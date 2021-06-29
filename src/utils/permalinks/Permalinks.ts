@@ -16,14 +16,14 @@ limitations under the License.
 
 import isIp from "is-ip";
 import * as utils from "matrix-js-sdk/src/utils";
-import {Room} from "matrix-js-sdk/src/models/room";
-import {EventType} from "matrix-js-sdk/src/@types/event";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
-import {MatrixClientPeg} from "../../MatrixClientPeg";
-import SpecPermalinkConstructor, {baseUrl as matrixtoBaseUrl} from "./SpecPermalinkConstructor";
-import PermalinkConstructor, {PermalinkParts} from "./PermalinkConstructor";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import SpecPermalinkConstructor, { baseUrl as matrixtoBaseUrl } from "./SpecPermalinkConstructor";
+import PermalinkConstructor, { PermalinkParts } from "./PermalinkConstructor";
 import ElementPermalinkConstructor from "./ElementPermalinkConstructor";
 import matrixLinkify from "../../linkify-matrix";
 import SdkConfig from "../../SdkConfig";
@@ -31,7 +31,6 @@ import SdkConfig from "../../SdkConfig";
 // The maximum number of servers to pick when working out which servers
 // to add to permalinks. The servers are appended as ?via=example.org
 const MAX_SERVER_CANDIDATES = 3;
-
 
 // Permalinks can have servers appended to them so that the user
 // receiving them can have a fighting chance at joining the room.
@@ -172,7 +171,7 @@ export class RoomPermalinkCreator {
                 this.updateServerCandidates();
                 return;
         }
-    }
+    };
 
     private onMembership = (evt: MatrixEvent, member: RoomMember, oldMembership: string) => {
         const userId = member.userId;
@@ -189,7 +188,7 @@ export class RoomPermalinkCreator {
 
         this.updateHighestPlUser();
         this.updateServerCandidates();
-    }
+    };
 
     private updateHighestPlUser() {
         const plEvent = this.room.currentState.getStateEvents("m.room.power_levels", "");

@@ -186,10 +186,10 @@ const NetworkDropdown = ({ onOptionChange, protocols = {}, selectedServerName, s
                 });
             }
 
-            protocolsList.forEach(({instances=[]}) => {
+            protocolsList.forEach(({ instances=[] }) => {
                 [...instances].sort((b, a) => {
                     return compare(a.desc, b.desc);
-                }).forEach(({desc, instance_id: instanceId}) => {
+                }).forEach(({ desc, instance_id: instanceId }) => {
                     entries.push(
                         <MenuItemRadio
                             key={String(instanceId)}
@@ -216,7 +216,7 @@ const NetworkDropdown = ({ onOptionChange, protocols = {}, selectedServerName, s
             if (removableServers.has(server)) {
                 const onClick = async () => {
                     closeMenu();
-                    const {finished} = Modal.createTrackedDialog("Network Dropdown", "Remove server", QuestionDialog, {
+                    const { finished } = Modal.createTrackedDialog("Network Dropdown", "Remove server", QuestionDialog, {
                         title: _t("Are you sure?"),
                         description: _t("Are you sure you want to remove <b>%(serverName)s</b>", {
                             serverName: server,

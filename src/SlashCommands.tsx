@@ -21,21 +21,21 @@ import * as React from 'react';
 import { User } from "matrix-js-sdk/src/models/user";
 
 import * as ContentHelpers from 'matrix-js-sdk/src/content-helpers';
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
-import {_t, _td} from './languageHandler';
+import { _t, _td } from './languageHandler';
 import Modal from './Modal';
 import MultiInviter from './utils/MultiInviter';
 import { linkifyAndSanitizeHtml } from './HtmlUtils';
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import WidgetUtils from "./utils/WidgetUtils";
-import {textToHtmlRainbow} from "./utils/colour";
+import { textToHtmlRainbow } from "./utils/colour";
 import { getAddressType } from './UserAddress';
 import { abbreviateUrl } from './utils/UrlUtils';
 import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from './utils/IdentityServerUtils';
-import {isPermalinkHost, parsePermalink} from "./utils/permalinks/Permalinks";
-import {inviteUsersToRoom} from "./RoomInvite";
+import { isPermalinkHost, parsePermalink } from "./utils/permalinks/Permalinks";
+import { inviteUsersToRoom } from "./RoomInvite";
 import { WidgetType } from "./widgets/WidgetType";
 import { Jitsi } from "./widgets/Jitsi";
 import { parseFragment as parseHtml, Element as ChildElement } from "parse5";
@@ -46,10 +46,10 @@ import { Action } from "./dispatcher/actions";
 import { EffectiveMembership, getEffectiveMembership, leaveRoomBehaviour } from "./utils/membership";
 import SdkConfig from "./SdkConfig";
 import SettingsStore from "./settings/SettingsStore";
-import {UIFeature} from "./settings/UIFeature";
-import {CHAT_EFFECTS} from "./effects"
+import { UIFeature } from "./settings/UIFeature";
+import { CHAT_EFFECTS } from "./effects";
 import CallHandler from "./CallHandler";
-import {guessAndSetDMRoom} from "./Rooms";
+import { guessAndSetDMRoom } from "./Rooms";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -143,11 +143,11 @@ export class Command {
 }
 
 function reject(error) {
-    return {error};
+    return { error };
 }
 
 function success(promise?: Promise<any>) {
-    return {promise};
+    return { promise };
 }
 
 function successSync(value: any) {
@@ -271,8 +271,8 @@ export const Commands = [
 
                 const RoomUpgradeWarningDialog = sdk.getComponent("dialogs.RoomUpgradeWarningDialog");
 
-                const {finished} = Modal.createTrackedDialog('Slash Commands', 'upgrade room confirmation',
-                    RoomUpgradeWarningDialog, {roomId: roomId, targetVersion: args}, /*className=*/null,
+                const { finished } = Modal.createTrackedDialog('Slash Commands', 'upgrade room confirmation',
+                    RoomUpgradeWarningDialog, { roomId: roomId, targetVersion: args }, /*className=*/null,
                     /*isPriority=*/false, /*isStatic=*/true);
 
                 return success(finished.then(async ([resp]) => {
@@ -288,7 +288,7 @@ export const Commands = [
                         if (resp.invite) {
                             checkForUpgradeFn = async (newRoom) => {
                                 // The upgradePromise should be done by the time we await it here.
-                                const {replacement_room: newRoomId} = await upgradePromise;
+                                const { replacement_room: newRoomId } = await upgradePromise;
                                 if (newRoom.roomId !== newRoomId) return;
 
                                 const toInvite = [
@@ -370,7 +370,7 @@ export const Commands = [
 
             return success(promise.then((url) => {
                 if (!url) return;
-                return MatrixClientPeg.get().sendStateEvent(roomId, 'm.room.avatar', {url}, '');
+                return MatrixClientPeg.get().sendStateEvent(roomId, 'm.room.avatar', { url }, '');
             }));
         },
         category: CommandCategories.actions,
@@ -741,7 +741,7 @@ export const Commands = [
                             Modal.createTrackedDialog('Slash Commands', 'User ignored', InfoDialog, {
                                 title: _t('Ignored user'),
                                 description: <div>
-                                    <p>{ _t('You are now ignoring %(userId)s', {userId}) }</p>
+                                    <p>{ _t('You are now ignoring %(userId)s', { userId }) }</p>
                                 </div>,
                             });
                         }),
@@ -772,7 +772,7 @@ export const Commands = [
                             Modal.createTrackedDialog('Slash Commands', 'User unignored', InfoDialog, {
                                 title: _t('Unignored user'),
                                 description: <div>
-                                    <p>{ _t('You are no longer ignoring %(userId)s', {userId}) }</p>
+                                    <p>{ _t('You are no longer ignoring %(userId)s', { userId }) }</p>
                                 </div>,
                             });
                         }),
@@ -839,7 +839,7 @@ export const Commands = [
         description: _td('Opens the Developer Tools dialog'),
         runFn: function(roomId) {
             const DevtoolsDialog = sdk.getComponent('dialogs.DevtoolsDialog');
-            Modal.createDialog(DevtoolsDialog, {roomId});
+            Modal.createDialog(DevtoolsDialog, { roomId });
             return success();
         },
         category: CommandCategories.advanced,
@@ -951,7 +951,7 @@ export const Commands = [
                                     {
                                         _t('The signing key you provided matches the signing key you received ' +
                                             'from %(userId)s\'s session %(deviceId)s. Session marked as verified.',
-                                        {userId, deviceId})
+                                        { userId, deviceId })
                                     }
                                 </p>
                             </div>,
@@ -1172,11 +1172,11 @@ export const Commands = [
                         };
                         MatrixClientPeg.get().sendMessage(roomId, content);
                     }
-                    dis.dispatch({action: `effects.${effect.command}`});
+                    dis.dispatch({ action: `effects.${effect.command}` });
                 })());
             },
             category: CommandCategories.effects,
-        })
+        });
     }),
 ];
 
@@ -1205,7 +1205,7 @@ export function parseCommandString(input: string) {
         cmd = input;
     }
 
-    return {cmd, args};
+    return { cmd, args };
 }
 
 /**
@@ -1217,7 +1217,7 @@ export function parseCommandString(input: string) {
  * Returns null if the input didn't match a command.
  */
 export function getCommand(input: string) {
-    const {cmd, args} = parseCommandString(input);
+    const { cmd, args } = parseCommandString(input);
 
     if (CommandMap.has(cmd) && CommandMap.get(cmd).isEnabled()) {
         return {

@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {clamp} from "lodash";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import { clamp } from "lodash";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
-import {SerializedPart} from "./editor/parts";
+import { SerializedPart } from "./editor/parts";
 import EditorModel from "./editor/model";
 
 interface IHistoryItem {

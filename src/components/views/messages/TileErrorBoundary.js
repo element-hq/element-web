@@ -20,7 +20,7 @@ import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import SdkConfig from "../../../SdkConfig";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.messages.TileErrorBoundary")
 export default class TileErrorBoundary extends React.Component {

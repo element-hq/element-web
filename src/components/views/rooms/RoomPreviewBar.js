@@ -17,14 +17,14 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import SdkConfig from "../../../SdkConfig";
 import IdentityAuthClient from '../../../IdentityAuthClient';
-import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
-import {UPDATE_EVENT} from "../../../stores/AsyncStore";
+import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
+import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import InviteReason from "../elements/InviteReason";
 
@@ -114,7 +114,7 @@ export default class RoomPreviewBar extends React.Component {
         // invited, fetch the user's account emails and discovery bindings so we
         // can check them against the email that was invited.
         if (this.props.inviterName && this.props.invitedEmail) {
-            this.setState({busy: true});
+            this.setState({ busy: true });
             try {
                 // Gather the account 3PIDs
                 const account3pids = await MatrixClientPeg.get().getThreePids();
@@ -125,7 +125,7 @@ export default class RoomPreviewBar extends React.Component {
                 // If we have an IS connected, use that to lookup the email and
                 // check the bound MXID.
                 if (!MatrixClientPeg.get().getIdentityServerUrl()) {
-                    this.setState({busy: false});
+                    this.setState({ busy: false });
                     return;
                 }
                 const authClient = new IdentityAuthClient();
@@ -136,11 +136,11 @@ export default class RoomPreviewBar extends React.Component {
                     undefined /* callback */,
                     identityAccessToken,
                 );
-                this.setState({invitedEmailMxid: result.mxid});
+                this.setState({ invitedEmailMxid: result.mxid });
             } catch (err) {
-                this.setState({threePidFetchError: err});
+                this.setState({ threePidFetchError: err });
             }
-            this.setState({busy: false});
+            this.setState({ busy: false });
         }
     }
 
@@ -214,7 +214,7 @@ export default class RoomPreviewBar extends React.Component {
         const memberName = kickerMember ?
             kickerMember.name : myMember.events.member.getSender();
         const reason = myMember.events.member.getContent().reason;
-        return {memberName, reason};
+        return { memberName, reason };
     }
 
     _joinRule() {
@@ -229,7 +229,7 @@ export default class RoomPreviewBar extends React.Component {
 
     _communityProfile() {
         if (this.props.room) return CommunityPrototypeStore.instance.getInviteProfile(this.props.room.roomId);
-        return {displayName: null, avatarMxc: null};
+        return { displayName: null, avatarMxc: null };
     }
 
     _roomName(atStart = false) {
@@ -253,7 +253,7 @@ export default class RoomPreviewBar extends React.Component {
     }
 
     _getInviteMember() {
-        const {room} = this.props;
+        const { room } = this.props;
         if (!room) {
             return;
         }
@@ -347,10 +347,10 @@ export default class RoomPreviewBar extends React.Component {
                 break;
             }
             case MessageCase.Kicked: {
-                const {memberName, reason} = this._getKickOrBanInfo();
+                const { memberName, reason } = this._getKickOrBanInfo();
                 title = _t("You were kicked from %(roomName)s by %(memberName)s",
-                    {memberName, roomName: this._roomName()});
-                subTitle = reason ? _t("Reason: %(reason)s", {reason}) : null;
+                    { memberName, roomName: this._roomName() });
+                subTitle = reason ? _t("Reason: %(reason)s", { reason }) : null;
 
                 if (this._joinRule() === "invite") {
                     primaryActionLabel = _t("Forget this room");
@@ -364,22 +364,22 @@ export default class RoomPreviewBar extends React.Component {
                 break;
             }
             case MessageCase.Banned: {
-                const {memberName, reason} = this._getKickOrBanInfo();
+                const { memberName, reason } = this._getKickOrBanInfo();
                 title = _t("You were banned from %(roomName)s by %(memberName)s",
-                    {memberName, roomName: this._roomName()});
-                subTitle = reason ? _t("Reason: %(reason)s", {reason}) : null;
+                    { memberName, roomName: this._roomName() });
+                subTitle = reason ? _t("Reason: %(reason)s", { reason }) : null;
                 primaryActionLabel = _t("Forget this room");
                 primaryActionHandler = this.props.onForgetClick;
                 break;
             }
             case MessageCase.OtherThreePIDError: {
                 title = _t("Something went wrong with your invite to %(roomName)s",
-                    {roomName: this._roomName()});
+                    { roomName: this._roomName() });
                 const joinRule = this._joinRule();
                 const errCodeMessage = _t(
                     "An error (%(errcode)s) was returned while trying to validate your " +
                     "invite. You could try to pass this information on to a room admin.",
-                    {errcode: this.state.threePidFetchError.errcode || _t("unknown error code")},
+                    { errcode: this.state.threePidFetchError.errcode || _t("unknown error code") },
                 );
                 switch (joinRule) {
                     case "invite":
@@ -478,7 +478,7 @@ export default class RoomPreviewBar extends React.Component {
                         { user: inviteMember.name });
                     subTitle = [
                         avatar,
-                        _t("<userName/> wants to chat", {}, {userName: () => inviterElement}),
+                        _t("<userName/> wants to chat", {}, { userName: () => inviterElement }),
                     ];
                     primaryActionLabel = _t("Start chatting");
                 } else {
@@ -486,7 +486,7 @@ export default class RoomPreviewBar extends React.Component {
                         { roomName: this._roomName() });
                     subTitle = [
                         avatar,
-                        _t("<userName/> invited you", {}, {userName: () => inviterElement}),
+                        _t("<userName/> invited you", {}, { userName: () => inviterElement }),
                     ];
                     primaryActionLabel = _t("Accept");
                 }
@@ -513,22 +513,22 @@ export default class RoomPreviewBar extends React.Component {
             case MessageCase.ViewingRoom: {
                 if (this.props.canPreview) {
                     title = _t("You're previewing %(roomName)s. Want to join it?",
-                        {roomName: this._roomName()});
+                        { roomName: this._roomName() });
                 } else {
                     title = _t("%(roomName)s can't be previewed. Do you want to join it?",
-                        {roomName: this._roomName(true)});
+                        { roomName: this._roomName(true) });
                 }
                 primaryActionLabel = _t("Join the discussion");
                 primaryActionHandler = this.props.onJoinClick;
                 break;
             }
             case MessageCase.RoomNotFound: {
-                title = _t("%(roomName)s does not exist.", {roomName: this._roomName(true)});
+                title = _t("%(roomName)s does not exist.", { roomName: this._roomName(true) });
                 subTitle = _t("This room doesn't exist. Are you sure you're at the right place?");
                 break;
             }
             case MessageCase.OtherError: {
-                title = _t("%(roomName)s is not accessible at this time.", {roomName: this._roomName(true)});
+                title = _t("%(roomName)s is not accessible at this time.", { roomName: this._roomName(true) });
                 subTitle = [
                     _t("Try again later, or ask a room admin to check if you have access."),
                     _t(

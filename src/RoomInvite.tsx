@@ -53,7 +53,7 @@ export function showStartChatInviteDialog(initialText = ""): void {
     // This dialog handles the room creation internally - we don't need to worry about it.
     const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
     Modal.createTrackedDialog(
-        'Start DM', '', InviteDialog, {kind: KIND_DM, initialText},
+        'Start DM', '', InviteDialog, { kind: KIND_DM, initialText },
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
     );
 }
@@ -72,7 +72,7 @@ export function showRoomInviteDialog(roomId: string, initialText = ""): void {
 
 export function showCommunityRoomInviteDialog(roomId: string, communityName: string): void {
     Modal.createTrackedDialog(
-        'Invite Users to Community', '', CommunityPrototypeInviteDialog, {communityName, roomId},
+        'Invite Users to Community', '', CommunityPrototypeInviteDialog, { communityName, roomId },
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
     );
 }
@@ -133,7 +133,7 @@ export function showAnyInviteErrors(
         // pointless for us to list who failed exactly.
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Failed to invite users to the room', '', ErrorDialog, {
-            title: _t("Failed to invite users to the room:", {roomName: room.name}),
+            title: _t("Failed to invite users to the room:", { roomName: room.name }),
             description: inviter.getErrorText(failedUsers[0]),
         });
         return false;

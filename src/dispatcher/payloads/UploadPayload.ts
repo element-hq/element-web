@@ -16,7 +16,7 @@ limitations under the License.
 
 import { ActionPayload } from "../payloads";
 import { Action } from "../actions";
-import {IUpload} from "../../models/IUpload";
+import { IUpload } from "../../models/IUpload";
 
 interface UploadPayload extends ActionPayload {
     /**

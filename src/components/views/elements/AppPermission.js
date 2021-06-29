@@ -23,8 +23,8 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import WidgetUtils from "../../../utils/WidgetUtils";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.elements.AppPermission")
 export default class AppPermission extends React.Component {
@@ -115,9 +115,9 @@ export default class AppPermission extends React.Component {
         // Due to i18n limitations, we can't dedupe the code for variables in these two messages.
         const warning = this.state.isWrapped
             ? _t("Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.",
-                {widgetDomain: this.state.widgetDomain}, {helpIcon: () => warningTooltip})
+                { widgetDomain: this.state.widgetDomain }, { helpIcon: () => warningTooltip })
             : _t("Using this widget may share data <helpIcon /> with %(widgetDomain)s.",
-                {widgetDomain: this.state.widgetDomain}, {helpIcon: () => warningTooltip});
+                { widgetDomain: this.state.widgetDomain }, { helpIcon: () => warningTooltip });
 
         const encryptionWarning = this.props.isRoomEncrypted ? _t("Widgets do not use message encryption.") : null;
 

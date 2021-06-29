@@ -17,12 +17,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { _t, _td } from '../../../languageHandler';
 import * as sdk from '../../../index';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
 import { addressTypes, getAddressType } from '../../../UserAddress';
 import GroupStore from '../../../stores/GroupStore';
@@ -30,10 +30,10 @@ import * as Email from '../../../email';
 import IdentityAuthClient from '../../../IdentityAuthClient';
 import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from '../../../utils/IdentityServerUtils';
 import { abbreviateUrl } from '../../../utils/UrlUtils';
-import {sleep} from "../../../utils/promise";
-import {Key} from "../../../Keyboard";
-import {Action} from "../../../dispatcher/actions";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { sleep } from "../../../utils/promise";
+import { Key } from "../../../Keyboard";
+import { Action } from "../../../dispatcher/actions";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -457,7 +457,7 @@ export default class AddressPickerDialog extends React.Component {
         const addrType = getAddressType(query);
         if (this.state.validAddressTypes.includes(addrType)) {
             if (addrType === 'email' && !Email.looksValid(query)) {
-                this.setState({searchError: _t("That doesn't look like a valid email address")});
+                this.setState({ searchError: _t("That doesn't look like a valid email address") });
                 return;
             }
             suggestedList.unshift({
@@ -573,13 +573,13 @@ export default class AddressPickerDialog extends React.Component {
     _getFilteredSuggestions() {
         // map addressType => set of addresses to avoid O(n*m) operation
         const selectedAddresses = {};
-        this.state.selectedList.forEach(({address, addressType}) => {
+        this.state.selectedList.forEach(({ address, addressType }) => {
             if (!selectedAddresses[addressType]) selectedAddresses[addressType] = new Set();
             selectedAddresses[addressType].add(address);
         });
 
         // Filter out any addresses in the above already selected addresses (matching both type and address)
-        return this.state.suggestedList.filter(({address, addressType}) => {
+        return this.state.suggestedList.filter(({ address, addressType }) => {
             return !(selectedAddresses[addressType] && selectedAddresses[addressType].has(address));
         });
     }

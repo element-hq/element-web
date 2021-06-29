@@ -22,8 +22,8 @@ import { _t } from '../../../../languageHandler';
 
 import SettingsStore from "../../../../settings/SettingsStore";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
-import {Action} from "../../../../dispatcher/actions";
-import {SettingLevel} from "../../../../settings/SettingLevel";
+import { Action } from "../../../../dispatcher/actions";
+import { SettingLevel } from "../../../../settings/SettingLevel";
 
 /*
  * Allows the user to disable the Event Index.

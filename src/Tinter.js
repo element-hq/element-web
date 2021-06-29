@@ -256,7 +256,6 @@ class Tinter {
         });
     }
 
-
     setTheme(theme) {
         this.theme = theme;
 

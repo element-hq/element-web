@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import PropTypes from "prop-types";
 import AutoHideScrollbar from "./AutoHideScrollbar";
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 
 @replaceableComponent("structures.IndicatorScrollbar")
 export default class IndicatorScrollbar extends React.Component {
@@ -69,7 +69,6 @@ export default class IndicatorScrollbar extends React.Component {
     _collectScrollerComponent(autoHideScrollbar) {
         this._autoHideScrollbar = autoHideScrollbar;
     }
-
 
     componentDidUpdate(prevProps) {
         const prevLen = prevProps && prevProps.children && prevProps.children.length || 0;
@@ -188,8 +187,8 @@ export default class IndicatorScrollbar extends React.Component {
         // eslint-disable-next-line no-unused-vars
         const { children, trackHorizontalOverflow, verticalScrollsHorizontally, ...otherProps } = this.props;
 
-        const leftIndicatorStyle = {left: this.state.leftIndicatorOffset};
-        const rightIndicatorStyle = {right: this.state.rightIndicatorOffset};
+        const leftIndicatorStyle = { left: this.state.leftIndicatorOffset };
+        const rightIndicatorStyle = { right: this.state.rightIndicatorOffset };
         const leftOverflowIndicator = trackHorizontalOverflow
             ? <div className="mx_IndicatorScrollbar_leftOverflowIndicator" style={leftIndicatorStyle} /> : null;
         const rightOverflowIndicator = trackHorizontalOverflow

@@ -23,9 +23,9 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 import AccessibleButton from '../elements/AccessibleButton';
-import {ERROR_USER_CANCELLED} from "../../structures/InteractiveAuth";
-import {SSOAuthEntry} from "../auth/InteractiveAuthEntryComponents";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { ERROR_USER_CANCELLED } from "../../structures/InteractiveAuth";
+import { SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.dialogs.InteractiveAuthDialog")
 export default class InteractiveAuthDialog extends React.Component {
@@ -117,7 +117,7 @@ export default class InteractiveAuthDialog extends React.Component {
 
     _onUpdateStagePhase = (newStage, newPhase) => {
         // We copy the stage and stage phase params into state for title selection in render()
-        this.setState({uiaStage: newStage, uiaStagePhase: newPhase});
+        this.setState({ uiaStage: newStage, uiaStagePhase: newPhase });
     };
 
     _onDismissClick = () => {

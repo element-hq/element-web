@@ -287,7 +287,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         if (this.state.room) {
             this.checkWidgets(this.state.room);
         }
-    }
+    };
 
     private checkWidgets = (room) => {
         this.setState({
@@ -530,7 +530,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             } else if (room) {
                 // Stop peeking because we have joined this room previously
                 this.context.stopPeeking();
-                this.setState({isPeeking: false});
+                this.setState({ isPeeking: false });
             }
         }
     }
@@ -698,7 +698,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 replyingToEvent: this.state.replyToEvent,
             });
         }
-    }
+    };
 
     private onRightPanelStoreUpdate = () => {
         this.setState({
@@ -882,7 +882,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 // no change
             } else if (!shouldHideEvent(ev, this.state)) {
                 this.setState((state, props) => {
-                    return {numUnreadMessages: state.numUnreadMessages + 1};
+                    return { numUnreadMessages: state.numUnreadMessages + 1 };
                 });
             }
         }
@@ -907,7 +907,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         CHAT_EFFECTS.forEach(effect => {
             if (containsEmoji(ev.getContent(), effect.emojis) || ev.getContent().msgtype === effect.msgType) {
-                dis.dispatch({action: `effects.${effect.command}`});
+                dis.dispatch({ action: `effects.${effect.command}` });
             }
         });
     };
@@ -960,7 +960,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 try {
                     await room.loadMembersIfNeeded();
                     if (!this.unmounted) {
-                        this.setState({membersLoaded: true});
+                        this.setState({ membersLoaded: true });
                     }
                 } catch (err) {
                     const errorMessage = `Fetching room members for ${room.roomId} failed.` +
@@ -988,7 +988,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         }
     }
 
-    private updatePreviewUrlVisibility({roomId}: Room) {
+    private updatePreviewUrlVisibility({ roomId }: Room) {
         // URL Previews in E2EE rooms can be a privacy leak so use a different setting which is per-room explicit
         const key = this.context.isRoomEncrypted(roomId) ? 'urlPreviewsEnabled_e2ee' : 'urlPreviewsEnabled';
         this.setState({
@@ -1128,7 +1128,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             const canReact = room.getMyMembership() === "join" && room.currentState.maySendEvent("m.reaction", me);
             const canReply = room.maySendMessage();
 
-            this.setState({canReact, canReply});
+            this.setState({ canReact, canReply });
         }
     }
 
@@ -1192,7 +1192,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                     room_id: this.getRoomId(),
                 },
             });
-            dis.dispatch({action: 'require_registration'});
+            dis.dispatch({ action: 'require_registration' });
         } else {
             Promise.resolve().then(() => {
                 const signUrl = this.props.threepidInvite?.signUrl;
@@ -1227,13 +1227,13 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         // We always increment the counter no matter the types, because dragging is
         // still happening. If we didn't, the drag counter would get out of sync.
-        this.setState({dragCounter: this.state.dragCounter + 1});
+        this.setState({ dragCounter: this.state.dragCounter + 1 });
 
         // See:
         // https://docs.w3cub.com/dom/datatransfer/types
         // https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Recommended_drag_types#file
         if (ev.dataTransfer.types.includes("Files") || ev.dataTransfer.types.includes("application/x-moz-file")) {
-            this.setState({draggingFile: true});
+            this.setState({ draggingFile: true });
         }
     };
 
@@ -1282,7 +1282,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     private injectSticker(url, info, text) {
         if (this.context.isGuest()) {
-            dis.dispatch({action: 'require_registration'});
+            dis.dispatch({ action: 'require_registration' });
             return;
         }
 
@@ -1609,7 +1609,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         const showBar = this.messagePanel.canJumpToReadMarker();
         if (this.state.showTopUnreadMessagesBar != showBar) {
-            this.setState({showTopUnreadMessagesBar: showBar});
+            this.setState({ showTopUnreadMessagesBar: showBar });
         }
     };
 
@@ -1740,7 +1740,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     onHiddenHighlightsClick = () => {
         const oldRoom = this.getOldRoom();
         if (!oldRoom) return;
-        dis.dispatch({action: "view_room", room_id: oldRoom.roomId});
+        dis.dispatch({ action: "view_room", room_id: oldRoom.roomId });
     };
 
     render() {
@@ -1948,7 +1948,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 >
                     {_t(
                         "You have %(count)s unread notifications in a prior version of this room.",
-                        {count: hiddenHighlightCount},
+                        { count: hiddenHighlightCount },
                     )}
                 </AccessibleButton>
             );

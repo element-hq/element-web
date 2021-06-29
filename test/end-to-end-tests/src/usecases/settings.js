@@ -51,5 +51,5 @@ module.exports.getE2EDeviceFromSettings = async function(session) {
     const closeButton = await session.query(".mx_UserSettingsDialog .mx_Dialog_cancelButton");
     await closeButton.click();
     session.log.done();
-    return {id, key};
+    return { id, key };
 };

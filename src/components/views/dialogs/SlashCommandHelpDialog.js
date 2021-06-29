@@ -15,11 +15,11 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../languageHandler";
-import {CommandCategories, Commands} from "../../../SlashCommands";
+import { _t } from "../../../languageHandler";
+import { CommandCategories, Commands } from "../../../SlashCommands";
 import * as sdk from "../../../index";
 
-export default ({onFinished}) => {
+export default ({ onFinished }) => {
     const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
 
     const categories = {};

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import { CallFeed, CallFeedEvent } from 'matrix-js-sdk/src/webrtc/callFeed';
 import { logger } from 'matrix-js-sdk/src/logger';
 import MediaDeviceHandler, { MediaDeviceHandlerEvent } from "../../../MediaDeviceHandler";
@@ -58,7 +58,7 @@ export default class AudioFeed extends React.Component<IProps> {
                 logger.warn("Couldn't set requested audio output device: using default", e);
             }
         }
-    }
+    };
 
     private playMedia() {
         const element = this.element.current;
@@ -77,7 +77,7 @@ export default class AudioFeed extends React.Component<IProps> {
             // should serialise the ones that need to be serialised but then be able to interrupt
             // them with another load() which will cancel the pending one, but since we don't call
             // load() explicitly, it shouldn't be a problem. - Dave
-            element.play()
+            element.play();
         } catch (e) {
             logger.info("Failed to play media element with feed", this.props.feed, e);
         }

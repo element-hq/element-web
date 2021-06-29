@@ -18,10 +18,10 @@ limitations under the License.
 import React from 'react';
 import classNames from "classnames";
 
-import {_t} from "../../../languageHandler";
-import {Key} from "../../../Keyboard";
-import {CategoryKey, ICategory} from "./Category";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { _t } from "../../../languageHandler";
+import { Key } from "../../../Keyboard";
+import { CategoryKey, ICategory } from "./Category";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     categories: ICategory[];

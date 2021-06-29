@@ -24,7 +24,7 @@ import dis from '../../dispatcher/dispatcher';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 import BetaCard from "../views/beta/BetaCard";
 
 @replaceableComponent("structures.MyGroups")
@@ -41,19 +41,19 @@ export default class MyGroups extends React.Component {
     }
 
     _onCreateGroupClick = () => {
-        dis.dispatch({action: 'view_create_group'});
+        dis.dispatch({ action: 'view_create_group' });
     };
 
     _fetch() {
         this.context.getJoinedGroups().then((result) => {
-            this.setState({groups: result.groups, error: null});
+            this.setState({ groups: result.groups, error: null });
         }, (err) => {
             if (err.errcode === 'M_GUEST_ACCESS_FORBIDDEN') {
                 // Indicate that the guest isn't in any groups (which should be true)
-                this.setState({groups: [], error: null});
+                this.setState({ groups: [], error: null });
                 return;
             }
-            this.setState({groups: null, error: err});
+            this.setState({ groups: null, error: err });
         });
     }
 
