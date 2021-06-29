@@ -2170,5 +2170,20 @@
     "Disable": "Išjungti",
     "Search (must be enabled)": "Paieška (turi būti įjungta)",
     "The user you called is busy.": "Vartotojas kuriam skambinate yra užsiėmęs.",
-    "User Busy": "Vartotojas Užsiėmęs"
+    "User Busy": "Vartotojas Užsiėmęs",
+    "Any of the following data may be shared:": "Gali būti dalijamasi bet kuriais toliau nurodytais duomenimis:",
+    "Cancel search": "Atšaukti paiešką",
+    "Quick Reactions": "Greitos Reakcijos",
+    "Categories": "Kategorijos",
+    "Flags": "Vėliavos",
+    "Symbols": "Simboliai",
+    "Objects": "Objektai",
+    "Travel & Places": "Kelionės & Vietovės",
+    "Activities": "Veikla",
+    "Food & Drink": "Maistas & Gėrimai",
+    "Animals & Nature": "Gyvūnai & Gamta",
+    "Frequently Used": "Dažnai Naudojama",
+    "Something went wrong when trying to get your communities.": "Kažkas nepavyko bandant gauti jūsų bendruomenes.",
+    "Can't load this message": "Nepavyko įkelti šios žinutės",
+    "Submit logs": "Pateikti žurnalus"
 }
