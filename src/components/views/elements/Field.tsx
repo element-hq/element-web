@@ -77,7 +77,7 @@ export interface IInputProps extends IProps, InputHTMLAttributes<HTMLInputElemen
     // The element to create. Defaults to "input".
     element?: "input";
     // The input's value. This is a controlled component, so the value is required.
-    value: string | number;
+    value: string;
 }
 
 interface ISelectProps extends IProps, SelectHTMLAttributes<HTMLSelectElement> {

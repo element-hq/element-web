@@ -116,7 +116,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
             return { valid: false, feedback: _t("Size must be a number") };
         }
 
-        if (min >= parsedSize || parsedSize >= max) {
+        if (min > parsedSize || parsedSize > max) {
             return {
                 valid: false,
                 feedback: _t(
@@ -149,7 +149,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
             };
         }
 
-        if (min >= parsedSize || parsedSize >= max) {
+        if (min > parsedSize || parsedSize > max) {
             return {
                 valid: false,
                 feedback: _t(
@@ -199,7 +199,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
             <Field
                 element="input"
                 type="number"
-                value={numberOfMessages}
+                value={numberOfMessages.toString()}
                 ref={messageCountRef}
                 onValidate={onValidateNumberOfMessages}
                 label={_t("Number of messages")}
@@ -295,7 +295,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                     onValidate={onValidateSize}
                     element="input"
                     ref={sizeLimitRef}
-                    value={sizeLimit}
+                    value={sizeLimit.toString()}
                     postfixComponent={sizePostFix}
                     onChange={(e) => setSizeLimit(parseInt(e.target.value))}
                 />
