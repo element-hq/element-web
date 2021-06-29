@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { IRecordingUpdate, RECORDING_PLAYBACK_SAMPLES, VoiceRecording } from "../../../voice/VoiceRecording";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { arrayFastResample, arraySeed } from "../../../utils/arrays";
+import { arrayFastResample } from "../../../utils/arrays";
 import { percentageOf } from "../../../utils/numbers";
 import Waveform from "./Waveform";
 import { MarkedExecution } from "../../../utils/MarkedExecution";
@@ -54,7 +54,12 @@ export default class LiveRecordingWaveform extends React.PureComponent<IProps, I
 
     componentDidMount() {
         this.props.recorder.liveData.onUpdate((update: IRecordingUpdate) => {
-            this.waveform = update.waveform;
+            const bars = arrayFastResample(Array.from(update.waveform), RECORDING_PLAYBACK_SAMPLES);
+            // The incoming data is between zero and one, but typically even screaming into a
+            // microphone won't send you over 0.6, so we artificially adjust the gain for the
+            // waveform. This results in a slightly more cinematic/animated waveform for the
+            // user.
+            this.waveform = bars.map(b => percentageOf(b, 0, 0.50));
             this.scheduledUpdate.mark();
         });
     }
