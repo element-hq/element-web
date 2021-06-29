@@ -30,7 +30,8 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     const [isExporting, setExporting] = useState(false);
     const [numberOfMessages, setNumberOfMessages] = useState<number>(100);
     const [sizeLimit, setSizeLimit] = useState<number | null>(8);
-    const [sizeLimitRef, messageCountRef] = [useRef<any>(), useRef<any>()];
+    const sizeLimitRef = useRef<Field>();
+    const messageCountRef = useRef<Field>();
     const [displayCancel, setCancelWarning] = useState(false);
     const [exportCancelled, setExportCancelled] = useState(false);
     const [exportSuccessful, setExportSuccessful] = useState(false);
