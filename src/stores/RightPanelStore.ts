@@ -22,6 +22,7 @@ import {RightPanelPhases, RIGHT_PANEL_PHASES_NO_ARGS} from "./RightPanelStorePha
 import {ActionPayload} from "../dispatcher/payloads";
 import {Action} from '../dispatcher/actions';
 import { SettingLevel } from "../settings/SettingLevel";
+import RoomViewStore from './RoomViewStore';
 
 interface RightPanelStoreState {
     // Whether or not to show the right panel at all. We split out rooms and groups
@@ -147,6 +148,8 @@ export default class RightPanelStore extends Store<ActionPayload> {
         switch (payload.action) {
             case 'view_room':
             case 'view_group':
+                if (payload.room_id === RoomViewStore.getRoomId()) break; // skip this transition, probably a permalink
+
                 // Reset to the member list if we're viewing member info
                 if (MEMBER_INFO_PHASES.includes(this.state.lastRoomPhase)) {
                     this.setState({lastRoomPhase: RightPanelPhases.RoomMemberList, lastRoomPhaseParams: {}});
