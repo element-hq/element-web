@@ -35,12 +35,12 @@ export default abstract class Exporter {
         window.addEventListener("onunload", this.abortWriter);
     }
 
-    protected onBeforeUnload(e: BeforeUnloadEvent) {
+    protected onBeforeUnload(e: BeforeUnloadEvent): string {
         e.preventDefault();
         return e.returnValue = "Are you sure you want to exit during this export?";
     }
 
-    protected addFile(filePath: string, blob: Blob) {
+    protected addFile(filePath: string, blob: Blob): void {
         const file = {
             name: filePath,
             stream: () => blob.stream(),
@@ -48,7 +48,7 @@ export default abstract class Exporter {
         this.files.push(file);
     }
 
-    protected async downloadZIP() {
+    protected async downloadZIP(): Promise<any> {
         const filename = `matrix-export-${formatFullDateNoDay(new Date())}.zip`;
 
         // Support for older browsers
@@ -78,14 +78,14 @@ export default abstract class Exporter {
         await this.pumpToFileStream(reader);
     }
 
-    protected cleanUp() {
+    protected cleanUp(): string {
         console.log("Cleaning up...");
         window.removeEventListener("beforeunload", this.onBeforeUnload);
         window.removeEventListener("onunload", this.abortWriter);
         return "";
     }
 
-    public async cancelExport() {
+    public async cancelExport(): Promise<void> {
         console.log("Cancelling export...");
         this.cancelled = true;
         await this.abortWriter();
@@ -105,7 +105,7 @@ export default abstract class Exporter {
         await this.writer?.abort();
     }
 
-    protected async pumpToFileStream(reader: ReadableStreamDefaultReader) {
+    protected async pumpToFileStream(reader: ReadableStreamDefaultReader): Promise<void> {
         const res = await reader.read();
         if (res.done) await this.writer.close();
         else {
@@ -114,7 +114,7 @@ export default abstract class Exporter {
         }
     }
 
-    protected setEventMetadata(event: MatrixEvent) {
+    protected setEventMetadata(event: MatrixEvent): MatrixEvent {
         const roomState = this.client.getRoom(this.room.roomId).currentState;
         event.sender = roomState.getSentinelMember(
             event.getSender(),
@@ -127,7 +127,7 @@ export default abstract class Exporter {
         return event;
     }
 
-    protected getLimit() {
+    protected getLimit(): number {
         let limit: number;
         switch (this.exportType) {
             case exportTypes.LAST_N_MESSAGES:
@@ -195,7 +195,7 @@ export default abstract class Exporter {
         return events;
     }
 
-    protected async getMediaBlob(event: MatrixEvent) {
+    protected async getMediaBlob(event: MatrixEvent): Promise<Blob> {
         let blob: Blob;
         try {
             const isEncrypted = event.isEncrypted();
@@ -215,7 +215,7 @@ export default abstract class Exporter {
         return blob;
     }
 
-    protected splitFileName(file: string) {
+    protected splitFileName(file: string): string[] {
         const lastDot = file.lastIndexOf('.');
         if (lastDot === -1) return [file, ""];
         const fileName = file.slice(0, lastDot);
@@ -223,7 +223,7 @@ export default abstract class Exporter {
         return [fileName, '.' + ext];
     }
 
-    protected getFilePath(event: MatrixEvent) {
+    protected getFilePath(event: MatrixEvent): string {
         const mediaType = event.getContent().msgtype;
         let fileDirectory: string;
         switch (mediaType) {
@@ -245,7 +245,7 @@ export default abstract class Exporter {
         return fileDirectory + "/" + fileName + '-' + fileDate + fileExt;
     }
 
-    protected isReply(event: MatrixEvent) {
+    protected isReply(event: MatrixEvent): boolean {
         const isEncrypted = event.isEncrypted();
         // If encrypted, in_reply_to lies in event.event.content
         const content = isEncrypted ? event.event.content : event.getContent();
@@ -253,7 +253,7 @@ export default abstract class Exporter {
         return !!(relatesTo && relatesTo["m.in_reply_to"]);
     }
 
-    protected isAttachment(mxEv: MatrixEvent) {
+    protected isAttachment(mxEv: MatrixEvent): boolean {
         const attachmentTypes = ["m.sticker", "m.image", "m.file", "m.video", "m.audio"];
         return mxEv.getType() === attachmentTypes[0] || attachmentTypes.includes(mxEv.getContent().msgtype);
     }
