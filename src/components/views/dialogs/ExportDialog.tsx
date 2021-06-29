@@ -260,7 +260,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 definitions={exportFormatOptions}
             />
 
-            <span className="mx_ExportDialog_subheading">{_t("Messages")}</span>
+            <span className="mx_ExportDialog_subheading">{ _t("Messages") }</span>
 
             <Field
                 element="select"
