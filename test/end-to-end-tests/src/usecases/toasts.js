@@ -40,7 +40,7 @@ async function acceptToast(session, expectedTitle) {
 
 async function rejectToast(session, expectedTitle) {
     await assertToast(session, expectedTitle);
-    const btn = await session.query('.mx_Toast_buttons .mx_AccessibleButton_kind_danger');
+    const btn = await session.query('.mx_Toast_buttons .mx_AccessibleButton_kind_danger_outline');
     await btn.click();
 }
 
