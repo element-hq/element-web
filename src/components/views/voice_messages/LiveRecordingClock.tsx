@@ -37,13 +37,13 @@ export default class LiveRecordingClock extends React.PureComponent<IProps, ISta
     private scheduledUpdate = new MarkedExecution(
         () => this.updateClock(),
         () => requestAnimationFrame(() => this.scheduledUpdate.trigger()),
-    )
+    );
 
     constructor(props) {
         super(props);
         this.state = {
             seconds: 0,
-        }
+        };
     }
 
     componentDidMount() {
@@ -56,7 +56,7 @@ export default class LiveRecordingClock extends React.PureComponent<IProps, ISta
     private updateClock() {
         this.setState({
             seconds: this.seconds,
-        })
+        });
     }
 
     public render() {

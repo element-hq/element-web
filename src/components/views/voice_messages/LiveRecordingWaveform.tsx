@@ -25,7 +25,7 @@ interface IProps {
 }
 
 interface IState {
-    waveform: number[]
+    waveform: number[];
 }
 
 /**
@@ -41,13 +41,13 @@ export default class LiveRecordingWaveform extends React.PureComponent<IProps, I
     private scheduledUpdate = new MarkedExecution(
         () => this.updateWaveform(),
         () => requestAnimationFrame(() => this.scheduledUpdate.trigger()),
-    )
+    );
 
     constructor(props) {
         super(props);
         this.state = {
             waveform: [],
-        }
+        };
     }
 
     componentDidMount() {
