@@ -15,11 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {needsCaretNodeBefore, needsCaretNodeAfter} from "./render";
+import { needsCaretNodeBefore, needsCaretNodeAfter } from "./render";
 import Range from "./range";
 import EditorModel from "./model";
-import DocumentPosition, {IPosition} from "./position";
-import {Part} from "./parts";
+import DocumentPosition, { IPosition } from "./position";
+import { Part } from "./parts";
 
 export type Caret = Range | DocumentPosition;
 
@@ -44,7 +44,7 @@ function setDocumentRangeSelection(editor: HTMLDivElement, model: EditorModel, r
 
 export function setCaretPosition(editor: HTMLDivElement, model: EditorModel, caretPosition: IPosition) {
     const range = document.createRange();
-    const {node, offset} = getNodeAndOffsetForPosition(editor, model, caretPosition);
+    const { node, offset } = getNodeAndOffsetForPosition(editor, model, caretPosition);
     range.setStart(node, offset);
     range.collapse(true);
 
@@ -68,7 +68,7 @@ export function setCaretPosition(editor: HTMLDivElement, model: EditorModel, car
 }
 
 function getNodeAndOffsetForPosition(editor: HTMLDivElement, model: EditorModel, position: IPosition) {
-    const {offset, lineIndex, nodeIndex} = getLineAndNodePosition(model, position);
+    const { offset, lineIndex, nodeIndex } = getLineAndNodePosition(model, position);
     const lineNode = editor.childNodes[lineIndex];
 
     let focusNode;
@@ -82,16 +82,16 @@ function getNodeAndOffsetForPosition(editor: HTMLDivElement, model: EditorModel,
             focusNode = focusNode.firstChild;
         }
     }
-    return {node: focusNode, offset};
+    return { node: focusNode, offset };
 }
 
 export function getLineAndNodePosition(model: EditorModel, caretPosition: IPosition) {
-    const {parts} = model;
+    const { parts } = model;
     const partIndex = caretPosition.index;
     const lineResult = findNodeInLineForPart(parts, partIndex);
-    const {lineIndex} = lineResult;
-    let {nodeIndex} = lineResult;
-    let {offset} = caretPosition;
+    const { lineIndex } = lineResult;
+    let { nodeIndex } = lineResult;
+    let { offset } = caretPosition;
     // we're at an empty line between a newline part
     // and another newline part or end/start of parts.
     // set offset to 0 so it gets set to the <br> inside the line container
@@ -99,9 +99,9 @@ export function getLineAndNodePosition(model: EditorModel, caretPosition: IPosit
         offset = 0;
     } else {
         // move caret out of uneditable part (into caret node, or empty line br) if needed
-        ({nodeIndex, offset} = moveOutOfUneditablePart(parts, partIndex, nodeIndex, offset));
+        ({ nodeIndex, offset } = moveOutOfUneditablePart(parts, partIndex, nodeIndex, offset));
     }
-    return {lineIndex, nodeIndex, offset};
+    return { lineIndex, nodeIndex, offset };
 }
 
 function findNodeInLineForPart(parts: Part[], partIndex: number) {
@@ -137,7 +137,7 @@ function findNodeInLineForPart(parts: Part[], partIndex: number) {
         }
     }
 
-    return {lineIndex, nodeIndex};
+    return { lineIndex, nodeIndex };
 }
 
 function moveOutOfUneditablePart(parts: Part[], partIndex: number, nodeIndex: number, offset: number) {
@@ -159,5 +159,5 @@ function moveOutOfUneditablePart(parts: Part[], partIndex: number, nodeIndex: nu
             offset = 0;
         }
     }
-    return {nodeIndex, offset};
+    return { nodeIndex, offset };
 }

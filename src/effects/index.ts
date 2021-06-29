@@ -75,4 +75,3 @@ export const CHAT_EFFECTS: Array<Effect<{ [key: string]: any }>> = [
     } as Effect<SpaceInvadersOptions>,
 ];
 
-

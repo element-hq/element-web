@@ -22,7 +22,7 @@ import Modal from '../../../Modal';
 import VerificationRequestDialog from '../../views/dialogs/VerificationRequestDialog';
 import * as sdk from '../../../index';
 import { SetupEncryptionStore, Phase } from '../../../stores/SetupEncryptionStore';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 function keyHasPassphrase(keyInfo) {
     return (

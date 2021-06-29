@@ -167,7 +167,6 @@ export default abstract class BaseEventIndexManager {
         throw new Error("Unimplemented");
     }
 
-
     /**
      * Get the user version of the database.
      * @return {Promise<number>} A promise that will resolve to the user stored

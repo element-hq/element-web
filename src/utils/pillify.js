@@ -16,9 +16,9 @@ limitations under the License.
 
 import React from "react";
 import ReactDOM from 'react-dom';
-import {MatrixClientPeg} from '../MatrixClientPeg';
+import { MatrixClientPeg } from '../MatrixClientPeg';
 import SettingsStore from "../settings/SettingsStore";
-import {PushProcessor} from 'matrix-js-sdk/src/pushprocessor';
+import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
 import Pill from "../components/views/elements/Pill";
 import { parseAppLocalLink } from "./permalinks/Permalinks";
 

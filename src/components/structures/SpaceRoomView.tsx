@@ -37,7 +37,7 @@ import * as Email from "../../email";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
-import ResizeNotifier from "../../utils/ResizeNotifier"
+import ResizeNotifier from "../../utils/ResizeNotifier";
 import MainSplit from './MainSplit';
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import { ActionPayload } from "../../dispatcher/payloads";
@@ -162,7 +162,7 @@ const SpaceInfo = ({ space }) => {
                 </AccessibleButton>
             ) : null}
         </RoomMemberCount> }
-    </div>
+    </div>;
 };
 
 const onBetaClick = () => {
@@ -592,14 +592,14 @@ const SpaceSetupPrivateScope = ({ space, justCreatedOpts, onFinished }) => {
 
         <AccessibleButton
             className="mx_SpaceRoomView_privateScope_justMeButton"
-            onClick={() => { onFinished(false) }}
+            onClick={() => { onFinished(false); }}
         >
             <h3>{ _t("Just me") }</h3>
             <div>{ _t("A private space to organise your rooms") }</div>
         </AccessibleButton>
         <AccessibleButton
             className="mx_SpaceRoomView_privateScope_meAndMyTeammatesButton"
-            onClick={() => { onFinished(true) }}
+            onClick={() => { onFinished(true); }}
         >
             <h3>{ _t("Me and my teammates") }</h3>
             <div>{ _t("A private space for you and your teammates") }</div>
@@ -686,7 +686,7 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
     let buttonLabel = _t("Skip for now");
     if (emailAddresses.some(name => name.trim())) {
         onClick = onNextClick;
-        buttonLabel = busy ? _t("Inviting...") : _t("Continue")
+        buttonLabel = busy ? _t("Inviting...") : _t("Continue");
     }
 
     return <div className="mx_SpaceRoomView_inviteTeammates">

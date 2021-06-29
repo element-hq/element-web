@@ -139,7 +139,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
                 throw new Error("Cross-signing key upload auth canceled");
             }
         }
-    }
+    };
 
     private bootstrapCrossSigning = async (): Promise<void> => {
         this.setState({
@@ -163,11 +163,11 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
             this.setState({ error: e });
             console.error("Error bootstrapping cross-signing", e);
         }
-    }
+    };
 
     private onCancel = (): void => {
         this.props.onFinished(false);
-    }
+    };
 
     render() {
         let content;

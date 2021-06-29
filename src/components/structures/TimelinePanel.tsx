@@ -519,7 +519,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             // we won't load this event now, because we don't want to push any
             // events off the other end of the timeline. But we need to note
             // that we can now paginate.
-            this.setState({canForwardPaginate: true});
+            this.setState({ canForwardPaginate: true });
             return;
         }
 
@@ -661,7 +661,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     };
 
     private onSync = (clientSyncState: SyncState, prevState: SyncState, data: object): void => {
-        this.setState({ clientSyncState });
+        this.setState({ clientSyncState  });
     };
 
     private readMarkerTimeout(readMarkerPosition: number): number {
@@ -839,7 +839,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
         this.sendReadReceipt();
     };
 
-
     // advance the read marker past any events we sent ourselves.
     private advanceReadMarkerPastMyEvents(): void {
         if (!this.props.manageReadMarkers) return;
@@ -955,7 +954,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
             && !this.timelineWindow.canPaginate(EventTimeline.FORWARDS);
     }
 
-
     /* get the current scroll state. See ScrollPanel.getScrollState for
      * details.
      *
@@ -1053,7 +1051,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     private loadTimeline(eventId?: string, pixelOffset?: number, offsetBase?: number): void {
         this.timelineWindow = new TimelineWindow(
             MatrixClientPeg.get(), this.props.timelineSet,
-            {windowLimit: this.props.timelineCap});
+            { windowLimit: this.props.timelineCap });
 
         const onLoaded = () => {
             // clear the timeline min-height when

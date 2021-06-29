@@ -17,24 +17,24 @@ limitations under the License.
 
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import {Room} from "matrix-js-sdk/src/models/room";
-import {User} from "matrix-js-sdk/src/models/user";
-import {Group} from "matrix-js-sdk/src/models/group";
-import {RoomMember} from "matrix-js-sdk/src/models/room-member";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { User } from "matrix-js-sdk/src/models/user";
+import { Group } from "matrix-js-sdk/src/models/group";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import QRCode from "../elements/QRCode";
-import {RoomPermalinkCreator, makeGroupPermalink, makeUserPermalink} from "../../../utils/permalinks/Permalinks";
+import { RoomPermalinkCreator, makeGroupPermalink, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import * as ContextMenu from "../../structures/ContextMenu";
-import {toRightOf} from "../../structures/ContextMenu";
-import {copyPlaintext, selectText} from "../../../utils/strings";
+import { toRightOf } from "../../structures/ContextMenu";
+import { copyPlaintext, selectText } from "../../../utils/strings";
 import StyledCheckbox from '../elements/StyledCheckbox';
 import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
 import { IDialogProps } from "./IDialogProps";
 import SettingsStore from "../../../settings/SettingsStore";
-import {UIFeature} from "../../../settings/UIFeature";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { UIFeature } from "../../../settings/UIFeature";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const socials = [
     {
@@ -120,7 +120,7 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
         const successful = await copyPlaintext(this.getUrl());
         const buttonRect = target.getBoundingClientRect();
         const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
-        const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
+        const { close } = ContextMenu.createMenu(GenericTextContextMenu, {
             ...toRightOf(buttonRect, 2),
             message: successful ? _t('Copied!') : _t('Failed to copy'),
         });

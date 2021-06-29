@@ -52,7 +52,7 @@ export default class GroupAvatar extends React.Component<IProps> {
         // extract the props we use from props so we can pass any others through
         // should consider adding this as a global rule in js-sdk?
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
-        const {groupId, groupAvatarUrl, groupName, ...otherProps} = this.props;
+        const { groupId, groupAvatarUrl, groupName, ...otherProps } = this.props;
 
         return (
             <BaseAvatar

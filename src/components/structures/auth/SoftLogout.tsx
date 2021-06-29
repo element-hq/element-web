@@ -15,17 +15,17 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import * as Lifecycle from '../../../Lifecycle';
 import Modal from '../../../Modal';
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {ISSOFlow, LoginFlow, sendLoginRequest} from "../../../Login";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { ISSOFlow, LoginFlow, sendLoginRequest } from "../../../Login";
 import AuthPage from "../../views/auth/AuthPage";
-import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY} from "../../../BasePlatform";
+import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY } from "../../../BasePlatform";
 import SSOButtons from "../../views/elements/SSOButtons";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const LOGIN_VIEW = {
     LOADING: 1,
@@ -79,7 +79,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
     componentDidMount(): void {
         // We've ended up here when we don't need to - navigate to login
         if (!Lifecycle.isSoftLogout()) {
-            dis.dispatch({action: "start_login"});
+            dis.dispatch({ action: "start_login" });
             return;
         }
 
@@ -109,7 +109,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         const queryParams = this.props.realQueryParams;
         const hasAllParams = queryParams && queryParams['loginToken'];
         if (hasAllParams) {
-            this.setState({loginView: LOGIN_VIEW.LOADING});
+            this.setState({ loginView: LOGIN_VIEW.LOADING });
             this.trySsoLogin();
             return;
         }
@@ -125,18 +125,18 @@ export default class SoftLogout extends React.Component<IProps, IState> {
     }
 
     onPasswordChange = (ev) => {
-        this.setState({password: ev.target.value});
+        this.setState({ password: ev.target.value });
     };
 
     onForgotPassword = () => {
-        dis.dispatch({action: 'start_password_recovery'});
+        dis.dispatch({ action: 'start_password_recovery' });
     };
 
     onPasswordLogin = async (ev) => {
         ev.preventDefault();
         ev.stopPropagation();
 
-        this.setState({busy: true});
+        this.setState({ busy: true });
 
         const hsUrl = MatrixClientPeg.get().getHomeserverUrl();
         const isUrl = MatrixClientPeg.get().getIdentityServerUrl();
@@ -168,12 +168,12 @@ export default class SoftLogout extends React.Component<IProps, IState> {
 
         Lifecycle.hydrateSession(credentials).catch((e) => {
             console.error(e);
-            this.setState({busy: false, errorText: _t("Failed to re-authenticate")});
+            this.setState({ busy: false, errorText: _t("Failed to re-authenticate") });
         });
     };
 
     async trySsoLogin() {
-        this.setState({busy: true});
+        this.setState({ busy: true });
 
         const hsUrl = localStorage.getItem(SSO_HOMESERVER_URL_KEY);
         const isUrl = localStorage.getItem(SSO_ID_SERVER_URL_KEY) || MatrixClientPeg.get().getIdentityServerUrl();
@@ -188,7 +188,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             credentials = await sendLoginRequest(hsUrl, isUrl, loginType, loginParams);
         } catch (e) {
             console.error(e);
-            this.setState({busy: false, loginView: LOGIN_VIEW.UNSUPPORTED});
+            this.setState({ busy: false, loginView: LOGIN_VIEW.UNSUPPORTED });
             return;
         }
 
@@ -196,7 +196,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             if (this.props.onTokenLoginCompleted) this.props.onTokenLoginCompleted();
         }).catch((e) => {
             console.error(e);
-            this.setState({busy: false, loginView: LOGIN_VIEW.UNSUPPORTED});
+            this.setState({ busy: false, loginView: LOGIN_VIEW.UNSUPPORTED });
         });
     }
 

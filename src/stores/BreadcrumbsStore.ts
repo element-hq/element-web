@@ -66,13 +66,13 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
             if (payload.settingName === 'breadcrumb_rooms') {
                 await this.updateRooms();
             } else if (payload.settingName === 'breadcrumbs') {
-                await this.updateState({enabled: SettingsStore.getValue("breadcrumbs", null)});
+                await this.updateState({ enabled: SettingsStore.getValue("breadcrumbs", null) });
             }
         } else if (payload.action === 'view_room') {
             if (payload.auto_join && !this.matrixClient.getRoom(payload.room_id)) {
                 // Queue the room instead of pushing it immediately. We're probably just
                 // waiting for a room join to complete.
-                this.waitingRooms.push({roomId: payload.room_id, addedTs: Date.now()});
+                this.waitingRooms.push({ roomId: payload.room_id, addedTs: Date.now() });
             } else {
                 // The tests might not result in a valid room object.
                 const room = this.matrixClient.getRoom(payload.room_id);
@@ -83,7 +83,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
 
     protected async onReady() {
         await this.updateRooms();
-        await this.updateState({enabled: SettingsStore.getValue("breadcrumbs", null)});
+        await this.updateState({ enabled: SettingsStore.getValue("breadcrumbs", null) });
 
         this.matrixClient.on("Room.myMembership", this.onMyMembership);
         this.matrixClient.on("Room", this.onRoom);
@@ -118,7 +118,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
         const rooms = roomIds.map(r => this.matrixClient.getRoom(r)).filter(r => !!r);
         const currentRooms = this.state.rooms || [];
         if (!arrayHasDiff(rooms, currentRooms)) return; // no change (probably echo)
-        await this.updateState({rooms});
+        await this.updateState({ rooms });
     }
 
     private async appendRoom(room: Room) {
@@ -163,10 +163,9 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
             updated = true;
         }
 
-
         if (updated) {
             // Update the breadcrumbs
-            await this.updateState({rooms});
+            await this.updateState({ rooms });
             const roomIds = rooms.map(r => r.roomId);
             if (roomIds.length > 0) {
                 await SettingsStore.setValue("breadcrumb_rooms", null, SettingLevel.ACCOUNT, roomIds);

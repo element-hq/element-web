@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 import { lexicographicCompare } from 'matrix-js-sdk/src/utils';
-import { Room } from 'matrix-js-sdk/src/models/room'
+import { Room } from 'matrix-js-sdk/src/models/room';
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AppsDrawer from './AppsDrawer';
@@ -126,7 +126,7 @@ export default class AuxPanel extends React.Component<IProps, IState> {
                         link,
                         severity,
                         stateKey,
-                    })
+                    });
                 }
             }
         }

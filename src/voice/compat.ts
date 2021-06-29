@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {SAMPLE_RATE} from "./VoiceRecording";
+import { SAMPLE_RATE } from "./VoiceRecording";
 
 // @ts-ignore - we know that this is not a module. We're looking for a path.
 import decoderWasmPath from 'opus-recorder/dist/decoderWorker.min.wasm';
@@ -57,7 +57,7 @@ export function decodeOgg(audioBuffer: ArrayBuffer): Promise<ArrayBuffer> {
 
         decoderWorker.onmessage = (ev) => {
             if (ev.data === null) { // null == done
-                wavWorker.postMessage({command: 'done'});
+                wavWorker.postMessage({ command: 'done' });
                 return;
             }
 
@@ -70,7 +70,7 @@ export function decodeOgg(audioBuffer: ArrayBuffer): Promise<ArrayBuffer> {
         wavWorker.onmessage = (ev) => {
             if (ev.data.message === 'page') {
                 // The encoding comes through as a single page
-                resolve(new Blob([ev.data.page], {type: "audio/wav"}).arrayBuffer());
+                resolve(new Blob([ev.data.page], { type: "audio/wav" }).arrayBuffer());
             }
         };
 

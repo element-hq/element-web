@@ -14,23 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {createClient} from 'matrix-js-sdk/src/matrix';
-import React, {ReactNode} from 'react';
-import {MatrixClient} from "matrix-js-sdk/src/client";
+import { createClient } from 'matrix-js-sdk/src/matrix';
+import React, { ReactNode } from 'react';
+import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import * as sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
-import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
 import classNames from "classnames";
 import * as Lifecycle from '../../../Lifecycle';
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AuthPage from "../../views/auth/AuthPage";
-import Login, {ISSOFlow} from "../../../Login";
+import Login, { ISSOFlow } from "../../../Login";
 import dis from "../../../dispatcher/dispatcher";
 import SSOButtons from "../../views/elements/SSOButtons";
 import ServerPicker from '../../views/elements/ServerPicker';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     serverConfig: ValidatedServerConfig;
@@ -131,7 +131,7 @@ export default class Registration extends React.Component<IProps, IState> {
             serverDeadError: "",
         };
 
-        const {hsUrl, isUrl} = this.props.serverConfig;
+        const { hsUrl, isUrl } = this.props.serverConfig;
         this.loginLogic = new Login(hsUrl, isUrl, null, {
             defaultDeviceDisplayName: "Element login check", // We shouldn't ever be used
         });
@@ -180,7 +180,7 @@ export default class Registration extends React.Component<IProps, IState> {
             }
         }
 
-        const {hsUrl, isUrl} = serverConfig;
+        const { hsUrl, isUrl } = serverConfig;
         const cli = createClient({
             baseUrl: hsUrl,
             idBaseUrl: isUrl,
@@ -230,7 +230,7 @@ export default class Registration extends React.Component<IProps, IState> {
                 // the user off to the login page to figure their account out.
                 if (ssoFlow) {
                     // Redirect to login page - server probably expects SSO only
-                    dis.dispatch({action: 'start_login'});
+                    dis.dispatch({ action: 'start_login' });
                 } else {
                     this.setState({
                         serverErrorIsFatal: true, // fatal because user cannot continue on this server
@@ -267,7 +267,7 @@ export default class Registration extends React.Component<IProps, IState> {
                 session_id: sessionId,
             }),
         );
-    }
+    };
 
     private onUIAuthFinished = async (success: boolean, response: any) => {
         if (!success) {
@@ -432,7 +432,7 @@ export default class Registration extends React.Component<IProps, IState> {
     private onLoginClickWithCheck = async ev => {
         ev.preventDefault();
 
-        const sessionLoaded = await Lifecycle.loadSession({ignoreGuest: true});
+        const sessionLoaded = await Lifecycle.loadSession({ ignoreGuest: true });
         if (!sessionLoaded) {
             // ok fine, there's still no session: really go to the login page
             this.props.onLoginClick();
@@ -487,7 +487,13 @@ export default class Registration extends React.Component<IProps, IState> {
                         fragmentAfterLogin={this.props.fragmentAfterLogin}
                     />
                     <h3 className="mx_AuthBody_centered">
-                        { _t("%(ssoButtons)s Or %(usernamePassword)s", { ssoButtons: "", usernamePassword: ""}).trim() }
+                        {_t(
+                            "%(ssoButtons)s Or %(usernamePassword)s",
+                            {
+                                ssoButtons: "",
+                                usernamePassword: "",
+                            },
+                        ).trim()}
                     </h3>
                 </React.Fragment>;
             }
@@ -563,7 +569,7 @@ export default class Registration extends React.Component<IProps, IState> {
                     <p><AccessibleButton element="span" className="mx_linkButton" onClick={async event => {
                         const sessionLoaded = await this.onLoginClickWithCheck(event);
                         if (sessionLoaded) {
-                            dis.dispatch({action: "view_welcome_page"});
+                            dis.dispatch({ action: "view_welcome_page" });
                         }
                     }}>
                         {_t("Continue with previous account")}

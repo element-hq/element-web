@@ -14,25 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useContext, useRef, useState} from "react";
+import React, { useContext, useRef, useState } from "react";
 import classNames from "classnames";
-import {EventType, RoomType, RoomCreateTypeField} from "matrix-js-sdk/src/@types/event";
+import { EventType, RoomType, RoomCreateTypeField } from "matrix-js-sdk/src/@types/event";
 import FocusLock from "react-focus-lock";
 
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import {ChevronFace, ContextMenu} from "../../structures/ContextMenu";
+import { ChevronFace, ContextMenu } from "../../structures/ContextMenu";
 import createRoom from "../../../createRoom";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {SpaceAvatar} from "./SpaceBasicSettings";
+import { SpaceAvatar } from "./SpaceBasicSettings";
 import AccessibleButton from "../elements/AccessibleButton";
-import {BetaPill} from "../beta/BetaCard";
+import { BetaPill } from "../beta/BetaCard";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {Action} from "../../../dispatcher/actions";
+import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserSettingsDialog";
 import Field from "../elements/Field";
 import withValidation from "../elements/Validation";
-import {SpaceFeedbackPrompt} from "../../structures/SpaceRoomView";
+import { SpaceFeedbackPrompt } from "../../structures/SpaceRoomView";
 import { Preset } from "matrix-js-sdk/src/@types/partials";
 import { ICreateRoomStateEvent } from "matrix-js-sdk/src/@types/requests";
 import RoomAliasField from "../elements/RoomAliasField";
@@ -261,6 +261,6 @@ const SpaceCreateMenu = ({ onFinished }) => {
             { body }
         </FocusLock>
     </ContextMenu>;
-}
+};
 
 export default SpaceCreateMenu;

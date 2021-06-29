@@ -73,7 +73,7 @@ export default class RoomProvider extends AutocompleteProvider {
         limit = -1,
     ): Promise<ICompletion[]> {
         let completions = [];
-        const {command, range} = this.getCurrentCommand(query, selection, force);
+        const { command, range } = this.getCurrentCommand(query, selection, force);
         if (command) {
             // the only reason we need to do this is because Fuse only matches on properties
             let matcherObjects = this.getRooms().reduce((aliases, room) => {

@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import type {MatrixClient} from "matrix-js-sdk/src/client";
-import type {MatrixEvent} from "matrix-js-sdk/src/models/event";
-import type {Room} from "matrix-js-sdk/src/models/room";
+import type { MatrixClient } from "matrix-js-sdk/src/client";
+import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import type { Room } from "matrix-js-sdk/src/models/room";
 
 import SdkConfig from '../SdkConfig';
 import Modal from '../Modal';
-import {IntegrationManagerInstance, Kind} from "./IntegrationManagerInstance";
+import { IntegrationManagerInstance, Kind } from "./IntegrationManagerInstance";
 import IntegrationsImpossibleDialog from "../components/views/dialogs/IntegrationsImpossibleDialog";
 import TabbedIntegrationManagerDialog from "../components/views/dialogs/TabbedIntegrationManagerDialog";
 import IntegrationsDisabledDialog from "../components/views/dialogs/IntegrationsDisabledDialog";
 import WidgetUtils from "../utils/WidgetUtils";
-import {MatrixClientPeg} from "../MatrixClientPeg";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
 import url from 'url';
 import { compare } from "../utils/strings";
@@ -187,7 +187,7 @@ export class IntegrationManagers {
 
         Modal.createTrackedDialog(
             'Tabbed Integration Manager', '', TabbedIntegrationManagerDialog,
-            {room, screen, integrationId}, 'mx_TabbedIntegrationManagerDialog',
+            { room, screen, integrationId }, 'mx_TabbedIntegrationManagerDialog',
         );
     }
 

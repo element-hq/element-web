@@ -17,14 +17,14 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from "prop-types";
-import {MatrixClientPeg} from "../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import * as sdk from "../../index";
 import Modal from '../../Modal';
 import { _t } from '../../languageHandler';
 import HomePage from "./HomePage";
-import {replaceableComponent} from "../../utils/replaceableComponent";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
-import {RoomMember} from "matrix-js-sdk/src/models/room-member";
+import { replaceableComponent } from "../../utils/replaceableComponent";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 @replaceableComponent("structures.UserView")
 export default class UserView extends React.Component {
@@ -56,7 +56,7 @@ export default class UserView extends React.Component {
 
     async _loadProfileInfo() {
         const cli = MatrixClientPeg.get();
-        this.setState({loading: true});
+        this.setState({ loading: true });
         let profileInfo;
         try {
             profileInfo = await cli.getProfileInfo(this.props.userId);
@@ -66,13 +66,13 @@ export default class UserView extends React.Component {
                 title: _t('Could not load user profile'),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
-            this.setState({loading: false});
+            this.setState({ loading: false });
             return;
         }
-        const fakeEvent = new MatrixEvent({type: "m.room.member", content: profileInfo});
+        const fakeEvent = new MatrixEvent({ type: "m.room.member", content: profileInfo });
         const member = new RoomMember(null, this.props.userId);
         member.setMembershipEvent(fakeEvent);
-        this.setState({member, loading: false});
+        this.setState({ member, loading: false });
     }
 
     render() {

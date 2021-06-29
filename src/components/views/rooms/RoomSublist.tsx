@@ -54,7 +54,7 @@ import ExtraTile from "./ExtraTile";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 import IconizedContextMenu from "../context_menus/IconizedContextMenu";
 import { getKeyBindingsManager, RoomListAction } from "../../../KeyBindingsManager";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
@@ -128,7 +128,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             rooms: arrayFastClone(RoomListStore.instance.orderedLists[this.props.tagId] || []),
         };
         // Why Object.assign() and not this.state.height? Because TypeScript says no.
-        this.state = Object.assign(this.state, {height: this.calculateInitialHeight()});
+        this.state = Object.assign(this.state, { height: this.calculateInitialHeight() });
     }
 
     private calculateInitialHeight() {
@@ -184,7 +184,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         // as the rooms can come in one by one we need to reevaluate
         // the amount of available rooms to cap the amount of requested visible rooms by the layout
         if (RoomSublist.calcNumTiles(prevState.rooms, prevExtraTiles) !== this.numTiles) {
-            this.setState({height: this.calculateInitialHeight()});
+            this.setState({ height: this.calculateInitialHeight() });
         }
     }
 
@@ -329,12 +329,12 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     ) => {
         const newHeight = this.heightAtStart + delta.height;
         this.applyHeightChange(newHeight);
-        this.setState({height: newHeight});
+        this.setState({ height: newHeight });
     };
 
     private onResizeStart = () => {
         this.heightAtStart = this.state.height;
-        this.setState({isResizing: true});
+        this.setState({ isResizing: true });
     };
 
     private onResizeStop = (
@@ -345,7 +345,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     ) => {
         const newHeight = this.heightAtStart + delta.height;
         this.applyHeightChange(newHeight);
-        this.setState({isResizing: false, height: newHeight});
+        this.setState({ isResizing: false, height: newHeight });
     };
 
     private onShowAllClick = () => {
@@ -353,7 +353,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         const numVisibleTiles = this.numVisibleTiles;
         const newHeight = this.layout.tilesToPixelsWithPadding(this.numTiles, this.padding);
         this.applyHeightChange(newHeight);
-        this.setState({height: newHeight}, () => {
+        this.setState({ height: newHeight }, () => {
             // focus the top-most new room
             this.focusRoomTile(numVisibleTiles);
         });
@@ -362,7 +362,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private onShowLessClick = () => {
         const newHeight = this.layout.tilesToPixelsWithPadding(this.layout.defaultVisibleTiles, this.padding);
         this.applyHeightChange(newHeight);
-        this.setState({height: newHeight});
+        this.setState({ height: newHeight });
     };
 
     private focusRoomTile = (index: number) => {
@@ -378,7 +378,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
-        this.setState({contextMenuPosition: target.getBoundingClientRect()});
+        this.setState({ contextMenuPosition: target.getBoundingClientRect() });
     };
 
     private onContextMenu = (ev: React.MouseEvent) => {
@@ -397,15 +397,15 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
-        this.setState({addRoomContextMenuPosition: target.getBoundingClientRect()});
+        this.setState({ addRoomContextMenuPosition: target.getBoundingClientRect() });
     };
 
     private onCloseMenu = () => {
-        this.setState({contextMenuPosition: null});
+        this.setState({ contextMenuPosition: null });
     };
 
     private onCloseAddRoomMenu = () => {
-        this.setState({addRoomContextMenuPosition: null});
+        this.setState({ addRoomContextMenuPosition: null });
     };
 
     private onUnreadFirstChanged = async () => {
@@ -462,7 +462,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
         if ((isStickyBottom && !isAtBottom) || (isStickyTop && !isAtTop)) {
             // is sticky - jump to list
-            sublist.scrollIntoView({behavior: 'smooth'});
+            sublist.scrollIntoView({ behavior: 'smooth' });
         } else {
             // on screen - toggle collapse
             const isExpanded = this.state.isExpanded;
@@ -470,7 +470,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             // if the bottom list is collapsed then scroll it in so it doesn't expand off screen
             if (!isExpanded && isStickyBottom) {
                 setImmediate(() => {
-                    sublist.scrollIntoView({behavior: 'smooth'});
+                    sublist.scrollIntoView({ behavior: 'smooth' });
                 });
             }
         }
@@ -478,9 +478,9 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
     private toggleCollapsed = () => {
         this.layout.isCollapsed = this.state.isExpanded;
-        this.setState({isExpanded: !this.layout.isCollapsed});
+        this.setState({ isExpanded: !this.layout.isCollapsed });
         if (this.props.onListCollapse) {
-            this.props.onListCollapse(!this.layout.isCollapsed)
+            this.props.onListCollapse(!this.layout.isCollapsed);
         }
     };
 
@@ -655,7 +655,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private renderHeader(): React.ReactElement {
         return (
             <RovingTabIndexWrapper inputRef={this.headerButton}>
-                {({onFocus, isActive, ref}) => {
+                {({ onFocus, isActive, ref }) => {
                     const tabIndex = isActive ? 0 : -1;
 
                     let ariaLabel = _t("Jump to first unread room.");
@@ -801,7 +801,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                 const nonPaddedHeight = this.state.height - RESIZE_HANDLE_HEIGHT - SHOW_N_BUTTON_HEIGHT;
                 const amountFullyShown = Math.floor(nonPaddedHeight / this.layout.tileHeight);
                 const numMissing = this.numTiles - amountFullyShown;
-                const label = _t("Show %(count)s more", {count: numMissing});
+                const label = _t("Show %(count)s more", { count: numMissing });
                 let showMoreText = (
                     <span className='mx_RoomSublist_showNButtonText'>
                         {label}
@@ -879,14 +879,14 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             content = (
                 <React.Fragment>
                     <Resizable
-                        size={{height: this.state.height} as any}
+                        size={{ height: this.state.height } as any}
                         minHeight={minTilesPx}
                         maxHeight={maxTilesPx}
                         onResizeStart={this.onResizeStart}
                         onResizeStop={this.onResizeStop}
                         onResize={this.onResize}
                         handleWrapperClass={handleWrapperClasses}
-                        handleClasses={{bottom: "mx_RoomSublist_resizerHandle"}}
+                        handleClasses={{ bottom: "mx_RoomSublist_resizerHandle" }}
                         className="mx_RoomSublist_resizeBox"
                         enable={handles}
                     >

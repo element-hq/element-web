@@ -15,9 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const {openRoomDirectory} = require('./create-room');
+const { openRoomDirectory } = require('./create-room');
 const { measureStart, measureStop } = require('../util');
-
 
 module.exports = async function join(session, roomName) {
     session.log.step(`joins room "${roomName}"`);

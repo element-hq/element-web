@@ -18,7 +18,7 @@ limitations under the License.
 
 import pako from 'pako';
 
-import {MatrixClientPeg} from '../MatrixClientPeg';
+import { MatrixClientPeg } from '../MatrixClientPeg';
 import PlatformPeg from '../PlatformPeg';
 import { _t } from '../languageHandler';
 import Tar from "tar-js";

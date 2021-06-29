@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const {assertNoToasts, acceptToast, rejectToast} = require("../usecases/toasts");
+const { assertNoToasts, acceptToast, rejectToast } = require("../usecases/toasts");
 
 module.exports = async function toastScenarios(alice, bob) {
     console.log(" checking and clearing toasts:");

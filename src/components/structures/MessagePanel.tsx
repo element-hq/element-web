@@ -432,7 +432,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             // confused.
             if (visible) {
                 hr = <hr className="mx_RoomView_myReadMarker"
-                    style={{opacity: 1, width: '99%'}}
+                    style={{ opacity: 1, width: '99%' }}
                 />;
             }
 

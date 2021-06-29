@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import classnames from 'classnames';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
     outlined?: boolean;

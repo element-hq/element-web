@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {getLineAndNodePosition} from "../../src/editor/caret";
+import { getLineAndNodePosition } from "../../src/editor/caret";
 import EditorModel from "../../src/editor/model";
-import {createPartCreator} from "./mock";
+import { createPartCreator } from "./mock";
 
 describe('editor/caret: DOM position for caret', function() {
     describe('basic text handling', function() {
@@ -25,8 +25,8 @@ describe('editor/caret: DOM position for caret', function() {
             const model = new EditorModel([
                 pc.plain("hello"),
             ]);
-            const {offset, lineIndex, nodeIndex} =
-                getLineAndNodePosition(model, {index: 0, offset: 5});
+            const { offset, lineIndex, nodeIndex } =
+                getLineAndNodePosition(model, { index: 0, offset: 5 });
             expect(lineIndex).toBe(0);
             expect(nodeIndex).toBe(0);
             expect(offset).toBe(5);
@@ -36,8 +36,8 @@ describe('editor/caret: DOM position for caret', function() {
             const model = new EditorModel([
                 pc.plain("hello"),
             ]);
-            const {offset, lineIndex, nodeIndex} =
-                getLineAndNodePosition(model, {index: 0, offset: 0});
+            const { offset, lineIndex, nodeIndex } =
+                getLineAndNodePosition(model, { index: 0, offset: 0 });
             expect(lineIndex).toBe(0);
             expect(nodeIndex).toBe(0);
             expect(offset).toBe(0);
@@ -47,8 +47,8 @@ describe('editor/caret: DOM position for caret', function() {
             const model = new EditorModel([
                 pc.plain("hello"),
             ]);
-            const {offset, lineIndex, nodeIndex} =
-                getLineAndNodePosition(model, {index: 0, offset: 2});
+            const { offset, lineIndex, nodeIndex } =
+                getLineAndNodePosition(model, { index: 0, offset: 2 });
             expect(lineIndex).toBe(0);
             expect(nodeIndex).toBe(0);
             expect(offset).toBe(2);
@@ -62,8 +62,8 @@ describe('editor/caret: DOM position for caret', function() {
                 pc.newline(),
                 pc.plain("world"),
             ]);
-            const {offset, lineIndex, nodeIndex} =
-                getLineAndNodePosition(model, {index: 2, offset: 5});
+            const { offset, lineIndex, nodeIndex } =
+                getLineAndNodePosition(model, { index: 2, offset: 5 });
             expect(lineIndex).toBe(1);
             expect(nodeIndex).toBe(0);
             expect(offset).toBe(5);
@@ -75,8 +75,8 @@ describe('editor/caret: DOM position for caret', function() {
                 pc.newline(),
                 pc.plain("world"),
             ]);
-            const {offset, lineIndex, nodeIndex} =
-                getLineAndNodePosition(model, {index: 2, offset: 0});
+            const { offset, lineIndex, nodeIndex } =
+                getLineAndNodePosition(model, { index: 2, offset: 0 });
             expect(lineIndex).toBe(1);
             expect(nodeIndex).toBe(0);
             expect(offset).toBe(0);
@@ -89,8 +89,8 @@ describe('editor/caret: DOM position for caret', function() {
                 pc.newline(),
                 pc.plain("world"),
             ]);
-            const {offset, lineIndex, nodeIndex} =
-                getLineAndNodePosition(model, {index: 1, offset: 1});
+            const { offset, lineIndex, nodeIndex } =
+                getLineAndNodePosition(model, { index: 1, offset: 1 });
             expect(lineIndex).toBe(1);
             expect(nodeIndex).toBe(-1);
             expect(offset).toBe(0);
@@ -103,8 +103,8 @@ describe('editor/caret: DOM position for caret', function() {
                 pc.newline(),
                 pc.plain("world"),
             ]);
-            const {offset, lineIndex, nodeIndex} =
-                getLineAndNodePosition(model, {index: 3, offset: 0});
+            const { offset, lineIndex, nodeIndex } =
+                getLineAndNodePosition(model, { index: 3, offset: 0 });
             expect(lineIndex).toBe(2);
             expect(nodeIndex).toBe(0);
             expect(offset).toBe(0);
@@ -118,8 +118,8 @@ describe('editor/caret: DOM position for caret', function() {
                 pc.userPill("Alice", "@alice:hs.tld"),
                 pc.plain("!"),
             ]);
-            const {offset, lineIndex, nodeIndex} =
-                getLineAndNodePosition(model, {index: 1, offset: 0});
+            const { offset, lineIndex, nodeIndex } =
+                getLineAndNodePosition(model, { index: 1, offset: 0 });
             expect(lineIndex).toBe(0);
             expect(nodeIndex).toBe(0);
             expect(offset).toBe(5);
@@ -131,8 +131,8 @@ describe('editor/caret: DOM position for caret', function() {
                 pc.userPill("Alice", "@alice:hs.tld"),
                 pc.plain("!"),
             ]);
-            const {offset, lineIndex, nodeIndex} =
-                getLineAndNodePosition(model, {index: 1, offset: 2});
+            const { offset, lineIndex, nodeIndex } =
+                getLineAndNodePosition(model, { index: 1, offset: 2 });
             expect(lineIndex).toBe(0);
             expect(nodeIndex).toBe(2);
             expect(offset).toBe(0);
@@ -142,8 +142,8 @@ describe('editor/caret: DOM position for caret', function() {
             const model = new EditorModel([
                 pc.userPill("Alice", "@alice:hs.tld"),
             ]);
-            const {offset, lineIndex, nodeIndex} =
-                getLineAndNodePosition(model, {index: 0, offset: 0});
+            const { offset, lineIndex, nodeIndex } =
+                getLineAndNodePosition(model, { index: 0, offset: 0 });
             expect(lineIndex).toBe(0);
             //presumed nodes on line are (caret, pill, caret)
             expect(nodeIndex).toBe(0);
@@ -154,8 +154,8 @@ describe('editor/caret: DOM position for caret', function() {
             const model = new EditorModel([
                 pc.userPill("Alice", "@alice:hs.tld"),
             ]);
-            const {offset, lineIndex, nodeIndex} =
-                getLineAndNodePosition(model, {index: 0, offset: 1});
+            const { offset, lineIndex, nodeIndex } =
+                getLineAndNodePosition(model, { index: 0, offset: 1 });
             expect(lineIndex).toBe(0);
             //presumed nodes on line are (caret, pill, caret)
             expect(nodeIndex).toBe(2);
@@ -167,8 +167,8 @@ describe('editor/caret: DOM position for caret', function() {
                 pc.userPill("Alice", "@alice:hs.tld"),
                 pc.userPill("Bob", "@bob:hs.tld"),
             ]);
-            const {offset, lineIndex, nodeIndex} =
-                getLineAndNodePosition(model, {index: 0, offset: 1});
+            const { offset, lineIndex, nodeIndex } =
+                getLineAndNodePosition(model, { index: 0, offset: 1 });
             expect(lineIndex).toBe(0);
             //presumed nodes on line are (caret, pill, caret, pill, caret)
             expect(nodeIndex).toBe(2);
@@ -180,8 +180,8 @@ describe('editor/caret: DOM position for caret', function() {
                 pc.userPill("Alice", "@alice:hs.tld"),
                 pc.userPill("Bob", "@bob:hs.tld"),
             ]);
-            const {offset, lineIndex, nodeIndex} =
-                getLineAndNodePosition(model, {index: 1, offset: 0});
+            const { offset, lineIndex, nodeIndex } =
+                getLineAndNodePosition(model, { index: 1, offset: 0 });
             expect(lineIndex).toBe(0);
             //presumed nodes on line are (caret, pill, caret, pill, caret)
             expect(nodeIndex).toBe(2);
@@ -193,8 +193,8 @@ describe('editor/caret: DOM position for caret', function() {
                 pc.userPill("Alice", "@alice:hs.tld"),
                 pc.userPill("Bob", "@bob:hs.tld"),
             ]);
-            const {offset, lineIndex, nodeIndex} =
-                getLineAndNodePosition(model, {index: 1, offset: 1});
+            const { offset, lineIndex, nodeIndex } =
+                getLineAndNodePosition(model, { index: 1, offset: 1 });
             expect(lineIndex).toBe(0);
             //presumed nodes on line are (caret, pill, caret, pill, caret)
             expect(nodeIndex).toBe(4);
