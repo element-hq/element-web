@@ -2352,5 +2352,21 @@
     "Converts the room to a DM": "Zmienia pokój w wiadomość bezpośrednią",
     "Sends the given message as a spoiler": "Wysyła podaną wiadomość jako spoiler",
     "User Busy": "Użytkownik zajęty",
-    "The user you called is busy.": "Użytkownik do którego zadzwoniłeś(-aś) jest zajęty."
+    "The user you called is busy.": "Użytkownik do którego zadzwoniłeś(-aś) jest zajęty.",
+    "End-to-end encryption isn't enabled": "Szyfrowanie end-to-end nie jest włączone",
+    "Nothing pinned, yet": "Nie przypięto tu jeszcze niczego",
+    "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "Jeżeli masz uprawnienia, przejdź do menu dowolnej wiadomości i wybierz <b>Przypnij</b>, aby przyczepić ją tutaj.",
+    "Pinned messages": "Przypięte wiadomości",
+    "Error loading Widget": "Błąd ładowania widżetu",
+    "Error - Mixed content": "Błąd — zawartość mieszana",
+    "You don't have permission to do this": "Nie masz uprawnień aby to zrobić",
+    "Sent": "Wysłano",
+    "Open link": "Otwórz odnośnik",
+    "Forward message": "Przekaż wiadomość",
+    "Message preview": "Podgląd wiadomości",
+    "Search for rooms or people": "Szukaj pokojów i ludzi",
+    "Some suggestions may be hidden for privacy.": "Niektóre propozycje mogą być ukryte z uwagi na prywatność.",
+    "If you can't see who you’re looking for, send them your invite link below.": "Jeżeli nie możesz zobaczyć osób, których szukasz, wyślij im poniższy odnośnik z zaproszeniem.",
+    "Or send invite link": "Lub wyślij odnośnik z zaproszeniem",
+    "We're working on this as part of the beta, but just want to let you know.": "Pracujemy nad tym w ramach bety, ale chcemy, żebyś wiedział(a)."
 }
