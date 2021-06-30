@@ -105,7 +105,7 @@ export default class SeekBar extends React.PureComponent<IProps, IState> {
             max={1}
             value={this.state.percentage}
             step={0.001}
-            style={{'--fillTo': this.state.percentage} as ISeekCSS}
+            style={{ '--fillTo': this.state.percentage } as ISeekCSS}
             disabled={this.props.playbackPhase === PlaybackState.Decoding}
         />;
     }

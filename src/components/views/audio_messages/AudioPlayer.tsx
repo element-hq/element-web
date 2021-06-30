@@ -118,6 +118,6 @@ export default class AudioPlayer extends React.PureComponent<IProps, IState> {
                 />
                 <PlaybackClock playback={this.props.playback} defaultDisplaySeconds={0} />
             </div>
-        </div>
+        </div>;
     }
 }

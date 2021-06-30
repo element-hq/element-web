@@ -46,7 +46,7 @@ export default class DurationClock extends React.PureComponent<IProps, IState> {
     }
 
     private onTimeUpdate = (time: number[]) => {
-        this.setState({durationSeconds: time[1]});
+        this.setState({ durationSeconds: time[1] });
     };
 
     public render() {
