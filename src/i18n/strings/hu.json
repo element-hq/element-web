@@ -33,5 +33,6 @@
     "Your browser can't run %(brand)s": "A böngészője nem tudja futtatni ezt: %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s speciális böngészőfunkciókat használ, amelyeket a jelenlegi böngészője nem támogat.",
     "Powered by Matrix": "A gépházban: Matrix",
-    "Use %(brand)s on mobile": "Mobilon használd ezt: %(brand)s"
+    "Use %(brand)s on mobile": "Mobilon használd ezt: %(brand)s",
+    "Switch to space by number": "Tér váltás számmal"
 }
