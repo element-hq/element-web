@@ -121,14 +121,15 @@ interface IState {
 @replaceableComponent("views.rooms.EditMessageComposer")
 export default class EditMessageComposer extends React.Component<IProps, IState> {
     static contextType = MatrixClientContext;
-    context: React.ContextType<typeof MatrixClientContext>;
+    context!: React.ContextType<typeof MatrixClientContext>;
 
     private readonly editorRef = createRef<BasicMessageComposer>();
     private readonly dispatcherRef: string;
     private model: EditorModel = null;
 
     constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+        super(props);
+        this.context = context; // otherwise React will only set it prior to render due to type def above
 
         this.state = {
             saveDisabled: true,

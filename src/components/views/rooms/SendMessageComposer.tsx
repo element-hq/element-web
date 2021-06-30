@@ -136,7 +136,7 @@ interface IProps {
 @replaceableComponent("views.rooms.SendMessageComposer")
 export default class SendMessageComposer extends React.Component<IProps> {
     static contextType = MatrixClientContext;
-    context: React.ContextType<typeof MatrixClientContext>;
+    context!: React.ContextType<typeof MatrixClientContext>;
 
     private readonly prepareToEncrypt?: RateLimitedFunc;
     private readonly editorRef = createRef<BasicMessageComposer>();
@@ -146,8 +146,9 @@ export default class SendMessageComposer extends React.Component<IProps> {
     private sendHistoryManager: SendHistoryManager;
 
     constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
-        if (context.isCryptoEnabled() && context.isRoomEncrypted(this.props.room.roomId)) {
+        super(props);
+        this.context = context; // otherwise React will only set it prior to render due to type def above
+        if (this.context.isCryptoEnabled() && this.context.isRoomEncrypted(this.props.room.roomId)) {
             this.prepareToEncrypt = new RateLimitedFunc(() => {
                 this.context.prepareToEncrypt(this.props.room);
             }, 60000);
