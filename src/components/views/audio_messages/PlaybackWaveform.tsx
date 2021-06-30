@@ -33,7 +33,7 @@ interface IState {
 /**
  * A waveform which shows the waveform of a previously recorded recording
  */
-@replaceableComponent("views.voice_messages.PlaybackWaveform")
+@replaceableComponent("views.audio_messages.PlaybackWaveform")
 export default class PlaybackWaveform extends React.PureComponent<IProps, IState> {
     public constructor(props) {
         super(props);

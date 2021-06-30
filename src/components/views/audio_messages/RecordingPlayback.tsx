@@ -20,6 +20,7 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import PlaybackWaveform from "./PlaybackWaveform";
 import PlayPauseButton from "./PlayPauseButton";
 import PlaybackClock from "./PlaybackClock";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // Playback instance to render. Cannot change during component lifecycle: create
@@ -31,6 +32,7 @@ interface IState {
     playbackPhase: PlaybackState;
 }
 
+@replaceableComponent("views.audio_messages.RecordingPlayback")
 export default class RecordingPlayback extends React.PureComponent<IProps, IState> {
     constructor(props: IProps) {
         super(props);
@@ -53,7 +55,7 @@ export default class RecordingPlayback extends React.PureComponent<IProps, IStat
     };
 
     public render(): ReactNode {
-        return <div className='mx_VoiceMessagePrimaryContainer'>
+        return <div className='mx_MediaBody mx_VoiceMessagePrimaryContainer'>
             <PlayPauseButton playback={this.props.playback} playbackPhase={this.state.playbackPhase} />
             <PlaybackClock playback={this.props.playback} />
             <PlaybackWaveform playback={this.props.playback} />

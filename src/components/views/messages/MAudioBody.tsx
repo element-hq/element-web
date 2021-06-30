@@ -23,8 +23,8 @@ import InlineSpinner from '../elements/InlineSpinner';
 import { _t } from "../../../languageHandler";
 import { mediaFromContent } from "../../../customisations/Media";
 import { decryptFile } from "../../../utils/DecryptFile";
-import RecordingPlayback from "../audio_messages/RecordingPlayback";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
+import AudioPlayer from "../audio_messages/AudioPlayer";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -36,8 +36,8 @@ interface IState {
     decryptedBlob?: Blob;
 }
 
-@replaceableComponent("views.messages.MVoiceMessageBody")
-export default class MVoiceMessageBody extends React.PureComponent<IProps, IState> {
+@replaceableComponent("views.messages.MAudioBody")
+export default class MAudioBody extends React.PureComponent<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
@@ -55,7 +55,7 @@ export default class MVoiceMessageBody extends React.PureComponent<IProps, IStat
                 this.setState({ decryptedBlob: blob });
             } catch (e) {
                 this.setState({ error: e });
-                console.warn("Unable to decrypt voice message", e);
+                console.warn("Unable to decrypt audio message", e);
                 return; // stop processing the audio file
             }
         } else {
@@ -63,15 +63,14 @@ export default class MVoiceMessageBody extends React.PureComponent<IProps, IStat
                 buffer = await media.downloadSource().then(r => r.blob()).then(r => r.arrayBuffer());
             } catch (e) {
                 this.setState({ error: e });
-                console.warn("Unable to download voice message", e);
+                console.warn("Unable to download audio message", e);
                 return; // stop processing the audio file
             }
         }
 
-        const waveform = content?.["org.matrix.msc1767.audio"]?.waveform?.map(p => p / 1024);
-
         // We should have a buffer to work with now: let's set it up
-        const playback = new Playback(buffer, waveform);
+        const playback = new Playback(buffer);
+        playback.clockInfo.populatePlaceholdersFrom(this.props.mxEvent);
         this.setState({ playback });
         // Note: the RecordingPlayback component will handle preparing the Playback class for us.
     }
@@ -84,9 +83,9 @@ export default class MVoiceMessageBody extends React.PureComponent<IProps, IStat
         if (this.state.error) {
             // TODO: @@TR: Verify error state
             return (
-                <span className="mx_MVoiceMessageBody">
+                <span className="mx_MAudioBody">
                     <img src={require("../../../../res/img/warning.svg")} width="16" height="16" />
-                    { _t("Error processing voice message") }
+                    { _t("Error processing audio message") }
                 </span>
             );
         }
@@ -94,7 +93,7 @@ export default class MVoiceMessageBody extends React.PureComponent<IProps, IStat
         if (!this.state.playback) {
             // TODO: @@TR: Verify loading/decrypting state
             return (
-                <span className="mx_MVoiceMessageBody">
+                <span className="mx_MAudioBody">
                     <InlineSpinner />
                 </span>
             );
@@ -102,8 +101,8 @@ export default class MVoiceMessageBody extends React.PureComponent<IProps, IStat
 
         // At this point we should have a playable state
         return (
-            <span className="mx_MVoiceMessageBody">
-                <RecordingPlayback playback={this.state.playback} />
+            <span className="mx_MAudioBody">
+                <AudioPlayer playback={this.state.playback} mediaName={this.props.mxEvent.getContent().body} />
                 <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />
             </span>
         );
