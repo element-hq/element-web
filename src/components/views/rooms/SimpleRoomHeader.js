@@ -28,7 +28,7 @@ export default class SimpleRoomHeader extends React.Component {
     static propTypes = {
         title: PropTypes.string,
 
-        // `src` to a TintableSvg. Optional.
+        // `src` to an image. Optional.
         icon: PropTypes.string,
     };
 
