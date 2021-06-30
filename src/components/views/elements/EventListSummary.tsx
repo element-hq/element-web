@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ReactChildren, useEffect} from 'react';
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
-import {RoomMember} from "matrix-js-sdk/src/models/room-member";
+import React, { ReactNode, useEffect } from 'react';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import MemberAvatar from '../avatars/MemberAvatar';
 import { _t } from '../../../languageHandler';
-import {useStateToggle} from "../../../hooks/useStateToggle";
+import { useStateToggle } from "../../../hooks/useStateToggle";
 import AccessibleButton from "./AccessibleButton";
 
 interface IProps {
@@ -31,11 +31,11 @@ interface IProps {
     // Whether or not to begin with state.expanded=true
     startExpanded?: boolean,
     // The list of room members for which to show avatars next to the summary
-    summaryMembers?: RoomMember[],
+    summaryMembers?: RoomMember[];
     // The text to show as the summary of this event list
-    summaryText?: string,
+    summaryText?: string;
     // An array of EventTiles to render when expanded
-    children: ReactChildren,
+    children: ReactNode[];
     // Called when the event list expansion is toggled
     onToggle?(): void;
 }

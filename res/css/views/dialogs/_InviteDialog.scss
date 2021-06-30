@@ -295,6 +295,7 @@ limitations under the License.
 
     .mx_InviteDialog_content {
         overflow: hidden;
+        height: 100%;
     }
 }
 
@@ -315,4 +316,43 @@ limitations under the License.
 
 .mx_InviteDialog_helpText .mx_AccessibleButton_kind_link {
     padding: 0;
+}
+
+.mx_InviteDialog_multiInviterError {
+    > h4 {
+        font-size: $font-15px;
+        line-height: $font-24px;
+        color: $secondary-fg-color;
+        font-weight: normal;
+    }
+
+    > div {
+        .mx_InviteDialog_multiInviterError_entry {
+            margin-bottom: 24px;
+
+            .mx_InviteDialog_multiInviterError_entry_userProfile {
+                .mx_InviteDialog_multiInviterError_entry_name {
+                    margin-left: 6px;
+                    font-size: $font-15px;
+                    line-height: $font-24px;
+                    font-weight: $font-semi-bold;
+                    color: $primary-fg-color;
+                }
+
+                .mx_InviteDialog_multiInviterError_entry_userId {
+                    margin-left: 6px;
+                    font-size: $font-12px;
+                    line-height: $font-15px;
+                    color: $tertiary-fg-color;
+                }
+            }
+
+            .mx_InviteDialog_multiInviterError_entry_error {
+                margin-left: 32px;
+                font-size: $font-15px;
+                line-height: $font-24px;
+                color: $notice-primary-color;
+            }
+        }
+    }
 }

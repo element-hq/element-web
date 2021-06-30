@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import EditorModel from "../../src/editor/model";
-import {createPartCreator, createRenderer} from "./mock";
+import { createPartCreator, createRenderer } from "./mock";
 
 const pillChannel = "#riot-dev:matrix.org";
 

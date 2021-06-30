@@ -15,13 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {diffAtCaret, diffDeletion, IDiff} from "./diff";
-import DocumentPosition, {IPosition} from "./position";
+import { diffAtCaret, diffDeletion, IDiff } from "./diff";
+import DocumentPosition, { IPosition } from "./position";
 import Range from "./range";
-import {SerializedPart, Part, PartCreator} from "./parts";
-import AutocompleteWrapperModel, {ICallback} from "./autocomplete";
+import { SerializedPart, Part, PartCreator } from "./parts";
+import AutocompleteWrapperModel, { ICallback } from "./autocomplete";
 import DocumentOffset from "./offset";
-import {Caret} from "./caret";
+import { Caret } from "./caret";
 
 /**
  * @callback ModelCallback
@@ -221,7 +221,7 @@ export default class EditorModel {
     }
 
     private setActivePart(pos: DocumentPosition, canOpenAutoComplete: boolean) {
-        const {index} = pos;
+        const { index } = pos;
         const part = this._parts[index];
         if (part) {
             if (index !== this.activePartIdx) {
@@ -250,7 +250,7 @@ export default class EditorModel {
         return Promise.resolve();
     }
 
-    private onAutoComplete = ({replaceParts, close}: ICallback) => {
+    private onAutoComplete = ({ replaceParts, close }: ICallback) => {
         let pos;
         if (replaceParts) {
             this._parts.splice(this.autoCompletePartIdx, this.autoCompletePartCount, ...replaceParts);
@@ -295,7 +295,7 @@ export default class EditorModel {
      * usually because of non-editable parts that can only be removed in their entirety.
      */
     removeText(pos: IPosition, len: number) {
-        let {index, offset} = pos;
+        let { index, offset } = pos;
         let removedOffsetDecrease = 0;
         while (len > 0) {
             // part might be undefined here
@@ -357,8 +357,8 @@ export default class EditorModel {
      * This can be more than the length of `str` when crossing non-editable parts, which are skipped.
      */
     private addText(pos: IPosition, str: string, inputType: string) {
-        let {index} = pos;
-        const {offset} = pos;
+        let { index } = pos;
+        const { offset } = pos;
         let addLen = str.length;
         const part = this._parts[index];
         if (part) {
@@ -390,7 +390,7 @@ export default class EditorModel {
         return addLen;
     }
 
-    positionForOffset(totalOffset: number, atPartEnd: boolean) {
+    positionForOffset(totalOffset: number, atPartEnd = false) {
         let currentOffset = 0;
         const index = this._parts.findIndex(part => {
             const partLen = part.text.length;

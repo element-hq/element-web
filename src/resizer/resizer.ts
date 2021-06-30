@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {throttle} from "lodash";
+import { throttle } from "lodash";
 
 import FixedDistributor from "./distributors/fixed";
 import ResizeItem from "./item";
@@ -87,7 +87,7 @@ export default class Resizer<C extends IConfig = IConfig> {
         const handles = this.getResizeHandles();
         const handle = handles[handleIndex];
         if (handle) {
-            const {distributor} = this.createSizerAndDistributor(<HTMLDivElement>handle);
+            const { distributor } = this.createSizerAndDistributor(<HTMLDivElement>handle);
             return distributor;
         }
     }
@@ -96,7 +96,7 @@ export default class Resizer<C extends IConfig = IConfig> {
         const handles = this.getResizeHandles();
         const handle = handles.find((h) => h.getAttribute("data-id") === id);
         if (handle) {
-            const {distributor} = this.createSizerAndDistributor(<HTMLDivElement>handle);
+            const { distributor } = this.createSizerAndDistributor(<HTMLDivElement>handle);
             return distributor;
         }
     }
@@ -127,7 +127,7 @@ export default class Resizer<C extends IConfig = IConfig> {
             this.config.onResizeStart();
         }
 
-        const {sizer, distributor} = this.createSizerAndDistributor(<HTMLDivElement>resizeHandle);
+        const { sizer, distributor } = this.createSizerAndDistributor(<HTMLDivElement>resizeHandle);
         distributor.start();
 
         const onMouseMove = (event) => {
@@ -159,11 +159,11 @@ export default class Resizer<C extends IConfig = IConfig> {
         // relax all items if they had any overconstrained flexboxes
         distributors.forEach(d => d.start());
         distributors.forEach(d => d.finish());
-    }, 100, {trailing: true, leading: true});
+    }, 100, { trailing: true, leading: true });
 
     public getDistributors = () => {
         return this.getResizeHandles().map(handle => {
-            const {distributor} = this.createSizerAndDistributor(<HTMLDivElement>handle);
+            const { distributor } = this.createSizerAndDistributor(<HTMLDivElement>handle);
             return distributor;
         });
     };
@@ -177,7 +177,7 @@ export default class Resizer<C extends IConfig = IConfig> {
         const sizer = Distributor.createSizer(this.container, vertical, reverse);
         const item = Distributor.createItem(resizeHandle, this, sizer);
         const distributor = new Distributor(item);
-        return {sizer, distributor};
+        return { sizer, distributor };
     }
 
     private getResizeHandles() {

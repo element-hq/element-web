@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import EditorModel from "../../src/editor/model";
-import {htmlSerializeIfNeeded} from "../../src/editor/serialize";
-import {createPartCreator} from "./mock";
+import { htmlSerializeIfNeeded } from "../../src/editor/serialize";
+import { createPartCreator } from "./mock";
 
 describe('editor/serialize', function() {
     it('user pill turns message into html', function() {

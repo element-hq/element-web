@@ -16,12 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import highlight from 'highlight.js';
 import * as HtmlUtils from '../../../HtmlUtils';
-import {formatDate} from '../../../DateUtils';
+import { formatDate } from '../../../DateUtils';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import dis from '../../../dispatcher/dispatcher';
@@ -29,14 +29,16 @@ import { _t } from '../../../languageHandler';
 import * as ContextMenu from '../../structures/ContextMenu';
 import SettingsStore from "../../../settings/SettingsStore";
 import ReplyThread from "../elements/ReplyThread";
-import {pillifyLinks, unmountPills} from '../../../utils/pillify';
-import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
-import {isPermalinkHost} from "../../../utils/permalinks/Permalinks";
-import {toRightOf} from "../../structures/ContextMenu";
-import {copyPlaintext} from "../../../utils/strings";
+import { pillifyLinks, unmountPills } from '../../../utils/pillify';
+import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
+import { isPermalinkHost } from "../../../utils/permalinks/Permalinks";
+import { toRightOf } from "../../structures/ContextMenu";
+import { copyPlaintext } from "../../../utils/strings";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import UIStore from "../../../stores/UIStore";
+import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
+import { Action } from "../../../dispatcher/actions";
 
 @replaceableComponent("views.messages.TextualBody")
 export default class TextualBody extends React.Component {
@@ -188,7 +190,7 @@ export default class TextualBody extends React.Component {
 
             const buttonRect = button.getBoundingClientRect();
             const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
-            const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
+            const { close } = ContextMenu.createMenu(GenericTextContextMenu, {
                 ...toRightOf(buttonRect, 2),
                 message: successful ? _t('Copied!') : _t('Failed to copy'),
             });
@@ -390,9 +392,9 @@ export default class TextualBody extends React.Component {
 
     onEmoteSenderClick = event => {
         const mxEvent = this.props.mxEvent;
-        dis.dispatch({
-            action: 'insert_mention',
-            user_id: mxEvent.getSender(),
+        dis.dispatch<ComposerInsertPayload>({
+            action: Action.ComposerInsert,
+            userId: mxEvent.getSender(),
         });
     };
 
@@ -402,7 +404,7 @@ export default class TextualBody extends React.Component {
         },
 
         unhideWidget: () => {
-            this.setState({widgetHidden: false});
+            this.setState({ widgetHidden: false });
             if (global.localStorage) {
                 global.localStorage.removeItem("hide_preview_" + this.props.mxEvent.getId());
             }
@@ -458,7 +460,7 @@ export default class TextualBody extends React.Component {
 
     _openHistoryDialog = async () => {
         const MessageEditHistoryDialog = sdk.getComponent("views.dialogs.MessageEditHistoryDialog");
-        Modal.createDialog(MessageEditHistoryDialog, {mxEvent: this.props.mxEvent});
+        Modal.createDialog(MessageEditHistoryDialog, { mxEvent: this.props.mxEvent });
     };
 
     _renderEditedMarker() {
@@ -467,7 +469,7 @@ export default class TextualBody extends React.Component {
 
         const tooltip = <div>
             <div className="mx_Tooltip_title">
-                {_t("Edited at %(date)s", {date: dateString})}
+                {_t("Edited at %(date)s", { date: dateString })}
             </div>
             <div className="mx_Tooltip_sub">
                 {_t("Click to view edits")}
@@ -478,7 +480,7 @@ export default class TextualBody extends React.Component {
             <AccessibleTooltipButton
                 className="mx_EventTile_edited"
                 onClick={this._openHistoryDialog}
-                title={_t("Edited at %(date)s. Click to view edits.", {date: dateString})}
+                title={_t("Edited at %(date)s. Click to view edits.", { date: dateString })}
                 tooltip={tooltip}
             >
                 <span>{`(${_t("edited")})`}</span>

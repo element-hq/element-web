@@ -19,7 +19,7 @@ limitations under the License.
 import React from "react";
 import PropTypes from "prop-types";
 import { _t } from '../../../languageHandler';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 /**
  * Basic container for buttons in modal dialogs.

@@ -20,19 +20,19 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import {PillCompletion} from './Components';
+import { PillCompletion } from './Components';
 import * as sdk from '../index';
 import QueryMatcher from './QueryMatcher';
-import {sortBy} from 'lodash';
-import {MatrixClientPeg} from '../MatrixClientPeg';
+import { sortBy } from 'lodash';
+import { MatrixClientPeg } from '../MatrixClientPeg';
 
-import MatrixEvent from "matrix-js-sdk/src/models/event";
-import Room from "matrix-js-sdk/src/models/room";
-import RoomMember from "matrix-js-sdk/src/models/room-member";
-import RoomState from "matrix-js-sdk/src/models/room-state";
-import EventTimeline from "matrix-js-sdk/src/models/event-timeline";
-import {makeUserPermalink} from "../utils/permalinks/Permalinks";
-import {ICompletion, ISelectionRange} from "./Autocompleter";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { RoomState } from "matrix-js-sdk/src/models/room-state";
+import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
+import { makeUserPermalink } from "../utils/permalinks/Permalinks";
+import { ICompletion, ISelectionRange } from "./Autocompleter";
 
 const USER_REGEX = /\B@\S*/g;
 
@@ -114,7 +114,7 @@ export default class UserProvider extends AutocompleteProvider {
         if (!this.users) this._makeUsers();
 
         let completions = [];
-        const {command, range} = this.getCurrentCommand(rawQuery, selection, force);
+        const { command, range } = this.getCurrentCommand(rawQuery, selection, force);
 
         if (!command) return completions;
 
@@ -158,7 +158,7 @@ export default class UserProvider extends AutocompleteProvider {
         }
 
         const currentUserId = MatrixClientPeg.get().credentials.userId;
-        this.users = this.room.getJoinedMembers().filter(({userId}) => userId !== currentUserId);
+        this.users = this.room.getJoinedMembers().filter(({ userId }) => userId !== currentUserId);
         this.users = this.users.concat(this.room.getMembersWithMembership("invite"));
 
         this.users = sortBy(this.users, (member) => 1E20 - lastSpoken[member.userId] || 1E20);

@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {SimpleObservable} from "matrix-widget-api";
-import {IDestroyable} from "../utils/IDestroyable";
+import { SimpleObservable } from "matrix-widget-api";
+import { IDestroyable } from "../utils/IDestroyable";
 
 // Because keeping track of time is sufficiently complicated...
 export class PlaybackClock implements IDestroyable {

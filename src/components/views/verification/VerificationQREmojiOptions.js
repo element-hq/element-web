@@ -18,10 +18,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import AccessibleButton from "../elements/AccessibleButton";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import VerificationQRCode from "../elements/crypto/VerificationQRCode";
 import Spinner from "../elements/Spinner";
-import {SCAN_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
+import { SCAN_QR_CODE_METHOD } from "matrix-js-sdk/src/crypto/verification/QRCode";
 
 @replaceableComponent("views.verification.VerificationQREmojiOptions")
 export default class VerificationQREmojiOptions extends React.Component {
@@ -32,7 +32,7 @@ export default class VerificationQREmojiOptions extends React.Component {
     };
 
     render() {
-        const {request} = this.props;
+        const { request } = this.props;
         const showQR = request.otherPartySupportsMethod(SCAN_QR_CODE_METHOD);
 
         let qrCode;

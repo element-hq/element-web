@@ -16,11 +16,11 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 const PHASE_START = 0;
 const PHASE_SHOW_SAS = 1;
@@ -86,9 +86,9 @@ export default class IncomingSasDialog extends React.Component {
     }
 
     _onContinueClick = () => {
-        this.setState({phase: PHASE_WAIT_FOR_PARTNER_TO_CONFIRM});
+        this.setState({ phase: PHASE_WAIT_FOR_PARTNER_TO_CONFIRM });
         this.props.verifier.verify().then(() => {
-            this.setState({phase: PHASE_VERIFIED});
+            this.setState({ phase: PHASE_VERIFIED });
         }).catch((e) => {
             console.log("Verification failed", e);
         });
