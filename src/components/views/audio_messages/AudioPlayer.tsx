@@ -83,7 +83,8 @@ export default class AudioPlayer extends React.PureComponent<IProps, IState> {
         const bytes = this.props.playback.sizeBytes;
         if (!bytes) return null;
 
-        // Not translated as these are units, and therefore universal
+        // Not translated here - we're just presenting the data which should already
+        // be translated if needed.
         return `(${formatBytes(bytes)})`;
     }
 
