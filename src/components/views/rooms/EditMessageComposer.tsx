@@ -395,7 +395,7 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
         const sel = document.getSelection();
         let caret;
         if (sel.focusNode) {
-            caret = getCaretOffsetAndText(this.editorRef.current, sel).caret;
+            caret = getCaretOffsetAndText(this.editorRef.current?.editorRef.current, sel).caret;
         }
         const parts = this.model.serializeParts();
         // if caret is undefined because for some reason there isn't a valid selection,

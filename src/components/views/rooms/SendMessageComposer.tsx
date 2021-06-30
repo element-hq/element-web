@@ -207,20 +207,20 @@ export default class SendMessageComposer extends React.Component<IProps> {
 
     // we keep sent messages/commands in a separate history (separate from undo history)
     // so you can alt+up/down in them
-    private selectSendHistory(up: boolean): void {
+    private selectSendHistory(up: boolean): boolean {
         const delta = up ? -1 : 1;
         // True if we are not currently selecting history, but composing a message
         if (this.sendHistoryManager.currentIndex === this.sendHistoryManager.history.length) {
             // We can't go any further - there isn't any more history, so nop.
             if (!up) {
-                return;
+                return false;
             }
             this.currentlyComposedEditorState = this.model.serializeParts();
         } else if (this.sendHistoryManager.currentIndex + delta === this.sendHistoryManager.history.length) {
             // True when we return to the message being composed currently
             this.model.reset(this.currentlyComposedEditorState);
             this.sendHistoryManager.currentIndex = this.sendHistoryManager.history.length;
-            return;
+            return true;
         }
         const { parts, replyEventId } = this.sendHistoryManager.getItem(delta);
         dis.dispatch({
@@ -231,6 +231,7 @@ export default class SendMessageComposer extends React.Component<IProps> {
             this.model.reset(parts);
             this.editorRef.current?.focus();
         }
+        return true;
     }
 
     private isSlashCommand(): boolean {
