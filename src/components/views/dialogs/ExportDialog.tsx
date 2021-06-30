@@ -268,7 +268,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 <span className="mx_ExportDialog_subheading">{ _t("Format") }</span>
 
                 <StyledRadioGroup
-                    name="feedbackRating"
+                    name="exportFormat"
                     value={exportFormat}
                     onChange={(key) => setExportFormat(exportFormats[key])}
                     definitions={exportFormatOptions}
@@ -332,7 +332,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                     )}
                 </p>
                 <DialogButtons
-                    primaryButton={_t("Abort export process")}
+                    primaryButton={_t("Stop")}
                     primaryButtonClass="danger"
                     hasCancel={true}
                     cancelButton={_t("Continue")}
@@ -348,6 +348,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 title={_t("Exporting your data...")}
                 className="mx_ExportDialog"
                 contentId="mx_Dialog_content"
+                hasCancel={false}
                 onFinished={onFinished}
                 fixedWidth={true}
             >
