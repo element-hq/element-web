@@ -251,7 +251,6 @@ module.exports = (env, argv) => {
                                     require("postcss-easings")(),
                                     require("postcss-strip-inline-comments")(),
                                     require("postcss-hexrgba")(),
-                                    require("postcss-calc")(),
 
                                     // It's important that this plugin is last otherwise we end
                                     // up with broken CSS.
