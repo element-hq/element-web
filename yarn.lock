@@ -42,7 +42,7 @@
     semver "^5.4.1"
     source-map "^0.5.0"
 
-"@babel/generator@^7.12.1", "@babel/generator@^7.12.10", "@babel/generator@^7.12.11":
+"@babel/generator@^7.12.10", "@babel/generator@^7.12.11":
   version "7.12.11"
   resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.12.11.tgz#98a7df7b8c358c9a37ab07a24056853016aba3af"
   integrity sha512-Ggg6WPOJtSi8yYQvLVjG8F/TlpWDlKx0OpS4Kt+xMQPs5OaGYWy+v1A+1TvxI6sAMGZpKWWoAQ1DaeQbImlItA==
@@ -477,13 +477,6 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.8.3"
 
-"@babel/plugin-syntax-flow@^7.12.1":
-  version "7.12.1"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-flow/-/plugin-syntax-flow-7.12.1.tgz#a77670d9abe6d63e8acadf4c31bb1eb5a506bbdd"
-  integrity sha512-1lBLLmtxrwpm4VKmtVFselI/P3pX+G63fAtUUt6b2Nzgao77KNDwyuRt90Mj2/9pKobtt68FdvjfqohZjg/FCA==
-  dependencies:
-    "@babel/helper-plugin-utils" "^7.10.4"
-
 "@babel/plugin-syntax-import-meta@^7.8.3":
   version "7.10.4"
   resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-import-meta/-/plugin-syntax-import-meta-7.10.4.tgz#ee601348c370fa334d2207be158777496521fd51"
@@ -641,23 +634,6 @@
   dependencies:
     "@babel/helper-builder-binary-assignment-operator-visitor" "^7.10.4"
     "@babel/helper-plugin-utils" "^7.10.4"
-
-"@babel/plugin-transform-flow-comments@^7.12.1":
-  version "7.12.1"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-flow-comments/-/plugin-transform-flow-comments-7.12.1.tgz#92fe5a27e635bd6d2e46f616094d60edff895a0b"
-  integrity sha512-jQd0UQUg98j95JJVQL74mOrzES7dYyd8hy+ZDiMj1wjHw1Nj0Pzkk7tKZdqqAoSZV/yTYLp0lJ0/PTozy2cNDg==
-  dependencies:
-    "@babel/generator" "^7.12.1"
-    "@babel/helper-plugin-utils" "^7.10.4"
-    "@babel/plugin-syntax-flow" "^7.12.1"
-
-"@babel/plugin-transform-flow-strip-types@^7.12.1":
-  version "7.12.10"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-flow-strip-types/-/plugin-transform-flow-strip-types-7.12.10.tgz#d85e30ecfa68093825773b7b857e5085bbd32c95"
-  integrity sha512-0ti12wLTLeUIzu9U7kjqIn4MyOL7+Wibc7avsHhj4o1l5C0ATs8p2IMHrVYjm9t9wzhfEO6S3kxax0Rpdo8LTg==
-  dependencies:
-    "@babel/helper-plugin-utils" "^7.10.4"
-    "@babel/plugin-syntax-flow" "^7.12.1"
 
 "@babel/plugin-transform-for-of@^7.12.1":
   version "7.12.1"
@@ -949,14 +925,6 @@
     "@babel/types" "^7.12.11"
     core-js-compat "^3.8.0"
     semver "^5.5.0"
-
-"@babel/preset-flow@^7.12.1":
-  version "7.12.1"
-  resolved "https://registry.yarnpkg.com/@babel/preset-flow/-/preset-flow-7.12.1.tgz#1a81d376c5a9549e75352a3888f8c273455ae940"
-  integrity sha512-UAoyMdioAhM6H99qPoKvpHMzxmNVXno8GYU/7vZmGaHk6/KqfDYL1W0NxszVbJ2EP271b7e6Ox+Vk2A9QsB3Sw==
-  dependencies:
-    "@babel/helper-plugin-utils" "^7.10.4"
-    "@babel/plugin-transform-flow-strip-types" "^7.12.1"
 
 "@babel/preset-modules@^0.1.3":
   version "0.1.4"
@@ -1315,7 +1283,6 @@
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.3.tgz":
   version "3.2.3"
-  uid cc332fdd25c08ef0e40f4d33fc3f822a0f98b6f4
   resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.3.tgz#cc332fdd25c08ef0e40f4d33fc3f822a0f98b6f4"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
@@ -4446,14 +4413,6 @@ eslint-plugin-babel@^5.2.1, eslint-plugin-babel@^5.3.1:
   integrity sha512-VsQEr6NH3dj664+EyxJwO4FCYm/00JhYb3Sk3ft8o+fpKuIfQ9TaW6uVUfvwMXHcf/lsnRIoyFPsLMyiWCSL/g==
   dependencies:
     eslint-rule-composer "^0.3.0"
-
-eslint-plugin-flowtype@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-flowtype/-/eslint-plugin-flowtype-5.2.0.tgz#a4bef5dc18f9b2bdb41569a4ab05d73805a3d261"
-  integrity sha512-z7ULdTxuhlRJcEe1MVljePXricuPOrsWfScRXFhNzVD5dmTHWjIF57AxD0e7AbEoLSbjSsaA5S+hCg43WvpXJQ==
-  dependencies:
-    lodash "^4.17.15"
-    string-natural-compare "^3.0.1"
 
 eslint-plugin-import@^2.14.0:
   version "2.22.1"
@@ -7747,7 +7706,7 @@ matrix-react-test-utils@^0.2.3:
     "@babel/traverse" "^7.13.17"
     walk "^2.3.14"
 
-matrix-widget-api@^0.1.0-beta.15:
+matrix-widget-api@^0.1.0-beta.14, matrix-widget-api@^0.1.0-beta.15:
   version "0.1.0-beta.15"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.15.tgz#b02511f93fe1a3634868b6e246d736107f182745"
   integrity sha512-sWmtb8ZarSbHVbk5ni7IHBR9jOh7m1+5R4soky0fEO9VKl+MN7skT0+qNux3J9WuUAu2D80dZW9xPUT9cxfxbg==
@@ -11323,11 +11282,6 @@ string-length@^4.0.1:
   dependencies:
     char-regex "^1.0.2"
     strip-ansi "^6.0.0"
-
-string-natural-compare@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/string-natural-compare/-/string-natural-compare-3.0.1.tgz#7a42d58474454963759e8e8b7ae63d71c1e7fdf4"
-  integrity sha512-n3sPwynL1nwKi3WJ6AIsClwBMa0zTi54fn2oLU6ndfTSIO05xaznjSf15PcBZU6FNWbmN5Q6cxT4V5hGvB4taw==
 
 string-width@^1.0.1:
   version "1.0.2"
