@@ -45,9 +45,9 @@ import { objectShallowClone, objectWithOnly } from "../../../utils/objects";
 import { IconizedContextMenuOption, IconizedContextMenuOptionList } from "../context_menus/IconizedContextMenu";
 import AccessibleButton from "../elements/AccessibleButton";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
-import SpaceStore, {ISuggestedRoom, SUGGESTED_ROOMS} from "../../../stores/SpaceStore";
-import {showAddExistingRooms, showCreateNewRoom, showSpaceInvite} from "../../../utils/space";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import SpaceStore, { ISuggestedRoom, SUGGESTED_ROOMS } from "../../../stores/SpaceStore";
+import { showAddExistingRooms, showCreateNewRoom, showSpaceInvite } from "../../../utils/space";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import RoomAvatar from "../avatars/RoomAvatar";
 
 interface IProps {
@@ -119,7 +119,7 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
         defaultHidden: false,
         addRoomLabel: _td("Start chat"),
         onAddRoom: (dispatcher?: Dispatcher<ActionPayload>) => {
-            (dispatcher || defaultDispatcher).dispatch({action: 'view_create_chat'});
+            (dispatcher || defaultDispatcher).dispatch({ action: 'view_create_chat' });
         },
     },
     [DefaultTagID.Untagged]: {
@@ -180,7 +180,7 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
                         e.preventDefault();
                         e.stopPropagation();
                         onFinished();
-                        defaultDispatcher.dispatch({action: "view_create_room"});
+                        defaultDispatcher.dispatch({ action: "view_create_room" });
                     }}
                 />
                 <IconizedContextMenuOption
@@ -356,7 +356,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             const newSublists = objectWithOnly(newLists, newListIds);
             const sublists = objectShallowClone(newSublists, (k, v) => arrayFastClone(v));
 
-            this.setState({sublists, isNameFiltering}, () => {
+            this.setState({ sublists, isNameFiltering }, () => {
                 this.props.onResize();
             });
         }
@@ -495,7 +495,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     resizeNotifier={this.props.resizeNotifier}
                     alwaysVisible={ALWAYS_VISIBLE_TAGS.includes(orderedTagId)}
                     onListCollapse={this.props.onListCollapse}
-                />
+                />;
             });
     }
 
@@ -542,7 +542,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     </AccessibleButton> }
                 </div>;
             } else if (Object.values(this.state.sublists).some(list => list.length > 0)) {
-                const unfilteredLists = RoomListStore.instance.unfilteredLists
+                const unfilteredLists = RoomListStore.instance.unfilteredLists;
                 const unfilteredRooms = unfilteredLists[DefaultTagID.Untagged] || [];
                 const unfilteredHistorical = unfilteredLists[DefaultTagID.Archived] || [];
                 const unfilteredFavourite = unfilteredLists[DefaultTagID.Favourite] || [];
@@ -572,7 +572,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         const sublists = this.renderSublists();
         return (
             <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={this.props.onKeyDown}>
-                {({onKeyDownHandler}) => (
+                {({ onKeyDownHandler }) => (
                     <div
                         onFocus={this.props.onFocus}
                         onBlur={this.props.onBlur}

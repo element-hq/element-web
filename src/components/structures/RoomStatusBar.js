@@ -17,15 +17,15 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t, _td } from '../../languageHandler';
-import {MatrixClientPeg} from '../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../MatrixClientPeg';
 import Resend from '../../Resend';
 import dis from '../../dispatcher/dispatcher';
-import {messageForResourceLimitError} from '../../utils/ErrorUtils';
-import {Action} from "../../dispatcher/actions";
-import {replaceableComponent} from "../../utils/replaceableComponent";
-import {EventStatus} from "matrix-js-sdk/src/models/event";
+import { messageForResourceLimitError } from '../../utils/ErrorUtils';
+import { Action } from "../../dispatcher/actions";
+import { replaceableComponent } from "../../utils/replaceableComponent";
+import { EventStatus } from "matrix-js-sdk/src/models/event";
 import NotificationBadge from "../views/rooms/NotificationBadge";
-import {StaticNotificationState} from "../../stores/notifications/StaticNotificationState";
+import { StaticNotificationState } from "../../stores/notifications/StaticNotificationState";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import InlineSpinner from "../views/elements/InlineSpinner";
 
@@ -115,9 +115,9 @@ export default class RoomStatusBar extends React.PureComponent {
 
     _onResendAllClick = () => {
         Resend.resendUnsentEvents(this.props.room).then(() => {
-            this.setState({isResending: false});
+            this.setState({ isResending: false });
         });
-        this.setState({isResending: true});
+        this.setState({ isResending: true });
         dis.fire(Action.FocusComposer);
     };
 

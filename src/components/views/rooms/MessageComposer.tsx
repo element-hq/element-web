@@ -69,7 +69,7 @@ function SendButton(props: ISendButtonProps) {
     );
 }
 
-const EmojiButton = ({addEmoji}) => {
+const EmojiButton = ({ addEmoji }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
     let contextMenu;
@@ -132,11 +132,11 @@ class UploadButton extends React.Component<IUploadButtonProps> {
 
     private onUploadClick = () => {
         if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({action: 'require_registration'});
+            dis.dispatch({ action: 'require_registration' });
             return;
         }
         this.uploadInput.current.click();
-    }
+    };
 
     private onUploadFileInputChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (ev.target.files.length === 0) return;
@@ -157,10 +157,10 @@ class UploadButton extends React.Component<IUploadButtonProps> {
         // to empty.
         // NB. we need to set 'value': the 'files' property is immutable.
         ev.target.value = '';
-    }
+    };
 
     render() {
-        const uploadInputStyle = {display: 'none'};
+        const uploadInputStyle = { display: 'none' };
         return (
             <AccessibleTooltipButton
                 className="mx_MessageComposer_button mx_MessageComposer_upload"
@@ -237,7 +237,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         // if we have the member already, do that
         const me = this.props.room.getMember(MatrixClientPeg.get().getUserId());
         if (me) {
-            this.setState({me});
+            this.setState({ me });
             return;
         }
         // Otherwise, wait for member loading to finish and then update the member for the avatar.
@@ -245,7 +245,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         // will return the promise for the existing operation
         this.props.room.loadMembersIfNeeded().then(() => {
             const me = this.props.room.getMember(MatrixClientPeg.get().getUserId());
-            this.setState({me});
+            this.setState({ me });
         });
     }
 
@@ -261,12 +261,12 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         if (ev.getRoomId() !== this.props.room.roomId) return;
 
         if (ev.getType() === 'm.room.tombstone') {
-            this.setState({tombstone: this.getRoomTombstone()});
+            this.setState({ tombstone: this.getRoomTombstone() });
         }
         if (ev.getType() === 'm.room.power_levels') {
-            this.setState({canSendMessages: this.props.room.maySendMessage()});
+            this.setState({ canSendMessages: this.props.room.maySendMessage() });
         }
-    }
+    };
 
     private getRoomTombstone() {
         return this.props.room.currentState.getStateEvents('m.room.tombstone', '');
@@ -300,7 +300,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 viaServers: viaServers,
             },
         });
-    }
+    };
 
     private renderPlaceholderText = () => {
         if (this.props.replyToEvent) {
@@ -316,7 +316,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 return _t('Send a message…');
             }
         }
-    }
+    };
 
     addEmoji(emoji: string) {
         dis.dispatch<ComposerInsertPayload>({
@@ -335,24 +335,24 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
         // XXX: Private function access
         this.messageComposerInput._sendMessage();
-    }
+    };
 
     onChange = (model) => {
         this.setState({
             isComposerEmpty: model.isEmpty,
         });
-    }
+    };
 
     private onVoiceStoreUpdate = () => {
         const recording = VoiceRecordingStore.instance.activeRecording;
-        this.setState({haveRecording: !!recording});
+        this.setState({ haveRecording: !!recording });
         if (recording) {
             // We show a little heads up that the recording is about to automatically end soon. The 3s
             // display time is completely arbitrary. Note that we don't need to deregister the listener
             // because the recording instance will clean that up for us.
-            recording.on(RecordingState.EndingSoon, ({secondsLeft}) => {
-                this.setState({recordingTimeLeftSeconds: secondsLeft});
-                setTimeout(() => this.setState({recordingTimeLeftSeconds: null}), 3000);
+            recording.on(RecordingState.EndingSoon, ({ secondsLeft }) => {
+                this.setState({ recordingTimeLeftSeconds: secondsLeft });
+                setTimeout(() => this.setState({ recordingTimeLeftSeconds: null }), 3000);
             });
         }
     };
@@ -442,7 +442,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         const secondsLeft = Math.round(this.state.recordingTimeLeftSeconds);
         if (secondsLeft) {
             recordingTooltip = <Tooltip
-                label={_t("%(seconds)ss left", {seconds: secondsLeft})}
+                label={_t("%(seconds)ss left", { seconds: secondsLeft })}
                 alignment={Alignment.Top} yOffset={-50}
             />;
         }

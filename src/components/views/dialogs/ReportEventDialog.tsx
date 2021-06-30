@@ -19,11 +19,11 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { ensureDMExists } from "../../../createRoom";
 import { IDialogProps } from "./IDialogProps";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import SdkConfig from '../../../SdkConfig';
 import Markdown from '../../../Markdown';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SettingsStore from "../../../settings/SettingsStore";
 import StyledRadioButton from "../elements/StyledRadioButton";
 
@@ -39,7 +39,6 @@ interface IState {
     // If we know it, the nature of the abuse, as specified by MSC3215.
     nature?: EXTENDED_NATURE;
 }
-
 
 const MODERATED_BY_STATE_EVENT_TYPE = [
     "org.matrix.msc3215.room.moderation.moderated_by",
@@ -75,7 +74,7 @@ type Moderation = {
     moderationRoomId: string;
     // The id of the bot in charge of forwarding abuse reports to the moderation room.
     moderationBotUserId: string;
-}
+};
 /*
  * A dialog for reporting an event.
  *
@@ -162,13 +161,13 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
     }
 
     // The user has written down a freeform description of the abuse.
-    private onReasonChange = ({target: {value: reason}}): void => {
+    private onReasonChange = ({ target: { value: reason } }): void => {
         this.setState({ reason });
     };
 
     // The user has clicked on a nature.
     private onNatureChosen = (e: React.FormEvent<HTMLInputElement>): void => {
-        this.setState({ nature: e.currentTarget.value as EXTENDED_NATURE});
+        this.setState({ nature: e.currentTarget.value as EXTENDED_NATURE });
     };
 
     // The user has clicked "cancel".

@@ -15,10 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from '../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
-import {objectClone, objectKeyChanges} from "../../utils/objects";
-import {SettingLevel} from "../SettingLevel";
+import { objectClone, objectKeyChanges } from "../../utils/objects";
+import { SettingLevel } from "../SettingLevel";
 import { WatchManager } from "../WatchManager";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -73,7 +73,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             const val = event.getContent()['enabled'];
             this.watchers.notifyUpdate("recent_emoji", null, SettingLevel.ACCOUNT, val);
         }
-    }
+    };
 
     public getValue(settingName: string, roomId: string): any {
         // Special case URL previews

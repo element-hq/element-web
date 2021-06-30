@@ -15,13 +15,13 @@ limitations under the License.
 */
 
 import React from 'react';
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { MatrixClientPeg } from './MatrixClientPeg';
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
-import {isValid3pidInvite} from "./RoomInvite";
+import { isValid3pidInvite } from "./RoomInvite";
 import SettingsStore from "./settings/SettingsStore";
-import {ALL_RULE_TYPES, ROOM_RULE_TYPES, SERVER_RULE_TYPES, USER_RULE_TYPES} from "./mjolnir/BanList";
-import {WIDGET_LAYOUT_EVENT_TYPE} from "./stores/widgets/WidgetLayoutStore";
+import { ALL_RULE_TYPES, ROOM_RULE_TYPES, SERVER_RULE_TYPES, USER_RULE_TYPES } from "./mjolnir/BanList";
+import { WIDGET_LAYOUT_EVENT_TYPE } from "./stores/widgets/WidgetLayoutStore";
 import { RightPanelPhases } from './stores/RightPanelStorePhases';
 import { Action } from './dispatcher/actions';
 import defaultDispatcher from './dispatcher/dispatcher';
@@ -112,7 +112,7 @@ function textForMemberEvent(ev): () => string | null {
                         targetName,
                         reason,
                     })
-                    : _t('%(senderName)s withdrew %(targetName)s\'s invitation', { senderName, targetName })
+                    : _t('%(senderName)s withdrew %(targetName)s\'s invitation', { senderName, targetName });
             } else if (prevContent.membership === "join") {
                 return () => reason
                     ? _t('%(senderName)s kicked %(targetName)s: %(reason)s', {
@@ -139,7 +139,7 @@ function textForRoomNameEvent(ev): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
 
     if (!ev.getContent().name || ev.getContent().name.trim().length === 0) {
-        return () => _t('%(senderDisplayName)s removed the room name.', {senderDisplayName});
+        return () => _t('%(senderDisplayName)s removed the room name.', { senderDisplayName });
     }
     if (ev.getPrevContent().name) {
         return () => _t('%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.', {
@@ -156,7 +156,7 @@ function textForRoomNameEvent(ev): () => string | null {
 
 function textForTombstoneEvent(ev): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-    return () => _t('%(senderDisplayName)s upgraded this room.', {senderDisplayName});
+    return () => _t('%(senderDisplayName)s upgraded this room.', { senderDisplayName });
 }
 
 function textForJoinRulesEvent(ev): () => string | null {
@@ -183,9 +183,9 @@ function textForGuestAccessEvent(ev): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     switch (ev.getContent().guest_access) {
         case "can_join":
-            return () => _t('%(senderDisplayName)s has allowed guests to join the room.', {senderDisplayName});
+            return () => _t('%(senderDisplayName)s has allowed guests to join the room.', { senderDisplayName });
         case "forbidden":
-            return () => _t('%(senderDisplayName)s has prevented guests from joining the room.', {senderDisplayName});
+            return () => _t('%(senderDisplayName)s has prevented guests from joining the room.', { senderDisplayName });
         default:
             // There's no other options we can expect, however just for safety's sake we'll do this.
             return () => _t('%(senderDisplayName)s changed guest access to %(rule)s', {
@@ -237,9 +237,9 @@ function textForServerACLEvent(ev): () => string | null {
 
     let getText = null;
     if (prev.deny.length === 0 && prev.allow.length === 0) {
-        getText = () => _t("%(senderDisplayName)s set the server ACLs for this room.", {senderDisplayName});
+        getText = () => _t("%(senderDisplayName)s set the server ACLs for this room.", { senderDisplayName });
     } else {
-        getText = () => _t("%(senderDisplayName)s changed the server ACLs for this room.", {senderDisplayName});
+        getText = () => _t("%(senderDisplayName)s changed the server ACLs for this room.", { senderDisplayName });
     }
 
     if (!Array.isArray(current.allow)) {
@@ -262,7 +262,7 @@ function textForMessageEvent(ev): () => string | null {
         if (ev.getContent().msgtype === "m.emote") {
             message = "* " + senderDisplayName + " " + message;
         } else if (ev.getContent().msgtype === "m.image") {
-            message = _t('%(senderDisplayName)s sent an image.', {senderDisplayName});
+            message = _t('%(senderDisplayName)s sent an image.', { senderDisplayName });
         }
         return message;
     };
@@ -323,7 +323,7 @@ function textForCallAnswerEvent(event): () => string | null {
     return () => {
         const senderName = event.sender ? event.sender.name : _t('Someone');
         const supported = MatrixClientPeg.get().supportsVoip() ? '' : _t('(not supported by this browser)');
-        return _t('%(senderName)s answered the call.', {senderName}) + ' ' + supported;
+        return _t('%(senderName)s answered the call.', { senderName }) + ' ' + supported;
     };
 }
 
@@ -358,16 +358,16 @@ function textForCallHangupEvent(event): () => string | null {
             // Also the correct hangup code as of VoIP v1 (with underscore)
             getReason = () => '';
         } else {
-            getReason = () => _t('(unknown failure: %(reason)s)', {reason: eventContent.reason});
+            getReason = () => _t('(unknown failure: %(reason)s)', { reason: eventContent.reason });
         }
     }
-    return () => _t('%(senderName)s ended the call.', {senderName: getSenderName()}) + ' ' + getReason();
+    return () => _t('%(senderName)s ended the call.', { senderName: getSenderName() }) + ' ' + getReason();
 }
 
 function textForCallRejectEvent(event): () => string | null {
     return () => {
         const senderName = event.sender ? event.sender.name : _t('Someone');
-        return _t('%(senderName)s declined the call.', {senderName});
+        return _t('%(senderName)s declined the call.', { senderName });
     };
 }
 
@@ -424,14 +424,14 @@ function textForHistoryVisibilityEvent(event): () => string | null {
     switch (event.getContent().history_visibility) {
         case 'invited':
             return () => _t('%(senderName)s made future room history visible to all room members, '
-                + 'from the point they are invited.', {senderName});
+                + 'from the point they are invited.', { senderName });
         case 'joined':
             return () => _t('%(senderName)s made future room history visible to all room members, '
-                + 'from the point they joined.', {senderName});
+                + 'from the point they joined.', { senderName });
         case 'shared':
-            return () => _t('%(senderName)s made future room history visible to all room members.', {senderName});
+            return () => _t('%(senderName)s made future room history visible to all room members.', { senderName });
         case 'world_readable':
-            return () => _t('%(senderName)s made future room history visible to anyone.', {senderName});
+            return () => _t('%(senderName)s made future room history visible to anyone.', { senderName });
         default:
             return () => _t('%(senderName)s made future room history visible to unknown (%(visibility)s).', {
                 senderName,
@@ -492,7 +492,7 @@ const onPinnedMessagesClick = (): void => {
         phase: RightPanelPhases.PinnedMessages,
         allowClose: false,
     });
-}
+};
 
 function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string | JSX.Element | null {
     if (!SettingsStore.getValue("feature_pinning")) return null;
@@ -517,8 +517,8 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string
 
 function textForWidgetEvent(event): () => string | null {
     const senderName = event.getSender();
-    const {name: prevName, type: prevType, url: prevUrl} = event.getPrevContent();
-    const {name, type, url} = event.getContent() || {};
+    const { name: prevName, type: prevType, url: prevUrl } = event.getPrevContent();
+    const { name, type, url } = event.getContent() || {};
 
     let widgetName = name || prevName || type || prevType || '';
     // Apply sentence case to widget name
@@ -547,68 +547,68 @@ function textForWidgetEvent(event): () => string | null {
 
 function textForWidgetLayoutEvent(event): () => string | null {
     const senderName = event.sender?.name || event.getSender();
-    return () => _t("%(senderName)s has updated the widget layout", {senderName});
+    return () => _t("%(senderName)s has updated the widget layout", { senderName });
 }
 
 function textForMjolnirEvent(event): () => string | null {
     const senderName = event.getSender();
-    const {entity: prevEntity} = event.getPrevContent();
-    const {entity, recommendation, reason} = event.getContent();
+    const { entity: prevEntity } = event.getPrevContent();
+    const { entity, recommendation, reason } = event.getContent();
 
     // Rule removed
     if (!entity) {
         if (USER_RULE_TYPES.includes(event.getType())) {
             return () => _t("%(senderName)s removed the rule banning users matching %(glob)s",
-                {senderName, glob: prevEntity});
+                { senderName, glob: prevEntity });
         } else if (ROOM_RULE_TYPES.includes(event.getType())) {
             return () => _t("%(senderName)s removed the rule banning rooms matching %(glob)s",
-                {senderName, glob: prevEntity});
+                { senderName, glob: prevEntity });
         } else if (SERVER_RULE_TYPES.includes(event.getType())) {
             return () => _t("%(senderName)s removed the rule banning servers matching %(glob)s",
-                {senderName, glob: prevEntity});
+                { senderName, glob: prevEntity });
         }
 
         // Unknown type. We'll say something, but we shouldn't end up here.
-        return () => _t("%(senderName)s removed a ban rule matching %(glob)s", {senderName, glob: prevEntity});
+        return () => _t("%(senderName)s removed a ban rule matching %(glob)s", { senderName, glob: prevEntity });
     }
 
     // Invalid rule
-    if (!recommendation || !reason) return () => _t(`%(senderName)s updated an invalid ban rule`, {senderName});
+    if (!recommendation || !reason) return () => _t(`%(senderName)s updated an invalid ban rule`, { senderName });
 
     // Rule updated
     if (entity === prevEntity) {
         if (USER_RULE_TYPES.includes(event.getType())) {
             return () => _t("%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s",
-                {senderName, glob: entity, reason});
+                { senderName, glob: entity, reason });
         } else if (ROOM_RULE_TYPES.includes(event.getType())) {
             return () => _t("%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s",
-                {senderName, glob: entity, reason});
+                { senderName, glob: entity, reason });
         } else if (SERVER_RULE_TYPES.includes(event.getType())) {
             return () => _t("%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s",
-                {senderName, glob: entity, reason});
+                { senderName, glob: entity, reason });
         }
 
         // Unknown type. We'll say something but we shouldn't end up here.
         return () => _t("%(senderName)s updated a ban rule matching %(glob)s for %(reason)s",
-            {senderName, glob: entity, reason});
+            { senderName, glob: entity, reason });
     }
 
     // New rule
     if (!prevEntity) {
         if (USER_RULE_TYPES.includes(event.getType())) {
             return () => _t("%(senderName)s created a rule banning users matching %(glob)s for %(reason)s",
-                {senderName, glob: entity, reason});
+                { senderName, glob: entity, reason });
         } else if (ROOM_RULE_TYPES.includes(event.getType())) {
             return () => _t("%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s",
-                {senderName, glob: entity, reason});
+                { senderName, glob: entity, reason });
         } else if (SERVER_RULE_TYPES.includes(event.getType())) {
             return () => _t("%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s",
-                {senderName, glob: entity, reason});
+                { senderName, glob: entity, reason });
         }
 
         // Unknown type. We'll say something but we shouldn't end up here.
         return () => _t("%(senderName)s created a ban rule matching %(glob)s for %(reason)s",
-            {senderName, glob: entity, reason});
+            { senderName, glob: entity, reason });
     }
 
     // else the entity !== prevEntity - count as a removal & add
@@ -616,25 +616,25 @@ function textForMjolnirEvent(event): () => string | null {
         return () => _t(
             "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching " +
             "%(newGlob)s for %(reason)s",
-            {senderName, oldGlob: prevEntity, newGlob: entity, reason},
+            { senderName, oldGlob: prevEntity, newGlob: entity, reason },
         );
     } else if (ROOM_RULE_TYPES.includes(event.getType())) {
         return () => _t(
             "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching " +
             "%(newGlob)s for %(reason)s",
-            {senderName, oldGlob: prevEntity, newGlob: entity, reason},
+            { senderName, oldGlob: prevEntity, newGlob: entity, reason },
         );
     } else if (SERVER_RULE_TYPES.includes(event.getType())) {
         return () => _t(
             "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching " +
             "%(newGlob)s for %(reason)s",
-            {senderName, oldGlob: prevEntity, newGlob: entity, reason},
+            { senderName, oldGlob: prevEntity, newGlob: entity, reason },
         );
     }
 
     // Unknown type. We'll say something but we shouldn't end up here.
     return () => _t("%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s " +
-        "for %(reason)s", {senderName, oldGlob: prevEntity, newGlob: entity, reason});
+        "for %(reason)s", { senderName, oldGlob: prevEntity, newGlob: entity, reason });
 }
 
 interface IHandlers {

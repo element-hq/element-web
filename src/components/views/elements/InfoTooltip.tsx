@@ -18,9 +18,9 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 
-import Tooltip, {Alignment} from './Tooltip';
-import {_t} from "../../../languageHandler";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import Tooltip, { Alignment } from './Tooltip';
+import { _t } from "../../../languageHandler";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface ITooltipProps {
     tooltip?: React.ReactNode;
@@ -53,7 +53,7 @@ export default class InfoTooltip extends React.PureComponent<ITooltipProps, ISta
     };
 
     render() {
-        const {tooltip, children, tooltipClassName} = this.props;
+        const { tooltip, children, tooltipClassName } = this.props;
         const title = _t("Information");
 
         // Tooltip are forced on the right for a more natural feel to them on info icons

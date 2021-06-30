@@ -140,12 +140,12 @@ export type KeyCombo = {
     ctrlKey?: boolean;
     metaKey?: boolean;
     shiftKey?: boolean;
-}
+};
 
 export type KeyBinding<T extends string> = {
     action: T;
     keyCombo: KeyCombo;
-}
+};
 
 /**
  * Helper method to check if a KeyboardEvent matches a KeyCombo

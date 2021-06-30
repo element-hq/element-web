@@ -21,9 +21,9 @@ import SdkConfig from '../../../../SdkConfig';
 import SettingsStore from "../../../../settings/SettingsStore";
 
 import Modal from '../../../../Modal';
-import {formatBytes, formatCountLong} from "../../../../utils/FormattingUtils";
+import { formatBytes, formatCountLong } from "../../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
-import {SettingLevel} from "../../../../settings/SettingLevel";
+import { SettingLevel } from "../../../../settings/SettingLevel";
 
 interface IProps {
     onFinished: (confirmed: boolean) => void;
@@ -139,7 +139,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
     };
 
     private onCrawlerSleepTimeChange = (e) => {
-        this.setState({crawlerSleepTime: e.target.value});
+        this.setState({ crawlerSleepTime: e.target.value });
         SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.value);
     };
 

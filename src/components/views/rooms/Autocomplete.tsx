@@ -15,15 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef, KeyboardEvent} from 'react';
+import React, { createRef, KeyboardEvent } from 'react';
 import classNames from 'classnames';
-import {flatMap} from "lodash";
-import {ICompletion, ISelectionRange, IProviderCompletions} from '../../../autocomplete/Autocompleter';
-import {Room} from 'matrix-js-sdk/src/models/room';
+import { flatMap } from "lodash";
+import { ICompletion, ISelectionRange, IProviderCompletions } from '../../../autocomplete/Autocompleter';
+import { Room } from 'matrix-js-sdk/src/models/room';
 
 import SettingsStore from "../../../settings/SettingsStore";
 import Autocompleter from '../../../autocomplete/Autocompleter';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const COMPOSER_SELECTED = 0;
 const MAX_PROVIDER_MATCHES = 20;
@@ -247,7 +247,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     };
 
     setSelection(selectionOffset: number) {
-        this.setState({selectionOffset, hide: false});
+        this.setState({ selectionOffset, hide: false });
         if (this.props.onSelectionChange) {
             this.props.onSelectionChange(this.state.completionList[selectionOffset - 1], selectionOffset - 1);
         }
@@ -273,7 +273,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         const renderedCompletions = this.state.completions.map((completionResult, i) => {
             const completions = completionResult.completions.map((completion, j) => {
                 const selected = position === this.state.selectionOffset;
-                const className = classNames('mx_Autocomplete_Completion', {selected});
+                const className = classNames('mx_Autocomplete_Completion', { selected });
                 const componentPosition = position;
                 position++;
 
@@ -290,7 +290,6 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
                     "aria-selected": selected,
                 });
             });
-
 
             return completions.length > 0 ? (
                 <div key={i} className="mx_Autocomplete_ProviderSection">

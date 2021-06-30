@@ -16,6 +16,7 @@ limitations under the License.
 
 import "matrix-js-sdk/src/@types/global"; // load matrix-js-sdk's type extensions first
 import * as ModernizrStatic from "modernizr";
+
 import ContentMessages from "../ContentMessages";
 import { IMatrixClientPeg } from "../MatrixClientPeg";
 import ToastStore from "../stores/ToastStore";
@@ -23,25 +24,25 @@ import DeviceListener from "../DeviceListener";
 import { RoomListStoreClass } from "../stores/room-list/RoomListStore";
 import { PlatformPeg } from "../PlatformPeg";
 import RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
-import {IntegrationManagers} from "../integrations/IntegrationManagers";
-import {ModalManager} from "../Modal";
+import { IntegrationManagers } from "../integrations/IntegrationManagers";
+import { ModalManager } from "../Modal";
 import SettingsStore from "../settings/SettingsStore";
-import {ActiveRoomObserver} from "../ActiveRoomObserver";
-import {Notifier} from "../Notifier";
-import type {Renderer} from "react-dom";
+import { ActiveRoomObserver } from "../ActiveRoomObserver";
+import { Notifier } from "../Notifier";
+import type { Renderer } from "react-dom";
 import RightPanelStore from "../stores/RightPanelStore";
 import WidgetStore from "../stores/WidgetStore";
 import CallHandler from "../CallHandler";
-import {Analytics} from "../Analytics";
+import { Analytics } from "../Analytics";
 import CountlyAnalytics from "../CountlyAnalytics";
 import UserActivity from "../UserActivity";
-import {ModalWidgetStore} from "../stores/ModalWidgetStore";
+import { ModalWidgetStore } from "../stores/ModalWidgetStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import VoipUserMapper from "../VoipUserMapper";
-import {SpaceStoreClass} from "../stores/SpaceStore";
+import { SpaceStoreClass } from "../stores/SpaceStore";
 import TypingStore from "../stores/TypingStore";
 import { EventIndexPeg } from "../indexing/EventIndexPeg";
-import {VoiceRecordingStore} from "../stores/VoiceRecordingStore";
+import { VoiceRecordingStore } from "../stores/VoiceRecordingStore";
 import PerformanceMonitor from "../performance";
 import UIStore from "../stores/UIStore";
 import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
@@ -127,11 +128,24 @@ declare global {
         setSinkId(outputId: string);
     }
 
+    // Add Chrome-specific `instant` ScrollBehaviour
+    type _ScrollBehavior = ScrollBehavior | "instant";
+
+    interface _ScrollOptions {
+        behavior?: _ScrollBehavior;
+    }
+
+    interface _ScrollIntoViewOptions extends _ScrollOptions {
+        block?: ScrollLogicalPosition;
+        inline?: ScrollLogicalPosition;
+    }
+
     interface Element {
         // Safari & IE11 only have this prefixed: we used prefixed versions
         // previously so let's continue to support them for now
         webkitRequestFullScreen(options?: FullscreenOptions): Promise<void>;
         msRequestFullscreen(options?: FullscreenOptions): Promise<void>;
+        scrollIntoView(arg?: boolean | _ScrollIntoViewOptions): void;
     }
 
     interface Error {

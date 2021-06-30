@@ -272,7 +272,7 @@
     "Server may be unavailable, overloaded, or you hit a bug.": "Возможно, сервер недоступен, перегружен или случилась ошибка.",
     "Server unavailable, overloaded, or something else went wrong.": "Возможно, сервер недоступен, перегружен или что-то еще пошло не так.",
     "Session ID": "ID сессии",
-    "%(senderName)s set a profile picture.": "%(senderName)s установил себе аватар.",
+    "%(senderName)s set a profile picture.": "%(senderName)s установил(а) себе аватар.",
     "%(senderName)s set their display name to %(displayName)s.": "%(senderName)s изменил(а) отображаемое имя на %(displayName)s.",
     "Signed Out": "Выполнен выход",
     "This room is not accessible by remote Matrix servers": "Это комната недоступна из других серверов Matrix",
@@ -853,7 +853,7 @@
     "Sets the room name": "Устанавливает название комнаты",
     "Forces the current outbound group session in an encrypted room to be discarded": "Принудительно отбрасывает текущую групповую сессию для отправки сообщений в зашифрованную комнату",
     "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s модернизировал эту комнату.",
-    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s установил %(address)s в качестве главного адреса комнаты.",
+    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s установил(а) %(address)s в качестве главного адреса комнаты.",
     "%(senderName)s removed the main address for this room.": "%(senderName)s удалил главный адрес комнаты.",
     "%(displayName)s is typing …": "%(displayName)s печатает…",
     "%(names)s and %(count)s others are typing …|other": "%(names)s и %(count)s других печатают…",
@@ -3211,5 +3211,13 @@
     "Failed to remove some rooms. Try again later": "Не удалось удалить несколько комнат. Попробуйте позже",
     "%(count)s rooms and 1 space|one": "%(count)s комната и одно пространство",
     "%(count)s rooms and 1 space|other": "%(count)s комнат и одно пространство",
-    "Sends the given message as a spoiler": "Отправить данное сообщение под спойлером"
+    "Sends the given message as a spoiler": "Отправить данное сообщение под спойлером",
+    "Play": "Воспроизведение",
+    "Pause": "Пауза",
+    "Connecting": "Подключение",
+    "Allow Peer-to-Peer for 1:1 calls (if you enable this, the other party might be able to see your IP address)": "Разрешить прямые соединения для вызовов 1:1 (при включении данной опции другая сторона может узнать ваш IP адрес)",
+    "Send and receive voice messages": "Отправлять и получать голосовые сообщения",
+    "%(deviceId)s from %(ip)s": "%(deviceId)s с %(ip)s",
+    "The user you called is busy.": "Вызываемый пользователь занят.",
+    "User Busy": "Пользователь занят"
 }

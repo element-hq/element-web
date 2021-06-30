@@ -3358,5 +3358,22 @@
     "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "Essayez d'autres mots ou vérifiez les fautes de frappe. Certains salons peuvent ne pas être visibles car ils sont privés et vous devez être invité pour les rejoindre.",
     "No results for \"%(query)s\"": "Aucun résultat pour « %(query)s »",
     "The user you called is busy.": "L’utilisateur que vous avez appelé est indisponible.",
-    "User Busy": "Utilisateur indisponible"
+    "User Busy": "Utilisateur indisponible",
+    "We're working on this as part of the beta, but just want to let you know.": "Nous travaillons sur cette partie en bêta, mais nous voulions vous en faire part.",
+    "Teammates might not be able to view or join any private rooms you make.": "Votre équipe pourrait ne pas voir ou rejoindre les salons privés que vous créez.",
+    "Or send invite link": "Ou envoyer le lien d’invitation",
+    "If you can't see who you’re looking for, send them your invite link below.": "Si vous ne trouvez pas la personne que vous cherchez, envoyez leur le lien d’invitation ci-dessous.",
+    "Some suggestions may be hidden for privacy.": "Certaines suggestions pourraient être masquées pour votre confidentialité.",
+    "Search for rooms or people": "Rechercher des salons ou des gens",
+    "Forward message": "Transférer le message",
+    "Open link": "Ouvrir le lien",
+    "Sent": "Envoyé",
+    "You don't have permission to do this": "Vous n’avez pas les permissions nécessaires pour effectuer cette action",
+    "Error - Mixed content": "Erreur - Contenu mixte",
+    "Error loading Widget": "Erreur lors du chargement du widget",
+    "Pinned messages": "Messages épinglés",
+    "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "Si vous avez les permissions, ouvrez le menu de n’importe quel message et sélectionnez <b>Épingler</b> pour les afficher ici.",
+    "Nothing pinned, yet": "Rien d’épinglé, pour l’instant",
+    "End-to-end encryption isn't enabled": "Le chiffrement de bout en bout n’est pas activé",
+    "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites. <a>Enable encryption in settings.</a>": "Vous messages privés sont normalement chiffrés, mais ce salon ne l’est pas. Ceci est souvent du à un appareil ou une méthode qui ne le prend pas en charge, comme les invitations par e-mail. <a>Activer le chiffrement dans les paramètres.</a>"
 }

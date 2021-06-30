@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 
 import * as TestUtils from '../../../test-utils';
 
-import {MatrixClientPeg} from '../../../../src/MatrixClientPeg';
+import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import sdk from '../../../skinned-sdk';
 
 import dis from '../../../../src/dispatcher/dispatcher';
@@ -12,7 +12,7 @@ import DMRoomMap from '../../../../src/utils/DMRoomMap';
 import GroupStore from '../../../../src/stores/GroupStore';
 
 import { MatrixClient, Room, RoomMember } from 'matrix-js-sdk';
-import {DefaultTagID} from "../../../../src/stores/room-list/models";
+import { DefaultTagID } from "../../../../src/stores/room-list/models";
 import RoomListStore, { LISTS_UPDATE_EVENT, RoomListStoreClass } from "../../../../src/stores/room-list/RoomListStore";
 import RoomListLayoutStore from "../../../../src/stores/room-list/RoomListLayoutStore";
 
@@ -55,7 +55,7 @@ describe('RoomList', () => {
 
         TestUtils.stubClient();
         client = MatrixClientPeg.get();
-        client.credentials = {userId: myUserId};
+        client.credentials = { userId: myUserId };
         //revert this to prototype method as the test-utils monkey-patches this to return a hardcoded value
         client.getUserId = MatrixClient.prototype.getUserId;
 
@@ -72,7 +72,7 @@ describe('RoomList', () => {
         );
         ReactTestUtils.findRenderedComponentWithType(root, RoomList);
 
-        movingRoom = createRoom({name: 'Moving room'});
+        movingRoom = createRoom({ name: 'Moving room' });
         expect(movingRoom.roomId).not.toBe(null);
 
         // Mock joined member
@@ -83,7 +83,7 @@ describe('RoomList', () => {
             [client.credentials.userId]: myMember,
         }[userId]);
 
-        otherRoom = createRoom({name: 'Other room'});
+        otherRoom = createRoom({ name: 'Other room' });
         myOtherMember = new RoomMember(otherRoom.roomId, myUserId);
         myOtherMember.membership = 'join';
         otherRoom.updateMyMembership('join');
@@ -95,10 +95,10 @@ describe('RoomList', () => {
         client.getRooms = () => [
             movingRoom,
             otherRoom,
-            createRoom({tags: {'m.favourite': {order: 0.1}}, name: 'Some other room'}),
-            createRoom({tags: {'m.favourite': {order: 0.2}}, name: 'Some other room 2'}),
-            createRoom({tags: {'m.lowpriority': {}}, name: 'Some unimportant room'}),
-            createRoom({tags: {'custom.tag': {}}, name: 'Some room customly tagged'}),
+            createRoom({ tags: { 'm.favourite': { order: 0.1 } }, name: 'Some other room' }),
+            createRoom({ tags: { 'm.favourite': { order: 0.2 } }, name: 'Some other room 2' }),
+            createRoom({ tags: { 'm.lowpriority': {} }, name: 'Some unimportant room' }),
+            createRoom({ tags: { 'custom.tag': {} }, name: 'Some room customly tagged' }),
         ];
         client.getVisibleRooms = client.getRooms;
 
@@ -138,7 +138,7 @@ describe('RoomList', () => {
         let expectedRoomTile;
         try {
             const roomTiles = ReactTestUtils.scryRenderedComponentsWithType(containingSubList, RoomTile);
-            console.info({roomTiles: roomTiles.length});
+            console.info({ roomTiles: roomTiles.length });
             expectedRoomTile = roomTiles.find((tile) => tile.props.room === room);
         } catch (err) {
             // truncate the error message because it's spammy
@@ -164,7 +164,7 @@ describe('RoomList', () => {
         // Set up the room that will be moved such that it has the correct state for a room in
         // the section for oldTagId
         if (oldTagId === DefaultTagID.Favourite || oldTagId === DefaultTagID.LowPriority) {
-            movingRoom.tags = {[oldTagId]: {}};
+            movingRoom.tags = { [oldTagId]: {} };
         } else if (oldTagId === DefaultTagID.DM) {
             // Mock inverse m.direct
             DMRoomMap.shared().roomToUser = {
@@ -172,13 +172,13 @@ describe('RoomList', () => {
             };
         }
 
-        dis.dispatch({action: 'MatrixActions.sync', prevState: null, state: 'PREPARED', matrixClient: client});
+        dis.dispatch({ action: 'MatrixActions.sync', prevState: null, state: 'PREPARED', matrixClient: client });
 
         expectRoomInSubList(movingRoom, srcSubListTest);
 
-        dis.dispatch({action: 'RoomListActions.tagRoom.pending', request: {
+        dis.dispatch({ action: 'RoomListActions.tagRoom.pending', request: {
             oldTagId, newTagId, room: movingRoom,
-        }});
+        } });
 
         expectRoomInSubList(movingRoom, destSubListTest);
     }
@@ -279,11 +279,11 @@ describe('RoomList', () => {
             // We also have to mock the client's getGroup function for the room list to filter it.
             // It's not smart enough to tell the difference between a real group and a template though.
             client.getGroup = (groupId) => {
-                return {groupId};
+                return { groupId };
             };
 
             // Select tag
-            dis.dispatch({action: 'select_tag', tag: '+group:domain'}, true);
+            dis.dispatch({ action: 'select_tag', tag: '+group:domain' }, true);
         }
 
         beforeEach(() => {
@@ -308,5 +308,4 @@ describe('RoomList', () => {
         itDoesCorrectOptimisticUpdatesForDraggedRoomTiles();
     });
 });
-
 

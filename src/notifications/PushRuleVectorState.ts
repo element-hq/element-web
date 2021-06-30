@@ -15,9 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {StandardActions} from "./StandardActions";
-import {NotificationUtils} from "./NotificationUtils";
-import {IPushRule} from "./types";
+import { StandardActions } from "./StandardActions";
+import { NotificationUtils } from "./NotificationUtils";
+import { IPushRule } from "./types";
 
 export enum State {
     /** The push rule is disabled */

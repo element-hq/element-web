@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../../../languageHandler";
+import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
 import { MatrixClientPeg } from '../../../../../MatrixClientPeg';
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -84,7 +84,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             fontSize: (SettingsStore.getValue("baseFontSize", null) + FontWatcher.SIZE_DIFF).toString(),
             ...this.calculateThemeState(),
             customThemeUrl: "",
-            customThemeMessage: {isError: false, text: ""},
+            customThemeMessage: { isError: false, text: "" },
             useCustomFontSize: SettingsStore.getValue("useCustomFontSize"),
             useSystemFont: SettingsStore.getValue("useSystemFont"),
             systemFont: SettingsStore.getValue("systemFont"),
@@ -149,43 +149,43 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         // so remember what the value was before we tried to set it so we can revert
         const oldTheme: string = SettingsStore.getValue('theme');
         SettingsStore.setValue("theme", null, SettingLevel.DEVICE, newTheme).catch(() => {
-            dis.dispatch<RecheckThemePayload>({action: Action.RecheckTheme});
-            this.setState({theme: oldTheme});
+            dis.dispatch<RecheckThemePayload>({ action: Action.RecheckTheme });
+            this.setState({ theme: oldTheme });
         });
-        this.setState({theme: newTheme});
+        this.setState({ theme: newTheme });
         // The settings watcher doesn't fire until the echo comes back from the
         // server, so to make the theme change immediately we need to manually
         // do the dispatch now
         // XXX: The local echoed value appears to be unreliable, in particular
         // when settings custom themes(!) so adding forceTheme to override
         // the value from settings.
-        dis.dispatch<RecheckThemePayload>({action: Action.RecheckTheme, forceTheme: newTheme});
+        dis.dispatch<RecheckThemePayload>({ action: Action.RecheckTheme, forceTheme: newTheme });
     };
 
     private onUseSystemThemeChanged = (checked: boolean): void => {
-        this.setState({useSystemTheme: checked});
+        this.setState({ useSystemTheme: checked });
         SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, checked);
-        dis.dispatch<RecheckThemePayload>({action: Action.RecheckTheme});
+        dis.dispatch<RecheckThemePayload>({ action: Action.RecheckTheme });
     };
 
     private onFontSizeChanged = (size: number): void => {
-        this.setState({fontSize: size.toString()});
+        this.setState({ fontSize: size.toString() });
         SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, size - FontWatcher.SIZE_DIFF);
     };
 
-    private onValidateFontSize = async ({value}: Pick<IFieldState, "value">): Promise<IValidationResult> => {
+    private onValidateFontSize = async ({ value }: Pick<IFieldState, "value">): Promise<IValidationResult> => {
         const parsedSize = parseFloat(value);
         const min = FontWatcher.MIN_SIZE + FontWatcher.SIZE_DIFF;
         const max = FontWatcher.MAX_SIZE + FontWatcher.SIZE_DIFF;
 
         if (isNaN(parsedSize)) {
-            return {valid: false, feedback: _t("Size must be a number")};
+            return { valid: false, feedback: _t("Size must be a number") };
         }
 
         if (!(min <= parsedSize && parsedSize <= max)) {
             return {
                 valid: false,
-                feedback: _t('Custom font size can only be between %(min)s pt and %(max)s pt', {min, max}),
+                feedback: _t('Custom font size can only be between %(min)s pt and %(max)s pt', { min, max }),
             };
         }
 
@@ -196,7 +196,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             parseInt(value, 10) - FontWatcher.SIZE_DIFF,
         );
 
-        return {valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', {min, max})};
+        return { valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', { min, max }) };
     };
 
     private onAddCustomTheme = async (): Promise<void> => {
@@ -213,37 +213,37 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             // XXX: need some schema for this
             const themeInfo = await r.json();
             if (!themeInfo || typeof(themeInfo['name']) !== 'string' || typeof(themeInfo['colors']) !== 'object') {
-                this.setState({customThemeMessage: {text: _t("Invalid theme schema."), isError: true}});
+                this.setState({ customThemeMessage: { text: _t("Invalid theme schema."), isError: true } });
                 return;
             }
             currentThemes.push(themeInfo);
         } catch (e) {
             console.error(e);
-            this.setState({customThemeMessage: {text: _t("Error downloading theme information."), isError: true}});
+            this.setState({ customThemeMessage: { text: _t("Error downloading theme information."), isError: true } });
             return; // Don't continue on error
         }
 
         await SettingsStore.setValue("custom_themes", null, SettingLevel.ACCOUNT, currentThemes);
-        this.setState({customThemeUrl: "", customThemeMessage: {text: _t("Theme added!"), isError: false}});
+        this.setState({ customThemeUrl: "", customThemeMessage: { text: _t("Theme added!"), isError: false } });
 
         this.themeTimer = setTimeout(() => {
-            this.setState({customThemeMessage: {text: "", isError: false}});
+            this.setState({ customThemeMessage: { text: "", isError: false } });
         }, 3000);
     };
 
     private onCustomThemeChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>): void => {
-        this.setState({customThemeUrl: e.target.value});
+        this.setState({ customThemeUrl: e.target.value });
     };
 
     private onIRCLayoutChange = (enabled: boolean) => {
         if (enabled) {
-            this.setState({layout: Layout.IRC});
+            this.setState({ layout: Layout.IRC });
             SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
         } else {
-            this.setState({layout: Layout.Group});
+            this.setState({ layout: Layout.Group });
             SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
         }
-    }
+    };
 
     private renderThemeSection() {
         const themeWatcher = new ThemeWatcher();
@@ -293,7 +293,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
         // XXX: replace any type here
         const themes = Object.entries<any>(enumerateThemes())
-            .map(p => ({id: p[0], name: p[1]})); // convert pairs to objects for code readability
+            .map(p => ({ id: p[0], name: p[1] })); // convert pairs to objects for code readability
         const builtInThemes = themes.filter(p => !p.id.startsWith("custom-"));
         const customThemes = themes.filter(p => !builtInThemes.includes(p))
             .sort((a, b) => compare(a.name, b.name));
@@ -348,7 +348,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             <SettingsFlag
                 name="useCustomFontSize"
                 level={SettingLevel.ACCOUNT}
-                onChange={(checked) => this.setState({useCustomFontSize: checked})}
+                onChange={(checked) => this.setState({ useCustomFontSize: checked })}
                 useCheckbox={true}
             />
 
@@ -360,7 +360,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 value={this.state.fontSize.toString()}
                 id="font_size_field"
                 onValidate={this.onValidateFontSize}
-                onChange={(value) => this.setState({fontSize: value.target.value})}
+                onChange={(value) => this.setState({ fontSize: value.target.value })}
                 disabled={!this.state.useCustomFontSize}
                 className="mx_SettingsTab_customFontSizeField"
             />
@@ -373,7 +373,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         const brand = SdkConfig.get().brand;
         const toggle = <div
             className="mx_AppearanceUserSettingsTab_AdvancedToggle"
-            onClick={() => this.setState({showAdvanced: !this.state.showAdvanced})}
+            onClick={() => this.setState({ showAdvanced: !this.state.showAdvanced })}
         >
             {this.state.showAdvanced ? _t("Hide advanced") : _t("Show advanced")}
         </div>;
@@ -403,7 +403,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     name="useSystemFont"
                     level={SettingLevel.DEVICE}
                     useCheckbox={true}
-                    onChange={(checked) => this.setState({useSystemFont: checked})}
+                    onChange={(checked) => this.setState({ useSystemFont: checked })}
                 />
                 <Field
                     className="mx_AppearanceUserSettingsTab_systemFont"

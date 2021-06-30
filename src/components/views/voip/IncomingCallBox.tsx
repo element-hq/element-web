@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import { ActionPayload } from '../../../dispatcher/payloads';
@@ -25,7 +25,7 @@ import CallHandler, { AudioID } from '../../../CallHandler';
 import RoomAvatar from '../avatars/RoomAvatar';
 import AccessibleButton from '../elements/AccessibleButton';
 import { CallState } from 'matrix-js-sdk/src/webrtc/call';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
 import classNames from 'classnames';
 
@@ -91,10 +91,10 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
 
     private onSilenceClick: React.MouseEventHandler = (e) => {
         e.stopPropagation();
-        const newState = !this.state.silenced
-        this.setState({silenced: newState});
+        const newState = !this.state.silenced;
+        this.setState({ silenced: newState });
         newState ? CallHandler.sharedInstance().pause(AudioID.Ring) : CallHandler.sharedInstance().play(AudioID.Ring);
-    }
+    };
 
     public render() {
         if (!this.state.incomingCall) {

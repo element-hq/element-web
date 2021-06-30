@@ -16,14 +16,14 @@ limitations under the License.
 
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { _t } from "../../../languageHandler";
-import React, {ReactNode} from "react";
+import React, { ReactNode } from "react";
 import {
     IRecordingUpdate,
     RECORDING_PLAYBACK_SAMPLES,
     RecordingState,
     VoiceRecording,
 } from "../../../voice/VoiceRecording";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import classNames from "classnames";
 import LiveRecordingWaveform from "../voice_messages/LiveRecordingWaveform";
@@ -32,7 +32,7 @@ import { arrayFastResample, arraySeed } from "../../../utils/arrays";
 import { percentageOf } from "../../../utils/numbers";
 import LiveRecordingClock from "../voice_messages/LiveRecordingClock";
 import { VoiceRecordingStore } from "../../../stores/VoiceRecordingStore";
-import {UPDATE_EVENT} from "../../../stores/AsyncStore";
+import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import RecordingPlayback from "../voice_messages/RecordingPlayback";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
 import Modal from "../../../Modal";
@@ -105,7 +105,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             });
             this.scheduledAnimationFrame = false;
         });
-    }
+    };
 
     // called by composer
     public async send() {
@@ -152,7 +152,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         await VoiceRecordingStore.instance.disposeRecording();
 
         // Reset back to no recording, which means no phase (ie: restart component entirely)
-        this.setState({recorder: null, recordingPhase: null});
+        this.setState({ recorder: null, recordingPhase: null });
     }
 
     private onCancel = async () => {
@@ -206,10 +206,10 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             // We don't need to remove the listener: the recorder will clean that up for us.
             recorder.on(UPDATE_EVENT, (ev: RecordingState) => {
                 if (ev === RecordingState.EndingSoon) return; // ignore this state: it has no UI purpose here
-                this.setState({recordingPhase: ev});
+                this.setState({ recordingPhase: ev });
             });
 
-            this.setState({recorder, recordingPhase: RecordingState.Started});
+            this.setState({ recorder, recordingPhase: RecordingState.Started });
         } catch (e) {
             console.error("Error starting recording: ", e);
             accessError();

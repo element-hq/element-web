@@ -54,8 +54,6 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
             }
 
             this.watchers.notifyUpdate("urlPreviewsEnabled", roomId, SettingLevel.ROOM_ACCOUNT, val);
-        } else if (event.getType() === "org.matrix.room.color_scheme") {
-            this.watchers.notifyUpdate("roomColor", roomId, SettingLevel.ROOM_ACCOUNT, event.getContent());
         } else if (event.getType() === "im.vector.web.settings") {
             // Figure out what changed and fire those updates
             const prevContent = prevEvent ? prevEvent.getContent() : {};
@@ -79,14 +77,6 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
             return !content['disable'];
         }
 
-        // Special case room color
-        if (settingName === "roomColor") {
-            // The event content should already be in an appropriate format, we just need
-            // to get the right value.
-            // don't fallback to {} because thats truthy and would imply there is an event specifying tint
-            return this.getSettings(roomId, "org.matrix.room.color_scheme");
-        }
-
         // Special case allowed widgets
         if (settingName === "allowedWidgets") {
             return this.getSettings(roomId, ALLOWED_WIDGETS_EVENT_TYPE);
@@ -102,12 +92,6 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
             const content = this.getSettings(roomId, "org.matrix.room.preview_urls") || {};
             content['disable'] = !newValue;
             return MatrixClientPeg.get().setRoomAccountData(roomId, "org.matrix.room.preview_urls", content);
-        }
-
-        // Special case room color
-        if (settingName === "roomColor") {
-            // The new value should match our requirements, we just need to store it in the right place.
-            return MatrixClientPeg.get().setRoomAccountData(roomId, "org.matrix.room.color_scheme", newValue);
         }
 
         // Special case allowed widgets

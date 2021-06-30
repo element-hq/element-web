@@ -17,11 +17,11 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t, _td } from '../../../languageHandler';
-import {PendingActionSpinner} from "../right_panel/EncryptionInfo";
+import { PendingActionSpinner } from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
 import DialogButtons from "../elements/DialogButtons";
 import { fixupColorFonts } from '../../../utils/FontManager';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 function capFirst(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
@@ -130,8 +130,8 @@ export default class VerificationShowSas extends React.Component {
                         text = _t("Waiting for your other session to verify…");
                     }
                 } else {
-                    const {displayName} = this.props;
-                    text = _t("Waiting for %(displayName)s to verify…", {displayName});
+                    const { displayName } = this.props;
+                    text = _t("Waiting for %(displayName)s to verify…", { displayName });
                 }
             } else {
                 text = _t("Cancelling…");
