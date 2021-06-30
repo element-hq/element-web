@@ -18,8 +18,8 @@ limitations under the License.
 */
 
 import BasePlatform from 'matrix-react-sdk/src/BasePlatform';
-import {_t} from 'matrix-react-sdk/src/languageHandler';
-import {getVectorConfig} from "../getconfig";
+import { _t } from 'matrix-react-sdk/src/languageHandler';
+import { getVectorConfig } from "../getconfig";
 
 import Favicon from "../../favicon";
 

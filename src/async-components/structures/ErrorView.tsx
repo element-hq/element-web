@@ -27,7 +27,7 @@ interface IProps {
     messages?: string[];
 }
 
-const ErrorView: React.FC<IProps> = ({title, messages}) => {
+const ErrorView: React.FC<IProps> = ({ title, messages }) => {
     return <div className="mx_ErrorView">
         <div className="mx_ErrorView_container">
             <div className="mx_HomePage_header">

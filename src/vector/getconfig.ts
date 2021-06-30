@@ -55,7 +55,7 @@ function getConfig(configJsonFilename: string): Promise<{}> {
                                 resolve({});
                             }
                         }
-                        reject({err: err, response: response});
+                        reject({ err: err, response: response });
                         return;
                     }
 
@@ -65,7 +65,7 @@ function getConfig(configJsonFilename: string): Promise<{}> {
                     // loading from the filesystem (see above).
                     resolve(JSON.parse(body));
                 } catch (e) {
-                    reject({err: e});
+                    reject({ err: e });
                 }
             },
         );
