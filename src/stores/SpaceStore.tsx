@@ -130,7 +130,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         if (space !== this.activeSpace) await this.setActiveSpace(space);
 
         if (space) {
-            const notificationState = this.getNotificationState(space.roomId)
+            const notificationState = this.getNotificationState(space.roomId);
             const roomId = notificationState.getFirstRoomWithNotifications();
             defaultDispatcher.dispatch({
                 action: "view_room",
@@ -141,7 +141,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             const lists = RoomListStore.instance.unfilteredLists;
             TAG_ORDER.every(t => {
                 const listRooms = lists[t];
-                const unreadRoom = listRooms.find((r: Room)=> {
+                const unreadRoom = listRooms.find((r: Room) => {
                     if (this.showInHomeSpace(r)) {
                         const state = RoomNotificationStateStore.instance.getRoomState(r);
                         return state.isUnread;
