@@ -16,17 +16,19 @@ limitations under the License.
 
 import * as Recorder from 'opus-recorder';
 import encoderPath from 'opus-recorder/dist/encoderWorker.min.js';
-import {MatrixClient} from "matrix-js-sdk/src/client";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 import MediaDeviceHandler from "../MediaDeviceHandler";
-import {SimpleObservable} from "matrix-widget-api";
-import {clamp, percentageOf, percentageWithin} from "../utils/numbers";
+import { SimpleObservable } from "matrix-widget-api";
+import { clamp, percentageOf, percentageWithin } from "../utils/numbers";
 import EventEmitter from "events";
-import {IDestroyable} from "../utils/IDestroyable";
-import {Singleflight} from "../utils/Singleflight";
-import {PayloadEvent, WORKLET_NAME} from "./consts";
-import {UPDATE_EVENT} from "../stores/AsyncStore";
-import {Playback} from "./Playback";
-import {createAudioContext} from "./compat";
+import { IDestroyable } from "../utils/IDestroyable";
+import { Singleflight } from "../utils/Singleflight";
+import { PayloadEvent, WORKLET_NAME } from "./consts";
+import { UPDATE_EVENT } from "../stores/AsyncStore";
+import { Playback } from "./Playback";
+import { createAudioContext } from "./compat";
+import { IEncryptedFile } from "matrix-js-sdk/src/@types/event";
+import { uploadFile } from "../ContentMessages";
 
 const CHANNELS = 1; // stereo isn't important
 export const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
@@ -49,6 +51,11 @@ export enum RecordingState {
     Uploaded = "uploaded",
 }
 
+export interface IUpload {
+    mxc?: string; // for unencrypted uploads
+    encrypted?: IEncryptedFile;
+}
+
 export class VoiceRecording extends EventEmitter implements IDestroyable {
     private recorder: Recorder;
     private recorderContext: AudioContext;
@@ -58,7 +65,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
     private recorderWorklet: AudioWorkletNode;
     private recorderProcessor: ScriptProcessorNode;
     private buffer = new Uint8Array(0); // use this.audioBuffer to access
-    private mxc: string;
+    private lastUpload: IUpload;
     private recording = false;
     private observable: SimpleObservable<IRecordingUpdate>;
     private amplitudes: number[] = []; // at each second mark, generated
@@ -214,13 +221,6 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         return this.buffer.length > 0;
     }
 
-    public get mxcUri(): string {
-        if (!this.mxc) {
-            throw new Error("Recording has not been uploaded yet");
-        }
-        return this.mxc;
-    }
-
     private onAudioProcess = (ev: AudioProcessingEvent) => {
         this.processAudioUpdate(ev.playbackTime);
 
@@ -283,14 +283,14 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             this.stop();
         } else if (secondsLeft <= TARGET_WARN_TIME_LEFT) {
             Singleflight.for(this, "ending_soon").do(() => {
-                this.emit(RecordingState.EndingSoon, {secondsLeft});
+                this.emit(RecordingState.EndingSoon, { secondsLeft });
                 return Singleflight.Void;
             });
         }
     };
 
     public async start(): Promise<void> {
-        if (this.mxc || this.hasRecording) {
+        if (this.lastUpload || this.hasRecording) {
             throw new Error("Recording already prepared");
         }
         if (this.recording) {
@@ -362,20 +362,19 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         this.observable.close();
     }
 
-    public async upload(): Promise<string> {
+    public async upload(inRoomId: string): Promise<IUpload> {
         if (!this.hasRecording) {
             throw new Error("No recording available to upload");
         }
 
-        if (this.mxc) return this.mxc;
+        if (this.lastUpload) return this.lastUpload;
 
         this.emit(RecordingState.Uploading);
-        this.mxc = await this.client.uploadContent(new Blob([this.audioBuffer], {
+        const { url: mxc, file: encrypted } = await uploadFile(this.client, inRoomId, new Blob([this.audioBuffer], {
             type: this.contentType,
-        }), {
-            onlyContentUri: false, // to stop the warnings in the console
-        }).then(r => r['content_uri']);
+        }));
+        this.lastUpload = { mxc, encrypted };
         this.emit(RecordingState.Uploaded);
-        return this.mxc;
+        return this.lastUpload;
     }
 }

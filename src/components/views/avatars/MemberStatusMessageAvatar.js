@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import {_t} from "../../../languageHandler";
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import { _t } from "../../../languageHandler";
 import MemberAvatar from '../avatars/MemberAvatar';
 import classNames from 'classnames';
 import StatusMessageContextMenu from "../context_menus/StatusMessageContextMenu";
 import SettingsStore from "../../../settings/SettingsStore";
-import {ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.avatars.MemberStatusMessageAvatar")
 export default class MemberStatusMessageAvatar extends React.Component {

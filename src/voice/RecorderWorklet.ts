@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {IAmplitudePayload, ITimingPayload, PayloadEvent, WORKLET_NAME} from "./consts";
-import {percentageOf} from "../utils/numbers";
+import { IAmplitudePayload, ITimingPayload, PayloadEvent, WORKLET_NAME } from "./consts";
+import { percentageOf } from "../utils/numbers";
 
 // from AudioWorkletGlobalScope: https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletGlobalScope
 declare const currentTime: number;
@@ -53,7 +53,7 @@ class MxVoiceWorklet extends AudioWorkletProcessor {
         }
 
         // We mostly use this worklet to fire regular clock updates through to components
-        this.port.postMessage(<ITimingPayload>{ev: PayloadEvent.Timekeep, timeSeconds: currentTime});
+        this.port.postMessage(<ITimingPayload>{ ev: PayloadEvent.Timekeep, timeSeconds: currentTime });
 
         // We're supposed to return false when we're "done" with the audio clip, but seeing as
         // we are acting as a passive processor we are never truly "done". The browser will clean

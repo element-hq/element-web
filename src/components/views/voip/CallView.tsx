@@ -18,20 +18,20 @@ limitations under the License.
 import React, { createRef, CSSProperties } from 'react';
 import dis from '../../../dispatcher/dispatcher';
 import CallHandler from '../../../CallHandler';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t, _td } from '../../../languageHandler';
 import VideoFeed from './VideoFeed';
 import RoomAvatar from "../avatars/RoomAvatar";
 import { CallState, CallType, MatrixCall, CallEvent } from 'matrix-js-sdk/src/webrtc/call';
 import classNames from 'classnames';
 import AccessibleButton from '../elements/AccessibleButton';
-import {isOnlyCtrlOrCmdKeyEvent, Key} from '../../../Keyboard';
-import {alwaysAboveLeftOf, alwaysAboveRightOf, ChevronFace, ContextMenuButton} from '../../structures/ContextMenu';
+import { isOnlyCtrlOrCmdKeyEvent, Key } from '../../../Keyboard';
+import { alwaysAboveLeftOf, alwaysAboveRightOf, ChevronFace, ContextMenuButton } from '../../structures/ContextMenu';
 import CallContextMenu from '../context_menus/CallContextMenu';
 import { avatarUrlForMember } from '../../../Avatar';
 import DialpadContextMenu from '../context_menus/DialpadContextMenu';
 import { CallFeed } from 'matrix-js-sdk/src/webrtc/callFeed';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
         // The call for us to display
@@ -117,7 +117,7 @@ export default class CallView extends React.Component<IProps, IState> {
             showMoreMenu: false,
             showDialpad: false,
             feeds: this.props.call.getFeeds(),
-        }
+        };
 
         this.updateCallListeners(null, this.props.call);
     }
@@ -191,7 +191,7 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onFeedsChanged = (newFeeds: Array<CallFeed>) => {
-        this.setState({feeds: newFeeds});
+        this.setState({ feeds: newFeeds });
     };
 
     private onCallLocalHoldUnhold = () => {
@@ -228,11 +228,11 @@ export default class CallView extends React.Component<IProps, IState> {
         this.setState({
             controlsVisible: false,
         });
-    }
+    };
 
     private onMouseMove = () => {
         this.showControls();
-    }
+    };
 
     private showControls() {
         if (this.state.showMoreMenu || this.state.showDialpad) return;
@@ -269,21 +269,21 @@ export default class CallView extends React.Component<IProps, IState> {
                 showDialpad: false,
             });
         }
-    }
+    };
 
     private onMicMuteClick = () => {
         const newVal = !this.state.micMuted;
 
         this.props.call.setMicrophoneMuted(newVal);
-        this.setState({micMuted: newVal});
-    }
+        this.setState({ micMuted: newVal });
+    };
 
     private onVidMuteClick = () => {
         const newVal = !this.state.vidMuted;
 
         this.props.call.setLocalVideoMuted(newVal);
-        this.setState({vidMuted: newVal});
-    }
+        this.setState({ vidMuted: newVal });
+    };
 
     private onMoreClick = () => {
         if (this.controlsHideTimer) {
@@ -295,21 +295,21 @@ export default class CallView extends React.Component<IProps, IState> {
             showMoreMenu: true,
             controlsVisible: true,
         });
-    }
+    };
 
     private closeDialpad = () => {
         this.setState({
             showDialpad: false,
         });
         this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
-    }
+    };
 
     private closeContextMenu = () => {
         this.setState({
             showMoreMenu: false,
         });
         this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
-    }
+    };
 
     // we register global shortcuts here, they *must not conflict* with local shortcuts elsewhere or both will fire
     // Note that this assumes we always have a CallView on screen at any given time
@@ -350,7 +350,7 @@ export default class CallView extends React.Component<IProps, IState> {
             action: 'view_room',
             room_id: userFacingRoomId,
         });
-    }
+    };
 
     private onSecondaryRoomAvatarClick = () => {
         const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.secondaryCall);
@@ -359,17 +359,17 @@ export default class CallView extends React.Component<IProps, IState> {
             action: 'view_room',
             room_id: userFacingRoomId,
         });
-    }
+    };
 
     private onCallResumeClick = () => {
         const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
         CallHandler.sharedInstance().setActiveCallRoomId(userFacingRoomId);
-    }
+    };
 
     private onTransferClick = () => {
         const transfereeCall = CallHandler.sharedInstance().getTransfereeForCallId(this.props.call.callId);
         this.props.call.transferToCall(transfereeCall);
-    }
+    };
 
     public render() {
         const client = MatrixClientPeg.get();
@@ -570,7 +570,7 @@ export default class CallView extends React.Component<IProps, IState> {
                         <div className="mx_CallView_voice_avatarsContainer">
                             <div
                                 className="mx_CallView_voice_avatarContainer"
-                                style={{width: avatarSize, height: avatarSize}}
+                                style={{ width: avatarSize, height: avatarSize }}
                             >
                                 <RoomAvatar
                                     room={callRoom}
@@ -614,7 +614,7 @@ export default class CallView extends React.Component<IProps, IState> {
             contentView = <div className={classes} onMouseMove={this.onMouseMove}>
                 {feeds}
                 <div className="mx_CallView_voice_avatarsContainer">
-                    <div className="mx_CallView_voice_avatarContainer" style={{width: avatarSize, height: avatarSize}}>
+                    <div className="mx_CallView_voice_avatarContainer" style={{ width: avatarSize, height: avatarSize }}>
                         <RoomAvatar
                             room={callRoom}
                             height={avatarSize}

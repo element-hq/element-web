@@ -25,7 +25,7 @@ import { Action } from "../../dispatcher/actions";
 import ProgressBar from "../views/elements/ProgressBar";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import { IUpload } from "../../models/IUpload";
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 
 interface IProps {
     room: Room;
@@ -47,7 +47,7 @@ export default class UploadBar extends React.Component<IProps, IState> {
         // Set initial state to any available upload in this room - we might be mounting
         // earlier than the first progress event, so should show something relevant.
         const uploadsHere = this.getUploadsInRoom();
-        this.state = {currentUpload: uploadsHere[0], uploadsHere};
+        this.state = { currentUpload: uploadsHere[0], uploadsHere };
     }
 
     componentDidMount() {
@@ -74,7 +74,7 @@ export default class UploadBar extends React.Component<IProps, IState> {
             case Action.UploadFailed: {
                 if (!this.mounted) return;
                 const uploadsHere = this.getUploadsInRoom();
-                this.setState({currentUpload: uploadsHere[0], uploadsHere});
+                this.setState({ currentUpload: uploadsHere[0], uploadsHere });
                 break;
             }
         }

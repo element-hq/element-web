@@ -15,15 +15,15 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../../../languageHandler";
+import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
-import {Mjolnir} from "../../../../../mjolnir/Mjolnir";
-import {ListRule} from "../../../../../mjolnir/ListRule";
-import {BanList, RULE_SERVER, RULE_USER} from "../../../../../mjolnir/BanList";
+import { Mjolnir } from "../../../../../mjolnir/Mjolnir";
+import { ListRule } from "../../../../../mjolnir/ListRule";
+import { BanList, RULE_SERVER, RULE_USER } from "../../../../../mjolnir/BanList";
 import Modal from "../../../../../Modal";
-import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../../index";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
 interface IState {
     busy: boolean;
@@ -44,11 +44,11 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
     }
 
     private onPersonalRuleChanged = (e) => {
-        this.setState({newPersonalRule: e.target.value});
+        this.setState({ newPersonalRule: e.target.value });
     };
 
     private onNewListChanged = (e) => {
-        this.setState({newList: e.target.value});
+        this.setState({ newList: e.target.value });
     };
 
     private onAddPersonalRule = async (e) => {
@@ -60,11 +60,11 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
             kind = RULE_USER;
         }
 
-        this.setState({busy: true});
+        this.setState({ busy: true });
         try {
             const list = await Mjolnir.sharedInstance().getOrCreatePersonalList();
             await list.banEntity(kind, this.state.newPersonalRule, _t("Ignored/Blocked"));
-            this.setState({newPersonalRule: ""}); // this will also cause the new rule to be rendered
+            this.setState({ newPersonalRule: "" }); // this will also cause the new rule to be rendered
         } catch (e) {
             console.error(e);
 
@@ -74,7 +74,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                 description: _t('Something went wrong. Please try again or view your console for hints.'),
             });
         } finally {
-            this.setState({busy: false});
+            this.setState({ busy: false });
         }
     };
 
@@ -82,11 +82,11 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         e.preventDefault();
         e.stopPropagation();
 
-        this.setState({busy: true});
+        this.setState({ busy: true });
         try {
             const room = await MatrixClientPeg.get().joinRoom(this.state.newList);
             await Mjolnir.sharedInstance().subscribeToList(room.roomId);
-            this.setState({newList: ""}); // this will also cause the new rule to be rendered
+            this.setState({ newList: "" }); // this will also cause the new rule to be rendered
         } catch (e) {
             console.error(e);
 
@@ -96,12 +96,12 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                 description: _t('Please verify the room ID or address and try again.'),
             });
         } finally {
-            this.setState({busy: false});
+            this.setState({ busy: false });
         }
     };
 
     private async removePersonalRule(rule: ListRule) {
-        this.setState({busy: true});
+        this.setState({ busy: true });
         try {
             const list = Mjolnir.sharedInstance().getPersonalList();
             await list.unbanEntity(rule.kind, rule.entity);
@@ -114,12 +114,12 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                 description: _t('Something went wrong. Please try again or view your console for hints.'),
             });
         } finally {
-            this.setState({busy: false});
+            this.setState({ busy: false });
         }
     }
 
     private async unsubscribeFromList(list: BanList) {
-        this.setState({busy: true});
+        this.setState({ busy: true });
         try {
             await Mjolnir.sharedInstance().unsubscribeFromList(list.roomId);
             await MatrixClientPeg.get().leave(list.roomId);
@@ -132,7 +132,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                 description: _t('Please try again or view your console for hints.'),
             });
         } finally {
-            this.setState({busy: false});
+            this.setState({ busy: false });
         }
     }
 
@@ -153,7 +153,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         };
 
         Modal.createTrackedDialog('View Mjolnir list rules', '', QuestionDialog, {
-            title: _t("Ban list rules - %(roomName)s", {roomName: name}),
+            title: _t("Ban list rules - %(roomName)s", { roomName: name }),
             description: (
                 <div>
                     <h3>{_t("Server rules")}</h3>
@@ -256,7 +256,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                             "Add users and servers you want to ignore here. Use asterisks " +
                             "to have %(brand)s match any characters. For example, <code>@bot:*</code> " +
                             "would ignore all users that have the name 'bot' on any server.",
-                            { brand }, {code: (s) => <code>{s}</code>},
+                            { brand }, { code: (s) => <code>{s}</code> },
                         )}<br />
                         <br />
                         {_t(

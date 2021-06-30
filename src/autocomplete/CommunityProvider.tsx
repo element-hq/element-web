@@ -19,15 +19,15 @@ import React from 'react';
 import Group from "matrix-js-sdk/src/models/group";
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import {MatrixClientPeg} from '../MatrixClientPeg';
+import { MatrixClientPeg } from '../MatrixClientPeg';
 import QueryMatcher from './QueryMatcher';
-import {PillCompletion} from './Components';
+import { PillCompletion } from './Components';
 import * as sdk from '../index';
-import {sortBy} from "lodash";
-import {makeGroupPermalink} from "../utils/permalinks/Permalinks";
-import {ICompletion, ISelectionRange} from "./Autocompleter";
+import { sortBy } from "lodash";
+import { makeGroupPermalink } from "../utils/permalinks/Permalinks";
+import { ICompletion, ISelectionRange } from "./Autocompleter";
 import FlairStore from "../stores/FlairStore";
-import {mediaFromMxc} from "../customisations/Media";
+import { mediaFromMxc } from "../customisations/Media";
 
 const COMMUNITY_REGEX = /\B\+\S*/g;
 
@@ -66,11 +66,11 @@ export default class CommunityProvider extends AutocompleteProvider {
 
         const cli = MatrixClientPeg.get();
         let completions = [];
-        const {command, range} = this.getCurrentCommand(query, selection, force);
+        const { command, range } = this.getCurrentCommand(query, selection, force);
         if (command) {
-            const joinedGroups = cli.getGroups().filter(({myMembership}) => myMembership === 'join');
+            const joinedGroups = cli.getGroups().filter(({ myMembership }) => myMembership === 'join');
 
-            const groups = (await Promise.all(joinedGroups.map(async ({groupId}) => {
+            const groups = (await Promise.all(joinedGroups.map(async ({ groupId }) => {
                 try {
                     return FlairStore.getGroupProfileCached(cli, groupId);
                 } catch (e) { // if FlairStore failed, fall back to just groupId
@@ -90,7 +90,7 @@ export default class CommunityProvider extends AutocompleteProvider {
             completions = sortBy(completions, [
                 (c) => score(matchedString, c.groupId),
                 (c) => c.groupId.length,
-            ]).map(({avatarUrl, groupId, name}) => ({
+            ]).map(({ avatarUrl, groupId, name }) => ({
                 completion: groupId,
                 suffix: ' ',
                 type: "community",

@@ -19,9 +19,9 @@ import React from 'react';
 import CallHandler, { CallHandlerEvent } from '../../../CallHandler';
 import CallView from './CallView';
 import dis from '../../../dispatcher/dispatcher';
-import {Resizable} from "re-resizable";
+import { Resizable } from "re-resizable";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // What room we should display the call for
@@ -74,7 +74,7 @@ export default class CallViewForRoom extends React.Component<IProps, IState> {
     private updateCall = () => {
         const newCall = this.getCall();
         if (newCall !== this.state.call) {
-            this.setState({call: newCall});
+            this.setState({ call: newCall });
         }
     };
 
@@ -121,7 +121,7 @@ export default class CallViewForRoom extends React.Component<IProps, IState> {
                     onResize={this.onResize}
                     onResizeStop={this.onResizeStop}
                     className="mx_CallViewForRoom_ResizeWrapper"
-                    handleClasses={{bottom: "mx_CallViewForRoom_ResizeHandle"}}
+                    handleClasses={{ bottom: "mx_CallViewForRoom_ResizeHandle" }}
                 >
                     <CallView
                         call={this.state.call}

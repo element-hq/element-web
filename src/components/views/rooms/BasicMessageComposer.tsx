@@ -147,7 +147,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         const enabledChange = this.props.disabled !== prevProps.disabled;
         const placeholderChanged = this.props.placeholder !== prevProps.placeholder;
         if (this.props.placeholder && (placeholderChanged || enabledChange)) {
-            const {isEmpty} = this.props.model;
+            const { isEmpty } = this.props.model;
             if (isEmpty) {
                 this.showPlaceholder();
             } else {
@@ -157,7 +157,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     private replaceEmoticon = (caretPosition: DocumentPosition) => {
-        const {model} = this.props;
+        const { model } = this.props;
         const range = model.startRange(caretPosition);
         // expand range max 8 characters backwards from caretPosition,
         // as a space to look for an emoticon
@@ -174,7 +174,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             const data = EMOTICON_TO_EMOJI.get(query) || EMOTICON_TO_EMOJI.get(query.toLowerCase());
 
             if (data) {
-                const {partCreator} = model;
+                const { partCreator } = model;
                 const hasPrecedingSpace = emoticonMatch[0][0] === " ";
                 // we need the range to only comprise of the emoticon
                 // because we'll replace the whole range with an emoji,
@@ -200,7 +200,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             const position = selection instanceof Range ? selection.end : selection;
             this.setLastCaretFromPosition(position);
         }
-        const {isEmpty} = this.props.model;
+        const { isEmpty } = this.props.model;
         if (this.props.placeholder) {
             if (isEmpty) {
                 this.showPlaceholder();
@@ -211,13 +211,13 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         if (isEmpty) {
             this.formatBarRef.current.hide();
         }
-        this.setState({autoComplete: this.props.model.autoComplete});
+        this.setState({ autoComplete: this.props.model.autoComplete });
         this.historyManager.tryPush(this.props.model, selection, inputType, diff);
 
         let isTyping = !this.props.model.isEmpty;
         // If the user is entering a command, only consider them typing if it is one which sends a message into the room
         if (isTyping && this.props.model.parts[0].type === "command") {
-            const {cmd} = parseCommandString(this.props.model.parts[0].text);
+            const { cmd } = parseCommandString(this.props.model.parts[0].text);
             const command = CommandMap.get(cmd);
             if (!command || !command.isEnabled() || command.category !== CommandCategories.messages) {
                 isTyping = false;
@@ -263,10 +263,10 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         const isSafari = ua.includes('safari/') && !ua.includes('chrome/');
 
         if (isSafari) {
-            this.onInput({inputType: "insertCompositionText"});
+            this.onInput({ inputType: "insertCompositionText" });
         } else {
             Promise.resolve().then(() => {
-                this.onInput({inputType: "insertCompositionText"});
+                this.onInput({ inputType: "insertCompositionText" });
             });
         }
     };
@@ -282,7 +282,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         const selection = document.getSelection();
         const text = selection.toString();
         if (text) {
-            const {model} = this.props;
+            const { model } = this.props;
             const range = getRangeForSelection(this.editorRef.current, model, selection);
             const selectedParts = range.parts.map(p => p.serialize());
             event.clipboardData.setData("application/x-element-composer", JSON.stringify(selectedParts));
@@ -311,8 +311,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             return true;
         }
 
-        const {model} = this.props;
-        const {partCreator} = model;
+        const { model } = this.props;
+        const { partCreator } = model;
         const partsText = event.clipboardData.getData("application/x-element-composer");
         let parts;
         if (partsText) {
@@ -335,13 +335,13 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         }
         this.modifiedFlag = true;
         const sel = document.getSelection();
-        const {caret, text} = getCaretOffsetAndText(this.editorRef.current, sel);
+        const { caret, text } = getCaretOffsetAndText(this.editorRef.current, sel);
         this.props.model.update(text, event.inputType, caret);
     };
 
     private insertText(textToInsert: string, inputType = "insertText") {
         const sel = document.getSelection();
-        const {caret, text} = getCaretOffsetAndText(this.editorRef.current, sel);
+        const { caret, text } = getCaretOffsetAndText(this.editorRef.current, sel);
         const newText = text.substr(0, caret.offset) + textToInsert + text.substr(caret.offset);
         caret.offset += textToInsert.length;
         this.modifiedFlag = true;
@@ -354,7 +354,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     // we need to recalculate it, to be able to know where to insert content after
     // losing focus
     private setLastCaretFromPosition(position: DocumentPosition) {
-        const {model} = this.props;
+        const { model } = this.props;
         this._isCaretAtEnd = position.isAtEnd(model);
         this.lastCaret = position.asOffset(model);
         this.lastSelection = cloneSelection(document.getSelection());
@@ -370,7 +370,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         const selection = document.getSelection();
         if (!this.lastSelection || !selectionEquals(this.lastSelection, selection)) {
             this.lastSelection = cloneSelection(selection);
-            const {caret, text} = getCaretOffsetAndText(this.editorRef.current, selection);
+            const { caret, text } = getCaretOffsetAndText(this.editorRef.current, selection);
             this.lastCaret = caret;
             this._isCaretAtEnd = caret.offset === text.length;
         }
@@ -409,7 +409,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     };
 
     private onSelectionChange = () => {
-        const {isEmpty} = this.props.model;
+        const { isEmpty } = this.props.model;
 
         this.refreshLastCaretIfNeeded();
         const selection = document.getSelection();
@@ -446,7 +446,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 break;
             case MessageComposerAction.EditRedo:
                 if (this.historyManager.canRedo()) {
-                    const {parts, caret} = this.historyManager.redo();
+                    const { parts, caret } = this.historyManager.redo();
                     // pass matching inputType so historyManager doesn't push echo
                     // when invoked from rerender callback.
                     model.reset(parts, caret, "historyRedo");
@@ -455,7 +455,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 break;
             case MessageComposerAction.EditUndo:
                 if (this.historyManager.canUndo()) {
-                    const {parts, caret} = this.historyManager.undo(this.props.model);
+                    const { parts, caret } = this.historyManager.undo(this.props.model);
                     // pass matching inputType so historyManager doesn't push echo
                     // when invoked from rerender callback.
                     model.reset(parts, caret, "historyUndo");
@@ -525,8 +525,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private async tabCompleteName() {
         try {
-            await new Promise<void>(resolve => this.setState({showVisualBell: false}, resolve));
-            const {model} = this.props;
+            await new Promise<void>(resolve => this.setState({ showVisualBell: false }, resolve));
+            const { model } = this.props;
             const caret = this.getCaret();
             const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
             const range = model.startRange(position);
@@ -537,7 +537,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                     part.type === "command"
                 );
             });
-            const {partCreator} = model;
+            const { partCreator } = model;
             // await for auto-complete to be open
             await model.transform(() => {
                 const addedLen = range.replace([partCreator.pillCandidate(range.text)]);
@@ -548,7 +548,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             if (model.autoComplete) {
                 await model.autoComplete.startSelection();
                 if (!model.autoComplete.hasSelection()) {
-                    this.setState({showVisualBell: true});
+                    this.setState({ showVisualBell: true });
                     model.autoComplete.close();
                 }
             }
@@ -569,7 +569,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     private onAutoCompleteSelectionChange = (completion: ICompletion, completionIndex: number) => {
         this.modifiedFlag = true;
         this.props.model.autoComplete.onComponentSelectionChange(completion);
-        this.setState({completionIndex});
+        this.setState({ completionIndex });
     };
 
     private configureEmoticonAutoReplace = () => {
@@ -599,7 +599,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         // not really, but we could not serialize the parts, and just change the autoCompleter
         partCreator.setAutoCompleteCreator(getAutoCompleteCreator(
             () => this.autocompleteRef.current,
-            query => new Promise(resolve => this.setState({query}, resolve)),
+            query => new Promise(resolve => this.setState({ query }, resolve)),
         ));
         // initial render of model
         this.updateEditorState(this.getInitialCaretPosition());
@@ -666,7 +666,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                     query={query}
                     onConfirm={this.onAutoCompleteConfirm}
                     onSelectionChange={this.onAutoCompleteSelectionChange}
-                    selection={{beginning: true, end: queryLen, start: queryLen}}
+                    selection={{ beginning: true, end: queryLen, start: queryLen }}
                     room={this.props.room}
                 />
             </div>);
@@ -685,7 +685,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             quote: ctrlShortcutLabel(">"),
         };
 
-        const {completionIndex} = this.state;
+        const { completionIndex } = this.state;
 
         return (<div className={wrapperClasses}>
             { autoComplete }
@@ -719,8 +719,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     public insertMention(userId: string) {
-        const {model} = this.props;
-        const {partCreator} = model;
+        const { model } = this.props;
+        const { partCreator } = model;
         const member = this.props.room.getMember(userId);
         const displayName = member ?
             member.rawDisplayName : userId;
@@ -737,9 +737,9 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     public insertQuotedMessage(event: MatrixEvent) {
-        const {model} = this.props;
-        const {partCreator} = model;
-        const quoteParts = parseEvent(event, partCreator, {isQuotedMessage: true});
+        const { model } = this.props;
+        const { partCreator } = model;
+        const quoteParts = parseEvent(event, partCreator, { isQuotedMessage: true });
         // add two newlines
         quoteParts.push(partCreator.newline());
         quoteParts.push(partCreator.newline());
@@ -752,8 +752,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     public insertPlaintext(text: string) {
-        const {model} = this.props;
-        const {partCreator} = model;
+        const { model } = this.props;
+        const { partCreator } = model;
         const caret = this.getCaret();
         const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
         model.transform(() => {

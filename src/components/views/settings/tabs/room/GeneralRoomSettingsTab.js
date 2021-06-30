@@ -16,15 +16,15 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../../../../languageHandler";
+import { _t } from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
 import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import SettingsStore from "../../../../../settings/SettingsStore";
-import {UIFeature} from "../../../../../settings/UIFeature";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import { UIFeature } from "../../../../../settings/UIFeature";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
 @replaceableComponent("views.settings.tabs.room.GeneralRoomSettingsTab")
 export default class GeneralRoomSettingsTab extends React.Component {

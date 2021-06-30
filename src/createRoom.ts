@@ -34,7 +34,7 @@ import { isJoinedOrNearlyJoined } from "./utils/membership";
 import { VIRTUAL_ROOM_EVENT_TYPE } from "./CallHandler";
 import SpaceStore from "./stores/SpaceStore";
 import { makeSpaceParentEvent } from "./utils/space";
-import { Action } from "./dispatcher/actions"
+import { Action } from "./dispatcher/actions";
 import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
 import { Preset, Visibility } from "matrix-js-sdk/src/@types/partials";
 
@@ -85,7 +85,7 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
 
     const client = MatrixClientPeg.get();
     if (client.isGuest()) {
-        dis.dispatch({action: 'require_registration'});
+        dis.dispatch({ action: 'require_registration' });
         return Promise.resolve(null);
     }
 
@@ -325,7 +325,7 @@ export async function ensureDMExists(client: MatrixClient, userId: string): Prom
             encryption = await canEncryptToAllUsers(client, [userId]);
         }
 
-        roomId = await createRoom({encryption, dmUserId: userId, spinner: false, andView: false});
+        roomId = await createRoom({ encryption, dmUserId: userId, spinner: false, andView: false });
         await _waitForMember(client, roomId, userId);
     }
     return roomId;

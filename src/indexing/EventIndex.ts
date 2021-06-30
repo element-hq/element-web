@@ -175,7 +175,7 @@ export default class EventIndex extends EventEmitter {
             await indexManager.commitLiveEvents();
             return;
         }
-    }
+    };
 
     /*
      * The Room.timeline listener.
@@ -209,7 +209,7 @@ export default class EventIndex extends EventEmitter {
         await client.decryptEventIfNeeded(ev);
 
         await this.addLiveEventToIndex(ev);
-    }
+    };
 
     private onRoomStateEvent = async (ev: MatrixEvent, state: RoomState) => {
         if (!MatrixClientPeg.get().isRoomEncrypted(state.roomId)) return;
@@ -218,7 +218,7 @@ export default class EventIndex extends EventEmitter {
             console.log("EventIndex: Adding a checkpoint for a newly encrypted room", state.roomId);
             this.addRoomCheckpoint(state.roomId, true);
         }
-    }
+    };
 
     /*
      * The Event.decrypted listener.
@@ -230,7 +230,7 @@ export default class EventIndex extends EventEmitter {
         // If the event isn't in our live event set, ignore it.
         if (err) return;
         await this.addLiveEventToIndex(ev);
-    }
+    };
 
     /*
      * The Room.redaction listener.
@@ -247,7 +247,7 @@ export default class EventIndex extends EventEmitter {
         } catch (e) {
             console.log("EventIndex: Error deleting event from index", e);
         }
-    }
+    };
 
     /*
      * The Room.timelineReset listener.
@@ -263,7 +263,7 @@ export default class EventIndex extends EventEmitter {
             room.roomId);
 
         this.addRoomCheckpoint(room.roomId, false);
-    }
+    };
 
     /**
      * Check if an event should be added to the event index.
@@ -464,7 +464,7 @@ export default class EventIndex extends EventEmitter {
 
             // We have a checkpoint, let us fetch some messages, again, very
             // conservatively to not bother our homeserver too much.
-            const eventMapper = client.getEventMapper({preventReEmit: true});
+            const eventMapper = client.getEventMapper({ preventReEmit: true });
             // TODO we need to ensure to use member lazy loading with this
             // request so we get the correct profiles.
             let res;

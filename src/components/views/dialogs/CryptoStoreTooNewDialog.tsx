@@ -43,7 +43,7 @@ export default (props: IProps) => {
             focus: false,
             onFinished: (doLogout) => {
                 if (doLogout) {
-                    dis.dispatch({action: 'logout'});
+                    dis.dispatch({ action: 'logout' });
                     props.onFinished(true);
                 }
             },

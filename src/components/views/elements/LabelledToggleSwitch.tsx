@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 
 import ToggleSwitch from "./ToggleSwitch";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // The value for the toggle switch

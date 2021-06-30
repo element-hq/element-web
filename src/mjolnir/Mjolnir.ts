@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from "../MatrixClientPeg";
-import {ALL_RULE_TYPES, BanList} from "./BanList";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import { ALL_RULE_TYPES, BanList } from "./BanList";
 import SettingsStore from "../settings/SettingsStore";
-import {_t} from "../languageHandler";
+import { _t } from "../languageHandler";
 import dis from "../dispatcher/dispatcher";
-import {SettingLevel} from "../settings/SettingLevel";
+import { SettingLevel } from "../settings/SettingLevel";
 import { Preset } from "matrix-js-sdk/src/@types/partials";
 
 // TODO: Move this and related files to the js-sdk or something once finalized.
@@ -49,7 +49,7 @@ export class Mjolnir {
         this._dispatcherRef = dis.register(this._onAction);
         dis.dispatch({
             action: 'do_after_sync_prepared',
-            deferred_action: {action: 'setup_mjolnir'},
+            deferred_action: { action: 'setup_mjolnir' },
         });
     }
 

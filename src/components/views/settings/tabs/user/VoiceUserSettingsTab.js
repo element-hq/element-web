@@ -16,16 +16,16 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../../../languageHandler";
+import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
 import MediaDeviceHandler from "../../../../../MediaDeviceHandler";
 import Field from "../../../elements/Field";
 import AccessibleButton from "../../../elements/AccessibleButton";
-import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../../index";
 import Modal from "../../../../../Modal";
-import {SettingLevel} from "../../../../../settings/SettingLevel";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import { SettingLevel } from "../../../../../settings/SettingLevel";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
 @replaceableComponent("views.settings.tabs.user.VoiceUserSettingsTab")
 export default class VoiceUserSettingsTab extends React.Component {
@@ -67,7 +67,7 @@ export default class VoiceUserSettingsTab extends React.Component {
         let stream;
         let error;
         try {
-            constraints = {video: true, audio: true};
+            constraints = { video: true, audio: true };
             stream = await navigator.mediaDevices.getUserMedia(constraints);
         } catch (err) {
             // user likely doesn't have a webcam,

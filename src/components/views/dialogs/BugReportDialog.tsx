@@ -22,9 +22,9 @@ import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
-import sendBugReport, {downloadBugReport} from '../../../rageshake/submit-rageshake';
+import sendBugReport, { downloadBugReport } from '../../../rageshake/submit-rageshake';
 import AccessibleButton from "../elements/AccessibleButton";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -68,7 +68,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
 
     private onCancel = (): void => {
         this.props.onFinished(false);
-    }
+    };
 
     private onSubmit = (): void => {
         if ((!this.state.text || !this.state.text.trim()) && (!this.state.issueUrl || !this.state.issueUrl.trim())) {
@@ -110,7 +110,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                 });
             }
         });
-    }
+    };
 
     private onDownload = async (): Promise<void> => {
         this.setState({ downloadBusy: true });
@@ -139,25 +139,25 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
 
     private onTextChange = (ev: React.FormEvent<HTMLTextAreaElement>): void => {
         this.setState({ text: ev.currentTarget.value });
-    }
+    };
 
     private onIssueUrlChange = (ev: React.FormEvent<HTMLInputElement>): void => {
         this.setState({ issueUrl: ev.currentTarget.value });
-    }
+    };
 
     private sendProgressCallback = (progress: string): void => {
         if (this.unmounted) {
             return;
         }
         this.setState({ progress });
-    }
+    };
 
     private downloadProgressCallback = (downloadProgress: string): void => {
         if (this.unmounted) {
             return;
         }
         this.setState({ downloadProgress });
-    }
+    };
 
     public render() {
         const Loader = sdk.getComponent("elements.Spinner");

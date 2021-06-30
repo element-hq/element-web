@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ReactNode} from "react";
+import React, { ReactNode } from "react";
 import AccessibleButton from "../elements/AccessibleButton";
 
-import {XOR} from "../../../@types/common";
+import { XOR } from "../../../@types/common";
 
 export interface IProps {
     description: ReactNode;
@@ -50,7 +50,7 @@ const GenericToast: React.FC<XOR<IPropsExtended, IProps>> = ({
             {detailContent}
         </div>
         <div className="mx_Toast_buttons" aria-live="off">
-            {onReject && rejectLabel && <AccessibleButton kind="danger" onClick={onReject}>
+            {onReject && rejectLabel && <AccessibleButton kind="danger_outline" onClick={onReject}>
                 { rejectLabel }
             </AccessibleButton> }
             <AccessibleButton onClick={onAccept} kind="primary">

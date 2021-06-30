@@ -21,7 +21,7 @@ interface IProps {
     max: number;
 }
 
-const ProgressBar: React.FC<IProps> = ({value, max}) => {
+const ProgressBar: React.FC<IProps> = ({ value, max }) => {
     return <progress className="mx_ProgressBar" max={max} value={value} />;
 };
 

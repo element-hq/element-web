@@ -16,7 +16,7 @@ limitations under the License.
 
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import shouldHideEvent from './shouldHideEvent';
@@ -43,12 +43,6 @@ export function eventTriggersUnreadCount(ev: MatrixEvent): boolean {
         case EventType.RoomCanonicalAlias:
         case EventType.RoomServerAcl:
             return false;
-
-        case EventType.RoomMessage:
-            if (ev.getContent().msgtype === MsgType.Notice) {
-                return false;
-            }
-            break;
     }
 
     if (ev.isRedacted()) return false;

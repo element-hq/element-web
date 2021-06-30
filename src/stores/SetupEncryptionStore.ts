@@ -16,11 +16,12 @@ limitations under the License.
 
 import EventEmitter from 'events';
 import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
-import { IKeyBackupVersion } from "matrix-js-sdk/src/crypto/keybackup";
+import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/matrix";
+import { PHASE_DONE as VERIF_PHASE_DONE } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import { accessSecretStorage, AccessCancelledError } from '../SecurityManager';
-import { PHASE_DONE as VERIF_PHASE_DONE } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
 export enum Phase {
     Loading = 0,
@@ -35,7 +36,7 @@ export class SetupEncryptionStore extends EventEmitter {
     private started: boolean;
     public phase: Phase;
     public verificationRequest: VerificationRequest;
-    public backupInfo: IKeyBackupVersion;
+    public backupInfo: IKeyBackupInfo;
     public keyId: string;
     public keyInfo: ISecretStorageKeyInfo;
     public hasDevicesToVerifyAgainst: boolean;
@@ -167,11 +168,11 @@ export class SetupEncryptionStore extends EventEmitter {
             this.phase = Phase.Done;
             this.emit("update");
         }
-    }
+    };
 
     public onVerificationRequest = (request: VerificationRequest): void => {
         this.setActiveVerificationRequest(request);
-    }
+    };
 
     public onVerificationRequestChange = (): void => {
         if (this.verificationRequest.cancelled) {
@@ -188,7 +189,7 @@ export class SetupEncryptionStore extends EventEmitter {
             this.phase = publicKeysTrusted ? Phase.Done : Phase.Busy;
             this.emit("update");
         }
-    }
+    };
 
     public skip(): void {
         this.phase = Phase.ConfirmSkip;

@@ -190,7 +190,7 @@ export default class TextualBody extends React.Component {
 
             const buttonRect = button.getBoundingClientRect();
             const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
-            const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
+            const { close } = ContextMenu.createMenu(GenericTextContextMenu, {
                 ...toRightOf(buttonRect, 2),
                 message: successful ? _t('Copied!') : _t('Failed to copy'),
             });
@@ -404,7 +404,7 @@ export default class TextualBody extends React.Component {
         },
 
         unhideWidget: () => {
-            this.setState({widgetHidden: false});
+            this.setState({ widgetHidden: false });
             if (global.localStorage) {
                 global.localStorage.removeItem("hide_preview_" + this.props.mxEvent.getId());
             }
@@ -460,7 +460,7 @@ export default class TextualBody extends React.Component {
 
     _openHistoryDialog = async () => {
         const MessageEditHistoryDialog = sdk.getComponent("views.dialogs.MessageEditHistoryDialog");
-        Modal.createDialog(MessageEditHistoryDialog, {mxEvent: this.props.mxEvent});
+        Modal.createDialog(MessageEditHistoryDialog, { mxEvent: this.props.mxEvent });
     };
 
     _renderEditedMarker() {
@@ -469,7 +469,7 @@ export default class TextualBody extends React.Component {
 
         const tooltip = <div>
             <div className="mx_Tooltip_title">
-                {_t("Edited at %(date)s", {date: dateString})}
+                {_t("Edited at %(date)s", { date: dateString })}
             </div>
             <div className="mx_Tooltip_sub">
                 {_t("Click to view edits")}
@@ -480,7 +480,7 @@ export default class TextualBody extends React.Component {
             <AccessibleTooltipButton
                 className="mx_EventTile_edited"
                 onClick={this._openHistoryDialog}
-                title={_t("Edited at %(date)s. Click to view edits.", {date: dateString})}
+                title={_t("Edited at %(date)s. Click to view edits.", { date: dateString })}
                 tooltip={tooltip}
             >
                 <span>{`(${_t("edited")})`}</span>

@@ -16,10 +16,10 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.dialogs.VerificationRequestDialog")
 export default class VerificationRequestDialog extends React.Component {
@@ -37,7 +37,7 @@ export default class VerificationRequestDialog extends React.Component {
             this.state.verificationRequest = this.props.verificationRequest;
         } else if (this.props.verificationRequestPromise) {
             this.props.verificationRequestPromise.then(r => {
-                this.setState({verificationRequest: r});
+                this.setState({ verificationRequest: r });
             });
         }
     }

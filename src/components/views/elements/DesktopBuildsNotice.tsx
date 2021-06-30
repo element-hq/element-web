@@ -22,7 +22,6 @@ import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserSettingsDialog";
 
-
 export enum WarningKind {
     Files,
     Search,
@@ -33,7 +32,7 @@ interface IProps {
     kind: WarningKind;
 }
 
-export default function DesktopBuildsNotice({isRoomEncrypted, kind}: IProps) {
+export default function DesktopBuildsNotice({ isRoomEncrypted, kind }: IProps) {
     if (!isRoomEncrypted) return null;
     if (EventIndexPeg.get()) return null;
 
@@ -53,7 +52,7 @@ export default function DesktopBuildsNotice({isRoomEncrypted, kind}: IProps) {
         </>;
     }
 
-    const {desktopBuilds, brand} = SdkConfig.get();
+    const { desktopBuilds, brand } = SdkConfig.get();
 
     let text = null;
     let logo = null;
@@ -74,10 +73,10 @@ export default function DesktopBuildsNotice({isRoomEncrypted, kind}: IProps) {
     } else {
         switch (kind) {
             case WarningKind.Files:
-                text = _t("This version of %(brand)s does not support viewing some encrypted files", {brand});
+                text = _t("This version of %(brand)s does not support viewing some encrypted files", { brand });
                 break;
             case WarningKind.Search:
-                text = _t("This version of %(brand)s does not support searching encrypted messages", {brand});
+                text = _t("This version of %(brand)s does not support searching encrypted messages", { brand });
                 break;
         }
     }

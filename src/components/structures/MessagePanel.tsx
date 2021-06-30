@@ -50,6 +50,7 @@ import EditorStateTransfer from "../../utils/EditorStateTransfer";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
+const membershipTypes = [EventType.RoomMember, EventType.RoomThirdPartyInvite, EventType.RoomServerAcl];
 
 // check if there is a previous event and it has the same sender as this event
 // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
@@ -80,10 +81,6 @@ function shouldFormContinuation(
     if (!haveTileForEvent(prevEvent, showHiddenEvents)) return false;
 
     return true;
-}
-
-const isMembershipChange = (e: MatrixEvent): boolean => {
-    return e.getType() === EventType.RoomMember || e.getType() === EventType.RoomThirdPartyInvite;
 }
 
 interface IProps {
@@ -440,7 +437,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             // confused.
             if (visible) {
                 hr = <hr className="mx_RoomView_myReadMarker"
-                    style={{opacity: 1, width: '99%'}}
+                    style={{ opacity: 1, width: '99%' }}
                 />;
             }
 
@@ -823,7 +820,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     private collectEventNode = (eventId: string, node: EventTile): void => {
         this.eventNodes[eventId] = node?.ref?.current;
-    }
+    };
 
     // once dynamic content in the events load, make the scrollPanel check the
     // scroll offsets.
@@ -1094,7 +1091,7 @@ class CreationGrouper extends BaseGrouper {
 class RedactionGrouper extends BaseGrouper {
     static canStartGroup = function(panel: MessagePanel, ev: MatrixEvent): boolean {
         return panel.shouldShowEvent(ev) && ev.isRedacted();
-    }
+    };
 
     constructor(
         panel: MessagePanel,
@@ -1189,8 +1186,8 @@ class RedactionGrouper extends BaseGrouper {
 // Wrap consecutive member events in a ListSummary, ignore if redacted
 class MemberGrouper extends BaseGrouper {
     static canStartGroup = function(panel: MessagePanel, ev: MatrixEvent): boolean {
-        return panel.shouldShowEvent(ev) && isMembershipChange(ev);
-    }
+        return panel.shouldShowEvent(ev) && membershipTypes.includes(ev.getType() as EventType);
+    };
 
     constructor(
         public readonly panel: MessagePanel,
@@ -1206,7 +1203,7 @@ class MemberGrouper extends BaseGrouper {
         if (this.panel.wantsDateSeparator(this.events[0], ev.getDate())) {
             return false;
         }
-        return isMembershipChange(ev);
+        return membershipTypes.includes(ev.getType() as EventType);
     }
 
     public add(ev: MatrixEvent, showHiddenEvents?: boolean): void {

@@ -36,7 +36,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
 
     static defaultProps = {
         totalFiles: 1,
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -56,15 +56,15 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
 
     private onCancelClick = () => {
         this.props.onFinished(false);
-    }
+    };
 
     private onUploadClick = () => {
         this.props.onFinished(true);
-    }
+    };
 
     private onUploadAllClick = () => {
         this.props.onFinished(true, true);
-    }
+    };
 
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
