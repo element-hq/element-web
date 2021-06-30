@@ -58,7 +58,7 @@ export default class ThreepidInviteStore extends EventEmitter {
     }
 
     public storeInvite(roomId: string, wireInvite: IThreepidInviteWireFormat): IThreepidInvite {
-        const invite = <IPersistedThreepidInvite>{roomId, ...wireInvite};
+        const invite = <IPersistedThreepidInvite>{ roomId, ...wireInvite };
         const id = this.generateIdOf(invite);
         localStorage.setItem(`${STORAGE_PREFIX}${id}`, JSON.stringify(invite));
         return this.translateInvite(invite);

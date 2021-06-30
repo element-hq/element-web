@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,14 +16,24 @@ limitations under the License.
 
 import React from 'react';
 import classNames from 'classnames';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import { _t } from '../../../languageHandler';
-import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import SdkConfig from "../../../SdkConfig";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import BugReportDialog from '../dialogs/BugReportDialog';
+
+interface IProps {
+    mxEvent: MatrixEvent;
+}
+
+interface IState {
+    error: Error;
+}
 
 @replaceableComponent("views.messages.TileErrorBoundary")
-export default class TileErrorBoundary extends React.Component {
+export default class TileErrorBoundary extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
 
@@ -32,17 +42,13 @@ export default class TileErrorBoundary extends React.Component {
         };
     }
 
-    static getDerivedStateFromError(error) {
+    static getDerivedStateFromError(error: Error): Partial<IState> {
         // Side effects are not permitted here, so we only update the state so
         // that the next render shows an error message.
         return { error };
     }
 
-    _onBugReport = () => {
-        const BugReportDialog = sdk.getComponent("dialogs.BugReportDialog");
-        if (!BugReportDialog) {
-            return;
-        }
+    private onBugReport = (): void => {
         Modal.createTrackedDialog('Bug Report Dialog', '', BugReportDialog, {
             label: 'react-soft-crash-tile',
         });
@@ -60,7 +66,7 @@ export default class TileErrorBoundary extends React.Component {
 
             let submitLogsButton;
             if (SdkConfig.get().bug_report_endpoint_url) {
-                submitLogsButton = <a onClick={this._onBugReport} href="#">
+                submitLogsButton = <a onClick={this.onBugReport} href="#">
                     {_t("Submit logs")}
                 </a>;
             }

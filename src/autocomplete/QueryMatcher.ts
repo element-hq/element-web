@@ -16,8 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {at, uniq} from 'lodash';
-import {removeHiddenChars} from "matrix-js-sdk/src/utils";
+import { at, uniq } from 'lodash';
+import { removeHiddenChars } from "matrix-js-sdk/src/utils";
 
 interface IOptions<T extends {}> {
     keys: Array<string | keyof T>;
@@ -112,7 +112,7 @@ export default class QueryMatcher<T extends Object> {
             const index = resultKey.indexOf(query);
             if (index !== -1) {
                 matches.push(
-                    ...candidates.map((candidate) => ({index, ...candidate})),
+                    ...candidates.map((candidate) => ({ index, ...candidate })),
                 );
             }
         }

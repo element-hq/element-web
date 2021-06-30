@@ -53,7 +53,7 @@ export function canEditContent(mxEvent: MatrixEvent): boolean {
         return false;
     }
     const content = mxEvent.getOriginalContent();
-    const {msgtype} = content;
+    const { msgtype } = content;
     return (msgtype === "m.text" || msgtype === "m.emote") &&
         content.body && typeof content.body === 'string' &&
         mxEvent.getSender() === MatrixClientPeg.get().getUserId();

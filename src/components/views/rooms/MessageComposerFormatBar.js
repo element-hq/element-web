@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import classNames from 'classnames';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.rooms.MessageComposerFormatBar")
 export default class MessageComposerFormatBar extends React.PureComponent {
@@ -30,7 +30,7 @@ export default class MessageComposerFormatBar extends React.PureComponent {
 
     constructor(props) {
         super(props);
-        this.state = {visible: false};
+        this.state = { visible: false };
     }
 
     render() {
@@ -47,7 +47,7 @@ export default class MessageComposerFormatBar extends React.PureComponent {
     }
 
     showAt(selectionRect) {
-        this.setState({visible: true});
+        this.setState({ visible: true });
         const parentRect = this._formatBarRef.parentElement.getBoundingClientRect();
         this._formatBarRef.style.left = `${selectionRect.left - parentRect.left}px`;
         // 12 is half the height of the bar (e.g. to center it) and 16 is an offset that felt ok.
@@ -55,7 +55,7 @@ export default class MessageComposerFormatBar extends React.PureComponent {
     }
 
     hide() {
-        this.setState({visible: false});
+        this.setState({ visible: false });
     }
 }
 

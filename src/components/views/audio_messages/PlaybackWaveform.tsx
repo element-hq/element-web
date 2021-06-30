@@ -53,13 +53,13 @@ export default class PlaybackWaveform extends React.PureComponent<IProps, IState
     }
 
     private onWaveformUpdate = (waveform: number[]) => {
-        this.setState({heights: this.toHeights(waveform)});
+        this.setState({ heights: this.toHeights(waveform) });
     };
 
     private onTimeUpdate = (time: number[]) => {
         // Track percentages to a general precision to avoid over-waking the component.
         const progress = Number(percentageOf(time[0], 0, time[1]).toFixed(3));
-        this.setState({progress});
+        this.setState({ progress });
     };
 
     public render() {

@@ -16,7 +16,7 @@ limitations under the License.
 
 import ResizeItem from "../item";
 import Sizer from "../sizer";
-import Resizer, {IConfig} from "../resizer";
+import Resizer, { IConfig } from "../resizer";
 
 /**
 distributors translate a moving cursor into

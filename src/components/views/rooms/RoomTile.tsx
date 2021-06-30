@@ -78,7 +78,7 @@ const contextMenuBelow = (elementRect: PartialDOMRect) => {
     const left = elementRect.left + window.pageXOffset - 9;
     const top = elementRect.bottom + window.pageYOffset + 17;
     const chevronFace = ChevronFace.None;
-    return {left, top, chevronFace};
+    return { left, top, chevronFace };
 };
 
 @replaceableComponent("views.rooms.RoomTile")
@@ -112,7 +112,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
     private onRoomNameUpdate = (room) => {
         this.forceUpdate();
-    }
+    };
 
     private onNotificationUpdate = () => {
         this.forceUpdate(); // notification state changed - update
@@ -120,7 +120,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
     private onLocalEchoUpdated = (ev: MatrixEvent, room: Room) => {
         if (room?.roomId !== this.props.room.roomId) return;
-        this.setState({hasUnsentEvents: this.countUnsentEvents() > 0});
+        this.setState({ hasUnsentEvents: this.countUnsentEvents() > 0 });
     };
 
     private onRoomPropertyUpdate = (property: CachedRoomKey) => {
@@ -259,25 +259,25 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     };
 
     private onActiveRoomUpdate = (isActive: boolean) => {
-        this.setState({selected: isActive});
+        this.setState({ selected: isActive });
     };
 
     private onNotificationsMenuOpenClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
-        this.setState({notificationsMenuPosition: target.getBoundingClientRect()});
+        this.setState({ notificationsMenuPosition: target.getBoundingClientRect() });
     };
 
     private onCloseNotificationsMenu = () => {
-        this.setState({notificationsMenuPosition: null});
+        this.setState({ notificationsMenuPosition: null });
     };
 
     private onGeneralMenuOpenClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
-        this.setState({generalMenuPosition: target.getBoundingClientRect()});
+        this.setState({ generalMenuPosition: target.getBoundingClientRect() });
     };
 
     private onContextMenu = (ev: React.MouseEvent) => {
@@ -295,7 +295,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     };
 
     private onCloseGeneralMenu = () => {
-        this.setState({generalMenuPosition: null});
+        this.setState({ generalMenuPosition: null });
     };
 
     private onTagRoom = (ev: ButtonEvent, tagId: TagID) => {
@@ -321,7 +321,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
         if ((ev as React.KeyboardEvent).key === Key.ENTER) {
             // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
-            this.setState({generalMenuPosition: null}); // hide the menu
+            this.setState({ generalMenuPosition: null }); // hide the menu
         }
     };
 
@@ -333,7 +333,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             action: 'leave_room',
             room_id: this.props.room.roomId,
         });
-        this.setState({generalMenuPosition: null}); // hide the menu
+        this.setState({ generalMenuPosition: null }); // hide the menu
     };
 
     private onForgetRoomClick = (ev: ButtonEvent) => {
@@ -344,7 +344,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             action: 'forget_room',
             room_id: this.props.room.roomId,
         });
-        this.setState({generalMenuPosition: null}); // hide the menu
+        this.setState({ generalMenuPosition: null }); // hide the menu
     };
 
     private onOpenRoomSettings = (ev: ButtonEvent) => {
@@ -355,7 +355,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             action: 'open_room_settings',
             room_id: this.props.room.roomId,
         });
-        this.setState({generalMenuPosition: null}); // hide the menu
+        this.setState({ generalMenuPosition: null }); // hide the menu
     };
 
     private onInviteClick = (ev: ButtonEvent) => {
@@ -366,7 +366,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             action: 'view_invite',
             roomId: this.props.room.roomId,
         });
-        this.setState({generalMenuPosition: null}); // hide the menu
+        this.setState({ generalMenuPosition: null }); // hide the menu
     };
 
     private async saveNotifState(ev: ButtonEvent, newState: Volume) {
@@ -379,7 +379,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         const key = (ev as React.KeyboardEvent).key;
         if (key === Key.ENTER) {
             // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
-            this.setState({notificationsMenuPosition: null}); // hide the menu
+            this.setState({ notificationsMenuPosition: null }); // hide the menu
         }
     }
 
@@ -554,7 +554,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             'mx_RoomTile_minimized': this.props.isMinimized,
         });
 
-        let roomProfile: IRoomProfile = {displayName: null, avatarMxc: null};
+        let roomProfile: IRoomProfile = { displayName: null, avatarMxc: null };
         if (this.props.tag === DefaultTagID.Invite) {
             roomProfile = CommunityPrototypeStore.instance.getInviteProfile(this.props.room.roomId);
         }
@@ -567,7 +567,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             room={this.props.room}
             avatarSize={32}
             displayBadge={this.props.isMinimized}
-            oobData={({avatarUrl: roomProfile.avatarMxc})}
+            oobData={({ avatarUrl: roomProfile.avatarMxc })}
         />;
 
         let badge: React.ReactNode;
@@ -659,7 +659,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         return (
             <React.Fragment>
                 <RovingTabIndexWrapper inputRef={this.roomTileRef}>
-                    {({onFocus, isActive, ref}) =>
+                    {({ onFocus, isActive, ref }) =>
                         <Button
                             {...props}
                             onFocus={onFocus}

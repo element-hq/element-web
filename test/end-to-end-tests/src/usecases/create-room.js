@@ -84,4 +84,4 @@ async function createDm(session, invitees) {
     await measureStop(session, "mx_CreateDM");
 }
 
-module.exports = {openRoomDirectory, findSublist, createRoom, createDm};
+module.exports = { openRoomDirectory, findSublist, createRoom, createDm };

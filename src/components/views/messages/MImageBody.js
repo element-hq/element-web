@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 
 import MFileBody from './MFileBody';
@@ -27,8 +27,8 @@ import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import InlineSpinner from '../elements/InlineSpinner';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromContent} from "../../../customisations/Media";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromContent } from "../../../customisations/Media";
 
 @replaceableComponent("views.messages.MImageBody")
 export default class MImageBody extends React.Component {
@@ -90,7 +90,7 @@ export default class MImageBody extends React.Component {
 
     showImage() {
         localStorage.setItem("mx_ShowImage_" + this.props.mxEvent.getId(), "true");
-        this.setState({showImage: true});
+        this.setState({ showImage: true });
         this._downloadImage();
     }
 
@@ -296,7 +296,7 @@ export default class MImageBody extends React.Component {
         if (showImage) {
             // Don't download anything becaue we don't want to display anything.
             this._downloadImage();
-            this.setState({showImage: true});
+            this.setState({ showImage: true });
         }
 
         this._afterComponentDidMount();
@@ -345,7 +345,7 @@ export default class MImageBody extends React.Component {
                     imageElement = <HiddenImagePlaceholder />;
                 } else {
                     imageElement = (
-                        <img style={{display: 'none'}} src={thumbUrl} ref={this._image}
+                        <img style={{ display: 'none' }} src={thumbUrl} ref={this._image}
                             alt={content.body}
                             onError={this.onImageError}
                             onLoad={this.onImageLoad}
@@ -417,7 +417,7 @@ export default class MImageBody extends React.Component {
                     </div>
                 }
 
-                <div style={{display: !showPlaceholder ? undefined : 'none'}}>
+                <div style={{ display: !showPlaceholder ? undefined : 'none' }}>
                     { img }
                     { gifLabel }
                 </div>

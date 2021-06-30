@@ -15,11 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {KeyboardEvent} from "react";
+import { KeyboardEvent } from "react";
 
-import {Part, CommandPartCreator, PartCreator} from "./parts";
+import { Part, CommandPartCreator, PartCreator } from "./parts";
 import DocumentPosition from "./position";
-import {ICompletion} from "../autocomplete/Autocompleter";
+import { ICompletion } from "../autocomplete/Autocompleter";
 import Autocomplete from "../components/views/rooms/Autocomplete";
 
 export interface ICallback {
@@ -52,7 +52,7 @@ export default class AutocompleteWrapperModel {
     }
 
     public close() {
-        this.updateCallback({close: true});
+        this.updateCallback({ close: true });
     }
 
     public hasSelection() {
@@ -65,7 +65,7 @@ export default class AutocompleteWrapperModel {
     }
 
     public onEnter() {
-        this.updateCallback({close: true});
+        this.updateCallback({ close: true });
     }
 
     /**
@@ -117,7 +117,7 @@ export default class AutocompleteWrapperModel {
     }
 
     private partForCompletion(completion: ICompletion) {
-        const {completionId} = completion;
+        const { completionId } = completion;
         const text = completion.completion;
         switch (completion.type) {
             case "room":

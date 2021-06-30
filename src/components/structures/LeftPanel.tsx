@@ -40,9 +40,9 @@ import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import RoomListNumResults from "../views/rooms/RoomListNumResults";
 import LeftPanelWidget from "./LeftPanelWidget";
-import {replaceableComponent} from "../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../customisations/Media";
-import SpaceStore, {UPDATE_SELECTED_SPACE} from "../../stores/SpaceStore";
+import { replaceableComponent } from "../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../customisations/Media";
+import SpaceStore, { UPDATE_SELECTED_SPACE } from "../../stores/SpaceStore";
 import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager";
 import UIStore from "../../stores/UIStore";
 
@@ -91,7 +91,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         this.bgImageWatcherRef = SettingsStore.watchSetting(
             "RoomList.backgroundImage", null, this.onBackgroundImageUpdate);
         this.groupFilterPanelWatcherRef = SettingsStore.watchSetting("TagPanel.enableTagPanel", null, () => {
-            this.setState({showGroupFilterPanel: SettingsStore.getValue("TagPanel.enableTagPanel")});
+            this.setState({ showGroupFilterPanel: SettingsStore.getValue("TagPanel.enableTagPanel") });
         });
     }
 
@@ -127,7 +127,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
     private onDialPad = () => {
         dis.fire(Action.OpenDialPad);
-    }
+    };
 
     private onExplore = () => {
         dis.fire(Action.ViewRoomDirectory);
@@ -136,12 +136,12 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     private refreshStickyHeaders = () => {
         if (!this.listContainerRef.current) return; // ignore: no headers to sticky
         this.handleStickyHeaders(this.listContainerRef.current);
-    }
+    };
 
     private onBreadcrumbsUpdate = () => {
         const newVal = BreadcrumbsStore.instance.visible;
         if (newVal !== this.state.showBreadcrumbs) {
-            this.setState({showBreadcrumbs: newVal});
+            this.setState({ showBreadcrumbs: newVal });
 
             // Update the sticky headers too as the breadcrumbs will be popping in or out.
             if (!this.listContainerRef.current) return; // ignore: no headers to sticky

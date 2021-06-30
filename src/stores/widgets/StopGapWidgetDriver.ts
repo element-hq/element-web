@@ -43,8 +43,8 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { CHAT_EFFECTS } from "../../effects";
 import { containsEmoji } from "../../effects/utils";
 import dis from "../../dispatcher/dispatcher";
-import {tryTransformPermalinkToLocalHref} from "../../utils/permalinks/Permalinks";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import { tryTransformPermalinkToLocalHref } from "../../utils/permalinks/Permalinks";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 // TODO: Purge this from the universe
 
@@ -136,13 +136,13 @@ export class StopGapWidgetDriver extends WidgetDriver {
             if (eventType === EventType.RoomMessage) {
                 CHAT_EFFECTS.forEach((effect) => {
                     if (containsEmoji(content, effect.emojis)) {
-                        dis.dispatch({action: `effects.${effect.command}`});
+                        dis.dispatch({ action: `effects.${effect.command}` });
                     }
                 });
             }
         }
 
-        return {roomId, eventId: r.event_id};
+        return { roomId, eventId: r.event_id };
     }
 
     public async readRoomEvents(eventType: string, msgtype: string | undefined, limit: number): Promise<object[]> {
@@ -199,13 +199,13 @@ export class StopGapWidgetDriver extends WidgetDriver {
         };
 
         if (oidcState === OIDCState.Denied) {
-            return observer.update({state: OpenIDRequestState.Blocked});
+            return observer.update({ state: OpenIDRequestState.Blocked });
         }
         if (oidcState === OIDCState.Allowed) {
-            return observer.update({state: OpenIDRequestState.Allowed, token: await getToken()});
+            return observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
         }
 
-        observer.update({state: OpenIDRequestState.PendingUserConfirmation});
+        observer.update({ state: OpenIDRequestState.PendingUserConfirmation });
 
         Modal.createTrackedDialog("OpenID widget permissions", '', WidgetOpenIDPermissionsDialog, {
             widget: this.forWidget,
@@ -214,10 +214,10 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
             onFinished: async (confirm) => {
                 if (!confirm) {
-                    return observer.update({state: OpenIDRequestState.Blocked});
+                    return observer.update({ state: OpenIDRequestState.Blocked });
                 }
 
-                return observer.update({state: OpenIDRequestState.Allowed, token: await getToken()});
+                return observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
             },
         });
     }

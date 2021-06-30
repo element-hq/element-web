@@ -42,7 +42,7 @@ interface IProps extends IDialogProps {
 }
 
 const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFinished }) => {
-    useDispatcher(defaultDispatcher, ({action, ...params}) => {
+    useDispatcher(defaultDispatcher, ({ action, ...params }) => {
         if (action === "after_leave_room" && params.room_id === space.roomId) {
             onFinished(false);
         }

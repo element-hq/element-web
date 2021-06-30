@@ -59,11 +59,11 @@ export default class PlaybackClock extends React.PureComponent<IProps, IState> {
     private onPlaybackUpdate = (ev: PlaybackState) => {
         // Convert Decoding -> Stopped because we don't care about the distinction here
         if (ev === PlaybackState.Decoding) ev = PlaybackState.Stopped;
-        this.setState({playbackPhase: ev});
+        this.setState({ playbackPhase: ev });
     };
 
     private onTimeUpdate = (time: number[]) => {
-        this.setState({seconds: time[0], durationSeconds: time[1]});
+        this.setState({ seconds: time[0], durationSeconds: time[1] });
     };
 
     public render() {

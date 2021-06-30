@@ -54,7 +54,7 @@ class EditableAliasesList extends EditableItemList<IEditableAliasesListProps> {
         if (!this.props.domain) {
             return super.renderNewItemField();
         }
-        const onChange = (alias) => this.onNewItemChanged({target: {value: alias}});
+        const onChange = (alias) => this.onNewItemChanged({ target: { value: alias } });
         return (
             <form
                 onSubmit={this.onAliasAdded}
@@ -179,9 +179,9 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                     "or a temporary failure occurred.",
                 ),
             });
-            this.setState({canonicalAlias: oldAlias});
+            this.setState({ canonicalAlias: oldAlias });
         }).finally(() => {
-            this.setState({updatingCanonicalAlias: false});
+            this.setState({ updatingCanonicalAlias: false });
         });
     }
 
@@ -213,7 +213,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                 ),
             });
         }).finally(() => {
-            this.setState({updatingCanonicalAlias: false});
+            this.setState({ updatingCanonicalAlias: false });
         });
     }
 
@@ -253,7 +253,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         // to this room. See https://github.com/vector-im/element-web/issues/7353
         MatrixClientPeg.get().deleteAlias(alias).then(() => {
             const localAliases = this.state.localAliases.filter(a => a !== alias);
-            this.setState({localAliases});
+            this.setState({ localAliases });
 
             if (this.state.canonicalAlias === alias) {
                 this.changeCanonicalAlias(null);
@@ -293,7 +293,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
 
     private onNewAltAliasChanged = (value: string) => {
         this.setState({ newAltAlias: value });
-    }
+    };
 
     private onAltAliasAdded = (alias: string) => {
         const altAliases = this.state.altAliases.slice();
@@ -302,20 +302,20 @@ export default class AliasSettings extends React.Component<IProps, IState> {
             this.changeAltAliases(altAliases);
             this.setState({ newAltAlias: "" });
         }
-    }
+    };
 
     private onAltAliasDeleted = (index: number) => {
         const altAliases = this.state.altAliases.slice();
         altAliases.splice(index, 1);
         this.changeAltAliases(altAliases);
-    }
+    };
 
     private getAliases() {
         return this.state.altAliases.concat(this.getLocalNonAltAliases());
     }
 
     private getLocalNonAltAliases() {
-        const {altAliases} = this.state;
+        const { altAliases } = this.state;
         return this.state.localAliases.filter(alias => !altAliases.includes(alias));
     }
 

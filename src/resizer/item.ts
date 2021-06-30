@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Resizer, {IConfig} from "./resizer";
+import Resizer, { IConfig } from "./resizer";
 import Sizer from "./sizer";
 
 export default class ResizeItem<C extends IConfig = IConfig> {

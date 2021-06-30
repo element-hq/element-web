@@ -16,7 +16,7 @@ limitations under the License.
 
 import DocumentOffset from "./offset";
 import EditorModel from "./model";
-import {Part} from "./parts";
+import { Part } from "./parts";
 
 export interface IPosition {
     index: number;
@@ -62,8 +62,8 @@ export default class DocumentPosition implements IPosition {
             return this;
         }
 
-        let {index, offset} = this;
-        const {parts} = model;
+        let { index, offset } = this;
+        const { parts } = model;
         while (index < parts.length) {
             const part = parts[index];
             while (offset < part.text.length) {
@@ -87,7 +87,7 @@ export default class DocumentPosition implements IPosition {
             return this;
         }
 
-        let {index, offset} = this;
+        let { index, offset } = this;
         const parts = model.parts;
         while (index >= 0) {
             const part = parts[index];

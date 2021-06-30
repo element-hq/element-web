@@ -18,10 +18,10 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
-import {haveTileForEvent} from "./EventTile";
+import { haveTileForEvent } from "./EventTile";
 import SettingsStore from "../../../settings/SettingsStore";
-import {UIFeature} from "../../../settings/UIFeature";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { UIFeature } from "../../../settings/UIFeature";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.rooms.SearchResultTile")
 export default class SearchResultTile extends React.Component {

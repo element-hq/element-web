@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 /*
  * Tells the user about files we know cannot be uploaded before we even try uploading

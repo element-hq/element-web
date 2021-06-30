@@ -20,7 +20,7 @@ import classNames from "classnames";
 import * as sdk from "../index";
 import Modal from "../Modal";
 import { _t, _td } from "../languageHandler";
-import {isMac, Key} from "../Keyboard";
+import { isMac, Key } from "../Keyboard";
 
 // TS: once languageHandler is TS we can probably inline this into the enum
 _td("Navigation");
@@ -332,7 +332,7 @@ const keyIcon: Record<string, string> = {
 
 const Shortcut: React.FC<{
     shortcut: IShortcut;
-}> = ({shortcut}) => {
+}> = ({ shortcut }) => {
     const classes = classNames({
         "mx_KeyboardShortcutsDialog_inline": shortcut.keybinds.every(k => !k.modifiers || k.modifiers.length === 0),
     });

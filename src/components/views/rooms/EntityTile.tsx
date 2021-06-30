@@ -33,7 +33,7 @@ export enum PowerStatus {
 const PowerLabel: Record<PowerStatus, string> = {
     [PowerStatus.Admin]: _td("Admin"),
     [PowerStatus.Moderator]: _td("Mod"),
-}
+};
 
 const PRESENCE_CLASS = {
     "offline": "mx_EntityTile_offline",
@@ -116,7 +116,7 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
         mainClassNames[presenceClass] = true;
 
         let nameEl;
-        const {name} = this.props;
+        const { name } = this.props;
 
         if (!this.props.suppressOnHover) {
             const activeAgo = this.props.presenceLastActiveAgo ?

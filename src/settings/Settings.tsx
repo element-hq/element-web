@@ -606,14 +606,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: false,
         controller: new UIFeatureController(UIFeature.URLPreviews),
     },
-    "roomColor": {
-        supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
-        displayName: _td("Room Colour"),
-        default: {
-            primary_color: null, // Hex string, eg: #000000
-            secondary_color: null, // Hex string, eg: #000000
-        },
-    },
     "notificationsEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,

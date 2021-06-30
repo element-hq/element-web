@@ -104,7 +104,6 @@ export function setDMRoom(roomId: string, userId: string): Promise<void> {
         dmRoomMap[userId] = roomList;
     }
 
-
     return MatrixClientPeg.get().setAccountData('m.direct', dmRoomMap);
 }
 

@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 const assert = require('assert');
-const {openMemberInfo} = require("./memberlist");
+const { openMemberInfo } = require("./memberlist");
 
 async function startVerification(session, name) {
     session.log.step("opens their opponent's profile and starts verification");

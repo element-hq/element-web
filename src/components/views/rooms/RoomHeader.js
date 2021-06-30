@@ -74,7 +74,7 @@ export default class RoomHeader extends React.Component {
     };
 
     _rateLimitedUpdate = new RateLimitedFunc(function() {
-        /* eslint-disable babel/no-invalid-this */
+        /* eslint-disable @babel/no-invalid-this */
         this.forceUpdate();
     }, 500);
 

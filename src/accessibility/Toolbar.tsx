@@ -16,8 +16,8 @@ limitations under the License.
 
 import React from "react";
 
-import {IState, RovingTabIndexProvider} from "./RovingTabIndex";
-import {Key} from "../Keyboard";
+import { IState, RovingTabIndexProvider } from "./RovingTabIndex";
+import { Key } from "../Keyboard";
 
 interface IProps extends Omit<React.HTMLProps<HTMLDivElement>, "onKeyDown"> {
 }
@@ -25,7 +25,7 @@ interface IProps extends Omit<React.HTMLProps<HTMLDivElement>, "onKeyDown"> {
 // This component implements the Toolbar design pattern from the WAI-ARIA Authoring Practices guidelines.
 // https://www.w3.org/TR/wai-aria-practices-1.1/#toolbar
 // All buttons passed in children must use RovingTabIndex to set `onFocus`, `isActive`, `ref`
-const Toolbar: React.FC<IProps> = ({children, ...props}) => {
+const Toolbar: React.FC<IProps> = ({ children, ...props }) => {
     const onKeyDown = (ev: React.KeyboardEvent, state: IState) => {
         const target = ev.target as HTMLElement;
         // Don't interfere with input default keydown behaviour
@@ -62,7 +62,7 @@ const Toolbar: React.FC<IProps> = ({children, ...props}) => {
     };
 
     return <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={onKeyDown}>
-        {({onKeyDownHandler}) => <div {...props} onKeyDown={onKeyDownHandler} role="toolbar">
+        {({ onKeyDownHandler }) => <div {...props} onKeyDown={onKeyDownHandler} role="toolbar">
             { children }
         </div>}
     </RovingTabIndexProvider>;

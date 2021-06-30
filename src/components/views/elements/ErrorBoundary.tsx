@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,21 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import * as sdk from '../../../index';
+import React, { ErrorInfo } from 'react';
+
 import { _t } from '../../../languageHandler';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import PlatformPeg from '../../../PlatformPeg';
 import Modal from '../../../Modal';
 import SdkConfig from "../../../SdkConfig";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import BugReportDialog from '../dialogs/BugReportDialog';
+import AccessibleButton from './AccessibleButton';
+
+interface IState {
+    error: Error;
+}
 
 /**
  * This error boundary component can be used to wrap large content areas and
  * catch exceptions during rendering in the component tree below them.
  */
 @replaceableComponent("views.elements.ErrorBoundary")
-export default class ErrorBoundary extends React.PureComponent {
+export default class ErrorBoundary extends React.PureComponent<{}, IState> {
     constructor(props) {
         super(props);
 
@@ -37,13 +43,13 @@ export default class ErrorBoundary extends React.PureComponent {
         };
     }
 
-    static getDerivedStateFromError(error) {
+    static getDerivedStateFromError(error: Error): Partial<IState> {
         // Side effects are not permitted here, so we only update the state so
         // that the next render shows an error message.
         return { error };
     }
 
-    componentDidCatch(error, { componentStack }) {
+    componentDidCatch(error: Error, { componentStack }: ErrorInfo): void {
         // Browser consoles are better at formatting output when native errors are passed
         // in their own `console.error` invocation.
         console.error(error);
@@ -53,7 +59,7 @@ export default class ErrorBoundary extends React.PureComponent {
         );
     }
 
-    _onClearCacheAndReload = () => {
+    private onClearCacheAndReload = (): void => {
         if (!PlatformPeg.get()) return;
 
         MatrixClientPeg.get().stopClient();
@@ -62,11 +68,7 @@ export default class ErrorBoundary extends React.PureComponent {
         });
     };
 
-    _onBugReport = () => {
-        const BugReportDialog = sdk.getComponent("dialogs.BugReportDialog");
-        if (!BugReportDialog) {
-            return;
-        }
+    private onBugReport = (): void => {
         Modal.createTrackedDialog('Bug Report Dialog', '', BugReportDialog, {
             label: 'react-soft-crash',
         });
@@ -74,7 +76,6 @@ export default class ErrorBoundary extends React.PureComponent {
 
     render() {
         if (this.state.error) {
-            const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
             const newIssueUrl = "https://github.com/vector-im/element-web/issues/new";
 
             let bugReportSection;
@@ -95,7 +96,7 @@ export default class ErrorBoundary extends React.PureComponent {
                         "the rooms or groups you have visited and the usernames of " +
                         "other users. They do not contain messages.",
                     )}</p>
-                    <AccessibleButton onClick={this._onBugReport} kind='primary'>
+                    <AccessibleButton onClick={this.onBugReport} kind='primary'>
                         {_t("Submit debug logs")}
                     </AccessibleButton>
                 </React.Fragment>;
@@ -105,7 +106,7 @@ export default class ErrorBoundary extends React.PureComponent {
                 <div className="mx_ErrorBoundary_body">
                     <h1>{_t("Something went wrong!")}</h1>
                     { bugReportSection }
-                    <AccessibleButton onClick={this._onClearCacheAndReload} kind='danger'>
+                    <AccessibleButton onClick={this.onClearCacheAndReload} kind='danger'>
                         {_t("Clear cache and reload")}
                     </AccessibleButton>
                 </div>

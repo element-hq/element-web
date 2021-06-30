@@ -81,7 +81,7 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
     };
 
     private openDevtools = (e) => {
-        Modal.createDialog(DevtoolsDialog, {roomId: this.props.roomId});
+        Modal.createDialog(DevtoolsDialog, { roomId: this.props.roomId });
     };
 
     private onOldRoomClicked = (e) => {

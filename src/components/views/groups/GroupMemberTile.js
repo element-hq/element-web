@@ -22,8 +22,8 @@ import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { GroupMemberType } from '../../../groups';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 @replaceableComponent("views.groups.GroupMemberTile")
 export default class GroupMemberTile extends React.Component {

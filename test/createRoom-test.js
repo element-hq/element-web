@@ -1,6 +1,6 @@
 import './skinned-sdk'; // Must be first for skinning to work
-import {_waitForMember, canEncryptToAllUsers} from '../src/createRoom';
-import {EventEmitter} from 'events';
+import { _waitForMember, canEncryptToAllUsers } from '../src/createRoom';
+import { EventEmitter } from 'events';
 
 /* Shorter timeout, we've got tests to run */
 const timeout = 30;
@@ -61,10 +61,9 @@ describe("canEncryptToAllUsers", () => {
         done();
     });
 
-
     it("returns false if not all users have crypto", async (done) => {
         const client = {
-            downloadKeys: async function(userIds) { return {...trueUser, ...falseUser}; },
+            downloadKeys: async function(userIds) { return { ...trueUser, ...falseUser }; },
         };
         const response = await canEncryptToAllUsers(client, ["@goodUser:localhost", "@badUser:localhost"]);
         expect(response).toBe(false);
