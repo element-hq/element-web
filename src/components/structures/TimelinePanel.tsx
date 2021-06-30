@@ -34,12 +34,10 @@ import * as sdk from "../../index";
 import { Key } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';
-import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import { haveTileForEvent, TileShape } from "../views/rooms/EventTile";
 import { UIFeature } from "../../settings/UIFeature";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import { arrayFastClone } from "../../utils/arrays";
-import { Action } from "../../dispatcher/actions";
 import MessagePanel from "./MessagePanel";
 import { SyncState } from 'matrix-js-sdk/src/sync.api';
 import { IScrollState } from "./ScrollPanel";
@@ -48,6 +46,7 @@ import { EventType } from 'matrix-js-sdk/src/@types/event';
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Spinner from "../views/elements/Spinner";
+import EditorStateTransfer from '../../utils/EditorStateTransfer';
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -375,7 +374,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 events,
                 liveEvents,
                 firstVisibleEventIndex,
-            }
+            };
 
             // We can now paginate in the unpaginated direction
             if (backwards) {
@@ -494,38 +493,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
             case "ignore_state_changed":
                 this.forceUpdate();
                 break;
-
-            case "edit_event": {
-                const editState = payload.event ? new EditorStateTransfer(payload.event) : null;
-                this.setState({ editState }, () => {
-                    if (payload.event && this.messagePanel.current) {
-                        this.messagePanel.current.scrollToEventIfNeeded(
-                            payload.event.getId(),
-                        );
-                    }
-                });
-                break;
-            }
-
-            case Action.ComposerInsert: {
-                // re-dispatch to the correct composer
-                if (this.state.editState) {
-                    dis.dispatch({
-                        ...payload,
-                        action: "edit_composer_insert",
-                    });
-                } else {
-                    dis.dispatch({
-                        ...payload,
-                        action: "send_composer_insert",
-                    });
-                }
-                break;
-            }
-
-            case "scroll_to_bottom":
-                this.jumpToLiveTimeline();
-                break;
         }
     };
 
@@ -552,7 +519,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             // we won't load this event now, because we don't want to push any
             // events off the other end of the timeline. But we need to note
             // that we can now paginate.
-            this.setState({canForwardPaginate: true});
+            this.setState({ canForwardPaginate: true });
             return;
         }
 
@@ -872,7 +839,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
         this.sendReadReceipt();
     };
 
-
     // advance the read marker past any events we sent ourselves.
     private advanceReadMarkerPastMyEvents(): void {
         if (!this.props.manageReadMarkers) return;
@@ -919,10 +885,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (this.timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
             this.loadTimeline();
         } else {
-            if (this.messagePanel.current) {
-                this.messagePanel.current.scrollToBottom();
-            }
+            this.messagePanel.current?.scrollToBottom();
         }
+    };
+
+    public scrollToEventIfNeeded = (eventId: string): void => {
+        this.messagePanel.current?.scrollToEventIfNeeded(eventId);
     };
 
     /* scroll to show the read-up-to marker. We put it 1/3 of the way down
@@ -978,12 +946,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
      * at the end of the live timeline.
      */
     public isAtEndOfLiveTimeline = (): boolean => {
-        return this.messagePanel.current
-            && this.messagePanel.current.isAtBottom()
+        return this.messagePanel.current?.isAtBottom()
             && this.timelineWindow
             && !this.timelineWindow.canPaginate(EventTimeline.FORWARDS);
-    }
-
+    };
 
     /* get the current scroll state. See ScrollPanel.getScrollState for
      * details.
@@ -1082,7 +1048,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     private loadTimeline(eventId?: string, pixelOffset?: number, offsetBase?: number): void {
         this.timelineWindow = new TimelineWindow(
             MatrixClientPeg.get(), this.props.timelineSet,
-            {windowLimit: this.props.timelineCap});
+            { windowLimit: this.props.timelineCap });
 
         const onLoaded = () => {
             // clear the timeline min-height when
@@ -1530,7 +1496,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 tileShape={this.props.tileShape}
                 resizeNotifier={this.props.resizeNotifier}
                 getRelationsForEvent={this.getRelationsForEvent}
-                editState={this.state.editState}
+                editState={this.props.editState}
                 showReactions={this.props.showReactions}
                 layout={this.props.layout}
                 enableFlair={SettingsStore.getValue(UIFeature.Flair)}

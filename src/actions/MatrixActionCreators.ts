@@ -20,7 +20,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
 
 import dis from "../dispatcher/dispatcher";
-import {ActionPayload} from "../dispatcher/payloads";
+import { ActionPayload } from "../dispatcher/payloads";
 
 // TODO: migrate from sync_state to MatrixActions.sync so that more js-sdk events
 //       become dispatches in the same place.

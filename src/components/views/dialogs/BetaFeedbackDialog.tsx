@@ -14,28 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 import QuestionDialog from './QuestionDialog';
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
 import SdkConfig from "../../../SdkConfig";
-import {IDialogProps} from "./IDialogProps";
+import { IDialogProps } from "./IDialogProps";
 import SettingsStore from "../../../settings/SettingsStore";
-import {submitFeedback} from "../../../rageshake/submit-rageshake";
+import { submitFeedback } from "../../../rageshake/submit-rageshake";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import Modal from "../../../Modal";
 import InfoDialog from "./InfoDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {Action} from "../../../dispatcher/actions";
+import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "./UserSettingsDialog";
 
 interface IProps extends IDialogProps {
     featureId: string;
 }
 
-const BetaFeedbackDialog: React.FC<IProps> = ({featureId, onFinished}) => {
+const BetaFeedbackDialog: React.FC<IProps> = ({ featureId, onFinished }) => {
     const info = SettingsStore.getBetaInfo(featureId);
 
     const [comment, setComment] = useState("");

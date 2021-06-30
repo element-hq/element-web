@@ -37,7 +37,7 @@ export type ConfettiOptions = {
      * use gradient instead of solid particle color
      */
     gradient: boolean,
-}
+};
 
 type ConfettiParticle = {
     color: string,
@@ -48,7 +48,7 @@ type ConfettiParticle = {
     tilt: number,
     tiltAngleIncrement: number,
     tiltAngle: number,
-}
+};
 
 export const DefaultOptions: ConfettiOptions = {
     maxCount: 150,
@@ -62,7 +62,7 @@ export default class Confetti implements ICanvasEffect {
     private readonly options: ConfettiOptions;
 
     constructor(options: { [key: string]: any }) {
-        this.options = {...DefaultOptions, ...options};
+        this.options = { ...DefaultOptions, ...options };
     }
 
     private context: CanvasRenderingContext2D | null = null;
@@ -93,11 +93,11 @@ export default class Confetti implements ICanvasEffect {
         if (timeout) {
             window.setTimeout(this.stop, timeout);
         }
-    }
+    };
 
     public stop = async () => {
         this.isRunning = false;
-    }
+    };
 
     private resetParticle = (particle: ConfettiParticle, width: number, height: number): ConfettiParticle => {
         particle.color = this.colors[(Math.random() * this.colors.length) | 0] + (this.options.alpha + ')');
@@ -113,7 +113,7 @@ export default class Confetti implements ICanvasEffect {
         particle.tiltAngleIncrement = Math.random() * 0.07 + 0.05;
         particle.tiltAngle = Math.random() * Math.PI;
         return particle;
-    }
+    };
 
     private runAnimation = (): void => {
         if (!this.context || !this.context.canvas) {
@@ -132,8 +132,7 @@ export default class Confetti implements ICanvasEffect {
             }
             requestAnimationFrame(this.runAnimation);
         }
-    }
-
+    };
 
     private drawParticles = (context: CanvasRenderingContext2D): void => {
         if (!this.context || !this.context.canvas) {
@@ -158,7 +157,7 @@ export default class Confetti implements ICanvasEffect {
             context.lineTo(x2, y2);
             context.stroke();
         }
-    }
+    };
 
     private updateParticles = () => {
         if (!this.context || !this.context.canvas) {
@@ -187,5 +186,5 @@ export default class Confetti implements ICanvasEffect {
                 }
             }
         }
-    }
+    };
 }

@@ -69,7 +69,6 @@ module.exports.receiveMessage = async function(session, expectedMessage) {
     session.log.done();
 };
 
-
 module.exports.checkTimelineContains = async function(session, expectedMessages, sendersDescription) {
     session.log.step(`checks timeline contains ${expectedMessages.length} ` +
         `given messages${sendersDescription ? ` from ${sendersDescription}`:""}`);

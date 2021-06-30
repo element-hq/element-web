@@ -81,7 +81,7 @@ const validOrder = (order: string): string | undefined => {
 // For sorting space children using a validated `order`, `m.room.create`'s `origin_server_ts`, `room_id`
 export const getChildOrder = (order: string, creationTs: number, roomId: string): Array<Many<ListIteratee<any>>> => {
     return [validOrder(order), creationTs, roomId];
-}
+};
 
 const getRoomFn: FetchRoomFn = (room: Room) => {
     return RoomNotificationStateStore.instance.getRoomState(room);
@@ -353,18 +353,18 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         // build initial state of invited spaces as we would have missed the emitted events about the room at launch
         this._invitedSpaces = new Set(this.sortRootSpaces(invitedSpaces));
         this.emit(UPDATE_INVITED_SPACES, this.invitedSpaces);
-    }, 100, {trailing: true, leading: true});
+    }, 100, { trailing: true, leading: true });
 
     private onSpaceUpdate = () => {
         this.rebuild();
-    }
+    };
 
     private showInHomeSpace = (room: Room) => {
         if (SettingsStore.getValue("feature_spaces.all_rooms")) return true;
         if (room.isSpaceRoom()) return false;
         return !this.parentMap.get(room.roomId)?.size // put all orphaned rooms in the Home Space
             || DMRoomMap.shared().getUserIdForRoomId(room.roomId) // put all DMs in the Home Space
-            || RoomListStore.instance.getTagsForRoom(room).includes(DefaultTagID.Favourite) // show all favourites
+            || RoomListStore.instance.getTagsForRoom(room).includes(DefaultTagID.Favourite); // show all favourites
     };
 
     // Update a given room due to its tag changing (e.g DM-ness or Fav-ness)
@@ -462,7 +462,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 return false;
             }));
         });
-    }, 100, {trailing: true, leading: true});
+    }, 100, { trailing: true, leading: true });
 
     private switchToRelatedSpace = (roomId: string) => {
         if (this.suggestedRooms.find(r => r.room_id === roomId)) return;
@@ -584,7 +584,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 this.onRoomUpdate(room);
             }
         }
-    }
+    };
 
     private onAccountData = (ev: MatrixEvent, lastEvent: MatrixEvent) => {
         if (ev.getType() === EventType.Direct) {

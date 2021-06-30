@@ -157,5 +157,5 @@ export function mediaFromContent(content: IMediaEventContent, client?: MatrixCli
  * @returns {Media} The media object.
  */
 export function mediaFromMxc(mxc: string, client?: MatrixClient): Media {
-    return mediaFromContent({url: mxc}, client);
+    return mediaFromContent({ url: mxc }, client);
 }

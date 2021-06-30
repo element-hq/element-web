@@ -408,7 +408,7 @@ export default class WidgetUtils {
             WidgetType.INTEGRATION_MANAGER,
             uiUrl,
             "Integration Manager: " + name,
-            {"api_url": apiUrl},
+            { "api_url": apiUrl },
         );
     }
 

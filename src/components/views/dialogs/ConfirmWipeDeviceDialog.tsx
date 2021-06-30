@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import * as sdk from "../../../index";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     onFinished: (success: boolean) => void;

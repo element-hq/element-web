@@ -73,7 +73,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         };
     }
 
-    private fakeEvent({message}: IState) {
+    private fakeEvent({ message }: IState) {
         // Fake it till we make it
         /* eslint-disable quote-props */
         const rawEvent = {
@@ -107,7 +107,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
             userId: this.props.userId,
             getAvatarUrl: (..._) => {
                 return Avatar.avatarUrlForUser(
-                    {avatarUrl: this.props.avatarUrl},
+                    { avatarUrl: this.props.avatarUrl },
                     AVATAR_SIZE, AVATAR_SIZE, "crop",
                 );
             },

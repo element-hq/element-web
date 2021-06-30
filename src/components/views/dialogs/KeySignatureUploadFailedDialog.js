@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState, useCallback, useRef} from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';

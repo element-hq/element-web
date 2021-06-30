@@ -18,8 +18,8 @@ import React from 'react';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -83,7 +83,7 @@ export default class CreateGroupDialog extends React.Component<IProps, IState> {
         if (this.state.groupName !== '') {
             profile.name = this.state.groupName;
         }
-        this.setState({creating: true});
+        this.setState({ creating: true });
         MatrixClientPeg.get().createGroup({
             localpart: this.state.groupId,
             profile: profile,
@@ -95,9 +95,9 @@ export default class CreateGroupDialog extends React.Component<IProps, IState> {
             });
             this.props.onFinished(true);
         }).catch((e) => {
-            this.setState({createError: e});
+            this.setState({ createError: e });
         }).finally(() => {
-            this.setState({creating: false});
+            this.setState({ creating: false });
         });
     };
 

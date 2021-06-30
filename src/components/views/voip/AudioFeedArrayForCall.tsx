@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import AudioFeed from "./AudioFeed"
+import AudioFeed from "./AudioFeed";
 import { CallEvent, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
 
@@ -48,7 +48,7 @@ export default class AudioFeedArrayForCall extends React.Component<IProps, IStat
         this.setState({
             feeds: this.props.call.getRemoteFeeds(),
         });
-    }
+    };
 
     render() {
         return this.state.feeds.map((feed, i) => {

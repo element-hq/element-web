@@ -20,7 +20,7 @@ import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import { SetupEncryptionStore, Phase } from '../../../stores/SetupEncryptionStore';
 import SetupEncryptionBody from "./SetupEncryptionBody";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("structures.auth.CompleteSecurity")
 export default class CompleteSecurity extends React.Component {
@@ -33,12 +33,12 @@ export default class CompleteSecurity extends React.Component {
         const store = SetupEncryptionStore.sharedInstance();
         store.on("update", this._onStoreUpdate);
         store.start();
-        this.state = {phase: store.phase};
+        this.state = { phase: store.phase };
     }
 
     _onStoreUpdate = () => {
         const store = SetupEncryptionStore.sharedInstance();
-        this.setState({phase: store.phase});
+        this.setState({ phase: store.phase });
     };
 
     componentWillUnmount() {
@@ -50,7 +50,7 @@ export default class CompleteSecurity extends React.Component {
     render() {
         const AuthPage = sdk.getComponent("auth.AuthPage");
         const CompleteSecurityBody = sdk.getComponent("auth.CompleteSecurityBody");
-        const {phase} = this.state;
+        const { phase } = this.state;
         let icon;
         let title;
 

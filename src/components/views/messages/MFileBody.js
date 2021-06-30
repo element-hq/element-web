@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import filesize from 'filesize';
 import { _t } from '../../../languageHandler';
-import {decryptFile} from '../../../utils/DecryptFile';
+import { decryptFile } from '../../../utils/DecryptFile';
 import Modal from '../../../Modal';
 import AccessibleButton from "../elements/AccessibleButton";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromContent} from "../../../customisations/Media";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromContent } from "../../../customisations/Media";
 import ErrorDialog from "../dialogs/ErrorDialog";
 
 let downloadIconUrl; // cached copy of the download.svg asset for the sandboxed iframe later on
@@ -242,7 +242,7 @@ export default class MFileBody extends React.Component {
                 <span className="mx_MFileBody">
                     {placeholder}
                     <div className="mx_MFileBody_download">
-                        <div style={{display: "none"}}>
+                        <div style={{ display: "none" }}>
                             { /*
                               * Add dummy copy of the "a" tag
                               * We'll use it to learn how the download link

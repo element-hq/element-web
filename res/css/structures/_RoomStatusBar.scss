@@ -112,7 +112,7 @@ limitations under the License.
 
         .mx_AccessibleButton {
             padding: 5px 10px;
-            padding-left: 28px; // 16px for the icon, 2px margin to text, 10px regular padding
+            padding-left: 30px; // 18px for the icon, 2px margin to text, 10px regular padding
             display: inline-block;
             position: relative;
 
@@ -128,13 +128,14 @@ limitations under the License.
                 mask-repeat: no-repeat;
                 mask-position: center;
                 mask-size: contain;
+                width: 18px;
+                height: 18px;
+                top: 50%; // text sizes are dynamic
+                transform: translateY(-50%);
             }
 
             &.mx_RoomStatusBar_unsentCancelAllBtn::before {
                 mask-image: url('$(res)/img/element-icons/trashcan.svg');
-                width: 12px;
-                height: 16px;
-                top: calc(50% - 8px); // text sizes are dynamic
             }
 
             &.mx_RoomStatusBar_unsentResendAllBtn {
@@ -142,9 +143,6 @@ limitations under the License.
 
                 &::before {
                     mask-image: url('$(res)/img/element-icons/retry.svg');
-                    width: 18px;
-                    height: 18px;
-                    top: calc(50% - 9px); // text sizes are dynamic
                 }
             }
         }

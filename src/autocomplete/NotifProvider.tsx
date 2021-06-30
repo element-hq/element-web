@@ -19,10 +19,10 @@ import { Room } from "matrix-js-sdk/src/models/room";
 
 import AutocompleteProvider from './AutocompleteProvider';
 import { _t } from '../languageHandler';
-import {MatrixClientPeg} from '../MatrixClientPeg';
-import {PillCompletion} from './Components';
+import { MatrixClientPeg } from '../MatrixClientPeg';
+import { PillCompletion } from './Components';
 import * as sdk from '../index';
-import {ICompletion, ISelectionRange} from "./Autocompleter";
+import { ICompletion, ISelectionRange } from "./Autocompleter";
 
 const AT_ROOM_REGEX = /@\S*/g;
 
@@ -46,7 +46,7 @@ export default class NotifProvider extends AutocompleteProvider {
 
         if (!this.room.currentState.mayTriggerNotifOfType('room', client.credentials.userId)) return [];
 
-        const {command, range} = this.getCurrentCommand(query, selection, force);
+        const { command, range } = this.getCurrentCommand(query, selection, force);
         if (command && command[0] && '@room'.startsWith(command[0]) && command[0].length > 1) {
             return [{
                 completion: '@room',

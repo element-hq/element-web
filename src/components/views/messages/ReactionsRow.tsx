@@ -125,7 +125,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
     private onDecrypted = () => {
         // Decryption changes whether the event is actionable
         this.forceUpdate();
-    }
+    };
 
     private onReactionsChange = () => {
         // TODO: Call `onHeightChanged` as needed
@@ -136,7 +136,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         // has changed (this is triggered by events for that purpose only) and
         // `PureComponent`s shallow state / props compare would otherwise filter this out.
         this.forceUpdate();
-    }
+    };
 
     private getMyReactions() {
         const reactions = this.props.reactions;
@@ -155,7 +155,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         this.setState({
             showAll: true,
         });
-    }
+    };
 
     render() {
         const { mxEvent, reactions } = this.props;

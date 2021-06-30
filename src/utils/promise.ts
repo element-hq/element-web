@@ -48,7 +48,7 @@ export function defer<T>(): IDeferred<T> {
         reject = _reject;
     });
 
-    return {resolve, reject, promise};
+    return { resolve, reject, promise };
 }
 
 // Helper method to retry a Promise a given number of times or until a predicate fails

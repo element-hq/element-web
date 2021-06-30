@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import * as sdk from '../../../index';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     helpText: string;
