@@ -26,7 +26,7 @@ require('highlight.js/styles/github.css');
 require('katex/dist/katex.css');
 
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
-import {parseQsFromFragment} from "./url_utils";
+import { parseQsFromFragment } from "./url_utils";
 import './modernizr';
 
 async function settled(...promises: Array<Promise<any>>) {

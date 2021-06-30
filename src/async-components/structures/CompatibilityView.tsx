@@ -27,7 +27,7 @@ interface IProps {
 }
 
 const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
-    const {brand, mobileBuilds} = SdkConfig.get();
+    const { brand, mobileBuilds } = SdkConfig.get();
 
     let ios = null;
     const iosCustomUrl = mobileBuilds?.ios;
@@ -71,7 +71,7 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
         android = [];
     }
 
-    let mobileHeader = <h2 id="step2_heading">{_t("Use %(brand)s on mobile", {brand})}</h2>;
+    let mobileHeader = <h2 id="step2_heading">{_t("Use %(brand)s on mobile", { brand })}</h2>;
     if (!android.length && !ios) {
         mobileHeader = null;
     }

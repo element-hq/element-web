@@ -48,7 +48,7 @@ import React from "react";
 import { randomString } from "matrix-js-sdk/src/randomstring";
 import { Action } from "matrix-react-sdk/src/dispatcher/actions";
 import { ActionPayload } from "matrix-react-sdk/src/dispatcher/payloads";
-import { SwitchSpacePayload} from "matrix-react-sdk/src/dispatcher/payloads/SwitchSpacePayload";
+import { SwitchSpacePayload } from "matrix-react-sdk/src/dispatcher/payloads/SwitchSpacePayload";
 import { showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/UpdateToast";
 import { CheckUpdatesPayload } from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
 import ToastStore from "matrix-react-sdk/src/stores/ToastStore";
@@ -119,8 +119,8 @@ class SeshatIndexManager extends BaseEventIndexManager {
         // TODO this should be moved into the preload.js file.
         const ipcCallId = ++this.nextIpcCallId;
         return new Promise((resolve, reject) => {
-            this.pendingIpcCalls[ipcCallId] = {resolve, reject};
-            window.electron.send('seshat', {id: ipcCallId, name, args});
+            this.pendingIpcCalls[ipcCallId] = { resolve, reject };
+            window.electron.send('seshat', { id: ipcCallId, name, args });
         });
     }
 
@@ -258,9 +258,9 @@ export default class ElectronPlatform extends VectorBasePlatform {
             dis.fire(Action.ViewUserSettings);
         });
 
-        electron.on('userDownloadCompleted', (ev, {path, name}) => {
+        electron.on('userDownloadCompleted', (ev, { path, name }) => {
             const onAccept = () => {
-                electron.send('userDownloadOpen', {path});
+                electron.send('userDownloadOpen', { path });
             };
 
             ToastStore.sharedInstance().addOrReplaceToast({
@@ -326,7 +326,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this._ipcCall('getConfig');
     }
 
-    onUpdateDownloaded = async (ev, {releaseNotes, releaseName}) => {
+    onUpdateDownloaded = async (ev, { releaseNotes, releaseName }) => {
         dis.dispatch<CheckUpdatesPayload>({
             action: Action.CheckUpdates,
             status: UpdateCheckStatus.Ready,
@@ -497,8 +497,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
     async _ipcCall(name: string, ...args: any[]): Promise<any> {
         const ipcCallId = ++this.nextIpcCallId;
         return new Promise((resolve, reject) => {
-            this.pendingIpcCalls[ipcCallId] = {resolve, reject};
-            window.electron.send('ipcCall', {id: ipcCallId, name, args});
+            this.pendingIpcCalls[ipcCallId] = { resolve, reject };
+            window.electron.send('ipcCall', { id: ipcCallId, name, args });
             // Maybe add a timeout to these? Probably not necessary.
         });
     }

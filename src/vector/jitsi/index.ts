@@ -18,7 +18,7 @@ limitations under the License.
 require("./index.scss");
 
 import * as qs from 'querystring';
-import {KJUR} from 'jsrsasign';
+import { KJUR } from 'jsrsasign';
 import {
     IOpenIDCredentials,
     IWidgetApiRequest,
@@ -138,7 +138,7 @@ let meetApi: any; // JitsiMeetExternalAPI
                         });
                         widgetApi.transport.reply(ev.detail, {}); // ack
                     } else {
-                        widgetApi.transport.reply(ev.detail, {error: {message: "Conference not joined"}});
+                        widgetApi.transport.reply(ev.detail, { error: { message: "Conference not joined" } });
                     }
                 },
             );
@@ -168,7 +168,7 @@ function switchVisibleContainers() {
  */
 function createJWTToken() {
     // Header
-    const header = {alg: 'HS256', typ: 'JWT'};
+    const header = { alg: 'HS256', typ: 'JWT' };
     // Payload
     const payload = {
         // As per Jitsi token auth, `iss` needs to be set to something agreed between
