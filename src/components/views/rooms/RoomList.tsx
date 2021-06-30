@@ -68,7 +68,7 @@ interface IState {
     suggestedRooms: ISuggestedRoom[];
 }
 
-const TAG_ORDER: TagID[] = [
+export const TAG_ORDER: TagID[] = [
     DefaultTagID.Invite,
     DefaultTagID.Favourite,
     DefaultTagID.DM,

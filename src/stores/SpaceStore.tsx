@@ -38,6 +38,7 @@ import { arrayHasDiff } from "../utils/arrays";
 import { objectDiff } from "../utils/objects";
 import { arrayHasOrderChange } from "../utils/arrays";
 import { reorderLexicographically } from "../utils/stringOrderField";
+import { TAG_ORDER } from "../components/views/rooms/RoomList";
 
 type SpaceKey = string | symbol;
 
@@ -128,16 +129,33 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         if (space && !space.isSpaceRoom()) return;
         if (space !== this.activeSpace) await this.setActiveSpace(space);
 
-        const notificationState = space
-            ? this.getNotificationState(space.roomId)
-            : RoomNotificationStateStore.instance.globalState;
-
-        if (notificationState.count) {
+        if (space) {
+            const notificationState = this.getNotificationState(space.roomId)
             const roomId = notificationState.getFirstRoomWithNotifications();
             defaultDispatcher.dispatch({
-                    action: "view_room",
-                    room_id: roomId,
-                    context_switch: true,
+                action: "view_room",
+                room_id: roomId,
+                context_switch: true,
+            });
+        } else {
+            const lists = RoomListStore.instance.unfilteredLists;
+            TAG_ORDER.every(t => {
+                const listRooms = lists[t];
+                const unreadRoom = listRooms.find((r: Room)=> {
+                    if (this.showInHomeSpace(r)) {
+                        const state = RoomNotificationStateStore.instance.getRoomState(r);
+                        return state.isUnread;
+                    }
+                });
+                if (unreadRoom) {
+                    defaultDispatcher.dispatch({
+                        action: "view_room",
+                        room_id: unreadRoom.roomId,
+                        context_switch: true,
+                    });
+                    return false;
+                }
+                return true;
             });
         }
     }

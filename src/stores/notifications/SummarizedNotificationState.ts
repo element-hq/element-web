@@ -32,16 +32,11 @@ export class SummarizedNotificationState extends NotificationState {
         super();
         this._symbol = null;
         this._count = 0;
-        this.unreadRoomId = null;
         this._color = NotificationColor.None;
     }
 
     public get numUnreadStates(): number {
         return this.totalStatesWithUnread;
-    }
-
-    public getFirstRoomWithNotifications() {
-        return this.unreadRoomId;
     }
 
     /**
@@ -63,7 +58,6 @@ export class SummarizedNotificationState extends NotificationState {
             this._color = other.color;
         }
         if (other.hasUnreadCount) {
-            this.unreadRoomId = !this.unreadRoomId ? other.room.roomId : this.unreadRoomId;
             this.totalStatesWithUnread++;
         }
     }
