@@ -26,7 +26,7 @@ import { CallState, CallType, MatrixCall, CallEvent } from 'matrix-js-sdk/src/we
 import classNames from 'classnames';
 import AccessibleButton from '../elements/AccessibleButton';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import { isOnlyCtrlOrCmdKeyEvent, Key} from '../../../Keyboard';
+import { isOnlyCtrlOrCmdKeyEvent, Key } from '../../../Keyboard';
 import {
     alwaysAboveLeftOf,
     alwaysAboveRightOf,
