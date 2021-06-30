@@ -1,9 +1,9 @@
-import React from "react"
+import React from "react";
 import Exporter from "./Exporter";
 import { mediaFromMxc } from "../../customisations/Media";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { renderToStaticMarkup } from 'react-dom/server'
+import { renderToStaticMarkup } from "react-dom/server";
 import { Layout } from "../../settings/Layout";
 import { shouldFormContinuation } from "../../components/structures/MessagePanel";
 import { formatFullDateNoDayNoTime, wantsDateSeparator } from "../../DateUtils";
@@ -191,7 +191,7 @@ export default class HTMLExporter extends Exporter {
                 </section>
                 <div id="snackbar"/>
             </body>
-        </html>`
+        </html>`;
     }
 
     protected getAvatarURL(event: MatrixEvent): string {
@@ -236,32 +236,35 @@ export default class HTMLExporter extends Exporter {
         const hasAvatar = !!this.getAvatarURL(mxEv);
         if (hasAvatar) await this.saveAvatarIfNeeded(mxEv);
 
-        const eventTile = <div className="mx_Export_EventWrapper" id={mxEv.getId()}>
-            <MatrixClientContext.Provider value = {this.client}>
-                <EventTile
-                    mxEvent={mxEv}
-                    continuation={continuation}
-                    isRedacted={mxEv.isRedacted()}
-                    replacingEventId={mxEv.replacingEventId()}
-                    forExport={true}
-                    readReceipts={null}
-                    readReceiptMap={null}
-                    showUrlPreview={false}
-                    checkUnmounting={() => false}
-                    isTwelveHour={false}
-                    last={false}
-                    lastInSection={false}
-                    permalinkCreator={this.permalinkCreator}
-                    lastSuccessful={false}
-                    isSelectedEvent={false}
-                    getRelationsForEvent={null}
-                    showReactions={false}
-                    layout={Layout.Group}
-                    enableFlair={false}
-                    showReadReceipts={false}
-                />
-            </MatrixClientContext.Provider>
-        </div>
+        const eventTile = (
+            <div className="mx_Export_EventWrapper" id={mxEv.getId()}>
+                <MatrixClientContext.Provider value={this.client}>
+                    <EventTile
+                        mxEvent={mxEv}
+                        continuation={continuation}
+                        isRedacted={mxEv.isRedacted()}
+                        replacingEventId={mxEv.replacingEventId()}
+                        forExport={true}
+                        readReceipts={null}
+                        readReceiptMap={null}
+                        showUrlPreview={false}
+                        checkUnmounting={() => false}
+                        isTwelveHour={false}
+                        last={false}
+                        lastInSection={false}
+                        permalinkCreator={this.permalinkCreator}
+                        lastSuccessful={false}
+                        isSelectedEvent={false}
+                        getRelationsForEvent={null}
+                        showReactions={false}
+                        layout={Layout.Group}
+                        enableFlair={false}
+                        showReadReceipts={false}
+                    />
+                </MatrixClientContext.Provider>
+            </div>
+        );
+
         let eventTileMarkup = renderToStaticMarkup(eventTile);
         if (filePath) {
             const mxc = mxEv.getContent().url || mxEv.getContent().file?.url;
@@ -282,7 +285,7 @@ export default class HTMLExporter extends Exporter {
             body: `*${text}*`,
             format: "org.matrix.custom.html",
             formatted_body: `<em>${text}</em>`,
-        }
+        };
         const modifiedEvent = new MatrixEvent();
         modifiedEvent.event = mxEv.event;
         modifiedEvent.sender = mxEv.sender;
@@ -367,7 +370,7 @@ export default class HTMLExporter extends Exporter {
         if (this.cancelled) {
             console.info("Export cancelled successfully");
         } else {
-            console.info("Export successful!")
+            console.info("Export successful!");
             console.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
         }
 

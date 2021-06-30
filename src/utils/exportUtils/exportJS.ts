@@ -24,4 +24,4 @@ document.querySelectorAll('.mx_reply_anchor').forEach(element => {
 })
 }
 
-`
+`;

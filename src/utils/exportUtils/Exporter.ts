@@ -8,7 +8,7 @@ import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay } from "../../DateUtils";
 import { MatrixClient } from "matrix-js-sdk";
 import streamToZIP from "./ZipStream";
-import * as ponyfill from "web-streams-polyfill/ponyfill"
+import * as ponyfill from "web-streams-polyfill/ponyfill";
 import "web-streams-polyfill/ponyfill"; // to support streams API for older browsers
 
 type FileStream = {
@@ -44,7 +44,7 @@ export default abstract class Exporter {
         const file = {
             name: filePath,
             stream: () => blob.stream(),
-        }
+        };
         this.files.push(file);
     }
 
@@ -52,7 +52,7 @@ export default abstract class Exporter {
         const filename = `matrix-export-${formatFullDateNoDay(new Date())}.zip`;
 
         // Support for older browsers
-        streamSaver.WritableStream = ponyfill.WritableStream
+        streamSaver.WritableStream = ponyfill.WritableStream;
 
         // Create a writable stream to the directory
         this.fileStream = streamSaver.createWriteStream(filename);
@@ -72,9 +72,9 @@ export default abstract class Exporter {
 
         if (this.cancelled) return this.cleanUp();
 
-        console.info("Writing to the file system...")
+        console.info("Writing to the file system...");
 
-        const reader = readableZipStream.getReader()
+        const reader = readableZipStream.getReader();
         await this.pumpToFileStream(reader);
     }
 
@@ -93,7 +93,7 @@ export default abstract class Exporter {
 
     protected async downloadPlainText(fileName: string, text: string): Promise<any> {
         this.fileStream = streamSaver.createWriteStream(fileName);
-        this.writer = this.fileStream.getWriter()
+        this.writer = this.fileStream.getWriter();
         const data = new TextEncoder().encode(text);
         if (this.cancelled) return this.cleanUp();
         await this.writer.write(data);
@@ -142,7 +142,7 @@ export default abstract class Exporter {
         return limit;
     }
 
-    protected async getRequiredEvents():Promise<MatrixEvent[]> {
+    protected async getRequiredEvents(): Promise<MatrixEvent[]> {
         const eventMapper = this.client.getEventMapper();
 
         let prevToken: string|null = null;

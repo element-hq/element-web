@@ -7,7 +7,6 @@ import { exportTypes } from "./exportUtils";
 import { exportOptions } from "./exportUtils";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
-
 export default class JSONExporter extends Exporter {
     protected totalSize: number;
     protected messages: any[];
@@ -32,7 +31,7 @@ export default class JSONExporter extends Exporter {
             export_date: exportDate,
             exported_by: exporterName,
             messages: this.messages,
-        }
+        };
         return JSON.stringify(jsonObject, null, 2);
     }
 
@@ -90,11 +89,11 @@ export default class JSONExporter extends Exporter {
         if (this.cancelled) {
             console.info("Export cancelled successfully");
         } else {
-            console.info("Export successful!")
+            console.info("Export successful!");
             console.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
         }
 
-        this.cleanUp()
+        this.cleanUp();
     }
 }
 

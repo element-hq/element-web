@@ -277,9 +277,9 @@ function textForMessageEvent(ev: MatrixEvent): () => string | null {
         if (ev.getContent().msgtype === "m.emote") {
             message = "* " + senderDisplayName + " " + message;
         } else if (ev.getContent().msgtype === "m.image") {
-            message = _t('%(senderDisplayName)s sent an image.', {senderDisplayName});
+            message = _t('%(senderDisplayName)s sent an image.', { senderDisplayName });
         } else if (ev.getType() == "m.sticker") {
-            message = _t('%(senderDisplayName)s sent a sticker.', {senderDisplayName});
+            message = _t('%(senderDisplayName)s sent a sticker.', { senderDisplayName });
         } else message = senderDisplayName + ': ' + message;
         return message;
     };

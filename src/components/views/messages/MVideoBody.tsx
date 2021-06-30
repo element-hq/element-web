@@ -194,7 +194,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
     private getFileBody = () => {
         if (this.props.forExport) return null;
         return <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />;
-    }
+    };
 
     render() {
         const content = this.props.mxEvent.getContent();

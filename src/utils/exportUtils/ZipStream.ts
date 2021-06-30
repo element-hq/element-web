@@ -13,7 +13,6 @@ type TypedArray =
     | Float32Array
     | Float64Array;
 
-
 /**
  * 32-bit cyclic redundancy check, or CRC-32 - checksum
  */
@@ -23,8 +22,8 @@ class Crc32 {
     constructor() {
         this.crc = -1;
         this.table = (() => {
-            let i
-            let j
+            let i;
+            let j;
             let t;
             const table = [];
 
@@ -37,8 +36,8 @@ class Crc32 {
                 }
                 table[i] = t;
             }
-            return table
-        })()
+            return table;
+        })();
     }
 
     append(data: TypedArray) {
@@ -55,25 +54,24 @@ class Crc32 {
     }
 }
 
-
 type DataHelper = {
     array: Uint8Array,
     view: DataView,
-}
+};
 
 const getDataHelper = (byteLength: number): DataHelper => {
-    const uint8 = new Uint8Array(byteLength)
+    const uint8 = new Uint8Array(byteLength);
     return {
         array: uint8,
         view: new DataView(uint8.buffer),
     };
-}
+};
 
 type FileLike = File & {
     directory: string,
     comment: string,
     stream(): ReadableStream,
-}
+};
 
 type ZipObj = {
     crc?: Crc32,
@@ -88,7 +86,7 @@ type ZipObj = {
     fileLike: FileLike,
     level: number,
     directory: boolean,
-}
+};
 
 const pump = (zipObj: ZipObj) => zipObj.reader ? zipObj.reader.read().then(chunk => {
     if (zipObj.crc) {
@@ -124,7 +122,7 @@ export default function streamToZIP(underlyingSource: UnderlyingSource) {
         desiredSize: null,
 
         error(err) {
-            console.error(err)
+            console.error(err);
         },
 
         enqueue(fileLike: FileLike) {
@@ -155,8 +153,8 @@ export default function streamToZIP(underlyingSource: UnderlyingSource) {
                 offset,
 
                 writeHeader() {
-                    const header = getDataHelper(26)
-                    const data = getDataHelper(30 + nameBuf.length)
+                    const header = getDataHelper(26);
+                    const data = getDataHelper(30 + nameBuf.length);
 
                     zipObject.offset = offset;
                     zipObject.header = header;
@@ -200,10 +198,10 @@ export default function streamToZIP(underlyingSource: UnderlyingSource) {
 
                     ctrl.enqueue(footer.array);
                     offset += zipObject.compressedLength + 16;
-                    next()
+                    next();
                 },
                 fileLike,
-            }
+            };
 
             if (!activeZipObject) {
                 activeZipObject = zipObject;
@@ -220,11 +218,11 @@ export default function streamToZIP(underlyingSource: UnderlyingSource) {
             if (!activeZipObject) closeZip();
             closed = true;
         },
-    }
+    };
 
     function closeZip() {
         let length = 0;
-        let index = 0
+        let index = 0;
         let indexFilename;
         let file;
 
@@ -232,7 +230,7 @@ export default function streamToZIP(underlyingSource: UnderlyingSource) {
             file = files[filenames[indexFilename]];
             length += 46 + file.nameBuf.length + file.comment.length;
         }
-        const data = getDataHelper(length + 22)
+        const data = getDataHelper(length + 22);
         for (indexFilename = 0; indexFilename < filenames.length; indexFilename++) {
             file = files[filenames[indexFilename]];
             data.view.setUint32(index, 0x504b0102);
@@ -275,7 +273,7 @@ export default function streamToZIP(underlyingSource: UnderlyingSource) {
             return processNextChunk() || (
                 underlyingSource.pull &&
                 Promise.resolve(underlyingSource.pull(zipWriter))
-            )
+            );
         },
     });
 }

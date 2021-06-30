@@ -8,7 +8,6 @@ import { exportTypes } from "./exportUtils";
 import { exportOptions } from "./exportUtils";
 import { textForEvent } from "../../TextForEvent";
 
-
 export default class PlainTextExporter extends Exporter {
     protected totalSize: number;
     protected mediaOmitText: string;
@@ -21,7 +20,7 @@ export default class PlainTextExporter extends Exporter {
             : _t("Media omitted - file size limit exceeded");
     }
 
-    protected textForReplyEvent = (ev : MatrixEvent) => {
+    protected textForReplyEvent = (ev: MatrixEvent) => {
         const REPLY_REGEX = /> <(.*?)>(.*?)\n\n(.*)/;
         const REPLY_SOURCE_MAX_LENGTH = 32;
         const content = ev.getContent();
@@ -36,7 +35,7 @@ export default class PlainTextExporter extends Exporter {
 
         rplSource = match[2].substring(1, REPLY_SOURCE_MAX_LENGTH);
         // Get the first non-blank line from the source.
-        const lines = rplSource.split('\n').filter((line) => !/^\s*$/.test(line))
+        const lines = rplSource.split('\n').filter((line) => !/^\s*$/.test(line));
         if (lines.length > 0) {
             // Cut to a maximum length.
             rplSource = lines[0].substring(0, REPLY_SOURCE_MAX_LENGTH);
@@ -52,7 +51,7 @@ export default class PlainTextExporter extends Exporter {
         }
 
         return `<${rplName}${rplSource}> ${rplText}`;
-    }
+    };
 
     protected _textForEvent = async (mxEv: MatrixEvent) => {
         const senderDisplayName = mxEv.sender && mxEv.sender.name ? mxEv.sender.name : mxEv.getSender();
@@ -76,7 +75,7 @@ export default class PlainTextExporter extends Exporter {
         }
         if (this.isReply(mxEv)) return senderDisplayName + ": " + this.textForReplyEvent(mxEv) + mediaText;
         else return textForEvent(mxEv) + mediaText;
-    }
+    };
 
     protected async createOutput(events: MatrixEvent[]) {
         let content = "";
@@ -115,7 +114,7 @@ export default class PlainTextExporter extends Exporter {
         if (this.cancelled) {
             console.info("Export cancelled successfully");
         } else {
-            console.info("Export successful!")
+            console.info("Export successful!");
             console.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
         }
 
