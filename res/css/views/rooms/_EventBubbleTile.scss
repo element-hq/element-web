@@ -15,17 +15,15 @@ limitations under the License.
 */
 
 .mx_EventTile[data-layout=bubble] {
-
     --avatarSize: 32px;
     --gutterSize: 7px;
-    --cornerRadius: 5px;
-
+    --cornerRadius: 12px;
     --maxWidth: 70%;
 
     position: relative;
     margin-top: var(--gutterSize);
-    margin-left: var(--avatarSize);
-    margin-right: var(--avatarSize);
+    margin-left: calc(var(--avatarSize) + var(--gutterSize));
+    margin-right: calc(var(--gutterSize) + var(--avatarSize));
     padding: 2px 0;
 
     &:hover {
@@ -46,6 +44,12 @@ limitations under the License.
         padding: var(--gutterSize);
         border-radius: var(--cornerRadius);
         background: var(--backgroundColor);
+        display: flex;
+        gap: var(--gutterSize);
+        > a {
+            position: absolute;
+            left: -33px;
+        }
     }
 
     .mx_EventTile_avatar {
@@ -78,16 +82,13 @@ limitations under the License.
         .mx_EventTile_avatar {
             right: calc(-1 * var(--avatarSize));
         }
+
         --backgroundColor: #F8FDFC;
     }
 
     &[data-has-reply=true] {
         > .mx_EventTile_line {
             flex-direction: column;
-
-            > a {
-                margin-top: -12px;
-            }
         }
 
         .mx_ReplyThread_show {
@@ -95,19 +96,41 @@ limitations under the License.
             background: white;
             box-shadow: 0 0 0 var(--gutterSize) white;
         }
+
+        .mx_ReplyThread {
+            margin: 0 calc(-1 * var(--gutterSize));
+
+            .mx_EventTile_reply {
+                padding: 0;
+                > a {
+                    display: none !important;
+                }
+            }
+
+            .mx_EventTile {
+                display: flex;
+                gap: var(--gutterSize);
+                .mx_EventTile_avatar {
+                    position: static;
+                }
+                .mx_SenderProfile {
+                    display: none;
+                }
+            }
+        }
     }
 
     &:not([data-self=true]) {
         .mx_EventTile_avatar {
             left: calc(-1 * var(--avatarSize));
         }
+
         --backgroundColor: #F7F8F9;
     }
 
     &.mx_EventTile_bubbleContainer,
     &.mx_EventTile_info,
     & ~ .mx_EventListSummary[data-expanded=false] {
-
         --backgroundColor: transparent;
         --gutterSize: 0;
 
@@ -141,34 +164,21 @@ limitations under the License.
         margin-right: 55px;
     }
 
-    .mx_EventTile_line {
-        display: flex;
-        gap: var(--gutterSize);
-        > a {
-            order: 999; /* always display the timestamp as the last item */
-            align-self: flex-end;
-        }
-    }
-
     /* Special layout scenario for "Unable To Decrypt (UTD)" events */
     &.mx_EventTile_bad > .mx_EventTile_line {
         flex-direction: column;
-        > a {
-            position: absolute;
-            bottom: var(--gutterSize);
-        }
     }
 
 
     .mx_EventTile_readAvatars {
         position: absolute;
-        right: 0;
+        right: -45px;
         bottom: 0;
+        top: auto;
     }
 
     .mx_MTextBody {
         /* 30px equates to the width of the timestamp */
         max-width: calc(100% - 35px - var(--gutterSize));
     }
-
 }

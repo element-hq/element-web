@@ -287,14 +287,14 @@ $hover-select-border: 4px;
             mask-size: contain;
         }
 
-    &::before {
-        background-color: #ffffff;
-        mask-image: url('$(res)/img/e2e/normal.svg');
-        mask-repeat: no-repeat;
-        mask-position: center;
-        mask-size: 80%;
+        &::before {
+            background-color: #ffffff;
+            mask-image: url('$(res)/img/e2e/normal.svg');
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-size: 80%;
+        }
     }
-}
 
     .mx_EventTile_e2eIcon_undecryptable, .mx_EventTile_e2eIcon_unverified {
         &::after {

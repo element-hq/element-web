@@ -1002,8 +1002,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             && (this.props.alwaysShowTimestamps
             || this.props.last
             || this.state.hover
-            || this.state.actionBarFocused)
-            || this.props.layout === Layout.Bubble;
+            || this.state.actionBarFocused);
 
         const timestamp = showTimestamp ?
             <MessageTimestamp showTwelveHour={this.props.isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
