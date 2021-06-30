@@ -163,8 +163,6 @@ export function getHandlerTile(ev) {
     return eventTileTypes[type];
 }
 
-const MAX_READ_AVATARS = 5;
-
 // Our component structure for EventTiles on the timeline is:
 //
 // .-EventTile------------------------------------------------.
@@ -648,6 +646,10 @@ export default class EventTile extends React.Component<IProps, IState> {
         if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
             return <SentReceipt messageState={this.props.mxEvent.getAssociatedStatus()} />;
         }
+
+        const MAX_READ_AVATARS = this.props.layout == Layout.Bubble
+            ? 2
+            : 5;
 
         // return early if there are no read receipts
         if (!this.props.readReceipts || this.props.readReceipts.length === 0) {
@@ -1194,6 +1196,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                         "data-scroll-tokens": scrollToken,
                         "data-layout": this.props.layout,
                         "data-self": isOwnEvent,
+                        "data-has-reply": !!thread,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
                     }, [

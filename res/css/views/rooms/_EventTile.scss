@@ -372,26 +372,6 @@ $hover-select-border: 4px;
         left: 41px;
     }
 
-    .mx_EventTile_tileError {
-        color: red;
-        text-align: center;
-
-        // Remove some of the default tile padding so that the error is centered
-        margin-right: 0;
-        .mx_EventTile_line {
-            padding-left: 0;
-            margin-right: 0;
-        }
-
-        .mx_EventTile_line span {
-            padding: 4px 8px;
-        }
-
-        a {
-            margin-left: 1em;
-        }
-    }
-
     .mx_MImageBody {
         margin-right: 34px;
     }
@@ -624,6 +604,26 @@ $hover-select-border: 4px;
 
 .mx_EventTile_keyRequestInfo_tooltip_contents p:last-child {
     margin-bottom: 0px;
+}
+
+.mx_EventTile_tileError {
+    color: red;
+    text-align: center;
+
+    // Remove some of the default tile padding so that the error is centered
+    margin-right: 0;
+    .mx_EventTile_line {
+        padding-left: 0;
+        margin-right: 0;
+    }
+
+    .mx_EventTile_line span {
+        padding: 4px 8px;
+    }
+
+    a {
+        margin-left: 1em;
+    }
 }
 
 @media only screen and (max-width: 480px) {

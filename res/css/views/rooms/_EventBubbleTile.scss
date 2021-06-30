@@ -36,34 +36,24 @@ limitations under the License.
     .mx_EventTile_line {
         width: fit-content;
         max-width: 70%;
-        background: var(--backgroundColor);
     }
 
     .mx_SenderProfile {
-        display: none;
         padding: var(--gutterSize) var(--gutterSize) 0 var(--gutterSize);
-        border-top-left-radius: var(--cornerRadius);
-        border-top-right-radius: var(--cornerRadius);
     }
 
     .mx_EventTile_line {
         padding: var(--gutterSize);
         border-radius: var(--cornerRadius);
+        background: var(--backgroundColor);
     }
-
-    /*
-    .mx_SenderProfile + .mx_EventTile_line {
-        padding-top: 0;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-    }
-    */
 
     .mx_EventTile_avatar {
         position: absolute;
         top: 0;
+        line-height: 1;
         img {
-            border: 2px solid #fff;
+            box-shadow: 0 0 0 2px #fff;
             border-radius: 50%;
         }
     }
@@ -71,6 +61,9 @@ limitations under the License.
     &[data-self=true] {
         .mx_EventTile_line {
             float: right;
+        }
+        .mx_SenderProfile {
+            display: none;
         }
         .mx_ReactionsRow {
             float: right;
@@ -88,6 +81,22 @@ limitations under the License.
         --backgroundColor: #F8FDFC;
     }
 
+    &[data-has-reply=true] {
+        > .mx_EventTile_line {
+            flex-direction: column;
+
+            > a {
+                margin-top: -12px;
+            }
+        }
+
+        .mx_ReplyThread_show {
+            order: 99999;
+            background: white;
+            box-shadow: 0 0 0 var(--gutterSize) white;
+        }
+    }
+
     &:not([data-self=true]) {
         .mx_EventTile_avatar {
             left: calc(-1 * var(--avatarSize));
@@ -100,6 +109,7 @@ limitations under the License.
     & ~ .mx_EventListSummary[data-expanded=false] {
 
         --backgroundColor: transparent;
+        --gutterSize: 0;
 
         display: flex;
         align-items: center;
@@ -140,10 +150,25 @@ limitations under the License.
         }
     }
 
+    /* Special layout scenario for "Unable To Decrypt (UTD)" events */
+    &.mx_EventTile_bad > .mx_EventTile_line {
+        flex-direction: column;
+        > a {
+            position: absolute;
+            bottom: var(--gutterSize);
+        }
+    }
+
+
     .mx_EventTile_readAvatars {
         position: absolute;
         right: 0;
         bottom: 0;
+    }
+
+    .mx_MTextBody {
+        /* 30px equates to the width of the timestamp */
+        max-width: calc(100% - 35px - var(--gutterSize));
     }
 
 }
