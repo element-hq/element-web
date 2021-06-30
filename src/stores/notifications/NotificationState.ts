@@ -80,8 +80,8 @@ export class NotificationStateSnapshot {
     }
 
     public isDifferentFrom(other: NotificationState): boolean {
-        const before = {count: this.count, symbol: this.symbol, color: this.color};
-        const after = {count: other.count, symbol: other.symbol, color: other.color};
+        const before = { count: this.count, symbol: this.symbol, color: this.color };
+        const after = { count: other.count, symbol: other.symbol, color: other.color };
         return JSON.stringify(before) !== JSON.stringify(after);
     }
 }

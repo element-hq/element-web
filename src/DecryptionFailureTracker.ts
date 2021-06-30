@@ -168,7 +168,7 @@ export class DecryptionFailureTracker {
         const trackedEventIds = [...dedupedFailuresMap.keys()];
 
         this.trackedEventHashMap = trackedEventIds.reduce(
-            (result, eventId) => ({...result, [eventId]: true}),
+            (result, eventId) => ({ ...result, [eventId]: true }),
             this.trackedEventHashMap,
         );
 

@@ -14,29 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ReactNode, useContext, useMemo, useState} from "react";
+import React, { ReactNode, useContext, useMemo, useState } from "react";
 import classNames from "classnames";
-import {Room} from "matrix-js-sdk/src/models/room";
-import {MatrixClient} from "matrix-js-sdk/src/client";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 
-import {_t} from '../../../languageHandler';
-import {IDialogProps} from "./IDialogProps";
+import { _t } from '../../../languageHandler';
+import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
 import Dropdown from "../elements/Dropdown";
 import SearchBox from "../../structures/SearchBox";
 import SpaceStore from "../../../stores/SpaceStore";
 import RoomAvatar from "../avatars/RoomAvatar";
-import {getDisplayAliasForRoom} from "../../../Rooms";
+import { getDisplayAliasForRoom } from "../../../Rooms";
 import AccessibleButton from "../elements/AccessibleButton";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import {sleep} from "../../../utils/promise";
+import { sleep } from "../../../utils/promise";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import {calculateRoomVia} from "../../../utils/permalinks/Permalinks";
+import { calculateRoomVia } from "../../../utils/permalinks/Permalinks";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {sortRooms} from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
+import { sortRooms } from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 import ProgressBar from "../elements/ProgressBar";
-import {SpaceFeedbackPrompt} from "../../structures/SpaceRoomView";
+import { SpaceFeedbackPrompt } from "../../structures/SpaceRoomView";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import TruncatedList from "../elements/TruncatedList";

@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 // @ts-ignore - XXX: tsc doesn't like this: our js-sdk imports are complex so this isn't surprising
-import {createClient} from "matrix-js-sdk/src/matrix";
+import { createClient } from "matrix-js-sdk/src/matrix";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { IMatrixClientCreds } from "./MatrixClientPeg";
 import SecurityCustomisations from "./customisations/Security";
@@ -189,7 +189,6 @@ export default class Login {
         });
     }
 }
-
 
 /**
  * Send a login request to the given server, and format the response

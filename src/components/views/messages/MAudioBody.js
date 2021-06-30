@@ -20,8 +20,8 @@ import MFileBody from './MFileBody';
 import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
 import InlineSpinner from '../elements/InlineSpinner';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromContent} from "../../../customisations/Media";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromContent } from "../../../customisations/Media";
 
 @replaceableComponent("views.messages.MAudioBody")
 export default class MAudioBody extends React.Component {

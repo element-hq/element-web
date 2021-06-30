@@ -138,7 +138,7 @@ export function getHtmlText(insaneHtml: string): string {
         selfClosing: [],
         allowedSchemes: [],
         disallowedTagsMode: 'discard',
-    })
+    });
 }
 
 /**
@@ -183,7 +183,7 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
         // images" preference is disabled. Future work might expose some UI to reveal them
         // like standalone image events have.
         if (!attribs.src || !attribs.src.startsWith('mxc://') || !SettingsStore.getValue("showImages")) {
-            return { tagName, attribs: {}};
+            return { tagName, attribs: {} };
         }
         const width = Number(attribs.width) || 800;
         const height = Number(attribs.height) || 600;

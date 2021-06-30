@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import { isSecureBackupRequired } from '../../../utils/WellKnownUtils';
@@ -26,7 +26,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 import QuestionDialog from '../dialogs/QuestionDialog';
 import RestoreKeyBackupDialog from '../dialogs/security/RestoreKeyBackupDialog';
 import { accessSecretStorage } from '../../../SecurityManager';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.settings.SecureBackupPanel")
 export default class SecureBackupPanel extends React.PureComponent {
@@ -85,7 +85,7 @@ export default class SecureBackupPanel extends React.PureComponent {
     async _checkKeyBackupStatus() {
         this._getUpdatedDiagnostics();
         try {
-            const {backupInfo, trustInfo} = await MatrixClientPeg.get().checkKeyBackup();
+            const { backupInfo, trustInfo } = await MatrixClientPeg.get().checkKeyBackup();
             this.setState({
                 loading: false,
                 error: null,
@@ -172,7 +172,7 @@ export default class SecureBackupPanel extends React.PureComponent {
             danger: true,
             onFinished: (proceed) => {
                 if (!proceed) return;
-                this.setState({loading: true});
+                this.setState({ loading: true });
                 MatrixClientPeg.get().deleteKeyBackupVersion(this.state.backupInfo.version).then(() => {
                     this._loadBackupStatus();
                 });
@@ -237,7 +237,7 @@ export default class SecureBackupPanel extends React.PureComponent {
                         "This session is <b>not backing up your keys</b>, " +
                         "but you do have an existing backup you can restore from " +
                         "and add to going forward.", {},
-                        {b: sub => <b>{sub}</b>},
+                        { b: sub => <b>{sub}</b> },
                     )}</p>
                     <p>{_t(
                         "Connect this session to key backup before signing out to avoid " +
@@ -385,7 +385,7 @@ export default class SecureBackupPanel extends React.PureComponent {
             statusDescription = <>
                 <p>{_t(
                     "Your keys are <b>not being backed up from this session</b>.", {},
-                    {b: sub => <b>{sub}</b>},
+                    { b: sub => <b>{sub}</b> },
                 )}</p>
                 <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
             </>;

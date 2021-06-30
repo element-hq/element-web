@@ -14,17 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
-import {_t} from "../../../languageHandler";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import React, { createRef } from 'react';
+import { _t } from "../../../languageHandler";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
 import { getHostingLink } from '../../../utils/HostingLink';
 import * as sdk from "../../../index";
-import {OwnProfileStore} from "../../../stores/OwnProfileStore";
+import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 @replaceableComponent("views.settings.ProfileSettings")
 export default class ProfileSettings extends React.Component {
@@ -79,7 +79,7 @@ export default class ProfileSettings extends React.Component {
         e.preventDefault();
 
         if (!this.state.enableProfileSave) return;
-        this.setState({enableProfileSave: false});
+        this.setState({ enableProfileSave: false });
 
         const client = MatrixClientPeg.get();
         const newState = {};

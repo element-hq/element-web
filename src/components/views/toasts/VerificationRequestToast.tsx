@@ -18,18 +18,18 @@ import React from "react";
 
 import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
-import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload"
-import {userLabelForEventRoom} from "../../../utils/KeyVerificationStateObserver";
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
+import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
+import { userLabelForEventRoom } from "../../../utils/KeyVerificationStateObserver";
 import dis from "../../../dispatcher/dispatcher";
 import ToastStore from "../../../stores/ToastStore";
 import Modal from "../../../Modal";
 import GenericToast from "./GenericToast";
-import {VerificationRequest} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
-import {DeviceInfo} from "matrix-js-sdk/src/crypto/deviceinfo";
-import {Action} from "../../../dispatcher/actions";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
+import { Action } from "../../../dispatcher/actions";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     toastKey: string;
@@ -48,16 +48,16 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
 
     constructor(props) {
         super(props);
-        this.state = {counter: Math.ceil(props.request.timeout / 1000)};
+        this.state = { counter: Math.ceil(props.request.timeout / 1000) };
     }
 
     async componentDidMount() {
-        const {request} = this.props;
+        const { request } = this.props;
         if (request.timeout && request.timeout > 0) {
             this.intervalHandle = setInterval(() => {
-                let {counter} = this.state;
+                let { counter } = this.state;
                 counter = Math.max(0, counter - 1);
-                this.setState({counter});
+                this.setState({ counter });
             }, 1000);
         }
         request.on("change", this._checkRequestIsPending);
@@ -68,7 +68,6 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         // As a quick & dirty fix, check the toast is still relevant when it mounts (this prevents
         // a toast hanging around after logging in if you did a verification as part of login).
         this._checkRequestIsPending();
-
 
         if (request.isSelfVerification) {
             const cli = MatrixClientPeg.get();
@@ -83,12 +82,12 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
 
     componentWillUnmount() {
         clearInterval(this.intervalHandle);
-        const {request} = this.props;
+        const { request } = this.props;
         request.off("change", this._checkRequestIsPending);
     }
 
     _checkRequestIsPending = () => {
-        const {request} = this.props;
+        const { request } = this.props;
         if (!request.canAccept) {
             ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         }
@@ -105,7 +104,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
 
     accept = async () => {
         ToastStore.sharedInstance().dismissToast(this.props.toastKey);
-        const {request} = this.props;
+        const { request } = this.props;
         // no room id for to_device requests
         const cli = MatrixClientPeg.get();
         try {
@@ -139,7 +138,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
     };
 
     render() {
-        const {request} = this.props;
+        const { request } = this.props;
         let description;
         let detail;
         if (request.isSelfVerification) {
@@ -159,13 +158,13 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                 const client = MatrixClientPeg.get();
                 const user = client.getUser(userId);
                 if (user && user.displayName) {
-                    description = _t("%(name)s (%(userId)s)", {name: user.displayName, userId});
+                    description = _t("%(name)s (%(userId)s)", { name: user.displayName, userId });
                 }
             }
         }
         const declineLabel = this.state.counter === 0 ?
             _t("Decline") :
-            _t("Decline (%(counter)s)", {counter: this.state.counter});
+            _t("Decline (%(counter)s)", { counter: this.state.counter });
 
         return <GenericToast
             description={description}

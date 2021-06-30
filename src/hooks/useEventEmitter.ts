@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {useRef, useEffect} from "react";
-import type {EventEmitter} from "events";
+import { useRef, useEffect } from "react";
+import type { EventEmitter } from "events";
 
 type Handler = (...args: any[]) => void;
 

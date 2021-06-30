@@ -20,7 +20,7 @@ import AccessibleButton from './AccessibleButton';
 import dis from '../../../dispatcher/dispatcher';
 import * as sdk from '../../../index';
 import Analytics from '../../../Analytics';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.elements.ActionButton")
 export default class ActionButton extends React.Component {
@@ -47,23 +47,21 @@ export default class ActionButton extends React.Component {
     _onClick = (ev) => {
         ev.stopPropagation();
         Analytics.trackEvent('Action Button', 'click', this.props.action);
-        dis.dispatch({action: this.props.action});
+        dis.dispatch({ action: this.props.action });
     };
 
     _onMouseEnter = () => {
-        if (this.props.tooltip) this.setState({showTooltip: true});
+        if (this.props.tooltip) this.setState({ showTooltip: true });
         if (this.props.mouseOverAction) {
-            dis.dispatch({action: this.props.mouseOverAction});
+            dis.dispatch({ action: this.props.mouseOverAction });
         }
     };
 
     _onMouseLeave = () => {
-        this.setState({showTooltip: false});
+        this.setState({ showTooltip: false });
     };
 
     render() {
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
-
         let tooltip;
         if (this.state.showTooltip) {
             const Tooltip = sdk.getComponent("elements.Tooltip");
@@ -71,7 +69,7 @@ export default class ActionButton extends React.Component {
         }
 
         const icon = this.props.iconPath ?
-            (<TintableSvg src={this.props.iconPath} width={this.props.size} height={this.props.size} />) :
+            (<img src={this.props.iconPath} width={this.props.size} height={this.props.size} />) :
             undefined;
 
         const classNames = ["mx_RoleButton"];

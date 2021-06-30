@@ -44,7 +44,7 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
     private onRoomPublishChange = (e) => {
         const valueBefore = this.state.isRoomPublished;
         const newValue = !valueBefore;
-        this.setState({isRoomPublished: newValue});
+        this.setState({ isRoomPublished: newValue });
         const client = MatrixClientPeg.get();
 
         client.setRoomDirectoryVisibility(
@@ -52,14 +52,14 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
             newValue ? 'public' : 'private',
         ).catch(() => {
             // Roll back the local echo on the change
-            this.setState({isRoomPublished: valueBefore});
+            this.setState({ isRoomPublished: valueBefore });
         });
     };
 
     componentDidMount() {
         const client = MatrixClientPeg.get();
         client.getRoomDirectoryVisibility(this.props.roomId).then((result => {
-            this.setState({isRoomPublished: result.visibility === 'public'});
+            this.setState({ isRoomPublished: result.visibility === 'public' });
         }));
     }
 

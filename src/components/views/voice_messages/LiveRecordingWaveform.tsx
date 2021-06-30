@@ -60,7 +60,7 @@ export default class LiveRecordingWaveform extends React.PureComponent<IProps, I
     private updateWaveform() {
         this.setState({
             waveform: this.waveform,
-        })
+        });
     }
 
     public render() {

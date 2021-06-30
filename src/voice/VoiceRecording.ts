@@ -16,17 +16,17 @@ limitations under the License.
 
 import * as Recorder from 'opus-recorder';
 import encoderPath from 'opus-recorder/dist/encoderWorker.min.js';
-import {MatrixClient} from "matrix-js-sdk/src/client";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 import MediaDeviceHandler from "../MediaDeviceHandler";
-import {SimpleObservable} from "matrix-widget-api";
-import {clamp, percentageOf, percentageWithin} from "../utils/numbers";
+import { SimpleObservable } from "matrix-widget-api";
+import { clamp, percentageOf, percentageWithin } from "../utils/numbers";
 import EventEmitter from "events";
-import {IDestroyable} from "../utils/IDestroyable";
-import {Singleflight} from "../utils/Singleflight";
-import {PayloadEvent, WORKLET_NAME} from "./consts";
-import {UPDATE_EVENT} from "../stores/AsyncStore";
-import {Playback} from "./Playback";
-import {createAudioContext} from "./compat";
+import { IDestroyable } from "../utils/IDestroyable";
+import { Singleflight } from "../utils/Singleflight";
+import { PayloadEvent, WORKLET_NAME } from "./consts";
+import { UPDATE_EVENT } from "../stores/AsyncStore";
+import { Playback } from "./Playback";
+import { createAudioContext } from "./compat";
 import { IEncryptedFile } from "matrix-js-sdk/src/@types/event";
 import { uploadFile } from "../ContentMessages";
 
@@ -283,7 +283,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             this.stop();
         } else if (secondsLeft <= TARGET_WARN_TIME_LEFT) {
             Singleflight.for(this, "ending_soon").do(() => {
-                this.emit(RecordingState.EndingSoon, {secondsLeft});
+                this.emit(RecordingState.EndingSoon, { secondsLeft });
                 return Singleflight.Void;
             });
         }

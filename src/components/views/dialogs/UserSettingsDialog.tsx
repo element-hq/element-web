@@ -16,8 +16,8 @@ limitations under the License.
 */
 
 import React from 'react';
-import TabbedView, {Tab} from "../../structures/TabbedView";
-import {_t, _td} from "../../../languageHandler";
+import TabbedView, { Tab } from "../../structures/TabbedView";
+import { _t, _td } from "../../../languageHandler";
 import GeneralUserSettingsTab from "../settings/tabs/user/GeneralUserSettingsTab";
 import SettingsStore, { CallbackFn } from "../../../settings/SettingsStore";
 import LabsUserSettingsTab from "../settings/tabs/user/LabsUserSettingsTab";
@@ -31,8 +31,8 @@ import FlairUserSettingsTab from "../settings/tabs/user/FlairUserSettingsTab";
 import * as sdk from "../../../index";
 import SdkConfig from "../../../SdkConfig";
 import MjolnirUserSettingsTab from "../settings/tabs/user/MjolnirUserSettingsTab";
-import {UIFeature} from "../../../settings/UIFeature";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { UIFeature } from "../../../settings/UIFeature";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 export enum UserTab {
     General = "USER_GENERAL_TAB",
@@ -78,8 +78,8 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
 
     private mjolnirChanged: CallbackFn = (settingName, roomId, atLevel, newValue) => {
         // We can cheat because we know what levels a feature is tracked at, and how it is tracked
-        this.setState({mjolnirEnabled: newValue});
-    }
+        this.setState({ mjolnirEnabled: newValue });
+    };
 
     _getTabs() {
         const tabs = [];

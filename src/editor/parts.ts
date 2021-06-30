@@ -15,9 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClient} from "matrix-js-sdk/src/client";
-import {RoomMember} from "matrix-js-sdk/src/models/room-member";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 import AutocompleteWrapperModel, {
     GetAutocompleterComponent,
@@ -466,7 +466,7 @@ export class PartCreator {
     constructor(private room: Room, private client: MatrixClient, autoCompleteCreator: AutoCompleteCreator = null) {
         // pre-create the creator as an object even without callback so it can already be passed
         // to PillCandidatePart (e.g. while deserializing) and set later on
-        this.autoCompleteCreator = {create: autoCompleteCreator && autoCompleteCreator(this)};
+        this.autoCompleteCreator = { create: autoCompleteCreator && autoCompleteCreator(this) };
     }
 
     setAutoCompleteCreator(autoCompleteCreator: AutoCompleteCreator) {

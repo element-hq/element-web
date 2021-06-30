@@ -22,7 +22,7 @@ import { replaceableComponent } from '../../../utils/replaceableComponent';
 import VerificationRequestDialog from './VerificationRequestDialog';
 import BaseDialog from './BaseDialog';
 import DialogButtons from '../elements/DialogButtons';
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import * as sdk from '../../../index';
 
 @replaceableComponent("views.dialogs.NewSessionReviewDialog")

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* eslint-disable babel/no-invalid-this */
+/* eslint-disable @typescript-eslint/no-invalid-this */
 import React from "react";
 import classNames from "classnames";
 

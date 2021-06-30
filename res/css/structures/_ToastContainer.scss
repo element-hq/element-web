@@ -134,11 +134,14 @@ limitations under the License.
         .mx_Toast_buttons {
             float: right;
             display: flex;
-            gap: 5px;
 
             .mx_AccessibleButton {
                 min-width: 96px;
                 box-sizing: border-box;
+            }
+
+            .mx_AccessibleButton + .mx_AccessibleButton {
+                margin-left: 5px;
             }
         }
 

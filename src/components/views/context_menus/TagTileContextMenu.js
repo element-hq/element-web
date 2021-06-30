@@ -20,9 +20,9 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
 import TagOrderActions from '../../../actions/TagOrderActions';
-import {MenuItem} from "../../structures/ContextMenu";
+import { MenuItem } from "../../structures/ContextMenu";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import GroupFilterOrderStore from "../../../stores/GroupFilterOrderStore";
 
 @replaceableComponent("views.context_menus.TagTileContextMenu")

@@ -27,7 +27,7 @@ interface IProps {
     forExport: boolean;
 }
 
-const RedactedBody = React.forwardRef<any, IProps>(({mxEvent, forExport}, ref) => {
+const RedactedBody = React.forwardRef<any, IProps>(({ mxEvent, forExport }, ref) => {
     const cli: MatrixClient = useContext(MatrixClientContext);
     let text = _t("Message deleted");
     const unsigned = mxEvent.getUnsigned();

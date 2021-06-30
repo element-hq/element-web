@@ -1,6 +1,6 @@
 import RoomViewStore from '../../src/stores/RoomViewStore';
 
-import {MatrixClientPeg as peg} from '../../src/MatrixClientPeg';
+import { MatrixClientPeg as peg } from '../../src/MatrixClientPeg';
 
 import * as testUtils from '../test-utils';
 
@@ -36,7 +36,7 @@ describe('RoomViewStore', function() {
             }
         });
 
-        peg.get().getRoomIdForAlias.mockResolvedValue({room_id: "!randomcharacters:aser.ver"});
+        peg.get().getRoomIdForAlias.mockResolvedValue({ room_id: "!randomcharacters:aser.ver" });
         peg.get().joinRoom = async (roomAddress) => {
             token.remove(); // stop RVS listener
             expect(roomAddress).toBe("#somealias2:aser.ver");
