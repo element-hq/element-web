@@ -32,7 +32,7 @@ export default class TextualEvent extends React.Component<IProps> {
 
     public render() {
         const text = TextForEvent.textForEvent(this.props.mxEvent, true, this.context?.showHiddenEventsInTimeline);
-        if (text == null || text.length === 0) return null;
+        if (!text) return null;
         return <div className="mx_TextualEvent">{ text }</div>;
     }
 }
