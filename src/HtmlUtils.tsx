@@ -358,11 +358,11 @@ interface IOpts {
     stripReplyFallback?: boolean;
     returnString?: boolean;
     forComposerQuote?: boolean;
-    ref?: React.Ref<any>;
+    ref?: React.Ref<HTMLSpanElement>;
 }
 
 export interface IOptsReturnNode extends IOpts {
-    returnString: false;
+    returnString: false | undefined;
 }
 
 export interface IOptsReturnString extends IOpts {
