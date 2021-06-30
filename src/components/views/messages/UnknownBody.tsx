@@ -16,8 +16,14 @@ limitations under the License.
 */
 
 import React, { forwardRef } from "react";
+import { MatrixEvent } from "matrix-js-sdk/src";
 
-export default forwardRef(({ mxEvent, children }, ref) => {
+interface IProps {
+    mxEvent: MatrixEvent;
+    children?: React.ReactNode;
+}
+
+export default forwardRef(({ mxEvent, children }: IProps, ref: React.RefObject<HTMLSpanElement>) => {
     const text = mxEvent.getContent().body;
     return (
         <span className="mx_UnknownBody" ref={ref}>
