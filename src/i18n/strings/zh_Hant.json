@@ -30,8 +30,9 @@
     "Open": "開啟",
     "Your Element is misconfigured": "Element 配置錯誤",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Element 的配置中包含無效JSON，請更正錯誤並重新加載網頁。",
-    "Your browser can't run %(brand)s": "當前瀏覽器無法運行%(brand)s",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "當前瀏覽器不支持%(brand)s使用的高級特性。",
+    "Your browser can't run %(brand)s": "您的瀏覽器無法執行 %(brand)s",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s 使用了您目前的瀏覽器不支援的進階瀏覽器功能。",
     "Powered by Matrix": "由 Matrix 提供",
-    "Use %(brand)s on mobile": "在行動裝置上使用 %(brand)s"
+    "Use %(brand)s on mobile": "在行動裝置上使用 %(brand)s",
+    "Switch to space by number": "依數字切換至空間"
 }
