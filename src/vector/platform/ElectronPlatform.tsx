@@ -354,7 +354,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return true;
     }
 
-    setNotificationCount(count: number): void {
+    public setNotificationCount(count: number): void {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
 
