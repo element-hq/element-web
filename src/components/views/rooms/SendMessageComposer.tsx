@@ -39,7 +39,6 @@ import Modal from '../../../Modal';
 import { _t, _td } from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import RateLimitedFunc from '../../../ratelimitedfunc';
 import { Action } from "../../../dispatcher/actions";
 import { containsEmoji } from "../../../effects/utils";
 import { CHAT_EFFECTS } from '../../../effects';
@@ -53,6 +52,7 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import { ActionPayload } from "../../../dispatcher/payloads";
+import { DebouncedFunc, throttle } from 'lodash';
 
 function addReplyToMessageContent(
     content: IContent,
@@ -138,7 +138,7 @@ export default class SendMessageComposer extends React.Component<IProps> {
     static contextType = MatrixClientContext;
     context!: React.ContextType<typeof MatrixClientContext>;
 
-    private readonly prepareToEncrypt?: RateLimitedFunc;
+    private readonly prepareToEncrypt?: DebouncedFunc<() => void>;
     private readonly editorRef = createRef<BasicMessageComposer>();
     private model: EditorModel = null;
     private currentlyComposedEditorState: SerializedPart[] = null;
@@ -149,9 +149,9 @@ export default class SendMessageComposer extends React.Component<IProps> {
         super(props);
         this.context = context; // otherwise React will only set it prior to render due to type def above
         if (this.context.isCryptoEnabled() && this.context.isRoomEncrypted(this.props.room.roomId)) {
-            this.prepareToEncrypt = new RateLimitedFunc(() => {
+            this.prepareToEncrypt = throttle(() => {
                 this.context.prepareToEncrypt(this.props.room);
-            }, 60000);
+            }, 60000, { leading: true, trailing: false });
         }
 
         window.addEventListener("beforeunload", this.saveStoredEditorState);

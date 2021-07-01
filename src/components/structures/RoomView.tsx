@@ -37,7 +37,6 @@ import Modal from '../../Modal';
 import * as sdk from '../../index';
 import CallHandler, { PlaceCallType } from '../../CallHandler';
 import dis from '../../dispatcher/dispatcher';
-import rateLimitedFunc from '../../ratelimitedfunc';
 import * as Rooms from '../../Rooms';
 import eventSearch, { searchPagination } from '../../Searching';
 import MainSplit from './MainSplit';
@@ -82,6 +81,7 @@ import { IOpts } from "../../createRoom";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import UIStore from "../../stores/UIStore";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
+import { throttle } from "lodash";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -675,8 +675,8 @@ export default class RoomView extends React.Component<IProps, IState> {
             );
         }
 
-        // cancel any pending calls to the rate_limited_funcs
-        this.updateRoomMembers.cancelPendingCall();
+        // cancel any pending calls to the throttled updated
+        this.updateRoomMembers.cancel();
 
         for (const watcher of this.settingWatchers) {
             SettingsStore.unwatchSetting(watcher);
@@ -1092,7 +1092,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             return;
         }
 
-        this.updateRoomMembers(member);
+        this.updateRoomMembers();
     };
 
     private onMyMembership = (room: Room, membership: string, oldMembership: string) => {
@@ -1114,10 +1114,10 @@ export default class RoomView extends React.Component<IProps, IState> {
     }
 
     // rate limited because a power level change will emit an event for every member in the room.
-    private updateRoomMembers = rateLimitedFunc(() => {
+    private updateRoomMembers = throttle(() => {
         this.updateDMState();
         this.updateE2EStatus(this.state.room);
-    }, 500);
+    }, 500, { leading: true, trailing: true });
 
     private checkDesktopNotifications() {
         const memberCount = this.state.room.getJoinedMemberCount() + this.state.room.getInvitedMemberCount();

@@ -22,7 +22,6 @@ import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher/dispatcher';
 import { isValid3pidInvite } from "../../../RoomInvite";
-import rateLimitedFunction from "../../../ratelimitedfunc";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import BaseCard from "../right_panel/BaseCard";
@@ -43,6 +42,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 import EntityTile from "./EntityTile";
 import MemberTile from "./MemberTile";
 import BaseAvatar from '../avatars/BaseAvatar';
+import { throttle } from 'lodash';
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -133,7 +133,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         }
 
         // cancel any pending calls to the rate_limited_funcs
-        this.updateList.cancelPendingCall();
+        this.updateList.cancel();
     }
 
     /**
@@ -237,9 +237,9 @@ export default class MemberList extends React.Component<IProps, IState> {
         if (this.canInvite !== this.state.canInvite) this.setState({ canInvite: this.canInvite });
     };
 
-    private updateList = rateLimitedFunction(() => {
+    private updateList = throttle(() => {
         this.updateListNow();
-    }, 500);
+    }, 500, { leading: true, trailing: true });
 
     private updateListNow(): void {
         const members = this.roomMembers();

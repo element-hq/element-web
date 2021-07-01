@@ -20,7 +20,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import RateLimitedFunc from '../../../ratelimitedfunc';
 
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
@@ -31,6 +30,7 @@ import RoomTopic from "../elements/RoomTopic";
 import RoomName from "../elements/RoomName";
 import { PlaceCallType } from "../../../CallHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { throttle } from 'lodash';
 
 @replaceableComponent("views.rooms.RoomHeader")
 export default class RoomHeader extends React.Component {
@@ -73,10 +73,9 @@ export default class RoomHeader extends React.Component {
         this._rateLimitedUpdate();
     };
 
-    _rateLimitedUpdate = new RateLimitedFunc(function() {
-        /* eslint-disable @babel/no-invalid-this */
+    _rateLimitedUpdate = throttle(() => {
         this.forceUpdate();
-    }, 500);
+    }, 500, { leading: true, trailing: true });
 
     render() {
         let searchStatus = null;
