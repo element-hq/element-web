@@ -54,6 +54,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
+    "@types/commonmark": "^0.27.4",
     "await-lock": "^2.1.0",
     "browser-encrypt-attachment": "^0.3.0",
     "browser-request": "^0.3.3",

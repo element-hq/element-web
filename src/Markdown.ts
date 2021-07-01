@@ -23,7 +23,15 @@ const ALLOWED_HTML_TAGS = ['sub', 'sup', 'del', 'u'];
 // These types of node are definitely text
 const TEXT_NODES = ['text', 'softbreak', 'linebreak', 'paragraph', 'document'];
 
-function isAllowedHtmlTag(node: any) {
+// As far as @types/commonmark is concerned, these are not public, so add them
+interface CommonmarkHtmlRendererInternal extends commonmark.HtmlRenderer {
+    paragraph: (node: commonmark.Node, entering: boolean) => void;
+    link: (node: commonmark.Node, entering: boolean) => void;
+    html_inline: (node: commonmark.Node) => void; // eslint-disable-line camelcase
+    html_block: (node: commonmark.Node) => void; // eslint-disable-line camelcase
+}
+
+function isAllowedHtmlTag(node: commonmark.Node): boolean {
     if (node.literal != null &&
         node.literal.match('^<((div|span) data-mx-maths="[^"]*"|/(div|span))>$') != null) {
         return true;
@@ -45,7 +53,7 @@ function isAllowedHtmlTag(node: any) {
  * comprises multiple block level elements (ie. lines),
  * or false if it is only a single line.
  */
-function isMultiLine(node) {
+function isMultiLine(node: commonmark.Node): boolean {
     let par = node;
     while (par.parent) {
         par = par.parent;
@@ -57,12 +65,10 @@ function isMultiLine(node) {
  * Class that wraps commonmark, adding the ability to see whether
  * a given message actually uses any markdown syntax or whether
  * it's plain text.
- *
- * Types are a bit of a struggle here as commonmark doesn't have types
  */
 export default class Markdown {
     private input: string;
-    private parsed: any;
+    private parsed: commonmark.Node;
 
     constructor(input) {
         this.input = input;
@@ -71,7 +77,7 @@ export default class Markdown {
         this.parsed = parser.parse(this.input);
     }
 
-    isPlainText() {
+    isPlainText(): boolean {
         const walker = this.parsed.walker();
 
         let ev;
@@ -94,7 +100,7 @@ export default class Markdown {
         return true;
     }
 
-    toHTML({ externalLinks = false } = {}) {
+    toHTML({ externalLinks = false } = {}): string {
         const renderer = new commonmark.HtmlRenderer({
             safe: false,
 
@@ -104,7 +110,7 @@ export default class Markdown {
             // block quote ends up all on one line
             // (https://github.com/vector-im/element-web/issues/3154)
             softbreak: '<br />',
-        });
+        }) as CommonmarkHtmlRendererInternal;
 
         // Trying to strip out the wrapping <p/> causes a lot more complication
         // than it's worth, i think.  For instance, this code will go and strip
@@ -181,8 +187,8 @@ export default class Markdown {
      * N.B. this does **NOT** render arbitrary MD to plain text - only MD
      * which has no formatting.  Otherwise it emits HTML(!).
      */
-    toPlaintext() {
-        const renderer = new commonmark.HtmlRenderer({ safe: false });
+    toPlaintext(): string {
+        const renderer = new commonmark.HtmlRenderer({ safe: false }) as CommonmarkHtmlRendererInternal;
 
         renderer.paragraph = function(node, entering) {
             // as with toHTML, only append lines to paragraphs if there are
