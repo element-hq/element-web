@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,16 +16,16 @@ limitations under the License.
 */
 
 import * as commonmark from 'commonmark';
-import {escape} from "lodash";
+import { escape } from "lodash";
 
 const ALLOWED_HTML_TAGS = ['sub', 'sup', 'del', 'u'];
 
 // These types of node are definitely text
 const TEXT_NODES = ['text', 'softbreak', 'linebreak', 'paragraph', 'document'];
 
-function is_allowed_html_tag(node) {
+function isAllowedHtmlTag(node: any) {
     if (node.literal != null &&
-        node.literal.match('^<((div|span) data-mx-maths="[^"]*"|\/(div|span))>$') != null) {
+        node.literal.match('^<((div|span) data-mx-maths="[^"]*"|/(div|span))>$') != null) {
         return true;
     }
 
@@ -39,21 +40,12 @@ function is_allowed_html_tag(node) {
     return false;
 }
 
-function html_if_tag_allowed(node) {
-    if (is_allowed_html_tag(node)) {
-        this.lit(node.literal);
-        return;
-    } else {
-        this.lit(escape(node.literal));
-    }
-}
-
 /*
  * Returns true if the parse output containing the node
  * comprises multiple block level elements (ie. lines),
  * or false if it is only a single line.
  */
-function is_multi_line(node) {
+function isMultiLine(node) {
     let par = node;
     while (par.parent) {
         par = par.parent;
@@ -65,8 +57,13 @@ function is_multi_line(node) {
  * Class that wraps commonmark, adding the ability to see whether
  * a given message actually uses any markdown syntax or whether
  * it's plain text.
+ *
+ * Types are a bit of a struggle here as commonmark doesn't have types
  */
 export default class Markdown {
+    private input: string;
+    private parsed: any;
+
     constructor(input) {
         this.input = input;
 
@@ -87,7 +84,7 @@ export default class Markdown {
                 // if it's an allowed html tag, we need to render it and therefore
                 // we will need to use HTML. If it's not allowed, it's not HTML since
                 // we'll just be treating it as text.
-                if (is_allowed_html_tag(node)) {
+                if (isAllowedHtmlTag(node)) {
                     return false;
                 }
             } else {
@@ -118,7 +115,7 @@ export default class Markdown {
         //
         // Let's try sending with <p/>s anyway for now, though.
 
-        const real_paragraph = renderer.paragraph;
+        const realParagraph = renderer.paragraph;
 
         renderer.paragraph = function(node, entering) {
             // If there is only one top level node, just return the
@@ -126,8 +123,8 @@ export default class Markdown {
             // 'inline', rather than unnecessarily wrapped in its own
             // p tag. If, however, we have multiple nodes, each gets
             // its own p tag to keep them as separate paragraphs.
-            if (is_multi_line(node)) {
-                real_paragraph.call(this, node, entering);
+            if (isMultiLine(node)) {
+                realParagraph.call(this, node, entering);
             }
         };
 
@@ -150,19 +147,26 @@ export default class Markdown {
             }
         };
 
-        renderer.html_inline = html_if_tag_allowed;
+        renderer.html_inline = function(node: any) {
+            if (isAllowedHtmlTag(node)) {
+                this.lit(node.literal);
+                return;
+            } else {
+                this.lit(escape(node.literal));
+            }
+        };
 
         renderer.html_block = function(node) {
-/*
+            /*
             // as with `paragraph`, we only insert line breaks
             // if there are multiple lines in the markdown.
             const isMultiLine = is_multi_line(node);
             if (isMultiLine) this.cr();
-*/
-            html_if_tag_allowed.call(this, node);
-/*
+            */
+            renderer.html_inline(node);
+            /*
             if (isMultiLine) this.cr();
-*/
+            */
         };
 
         return renderer.render(this.parsed);
@@ -178,13 +182,12 @@ export default class Markdown {
      * which has no formatting.  Otherwise it emits HTML(!).
      */
     toPlaintext() {
-        const renderer = new commonmark.HtmlRenderer({safe: false});
-        const real_paragraph = renderer.paragraph;
+        const renderer = new commonmark.HtmlRenderer({ safe: false });
 
         renderer.paragraph = function(node, entering) {
             // as with toHTML, only append lines to paragraphs if there are
             // multiple paragraphs
-            if (is_multi_line(node)) {
+            if (isMultiLine(node)) {
                 if (!entering && node.next) {
                     this.lit('\n\n');
                 }
@@ -193,7 +196,7 @@ export default class Markdown {
 
         renderer.html_block = function(node) {
             this.lit(node.literal);
-            if (is_multi_line(node) && node.next) this.lit('\n\n');
+            if (isMultiLine(node) && node.next) this.lit('\n\n');
         };
 
         return renderer.render(this.parsed);
