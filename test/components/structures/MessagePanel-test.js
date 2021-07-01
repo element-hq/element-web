@@ -30,7 +30,7 @@ import { MatrixClientPeg } from '../../../src/MatrixClientPeg';
 import Matrix from 'matrix-js-sdk';
 
 const TestUtilsMatrix = require('../../test-utils');
-const mockclock = require('../../mock-clock');
+import FakeTimers from '@sinonjs/fake-timers';
 
 import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import { configure, mount } from "enzyme";
@@ -72,7 +72,7 @@ class WrappedMessagePanel extends React.Component {
 }
 
 describe('MessagePanel', function() {
-    const clock = mockclock.clock();
+    let clock = null;
     const realSetTimeout = window.setTimeout;
     const events = mkEvents();
 
@@ -90,7 +90,10 @@ describe('MessagePanel', function() {
     });
 
     afterEach(function() {
-        clock.uninstall();
+        if (clock) {
+            clock.uninstall();
+            clock = null;
+        }
     });
 
     function mkEvents() {
@@ -362,8 +365,7 @@ describe('MessagePanel', function() {
 
     it('shows a ghost read-marker when the read-marker moves', function(done) {
         // fake the clock so that we can test the velocity animation.
-        clock.install();
-        clock.mockDate();
+        clock = FakeTimers.install();
 
         const parentDiv = document.createElement('div');
 
