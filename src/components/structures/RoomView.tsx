@@ -63,7 +63,7 @@ import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
 import AuxPanel from "../views/rooms/AuxPanel";
 import RoomHeader from "../views/rooms/RoomHeader";
 import { XOR } from "../../@types/common";
-import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
+import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import EffectsOverlay from "../views/elements/EffectsOverlay";
 import { containsEmoji } from '../../effects/utils';
 import { CHAT_EFFECTS } from '../../effects';
@@ -95,21 +95,7 @@ if (DEBUG) {
 
 interface IProps {
     threepidInvite: IThreepidInvite,
-
-    // Any data about the room that would normally come from the homeserver
-    // but has been passed out-of-band, eg. the room name and avatar URL
-    // from an email invite (a workaround for the fact that we can't
-    // get this information from the HS using an email invite).
-    // Fields:
-    //  * name (string) The room's name
-    //  * avatarUrl (string) The mxc:// avatar URL for the room
-    //  * inviterName (string) The display name of the person who
-    //  *                      invited us to the room
-    oobData?: {
-        name?: string;
-        avatarUrl?: string;
-        inviterName?: string;
-    };
+    oobData?: IOOBData;
 
     resizeNotifier: ResizeNotifier;
     justCreatedOpts?: IOpts;
@@ -1261,7 +1247,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         });
     };
 
-    private injectSticker(url, info, text) {
+    private injectSticker(url: string, info: object, text: string) {
         if (this.context.isGuest()) {
             dis.dispatch({ action: 'require_registration' });
             return;
@@ -1457,13 +1443,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         dis.dispatch({
             action: "appsDrawer",
             show: !this.state.showApps,
-        });
-    };
-
-    private onLeaveClick = () => {
-        dis.dispatch({
-            action: 'leave_room',
-            room_id: this.state.room.roomId,
         });
     };
 
@@ -2106,7 +2085,6 @@ export default class RoomView extends React.Component<IProps, IState> {
                             onSearchClick={this.onSearchClick}
                             onSettingsClick={this.onSettingsClick}
                             onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
-                            onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
                             e2eStatus={this.state.e2eStatus}
                             onAppsClick={this.state.hasPinnedWidgets ? this.onAppsClick : null}
                             appsShown={this.state.showApps}
