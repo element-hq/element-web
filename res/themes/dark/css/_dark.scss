@@ -231,6 +231,12 @@ $groupFilterPanel-background-blur-amount: 30px;
 
 $composer-shadow-color: rgba(0, 0, 0, 0.28);
 
+// Bubble tiles
+$eventbubble-self-bg: rgba(141, 151, 165, 0.3);
+$eventbubble-others-bg: rgba(141, 151, 165, 0.3);
+$eventbubble-bg-hover: rgba(141, 151, 165, 0.1);
+$eventbubble-avatar-outline: #15191E;
+
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {

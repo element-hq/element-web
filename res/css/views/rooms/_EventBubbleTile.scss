@@ -26,8 +26,13 @@ limitations under the License.
     margin-right: calc(var(--gutterSize) + var(--avatarSize));
     padding: 2px 0;
 
+    /* For replies */
+    .mx_EventTile {
+        padding-top: 0;
+    }
+
     &:hover {
-        background: rgb(242, 242, 242);
+        background: $eventbubble-bg-hover;
     }
 
     .mx_SenderProfile,
@@ -37,7 +42,7 @@ limitations under the License.
     }
 
     .mx_SenderProfile {
-        padding: var(--gutterSize) var(--gutterSize) 0 var(--gutterSize);
+        padding: 0 var(--gutterSize);
     }
 
     .mx_EventTile_line {
@@ -57,7 +62,7 @@ limitations under the License.
         top: 0;
         line-height: 1;
         img {
-            box-shadow: 0 0 0 2px #fff;
+            box-shadow: 0 0 0 2px $eventbubble-avatar-outline;
             border-radius: 50%;
         }
     }
@@ -83,7 +88,7 @@ limitations under the License.
             right: calc(-1 * var(--avatarSize));
         }
 
-        --backgroundColor: #F8FDFC;
+        --backgroundColor: $eventbubble-self-bg;
     }
 
     &[data-has-reply=true] {
@@ -93,8 +98,8 @@ limitations under the License.
 
         .mx_ReplyThread_show {
             order: 99999;
-            background: white;
-            box-shadow: 0 0 0 var(--gutterSize) white;
+            /* background: white;
+            box-shadow: 0 0 0 var(--gutterSize) white; */
         }
 
         .mx_ReplyThread {
@@ -120,12 +125,12 @@ limitations under the License.
         }
     }
 
-    &:not([data-self=true]) {
+    &[data-self=false] {
         .mx_EventTile_avatar {
             left: calc(-1 * var(--avatarSize));
         }
 
-        --backgroundColor: #F7F8F9;
+        --backgroundColor: $eventbubble-others-bg;
     }
 
     &.mx_EventTile_bubbleContainer,
