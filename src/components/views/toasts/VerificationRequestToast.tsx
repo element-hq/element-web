@@ -29,7 +29,7 @@ import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/reque
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { Action } from "../../../dispatcher/actions";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import VerificationRequestDialog from "../dialogs/VerificationRequestDialog"
+import VerificationRequestDialog from "../dialogs/VerificationRequestDialog";
 
 interface IProps {
     toastKey: string;

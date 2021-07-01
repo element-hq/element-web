@@ -22,7 +22,7 @@ import VerificationRequestDialog from '../../views/dialogs/VerificationRequestDi
 import { SetupEncryptionStore, Phase } from '../../../stores/SetupEncryptionStore';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ISecretStorageKeyInfo } from 'matrix-js-sdk';
-import EncryptionPanel from "../../views/right_panel/EncryptionPanel"
+import EncryptionPanel from "../../views/right_panel/EncryptionPanel";
 import AccessibleButton from '../../views/elements/AccessibleButton';
 import Spinner from '../../views/elements/Spinner';
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
@@ -32,7 +32,7 @@ function keyHasPassphrase(keyInfo: ISecretStorageKeyInfo): boolean {
     return Boolean(
         keyInfo.passphrase &&
         keyInfo.passphrase.salt &&
-        keyInfo.passphrase.iterations
+        keyInfo.passphrase.iterations,
     );
 }
 
@@ -85,7 +85,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
     private onUsePassphraseClick = async () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.usePassPhrase();
-    }
+    };
 
     private onVerifyClick = () => {
         const cli = MatrixClientPeg.get();
@@ -101,31 +101,31 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 request.cancel();
             },
         });
-    }
+    };
 
     private onSkipClick = () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.skip();
-    }
+    };
 
     private onSkipConfirmClick = () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.skipConfirm();
-    }
+    };
 
     private onSkipBackClick = () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.returnAfterSkip();
-    }
+    };
 
     private onDoneClick = () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.done();
-    }
+    };
 
     private onEncryptionPanelClose = () => {
         this.props.onFinished(false);
-    }
+    };
 
     public render() {
         const {
