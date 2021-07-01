@@ -39,7 +39,7 @@ interface IProps {
     member: RoomMember | User;
     onClose: () => void;
     verificationRequest: VerificationRequest;
-    verificationRequestPromise: Promise<VerificationRequest>;
+    verificationRequestPromise?: Promise<VerificationRequest>;
     layout: string;
     inDialog: boolean;
     isRoomEncrypted: boolean;

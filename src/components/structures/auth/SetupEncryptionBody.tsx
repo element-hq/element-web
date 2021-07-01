@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
@@ -23,23 +22,31 @@ import VerificationRequestDialog from '../../views/dialogs/VerificationRequestDi
 import * as sdk from '../../../index';
 import { SetupEncryptionStore, Phase } from '../../../stores/SetupEncryptionStore';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { ISecretStorageKeyInfo } from 'matrix-js-sdk';
+import EncryptionPanel from "../../views/right_panel/EncryptionPanel"
 
-function keyHasPassphrase(keyInfo) {
-    return (
+function keyHasPassphrase(keyInfo: ISecretStorageKeyInfo): boolean {
+    return Boolean(
         keyInfo.passphrase &&
         keyInfo.passphrase.salt &&
         keyInfo.passphrase.iterations
     );
 }
 
-@replaceableComponent("structures.auth.SetupEncryptionBody")
-export default class SetupEncryptionBody extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-    };
+interface IProps {
+    onFinished: (boolean) => void;
+}
 
-    constructor() {
-        super();
+interface IState {
+    phase: Phase;
+    verificationRequest: any;
+    backupInfo: any;
+}
+
+@replaceableComponent("structures.auth.SetupEncryptionBody")
+export default class SetupEncryptionBody extends React.Component<IProps, IState> {
+    constructor(props) {
+        super(props);
         const store = SetupEncryptionStore.sharedInstance();
         store.on("update", this._onStoreUpdate);
         store.start();
@@ -56,7 +63,7 @@ export default class SetupEncryptionBody extends React.Component {
     _onStoreUpdate = () => {
         const store = SetupEncryptionStore.sharedInstance();
         if (store.phase === Phase.Finished) {
-            this.props.onFinished();
+            this.props.onFinished(true);
             return;
         }
         this.setState({
@@ -113,6 +120,10 @@ export default class SetupEncryptionBody extends React.Component {
         store.done();
     }
 
+    onEncryptionPanelClose = () => {
+        this.props.onFinished(false);
+    }
+
     render() {
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
@@ -121,12 +132,13 @@ export default class SetupEncryptionBody extends React.Component {
         } = this.state;
 
         if (this.state.verificationRequest) {
-            const EncryptionPanel = sdk.getComponent("views.right_panel.EncryptionPanel");
             return <EncryptionPanel
                 layout="dialog"
+                inDialog={true}
                 verificationRequest={this.state.verificationRequest}
-                onClose={this.props.onFinished}
+                onClose={this.onEncryptionPanelClose}
                 member={MatrixClientPeg.get().getUser(this.state.verificationRequest.otherUserId)}
+                isRoomEncrypted={false}
             />;
         } else if (phase === Phase.Intro) {
             const store = SetupEncryptionStore.sharedInstance();
