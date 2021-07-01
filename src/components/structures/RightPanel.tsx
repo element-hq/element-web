@@ -47,7 +47,7 @@ import FilePanel from "./FilePanel";
 import NotificationPanel from "./NotificationPanel";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import PinnedMessagesCard from "../views/right_panel/PinnedMessagesCard";
-import { DebouncedFunc, throttle } from 'lodash';
+import { throttle } from 'lodash';
 
 interface IProps {
     room?: Room; // if showing panels for a given room, this is set
@@ -73,7 +73,6 @@ interface IState {
 export default class RightPanel extends React.Component<IProps, IState> {
     static contextType = MatrixClientContext;
 
-    private readonly delayedUpdate: DebouncedFunc<() => void>;
     private dispatcherRef: string;
 
     constructor(props, context) {
@@ -84,11 +83,11 @@ export default class RightPanel extends React.Component<IProps, IState> {
             isUserPrivilegedInGroup: null,
             member: this.getUserForPanel(),
         };
-
-        this.delayedUpdate = throttle(() => {
-            this.forceUpdate();
-        }, 500, { leading: true, trailing: true });
     }
+
+    private readonly delayedUpdate = throttle((): void => {
+        this.forceUpdate();
+    }, 500, { leading: true, trailing: true });
 
     // Helper function to split out the logic for getPhaseFromProps() and the constructor
     // as both are called at the same time in the constructor.
