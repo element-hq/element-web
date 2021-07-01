@@ -30,7 +30,7 @@ import RoomName from "../elements/RoomName";
 import { PlaceCallType } from "../../../CallHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { throttle } from 'lodash';
-import { Room } from 'matrix-js-sdk/src';
+import { MatrixEvent, Room, RoomState } from 'matrix-js-sdk/src';
 import { E2EStatus } from '../../../utils/ShieldUtils';
 import { IOOBData } from '../../../stores/ThreepidInviteStore';
 import { SearchScope } from './SearchBar';
@@ -74,7 +74,7 @@ export default class RoomHeader extends React.Component<IProps> {
         }
     }
 
-    private onRoomStateEvents = (event, state) => {
+    private onRoomStateEvents = (event: MatrixEvent, state: RoomState) => {
         if (!this.props.room || event.getRoomId() !== this.props.room.roomId) {
             return;
         }
