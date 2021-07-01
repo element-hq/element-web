@@ -267,7 +267,7 @@ interface IProps {
     showReactions?: boolean;
 
     // which layout to use
-    layout: Layout;
+    layout?: Layout;
 
     // whether or not to show flair at all
     enableFlair?: boolean;

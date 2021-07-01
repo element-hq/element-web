@@ -16,31 +16,27 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
-import { haveTileForEvent } from "./EventTile";
+import EventTile, { haveTileForEvent } from "./EventTile";
+import DateSeparator from '../messages/DateSeparator';
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
+import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+interface IProps {
+    // a matrix-js-sdk SearchResult containing the details of this result
+    searchResult: any;
+    // a list of strings to be highlighted in the results
+    searchHighlights?: string[];
+    // href for the highlights in this result
+    resultLink?: string;
+    onHeightChanged?: () => void;
+    permalinkCreator?: RoomPermalinkCreator;
+}
+
 @replaceableComponent("views.rooms.SearchResultTile")
-export default class SearchResultTile extends React.Component {
-    static propTypes = {
-        // a matrix-js-sdk SearchResult containing the details of this result
-        searchResult: PropTypes.object.isRequired,
-
-        // a list of strings to be highlighted in the results
-        searchHighlights: PropTypes.array,
-
-        // href for the highlights in this result
-        resultLink: PropTypes.string,
-
-        onHeightChanged: PropTypes.func,
-    };
-
-    render() {
-        const DateSeparator = sdk.getComponent('messages.DateSeparator');
-        const EventTile = sdk.getComponent('rooms.EventTile');
+export default class SearchResultTile extends React.Component<IProps> {
+    public render() {
         const result = this.props.searchResult;
         const mxEv = result.context.getEvent();
         const eventId = mxEv.getId();
