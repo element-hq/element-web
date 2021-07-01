@@ -75,6 +75,7 @@ export class Media {
      * The HTTP URL for the source media.
      */
     public get srcHttp(): string {
+        // eslint-disable-next-line no-restricted-properties
         return this.client.mxcUrlToHttp(this.srcMxc);
     }
 
@@ -84,6 +85,7 @@ export class Media {
      */
     public get thumbnailHttp(): string | undefined | null {
         if (!this.hasThumbnail) return null;
+        // eslint-disable-next-line no-restricted-properties
         return this.client.mxcUrlToHttp(this.thumbnailMxc);
     }
 
@@ -100,6 +102,7 @@ export class Media {
         // scale using the device pixel ratio to keep images clear
         width = Math.floor(width * window.devicePixelRatio);
         height = Math.floor(height * window.devicePixelRatio);
+        // eslint-disable-next-line no-restricted-properties
         return this.client.mxcUrlToHttp(this.thumbnailMxc, width, height, mode);
     }
 
@@ -114,6 +117,7 @@ export class Media {
         // scale using the device pixel ratio to keep images clear
         width = Math.floor(width * window.devicePixelRatio);
         height = Math.floor(height * window.devicePixelRatio);
+        // eslint-disable-next-line no-restricted-properties
         return this.client.mxcUrlToHttp(this.srcMxc, width, height, mode);
     }
 

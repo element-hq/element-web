@@ -37,6 +37,11 @@
 @import "./structures/_ViewSource.scss";
 @import "./structures/auth/_CompleteSecurity.scss";
 @import "./structures/auth/_Login.scss";
+@import "./views/audio_messages/_AudioPlayer.scss";
+@import "./views/audio_messages/_PlayPauseButton.scss";
+@import "./views/audio_messages/_PlaybackContainer.scss";
+@import "./views/audio_messages/_SeekBar.scss";
+@import "./views/audio_messages/_Waveform.scss";
 @import "./views/auth/_AuthBody.scss";
 @import "./views/auth/_AuthButtons.scss";
 @import "./views/auth/_AuthFooter.scss";
@@ -165,6 +170,7 @@
 @import "./views/messages/_MTextBody.scss";
 @import "./views/messages/_MVideoBody.scss";
 @import "./views/messages/_MVoiceMessageBody.scss";
+@import "./views/messages/_MediaBody.scss";
 @import "./views/messages/_MessageActionBar.scss";
 @import "./views/messages/_MessageTimestamp.scss";
 @import "./views/messages/_MjolnirBody.scss";
@@ -253,9 +259,6 @@
 @import "./views/toasts/_AnalyticsToast.scss";
 @import "./views/toasts/_NonUrgentEchoFailureToast.scss";
 @import "./views/verification/_VerificationShowSas.scss";
-@import "./views/voice_messages/_PlayPauseButton.scss";
-@import "./views/voice_messages/_PlaybackContainer.scss";
-@import "./views/voice_messages/_Waveform.scss";
 @import "./views/voip/_CallContainer.scss";
 @import "./views/voip/_CallView.scss";
 @import "./views/voip/_CallViewForRoom.scss";

@@ -20,6 +20,9 @@ $tertiary-fg-color: $primary-fg-color;
 $primary-bg-color: $bg-color;
 $muted-fg-color: $header-panel-text-primary-color;
 
+// Legacy theme backports
+$quaternary-fg-color: #6F7882;
+
 // used for dialog box text
 $light-fg-color: $header-panel-text-secondary-color;
 
@@ -209,8 +212,6 @@ $message-body-panel-icon-bg-color: $secondary-fg-color;
 
 // See non-legacy dark for variable information
 $voice-record-stop-border-color: #6F7882;
-$voice-record-waveform-bg-color: $message-body-panel-bg-color;
-$voice-record-waveform-fg-color: $message-body-panel-fg-color;
 $voice-record-waveform-incomplete-fg-color: #6F7882;
 $voice-record-icon-color: #6F7882;
 $voice-playback-button-bg-color: $tertiary-fg-color;
