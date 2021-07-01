@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import classNames from 'classnames';
-import { SERVICE_TYPES } from '../../matrix-js-sdk/src/service-types';
+import { SERVICE_TYPES } from 'matrix-js-sdk/src/service-types';
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import * as sdk from '.';
