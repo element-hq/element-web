@@ -41,7 +41,6 @@ interface IProps {
     verificationRequest: VerificationRequest;
     verificationRequestPromise?: Promise<VerificationRequest>;
     layout: string;
-    inDialog: boolean;
     isRoomEncrypted: boolean;
 }
 

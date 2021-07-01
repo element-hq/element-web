@@ -135,7 +135,6 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         if (this.state.verificationRequest) {
             return <EncryptionPanel
                 layout="dialog"
-                inDialog={true}
                 verificationRequest={this.state.verificationRequest}
                 onClose={this.onEncryptionPanelClose}
                 member={MatrixClientPeg.get().getUser(this.state.verificationRequest.otherUserId)}
