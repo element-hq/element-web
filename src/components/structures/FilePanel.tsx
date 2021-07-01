@@ -129,7 +129,7 @@ class FilePanel extends React.Component<IProps, IState> {
         }
     }
 
-    public async fetchFileEventsServer(room: Room): Promise<void> {
+    public async fetchFileEventsServer(room: Room): Promise<EventTimelineSet> {
         const client = MatrixClientPeg.get();
 
         const filter = new Filter(client.credentials.userId);
