@@ -14,11 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Returns a promise which resolves with a given value after the given number of ms
-export function sleep<T>(ms: number, value?: T): Promise<T> {
-    return new Promise((resolve => { setTimeout(resolve, ms, value); }));
-}
-
 // Returns a promise which resolves when the input promise resolves with its value
 // or when the timeout of ms is reached with the value of given timeoutValue
 export async function timeout<T>(promise: Promise<T>, timeoutValue: T, ms: number): Promise<T> {
