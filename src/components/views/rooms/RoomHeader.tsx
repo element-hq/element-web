@@ -42,9 +42,9 @@ export interface ISearchInfo {
 }
 
 interface IProps {
-    room: Room,
-    oobData?: IOOBData,
-    inRoom: boolean,
+    room: Room;
+    oobData?: IOOBData;
+    inRoom: boolean;
     onSettingsClick: () => void;
     onSearchClick: () => void;
     onForgetClick: () => void;
