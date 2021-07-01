@@ -26,8 +26,8 @@ import { WidgetType } from "../widgets/WidgetType";
 class WidgetEchoStore extends EventEmitter {
     private roomWidgetEcho: {
         [roomId: string]: {
-            [widgetId: string]: IWidget,
-        },
+            [widgetId: string]: IWidget;
+        };
     };
 
     constructor() {

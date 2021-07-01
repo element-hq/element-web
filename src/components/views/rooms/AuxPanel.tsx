@@ -32,32 +32,32 @@ import { throttle } from 'lodash';
 
 interface IProps {
     // js-sdk room object
-    room: Room,
-    userId: string,
-    showApps: boolean, // Render apps
+    room: Room;
+    userId: string;
+    showApps: boolean; // Render apps
 
     // maxHeight attribute for the aux panel and the video
     // therein
-    maxHeight: number,
+    maxHeight: number;
 
     // a callback which is called when the content of the aux panel changes
     // content in a way that is likely to make it change size.
-    onResize: () => void,
-    fullHeight: boolean,
+    onResize: () => void;
+    fullHeight: boolean;
 
-    resizeNotifier: ResizeNotifier,
+    resizeNotifier: ResizeNotifier;
 }
 
 interface Counter {
-    title: string,
-    value: number,
-    link: string,
-    severity: string,
-    stateKey: string,
+    title: string;
+    value: number;
+    link: string;
+    severity: string;
+    stateKey: string;
 }
 
 interface IState {
-    counters: Counter[],
+    counters: Counter[];
 }
 
 @replaceableComponent("views.rooms.AuxPanel")

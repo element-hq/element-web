@@ -28,7 +28,7 @@ import EventTileBubble from "./EventTileBubble";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
-    mxEvent: MatrixEvent
+    mxEvent: MatrixEvent;
 }
 
 @replaceableComponent("views.messages.MKeyVerificationRequest")

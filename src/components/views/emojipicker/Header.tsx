@@ -25,7 +25,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     categories: ICategory[];
-    onAnchorClick(id: CategoryKey): void
+    onAnchorClick(id: CategoryKey): void;
 }
 
 @replaceableComponent("views.emojipicker.Header")
