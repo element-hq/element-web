@@ -45,7 +45,7 @@
     "start:all": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n build,reskindex \"yarn start:build\" \"yarn reskindex:watch\"",
     "start:build": "babel src -w -s -d lib --verbose --extensions \".ts,.js\"",
     "lint": "yarn lint:types && yarn lint:js && yarn lint:style",
-    "lint:js": "eslint --max-warnings 0 --ignore-path .eslintignore.errorfiles src test",
+    "lint:js": "eslint --max-warnings 0 src test",
     "lint:types": "tsc --noEmit --jsx react",
     "lint:style": "stylelint 'res/css/**/*.scss'",
     "test": "jest",

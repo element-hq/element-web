@@ -26,7 +26,7 @@ import { EventEmitter } from "events";
 import sdk from '../../skinned-sdk';
 
 const MessagePanel = sdk.getComponent('structures.MessagePanel');
-import {MatrixClientPeg} from '../../../src/MatrixClientPeg';
+import { MatrixClientPeg } from '../../../src/MatrixClientPeg';
 import Matrix from 'matrix-js-sdk';
 
 const test_utils = require('../../test-utils');
@@ -79,7 +79,7 @@ describe('MessagePanel', function() {
     beforeEach(function() {
         test_utils.stubClient();
         client = MatrixClientPeg.get();
-        client.credentials = {userId: '@me:here'};
+        client.credentials = { userId: '@me:here' };
 
         // HACK: We assume all settings want to be disabled
         SettingsStore.getValue = jest.fn((arg) => {
@@ -119,7 +119,6 @@ describe('MessagePanel', function() {
         }
         return events;
     }
-
 
     // make a collection of events with some member events that should be collapsed
     // with a MemberEventListSummary

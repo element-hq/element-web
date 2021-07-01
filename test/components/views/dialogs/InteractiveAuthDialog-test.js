@@ -20,10 +20,10 @@ import ReactTestUtils from 'react-dom/test-utils';
 import MatrixReactTestUtils from 'matrix-react-test-utils';
 
 import sdk from '../../../skinned-sdk';
-import {MatrixClientPeg} from '../../../../src/MatrixClientPeg';
+import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 
 import * as test_utils from '../../../test-utils';
-import {sleep} from "../../../../src/utils/promise";
+import { sleep } from "../../../../src/utils/promise";
 
 const InteractiveAuthDialog = sdk.getComponent(
     'views.dialogs.InteractiveAuthDialog',
@@ -45,11 +45,11 @@ describe('InteractiveAuthDialog', function() {
 
     it('Should successfully complete a password flow', function() {
         const onFinished = jest.fn();
-        const doRequest = jest.fn().mockResolvedValue({a: 1});
+        const doRequest = jest.fn().mockResolvedValue({ a: 1 });
 
         // tell the stub matrixclient to return a real userid
         const client = MatrixClientPeg.get();
-        client.credentials = {userId: "@user:id"};
+        client.credentials = { userId: "@user:id" };
 
         const dlg = ReactDOM.render(
             <InteractiveAuthDialog
@@ -57,7 +57,7 @@ describe('InteractiveAuthDialog', function() {
                 authData={{
                     session: "sess",
                     flows: [
-                        {"stages": ["m.login.password"]},
+                        { "stages": ["m.login.password"] },
                     ],
                 }}
                 makeRequest={doRequest}
@@ -105,7 +105,7 @@ describe('InteractiveAuthDialog', function() {
             return sleep(1);
         }).then(sleep(1)).then(() => {
             expect(onFinished).toBeCalledTimes(1);
-            expect(onFinished).toBeCalledWith(true, {a: 1});
+            expect(onFinished).toBeCalledWith(true, { a: 1 });
         });
     });
 });
