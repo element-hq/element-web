@@ -123,7 +123,7 @@ export default class Markdown {
 
         const realParagraph = renderer.paragraph;
 
-        renderer.paragraph = function(node, entering) {
+        renderer.paragraph = function(node: commonmark.Node, entering: boolean) {
             // If there is only one top level node, just return the
             // bare text: it's a single line of text and so should be
             // 'inline', rather than unnecessarily wrapped in its own
@@ -153,7 +153,7 @@ export default class Markdown {
             }
         };
 
-        renderer.html_inline = function(node: any) {
+        renderer.html_inline = function(node: commonmark.Node) {
             if (isAllowedHtmlTag(node)) {
                 this.lit(node.literal);
                 return;
@@ -162,7 +162,7 @@ export default class Markdown {
             }
         };
 
-        renderer.html_block = function(node) {
+        renderer.html_block = function(node: commonmark.Node) {
             /*
             // as with `paragraph`, we only insert line breaks
             // if there are multiple lines in the markdown.
@@ -190,7 +190,7 @@ export default class Markdown {
     toPlaintext(): string {
         const renderer = new commonmark.HtmlRenderer({ safe: false }) as CommonmarkHtmlRendererInternal;
 
-        renderer.paragraph = function(node, entering) {
+        renderer.paragraph = function(node: commonmark.Node, entering: boolean) {
             // as with toHTML, only append lines to paragraphs if there are
             // multiple paragraphs
             if (isMultiLine(node)) {
@@ -200,7 +200,7 @@ export default class Markdown {
             }
         };
 
-        renderer.html_block = function(node) {
+        renderer.html_block = function(node: commonmark.Node) {
             this.lit(node.literal);
             if (isMultiLine(node) && node.next) this.lit('\n\n');
         };
