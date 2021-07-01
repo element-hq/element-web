@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import { replaceableComponent } from '../../../utils/replaceableComponent';
@@ -23,18 +22,18 @@ import VerificationRequestDialog from './VerificationRequestDialog';
 import BaseDialog from './BaseDialog';
 import DialogButtons from '../elements/DialogButtons';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import * as sdk from '../../../index';
+import { DeviceInfo } from 'matrix-js-sdk/src/crypto/deviceinfo';
+import ErrorDialog from "./ErrorDialog";
+
+interface IProps {
+    userId: string;
+    device: DeviceInfo,
+    onFinished: (boolean) => void;
+}
 
 @replaceableComponent("views.dialogs.NewSessionReviewDialog")
-export default class NewSessionReviewDialog extends React.PureComponent {
-    static propTypes = {
-        userId: PropTypes.string.isRequired,
-        device: PropTypes.object.isRequired,
-        onFinished: PropTypes.func.isRequired,
-    }
-
-    onCancelClick = () => {
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+export default class NewSessionReviewDialog extends React.PureComponent<IProps> {
+    private onCancelClick = () => {
         Modal.createTrackedDialog("Verification failed", "insecure", ErrorDialog, {
             headerImage: require("../../../../res/img/e2e/warning.svg"),
             title: _t("Your account is not secure"),
@@ -54,7 +53,7 @@ export default class NewSessionReviewDialog extends React.PureComponent {
         });
     }
 
-    onContinueClick = () => {
+    private onContinueClick = () => {
         const { userId, device } = this.props;
         const cli = MatrixClientPeg.get();
         const requestPromise = cli.requestVerification(
@@ -73,7 +72,7 @@ export default class NewSessionReviewDialog extends React.PureComponent {
         });
     }
 
-    render() {
+    public render() {
         const { device } = this.props;
 
         const icon = <span className="mx_NewSessionReviewDialog_headerIcon mx_E2EIcon_warning"></span>;
