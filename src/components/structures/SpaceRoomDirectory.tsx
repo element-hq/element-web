@@ -58,7 +58,7 @@ export interface ISpaceSummaryRoom {
     avatar_url?: string;
     guest_can_join: boolean;
     name?: string;
-    num_joined_members: number
+    num_joined_members: number;
     room_id: string;
     topic?: string;
     world_readable: boolean;

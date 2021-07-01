@@ -48,13 +48,13 @@ export interface Policy {
 }
 
 export type Policies = {
-    [policy: string]: Policy,
+    [policy: string]: Policy;
 };
 
 export type TermsInteractionCallback = (
     policiesAndServicePairs: {
-        service: Service,
-        policies: Policies,
+        service: Service;
+        policies: Policies;
     }[],
     agreedUrls: string[],
     extraClassNames?: string,
@@ -180,8 +180,8 @@ export async function startTermsFlow(
 
 export function dialogTermsInteractionCallback(
     policiesAndServicePairs: {
-        service: Service,
-        policies: { [policy: string]: Policy },
+        service: Service;
+        policies: { [policy: string]: Policy };
     }[],
     agreedUrls: string[],
     extraClassNames?: string,

@@ -94,7 +94,7 @@ if (DEBUG) {
 }
 
 interface IProps {
-    threepidInvite: IThreepidInvite,
+    threepidInvite: IThreepidInvite;
     oobData?: IOOBData;
 
     resizeNotifier: ResizeNotifier;

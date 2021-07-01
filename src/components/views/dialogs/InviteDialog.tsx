@@ -70,9 +70,9 @@ import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
 /* eslint-disable camelcase */
 
 interface IRecentUser {
-    userId: string,
-    user: RoomMember,
-    lastActive: number,
+    userId: string;
+    user: RoomMember;
+    lastActive: number;
 }
 
 export const KIND_DM = "dm";
@@ -330,16 +330,16 @@ interface IInviteDialogProps {
 
     // The kind of invite being performed. Assumed to be KIND_DM if
     // not provided.
-    kind: string,
+    kind: string;
 
     // The room ID this dialog is for. Only required for KIND_INVITE.
-    roomId: string,
+    roomId: string;
 
     // The call to transfer. Only required for KIND_CALL_TRANSFER.
-    call: MatrixCall,
+    call: MatrixCall;
 
     // Initial value to populate the filter with
-    initialText: string,
+    initialText: string;
 }
 
 interface IInviteDialogState {
@@ -356,8 +356,8 @@ interface IInviteDialogState {
     consultFirst: boolean;
 
     // These two flags are used for the 'Go' button to communicate what is going on.
-    busy: boolean,
-    errorText: string,
+    busy: boolean;
+    errorText: string;
 }
 
 @replaceableComponent("views.dialogs.InviteDialog")

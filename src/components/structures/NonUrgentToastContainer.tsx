@@ -24,7 +24,7 @@ interface IProps {
 }
 
 interface IState {
-    toasts: ComponentClass[],
+    toasts: ComponentClass[];
 }
 
 @replaceableComponent("structures.NonUrgentToastContainer")
