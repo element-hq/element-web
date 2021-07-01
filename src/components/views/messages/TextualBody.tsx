@@ -18,7 +18,7 @@ import React, { createRef, SyntheticEvent } from 'react';
 import ReactDOM from 'react-dom';
 import highlight from 'highlight.js';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import { MsgType } from "matrix-js-sdk/lib/@types/event";
+import { MsgType } from "matrix-js-sdk/src/@types/event";
 
 import * as HtmlUtils from '../../../HtmlUtils';
 import { formatDate } from '../../../DateUtils';
