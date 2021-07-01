@@ -32,25 +32,6 @@ export async function timeout<T>(promise: Promise<T>, timeoutValue: T, ms: numbe
     return Promise.race([promise, timeoutPromise]);
 }
 
-export interface IDeferred<T> {
-    resolve: (value: T) => void;
-    reject: (any) => void;
-    promise: Promise<T>;
-}
-
-// Returns a Deferred
-export function defer<T>(): IDeferred<T> {
-    let resolve;
-    let reject;
-
-    const promise = new Promise<T>((_resolve, _reject) => {
-        resolve = _resolve;
-        reject = _reject;
-    });
-
-    return { resolve, reject, promise };
-}
-
 // Helper method to retry a Promise a given number of times or until a predicate fails
 export async function retry<T, E extends Error>(fn: () => Promise<T>, num: number, predicate?: (e: E) => boolean) {
     let lastErr: E;
