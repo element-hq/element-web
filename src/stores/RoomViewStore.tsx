@@ -276,7 +276,7 @@ class RoomViewStore extends Store<ActionPayload> {
         const address = this.state.roomAlias || this.state.roomId;
         const viaServers = this.state.viaServers || [];
         try {
-            await retry<void, MatrixError>(() => cli.joinRoom(address, {
+            await retry<any, MatrixError>(() => cli.joinRoom(address, {
                 viaServers,
                 ...payload.opts,
             }), NUM_JOIN_RETRY, (err) => {

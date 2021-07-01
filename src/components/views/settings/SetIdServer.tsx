@@ -16,17 +16,17 @@ limitations under the License.
 
 import url from 'url';
 import React from 'react';
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import * as sdk from '../../../index';
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from '../../../Modal';
 import dis from "../../../dispatcher/dispatcher";
 import { getThreepidsWithBindStatus } from '../../../boundThreepids';
 import IdentityAuthClient from "../../../IdentityAuthClient";
-import {abbreviateUrl, unabbreviateUrl} from "../../../utils/UrlUtils";
+import { abbreviateUrl, unabbreviateUrl } from "../../../utils/UrlUtils";
 import { getDefaultIdentityServerUrl, doesIdentityServerHaveTerms } from '../../../utils/IdentityServerUtils';
-import {timeout} from "../../../utils/promise";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { timeout } from "../../../utils/promise";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ActionPayload } from '../../../dispatcher/payloads';
 
 // We'll wait up to this long when checking for 3PID bindings on the IS.
@@ -50,7 +50,7 @@ async function checkIdentityServerUrl(u) {
         if (response.ok) {
             return null;
         } else if (response.status < 200 || response.status >= 300) {
-            return _t("Not a valid Identity Server (status code %(code)s)", {code: response.status});
+            return _t("Not a valid Identity Server (status code %(code)s)", { code: response.status });
         } else {
             return _t("Could not connect to Identity Server");
         }
@@ -121,7 +121,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
     private onIdentityServerChanged = (ev) => {
         const u = ev.target.value;
 
-        this.setState({idServer: u});
+        this.setState({ idServer: u });
     };
 
     private getTooltip = () => {
@@ -159,14 +159,14 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         e.preventDefault();
         const { idServer, currentClientIdServer } = this.state;
 
-        this.setState({busy: true, checking: true, error: null});
+        this.setState({ busy: true, checking: true, error: null });
 
         const fullUrl = unabbreviateUrl(idServer);
 
         let errStr = await checkIdentityServerUrl(fullUrl);
         if (!errStr) {
             try {
-                this.setState({checking: false}); // clear tooltip
+                this.setState({ checking: false }); // clear tooltip
 
                 // Test the identity server by trying to register with it. This
                 // may result in a terms of service prompt.
@@ -236,13 +236,13 @@ export default class SetIdServer extends React.Component<IProps, IState> {
     }
 
     private onDisconnectClicked = async () => {
-        this.setState({disconnectBusy: true});
+        this.setState({ disconnectBusy: true });
         try {
             const [confirmed] = await this.showServerChangeWarning({
                 title: _t("Disconnect identity server"),
                 unboundMessage: _t(
                     "Disconnect from the identity server <idserver />?", {},
-                    {idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b>},
+                    { idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b> },
                 ),
                 button: _t("Disconnect"),
             });
@@ -250,7 +250,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 this.disconnectIdServer();
             }
         } finally {
-            this.setState({disconnectBusy: false});
+            this.setState({ disconnectBusy: false });
         }
     };
 
@@ -369,7 +369,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 bodyText = _t(
                     "If you don't want to use <server /> to discover and be discoverable by existing " +
                     "contacts you know, enter another identity server below.",
-                    {}, {server: sub => <b>{abbreviateUrl(idServerUrl)}</b>},
+                    {}, { server: sub => <b>{abbreviateUrl(idServerUrl)}</b> },
                 );
             }
         } else {

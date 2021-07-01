@@ -42,7 +42,7 @@ import DMRoomMap from "../../../src/utils/DMRoomMap";
 configure({ adapter: new Adapter() });
 
 let client;
-const room = new Matrix.Room();
+const room = new Matrix.Room("!roomId:server_name");
 
 // wrap MessagePanel with a component which provides the MatrixClient in the context.
 class WrappedMessagePanel extends React.Component {

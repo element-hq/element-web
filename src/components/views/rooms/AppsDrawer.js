@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {Resizable} from "re-resizable";
+import { Resizable } from "re-resizable";
 
 import AppTile from '../elements/AppTile';
 import dis from '../../../dispatcher/dispatcher';
@@ -26,16 +26,16 @@ import * as sdk from '../../../index';
 import * as ScalarMessaging from '../../../ScalarMessaging';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import WidgetEchoStore from "../../../stores/WidgetEchoStore";
-import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
+import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 import ResizeHandle from "../elements/ResizeHandle";
 import Resizer from "../../../resizer/resizer";
 import PercentageDistributor from "../../../resizer/distributors/percentage";
-import {Container, WidgetLayoutStore} from "../../../stores/widgets/WidgetLayoutStore";
-import {clamp, percentageOf, percentageWithin} from "../../../utils/numbers";
-import {useStateCallback} from "../../../hooks/useStateCallback";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import { clamp, percentageOf, percentageWithin } from "../../../utils/numbers";
+import { useStateCallback } from "../../../hooks/useStateCallback";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import UIStore from "../../../stores/UIStore";
 
 @replaceableComponent("views.rooms.AppsDrawer")
@@ -80,13 +80,6 @@ export default class AppsDrawer extends React.Component {
             this.resizer.detach();
         }
         this.props.resizeNotifier.off("isResizing", this.onIsResizing);
-    }
-
-    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps(newProps) {
-        // Room has changed probably, update apps
-        this._updateApps();
     }
 
     onIsResizing = (resizing) => {
@@ -141,7 +134,10 @@ export default class AppsDrawer extends React.Component {
     _getAppsHash = (apps) => apps.map(app => app.id).join("~");
 
     componentDidUpdate(prevProps, prevState) {
-        if (this._getAppsHash(this.state.apps) !== this._getAppsHash(prevState.apps)) {
+        if (prevProps.userId !== this.props.userId || prevProps.room !== this.props.room) {
+            // Room has changed, update apps
+            this._updateApps();
+        } else if (this._getAppsHash(this.state.apps) !== this._getAppsHash(prevState.apps)) {
             this._loadResizerPreferences();
         }
     }
@@ -307,7 +303,7 @@ const PersistentVResizer = ({
     });
 
     return <Resizable
-        size={{height: Math.min(height, maxHeight)}}
+        size={{ height: Math.min(height, maxHeight) }}
         minHeight={minHeight}
         maxHeight={maxHeight}
         onResizeStart={() => {
@@ -321,9 +317,9 @@ const PersistentVResizer = ({
             resizeNotifier.stopResizing();
         }}
         handleWrapperClass={handleWrapperClass}
-        handleClasses={{bottom: handleClass}}
+        handleClasses={{ bottom: handleClass }}
         className={className}
-        enable={{bottom: true}}
+        enable={{ bottom: true }}
     >
         { children }
     </Resizable>;

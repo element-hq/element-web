@@ -30,7 +30,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { formatFullDate } from "../../../DateUtils";
 import dis from '../../../dispatcher/dispatcher';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks"
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { normalizeWheelEvent } from "../../../utils/Mouse";
 
@@ -116,7 +116,7 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     private recalculateZoom = () => {
         this.setZoomAndRotation();
-    }
+    };
 
     private setZoomAndRotation = (inputRotation?: number) => {
         const image = this.image.current;
@@ -158,7 +158,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             rotation: rotation,
             zoom: zoom,
         });
-    }
+    };
 
     private zoom(delta: number) {
         const newZoom = this.state.zoom + delta;

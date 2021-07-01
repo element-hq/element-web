@@ -17,8 +17,8 @@ limitations under the License.
 import React from 'react';
 import MImageBody from './MImageBody';
 import * as sdk from '../../../index';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {BLURHASH_FIELD} from "../../../ContentMessages";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { BLURHASH_FIELD } from "../../../ContentMessages";
 
 @replaceableComponent("views.messages.MStickerBody")
 export default class MStickerBody extends MImageBody {
@@ -44,8 +44,7 @@ export default class MStickerBody extends MImageBody {
     // img onLoad hasn't fired yet.
     getPlaceholder(width, height) {
         if (this.props.mxEvent.getContent().info[BLURHASH_FIELD]) return super.getPlaceholder(width, height);
-        const TintableSVG = sdk.getComponent('elements.TintableSvg');
-        return <TintableSVG src={require("../../../../res/img/icons-show-stickers.svg")} width="75" height="75" />;
+        return <img src={require("../../../../res/img/icons-show-stickers.svg")} width="75" height="75" />;
     }
 
     // Tooltip to show on mouse over
@@ -55,7 +54,7 @@ export default class MStickerBody extends MImageBody {
         if (!content || !content.body || !content.info || !content.info.w) return null;
 
         const Tooltip = sdk.getComponent('elements.Tooltip');
-        return <div style={{left: content.info.w + 'px'}} className="mx_MStickerBody_tooltip">
+        return <div style={{ left: content.info.w + 'px' }} className="mx_MStickerBody_tooltip">
             <Tooltip label={content.body} />
         </div>;
     }

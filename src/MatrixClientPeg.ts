@@ -18,22 +18,22 @@ limitations under the License.
 */
 
 import { ICreateClientOpts } from 'matrix-js-sdk/src/matrix';
-import {MatrixClient} from 'matrix-js-sdk/src/client';
-import {MemoryStore} from 'matrix-js-sdk/src/store/memory';
+import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { MemoryStore } from 'matrix-js-sdk/src/store/memory';
 import * as utils from 'matrix-js-sdk/src/utils';
-import {EventTimeline} from 'matrix-js-sdk/src/models/event-timeline';
-import {EventTimelineSet} from 'matrix-js-sdk/src/models/event-timeline-set';
+import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
+import { EventTimelineSet } from 'matrix-js-sdk/src/models/event-timeline-set';
 import * as sdk from './index';
 import createMatrixClient from './utils/createMatrixClient';
 import SettingsStore from './settings/SettingsStore';
 import MatrixActionCreators from './actions/MatrixActionCreators';
 import Modal from './Modal';
-import {verificationMethods} from 'matrix-js-sdk/src/crypto';
+import { verificationMethods } from 'matrix-js-sdk/src/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
 import { crossSigningCallbacks, tryToUnlockSecretStorageWithDehydrationKey } from './SecurityManager';
-import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
+import { SHOW_QR_CODE_METHOD } from "matrix-js-sdk/src/crypto/verification/QRCode";
 import SecurityCustomisations from "./customisations/Security";
 
 export interface IMatrixClientCreds {

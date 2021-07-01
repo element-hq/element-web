@@ -33,4 +33,4 @@ const HostSignupContainer = () => {
     </div>;
 };
 
-export default HostSignupContainer
+export default HostSignupContainer;

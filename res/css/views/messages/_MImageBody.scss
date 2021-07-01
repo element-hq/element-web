@@ -49,7 +49,7 @@ $timelineImageBorderRadius: 4px;
     top: 50%;
 }
 
-// Inner img and TintableSvg should be centered around 0, 0
+// Inner img should be centered around 0, 0
 .mx_MImageBody_thumbnail_spinner > * {
     transform: translate(-50%, -50%);
 }

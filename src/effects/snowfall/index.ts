@@ -29,7 +29,7 @@ export type SnowfallOptions = {
      * The amount of drift (horizontal sway) to apply to the snowflakes. Each snowflake varies.
      */
     maxDrift: number;
-}
+};
 
 type Snowflake = {
     x: number;
@@ -38,7 +38,7 @@ type Snowflake = {
     diameter: number;
     maximumDrift: number;
     gravity: number;
-}
+};
 
 export const DefaultOptions: SnowfallOptions = {
     maxCount: 200,
@@ -52,7 +52,7 @@ export default class Snowfall implements ICanvasEffect {
     private readonly options: SnowfallOptions;
 
     constructor(options: { [key: string]: any }) {
-        this.options = {...DefaultOptions, ...options};
+        this.options = { ...DefaultOptions, ...options };
     }
 
     private context: CanvasRenderingContext2D | null = null;
@@ -76,11 +76,11 @@ export default class Snowfall implements ICanvasEffect {
         if (timeout) {
             window.setTimeout(this.stop, timeout);
         }
-    }
+    };
 
     public stop = async () => {
         this.isRunning = false;
-    }
+    };
 
     private resetParticle = (particle: Snowflake, width: number, height: number): Snowflake => {
         particle.x = Math.random() * width;
@@ -90,7 +90,7 @@ export default class Snowfall implements ICanvasEffect {
         particle.maximumDrift = (Math.random() * this.options.maxDrift) + 3.5;
         particle.gravity = this.options.gravity + (Math.random() * 6) + 4;
         return particle;
-    }
+    };
 
     private renderLoop = (): void => {
         if (!this.context || !this.context.canvas) {

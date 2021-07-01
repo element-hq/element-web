@@ -17,12 +17,12 @@ limitations under the License.
 import url from 'url';
 import SettingsStore from "./settings/SettingsStore";
 import { Service, startTermsFlow, TermsInteractionCallback, TermsNotSignedError } from './Terms';
-import {MatrixClientPeg} from "./MatrixClientPeg";
+import { MatrixClientPeg } from "./MatrixClientPeg";
 import request from "browser-request";
 
 import SdkConfig from "./SdkConfig";
-import {WidgetType} from "./widgets/WidgetType";
-import {SERVICE_TYPES} from "matrix-js-sdk/src/service-types";
+import { WidgetType } from "./widgets/WidgetType";
+import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
 import { Room } from "matrix-js-sdk/src/models/room";
 
 // The version of the integration manager API we're intending to work with
@@ -109,7 +109,7 @@ export default class ScalarAuthClient {
             request({
                 method: "GET",
                 uri: url,
-                qs: {scalar_token: token, v: imApiVersion},
+                qs: { scalar_token: token, v: imApiVersion },
                 json: true,
             }, (err, response, body) => {
                 if (err) {
@@ -189,7 +189,7 @@ export default class ScalarAuthClient {
             request({
                 method: 'POST',
                 uri: scalarRestUrl + '/register',
-                qs: {v: imApiVersion},
+                qs: { v: imApiVersion },
                 body: openidTokenObject,
                 json: true,
             }, (err, response, body) => {

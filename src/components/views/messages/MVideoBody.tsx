@@ -23,9 +23,9 @@ import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import InlineSpinner from '../elements/InlineSpinner';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromContent} from "../../../customisations/Media";
-import {BLURHASH_FIELD} from "../../../ContentMessages";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromContent } from "../../../customisations/Media";
+import { BLURHASH_FIELD } from "../../../ContentMessages";
 
 interface IProps {
     /* the MatrixEvent to show */
@@ -35,11 +35,11 @@ interface IProps {
 }
 
 interface IState {
-    decryptedUrl: string|null,
-    decryptedThumbnailUrl: string|null,
-    decryptedBlob: Blob|null,
-    error: any|null,
-    fetchingData: boolean,
+    decryptedUrl?: string;
+    decryptedThumbnailUrl?: string;
+    decryptedBlob?: Blob;
+    error?: any;
+    fetchingData: boolean;
     posterLoading: boolean;
     blurhashUrl: string;
 }
@@ -58,7 +58,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
             error: null,
             posterLoading: false,
             blurhashUrl: null,
-        }
+        };
     }
 
     thumbScale(fullWidth: number, fullHeight: number, thumbWidth = 480, thumbHeight = 360) {
@@ -231,7 +231,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
             this.videoRef.current.play();
         });
         this.props.onHeightChanged();
-    }
+    };
 
     render() {
         const content = this.props.mxEvent.getContent();

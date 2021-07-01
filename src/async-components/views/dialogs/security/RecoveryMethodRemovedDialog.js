@@ -21,7 +21,7 @@ import * as sdk from "../../../../index";
 import dis from "../../../../dispatcher/dispatcher";
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
-import {Action} from "../../../../dispatcher/actions";
+import { Action } from "../../../../dispatcher/actions";
 
 export default class RecoveryMethodRemovedDialog extends React.PureComponent {
     static propTypes = {
