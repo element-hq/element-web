@@ -14,11 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_EventTile[data-layout=bubble] {
+.mx_EventTile[data-layout=bubble],
+.mx_EventTile[data-layout=bubble] ~ .mx_EventListSummary {
     --avatarSize: 32px;
     --gutterSize: 7px;
     --cornerRadius: 12px;
     --maxWidth: 70%;
+}
+
+.mx_EventTile[data-layout=bubble] {
 
     position: relative;
     margin-top: var(--gutterSize);
@@ -146,15 +150,22 @@ limitations under the License.
         .mx_EventTile_avatar {
             position: static;
             order: -1;
+            margin-right: 5px;
         }
     }
 
     & ~ .mx_EventListSummary {
-        --maxWidth: 95%;
+        --maxWidth: 80%;
+        margin-left: calc(var(--avatarSize) + var(--gutterSize));
+        margin-right: calc(var(--gutterSize) + var(--avatarSize));
         .mx_EventListSummary_toggle {
             float: none;
             margin: 0;
             order: 9;
+            margin-left: 5px;
+        }
+        .mx_EventListSummary_avatars {
+            padding-top: 0;
         }
     }
 
