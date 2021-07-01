@@ -403,9 +403,14 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
     try {
         if (highlights && highlights.length > 0) {
             const highlighter = new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
-            const safeHighlights = highlights.map(function(highlight) {
-                return sanitizeHtml(highlight, sanitizeParams);
-            });
+            const safeHighlights = highlights
+                // sanitizeHtml can hang if an unclosed HTML tag is thrown at it
+                // A search for `<foo` will make the browser crash
+                // an alternative would be to escape HTML special characters
+                // but that would bring no additional benefit as the highlighter
+                // does not work with those special chars
+                .filter((highlight: string): boolean => !highlight.includes("<"))
+                .map((highlight: string): string => sanitizeHtml(highlight, sanitizeParams));
             // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeParams structure.
             sanitizeParams.textFilter = function(safeText) {
                 return highlighter.applyHighlights(safeText, safeHighlights).join('');
