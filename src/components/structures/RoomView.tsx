@@ -1261,7 +1261,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         });
     };
 
-    private injectSticker(url, info, text) {
+    private injectSticker(url: string, info: object, text: string) {
         if (this.context.isGuest()) {
             dis.dispatch({ action: 'require_registration' });
             return;

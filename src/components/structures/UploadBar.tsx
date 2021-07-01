@@ -26,6 +26,7 @@ import ProgressBar from "../views/elements/ProgressBar";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import { IUpload } from "../../models/IUpload";
 import { replaceableComponent } from "../../utils/replaceableComponent";
+import MatrixClientContext from "../../contexts/MatrixClientContext";
 
 interface IProps {
     room: Room;
@@ -38,6 +39,8 @@ interface IState {
 
 @replaceableComponent("structures.UploadBar")
 export default class UploadBar extends React.Component<IProps, IState> {
+    static contextType = MatrixClientContext;
+
     private dispatcherRef: string;
     private mounted: boolean;
 
@@ -82,7 +85,7 @@ export default class UploadBar extends React.Component<IProps, IState> {
 
     private onCancelClick = (ev) => {
         ev.preventDefault();
-        ContentMessages.sharedInstance().cancelUpload(this.state.currentUpload.promise);
+        ContentMessages.sharedInstance().cancelUpload(this.state.currentUpload.promise, this.context);
     };
 
     render() {

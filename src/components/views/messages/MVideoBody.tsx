@@ -16,6 +16,8 @@ limitations under the License.
 */
 
 import React from 'react';
+import { decode } from "blurhash";
+
 import MFileBody from './MFileBody';
 import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
@@ -23,6 +25,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import InlineSpinner from '../elements/InlineSpinner';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromContent } from "../../../customisations/Media";
+import { BLURHASH_FIELD } from "../../../ContentMessages";
 
 interface IProps {
     /* the MatrixEvent to show */
@@ -32,11 +35,13 @@ interface IProps {
 }
 
 interface IState {
-    decryptedUrl: string|null,
-    decryptedThumbnailUrl: string|null,
-    decryptedBlob: Blob|null,
-    error: any|null,
-    fetchingData: boolean,
+    decryptedUrl?: string;
+    decryptedThumbnailUrl?: string;
+    decryptedBlob?: Blob;
+    error?: any;
+    fetchingData: boolean;
+    posterLoading: boolean;
+    blurhashUrl: string;
 }
 
 @replaceableComponent("views.messages.MVideoBody")
@@ -51,10 +56,12 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
             decryptedThumbnailUrl: null,
             decryptedBlob: null,
             error: null,
+            posterLoading: false,
+            blurhashUrl: null,
         };
     }
 
-    thumbScale(fullWidth: number, fullHeight: number, thumbWidth: number, thumbHeight: number) {
+    thumbScale(fullWidth: number, fullHeight: number, thumbWidth = 480, thumbHeight = 360) {
         if (!fullWidth || !fullHeight) {
             // Cannot calculate thumbnail height for image: missing w/h in metadata. We can't even
             // log this because it's spammy
@@ -92,8 +99,11 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
     private getThumbUrl(): string|null {
         const content = this.props.mxEvent.getContent();
         const media = mediaFromContent(content);
-        if (media.isEncrypted) {
+
+        if (media.isEncrypted && this.state.decryptedThumbnailUrl) {
             return this.state.decryptedThumbnailUrl;
+        } else if (this.state.posterLoading) {
+            return this.state.blurhashUrl;
         } else if (media.hasThumbnail) {
             return media.thumbnailHttp;
         } else {
@@ -101,18 +111,57 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         }
     }
 
+    private loadBlurhash() {
+        const info = this.props.mxEvent.getContent()?.info;
+        if (!info[BLURHASH_FIELD]) return;
+
+        const canvas = document.createElement("canvas");
+
+        let width = info.w;
+        let height = info.h;
+        const scale = this.thumbScale(info.w, info.h);
+        if (scale) {
+            width = Math.floor(info.w * scale);
+            height = Math.floor(info.h * scale);
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const pixels = decode(info[BLURHASH_FIELD], width, height);
+        const ctx = canvas.getContext("2d");
+        const imgData = ctx.createImageData(width, height);
+        imgData.data.set(pixels);
+        ctx.putImageData(imgData, 0, 0);
+
+        this.setState({
+            blurhashUrl: canvas.toDataURL(),
+            posterLoading: true,
+        });
+
+        const content = this.props.mxEvent.getContent();
+        const media = mediaFromContent(content);
+        if (media.hasThumbnail) {
+            const image = new Image();
+            image.onload = () => {
+                this.setState({ posterLoading: false });
+            };
+            image.src = media.thumbnailHttp;
+        }
+    }
+
     async componentDidMount() {
         const autoplay = SettingsStore.getValue("autoplayGifsAndVideos") as boolean;
         const content = this.props.mxEvent.getContent();
+        this.loadBlurhash();
+
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             let thumbnailPromise = Promise.resolve(null);
-            if (content.info && content.info.thumbnail_file) {
-                thumbnailPromise = decryptFile(
-                    content.info.thumbnail_file,
-                ).then(function(blob) {
-                    return URL.createObjectURL(blob);
-                });
+            if (content?.info?.thumbnail_file) {
+                thumbnailPromise = decryptFile(content.info.thumbnail_file)
+                    .then(blob => URL.createObjectURL(blob));
             }
+
             try {
                 const thumbnailUrl = await thumbnailPromise;
                 if (autoplay) {
@@ -218,7 +267,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         let poster = null;
         let preload = "metadata";
         if (content.info) {
-            const scale = this.thumbScale(content.info.w, content.info.h, 480, 360);
+            const scale = this.thumbScale(content.info.w, content.info.h);
             if (scale) {
                 width = Math.floor(content.info.w * scale);
                 height = Math.floor(content.info.h * scale);
