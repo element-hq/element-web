@@ -37,6 +37,7 @@ import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks"
 import { SHORTCODE_TO_EMOJI, getEmojiFromUnicode } from "./emoji";
 import ReplyThread from "./components/views/elements/ReplyThread";
 import { mediaFromMxc } from "./customisations/Media";
+import { highlight } from 'highlight.js';
 
 linkifyMatrix(linkify);
 
@@ -403,9 +404,11 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
     try {
         if (highlights && highlights.length > 0) {
             const highlighter = new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
-            const safeHighlights = highlights.map(function(highlight) {
-                return sanitizeHtml(highlight, sanitizeParams);
-            });
+            const safeHighlights = highlights
+                // sanitizeHtml can hang if an unclosed HTML tag is thrown at it
+                // A search for `<foo` will make the browser crash
+                .filter((highlight: string): boolean => !highlight.includes("<"))
+                .map((highlight: string): string => sanitizeHtml(highlight, sanitizeParams));
             // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeParams structure.
             sanitizeParams.textFilter = function(safeText) {
                 return highlighter.applyHighlights(safeText, safeHighlights).join('');
