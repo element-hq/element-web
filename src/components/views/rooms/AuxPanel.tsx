@@ -21,7 +21,6 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AppsDrawer from './AppsDrawer';
-import RateLimitedFunc from '../../../ratelimitedfunc';
 import SettingsStore from "../../../settings/SettingsStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { UIFeature } from "../../../settings/UIFeature";
@@ -29,6 +28,7 @@ import ResizeNotifier from "../../../utils/ResizeNotifier";
 import CallViewForRoom from '../voip/CallViewForRoom';
 import { objectHasDiff } from "../../../utils/objects";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { throttle } from 'lodash';
 
 interface IProps {
     // js-sdk room object
@@ -99,9 +99,9 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         }
     }
 
-    private rateLimitedUpdate = new RateLimitedFunc(() => {
+    private rateLimitedUpdate = throttle(() => {
         this.setState({ counters: this.computeCounters() });
-    }, 500);
+    }, 500, { leading: true, trailing: true });
 
     private computeCounters() {
         const counters = [];
