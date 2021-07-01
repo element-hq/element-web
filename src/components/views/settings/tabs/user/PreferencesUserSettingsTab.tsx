@@ -24,6 +24,8 @@ import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import * as KeyboardShortcuts from "../../../../../accessibility/KeyboardShortcuts";
+import AccessibleButton from "../../../elements/AccessibleButton";
 
 interface IState {
     autoLaunch: boolean;
@@ -232,6 +234,9 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Keyboard shortcuts")}</span>
+                    <AccessibleButton className="mx_SettingsFlag" onClick={KeyboardShortcuts.toggleDialog}>
+                        { _t("To view all keyboard shortcuts, click here.") }
+                    </AccessibleButton>
                     {this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
                 </div>
 
