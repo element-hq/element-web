@@ -267,7 +267,7 @@ interface IProps {
     showReactions?: boolean;
 
     // which layout to use
-    layout?: Layout;
+    layout: Layout;
 
     // whether or not to show flair at all
     enableFlair?: boolean;
@@ -321,6 +321,7 @@ export default class EventTile extends React.Component<IProps, IState> {
     static defaultProps = {
         // no-op function because onHeightChanged is optional yet some sub-components assume its existence
         onHeightChanged: function() {},
+        layout: Layout.Group,
     };
 
     static contextType = MatrixClientContext;
