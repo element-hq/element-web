@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import {decode} from "blurhash";
+import { decode } from "blurhash";
 
 interface IProps {
     blurhash: string;
@@ -38,7 +38,7 @@ export default class BlurhashPlaceholder extends React.PureComponent<IProps> {
         if (!this.canvas.current) return;
 
         try {
-            const {width, height} = this.props;
+            const { width, height } = this.props;
 
             const pixels = decode(this.props.blurhash, Math.ceil(width), Math.ceil(height));
             const ctx = this.canvas.current.getContext("2d");
