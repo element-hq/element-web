@@ -147,7 +147,7 @@ describe('<SendMessageComposer/>', () => {
                 wrapper.update();
             });
 
-            const key = wrapper.find(SendMessageComposer).instance()._editorStateKey;
+            const key = wrapper.find(SendMessageComposer).instance().editorStateKey;
 
             expect(wrapper.text()).toBe("Test Text");
             expect(localStorage.getItem(key)).toBeNull();
@@ -188,7 +188,7 @@ describe('<SendMessageComposer/>', () => {
                 wrapper.update();
             });
 
-            const key = wrapper.find(SendMessageComposer).instance()._editorStateKey;
+            const key = wrapper.find(SendMessageComposer).instance().editorStateKey;
 
             expect(wrapper.text()).toBe("Hello World");
             expect(localStorage.getItem(key)).toBeNull();

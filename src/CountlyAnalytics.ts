@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { randomString } from "matrix-js-sdk/src/randomstring";
+import { IContent } from "matrix-js-sdk/src/models/event";
 
 import { getCurrentLanguage } from './languageHandler';
 import PlatformPeg from './PlatformPeg';
@@ -868,7 +869,7 @@ export default class CountlyAnalytics {
         roomId: string,
         isEdit: boolean,
         isReply: boolean,
-        content: {format?: string, msgtype: string},
+        content: IContent,
     ) {
         if (this.disabled) return;
         const cli = MatrixClientPeg.get();

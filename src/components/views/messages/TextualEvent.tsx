@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,20 +15,20 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+
 import * as TextForEvent from "../../../TextForEvent";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-@replaceableComponent("views.messages.TextualEvent")
-export default class TextualEvent extends React.Component {
-    static propTypes = {
-        /* the MatrixEvent to show */
-        mxEvent: PropTypes.object.isRequired,
-    };
+interface IProps {
+    mxEvent: MatrixEvent;
+}
 
+@replaceableComponent("views.messages.TextualEvent")
+export default class TextualEvent extends React.Component<IProps> {
     render() {
         const text = TextForEvent.textForEvent(this.props.mxEvent, true);
-        if (text == null || text.length === 0) return null;
+        if (!text || (text as string).length === 0) return null;
         return (
             <div className="mx_TextualEvent">{ text }</div>
         );
