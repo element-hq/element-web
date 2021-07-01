@@ -24,6 +24,8 @@ import { SetupEncryptionStore, Phase } from '../../../stores/SetupEncryptionStor
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ISecretStorageKeyInfo } from 'matrix-js-sdk';
 import EncryptionPanel from "../../views/right_panel/EncryptionPanel"
+import AccessibleButton from '../../views/elements/AccessibleButton';
+import Spinner from '../../views/elements/Spinner';
 
 function keyHasPassphrase(keyInfo: ISecretStorageKeyInfo): boolean {
     return Boolean(
@@ -48,7 +50,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
     constructor(props) {
         super(props);
         const store = SetupEncryptionStore.sharedInstance();
-        store.on("update", this._onStoreUpdate);
+        store.on("update", this.onStoreUpdate);
         store.start();
         this.state = {
             phase: store.phase,
@@ -60,7 +62,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         };
     }
 
-    _onStoreUpdate = () => {
+    private onStoreUpdate = () => {
         const store = SetupEncryptionStore.sharedInstance();
         if (store.phase === Phase.Finished) {
             this.props.onFinished(true);
@@ -73,18 +75,18 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         });
     };
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         const store = SetupEncryptionStore.sharedInstance();
-        store.off("update", this._onStoreUpdate);
+        store.off("update", this.onStoreUpdate);
         store.stop();
     }
 
-    _onUsePassphraseClick = async () => {
+    private onUsePassphraseClick = async () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.usePassPhrase();
     }
 
-    _onVerifyClick = () => {
+    private onVerifyClick = () => {
         const cli = MatrixClientPeg.get();
         const userId = cli.getUserId();
         const requestPromise = cli.requestVerification(userId);
@@ -100,33 +102,31 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         });
     }
 
-    onSkipClick = () => {
+    private onSkipClick = () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.skip();
     }
 
-    onSkipConfirmClick = () => {
+    private onSkipConfirmClick = () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.skipConfirm();
     }
 
-    onSkipBackClick = () => {
+    private onSkipBackClick = () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.returnAfterSkip();
     }
 
-    onDoneClick = () => {
+    private onDoneClick = () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.done();
     }
 
-    onEncryptionPanelClose = () => {
+    private onEncryptionPanelClose = () => {
         this.props.onFinished(false);
     }
 
-    render() {
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-
+    public render() {
         const {
             phase,
         } = this.state;
@@ -151,14 +151,14 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
 
             let useRecoveryKeyButton;
             if (recoveryKeyPrompt) {
-                useRecoveryKeyButton = <AccessibleButton kind="link" onClick={this._onUsePassphraseClick}>
+                useRecoveryKeyButton = <AccessibleButton kind="link" onClick={this.onUsePassphraseClick}>
                     {recoveryKeyPrompt}
                 </AccessibleButton>;
             }
 
             let verifyButton;
             if (store.hasDevicesToVerifyAgainst) {
-                verifyButton = <AccessibleButton kind="primary" onClick={this._onVerifyClick}>
+                verifyButton = <AccessibleButton kind="primary" onClick={this.onVerifyClick}>
                     { _t("Use another login") }
                 </AccessibleButton>;
             }
@@ -229,7 +229,6 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 </div>
             );
         } else if (phase === Phase.Busy || phase === Phase.Loading) {
-            const Spinner = sdk.getComponent('views.elements.Spinner');
             return <Spinner />;
         } else {
             console.log(`SetupEncryptionBody: Unknown phase ${phase}`);
