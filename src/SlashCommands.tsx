@@ -1181,7 +1181,7 @@ export const Commands = [
 ];
 
 // build a map from names and aliases to the Command objects.
-export const CommandMap = new Map();
+export const CommandMap = new Map<string, Command>();
 Commands.forEach(cmd => {
     CommandMap.set(cmd.command, cmd);
     cmd.aliases.forEach(alias => {
@@ -1189,15 +1189,15 @@ Commands.forEach(cmd => {
     });
 });
 
-export function parseCommandString(input: string) {
+export function parseCommandString(input: string): { cmd?: string, args?: string } {
     // trim any trailing whitespace, as it can confuse the parser for
     // IRC-style commands
     input = input.replace(/\s+$/, '');
     if (input[0] !== '/') return {}; // not a command
 
     const bits = input.match(/^(\S+?)(?:[ \n]+((.|\n)*))?$/);
-    let cmd;
-    let args;
+    let cmd: string;
+    let args: string;
     if (bits) {
         cmd = bits[1].substring(1).toLowerCase();
         args = bits[2];
@@ -1208,6 +1208,11 @@ export function parseCommandString(input: string) {
     return { cmd, args };
 }
 
+interface ICmd {
+    cmd?: Command;
+    args?: string;
+}
+
 /**
  * Process the given text for /commands and return a bound method to perform them.
  * @param {string} roomId The room in which the command was performed.
@@ -1216,7 +1221,7 @@ export function parseCommandString(input: string) {
  * processing the command, or 'promise' if a request was sent out.
  * Returns null if the input didn't match a command.
  */
-export function getCommand(input: string) {
+export function getCommand(input: string): ICmd {
     const { cmd, args } = parseCommandString(input);
 
     if (CommandMap.has(cmd) && CommandMap.get(cmd).isEnabled()) {
