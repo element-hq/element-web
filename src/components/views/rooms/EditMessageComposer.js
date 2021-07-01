@@ -88,7 +88,7 @@ function createEditContent(model, editedEvent) {
         body: `${plainPrefix} * ${body}`,
     };
 
-    const formattedBody = htmlSerializeIfNeeded(model, {forceHTML: isReply});
+    const formattedBody = htmlSerializeIfNeeded(model, { forceHTML: isReply });
     if (formattedBody) {
         newContent.format = "org.matrix.custom.html";
         newContent.formatted_body = formattedBody;
@@ -156,7 +156,7 @@ export default class EditMessageComposer extends React.Component {
                 const previousEvent = findEditableEvent(this._getRoom(), false,
                     this.props.editState.getEvent().getId());
                 if (previousEvent) {
-                    dis.dispatch({action: 'edit_event', event: previousEvent});
+                    dis.dispatch({ action: 'edit_event', event: previousEvent });
                     event.preventDefault();
                 }
                 break;
@@ -167,10 +167,10 @@ export default class EditMessageComposer extends React.Component {
                 }
                 const nextEvent = findEditableEvent(this._getRoom(), true, this.props.editState.getEvent().getId());
                 if (nextEvent) {
-                    dis.dispatch({action: 'edit_event', event: nextEvent});
+                    dis.dispatch({ action: 'edit_event', event: nextEvent });
                 } else {
                     this._clearStoredEditorState();
-                    dis.dispatch({action: 'edit_event', event: null});
+                    dis.dispatch({ action: 'edit_event', event: null });
                     dis.fire(Action.FocusComposer);
                 }
                 event.preventDefault();
@@ -189,7 +189,7 @@ export default class EditMessageComposer extends React.Component {
 
     _cancelEdit = () => {
         this._clearStoredEditorState();
-        dis.dispatch({action: "edit_event", event: null});
+        dis.dispatch({ action: "edit_event", event: null });
         dis.fire(Action.FocusComposer);
     }
 
@@ -201,7 +201,7 @@ export default class EditMessageComposer extends React.Component {
         const json = localStorage.getItem(this._editorStateKey);
         if (json) {
             try {
-                const {parts: serializedParts} = JSON.parse(json);
+                const { parts: serializedParts } = JSON.parse(json);
                 const parts = serializedParts.map(p => partCreator.deserializePart(p));
                 return parts;
             } catch (e) {
@@ -264,7 +264,7 @@ export default class EditMessageComposer extends React.Component {
             }
             return text + part.text;
         }, "");
-        const {cmd, args} = getCommand(commandText);
+        const { cmd, args } = getCommand(commandText);
         return [cmd, args, commandText];
     }
 
@@ -332,11 +332,11 @@ export default class EditMessageComposer extends React.Component {
                 } else {
                     // ask the user if their unknown command should be sent as a message
                     const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                    const {finished} = Modal.createTrackedDialog("Unknown command", "", QuestionDialog, {
+                    const { finished } = Modal.createTrackedDialog("Unknown command", "", QuestionDialog, {
                         title: _t("Unknown Command"),
                         description: <div>
                             <p>
-                                { _t("Unrecognised command: %(commandText)s", {commandText}) }
+                                { _t("Unrecognised command: %(commandText)s", { commandText }) }
                             </p>
                             <p>
                                 { _t("You can use <code>/help</code> to list available commands. " +
@@ -361,13 +361,13 @@ export default class EditMessageComposer extends React.Component {
                 this._cancelPreviousPendingEdit();
                 const prom = this.context.sendMessage(roomId, editContent);
                 this._clearStoredEditorState();
-                dis.dispatch({action: "message_sent"});
+                dis.dispatch({ action: "message_sent" });
                 CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, true, false, editContent);
             }
         }
 
         // close the event editing and focus composer
-        dis.dispatch({action: "edit_event", event: null});
+        dis.dispatch({ action: "edit_event", event: null });
         dis.fire(Action.FocusComposer);
     };
 
@@ -404,7 +404,7 @@ export default class EditMessageComposer extends React.Component {
     }
 
     _createEditorModel() {
-        const {editState} = this.props;
+        const { editState } = this.props;
         const room = this._getRoom();
         const partCreator = new CommandPartCreator(room, this.context);
         let parts;
@@ -421,7 +421,7 @@ export default class EditMessageComposer extends React.Component {
     }
 
     _getInitialCaretPosition() {
-        const {editState} = this.props;
+        const { editState } = this.props;
         let caretPosition;
         if (editState.hasEditorState() && editState.getCaret()) {
             // if restoring state from a previous editor,

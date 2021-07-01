@@ -16,8 +16,8 @@ limitations under the License.
 */
 
 import React from 'react';
-import TabbedView, {Tab} from "../../structures/TabbedView";
-import {_t, _td} from "../../../languageHandler";
+import TabbedView, { Tab } from "../../structures/TabbedView";
+import { _t, _td } from "../../../languageHandler";
 import AdvancedRoomSettingsTab from "../settings/tabs/room/AdvancedRoomSettingsTab";
 import RolesRoomSettingsTab from "../settings/tabs/room/RolesRoomSettingsTab";
 import GeneralRoomSettingsTab from "../settings/tabs/room/GeneralRoomSettingsTab";
@@ -25,11 +25,11 @@ import SecurityRoomSettingsTab from "../settings/tabs/room/SecurityRoomSettingsT
 import NotificationSettingsTab from "../settings/tabs/room/NotificationSettingsTab";
 import BridgeSettingsTab from "../settings/tabs/room/BridgeSettingsTab";
 import * as sdk from "../../../index";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
-import {UIFeature} from "../../../settings/UIFeature";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { UIFeature } from "../../../settings/UIFeature";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 export const ROOM_GENERAL_TAB = "ROOM_GENERAL_TAB";
 export const ROOM_SECURITY_TAB = "ROOM_SECURITY_TAB";
@@ -127,7 +127,7 @@ export default class RoomSettingsDialog extends React.Component<IProps> {
                 className='mx_RoomSettingsDialog'
                 hasCancel={true}
                 onFinished={this.props.onFinished}
-                title={_t("Room Settings - %(roomName)s", {roomName})}
+                title={_t("Room Settings - %(roomName)s", { roomName })}
             >
                 <div className='mx_SettingsDialog_content'>
                     <TabbedView

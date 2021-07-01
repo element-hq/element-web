@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import EditorModel from "../../src/editor/model";
-import {createPartCreator} from "./mock";
+import { createPartCreator } from "./mock";
 
 function createRenderer() {
     const render = (c) => {

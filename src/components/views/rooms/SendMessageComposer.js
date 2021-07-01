@@ -80,7 +80,7 @@ export function createMessageContent(model, permalinkCreator, replyToEvent) {
         msgtype: isEmote ? "m.emote" : "m.text",
         body: body,
     };
-    const formattedBody = htmlSerializeIfNeeded(model, {forceHTML: !!replyToEvent});
+    const formattedBody = htmlSerializeIfNeeded(model, { forceHTML: !!replyToEvent });
     if (formattedBody) {
         content.format = "org.matrix.custom.html";
         content.formatted_body = formattedBody;
@@ -208,7 +208,7 @@ export default class SendMessageComposer extends React.Component {
             this.sendHistoryManager.currentIndex = this.sendHistoryManager.history.length;
             return;
         }
-        const {parts, replyEventId} = this.sendHistoryManager.getItem(delta);
+        const { parts, replyEventId } = this.sendHistoryManager.getItem(delta);
         dis.dispatch({
             action: 'reply_to_event',
             event: replyEventId ? this.props.room.findEventById(replyEventId) : null,
@@ -265,7 +265,7 @@ export default class SendMessageComposer extends React.Component {
                             "key": reaction,
                         },
                     });
-                    dis.dispatch({action: "message_sent"});
+                    dis.dispatch({ action: "message_sent" });
                 }
                 break;
             }
@@ -280,7 +280,7 @@ export default class SendMessageComposer extends React.Component {
             }
             return text + part.text;
         }, "");
-        const {cmd, args} = getCommand(commandText);
+        const { cmd, args } = getCommand(commandText);
         return [cmd, args, commandText];
     }
 
@@ -350,11 +350,11 @@ export default class SendMessageComposer extends React.Component {
             } else {
                 // ask the user if their unknown command should be sent as a message
                 const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                const {finished} = Modal.createTrackedDialog("Unknown command", "", QuestionDialog, {
+                const { finished } = Modal.createTrackedDialog("Unknown command", "", QuestionDialog, {
                     title: _t("Unknown Command"),
                     description: <div>
                         <p>
-                            { _t("Unrecognised command: %(commandText)s", {commandText}) }
+                            { _t("Unrecognised command: %(commandText)s", { commandText }) }
                         </p>
                         <p>
                             { _t("You can use <code>/help</code> to list available commands. " +
@@ -383,7 +383,7 @@ export default class SendMessageComposer extends React.Component {
 
         if (shouldSend) {
             const startTime = CountlyAnalytics.getTimestamp();
-            const {roomId} = this.props.room;
+            const { roomId } = this.props.room;
             if (!content) {
                 content = createMessageContent(this.model, this.props.permalinkCreator, replyToEvent);
             }
@@ -399,10 +399,10 @@ export default class SendMessageComposer extends React.Component {
                     event: null,
                 });
             }
-            dis.dispatch({action: "message_sent"});
+            dis.dispatch({ action: "message_sent" });
             CHAT_EFFECTS.forEach((effect) => {
                 if (containsEmoji(content, effect.emojis)) {
-                    dis.dispatch({action: `effects.${effect.command}`});
+                    dis.dispatch({ action: `effects.${effect.command}` });
                 }
             });
             CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, !!replyToEvent, content);
@@ -415,7 +415,7 @@ export default class SendMessageComposer extends React.Component {
         this._editorRef.focus();
         this._clearStoredEditorState();
         if (SettingsStore.getValue("scrollToBottomOnMessageSent")) {
-            dis.dispatch({action: "scroll_to_bottom"});
+            dis.dispatch({ action: "scroll_to_bottom" });
         }
     }
 
@@ -446,7 +446,7 @@ export default class SendMessageComposer extends React.Component {
         const json = localStorage.getItem(this._editorStateKey);
         if (json) {
             try {
-                const {parts: serializedParts, replyEventId} = JSON.parse(json);
+                const { parts: serializedParts, replyEventId } = JSON.parse(json);
                 const parts = serializedParts.map(p => partCreator.deserializePart(p));
                 if (replyEventId) {
                     dis.dispatch({
@@ -498,7 +498,7 @@ export default class SendMessageComposer extends React.Component {
     };
 
     _onPaste = (event) => {
-        const {clipboardData} = event;
+        const { clipboardData } = event;
         // Prioritize text on the clipboard over files as Office on macOS puts a bitmap
         // in the clipboard as well as the content being copied.
         if (clipboardData.files.length && !clipboardData.types.some(t => t === "text/plain")) {

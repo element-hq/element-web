@@ -15,13 +15,18 @@ limitations under the License.
 */
 
 import React from "react";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Clock from "./Clock";
-import {Playback, PlaybackState} from "../../../voice/Playback";
-import {UPDATE_EVENT} from "../../../stores/AsyncStore";
+import { Playback, PlaybackState } from "../../../voice/Playback";
+import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 
 interface IProps {
     playback: Playback;
+
+    // The default number of seconds to show when the playback has completed or
+    // has not started. Not used during playback, even when paused. Defaults to
+    // clip duration length.
+    defaultDisplaySeconds?: number;
 }
 
 interface IState {
@@ -33,7 +38,7 @@ interface IState {
 /**
  * A clock for a playback of a recording.
  */
-@replaceableComponent("views.voice_messages.PlaybackClock")
+@replaceableComponent("views.audio_messages.PlaybackClock")
 export default class PlaybackClock extends React.PureComponent<IProps, IState> {
     public constructor(props) {
         super(props);
@@ -54,17 +59,21 @@ export default class PlaybackClock extends React.PureComponent<IProps, IState> {
     private onPlaybackUpdate = (ev: PlaybackState) => {
         // Convert Decoding -> Stopped because we don't care about the distinction here
         if (ev === PlaybackState.Decoding) ev = PlaybackState.Stopped;
-        this.setState({playbackPhase: ev});
+        this.setState({ playbackPhase: ev });
     };
 
     private onTimeUpdate = (time: number[]) => {
-        this.setState({seconds: time[0], durationSeconds: time[1]});
+        this.setState({ seconds: time[0], durationSeconds: time[1] });
     };
 
     public render() {
         let seconds = this.state.seconds;
         if (this.state.playbackPhase === PlaybackState.Stopped) {
-            seconds = this.state.durationSeconds;
+            if (Number.isFinite(this.props.defaultDisplaySeconds)) {
+                seconds = this.props.defaultDisplaySeconds;
+            } else {
+                seconds = this.state.durationSeconds;
+            }
         }
         return <Clock seconds={seconds} />;
     }

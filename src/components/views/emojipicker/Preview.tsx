@@ -17,8 +17,8 @@ limitations under the License.
 
 import React from 'react';
 
-import {IEmoji} from "../../../emoji";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { IEmoji } from "../../../emoji";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     emoji: IEmoji;

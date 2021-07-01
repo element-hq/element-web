@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import Markdown from '../Markdown';
-import {makeGenericPermalink} from "../utils/permalinks/Permalinks";
+import { makeGenericPermalink } from "../utils/permalinks/Permalinks";
 import EditorModel from "./model";
 import { AllHtmlEntities } from 'html-entities';
 import SettingsStore from '../settings/SettingsStore';
@@ -45,7 +45,7 @@ export function mdSerialize(model: EditorModel) {
     }, "");
 }
 
-export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = {}) {
+export function htmlSerializeIfNeeded(model: EditorModel, { forceHTML = false } = {}) {
     let md = mdSerialize(model);
     // copy of raw input to remove unwanted math later
     const orig = md;
@@ -142,9 +142,9 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
 
             // add fallback output for latex math, which should not be interpreted as markdown
             phtml('div, span').each(function(i, e) {
-                const tex = phtml(e).attr('data-mx-maths')
+                const tex = phtml(e).attr('data-mx-maths');
                 if (tex) {
-                    phtml(e).html(`<code>${tex}</code>`)
+                    phtml(e).html(`<code>${tex}</code>`);
                 }
             });
         }
@@ -200,18 +200,18 @@ export function stripEmoteCommand(model: EditorModel) {
 
 export function stripPrefix(model: EditorModel, prefix: string) {
     model = model.clone();
-    model.removeText({index: 0, offset: 0}, prefix.length);
+    model.removeText({ index: 0, offset: 0 }, prefix.length);
     return model;
 }
 
 export function unescapeMessage(model: EditorModel) {
-    const {parts} = model;
+    const { parts } = model;
     if (parts.length) {
         const firstPart = parts[0];
         // only unescape \/ to / at start of editor
         if (firstPart.type === "plain" && firstPart.text.startsWith("\\/")) {
             model = model.clone();
-            model.removeText({index: 0, offset: 0}, 1);
+            model.removeText({ index: 0, offset: 0 }, 1);
         }
     }
     return model;

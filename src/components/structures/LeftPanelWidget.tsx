@@ -14,19 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useContext, useMemo} from "react";
-import {Resizable} from "re-resizable";
+import React, { useContext, useMemo } from "react";
+import { Resizable } from "re-resizable";
 import classNames from "classnames";
 
 import AccessibleButton from "../views/elements/AccessibleButton";
-import {useRovingTabIndex} from "../../accessibility/RovingTabIndex";
-import {Key} from "../../Keyboard";
-import {useLocalStorageState} from "../../hooks/useLocalStorageState";
+import { useRovingTabIndex } from "../../accessibility/RovingTabIndex";
+import { Key } from "../../Keyboard";
+import { useLocalStorageState } from "../../hooks/useLocalStorageState";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import WidgetUtils, {IWidgetEvent} from "../../utils/WidgetUtils";
-import {useAccountData} from "../../hooks/useAccountData";
+import WidgetUtils, { IWidgetEvent } from "../../utils/WidgetUtils";
+import { useAccountData } from "../../hooks/useAccountData";
 import AppTile from "../views/elements/AppTile";
-import {useSettingValue} from "../../hooks/useSettings";
+import { useSettingValue } from "../../hooks/useSettings";
 import UIStore from "../../stores/UIStore";
 
 const MIN_HEIGHT = 100;
@@ -62,14 +62,14 @@ const LeftPanelWidget: React.FC = () => {
     let content;
     if (expanded) {
         content = <Resizable
-            size={{height} as any}
+            size={{ height } as any}
             minHeight={MIN_HEIGHT}
             maxHeight={Math.min(UIStore.instance.windowHeight / 2, MAX_HEIGHT)}
             onResizeStop={(e, dir, ref, d) => {
                 setHeight(height + d.height);
             }}
             handleWrapperClass="mx_LeftPanelWidget_resizerHandles"
-            handleClasses={{top: "mx_LeftPanelWidget_resizerHandle"}}
+            handleClasses={{ top: "mx_LeftPanelWidget_resizerHandle" }}
             className="mx_LeftPanelWidget_resizeBox"
             enable={{ top: true }}
         >

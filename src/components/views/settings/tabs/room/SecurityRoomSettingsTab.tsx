@@ -134,18 +134,18 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             ),
             onFinished: (confirm) => {
                 if (!confirm) {
-                    this.setState({encrypted: false});
+                    this.setState({ encrypted: false });
                     return;
                 }
 
                 const beforeEncrypted = this.state.encrypted;
-                this.setState({encrypted: true});
+                this.setState({ encrypted: true });
                 MatrixClientPeg.get().sendStateEvent(
                     this.props.roomId, EventType.RoomEncryption,
                     { algorithm: "m.megolm.v1.aes-sha2" },
                 ).catch((e) => {
                     console.error(e);
-                    this.setState({encrypted: beforeEncrypted});
+                    this.setState({ encrypted: beforeEncrypted });
                 });
             },
         });
@@ -161,11 +161,14 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         this.setState({ guestAccess });
 
         const client = MatrixClientPeg.get();
-        client.sendStateEvent(this.props.roomId, EventType.RoomGuestAccess, {
-            guest_access: guestAccess,
-        }, "").catch((e) => {
+        client.sendStateEvent(
+            this.props.roomId,
+            EventType.RoomGuestAccess,
+            { guest_access: guestAccess, },
+            "",
+        ).catch((e) => {
             console.error(e);
-            this.setState({guestAccess: beforeGuestAccess});
+            this.setState({ guestAccess: beforeGuestAccess });
         });
     };
 
@@ -205,31 +208,37 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
         const beforeJoinRule = this.state.joinRule;
         const beforeGuestAccess = this.state.guestAccess;
-        this.setState({joinRule, guestAccess});
+        this.setState({ joinRule, guestAccess });
 
         const client = MatrixClientPeg.get();
-        client.sendStateEvent(this.props.roomId, EventType.RoomJoinRules, {
+        client.sendStateEvent(
+            this.props.roomId,
+            EventType.RoomJoinRules, {
             join_rule: joinRule,
-        }, "").catch((e) => {
+        }, "",
+        ).catch((e) => {
             console.error(e);
-            this.setState({joinRule: beforeJoinRule});
+            this.setState({ joinRule: beforeJoinRule });
         });
-        client.sendStateEvent(this.props.roomId, EventType.RoomGuestAccess, {
+        client.sendStateEvent(
+            this.props.roomId,
+            EventType.RoomGuestAccess, {
             guest_access: guestAccess,
-        }, "").catch((e) => {
+        }, "",
+        ).catch((e) => {
             console.error(e);
-            this.setState({guestAccess: beforeGuestAccess});
+            this.setState({ guestAccess: beforeGuestAccess });
         });
     };
 
     private onHistoryRadioToggle = (history: HistoryVisibility) => {
         const beforeHistory = this.state.history;
-        this.setState({history: history});
+        this.setState({ history: history });
         MatrixClientPeg.get().sendStateEvent(this.props.roomId, EventType.RoomHistoryVisibility, {
             history_visibility: history,
         }, "").catch((e) => {
             console.error(e);
-            this.setState({history: beforeHistory});
+            this.setState({ history: beforeHistory });
         });
     };
 

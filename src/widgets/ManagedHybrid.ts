@@ -36,7 +36,7 @@ function getWidgetBuildUrl(): string {
         return SdkConfig.get().widget_build_url;
     }
     /* eslint-disable-next-line camelcase */
-    return getCallBehaviourWellKnown()?.widget_build_url
+    return getCallBehaviourWellKnown()?.widget_build_url;
 }
 
 export function isManagedHybridWidgetEnabled(): boolean {

@@ -44,4 +44,4 @@ async function rejectToast(session, expectedTitle) {
     await btn.click();
 }
 
-module.exports = {assertNoToasts, assertToast, acceptToast, rejectToast};
+module.exports = { assertNoToasts, assertToast, acceptToast, rejectToast };

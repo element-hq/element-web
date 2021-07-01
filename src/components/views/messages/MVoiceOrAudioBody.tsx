@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import React from "react";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import MAudioBody from "./MAudioBody";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SettingsStore from "../../../settings/SettingsStore";
 import MVoiceMessageBody from "./MVoiceMessageBody";
 

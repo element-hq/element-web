@@ -26,7 +26,7 @@ import { accessSecretStorage } from './SecurityManager';
 import { verificationMethods } from 'matrix-js-sdk/src/crypto';
 import { Action } from './dispatcher/actions';
 import UntrustedDeviceDialog from "./components/views/dialogs/UntrustedDeviceDialog";
-import {IDevice} from "./components/views/right_panel/UserInfo";
+import { IDevice } from "./components/views/right_panel/UserInfo";
 
 async function enable4SIfNeeded() {
     const cli = MatrixClientPeg.get();
@@ -45,7 +45,7 @@ async function enable4SIfNeeded() {
 export async function verifyDevice(user: User, device: IDevice) {
     const cli = MatrixClientPeg.get();
     if (cli.isGuest()) {
-        dis.dispatch({action: 'require_registration'});
+        dis.dispatch({ action: 'require_registration' });
         return;
     }
     // if cross-signing is not explicitly disabled, check if it should be enabled first.
@@ -68,7 +68,7 @@ export async function verifyDevice(user: User, device: IDevice) {
                 dis.dispatch({
                     action: Action.SetRightPanelPhase,
                     phase: RightPanelPhases.EncryptionPanel,
-                    refireParams: {member: user, verificationRequestPromise},
+                    refireParams: { member: user, verificationRequestPromise },
                 });
             } else if (action === "legacy") {
                 const ManualDeviceKeyVerificationDialog =
@@ -88,7 +88,7 @@ export async function verifyDevice(user: User, device: IDevice) {
 export async function legacyVerifyUser(user: User) {
     const cli = MatrixClientPeg.get();
     if (cli.isGuest()) {
-        dis.dispatch({action: 'require_registration'});
+        dis.dispatch({ action: 'require_registration' });
         return;
     }
     // if cross-signing is not explicitly disabled, check if it should be enabled first.
@@ -101,14 +101,14 @@ export async function legacyVerifyUser(user: User) {
     dis.dispatch({
         action: Action.SetRightPanelPhase,
         phase: RightPanelPhases.EncryptionPanel,
-        refireParams: {member: user, verificationRequestPromise},
+        refireParams: { member: user, verificationRequestPromise },
     });
 }
 
 export async function verifyUser(user: User) {
     const cli = MatrixClientPeg.get();
     if (cli.isGuest()) {
-        dis.dispatch({action: 'require_registration'});
+        dis.dispatch({ action: 'require_registration' });
         return;
     }
     if (!await enable4SIfNeeded()) {

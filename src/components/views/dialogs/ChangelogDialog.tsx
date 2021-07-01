@@ -49,7 +49,7 @@ export default class ChangelogDialog extends React.Component<IProps> {
                     this.setState({ [REPOS[i]]: response.statusText });
                     return;
                 }
-                this.setState({[REPOS[i]]: JSON.parse(body).commits});
+                this.setState({ [REPOS[i]]: JSON.parse(body).commits });
             });
         }
     }
@@ -92,7 +92,6 @@ export default class ChangelogDialog extends React.Component<IProps> {
                 {this.props.version == null || this.props.newVersion == null ? <h2>{_t("Unavailable")}</h2> : logs}
             </div>
         );
-
 
         return (
             <QuestionDialog

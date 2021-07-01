@@ -16,13 +16,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 /*
  * This component can be used to display generic HTML content in a contextual
  * menu.
  */
-
 
 @replaceableComponent("views.context_menus.GenericElementContextMenu")
 export default class GenericElementContextMenu extends React.Component {

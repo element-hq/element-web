@@ -17,8 +17,13 @@ limitations under the License.
 import React from "react";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import classNames from "classnames";
+import { CSSProperties } from "react";
 
-export interface IProps {
+interface WaveformCSSProperties extends CSSProperties {
+    '--barHeight': number;
+}
+
+interface IProps {
     relHeights: number[]; // relative heights (0-1)
     progress: number; // percent complete, 0-1, default 100%
 }
@@ -34,14 +39,7 @@ interface IState {
  * For CSS purposes, a mx_Waveform_bar_100pct class is added when the bar should be
  * "filled", as a demonstration of the progress property.
  */
-
-import { CSSProperties } from "react";
-
-export interface WaveformCSSProperties extends CSSProperties {
-    '--barHeight': number;
-}
-
-@replaceableComponent("views.voice_messages.Waveform")
+@replaceableComponent("views.audio_messages.Waveform")
 export default class Waveform extends React.PureComponent<IProps, IState> {
     public static defaultProps = {
         progress: 1,

@@ -16,11 +16,11 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from "prop-types";
-import {_t, pickBestLanguage} from "../../../languageHandler";
+import { _t, pickBestLanguage } from "../../../languageHandler";
 import * as sdk from "../../..";
-import {objectClone} from "../../../utils/objects";
+import { objectClone } from "../../../utils/objects";
 import StyledCheckbox from "../elements/StyledCheckbox";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.terms.InlineTermsAgreement")
 export default class InlineTermsAgreement extends React.Component {
@@ -56,20 +56,20 @@ export default class InlineTermsAgreement extends React.Component {
             }
         }
 
-        this.setState({policies});
+        this.setState({ policies });
     }
 
     _togglePolicy = (index) => {
         const policies = objectClone(this.state.policies);
         policies[index].checked = !policies[index].checked;
-        this.setState({policies});
+        this.setState({ policies });
     };
 
     _onContinue = () => {
         const hasUnchecked = !!this.state.policies.some(p => !p.checked);
         if (hasUnchecked) return;
 
-        this.setState({busy: true});
+        this.setState({ busy: true });
         this.props.onFinished(this.state.policies.map(p => p.url));
     };
 

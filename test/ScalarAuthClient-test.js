@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import ScalarAuthClient from '../src/ScalarAuthClient';
-import {MatrixClientPeg} from '../src/MatrixClientPeg';
+import { MatrixClientPeg } from '../src/MatrixClientPeg';
 import { stubClient } from './test-utils';
 
 describe('ScalarAuthClient', function() {

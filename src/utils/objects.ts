@@ -114,7 +114,7 @@ export function objectDiff<O extends {}>(a: O, b: O): Diff<keyof O> {
     const possibleChanges = arrayUnion(aKeys, bKeys);
     const changes = possibleChanges.filter(k => a[k] !== b[k]);
 
-    return {changed: changes, added: keyDiff.added, removed: keyDiff.removed};
+    return { changed: changes, added: keyDiff.added, removed: keyDiff.removed };
 }
 
 /**

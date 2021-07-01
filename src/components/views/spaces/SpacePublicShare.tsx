@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState} from "react";
-import {Room} from "matrix-js-sdk/src/models/room";
+import React, { useState } from "react";
+import { Room } from "matrix-js-sdk/src/models/room";
 
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
-import {copyPlaintext} from "../../../utils/strings";
-import {sleep} from "../../../utils/promise";
-import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
-import {showRoomInviteDialog} from "../../../RoomInvite";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { copyPlaintext } from "../../../utils/strings";
+import { sleep } from "../../../utils/promise";
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { showRoomInviteDialog } from "../../../RoomInvite";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps {
     space: Room;

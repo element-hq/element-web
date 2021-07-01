@@ -35,9 +35,9 @@ function diffStringsAtEnd(oldStr: string, newStr: string): IDiff {
     const len = Math.min(oldStr.length, newStr.length);
     const startInCommon = oldStr.substr(0, len) === newStr.substr(0, len);
     if (startInCommon && oldStr.length > newStr.length) {
-        return {removed: oldStr.substr(len), at: len};
+        return { removed: oldStr.substr(len), at: len };
     } else if (startInCommon && oldStr.length < newStr.length) {
-        return {added: newStr.substr(len), at: len};
+        return { added: newStr.substr(len), at: len };
     } else {
         const commonStartLen = firstDiff(oldStr, newStr);
         return {
@@ -55,7 +55,7 @@ export function diffDeletion(oldStr: string, newStr: string): IDiff {
     }
     const firstDiffIdx = firstDiff(oldStr, newStr);
     const amount = oldStr.length - newStr.length;
-    return {at: firstDiffIdx, removed: oldStr.substr(firstDiffIdx, amount)};
+    return { at: firstDiffIdx, removed: oldStr.substr(firstDiffIdx, amount) };
 }
 
 /**

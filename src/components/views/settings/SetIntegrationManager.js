@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../languageHandler";
-import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
+import { _t } from "../../../languageHandler";
+import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import * as sdk from '../../../index';
 import SettingsStore from "../../../settings/SettingsStore";
-import {SettingLevel} from "../../../settings/SettingLevel";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { SettingLevel } from "../../../settings/SettingLevel";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.settings.SetIntegrationManager")
 export default class SetIntegrationManager extends React.Component {
@@ -41,9 +41,9 @@ export default class SetIntegrationManager extends React.Component {
             console.error("Error changing integration manager provisioning");
             console.error(err);
 
-            this.setState({provisioningEnabled: current});
+            this.setState({ provisioningEnabled: current });
         });
-        this.setState({provisioningEnabled: !current});
+        this.setState({ provisioningEnabled: !current });
     };
 
     render() {
@@ -57,7 +57,7 @@ export default class SetIntegrationManager extends React.Component {
             bodyText = _t(
                 "Use an Integration Manager <b>(%(serverName)s)</b> to manage bots, widgets, " +
                 "and sticker packs.",
-                {serverName: currentManager.name},
+                { serverName: currentManager.name },
                 { b: sub => <b>{sub}</b> },
             );
         } else {
