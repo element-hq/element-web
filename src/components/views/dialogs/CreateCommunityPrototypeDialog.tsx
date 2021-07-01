@@ -23,9 +23,9 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import InfoTooltip from "../elements/InfoTooltip";
 import dis from "../../../dispatcher/dispatcher";
-import {showCommunityRoomInviteDialog} from "../../../RoomInvite";
+import { showCommunityRoomInviteDialog } from "../../../RoomInvite";
 import GroupStore from "../../../stores/GroupStore";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps extends IDialogProps {
 }
@@ -58,7 +58,7 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
 
     private onNameChange = (ev: ChangeEvent<HTMLInputElement>) => {
         const localpart = (ev.target.value || "").toLowerCase().replace(/[^a-z0-9.\-_]/g, '-');
-        this.setState({name: ev.target.value, localpart});
+        this.setState({ name: ev.target.value, localpart });
     };
 
     private onSubmit = async (ev) => {
@@ -69,7 +69,7 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
 
         // We'll create the community now to see if it's taken, leaving it active in
         // the background for the user to look at while they invite people.
-        this.setState({busy: true});
+        this.setState({ busy: true });
         try {
             let avatarUrl = ''; // must be a string for synapse to accept it
             if (this.state.avatarFile) {
@@ -85,7 +85,7 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
             });
 
             // Ensure the tag gets selected now that we've created it
-            dis.dispatch({action: 'deselect_tags'}, true);
+            dis.dispatch({ action: 'deselect_tags' }, true);
             dis.dispatch({
                 action: 'select_tag',
                 tag: result.group_id,
@@ -123,13 +123,13 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
 
     private onAvatarChanged = (e: ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files || !e.target.files.length) {
-            this.setState({avatarFile: null});
+            this.setState({ avatarFile: null });
         } else {
-            this.setState({busy: true});
+            this.setState({ busy: true });
             const file = e.target.files[0];
             const reader = new FileReader();
             reader.onload = (ev: ProgressEvent<FileReader>) => {
-                this.setState({avatarFile: file, busy: false, avatarPreview: ev.target.result as string});
+                this.setState({ avatarFile: file, busy: false, avatarPreview: ev.target.result as string });
             };
             reader.readAsDataURL(file);
         }
@@ -175,7 +175,7 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
 
         let preview = <img src={this.state.avatarPreview} className="mx_CreateCommunityPrototypeDialog_avatar" />;
         if (!this.state.avatarPreview) {
-            preview = <div className="mx_CreateCommunityPrototypeDialog_placeholderAvatar" />
+            preview = <div className="mx_CreateCommunityPrototypeDialog_placeholderAvatar" />;
         }
 
         return (
@@ -204,7 +204,7 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
                         </div>
                         <div className="mx_CreateCommunityPrototypeDialog_colAvatar">
                             <input
-                                type="file" style={{display: "none"}}
+                                type="file" style={{ display: "none" }}
                                 ref={this.avatarUploadRef} accept="image/*"
                                 onChange={this.onAvatarChanged}
                             />

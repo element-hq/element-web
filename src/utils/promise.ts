@@ -48,25 +48,7 @@ export function defer<T>(): IDeferred<T> {
         reject = _reject;
     });
 
-    return {resolve, reject, promise};
-}
-
-// Promise.allSettled polyfill until browser support is stable in Firefox
-export function allSettled<T>(promises: Promise<T>[]): Promise<Array<ISettledFulfilled<T> | ISettledRejected>> {
-    if (Promise.allSettled) {
-        return Promise.allSettled<T>(promises);
-    }
-
-    // @ts-ignore - typescript isn't smart enough to see the disjoint here
-    return Promise.all(promises.map((promise) => {
-        return promise.then(value => ({
-            status: "fulfilled",
-            value,
-        })).catch(reason => ({
-            status: "rejected",
-            reason,
-        }));
-    }));
+    return { resolve, reject, promise };
 }
 
 // Helper method to retry a Promise a given number of times or until a predicate fails

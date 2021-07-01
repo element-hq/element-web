@@ -19,11 +19,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { _t } from "../../../../languageHandler";
-import {MatrixClientPeg} from "../../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
 import AddThreepid from '../../../../AddThreepid';
-import {replaceableComponent} from "../../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../../utils/replaceableComponent";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -190,7 +190,7 @@ export class PhoneNumber extends React.Component {
                     description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });
             } else {
-                this.setState({verifyError: _t("Incorrect verification code")});
+                this.setState({ verifyError: _t("Incorrect verification code") });
             }
         }
     }

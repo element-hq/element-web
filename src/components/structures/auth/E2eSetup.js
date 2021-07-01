@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import AuthPage from '../../views/auth/AuthPage';
 import CompleteSecurityBody from '../../views/auth/CompleteSecurityBody';
 import CreateCrossSigningDialog from '../../views/dialogs/security/CreateCrossSigningDialog';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("structures.auth.E2eSetup")
 export default class E2eSetup extends React.Component {

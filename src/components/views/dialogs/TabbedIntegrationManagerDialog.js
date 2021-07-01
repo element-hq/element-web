@@ -16,13 +16,13 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
+import { Room } from "matrix-js-sdk/src/models/room";
 import * as sdk from '../../../index';
-import {dialogTermsInteractionCallback, TermsNotSignedError} from "../../../Terms";
+import { dialogTermsInteractionCallback, TermsNotSignedError } from "../../../Terms";
 import classNames from 'classnames';
 import * as ScalarMessaging from "../../../ScalarMessaging";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.dialogs.TabbedIntegrationManagerDialog")
 export default class TabbedIntegrationManagerDialog extends React.Component {
@@ -63,11 +63,11 @@ export default class TabbedIntegrationManagerDialog extends React.Component {
         };
     }
 
-    componentDidMount(): void {
+    componentDidMount() {
         this.openManager(0, true);
     }
 
-    openManager = async (i: number, force = false) => {
+    openManager = async (i, force = false) => {
         if (i === this.state.currentIndex && !force) return;
 
         const manager = this.state.managers[i];

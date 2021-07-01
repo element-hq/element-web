@@ -15,16 +15,17 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t, _td} from "../../../../../languageHandler";
-import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
+import { _t, _td } from "../../../../../languageHandler";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
-import {EventType} from "matrix-js-sdk/src/@types/event";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomState } from "matrix-js-sdk/src/models/room-state";
+import { compare } from "../../../../../utils/strings";
 
 const plEventsToLabels = {
     // These will be translated for us later.
@@ -44,18 +45,18 @@ const plEventsToLabels = {
 
 const plEventsToShow = {
     // If an event is listed here, it will be shown in the PL settings. Defaults will be calculated.
-    [EventType.RoomAvatar]: {isState: true},
-    [EventType.RoomName]: {isState: true},
-    [EventType.RoomCanonicalAlias]: {isState: true},
-    [EventType.RoomHistoryVisibility]: {isState: true},
-    [EventType.RoomPowerLevels]: {isState: true},
-    [EventType.RoomTopic]: {isState: true},
-    [EventType.RoomTombstone]: {isState: true},
-    [EventType.RoomEncryption]: {isState: true},
-    [EventType.RoomServerAcl]: {isState: true},
+    [EventType.RoomAvatar]: { isState: true },
+    [EventType.RoomName]: { isState: true },
+    [EventType.RoomCanonicalAlias]: { isState: true },
+    [EventType.RoomHistoryVisibility]: { isState: true },
+    [EventType.RoomPowerLevels]: { isState: true },
+    [EventType.RoomTopic]: { isState: true },
+    [EventType.RoomTombstone]: { isState: true },
+    [EventType.RoomEncryption]: { isState: true },
+    [EventType.RoomServerAcl]: { isState: true },
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
-    "im.vector.modular.widgets": {isState: true},
+    "im.vector.modular.widgets": { isState: true },
 };
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
@@ -102,7 +103,7 @@ export class BannedUser extends React.Component<IBannedUserProps> {
         return (
             <li>
                 {unbanButton}
-                <span title={_t("Banned by %(displayName)s", {displayName: this.props.by})}>
+                <span title={_t("Banned by %(displayName)s", { displayName: this.props.by })}>
                     <strong>{ this.props.member.name }</strong> {userId}
                     {this.props.reason ? " " + _t('Reason') + ": " + this.props.reason : ""}
                 </span>
@@ -312,7 +313,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             // comparator for sorting PL users lexicographically on PL descending, MXID ascending. (case-insensitive)
             const comparator = (a, b) => {
                 const plDiff = userLevels[b.key] - userLevels[a.key];
-                return plDiff !== 0 ? plDiff : a.key.toLocaleLowerCase().localeCompare(b.key.toLocaleLowerCase());
+                return plDiff !== 0 ? plDiff : compare(a.key.toLocaleLowerCase(), b.key.toLocaleLowerCase());
             };
 
             privilegedUsers.sort(comparator);
@@ -393,7 +394,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             if (label) {
                 label = _t(label);
             } else {
-                label = _t("Send %(eventType)s events", {eventType});
+                label = _t("Send %(eventType)s events", { eventType });
             }
             return (
                 <div className="" key={eventType}>

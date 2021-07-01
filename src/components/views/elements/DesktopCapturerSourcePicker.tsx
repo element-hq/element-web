@@ -16,10 +16,10 @@ limitations under the License.
 
 import React from 'react';
 import { _t } from '../../../languageHandler';
-import BaseDialog from "..//dialogs/BaseDialog"
+import BaseDialog from "..//dialogs/BaseDialog";
 import AccessibleButton from './AccessibleButton';
-import {getDesktopCapturerSources} from "matrix-js-sdk/src/webrtc/call";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { getDesktopCapturerSources } from "matrix-js-sdk/src/webrtc/call";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 export interface DesktopCapturerSource {
     id: string;
@@ -44,7 +44,7 @@ export class ExistingSource extends React.Component<DesktopCapturerSourceIProps>
 
     onClick = (ev) => {
         this.props.onSelect(this.props.source);
-    }
+    };
 
     render() {
         return (
@@ -108,19 +108,19 @@ export default class DesktopCapturerSourcePicker extends React.Component<
 
     onSelect = (source) => {
         this.props.onFinished(source);
-    }
+    };
 
     onScreensClick = (ev) => {
-        this.setState({selectedTab: Tabs.Screens});
-    }
+        this.setState({ selectedTab: Tabs.Screens });
+    };
 
     onWindowsClick = (ev) => {
-        this.setState({selectedTab: Tabs.Windows});
-    }
+        this.setState({ selectedTab: Tabs.Windows });
+    };
 
     onCloseClick = (ev) => {
         this.props.onFinished(null);
-    }
+    };
 
     render() {
         let sources;

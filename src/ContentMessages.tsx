@@ -18,8 +18,8 @@ limitations under the License.
 
 import React from "react";
 import dis from './dispatcher/dispatcher';
-import {MatrixClientPeg} from './MatrixClientPeg';
-import {MatrixClient} from "matrix-js-sdk/src/client";
+import { MatrixClientPeg } from './MatrixClientPeg';
+import { MatrixClient } from "matrix-js-sdk/src/client";
 import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
@@ -28,8 +28,6 @@ import encrypt from "browser-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
 import Spinner from "./components/views/elements/Spinner";
 
-// Polyfill for Canvas.toBlob API using Canvas.toDataURL
-import "blueimp-canvas-to-blob";
 import { Action } from "./dispatcher/actions";
 import CountlyAnalytics from "./CountlyAnalytics";
 import {
@@ -39,7 +37,8 @@ import {
     UploadProgressPayload,
     UploadStartedPayload,
 } from "./dispatcher/payloads/UploadPayload";
-import {IUpload} from "./models/IUpload";
+import { IUpload } from "./models/IUpload";
+import { IImageInfo } from "matrix-js-sdk/src/@types/partials";
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
@@ -190,7 +189,7 @@ async function loadImageElement(imageFile: File) {
     const [hidpi] = await Promise.all([parsePromise, imgPromise]);
     const width = hidpi ? (img.width >> 1) : img.width;
     const height = hidpi ? (img.height >> 1) : img.height;
-    return {width, height, img};
+    return { width, height, img };
 }
 
 /**
@@ -208,12 +207,12 @@ function infoForImageFile(matrixClient, roomId, imageFile) {
     }
 
     let imageInfo;
-    return loadImageElement(imageFile).then(function(r) {
+    return loadImageElement(imageFile).then((r) => {
         return createThumbnail(r.img, r.width, r.height, thumbnailType);
-    }).then(function(result) {
+    }).then((result) => {
         imageInfo = result.info;
         return uploadFile(matrixClient, roomId, result.thumbnail);
-    }).then(function(result) {
+    }).then((result) => {
         imageInfo.thumbnail_url = result.url;
         imageInfo.thumbnail_file = result.file;
         return imageInfo;
@@ -264,12 +263,12 @@ function infoForVideoFile(matrixClient, roomId, videoFile) {
     const thumbnailType = "image/jpeg";
 
     let videoInfo;
-    return loadVideoElement(videoFile).then(function(video) {
+    return loadVideoElement(videoFile).then((video) => {
         return createThumbnail(video, video.videoWidth, video.videoHeight, thumbnailType);
-    }).then(function(result) {
+    }).then((result) => {
         videoInfo = result.info;
         return uploadFile(matrixClient, roomId, result.thumbnail);
-    }).then(function(result) {
+    }).then((result) => {
         videoInfo.thumbnail_url = result.url;
         videoInfo.thumbnail_file = result.file;
         return videoInfo;
@@ -308,7 +307,12 @@ function readFileAsArrayBuffer(file: File | Blob): Promise<ArrayBuffer> {
  *  If the file is unencrypted then the object will have a "url" key.
  *  If the file is encrypted then the object will have a "file" key.
  */
-function uploadFile(matrixClient: MatrixClient, roomId: string, file: File | Blob, progressHandler?: any) {
+export function uploadFile(
+    matrixClient: MatrixClient,
+    roomId: string,
+    file: File | Blob,
+    progressHandler?: any, // TODO: Types
+): Promise<{url?: string, file?: any}> { // TODO: Types
     let canceled = false;
     if (matrixClient.isRoomEncrypted(roomId)) {
         // If the room is encrypted then encrypt the file before uploading it.
@@ -339,7 +343,7 @@ function uploadFile(matrixClient: MatrixClient, roomId: string, file: File | Blo
             if (file.type) {
                 encryptInfo.mimetype = file.type;
             }
-            return {"file": encryptInfo};
+            return { "file": encryptInfo };
         });
         (prom as IAbortablePromise<any>).abort = () => {
             canceled = true;
@@ -353,9 +357,9 @@ function uploadFile(matrixClient: MatrixClient, roomId: string, file: File | Blo
         const promise1 = basePromise.then(function(url) {
             if (canceled) throw new UploadCanceledError();
             // If the attachment isn't encrypted then include the URL directly.
-            return {"url": url};
+            return { "url": url };
         });
-        promise1.abort = () => {
+        (promise1 as any).abort = () => {
             canceled = true;
             MatrixClientPeg.get().cancelUpload(basePromise);
         };
@@ -367,13 +371,13 @@ export default class ContentMessages {
     private inprogress: IUpload[] = [];
     private mediaConfig: IMediaConfig = null;
 
-    sendStickerContentToRoom(url: string, roomId: string, info: string, text: string, matrixClient: MatrixClient) {
+    sendStickerContentToRoom(url: string, roomId: string, info: IImageInfo, text: string, matrixClient: MatrixClient) {
         const startTime = CountlyAnalytics.getTimestamp();
         const prom = MatrixClientPeg.get().sendStickerMessage(roomId, url, info, text).catch((e) => {
             console.warn(`Failed to send content with URL ${url} to room ${roomId}`, e);
             throw e;
         });
-        CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, false, {msgtype: "m.sticker"});
+        CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, false, { msgtype: "m.sticker" });
         return prom;
     }
 
@@ -387,14 +391,14 @@ export default class ContentMessages {
 
     async sendContentListToRoom(files: File[], roomId: string, matrixClient: MatrixClient) {
         if (matrixClient.isGuest()) {
-            dis.dispatch({action: 'require_registration'});
+            dis.dispatch({ action: 'require_registration' });
             return;
         }
 
         const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
         if (isQuoting) {
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            const {finished} = Modal.createTrackedDialog<[boolean]>('Upload Reply Warning', '', QuestionDialog, {
+            const { finished } = Modal.createTrackedDialog<[boolean]>('Upload Reply Warning', '', QuestionDialog, {
                 title: _t('Replying With Files'),
                 description: (
                     <div>{_t(
@@ -428,7 +432,7 @@ export default class ContentMessages {
 
         if (tooBigFiles.length > 0) {
             const UploadFailureDialog = sdk.getComponent("dialogs.UploadFailureDialog");
-            const {finished} = Modal.createTrackedDialog<[boolean]>('Upload Failure', '', UploadFailureDialog, {
+            const { finished } = Modal.createTrackedDialog<[boolean]>('Upload Failure', '', UploadFailureDialog, {
                 badFiles: tooBigFiles,
                 totalFiles: files.length,
                 contentMessages: this,
@@ -441,11 +445,11 @@ export default class ContentMessages {
         let uploadAll = false;
         // Promise to complete before sending next file into room, used for synchronisation of file-sending
         // to match the order the files were specified in
-        let promBefore = Promise.resolve();
+        let promBefore: Promise<any> = Promise.resolve();
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             if (!uploadAll) {
-                const {finished} = Modal.createTrackedDialog<[boolean, boolean]>('Upload Files confirmation',
+                const { finished } = Modal.createTrackedDialog<[boolean, boolean]>('Upload Files confirmation',
                     '', UploadConfirmDialog, {
                         file,
                         currentIndex: i,
@@ -477,7 +481,7 @@ export default class ContentMessages {
         if (upload) {
             upload.canceled = true;
             MatrixClientPeg.get().cancelUpload(upload.promise);
-            dis.dispatch<UploadCanceledPayload>({action: Action.UploadCanceled, upload});
+            dis.dispatch<UploadCanceledPayload>({ action: Action.UploadCanceled, upload });
         }
     }
 
@@ -538,7 +542,7 @@ export default class ContentMessages {
             promise: prom,
         };
         this.inprogress.push(upload);
-        dis.dispatch<UploadStartedPayload>({action: Action.UploadStarted, upload});
+        dis.dispatch<UploadStartedPayload>({ action: Action.UploadStarted, upload });
 
         // Focus the composer view
         dis.fire(Action.FocusComposer);
@@ -546,7 +550,7 @@ export default class ContentMessages {
         function onProgress(ev) {
             upload.total = ev.total;
             upload.loaded = ev.loaded;
-            dis.dispatch<UploadProgressPayload>({action: Action.UploadProgress, upload});
+            dis.dispatch<UploadProgressPayload>({ action: Action.UploadProgress, upload });
         }
 
         let error;
@@ -573,11 +577,11 @@ export default class ContentMessages {
         }, function(err) {
             error = err;
             if (!upload.canceled) {
-                let desc = _t("The file '%(fileName)s' failed to upload.", {fileName: upload.fileName});
+                let desc = _t("The file '%(fileName)s' failed to upload.", { fileName: upload.fileName });
                 if (err.http_status === 413) {
                     desc = _t(
                         "The file '%(fileName)s' exceeds this homeserver's size limit for uploads",
-                        {fileName: upload.fileName},
+                        { fileName: upload.fileName },
                     );
                 }
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -600,10 +604,10 @@ export default class ContentMessages {
                 if (error && error.http_status === 413) {
                     this.mediaConfig = null;
                 }
-                dis.dispatch<UploadErrorPayload>({action: Action.UploadFailed, upload, error});
+                dis.dispatch<UploadErrorPayload>({ action: Action.UploadFailed, upload, error });
             } else {
-                dis.dispatch<UploadFinishedPayload>({action: Action.UploadFinished, upload});
-                dis.dispatch({action: 'message_sent'});
+                dis.dispatch<UploadFinishedPayload>({ action: Action.UploadFinished, upload });
+                dis.dispatch({ action: 'message_sent' });
             }
         });
     }

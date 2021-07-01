@@ -15,13 +15,13 @@ limitations under the License.
 */
 
 import React from "react";
-import {Room} from "matrix-js-sdk/src/models/room";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
-import {_t} from "../../../../../languageHandler";
-import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
+import { _t } from "../../../../../languageHandler";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import BridgeTile from "../../BridgeTile";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
 const BRIDGE_EVENT_TYPES = [
     "uk.half-shot.bridge",
@@ -44,14 +44,11 @@ export default class BridgeSettingsTab extends React.Component<IProps> {
         return <BridgeTile key={event.getId()} room={room} ev={event} />;
     }
 
-    static getBridgeStateEvents(roomId: string) {
+    static getBridgeStateEvents(roomId: string): MatrixEvent[] {
         const client = MatrixClientPeg.get();
         const roomState = client.getRoom(roomId).currentState;
 
-        return BRIDGE_EVENT_TYPES.map(typeName => {
-            const events = roomState.events.get(typeName);
-            return events ? Array.from(events.values()) : [];
-        }).flat(1);
+        return BRIDGE_EVENT_TYPES.map(typeName => roomState.getStateEvents(typeName)).flat(1);
     }
 
     render() {

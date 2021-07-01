@@ -21,9 +21,9 @@ import { _t } from '../../../languageHandler';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore from "../../../settings/SettingsStore";
 import PropTypes from "prop-types";
-import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
-import {UIFeature} from "../../../settings/UIFeature";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { UIFeature } from "../../../settings/UIFeature";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 function cancelQuoting() {
     dis.dispatch({
@@ -89,12 +89,13 @@ export default class ReplyPreview extends React.Component {
                 </div>
                 <div className="mx_ReplyPreview_clear" />
                 <EventTile
-                    last={true}
+                    alwaysShowTimestamps={true}
                     tileShape="reply_preview"
                     mxEvent={this.state.event}
                     permalinkCreator={this.props.permalinkCreator}
                     isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
                     enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+                    as="div"
                 />
             </div>
         </div>;

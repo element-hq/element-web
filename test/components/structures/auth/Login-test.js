@@ -19,7 +19,7 @@ import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import sdk from '../../../skinned-sdk';
 import SdkConfig from '../../../../src/SdkConfig';
-import {mkServerConfig} from "../../../test-utils";
+import { mkServerConfig } from "../../../test-utils";
 
 const Login = sdk.getComponent(
     'structures.auth.Login',
@@ -133,7 +133,7 @@ describe('Login', function() {
         root.setState({
             flows: [{
                 "type": "m.login.sso",
-                "org.matrix.msc2858.identity_providers": [{
+                "identity_providers": [{
                     id: "a",
                     name: "Provider 1",
                 }, {

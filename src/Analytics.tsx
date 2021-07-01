@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 
-import {getCurrentLanguage, _t, _td, IVariables} from './languageHandler';
+import { getCurrentLanguage, _t, _td, IVariables } from './languageHandler';
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 import Modal from './Modal';

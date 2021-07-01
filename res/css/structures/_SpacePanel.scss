@@ -31,7 +31,6 @@ $activeBorderColor: $secondary-fg-color;
     // Create another flexbox so the Panel fills the container
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
 
     .mx_SpacePanel_spaceTreeWrapper {
         flex: 1;
@@ -67,6 +66,12 @@ $activeBorderColor: $secondary-fg-color;
 
     .mx_SpaceButton_toggleCollapse {
         cursor: pointer;
+    }
+
+    .mx_SpaceItem_dragging {
+        .mx_SpaceButton_toggleCollapse {
+            visibility: hidden;
+        }
     }
 
     .mx_SpaceTreeLevel {

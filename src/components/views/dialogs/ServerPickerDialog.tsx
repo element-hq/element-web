@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from "react";
-import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
+import React, { createRef } from "react";
+import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
 
-import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
 import BaseDialog from './BaseDialog';
 import { _t } from '../../../languageHandler';
 import AccessibleButton from "../elements/AccessibleButton";
@@ -25,8 +25,8 @@ import SdkConfig from "../../../SdkConfig";
 import Field from "../elements/Field";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import TextWithTooltip from "../elements/TextWithTooltip";
-import withValidation, {IFieldState} from "../elements/Validation";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import withValidation, { IFieldState } from "../elements/Validation";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     title?: string;

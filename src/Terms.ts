@@ -16,7 +16,7 @@ limitations under the License.
 
 import classNames from 'classnames';
 
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { MatrixClientPeg } from './MatrixClientPeg';
 import * as sdk from '.';
 import Modal from './Modal';
 
@@ -36,14 +36,18 @@ export class Service {
     }
 }
 
-interface Policy {
+export interface LocalisedPolicy {
+    name: string;
+    url: string;
+}
+
+export interface Policy {
     // @ts-ignore: No great way to express indexed types together with other keys
     version: string;
-    [lang: string]: {
-        url: string;
-    };
+    [lang: string]: LocalisedPolicy;
 }
-type Policies = {
+
+export type Policies = {
     [policy: string]: Policy,
 };
 
@@ -99,7 +103,7 @@ export async function startTermsFlow(
 
     // fetch the set of agreed policy URLs from account data
     const currentAcceptedTerms = await MatrixClientPeg.get().getAccountData('m.accepted_terms');
-    let agreedUrlSet;
+    let agreedUrlSet: Set<string>;
     if (!currentAcceptedTerms || !currentAcceptedTerms.getContent() || !currentAcceptedTerms.getContent().accepted) {
         agreedUrlSet = new Set();
     } else {
@@ -113,7 +117,7 @@ export async function startTermsFlow(
     // but that is not a thing the API supports, so probably best to just show
     // things they've not agreed to yet.
     const unagreedPoliciesAndServicePairs = [];
-    for (const {service, policies} of policiesAndServicePairs) {
+    for (const { service, policies } of policiesAndServicePairs) {
         const unagreedPolicies = {};
         for (const [policyName, policy] of Object.entries(policies)) {
             let policyAgreed = false;
@@ -127,7 +131,7 @@ export async function startTermsFlow(
             if (!policyAgreed) unagreedPolicies[policyName] = policy;
         }
         if (Object.keys(unagreedPolicies).length > 0) {
-            unagreedPoliciesAndServicePairs.push({service, policies: unagreedPolicies});
+            unagreedPoliciesAndServicePairs.push({ service, policies: unagreedPolicies });
         }
     }
 
@@ -144,7 +148,7 @@ export async function startTermsFlow(
 
     // We only ever add to the set of URLs, so if anything has changed then we'd see a different length
     if (agreedUrlSet.size !== numAcceptedBeforeAgreement) {
-        const newAcceptedTerms = {accepted: Array.from(agreedUrlSet)};
+        const newAcceptedTerms = { accepted: Array.from(agreedUrlSet) };
         await MatrixClientPeg.get().setAccountData('m.accepted_terms', newAcceptedTerms);
     }
 

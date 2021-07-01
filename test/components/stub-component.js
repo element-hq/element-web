@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-export default function({displayName = "StubComponent", render} = {}) {
+export default function({ displayName = "StubComponent", render } = {}) {
     if (!render) {
         render = function() {
             return <div>{ displayName }</div>;

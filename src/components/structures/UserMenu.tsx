@@ -26,14 +26,14 @@ import { ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { _t } from "../../languageHandler";
 import { ContextMenuButton } from "./ContextMenu";
-import { USER_NOTIFICATIONS_TAB, USER_SECURITY_TAB } from "../views/dialogs/UserSettingsDialog";
+import { UserTab } from "../views/dialogs/UserSettingsDialog";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import FeedbackDialog from "../views/dialogs/FeedbackDialog";
 import Modal from "../../Modal";
 import LogoutDialog from "../views/dialogs/LogoutDialog";
 import SettingsStore from "../../settings/SettingsStore";
-import {getCustomTheme} from "../../theme";
-import AccessibleButton, {ButtonEvent} from "../views/elements/AccessibleButton";
+import { getCustomTheme } from "../../theme";
+import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
 import SdkConfig from "../../SdkConfig";
 import { getHomePageUrl } from "../../utils/pages";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
@@ -56,8 +56,9 @@ import HostSignupAction from "./HostSignupAction";
 import { IHostSignupConfig } from "../views/dialogs/HostSignupDialogTypes";
 import SpaceStore, { UPDATE_SELECTED_SPACE } from "../../stores/SpaceStore";
 import RoomName from "../views/elements/RoomName";
-import {replaceableComponent} from "../../utils/replaceableComponent";
-
+import { replaceableComponent } from "../../utils/replaceableComponent";
+import InlineSpinner from "../views/elements/InlineSpinner";
+import TooltipButton from "../views/elements/TooltipButton";
 interface IProps {
     isMinimized: boolean;
 }
@@ -68,6 +69,7 @@ interface IState {
     contextMenuPosition: PartialDOMRect;
     isDarkTheme: boolean;
     selectedSpace?: Room;
+    pendingRoomJoin: Set<string>;
 }
 
 @replaceableComponent("structures.UserMenu")
@@ -84,6 +86,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.state = {
             contextMenuPosition: null,
             isDarkTheme: this.isUserOnDarkTheme(),
+            pendingRoomJoin: new Set<string>(),
         };
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
@@ -103,6 +106,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         this.themeWatcherRef = SettingsStore.watchSetting("theme", null, this.onThemeChanged);
         this.tagStoreRef = GroupFilterOrderStore.addListener(this.onTagStoreUpdate);
+        MatrixClientPeg.get().on("Room", this.onRoom);
     }
 
     public componentWillUnmount() {
@@ -114,7 +118,12 @@ export default class UserMenu extends React.Component<IProps, IState> {
         if (SettingsStore.getValue("feature_spaces")) {
             SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
         }
+        MatrixClientPeg.get().removeListener("Room", this.onRoom);
     }
+
+    private onRoom = (room: Room): void => {
+        this.removePendingJoinRoom(room.roomId);
+    };
 
     private onTagStoreUpdate = () => {
         this.forceUpdate(); // we don't have anything useful in state to update
@@ -143,24 +152,48 @@ export default class UserMenu extends React.Component<IProps, IState> {
     };
 
     private onThemeChanged = () => {
-        this.setState({isDarkTheme: this.isUserOnDarkTheme()});
+        this.setState({ isDarkTheme: this.isUserOnDarkTheme() });
     };
 
     private onAction = (ev: ActionPayload) => {
-        if (ev.action !== Action.ToggleUserMenu) return; // not interested
-
-        if (this.state.contextMenuPosition) {
-            this.setState({contextMenuPosition: null});
-        } else {
-            if (this.buttonRef.current) this.buttonRef.current.click();
+        switch (ev.action) {
+            case Action.ToggleUserMenu:
+                if (this.state.contextMenuPosition) {
+                    this.setState({ contextMenuPosition: null });
+                } else {
+                    if (this.buttonRef.current) this.buttonRef.current.click();
+                }
+                break;
+            case Action.JoinRoom:
+                this.addPendingJoinRoom(ev.roomId);
+                break;
+            case Action.JoinRoomReady:
+            case Action.JoinRoomError:
+                this.removePendingJoinRoom(ev.roomId);
+                break;
         }
     };
+
+    private addPendingJoinRoom(roomId: string): void {
+        this.setState({
+            pendingRoomJoin: new Set<string>(this.state.pendingRoomJoin)
+                .add(roomId),
+        });
+    }
+
+    private removePendingJoinRoom(roomId: string): void {
+        if (this.state.pendingRoomJoin.delete(roomId)) {
+            this.setState({
+                pendingRoomJoin: new Set<string>(this.state.pendingRoomJoin),
+            });
+        }
+    }
 
     private onOpenMenuClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
-        this.setState({contextMenuPosition: target.getBoundingClientRect()});
+        this.setState({ contextMenuPosition: target.getBoundingClientRect() });
     };
 
     private onContextMenu = (ev: React.MouseEvent) => {
@@ -177,7 +210,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
     };
 
     private onCloseMenu = () => {
-        this.setState({contextMenuPosition: null});
+        this.setState({ contextMenuPosition: null });
     };
 
     private onSwitchThemeClick = (ev: React.MouseEvent) => {
@@ -195,9 +228,9 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        const payload: OpenToTabPayload = {action: Action.ViewUserSettings, initialTabId: tabId};
+        const payload: OpenToTabPayload = { action: Action.ViewUserSettings, initialTabId: tabId };
         defaultDispatcher.dispatch(payload);
-        this.setState({contextMenuPosition: null}); // also close the menu
+        this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
     private onShowArchived = (ev: ButtonEvent) => {
@@ -214,7 +247,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.stopPropagation();
 
         Modal.createTrackedDialog('Feedback Dialog', '', FeedbackDialog);
-        this.setState({contextMenuPosition: null}); // also close the menu
+        this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
     private onSignOutClick = async (ev: ButtonEvent) => {
@@ -224,30 +257,30 @@ export default class UserMenu extends React.Component<IProps, IState> {
         const cli = MatrixClientPeg.get();
         if (!cli || !cli.isCryptoEnabled() || !(await cli.exportRoomKeys())?.length) {
             // log out without user prompt if they have no local megolm sessions
-            dis.dispatch({action: 'logout'});
+            dis.dispatch({ action: 'logout' });
         } else {
             Modal.createTrackedDialog('Logout from LeftPanel', '', LogoutDialog);
         }
 
-        this.setState({contextMenuPosition: null}); // also close the menu
+        this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
     private onSignInClick = () => {
         dis.dispatch({ action: 'start_login' });
-        this.setState({contextMenuPosition: null}); // also close the menu
+        this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
     private onRegisterClick = () => {
         dis.dispatch({ action: 'start_registration' });
-        this.setState({contextMenuPosition: null}); // also close the menu
+        this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
     private onHomeClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
 
-        defaultDispatcher.dispatch({action: 'view_home_page'});
-        this.setState({contextMenuPosition: null}); // also close the menu
+        defaultDispatcher.dispatch({ action: 'view_home_page' });
+        this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
     private onCommunitySettingsClick = (ev: ButtonEvent) => {
@@ -257,7 +290,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         Modal.createTrackedDialog('Edit Community', '', EditCommunityPrototypeDialog, {
             communityId: CommunityPrototypeStore.instance.getSelectedCommunityId(),
         });
-        this.setState({contextMenuPosition: null}); // also close the menu
+        this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
     private onCommunityMembersClick = (ev: ButtonEvent) => {
@@ -274,7 +307,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 action: 'view_room',
                 room_id: chat.roomId,
             }, true);
-            dis.dispatch({action: Action.SetRightPanelPhase, phase: RightPanelPhases.RoomMemberList});
+            dis.dispatch({ action: Action.SetRightPanelPhase, phase: RightPanelPhases.RoomMemberList });
         } else {
             // "This should never happen" clauses go here for the prototype.
             Modal.createTrackedDialog('Failed to find general chat', '', ErrorDialog, {
@@ -282,7 +315,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 description: _t("Failed to find the general chat for this community"),
             });
         }
-        this.setState({contextMenuPosition: null}); // also close the menu
+        this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
     private onCommunityInviteClick = (ev: ButtonEvent) => {
@@ -290,7 +323,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.stopPropagation();
 
         showCommunityInviteDialog(CommunityPrototypeStore.instance.getSelectedCommunityId());
-        this.setState({contextMenuPosition: null}); // also close the menu
+        this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
     private onDndToggle = (ev) => {
@@ -324,7 +357,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                         ),
                     })}
                 </div>
-            )
+            );
         } else if (hostSignupConfig) {
             if (hostSignupConfig && hostSignupConfig.url) {
                 // If hostSignup.domains is set to a non-empty array, only show
@@ -333,9 +366,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 const mxDomain = MatrixClientPeg.get().getDomain();
                 const validDomains = hostSignupDomains.filter(d => (d === mxDomain || mxDomain.endsWith(`.${d}`)));
                 if (!hostSignupConfig.domains || validDomains.length > 0) {
-                    topSection = <div onClick={this.onCloseMenu}>
-                        <HostSignupAction />
-                    </div>;
+                    topSection = <HostSignupAction onClick={this.onCloseMenu} />;
                 }
             }
         }
@@ -377,12 +408,12 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     <IconizedContextMenuOption
                         iconClassName="mx_UserMenu_iconBell"
                         label={_t("Notification settings")}
-                        onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}
+                        onClick={(e) => this.onSettingsOpen(e, UserTab.Notifications)}
                     />
                     <IconizedContextMenuOption
                         iconClassName="mx_UserMenu_iconLock"
                         label={_t("Security & privacy")}
-                        onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}
+                        onClick={(e) => this.onSettingsOpen(e, UserTab.Security)}
                     />
                     <IconizedContextMenuOption
                         iconClassName="mx_UserMenu_iconSettings"
@@ -478,7 +509,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                         />
                     </IconizedContextMenuOptionList>
                 </React.Fragment>
-            )
+            );
         } else if (MatrixClientPeg.get().isGuest()) {
             primaryOptionList = (
                 <React.Fragment>
@@ -617,6 +648,14 @@ export default class UserMenu extends React.Component<IProps, IState> {
                             />
                         </span>
                         {name}
+                        {this.state.pendingRoomJoin.size > 0 && (
+                            <InlineSpinner>
+                                <TooltipButton helpText={_t(
+                                    "Currently joining %(count)s rooms",
+                                    { count: this.state.pendingRoomJoin.size },
+                                )} />
+                            </InlineSpinner>
+                        )}
                         {dnd}
                         {buttons}
                     </div>

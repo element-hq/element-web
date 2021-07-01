@@ -30,7 +30,7 @@ interface IProps extends IDialogProps {
     device: IDevice;
 }
 
-const UntrustedDeviceDialog: React.FC<IProps> = ({device, user, onFinished}) => {
+const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) => {
     let askToVerifyText;
     let newSessionText;
 
@@ -39,7 +39,7 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({device, user, onFinished}) => 
         askToVerifyText = _t("Verify your other session using one of the options below.");
     } else {
         newSessionText = _t("%(name)s (%(userId)s) signed in to a new session without verifying it:",
-            {name: user.displayName, userId: user.userId});
+            { name: user.displayName, userId: user.userId });
         askToVerifyText = _t("Ask this user to verify their session, or manually verify it below.");
     }
 

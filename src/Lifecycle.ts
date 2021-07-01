@@ -20,9 +20,9 @@ limitations under the License.
 import { createClient } from 'matrix-js-sdk/src/matrix';
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import {decryptAES, encryptAES} from "matrix-js-sdk/src/crypto/aes";
+import { decryptAES, encryptAES, IEncryptedPayload } from "matrix-js-sdk/src/crypto/aes";
 
-import {IMatrixClientCreds, MatrixClientPeg} from './MatrixClientPeg';
+import { IMatrixClientCreds, MatrixClientPeg } from './MatrixClientPeg';
 import SecurityCustomisations from "./customisations/Security";
 import EventIndexPeg from './indexing/EventIndexPeg';
 import createMatrixClient from './utils/createMatrixClient';
@@ -41,17 +41,17 @@ import * as StorageManager from './utils/StorageManager';
 import SettingsStore from "./settings/SettingsStore";
 import TypingStore from "./stores/TypingStore";
 import ToastStore from "./stores/ToastStore";
-import {IntegrationManagers} from "./integrations/IntegrationManagers";
-import {Mjolnir} from "./mjolnir/Mjolnir";
+import { IntegrationManagers } from "./integrations/IntegrationManagers";
+import { Mjolnir } from "./mjolnir/Mjolnir";
 import DeviceListener from "./DeviceListener";
-import {Jitsi} from "./widgets/Jitsi";
-import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY, SSO_IDP_ID_KEY} from "./BasePlatform";
+import { Jitsi } from "./widgets/Jitsi";
+import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY, SSO_IDP_ID_KEY } from "./BasePlatform";
 import ThreepidInviteStore from "./stores/ThreepidInviteStore";
 import CountlyAnalytics from "./CountlyAnalytics";
 import CallHandler from './CallHandler';
 import LifecycleCustomisations from "./customisations/Lifecycle";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
-import {_t} from "./languageHandler";
+import { _t } from "./languageHandler";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -154,7 +154,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
  *     return [null, null].
  */
 export async function getStoredSessionOwner(): Promise<[string, boolean]> {
-    const {hsUrl, userId, hasAccessToken, isGuest} = await getStoredSessionVars();
+    const { hsUrl, userId, hasAccessToken, isGuest } = await getStoredSessionVars();
     return hsUrl && userId && hasAccessToken ? [userId, isGuest] : [null, null];
 }
 
@@ -303,7 +303,7 @@ export interface IStoredSession {
     hsUrl: string;
     isUrl: string;
     hasAccessToken: boolean;
-    accessToken: string | object;
+    accessToken: string | IEncryptedPayload;
     userId: string;
     deviceId: string;
     isGuest: boolean;
@@ -346,11 +346,11 @@ export async function getStoredSessionVars(): Promise<IStoredSession> {
         isGuest = localStorage.getItem("matrix-is-guest") === "true";
     }
 
-    return {hsUrl, isUrl, hasAccessToken, accessToken, userId, deviceId, isGuest};
+    return { hsUrl, isUrl, hasAccessToken, accessToken, userId, deviceId, isGuest };
 }
 
 // The pickle key is a string of unspecified length and format.  For AES, we
-// need a 256-bit Uint8Array.  So we HKDF the pickle key to generate the AES
+// need a 256-bit Uint8Array. So we HKDF the pickle key to generate the AES
 // key.  The AES key should be zeroed after it is used.
 async function pickleKeyToAesKey(pickleKey: string): Promise<Uint8Array> {
     const pickleKeyBuffer = new Uint8Array(pickleKey.length);
@@ -402,7 +402,7 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
         return false;
     }
 
-    const {hsUrl, isUrl, hasAccessToken, accessToken, userId, deviceId, isGuest} = await getStoredSessionVars();
+    const { hsUrl, isUrl, hasAccessToken, accessToken, userId, deviceId, isGuest } = await getStoredSessionVars();
 
     if (hasAccessToken && !accessToken) {
         abortLogin();
@@ -495,7 +495,7 @@ export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<Matr
         console.log("Pickle key not created");
     }
 
-    return doSetLoggedIn(Object.assign({}, credentials, {pickleKey}), true);
+    return doSetLoggedIn(Object.assign({}, credentials, { pickleKey }), true);
 }
 
 /**
@@ -562,7 +562,7 @@ async function doSetLoggedIn(
     //
     // we fire it *synchronously* to make sure it fires before on_logged_in.
     // (dis.dispatch uses `setTimeout`, which does not guarantee ordering.)
-    dis.dispatch({action: 'on_logging_in'}, true);
+    dis.dispatch({ action: 'on_logging_in' }, true);
 
     if (clearStorageEnabled) {
         await clearStorage();
@@ -745,7 +745,7 @@ export function softLogout(): void {
     // Ensure that we dispatch a view change **before** stopping the client so
     // so that React components unmount first. This avoids React soft crashes
     // that can occur when components try to use a null client.
-    dis.dispatch({action: 'on_client_not_viable'}); // generic version of on_logged_out
+    dis.dispatch({ action: 'on_client_not_viable' }); // generic version of on_logged_out
     stopMatrixClient(/*unsetClient=*/false);
 
     // DO NOT CALL LOGOUT. A soft logout preserves data, logout does not.
@@ -772,7 +772,7 @@ async function startMatrixClient(startSyncing = true): Promise<void> {
     // to add listeners for the 'sync' event so otherwise we'd have
     // a race condition (and we need to dispatch synchronously for this
     // to work).
-    dis.dispatch({action: 'will_start_client'}, true);
+    dis.dispatch({ action: 'will_start_client' }, true);
 
     // reset things first just in case
     TypingStore.sharedInstance().reset();
@@ -814,7 +814,7 @@ async function startMatrixClient(startSyncing = true): Promise<void> {
 
     // dispatch that we finished starting up to wire up any other bits
     // of the matrix client that cannot be set prior to starting up.
-    dis.dispatch({action: 'client_started'});
+    dis.dispatch({ action: 'client_started' });
 
     if (isSoftLogout()) {
         softLogout();
@@ -830,9 +830,9 @@ export async function onLoggedOut(): Promise<void> {
     // Ensure that we dispatch a view change **before** stopping the client so
     // so that React components unmount first. This avoids React soft crashes
     // that can occur when components try to use a null client.
-    dis.dispatch({action: 'on_logged_out'}, true);
+    dis.dispatch({ action: 'on_logged_out' }, true);
     stopMatrixClient();
-    await clearStorage({deleteEverything: true});
+    await clearStorage({ deleteEverything: true });
     LifecycleCustomisations.onLoggedOutAndStorageCleared?.();
 }
 

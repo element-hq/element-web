@@ -21,7 +21,7 @@ import * as sdk from '../../index';
 import dis from '../../dispatcher/dispatcher';
 import classNames from 'classnames';
 import * as FormattingUtils from '../../utils/FormattingUtils';
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 
 @replaceableComponent("structures.CustomRoomTagPanel")
 class CustomRoomTagPanel extends React.Component {
@@ -34,7 +34,7 @@ class CustomRoomTagPanel extends React.Component {
 
     componentDidMount() {
         this._tagStoreToken = CustomRoomTagStore.addListener(() => {
-            this.setState({tags: CustomRoomTagStore.getSortedTags()});
+            this.setState({ tags: CustomRoomTagStore.getSortedTags() });
         });
     }
 
@@ -64,7 +64,7 @@ class CustomRoomTagPanel extends React.Component {
 
 class CustomRoomTagTile extends React.Component {
     onClick = () => {
-        dis.dispatch({action: 'select_custom_room_tag', tag: this.props.tag.name});
+        dis.dispatch({ action: 'select_custom_room_tag', tag: this.props.tag.name });
     };
 
     render() {
