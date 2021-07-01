@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 import EventTile, { haveTileForEvent } from "./EventTile";
 import DateSeparator from '../messages/DateSeparator';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -25,7 +26,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // a matrix-js-sdk SearchResult containing the details of this result
-    searchResult: any;
+    searchResult: SearchResult;
     // a list of strings to be highlighted in the results
     searchHighlights?: string[];
     // href for the highlights in this result

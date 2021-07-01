@@ -37,7 +37,6 @@ import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks"
 import { SHORTCODE_TO_EMOJI, getEmojiFromUnicode } from "./emoji";
 import ReplyThread from "./components/views/elements/ReplyThread";
 import { mediaFromMxc } from "./customisations/Media";
-import { highlight } from 'highlight.js';
 
 linkifyMatrix(linkify);
 
