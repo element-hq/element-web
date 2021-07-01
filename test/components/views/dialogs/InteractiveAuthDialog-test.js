@@ -22,7 +22,7 @@ import MatrixReactTestUtils from 'matrix-react-test-utils';
 import sdk from '../../../skinned-sdk';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 
-import * as test_utils from '../../../test-utils';
+import * as TestUtilsMatrix from '../../../test-utils';
 import { sleep } from "../../../../src/utils/promise";
 
 const InteractiveAuthDialog = sdk.getComponent(
@@ -33,7 +33,7 @@ describe('InteractiveAuthDialog', function() {
     let parentDiv;
 
     beforeEach(function() {
-        test_utils.stubClient();
+        TestUtilsMatrix.stubClient();
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);
     });

@@ -42,7 +42,13 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * The reason for C&Ping jasmine's clock here is that jasmine itself is
  * difficult to webpack, and we don't really want all of it. Sinon also has a
  * mock-clock implementation, but again, it is difficult to webpack.
+ *
+ * Hopefully the reasons for c+ping this no longer apply, but until we can
+ * verify this / remove it, disable the eslint rule that it breaks (impresssively
+ * only one, having fixed the long line).
  */
+
+/* eslint-disable prefer-rest-params */
 
 const j$ = {};
 
@@ -67,7 +73,10 @@ j$.Clock = function() {
 
         self.install = function() {
             if (!originalTimingFunctionsIntact()) {
-                throw new Error('Jasmine Clock was unable to install over custom global timer functions. Is the clock already installed?');
+                throw new Error(
+                    'Jasmine Clock was unable to install over custom global timer functions. ' +
+                    'Is the clock already installed?',
+                );
             }
             replace(global, fakeTimingFunctions);
             timer = fakeTimingFunctions;
