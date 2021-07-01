@@ -48,7 +48,7 @@ interface IProps {
     onSettingsClick: () => void;
     onSearchClick: () => void;
     onForgetClick: () => void;
-    onCallPlaced: (PlaceCallType) => void;
+    onCallPlaced: (type: PlaceCallType) => void;
     onAppsClick: () => void;
     e2eStatus: E2EStatus;
     appsShown: boolean;
