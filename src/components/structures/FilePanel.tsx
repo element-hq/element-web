@@ -19,6 +19,7 @@ import React from 'react';
 
 import { Filter } from 'matrix-js-sdk/src/filter';
 import { EventTimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
+import { Direction } from "matrix-js-sdk/src/models/event-timeline";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
@@ -153,7 +154,11 @@ class FilePanel extends React.Component<IProps, IState> {
         return timelineSet;
     }
 
-    private onPaginationRequest = (timelineWindow: TimelineWindow, direction: string, limit: number): void => {
+    private onPaginationRequest = (
+        timelineWindow: TimelineWindow,
+        direction: Direction,
+        limit: number,
+    ): Promise<boolean> => {
         const client = MatrixClientPeg.get();
         const eventIndex = EventIndexPeg.get();
         const roomId = this.props.roomId;

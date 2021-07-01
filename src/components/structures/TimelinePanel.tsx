@@ -19,7 +19,7 @@ import ReactDOM from "react-dom";
 import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventTimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
-import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
+import { Direction, EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
 import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { EventType, RelationType } from 'matrix-js-sdk/src/@types/event';
 import { SyncState } from 'matrix-js-sdk/src/sync.api';
@@ -388,7 +388,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     private onPaginationRequest = (
         timelineWindow: TimelineWindow,
-        direction: string,
+        direction: Direction,
         size: number,
     ): Promise<boolean> => {
         if (this.props.onPaginationRequest) {

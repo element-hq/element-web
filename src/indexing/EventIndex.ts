@@ -862,7 +862,7 @@ export default class EventIndex extends EventEmitter {
      * @returns {Promise<boolean>} Resolves to a boolean which is true if more
      * events were successfully retrieved.
      */
-    public paginateTimelineWindow(room: Room, timelineWindow: TimelineWindow, direction: string, limit: number) {
+    public paginateTimelineWindow(room: Room, timelineWindow: TimelineWindow, direction: Direction, limit: number) {
         const tl = timelineWindow.getTimelineIndex(direction);
 
         if (!tl) return Promise.resolve(false);
