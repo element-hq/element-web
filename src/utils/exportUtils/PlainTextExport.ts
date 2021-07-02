@@ -12,8 +12,13 @@ export default class PlainTextExporter extends Exporter {
     protected totalSize: number;
     protected mediaOmitText: string;
 
-    constructor(room: Room, exportType: exportTypes, exportOptions: exportOptions) {
-        super(room, exportType, exportOptions);
+    constructor(
+        room: Room,
+        exportType: exportTypes,
+        exportOptions: exportOptions,
+        setProgressText: React.Dispatch<React.SetStateAction<string>>,
+    ) {
+        super(room, exportType, exportOptions, setProgressText);
         this.totalSize = 0;
         this.mediaOmitText = !this.exportOptions.attachmentsIncluded
             ? _t("Media omitted")
@@ -79,7 +84,9 @@ export default class PlainTextExporter extends Exporter {
 
     protected async createOutput(events: MatrixEvent[]) {
         let content = "";
-        for (const event of events) {
+        for (let i = 0; i < events.length; i++) {
+            const event = events[i];
+            if (i % 100 == 0) this.updateProgress(`Processing event ${i ? i : 1} out of ${events.length}`, false, true);
             if (this.cancelled) return this.cleanUp();
             if (!haveTileForEvent(event)) continue;
             const textForEvent = await this._textForEvent(event);
@@ -89,8 +96,8 @@ export default class PlainTextExporter extends Exporter {
     }
 
     public async export() {
-        console.info("Starting export process...");
-        console.info("Fetching events...");
+        this.updateProgress("Starting export process...");
+        this.updateProgress("Fetching events...");
 
         const fetchStart = performance.now();
         const res = await this.getRequiredEvents();
@@ -98,7 +105,7 @@ export default class PlainTextExporter extends Exporter {
 
         console.log(`Fetched ${res.length} events in ${(fetchEnd - fetchStart)/1000}s`);
 
-        console.info("Creating output...");
+        this.updateProgress("Creating output...");
         const text = await this.createOutput(res);
 
         if (this.files.length) {

@@ -26,7 +26,8 @@ export default abstract class Exporter {
     protected constructor(
         protected room: Room,
         protected exportType: exportTypes,
-        protected exportOptions?: exportOptions,
+        protected exportOptions: exportOptions,
+        protected setProgressText: React.Dispatch<React.SetStateAction<string>>,
     ) {
         this.cancelled = false;
         this.files = [];
@@ -38,6 +39,11 @@ export default abstract class Exporter {
     protected onBeforeUnload(e: BeforeUnloadEvent): string {
         e.preventDefault();
         return e.returnValue = "Are you sure you want to exit during this export?";
+    }
+
+    protected updateProgress(progress: string, log = true, show = true): void {
+        if (log) console.log(progress);
+        if (show) this.setProgressText(progress);
     }
 
     protected addFile(filePath: string, blob: Blob): void {
@@ -57,7 +63,7 @@ export default abstract class Exporter {
         // Create a writable stream to the directory
         this.fileStream = streamSaver.createWriteStream(filename);
 
-        if (!this.cancelled) console.info("Generating a ZIP...");
+        if (!this.cancelled) this.updateProgress("Generating a ZIP...");
         else return this.cleanUp();
 
         this.writer = this.fileStream.getWriter();
@@ -72,7 +78,7 @@ export default abstract class Exporter {
 
         if (this.cancelled) return this.cleanUp();
 
-        console.info("Writing to the file system...");
+        this.updateProgress("Writing to the file system...");
 
         const reader = readableZipStream.getReader();
         await this.pumpToFileStream(reader);
@@ -172,7 +178,11 @@ export default abstract class Exporter {
                 }
                 events.push(mxEv);
             }
-            console.log("Fetched " + events.length + " events so far.");
+            this.updateProgress(
+                ("Fetched " + events.length + " events ") + (this.exportType === exportTypes.LAST_N_MESSAGES
+                    ? `out of ${this.exportOptions.numberOfMessages}...`
+                    : "so far..."),
+            );
             prevToken = res.end;
         }
         // Reverse the events so that we preserve the order

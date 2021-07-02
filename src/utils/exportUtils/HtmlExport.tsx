@@ -27,8 +27,13 @@ export default class HTMLExporter extends Exporter {
     protected totalSize: number;
     protected mediaOmitText: string;
 
-    constructor(room: Room, exportType: exportTypes, exportOptions: exportOptions) {
-        super(room, exportType, exportOptions);
+    constructor(
+        room: Room,
+        exportType: exportTypes,
+        exportOptions: exportOptions,
+        setProgressText: React.Dispatch<React.SetStateAction<string>>,
+    ) {
+        super(room, exportType, exportOptions, setProgressText);
         this.avatars = new Map<string, boolean>();
         this.permalinkCreator = new RoomPermalinkCreator(this.room);
         this.totalSize = 0;
@@ -328,6 +333,7 @@ export default class HTMLExporter extends Exporter {
         let prevEvent = null;
         for (let i = 0; i < events.length; i++) {
             const event = events[i];
+            if (i % 100 == 0) this.updateProgress(`Processing event ${i ? i : 1} out of ${events.length}`, false, true);
             if (this.cancelled) return this.cleanUp();
             if (!haveTileForEvent(event)) continue;
 
@@ -343,16 +349,16 @@ export default class HTMLExporter extends Exporter {
     }
 
     public async export() {
-        console.info("Starting export process...");
-        console.info("Fetching events...");
+        this.updateProgress("Starting export process...", true, false);
+        this.updateProgress("Fetching events...");
 
         const fetchStart = performance.now();
         const res = await this.getRequiredEvents();
         const fetchEnd = performance.now();
 
-        console.log(`Fetched ${res.length} events in ${(fetchEnd - fetchStart)/1000}s`);
+        this.updateProgress(`Fetched ${res.length} events in ${(fetchEnd - fetchStart)/1000}s`, true, false);
 
-        console.info("Creating HTML...");
+        this.updateProgress("Creating HTML...");
         const html = await this.createHTML(res);
 
         this.addFile("index.html", new Blob([html]));
@@ -370,8 +376,8 @@ export default class HTMLExporter extends Exporter {
         if (this.cancelled) {
             console.info("Export cancelled successfully");
         } else {
-            console.info("Export successful!");
-            console.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
+            this.updateProgress("Export successful!");
+            this.updateProgress(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
         }
 
         this.cleanUp();

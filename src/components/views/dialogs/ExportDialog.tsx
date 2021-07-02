@@ -29,6 +29,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     const [exportType, setExportType] = useState(exportTypes.TIMELINE);
     const [includeAttachments, setAttachments] = useState(false);
     const [isExporting, setExporting] = useState(false);
+    const [exportProgressText, setExportProgressText] = useState("");
     const [numberOfMessages, setNumberOfMessages] = useState<number>(100);
     const [sizeLimit, setSizeLimit] = useState<number | null>(8);
     const sizeLimitRef = useRef<Field>();
@@ -58,6 +59,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                         room,
                         exportTypes[exportType],
                         exportOptions,
+                        setExportProgressText,
                     ),
                 );
                 break;
@@ -67,6 +69,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                         room,
                         exportTypes[exportType],
                         exportOptions,
+                        setExportProgressText,
                     ),
                 );
                 break;
@@ -76,6 +79,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                         room,
                         exportTypes[exportType],
                         exportOptions,
+                        setExportProgressText,
                     ),
                 );
                 break;
@@ -352,6 +356,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 onFinished={onFinished}
                 fixedWidth={true}
             >
+                <p> { exportProgressText } </p>
                 <DialogButtons
                     primaryButton={_t("Cancel")}
                     primaryButtonClass="danger"
