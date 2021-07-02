@@ -17,6 +17,7 @@ limitations under the License.
 import { ICryptoCallbacks, ISecretStorageKeyInfo } from 'matrix-js-sdk/src/matrix';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import Modal from './Modal';
+import * as sdk from './index';
 import { MatrixClientPeg } from './MatrixClientPeg';
 import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
@@ -28,8 +29,6 @@ import RestoreKeyBackupDialog from './components/views/dialogs/security/RestoreK
 import SettingsStore from "./settings/SettingsStore";
 import SecurityCustomisations from "./customisations/Security";
 import { DeviceTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
-import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
-import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
@@ -69,6 +68,7 @@ export class AccessCancelledError extends Error {
 }
 
 async function confirmToDismiss(): Promise<boolean> {
+    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
     const [sure] = await Modal.createDialog(QuestionDialog, {
         title: _t("Cancel entering passphrase?"),
         description: _t("Are you sure you want to cancel entering passphrase?"),
@@ -354,6 +354,8 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
                 throw new Error("Secret storage creation canceled");
             }
         } else {
+            // FIXME: Using an import will result in test failures
+            const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
             await cli.bootstrapCrossSigning({
                 authUploadDeviceSigningKeys: async (makeRequest) => {
                     const { finished } = Modal.createTrackedDialog(
