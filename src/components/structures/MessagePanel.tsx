@@ -229,6 +229,9 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     private readonly showTypingNotificationsWatcherRef: string;
     private eventNodes: Record<string, HTMLElement>;
 
+    // A map of <callId, CallEventGrouper>
+    private callEventGroupers = new Map<string, CallEventGrouper>();
+
     constructor(props, context) {
         super(props, context);
 
@@ -245,9 +248,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         this.showTypingNotificationsWatcherRef =
             SettingsStore.watchSetting("showTypingNotifications", null, this.onShowTypingNotificationsChange);
-
-        // A map of <callId, CallEventGrouper>
-        this._callEventGroupers = new Map();
     }
 
     componentDidMount() {
@@ -576,12 +576,12 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 mxEv.getType().indexOf("org.matrix.call.") === 0
             ) {
                 const callId = mxEv.getContent().call_id;
-                if (this._callEventGroupers.has(callId)) {
-                    this._callEventGroupers.get(callId).add(mxEv);
+                if (this.callEventGroupers.has(callId)) {
+                    this.callEventGroupers.get(callId).add(mxEv);
                 } else {
                     const callEventGrouper = new CallEventGrouper();
                     callEventGrouper.add(mxEv);
-                    this._callEventGroupers.set(callId, callEventGrouper);
+                    this.callEventGroupers.set(callId, callEventGrouper);
                 }
             }
 
@@ -698,7 +698,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         // it's successful: we received it.
         isLastSuccessful = isLastSuccessful && mxEv.getSender() === MatrixClientPeg.get().getUserId();
 
-        const callEventGrouper = this._callEventGroupers.get(mxEv.getContent().call_id);
+        const callEventGrouper = this.callEventGroupers.get(mxEv.getContent().call_id);
 
         // use txnId as key if available so that we don't remount during sending
         ret.push(
