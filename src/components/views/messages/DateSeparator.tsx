@@ -35,7 +35,7 @@ function getDaysArray(): string[] {
 
 interface IProps {
     ts: number;
-    forExport?: boolean
+    forExport?: boolean;
 }
 
 @replaceableComponent("views.messages.DateSeparator")

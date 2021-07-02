@@ -55,8 +55,8 @@ class Crc32 {
 }
 
 type DataHelper = {
-    array: Uint8Array,
-    view: DataView,
+    array: Uint8Array;
+    view: DataView;
 };
 
 const getDataHelper = (byteLength: number): DataHelper => {
@@ -68,24 +68,24 @@ const getDataHelper = (byteLength: number): DataHelper => {
 };
 
 type FileLike = File & {
-    directory: string,
-    comment: string,
-    stream(): ReadableStream,
+    directory: string;
+    comment: string;
+    stream(): ReadableStream;
 };
 
 type ZipObj = {
     crc?: Crc32,
-    uncompressedLength: number,
-    compressedLength: number,
-    ctrl: ReadableStreamDefaultController,
-    writeFooter: Function,
-    writeHeader: Function,
-    reader?: ReadableStreamDefaultReader,
-    offset: number
-    header?: DataHelper,
-    fileLike: FileLike,
-    level: number,
-    directory: boolean,
+    uncompressedLength: number;
+    compressedLength: number;
+    ctrl: ReadableStreamDefaultController;
+    writeFooter: Function;
+    writeHeader: Function;
+    reader?: ReadableStreamDefaultReader;
+    offset: number;
+    header?: DataHelper;
+    fileLike: FileLike;
+    level: number;
+    directory: boolean;
 };
 
 const pump = (zipObj: ZipObj) => zipObj.reader ? zipObj.reader.read().then(chunk => {
