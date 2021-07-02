@@ -140,7 +140,7 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
                             e.preventDefault();
                             e.stopPropagation();
                             onFinished();
-                            showCreateNewRoom(MatrixClientPeg.get(), SpaceStore.instance.activeSpace);
+                            showCreateNewRoom(SpaceStore.instance.activeSpace);
                         }}
                         disabled={!canAddRooms}
                         tooltip={canAddRooms ? undefined
@@ -153,7 +153,7 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
                             e.preventDefault();
                             e.stopPropagation();
                             onFinished();
-                            showAddExistingRooms(MatrixClientPeg.get(), SpaceStore.instance.activeSpace);
+                            showAddExistingRooms(SpaceStore.instance.activeSpace);
                         }}
                         disabled={!canAddRooms}
                         tooltip={canAddRooms ? undefined

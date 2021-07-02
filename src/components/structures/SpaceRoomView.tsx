@@ -307,7 +307,6 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
 };
 
 const SpaceLandingAddButton = ({ space, onNewRoomAdded }) => {
-    const cli = useContext(MatrixClientContext);
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
 
     let contextMenu;
@@ -330,7 +329,7 @@ const SpaceLandingAddButton = ({ space, onNewRoomAdded }) => {
                         e.stopPropagation();
                         closeMenu();
 
-                        if (await showCreateNewRoom(cli, space)) {
+                        if (await showCreateNewRoom(space)) {
                             onNewRoomAdded();
                         }
                     }}
@@ -343,7 +342,7 @@ const SpaceLandingAddButton = ({ space, onNewRoomAdded }) => {
                         e.stopPropagation();
                         closeMenu();
 
-                        const [added] = await showAddExistingRooms(cli, space);
+                        const [added] = await showAddExistingRooms(space);
                         if (added) {
                             onNewRoomAdded();
                         }
@@ -397,11 +396,11 @@ const SpaceLanding = ({ space }) => {
     }
 
     let settingsButton;
-    if (shouldShowSpaceSettings(cli, space)) {
+    if (shouldShowSpaceSettings(space)) {
         settingsButton = <AccessibleTooltipButton
             className="mx_SpaceRoomView_landing_settingsButton"
             onClick={() => {
-                showSpaceSettings(cli, space);
+                showSpaceSettings(space);
             }}
             title={_t("Settings")}
         />;

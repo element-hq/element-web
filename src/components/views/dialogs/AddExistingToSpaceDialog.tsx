@@ -17,7 +17,6 @@ limitations under the License.
 import React, { ReactNode, useContext, useMemo, useState } from "react";
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import { _t } from '../../../languageHandler';
 import { IDialogProps } from "./IDialogProps";
@@ -44,9 +43,8 @@ import EntityTile from "../rooms/EntityTile";
 import BaseAvatar from "../avatars/BaseAvatar";
 
 interface IProps extends IDialogProps {
-    matrixClient: MatrixClient;
     space: Room;
-    onCreateRoomClick(cli: MatrixClient, space: Room): void;
+    onCreateRoomClick(space: Room): void;
 }
 
 const Entry = ({ room, checked, onChange }) => {
@@ -295,7 +293,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     </div>;
 };
 
-const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, onCreateRoomClick, onFinished }) => {
+const AddExistingToSpaceDialog: React.FC<IProps> = ({ space, onCreateRoomClick, onFinished }) => {
     const [selectedSpace, setSelectedSpace] = useState(space);
     const existingSubspaces = SpaceStore.instance.getChildSpaces(space.roomId);
 
@@ -344,13 +342,13 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
         onFinished={onFinished}
         fixedWidth={false}
     >
-        <MatrixClientContext.Provider value={cli}>
+        <MatrixClientContext.Provider value={space.client}>
             <AddExistingToSpace
                 space={space}
                 onFinished={onFinished}
                 footerPrompt={<>
                     <div>{ _t("Want to add a new room instead?") }</div>
-                    <AccessibleButton onClick={() => onCreateRoomClick(cli, space)} kind="link">
+                    <AccessibleButton onClick={() => onCreateRoomClick(space)} kind="link">
                         { _t("Create a new room") }
                     </AccessibleButton>
                 </>}
