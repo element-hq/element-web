@@ -35,10 +35,10 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
         // The call for us to display
-        call: MatrixCall,
+        call: MatrixCall;
 
         // Another ongoing call to display information about
-        secondaryCall?: MatrixCall,
+        secondaryCall?: MatrixCall;
 
         // a callback which is called when the content in the CallView changes
         // in a way that is likely to cause a resize.
@@ -52,15 +52,15 @@ interface IProps {
 }
 
 interface IState {
-    isLocalOnHold: boolean,
-    isRemoteOnHold: boolean,
-    micMuted: boolean,
-    vidMuted: boolean,
-    callState: CallState,
-    controlsVisible: boolean,
-    showMoreMenu: boolean,
-    showDialpad: boolean,
-    feeds: CallFeed[],
+    isLocalOnHold: boolean;
+    isRemoteOnHold: boolean;
+    micMuted: boolean;
+    vidMuted: boolean;
+    callState: CallState;
+    controlsVisible: boolean;
+    showMoreMenu: boolean;
+    showDialpad: boolean;
+    feeds: CallFeed[];
 }
 
 function getFullScreenElement() {

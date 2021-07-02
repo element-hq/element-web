@@ -17,9 +17,10 @@ limitations under the License.
 */
 
 import React from "react";
-import dis from './dispatcher/dispatcher';
-import { MatrixClientPeg } from './MatrixClientPeg';
+import { encode } from "blurhash";
 import { MatrixClient } from "matrix-js-sdk/src/client";
+
+import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
@@ -46,6 +47,10 @@ const MAX_HEIGHT = 600;
 // scraped out of a macOS hidpi (5660ppm) screenshot png
 //                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
 const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
+
+export const BLURHASH_FIELD = "xyz.amorgan.blurhash"; // MSC2448
+const BLURHASH_X_COMPONENTS = 6;
+const BLURHASH_Y_COMPONENTS = 6;
 
 export class UploadCanceledError extends Error {}
 
@@ -77,6 +82,7 @@ interface IThumbnail {
         };
         w: number;
         h: number;
+        [BLURHASH_FIELD]: string;
     };
     thumbnail: Blob;
 }
@@ -124,7 +130,16 @@ function createThumbnail(
         const canvas = document.createElement("canvas");
         canvas.width = targetWidth;
         canvas.height = targetHeight;
-        canvas.getContext("2d").drawImage(element, 0, 0, targetWidth, targetHeight);
+        const context = canvas.getContext("2d");
+        context.drawImage(element, 0, 0, targetWidth, targetHeight);
+        const imageData = context.getImageData(0, 0, targetWidth, targetHeight);
+        const blurhash = encode(
+            imageData.data,
+            imageData.width,
+            imageData.height,
+            BLURHASH_X_COMPONENTS,
+            BLURHASH_Y_COMPONENTS,
+        );
         canvas.toBlob(function(thumbnail) {
             resolve({
                 info: {
@@ -136,8 +151,9 @@ function createThumbnail(
                     },
                     w: inputWidth,
                     h: inputHeight,
+                    [BLURHASH_FIELD]: blurhash,
                 },
-                thumbnail: thumbnail,
+                thumbnail,
             });
         }, mimeType);
     });
@@ -220,7 +236,8 @@ function infoForImageFile(matrixClient, roomId, imageFile) {
 }
 
 /**
- * Load a file into a newly created video element.
+ * Load a file into a newly created video element and pull some strings
+ * in an attempt to guarantee the first frame will be showing.
  *
  * @param {File} videoFile The file to load in an video element.
  * @return {Promise} A promise that resolves with the video image element.
@@ -229,20 +246,25 @@ function loadVideoElement(videoFile): Promise<HTMLVideoElement> {
     return new Promise((resolve, reject) => {
         // Load the file into an html element
         const video = document.createElement("video");
+        video.preload = "metadata";
+        video.playsInline = true;
+        video.muted = true;
 
         const reader = new FileReader();
 
         reader.onload = function(ev) {
-            video.src = ev.target.result as string;
-
-            // Once ready, returns its size
             // Wait until we have enough data to thumbnail the first frame.
-            video.onloadeddata = function() {
+            video.onloadeddata = async function() {
                 resolve(video);
+                video.pause();
             };
             video.onerror = function(e) {
                 reject(e);
             };
+
+            video.src = ev.target.result as string;
+            video.load();
+            video.play();
         };
         reader.onerror = function(e) {
             reject(e);
@@ -347,7 +369,7 @@ export function uploadFile(
         });
         (prom as IAbortablePromise<any>).abort = () => {
             canceled = true;
-            if (uploadPromise) MatrixClientPeg.get().cancelUpload(uploadPromise);
+            if (uploadPromise) matrixClient.cancelUpload(uploadPromise);
         };
         return prom;
     } else {
@@ -357,11 +379,11 @@ export function uploadFile(
         const promise1 = basePromise.then(function(url) {
             if (canceled) throw new UploadCanceledError();
             // If the attachment isn't encrypted then include the URL directly.
-            return { "url": url };
+            return { url };
         });
         (promise1 as any).abort = () => {
             canceled = true;
-            MatrixClientPeg.get().cancelUpload(basePromise);
+            matrixClient.cancelUpload(basePromise);
         };
         return promise1;
     }
@@ -373,7 +395,7 @@ export default class ContentMessages {
 
     sendStickerContentToRoom(url: string, roomId: string, info: IImageInfo, text: string, matrixClient: MatrixClient) {
         const startTime = CountlyAnalytics.getTimestamp();
-        const prom = MatrixClientPeg.get().sendStickerMessage(roomId, url, info, text).catch((e) => {
+        const prom = matrixClient.sendStickerMessage(roomId, url, info, text).catch((e) => {
             console.warn(`Failed to send content with URL ${url} to room ${roomId}`, e);
             throw e;
         });
@@ -415,7 +437,7 @@ export default class ContentMessages {
 
         if (!this.mediaConfig) { // hot-path optimization to not flash a spinner if we don't need to
             const modal = Modal.createDialog(Spinner, null, 'mx_Dialog_spinner');
-            await this.ensureMediaConfigFetched();
+            await this.ensureMediaConfigFetched(matrixClient);
             modal.close();
         }
 
@@ -470,7 +492,7 @@ export default class ContentMessages {
         return this.inprogress.filter(u => !u.canceled);
     }
 
-    cancelUpload(promise: Promise<any>) {
+    cancelUpload(promise: Promise<any>, matrixClient: MatrixClient) {
         let upload: IUpload;
         for (let i = 0; i < this.inprogress.length; ++i) {
             if (this.inprogress[i].promise === promise) {
@@ -480,7 +502,7 @@ export default class ContentMessages {
         }
         if (upload) {
             upload.canceled = true;
-            MatrixClientPeg.get().cancelUpload(upload.promise);
+            matrixClient.cancelUpload(upload.promise);
             dis.dispatch<UploadCanceledPayload>({ action: Action.UploadCanceled, upload });
         }
     }
@@ -621,11 +643,11 @@ export default class ContentMessages {
         return true;
     }
 
-    private ensureMediaConfigFetched() {
+    private ensureMediaConfigFetched(matrixClient: MatrixClient) {
         if (this.mediaConfig !== null) return;
 
         console.log("[Media Config] Fetching");
-        return MatrixClientPeg.get().getMediaConfig().then((config) => {
+        return matrixClient.getMediaConfig().then((config) => {
             console.log("[Media Config] Fetched config:", config);
             return config;
         }).catch(() => {

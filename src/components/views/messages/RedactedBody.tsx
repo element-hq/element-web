@@ -24,7 +24,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 
 interface IProps {
     mxEvent: MatrixEvent;
-    forExport: boolean;
+    forExport?: boolean;
 }
 
 const RedactedBody = React.forwardRef<any, IProps>(({ mxEvent, forExport }, ref) => {

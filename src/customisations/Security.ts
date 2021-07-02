@@ -69,11 +69,11 @@ function setupEncryptionNeeded(kind: SetupEncryptionKind): boolean {
 export interface ISecurityCustomisations {
     examineLoginResponse?: typeof examineLoginResponse;
     persistCredentials?: typeof persistCredentials;
-    createSecretStorageKey?: typeof createSecretStorageKey,
-    getSecretStorageKey?: typeof getSecretStorageKey,
-    catchAccessSecretStorageError?: typeof catchAccessSecretStorageError,
-    setupEncryptionNeeded?: typeof setupEncryptionNeeded,
-    getDehydrationKey?: typeof getDehydrationKey,
+    createSecretStorageKey?: typeof createSecretStorageKey;
+    getSecretStorageKey?: typeof getSecretStorageKey;
+    catchAccessSecretStorageError?: typeof catchAccessSecretStorageError;
+    setupEncryptionNeeded?: typeof setupEncryptionNeeded;
+    getDehydrationKey?: typeof getDehydrationKey;
 
     /**
      * When false, disables the post-login UI from showing. If there's
@@ -83,7 +83,7 @@ export interface ISecurityCustomisations {
      * encryption is set up some other way which would circumvent the default
      * UI, such as by presenting alternative UI.
      */
-    SHOW_ENCRYPTION_SETUP_UI?: boolean, // default true
+    SHOW_ENCRYPTION_SETUP_UI?: boolean; // default true
 }
 
 // A real customisation module will define and export one or more of the

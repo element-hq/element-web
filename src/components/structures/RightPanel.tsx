@@ -23,7 +23,6 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
 import dis from '../../dispatcher/dispatcher';
-import RateLimitedFunc from '../../ratelimitedfunc';
 import GroupStore from '../../stores/GroupStore';
 import {
     RIGHT_PANEL_PHASES_NO_ARGS,
@@ -48,6 +47,7 @@ import FilePanel from "./FilePanel";
 import NotificationPanel from "./NotificationPanel";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import PinnedMessagesCard from "../views/right_panel/PinnedMessagesCard";
+import { throttle } from 'lodash';
 
 interface IProps {
     room?: Room; // if showing panels for a given room, this is set
@@ -73,7 +73,6 @@ interface IState {
 export default class RightPanel extends React.Component<IProps, IState> {
     static contextType = MatrixClientContext;
 
-    private readonly delayedUpdate: RateLimitedFunc;
     private dispatcherRef: string;
 
     constructor(props, context) {
@@ -84,11 +83,11 @@ export default class RightPanel extends React.Component<IProps, IState> {
             isUserPrivilegedInGroup: null,
             member: this.getUserForPanel(),
         };
-
-        this.delayedUpdate = new RateLimitedFunc(() => {
-            this.forceUpdate();
-        }, 500);
     }
+
+    private readonly delayedUpdate = throttle((): void => {
+        this.forceUpdate();
+    }, 500, { leading: true, trailing: true });
 
     // Helper function to split out the logic for getPhaseFromProps() and the constructor
     // as both are called at the same time in the constructor.

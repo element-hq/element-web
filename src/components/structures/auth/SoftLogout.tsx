@@ -49,7 +49,7 @@ interface IProps {
     fragmentAfterLogin?: string;
 
     // Called when the SSO login completes
-    onTokenLoginCompleted: () => void,
+    onTokenLoginCompleted: () => void;
 }
 
 interface IState {

@@ -49,7 +49,7 @@ interface IProps {
     //   for operations like uploading cross-signing keys).
     onLoggedIn(params: {
         userId: string;
-        deviceId: string
+        deviceId: string;
         homeserverUrl: string;
         identityServerUrl?: string;
         accessToken: string;

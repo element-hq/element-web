@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,33 +15,43 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import VerificationRequestDialog from '../../views/dialogs/VerificationRequestDialog';
-import * as sdk from '../../../index';
 import { SetupEncryptionStore, Phase } from '../../../stores/SetupEncryptionStore';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { ISecretStorageKeyInfo } from 'matrix-js-sdk';
+import EncryptionPanel from "../../views/right_panel/EncryptionPanel";
+import AccessibleButton from '../../views/elements/AccessibleButton';
+import Spinner from '../../views/elements/Spinner';
+import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
+import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
-function keyHasPassphrase(keyInfo) {
-    return (
+function keyHasPassphrase(keyInfo: ISecretStorageKeyInfo): boolean {
+    return Boolean(
         keyInfo.passphrase &&
         keyInfo.passphrase.salt &&
-        keyInfo.passphrase.iterations
+        keyInfo.passphrase.iterations,
     );
 }
 
-@replaceableComponent("structures.auth.SetupEncryptionBody")
-export default class SetupEncryptionBody extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-    };
+interface IProps {
+    onFinished: (boolean) => void;
+}
 
-    constructor() {
-        super();
+interface IState {
+    phase: Phase;
+    verificationRequest: VerificationRequest;
+    backupInfo: IKeyBackupInfo;
+}
+
+@replaceableComponent("structures.auth.SetupEncryptionBody")
+export default class SetupEncryptionBody extends React.Component<IProps, IState> {
+    constructor(props) {
+        super(props);
         const store = SetupEncryptionStore.sharedInstance();
-        store.on("update", this._onStoreUpdate);
+        store.on("update", this.onStoreUpdate);
         store.start();
         this.state = {
             phase: store.phase,
@@ -53,10 +63,10 @@ export default class SetupEncryptionBody extends React.Component {
         };
     }
 
-    _onStoreUpdate = () => {
+    private onStoreUpdate = () => {
         const store = SetupEncryptionStore.sharedInstance();
         if (store.phase === Phase.Finished) {
-            this.props.onFinished();
+            this.props.onFinished(true);
             return;
         }
         this.setState({
@@ -66,18 +76,18 @@ export default class SetupEncryptionBody extends React.Component {
         });
     };
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         const store = SetupEncryptionStore.sharedInstance();
-        store.off("update", this._onStoreUpdate);
+        store.off("update", this.onStoreUpdate);
         store.stop();
     }
 
-    _onUsePassphraseClick = async () => {
+    private onUsePassphraseClick = async () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.usePassPhrase();
-    }
+    };
 
-    _onVerifyClick = () => {
+    private onVerifyClick = () => {
         const cli = MatrixClientPeg.get();
         const userId = cli.getUserId();
         const requestPromise = cli.requestVerification(userId);
@@ -91,42 +101,44 @@ export default class SetupEncryptionBody extends React.Component {
                 request.cancel();
             },
         });
-    }
+    };
 
-    onSkipClick = () => {
+    private onSkipClick = () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.skip();
-    }
+    };
 
-    onSkipConfirmClick = () => {
+    private onSkipConfirmClick = () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.skipConfirm();
-    }
+    };
 
-    onSkipBackClick = () => {
+    private onSkipBackClick = () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.returnAfterSkip();
-    }
+    };
 
-    onDoneClick = () => {
+    private onDoneClick = () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.done();
-    }
+    };
 
-    render() {
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
+    private onEncryptionPanelClose = () => {
+        this.props.onFinished(false);
+    };
 
+    public render() {
         const {
             phase,
         } = this.state;
 
         if (this.state.verificationRequest) {
-            const EncryptionPanel = sdk.getComponent("views.right_panel.EncryptionPanel");
             return <EncryptionPanel
                 layout="dialog"
                 verificationRequest={this.state.verificationRequest}
-                onClose={this.props.onFinished}
+                onClose={this.onEncryptionPanelClose}
                 member={MatrixClientPeg.get().getUser(this.state.verificationRequest.otherUserId)}
+                isRoomEncrypted={false}
             />;
         } else if (phase === Phase.Intro) {
             const store = SetupEncryptionStore.sharedInstance();
@@ -139,14 +151,14 @@ export default class SetupEncryptionBody extends React.Component {
 
             let useRecoveryKeyButton;
             if (recoveryKeyPrompt) {
-                useRecoveryKeyButton = <AccessibleButton kind="link" onClick={this._onUsePassphraseClick}>
+                useRecoveryKeyButton = <AccessibleButton kind="link" onClick={this.onUsePassphraseClick}>
                     {recoveryKeyPrompt}
                 </AccessibleButton>;
             }
 
             let verifyButton;
             if (store.hasDevicesToVerifyAgainst) {
-                verifyButton = <AccessibleButton kind="primary" onClick={this._onVerifyClick}>
+                verifyButton = <AccessibleButton kind="primary" onClick={this.onVerifyClick}>
                     { _t("Use another login") }
                 </AccessibleButton>;
             }
@@ -217,7 +229,6 @@ export default class SetupEncryptionBody extends React.Component {
                 </div>
             );
         } else if (phase === Phase.Busy || phase === Phase.Loading) {
-            const Spinner = sdk.getComponent('views.elements.Spinner');
             return <Spinner />;
         } else {
             console.log(`SetupEncryptionBody: Unknown phase ${phase}`);
