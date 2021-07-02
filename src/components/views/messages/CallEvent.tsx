@@ -48,7 +48,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
         this.state = {
             callState: this.props.callEventGrouper.state,
             silenced: false,
-        }
+        };
     }
 
     componentDidMount() {
@@ -66,7 +66,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
     };
 
     private onStateChanged = (newState: CallState) => {
-        this.setState({callState: newState});
+        this.setState({ callState: newState });
     };
 
     private renderContent(state: CallState | CustomCallState): JSX.Element {
@@ -138,7 +138,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
             } else if (hangupReason === CallErrorCode.UserBusy) {
                 reason = _t("The user you called is busy.");
             } else {
-                reason = _t('Unknown failure: %(reason)s)', {reason: hangupReason});
+                reason = _t('Unknown failure: %(reason)s)', { reason: hangupReason });
             }
 
             return (
@@ -191,7 +191,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
             mx_CallEvent_type_icon: true,
             mx_CallEvent_type_icon_voice: isVoice,
             mx_CallEvent_type_icon_video: !isVoice,
-        })
+        });
 
         return (
             <div className="mx_CallEvent">

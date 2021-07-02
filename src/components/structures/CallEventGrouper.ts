@@ -87,16 +87,16 @@ export default class CallEventGrouper extends EventEmitter {
 
     private onSilencedCallsChanged = () => {
         const newState = CallHandler.sharedInstance().isCallSilenced(this.callId);
-        this.emit(CallEventGrouperEvent.SilencedChanged, newState)
-    }
+        this.emit(CallEventGrouperEvent.SilencedChanged, newState);
+    };
 
     public answerCall = () => {
         this.call?.answer();
-    }
+    };
 
     public rejectCall = () => {
         this.call?.reject();
-    }
+    };
 
     public callBack = () => {
         defaultDispatcher.dispatch({
@@ -104,14 +104,14 @@ export default class CallEventGrouper extends EventEmitter {
             type: this.isVoice ? CallType.Voice : CallType.Video,
             room_id: [...this.events][0]?.getRoomId(),
         });
-    }
+    };
 
     public toggleSilenced = () => {
         const silenced = CallHandler.sharedInstance().isCallSilenced(this.callId);
         silenced ?
             CallHandler.sharedInstance().unSilenceCall(this.callId) :
             CallHandler.sharedInstance().silenceCall(this.callId);
-    }
+    };
 
     private setCallListeners() {
         if (!this.call) return;
@@ -128,7 +128,7 @@ export default class CallEventGrouper extends EventEmitter {
             else if (this.invite && this.call) this.state = CallState.Connecting;
         }
         this.emit(CallEventGrouperEvent.StateChanged, this.state);
-    }
+    };
 
     private setCall = () => {
         if (this.call) return;
@@ -136,7 +136,7 @@ export default class CallEventGrouper extends EventEmitter {
         this.call = CallHandler.sharedInstance().getCallById(this.callId);
         this.setCallListeners();
         this.setState();
-    }
+    };
 
     public add(event: MatrixEvent) {
         this.events.add(event);
