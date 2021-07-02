@@ -23,10 +23,10 @@ import * as sdk from '../../../index';
 
 import dis from '../../../dispatcher/dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
-import {MatrixClient} from 'matrix-js-sdk';
+import { MatrixClient } from 'matrix-js-sdk';
 
-import {objectHasDiff} from '../../../utils/objects';
-import {getHandlerTile} from "./EventTile";
+import { objectHasDiff } from '../../../utils/objects';
+import { getHandlerTile } from "./EventTile";
 
 class ReplyTile extends React.Component {
     static contextTypes = {
@@ -112,7 +112,7 @@ class ReplyTile extends React.Component {
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
         if (!tileHandler) {
-            const {mxEvent} = this.props;
+            const { mxEvent } = this.props;
             console.warn(`Event type not supported: type:${mxEvent.getType()} isState:${mxEvent.isState()}`);
             return <div className="mx_ReplyTile mx_ReplyTile_info mx_MNoticeBody">
                 { _t('This event could not be displayed') }

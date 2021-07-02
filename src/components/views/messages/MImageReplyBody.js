@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import React from "react";
-import {_td} from "../../../languageHandler";
+import { _td } from "../../../languageHandler";
 import * as sdk from "../../../index";
 import MImageBody from './MImageBody';
-import {presentableTextForFile} from "./MFileBody";
+import { presentableTextForFile } from "./MFileBody";
 
 export default class MImageReplyBody extends MImageBody {
     onClick(ev) {
