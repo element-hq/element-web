@@ -34,7 +34,7 @@ import IdentityAuthClient from './IdentityAuthClient';
 import { crossSigningCallbacks, tryToUnlockSecretStorageWithDehydrationKey } from './SecurityManager';
 import { SHOW_QR_CODE_METHOD } from "matrix-js-sdk/src/crypto/verification/QRCode";
 import SecurityCustomisations from "./customisations/Security";
-import CryptoStoreTooNewDialog from ".components/views/dialogs/CryptoStoreTooNewDialog";
+import CryptoStoreTooNewDialog from "./components/views/dialogs/CryptoStoreTooNewDialog";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;

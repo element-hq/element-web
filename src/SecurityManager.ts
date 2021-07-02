@@ -29,6 +29,7 @@ import SettingsStore from "./settings/SettingsStore";
 import SecurityCustomisations from "./customisations/Security";
 import { DeviceTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
+import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times

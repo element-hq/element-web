@@ -28,7 +28,7 @@ interface IProps {
     onFinished: (success: boolean) => void;
 }
 
-export default (props: IProps) => {
+const CryptoStoreTooNewDialog: React.FC<IProps> = (props: IProps) => {
     const brand = SdkConfig.get().brand;
 
     const _onLogoutClicked = () => {
@@ -78,3 +78,5 @@ export default (props: IProps) => {
         </DialogButtons>
     </BaseDialog>);
 };
+
+export default CryptoStoreTooNewDialog;
