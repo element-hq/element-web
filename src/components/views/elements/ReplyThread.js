@@ -382,12 +382,6 @@ export default class ReplyThread extends React.Component {
                     mxEvent={ev}
                     onHeightChanged={this.props.onHeightChanged}
                     permalinkCreator={this.props.permalinkCreator}
-                    isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
-                    layout={this.props.layout}
-                    alwaysShowTimestamps={this.props.alwaysShowTimestamps}
-                    enableFlair={SettingsStore.getValue(UIFeature.Flair)}
-                    replacingEventId={ev.replacingEventId()}
-                    as="div"
                 />
             </blockquote>;
         });
