@@ -438,7 +438,7 @@ export default class MImageBody extends React.Component<IProps, IState> {
     }
 
     // Overidden by MStickerBody
-    protected getPlaceholder() {
+    protected getPlaceholder(width: number, height: number) {
         const blurhash = this.props.mxEvent.getContent().info[BLURHASH_FIELD];
         if (blurhash) return <BlurhashPlaceholder blurhash={blurhash} width={width} height={height} />;
         return <div className="mx_MImageBody_thumbnail_spinner">
