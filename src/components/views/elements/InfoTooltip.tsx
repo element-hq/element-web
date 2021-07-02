@@ -29,7 +29,7 @@ export enum InfoTooltipKind {
 
 interface ITooltipProps {
     tooltip?: React.ReactNode;
-    className?: string,
+    className?: string;
     tooltipClassName?: string;
     kind?: InfoTooltipKind;
 }
