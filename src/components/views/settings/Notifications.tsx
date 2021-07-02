@@ -22,7 +22,6 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import SettingsStore from '../../../settings/SettingsStore';
 import Modal from '../../../Modal';
 import {
-    NotificationUtils,
     VectorPushRulesDefinitions,
     PushRuleVectorState,
     ContentRules,
@@ -39,31 +38,6 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 // TODO: this component also does a lot of direct poking into this.state, which
 // is VERY NAUGHTY.
-
-/**
- * Rules that Vector used to set in order to override the actions of default rules.
- * These are used to port peoples existing overrides to match the current API.
- * These can be removed and forgotten once everyone has moved to the new client.
- */
-const LEGACY_RULES = {
-    "im.vector.rule.contains_display_name": ".m.rule.contains_display_name",
-    "im.vector.rule.room_one_to_one": ".m.rule.room_one_to_one",
-    "im.vector.rule.room_message": ".m.rule.message",
-    "im.vector.rule.invite_for_me": ".m.rule.invite_for_me",
-    "im.vector.rule.call": ".m.rule.call",
-    "im.vector.rule.notices": ".m.rule.suppress_notices",
-};
-
-function portLegacyActions(actions) {
-    const decoded = NotificationUtils.decodeActions(actions);
-    if (decoded !== null) {
-        return NotificationUtils.encodeActions(decoded);
-    } else {
-        // We don't recognise one of the actions here, so we don't try to
-        // canonicalise them.
-        return actions;
-    }
-}
 
 @replaceableComponent("views.settings.Notifications")
 export default class Notifications extends React.Component {
@@ -84,6 +58,7 @@ export default class Notifications extends React.Component {
         externalPushRules: [], // Push rules (except content rule) that have been defined outside Vector UI
         externalContentRules: [], // Keyword push rules that have been defined outside Vector UI
         threepids: [], // used for email notifications
+        pushers: undefined,
     };
 
     componentDidMount() {
@@ -199,7 +174,7 @@ export default class Notifications extends React.Component {
 
     onKeywordsClicked = (event) => {
         // Compute the keywords list to display
-        let keywords = [];
+        let keywords: any[]|string = [];
         for (const i in this.state.vectorContentRules.rules) {
             const rule = this.state.vectorContentRules.rules[i];
             keywords.push(rule.pattern);
@@ -448,48 +423,9 @@ export default class Notifications extends React.Component {
         );
     }
 
-    // Check if any legacy im.vector rules need to be ported to the new API
-    // for overriding the actions of default rules.
-    _portRulesToNewAPI(rulesets) {
-        const needsUpdate = [];
-        const cli = MatrixClientPeg.get();
-
-        for (const kind in rulesets.global) {
-            const ruleset = rulesets.global[kind];
-            for (let i = 0; i < ruleset.length; ++i) {
-                const rule = ruleset[i];
-                if (rule.rule_id in LEGACY_RULES) {
-                    console.log("Porting legacy rule", rule);
-                    needsUpdate.push( function(kind, rule) {
-                        return cli.setPushRuleActions(
-                            'global', kind, LEGACY_RULES[rule.rule_id], portLegacyActions(rule.actions),
-                        ).then(() =>
-                            cli.deletePushRule('global', kind, rule.rule_id),
-                        ).catch( (e) => {
-                            console.warn(`Error when porting legacy rule: ${e}`);
-                        });
-                    }(kind, rule));
-                }
-            }
-        }
-
-        if (needsUpdate.length > 0) {
-            // If some of the rules need to be ported then wait for the porting
-            // to happen and then fetch the rules again.
-            return Promise.all(needsUpdate).then(() =>
-                cli.getPushRules(),
-            );
-        } else {
-            // Otherwise return the rules that we already have.
-            return rulesets;
-        }
-    }
-
     _refreshFromServer = () => {
         const self = this;
-        const pushRulesPromise = MatrixClientPeg.get().getPushRules().then(
-            self._portRulesToNewAPI,
-        ).then(function(rulesets) {
+        const pushRulesPromise = MatrixClientPeg.get().getPushRules().then(function(rulesets) {
             /// XXX seriously? wtf is this?
             MatrixClientPeg.get().pushRules = rulesets;
 
@@ -803,7 +739,7 @@ export default class Notifications extends React.Component {
         }
 
         // Show keywords not displayed by the vector UI as a single external push rule
-        let externalKeywords = [];
+        let externalKeywords: any[]|string = [];
         for (const i in this.state.externalContentRules) {
             const rule = this.state.externalContentRules[i];
             externalKeywords.push(rule.pattern);
@@ -890,9 +826,13 @@ export default class Notifications extends React.Component {
                         <table className="mx_UserNotifSettings_pushRulesTable">
                             <thead>
                                 <tr>
-                                    <th width="55%"></th>
+                                    {/* @ts-ignore*/}
+                                    <th width="55%"/>
+                                    {/* @ts-ignore*/}
                                     <th width="15%">{ _t('Off') }</th>
+                                    {/* @ts-ignore*/}
                                     <th width="15%">{ _t('On') }</th>
+                                    {/* @ts-ignore*/}
                                     <th width="15%">{ _t('Noisy') }</th>
                                 </tr>
                             </thead>
