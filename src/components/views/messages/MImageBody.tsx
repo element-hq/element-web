@@ -36,30 +36,30 @@ import { IProps as ImageViewIProps } from "../elements/ImageView";
 
 export interface IProps {
     /* the MatrixEvent to show */
-    mxEvent: MatrixEvent,
+    mxEvent: MatrixEvent;
     /* called when the image has loaded */
-    onHeightChanged(): void,
+    onHeightChanged(): void;
 
     /* the maximum image height to use */
-    maxImageHeight?: number,
+    maxImageHeight?: number;
 
     /* the permalinkCreator */
-    permalinkCreator?: RoomPermalinkCreator,
+    permalinkCreator?: RoomPermalinkCreator;
 }
 
 interface IState {
-    decryptedUrl?: string,
-    decryptedThumbnailUrl?: string,
-    decryptedBlob?: Blob,
-    error,
-    imgError: boolean,
-    imgLoaded: boolean,
+    decryptedUrl?: string;
+    decryptedThumbnailUrl?: string;
+    decryptedBlob?: Blob;
+    error;
+    imgError: boolean;
+    imgLoaded: boolean;
     loadedImageDimensions?: {
         naturalWidth: number;
         naturalHeight: number;
-    },
-    hover: boolean,
-    showImage: boolean,
+    };
+    hover: boolean;
+    showImage: boolean;
 }
 
 @replaceableComponent("views.messages.MImageBody")
