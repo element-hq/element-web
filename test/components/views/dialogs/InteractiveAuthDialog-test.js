@@ -24,7 +24,6 @@ import sdk from '../../../skinned-sdk';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 
 import * as TestUtilsMatrix from '../../../test-utils';
-import { sleep } from "../../../../src/utils/promise";
 
 const InteractiveAuthDialog = sdk.getComponent(
     'views.dialogs.InteractiveAuthDialog',
