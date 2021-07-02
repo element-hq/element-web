@@ -16,7 +16,7 @@
 
 import React from 'react';
 
-import {Key} from '../../../Keyboard';
+import { Key } from '../../../Keyboard';
 import classnames from 'classnames';
 
 export type ButtonEvent = React.MouseEvent<Element> | React.KeyboardEvent<Element>;
@@ -62,6 +62,8 @@ export default function AccessibleButton({
     disabled,
     inputRef,
     className,
+    onKeyDown,
+    onKeyUp,
     ...restProps
 }: IProps) {
     const newProps: IAccessibleButtonProps = restProps;
@@ -83,6 +85,8 @@ export default function AccessibleButton({
             if (e.key === Key.SPACE) {
                 e.stopPropagation();
                 e.preventDefault();
+            } else {
+                onKeyDown?.(e);
             }
         };
         newProps.onKeyUp = (e) => {
@@ -94,6 +98,8 @@ export default function AccessibleButton({
             if (e.key === Key.ENTER) {
                 e.stopPropagation();
                 e.preventDefault();
+            } else {
+                onKeyUp?.(e);
             }
         };
     }

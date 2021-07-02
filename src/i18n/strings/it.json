@@ -3381,5 +3381,22 @@
     "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "Prova parole diverse o controlla errori di battitura. Alcuni risultati potrebbero non essere visibili dato che sono privati e ti servirebbe un invito per unirti.",
     "No results for \"%(query)s\"": "Nessun risultato per \"%(query)s\"",
     "The user you called is busy.": "L'utente che hai chiamato è occupato.",
-    "User Busy": "Utente occupato"
+    "User Busy": "Utente occupato",
+    "We're working on this as part of the beta, but just want to let you know.": "Stiamo lavorando a questo come parte della beta, ma vogliamo almeno fartelo sapere.",
+    "Teammates might not be able to view or join any private rooms you make.": "I tuoi compagni potrebbero non riuscire a vedere o unirsi a qualsiasi stanza privata che crei.",
+    "Or send invite link": "O manda un collegamento di invito",
+    "If you can't see who you’re looking for, send them your invite link below.": "Se non vedi chi stai cercando, mandagli il collegamento di invito sottostante.",
+    "Some suggestions may be hidden for privacy.": "Alcuni suggerimenti potrebbero essere nascosti per privacy.",
+    "Search for rooms or people": "Cerca stanze o persone",
+    "Forward message": "Inoltra messaggio",
+    "Open link": "Apri collegamento",
+    "Sent": "Inviato",
+    "You don't have permission to do this": "Non hai il permesso per farlo",
+    "Error - Mixed content": "Errore - Contenuto misto",
+    "Error loading Widget": "Errore di caricamento del widget",
+    "Nothing pinned, yet": "Non c'è ancora nulla di ancorato",
+    "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "Se ne hai il permesso, apri il menu di qualsiasi messaggio e seleziona <b>Fissa</b> per ancorarlo qui.",
+    "Pinned messages": "Messaggi ancorati",
+    "End-to-end encryption isn't enabled": "La crittografia end-to-end non è attiva",
+    "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites. <a>Enable encryption in settings.</a>": "I tuoi messaggi privati normalmente sono cifrati, ma questa stanza non lo è. Di solito ciò è dovuto ad un dispositivo non supportato o dal metodo usato, come gli inviti per email. <a>Attiva la crittografia nelle impostazioni.</a>"
 }

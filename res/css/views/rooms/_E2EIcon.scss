@@ -45,7 +45,7 @@ limitations under the License.
     mask-image: url('$(res)/img/e2e/normal.svg');
     mask-repeat: no-repeat;
     mask-position: center;
-    mask-size: 90%;
+    mask-size: 80%;
 }
 
 // transparent-looking border surrounding the shield for when overlain over avatars
@@ -59,7 +59,7 @@ limitations under the License.
     }
     // shrink the infill of the badge
     &::before {
-        mask-size: 65%;
+        mask-size: 60%;
     }
 }
 

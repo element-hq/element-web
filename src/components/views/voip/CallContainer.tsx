@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import IncomingCallBox from './IncomingCallBox';
 import CallPreview from './CallPreview';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
 

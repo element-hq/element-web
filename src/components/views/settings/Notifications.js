@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import SettingsStore from '../../../settings/SettingsStore';
 import Modal from '../../../Modal';
 import {
@@ -30,16 +30,15 @@ import {
 import SdkConfig from "../../../SdkConfig";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import AccessibleButton from "../elements/AccessibleButton";
-import {SettingLevel} from "../../../settings/SettingLevel";
-import {UIFeature} from "../../../settings/UIFeature";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { SettingLevel } from "../../../settings/SettingLevel";
+import { UIFeature } from "../../../settings/UIFeature";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
 
 // TODO: this component also does a lot of direct poking into this.state, which
 // is VERY NAUGHTY.
-
 
 /**
  * Rules that Vector used to set in order to override the actions of default rules.
@@ -517,7 +516,7 @@ export default class Notifications extends React.Component {
             };
 
             // HS default rules
-            const defaultRules = {master: [], vector: {}, others: []};
+            const defaultRules = { master: [], vector: {}, others: [] };
 
             for (const kind in rulesets.global) {
                 for (let i = 0; i < Object.keys(rulesets.global[kind]).length; ++i) {
@@ -632,7 +631,7 @@ export default class Notifications extends React.Component {
         });
 
         const pushersPromise = MatrixClientPeg.get().getPushers().then(function(resp) {
-            self.setState({pushers: resp.pushers});
+            self.setState({ pushers: resp.pushers });
         });
 
         Promise.all([pushRulesPromise, pushersPromise]).then(function() {
@@ -655,7 +654,7 @@ export default class Notifications extends React.Component {
             });
         });
 
-        MatrixClientPeg.get().getThreePids().then((r) => this.setState({threepids: r.threepids}));
+        MatrixClientPeg.get().getThreePids().then((r) => this.setState({ threepids: r.threepids }));
     };
 
     _onClearNotifications = () => {

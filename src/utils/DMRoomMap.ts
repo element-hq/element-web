@@ -86,7 +86,7 @@ export default class DMRoomMap {
             this.userToRooms = null;
             this.roomToUser = null;
         }
-    }
+    };
 
     /**
      * some client bug somewhere is causing some DMs to be marked
@@ -103,7 +103,7 @@ export default class DMRoomMap {
                 if (room) {
                     const userId = room.guessDMUserId();
                     if (userId && userId !== myUserId) {
-                        return {userId, roomId};
+                        return { userId, roomId };
                     }
                 }
             }).filter((ids) => !!ids); //filter out
@@ -116,7 +116,7 @@ export default class DMRoomMap {
                 return !guessedUserIdsThatChanged
                     .some((ids) => ids.roomId === roomId);
             });
-            guessedUserIdsThatChanged.forEach(({userId, roomId}) => {
+            guessedUserIdsThatChanged.forEach(({ userId, roomId }) => {
                 const roomIds = userToRooms[userId];
                 if (!roomIds) {
                     userToRooms[userId] = [roomId];
@@ -181,7 +181,7 @@ export default class DMRoomMap {
     public getUniqueRoomsWithIndividuals(): {[userId: string]: Room} {
         if (!this.roomToUser) return {}; // No rooms means no map.
         return Object.keys(this.roomToUser)
-            .map(r => ({userId: this.getUserIdForRoomId(r), room: this.matrixClient.getRoom(r)}))
+            .map(r => ({ userId: this.getUserIdForRoomId(r), room: this.matrixClient.getRoom(r) }))
             .filter(r => r.userId && r.room && r.room.getInvitedAndJoinedMemberCount() === 2)
             .reduce((obj, r) => (obj[r.userId] = r.room) && obj, {});
     }

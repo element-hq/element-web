@@ -30,7 +30,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { formatFullDate } from "../../../DateUtils";
 import dis from '../../../dispatcher/dispatcher';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks"
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { normalizeWheelEvent } from "../../../utils/Mouse";
 
@@ -44,31 +44,31 @@ const ZOOM_COEFFICIENT = 0.0025;
 const ZOOM_DISTANCE = 10;
 
 interface IProps {
-    src: string, // the source of the image being displayed
-    name?: string, // the main title ('name') for the image
-    link?: string, // the link (if any) applied to the name of the image
-    width?: number, // width of the image src in pixels
-    height?: number, // height of the image src in pixels
-    fileSize?: number, // size of the image src in bytes
-    onFinished(): void, // callback when the lightbox is dismissed
+    src: string; // the source of the image being displayed
+    name?: string; // the main title ('name') for the image
+    link?: string; // the link (if any) applied to the name of the image
+    width?: number; // width of the image src in pixels
+    height?: number; // height of the image src in pixels
+    fileSize?: number; // size of the image src in bytes
+    onFinished(): void; // callback when the lightbox is dismissed
 
     // the event (if any) that the Image is displaying. Used for event-specific stuff like
     // redactions, senders, timestamps etc.  Other descriptors are taken from the explicit
     // properties above, which let us use lightboxes to display images which aren't associated
     // with events.
-    mxEvent: MatrixEvent,
-    permalinkCreator: RoomPermalinkCreator,
+    mxEvent: MatrixEvent;
+    permalinkCreator: RoomPermalinkCreator;
 }
 
 interface IState {
-    zoom: number,
-    minZoom: number,
-    maxZoom: number,
-    rotation: number,
-    translationX: number,
-    translationY: number,
-    moving: boolean,
-    contextMenuDisplayed: boolean,
+    zoom: number;
+    minZoom: number;
+    maxZoom: number;
+    rotation: number;
+    translationX: number;
+    translationY: number;
+    moving: boolean;
+    contextMenuDisplayed: boolean;
 }
 
 @replaceableComponent("views.elements.ImageView")
@@ -116,7 +116,7 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     private recalculateZoom = () => {
         this.setZoomAndRotation();
-    }
+    };
 
     private setZoomAndRotation = (inputRotation?: number) => {
         const image = this.image.current;
@@ -158,7 +158,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             rotation: rotation,
             zoom: zoom,
         });
-    }
+    };
 
     private zoom(delta: number) {
         const newZoom = this.state.zoom + delta;

@@ -20,8 +20,8 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import PropTypes from "prop-types";
-import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 function cancelQuoting() {
     dis.dispatch({

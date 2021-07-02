@@ -53,14 +53,14 @@ export default class ConfirmAndWaitRedactDialog extends React.PureComponent<IPro
 
     public onParentFinished = async (proceed: boolean): Promise<void> => {
         if (proceed) {
-            this.setState({isRedacting: true});
+            this.setState({ isRedacting: true });
             try {
                 await this.props.redact();
                 this.props.onFinished(true);
             } catch (error) {
                 const code = error.errcode || error.statusCode;
                 if (typeof code !== "undefined") {
-                    this.setState({redactionErrorCode: code});
+                    this.setState({ redactionErrorCode: code });
                 } else {
                     this.props.onFinished(true);
                 }
@@ -79,7 +79,7 @@ export default class ConfirmAndWaitRedactDialog extends React.PureComponent<IPro
                     <ErrorDialog
                         onFinished={this.props.onFinished}
                         title={_t('Error')}
-                        description={_t('You cannot delete this message. (%(code)s)', {code})}
+                        description={_t('You cannot delete this message. (%(code)s)', { code })}
                     />
                 );
             } else {

@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t, getCurrentLanguage} from "../../../../../languageHandler";
-import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
+import { _t, getCurrentLanguage } from "../../../../../languageHandler";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import AccessibleTooltipButton from '../../../elements/AccessibleTooltipButton';
 import SdkConfig from "../../../../../SdkConfig";
@@ -54,10 +54,10 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
     }
 
     componentDidMount(): void {
-        PlatformPeg.get().getAppVersion().then((ver) => this.setState({appVersion: ver})).catch((e) => {
+        PlatformPeg.get().getAppVersion().then((ver) => this.setState({ appVersion: ver })).catch((e) => {
             console.error("Error getting vector version: ", e);
         });
-        PlatformPeg.get().canSelfUpdate().then((v) => this.setState({canUpdate: v})).catch((e) => {
+        PlatformPeg.get().canSelfUpdate().then((v) => this.setState({ canUpdate: v })).catch((e) => {
             console.error("Error getting self updatability: ", e);
         });
     }
@@ -172,12 +172,12 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         const successful = await copyPlaintext(MatrixClientPeg.get().getAccessToken());
         const buttonRect = target.getBoundingClientRect();
         const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
-        const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
+        const { close } = ContextMenu.createMenu(GenericTextContextMenu, {
             ...toRightOf(buttonRect, 2),
             message: successful ? _t('Copied!') : _t('Failed to copy'),
         });
         this.closeCopiedTooltip = target.onmouseleave = close;
-    }
+    };
 
     render() {
         const brand = SdkConfig.get().brand;

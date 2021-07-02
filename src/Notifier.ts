@@ -32,11 +32,11 @@ import { _t } from './languageHandler';
 import Modal from './Modal';
 import SettingsStore from "./settings/SettingsStore";
 import { hideToast as hideNotificationsToast } from "./toasts/DesktopNotificationsToast";
-import {SettingLevel} from "./settings/SettingLevel";
-import {isPushNotifyDisabled} from "./settings/controllers/NotificationControllers";
+import { SettingLevel } from "./settings/SettingLevel";
+import { isPushNotifyDisabled } from "./settings/controllers/NotificationControllers";
 import RoomViewStore from "./stores/RoomViewStore";
 import UserActivity from "./UserActivity";
-import {mediaFromMxc} from "./customisations/Media";
+import { mediaFromMxc } from "./customisations/Media";
 
 /*
  * Dispatches:
@@ -68,7 +68,7 @@ export const Notifier = {
     // or not
     pendingEncryptedEventIds: [],
 
-    notificationMessageForEvent: function(ev: MatrixEvent) {
+    notificationMessageForEvent: function(ev: MatrixEvent): string {
         if (typehandlers.hasOwnProperty(ev.getContent().msgtype)) {
             return typehandlers[ev.getContent().msgtype](ev);
         }

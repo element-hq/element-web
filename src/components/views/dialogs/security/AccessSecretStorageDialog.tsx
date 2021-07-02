@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {debounce} from "lodash";
+import { debounce } from "lodash";
 import classNames from 'classnames';
-import React, {ChangeEvent, FormEvent} from 'react';
-import {ISecretStorageKeyInfo} from "matrix-js-sdk/src";
+import React, { ChangeEvent, FormEvent } from 'react';
+import { ISecretStorageKeyInfo } from "matrix-js-sdk/src";
 
 import * as sdk from '../../../../index';
-import {MatrixClientPeg} from '../../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../../MatrixClientPeg';
 import Field from '../../elements/Field';
 import AccessibleButton from '../../elements/AccessibleButton';
-import {_t} from '../../../../languageHandler';
-import {IDialogProps} from "../IDialogProps";
-import {accessSecretStorage} from "../../../../SecurityManager";
+import { _t } from '../../../../languageHandler';
+import { IDialogProps } from "../IDialogProps";
+import { accessSecretStorage } from "../../../../SecurityManager";
 import Modal from "../../../../Modal";
 
 // Maximum acceptable size of a key file. It's 59 characters including the spaces we encode,
@@ -75,7 +75,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
 
     private onCancel = () => {
         if (this.state.resetting) {
-            this.setState({resetting: false});
+            this.setState({ resetting: false });
         }
         this.props.onFinished(false);
     };
@@ -169,7 +169,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
 
     private onRecoveryKeyFileUploadClick = () => {
         this.fileUpload.current.click();
-    }
+    };
 
     private onPassPhraseNext = async (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
@@ -210,7 +210,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
 
     private onResetAllClick = (ev: React.MouseEvent<HTMLAnchorElement>) => {
         ev.preventDefault();
-        this.setState({resetting: true});
+        this.setState({ resetting: true });
     };
 
     private onConfirmResetAllClick = async () => {
@@ -231,7 +231,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
                     authUploadDeviceSigningKeys: async (makeRequest) => {
                         // XXX: Making this an import breaks the app.
                         const InteractiveAuthDialog = sdk.getComponent("views.dialogs.InteractiveAuthDialog");
-                        const {finished} = Modal.createTrackedDialog(
+                        const { finished } = Modal.createTrackedDialog(
                             'Cross-signing keys dialog', '', InteractiveAuthDialog,
                             {
                                 title: _t("Setting up keys"),

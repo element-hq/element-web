@@ -19,7 +19,7 @@ import SetupEncryptionBody from '../../../structures/auth/SetupEncryptionBody';
 import BaseDialog from '../BaseDialog';
 import { _t } from '../../../../languageHandler';
 import { SetupEncryptionStore, Phase } from '../../../../stores/SetupEncryptionStore';
-import {replaceableComponent} from "../../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../../utils/replaceableComponent";
 
 function iconFromPhase(phase: Phase) {
     if (phase === Phase.Done) {
@@ -45,7 +45,7 @@ export default class SetupEncryptionDialog extends React.Component<IProps, IStat
         super(props);
 
         this.store = SetupEncryptionStore.sharedInstance();
-        this.state = {icon: iconFromPhase(this.store.phase)};
+        this.state = { icon: iconFromPhase(this.store.phase) };
     }
 
     public componentDidMount() {
@@ -57,7 +57,7 @@ export default class SetupEncryptionDialog extends React.Component<IProps, IStat
     }
 
     private onStoreUpdate = (): void => {
-        this.setState({icon: iconFromPhase(this.store.phase)});
+        this.setState({ icon: iconFromPhase(this.store.phase) });
     };
 
     public render() {

@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { randomString } from "matrix-js-sdk/src/randomstring";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }

@@ -21,7 +21,7 @@ import { _t } from "../../../languageHandler";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { User } from "matrix-js-sdk/src/models/user";
 
-export const PendingActionSpinner = ({text}) => {
+export const PendingActionSpinner = ({ text }) => {
     const Spinner = sdk.getComponent('elements.Spinner');
     return <div className="mx_EncryptionInfo_spinner">
         <Spinner />

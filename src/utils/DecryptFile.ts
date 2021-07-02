@@ -16,7 +16,7 @@ limitations under the License.
 
 // Pull in the encryption lib so that we can decrypt attachments.
 import encrypt from 'browser-encrypt-attachment';
-import {mediaFromContent} from "../customisations/Media";
+import { mediaFromContent } from "../customisations/Media";
 import { IEncryptedFile } from "../customisations/models/IMediaEventContent";
 import { getBlobSafeMimeType } from "./blobs";
 
@@ -29,7 +29,7 @@ import { getBlobSafeMimeType } from "./blobs";
  * @returns {Promise<Blob>} Resolves to a Blob of the file.
  */
 export function decryptFile(file: IEncryptedFile): Promise<Blob> {
-    const media = mediaFromContent({file});
+    const media = mediaFromContent({ file });
     // Download the encrypted file as an array buffer.
     return media.downloadSource().then((response) => {
         return response.arrayBuffer();
@@ -47,6 +47,6 @@ export function decryptFile(file: IEncryptedFile): Promise<Blob> {
         let mimetype = file.mimetype ? file.mimetype.split(";")[0].trim() : '';
         mimetype = getBlobSafeMimeType(mimetype);
 
-        return new Blob([dataArray], {type: mimetype});
+        return new Blob([dataArray], { type: mimetype });
     });
 }

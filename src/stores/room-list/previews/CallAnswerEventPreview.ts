@@ -26,7 +26,7 @@ export class CallAnswerEventPreview implements IPreview {
             if (isSelf(event)) {
                 return _t("You joined the call");
             } else {
-                return _t("%(senderName)s joined the call", {senderName: getSenderName(event)});
+                return _t("%(senderName)s joined the call", { senderName: getSenderName(event) });
             }
         } else {
             return _t("Call in progress");
