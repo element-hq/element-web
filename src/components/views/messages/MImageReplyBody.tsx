@@ -15,22 +15,26 @@ limitations under the License.
 */
 
 import React from "react";
-import { _td } from "../../../languageHandler";
-import * as sdk from "../../../index";
-import MImageBody from './MImageBody';
+import MImageBody, { IProps as MImageBodyIProps } from "./MImageBody";
 import { presentableTextForFile } from "./MFileBody";
+import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
+import SenderProfile from "./SenderProfile";
 
 export default class MImageReplyBody extends MImageBody {
-    onClick(ev) {
-        ev.preventDefault();
+    constructor(props: MImageBodyIProps) {
+        super(props);
     }
 
-    wrapImage(contentUrl, children) {
+    public onClick = (ev: React.MouseEvent): void => {
+        ev.preventDefault();
+    };
+
+    public wrapImage(contentUrl: string, children: JSX.Element): JSX.Element {
         return children;
     }
 
     // Don't show "Download this_file.png ..."
-    getFileBody() {
+    public getFileBody(): JSX.Element {
         return presentableTextForFile(this.props.mxEvent.getContent());
     }
 
@@ -39,17 +43,14 @@ export default class MImageReplyBody extends MImageBody {
             return super.render();
         }
 
-        const content = this.props.mxEvent.getContent();
+        const content = this.props.mxEvent.getContent() as IMediaEventContent;
 
-        const contentUrl = this._getContentUrl();
-        const thumbnail = this._messageContent(contentUrl, this._getThumbUrl(), content);
+        const contentUrl = this.getContentUrl();
+        const thumbnail = this.messageContent(contentUrl, this.getThumbUrl(), content);
         const fileBody = this.getFileBody();
-        const SenderProfile = sdk.getComponent('messages.SenderProfile');
         const sender = <SenderProfile
-            onClick={this.onSenderProfileClick}
             mxEvent={this.props.mxEvent}
             enableFlair={false}
-            text={_td('%(senderName)s sent an image')}
         />;
 
         return <div className="mx_MImageReplyBody">
