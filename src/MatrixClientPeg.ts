@@ -23,7 +23,6 @@ import { MemoryStore } from 'matrix-js-sdk/src/store/memory';
 import * as utils from 'matrix-js-sdk/src/utils';
 import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
 import { EventTimelineSet } from 'matrix-js-sdk/src/models/event-timeline-set';
-import * as sdk from './index';
 import createMatrixClient from './utils/createMatrixClient';
 import SettingsStore from './settings/SettingsStore';
 import MatrixActionCreators from './actions/MatrixActionCreators';
@@ -35,6 +34,7 @@ import IdentityAuthClient from './IdentityAuthClient';
 import { crossSigningCallbacks, tryToUnlockSecretStorageWithDehydrationKey } from './SecurityManager';
 import { SHOW_QR_CODE_METHOD } from "matrix-js-sdk/src/crypto/verification/QRCode";
 import SecurityCustomisations from "./customisations/Security";
+import CryptoStoreTooNewDialog from ".components/views/dialogs/CryptoStoreTooNewDialog";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -219,8 +219,6 @@ class _MatrixClientPeg implements IMatrixClientPeg {
         } catch (e) {
             if (e && e.name === 'InvalidCryptoStoreError') {
                 // The js-sdk found a crypto DB too new for it to use
-                const CryptoStoreTooNewDialog =
-                    sdk.getComponent("views.dialogs.CryptoStoreTooNewDialog");
                 Modal.createDialog(CryptoStoreTooNewDialog);
             }
             // this can happen for a number of reasons, the most likely being

@@ -21,7 +21,7 @@ import { getCurrentLanguage, _t, _td, IVariables } from './languageHandler';
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 import Modal from './Modal';
-import * as sdk from './index';
+import ErrorDialog from './components/views/dialogs/ErrorDialog';
 
 const hashRegex = /#\/(groups?|room|user|settings|register|login|forgot_password|home|directory)/;
 const hashVarRegex = /#\/(group|room|user)\/.*$/;
@@ -390,7 +390,6 @@ export class Analytics {
             { expl: _td('Your device resolution'), value: resolution },
         ];
 
-        const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
         Modal.createTrackedDialog('Analytics Details', '', ErrorDialog, {
             title: _t('Analytics'),
             description: <div className="mx_AnalyticsModal">
