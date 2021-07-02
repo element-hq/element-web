@@ -36,7 +36,7 @@ import FlairStore from '../../stores/FlairStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import { makeGroupPermalink, makeUserPermalink } from "../../utils/permalinks/Permalinks";
 import { Group } from "matrix-js-sdk/src/models/group";
-import { sleep } from "../../utils/promise";
+import { sleep } from "matrix-js-sdk/src/utils";
 import RightPanelStore from "../../stores/RightPanelStore";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { mediaFromMxc } from "../../customisations/Media";
