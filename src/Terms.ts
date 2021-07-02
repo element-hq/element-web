@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import classNames from 'classnames';
+import { SERVICE_TYPES } from 'matrix-js-sdk/src/service-types';
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import * as sdk from '.';
@@ -32,7 +33,7 @@ export class Service {
      * @param {string} baseUrl The Base URL of the service (ie. before '/_matrix')
      * @param {string} accessToken The user's access token for the service
      */
-    constructor(public serviceType: string, public baseUrl: string, public accessToken: string) {
+    constructor(public serviceType: SERVICE_TYPES, public baseUrl: string, public accessToken: string) {
     }
 }
 
