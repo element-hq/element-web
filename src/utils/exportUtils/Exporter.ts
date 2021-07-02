@@ -10,6 +10,7 @@ import { MatrixClient } from "matrix-js-sdk";
 import streamToZIP from "./ZipStream";
 import * as ponyfill from "web-streams-polyfill/ponyfill";
 import "web-streams-polyfill/ponyfill"; // to support streams API for older browsers
+import { MutableRefObject } from "react";
 
 type FileStream = {
     name: string;
@@ -27,7 +28,7 @@ export default abstract class Exporter {
         protected room: Room,
         protected exportType: exportTypes,
         protected exportOptions: exportOptions,
-        protected setProgressText: React.Dispatch<React.SetStateAction<string>>,
+        protected exportProgressRef: MutableRefObject<HTMLParagraphElement>,
     ) {
         this.cancelled = false;
         this.files = [];
@@ -43,7 +44,7 @@ export default abstract class Exporter {
 
     protected updateProgress(progress: string, log = true, show = true): void {
         if (log) console.log(progress);
-        if (show) this.setProgressText(progress);
+        if (show) this.exportProgressRef.current.innerText = progress;
     }
 
     protected addFile(filePath: string, blob: Blob): void {

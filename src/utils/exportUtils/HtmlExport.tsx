@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MutableRefObject } from "react";
 import Exporter from "./Exporter";
 import { mediaFromMxc } from "../../customisations/Media";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -31,9 +31,9 @@ export default class HTMLExporter extends Exporter {
         room: Room,
         exportType: exportTypes,
         exportOptions: exportOptions,
-        setProgressText: React.Dispatch<React.SetStateAction<string>>,
+        exportProgressRef: MutableRefObject<HTMLParagraphElement>,
     ) {
-        super(room, exportType, exportOptions, setProgressText);
+        super(room, exportType, exportOptions, exportProgressRef);
         this.avatars = new Map<string, boolean>();
         this.permalinkCreator = new RoomPermalinkCreator(this.room);
         this.totalSize = 0;
@@ -333,7 +333,7 @@ export default class HTMLExporter extends Exporter {
         let prevEvent = null;
         for (let i = 0; i < events.length; i++) {
             const event = events[i];
-            if (i % 100 == 0) this.updateProgress(`Processing event ${i ? i : 1} out of ${events.length}`, false, true);
+            this.updateProgress(`Processing event ${i + 1} out of ${events.length}`, false, true);
             if (this.cancelled) return this.cleanUp();
             if (!haveTileForEvent(event)) continue;
 
