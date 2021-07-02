@@ -92,12 +92,12 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
         if (settingName === "urlPreviewsEnabled") {
             const content = this.getSettings(roomId, "org.matrix.room.preview_urls") || {};
             content['disable'] = !newValue;
-            return MatrixClientPeg.get().sendStateEvent(roomId, "org.matrix.room.preview_urls", content);
+            return MatrixClientPeg.get().sendStateEvent(roomId, "org.matrix.room.preview_urls", content).then();
         }
 
         const content = this.getSettings(roomId) || {};
         content[settingName] = newValue;
-        return MatrixClientPeg.get().sendStateEvent(roomId, "im.vector.web.settings", content, "");
+        return MatrixClientPeg.get().sendStateEvent(roomId, "im.vector.web.settings", content, "").then();
     }
 
     public canSetValue(settingName: string, roomId: string): boolean {

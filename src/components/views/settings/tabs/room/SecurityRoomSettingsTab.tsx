@@ -36,6 +36,7 @@ import RoomAvatar from "../../../avatars/RoomAvatar";
 import ManageRestrictedJoinRuleDialog from '../../../dialogs/ManageRestrictedJoinRuleDialog';
 import RoomUpgradeWarningDialog from '../../../dialogs/RoomUpgradeWarningDialog';
 import { upgradeRoom } from "../../../../../utils/RoomUpgrade";
+import { arrayHasDiff } from "../../../../../utils/arrays";
 
 interface IProps {
     roomId: string;
@@ -166,56 +167,73 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         });
     };
 
-    private onJoinRuleChange = (joinRule: JoinRule) => {
-        if (joinRule === JoinRule.Restricted &&
-            !this.state.roomSupportsRestricted &&
-            this.state.preferredRestrictionVersion
-        ) {
-            const cli = MatrixClientPeg.get();
+    private onJoinRuleChange = async (joinRule: JoinRule) => {
+        const beforeJoinRule = this.state.joinRule;
+        if (beforeJoinRule === joinRule) return;
+
+        if (joinRule === JoinRule.Restricted) {
+            const matrixClient = MatrixClientPeg.get();
             const roomId = this.props.roomId;
-            const room = cli.getRoom(roomId);
-            const targetVersion = this.state.preferredRestrictionVersion;
-            const activeSpace = SpaceStore.instance.activeSpace;
-            Modal.createTrackedDialog('Restricted join rule upgrade', '', RoomUpgradeWarningDialog, {
-                roomId,
-                targetVersion,
-                description: _t("This upgrade will allow members of selected spaces " +
-                    "access to this room without an invite."),
-                onFinished: async (resp) => {
-                    if (!resp?.continue) return;
-                    const { replacement_room: newRoomId } = await upgradeRoom(room, targetVersion, resp.invite);
+            const room = matrixClient.getRoom(roomId);
 
-                    const content: IContent = {
-                        join_rule: JoinRule.Restricted,
-                    };
+            if (this.state.roomSupportsRestricted) {
+                // Have the user pick which spaces to allow joins from
+                const { finished } = Modal.createTrackedDialog('Set restricted', '', ManageRestrictedJoinRuleDialog, {
+                    matrixClient,
+                    room,
+                    // if they have are viewing this room from the context of a space then default to that
+                    selected: SpaceStore.instance.activeSpace ? [SpaceStore.instance.activeSpace.roomId] : [],
+                }, "mx_ManageRestrictedJoinRuleDialog_wrapper");
 
-                    if (activeSpace) {
-                        content.allow = [{
-                            "type": RestrictedAllowType.RoomMembership,
-                            "room_id": activeSpace.roomId,
-                        }];
-                    }
-
-                    cli.sendStateEvent(newRoomId, EventType.RoomJoinRules, content);
-                },
-            });
-            return;
+                const [restrictedAllowRoomIds] = await finished;
+                if (!Array.isArray(restrictedAllowRoomIds)) return;
+            } else if (this.state.preferredRestrictionVersion) {
+                // Block this action on a room upgrade otherwise it'd make their room unjoinable
+                const targetVersion = this.state.preferredRestrictionVersion;
+                Modal.createTrackedDialog('Restricted join rule upgrade', '', RoomUpgradeWarningDialog, {
+                    roomId,
+                    targetVersion,
+                    description: _t("This upgrade will allow members of selected spaces " +
+                        "access to this room without an invite."),
+                    onFinished: (resp) => {
+                        if (!resp?.continue) return;
+                        upgradeRoom(room, targetVersion, resp.invite);
+                    },
+                });
+                return;
+            }
         }
 
-        const beforeJoinRule = this.state.joinRule;
-        this.setState({ joinRule });
+        const content: IContent = {
+            join_rule: joinRule,
+        };
+
+        let restrictedAllowRoomIds: string[];
+        // pre-set the accepted spaces with the currently viewed one as per the microcopy
+        if (joinRule === JoinRule.Restricted && SpaceStore.instance.activeSpace) {
+            const spaceRoomId = SpaceStore.instance.activeSpace.roomId;
+            restrictedAllowRoomIds = [spaceRoomId];
+            content.allow = [{
+                "type": RestrictedAllowType.RoomMembership,
+                "room_id": spaceRoomId,
+            }];
+        }
+
+        this.setState({ joinRule, restrictedAllowRoomIds });
 
         const client = MatrixClientPeg.get();
-        client.sendStateEvent(this.props.roomId, EventType.RoomJoinRules, {
-            join_rule: joinRule,
-        }, "").catch((e) => {
+        client.sendStateEvent(this.props.roomId, EventType.RoomJoinRules, content, "").catch((e) => {
             console.error(e);
-            this.setState({ joinRule: beforeJoinRule });
+            this.setState({
+                joinRule: beforeJoinRule,
+                restrictedAllowRoomIds: undefined,
+            });
         });
     };
 
     private onRestrictedRoomIdsChange = (restrictedAllowRoomIds: string[]) => {
         const beforeRestrictedAllowRoomIds = this.state.restrictedAllowRoomIds;
+        if (!arrayHasDiff(beforeRestrictedAllowRoomIds || [], restrictedAllowRoomIds)) return;
         this.setState({ restrictedAllowRoomIds });
 
         const client = MatrixClientPeg.get();
@@ -234,6 +252,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     private onGuestAccessChange = (allowed: boolean) => {
         const guestAccess = allowed ? GuestAccess.CanJoin : GuestAccess.Forbidden;
         const beforeGuestAccess = this.state.guestAccess;
+        if (beforeGuestAccess === guestAccess) return;
+
         this.setState({ guestAccess });
 
         const client = MatrixClientPeg.get();
@@ -247,6 +267,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
     private onHistoryRadioToggle = (history: HistoryVisibility) => {
         const beforeHistory = this.state.history;
+        if (beforeHistory === history) return;
+
         this.setState({ history: history });
         MatrixClientPeg.get().sendStateEvent(this.props.roomId, EventType.RoomHistoryVisibility, {
             history_visibility: history,
