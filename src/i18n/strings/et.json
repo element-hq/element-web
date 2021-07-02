@@ -3393,5 +3393,16 @@
     "%(senderName)s banned %(targetName)s: %(reason)s": "%(senderName)s keelas ligipääsu kasutajale %(targetName)s: %(reason)s",
     "%(targetName)s accepted an invitation": "%(targetName)s võttis kutse vastu",
     "%(targetName)s accepted the invitation for %(displayName)s": "%(targetName)s võttis vastu kutse %(displayName)s nimel",
-    "Some invites couldn't be sent": "Mõnede kutsete saatmine ei õnnestunud"
+    "Some invites couldn't be sent": "Mõnede kutsete saatmine ei õnnestunud",
+    "Visibility": "Nähtavus",
+    "This may be useful for public spaces.": "Seda saad kasutada näiteks avalike kogukonnakeskuste puhul.",
+    "Guests can join a space without having an account.": "Külalised võivad liituda kogukonnakeskusega ilma kasutajakontota.",
+    "Enable guest access": "Luba ligipääs külalistele",
+    "Failed to update the history visibility of this space": "Ei õnnestunud selle kogukonnakekuse ajaloo loetavust uuendada",
+    "Failed to update the guest access of this space": "Ei õnnestunud selle kogukonnakekuse külaliste ligipääsureegleid uuendada",
+    "Failed to update the visibility of this space": "Kogukonnakeskuse nähtavust ei õnnestunud uuendada",
+    "Address": "Aadress",
+    "e.g. my-space": "näiteks minu kogukond",
+    "Silence call": "Vaigista kõne",
+    "Sound on": "Lõlita heli sisse"
 }
