@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,11 +16,9 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import RateLimitedFunc from '../../../ratelimitedfunc';
 
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
@@ -31,54 +29,65 @@ import RoomTopic from "../elements/RoomTopic";
 import RoomName from "../elements/RoomName";
 import { PlaceCallType } from "../../../CallHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { throttle } from 'lodash';
+import { MatrixEvent, Room, RoomState } from 'matrix-js-sdk/src';
+import { E2EStatus } from '../../../utils/ShieldUtils';
+import { IOOBData } from '../../../stores/ThreepidInviteStore';
+import { SearchScope } from './SearchBar';
+
+export interface ISearchInfo {
+    searchTerm: string;
+    searchScope: SearchScope;
+    searchCount: number;
+}
+
+interface IProps {
+    room: Room;
+    oobData?: IOOBData;
+    inRoom: boolean;
+    onSettingsClick: () => void;
+    onSearchClick: () => void;
+    onForgetClick: () => void;
+    onCallPlaced: (type: PlaceCallType) => void;
+    onAppsClick: () => void;
+    e2eStatus: E2EStatus;
+    appsShown: boolean;
+    searchInfo: ISearchInfo;
+}
 
 @replaceableComponent("views.rooms.RoomHeader")
-export default class RoomHeader extends React.Component {
-    static propTypes = {
-        room: PropTypes.object,
-        oobData: PropTypes.object,
-        inRoom: PropTypes.bool,
-        onSettingsClick: PropTypes.func,
-        onSearchClick: PropTypes.func,
-        onLeaveClick: PropTypes.func,
-        e2eStatus: PropTypes.string,
-        onAppsClick: PropTypes.func,
-        appsShown: PropTypes.bool,
-        onCallPlaced: PropTypes.func, // (PlaceCallType) => void;
-    };
-
+export default class RoomHeader extends React.Component<IProps> {
     static defaultProps = {
         editing: false,
         inRoom: false,
     };
 
-    componentDidMount() {
+    public componentDidMount() {
         const cli = MatrixClientPeg.get();
-        cli.on("RoomState.events", this._onRoomStateEvents);
+        cli.on("RoomState.events", this.onRoomStateEvents);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         const cli = MatrixClientPeg.get();
         if (cli) {
-            cli.removeListener("RoomState.events", this._onRoomStateEvents);
+            cli.removeListener("RoomState.events", this.onRoomStateEvents);
         }
     }
 
-    _onRoomStateEvents = (event, state) => {
+    private onRoomStateEvents = (event: MatrixEvent, state: RoomState) => {
         if (!this.props.room || event.getRoomId() !== this.props.room.roomId) {
             return;
         }
 
         // redisplay the room name, topic, etc.
-        this._rateLimitedUpdate();
+        this.rateLimitedUpdate();
     };
 
-    _rateLimitedUpdate = new RateLimitedFunc(function() {
-        /* eslint-disable @babel/no-invalid-this */
+    private rateLimitedUpdate = throttle(() => {
         this.forceUpdate();
-    }, 500);
+    }, 500, { leading: true, trailing: true });
 
-    render() {
+    public render() {
         let searchStatus = null;
 
         // don't display the search count until the search completes and

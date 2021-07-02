@@ -1,7 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,134 +14,151 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from 'react';
+import React, { createRef, SyntheticEvent } from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
 import highlight from 'highlight.js';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { MsgType } from "matrix-js-sdk/src/@types/event";
+
 import * as HtmlUtils from '../../../HtmlUtils';
 import { formatDate } from '../../../DateUtils';
-import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import * as ContextMenu from '../../structures/ContextMenu';
+import { toRightOf } from '../../structures/ContextMenu';
 import SettingsStore from "../../../settings/SettingsStore";
 import ReplyThread from "../elements/ReplyThread";
 import { pillifyLinks, unmountPills } from '../../../utils/pillify';
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import { isPermalinkHost } from "../../../utils/permalinks/Permalinks";
-import { toRightOf } from "../../structures/ContextMenu";
 import { copyPlaintext } from "../../../utils/strings";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import UIStore from "../../../stores/UIStore";
 import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../dispatcher/actions";
+import { TileShape } from '../rooms/EventTile';
+import EditorStateTransfer from "../../../utils/EditorStateTransfer";
+import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
+import Spoiler from "../elements/Spoiler";
+import QuestionDialog from "../dialogs/QuestionDialog";
+import MessageEditHistoryDialog from "../dialogs/MessageEditHistoryDialog";
+import EditMessageComposer from '../rooms/EditMessageComposer';
+import LinkPreviewWidget from '../rooms/LinkPreviewWidget';
+
+interface IProps {
+    /* the MatrixEvent to show */
+    mxEvent: MatrixEvent;
+
+    /* a list of words to highlight */
+    highlights?: string[];
+
+    /* link URL for the highlights */
+    highlightLink?: string;
+
+    /* should show URL previews for this event */
+    showUrlPreview?: boolean;
+
+    /* the shape of the tile, used */
+    tileShape?: TileShape;
+
+    editState?: EditorStateTransfer;
+    replacingEventId?: string;
+
+    /* callback for when our widget has loaded */
+    onHeightChanged(): void;
+}
+
+interface IState {
+    // the URLs (if any) to be previewed with a LinkPreviewWidget inside this TextualBody.
+    links: string[];
+
+    // track whether the preview widget is hidden
+    widgetHidden: boolean;
+}
 
 @replaceableComponent("views.messages.TextualBody")
-export default class TextualBody extends React.Component {
-    static propTypes = {
-        /* the MatrixEvent to show */
-        mxEvent: PropTypes.object.isRequired,
+export default class TextualBody extends React.Component<IProps, IState> {
+    private readonly contentRef = createRef<HTMLSpanElement>();
 
-        /* a list of words to highlight */
-        highlights: PropTypes.array,
-
-        /* link URL for the highlights */
-        highlightLink: PropTypes.string,
-
-        /* should show URL previews for this event */
-        showUrlPreview: PropTypes.bool,
-
-        /* callback for when our widget has loaded */
-        onHeightChanged: PropTypes.func,
-
-        /* the shape of the tile, used */
-        tileShape: PropTypes.string,
-    };
+    private unmounted = false;
+    private pills: Element[] = [];
 
     constructor(props) {
         super(props);
 
-        this._content = createRef();
-
         this.state = {
-            // the URLs (if any) to be previewed with a LinkPreviewWidget
-            // inside this TextualBody.
             links: [],
-
-            // track whether the preview widget is hidden
             widgetHidden: false,
         };
     }
 
     componentDidMount() {
-        this._unmounted = false;
-        this._pills = [];
         if (!this.props.editState) {
-            this._applyFormatting();
+            this.applyFormatting();
         }
     }
 
-    _applyFormatting() {
+    private applyFormatting(): void {
         const showLineNumbers = SettingsStore.getValue("showCodeLineNumbers");
-        this.activateSpoilers([this._content.current]);
+        this.activateSpoilers([this.contentRef.current]);
 
         // pillifyLinks BEFORE linkifyElement because plain room/user URLs in the composer
         // are still sent as plaintext URLs. If these are ever pillified in the composer,
         // we should be pillify them here by doing the linkifying BEFORE the pillifying.
-        pillifyLinks([this._content.current], this.props.mxEvent, this._pills);
-        HtmlUtils.linkifyElement(this._content.current);
+        pillifyLinks([this.contentRef.current], this.props.mxEvent, this.pills);
+        HtmlUtils.linkifyElement(this.contentRef.current);
         this.calculateUrlPreview();
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
             // Handle expansion and add buttons
-            const pres = ReactDOM.findDOMNode(this).getElementsByTagName("pre");
+            const pres = (ReactDOM.findDOMNode(this) as Element).getElementsByTagName("pre");
             if (pres.length > 0) {
                 for (let i = 0; i < pres.length; i++) {
                     // If there already is a div wrapping the codeblock we want to skip this.
                     // This happens after the codeblock was edited.
-                    if (pres[i].parentNode.className == "mx_EventTile_pre_container") continue;
+                    if (pres[i].parentElement.className == "mx_EventTile_pre_container") continue;
                     // Add code element if it's missing since we depend on it
                     if (pres[i].getElementsByTagName("code").length == 0) {
-                        this._addCodeElement(pres[i]);
+                        this.addCodeElement(pres[i]);
                     }
                     // Wrap a div around <pre> so that the copy button can be correctly positioned
                     // when the <pre> overflows and is scrolled horizontally.
-                    const div = this._wrapInDiv(pres[i]);
-                    this._handleCodeBlockExpansion(pres[i]);
-                    this._addCodeExpansionButton(div, pres[i]);
-                    this._addCodeCopyButton(div);
+                    const div = this.wrapInDiv(pres[i]);
+                    this.handleCodeBlockExpansion(pres[i]);
+                    this.addCodeExpansionButton(div, pres[i]);
+                    this.addCodeCopyButton(div);
                     if (showLineNumbers) {
-                        this._addLineNumbers(pres[i]);
+                        this.addLineNumbers(pres[i]);
                     }
                 }
             }
             // Highlight code
-            const codes = ReactDOM.findDOMNode(this).getElementsByTagName("code");
+            const codes = (ReactDOM.findDOMNode(this) as Element).getElementsByTagName("code");
             if (codes.length > 0) {
                 // Do this asynchronously: parsing code takes time and we don't
                 // need to block the DOM update on it.
                 setTimeout(() => {
-                    if (this._unmounted) return;
+                    if (this.unmounted) return;
                     for (let i = 0; i < codes.length; i++) {
                         // If the code already has the hljs class we want to skip this.
                         // This happens after the codeblock was edited.
                         if (codes[i].className.includes("hljs")) continue;
-                        this._highlightCode(codes[i]);
+                        this.highlightCode(codes[i]);
                     }
                 }, 10);
             }
         }
     }
 
-    _addCodeElement(pre) {
+    private addCodeElement(pre: HTMLPreElement): void {
         const code = document.createElement("code");
         code.append(...pre.childNodes);
         pre.appendChild(code);
     }
 
-    _addCodeExpansionButton(div, pre) {
+    private addCodeExpansionButton(div: HTMLDivElement, pre: HTMLPreElement): void {
         // Calculate how many percent does the pre element take up.
         // If it's less than 30% we don't add the expansion button.
         const percentageOfViewport = pre.offsetHeight / UIStore.instance.windowHeight * 100;
@@ -175,7 +190,7 @@ export default class TextualBody extends React.Component {
         div.appendChild(button);
     }
 
-    _addCodeCopyButton(div) {
+    private addCodeCopyButton(div: HTMLDivElement): void {
         const button = document.createElement("span");
         button.className = "mx_EventTile_button mx_EventTile_copyButton ";
 
@@ -185,11 +200,10 @@ export default class TextualBody extends React.Component {
         if (expansionButtonExists.length > 0) button.className += "mx_EventTile_buttonBottom";
 
         button.onclick = async () => {
-            const copyCode = button.parentNode.getElementsByTagName("code")[0];
+            const copyCode = button.parentElement.getElementsByTagName("code")[0];
             const successful = await copyPlaintext(copyCode.textContent);
 
             const buttonRect = button.getBoundingClientRect();
-            const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
             const { close } = ContextMenu.createMenu(GenericTextContextMenu, {
                 ...toRightOf(buttonRect, 2),
                 message: successful ? _t('Copied!') : _t('Failed to copy'),
@@ -200,7 +214,7 @@ export default class TextualBody extends React.Component {
         div.appendChild(button);
     }
 
-    _wrapInDiv(pre) {
+    private wrapInDiv(pre: HTMLPreElement): HTMLDivElement {
         const div = document.createElement("div");
         div.className = "mx_EventTile_pre_container";
 
@@ -212,13 +226,13 @@ export default class TextualBody extends React.Component {
         return div;
     }
 
-    _handleCodeBlockExpansion(pre) {
+    private handleCodeBlockExpansion(pre: HTMLPreElement): void {
         if (!SettingsStore.getValue("expandCodeByDefault")) {
             pre.className = "mx_EventTile_collapsedCodeBlock";
         }
     }
 
-    _addLineNumbers(pre) {
+    private addLineNumbers(pre: HTMLPreElement): void {
         // Calculate number of lines in pre
         const number = pre.innerHTML.replace(/\n(<\/code>)?$/, "").split(/\n/).length;
         pre.innerHTML = '<span class="mx_EventTile_lineNumbers"></span>' + pre.innerHTML + '<span></span>';
@@ -229,7 +243,7 @@ export default class TextualBody extends React.Component {
         }
     }
 
-    _highlightCode(code) {
+    private highlightCode(code: HTMLElement): void {
         if (SettingsStore.getValue("enableSyntaxHighlightLanguageDetection")) {
             highlight.highlightBlock(code);
         } else {
@@ -249,14 +263,14 @@ export default class TextualBody extends React.Component {
             const stoppedEditing = prevProps.editState && !this.props.editState;
             const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
             if (messageWasEdited || stoppedEditing) {
-                this._applyFormatting();
+                this.applyFormatting();
             }
         }
     }
 
     componentWillUnmount() {
-        this._unmounted = true;
-        unmountPills(this._pills);
+        this.unmounted = true;
+        unmountPills(this.pills);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -273,12 +287,12 @@ export default class TextualBody extends React.Component {
                 nextState.widgetHidden !== this.state.widgetHidden);
     }
 
-    calculateUrlPreview() {
+    private calculateUrlPreview(): void {
         //console.info("calculateUrlPreview: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
 
         if (this.props.showUrlPreview) {
             // pass only the first child which is the event tile otherwise this recurses on edited events
-            let links = this.findLinks([this._content.current]);
+            let links = this.findLinks([this.contentRef.current]);
             if (links.length) {
                 // de-duplicate the links after stripping hashes as they don't affect the preview
                 // using a set here maintains the order
@@ -291,8 +305,8 @@ export default class TextualBody extends React.Component {
                 this.setState({ links });
 
                 // lazy-load the hidden state of the preview widget from localstorage
-                if (global.localStorage) {
-                    const hidden = global.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId());
+                if (window.localStorage) {
+                    const hidden = !!window.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId());
                     this.setState({ widgetHidden: hidden });
                 }
             } else if (this.state.links.length) {
@@ -301,19 +315,15 @@ export default class TextualBody extends React.Component {
         }
     }
 
-    activateSpoilers(nodes) {
+    private activateSpoilers(nodes: ArrayLike<Element>): void {
         let node = nodes[0];
         while (node) {
             if (node.tagName === "SPAN" && typeof node.getAttribute("data-mx-spoiler") === "string") {
                 const spoilerContainer = document.createElement('span');
 
                 const reason = node.getAttribute("data-mx-spoiler");
-                const Spoiler = sdk.getComponent('elements.Spoiler');
                 node.removeAttribute("data-mx-spoiler"); // we don't want to recurse
-                const spoiler = <Spoiler
-                    reason={reason}
-                    contentHtml={node.outerHTML}
-                />;
+                const spoiler = <Spoiler reason={reason} contentHtml={node.outerHTML} />;
 
                 ReactDOM.render(spoiler, spoilerContainer);
                 node.parentNode.replaceChild(spoilerContainer, node);
@@ -322,15 +332,15 @@ export default class TextualBody extends React.Component {
             }
 
             if (node.childNodes && node.childNodes.length) {
-                this.activateSpoilers(node.childNodes);
+                this.activateSpoilers(node.childNodes as NodeListOf<Element>);
             }
 
-            node = node.nextSibling;
+            node = node.nextSibling as Element;
         }
     }
 
-    findLinks(nodes) {
-        let links = [];
+    private findLinks(nodes: ArrayLike<Element>): string[] {
+        let links: string[] = [];
 
         for (let i = 0; i < nodes.length; i++) {
             const node = nodes[i];
@@ -348,7 +358,7 @@ export default class TextualBody extends React.Component {
         return links;
     }
 
-    isLinkPreviewable(node) {
+    private isLinkPreviewable(node: Element): boolean {
         // don't try to preview relative links
         if (!node.getAttribute("href").startsWith("http://") &&
             !node.getAttribute("href").startsWith("https://")) {
@@ -381,7 +391,7 @@ export default class TextualBody extends React.Component {
         }
     }
 
-    onCancelClick = event => {
+    private onCancelClick = (): void => {
         this.setState({ widgetHidden: true });
         // FIXME: persist this somewhere smarter than local storage
         if (global.localStorage) {
@@ -390,7 +400,7 @@ export default class TextualBody extends React.Component {
         this.forceUpdate();
     };
 
-    onEmoteSenderClick = event => {
+    private onEmoteSenderClick = (): void => {
         const mxEvent = this.props.mxEvent;
         dis.dispatch<ComposerInsertPayload>({
             action: Action.ComposerInsert,
@@ -398,7 +408,7 @@ export default class TextualBody extends React.Component {
         });
     };
 
-    getEventTileOps = () => ({
+    public getEventTileOps = () => ({
         isWidgetHidden: () => {
             return this.state.widgetHidden;
         },
@@ -411,7 +421,7 @@ export default class TextualBody extends React.Component {
         },
     });
 
-    onStarterLinkClick = (starterLink, ev) => {
+    private onStarterLinkClick = (starterLink: string, ev: SyntheticEvent): void => {
         ev.preventDefault();
         // We need to add on our scalar token to the starter link, but we may not have one!
         // In addition, we can't fetch one on click and then go to it immediately as that
@@ -431,7 +441,6 @@ export default class TextualBody extends React.Component {
         const scalarClient = integrationManager.getScalarClient();
         scalarClient.connect().then(() => {
             const completeUrl = scalarClient.getStarterLink(starterLink);
-            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             const integrationsUrl = integrationManager.uiUrl;
             Modal.createTrackedDialog('Add an integration', '', QuestionDialog, {
                 title: _t("Add an Integration"),
@@ -458,12 +467,11 @@ export default class TextualBody extends React.Component {
         });
     };
 
-    _openHistoryDialog = async () => {
-        const MessageEditHistoryDialog = sdk.getComponent("views.dialogs.MessageEditHistoryDialog");
+    private openHistoryDialog = async (): Promise<void> => {
         Modal.createDialog(MessageEditHistoryDialog, { mxEvent: this.props.mxEvent });
     };
 
-    _renderEditedMarker() {
+    private renderEditedMarker() {
         const date = this.props.mxEvent.replacingEventDate();
         const dateString = date && formatDate(date);
 
@@ -479,7 +487,7 @@ export default class TextualBody extends React.Component {
         return (
             <AccessibleTooltipButton
                 className="mx_EventTile_edited"
-                onClick={this._openHistoryDialog}
+                onClick={this.openHistoryDialog}
                 title={_t("Edited at %(date)s. Click to view edits.", { date: dateString })}
                 tooltip={tooltip}
             >
@@ -490,24 +498,25 @@ export default class TextualBody extends React.Component {
 
     render() {
         if (this.props.editState) {
-            const EditMessageComposer = sdk.getComponent('rooms.EditMessageComposer');
             return <EditMessageComposer editState={this.props.editState} className="mx_EventTile_content" />;
         }
         const mxEvent = this.props.mxEvent;
         const content = mxEvent.getContent();
 
         // only strip reply if this is the original replying event, edits thereafter do not have the fallback
-        const stripReply = !mxEvent.replacingEvent() && ReplyThread.getParentEventId(mxEvent);
+        const stripReply = !mxEvent.replacingEvent() && !!ReplyThread.getParentEventId(mxEvent);
         let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
-            disableBigEmoji: content.msgtype === "m.emote" || !SettingsStore.getValue('TextualBody.enableBigEmoji'),
+            disableBigEmoji: content.msgtype === MsgType.Emote
+                || !SettingsStore.getValue<boolean>('TextualBody.enableBigEmoji'),
             // Part of Replies fallback support
             stripReplyFallback: stripReply,
-            ref: this._content,
+            ref: this.contentRef,
+            returnString: false,
         });
         if (this.props.replacingEventId) {
             body = <>
                 {body}
-                {this._renderEditedMarker()}
+                {this.renderEditedMarker()}
             </>;
         }
 
@@ -521,7 +530,6 @@ export default class TextualBody extends React.Component {
 
         let widgets;
         if (this.state.links.length && !this.state.widgetHidden && this.props.showUrlPreview) {
-            const LinkPreviewWidget = sdk.getComponent('rooms.LinkPreviewWidget');
             widgets = this.state.links.map((link)=>{
                 return <LinkPreviewWidget
                     key={link}
@@ -534,7 +542,7 @@ export default class TextualBody extends React.Component {
         }
 
         switch (content.msgtype) {
-            case "m.emote":
+            case MsgType.Emote:
                 return (
                     <span className="mx_MEmoteBody mx_EventTile_content">
                         *&nbsp;
@@ -549,7 +557,7 @@ export default class TextualBody extends React.Component {
                         { widgets }
                     </span>
                 );
-            case "m.notice":
+            case MsgType.Notice:
                 return (
                     <span className="mx_MNoticeBody mx_EventTile_content">
                         { body }

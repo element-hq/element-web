@@ -16,9 +16,11 @@ limitations under the License.
 
 import React from "react";
 import ReactDOM from 'react-dom';
+import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import SettingsStore from "../settings/SettingsStore";
-import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
 import Pill from "../components/views/elements/Pill";
 import { parseAppLocalLink } from "./permalinks/Permalinks";
 
@@ -27,15 +29,15 @@ import { parseAppLocalLink } from "./permalinks/Permalinks";
  * into pills based on the context of a given room.  Returns a list of
  * the resulting React nodes so they can be unmounted rather than leaking.
  *
- * @param {Node[]} nodes - a list of sibling DOM nodes to traverse to try
+ * @param {Element[]} nodes - a list of sibling DOM nodes to traverse to try
  *   to turn into pills.
  * @param {MatrixEvent} mxEvent - the matrix event which the DOM nodes are
  *   part of representing.
- * @param {Node[]} pills: an accumulator of the DOM nodes which contain
+ * @param {Element[]} pills: an accumulator of the DOM nodes which contain
  *   React components which have been mounted as part of this.
  *   The initial caller should pass in an empty array to seed the accumulator.
  */
-export function pillifyLinks(nodes, mxEvent, pills) {
+export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pills: Element[]) {
     const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId());
     const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
     let node = nodes[0];
@@ -73,7 +75,7 @@ export function pillifyLinks(nodes, mxEvent, pills) {
             // to clear the pills from the last run of pillifyLinks
             !node.parentElement.classList.contains("mx_AtRoomPill")
         ) {
-            let currentTextNode = node;
+            let currentTextNode = node as Node as Text;
             const roomNotifTextNodes = [];
 
             // Take a textNode and break it up to make all the instances of @room their
@@ -125,10 +127,10 @@ export function pillifyLinks(nodes, mxEvent, pills) {
         }
 
         if (node.childNodes && node.childNodes.length && !pillified) {
-            pillifyLinks(node.childNodes, mxEvent, pills);
+            pillifyLinks(node.childNodes as NodeListOf<Element>, mxEvent, pills);
         }
 
-        node = node.nextSibling;
+        node = node.nextSibling as Element;
     }
 }
 
@@ -140,10 +142,10 @@ export function pillifyLinks(nodes, mxEvent, pills) {
  * emitter on BaseAvatar as per
  * https://github.com/vector-im/element-web/issues/12417
  *
- * @param {Node[]} pills - array of pill containers whose React
+ * @param {Element[]} pills - array of pill containers whose React
  *   components should be unmounted.
  */
-export function unmountPills(pills) {
+export function unmountPills(pills: Element[]) {
     for (const pillContainer of pills) {
         ReactDOM.unmountComponentAtNode(pillContainer);
     }

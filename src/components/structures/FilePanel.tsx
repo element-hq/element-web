@@ -37,7 +37,7 @@ import ResizeNotifier from '../../utils/ResizeNotifier';
 interface IProps {
     roomId: string;
     onClose: () => void;
-    resizeNotifier: ResizeNotifier
+    resizeNotifier: ResizeNotifier;
 }
 
 interface IState {

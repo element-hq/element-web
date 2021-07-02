@@ -29,7 +29,7 @@ interface IProps {
     // group member object. Supply either this or 'member'
     groupMember: GroupMemberType;
     // needed if a group member is specified
-    matrixClient?: MatrixClient,
+    matrixClient?: MatrixClient;
     action: string; // eg. 'Ban'
     title: string; // eg. 'Ban this user?'
 

@@ -20,34 +20,34 @@ export type ConfettiOptions = {
     /**
      * max confetti count
      */
-    maxCount: number,
+    maxCount: number;
     /**
      * particle animation speed
      */
-    speed: number,
+    speed: number;
     /**
      * the confetti animation frame interval in milliseconds
      */
-    frameInterval: number,
+    frameInterval: number;
     /**
      * the alpha opacity of the confetti (between 0 and 1, where 1 is opaque and 0 is invisible)
      */
-    alpha: number,
+    alpha: number;
     /**
      * use gradient instead of solid particle color
      */
-    gradient: boolean,
+    gradient: boolean;
 };
 
 type ConfettiParticle = {
-    color: string,
-    color2: string,
-    x: number,
-    y: number,
-    diameter: number,
-    tilt: number,
-    tiltAngleIncrement: number,
-    tiltAngle: number,
+    color: string;
+    color2: string;
+    x: number;
+    y: number;
+    diameter: number;
+    tilt: number;
+    tiltAngleIncrement: number;
+    tiltAngle: number;
 };
 
 export const DefaultOptions: ConfettiOptions = {

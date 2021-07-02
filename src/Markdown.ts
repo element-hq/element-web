@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,16 +16,24 @@ limitations under the License.
 */
 
 import * as commonmark from 'commonmark';
-import {escape} from "lodash";
+import { escape } from "lodash";
 
 const ALLOWED_HTML_TAGS = ['sub', 'sup', 'del', 'u'];
 
 // These types of node are definitely text
 const TEXT_NODES = ['text', 'softbreak', 'linebreak', 'paragraph', 'document'];
 
-function is_allowed_html_tag(node) {
+// As far as @types/commonmark is concerned, these are not public, so add them
+interface CommonmarkHtmlRendererInternal extends commonmark.HtmlRenderer {
+    paragraph: (node: commonmark.Node, entering: boolean) => void;
+    link: (node: commonmark.Node, entering: boolean) => void;
+    html_inline: (node: commonmark.Node) => void; // eslint-disable-line camelcase
+    html_block: (node: commonmark.Node) => void; // eslint-disable-line camelcase
+}
+
+function isAllowedHtmlTag(node: commonmark.Node): boolean {
     if (node.literal != null &&
-        node.literal.match('^<((div|span) data-mx-maths="[^"]*"|\/(div|span))>$') != null) {
+        node.literal.match('^<((div|span) data-mx-maths="[^"]*"|/(div|span))>$') != null) {
         return true;
     }
 
@@ -39,21 +48,12 @@ function is_allowed_html_tag(node) {
     return false;
 }
 
-function html_if_tag_allowed(node) {
-    if (is_allowed_html_tag(node)) {
-        this.lit(node.literal);
-        return;
-    } else {
-        this.lit(escape(node.literal));
-    }
-}
-
 /*
  * Returns true if the parse output containing the node
  * comprises multiple block level elements (ie. lines),
  * or false if it is only a single line.
  */
-function is_multi_line(node) {
+function isMultiLine(node: commonmark.Node): boolean {
     let par = node;
     while (par.parent) {
         par = par.parent;
@@ -67,6 +67,9 @@ function is_multi_line(node) {
  * it's plain text.
  */
 export default class Markdown {
+    private input: string;
+    private parsed: commonmark.Node;
+
     constructor(input) {
         this.input = input;
 
@@ -74,7 +77,7 @@ export default class Markdown {
         this.parsed = parser.parse(this.input);
     }
 
-    isPlainText() {
+    isPlainText(): boolean {
         const walker = this.parsed.walker();
 
         let ev;
@@ -87,7 +90,7 @@ export default class Markdown {
                 // if it's an allowed html tag, we need to render it and therefore
                 // we will need to use HTML. If it's not allowed, it's not HTML since
                 // we'll just be treating it as text.
-                if (is_allowed_html_tag(node)) {
+                if (isAllowedHtmlTag(node)) {
                     return false;
                 }
             } else {
@@ -97,7 +100,7 @@ export default class Markdown {
         return true;
     }
 
-    toHTML({ externalLinks = false } = {}) {
+    toHTML({ externalLinks = false } = {}): string {
         const renderer = new commonmark.HtmlRenderer({
             safe: false,
 
@@ -107,7 +110,7 @@ export default class Markdown {
             // block quote ends up all on one line
             // (https://github.com/vector-im/element-web/issues/3154)
             softbreak: '<br />',
-        });
+        }) as CommonmarkHtmlRendererInternal;
 
         // Trying to strip out the wrapping <p/> causes a lot more complication
         // than it's worth, i think.  For instance, this code will go and strip
@@ -118,16 +121,16 @@ export default class Markdown {
         //
         // Let's try sending with <p/>s anyway for now, though.
 
-        const real_paragraph = renderer.paragraph;
+        const realParagraph = renderer.paragraph;
 
-        renderer.paragraph = function(node, entering) {
+        renderer.paragraph = function(node: commonmark.Node, entering: boolean) {
             // If there is only one top level node, just return the
             // bare text: it's a single line of text and so should be
             // 'inline', rather than unnecessarily wrapped in its own
             // p tag. If, however, we have multiple nodes, each gets
             // its own p tag to keep them as separate paragraphs.
-            if (is_multi_line(node)) {
-                real_paragraph.call(this, node, entering);
+            if (isMultiLine(node)) {
+                realParagraph.call(this, node, entering);
             }
         };
 
@@ -150,19 +153,26 @@ export default class Markdown {
             }
         };
 
-        renderer.html_inline = html_if_tag_allowed;
+        renderer.html_inline = function(node: commonmark.Node) {
+            if (isAllowedHtmlTag(node)) {
+                this.lit(node.literal);
+                return;
+            } else {
+                this.lit(escape(node.literal));
+            }
+        };
 
-        renderer.html_block = function(node) {
-/*
+        renderer.html_block = function(node: commonmark.Node) {
+            /*
             // as with `paragraph`, we only insert line breaks
             // if there are multiple lines in the markdown.
             const isMultiLine = is_multi_line(node);
             if (isMultiLine) this.cr();
-*/
-            html_if_tag_allowed.call(this, node);
-/*
+            */
+            renderer.html_inline(node);
+            /*
             if (isMultiLine) this.cr();
-*/
+            */
         };
 
         return renderer.render(this.parsed);
@@ -177,23 +187,22 @@ export default class Markdown {
      * N.B. this does **NOT** render arbitrary MD to plain text - only MD
      * which has no formatting.  Otherwise it emits HTML(!).
      */
-    toPlaintext() {
-        const renderer = new commonmark.HtmlRenderer({safe: false});
-        const real_paragraph = renderer.paragraph;
+    toPlaintext(): string {
+        const renderer = new commonmark.HtmlRenderer({ safe: false }) as CommonmarkHtmlRendererInternal;
 
-        renderer.paragraph = function(node, entering) {
+        renderer.paragraph = function(node: commonmark.Node, entering: boolean) {
             // as with toHTML, only append lines to paragraphs if there are
             // multiple paragraphs
-            if (is_multi_line(node)) {
+            if (isMultiLine(node)) {
                 if (!entering && node.next) {
                     this.lit('\n\n');
                 }
             }
         };
 
-        renderer.html_block = function(node) {
+        renderer.html_block = function(node: commonmark.Node) {
             this.lit(node.literal);
-            if (is_multi_line(node) && node.next) this.lit('\n\n');
+            if (isMultiLine(node) && node.next) this.lit('\n\n');
         };
 
         return renderer.render(this.parsed);

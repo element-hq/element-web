@@ -21,8 +21,8 @@ interface IProps extends Omit<HTMLAttributes<HTMLDivElement>, "onScroll"> {
     className?: string;
     onScroll?: (event: Event) => void;
     onWheel?: (event: WheelEvent) => void;
-    style?: React.CSSProperties
-    tabIndex?: number,
+    style?: React.CSSProperties;
+    tabIndex?: number;
     wrappedRef?: (ref: HTMLDivElement) => void;
 }
 

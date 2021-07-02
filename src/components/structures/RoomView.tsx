@@ -37,7 +37,6 @@ import Modal from '../../Modal';
 import * as sdk from '../../index';
 import CallHandler, { PlaceCallType } from '../../CallHandler';
 import dis from '../../dispatcher/dispatcher';
-import rateLimitedFunc from '../../ratelimitedfunc';
 import * as Rooms from '../../Rooms';
 import eventSearch, { searchPagination } from '../../Searching';
 import MainSplit from './MainSplit';
@@ -64,7 +63,7 @@ import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
 import AuxPanel from "../views/rooms/AuxPanel";
 import RoomHeader from "../views/rooms/RoomHeader";
 import { XOR } from "../../@types/common";
-import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
+import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import EffectsOverlay from "../views/elements/EffectsOverlay";
 import { containsEmoji } from '../../effects/utils';
 import { CHAT_EFFECTS } from '../../effects';
@@ -82,6 +81,7 @@ import { IOpts } from "../../createRoom";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import UIStore from "../../stores/UIStore";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
+import { throttle } from "lodash";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -94,22 +94,8 @@ if (DEBUG) {
 }
 
 interface IProps {
-    threepidInvite: IThreepidInvite,
-
-    // Any data about the room that would normally come from the homeserver
-    // but has been passed out-of-band, eg. the room name and avatar URL
-    // from an email invite (a workaround for the fact that we can't
-    // get this information from the HS using an email invite).
-    // Fields:
-    //  * name (string) The room's name
-    //  * avatarUrl (string) The mxc:// avatar URL for the room
-    //  * inviterName (string) The display name of the person who
-    //  *                      invited us to the room
-    oobData?: {
-        name?: string;
-        avatarUrl?: string;
-        inviterName?: string;
-    };
+    threepidInvite: IThreepidInvite;
+    oobData?: IOOBData;
 
     resizeNotifier: ResizeNotifier;
     justCreatedOpts?: IOpts;
@@ -675,8 +661,8 @@ export default class RoomView extends React.Component<IProps, IState> {
             );
         }
 
-        // cancel any pending calls to the rate_limited_funcs
-        this.updateRoomMembers.cancelPendingCall();
+        // cancel any pending calls to the throttled updated
+        this.updateRoomMembers.cancel();
 
         for (const watcher of this.settingWatchers) {
             SettingsStore.unwatchSetting(watcher);
@@ -1092,7 +1078,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             return;
         }
 
-        this.updateRoomMembers(member);
+        this.updateRoomMembers();
     };
 
     private onMyMembership = (room: Room, membership: string, oldMembership: string) => {
@@ -1114,10 +1100,10 @@ export default class RoomView extends React.Component<IProps, IState> {
     }
 
     // rate limited because a power level change will emit an event for every member in the room.
-    private updateRoomMembers = rateLimitedFunc(() => {
+    private updateRoomMembers = throttle(() => {
         this.updateDMState();
         this.updateE2EStatus(this.state.room);
-    }, 500);
+    }, 500, { leading: true, trailing: true });
 
     private checkDesktopNotifications() {
         const memberCount = this.state.room.getJoinedMemberCount() + this.state.room.getInvitedMemberCount();
@@ -1261,7 +1247,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         });
     };
 
-    private injectSticker(url, info, text) {
+    private injectSticker(url: string, info: object, text: string) {
         if (this.context.isGuest()) {
             dis.dispatch({ action: 'require_registration' });
             return;
@@ -1457,13 +1443,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         dis.dispatch({
             action: "appsDrawer",
             show: !this.state.showApps,
-        });
-    };
-
-    private onLeaveClick = () => {
-        dis.dispatch({
-            action: 'leave_room',
-            room_id: this.state.room.roomId,
         });
     };
 
@@ -2106,7 +2085,6 @@ export default class RoomView extends React.Component<IProps, IState> {
                             onSearchClick={this.onSearchClick}
                             onSettingsClick={this.onSettingsClick}
                             onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
-                            onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
                             e2eStatus={this.state.e2eStatus}
                             onAppsClick={this.state.hasPinnedWidgets ? this.onAppsClick : null}
                             appsShown={this.state.showApps}

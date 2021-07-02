@@ -23,7 +23,7 @@ import Field from "../elements/Field";
 interface IProps {
     avatarUrl?: string;
     avatarDisabled?: boolean;
-    name?: string,
+    name?: string;
     nameDisabled?: boolean;
     topic?: string;
     topicDisabled?: boolean;

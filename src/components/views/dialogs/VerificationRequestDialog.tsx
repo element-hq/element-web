@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,27 +15,33 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import BaseDialog from "./BaseDialog";
+import EncryptionPanel from "../right_panel/EncryptionPanel";
+import { User } from 'matrix-js-sdk';
+
+interface IProps {
+    verificationRequest: VerificationRequest;
+    verificationRequestPromise: Promise<VerificationRequest>;
+    onFinished: () => void;
+    member: User;
+}
+
+interface IState {
+    verificationRequest: VerificationRequest;
+}
 
 @replaceableComponent("views.dialogs.VerificationRequestDialog")
-export default class VerificationRequestDialog extends React.Component {
-    static propTypes = {
-        verificationRequest: PropTypes.object,
-        verificationRequestPromise: PropTypes.object,
-        onFinished: PropTypes.func.isRequired,
-        member: PropTypes.string,
-    };
-
-    constructor(...args) {
-        super(...args);
-        this.state = {};
-        if (this.props.verificationRequest) {
-            this.state.verificationRequest = this.props.verificationRequest;
-        } else if (this.props.verificationRequestPromise) {
+export default class VerificationRequestDialog extends React.Component<IProps, IState> {
+    constructor(props) {
+        super(props);
+        this.state = {
+            verificationRequest: this.props.verificationRequest,
+        };
+        if (this.props.verificationRequestPromise) {
             this.props.verificationRequestPromise.then(r => {
                 this.setState({ verificationRequest: r });
             });
@@ -43,8 +49,6 @@ export default class VerificationRequestDialog extends React.Component {
     }
 
     render() {
-        const BaseDialog = sdk.getComponent("views.dialogs.BaseDialog");
-        const EncryptionPanel = sdk.getComponent("views.right_panel.EncryptionPanel");
         const request = this.state.verificationRequest;
         const otherUserId = request && request.otherUserId;
         const member = this.props.member ||
@@ -65,6 +69,7 @@ export default class VerificationRequestDialog extends React.Component {
                 verificationRequestPromise={this.props.verificationRequestPromise}
                 onClose={this.props.onFinished}
                 member={member}
+                isRoomEncrypted={false}
             />
         </BaseDialog>;
     }

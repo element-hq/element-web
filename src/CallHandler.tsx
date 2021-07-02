@@ -124,9 +124,9 @@ interface ThirdpartyLookupResponseFields {
 }
 
 interface ThirdpartyLookupResponse {
-    userid: string,
-    protocol: string,
-    fields: ThirdpartyLookupResponseFields,
+    userid: string;
+    protocol: string;
+    fields: ThirdpartyLookupResponseFields;
 }
 
 // Unlike 'CallType' in js-sdk, this one includes screen sharing
