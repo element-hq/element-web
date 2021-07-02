@@ -1656,7 +1656,7 @@
     "Show %(count)s more|other": "Show %(count)s more",
     "Show %(count)s more|one": "Show %(count)s more",
     "Show less": "Show less",
-    "Use default": "Use default",
+    "Global": "Global",
     "All messages": "All messages",
     "Mentions & Keywords": "Mentions & Keywords",
     "Notification options": "Notification options",

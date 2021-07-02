@@ -408,7 +408,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             >
                 <IconizedContextMenuOptionList first>
                     <IconizedContextMenuRadio
-                        label={_t("Use default")}
+                        label={_t("Global")}
                         active={state === ALL_MESSAGES}
                         iconClassName="mx_RoomTile_iconBell"
                         onClick={this.onClickAllNotifs}
