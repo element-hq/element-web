@@ -15,66 +15,52 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { _t, _td } from '../../../languageHandler';
-
-import * as sdk from '../../../index';
-
+import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
-import { MatrixClient } from 'matrix-js-sdk';
-
-import { objectHasDiff } from '../../../utils/objects';
 import { getHandlerTile } from "./EventTile";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
+import SenderProfile from "../messages/SenderProfile";
+import TextualBody from "../messages/TextualBody";
+import MImageReplyBody from "../messages/MImageReplyBody";
+import * as sdk from '../../../index';
 
-class ReplyTile extends React.Component {
-    static contextTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
-    }
+interface IProps {
+    mxEvent: MatrixEvent;
+    isRedacted?: boolean;
+    permalinkCreator?: RoomPermalinkCreator;
+    highlights?: Array<string>;
+    highlightLink?: string;
+    onHeightChanged?(): void;
+}
 
-    static propTypes = {
-        mxEvent: PropTypes.object.isRequired,
-        isRedacted: PropTypes.bool,
-        permalinkCreator: PropTypes.object,
-        onHeightChanged: PropTypes.func,
-    }
-
+export default class ReplyTile extends React.PureComponent<IProps> {
     static defaultProps = {
-        onHeightChanged: function() {},
-    }
+        onHeightChanged: () => {},
+    };
 
-    constructor(props, context) {
-        super(props, context);
-        this.state = {};
-        this.onClick = this.onClick.bind(this);
-        this._onDecrypted = this._onDecrypted.bind(this);
+    constructor(props: IProps) {
+        super(props);
     }
 
     componentDidMount() {
-        this.props.mxEvent.on("Event.decrypted", this._onDecrypted);
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        if (objectHasDiff(this.state, nextState)) {
-            return true;
-        }
-
-        return objectHasDiff(this.props, nextProps);
+        this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
     }
 
     componentWillUnmount() {
-        this.props.mxEvent.removeListener("Event.decrypted", this._onDecrypted);
+        this.props.mxEvent.removeListener("Event.decrypted", this.onDecrypted);
     }
 
-    _onDecrypted() {
+    private onDecrypted = (): void => {
         this.forceUpdate();
         if (this.props.onHeightChanged) {
             this.props.onHeightChanged();
         }
-    }
+    };
 
-    onClick(e) {
+    private onClick = (e: React.MouseEvent): void => {
         // This allows the permalink to be opened in a new tab/window or copied as
         // matrix.to, but also for it to enable routing within Riot when clicked.
         e.preventDefault();
@@ -84,11 +70,9 @@ class ReplyTile extends React.Component {
             highlighted: true,
             room_id: this.props.mxEvent.getRoomId(),
         });
-    }
+    };
 
     render() {
-        const SenderProfile = sdk.getComponent('messages.SenderProfile');
-
         const content = this.props.mxEvent.getContent();
         const msgtype = content.msgtype;
         const eventType = this.props.mxEvent.getType();
@@ -118,6 +102,7 @@ class ReplyTile extends React.Component {
                 { _t('This event could not be displayed') }
             </div>;
         }
+
         const EventTileType = sdk.getComponent(tileHandler);
 
         const classes = classNames({
@@ -135,18 +120,12 @@ class ReplyTile extends React.Component {
         const needsSenderProfile = msgtype !== 'm.image' && tileHandler !== 'messages.RoomCreate' && !isInfoMessage;
 
         if (needsSenderProfile) {
-            let text = null;
-            if (msgtype === 'm.image') text = _td('%(senderName)s sent an image');
-            else if (msgtype === 'm.video') text = _td('%(senderName)s sent a video');
-            else if (msgtype === 'm.file') text = _td('%(senderName)s uploaded a file');
-            sender = <SenderProfile onClick={this.onSenderProfileClick}
+            sender = <SenderProfile
                 mxEvent={this.props.mxEvent}
                 enableFlair={false}
-                text={text} />;
+            />;
         }
 
-        const MImageReplyBody = sdk.getComponent('messages.MImageReplyBody');
-        const TextualBody = sdk.getComponent('messages.TextualBody');
         const msgtypeOverrides = {
             "m.image": MImageReplyBody,
             // We don't want a download link for files, just the file name is enough.
@@ -163,7 +142,8 @@ class ReplyTile extends React.Component {
             <div className={classes}>
                 <a href={permalink} onClick={this.onClick}>
                     { sender }
-                    <EventTileType ref="tile"
+                    <EventTileType
+                        ref="tile"
                         mxEvent={this.props.mxEvent}
                         highlights={this.props.highlights}
                         highlightLink={this.props.highlightLink}
@@ -177,5 +157,3 @@ class ReplyTile extends React.Component {
         );
     }
 }
-
-export default ReplyTile;
