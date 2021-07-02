@@ -17,7 +17,8 @@ limitations under the License.
 import React, { useContext, useRef, useState } from "react";
 import classNames from "classnames";
 import { EventType, RoomType, RoomCreateTypeField } from "matrix-js-sdk/src/@types/event";
-import FocusLock from "react-focus-lock";
+import { Preset } from "matrix-js-sdk/src/@types/partials";
+import { ICreateRoomStateEvent } from "matrix-js-sdk/src/@types/requests";
 
 import { _t } from "../../../languageHandler";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
@@ -33,8 +34,6 @@ import { UserTab } from "../dialogs/UserSettingsDialog";
 import Field from "../elements/Field";
 import withValidation from "../elements/Validation";
 import { SpaceFeedbackPrompt } from "../../structures/SpaceRoomView";
-import { Preset } from "matrix-js-sdk/src/@types/partials";
-import { ICreateRoomStateEvent } from "matrix-js-sdk/src/@types/requests";
 import RoomAliasField from "../elements/RoomAliasField";
 
 const SpaceCreateMenuType = ({ title, description, className, onClick }) => {
@@ -250,16 +249,14 @@ const SpaceCreateMenu = ({ onFinished }) => {
         wrapperClassName="mx_SpaceCreateMenu_wrapper"
         managed={false}
     >
-        <FocusLock returnFocus={true}>
-            <BetaPill onClick={() => {
-                onFinished();
-                defaultDispatcher.dispatch({
-                    action: Action.ViewUserSettings,
-                    initialTabId: UserTab.Labs,
-                });
-            }} />
-            { body }
-        </FocusLock>
+        <BetaPill onClick={() => {
+            onFinished();
+            defaultDispatcher.dispatch({
+                action: Action.ViewUserSettings,
+                initialTabId: UserTab.Labs,
+            });
+        }} />
+        { body }
     </ContextMenu>;
 };
 

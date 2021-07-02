@@ -19,6 +19,7 @@ limitations under the License.
 import React, { CSSProperties, RefObject, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
+import FocusLock from "react-focus-lock";
 
 import { Key } from "../../Keyboard";
 import { Writeable } from "../../@types/common";
@@ -44,6 +45,7 @@ function getOrCreateContainer(): HTMLDivElement {
 }
 
 const ARIA_MENU_ITEM_ROLES = new Set(["menuitem", "menuitemcheckbox", "menuitemradio"]);
+const ARIA_MENU_ITEM_SELECTOR = '[role^="menuitem"], [role^="menuitemcheckbox"], [role^="menuitemradio"]';
 
 interface IPosition {
     top?: number;
@@ -95,8 +97,6 @@ interface IState {
 // this will allow the ContextMenu to manage its own focus using arrow keys as per the ARIA guidelines.
 @replaceableComponent("structures.ContextMenu")
 export class ContextMenu extends React.PureComponent<IProps, IState> {
-    private initialFocus: HTMLElement;
-
     static defaultProps = {
         hasBackground: true,
         managed: true,
@@ -107,24 +107,15 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
         this.state = {
             contextMenuElem: null,
         };
-
-        // persist what had focus when we got initialized so we can return it after
-        this.initialFocus = document.activeElement as HTMLElement;
     }
 
-    componentWillUnmount() {
-        // return focus to the thing which had it before us
-        this.initialFocus.focus();
-    }
-
-    private collectContextMenuRect = (element) => {
+    private collectContextMenuRect = (element: HTMLDivElement) => {
         // We don't need to clean up when unmounting, so ignore
         if (!element) return;
 
-        let first = element.querySelector('[role^="menuitem"]');
-        if (!first) {
-            first = element.querySelector('[tab-index]');
-        }
+        const first = element.querySelector<HTMLElement>(ARIA_MENU_ITEM_SELECTOR)
+            || element.querySelector<HTMLElement>('[tab-index]');
+
         if (first) {
             first.focus();
         }
@@ -381,8 +372,10 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
                     ref={this.collectContextMenuRect}
                     role={this.props.managed ? "menu" : undefined}
                 >
-                    { chevron }
-                    { props.children }
+                    <FocusLock returnFocus={true}>
+                        { chevron }
+                        { props.children }
+                    </FocusLock>
                 </div>
                 { background }
             </div>
