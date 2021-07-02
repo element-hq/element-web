@@ -67,7 +67,7 @@ interface IProps {
     replacingEventId?: string;
 
     /* callback for when our widget has loaded */
-    onHeightChanged(): void,
+    onHeightChanged(): void;
 }
 
 interface IState {

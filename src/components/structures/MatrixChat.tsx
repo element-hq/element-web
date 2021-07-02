@@ -204,7 +204,7 @@ interface IState {
     resizeNotifier: ResizeNotifier;
     serverConfig?: ValidatedServerConfig;
     ready: boolean;
-    threepidInvite?: IThreepidInvite,
+    threepidInvite?: IThreepidInvite;
     roomOobData?: object;
     pendingInitialSync?: boolean;
     justRegistered?: boolean;

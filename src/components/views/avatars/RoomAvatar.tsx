@@ -24,14 +24,14 @@ import Modal from '../../../Modal';
 import * as Avatar from '../../../Avatar';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
+import { IOOBData } from '../../../stores/ThreepidInviteStore';
 
 interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick"> {
     // Room may be left unset here, but if it is,
     // oobData.avatarUrl should be set (else there
     // would be nowhere to get the avatar from)
     room?: Room;
-    // TODO: type when js-sdk has types
-    oobData?: any;
+    oobData?: IOOBData;
     width?: number;
     height?: number;
     resizeMethod?: ResizeMethod;

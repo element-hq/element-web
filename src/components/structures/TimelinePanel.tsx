@@ -125,7 +125,7 @@ interface IProps {
     onReadMarkerUpdated?(): void;
 
     // callback which is called when we wish to paginate the timeline window.
-    onPaginationRequest?(timelineWindow: TimelineWindow, direction: string, size: number): Promise<boolean>,
+    onPaginationRequest?(timelineWindow: TimelineWindow, direction: string, size: number): Promise<boolean>;
 }
 
 interface IState {

@@ -17,15 +17,15 @@ limitations under the License.
 import { PerformanceEntryNames } from "./entry-names";
 
 interface GetEntriesOptions {
-    name?: string,
-    type?: string,
+    name?: string;
+    type?: string;
 }
 
 type PerformanceCallbackFunction = (entry: PerformanceEntry[]) => void;
 
 interface PerformanceDataListener {
-    entryNames?: string[],
-    callback: PerformanceCallbackFunction
+    entryNames?: string[];
+    callback: PerformanceCallbackFunction;
 }
 
 export default class PerformanceMonitor {

@@ -1478,6 +1478,11 @@
   resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.11.tgz#2521cc86f69d15c5b90664e4829d84566052c1cf"
   integrity sha512-2koNhpWm3DgWRp5tpkiJ8JGc1xTn2q0l+jUNUE7oMKXUf5NpI9AIdC4kbjGNFBdHtcxBD18LAksoudAVhFKCjw==
 
+"@types/commonmark@^0.27.4":
+  version "0.27.4"
+  resolved "https://registry.yarnpkg.com/@types/commonmark/-/commonmark-0.27.4.tgz#8f42990e5cf3b6b95bd99eaa452e157aab679b82"
+  integrity sha512-7koSjp08QxKoS1/+3T15+kD7+vqOUvZRHvM8PutF3Xsk5aAEkdlIGRsHJ3/XsC3izoqTwBdRW/vH7rzCKkIicA==
+
 "@types/counterpart@^0.18.1":
   version "0.18.1"
   resolved "https://registry.yarnpkg.com/@types/counterpart/-/counterpart-0.18.1.tgz#b1b784d9e54d9879f0a8cb12f2caedab65430fe8"
@@ -2189,6 +2194,11 @@ bluebird@^3.5.0:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
   integrity sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==
+
+blurhash@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/blurhash/-/blurhash-1.1.3.tgz#dc325af7da836d07a0861d830bdd63694382483e"
+  integrity sha512-yUhPJvXexbqbyijCIE/T2NCXcj9iNPhWmOKbPTuR/cm7Q5snXYIfnVnz6m7MWOXxODMz/Cr3UcVkRdHiuDVRDw==
 
 boolbase@^1.0.0:
   version "1.0.0"
@@ -3222,7 +3232,7 @@ eslint-config-google@^0.14.0:
 
 "eslint-plugin-matrix-org@github:matrix-org/eslint-plugin-matrix-org#main":
   version "0.3.2"
-  resolved "https://codeload.github.com/matrix-org/eslint-plugin-matrix-org/tar.gz/28d392822533a7468be0dd806d0a4ba573a45d74"
+  resolved "https://codeload.github.com/matrix-org/eslint-plugin-matrix-org/tar.gz/e8197938dca66849ffdac4baca7c05275df12835"
 
 eslint-plugin-react-hooks@^4.2.0:
   version "4.2.0"

@@ -256,7 +256,7 @@ interface ICreateRoomEvent extends IEvent {
         num_users: number;
         is_encrypted: boolean;
         is_public: boolean;
-    }
+    };
 }
 
 interface IJoinRoomEvent extends IEvent {
