@@ -1520,7 +1520,7 @@
     "Please fill why you're reporting.": "Ju lutemi, plotësoni arsyen pse po raportoni.",
     "Report Content to Your Homeserver Administrator": "Raportoni Lëndë te Përgjegjësi i Shërbyesit Tuaj Home",
     "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Raportimi i këtij mesazhi do të shkaktojë dërgimin e 'ID-së së aktit' unike te përgjegjësi i shërbyesit tuaj Home. Nëse mesazhet në këtë dhomë fshehtëzohen, përgjegjësi i shërbyesit tuaj Home s’do të jetë në gjendje të lexojë tekstin e mesazhit apo të shohë çfarëdo kartelë apo figurë.",
-    "Send report": "Dërgoje raportin",
+    "Send report": "Dërgoje njoftimin",
     "To continue you need to accept the terms of this service.": "Që të vazhdohet, lypset të pranoni kushtet e këtij shërbimi.",
     "Document": "Dokument",
     "Report Content": "Raportoni Lëndë",
