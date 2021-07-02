@@ -17,8 +17,6 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-import PropTypes from 'prop-types';
-
 import MFileBody from './MFileBody';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
@@ -31,35 +29,47 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromContent } from "../../../customisations/Media";
 import BlurhashPlaceholder from "../elements/BlurhashPlaceholder";
 import { BLURHASH_FIELD } from "../../../ContentMessages";
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
+import { IMediaEventContent } from '../../../customisations/models/IMediaEventContent';
+import { IProps as ImageViewIProps } from "../elements/ImageView";
+
+export interface IProps {
+    /* the MatrixEvent to show */
+    mxEvent: MatrixEvent,
+    /* called when the image has loaded */
+    onHeightChanged(): void,
+
+    /* the maximum image height to use */
+    maxImageHeight?: number,
+
+    /* the permalinkCreator */
+    permalinkCreator?: RoomPermalinkCreator,
+}
+
+interface IState {
+    decryptedUrl?: string,
+    decryptedThumbnailUrl?: string,
+    decryptedBlob?: Blob,
+    error,
+    imgError: boolean,
+    imgLoaded: boolean,
+    loadedImageDimensions?: {
+        naturalWidth: number;
+        naturalHeight: number;
+    },
+    hover: boolean,
+    showImage: boolean,
+}
 
 @replaceableComponent("views.messages.MImageBody")
-export default class MImageBody extends React.Component {
-    static propTypes = {
-        /* the MatrixEvent to show */
-        mxEvent: PropTypes.object.isRequired,
-
-        /* called when the image has loaded */
-        onHeightChanged: PropTypes.func.isRequired,
-
-        /* the maximum image height to use */
-        maxImageHeight: PropTypes.number,
-
-        /* the permalinkCreator */
-        permalinkCreator: PropTypes.object,
-    };
-
+export default class MImageBody extends React.Component<IProps, IState> {
     static contextType = MatrixClientContext;
+    private unmounted = true;
+    private image = createRef<HTMLImageElement>();
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
-
-        this.onImageError = this.onImageError.bind(this);
-        this.onImageLoad = this.onImageLoad.bind(this);
-        this.onImageEnter = this.onImageEnter.bind(this);
-        this.onImageLeave = this.onImageLeave.bind(this);
-        this.onClientSync = this.onClientSync.bind(this);
-        this.onClick = this.onClick.bind(this);
-        this._isGif = this._isGif.bind(this);
 
         this.state = {
             decryptedUrl: null,
@@ -72,12 +82,10 @@ export default class MImageBody extends React.Component {
             hover: false,
             showImage: SettingsStore.getValue("showImages"),
         };
-
-        this._image = createRef();
     }
 
     // FIXME: factor this out and apply it to MVideoBody and MAudioBody too!
-    onClientSync(syncState, prevState) {
+    private onClientSync = (syncState, prevState): void => {
         if (this.unmounted) return;
         // Consider the client reconnected if there is no error with syncing.
         // This means the state could be RECONNECTING, SYNCING, PREPARED or CATCHUP.
@@ -88,15 +96,15 @@ export default class MImageBody extends React.Component {
                 imgError: false,
             });
         }
-    }
+    };
 
-    showImage() {
+    protected showImage(): void {
         localStorage.setItem("mx_ShowImage_" + this.props.mxEvent.getId(), "true");
         this.setState({ showImage: true });
-        this._downloadImage();
+        this.downloadImage();
     }
 
-    onClick(ev) {
+    protected onClick = (ev: React.MouseEvent): void => {
         if (ev.button === 0 && !ev.metaKey) {
             ev.preventDefault();
             if (!this.state.showImage) {
@@ -104,12 +112,12 @@ export default class MImageBody extends React.Component {
                 return;
             }
 
-            const content = this.props.mxEvent.getContent();
-            const httpUrl = this._getContentUrl();
+            const content = this.props.mxEvent.getContent() as IMediaEventContent;
+            const httpUrl = this.getContentUrl();
             const ImageView = sdk.getComponent("elements.ImageView");
-            const params = {
+            const params: ImageViewIProps = {
                 src: httpUrl,
-                name: content.body && content.body.length > 0 ? content.body : _t('Attachment'),
+                name: content.body?.length > 0 ? content.body : _t('Attachment'),
                 mxEvent: this.props.mxEvent,
                 permalinkCreator: this.props.permalinkCreator,
             };
@@ -122,58 +130,54 @@ export default class MImageBody extends React.Component {
 
             Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
         }
-    }
+    };
 
-    _isGif() {
+    private isGif = (): boolean => {
         const content = this.props.mxEvent.getContent();
-        return (
-            content &&
-            content.info &&
-            content.info.mimetype === "image/gif"
-        );
-    }
+        return content?.info?.mimetype === "image/gif";
+    };
 
-    onImageEnter(e) {
+    private onImageEnter = (e: React.MouseEvent): void => {
         this.setState({ hover: true });
 
-        if (!this.state.showImage || !this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
+        if (!this.state.showImage || !this.isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
             return;
         }
-        const imgElement = e.target;
-        imgElement.src = this._getContentUrl();
-    }
+        const imgElement = e.target as HTMLImageElement;
+        imgElement.src = this.getContentUrl();
+    };
 
-    onImageLeave(e) {
+    private onImageLeave = (e: React.MouseEvent): void => {
         this.setState({ hover: false });
 
-        if (!this.state.showImage || !this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
+        if (!this.state.showImage || !this.isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
             return;
         }
-        const imgElement = e.target;
-        imgElement.src = this._getThumbUrl();
-    }
+        const imgElement = e.target as HTMLImageElement;
+        imgElement.src = this.getThumbUrl();
+    };
 
-    onImageError() {
+    private onImageError = (): void => {
         this.setState({
             imgError: true,
         });
-    }
+    };
 
-    onImageLoad() {
+    private onImageLoad = (): void => {
         this.props.onHeightChanged();
 
         let loadedImageDimensions;
 
-        if (this._image.current) {
-            const { naturalWidth, naturalHeight } = this._image.current;
+        if (this.image.current) {
+            const { naturalWidth, naturalHeight } = this.image.current;
             // this is only used as a fallback in case content.info.w/h is missing
             loadedImageDimensions = { naturalWidth, naturalHeight };
         }
 
         this.setState({ imgLoaded: true, loadedImageDimensions });
-    }
+    };
 
-    _getContentUrl() {
+    protected getContentUrl(): string {
         const media = mediaFromContent(this.props.mxEvent.getContent());
         if (media.isEncrypted) {
             return this.state.decryptedUrl;
@@ -182,7 +186,7 @@ export default class MImageBody extends React.Component {
         }
     }
 
-    _getThumbUrl() {
+    protected getThumbUrl(): string {
         // FIXME: we let images grow as wide as you like, rather than capped to 800x600.
         // So either we need to support custom timeline widths here, or reimpose the cap, otherwise the
         // thumbnail resolution will be unnecessarily reduced.
@@ -190,7 +194,7 @@ export default class MImageBody extends React.Component {
         const thumbWidth = 800;
         const thumbHeight = 600;
 
-        const content = this.props.mxEvent.getContent();
+        const content = this.props.mxEvent.getContent() as IMediaEventContent;
         const media = mediaFromContent(content);
 
         if (media.isEncrypted) {
@@ -218,7 +222,7 @@ export default class MImageBody extends React.Component {
             //   - If there's no sizing info in the event, default to thumbnail
             const info = content.info;
             if (
-                this._isGif() ||
+                this.isGif() ||
                 window.devicePixelRatio === 1.0 ||
                 (!info || !info.w || !info.h || !info.size)
             ) {
@@ -253,7 +257,7 @@ export default class MImageBody extends React.Component {
         }
     }
 
-    _downloadImage() {
+    private downloadImage(): void {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             let thumbnailPromise = Promise.resolve(null);
@@ -297,7 +301,7 @@ export default class MImageBody extends React.Component {
 
         if (showImage) {
             // Don't download anything becaue we don't want to display anything.
-            this._downloadImage();
+            this.downloadImage();
             this.setState({ showImage: true });
         }
 
@@ -327,7 +331,7 @@ export default class MImageBody extends React.Component {
     _afterComponentWillUnmount() {
     }
 
-    _messageContent(contentUrl, thumbUrl, content) {
+    protected messageContent(contentUrl: string, thumbUrl: string, content: IMediaEventContent): JSX.Element {
         let infoWidth;
         let infoHeight;
 
@@ -348,7 +352,7 @@ export default class MImageBody extends React.Component {
                     imageElement = <HiddenImagePlaceholder />;
                 } else {
                     imageElement = (
-                        <img style={{ display: 'none' }} src={thumbUrl} ref={this._image}
+                        <img style={{ display: 'none' }} src={thumbUrl} ref={this.image}
                             alt={content.body}
                             onError={this.onImageError}
                             onLoad={this.onImageLoad}
@@ -382,7 +386,7 @@ export default class MImageBody extends React.Component {
             // which has the same width as the timeline
             // mx_MImageBody_thumbnail resizes img to exactly container size
             img = (
-                <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref={this._image}
+                <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref={this.image}
                     style={{ maxWidth: maxWidth + "px" }}
                     alt={content.body}
                     onError={this.onImageError}
@@ -393,11 +397,11 @@ export default class MImageBody extends React.Component {
         }
 
         if (!this.state.showImage) {
-            img = <HiddenImagePlaceholder style={{ maxWidth: maxWidth + "px" }} />;
+            img = <HiddenImagePlaceholder maxWidth={maxWidth} />;
             showPlaceholder = false; // because we're hiding the image, so don't show the placeholder.
         }
 
-        if (this._isGif() && !SettingsStore.getValue("autoplayGifsAndVideos") && !this.state.hover) {
+        if (this.isGif() && !SettingsStore.getValue("autoplayGifsAndVideos") && !this.state.hover) {
             gifLabel = <p className="mx_MImageBody_gifLabel">GIF</p>;
         }
 
@@ -427,14 +431,14 @@ export default class MImageBody extends React.Component {
     }
 
     // Overidden by MStickerBody
-    wrapImage(contentUrl, children) {
+    protected wrapImage(contentUrl: string, children: JSX.Element): JSX.Element {
         return <a href={contentUrl} onClick={this.onClick}>
             {children}
         </a>;
     }
 
     // Overidden by MStickerBody
-    getPlaceholder(width, height) {
+    protected getPlaceholder() {
         const blurhash = this.props.mxEvent.getContent().info[BLURHASH_FIELD];
         if (blurhash) return <BlurhashPlaceholder blurhash={blurhash} width={width} height={height} />;
         return <div className="mx_MImageBody_thumbnail_spinner">
@@ -443,17 +447,17 @@ export default class MImageBody extends React.Component {
     }
 
     // Overidden by MStickerBody
-    getTooltip() {
+    protected getTooltip() {
         return null;
     }
 
     // Overidden by MStickerBody
-    getFileBody() {
+    protected getFileBody(): JSX.Element {
         return <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />;
     }
 
     render() {
-        const content = this.props.mxEvent.getContent();
+        const content = this.props.mxEvent.getContent() as IMediaEventContent;
 
         if (this.state.error !== null) {
             return (
@@ -464,15 +468,15 @@ export default class MImageBody extends React.Component {
             );
         }
 
-        const contentUrl = this._getContentUrl();
+        const contentUrl = this.getContentUrl();
         let thumbUrl;
-        if (this._isGif() && SettingsStore.getValue("autoplayGifsAndVideos")) {
+        if (this.isGif() && SettingsStore.getValue("autoplayGifsAndVideos")) {
             thumbUrl = contentUrl;
         } else {
-            thumbUrl = this._getThumbUrl();
+            thumbUrl = this.getThumbUrl();
         }
 
-        const thumbnail = this._messageContent(contentUrl, thumbUrl, content);
+        const thumbnail = this.messageContent(contentUrl, thumbUrl, content);
         const fileBody = this.getFileBody();
 
         return <span className="mx_MImageBody">
@@ -482,16 +486,18 @@ export default class MImageBody extends React.Component {
     }
 }
 
-export class HiddenImagePlaceholder extends React.PureComponent {
-    static propTypes = {
-        hover: PropTypes.bool,
-    };
+interface PlaceholderIProps {
+    hover?: boolean;
+    maxWidth?: number;
+}
 
+export class HiddenImagePlaceholder extends React.PureComponent<PlaceholderIProps> {
     render() {
+        const maxWidth = this.props.maxWidth ? this.props.maxWidth + "px" : null;
         let className = 'mx_HiddenImagePlaceholder';
         if (this.props.hover) className += ' mx_HiddenImagePlaceholder_hover';
         return (
-            <div className={className}>
+            <div className={className} style={{ maxWidth: maxWidth }}>
                 <div className='mx_HiddenImagePlaceholder_button'>
                     <span className='mx_HiddenImagePlaceholder_eye' />
                     <span>{_t("Show image")}</span>
