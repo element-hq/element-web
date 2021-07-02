@@ -177,7 +177,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
                     <Field
                         label={_t('Message downloading sleep time(ms)')}
                         type='number'
-                        value={this.state.crawlerSleepTime}
+                        value={this.state.crawlerSleepTime.toString()}
                         onChange={this.onCrawlerSleepTimeChange} />
                 </div>
             </div>
