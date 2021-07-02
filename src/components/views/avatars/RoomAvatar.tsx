@@ -13,9 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 import React, { ComponentProps } from 'react';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
+import classNames from "classnames";
 
 import BaseAvatar from './BaseAvatar';
 import ImageView from '../elements/ImageView';
@@ -31,11 +33,14 @@ interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idNam
     // oobData.avatarUrl should be set (else there
     // would be nowhere to get the avatar from)
     room?: Room;
-    oobData?: IOOBData;
+    oobData?: IOOBData & {
+        roomId?: string;
+    };
     width?: number;
     height?: number;
     resizeMethod?: ResizeMethod;
     viewAvatarOnClick?: boolean;
+    className?: string;
     onClick?(): void;
 }
 
@@ -128,14 +133,16 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
     };
 
     public render() {
-        const { room, oobData, viewAvatarOnClick, onClick, ...otherProps } = this.props;
-
-        const roomName = room ? room.name : oobData.name;
+        const { room, oobData, viewAvatarOnClick, onClick, className, ...otherProps } = this.props;
 
         return (
-            <BaseAvatar {...otherProps}
-                name={roomName}
-                idName={room ? room.roomId : null}
+            <BaseAvatar
+                {...otherProps}
+                className={classNames(className, {
+                    mx_RoomAvatar_isSpaceRoom: room?.isSpaceRoom(),
+                })}
+                name={room ? room.name : oobData.name}
+                idName={room ? room.roomId : oobData.roomId}
                 urls={this.state.urls}
                 onClick={viewAvatarOnClick && this.state.urls[0] ? this.onRoomAvatarClick : onClick}
             />

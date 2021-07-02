@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 import classNames from "classnames";
 
 import StyledRadioButton from "./StyledRadioButton";
@@ -23,8 +23,8 @@ export interface IDefinition<T extends string> {
     value: T;
     className?: string;
     disabled?: boolean;
-    label: React.ReactChild;
-    description?: React.ReactChild;
+    label: ReactNode;
+    description?: ReactNode;
     checked?: boolean; // If provided it will override the value comparison done in the group
 }
 

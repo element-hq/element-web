@@ -37,8 +37,6 @@ import { VIRTUAL_ROOM_EVENT_TYPE } from "./CallHandler";
 import SpaceStore from "./stores/SpaceStore";
 import { makeSpaceParentEvent } from "./utils/space";
 import { Action } from "./dispatcher/actions";
-import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
-import { Preset, Visibility } from "matrix-js-sdk/src/@types/partials";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -53,6 +51,7 @@ export interface IOpts {
     andView?: boolean;
     associatedWithCommunity?: string;
     parentSpace?: Room;
+    joinRule?: JoinRule;
 }
 
 /**
@@ -153,10 +152,10 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
             },
         });
 
-        if (opts.parentSpace.getJoinRule() !== JoinRule.Public && opts.createOpts.preset !== Preset.PublicChat) {
+        if (opts.joinRule === JoinRule.Restricted) {
             const serverCapabilities = await client.getCapabilities();
             const roomCapabilities = serverCapabilities?.["m.room_versions"]?.["org.matrix.msc3244.room_capabilities"];
-            if (roomCapabilities?.["restricted"]) {
+            if (roomCapabilities?.["restricted"]?.preferred) {
                 opts.createOpts.room_version = roomCapabilities?.["restricted"].preferred;
 
                 opts.createOpts.initial_state.push({
@@ -168,9 +167,16 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
                             "room_id": opts.parentSpace.roomId,
                         }],
                     },
-                })
+                });
             }
         }
+    }
+
+    if (opts.joinRule !== JoinRule.Restricted) {
+        opts.createOpts.initial_state.push({
+            type: EventType.RoomJoinRules,
+            content: { join_rule: opts.joinRule },
+        });
     }
 
     let modal;

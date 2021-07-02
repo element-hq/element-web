@@ -15,9 +15,8 @@ limitations under the License.
 */
 
 import React from 'react';
-import { GuestAccess, HistoryVisibility, JoinRule } from "matrix-js-sdk/src/@types/partials";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { IRoomVersionsCapability } from 'matrix-js-sdk/src/client';
+import { GuestAccess, HistoryVisibility, JoinRule, RestrictedAllowType } from "matrix-js-sdk/src/@types/partials";
+import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from 'matrix-js-sdk/src/@types/event';
 
 import { _t } from "../../../../../languageHandler";
@@ -31,6 +30,12 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import AccessibleButton from "../../../elements/AccessibleButton";
+import SpaceStore from "../../../../../stores/SpaceStore";
+import RoomAvatar from "../../../avatars/RoomAvatar";
+import ManageRestrictedJoinRuleDialog from '../../../dialogs/ManageRestrictedJoinRuleDialog';
+import RoomUpgradeWarningDialog from '../../../dialogs/RoomUpgradeWarningDialog';
+import { upgradeRoom } from "../../../../../utils/RoomUpgrade";
 
 interface IProps {
     roomId: string;
@@ -38,18 +43,14 @@ interface IProps {
 
 interface IState {
     joinRule: JoinRule;
+    restrictedAllowRoomIds?: string[];
     guestAccess: GuestAccess;
     history: HistoryVisibility;
     hasAliases: boolean;
     encrypted: boolean;
-    roomVersionsCapability?: IRoomVersionsCapability;
-}
-
-enum RoomVisibility {
-    InviteOnly = "invite_only",
-    PublicNoGuests = "public_no_guests",
-    PublicWithGuests = "public_with_guests",
-    Restricted = "restricted",
+    roomSupportsRestricted?: boolean;
+    preferredRestrictionVersion?: string;
+    showAdvancedSection: boolean;
 }
 
 @replaceableComponent("views.settings.tabs.room.SecurityRoomSettingsTab")
@@ -59,10 +60,11 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
         this.state = {
             joinRule: JoinRule.Invite,
-            guestAccess: GuestAccess.CanJoin,
+            guestAccess: GuestAccess.Forbidden,
             history: HistoryVisibility.Shared,
             hasAliases: false,
             encrypted: false,
+            showAdvancedSection: false,
         };
     }
 
@@ -74,34 +76,47 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         const room = cli.getRoom(this.props.roomId);
         const state = room.currentState;
 
-        const joinRule: JoinRule = this.pullContentPropertyFromEvent(
-            state.getStateEvents(EventType.RoomJoinRules, ""),
+        const joinRuleEvent = state.getStateEvents(EventType.RoomJoinRules, "");
+        const joinRule: JoinRule = this.pullContentPropertyFromEvent<JoinRule>(
+            joinRuleEvent,
             'join_rule',
             JoinRule.Invite,
         );
-        const guestAccess: GuestAccess = this.pullContentPropertyFromEvent(
+        const restrictedAllowRoomIds = joinRule === JoinRule.Restricted
+            ? joinRuleEvent?.getContent().allow
+                ?.filter(a => a.type === RestrictedAllowType.RoomMembership)
+                ?.map(a => a.room_id)
+            : undefined;
+
+        const guestAccess: GuestAccess = this.pullContentPropertyFromEvent<GuestAccess>(
             state.getStateEvents(EventType.RoomGuestAccess, ""),
             'guest_access',
             GuestAccess.Forbidden,
         );
-        const history: HistoryVisibility = this.pullContentPropertyFromEvent(
+        const history: HistoryVisibility = this.pullContentPropertyFromEvent<HistoryVisibility>(
             state.getStateEvents(EventType.RoomHistoryVisibility, ""),
             'history_visibility',
             HistoryVisibility.Shared,
         );
 
         const encrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.roomId);
-        this.setState({ joinRule, guestAccess, history, encrypted });
+        this.setState({ joinRule, restrictedAllowRoomIds, guestAccess, history, encrypted });
 
         this.hasAliases().then(hasAliases => this.setState({ hasAliases }));
-        cli.getCapabilities().then(capabilities => this.setState({
-            roomVersionsCapability: capabilities["m.room_versions"],
-        }));
+        cli.getCapabilities().then(capabilities => {
+            const roomCapabilities = capabilities["org.matrix.msc3244.room_capabilities"];
+            const roomSupportsRestricted = roomCapabilities && Array.isArray(roomCapabilities["restricted"]?.support) &&
+                roomCapabilities["restricted"].support.includes(room.getVersion());
+            const preferredRestrictionVersion = roomSupportsRestricted
+                ? roomCapabilities?.["restricted"].preferred
+                : undefined;
+
+            this.setState({ roomSupportsRestricted, preferredRestrictionVersion });
+        });
     }
 
     private pullContentPropertyFromEvent<T>(event: MatrixEvent, key: string, defaultValue: T): T {
-        if (!event || !event.getContent()) return defaultValue;
-        return event.getContent()[key] || defaultValue;
+        return event?.getContent()[key] || defaultValue;
     }
 
     componentWillUnmount() {
@@ -151,81 +166,80 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         });
     };
 
-    private fixGuestAccess = (e: React.MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
+    private onJoinRuleChange = (joinRule: JoinRule) => {
+        if (joinRule === JoinRule.Restricted &&
+            !this.state.roomSupportsRestricted &&
+            this.state.preferredRestrictionVersion
+        ) {
+            const cli = MatrixClientPeg.get();
+            const roomId = this.props.roomId;
+            const room = cli.getRoom(roomId);
+            const targetVersion = this.state.preferredRestrictionVersion;
+            const activeSpace = SpaceStore.instance.activeSpace;
+            Modal.createTrackedDialog('Restricted join rule upgrade', '', RoomUpgradeWarningDialog, {
+                roomId,
+                targetVersion,
+                description: _t("This upgrade will allow members of selected spaces " +
+                    "access to this room without an invite."),
+                onFinished: async (resp) => {
+                    if (!resp?.continue) return;
+                    const { replacement_room: newRoomId } = await upgradeRoom(room, targetVersion, resp.invite);
 
-        const guestAccess = GuestAccess.CanJoin;
+                    const content: IContent = {
+                        join_rule: JoinRule.Restricted,
+                    };
 
+                    if (activeSpace) {
+                        content.allow = [{
+                            "type": RestrictedAllowType.RoomMembership,
+                            "room_id": activeSpace.roomId,
+                        }];
+                    }
+
+                    cli.sendStateEvent(newRoomId, EventType.RoomJoinRules, content);
+                },
+            });
+            return;
+        }
+
+        const beforeJoinRule = this.state.joinRule;
+        this.setState({ joinRule });
+
+        const client = MatrixClientPeg.get();
+        client.sendStateEvent(this.props.roomId, EventType.RoomJoinRules, {
+            join_rule: joinRule,
+        }, "").catch((e) => {
+            console.error(e);
+            this.setState({ joinRule: beforeJoinRule });
+        });
+    };
+
+    private onRestrictedRoomIdsChange = (restrictedAllowRoomIds: string[]) => {
+        const beforeRestrictedAllowRoomIds = this.state.restrictedAllowRoomIds;
+        this.setState({ restrictedAllowRoomIds });
+
+        const client = MatrixClientPeg.get();
+        client.sendStateEvent(this.props.roomId, EventType.RoomJoinRules, {
+            join_rule: JoinRule.Restricted,
+            allow: restrictedAllowRoomIds.map(roomId => ({
+                "type": RestrictedAllowType.RoomMembership,
+                "room_id": roomId,
+            })),
+        }, "").catch((e) => {
+            console.error(e);
+            this.setState({ restrictedAllowRoomIds: beforeRestrictedAllowRoomIds });
+        });
+    };
+
+    private onGuestAccessChange = (allowed: boolean) => {
+        const guestAccess = allowed ? GuestAccess.CanJoin : GuestAccess.Forbidden;
         const beforeGuestAccess = this.state.guestAccess;
         this.setState({ guestAccess });
 
         const client = MatrixClientPeg.get();
-        client.sendStateEvent(
-            this.props.roomId,
-            EventType.RoomGuestAccess,
-            { guest_access: guestAccess, },
-            "",
-        ).catch((e) => {
-            console.error(e);
-            this.setState({ guestAccess: beforeGuestAccess });
-        });
-    };
-
-    private onRoomAccessRadioToggle = (roomAccess: RoomVisibility) => {
-        //                         join_rule
-        //                      INVITE  |  PUBLIC        | RESTRICTED
-        //        -----------+----------+----------------+-------------
-        // guest  CAN_JOIN   | inv_only | pub_with_guest | restricted
-        // access -----------+----------+----------------+-------------
-        //        FORBIDDEN  | inv_only | pub_no_guest   | restricted
-        //        -----------+----------+----------------+-------------
-
-        // we always set guests can_join here as it makes no sense to have
-        // an invite-only room that guests can't join.  If you explicitly
-        // invite them, you clearly want them to join, whether they're a
-        // guest or not.  In practice, guest_access should probably have
-        // been implemented as part of the join_rules enum.
-        let joinRule = JoinRule.Invite;
-        let guestAccess = GuestAccess.CanJoin;
-
-        switch (roomAccess) {
-            case RoomVisibility.InviteOnly:
-                // no change - use defaults above
-                break;
-            case RoomVisibility.Restricted:
-                joinRule = JoinRule.Restricted;
-                break;
-            case RoomVisibility.PublicNoGuests:
-                joinRule = JoinRule.Public;
-                guestAccess = GuestAccess.Forbidden;
-                break;
-            case RoomVisibility.PublicWithGuests:
-                joinRule = JoinRule.Public;
-                guestAccess = GuestAccess.CanJoin;
-                break;
-        }
-
-        const beforeJoinRule = this.state.joinRule;
-        const beforeGuestAccess = this.state.guestAccess;
-        this.setState({ joinRule, guestAccess });
-
-        const client = MatrixClientPeg.get();
-        client.sendStateEvent(
-            this.props.roomId,
-            EventType.RoomJoinRules, {
-            join_rule: joinRule,
-        }, "",
-        ).catch((e) => {
-            console.error(e);
-            this.setState({ joinRule: beforeJoinRule });
-        });
-        client.sendStateEvent(
-            this.props.roomId,
-            EventType.RoomGuestAccess, {
+        client.sendStateEvent(this.props.roomId, EventType.RoomGuestAccess, {
             guest_access: guestAccess,
-        }, "",
-        ).catch((e) => {
+        }, "").catch((e) => {
             console.error(e);
             this.setState({ guestAccess: beforeGuestAccess });
         });
@@ -260,27 +274,25 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         }
     }
 
-    private renderRoomAccess() {
+    private onEditRestrictedClick = () => {
+        const matrixClient = MatrixClientPeg.get();
+        Modal.createTrackedDialog('Edit restricted', '', ManageRestrictedJoinRuleDialog, {
+            matrixClient,
+            room: matrixClient.getRoom(this.props.roomId),
+            selected: this.state.restrictedAllowRoomIds,
+            onFinished: (restrictedAllowRoomIds?: string[]) => {
+                if (!Array.isArray(restrictedAllowRoomIds)) return;
+                this.onRestrictedRoomIdsChange(restrictedAllowRoomIds);
+            },
+        }, "mx_ManageRestrictedJoinRuleDialog_wrapper");
+    };
+
+    private renderJoinRule() {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const joinRule = this.state.joinRule;
-        const guestAccess = this.state.guestAccess;
 
-        const canChangeAccess = room.currentState.mayClientSendStateEvent(EventType.RoomJoinRules, client)
-            && room.currentState.mayClientSendStateEvent(EventType.RoomGuestAccess, client);
-
-        let guestWarning = null;
-        if (joinRule !== JoinRule.Public && guestAccess === GuestAccess.Forbidden) {
-            guestWarning = (
-                <div className='mx_SecurityRoomSettingsTab_warning'>
-                    <img src={require("../../../../../../res/img/warning.svg")} width={15} height={15} />
-                    <span>
-                        {_t("Guests cannot join this room even if explicitly invited.")}&nbsp;
-                        <a href="" onClick={this.fixGuestAccess}>{_t("Click here to fix")}</a>
-                    </span>
-                </div>
-            );
-        }
+        const canChangeJoinRule = room.currentState.mayClientSendStateEvent(EventType.RoomJoinRules, client);
 
         let aliasWarning = null;
         if (joinRule === JoinRule.Public && !this.state.hasAliases) {
@@ -294,46 +306,98 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             );
         }
 
-        const radioDefinitions: IDefinition<RoomVisibility>[] = [
-            {
-                value: RoomVisibility.InviteOnly,
-                label: _t('Only people who have been invited'),
-                checked: joinRule !== JoinRule.Public && joinRule !== JoinRule.Restricted,
-            },
-            {
-                value: RoomVisibility.PublicNoGuests,
-                label: _t('Anyone who knows the room\'s link, apart from guests'),
-                checked: joinRule === JoinRule.Public && guestAccess !== GuestAccess.CanJoin,
-            },
-            {
-                value: RoomVisibility.PublicWithGuests,
-                label: _t("Anyone who knows the room's link, including guests"),
-                checked: joinRule === JoinRule.Public && guestAccess === GuestAccess.CanJoin,
-            },
-        ];
+        const radioDefinitions: IDefinition<JoinRule>[] = [{
+            value: JoinRule.Invite,
+            label: _t("Private (invite only)"),
+            description: _t("Only invited people can join."),
+        }, {
+            value: JoinRule.Public,
+            label: _t("Public (anyone)"),
+            description: _t("Anyone can find and join."),
+        }];
 
-        const roomCapabilities = this.state.roomVersionsCapability?.["org.matrix.msc3244.room_capabilities"];
-        if (roomCapabilities?.["restricted"]) {
-            if (Array.isArray(roomCapabilities["restricted"]?.support) &&
-                roomCapabilities["restricted"].support.includes(room.getVersion() ?? "1")
-            ) {
-                radioDefinitions.unshift({
-                    value: RoomVisibility.Restricted,
-                    label: _t("Only people in certain spaces or those who have been invited (TODO copy)"),
-                    checked: joinRule === JoinRule.Restricted,
-                });
+        if (this.state.roomSupportsRestricted ||
+            this.state.preferredRestrictionVersion ||
+            joinRule === JoinRule.Restricted
+        ) {
+            let upgradeRequiredPill;
+            if (this.state.preferredRestrictionVersion) {
+                upgradeRequiredPill = <span className="mx_SecurityRoomSettingsTab_upgradeRequired">
+                    { _t("Upgrade required") }
+                </span>;
             }
+
+            let description;
+            if (joinRule === JoinRule.Restricted) {
+                let spacesWhichCanAccess;
+                if (this.state.restrictedAllowRoomIds?.length) {
+                    const shownSpaces = this.state.restrictedAllowRoomIds
+                        .map(roomId => client.getRoom(roomId))
+                        .filter(Boolean)
+                        .slice(0, 4);
+
+                    spacesWhichCanAccess = <div className="mx_SecurityRoomSettingsTab_spacesWithAccess">
+                        <h4>{ _t("Spaces with access") }</h4>
+                        { shownSpaces.map(room => {
+                            return <span key={room.roomId}>
+                                <RoomAvatar room={room} height={32} width={32} />
+                                { room.name }
+                            </span>;
+                        })}
+                        { shownSpaces.length < this.state.restrictedAllowRoomIds.length && <span>
+                            { _t("& %(count)s more", {
+                                count: this.state.restrictedAllowRoomIds.length - shownSpaces.length,
+                            }) }
+                        </span> }
+                    </div>;
+                }
+
+                description = <div>
+                    <span>
+                        { _t("Anyone in a space can find and join. <a>Edit which spaces can access here.</a>", {}, {
+                            a: sub => <AccessibleButton
+                                disabled={!canChangeJoinRule}
+                                onClick={this.onEditRestrictedClick}
+                                kind="link"
+                            >
+                                { sub }
+                            </AccessibleButton>,
+                        }) }
+                    </span>
+                    { spacesWhichCanAccess }
+                </div>;
+            } else if (SpaceStore.instance.activeSpace) {
+                description = _t("Anyone in %(spaceName)s can find and join. You can select other spaces too.", {
+                    spaceName: SpaceStore.instance.activeSpace.name,
+                });
+            } else {
+                description = _t("Anyone in a space can find and join. You can select multiple spaces.");
+            }
+
+            radioDefinitions.splice(1, 0, {
+                value: JoinRule.Restricted,
+                label: <>
+                    { _t("Space members") }
+                    { upgradeRequiredPill }
+                </>,
+                description,
+            });
         }
 
         return (
-            <div>
-                { guestWarning }
+            <div className="mx_SecurityRoomSettingsTab_joinRule">
+                <div className="mx_SettingsTab_subsectionText">
+                    <span>{ _t("Decide who can view and join %(roomName)s.", {
+                        roomName: client.getRoom(this.props.roomId)?.name,
+                    }) }</span>
+                </div>
                 { aliasWarning }
                 <StyledRadioGroup
-                    name="roomVis"
-                    onChange={this.onRoomAccessRadioToggle}
+                    name="joinRule"
+                    value={joinRule}
+                    onChange={this.onJoinRuleChange}
                     definitions={radioDefinitions}
-                    disabled={!canChangeAccess}
+                    disabled={!canChangeJoinRule}
                 />
             </div>
         );
@@ -382,6 +446,30 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         );
     }
 
+    private toggleAdvancedSection = () => {
+        this.setState({ showAdvancedSection: !this.state.showAdvancedSection });
+    };
+
+    private renderAdvanced() {
+        const client = MatrixClientPeg.get();
+        const guestAccess = this.state.guestAccess;
+        const state = client.getRoom(this.props.roomId).currentState;
+        const canSetGuestAccess = state.mayClientSendStateEvent(EventType.RoomGuestAccess, client);
+
+        return <>
+            <LabelledToggleSwitch
+                value={guestAccess === GuestAccess.CanJoin}
+                onChange={this.onGuestAccessChange}
+                disabled={!canSetGuestAccess}
+                label={_t("Enable guest access")}
+            />
+            <p>
+                { _t("People with supported clients will be able to join " +
+                    "the room without having a registered account.") }
+            </p>
+        </>;
+    }
+
     render() {
         const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
 
@@ -413,27 +501,39 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
         return (
             <div className="mx_SettingsTab mx_SecurityRoomSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Security & Privacy")}</div>
+                <div className="mx_SettingsTab_heading">{ _t("Security & Privacy") }</div>
 
-                <span className='mx_SettingsTab_subheading'>{_t("Encryption")}</span>
+                <span className='mx_SettingsTab_subheading'>{ _t("Encryption") }</span>
                 <div className='mx_SettingsTab_section mx_SecurityRoomSettingsTab_encryptionSection'>
                     <div>
                         <div className='mx_SettingsTab_subsectionText'>
-                            <span>{_t("Once enabled, encryption cannot be disabled.")}</span>
+                            <span>{ _t("Once enabled, encryption cannot be disabled.") }</span>
                         </div>
-                        <LabelledToggleSwitch value={isEncrypted} onChange={this.onEncryptionChange}
-                            label={_t("Encrypted")} disabled={!canEnableEncryption}
+                        <LabelledToggleSwitch
+                            value={isEncrypted}
+                            onChange={this.onEncryptionChange}
+                            label={_t("Encrypted")}
+                            disabled={!canEnableEncryption}
                         />
                     </div>
-                    {encryptionSettings}
+                    { encryptionSettings }
                 </div>
 
-                <span className='mx_SettingsTab_subheading'>{_t("Who can access this room?")}</span>
+                <span className='mx_SettingsTab_subheading'>{_t("Access")}</span>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    {this.renderRoomAccess()}
+                    { this.renderJoinRule() }
                 </div>
 
-                {historySection}
+                <AccessibleButton
+                    onClick={this.toggleAdvancedSection}
+                    kind="link"
+                    className="mx_SettingsTab_showAdvanced"
+                >
+                    { this.state.showAdvancedSection ? _t("Hide advanced") : _t("Show advanced") }
+                </AccessibleButton>
+                { this.state.showAdvancedSection && this.renderAdvanced() }
+
+                { historySection }
             </div>
         );
     }
