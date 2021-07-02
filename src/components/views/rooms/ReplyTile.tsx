@@ -29,7 +29,6 @@ import * as sdk from '../../../index';
 
 interface IProps {
     mxEvent: MatrixEvent;
-    isRedacted?: boolean;
     permalinkCreator?: RoomPermalinkCreator;
     highlights?: Array<string>;
     highlightLink?: string;
@@ -108,7 +107,6 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         const classes = classNames({
             mx_ReplyTile: true,
             mx_ReplyTile_info: isInfoMessage,
-            mx_ReplyTile_redacted: this.props.isRedacted,
         });
 
         let permalink = "#";

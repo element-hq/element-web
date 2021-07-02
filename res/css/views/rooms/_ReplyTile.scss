@@ -96,28 +96,6 @@ limitations under the License.
     max-width: calc(100% - 65px);
 }
 
-.mx_ReplyTile_redacted .mx_UnknownBody {
-    --lozenge-color: $event-redacted-fg-color;
-    --lozenge-border-color: $event-redacted-border-color;
-    display: block;
-    height: 22px;
-    width: 250px;
-    border-radius: 11px;
-    background:
-        repeating-linear-gradient(
-            -45deg,
-            var(--lozenge-color),
-            var(--lozenge-color) 3px,
-            transparent 3px,
-            transparent 6px
-        );
-    box-shadow: 0px 0px 3px var(--lozenge-border-color) inset;
-}
-
-.mx_ReplyTile_sending.mx_ReplyTile_redacted .mx_UnknownBody {
-    opacity: 0.4;
-}
-
 .mx_ReplyTile_contextual {
     opacity: 0.4;
 }

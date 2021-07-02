@@ -382,7 +382,6 @@ export default class ReplyThread extends React.Component {
                     mxEvent={ev}
                     onHeightChanged={this.props.onHeightChanged}
                     permalinkCreator={this.props.permalinkCreator}
-                    isRedacted={ev.isRedacted()}
                     isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
                     layout={this.props.layout}
                     alwaysShowTimestamps={this.props.alwaysShowTimestamps}
