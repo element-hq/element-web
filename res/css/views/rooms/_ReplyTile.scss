@@ -25,7 +25,8 @@ limitations under the License.
 }
 
 .mx_ReplyTile > a {
-    display: block;
+    display: flex;
+    flex-direction: column;
     text-decoration: none;
     color: $primary-fg-color;
 }
