@@ -19,6 +19,7 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
+import { sleep } from "matrix-js-sdk/src/utils";
 
 import { _t, _td } from '../../../languageHandler';
 import * as sdk from '../../../index';
@@ -30,7 +31,6 @@ import * as Email from '../../../email';
 import IdentityAuthClient from '../../../IdentityAuthClient';
 import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from '../../../utils/IdentityServerUtils';
 import { abbreviateUrl } from '../../../utils/UrlUtils';
-import { sleep } from "../../../utils/promise";
 import { Key } from "../../../Keyboard";
 import { Action } from "../../../dispatcher/actions";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
