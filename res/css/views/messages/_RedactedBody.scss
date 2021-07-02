@@ -20,8 +20,6 @@ limitations under the License.
     padding-left: 20px;
     position: relative;
 
-    line-height: 2.2rem;
-
     &::before {
         height: 14px;
         width: 14px;
@@ -32,7 +30,7 @@ limitations under the License.
         mask-size: contain;
         content: '';
         position: absolute;
-        top: 4px;
+        top: 1px;
         left: 0;
     }
 }
