@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import React, { ReactNode } from 'react';
-import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
-import {_t, _td, newTranslatableError} from "../languageHandler";
-import {makeType} from "./TypeUtils";
+import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
+import { _t, _td, newTranslatableError } from "../languageHandler";
+import { makeType } from "./TypeUtils";
 import SdkConfig from '../SdkConfig';
 
 const LIVELINESS_DISCOVERY_ERRORS: string[] = [

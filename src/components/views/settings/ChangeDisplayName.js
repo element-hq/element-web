@@ -18,9 +18,9 @@ limitations under the License.
 
 import React from 'react';
 import * as sdk from '../../../index';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.settings.ChangeDisplayName")
 export default class ChangeDisplayName extends React.Component {

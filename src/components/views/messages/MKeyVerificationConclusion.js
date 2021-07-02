@@ -17,12 +17,12 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
-import {getNameForEventRoom, userLabelForEventRoom}
+import { getNameForEventRoom, userLabelForEventRoom }
     from '../../../utils/KeyVerificationStateObserver';
 import EventTileBubble from "./EventTileBubble";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.messages.MKeyVerificationConclusion")
 export default class MKeyVerificationConclusion extends React.Component {
@@ -90,7 +90,7 @@ export default class MKeyVerificationConclusion extends React.Component {
     }
 
     render() {
-        const {mxEvent} = this.props;
+        const { mxEvent } = this.props;
         const request = mxEvent.verificationRequest;
 
         if (!this._shouldRender(mxEvent, request)) {
@@ -103,15 +103,15 @@ export default class MKeyVerificationConclusion extends React.Component {
         let title;
 
         if (request.done) {
-            title = _t("You verified %(name)s", {name: getNameForEventRoom(request.otherUserId, mxEvent)});
+            title = _t("You verified %(name)s", { name: getNameForEventRoom(request.otherUserId, mxEvent) });
         } else if (request.cancelled) {
             const userId = request.cancellingUserId;
             if (userId === myUserId) {
                 title = _t("You cancelled verifying %(name)s",
-                    {name: getNameForEventRoom(request.otherUserId, mxEvent)});
+                    { name: getNameForEventRoom(request.otherUserId, mxEvent) });
             } else {
                 title = _t("%(name)s cancelled verifying",
-                    {name: getNameForEventRoom(userId, mxEvent)});
+                    { name: getNameForEventRoom(userId, mxEvent) });
             }
         }
 

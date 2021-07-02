@@ -19,49 +19,68 @@ limitations under the License.
     padding: 24px;
     background-color: $settings-profile-placeholder-bg-color;
     border-radius: 8px;
-    display: flex;
     box-sizing: border-box;
 
-    > div {
-        .mx_BetaCard_title {
-            font-weight: $font-semi-bold;
-            font-size: $font-18px;
-            line-height: $font-22px;
-            color: $primary-fg-color;
-            margin: 4px 0 14px;
+    .mx_BetaCard_columns {
+        display: flex;
 
-            .mx_BetaCard_betaPill {
-                margin-left: 12px;
+        > div {
+            .mx_BetaCard_title {
+                font-weight: $font-semi-bold;
+                font-size: $font-18px;
+                line-height: $font-22px;
+                color: $primary-fg-color;
+                margin: 4px 0 14px;
+
+                .mx_BetaCard_betaPill {
+                    margin-left: 12px;
+                }
+            }
+
+            .mx_BetaCard_caption {
+                font-size: $font-15px;
+                line-height: $font-20px;
+                color: $secondary-fg-color;
+                margin-bottom: 20px;
+            }
+
+            .mx_BetaCard_buttons .mx_AccessibleButton {
+                display: block;
+                margin: 12px 0;
+                padding: 7px 40px;
+                width: auto;
+            }
+
+            .mx_BetaCard_disclaimer {
+                font-size: $font-12px;
+                line-height: $font-15px;
+                color: $secondary-fg-color;
+                margin-top: 20px;
             }
         }
 
-        .mx_BetaCard_caption {
-            font-size: $font-15px;
-            line-height: $font-20px;
-            color: $secondary-fg-color;
-            margin-bottom: 20px;
-        }
-
-        .mx_AccessibleButton {
-            display: block;
-            margin: 12px 0;
-            padding: 7px 40px;
-            width: auto;
-        }
-
-        .mx_BetaCard_disclaimer {
-            font-size: $font-12px;
-            line-height: $font-15px;
-            color: $secondary-fg-color;
-            margin-top: 20px;
+        > img {
+            margin: auto 0 auto 20px;
+            width: 300px;
+            object-fit: contain;
+            height: 100%;
         }
     }
 
-    > img {
-        margin: auto 0 auto 20px;
-        width: 300px;
-        object-fit: contain;
-        height: 100%;
+    .mx_BetaCard_relatedSettings {
+        .mx_SettingsFlag {
+            margin: 16px 0 0;
+            font-size: $font-15px;
+            line-height: $font-24px;
+            color: $primary-fg-color;
+
+            .mx_SettingsFlag_microcopy {
+                margin-top: 4px;
+                font-size: $font-12px;
+                line-height: $font-15px;
+                color: $secondary-fg-color;
+            }
+        }
     }
 }
 

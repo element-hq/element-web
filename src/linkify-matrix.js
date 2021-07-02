@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {baseUrl} from "./utils/permalinks/SpecPermalinkConstructor";
+import { baseUrl } from "./utils/permalinks/SpecPermalinkConstructor";
 import {
     parsePermalink,
     tryTransformEntityToPermalink,
@@ -81,7 +81,6 @@ function matrixLinkify(linkify) {
     S_ROOMALIAS.on(TT.COLON, S_ROOMALIAS_COLON); // do not accept trailing `:`
     S_ROOMALIAS_COLON.on(TT.NUM, S_ROOMALIAS_COLON_NUM); // but do accept :NUM (port specifier)
 
-
     const USERID = function(value) {
         MultiToken.call(this, value);
         this.type = 'userid';
@@ -126,7 +125,6 @@ function matrixLinkify(linkify) {
     S_USERID.on(TT.DOT, S_AT_NAME_COLON_DOMAIN_DOT); // accept repeated TLDs (e.g .org.uk)
     S_USERID.on(TT.COLON, S_USERID_COLON); // do not accept trailing `:`
     S_USERID_COLON.on(TT.NUM, S_USERID_COLON_NUM); // but do accept :NUM (port specifier)
-
 
     const GROUPID = function(value) {
         MultiToken.call(this, value);

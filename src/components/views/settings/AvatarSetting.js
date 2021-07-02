@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState} from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import classNames from "classnames";
 
-const AvatarSetting = ({avatarUrl, avatarAltText, avatarName, uploadAvatar, removeAvatar}) => {
+const AvatarSetting = ({ avatarUrl, avatarAltText, avatarName, uploadAvatar, removeAvatar }) => {
     const [isHovering, setIsHovering] = useState(false);
     const hoveringProps = {
         onMouseEnter: () => setIsHovering(true),

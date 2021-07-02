@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import * as React from "react";
-import ToastStore, {IToast} from "../../stores/ToastStore";
+import ToastStore, { IToast } from "../../stores/ToastStore";
 import classNames from "classnames";
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 
 interface IState {
     toasts: IToast<any>[];
@@ -58,7 +58,7 @@ export default class ToastContainer extends React.Component<{}, IState> {
         let containerClasses;
         if (totalCount !== 0) {
             const topToast = this.state.toasts[0];
-            const {title, icon, key, component, className, props} = topToast;
+            const { title, icon, key, component, className, props } = topToast;
             const toastClasses = classNames("mx_Toast_toast", {
                 "mx_Toast_hasIcon": icon,
                 [`mx_Toast_icon_${icon}`]: icon,

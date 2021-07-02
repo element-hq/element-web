@@ -18,9 +18,9 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 
-import Tooltip, {Alignment} from './Tooltip';
-import {_t} from "../../../languageHandler";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import Tooltip, { Alignment } from './Tooltip';
+import { _t } from "../../../languageHandler";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 export enum InfoTooltipKind {
     Info = "info",
@@ -60,7 +60,7 @@ export default class InfoTooltip extends React.PureComponent<ITooltipProps, ISta
     };
 
     render() {
-        const {tooltip, children, tooltipClassName, className, kind} = this.props;
+        const { tooltip, children, tooltipClassName, className, kind } = this.props;
         const title = _t("Information");
         const iconClassName = (
             (kind !== InfoTooltipKind.Warning) ?

@@ -15,13 +15,13 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../../../languageHandler";
+import { _t } from "../../../../../languageHandler";
 import PropTypes from "prop-types";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as sdk from "../../../../../index";
-import {SettingLevel} from "../../../../../settings/SettingLevel";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import { SettingLevel } from "../../../../../settings/SettingLevel";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import SdkConfig from "../../../../../SdkConfig";
 import BetaCard from "../../../beta/BetaCard";
 

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const {findSublist} = require("./create-room");
+const { findSublist } = require("./create-room");
 
 module.exports = async function acceptInvite(session, name) {
     session.log.step(`accepts "${name}" invite`);
@@ -23,9 +23,9 @@ module.exports = async function acceptInvite(session, name) {
     const invitesHandles = await inviteSublist.$$(".mx_RoomTile_name");
     const invitesWithText = await Promise.all(invitesHandles.map(async (inviteHandle) => {
         const text = await session.innerText(inviteHandle);
-        return {inviteHandle, text};
+        return { inviteHandle, text };
     }));
-    const inviteHandle = invitesWithText.find(({inviteHandle, text}) => {
+    const inviteHandle = invitesWithText.find(({ inviteHandle, text }) => {
         return text.trim() === name;
     }).inviteHandle;
 

@@ -17,37 +17,45 @@ limitations under the License.
 import React, { createRef } from 'react';
 import classNames from 'classnames';
 
-import {_t, _td} from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import * as sdk from "../../../index";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {makeRoomPermalink, makeUserPermalink} from "../../../utils/permalinks/Permalinks";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { makeRoomPermalink, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import {RoomMember} from "matrix-js-sdk/src/models/room-member";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import SdkConfig from "../../../SdkConfig";
 import * as Email from "../../../email";
-import {getDefaultIdentityServerUrl, useDefaultIdentityServer} from "../../../utils/IdentityServerUtils";
-import {abbreviateUrl} from "../../../utils/UrlUtils";
+import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from "../../../utils/IdentityServerUtils";
+import { abbreviateUrl } from "../../../utils/UrlUtils";
 import dis from "../../../dispatcher/dispatcher";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import Modal from "../../../Modal";
-import {humanizeTime} from "../../../utils/humanize";
+import { humanizeTime } from "../../../utils/humanize";
 import createRoom, {
-    canEncryptToAllUsers, ensureDMExists, findDMForUser, privateShouldBeEncrypted,
+    canEncryptToAllUsers,
+    ensureDMExists,
+    findDMForUser,
+    privateShouldBeEncrypted,
 } from "../../../createRoom";
-import {inviteMultipleToRoom, showCommunityInviteDialog} from "../../../RoomInvite";
-import {Key} from "../../../Keyboard";
-import {Action} from "../../../dispatcher/actions";
-import {DefaultTagID} from "../../../stores/room-list/models";
+import {
+    IInviteResult,
+    inviteMultipleToRoom,
+    showAnyInviteErrors,
+    showCommunityInviteDialog,
+} from "../../../RoomInvite";
+import { Key } from "../../../Keyboard";
+import { Action } from "../../../dispatcher/actions";
+import { DefaultTagID } from "../../../stores/room-list/models";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
-import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
+import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import SettingsStore from "../../../settings/SettingsStore";
-import {UIFeature} from "../../../settings/UIFeature";
+import { UIFeature } from "../../../settings/UIFeature";
 import CountlyAnalytics from "../../../CountlyAnalytics";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
-import {getAddressType} from "../../../UserAddress";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
+import { getAddressType } from "../../../UserAddress";
 import BaseAvatar from '../avatars/BaseAvatar';
 import AccessibleButton from '../elements/AccessibleButton';
 import { compare } from '../../../utils/strings';
@@ -62,9 +70,9 @@ import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
 /* eslint-disable camelcase */
 
 interface IRecentUser {
-    userId: string,
-    user: RoomMember,
-    lastActive: number,
+    userId: string;
+    user: RoomMember;
+    lastActive: number;
 }
 
 export const KIND_DM = "dm";
@@ -74,10 +82,10 @@ export const KIND_CALL_TRANSFER = "call_transfer";
 const INITIAL_ROOMS_SHOWN = 3; // Number of rooms to show at first
 const INCREMENT_ROOMS_SHOWN = 5; // Number of rooms to add when 'show more' is clicked
 
-// This is the interface that is expected by various components in this file. It is a bit
-// awkward because it also matches the RoomMember class from the js-sdk with some extra support
+// This is the interface that is expected by various components in the Invite Dialog and RoomInvite.
+// It is a bit awkward because it also matches the RoomMember class from the js-sdk with some extra support
 // for 3PIDs/email addresses.
-abstract class Member {
+export abstract class Member {
     /**
      * The display name of this Member. For users this should be their profile's display
      * name or user ID if none set. For 3PIDs this should be the 3PID address (email).
@@ -102,7 +110,8 @@ class DirectoryMember extends Member {
     private readonly displayName: string;
     private readonly avatarUrl: string;
 
-    constructor(userDirResult: {user_id: string, display_name: string, avatar_url: string}) {
+    // eslint-disable-next-line camelcase
+    constructor(userDirResult: { user_id: string, display_name: string, avatar_url: string }) {
         super();
         this._userId = userDirResult.user_id;
         this.displayName = userDirResult.display_name;
@@ -321,16 +330,16 @@ interface IInviteDialogProps {
 
     // The kind of invite being performed. Assumed to be KIND_DM if
     // not provided.
-    kind: string,
+    kind: string;
 
     // The room ID this dialog is for. Only required for KIND_INVITE.
-    roomId: string,
+    roomId: string;
 
     // The call to transfer. Only required for KIND_CALL_TRANSFER.
-    call: MatrixCall,
+    call: MatrixCall;
 
     // Initial value to populate the filter with
-    initialText: string,
+    initialText: string;
 }
 
 interface IInviteDialogState {
@@ -347,8 +356,8 @@ interface IInviteDialogState {
     consultFirst: boolean;
 
     // These two flags are used for the 'Go' button to communicate what is going on.
-    busy: boolean,
-    errorText: string,
+    busy: boolean;
+    errorText: string;
 }
 
 @replaceableComponent("views.dialogs.InviteDialog")
@@ -417,8 +426,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     private onConsultFirstChange = (ev) => {
-        this.setState({consultFirst: ev.target.checked});
-    }
+        this.setState({ consultFirst: ev.target.checked });
+    };
 
     public static buildRecents(excludedTargetIds: Set<string>): IRecentUser[] {
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room
@@ -473,7 +482,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 continue;
             }
 
-            recents.push({userId, user: member, lastActive: lastEventTs});
+            recents.push({ userId, user: member, lastActive: lastEventTs });
         }
         if (!recents) console.warn("[Invite:Recents] No recents to suggest!");
 
@@ -581,7 +590,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             const scoreBoost = Math.max(1, inverseTime / (15 * 60 * 1000)); // 15min segments to keep scores sane
 
             let record = memberScores[userId];
-            if (!record) record = memberScores[userId] = {score: 0};
+            if (!record) record = memberScores[userId] = { score: 0 };
             record.member = member;
             record.score += scoreBoost;
         }
@@ -598,22 +607,13 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             return b.score - a.score;
         });
 
-        return members.map(m => ({userId: m.member.userId, user: m.member}));
+        return members.map(m => ({ userId: m.member.userId, user: m.member }));
     }
 
-    private shouldAbortAfterInviteError(result): boolean {
-        const failedUsers = Object.keys(result.states).filter(a => result.states[a] === 'error');
-        if (failedUsers.length > 0) {
-            console.log("Failed to invite users: ", result);
-            this.setState({
-                busy: false,
-                errorText: _t("Failed to invite the following users to chat: %(csvUsers)s", {
-                    csvUsers: failedUsers.join(", "),
-                }),
-            });
-            return true; // abort
-        }
-        return false;
+    private shouldAbortAfterInviteError(result: IInviteResult, room: Room): boolean {
+        this.setState({ busy: false });
+        const userMap = new Map<string, Member>(this.state.targets.map(member => [member.userId, member]));
+        return !showAnyInviteErrors(result.states, room, result.inviter, userMap);
     }
 
     private convertFilter(): Member[] {
@@ -623,18 +623,18 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         let newMember: Member;
         if (this.state.filterText.startsWith('@')) {
             // Assume mxid
-            newMember = new DirectoryMember({user_id: this.state.filterText, display_name: null, avatar_url: null});
+            newMember = new DirectoryMember({ user_id: this.state.filterText, display_name: null, avatar_url: null });
         } else if (SettingsStore.getValue(UIFeature.IdentityServer)) {
             // Assume email
             newMember = new ThreepidMember(this.state.filterText);
         }
         const newTargets = [...(this.state.targets || []), newMember];
-        this.setState({targets: newTargets, filterText: ''});
+        this.setState({ targets: newTargets, filterText: '' });
         return newTargets;
     }
 
     private startDm = async () => {
-        this.setState({busy: true});
+        this.setState({ busy: true });
         const client = MatrixClientPeg.get();
         const targets = this.convertFilter();
         const targetIds = targets.map(t => t.userId);
@@ -657,7 +657,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             return;
         }
 
-        const createRoomOptions = {inlineErrors: true} as any; // XXX: Type out `createRoomOptions`
+        const createRoomOptions = { inlineErrors: true } as any; // XXX: Type out `createRoomOptions`
 
         if (privateShouldBeEncrypted()) {
             // Check whether all users have uploaded device keys before.
@@ -696,7 +696,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         return roomOptions;
                     },
                     { invite: [], invite_3pid: [] },
-                )
+                );
             }
 
             await createRoom(createRoomOptions);
@@ -712,7 +712,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
     private inviteUsers = async () => {
         const startTime = CountlyAnalytics.getTimestamp();
-        this.setState({busy: true});
+        this.setState({ busy: true });
         this.convertFilter();
         const targets = this.convertFilter();
         const targetIds = targets.map(t => t.userId);
@@ -729,9 +729,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         }
 
         try {
-            const result = await inviteMultipleToRoom(this.props.roomId, targetIds)
+            const result = await inviteMultipleToRoom(this.props.roomId, targetIds);
             CountlyAnalytics.instance.trackSendInvite(startTime, this.props.roomId, targetIds.length);
-            if (!this.shouldAbortAfterInviteError(result)) { // handles setting error message too
+            if (!this.shouldAbortAfterInviteError(result, room)) { // handles setting error message too
                 this.props.onFinished();
             }
 
@@ -792,10 +792,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             });
             this.props.onFinished();
         } else {
-            this.setState({busy: true});
+            this.setState({ busy: true });
             try {
                 await this.props.call.transfer(targetIds[0]);
-                this.setState({busy: false});
+                this.setState({ busy: false });
                 this.props.onFinished();
             } catch (e) {
                 this.setState({
@@ -826,7 +826,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     };
 
     private updateSuggestions = async (term) => {
-        MatrixClientPeg.get().searchUserDirectory({term}).then(async r => {
+        MatrixClientPeg.get().searchUserDirectory({ term }).then(async r => {
             if (term !== this.state.filterText) {
                 // Discard the results - we were probably too slow on the server-side to make
                 // these results useful. This is a race we want to avoid because we could overwrite
@@ -874,14 +874,14 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         }).catch(e => {
             console.error("Error searching user directory:");
             console.error(e);
-            this.setState({serverResultsMixin: []}); // clear results because it's moderately fatal
+            this.setState({ serverResultsMixin: [] }); // clear results because it's moderately fatal
         });
 
         // Whenever we search the directory, also try to search the identity server. It's
         // all debounced the same anyways.
         if (!this.state.canUseIdentityServer) {
             // The user doesn't have an identity server set - warn them of that.
-            this.setState({tryingIdentityServer: true});
+            this.setState({ tryingIdentityServer: true });
             return;
         }
         if (term.indexOf('@') > 0 && Email.looksValid(term) && SettingsStore.getValue(UIFeature.IdentityServer)) {
@@ -889,7 +889,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             // to a real account.
             this.setState({
                 // per above: the userId is a lie here - it's just a regular identifier
-                threepidResultsMixin: [{user: new ThreepidMember(term), userId: term}],
+                threepidResultsMixin: [{ user: new ThreepidMember(term), userId: term }],
             });
             try {
                 const authClient = new IdentityAuthClient();
@@ -929,14 +929,14 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             } catch (e) {
                 console.error("Error searching identity server:");
                 console.error(e);
-                this.setState({threepidResultsMixin: []}); // clear results because it's moderately fatal
+                this.setState({ threepidResultsMixin: [] }); // clear results because it's moderately fatal
             }
         }
     };
 
     private updateFilter = (e) => {
         const term = e.target.value;
-        this.setState({filterText: term});
+        this.setState({ filterText: term });
 
         // Debounce server lookups to reduce spam. We don't clear the existing server
         // results because they might still be vaguely accurate, likewise for races which
@@ -950,11 +950,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     };
 
     private showMoreRecents = () => {
-        this.setState({numRecentsShown: this.state.numRecentsShown + INCREMENT_ROOMS_SHOWN});
+        this.setState({ numRecentsShown: this.state.numRecentsShown + INCREMENT_ROOMS_SHOWN });
     };
 
     private showMoreSuggestions = () => {
-        this.setState({numSuggestionsShown: this.state.numSuggestionsShown + INCREMENT_ROOMS_SHOWN});
+        this.setState({ numSuggestionsShown: this.state.numSuggestionsShown + INCREMENT_ROOMS_SHOWN });
     };
 
     private toggleMember = (member: Member) => {
@@ -968,7 +968,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 targets.push(member);
                 filterText = ""; // clear the filter when the user accepts a suggestion
             }
-            this.setState({targets, filterText});
+            this.setState({ targets, filterText });
 
             if (this.editorRef && this.editorRef.current) {
                 this.editorRef.current.focus();
@@ -981,7 +981,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         const idx = targets.indexOf(member);
         if (idx >= 0) {
             targets.splice(idx, 1);
-            this.setState({targets});
+            this.setState({ targets });
         }
 
         if (this.editorRef && this.editorRef.current) {
@@ -1051,13 +1051,13 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 title: _t('Failed to find the following users'),
                 description: _t(
                     "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s",
-                    {csvNames: failed.join(", ")},
+                    { csvNames: failed.join(", ") },
                 ),
                 button: _t('OK'),
             });
         }
 
-        this.setState({targets: [...this.state.targets, ...toAdd]});
+        this.setState({ targets: [...this.state.targets, ...toAdd] });
     };
 
     private onClickInputArea = (e) => {
@@ -1076,7 +1076,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         // Update the IS in account data. Actually using it may trigger terms.
         // eslint-disable-next-line react-hooks/rules-of-hooks
         useDefaultIdentityServer();
-        this.setState({canUseIdentityServer: true, tryingIdentityServer: false});
+        this.setState({ canUseIdentityServer: true, tryingIdentityServer: false });
     };
 
     private onManageSettingsClick = (e) => {
@@ -1100,7 +1100,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
         if (kind === 'suggestions' && CommunityPrototypeStore.instance.getSelectedCommunityId()) {
             const communityName = CommunityPrototypeStore.instance.getSelectedCommunityName();
-            sectionSubname = _t("May include members not in %(communityName)s", {communityName});
+            sectionSubname = _t("May include members not in %(communityName)s", { communityName });
         }
 
         if (this.props.kind === KIND_INVITE) {
@@ -1297,21 +1297,21 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 helpText = _t(
                     "Start a conversation with someone using their name, email address or username (like <userId/>).",
                     {},
-                    {userId: () => {
+                    { userId: () => {
                         return (
                             <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>
                         );
-                    }},
+                    } },
                 );
             } else {
                 helpText = _t(
                     "Start a conversation with someone using their name or username (like <userId/>).",
                     {},
-                    {userId: () => {
+                    { userId: () => {
                         return (
                             <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>
                         );
-                    }},
+                    } },
                 );
             }
 
@@ -1320,7 +1320,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 const inviteText = _t(
                     "This won't invite them to %(communityName)s. " +
                     "To invite someone to %(communityName)s, click <a>here</a>",
-                    {communityName}, {
+                    { communityName }, {
                         userId: () => {
                             return (
                                 <a
@@ -1365,7 +1365,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         <div />
                     </AccessibleTooltipButton>
                 </div>
-            </div>
+            </div>;
         } else if (this.props.kind === KIND_INVITE) {
             const room = MatrixClientPeg.get()?.getRoom(this.props.roomId);
             const isSpace = SettingsStore.getValue("feature_spaces") && room?.isSpaceRoom();

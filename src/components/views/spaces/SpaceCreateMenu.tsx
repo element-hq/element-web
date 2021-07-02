@@ -14,27 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useContext, useRef, useState} from "react";
+import React, { useContext, useRef, useState } from "react";
 import classNames from "classnames";
-import {EventType, RoomType, RoomCreateTypeField} from "matrix-js-sdk/src/@types/event";
+import { EventType, RoomType, RoomCreateTypeField } from "matrix-js-sdk/src/@types/event";
 import FocusLock from "react-focus-lock";
 
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import {ChevronFace, ContextMenu} from "../../structures/ContextMenu";
+import { ChevronFace, ContextMenu } from "../../structures/ContextMenu";
 import createRoom from "../../../createRoom";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {SpaceAvatar} from "./SpaceBasicSettings";
+import { SpaceAvatar } from "./SpaceBasicSettings";
 import AccessibleButton from "../elements/AccessibleButton";
-import {BetaPill} from "../beta/BetaCard";
+import { BetaPill } from "../beta/BetaCard";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {Action} from "../../../dispatcher/actions";
+import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserSettingsDialog";
 import Field from "../elements/Field";
 import withValidation from "../elements/Validation";
-import {SpaceFeedbackPrompt} from "../../structures/SpaceRoomView";
+import { SpaceFeedbackPrompt } from "../../structures/SpaceRoomView";
 import { Preset } from "matrix-js-sdk/src/@types/partials";
 import { ICreateRoomStateEvent } from "matrix-js-sdk/src/@types/requests";
+import RoomAliasField from "../elements/RoomAliasField";
 
 const SpaceCreateMenuType = ({ title, description, className, onClick }) => {
     return (
@@ -60,6 +61,11 @@ const spaceNameValidator = withValidation({
     ],
 });
 
+const nameToAlias = (name: string, domain: string): string => {
+    const localpart = name.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9_-]+/gi, "");
+    return `#${localpart}:${domain}`;
+};
+
 const SpaceCreateMenu = ({ onFinished }) => {
     const cli = useContext(MatrixClientContext);
     const [visibility, setVisibility] = useState<Visibility>(null);
@@ -67,6 +73,8 @@ const SpaceCreateMenu = ({ onFinished }) => {
 
     const [name, setName] = useState("");
     const spaceNameField = useRef<Field>();
+    const [alias, setAlias] = useState("");
+    const spaceAliasField = useRef<RoomAliasField>();
     const [avatar, setAvatar] = useState<File>(null);
     const [topic, setTopic] = useState<string>("");
 
@@ -79,6 +87,13 @@ const SpaceCreateMenu = ({ onFinished }) => {
         if (!await spaceNameField.current.validate({ allowEmpty: false })) {
             spaceNameField.current.focus();
             spaceNameField.current.validate({ allowEmpty: false, focused: true });
+            setBusy(false);
+            return;
+        }
+        // validate the space name alias field but do not require it
+        if (visibility === Visibility.Public && !await spaceAliasField.current.validate({ allowEmpty: true })) {
+            spaceAliasField.current.focus();
+            spaceAliasField.current.validate({ allowEmpty: true, focused: true });
             setBusy(false);
             return;
         }
@@ -99,12 +114,6 @@ const SpaceCreateMenu = ({ onFinished }) => {
                 content: { url },
             });
         }
-        if (topic) {
-            initialState.push({
-                type: EventType.RoomTopic,
-                content: { topic },
-            });
-        }
 
         try {
             await createRoom({
@@ -112,7 +121,6 @@ const SpaceCreateMenu = ({ onFinished }) => {
                     preset: visibility === Visibility.Public ? Preset.PublicChat : Preset.PrivateChat,
                     name,
                     creation_content: {
-                        // Based on MSC1840
                         [RoomCreateTypeField]: RoomType.Space,
                     },
                     initial_state: initialState,
@@ -121,6 +129,10 @@ const SpaceCreateMenu = ({ onFinished }) => {
                         events_default: 100,
                         ...Visibility.Public ? { invite: 0 } : {},
                     },
+                    room_alias_name: visibility === Visibility.Public && alias
+                        ? alias.substr(1, alias.indexOf(":") - 1)
+                        : undefined,
+                    topic,
                 },
                 spinner: false,
                 encryption: false,
@@ -159,6 +171,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
             <SpaceFeedbackPrompt onClick={onFinished} />
         </React.Fragment>;
     } else {
+        const domain = cli.getDomain();
         body = <React.Fragment>
             <AccessibleTooltipButton
                 className="mx_SpaceCreateMenu_back"
@@ -187,11 +200,29 @@ const SpaceCreateMenu = ({ onFinished }) => {
                     label={_t("Name")}
                     autoFocus={true}
                     value={name}
-                    onChange={ev => setName(ev.target.value)}
+                    onChange={ev => {
+                        const newName = ev.target.value;
+                        if (!alias || alias === nameToAlias(name, domain)) {
+                            setAlias(nameToAlias(newName, domain));
+                        }
+                        setName(newName);
+                    }}
                     ref={spaceNameField}
                     onValidate={spaceNameValidator}
                     disabled={busy}
                 />
+
+                { visibility === Visibility.Public
+                    ? <RoomAliasField
+                        ref={spaceAliasField}
+                        onChange={setAlias}
+                        domain={domain}
+                        value={alias}
+                        placeholder={name ? nameToAlias(name, domain) : _t("e.g. my-space")}
+                        label={_t("Address")}
+                    />
+                    : null
+                }
 
                 <Field
                     name="spaceTopic"
@@ -230,6 +261,6 @@ const SpaceCreateMenu = ({ onFinished }) => {
             { body }
         </FocusLock>
     </ContextMenu>;
-}
+};
 
 export default SpaceCreateMenu;

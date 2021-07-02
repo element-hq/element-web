@@ -19,7 +19,7 @@ import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import sdk from '../../../skinned-sdk';
 import SdkConfig from '../../../../src/SdkConfig';
-import {mkServerConfig} from "../../../test-utils";
+import { mkServerConfig } from "../../../test-utils";
 
 const Login = sdk.getComponent(
     'structures.auth.Login',

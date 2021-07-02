@@ -17,16 +17,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClient} from "matrix-js-sdk/src/client";
-import {encodeUnpaddedBase64} from "matrix-js-sdk/src/crypto/olmlib";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { encodeUnpaddedBase64 } from "matrix-js-sdk/src/crypto/olmlib";
 import dis from './dispatcher/dispatcher';
 import BaseEventIndexManager from './indexing/BaseEventIndexManager';
-import {ActionPayload} from "./dispatcher/payloads";
-import {CheckUpdatesPayload} from "./dispatcher/payloads/CheckUpdatesPayload";
-import {Action} from "./dispatcher/actions";
-import {hideToast as hideUpdateToast} from "./toasts/UpdateToast";
-import {MatrixClientPeg} from "./MatrixClientPeg";
-import {idbLoad, idbSave, idbDelete} from "./utils/StorageManager";
+import { ActionPayload } from "./dispatcher/payloads";
+import { CheckUpdatesPayload } from "./dispatcher/payloads/CheckUpdatesPayload";
+import { Action } from "./dispatcher/actions";
+import { hideToast as hideUpdateToast } from "./toasts/UpdateToast";
+import { MatrixClientPeg } from "./MatrixClientPeg";
+import { idbLoad, idbSave, idbDelete } from "./utils/StorageManager";
 
 export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
 export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
@@ -335,7 +335,7 @@ export default abstract class BasePlatform {
 
         try {
             const key = await crypto.subtle.decrypt(
-                {name: "AES-GCM", iv: data.iv, additionalData}, data.cryptoKey,
+                { name: "AES-GCM", iv: data.iv, additionalData }, data.cryptoKey,
                 data.encrypted,
             );
             return encodeUnpaddedBase64(key);
@@ -348,7 +348,7 @@ export default abstract class BasePlatform {
     /**
      * Create and store a pickle key for encrypting libolm objects.
      * @param {string} userId the user ID for the user that the pickle key is for.
-     * @param {string} userId the device ID that the pickle key is for.
+     * @param {string} deviceId the device ID that the pickle key is for.
      * @returns {string|null} the pickle key, or null if the platform does not
      *     support storing pickle keys.
      */
@@ -360,7 +360,7 @@ export default abstract class BasePlatform {
         const randomArray = new Uint8Array(32);
         crypto.getRandomValues(randomArray);
         const cryptoKey = await crypto.subtle.generateKey(
-            {name: "AES-GCM", length: 256}, false, ["encrypt", "decrypt"],
+            { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"],
         );
         const iv = new Uint8Array(32);
         crypto.getRandomValues(iv);
@@ -375,11 +375,11 @@ export default abstract class BasePlatform {
         }
 
         const encrypted = await crypto.subtle.encrypt(
-            {name: "AES-GCM", iv, additionalData}, cryptoKey, randomArray,
+            { name: "AES-GCM", iv, additionalData }, cryptoKey, randomArray,
         );
 
         try {
-            await idbSave("pickleKey", [userId, deviceId], {encrypted, iv, cryptoKey});
+            await idbSave("pickleKey", [userId, deviceId], { encrypted, iv, cryptoKey });
         } catch (e) {
             return null;
         }

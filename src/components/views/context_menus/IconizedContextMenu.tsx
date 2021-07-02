@@ -90,14 +90,14 @@ export const IconizedContextMenuCheckbox: React.FC<ICheckboxProps> = ({
     </MenuItemCheckbox>;
 };
 
-export const IconizedContextMenuOption: React.FC<IOptionProps> = ({label, iconClassName, ...props}) => {
+export const IconizedContextMenuOption: React.FC<IOptionProps> = ({ label, iconClassName, ...props }) => {
     return <MenuItem {...props} label={label}>
         { iconClassName && <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} /> }
         <span className="mx_IconizedContextMenu_label">{label}</span>
     </MenuItem>;
 };
 
-export const IconizedContextMenuOptionList: React.FC<IOptionListProps> = ({first, red, className, children}) => {
+export const IconizedContextMenuOptionList: React.FC<IOptionListProps> = ({ first, red, className, children }) => {
     const classes = classNames("mx_IconizedContextMenu_optionList", className, {
         mx_IconizedContextMenu_optionList_notFirst: !first,
         mx_IconizedContextMenu_optionList_red: red,
@@ -108,7 +108,7 @@ export const IconizedContextMenuOptionList: React.FC<IOptionListProps> = ({first
     </div>;
 };
 
-const IconizedContextMenu: React.FC<IProps> = ({className, children, compact, ...props}) => {
+const IconizedContextMenu: React.FC<IProps> = ({ className, children, compact, ...props }) => {
     const classes = classNames("mx_IconizedContextMenu", className, {
         mx_IconizedContextMenu_compact: compact,
     });

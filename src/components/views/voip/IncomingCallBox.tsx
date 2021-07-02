@@ -17,15 +17,15 @@ limitations under the License.
 */
 
 import React from 'react';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import { ActionPayload } from '../../../dispatcher/payloads';
 import CallHandler, { CallHandlerEvent } from '../../../CallHandler';
 import RoomAvatar from '../avatars/RoomAvatar';
-import FormButton from '../elements/FormButton';
+import AccessibleButton from '../elements/AccessibleButton';
 import { CallState } from 'matrix-js-sdk/src/webrtc/call';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
 import classNames from 'classnames';
 
@@ -53,7 +53,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
 
     componentDidMount = () => {
         CallHandler.sharedInstance().addListener(CallHandlerEvent.SilencedCallsChanged, this.onSilencedCallsChanged);
-    }
+    };
 
     public componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
@@ -82,7 +82,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
         const callId = this.state.incomingCall?.callId;
         if (!callId) return;
         this.setState({ silenced: CallHandler.sharedInstance().isCallSilenced(callId) });
-    }
+    };
 
     private onAnswerClick: React.MouseEventHandler = (e) => {
         e.stopPropagation();
@@ -106,7 +106,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
         this.state.silenced ?
             CallHandler.sharedInstance().unSilenceCall(callId):
             CallHandler.sharedInstance().silenceCall(callId);
-    }
+    };
 
     public render() {
         if (!this.state.incomingCall) {
@@ -155,21 +155,22 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
                 />
             </div>
             <div className="mx_IncomingCallBox_buttons">
-                <FormButton
+                <AccessibleButton
                     className={"mx_IncomingCallBox_decline"}
                     onClick={this.onRejectClick}
                     kind="danger"
-                    label={_t("Decline")}
-                />
+                >
+                    { _t("Decline") }
+                </AccessibleButton>
                 <div className="mx_IncomingCallBox_spacer" />
-                <FormButton
+                <AccessibleButton
                     className={"mx_IncomingCallBox_accept"}
                     onClick={this.onAnswerClick}
                     kind="primary"
-                    label={_t("Accept")}
-                />
+                >
+                    { _t("Accept") }
+                </AccessibleButton>
             </div>
         </div>;
     }
 }
-
