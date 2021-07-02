@@ -74,7 +74,7 @@ type FileLike = File & {
 };
 
 type ZipObj = {
-    crc?: Crc32,
+    crc?: Crc32;
     uncompressedLength: number;
     compressedLength: number;
     ctrl: ReadableStreamDefaultController;
