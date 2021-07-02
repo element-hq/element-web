@@ -29,7 +29,6 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import { Action } from "../../../dispatcher/actions";
 import sanitizeHtml from "sanitize-html";
-import { UIFeature } from "../../../settings/UIFeature";
 import { PERMITTED_URL_SCHEMES } from "../../../HtmlUtils";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
