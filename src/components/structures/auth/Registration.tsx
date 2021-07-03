@@ -18,7 +18,6 @@ import { createClient } from 'matrix-js-sdk/src/matrix';
 import React, { ReactNode } from 'react';
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
-import * as sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
@@ -31,6 +30,12 @@ import dis from "../../../dispatcher/dispatcher";
 import SSOButtons from "../../views/elements/SSOButtons";
 import ServerPicker from '../../views/elements/ServerPicker';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import RegistrationForm from '../../views/auth/RegistrationForm';
+import AccessibleButton from '../../views/elements/AccessibleButton';
+import AuthBody from "../../views/auth/AuthBody";
+import AuthHeader from "../../views/auth/AuthHeader";
+import InteractiveAuth from "../InteractiveAuth";
+import Spinner from "../../views/elements/Spinner";
 
 interface IProps {
     serverConfig: ValidatedServerConfig;
@@ -240,7 +245,7 @@ export default class Registration extends React.Component<IProps, IState> {
         }
     }
 
-    private onFormSubmit = formVals => {
+    private onFormSubmit = async (formVals): Promise<void> => {
         this.setState({
             errorText: "",
             busy: true,
@@ -436,10 +441,6 @@ export default class Registration extends React.Component<IProps, IState> {
     };
 
     private renderRegisterComponent() {
-        const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
-        const Spinner = sdk.getComponent('elements.Spinner');
-        const RegistrationForm = sdk.getComponent('auth.RegistrationForm');
-
         if (this.state.matrixClient && this.state.doingUIAuth) {
             return <InteractiveAuth
                 matrixClient={this.state.matrixClient}
@@ -510,10 +511,6 @@ export default class Registration extends React.Component<IProps, IState> {
     }
 
     render() {
-        const AuthHeader = sdk.getComponent('auth.AuthHeader');
-        const AuthBody = sdk.getComponent("auth.AuthBody");
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
         let errorText;
         const err = this.state.errorText;
         if (err) {

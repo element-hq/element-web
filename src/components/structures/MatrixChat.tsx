@@ -36,7 +36,6 @@ import dis from "../../dispatcher/dispatcher";
 import Notifier from '../../Notifier';
 
 import Modal from "../../Modal";
-import * as sdk from '../../index';
 import { showRoomInviteDialog, showStartChatInviteDialog } from '../../RoomInvite';
 import * as Rooms from '../../Rooms';
 import linkifyMatrix from "../../linkify-matrix";
@@ -101,6 +100,7 @@ import E2eSetup from "./auth/E2eSetup";
 import Registration from './auth/Registration';
 import Login from "./auth/Login";
 import ErrorBoundary from '../views/elements/ErrorBoundary';
+import VerificationRequestToast from '../views/toasts/VerificationRequestToast';
 
 import PerformanceMonitor, { PerformanceEntryNames } from "../../performance";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
@@ -1581,7 +1581,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     title: _t("Verification requested"),
                     icon: "verification",
                     props: { request },
-                    component: sdk.getComponent("toasts.VerificationRequestToast"),
+                    component: VerificationRequestToast,
                     priority: 90,
                 });
             }
