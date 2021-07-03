@@ -371,7 +371,6 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                     key="controls_input"
                     room={this.props.room}
                     placeholder={this.renderPlaceholderText()}
-                    resizeNotifier={this.props.resizeNotifier}
                     permalinkCreator={this.props.permalinkCreator}
                     replyToEvent={this.props.replyToEvent}
                     onChange={this.onChange}
