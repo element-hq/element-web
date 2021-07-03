@@ -20,7 +20,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Tooltip from './Tooltip';
 
 interface IProps {
-    helpText: string;
+    helpText: React.ReactNode | string;
 }
 
 interface IState {
