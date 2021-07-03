@@ -24,7 +24,6 @@ import { Key } from '../../Keyboard';
 import PageTypes from '../../PageTypes';
 import MediaDeviceHandler from '../../MediaDeviceHandler';
 import { fixupColorFonts } from '../../utils/FontManager';
-import * as sdk from '../../index';
 import dis from '../../dispatcher/dispatcher';
 import { IMatrixClientCreds } from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
@@ -59,6 +58,11 @@ import { replaceableComponent } from "../../utils/replaceableComponent";
 import CallHandler, { CallHandlerEvent } from '../../CallHandler';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import AudioFeedArrayForCall from '../views/voip/AudioFeedArrayForCall';
+import RoomView from './RoomView';
+import ToastContainer from './ToastContainer';
+import MyGroups from "./MyGroups";
+import UserView from "./UserView";
+import GroupView from "./GroupView";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -567,12 +571,6 @@ class LoggedInView extends React.Component<IProps, IState> {
     };
 
     render() {
-        const RoomView = sdk.getComponent('structures.RoomView');
-        const UserView = sdk.getComponent('structures.UserView');
-        const GroupView = sdk.getComponent('structures.GroupView');
-        const MyGroups = sdk.getComponent('structures.MyGroups');
-        const ToastContainer = sdk.getComponent('structures.ToastContainer');
-
         let pageElement;
 
         switch (this.props.page_type) {
