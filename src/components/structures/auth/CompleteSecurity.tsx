@@ -15,39 +15,42 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import { SetupEncryptionStore, Phase } from '../../../stores/SetupEncryptionStore';
 import SetupEncryptionBody from "./SetupEncryptionBody";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-@replaceableComponent("structures.auth.CompleteSecurity")
-export default class CompleteSecurity extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-    };
+interface IProps {
+    onFinished: () => void;
+}
 
-    constructor() {
-        super();
+interface IState {
+    phase: Phase;
+}
+
+@replaceableComponent("structures.auth.CompleteSecurity")
+export default class CompleteSecurity extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
+        super(props);
         const store = SetupEncryptionStore.sharedInstance();
-        store.on("update", this._onStoreUpdate);
+        store.on("update", this.onStoreUpdate);
         store.start();
         this.state = { phase: store.phase };
     }
 
-    _onStoreUpdate = () => {
+    private onStoreUpdate = (): void => {
         const store = SetupEncryptionStore.sharedInstance();
         this.setState({ phase: store.phase });
     };
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         const store = SetupEncryptionStore.sharedInstance();
-        store.off("update", this._onStoreUpdate);
+        store.off("update", this.onStoreUpdate);
         store.stop();
     }
 
-    render() {
+    public render() {
         const AuthPage = sdk.getComponent("auth.AuthPage");
         const CompleteSecurityBody = sdk.getComponent("auth.CompleteSecurityBody");
         const { phase } = this.state;
