@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _t, _td } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import Modal from "../../../Modal";
@@ -31,27 +30,50 @@ import PassphraseField from '../../views/auth/PassphraseField';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { PASSWORD_MIN_SCORE } from '../../views/auth/RegistrationForm';
 
-// Phases
-// Show the forgot password inputs
-const PHASE_FORGOT = 1;
-// Email is in the process of being sent
-const PHASE_SENDING_EMAIL = 2;
-// Email has been sent
-const PHASE_EMAIL_SENT = 3;
-// User has clicked the link in email and completed reset
-const PHASE_DONE = 4;
+import { IValidationResult } from "../../views/elements/Validation";
+
+enum Phase {
+    // Show the forgot password inputs
+    Forgot = 1,
+    // Email is in the process of being sent
+    SendingEmail = 2,
+    // Email has been sent
+    EmailSent = 3,
+    // User has clicked the link in email and completed reset
+    Done = 4,
+}
+
+interface IProps {
+    serverConfig: ValidatedServerConfig;
+    onServerConfigChange: () => void;
+    onLoginClick?: () => void;
+    onComplete: () => void;
+}
+
+interface IState {
+    phase: Phase;
+    email: string;
+    password: string;
+    password2: string;
+    errorText: string;
+
+    // We perform liveliness checks later, but for now suppress the errors.
+    // We also track the server dead errors independently of the regular errors so
+    // that we can render it differently, and override any other error the user may
+    // be seeing.
+    serverIsAlive: boolean;
+    serverErrorIsFatal: boolean;
+    serverDeadError: string;
+
+    passwordFieldValid: boolean;
+}
 
 @replaceableComponent("structures.auth.ForgotPassword")
-export default class ForgotPassword extends React.Component {
-    static propTypes = {
-        serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
-        onServerConfigChange: PropTypes.func.isRequired,
-        onLoginClick: PropTypes.func,
-        onComplete: PropTypes.func.isRequired,
-    };
+export default class ForgotPassword extends React.Component<IProps, IState> {
+    private reset: PasswordReset;
 
     state = {
-        phase: PHASE_FORGOT,
+        phase: Phase.Forgot,
         email: "",
         password: "",
         password2: "",
@@ -64,30 +86,31 @@ export default class ForgotPassword extends React.Component {
         serverIsAlive: true,
         serverErrorIsFatal: false,
         serverDeadError: "",
+        passwordFieldValid: false,
     };
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
 
         CountlyAnalytics.instance.track("onboarding_forgot_password_begin");
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.reset = null;
-        this._checkServerLiveliness(this.props.serverConfig);
+        this.checkServerLiveliness(this.props.serverConfig);
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
     // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps(newProps) {
+    public UNSAFE_componentWillReceiveProps(newProps: IProps): void {
         if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
 
         // Do a liveliness check on the new URLs
-        this._checkServerLiveliness(newProps.serverConfig);
+        this.checkServerLiveliness(newProps.serverConfig);
     }
 
-    async _checkServerLiveliness(serverConfig) {
+    private async checkServerLiveliness(serverConfig): Promise<void> {
         try {
             await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(
                 serverConfig.hsUrl,
@@ -98,28 +121,28 @@ export default class ForgotPassword extends React.Component {
                 serverIsAlive: true,
             });
         } catch (e) {
-            this.setState(AutoDiscoveryUtils.authComponentStateForError(e, "forgot_password"));
+            this.setState(AutoDiscoveryUtils.authComponentStateForError(e, "forgot_password") as IState);
         }
     }
 
-    submitPasswordReset(email, password) {
+    public submitPasswordReset(email: string, password: string): void {
         this.setState({
-            phase: PHASE_SENDING_EMAIL,
+            phase: Phase.SendingEmail,
         });
         this.reset = new PasswordReset(this.props.serverConfig.hsUrl, this.props.serverConfig.isUrl);
         this.reset.resetPassword(email, password).then(() => {
             this.setState({
-                phase: PHASE_EMAIL_SENT,
+                phase: Phase.EmailSent,
             });
         }, (err) => {
             this.showErrorDialog(_t('Failed to send email') + ": " + err.message);
             this.setState({
-                phase: PHASE_FORGOT,
+                phase: Phase.Forgot,
             });
         });
     }
 
-    onVerify = async ev => {
+    private onVerify = async (ev: React.MouseEvent): Promise<void> => {
         ev.preventDefault();
         if (!this.reset) {
             console.error("onVerify called before submitPasswordReset!");
@@ -127,17 +150,17 @@ export default class ForgotPassword extends React.Component {
         }
         try {
             await this.reset.checkEmailLinkClicked();
-            this.setState({ phase: PHASE_DONE });
+            this.setState({ phase: Phase.Done });
         } catch (err) {
             this.showErrorDialog(err.message);
         }
     };
 
-    onSubmitForm = async ev => {
+    private onSubmitForm = async (ev: React.FormEvent): Promise<void> => {
         ev.preventDefault();
 
         // refresh the server errors, just in case the server came back online
-        await this._checkServerLiveliness(this.props.serverConfig);
+        await this.checkServerLiveliness(this.props.serverConfig);
 
         await this['password_field'].validate({ allowEmpty: false });
 
@@ -172,27 +195,27 @@ export default class ForgotPassword extends React.Component {
         }
     };
 
-    onInputChanged = (stateKey, ev) => {
+    private onInputChanged = (stateKey: string, ev: React.FormEvent<HTMLInputElement>) => {
         this.setState({
-            [stateKey]: ev.target.value,
-        });
+            [stateKey]: ev.currentTarget.value,
+        } as any);
     };
 
-    onLoginClick = ev => {
+    private onLoginClick = (ev: React.MouseEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
         this.props.onLoginClick();
     };
 
-    showErrorDialog(body, title) {
+    public showErrorDialog(description: string, title?: string) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Forgot Password Error', '', ErrorDialog, {
-            title: title,
-            description: body,
+            title,
+            description,
         });
     }
 
-    onPasswordValidate(result) {
+    private onPasswordValidate(result: IValidationResult) {
         this.setState({
             passwordFieldValid: result.valid,
         });
@@ -316,16 +339,16 @@ export default class ForgotPassword extends React.Component {
 
         let resetPasswordJsx;
         switch (this.state.phase) {
-            case PHASE_FORGOT:
+            case Phase.Forgot:
                 resetPasswordJsx = this.renderForgot();
                 break;
-            case PHASE_SENDING_EMAIL:
+            case Phase.SendingEmail:
                 resetPasswordJsx = this.renderSendingEmail();
                 break;
-            case PHASE_EMAIL_SENT:
+            case Phase.EmailSent:
                 resetPasswordJsx = this.renderEmailSent();
                 break;
-            case PHASE_DONE:
+            case Phase.Done:
                 resetPasswordJsx = this.renderDone();
                 break;
         }
