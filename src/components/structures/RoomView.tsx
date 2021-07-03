@@ -42,7 +42,7 @@ import eventSearch, { searchPagination } from '../../Searching';
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
 import RoomViewStore from '../../stores/RoomViewStore';
-import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
+import RoomScrollStateStore, { ScrollState } from '../../stores/RoomScrollStateStore';
 import WidgetEchoStore from '../../stores/WidgetEchoStore';
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/Layout";
@@ -1577,7 +1577,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     // get the current scroll position of the room, so that it can be
     // restored when we switch back to it.
     //
-    private getScrollState() {
+    private getScrollState(): ScrollState {
         const messagePanel = this.messagePanel;
         if (!messagePanel) return null;
 
