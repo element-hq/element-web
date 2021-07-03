@@ -3404,5 +3404,20 @@
     "Address": "Aadress",
     "e.g. my-space": "näiteks minu kogukond",
     "Silence call": "Vaigista kõne",
-    "Sound on": "Lõlita heli sisse"
+    "Sound on": "Lõlita heli sisse",
+    "To publish an address, it needs to be set as a local address first.": "Aadressi avaldamiseks peab ta esmalt olema määratud kohalikuks aadressiks.",
+    "Published addresses can be used by anyone on any server to join your room.": "Avaldatud aadresse saab igaüks igast serverist kasutada liitumiseks sinu jututoaga.",
+    "Published addresses can be used by anyone on any server to join your space.": "Avaldatud aadresse saab igaüks igast serverist kasutada liitumiseks sinu kogukonnakeskusega.",
+    "This space has no local addresses": "Sellel kogukonnakeskusel puuduvad kohalikud aadressid",
+    "Space information": "Kogukonnakeskuse teave",
+    "Collapse": "ahenda",
+    "Expand": "laienda",
+    "Recommended for public spaces.": "Soovitame avalike kogukonnakeskuste puhul.",
+    "Allow people to preview your space before they join.": "Luba huvilistel enne liitumist näha kogukonnakeskuse eelvaadet.",
+    "Preview Space": "Kogukonnakeskuse eelvaade",
+    "only invited people can view and join": "igaüks, kellel on kutse, saab liituda ja näha sisu",
+    "anyone with the link can view and join": "igaüks, kellel on link, saab liituda ja näha sisu",
+    "Decide who can view and join %(spaceName)s.": "Otsusta kes saada näha ja liituda %(spaceName)s kogukonnaga.",
+    "Show people in spaces": "Näita kogukonnakeskuses osalejaid",
+    "Show all rooms in Home": "Näita kõiki jututubasid avalehel"
 }
