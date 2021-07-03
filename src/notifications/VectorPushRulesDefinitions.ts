@@ -20,15 +20,25 @@ import { StandardActions } from "./StandardActions";
 import { PushRuleVectorState } from "./PushRuleVectorState";
 import { NotificationUtils } from "./NotificationUtils";
 
+interface IProps {
+    kind: Kind;
+    description: string;
+    vectorStateToActions: Action;
+}
+
 class VectorPushRuleDefinition {
-    constructor(opts) {
+    private kind: Kind;
+    private description: string;
+    private vectorStateToActions: Action;
+
+    constructor(opts: IProps) {
         this.kind = opts.kind;
         this.description = opts.description;
         this.vectorStateToActions = opts.vectorStateToActions;
     }
 
     // Translate the rule actions and its enabled value into vector state
-    ruleToVectorState(rule) {
+    public ruleToVectorState(rule): VectorPushRuleDefinition {
         let enabled = false;
         if (rule) {
             enabled = rule.enabled;
@@ -63,13 +73,24 @@ class VectorPushRuleDefinition {
     }
 }
 
+enum Kind {
+    Override = "override",
+    Underride = "underride",
+}
+
+interface Action {
+    on: StandardActions;
+    loud: StandardActions;
+    off: StandardActions;
+}
+
 /**
  * The descriptions of rules managed by the Vector UI.
  */
 export const VectorPushRulesDefinitions = {
     // Messages containing user's display name
     ".m.rule.contains_display_name": new VectorPushRuleDefinition({
-        kind: "override",
+        kind: Kind.Override,
         description: _td("Messages containing my display name"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
             on: StandardActions.ACTION_NOTIFY,
@@ -80,7 +101,7 @@ export const VectorPushRulesDefinitions = {
 
     // Messages containing user's username (localpart/MXID)
     ".m.rule.contains_user_name": new VectorPushRuleDefinition({
-        kind: "override",
+        kind: Kind.Override,
         description: _td("Messages containing my username"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
             on: StandardActions.ACTION_NOTIFY,
@@ -91,7 +112,7 @@ export const VectorPushRulesDefinitions = {
 
     // Messages containing @room
     ".m.rule.roomnotif": new VectorPushRuleDefinition({
-        kind: "override",
+        kind: Kind.Override,
         description: _td("Messages containing @room"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
             on: StandardActions.ACTION_NOTIFY,
@@ -102,7 +123,7 @@ export const VectorPushRulesDefinitions = {
 
     // Messages just sent to the user in a 1:1 room
     ".m.rule.room_one_to_one": new VectorPushRuleDefinition({
-        kind: "underride",
+        kind: Kind.Underride,
         description: _td("Messages in one-to-one chats"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
             on: StandardActions.ACTION_NOTIFY,
@@ -113,7 +134,7 @@ export const VectorPushRulesDefinitions = {
 
     // Encrypted messages just sent to the user in a 1:1 room
     ".m.rule.encrypted_room_one_to_one": new VectorPushRuleDefinition({
-        kind: "underride",
+        kind: Kind.Underride,
         description: _td("Encrypted messages in one-to-one chats"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
             on: StandardActions.ACTION_NOTIFY,
@@ -126,7 +147,7 @@ export const VectorPushRulesDefinitions = {
     // 1:1 room messages are catched by the .m.rule.room_one_to_one rule if any defined
     // By opposition, all other room messages are from group chat rooms.
     ".m.rule.message": new VectorPushRuleDefinition({
-        kind: "underride",
+        kind: Kind.Underride,
         description: _td("Messages in group chats"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
             on: StandardActions.ACTION_NOTIFY,
@@ -139,7 +160,7 @@ export const VectorPushRulesDefinitions = {
     // Encrypted 1:1 room messages are catched by the .m.rule.encrypted_room_one_to_one rule if any defined
     // By opposition, all other room messages are from group chat rooms.
     ".m.rule.encrypted": new VectorPushRuleDefinition({
-        kind: "underride",
+        kind: Kind.Underride,
         description: _td("Encrypted messages in group chats"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
             on: StandardActions.ACTION_NOTIFY,
@@ -150,7 +171,7 @@ export const VectorPushRulesDefinitions = {
 
     // Invitation for the user
     ".m.rule.invite_for_me": new VectorPushRuleDefinition({
-        kind: "underride",
+        kind: Kind.Underride,
         description: _td("When I'm invited to a room"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
             on: StandardActions.ACTION_NOTIFY,
@@ -161,7 +182,7 @@ export const VectorPushRulesDefinitions = {
 
     // Incoming call
     ".m.rule.call": new VectorPushRuleDefinition({
-        kind: "underride",
+        kind: Kind.Underride,
         description: _td("Call invitation"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
             on: StandardActions.ACTION_NOTIFY,
@@ -172,7 +193,7 @@ export const VectorPushRulesDefinitions = {
 
     // Notifications from bots
     ".m.rule.suppress_notices": new VectorPushRuleDefinition({
-        kind: "override",
+        kind: Kind.Override,
         description: _td("Messages sent by bot"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
             // .m.rule.suppress_notices is a "negative" rule, we have to invert its enabled value for vector UI
@@ -184,7 +205,7 @@ export const VectorPushRulesDefinitions = {
 
     // Room upgrades (tombstones)
     ".m.rule.tombstone": new VectorPushRuleDefinition({
-        kind: "override",
+        kind: Kind.Override,
         description: _td("When rooms are upgraded"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
             on: StandardActions.ACTION_NOTIFY,
