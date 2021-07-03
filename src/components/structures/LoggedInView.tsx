@@ -82,8 +82,8 @@ interface IProps {
     hideToSRUsers: boolean;
     resizeNotifier: ResizeNotifier;
     // eslint-disable-next-line camelcase
-    page_type: string;
-    autoJoin: boolean;
+    page_type?: string;
+    autoJoin?: boolean;
     threepidInvite?: IThreepidInvite;
     roomOobData?: IOOBData;
     currentRoomId: string;

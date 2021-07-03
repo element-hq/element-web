@@ -24,7 +24,7 @@ import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
 import classNames from "classnames";
 import * as Lifecycle from '../../../Lifecycle';
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { IMatrixClientCreds, MatrixClientPeg } from "../../../MatrixClientPeg";
 import AuthPage from "../../views/auth/AuthPage";
 import Login, { ISSOFlow } from "../../../Login";
 import dis from "../../../dispatcher/dispatcher";
@@ -47,13 +47,7 @@ interface IProps {
     // - The user's password, if available and applicable (may be cached in memory
     //   for a short time so the user is not required to re-enter their password
     //   for operations like uploading cross-signing keys).
-    onLoggedIn(params: {
-        userId: string;
-        deviceId: string;
-        homeserverUrl: string;
-        identityServerUrl?: string;
-        accessToken: string;
-    }, password: string): void;
+    onLoggedIn(params: IMatrixClientCreds, password: string): void;
     makeRegistrationUrl(params: {
         /* eslint-disable camelcase */
         client_secret: string;
