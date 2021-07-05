@@ -2117,7 +2117,7 @@
     "Use this session to verify your new one, granting it access to encrypted messages:": "Använd den här sessionen för att verifiera en ny och ge den åtkomst till krypterade meddelanden:",
     "If you didn’t sign in to this session, your account may be compromised.": "Om det inte var du som loggade in i den här sessionen så kan ditt konto vara äventyrat.",
     "This wasn't me": "Det var inte jag",
-    "Please fill why you're reporting.": "Vänligen fyll i varför du rapporterar.",
+    "Please fill why you're reporting.": "Vänligen fyll i varför du anmäler.",
     "Report Content to Your Homeserver Administrator": "Rapportera innehåll till din hemserveradministratör",
     "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Att rapportera det här meddelandet kommer att skicka dess unika 'händelse-ID' till administratören för din hemserver. Om meddelanden i det här rummet är krypterade kommer din hemserveradministratör inte att kunna läsa meddelandetexten eller se några filer eller bilder.",
     "Send report": "Skicka rapport",
@@ -3353,5 +3353,8 @@
     "%(targetName)s accepted an invitation": "%(targetName)s accepterade inbjudan",
     "%(targetName)s accepted the invitation for %(displayName)s": "%(targetName)s accepterade inbjudan för %(displayName)s",
     "Some invites couldn't be sent": "Vissa inbjudningar kunde inte skickas",
-    "We sent the others, but the below people couldn't be invited to <RoomName/>": "Vi skickade de andra, men personerna nedan kunde inte bjudas in till <RoomName/>"
+    "We sent the others, but the below people couldn't be invited to <RoomName/>": "Vi skickade de andra, men personerna nedan kunde inte bjudas in till <RoomName/>",
+    "What this user is writing is wrong.\nThis will be reported to the room moderators.": "Vad användaren skriver är fel.\nDet här kommer att anmälas till rumsmoderatorerna.",
+    "Report to moderators prototype. In rooms that support moderation, the `report` button will let you report abuse to room moderators": "Prototyp av anmälan till moderatorer. I rum som söder moderering så kommer `anmäl`-knappen att låta dig anmäla olämpligt beteende till rummets moderatorer",
+    "Report": "Rapportera"
 }
