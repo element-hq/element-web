@@ -1059,15 +1059,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         });
     }
 
-    private updateTint() {
-        const room = this.state.room;
-        if (!room) return;
-
-        console.log("Tinter.tint from updateTint");
-        const colorScheme = SettingsStore.getValue("roomColor", room.roomId);
-        Tinter.tint(colorScheme.primary_color, colorScheme.secondary_color);
-    }
-
     private onAccountData = (event: MatrixEvent) => {
         const type = event.getType();
         if ((type === "org.matrix.preview_urls" || type === "im.vector.web.settings") && this.state.room) {
@@ -1718,10 +1709,6 @@ export default class RoomView extends React.Component<IProps, IState> {
     // otherwise react calls it with null on each update.
     private gatherTimelinePanelRef = r => {
         this.messagePanel = r;
-        if (r) {
-            console.log("updateTint from RoomView.gatherTimelinePanelRef");
-            this.updateTint();
-        }
     };
 
     private getOldRoom() {
