@@ -122,7 +122,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         const image = this.image.current;
         const imageWrapper = this.imageWrapper.current;
 
-        const rotation = inputRotation || this.state.rotation;
+        const rotation = inputRotation ?? this.state.rotation;
 
         const imageIsNotFlipped = rotation % 180 === 0;
 
