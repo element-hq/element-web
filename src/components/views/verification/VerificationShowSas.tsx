@@ -26,7 +26,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     pending?: boolean;
-    displayName?: string // required if pending is true
+    displayName?: string; // required if pending is true
     device?: DeviceInfo;
     onDone: () => void;
     onCancel: () => void;

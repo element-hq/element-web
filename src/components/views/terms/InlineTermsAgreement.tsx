@@ -24,12 +24,12 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 interface IProps {
     policiesAndServicePairs: any[];
     onFinished: (string) => void;
-    agreedUrls: string[], // array of URLs the user has accepted
-    introElement: Node,
+    agreedUrls: string[]; // array of URLs the user has accepted
+    introElement: Node;
 }
 
 interface IState {
-    policies: Policy[],
+    policies: Policy[];
     busy: boolean;
 }
 
