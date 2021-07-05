@@ -17,7 +17,7 @@ limitations under the License.
 .mx_EventTile[data-layout=bubble],
 .mx_EventTile[data-layout=bubble] ~ .mx_EventListSummary {
     --avatarSize: 32px;
-    --gutterSize: 7px;
+    --gutterSize: 11px;
     --cornerRadius: 12px;
     --maxWidth: 70%;
 }
@@ -55,9 +55,10 @@ limitations under the License.
         background: var(--backgroundColor);
         display: flex;
         gap: var(--gutterSize);
+        margin: 0 calc(-2 * var(--gutterSize));
         > a {
             position: absolute;
-            left: -33px;
+            left: -50px;
         }
     }
 
@@ -66,7 +67,7 @@ limitations under the License.
         top: 0;
         line-height: 1;
         img {
-            box-shadow: 0 0 0 2px $eventbubble-avatar-outline;
+            box-shadow: 0 0 0 3px $eventbubble-avatar-outline;
             border-radius: 50%;
         }
     }
@@ -89,6 +90,7 @@ limitations under the License.
             }
         }
         .mx_EventTile_avatar {
+            top: -19px; // height of the sender block
             right: calc(-1 * var(--avatarSize));
         }
 
