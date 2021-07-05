@@ -17,6 +17,8 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { sleep } from "matrix-js-sdk/src/utils";
+
 import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
@@ -25,7 +27,6 @@ import AccessibleButton from "../../../elements/AccessibleButton";
 import Analytics from "../../../../../Analytics";
 import Modal from "../../../../../Modal";
 import * as sdk from "../../../../..";
-import { sleep } from "../../../../../utils/promise";
 import dis from "../../../../../dispatcher/dispatcher";
 import { privateShouldBeEncrypted } from "../../../../../createRoom";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
