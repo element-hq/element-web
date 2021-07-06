@@ -144,19 +144,19 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
     }
 
     if (opts.parentSpace) {
-        opts.createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
-        opts.createOpts.initial_state.push({
+        createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
+        createOpts.initial_state.push({
             type: EventType.RoomHistoryVisibility,
             content: {
-                "history_visibility": opts.createOpts.preset === Preset.PublicChat ? "world_readable" : "invited",
+                "history_visibility": createOpts.preset === Preset.PublicChat ? "world_readable" : "invited",
             },
         });
 
         if (opts.joinRule === JoinRule.Restricted) {
             if (SpaceStore.instance.restrictedJoinRuleSupport?.preferred) {
-                opts.createOpts.room_version = SpaceStore.instance.restrictedJoinRuleSupport.preferred;
+                createOpts.room_version = SpaceStore.instance.restrictedJoinRuleSupport.preferred;
 
-                opts.createOpts.initial_state.push({
+                createOpts.initial_state.push({
                     type: EventType.RoomJoinRules,
                     content: {
                         "join_rule": JoinRule.Restricted,
@@ -171,7 +171,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
     }
 
     if (opts.joinRule !== JoinRule.Restricted) {
-        opts.createOpts.initial_state.push({
+        createOpts.initial_state.push({
             type: EventType.RoomJoinRules,
             content: { join_rule: opts.joinRule },
         });

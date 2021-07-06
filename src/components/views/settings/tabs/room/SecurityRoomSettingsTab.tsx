@@ -104,7 +104,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         const restrictedRoomCapabilities = SpaceStore.instance.restrictedJoinRuleSupport;
         const roomSupportsRestricted = Array.isArray(restrictedRoomCapabilities?.support)
             && restrictedRoomCapabilities.support.includes(room.getVersion());
-        const preferredRestrictionVersion = roomSupportsRestricted ? null : restrictedRoomCapabilities.preferred;
+        const preferredRestrictionVersion = roomSupportsRestricted ? undefined : restrictedRoomCapabilities?.preferred;
         this.setState({ joinRule, restrictedAllowRoomIds, guestAccess, history, encrypted,
             roomSupportsRestricted, preferredRestrictionVersion });
 
