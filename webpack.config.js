@@ -55,8 +55,8 @@ module.exports = (env, argv) => {
 
         entry: {
             "bundle": "./src/vector/index.ts",
-            "indexeddb-worker": "./src/vector/indexeddb-worker.js",
-            "mobileguide": "./src/vector/mobile_guide/index.js",
+            "indexeddb-worker": "./src/vector/indexeddb-worker.ts",
+            "mobileguide": "./src/vector/mobile_guide/index.ts",
             "jitsi": "./src/vector/jitsi/index.ts",
             "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.js",
             "recorder-worklet": "./node_modules/matrix-react-sdk/src/voice/RecorderWorklet.ts",
