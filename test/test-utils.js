@@ -96,6 +96,7 @@ export function createTestClient() {
             },
         },
         decryptEventIfNeeded: () => Promise.resolve(),
+        getCapabilities: jest.fn().mockReturnValue({}),
     };
 }
 
