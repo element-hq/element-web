@@ -29,7 +29,7 @@ jobs:
                 path: ./cache
                 key: ${{ runner.os }}-benchmark
             - name: Store benchmark result
-              uses: matrix-org/github-action-benchmark@jsperfentry-4
+              uses: matrix-org/github-action-benchmark@jsperfentry-1
               with:
                 tool: 'jsperformanceentry'
                 output-file-path: test/end-to-end-tests/performance-entries.json
