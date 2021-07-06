@@ -102,6 +102,13 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
         setNewSelected(new Set(newSelected));
     };
 
+    let inviteOnlyWarning;
+    if (newSelected.size < 1) {
+        inviteOnlyWarning = <div className="mx_ManageRestrictedJoinRuleDialog_section_info">
+            { _t("You're removing all spaces. Access will default to invite only") }
+        </div>;
+    }
+
     return <BaseDialog
         title={_t("Select spaces")}
         className="mx_ManageRestrictedJoinRuleDialog"
@@ -142,7 +149,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                 { filteredOtherEntries.length > 0 ? (
                     <div className="mx_ManageRestrictedJoinRuleDialog_section">
                         <h3>{ _t("Other spaces or rooms you might not know") }</h3>
-                        <div className="mx_ManageRestrictedJoinRuleDialog_section_experimental">
+                        <div className="mx_ManageRestrictedJoinRuleDialog_section_info">
                             <div>{ _t("These are likely ones other room admins are a part of.") }</div>
                         </div>
                         { filteredOtherEntries.map(space => {
@@ -167,12 +174,15 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
             </AutoHideScrollbar>
 
             <div className="mx_ManageRestrictedJoinRuleDialog_footer">
-                <AccessibleButton kind="primary_outline" onClick={() => onFinished()}>
-                    { _t("Cancel") }
-                </AccessibleButton>
-                <AccessibleButton kind="primary" onClick={() => onFinished(Array.from(newSelected))}>
-                    { _t("Confirm") }
-                </AccessibleButton>
+                { inviteOnlyWarning }
+                <div className="mx_ManageRestrictedJoinRuleDialog_footer_buttons">
+                    <AccessibleButton kind="primary_outline" onClick={() => onFinished()}>
+                        { _t("Cancel") }
+                    </AccessibleButton>
+                    <AccessibleButton kind="primary" onClick={() => onFinished(Array.from(newSelected))}>
+                        { _t("Confirm") }
+                    </AccessibleButton>
+                </div>
             </div>
         </MatrixClientContext.Provider>
     </BaseDialog>;

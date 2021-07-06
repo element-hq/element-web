@@ -101,19 +101,14 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         );
 
         const encrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.roomId);
-        this.setState({ joinRule, restrictedAllowRoomIds, guestAccess, history, encrypted });
+        const restrictedRoomCapabilities = SpaceStore.instance.restrictedJoinRuleSupport;
+        const roomSupportsRestricted = Array.isArray(restrictedRoomCapabilities?.support)
+            && restrictedRoomCapabilities.support.includes(room.getVersion());
+        const preferredRestrictionVersion = roomSupportsRestricted ? null : restrictedRoomCapabilities.preferred;
+        this.setState({ joinRule, restrictedAllowRoomIds, guestAccess, history, encrypted,
+            roomSupportsRestricted, preferredRestrictionVersion });
 
         this.hasAliases().then(hasAliases => this.setState({ hasAliases }));
-        cli.getCapabilities().then(capabilities => {
-            const roomCapabilities = capabilities["org.matrix.msc3244.room_capabilities"];
-            const roomSupportsRestricted = roomCapabilities && Array.isArray(roomCapabilities["restricted"]?.support) &&
-                roomCapabilities["restricted"].support.includes(room.getVersion());
-            const preferredRestrictionVersion = roomSupportsRestricted
-                ? roomCapabilities?.["restricted"].preferred
-                : undefined;
-
-            this.setState({ roomSupportsRestricted, preferredRestrictionVersion });
-        });
     }
 
     private pullContentPropertyFromEvent<T>(event: MatrixEvent, key: string, defaultValue: T): T {
@@ -169,23 +164,16 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
     private onJoinRuleChange = async (joinRule: JoinRule) => {
         const beforeJoinRule = this.state.joinRule;
-        if (beforeJoinRule === joinRule) return;
 
+        let restrictedAllowRoomIds: string[];
         if (joinRule === JoinRule.Restricted) {
             const matrixClient = MatrixClientPeg.get();
             const roomId = this.props.roomId;
             const room = matrixClient.getRoom(roomId);
 
-            if (this.state.roomSupportsRestricted) {
+            if (beforeJoinRule === JoinRule.Restricted || this.state.roomSupportsRestricted) {
                 // Have the user pick which spaces to allow joins from
-                const { finished } = Modal.createTrackedDialog('Set restricted', '', ManageRestrictedJoinRuleDialog, {
-                    matrixClient,
-                    room,
-                    // if they have are viewing this room from the context of a space then default to that
-                    selected: SpaceStore.instance.activeSpace ? [SpaceStore.instance.activeSpace.roomId] : [],
-                }, "mx_ManageRestrictedJoinRuleDialog_wrapper");
-
-                const [restrictedAllowRoomIds] = await finished;
+                restrictedAllowRoomIds = await this.editRestrictedRoomIds();
                 if (!Array.isArray(restrictedAllowRoomIds)) return;
             } else if (this.state.preferredRestrictionVersion) {
                 // Block this action on a room upgrade otherwise it'd make their room unjoinable
@@ -204,19 +192,18 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             }
         }
 
+        if (beforeJoinRule === joinRule && !restrictedAllowRoomIds) return;
+
         const content: IContent = {
             join_rule: joinRule,
         };
 
-        let restrictedAllowRoomIds: string[];
         // pre-set the accepted spaces with the currently viewed one as per the microcopy
-        if (joinRule === JoinRule.Restricted && SpaceStore.instance.activeSpace) {
-            const spaceRoomId = SpaceStore.instance.activeSpace.roomId;
-            restrictedAllowRoomIds = [spaceRoomId];
-            content.allow = [{
+        if (joinRule === JoinRule.Restricted) {
+            content.allow = restrictedAllowRoomIds.map(roomId => ({
                 "type": RestrictedAllowType.RoomMembership,
-                "room_id": spaceRoomId,
-            }];
+                "room_id": roomId,
+            }));
         }
 
         this.setState({ joinRule, restrictedAllowRoomIds });
@@ -296,17 +283,31 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         }
     }
 
-    private onEditRestrictedClick = () => {
+    private editRestrictedRoomIds = async (): Promise<string[] | undefined> => {
+        let selected = this.state.restrictedAllowRoomIds;
+        if (!selected?.length && SpaceStore.instance.activeSpace) {
+            selected = [SpaceStore.instance.activeSpace.roomId];
+        }
+
         const matrixClient = MatrixClientPeg.get();
-        Modal.createTrackedDialog('Edit restricted', '', ManageRestrictedJoinRuleDialog, {
+        const { finished } = Modal.createTrackedDialog('Edit restricted', '', ManageRestrictedJoinRuleDialog, {
             matrixClient,
             room: matrixClient.getRoom(this.props.roomId),
-            selected: this.state.restrictedAllowRoomIds,
-            onFinished: (restrictedAllowRoomIds?: string[]) => {
-                if (!Array.isArray(restrictedAllowRoomIds)) return;
-                this.onRestrictedRoomIdsChange(restrictedAllowRoomIds);
-            },
+            selected,
         }, "mx_ManageRestrictedJoinRuleDialog_wrapper");
+
+        const [restrictedAllowRoomIds] = await finished;
+        return restrictedAllowRoomIds;
+    };
+
+    private onEditRestrictedClick = async () => {
+        const restrictedAllowRoomIds = await this.editRestrictedRoomIds();
+        if (!Array.isArray(restrictedAllowRoomIds)) return;
+        if (restrictedAllowRoomIds.length > 0) {
+            this.onRestrictedRoomIdsChange(restrictedAllowRoomIds);
+        } else {
+            this.onJoinRuleChange(JoinRule.Invite);
+        }
     };
 
     private renderJoinRule() {
@@ -332,6 +333,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             value: JoinRule.Invite,
             label: _t("Private (invite only)"),
             description: _t("Only invited people can join."),
+            checked: this.state.joinRule === JoinRule.Invite
+                || (this.state.joinRule === JoinRule.Restricted && !this.state.restrictedAllowRoomIds?.length),
         }, {
             value: JoinRule.Public,
             label: _t("Public (anyone)"),
@@ -350,28 +353,23 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             }
 
             let description;
-            if (joinRule === JoinRule.Restricted) {
-                let spacesWhichCanAccess;
-                if (this.state.restrictedAllowRoomIds?.length) {
-                    const shownSpaces = this.state.restrictedAllowRoomIds
-                        .map(roomId => client.getRoom(roomId))
-                        .filter(Boolean)
-                        .slice(0, 4);
+            if (joinRule === JoinRule.Restricted && this.state.restrictedAllowRoomIds?.length) {
+                const shownSpaces = this.state.restrictedAllowRoomIds
+                    .map(roomId => client.getRoom(roomId))
+                    .filter(room => room?.isSpaceRoom())
+                    .slice(0, 4);
 
-                    spacesWhichCanAccess = <div className="mx_SecurityRoomSettingsTab_spacesWithAccess">
-                        <h4>{ _t("Spaces with access") }</h4>
-                        { shownSpaces.map(room => {
-                            return <span key={room.roomId}>
-                                <RoomAvatar room={room} height={32} width={32} />
-                                { room.name }
-                            </span>;
-                        })}
-                        { shownSpaces.length < this.state.restrictedAllowRoomIds.length && <span>
-                            { _t("& %(count)s more", {
-                                count: this.state.restrictedAllowRoomIds.length - shownSpaces.length,
-                            }) }
-                        </span> }
-                    </div>;
+                let moreText;
+                if (shownSpaces.length < this.state.restrictedAllowRoomIds.length) {
+                    if (shownSpaces.length > 0) {
+                        moreText = _t("& %(count)s more", {
+                            count: this.state.restrictedAllowRoomIds.length - shownSpaces.length,
+                        });
+                    } else {
+                        moreText = _t("Currently, %(count)s spaces have access", {
+                            count: this.state.restrictedAllowRoomIds.length,
+                        });
+                    }
                 }
 
                 description = <div>
@@ -386,7 +384,17 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                             </AccessibleButton>,
                         }) }
                     </span>
-                    { spacesWhichCanAccess }
+
+                    <div className="mx_SecurityRoomSettingsTab_spacesWithAccess">
+                        <h4>{ _t("Spaces with access") }</h4>
+                        { shownSpaces.map(room => {
+                            return <span key={room.roomId}>
+                                <RoomAvatar room={room} height={32} width={32} />
+                                { room.name }
+                            </span>;
+                        })}
+                        { moreText && <span>{ moreText }</span> }
+                    </div>
                 </div>;
             } else if (SpaceStore.instance.activeSpace) {
                 description = _t("Anyone in %(spaceName)s can find and join. You can select other spaces too.", {
@@ -403,6 +411,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     { upgradeRequiredPill }
                 </>,
                 description,
+                // if there are 0 allowed spaces then render it as invite only instead
+                checked: this.state.joinRule === JoinRule.Restricted && !!this.state.restrictedAllowRoomIds?.length,
             });
         }
 
@@ -478,7 +488,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         const state = client.getRoom(this.props.roomId).currentState;
         const canSetGuestAccess = state.mayClientSendStateEvent(EventType.RoomGuestAccess, client);
 
-        return <>
+        return <div className="mx_SettingsTab_section">
             <LabelledToggleSwitch
                 value={guestAccess === GuestAccess.CanJoin}
                 onChange={this.onGuestAccessChange}
@@ -489,7 +499,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 { _t("People with supported clients will be able to join " +
                     "the room without having a registered account.") }
             </p>
-        </>;
+        </div>;
     }
 
     render() {

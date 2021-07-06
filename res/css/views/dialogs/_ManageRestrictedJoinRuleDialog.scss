@@ -104,7 +104,7 @@ limitations under the License.
         }
     }
 
-    .mx_ManageRestrictedJoinRuleDialog_section_experimental {
+    .mx_ManageRestrictedJoinRuleDialog_section_info {
         position: relative;
         border-radius: 8px;
         margin: 12px 0;
@@ -131,16 +131,19 @@ limitations under the License.
     }
 
     .mx_ManageRestrictedJoinRuleDialog_footer {
-        display: flex;
         margin-top: 20px;
-        align-self: end;
 
-        .mx_AccessibleButton {
-            display: inline-block;
-            align-self: center;
+        .mx_ManageRestrictedJoinRuleDialog_footer_buttons {
+            display: flex;
+            width: max-content;
+            margin-left: auto;
 
-            & + .mx_AccessibleButton {
-                margin-left: 24px;
+            .mx_AccessibleButton {
+                display: inline-block;
+
+                & + .mx_AccessibleButton {
+                    margin-left: 24px;
+                }
             }
         }
     }
