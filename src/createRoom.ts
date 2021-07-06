@@ -153,10 +153,8 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         });
 
         if (opts.joinRule === JoinRule.Restricted) {
-            const serverCapabilities = await client.getCapabilities();
-            const roomCapabilities = serverCapabilities?.["m.room_versions"]?.["org.matrix.msc3244.room_capabilities"];
-            if (roomCapabilities?.["restricted"]?.preferred) {
-                opts.createOpts.room_version = roomCapabilities?.["restricted"].preferred;
+            if (SpaceStore.instance.restrictedJoinRuleSupport?.preferred) {
+                opts.createOpts.room_version = SpaceStore.instance.restrictedJoinRuleSupport.preferred;
 
                 opts.createOpts.initial_state.push({
                     type: EventType.RoomJoinRules,
