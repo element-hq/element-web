@@ -269,6 +269,7 @@ export function mkStubRoom(roomId = null, name) {
         getCanonicalAlias: jest.fn(),
         getAltAliases: jest.fn().mockReturnValue([]),
         timeline: [],
+        getJoinRule: jest.fn().mockReturnValue("invite"),
     };
 }
 
