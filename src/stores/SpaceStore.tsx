@@ -19,6 +19,8 @@ import { ListIteratee, Many, sortBy, throttle } from "lodash";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { JoinRule } from "matrix-js-sdk/src/@types/partials";
+import { IRoomCapability } from "matrix-js-sdk/src/client";
 
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
@@ -45,7 +47,6 @@ import { _t } from "../languageHandler";
 import GenericToast from "../components/views/toasts/GenericToast";
 import Modal from "../Modal";
 import InfoDialog from "../components/views/dialogs/InfoDialog";
-import { JoinRule } from "../../../matrix-js-sdk/src/@types/partials";
 
 type SpaceKey = string | symbol;
 
@@ -115,6 +116,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     private _suggestedRooms: ISuggestedRoom[] = [];
     private _invitedSpaces = new Set<Room>();
     private spaceOrderLocalEchoMap = new Map<string, string>();
+    private _restrictedJoinRuleSupport?: IRoomCapability;
 
     public get invitedSpaces(): Room[] {
         return Array.from(this._invitedSpaces);
@@ -130,6 +132,10 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
     public get suggestedRooms(): ISuggestedRoom[] {
         return this._suggestedRooms;
+    }
+
+    public get restrictedJoinRuleSupport(): IRoomCapability {
+        return this._restrictedJoinRuleSupport;
     }
 
     /**
@@ -182,66 +188,63 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
 
         // New in Spaces beta toast for Restricted Join Rule
-        (async () => {
-            const lsKey = "mx_SpaceBeta_restrictedJoinRuleToastSeen";
-            if (contextSwitch && space?.getJoinRule() === JoinRule.Invite && shouldShowSpaceSettings(space) &&
-                space.getJoinedMemberCount() > 1 && !localStorage.getItem(lsKey) /*&&
-                (await this.matrixClient.getCapabilities())
-                    ?.["m.room_versions"]?.["org.matrix.msc3244.room_capabilities"]?.["restricted"]?.preferred*/
-            ) {
-                const toastKey = "restrictedjoinrule";
-                ToastStore.sharedInstance().addOrReplaceToast({
-                    key: toastKey,
-                    title: _t("New in the Spaces beta"),
-                    props: {
-                        description: _t("Help people in spaces to find and join private rooms"),
-                        acceptLabel: _t("Learn more"),
-                        onAccept: () => {
-                            localStorage.setItem(lsKey, "true");
-                            ToastStore.sharedInstance().dismissToast(toastKey);
+        const lsKey = "mx_SpaceBeta_restrictedJoinRuleToastSeen";
+        if (contextSwitch && space?.getJoinRule() === JoinRule.Invite && shouldShowSpaceSettings(space) &&
+            space.getJoinedMemberCount() > 1 && !localStorage.getItem(lsKey)
+            && this.restrictedJoinRuleSupport?.preferred
+        ) {
+            const toastKey = "restrictedjoinrule";
+            ToastStore.sharedInstance().addOrReplaceToast({
+                key: toastKey,
+                title: _t("New in the Spaces beta"),
+                props: {
+                    description: _t("Help people in spaces to find and join private rooms"),
+                    acceptLabel: _t("Learn more"),
+                    onAccept: () => {
+                        localStorage.setItem(lsKey, "true");
+                        ToastStore.sharedInstance().dismissToast(toastKey);
 
-                            Modal.createTrackedDialog("New in the Spaces beta", "restricted join rule", InfoDialog, {
-                                title: _t("Help space members find private rooms"),
-                                description: <>
-                                    <p>{ _t("To help space members find and join a private room, " +
-                                        "go to that room's Security & Privacy settings.") }</p>
+                        Modal.createTrackedDialog("New in the Spaces beta", "restricted join rule", InfoDialog, {
+                            title: _t("Help space members find private rooms"),
+                            description: <>
+                                <p>{ _t("To help space members find and join a private room, " +
+                                    "go to that room's Security & Privacy settings.") }</p>
 
-                                    { /* Reuses classes from TabbedView for simplicity, non-interactive */ }
-                                    <div style={{ width: "190px" }}>
-                                        <div className="mx_TabbedView_tabLabel">
-                                            <span className="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_settingsIcon" />
-                                            <span className="mx_TabbedView_tabLabel_text">{ _t("General") }</span>
-                                        </div>
-                                        <div className="mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active">
-                                            <span className="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_securityIcon" />
-                                            <span className="mx_TabbedView_tabLabel_text">{ _t("Security & Privacy") }</span>
-                                        </div>
-                                        <div className="mx_TabbedView_tabLabel">
-                                            <span className="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_rolesIcon" />
-                                            <span className="mx_TabbedView_tabLabel_text">{ _t("Roles & Permissions") }</span>
-                                        </div>
+                                { /* Reuses classes from TabbedView for simplicity, non-interactive */ }
+                                <div style={{ width: "190px" }}>
+                                    <div className="mx_TabbedView_tabLabel">
+                                        <span className="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_settingsIcon" />
+                                        <span className="mx_TabbedView_tabLabel_text">{ _t("General") }</span>
                                     </div>
+                                    <div className="mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active">
+                                        <span className="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_securityIcon" />
+                                        <span className="mx_TabbedView_tabLabel_text">{ _t("Security & Privacy") }</span>
+                                    </div>
+                                    <div className="mx_TabbedView_tabLabel">
+                                        <span className="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_rolesIcon" />
+                                        <span className="mx_TabbedView_tabLabel_text">{ _t("Roles & Permissions") }</span>
+                                    </div>
+                                </div>
 
-                                    <p>{ _t("This make it easy for rooms to stay private to a space, " +
-                                        "while letting people in the space find and join them. " +
-                                        "All new rooms in a space will have this option available.")}</p>
-                                </>,
-                                button: _t("OK"),
-                                hasCloseButton: false,
-                                fixedWidth: true,
-                            });
-                        },
-                        rejectLabel: _t("Skip"),
-                        onReject: () => {
-                            localStorage.setItem(lsKey, "true");
-                            ToastStore.sharedInstance().dismissToast(toastKey);
-                        },
+                                <p>{ _t("This make it easy for rooms to stay private to a space, " +
+                                    "while letting people in the space find and join them. " +
+                                    "All new rooms in a space will have this option available.")}</p>
+                            </>,
+                            button: _t("OK"),
+                            hasCloseButton: false,
+                            fixedWidth: true,
+                        });
                     },
-                    component: GenericToast,
-                    priority: 35,
-                });
-            }
-        })().then();
+                    rejectLabel: _t("Skip"),
+                    onReject: () => {
+                        localStorage.setItem(lsKey, "true");
+                        ToastStore.sharedInstance().dismissToast(toastKey);
+                    },
+                },
+                component: GenericToast,
+                priority: 35,
+            });
+        }
 
         if (space) {
             const suggestedRooms = await this.fetchSuggestedRooms(space);
@@ -708,6 +711,11 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         if (!SettingsStore.getValue("feature_spaces.all_rooms")) {
             this.matrixClient.on("accountData", this.onAccountData);
         }
+
+        this.matrixClient.getCapabilities().then(capabilities => {
+            this._restrictedJoinRuleSupport = capabilities
+                ?.["m.room_versions"]?.["org.matrix.msc3244.room_capabilities"]?.["restricted"];
+        });
 
         await this.onSpaceUpdate(); // trigger an initial update
 
