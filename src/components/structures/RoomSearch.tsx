@@ -108,22 +108,22 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     };
 
     private openSearch = () => {
-        defaultDispatcher.dispatch({action: "show_left_panel"});
-        defaultDispatcher.dispatch({action: "focus_room_filter"});
+        defaultDispatcher.dispatch({ action: "show_left_panel" });
+        defaultDispatcher.dispatch({ action: "focus_room_filter" });
     };
 
     private onChange = () => {
         if (!this.inputRef.current) return;
-        this.setState({query: this.inputRef.current.value});
+        this.setState({ query: this.inputRef.current.value });
     };
 
     private onFocus = (ev: React.FocusEvent<HTMLInputElement>) => {
-        this.setState({focused: true});
+        this.setState({ focused: true });
         ev.target.select();
     };
 
     private onBlur = (ev: React.FocusEvent<HTMLInputElement>) => {
-        this.setState({focused: false});
+        this.setState({ focused: false });
     };
 
     private onKeyDown = (ev: React.KeyboardEvent) => {

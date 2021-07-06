@@ -14,13 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {randomString} from "matrix-js-sdk/src/randomstring";
+import { randomString } from "matrix-js-sdk/src/randomstring";
+import { IContent } from "matrix-js-sdk/src/models/event";
+import { sleep } from "matrix-js-sdk/src/utils";
 
-import {getCurrentLanguage} from './languageHandler';
+import { getCurrentLanguage } from './languageHandler';
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
-import {MatrixClientPeg} from "./MatrixClientPeg";
-import {sleep} from "./utils/promise";
+import { MatrixClientPeg } from "./MatrixClientPeg";
 import RoomViewStore from "./stores/RoomViewStore";
 import { Action } from "./dispatcher/actions";
 
@@ -255,7 +256,7 @@ interface ICreateRoomEvent extends IEvent {
         num_users: number;
         is_encrypted: boolean;
         is_public: boolean;
-    }
+    };
 }
 
 interface IJoinRoomEvent extends IEvent {
@@ -338,8 +339,8 @@ const getRoomStats = (roomId: string) => {
         "is_encrypted": cli?.isRoomEncrypted(roomId),
         // eslint-disable-next-line camelcase
         "is_public": room?.currentState.getStateEvents("m.room.join_rules", "")?.getContent()?.join_rule === "public",
-    }
-}
+    };
+};
 
 // async wrapper for regex-powered String.prototype.replace
 const strReplaceAsync = async (str: string, regex: RegExp, fn: (...args: string[]) => Promise<string>) => {
@@ -414,7 +415,7 @@ export default class CountlyAnalytics {
 
         this.anonymous = anonymous;
         if (anonymous) {
-            await this.changeUserKey(randomString(64))
+            await this.changeUserKey(randomString(64));
         } else {
             await this.changeUserKey(await hashHex(MatrixClientPeg.get().getUserId()), true);
         }
@@ -438,7 +439,7 @@ export default class CountlyAnalytics {
         await this.track("Opt-Out" );
         this.endSession();
         window.clearInterval(this.heartbeatIntervalId);
-        window.clearTimeout(this.activityIntervalId)
+        window.clearTimeout(this.activityIntervalId);
         this.baseUrl = null;
         // remove listeners bound in trackSessions()
         window.removeEventListener("beforeunload", this.endSession);
@@ -662,14 +663,14 @@ export default class CountlyAnalytics {
     }
 
     private queue(args: Omit<IEvent, "timestamp" | "hour" | "dow" | "count"> & Partial<Pick<IEvent, "count">>) {
-        const {count = 1, ...rest} = args;
+        const { count = 1, ...rest } = args;
         const ev = {
             ...this.getTimeParams(),
             ...rest,
             count,
             platform: this.appPlatform,
             app_version: this.appVersion,
-        }
+        };
 
         this.pendingEvents.push(ev);
         if (this.pendingEvents.length > MAX_PENDING_EVENTS) {
@@ -680,7 +681,7 @@ export default class CountlyAnalytics {
     private getOrientation = (): Orientation => {
         return window.matchMedia("(orientation: landscape)").matches
             ? Orientation.Landscape
-            : Orientation.Portrait
+            : Orientation.Portrait;
     };
 
     private reportOrientation = () => {
@@ -749,7 +750,7 @@ export default class CountlyAnalytics {
             const request: Parameters<typeof CountlyAnalytics.prototype.request>[0] = {
                 begin_session: 1,
                 user_details: JSON.stringify(userDetails),
-            }
+            };
 
             const metrics = this.getMetrics();
             if (metrics) {
@@ -773,7 +774,7 @@ export default class CountlyAnalytics {
 
     private endSession = () => {
         if (this.sessionStarted) {
-            window.removeEventListener("resize", this.reportOrientation)
+            window.removeEventListener("resize", this.reportOrientation);
 
             this.reportViewDuration();
             this.request({
@@ -868,7 +869,7 @@ export default class CountlyAnalytics {
         roomId: string,
         isEdit: boolean,
         isReply: boolean,
-        content: {format?: string, msgtype: string},
+        content: IContent,
     ) {
         if (this.disabled) return;
         const cli = MatrixClientPeg.get();

@@ -58,6 +58,7 @@ export class Playback extends EventEmitter implements IDestroyable {
     private resampledWaveform: number[];
     private waveformObservable = new SimpleObservable<number[]>();
     private readonly clock: PlaybackClock;
+    private readonly fileSize: number;
 
     /**
      * Creates a new playback instance from a buffer.
@@ -67,10 +68,20 @@ export class Playback extends EventEmitter implements IDestroyable {
      */
     constructor(private buf: ArrayBuffer, seedWaveform = DEFAULT_WAVEFORM) {
         super();
+        // Capture the file size early as reading the buffer will result in a 0-length buffer left behind
+        this.fileSize = this.buf.byteLength;
         this.context = createAudioContext();
         this.resampledWaveform = arrayFastResample(seedWaveform ?? DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES);
         this.waveformObservable.update(this.resampledWaveform);
         this.clock = new PlaybackClock(this.context);
+    }
+
+    /**
+     * Size of the audio clip in bytes. May be zero if unknown. This is updated
+     * when the playback goes through phase changes.
+     */
+    public get sizeBytes(): number {
+        return this.fileSize;
     }
 
     /**
@@ -150,16 +161,9 @@ export class Playback extends EventEmitter implements IDestroyable {
     public async play() {
         // We can't restart a buffer source, so we need to create a new one if we hit the end
         if (this.state === PlaybackState.Stopped) {
-            if (this.source) {
-                this.source.disconnect();
-                this.source.removeEventListener("ended", this.onPlaybackEnd);
-            }
-
-            this.source = this.context.createBufferSource();
-            this.source.connect(this.context.destination);
-            this.source.buffer = this.audioBuf;
-            this.source.start(); // start immediately
-            this.source.addEventListener("ended", this.onPlaybackEnd);
+            this.disconnectSource();
+            this.makeNewSourceBuffer();
+            this.source.start();
         }
 
         // We use the context suspend/resume functions because it allows us to pause a source
@@ -167,6 +171,18 @@ export class Playback extends EventEmitter implements IDestroyable {
         await this.context.resume();
         this.clock.flagStart();
         this.emit(PlaybackState.Playing);
+    }
+
+    private disconnectSource() {
+        this.source?.disconnect();
+        this.source?.removeEventListener("ended", this.onPlaybackEnd);
+    }
+
+    private makeNewSourceBuffer() {
+        this.source = this.context.createBufferSource();
+        this.source.buffer = this.audioBuf;
+        this.source.addEventListener("ended", this.onPlaybackEnd);
+        this.source.connect(this.context.destination);
     }
 
     public async pause() {
@@ -182,5 +198,61 @@ export class Playback extends EventEmitter implements IDestroyable {
     public async toggle() {
         if (this.isPlaying) await this.pause();
         else await this.play();
+    }
+
+    public async skipTo(timeSeconds: number) {
+        // Dev note: this function talks a lot about clock desyncs. There is a clock running
+        // independently to the audio context and buffer so that accurate human-perceptible
+        // time can be exposed. The PlaybackClock class has more information, but the short
+        // version is that we need to line up the useful time (clip position) with the context
+        // time, and avoid as many deviations as possible as otherwise the user could see the
+        // wrong time, and we stop playback at the wrong time, etc.
+
+        timeSeconds = clamp(timeSeconds, 0, this.clock.durationSeconds);
+
+        // Track playing state so we don't cause seeking to start playing the track.
+        const isPlaying = this.isPlaying;
+
+        if (isPlaying) {
+            // Pause first so we can get an accurate measurement of time
+            await this.context.suspend();
+        }
+
+        // We can't simply tell the context/buffer to jump to a time, so we have to
+        // start a whole new buffer and start it from the new time offset.
+        const now = this.context.currentTime;
+        this.disconnectSource();
+        this.makeNewSourceBuffer();
+
+        // We have to resync the clock because it can get confused about where we're
+        // at in the audio clip.
+        this.clock.syncTo(now, timeSeconds);
+
+        // Always start the source to queue it up. We have to do this now (and pause
+        // quickly if we're not supposed to be playing) as otherwise the clock can desync
+        // when it comes time to the user hitting play. After a couple jumps, the user
+        // will have desynced the clock enough to be about 10-15 seconds off, while this
+        // keeps it as close to perfect as humans can perceive.
+        this.source.start(now, timeSeconds);
+
+        // Dev note: it's critical that the code gap between `this.source.start()` and
+        // `this.pause()` is as small as possible: we do not want to delay *anything*
+        // as that could cause a clock desync, or a buggy feeling as a single note plays
+        // during seeking.
+
+        if (isPlaying) {
+            // If we were playing before, continue the context so the clock doesn't desync.
+            await this.context.resume();
+        } else {
+            // As mentioned above, we'll have to pause the clip if we weren't supposed to
+            // be playing it just yet. If we didn't have this, the audio clip plays but all
+            // the states will be wrong: clock won't advance, pause state doesn't match the
+            // blaring noise leaving the user's speakers, etc.
+            //
+            // Also as mentioned, if the code gap is small enough then this should be
+            // executed immediately after the start time, leaving no feasible time for the
+            // user's speakers to play any sound.
+            await this.pause();
+        }
     }
 }

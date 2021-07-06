@@ -16,8 +16,8 @@ limitations under the License.
 */
 
 const assert = require('assert');
-const {openRoomSummaryCard} = require("./rightpanel");
-const {acceptDialog} = require('./dialog');
+const { openRoomSummaryCard } = require("./rightpanel");
+const { acceptDialog } = require('./dialog');
 
 async function setSettingsToggle(session, toggle, enabled) {
     const className = await session.getElementProperty(toggle, "className");
@@ -57,13 +57,13 @@ async function findTabs(session) {
     const tabLabels = await Promise.all(tabButtons.map(t => session.innerText(t)));
     const securityTabButton = tabButtons[tabLabels.findIndex(l => l.toLowerCase().includes("security"))];
 
-    return {securityTabButton};
+    return { securityTabButton };
 }
 
 async function checkRoomSettings(session, expectedSettings) {
     session.log.startGroup(`checks the room settings`);
 
-    const {securityTabButton} = await findTabs(session);
+    const { securityTabButton } = await findTabs(session);
     const generalSwitches = await session.queryAll(".mx_RoomSettingsDialog .mx_ToggleSwitch");
     const isDirectory = generalSwitches[0];
 
@@ -129,7 +129,7 @@ async function checkRoomSettings(session, expectedSettings) {
 async function changeRoomSettings(session, settings) {
     session.log.startGroup(`changes the room settings`);
 
-    const {securityTabButton} = await findTabs(session);
+    const { securityTabButton } = await findTabs(session);
     const generalSwitches = await session.queryAll(".mx_RoomSettingsDialog .mx_ToggleSwitch");
     const isDirectory = generalSwitches[0];
 
@@ -188,4 +188,4 @@ async function changeRoomSettings(session, settings) {
     session.log.endGroup();
 }
 
-module.exports = {checkRoomSettings, changeRoomSettings};
+module.exports = { checkRoomSettings, changeRoomSettings };

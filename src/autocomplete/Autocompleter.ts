@@ -26,7 +26,7 @@ import UserProvider from './UserProvider';
 import EmojiProvider from './EmojiProvider';
 import NotifProvider from './NotifProvider';
 import { timeout } from "../utils/promise";
-import AutocompleteProvider, {ICommand} from "./AutocompleteProvider";
+import AutocompleteProvider, { ICommand } from "./AutocompleteProvider";
 import SettingsStore from "../settings/SettingsStore";
 import SpaceProvider from "./SpaceProvider";
 

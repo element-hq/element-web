@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { createRef } from 'react';
 import classNames from "classnames";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -176,10 +176,17 @@ const MAX_READ_AVATARS = 5;
 // |    '--------------------------------------'              |
 // '----------------------------------------------------------'
 
-interface IReadReceiptProps {
+export interface IReadReceiptProps {
     userId: string;
     roomMember: RoomMember;
     ts: number;
+}
+
+export enum TileShape {
+    Notif = "notif",
+    FileGrid = "file_grid",
+    Reply = "reply",
+    ReplyPreview = "reply_preview",
 }
 
 interface IProps {
@@ -248,7 +255,7 @@ interface IProps {
     // It could also be done by subclassing EventTile, but that'd be quite
     // boiilerplatey.  So just make the necessary render decisions conditional
     // for now.
-    tileShape?: 'notif' | 'file_grid' | 'reply' | 'reply_preview';
+    tileShape?: TileShape;
 
     // show twelve hour timestamps
     isTwelveHour?: boolean;
@@ -260,7 +267,7 @@ interface IProps {
     showReactions?: boolean;
 
     // which layout to use
-    layout: Layout;
+    layout?: Layout;
 
     // whether or not to show flair at all
     enableFlair?: boolean;
@@ -280,10 +287,10 @@ interface IProps {
     permalinkCreator?: RoomPermalinkCreator;
 
     // Symbol of the root node
-    as?: string
+    as?: string;
 
     // whether or not to always show timestamps
-    alwaysShowTimestamps?: boolean
+    alwaysShowTimestamps?: boolean;
 }
 
 interface IState {
@@ -306,13 +313,15 @@ interface IState {
 export default class EventTile extends React.Component<IProps, IState> {
     private suppressReadReceiptAnimation: boolean;
     private isListeningForReceipts: boolean;
-    private ref: React.RefObject<unknown>;
     private tile = React.createRef();
     private replyThread = React.createRef();
+
+    public readonly ref = createRef<HTMLElement>();
 
     static defaultProps = {
         // no-op function because onHeightChanged is optional yet some sub-components assume its existence
         onHeightChanged: function() {},
+        layout: Layout.Group,
     };
 
     static contextType = MatrixClientContext;
@@ -345,8 +354,6 @@ export default class EventTile extends React.Component<IProps, IState> {
         // to determine if we've already subscribed and use a combination of other flags to find
         // out if we should even be subscribed at all.
         this.isListeningForReceipts = false;
-
-        this.ref = React.createRef();
     }
 
     /**
@@ -723,7 +730,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                     { avatars }
                 </span>
             </div>
-        )
+        );
     }
 
     onSenderProfileClick = event => {
@@ -847,7 +854,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         let tileHandler = getHandlerTile(this.props.mxEvent);
 
         // Info messages are basically information about commands processed on a room
-        const isBubbleMessage = eventType.startsWith("m.key.verification") ||
+        let isBubbleMessage = eventType.startsWith("m.key.verification") ||
             (eventType === EventType.RoomMessage && msgtype && msgtype.startsWith("m.key.verification")) ||
             (eventType === EventType.RoomCreate) ||
             (eventType === EventType.RoomEncryption) ||
@@ -863,13 +870,14 @@ export default class EventTile extends React.Component<IProps, IState> {
         // duplicate of the thing they are replacing).
         if (SettingsStore.getValue("showHiddenEventsInTimeline") && !haveTileForEvent(this.props.mxEvent)) {
             tileHandler = "messages.ViewSourceEvent";
+            isBubbleMessage = false;
             // Reuse info message avatar and sender profile styling
             isInfoMessage = true;
         }
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
         if (!tileHandler) {
-            const {mxEvent} = this.props;
+            const { mxEvent } = this.props;
             console.warn(`Event type not supported: type:${mxEvent.getType()} isState:${mxEvent.isState()}`);
             return <div className="mx_EventTile mx_EventTile_info mx_MNoticeBody">
                 <div className="mx_EventTile_line">
@@ -1016,7 +1024,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             _t(
                 '<requestLink>Re-request encryption keys</requestLink> from your other sessions.',
                 {},
-                {'requestLink': (sub) => <a onClick={this.onRequestKeysClick}>{ sub }</a>},
+                { 'requestLink': (sub) => <a onClick={this.onRequestKeysClick}>{ sub }</a> },
             );
 
         const TooltipButton = sdk.getComponent('elements.TooltipButton');
@@ -1206,7 +1214,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                         avatar,
 
                     ])
-                )
+                );
             }
         }
     }
@@ -1289,11 +1297,11 @@ class E2ePadlock extends React.Component<IE2ePadlockProps, IE2ePadlockState> {
     }
 
     onHoverStart = () => {
-        this.setState({hover: true});
+        this.setState({ hover: true });
     };
 
     onHoverEnd = () => {
-        this.setState({hover: false});
+        this.setState({ hover: false });
     };
 
     render() {
@@ -1331,11 +1339,11 @@ class SentReceipt extends React.PureComponent<ISentReceiptProps, ISentReceiptSta
     }
 
     onHoverStart = () => {
-        this.setState({hover: true});
+        this.setState({ hover: true });
     };
 
     onHoverEnd = () => {
-        this.setState({hover: false});
+        this.setState({ hover: false });
     };
 
     render() {

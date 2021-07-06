@@ -28,12 +28,8 @@ export async function getDrawable(url: string): Promise<CanvasImageSource> {
         return new Promise<HTMLImageElement>((resolve, reject) => {
             const img = document.createElement("img");
             img.crossOrigin = "anonymous";
-            img.onload = function() {
-                resolve(img);
-            }
-            img.onerror = function(e) {
-                reject(e);
-            }
+            img.onload = () => resolve(img);
+            img.onerror = (e) => reject(e);
             img.src = url;
         });
     }

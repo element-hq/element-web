@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {AsyncStoreWithClient} from "./AsyncStoreWithClient";
+import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
-import {ActionPayload} from "../dispatcher/payloads";
-import {VoiceRecording} from "../voice/VoiceRecording";
+import { ActionPayload } from "../dispatcher/payloads";
+import { VoiceRecording } from "../voice/VoiceRecording";
 
 interface IState {
     recording?: VoiceRecording;
@@ -62,7 +62,7 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
         const recording = new VoiceRecording(this.matrixClient);
 
         // noinspection JSIgnoredPromiseFromCall - we can safely run this async
-        this.updateState({recording});
+        this.updateState({ recording });
 
         return recording;
     }
@@ -75,7 +75,7 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
         if (this.state.recording) {
             this.state.recording.destroy(); // stops internally
         }
-        return this.updateState({recording: null});
+        return this.updateState({ recording: null });
     }
 }
 

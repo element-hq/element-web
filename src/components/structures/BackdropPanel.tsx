@@ -25,7 +25,6 @@ interface IProps {
     opacity?: number;
 }
 
-
 export default class BackdropPanel extends React.PureComponent<IProps> {
     private canvasRef = createRef<HTMLCanvasElement>();
     private ctx: CanvasRenderingContext2D;
@@ -33,7 +32,7 @@ export default class BackdropPanel extends React.PureComponent<IProps> {
     static defaultProps = {
         blur: "60px",
         opacity: .15,
-    }
+    };
 
     public componentDidMount() {
         this.ctx = this.canvasRef.current.getContext("2d");
@@ -78,7 +77,7 @@ export default class BackdropPanel extends React.PureComponent<IProps> {
             resultWidth,
             resultHeight,
         );
-    }
+    };
 
     public render() {
         return <canvas

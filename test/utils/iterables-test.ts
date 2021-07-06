@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {iterableDiff, iterableUnion} from "../../src/utils/iterables";
+import { iterableDiff, iterableUnion } from "../../src/utils/iterables";
 
 describe('iterables', () => {
     describe('iterableUnion', () => {

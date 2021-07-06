@@ -138,7 +138,7 @@ export function getHtmlText(insaneHtml: string): string {
         selfClosing: [],
         allowedSchemes: [],
         disallowedTagsMode: 'discard',
-    })
+    });
 }
 
 /**
@@ -183,7 +183,7 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
         // images" preference is disabled. Future work might expose some UI to reveal them
         // like standalone image events have.
         if (!attribs.src || !attribs.src.startsWith('mxc://') || !SettingsStore.getValue("showImages")) {
-            return { tagName, attribs: {}};
+            return { tagName, attribs: {} };
         }
         const width = Number(attribs.width) || 800;
         const height = Number(attribs.height) || 600;
@@ -358,11 +358,11 @@ interface IOpts {
     stripReplyFallback?: boolean;
     returnString?: boolean;
     forComposerQuote?: boolean;
-    ref?: React.Ref<any>;
+    ref?: React.Ref<HTMLSpanElement>;
 }
 
 export interface IOptsReturnNode extends IOpts {
-    returnString: false;
+    returnString: false | undefined;
 }
 
 export interface IOptsReturnString extends IOpts {
@@ -403,9 +403,14 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
     try {
         if (highlights && highlights.length > 0) {
             const highlighter = new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
-            const safeHighlights = highlights.map(function(highlight) {
-                return sanitizeHtml(highlight, sanitizeParams);
-            });
+            const safeHighlights = highlights
+                // sanitizeHtml can hang if an unclosed HTML tag is thrown at it
+                // A search for `<foo` will make the browser crash
+                // an alternative would be to escape HTML special characters
+                // but that would bring no additional benefit as the highlighter
+                // does not work with those special chars
+                .filter((highlight: string): boolean => !highlight.includes("<"))
+                .map((highlight: string): string => sanitizeHtml(highlight, sanitizeParams));
             // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeParams structure.
             sanitizeParams.textFilter = function(safeText) {
                 return highlighter.applyHighlights(safeText, safeHighlights).join('');

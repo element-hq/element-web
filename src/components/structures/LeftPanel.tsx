@@ -24,6 +24,7 @@ import CustomRoomTagPanel from "./CustomRoomTagPanel";
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import RoomList from "../views/rooms/RoomList";
+import CallHandler from "../../CallHandler";
 import { HEADER_HEIGHT } from "../views/rooms/RoomSublist";
 import { Action } from "../../dispatcher/actions";
 import UserMenu from "./UserMenu";
@@ -38,8 +39,8 @@ import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import RoomListNumResults from "../views/rooms/RoomListNumResults";
 import LeftPanelWidget from "./LeftPanelWidget";
-import {replaceableComponent} from "../../utils/replaceableComponent";
-import SpaceStore, {UPDATE_SELECTED_SPACE} from "../../stores/SpaceStore";
+import { replaceableComponent } from "../../utils/replaceableComponent";
+import SpaceStore, { UPDATE_SELECTED_SPACE } from "../../stores/SpaceStore";
 import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager";
 import UIStore from "../../stores/UIStore";
 import BackdropPanel from "./BackdropPanel";
@@ -87,7 +88,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
         this.groupFilterPanelWatcherRef = SettingsStore.watchSetting("TagPanel.enableTagPanel", null, () => {
-            this.setState({showGroupFilterPanel: SettingsStore.getValue("TagPanel.enableTagPanel")});
+            this.setState({ showGroupFilterPanel: SettingsStore.getValue("TagPanel.enableTagPanel") });
         });
     }
 
@@ -120,6 +121,10 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         this.setState({ activeSpace });
     };
 
+    private onDialPad = () => {
+        dis.fire(Action.OpenDialPad);
+    };
+
     private onExplore = () => {
         dis.fire(Action.ViewRoomDirectory);
     };
@@ -127,12 +132,12 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     private refreshStickyHeaders = () => {
         if (!this.listContainerRef.current) return; // ignore: no headers to sticky
         this.handleStickyHeaders(this.listContainerRef.current);
-    }
+    };
 
     private onBreadcrumbsUpdate = () => {
         const newVal = BreadcrumbsStore.instance.visible;
         if (newVal !== this.state.showBreadcrumbs) {
-            this.setState({showBreadcrumbs: newVal});
+            this.setState({ showBreadcrumbs: newVal });
 
             // Update the sticky headers too as the breadcrumbs will be popping in or out.
             if (!this.listContainerRef.current) return; // ignore: no headers to sticky
@@ -376,7 +381,20 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         }
     }
 
-    private renderSearchExplore(): React.ReactNode {
+    private renderSearchDialExplore(): React.ReactNode {
+        let dialPadButton = null;
+
+        // If we have dialer support, show a button to bring up the dial pad
+        // to start a new call
+        if (CallHandler.sharedInstance().getSupportsPstnProtocol()) {
+            dialPadButton =
+                <AccessibleTooltipButton
+                    className={classNames("mx_LeftPanel_dialPadButton", {})}
+                    onClick={this.onDialPad}
+                    title={_t("Open dial pad")}
+                />;
+        }
+
         return (
             <div
                 className="mx_LeftPanel_filterContainer"
@@ -389,6 +407,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     onKeyDown={this.onKeyDown}
                     onSelectRoom={this.selectRoom}
                 />
+
+                {dialPadButton}
+
                 <AccessibleTooltipButton
                     className={classNames("mx_LeftPanel_exploreButton", {
                         mx_LeftPanel_exploreButton_space: !!this.state.activeSpace,
@@ -444,7 +465,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 {leftLeftPanel}
                 <aside className="mx_LeftPanel_roomListContainer">
                     {this.renderHeader()}
-                    {this.renderSearchExplore()}
+                    {this.renderSearchDialExplore()}
                     {this.renderBreadcrumbs()}
                     <RoomListNumResults onVisibilityChange={this.refreshStickyHeaders} />
                     <div className="mx_LeftPanel_roomListWrapper">

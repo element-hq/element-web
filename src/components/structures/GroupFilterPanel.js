@@ -91,12 +91,12 @@ class GroupFilterPanel extends React.Component {
     onClick = e => {
         // only dispatch if its not a no-op
         if (this.state.selectedTags.length > 0) {
-            dis.dispatch({action: 'deselect_tags'});
+            dis.dispatch({ action: 'deselect_tags' });
         }
     };
 
     onClearFilterClick = ev => {
-        dis.dispatch({action: 'deselect_tags'});
+        dis.dispatch({ action: 'deselect_tags' });
     };
 
     renderGlobalIcon() {

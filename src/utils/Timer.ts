@@ -57,7 +57,7 @@ export default class Timer {
             const delta = this.timeout - elapsed;
             this.timerHandle = setTimeout(this.onTimeout, delta);
         }
-    }
+    };
 
     changeTimeout(timeout: number) {
         if (timeout === this.timeout) {

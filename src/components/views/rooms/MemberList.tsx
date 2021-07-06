@@ -22,7 +22,6 @@ import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher/dispatcher';
 import { isValid3pidInvite } from "../../../RoomInvite";
-import rateLimitedFunction from "../../../ratelimitedfunc";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import BaseCard from "../right_panel/BaseCard";
@@ -43,6 +42,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 import EntityTile from "./EntityTile";
 import MemberTile from "./MemberTile";
 import BaseAvatar from '../avatars/BaseAvatar';
+import { throttle } from 'lodash';
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -133,7 +133,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         }
 
         // cancel any pending calls to the rate_limited_funcs
-        this.updateList.cancelPendingCall();
+        this.updateList.cancel();
     }
 
     /**
@@ -148,7 +148,7 @@ export default class MemberList extends React.Component<IProps, IState> {
             const room = cli.getRoom(this.props.roomId);
             const membership = room && room.getMyMembership();
             if (membership === "join") {
-                this.setState({loading: true});
+                this.setState({ loading: true });
                 try {
                     await room.loadMembersIfNeeded();
                 } catch (ex) {/* already logged in RoomView */}
@@ -237,12 +237,12 @@ export default class MemberList extends React.Component<IProps, IState> {
         if (this.canInvite !== this.state.canInvite) this.setState({ canInvite: this.canInvite });
     };
 
-    private updateList = rateLimitedFunction(() => {
+    private updateList = throttle(() => {
         this.updateListNow();
-    }, 500);
+    }, 500, { leading: true, trailing: true });
 
     private updateListNow(): void {
-        const members = this.roomMembers()
+        const members = this.roomMembers();
 
         this.setState({
             loading: false,
@@ -471,7 +471,7 @@ export default class MemberList extends React.Component<IProps, IState> {
     }
 
     private getChildrenJoined = (start: number, end: number): Array<JSX.Element> => {
-        return this.makeMemberTiles(this.state.filteredJoinedMembers.slice(start, end))
+        return this.makeMemberTiles(this.state.filteredJoinedMembers.slice(start, end));
     };
 
     private getChildCountJoined = (): number => this.state.filteredJoinedMembers.length;
@@ -487,7 +487,7 @@ export default class MemberList extends React.Component<IProps, IState> {
 
     private getChildCountInvited = (): number => {
         return this.state.filteredInvitedMembers.length + (this.getPending3PidInvites() || []).length;
-    }
+    };
 
     render() {
         if (this.state.loading) {
@@ -582,7 +582,7 @@ export default class MemberList extends React.Component<IProps, IState> {
 
     onInviteButtonClick = (): void => {
         if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({action: 'require_registration'});
+            dis.dispatch({ action: 'require_registration' });
             return;
         }
 

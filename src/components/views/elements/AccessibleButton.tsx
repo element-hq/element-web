@@ -16,7 +16,7 @@
 
 import React from 'react';
 
-import {Key} from '../../../Keyboard';
+import { Key } from '../../../Keyboard';
 import classnames from 'classnames';
 
 export type ButtonEvent = React.MouseEvent<Element> | React.KeyboardEvent<Element>;

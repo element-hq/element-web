@@ -22,7 +22,7 @@ import { User } from "matrix-js-sdk/src/models/user";
 import { memoize, throttle } from "lodash";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
-import {mediaFromMxc} from "../customisations/Media";
+import { mediaFromMxc } from "../customisations/Media";
 import SettingsStore from "../settings/SettingsStore";
 import { getDrawable } from "../utils/drawable";
 
@@ -136,7 +136,7 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         } else {
             window.localStorage.removeItem(KEY_AVATAR_URL);
         }
-        await this.updateState({displayName: profileInfo.displayname, avatarUrl: profileInfo.avatar_url});
+        await this.updateState({ displayName: profileInfo.displayname, avatarUrl: profileInfo.avatar_url });
     };
 
     public async getAvatarBitmap(avatarSize = 32): Promise<CanvasImageSource> {
@@ -160,5 +160,5 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         if (ev.getType() === 'm.room.member' && ev.getSender() === myUserId && ev.getStateKey() === myUserId) {
             await this.onProfileUpdate();
         }
-    }, 200, {trailing: true, leading: true});
+    }, 200, { trailing: true, leading: true });
 }

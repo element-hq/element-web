@@ -102,7 +102,7 @@ describe("RovingTabIndex", () => {
                 { button1 }
                 { button2 }
                 <RovingTabIndexWrapper>
-                    {({onFocus, isActive, ref}) =>
+                    {({ onFocus, isActive, ref }) =>
                         <button onFocus={onFocus} tabIndex={isActive ? 0 : -1} ref={ref}>.</button>
                     }
                 </RovingTabIndexWrapper>
@@ -118,5 +118,4 @@ describe("RovingTabIndex", () => {
         checkTabIndexes(wrapper.find("button"), [-1, -1, 0]);
     });
 });
-
 

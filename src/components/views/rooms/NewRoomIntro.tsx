@@ -45,7 +45,7 @@ function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room): 
 
 const NewRoomIntro = () => {
     const cli = useContext(MatrixClientContext);
-    const {room, roomId} = useContext(RoomContext);
+    const { room, roomId } = useContext(RoomContext);
 
     const dmPartner = DMRoomMap.shared().getUserIdForRoomId(roomId);
     let body;

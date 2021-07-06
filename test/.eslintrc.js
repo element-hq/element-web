@@ -5,6 +5,6 @@ module.exports = {
 
     // mocha defines a 'this'
     rules: {
-        "babel/no-invalid-this": "off",
+        "@babel/no-invalid-this": "off",
     },
 };

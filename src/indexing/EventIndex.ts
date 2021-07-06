@@ -16,16 +16,16 @@ limitations under the License.
 
 import { EventEmitter } from "events";
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
-import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
+import { Direction, EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { EventTimelineSet } from 'matrix-js-sdk/src/models/event-timeline-set';
 import { RoomState } from 'matrix-js-sdk/src/models/room-state';
 import { TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
+import { sleep } from "matrix-js-sdk/src/utils";
 
 import PlatformPeg from "../PlatformPeg";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { sleep } from "../utils/promise";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 import { ICrawlerCheckpoint, ILoadArgs, ISearchArgs } from "./BaseEventIndexManager";
@@ -109,7 +109,7 @@ export default class EventIndex extends EventEmitter {
         // our message crawler.
         await Promise.all(encryptedRooms.map(async (room) => {
             const timeline = room.getLiveTimeline();
-            const token = timeline.getPaginationToken("b");
+            const token = timeline.getPaginationToken(Direction.Backward);
 
             const backCheckpoint: ICrawlerCheckpoint = {
                 roomId: room.roomId,
@@ -175,7 +175,7 @@ export default class EventIndex extends EventEmitter {
             await indexManager.commitLiveEvents();
             return;
         }
-    }
+    };
 
     /*
      * The Room.timeline listener.
@@ -209,7 +209,7 @@ export default class EventIndex extends EventEmitter {
         await client.decryptEventIfNeeded(ev);
 
         await this.addLiveEventToIndex(ev);
-    }
+    };
 
     private onRoomStateEvent = async (ev: MatrixEvent, state: RoomState) => {
         if (!MatrixClientPeg.get().isRoomEncrypted(state.roomId)) return;
@@ -218,7 +218,7 @@ export default class EventIndex extends EventEmitter {
             console.log("EventIndex: Adding a checkpoint for a newly encrypted room", state.roomId);
             this.addRoomCheckpoint(state.roomId, true);
         }
-    }
+    };
 
     /*
      * The Event.decrypted listener.
@@ -230,7 +230,7 @@ export default class EventIndex extends EventEmitter {
         // If the event isn't in our live event set, ignore it.
         if (err) return;
         await this.addLiveEventToIndex(ev);
-    }
+    };
 
     /*
      * The Room.redaction listener.
@@ -247,7 +247,7 @@ export default class EventIndex extends EventEmitter {
         } catch (e) {
             console.log("EventIndex: Error deleting event from index", e);
         }
-    }
+    };
 
     /*
      * The Room.timelineReset listener.
@@ -263,7 +263,7 @@ export default class EventIndex extends EventEmitter {
             room.roomId);
 
         this.addRoomCheckpoint(room.roomId, false);
-    }
+    };
 
     /**
      * Check if an event should be added to the event index.
@@ -371,7 +371,7 @@ export default class EventIndex extends EventEmitter {
         if (!room) return;
 
         const timeline = room.getLiveTimeline();
-        const token = timeline.getPaginationToken("b");
+        const token = timeline.getPaginationToken(Direction.Backward);
 
         if (!token) {
             // The room doesn't contain any tokens, meaning the live timeline
@@ -464,7 +464,7 @@ export default class EventIndex extends EventEmitter {
 
             // We have a checkpoint, let us fetch some messages, again, very
             // conservatively to not bother our homeserver too much.
-            const eventMapper = client.getEventMapper({preventReEmit: true});
+            const eventMapper = client.getEventMapper({ preventReEmit: true });
             // TODO we need to ensure to use member lazy loading with this
             // request so we get the correct profiles.
             let res;
@@ -862,7 +862,7 @@ export default class EventIndex extends EventEmitter {
      * @returns {Promise<boolean>} Resolves to a boolean which is true if more
      * events were successfully retrieved.
      */
-    public paginateTimelineWindow(room: Room, timelineWindow: TimelineWindow, direction: string, limit: number) {
+    public paginateTimelineWindow(room: Room, timelineWindow: TimelineWindow, direction: Direction, limit: number) {
         const tl = timelineWindow.getTimelineIndex(direction);
 
         if (!tl) return Promise.resolve(false);

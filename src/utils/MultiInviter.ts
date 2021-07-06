@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { MatrixError } from "matrix-js-sdk/src/http-api";
+import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import { AddressType, getAddressType } from '../UserAddress';
@@ -22,7 +23,6 @@ import GroupStore from '../stores/GroupStore';
 import { _t } from "../languageHandler";
 import Modal from "../Modal";
 import SettingsStore from "../settings/SettingsStore";
-import { defer, IDeferred } from "./promise";
 import AskInviteAnywayDialog from "../components/views/dialogs/AskInviteAnywayDialog";
 
 export enum InviteState {
@@ -184,7 +184,7 @@ export default class MultiInviter {
                     fatal = true;
                     errorText = _t('You do not have permission to invite people to this room.');
                 } else if (err.errcode === "RIOT.ALREADY_IN_ROOM") {
-                    errorText = _t("User %(userId)s is already in the room", {userId: address});
+                    errorText = _t("User %(userId)s is already in the room", { userId: address });
                 } else if (err.errcode === 'M_LIMIT_EXCEEDED') {
                     // we're being throttled so wait a bit & try again
                     setTimeout(() => {
@@ -192,9 +192,9 @@ export default class MultiInviter {
                     }, 5000);
                     return;
                 } else if (['M_NOT_FOUND', 'M_USER_NOT_FOUND'].includes(err.errcode)) {
-                    errorText = _t("User %(user_id)s does not exist", {user_id: address});
+                    errorText = _t("User %(user_id)s does not exist", { user_id: address });
                 } else if (err.errcode === 'M_PROFILE_UNDISCLOSED') {
-                    errorText = _t("User %(user_id)s may or may not exist", {user_id: address});
+                    errorText = _t("User %(user_id)s may or may not exist", { user_id: address });
                 } else if (err.errcode === 'M_PROFILE_NOT_FOUND' && !ignoreProfile) {
                     // Invite without the profile check
                     console.warn(`User ${address} does not have a profile - inviting anyways automatically`);

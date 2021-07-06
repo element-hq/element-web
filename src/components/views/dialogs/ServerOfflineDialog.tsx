@@ -28,7 +28,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { IDialogProps } from "./IDialogProps";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps extends IDialogProps {
 }
@@ -85,7 +85,7 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
                         {entries}
                     </div>
                 </div>
-            )
+            );
         });
     }
 
@@ -108,7 +108,7 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
                     "Below are some of the most likely reasons.",
                 )}</p>
                 <ul>
-                    <li>{_t("The server (%(serverName)s) took too long to respond.", {serverName})}</li>
+                    <li>{_t("The server (%(serverName)s) took too long to respond.", { serverName })}</li>
                     <li>{_t("Your firewall or anti-virus is blocking the request.")}</li>
                     <li>{_t("A browser extension is preventing the request.")}</li>
                     <li>{_t("The server is offline.")}</li>

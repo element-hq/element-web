@@ -57,14 +57,15 @@ limitations under the License.
 
 @keyframes mx_RoomView_fileDropTarget_image_animation {
     from {
-        width: 0px;
+        transform: scaleX(0);
     }
     to {
-        width: 32px;
+        transform: scaleX(1);
     }
 }
 
 .mx_RoomView_fileDropTarget_image {
+    width: 32px;
     animation: mx_RoomView_fileDropTarget_image_animation;
     animation-duration: 0.5s;
     margin-bottom: 16px;

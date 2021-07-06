@@ -81,7 +81,7 @@ export async function decryptMegolmKeyFile(data, password) {
     let isValid;
     try {
         isValid = await subtleCrypto.verify(
-            {name: 'HMAC'},
+            { name: 'HMAC' },
             hmacKey,
             hmac,
             toVerify,
@@ -111,7 +111,6 @@ export async function decryptMegolmKeyFile(data, password) {
 
     return new TextDecoder().decode(new Uint8Array(plaintext));
 }
-
 
 /**
  * Encrypt a megolm key file
@@ -174,14 +173,13 @@ export async function encryptMegolmKeyFile(data, password, options) {
     let hmac;
     try {
         hmac = await subtleCrypto.sign(
-            {name: 'HMAC'},
+            { name: 'HMAC' },
             hmacKey,
             toSign,
         );
     } catch (e) {
         throw friendlyError('subtleCrypto.sign failed: ' + e, cryptoFailMsg());
     }
-
 
     const hmacArray = new Uint8Array(hmac);
     resultBuffer.set(hmacArray, idx);
@@ -204,7 +202,7 @@ async function deriveKeys(salt, iterations, password) {
         key = await subtleCrypto.importKey(
             'raw',
             new TextEncoder().encode(password),
-            {name: 'PBKDF2'},
+            { name: 'PBKDF2' },
             false,
             ['deriveBits'],
         );
@@ -237,7 +235,7 @@ async function deriveKeys(salt, iterations, password) {
     const aesProm = subtleCrypto.importKey(
         'raw',
         aesKey,
-        {name: 'AES-CTR'},
+        { name: 'AES-CTR' },
         false,
         ['encrypt', 'decrypt'],
     ).catch((e) => {
@@ -249,7 +247,7 @@ async function deriveKeys(salt, iterations, password) {
         hmacKey,
         {
             name: 'HMAC',
-            hash: {name: 'SHA-256'},
+            hash: { name: 'SHA-256' },
         },
         false,
         ['sign', 'verify'],

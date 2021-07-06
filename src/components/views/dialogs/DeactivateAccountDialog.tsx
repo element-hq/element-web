@@ -19,13 +19,13 @@ import React from 'react';
 
 import * as sdk from '../../../index';
 import Analytics from '../../../Analytics';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as Lifecycle from '../../../Lifecycle';
 import { _t } from '../../../languageHandler';
-import InteractiveAuth, {ERROR_USER_CANCELLED} from "../../structures/InteractiveAuth";
-import {DEFAULT_PHASE, PasswordAuthEntry, SSOAuthEntry} from "../auth/InteractiveAuthEntryComponents";
+import InteractiveAuth, { ERROR_USER_CANCELLED } from "../../structures/InteractiveAuth";
+import { DEFAULT_PHASE, PasswordAuthEntry, SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import StyledCheckbox from "../elements/StyledCheckbox";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -100,7 +100,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
             if (phaseAesthetics && phaseAesthetics.continueText) continueText = phaseAesthetics.continueText;
             if (phaseAesthetics && phaseAesthetics.continueKind) continueKind = phaseAesthetics.continueKind;
         }
-        this.setState({bodyText, continueText, continueKind});
+        this.setState({ bodyText, continueText, continueKind });
     };
 
     private onUIAuthFinished = (success: boolean, result: Error) => {
@@ -112,7 +112,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
         }
 
         console.error("Error during UI Auth:", { result });
-        this.setState({errStr: _t("There was a problem communicating with the server. Please try again.")});
+        this.setState({ errStr: _t("There was a problem communicating with the server. Please try again.") });
     };
 
     private onUIAuthComplete = (auth: any): void => {
@@ -123,7 +123,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
             this.props.onFinished(true);
         }).catch(e => {
             console.error(e);
-            this.setState({errStr: _t("There was a problem communicating with the server. Please try again.")});
+            this.setState({ errStr: _t("There was a problem communicating with the server. Please try again.") });
         });
     };
 
@@ -153,13 +153,13 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
             // We'll try to log something in an vain attempt to record what happened (storage
             // is also obliterated on logout).
             console.warn("User's account got deactivated without confirmation: Server had no auth");
-            this.setState({errStr: _t("Server did not require any authentication")});
+            this.setState({ errStr: _t("Server did not require any authentication") });
         }).catch(e => {
             if (e && e.httpStatus === 401 && e.data) {
                 // Valid UIA response
-                this.setState({authData: e.data, authEnabled: true});
+                this.setState({ authData: e.data, authEnabled: true });
             } else {
-                this.setState({errStr: _t("Server did not return valid authentication information.")});
+                this.setState({ errStr: _t("Server did not return valid authentication information.") });
             }
         });
     }
