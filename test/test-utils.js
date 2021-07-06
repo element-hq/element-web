@@ -220,7 +220,7 @@ export function mkMessage(opts) {
     return mkEvent(opts);
 }
 
-export function mkStubRoom(roomId = null, name) {
+export function mkStubRoom(roomId = null, name, client) {
     const stubTimeline = { getEvents: () => [] };
     return {
         roomId,
@@ -235,6 +235,7 @@ export function mkStubRoom(roomId = null, name) {
         }),
         getMembersWithMembership: jest.fn().mockReturnValue([]),
         getJoinedMembers: jest.fn().mockReturnValue([]),
+        getJoinedMemberCount: jest.fn().mockReturnValue(1),
         getMembers: jest.fn().mockReturnValue([]),
         getPendingEvents: () => [],
         getLiveTimeline: () => stubTimeline,
@@ -270,6 +271,7 @@ export function mkStubRoom(roomId = null, name) {
         getAltAliases: jest.fn().mockReturnValue([]),
         timeline: [],
         getJoinRule: jest.fn().mockReturnValue("invite"),
+        client,
     };
 }
 

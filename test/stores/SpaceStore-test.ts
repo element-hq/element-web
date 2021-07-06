@@ -53,32 +53,6 @@ const emitPromise = (e: EventEmitter, k: string | symbol) => new Promise(r => e.
 
 const testUserId = "@test:user";
 
-let rooms = [];
-
-const mkRoom = (roomId: string) => {
-    const room = mkStubRoom(roomId);
-    room.currentState.getStateEvents.mockImplementation(mockStateEventImplementation([]));
-    rooms.push(room);
-    return room;
-};
-
-const mkSpace = (spaceId: string, children: string[] = []) => {
-    const space = mkRoom(spaceId);
-    space.isSpaceRoom.mockReturnValue(true);
-    space.currentState.getStateEvents.mockImplementation(mockStateEventImplementation(children.map(roomId =>
-        mkEvent({
-            event: true,
-            type: EventType.SpaceChild,
-            room: spaceId,
-            user: testUserId,
-            skey: roomId,
-            content: { via: [] },
-            ts: Date.now(),
-        }),
-    )));
-    return space;
-};
-
 const getValue = jest.fn();
 SettingsStore.getValue = getValue;
 
@@ -110,6 +84,32 @@ describe("SpaceStore", () => {
     stubClient();
     const store = SpaceStore.instance;
     const client = MatrixClientPeg.get();
+
+    let rooms = [];
+
+    const mkRoom = (roomId: string) => {
+        const room = mkStubRoom(roomId, roomId, client);
+        room.currentState.getStateEvents.mockImplementation(mockStateEventImplementation([]));
+        rooms.push(room);
+        return room;
+    };
+
+    const mkSpace = (spaceId: string, children: string[] = []) => {
+        const space = mkRoom(spaceId);
+        space.isSpaceRoom.mockReturnValue(true);
+        space.currentState.getStateEvents.mockImplementation(mockStateEventImplementation(children.map(roomId =>
+            mkEvent({
+                event: true,
+                type: EventType.SpaceChild,
+                room: spaceId,
+                user: testUserId,
+                skey: roomId,
+                content: { via: [] },
+                ts: Date.now(),
+            }),
+        )));
+        return space;
+    };
 
     const viewRoom = roomId => defaultDispatcher.dispatch({ action: "view_room", room_id: roomId }, true);
 
