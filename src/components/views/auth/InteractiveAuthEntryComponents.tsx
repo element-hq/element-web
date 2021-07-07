@@ -18,7 +18,6 @@ import React, { ChangeEvent, createRef, FormEvent, MouseEvent } from 'react';
 import classNames from 'classnames';
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -26,6 +25,8 @@ import Spinner from "../elements/Spinner";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { LocalisedPolicy, Policies } from '../../../Terms';
+import Field from '../elements/Field';
+import CaptchaForm from "./CaptchaForm";
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -164,8 +165,7 @@ export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswor
 
         let submitButtonOrSpinner;
         if (this.props.busy) {
-            const Loader = sdk.getComponent("elements.Spinner");
-            submitButtonOrSpinner = <Loader />;
+            submitButtonOrSpinner = <Spinner />;
         } else {
             submitButtonOrSpinner = (
                 <input type="submit"
@@ -184,8 +184,6 @@ export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswor
                 </div>
             );
         }
-
-        const Field = sdk.getComponent('elements.Field');
 
         return (
             <div>
@@ -236,13 +234,11 @@ export class RecaptchaAuthEntry extends React.Component<IRecaptchaAuthEntryProps
 
     render() {
         if (this.props.busy) {
-            const Loader = sdk.getComponent("elements.Spinner");
-            return <Loader />;
+            return <Spinner />;
         }
 
         let errorText = this.props.errorText;
 
-        const CaptchaForm = sdk.getComponent("views.auth.CaptchaForm");
         let sitePublicKey;
         if (!this.props.stageParams || !this.props.stageParams.public_key) {
             errorText = _t(
@@ -390,8 +386,7 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
 
     render() {
         if (this.props.busy) {
-            const Loader = sdk.getComponent("elements.Spinner");
-            return <Loader />;
+            return <Spinner />;
         }
 
         const checkboxes = [];
@@ -590,8 +585,7 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
 
     render() {
         if (this.state.requestingToken) {
-            const Loader = sdk.getComponent("elements.Spinner");
-            return <Loader />;
+            return <Spinner />;
         } else {
             const enableSubmit = Boolean(this.state.token);
             const submitClasses = classNames({

@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import { _t, _td } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
-import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
@@ -26,6 +25,8 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomState } from "matrix-js-sdk/src/models/room-state";
 import { compare } from "../../../../../utils/strings";
+import ErrorDialog from '../../../dialogs/ErrorDialog';
+import PowerSelector from "../../../elements/PowerSelector";
 
 const plEventsToLabels = {
     // These will be translated for us later.
@@ -76,7 +77,6 @@ interface IBannedUserProps {
 export class BannedUser extends React.Component<IBannedUserProps> {
     private onUnbanClick = (e) => {
         MatrixClientPeg.get().unban(this.props.member.roomId, this.props.member.userId).catch((err) => {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to unban: " + err);
             Modal.createTrackedDialog('Failed to unban', '', ErrorDialog, {
                 title: _t('Error'),
@@ -176,7 +176,6 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         client.sendStateEvent(this.props.roomId, "m.room.power_levels", plContent).catch(e => {
             console.error(e);
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Power level requirement change failed', '', ErrorDialog, {
                 title: _t('Error changing power level requirement'),
                 description: _t(
@@ -203,7 +202,6 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         client.sendStateEvent(this.props.roomId, "m.room.power_levels", plContent).catch(e => {
             console.error(e);
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Power level change failed', '', ErrorDialog, {
                 title: _t('Error changing power level'),
                 description: _t(
@@ -215,8 +213,6 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
     };
 
     render() {
-        const PowerSelector = sdk.getComponent('elements.PowerSelector');
-
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');

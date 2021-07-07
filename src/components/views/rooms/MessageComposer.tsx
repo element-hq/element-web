@@ -17,7 +17,6 @@ import React from 'react';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import * as sdk from '../../../index';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
@@ -44,13 +43,14 @@ import SendMessageComposer from "./SendMessageComposer";
 import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../dispatcher/actions";
 import EditorModel from "../../../editor/model";
+import EmojiPicker from '../emojipicker/EmojiPicker';
+import MemberStatusMessageAvatar from "../avatars/MemberStatusMessageAvatar";
 
 interface IComposerAvatarProps {
     me: object;
 }
 
 function ComposerAvatar(props: IComposerAvatarProps) {
-    const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
     return <div className="mx_MessageComposer_avatar">
         <MemberStatusMessageAvatar member={props.me} width={24} height={24} />
     </div>;
@@ -76,7 +76,6 @@ const EmojiButton = ({ addEmoji }) => {
     let contextMenu;
     if (menuDisplayed) {
         const buttonRect = button.current.getBoundingClientRect();
-        const EmojiPicker = sdk.getComponent('emojipicker.EmojiPicker');
         contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false}>
             <EmojiPicker onChoose={addEmoji} showQuickReactions={true} />
         </ContextMenu>;
@@ -366,15 +365,12 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         ];
 
         if (!this.state.tombstone && this.state.canSendMessages) {
-            const SendMessageComposer = sdk.getComponent("rooms.SendMessageComposer");
-
             controls.push(
                 <SendMessageComposer
                     ref={(c) => this.messageComposerInput = c}
                     key="controls_input"
                     room={this.props.room}
                     placeholder={this.renderPlaceholderText()}
-                    resizeNotifier={this.props.resizeNotifier}
                     permalinkCreator={this.props.permalinkCreator}
                     replyToEvent={this.props.replyToEvent}
                     onChange={this.onChange}
