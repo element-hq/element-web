@@ -61,7 +61,7 @@ interface IState {
     loading: boolean;
     protocolsLoading: boolean;
     error?: string;
-    instanceId: string | symbol;
+    instanceId: string;
     roomServer: string;
     filterString: string;
     selectedCommunityId?: string;
