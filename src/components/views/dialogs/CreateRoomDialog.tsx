@@ -15,22 +15,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ChangeEvent, createRef, KeyboardEvent, SyntheticEvent} from "react";
-import {Room} from "matrix-js-sdk/src/models/room";
+import React, { ChangeEvent, createRef, KeyboardEvent, SyntheticEvent } from "react";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 import SdkConfig from '../../../SdkConfig';
-import withValidation, {IFieldState} from '../elements/Validation';
-import {_t} from '../../../languageHandler';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import {Key} from "../../../Keyboard";
-import {IOpts, Preset, privateShouldBeEncrypted, Visibility} from "../../../createRoom";
-import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import withValidation, { IFieldState } from '../elements/Validation';
+import { _t } from '../../../languageHandler';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import { Key } from "../../../Keyboard";
+import { IOpts, privateShouldBeEncrypted } from "../../../createRoom";
+import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Field from "../elements/Field";
 import RoomAliasField from "../elements/RoomAliasField";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "../dialogs/BaseDialog";
+import { Preset, Visibility } from "matrix-js-sdk/src/@types/partials";
 
 interface IProps {
     defaultPublic?: boolean;
@@ -72,7 +73,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             canChangeEncryption: true,
         };
 
-        MatrixClientPeg.get().doesServerForceEncryptionForPreset("private")
+        MatrixClientPeg.get().doesServerForceEncryptionForPreset(Preset.PrivateChat)
             .then(isForced => this.setState({ canChangeEncryption: !isForced }));
     }
 
@@ -136,9 +137,9 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         if (activeElement) {
             activeElement.blur();
         }
-        await this.nameField.current.validate({allowEmpty: false});
+        await this.nameField.current.validate({ allowEmpty: false });
         if (this.aliasField.current) {
-            await this.aliasField.current.validate({allowEmpty: false});
+            await this.aliasField.current.validate({ allowEmpty: false });
         }
         // Validation and state updates are async, so we need to wait for them to complete
         // first. Queue a `setState` callback and wait for it to resolve.
@@ -193,7 +194,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
 
     private onNameValidate = async (fieldState: IFieldState) => {
         const result = await CreateRoomDialog.validateRoomName(fieldState);
-        this.setState({nameIsValid: result.valid});
+        this.setState({ nameIsValid: result.valid });
         return result;
     };
 
@@ -275,7 +276,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         let title = this.state.isPublic ? _t('Create a public room') : _t('Create a private room');
         if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
             const name = CommunityPrototypeStore.instance.getSelectedCommunityName();
-            title = _t("Create a room in %(communityName)s", {communityName: name});
+            title = _t("Create a room in %(communityName)s", { communityName: name });
         }
         return (
             <BaseDialog className="mx_CreateRoomDialog" onFinished={this.props.onFinished}
@@ -312,7 +313,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                             <LabelledToggleSwitch
                                 label={_t(
                                     "Block anyone not part of %(serverName)s from ever joining this room.",
-                                    {serverName: MatrixClientPeg.getHomeserverName()},
+                                    { serverName: MatrixClientPeg.getHomeserverName() },
                                 )}
                                 onChange={this.onNoFederateChange}
                                 value={this.state.noFederate}

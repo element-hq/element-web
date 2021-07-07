@@ -55,18 +55,19 @@ limitations under the License.
 
 import React from 'react';
 
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { MatrixClientPeg } from './MatrixClientPeg';
+import PlatformPeg from './PlatformPeg';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
 import SettingsStore from './settings/SettingsStore';
-import {Jitsi} from "./widgets/Jitsi";
-import {WidgetType} from "./widgets/WidgetType";
-import {SettingLevel} from "./settings/SettingLevel";
+import { Jitsi } from "./widgets/Jitsi";
+import { WidgetType } from "./widgets/WidgetType";
+import { SettingLevel } from "./settings/SettingLevel";
 import { ActionPayload } from "./dispatcher/payloads";
-import {base32} from "rfc4648";
+import { base32 } from "rfc4648";
 
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
@@ -76,7 +77,7 @@ import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
 import { MatrixCall, CallErrorCode, CallState, CallEvent, CallParty, CallType } from "matrix-js-sdk/src/webrtc/call";
 import Analytics from './Analytics';
 import CountlyAnalytics from "./CountlyAnalytics";
-import {UIFeature} from "./settings/UIFeature";
+import { UIFeature } from "./settings/UIFeature";
 import { CallError } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from 'matrix-js-sdk/src/logger';
 import { Action } from './dispatcher/actions';
@@ -97,7 +98,7 @@ const CHECK_PROTOCOLS_ATTEMPTS = 3;
 // (and store the ID of their native room)
 export const VIRTUAL_ROOM_EVENT_TYPE = 'im.vector.is_virtual_room';
 
-enum AudioID {
+export enum AudioID {
     Ring = 'ringAudio',
     Ringback = 'ringbackAudio',
     CallEnd = 'callendAudio',
@@ -122,9 +123,9 @@ interface ThirdpartyLookupResponseFields {
 }
 
 interface ThirdpartyLookupResponse {
-    userid: string,
-    protocol: string,
-    fields: ThirdpartyLookupResponseFields,
+    userid: string;
+    protocol: string;
+    fields: ThirdpartyLookupResponseFields;
 }
 
 export enum PlaceCallType {
@@ -159,7 +160,7 @@ export default class CallHandler extends EventEmitter {
 
     static sharedInstance() {
         if (!window.mxCallHandler) {
-            window.mxCallHandler = new CallHandler()
+            window.mxCallHandler = new CallHandler();
         }
 
         return window.mxCallHandler;
@@ -178,7 +179,7 @@ export default class CallHandler extends EventEmitter {
             const nativeUser = this.assertedIdentityNativeUsers[call.callId];
             if (nativeUser) {
                 const room = findDMForUser(MatrixClientPeg.get(), nativeUser);
-                if (room) return room.roomId
+                if (room) return room.roomId;
             }
         }
 
@@ -231,7 +232,7 @@ export default class CallHandler extends EventEmitter {
                 this.supportsPstnProtocol = null;
             }
 
-            dis.dispatch({action: Action.PstnSupportUpdated});
+            dis.dispatch({ action: Action.PstnSupportUpdated });
 
             if (protocols[PROTOCOL_SIP_NATIVE] !== undefined && protocols[PROTOCOL_SIP_VIRTUAL] !== undefined) {
                 this.supportsSipNativeVirtual = Boolean(
@@ -239,7 +240,7 @@ export default class CallHandler extends EventEmitter {
                 );
             }
 
-            dis.dispatch({action: Action.VirtualRoomSupportUpdated});
+            dis.dispatch({ action: Action.VirtualRoomSupportUpdated });
         } catch (e) {
             if (maxTries === 1) {
                 console.log("Failed to check for protocol support and no retries remain: assuming no support", e);
@@ -292,7 +293,7 @@ export default class CallHandler extends EventEmitter {
             action: 'incoming_call',
             call: call,
         }, true);
-    }
+    };
 
     getCallForRoom(roomId: string): MatrixCall {
         return this.calls.get(roomId) || null;
@@ -790,7 +791,7 @@ export default class CallHandler extends EventEmitter {
 
                     Analytics.trackEvent('voip', 'receiveCall', 'type', call.type);
                     console.log("Adding call for room ", mappedRoomId);
-                    this.calls.set(mappedRoomId, call)
+                    this.calls.set(mappedRoomId, call);
                     this.emit(CallHandlerEvent.CallsChanged, this.calls);
                     this.setCallListeners(call);
 
@@ -846,7 +847,7 @@ export default class CallHandler extends EventEmitter {
                 this.dialNumber(payload.number);
                 break;
         }
-    }
+    };
 
     private async dialNumber(number: string) {
         const results = await this.pstnLookup(number);
@@ -940,7 +941,7 @@ export default class CallHandler extends EventEmitter {
             confId = 'Jitsi' + random;
         }
 
-        let widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl({auth: jitsiAuth});
+        let widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl({ auth: jitsiAuth });
 
         // TODO: Remove URL hacks when the mobile clients eventually support v2 widgets
         const parsedUrl = new URL(widgetUrl);

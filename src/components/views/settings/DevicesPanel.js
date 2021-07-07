@@ -20,11 +20,11 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import * as sdk from '../../../index';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
-import {SSOAuthEntry} from "../auth/InteractiveAuthEntryComponents";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.settings.DevicesPanel")
 export default class DevicesPanel extends React.Component {
@@ -58,7 +58,7 @@ export default class DevicesPanel extends React.Component {
         MatrixClientPeg.get().getDevices().then(
             (resp) => {
                 if (this._unmounted) { return; }
-                this.setState({devices: resp.devices || []});
+                this.setState({ devices: resp.devices || [] });
             },
             (error) => {
                 if (this._unmounted) { return; }
@@ -70,11 +70,10 @@ export default class DevicesPanel extends React.Component {
                     console.error("Error loading sessions:", error);
                     errtxt = _t("Unable to load session list");
                 }
-                this.setState({deviceLoadError: errtxt});
+                this.setState({ deviceLoadError: errtxt });
             },
         );
     }
-
 
     /*
      * compare two devices, sorting from most-recently-seen to least-recently-seen
@@ -107,7 +106,7 @@ export default class DevicesPanel extends React.Component {
                 selectedDevices.splice(i, 1);
             }
 
-            return {selectedDevices};
+            return { selectedDevices };
         });
     }
 
@@ -141,7 +140,7 @@ export default class DevicesPanel extends React.Component {
                     body: _t("Click the button below to confirm deleting these sessions.", {
                         count: numDevices,
                     }),
-                    continueText: _t("Delete sessions", {count: numDevices}),
+                    continueText: _t("Delete sessions", { count: numDevices }),
                     continueKind: "danger",
                 },
             };
@@ -214,7 +213,7 @@ export default class DevicesPanel extends React.Component {
         const deleteButton = this.state.deleting ?
             <Spinner w={22} h={22} /> :
             <AccessibleButton onClick={this._onDeleteClick} kind="danger_sm">
-                { _t("Delete %(count)s sessions", {count: this.state.selectedDevices.length})}
+                { _t("Delete %(count)s sessions", { count: this.state.selectedDevices.length })}
             </AccessibleButton>;
 
         const classes = classNames(this.props.className, "mx_DevicesPanel");

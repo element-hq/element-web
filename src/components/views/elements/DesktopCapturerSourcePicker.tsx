@@ -16,12 +16,12 @@ limitations under the License.
 
 import React from 'react';
 import { _t } from '../../../languageHandler';
-import BaseDialog from "..//dialogs/BaseDialog"
-import DialogButtons from "./DialogButtons"
+import BaseDialog from "..//dialogs/BaseDialog";
+import DialogButtons from "./DialogButtons";
+import classNames from 'classnames';
 import AccessibleButton from './AccessibleButton';
 import { getDesktopCapturerSources } from "matrix-js-sdk/src/webrtc/call";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import classNames from 'classnames';
 
 export interface DesktopCapturerSource {
     id: string;
@@ -47,7 +47,7 @@ export class ExistingSource extends React.Component<ExistingSourceIProps> {
 
     onClick = (ev) => {
         this.props.onSelect(this.props.source);
-    }
+    };
 
     render() {
         const classes = classNames({
@@ -118,11 +118,11 @@ export default class DesktopCapturerSourcePicker extends React.Component<
 
     onSelect = (source) => {
         this.setState({ selectedSource: source });
-    }
+    };
 
     onShare = () => {
         this.props.onFinished(this.state.selectedSource);
-    }
+    };
 
     onScreensClick = () => {
         if (this.state.selectedTab === Tabs.Screens) return;
@@ -130,7 +130,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<
             selectedTab: Tabs.Screens,
             selectedSource: null,
         });
-    }
+    };
 
     onWindowsClick = () => {
         if (this.state.selectedTab === Tabs.Windows) return;
@@ -138,15 +138,15 @@ export default class DesktopCapturerSourcePicker extends React.Component<
             selectedTab: Tabs.Windows,
             selectedSource: null,
         });
-    }
+    };
 
     onCloseClick = () => {
         this.props.onFinished(null);
-    }
+    };
 
     render() {
         const sources = this.state.sources.filter((source) => {
-            return source.id.startsWith(this.state.selectedTab)
+            return source.id.startsWith(this.state.selectedTab);
         });
         const sourceElements = sources.map((source) => {
             return (

@@ -79,7 +79,7 @@ async function runTests() {
         await new Promise((resolve) => setTimeout(resolve, 5 * 60 * 1000));
     }
 
-    const performanceEntries = {};
+    let performanceEntries;
 
     await Promise.all(sessions.map(async (session) => {
         // Collecting all performance monitoring data before closing the session
@@ -88,6 +88,10 @@ async function runTests() {
             window.mxPerformanceMonitor.addPerformanceDataCallback({
                 entryNames: [
                     window.mxPerformanceEntryNames.REGISTER,
+                    window.mxPerformanceEntryNames.LOGIN,
+                    window.mxPerformanceEntryNames.JOIN_ROOM,
+                    window.mxPerformanceEntryNames.CREATE_DM,
+                    window.mxPerformanceEntryNames.VERIFY_E2EE_USER,
                 ],
                 callback: (events) => {
                     measurements = JSON.stringify(events);
@@ -95,7 +99,11 @@ async function runTests() {
             }, true);
             return measurements;
         });
-        performanceEntries[session.username] = JSON.parse(measurements);
+
+        /**
+         * TODO: temporary only use one user session data
+         */
+        performanceEntries = JSON.parse(measurements);
         return session.close();
     }));
     fs.writeFileSync(`performance-entries.json`, JSON.stringify(performanceEntries));
@@ -125,7 +133,7 @@ async function writeLogs(sessions, dir) {
         fs.writeFileSync(appHtmlName, documentHtml);
         fs.writeFileSync(networkLogName, session.networkLogs());
         fs.writeFileSync(consoleLogName, session.consoleLogs());
-        await session.page.screenshot({path: `${userLogDir}/screenshot.png`});
+        await session.page.screenshot({ path: `${userLogDir}/screenshot.png` });
     }
     return logs;
 }

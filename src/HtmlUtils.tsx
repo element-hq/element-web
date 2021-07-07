@@ -17,11 +17,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import sanitizeHtml from 'sanitize-html';
-import { IExtendedSanitizeOptions } from './@types/sanitize-html';
+import cheerio from 'cheerio';
 import * as linkify from 'linkifyjs';
-import linkifyMatrix from './linkify-matrix';
 import _linkifyElement from 'linkifyjs/element';
 import _linkifyString from 'linkifyjs/string';
 import classNames from 'classnames';
@@ -29,13 +28,15 @@ import EMOJIBASE_REGEX from 'emojibase-regex';
 import url from 'url';
 import katex from 'katex';
 import { AllHtmlEntities } from 'html-entities';
-import SettingsStore from './settings/SettingsStore';
-import cheerio from 'cheerio';
+import { IContent } from 'matrix-js-sdk/src/models/event';
 
-import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
-import {SHORTCODE_TO_EMOJI, getEmojiFromUnicode} from "./emoji";
+import { IExtendedSanitizeOptions } from './@types/sanitize-html';
+import linkifyMatrix from './linkify-matrix';
+import SettingsStore from './settings/SettingsStore';
+import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";
+import { SHORTCODE_TO_EMOJI, getEmojiFromUnicode } from "./emoji";
 import ReplyThread from "./components/views/elements/ReplyThread";
-import {mediaFromMxc} from "./customisations/Media";
+import { mediaFromMxc } from "./customisations/Media";
 
 linkifyMatrix(linkify);
 
@@ -66,7 +67,7 @@ export const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet'
  * need emojification.
  * unicodeToImage uses this function.
  */
-function mightContainEmoji(str: string) {
+function mightContainEmoji(str: string): boolean {
     return SURROGATE_PAIR_PATTERN.test(str) || SYMBOL_PATTERN.test(str);
 }
 
@@ -76,7 +77,7 @@ function mightContainEmoji(str: string) {
  * @param {String} char The emoji character
  * @return {String} The shortcode (such as :thumbup:)
  */
-export function unicodeToShortcode(char: string) {
+export function unicodeToShortcode(char: string): string {
     const data = getEmojiFromUnicode(char);
     return (data && data.shortcodes ? `:${data.shortcodes[0]}:` : '');
 }
@@ -87,7 +88,7 @@ export function unicodeToShortcode(char: string) {
  * @param {String} shortcode The shortcode (such as :thumbup:)
  * @return {String} The emoji character; null if none exists
  */
-export function shortcodeToUnicode(shortcode: string) {
+export function shortcodeToUnicode(shortcode: string): string {
     shortcode = shortcode.slice(1, shortcode.length - 1);
     const data = SHORTCODE_TO_EMOJI.get(shortcode);
     return data ? data.unicode : null;
@@ -124,20 +125,20 @@ export function processHtmlForSending(html: string): string {
  * Given an untrusted HTML string, return a React node with an sanitized version
  * of that HTML.
  */
-export function sanitizedHtmlNode(insaneHtml: string) {
+export function sanitizedHtmlNode(insaneHtml: string): ReactNode {
     const saneHtml = sanitizeHtml(insaneHtml, sanitizeHtmlParams);
 
     return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" />;
 }
 
-export function getHtmlText(insaneHtml: string) {
+export function getHtmlText(insaneHtml: string): string {
     return sanitizeHtml(insaneHtml, {
         allowedTags: [],
         allowedAttributes: {},
         selfClosing: [],
         allowedSchemes: [],
         disallowedTagsMode: 'discard',
-    })
+    });
 }
 
 /**
@@ -148,7 +149,7 @@ export function getHtmlText(insaneHtml: string) {
  * other places we need to sanitise URLs.
  * @return true if permitted, otherwise false
  */
-export function isUrlPermitted(inputUrl: string) {
+export function isUrlPermitted(inputUrl: string): boolean {
     try {
         const parsed = url.parse(inputUrl);
         if (!parsed.protocol) return false;
@@ -182,7 +183,7 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
         // images" preference is disabled. Future work might expose some UI to reveal them
         // like standalone image events have.
         if (!attribs.src || !attribs.src.startsWith('mxc://') || !SettingsStore.getValue("showImages")) {
-            return { tagName, attribs: {}};
+            return { tagName, attribs: {} };
         }
         const width = Number(attribs.width) || 800;
         const height = Number(attribs.height) || 600;
@@ -351,20 +352,21 @@ class HtmlHighlighter extends BaseHighlighter<string> {
     }
 }
 
-interface IContent {
-    format?: string;
-    // eslint-disable-next-line camelcase
-    formatted_body?: string;
-    body: string;
-}
-
 interface IOpts {
     highlightLink?: string;
     disableBigEmoji?: boolean;
     stripReplyFallback?: boolean;
     returnString?: boolean;
     forComposerQuote?: boolean;
-    ref?: React.Ref<any>;
+    ref?: React.Ref<HTMLSpanElement>;
+}
+
+export interface IOptsReturnNode extends IOpts {
+    returnString: false | undefined;
+}
+
+export interface IOptsReturnString extends IOpts {
+    returnString: true;
 }
 
 /* turn a matrix event body into html
@@ -380,6 +382,8 @@ interface IOpts {
  * opts.forComposerQuote: optional param to lessen the url rewriting done by sanitization, for quoting into composer
  * opts.ref: React ref to attach to any React components returned (not compatible with opts.returnString)
  */
+export function bodyToHtml(content: IContent, highlights: string[], opts: IOptsReturnString): string;
+export function bodyToHtml(content: IContent, highlights: string[], opts: IOptsReturnNode): ReactNode;
 export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts = {}) {
     const isHtmlMessage = content.format === "org.matrix.custom.html" && content.formatted_body;
     let bodyHasEmoji = false;
@@ -399,9 +403,14 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
     try {
         if (highlights && highlights.length > 0) {
             const highlighter = new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
-            const safeHighlights = highlights.map(function(highlight) {
-                return sanitizeHtml(highlight, sanitizeParams);
-            });
+            const safeHighlights = highlights
+                // sanitizeHtml can hang if an unclosed HTML tag is thrown at it
+                // A search for `<foo` will make the browser crash
+                // an alternative would be to escape HTML special characters
+                // but that would bring no additional benefit as the highlighter
+                // does not work with those special chars
+                .filter((highlight: string): boolean => !highlight.includes("<"))
+                .map((highlight: string): string => sanitizeHtml(highlight, sanitizeParams));
             // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeParams structure.
             sanitizeParams.textFilter = function(safeText) {
                 return highlighter.applyHighlights(safeText, safeHighlights).join('');
@@ -501,7 +510,7 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
  * @param {object} [options] Options for linkifyString. Default: linkifyMatrix.options
  * @returns {string} Linkified string
  */
-export function linkifyString(str: string, options = linkifyMatrix.options) {
+export function linkifyString(str: string, options = linkifyMatrix.options): string {
     return _linkifyString(str, options);
 }
 
@@ -512,7 +521,7 @@ export function linkifyString(str: string, options = linkifyMatrix.options) {
  * @param {object} [options] Options for linkifyElement. Default: linkifyMatrix.options
  * @returns {object}
  */
-export function linkifyElement(element: HTMLElement, options = linkifyMatrix.options) {
+export function linkifyElement(element: HTMLElement, options = linkifyMatrix.options): HTMLElement {
     return _linkifyElement(element, options);
 }
 
@@ -523,7 +532,7 @@ export function linkifyElement(element: HTMLElement, options = linkifyMatrix.opt
  * @param {object} [options] Options for linkifyString. Default: linkifyMatrix.options
  * @returns {string}
  */
-export function linkifyAndSanitizeHtml(dirtyHtml: string, options = linkifyMatrix.options) {
+export function linkifyAndSanitizeHtml(dirtyHtml: string, options = linkifyMatrix.options): string {
     return sanitizeHtml(linkifyString(dirtyHtml, options), sanitizeHtmlParams);
 }
 
@@ -534,7 +543,7 @@ export function linkifyAndSanitizeHtml(dirtyHtml: string, options = linkifyMatri
  * @param {Node} node
  * @returns {bool}
  */
-export function checkBlockNode(node: Node) {
+export function checkBlockNode(node: Node): boolean {
     switch (node.nodeName) {
         case "H1":
         case "H2":

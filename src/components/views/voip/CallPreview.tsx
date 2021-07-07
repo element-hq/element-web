@@ -26,7 +26,7 @@ import PersistentApp from "../elements/PersistentApp";
 import SettingsStore from "../../../settings/SettingsStore";
 import { CallEvent, CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
@@ -171,7 +171,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
             primaryCall: primaryCall,
             secondaryCall: secondaryCalls[0],
         });
-    }
+    };
 
     public render() {
         if (this.state.primaryCall) {

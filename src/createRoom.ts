@@ -34,54 +34,16 @@ import { isJoinedOrNearlyJoined } from "./utils/membership";
 import { VIRTUAL_ROOM_EVENT_TYPE } from "./CallHandler";
 import SpaceStore from "./stores/SpaceStore";
 import { makeSpaceParentEvent } from "./utils/space";
-import { Action } from "./dispatcher/actions"
+import { Action } from "./dispatcher/actions";
+import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
+import { Preset, Visibility } from "matrix-js-sdk/src/@types/partials";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
 
-// TODO move these interfaces over to js-sdk once it has been typescripted enough to accept them
-export enum Visibility {
-    Public = "public",
-    Private = "private",
-}
-
-export enum Preset {
-    PrivateChat = "private_chat",
-    TrustedPrivateChat = "trusted_private_chat",
-    PublicChat = "public_chat",
-}
-
-interface Invite3PID {
-    id_server: string;
-    id_access_token?: string; // this gets injected by the js-sdk
-    medium: string;
-    address: string;
-}
-
-export interface IStateEvent {
-    type: string;
-    state_key?: string; // defaults to an empty string
-    content: object;
-}
-
-interface ICreateOpts {
-    visibility?: Visibility;
-    room_alias_name?: string;
-    name?: string;
-    topic?: string;
-    invite?: string[];
-    invite_3pid?: Invite3PID[];
-    room_version?: string;
-    creation_content?: object;
-    initial_state?: IStateEvent[];
-    preset?: Preset;
-    is_direct?: boolean;
-    power_level_content_override?: object;
-}
-
 export interface IOpts {
     dmUserId?: string;
-    createOpts?: ICreateOpts;
+    createOpts?: ICreateRoomOpts;
     spinner?: boolean;
     guestAccess?: boolean;
     encryption?: boolean;
@@ -89,12 +51,6 @@ export interface IOpts {
     andView?: boolean;
     associatedWithCommunity?: string;
     parentSpace?: Room;
-}
-
-export interface IInvite3PID {
-    id_server: string,
-    medium: 'email',
-    address: string,
 }
 
 /**
@@ -129,14 +85,14 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
 
     const client = MatrixClientPeg.get();
     if (client.isGuest()) {
-        dis.dispatch({action: 'require_registration'});
+        dis.dispatch({ action: 'require_registration' });
         return Promise.resolve(null);
     }
 
     const defaultPreset = opts.dmUserId ? Preset.TrustedPrivateChat : Preset.PrivateChat;
 
     // set some defaults for the creation
-    const createOpts = opts.createOpts || {};
+    const createOpts: ICreateRoomOpts = opts.createOpts || {};
     createOpts.preset = createOpts.preset || defaultPreset;
     createOpts.visibility = createOpts.visibility || Visibility.Private;
     if (opts.dmUserId && createOpts.invite === undefined) {
@@ -369,7 +325,7 @@ export async function ensureDMExists(client: MatrixClient, userId: string): Prom
             encryption = await canEncryptToAllUsers(client, [userId]);
         }
 
-        roomId = await createRoom({encryption, dmUserId: userId, spinner: false, andView: false});
+        roomId = await createRoom({ encryption, dmUserId: userId, spinner: false, andView: false });
         await _waitForMember(client, roomId, userId);
     }
     return roomId;

@@ -16,17 +16,17 @@ limitations under the License.
 
 import classnames from 'classnames';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import SettingsStore from "../../../settings/SettingsStore";
 import { CallFeed, CallFeedEvent } from 'matrix-js-sdk/src/webrtc/callFeed';
 import { logger } from 'matrix-js-sdk/src/logger';
-import MemberAvatar from "../avatars/MemberAvatar"
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import MemberAvatar from "../avatars/MemberAvatar";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
-    call: MatrixCall,
+    call: MatrixCall;
 
-    feed: CallFeed,
+    feed: CallFeed;
 
     // Whether this call view is for picture-in-picture mode
     // otherwise, it's the larger call view when viewing the room the call is in.

@@ -18,20 +18,20 @@ limitations under the License.
 import React, { createRef, CSSProperties } from 'react';
 import dis from '../../../dispatcher/dispatcher';
 import CallHandler from '../../../CallHandler';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t, _td } from '../../../languageHandler';
 import VideoFeed from './VideoFeed';
 import RoomAvatar from "../avatars/RoomAvatar";
 import { CallState, CallType, MatrixCall, CallEvent } from 'matrix-js-sdk/src/webrtc/call';
 import classNames from 'classnames';
 import AccessibleButton from '../elements/AccessibleButton';
-import {isOnlyCtrlOrCmdKeyEvent, Key} from '../../../Keyboard';
-import {alwaysAboveLeftOf, alwaysAboveRightOf, ChevronFace, ContextMenuButton} from '../../structures/ContextMenu';
+import { isOnlyCtrlOrCmdKeyEvent, Key } from '../../../Keyboard';
+import { alwaysAboveLeftOf, alwaysAboveRightOf, ChevronFace, ContextMenuButton } from '../../structures/ContextMenu';
 import CallContextMenu from '../context_menus/CallContextMenu';
 import { avatarUrlForMember } from '../../../Avatar';
 import DialpadContextMenu from '../context_menus/DialpadContextMenu';
 import { CallFeed } from 'matrix-js-sdk/src/webrtc/callFeed';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import DesktopCapturerSourcePicker from "../elements/DesktopCapturerSourcePicker";
 import Modal from '../../../Modal';
 import { SDPStreamMetadataPurpose } from 'matrix-js-sdk/src/webrtc/callEventTypes';
@@ -39,10 +39,10 @@ import CallViewSidebar from './CallViewSidebar';
 
 interface IProps {
         // The call for us to display
-        call: MatrixCall,
+        call: MatrixCall;
 
         // Another ongoing call to display information about
-        secondaryCall?: MatrixCall,
+        secondaryCall?: MatrixCall;
 
         // a callback which is called when the content in the CallView changes
         // in a way that is likely to cause a resize.
@@ -56,18 +56,18 @@ interface IProps {
 }
 
 interface IState {
-    isLocalOnHold: boolean,
-    isRemoteOnHold: boolean,
-    micMuted: boolean,
-    vidMuted: boolean,
-    screensharing: boolean,
-    callState: CallState,
-    controlsVisible: boolean,
-    showMoreMenu: boolean,
-    showDialpad: boolean,
-    primaryFeed: CallFeed,
-    secondaryFeeds: Array<CallFeed>,
-    sidebarShown: boolean,
+    isLocalOnHold: boolean;
+    isRemoteOnHold: boolean;
+    micMuted: boolean;
+    vidMuted: boolean;
+    screensharing: boolean;
+    callState: CallState;
+    controlsVisible: boolean;
+    showMoreMenu: boolean;
+    showDialpad: boolean;
+    primaryFeed: CallFeed;
+    secondaryFeeds: Array<CallFeed>;
+    sidebarShown: boolean;
 }
 
 function getFullScreenElement() {
@@ -129,7 +129,7 @@ export default class CallView extends React.Component<IProps, IState> {
             primaryFeed: primary,
             secondaryFeeds: secondary,
             sidebarShown: true,
-        }
+        };
 
         this.updateCallListeners(null, this.props.call);
     }
@@ -244,11 +244,11 @@ export default class CallView extends React.Component<IProps, IState> {
         this.setState({
             controlsVisible: false,
         });
-    }
+    };
 
     private onMouseMove = () => {
         this.showControls();
-    }
+    };
 
     private getOrderedFeeds(feeds: Array<CallFeed>): { primary: CallFeed, secondary: Array<CallFeed> } {
         let primary;
@@ -309,33 +309,33 @@ export default class CallView extends React.Component<IProps, IState> {
                 showDialpad: false,
             });
         }
-    }
+    };
 
     private onMicMuteClick = () => {
         const newVal = !this.state.micMuted;
 
         this.props.call.setMicrophoneMuted(newVal);
-        this.setState({micMuted: newVal});
-    }
+        this.setState({ micMuted: newVal });
+    };
 
     private onVidMuteClick = () => {
         const newVal = !this.state.vidMuted;
 
         this.props.call.setLocalVideoMuted(newVal);
-        this.setState({vidMuted: newVal});
-    }
+        this.setState({ vidMuted: newVal });
+    };
 
     private onScreenshareClick = async () => {
         const isScreensharing = await this.props.call.setScreensharingEnabled(
             !this.state.screensharing,
             async (): Promise<DesktopCapturerSource> => {
-                const {finished} = Modal.createDialog(DesktopCapturerSourcePicker);
+                const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
                 const [source] = await finished;
                 return source;
             },
         );
-        this.setState({screensharing: isScreensharing})
-    }
+        this.setState({ screensharing: isScreensharing });
+    };
 
     private onMoreClick = () => {
         if (this.controlsHideTimer) {
@@ -347,21 +347,21 @@ export default class CallView extends React.Component<IProps, IState> {
             showMoreMenu: true,
             controlsVisible: true,
         });
-    }
+    };
 
     private closeDialpad = () => {
         this.setState({
             showDialpad: false,
         });
         this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
-    }
+    };
 
     private closeContextMenu = () => {
         this.setState({
             showMoreMenu: false,
         });
         this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
-    }
+    };
 
     // we register global shortcuts here, they *must not conflict* with local shortcuts elsewhere or both will fire
     // Note that this assumes we always have a CallView on screen at any given time
@@ -402,7 +402,7 @@ export default class CallView extends React.Component<IProps, IState> {
             action: 'view_room',
             room_id: userFacingRoomId,
         });
-    }
+    };
 
     private onSecondaryRoomAvatarClick = () => {
         const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.secondaryCall);
@@ -411,24 +411,24 @@ export default class CallView extends React.Component<IProps, IState> {
             action: 'view_room',
             room_id: userFacingRoomId,
         });
-    }
+    };
 
     private onCallResumeClick = () => {
         const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
         CallHandler.sharedInstance().setActiveCallRoomId(userFacingRoomId);
-    }
+    };
 
     private onTransferClick = () => {
         const transfereeCall = CallHandler.sharedInstance().getTransfereeForCallId(this.props.call.callId);
         this.props.call.transferToCall(transfereeCall);
-    }
+    };
 
     private onHangupClick = () => {
         dis.dispatch({
             action: 'hangup',
             room_id: CallHandler.sharedInstance().roomIdForCall(this.props.call),
         });
-    }
+    };
 
     private onToggleSidebar = () => {
         let vidMuted = this.state.vidMuted;
@@ -440,7 +440,7 @@ export default class CallView extends React.Component<IProps, IState> {
             vidMuted: vidMuted,
             sidebarShown: !this.state.sidebarShown,
         });
-    }
+    };
 
     private renderCallControls(): JSX.Element {
         const micClasses = classNames({
@@ -673,7 +673,7 @@ export default class CallView extends React.Component<IProps, IState> {
                         <div className="mx_CallView_voice_avatarsContainer">
                             <div
                                 className="mx_CallView_voice_avatarContainer"
-                                style={{width: avatarSize, height: avatarSize}}
+                                style={{ width: avatarSize, height: avatarSize }}
                             >
                                 <RoomAvatar
                                     room={callRoom}
@@ -708,7 +708,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     <div className="mx_CallView_voice_avatarsContainer">
                         <div
                             className="mx_CallView_voice_avatarContainer"
-                            style={{width: avatarSize, height: avatarSize}}
+                            style={{ width: avatarSize, height: avatarSize }}
                         >
                             <RoomAvatar
                                 room={callRoom}
@@ -737,7 +737,7 @@ export default class CallView extends React.Component<IProps, IState> {
 
                 presenting = (
                     <div className={presentingClasses}>
-                        { _t('%(sharerName)s is presenting', {sharerName}) }
+                        { _t('%(sharerName)s is presenting', { sharerName }) }
                     </div>
                 );
             }

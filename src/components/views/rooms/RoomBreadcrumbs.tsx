@@ -71,13 +71,13 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
         // The second update, on the next available tick, causes the "enter" animation to start
         // again and this time we want to show the newest breadcrumb because it'll be hidden
         // off screen for the animation.
-        this.setState({doAnimation: false, skipFirst: true});
-        setTimeout(() => this.setState({doAnimation: true, skipFirst: false}), 0);
+        this.setState({ doAnimation: false, skipFirst: true });
+        setTimeout(() => this.setState({ doAnimation: true, skipFirst: false }), 0);
     };
 
     private viewRoom = (room: Room, index: number) => {
         Analytics.trackEvent("Breadcrumbs", "click_node", String(index));
-        defaultDispatcher.dispatch({action: "view_room", room_id: room.roomId});
+        defaultDispatcher.dispatch({ action: "view_room", room_id: room.roomId });
     };
 
     public render(): React.ReactElement {
@@ -87,7 +87,7 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
                     className="mx_RoomBreadcrumbs_crumb"
                     key={r.roomId}
                     onClick={() => this.viewRoom(r, i)}
-                    aria-label={_t("Room %(name)s", {name: r.name})}
+                    aria-label={_t("Room %(name)s", { name: r.name })}
                     title={r.name}
                     tooltipClassName="mx_RoomBreadcrumbs_Tooltip"
                 >

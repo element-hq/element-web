@@ -14,57 +14,60 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {RefObject, useContext, useRef, useState} from "react";
-import {EventType} from "matrix-js-sdk/src/@types/event";
-import {Room} from "matrix-js-sdk/src/models/room";
-import {EventSubscription} from "fbemitter";
+import React, { RefObject, useContext, useRef, useState } from "react";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import { Preset } from "matrix-js-sdk/src/@types/partials";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { EventSubscription } from "fbemitter";
 
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import RoomAvatar from "../views/avatars/RoomAvatar";
-import {_t} from "../../languageHandler";
+import { _t } from "../../languageHandler";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import RoomName from "../views/elements/RoomName";
 import RoomTopic from "../views/elements/RoomTopic";
 import InlineSpinner from "../views/elements/InlineSpinner";
-import {inviteMultipleToRoom, showRoomInviteDialog} from "../../RoomInvite";
-import {useRoomMembers} from "../../hooks/useRoomMembers";
-import createRoom, {IOpts, Preset} from "../../createRoom";
+import { inviteMultipleToRoom, showRoomInviteDialog } from "../../RoomInvite";
+import { useRoomMembers } from "../../hooks/useRoomMembers";
+import createRoom, { IOpts } from "../../createRoom";
 import Field from "../views/elements/Field";
-import {useEventEmitter} from "../../hooks/useEventEmitter";
+import { useEventEmitter } from "../../hooks/useEventEmitter";
 import withValidation from "../views/elements/Validation";
 import * as Email from "../../email";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import {Action} from "../../dispatcher/actions";
-import ResizeNotifier from "../../utils/ResizeNotifier"
+import dis from "../../dispatcher/dispatcher";
+import { Action } from "../../dispatcher/actions";
+import ResizeNotifier from "../../utils/ResizeNotifier";
 import MainSplit from './MainSplit';
 import ErrorBoundary from "../views/elements/ErrorBoundary";
-import {ActionPayload} from "../../dispatcher/payloads";
+import { ActionPayload } from "../../dispatcher/payloads";
 import RightPanel from "./RightPanel";
 import RightPanelStore from "../../stores/RightPanelStore";
-import {RightPanelPhases} from "../../stores/RightPanelStorePhases";
-import {SetRightPanelPhasePayload} from "../../dispatcher/payloads/SetRightPanelPhasePayload";
-import {useStateArray} from "../../hooks/useStateArray";
+import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
+import { SetRightPanelPhasePayload } from "../../dispatcher/payloads/SetRightPanelPhasePayload";
+import { useStateArray } from "../../hooks/useStateArray";
 import SpacePublicShare from "../views/spaces/SpacePublicShare";
-import {showAddExistingRooms, showCreateNewRoom, shouldShowSpaceSettings, showSpaceSettings} from "../../utils/space";
-import {showRoom, SpaceHierarchy} from "./SpaceRoomDirectory";
+import { shouldShowSpaceSettings, showAddExistingRooms, showCreateNewRoom, showSpaceSettings } from "../../utils/space";
+import { showRoom, SpaceHierarchy } from "./SpaceRoomDirectory";
 import MemberAvatar from "../views/avatars/MemberAvatar";
-import {useStateToggle} from "../../hooks/useStateToggle";
+import { useStateToggle } from "../../hooks/useStateToggle";
 import SpaceStore from "../../stores/SpaceStore";
 import FacePile from "../views/elements/FacePile";
-import {AddExistingToSpace} from "../views/dialogs/AddExistingToSpaceDialog";
-import {ChevronFace, ContextMenuButton, useContextMenu} from "./ContextMenu";
+import { AddExistingToSpace } from "../views/dialogs/AddExistingToSpaceDialog";
+import { ChevronFace, ContextMenuButton, useContextMenu } from "./ContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
 } from "../views/context_menus/IconizedContextMenu";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
-import {BetaPill} from "../views/beta/BetaCard";
-import {USER_LABS_TAB} from "../views/dialogs/UserSettingsDialog";
+import { BetaPill } from "../views/beta/BetaCard";
+import { UserTab } from "../views/dialogs/UserSettingsDialog";
 import SettingsStore from "../../settings/SettingsStore";
-import dis from "../../dispatcher/dispatcher";
 import Modal from "../../Modal";
 import BetaFeedbackDialog from "../views/dialogs/BetaFeedbackDialog";
 import SdkConfig from "../../SdkConfig";
+import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
+import { JoinRule } from "../views/settings/tabs/room/SecurityRoomSettingsTab";
 
 interface IProps {
     space: Room;
@@ -159,13 +162,13 @@ const SpaceInfo = ({ space }) => {
                 </AccessibleButton>
             ) : null}
         </RoomMemberCount> }
-    </div>
+    </div>;
 };
 
 const onBetaClick = () => {
     defaultDispatcher.dispatch({
         action: Action.ViewUserSettings,
-        initialTabId: USER_LABS_TAB,
+        initialTabId: UserTab.Labs,
     });
 };
 
@@ -176,6 +179,9 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
     const [busy, setBusy] = useState(false);
 
     const spacesEnabled = SettingsStore.getValue("feature_spaces");
+
+    const cannotJoin = getEffectiveMembership(myMembership) === EffectiveMembership.Leave
+        && space.getJoinRule() !== JoinRule.Public;
 
     let inviterSection;
     let joinButtons;
@@ -243,7 +249,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
                     setBusy(true);
                     onJoinButtonClicked();
                 }}
-                disabled={!spacesEnabled}
+                disabled={!spacesEnabled || cannotJoin}
             >
                 { _t("Join") }
             </AccessibleButton>
@@ -252,6 +258,30 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
 
     if (busy) {
         joinButtons = <InlineSpinner />;
+    }
+
+    let footer;
+    if (!spacesEnabled) {
+        footer = <div className="mx_SpaceRoomView_preview_spaceBetaPrompt">
+            { myMembership === "join"
+                ? _t("To view %(spaceName)s, turn on the <a>Spaces beta</a>", {
+                    spaceName: space.name,
+                }, {
+                    a: sub => <AccessibleButton onClick={onBetaClick} kind="link">{ sub }</AccessibleButton>,
+                })
+                : _t("To join %(spaceName)s, turn on the <a>Spaces beta</a>", {
+                    spaceName: space.name,
+                }, {
+                    a: sub => <AccessibleButton onClick={onBetaClick} kind="link">{ sub }</AccessibleButton>,
+                })
+            }
+        </div>;
+    } else if (cannotJoin) {
+        footer = <div className="mx_SpaceRoomView_preview_spaceBetaPrompt">
+            { _t("To view %(spaceName)s, you need an invite", {
+                spaceName: space.name,
+            }) }
+        </div>;
     }
 
     return <div className="mx_SpaceRoomView_preview">
@@ -273,20 +303,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         <div className="mx_SpaceRoomView_preview_joinButtons">
             { joinButtons }
         </div>
-        { !spacesEnabled && <div className="mx_SpaceRoomView_preview_spaceBetaPrompt">
-            { myMembership === "join"
-                ? _t("To view %(spaceName)s, turn on the <a>Spaces beta</a>", {
-                    spaceName: space.name,
-                }, {
-                    a: sub => <AccessibleButton onClick={onBetaClick} kind="link">{ sub }</AccessibleButton>,
-                })
-                : _t("To join %(spaceName)s, turn on the <a>Spaces beta</a>", {
-                    spaceName: space.name,
-                }, {
-                    a: sub => <AccessibleButton onClick={onBetaClick} kind="link">{ sub }</AccessibleButton>,
-                })
-            }
-        </div> }
+        { footer }
     </div>;
 };
 
@@ -575,14 +592,14 @@ const SpaceSetupPrivateScope = ({ space, justCreatedOpts, onFinished }) => {
 
         <AccessibleButton
             className="mx_SpaceRoomView_privateScope_justMeButton"
-            onClick={() => { onFinished(false) }}
+            onClick={() => { onFinished(false); }}
         >
             <h3>{ _t("Just me") }</h3>
             <div>{ _t("A private space to organise your rooms") }</div>
         </AccessibleButton>
         <AccessibleButton
             className="mx_SpaceRoomView_privateScope_meAndMyTeammatesButton"
-            onClick={() => { onFinished(true) }}
+            onClick={() => { onFinished(true); }}
         >
             <h3>{ _t("Me and my teammates") }</h3>
             <div>{ _t("A private space for you and your teammates") }</div>
@@ -669,7 +686,7 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
     let buttonLabel = _t("Skip for now");
     if (emailAddresses.some(name => name.trim())) {
         onClick = onNextClick;
-        buttonLabel = busy ? _t("Inviting...") : _t("Continue")
+        buttonLabel = busy ? _t("Inviting...") : _t("Continue");
     }
 
     return <div className="mx_SpaceRoomView_inviteTeammates">

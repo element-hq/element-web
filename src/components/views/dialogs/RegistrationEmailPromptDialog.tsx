@@ -18,7 +18,7 @@ import * as React from "react";
 
 import { _t } from '../../../languageHandler';
 import { IDialogProps } from "./IDialogProps";
-import {useRef, useState} from "react";
+import { useRef, useState } from "react";
 import Field from "../elements/Field";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import withValidation from "../elements/Validation";
@@ -40,7 +40,7 @@ const validation = withValidation({
     ],
 });
 
-const RegistrationEmailPromptDialog: React.FC<IProps> = ({onFinished}) => {
+const RegistrationEmailPromptDialog: React.FC<IProps> = ({ onFinished }) => {
     const [email, setEmail] = useState("");
     const fieldRef = useRef<Field>();
 

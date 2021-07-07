@@ -28,7 +28,7 @@ export class StickerEventPreview implements IPreview {
         if (isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
             return stickerName;
         } else {
-            return _t("%(senderName)s: %(stickerName)s", {senderName: getSenderName(event), stickerName});
+            return _t("%(senderName)s: %(stickerName)s", { senderName: getSenderName(event), stickerName });
         }
     }
 }
