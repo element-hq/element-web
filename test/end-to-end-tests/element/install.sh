@@ -12,5 +12,5 @@ unzip -q element.zip
 rm element.zip
 mv element-web-${ELEMENT_BRANCH} element-web
 cd element-web
-yarn install
+yarn install --pure-lockfile
 yarn run build
