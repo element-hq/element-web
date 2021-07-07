@@ -279,12 +279,7 @@ $composer-shadow-color: tranparent;
     }
 }
 
-// diff highlight colors
-// intentionally swapped to avoid inversion
-.hljs-addition {
-    background: #fdd;
-}
-
-.hljs-deletion {
-    background: #dfd;
+// highlight.js overrides:
+.hljs-tag {
+    color: inherit;
 }

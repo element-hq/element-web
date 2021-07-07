@@ -283,3 +283,8 @@ $composer-shadow-color: rgba(0, 0, 0, 0.28);
         }
     }
 }
+
+// highlight.js overrides
+.hljs-tag {
+    color: inherit;
+}
