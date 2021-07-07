@@ -45,7 +45,7 @@ import Spoiler from "../elements/Spoiler";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import MessageEditHistoryDialog from "../dialogs/MessageEditHistoryDialog";
 import EditMessageComposer from '../rooms/EditMessageComposer';
-import LinkPreviewWidget from '../rooms/LinkPreviewWidget';
+import LinkPreviewGroup from '../rooms/LinkPreviewGroup';
 
 interface IProps {
     /* the MatrixEvent to show */
@@ -294,15 +294,9 @@ export default class TextualBody extends React.Component<IProps, IState> {
             // pass only the first child which is the event tile otherwise this recurses on edited events
             let links = this.findLinks([this.contentRef.current]);
             if (links.length) {
-                // de-dup the links (but preserve ordering)
-                const seen = new Set();
-                links = links.filter((link) => {
-                    if (seen.has(link)) return false;
-                    seen.add(link);
-                    return true;
-                });
-
-                this.setState({ links: links });
+                // de-duplicate the links using a set here maintains the order
+                links = Array.from(new Set(links));
+                this.setState({ links });
 
                 // lazy-load the hidden state of the preview widget from localstorage
                 if (window.localStorage) {
@@ -530,15 +524,12 @@ export default class TextualBody extends React.Component<IProps, IState> {
 
         let widgets;
         if (this.state.links.length && !this.state.widgetHidden && this.props.showUrlPreview) {
-            widgets = this.state.links.map((link)=>{
-                return <LinkPreviewWidget
-                    key={link}
-                    link={link}
-                    mxEvent={this.props.mxEvent}
-                    onCancelClick={this.onCancelClick}
-                    onHeightChanged={this.props.onHeightChanged}
-                />;
-            });
+            widgets = <LinkPreviewGroup
+                links={this.state.links}
+                mxEvent={this.props.mxEvent}
+                onCancelClick={this.onCancelClick}
+                onHeightChanged={this.props.onHeightChanged}
+            />;
         }
 
         switch (content.msgtype) {

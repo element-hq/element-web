@@ -51,22 +51,6 @@ limitations under the License.
     word-wrap: break-word;
 }
 
-.mx_LinkPreviewWidget_cancel {
-    cursor: pointer;
-    width: 18px;
-    height: 18px;
-
-    img {
-        flex: 0 0 40px;
-        visibility: hidden;
-    }
-}
-
-.mx_LinkPreviewWidget:hover .mx_LinkPreviewWidget_cancel img,
-.mx_LinkPreviewWidget_cancel.focus-visible:focus img {
-    visibility: visible;
-}
-
 .mx_MatrixChat_useCompactLayout {
     .mx_LinkPreviewWidget {
         margin-top: 6px;

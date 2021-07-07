@@ -1508,6 +1508,8 @@
     "Your message was sent": "Your message was sent",
     "Failed to send": "Failed to send",
     "Scroll to most recent messages": "Scroll to most recent messages",
+    "Show %(count)s other previews|other": "Show %(count)s other previews",
+    "Show %(count)s other previews|one": "Show %(count)s other preview",
     "Close preview": "Close preview",
     "and %(count)s others...|other": "and %(count)s others...",
     "and %(count)s others...|one": "and one other...",
