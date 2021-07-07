@@ -20,7 +20,7 @@ import { MatrixClientPeg } from '../../MatrixClientPeg';
 import { SettingLevel } from "../SettingLevel";
 
 // XXX: This feels wrong.
-import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
+import { Action, PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 // .m.rule.master being enabled means all events match that push rule
 // default action on this rule is dont_notify, but it could be something else
@@ -35,7 +35,7 @@ export function isPushNotifyDisabled(): boolean {
     }
 
     // If the rule is enabled then check it does not notify on everything
-    return masterRule.enabled && !masterRule.actions.includes("notify");
+    return masterRule.enabled && !masterRule.actions.includes(Action.Notify);
 }
 
 function getNotifier(): any { // TODO: [TS] Formal type that doesn't cause a cyclical reference.
