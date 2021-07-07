@@ -36,9 +36,9 @@ interface IProps {
 
     // a callback which is called when the video element is resized
     // due to a change in video metadata
-    onResize?: (e: Event) => void,
+    onResize?: (e: Event) => void;
 
-    primary: boolean,
+    primary: boolean;
 }
 
 interface IState {

@@ -56,7 +56,6 @@ limitations under the License.
 import React from 'react';
 
 import { MatrixClientPeg } from './MatrixClientPeg';
-import PlatformPeg from './PlatformPeg';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 import dis from './dispatcher/dispatcher';
