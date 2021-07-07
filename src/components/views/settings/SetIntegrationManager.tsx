@@ -17,15 +17,25 @@ limitations under the License.
 import React from 'react';
 import { _t } from "../../../languageHandler";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
+import { IntegrationManagerInstance } from "../../../integrations/IntegrationManagerInstance";
 import * as sdk from '../../../index';
 import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+interface IProps {
+
+}
+
+interface IState {
+    currentManager: IntegrationManagerInstance;
+    provisioningEnabled: boolean;
+}
+
 @replaceableComponent("views.settings.SetIntegrationManager")
-export default class SetIntegrationManager extends React.Component {
-    constructor() {
-        super();
+export default class SetIntegrationManager extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
+        super(props);
 
         const currentManager = IntegrationManagers.sharedInstance().getPrimaryManager();
 
@@ -35,7 +45,7 @@ export default class SetIntegrationManager extends React.Component {
         };
     }
 
-    onProvisioningToggled = () => {
+    private onProvisioningToggled = (): void => {
         const current = this.state.provisioningEnabled;
         SettingsStore.setValue("integrationProvisioning", null, SettingLevel.ACCOUNT, !current).catch(err => {
             console.error("Error changing integration manager provisioning");
@@ -46,7 +56,7 @@ export default class SetIntegrationManager extends React.Component {
         this.setState({ provisioningEnabled: !current });
     };
 
-    render() {
+    public render(): React.ReactNode {
         const ToggleSwitch = sdk.getComponent("views.elements.ToggleSwitch");
 
         const currentManager = this.state.currentManager;

@@ -1,3 +1,174 @@
+Changes in [3.25.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.25.0) (2021-07-05)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.25.0-rc.1...v3.25.0)
+
+ * Remove reminescent references to the tinter
+   [\#6316](https://github.com/matrix-org/matrix-react-sdk/pull/6316)
+ * Update to released version of js-sdk
+
+Changes in [3.25.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.25.0-rc.1) (2021-06-29)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.24.0...v3.25.0-rc.1)
+
+ * Update to js-sdk v12.0.1-rc.1
+ * Translations update from Weblate
+   [\#6286](https://github.com/matrix-org/matrix-react-sdk/pull/6286)
+ * Fix back button on user info card after clicking a permalink
+   [\#6277](https://github.com/matrix-org/matrix-react-sdk/pull/6277)
+ * Group ACLs with MELS
+   [\#6280](https://github.com/matrix-org/matrix-react-sdk/pull/6280)
+ * Fix editState not getting passed through
+   [\#6282](https://github.com/matrix-org/matrix-react-sdk/pull/6282)
+ * Migrate message context menu to IconizedContextMenu
+   [\#5671](https://github.com/matrix-org/matrix-react-sdk/pull/5671)
+ * Improve audio recording performance
+   [\#6240](https://github.com/matrix-org/matrix-react-sdk/pull/6240)
+ * Fix multiple timeline panels handling composer and edit events
+   [\#6278](https://github.com/matrix-org/matrix-react-sdk/pull/6278)
+ * Let m.notice messages mark a room as unread
+   [\#6281](https://github.com/matrix-org/matrix-react-sdk/pull/6281)
+ * Removes the override on the Bubble Container
+   [\#5953](https://github.com/matrix-org/matrix-react-sdk/pull/5953)
+ * Fix IRC layout regressions
+   [\#6193](https://github.com/matrix-org/matrix-react-sdk/pull/6193)
+ * Fix trashcan.svg by exporting it with its viewbox
+   [\#6248](https://github.com/matrix-org/matrix-react-sdk/pull/6248)
+ * Fix tiny scrollbar dot on chrome/electron in Forward Dialog
+   [\#6276](https://github.com/matrix-org/matrix-react-sdk/pull/6276)
+ * Upgrade puppeteer to use newer version of Chrome
+   [\#6268](https://github.com/matrix-org/matrix-react-sdk/pull/6268)
+ * Make toast dismiss button less prominent
+   [\#6275](https://github.com/matrix-org/matrix-react-sdk/pull/6275)
+ * Encrypt the voice message file if needed
+   [\#6269](https://github.com/matrix-org/matrix-react-sdk/pull/6269)
+ * Fix hyper-precise presence
+   [\#6270](https://github.com/matrix-org/matrix-react-sdk/pull/6270)
+ * Fix issues around private spaces, including previewable
+   [\#6265](https://github.com/matrix-org/matrix-react-sdk/pull/6265)
+ * Make _pinned messages_ in `m.room.pinned_events` event clickable
+   [\#6257](https://github.com/matrix-org/matrix-react-sdk/pull/6257)
+ * Fix space avatar management layout being broken
+   [\#6266](https://github.com/matrix-org/matrix-react-sdk/pull/6266)
+ * Convert EntityTile, MemberTile and PresenceLabel to TS
+   [\#6251](https://github.com/matrix-org/matrix-react-sdk/pull/6251)
+ * Fix UserInfo not working when rendered without a room
+   [\#6260](https://github.com/matrix-org/matrix-react-sdk/pull/6260)
+ * Update membership reason handling, including leave reason displaying
+   [\#6253](https://github.com/matrix-org/matrix-react-sdk/pull/6253)
+ * Consolidate types with js-sdk changes
+   [\#6220](https://github.com/matrix-org/matrix-react-sdk/pull/6220)
+ * Fix edit history modal
+   [\#6258](https://github.com/matrix-org/matrix-react-sdk/pull/6258)
+ * Convert MemberList to TS
+   [\#6249](https://github.com/matrix-org/matrix-react-sdk/pull/6249)
+ * Fix two PRs duplicating the css attribute
+   [\#6259](https://github.com/matrix-org/matrix-react-sdk/pull/6259)
+ * Improve invite error messages in InviteDialog for room invites
+   [\#6201](https://github.com/matrix-org/matrix-react-sdk/pull/6201)
+ * Fix invite dialog being cut off when it has limited results
+   [\#6256](https://github.com/matrix-org/matrix-react-sdk/pull/6256)
+ * Fix pinning event in a room which hasn't had events pinned in before
+   [\#6255](https://github.com/matrix-org/matrix-react-sdk/pull/6255)
+ * Allow modal widget buttons to be disabled when the modal opens
+   [\#6178](https://github.com/matrix-org/matrix-react-sdk/pull/6178)
+ * Decrease e2e shield fill mask size so that it doesn't overlap
+   [\#6250](https://github.com/matrix-org/matrix-react-sdk/pull/6250)
+ * Dial Pad UI bug fixes
+   [\#5786](https://github.com/matrix-org/matrix-react-sdk/pull/5786)
+ * Simple handling of mid-call output changes
+   [\#6247](https://github.com/matrix-org/matrix-react-sdk/pull/6247)
+ * Improve ForwardDialog performance by using TruncatedList
+   [\#6228](https://github.com/matrix-org/matrix-react-sdk/pull/6228)
+ * Fix dependency and lockfile mismatch
+   [\#6246](https://github.com/matrix-org/matrix-react-sdk/pull/6246)
+ * Improve room directory click behaviour
+   [\#6234](https://github.com/matrix-org/matrix-react-sdk/pull/6234)
+ * Fix keyboard accessibility of the space panel
+   [\#6239](https://github.com/matrix-org/matrix-react-sdk/pull/6239)
+ * Add ways to manage addresses for Spaces
+   [\#6151](https://github.com/matrix-org/matrix-react-sdk/pull/6151)
+ * Hide communities invites and the community autocompleter when Spaces on
+   [\#6244](https://github.com/matrix-org/matrix-react-sdk/pull/6244)
+ * Convert bunch of files to TS
+   [\#6241](https://github.com/matrix-org/matrix-react-sdk/pull/6241)
+ * Open local addresses section by default when there are no existing local
+   addresses
+   [\#6179](https://github.com/matrix-org/matrix-react-sdk/pull/6179)
+ * Allow reordering of the space panel via Drag and Drop
+   [\#6137](https://github.com/matrix-org/matrix-react-sdk/pull/6137)
+ * Replace drag and drop mechanism in communities with something simpler
+   [\#6134](https://github.com/matrix-org/matrix-react-sdk/pull/6134)
+ * EventTilePreview fixes
+   [\#6000](https://github.com/matrix-org/matrix-react-sdk/pull/6000)
+ * Upgrade @types/react and @types/react-dom
+   [\#6233](https://github.com/matrix-org/matrix-react-sdk/pull/6233)
+ * Fix type error in the SpaceStore
+   [\#6242](https://github.com/matrix-org/matrix-react-sdk/pull/6242)
+ * Add experimental options to the Spaces beta
+   [\#6199](https://github.com/matrix-org/matrix-react-sdk/pull/6199)
+ * Consolidate types with js-sdk changes
+   [\#6215](https://github.com/matrix-org/matrix-react-sdk/pull/6215)
+ * Fix branch matching for Buildkite
+   [\#6236](https://github.com/matrix-org/matrix-react-sdk/pull/6236)
+ * Migrate SearchBar to TypeScript
+   [\#6230](https://github.com/matrix-org/matrix-react-sdk/pull/6230)
+ * Add support to keyboard shortcuts dialog for [digits]
+   [\#6088](https://github.com/matrix-org/matrix-react-sdk/pull/6088)
+ * Fix modal opening race condition
+   [\#6238](https://github.com/matrix-org/matrix-react-sdk/pull/6238)
+ * Deprecate FormButton in favour of AccessibleButton
+   [\#6229](https://github.com/matrix-org/matrix-react-sdk/pull/6229)
+ * Add PR template
+   [\#6216](https://github.com/matrix-org/matrix-react-sdk/pull/6216)
+ * Prefer canonical aliases while autocompleting rooms
+   [\#6222](https://github.com/matrix-org/matrix-react-sdk/pull/6222)
+ * Fix quote button
+   [\#6232](https://github.com/matrix-org/matrix-react-sdk/pull/6232)
+ * Restore branch matching support for GitHub Actions e2e tests
+   [\#6224](https://github.com/matrix-org/matrix-react-sdk/pull/6224)
+ * Fix View Source accessing renamed private field on MatrixEvent
+   [\#6225](https://github.com/matrix-org/matrix-react-sdk/pull/6225)
+ * Fix ConfirmUserActionDialog returning an input field rather than text
+   [\#6219](https://github.com/matrix-org/matrix-react-sdk/pull/6219)
+ * Revert "Partially restore immutable event objects at the rendering layer"
+   [\#6221](https://github.com/matrix-org/matrix-react-sdk/pull/6221)
+ * Add jq to e2e tests Dockerfile
+   [\#6218](https://github.com/matrix-org/matrix-react-sdk/pull/6218)
+ * Partially restore immutable event objects at the rendering layer
+   [\#6196](https://github.com/matrix-org/matrix-react-sdk/pull/6196)
+ * Update MSC number references for voice messages
+   [\#6197](https://github.com/matrix-org/matrix-react-sdk/pull/6197)
+ * Fix phase enum usage in JS modules as well
+   [\#6214](https://github.com/matrix-org/matrix-react-sdk/pull/6214)
+ * Migrate some dialogs to TypeScript
+   [\#6185](https://github.com/matrix-org/matrix-react-sdk/pull/6185)
+ * Typescript fixes due to MatrixEvent being TSified
+   [\#6208](https://github.com/matrix-org/matrix-react-sdk/pull/6208)
+ * Allow click-to-ping, quote & emoji picker for edit composer too
+   [\#5858](https://github.com/matrix-org/matrix-react-sdk/pull/5858)
+ * Add call silencing
+   [\#6082](https://github.com/matrix-org/matrix-react-sdk/pull/6082)
+ * Fix types in SlashCommands
+   [\#6207](https://github.com/matrix-org/matrix-react-sdk/pull/6207)
+ * Benchmark multiple common user scenario
+   [\#6190](https://github.com/matrix-org/matrix-react-sdk/pull/6190)
+ * Fix forward dialog message preview display names
+   [\#6204](https://github.com/matrix-org/matrix-react-sdk/pull/6204)
+ * Remove stray bullet point in reply preview
+   [\#6206](https://github.com/matrix-org/matrix-react-sdk/pull/6206)
+ * Stop requesting null next replies from the server
+   [\#6203](https://github.com/matrix-org/matrix-react-sdk/pull/6203)
+ * Fix soft crash caused by a broken shouldComponentUpdate
+   [\#6202](https://github.com/matrix-org/matrix-react-sdk/pull/6202)
+ * Keep composer reply when scrolling away from a highlighted event
+   [\#6200](https://github.com/matrix-org/matrix-react-sdk/pull/6200)
+ * Cache virtual/native room mappings when they're created
+   [\#6194](https://github.com/matrix-org/matrix-react-sdk/pull/6194)
+ * Disable comment-on-alert
+   [\#6191](https://github.com/matrix-org/matrix-react-sdk/pull/6191)
+ * Bump postcss from 7.0.35 to 7.0.36
+   [\#6195](https://github.com/matrix-org/matrix-react-sdk/pull/6195)
+
 Changes in [3.24.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.24.0) (2021-06-21)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.24.0-rc.1...v3.24.0)
