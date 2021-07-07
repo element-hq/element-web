@@ -26,9 +26,12 @@ limitations under the License.
 
     position: relative;
     margin-top: var(--gutterSize);
-    margin-left: calc(var(--avatarSize) + var(--gutterSize));
-    margin-right: calc(var(--gutterSize) + var(--avatarSize));
-    padding: 2px 0;
+    margin-left: 50px;
+    margin-right: 50px;
+
+    &.mx_EventTile_continuation {
+        margin-top: 2px;
+    }
 
     /* For replies */
     .mx_EventTile {
@@ -36,7 +39,23 @@ limitations under the License.
     }
 
     &:hover {
-        background: $eventbubble-bg-hover;
+        &::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            bottom: -1px;
+            left: -60px;
+            right: -65px;
+            z-index: -1;
+            background: $eventbubble-bg-hover;
+            border-radius: 4px;
+        }
+
+        .mx_EventTile_avatar {
+            img {
+                box-shadow: 0 0 0 3px $eventbubble-bg-hover;
+            }
+        }
     }
 
     .mx_SenderProfile,
@@ -55,10 +74,10 @@ limitations under the License.
         background: var(--backgroundColor);
         display: flex;
         gap: var(--gutterSize);
-        margin: 0 calc(-2 * var(--gutterSize));
+        margin: 0 -12px 0 -22px;
         > a {
             position: absolute;
-            left: -50px;
+            left: -57px;
         }
     }
 
@@ -91,7 +110,7 @@ limitations under the License.
         }
         .mx_EventTile_avatar {
             top: -19px; // height of the sender block
-            right: calc(-1 * var(--avatarSize));
+            right: -45px;
         }
 
         --backgroundColor: $eventbubble-self-bg;
@@ -104,8 +123,6 @@ limitations under the License.
 
         .mx_ReplyThread_show {
             order: 99999;
-            /* background: white;
-            box-shadow: 0 0 0 var(--gutterSize) white; */
         }
 
         .mx_ReplyThread {
@@ -190,7 +207,7 @@ limitations under the License.
 
     .mx_EventTile_readAvatars {
         position: absolute;
-        right: -45px;
+        right: -60px;
         bottom: 0;
         top: auto;
     }

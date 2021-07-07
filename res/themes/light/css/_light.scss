@@ -354,8 +354,8 @@ $composer-shadow-color: rgba(0, 0, 0, 0.04);
 // Bubble tiles
 $eventbubble-self-bg: #F8FDFC;
 $eventbubble-others-bg: #F7F8F9;
-$eventbubble-bg-hover: rgb(242, 242, 242);
-$eventbubble-avatar-outline: #fff;
+$eventbubble-bg-hover: #FEFCF5;
+$eventbubble-avatar-outline: $primary-bg-color;
 
 // ***** Mixins! *****
 
