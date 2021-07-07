@@ -281,5 +281,5 @@ $composer-shadow-color: tranparent;
 
 // highlight.js overrides:
 .hljs-tag {
-    color: inherit;
+    color: inherit; // Without this they'd be weirdly blue which doesn't match the theme
 }
