@@ -72,11 +72,45 @@ limitations under the License.
         .mx_EventTile_line {
             border-bottom-right-radius: var(--cornerRadius);
         }
+        .mx_EventTile_avatar {
+            left: calc(-1 * var(--avatarSize));
+        }
+
+        .mx_MessageActionBar {
+            right: 0;
+            transform: translate3d(50%, 50%, 0);
+        }
+
+        --backgroundColor: $eventbubble-others-bg;
     }
     &[data-self=true] {
         .mx_EventTile_line {
             border-bottom-left-radius: var(--cornerRadius);
+            float: right;
+            > a {
+                left: auto;
+                right: -35px;
+            }
         }
+        .mx_SenderProfile {
+            display: none;
+        }
+        .mx_ReactionsRow {
+            float: right;
+            clear: right;
+            display: flex;
+
+            /* Moving the "add reaction button" before the reactions */
+            > :last-child {
+                order: -1;
+            }
+        }
+        .mx_EventTile_avatar {
+            top: -19px; // height of the sender block
+            right: -45px;
+        }
+
+        --backgroundColor: $eventbubble-self-bg;
     }
 
     .mx_EventTile_line {
@@ -118,35 +152,6 @@ limitations under the License.
         }
     }
 
-    &[data-self=true] {
-        .mx_EventTile_line {
-            float: right;
-            > a {
-                left: auto;
-                right: -35px;
-            }
-        }
-        .mx_SenderProfile {
-            display: none;
-        }
-        .mx_ReactionsRow {
-            float: right;
-            clear: right;
-            display: flex;
-
-            /* Moving the "add reaction button" before the reactions */
-            > :last-child {
-                order: -1;
-            }
-        }
-        .mx_EventTile_avatar {
-            top: -19px; // height of the sender block
-            right: -45px;
-        }
-
-        --backgroundColor: $eventbubble-self-bg;
-    }
-
     &[data-has-reply=true] {
         > .mx_EventTile_line {
             flex-direction: column;
@@ -177,19 +182,6 @@ limitations under the License.
                 }
             }
         }
-    }
-
-    &[data-self=false] {
-        .mx_EventTile_avatar {
-            left: calc(-1 * var(--avatarSize));
-        }
-
-        .mx_MessageActionBar {
-            right: 0;
-            transform: translate3d(50%, 50%, 0);
-        }
-
-        --backgroundColor: $eventbubble-others-bg;
     }
 
     &.mx_EventTile_bubbleContainer,
