@@ -74,6 +74,7 @@ export default class AudioFeed extends React.Component<IProps, IState> {
 
     private playMedia() {
         const element = this.element.current;
+        if (!element) return;
         this.onAudioOutputChanged(MediaDeviceHandler.getAudioOutput());
         element.muted = false;
         element.srcObject = this.props.feed.stream;
