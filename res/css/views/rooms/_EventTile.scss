@@ -123,13 +123,6 @@ $hover-select-border: 4px;
         left: calc(-$hover-select-border);
     }
 
-    .mx_EventTile:hover .mx_MessageActionBar,
-    .mx_EventTile.mx_EventTile_actionBarFocused .mx_MessageActionBar,
-    [data-whatinput='keyboard'] .mx_EventTile:focus-within .mx_MessageActionBar,
-    .mx_EventTile.focus-visible:focus-within .mx_MessageActionBar {
-        visibility: visible;
-    }
-
     /* this is used for the tile for the event which is selected via the URL.
      * TODO: ultimately we probably want some transition on here.
      */
@@ -624,6 +617,13 @@ $hover-select-border: 4px;
     a {
         margin-left: 1em;
     }
+}
+
+.mx_EventTile:hover .mx_MessageActionBar,
+.mx_EventTile.mx_EventTile_actionBarFocused .mx_MessageActionBar,
+[data-whatinput='keyboard'] .mx_EventTile:focus-within .mx_MessageActionBar,
+.mx_EventTile.focus-visible:focus-within .mx_MessageActionBar {
+    visibility: visible;
 }
 
 @media only screen and (max-width: 480px) {

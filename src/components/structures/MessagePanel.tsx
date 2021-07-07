@@ -644,8 +644,10 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         }
 
         let willWantDateSeparator = false;
+        let lastInSection = true;
         if (nextEvent) {
             willWantDateSeparator = this.wantsDateSeparator(mxEv, nextEvent.getDate() || new Date());
+            lastInSection = willWantDateSeparator || mxEv.getSender() !== nextEvent.getSender();
         }
 
         // is this a continuation of the previous message?
@@ -702,7 +704,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     isTwelveHour={this.props.isTwelveHour}
                     permalinkCreator={this.props.permalinkCreator}
                     last={last}
-                    lastInSection={willWantDateSeparator}
+                    lastInSection={lastInSection}
                     lastSuccessful={isLastSuccessful}
                     isSelectedEvent={highlight}
                     getRelationsForEvent={this.props.getRelationsForEvent}
