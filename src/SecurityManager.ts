@@ -42,8 +42,8 @@ let secretStorageBeingAccessed = false;
 let nonInteractive = false;
 
 let dehydrationCache: {
-    key?: Uint8Array,
-    keyInfo?: ISecretStorageKeyInfo,
+    key?: Uint8Array;
+    keyInfo?: ISecretStorageKeyInfo;
 } = {};
 
 function isCachingAllowed(): boolean {

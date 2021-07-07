@@ -41,7 +41,7 @@ import { Key } from "../../../Keyboard";
 import { EMOTICON_TO_EMOJI } from "../../../emoji";
 import { CommandCategories, CommandMap, parseCommandString } from "../../../SlashCommands";
 import Range from "../../../editor/range";
-import MessageComposerFormatBar from "./MessageComposerFormatBar";
+import MessageComposerFormatBar, { Formatting } from "./MessageComposerFormatBar";
 import DocumentOffset from "../../../editor/offset";
 import { IDiff } from "../../../editor/diff";
 import AutocompleteWrapperModel from "../../../editor/autocomplete";
@@ -55,7 +55,7 @@ const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.sourc
 
 const IS_MAC = navigator.platform.indexOf("Mac") !== -1;
 
-function ctrlShortcutLabel(key) {
+function ctrlShortcutLabel(key: string): string {
     return (IS_MAC ? "⌘" : "Ctrl") + "+" + key;
 }
 
@@ -81,14 +81,6 @@ function selectionEquals(a: Partial<Selection>, b: Selection): boolean {
         a.type === b.type;
 }
 
-enum Formatting {
-    Bold = "bold",
-    Italics = "italics",
-    Strikethrough = "strikethrough",
-    Code = "code",
-    Quote = "quote",
-}
-
 interface IProps {
     model: EditorModel;
     room: Room;
@@ -111,9 +103,9 @@ interface IState {
 
 @replaceableComponent("views.rooms.BasicMessageEditor")
 export default class BasicMessageEditor extends React.Component<IProps, IState> {
-    private editorRef = createRef<HTMLDivElement>();
+    public readonly editorRef = createRef<HTMLDivElement>();
     private autocompleteRef = createRef<Autocomplete>();
-    private formatBarRef = createRef<typeof MessageComposerFormatBar>();
+    private formatBarRef = createRef<MessageComposerFormatBar>();
 
     private modifiedFlag = false;
     private isIMEComposing = false;
@@ -156,7 +148,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         }
     }
 
-    private replaceEmoticon = (caretPosition: DocumentPosition) => {
+    private replaceEmoticon = (caretPosition: DocumentPosition): number => {
         const { model } = this.props;
         const range = model.startRange(caretPosition);
         // expand range max 8 characters backwards from caretPosition,
@@ -188,7 +180,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         }
     };
 
-    private updateEditorState = (selection: Caret, inputType?: string, diff?: IDiff) => {
+    private updateEditorState = (selection: Caret, inputType?: string, diff?: IDiff): void => {
         renderModel(this.editorRef.current, this.props.model);
         if (selection) { // set the caret/selection
             try {
@@ -230,25 +222,25 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         }
     };
 
-    private showPlaceholder() {
+    private showPlaceholder(): void {
         // escape single quotes
         const placeholder = this.props.placeholder.replace(/'/g, '\\\'');
         this.editorRef.current.style.setProperty("--placeholder", `'${placeholder}'`);
         this.editorRef.current.classList.add("mx_BasicMessageComposer_inputEmpty");
     }
 
-    private hidePlaceholder() {
+    private hidePlaceholder(): void {
         this.editorRef.current.classList.remove("mx_BasicMessageComposer_inputEmpty");
         this.editorRef.current.style.removeProperty("--placeholder");
     }
 
-    private onCompositionStart = () => {
+    private onCompositionStart = (): void => {
         this.isIMEComposing = true;
         // even if the model is empty, the composition text shouldn't be mixed with the placeholder
         this.hidePlaceholder();
     };
 
-    private onCompositionEnd = () => {
+    private onCompositionEnd = (): void => {
         this.isIMEComposing = false;
         // some browsers (Chrome) don't fire an input event after ending a composition,
         // so trigger a model update after the composition is done by calling the input handler.
@@ -271,14 +263,14 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         }
     };
 
-    isComposing(event: React.KeyboardEvent) {
+    public isComposing(event: React.KeyboardEvent): boolean {
         // checking the event.isComposing flag just in case any browser out there
         // emits events related to the composition after compositionend
         // has been fired
         return !!(this.isIMEComposing || (event.nativeEvent && event.nativeEvent.isComposing));
     }
 
-    private onCutCopy = (event: ClipboardEvent, type: string) => {
+    private onCutCopy = (event: ClipboardEvent, type: string): void => {
         const selection = document.getSelection();
         const text = selection.toString();
         if (text) {
@@ -296,15 +288,15 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         }
     };
 
-    private onCopy = (event: ClipboardEvent) => {
+    private onCopy = (event: ClipboardEvent): void => {
         this.onCutCopy(event, "copy");
     };
 
-    private onCut = (event: ClipboardEvent) => {
+    private onCut = (event: ClipboardEvent): void => {
         this.onCutCopy(event, "cut");
     };
 
-    private onPaste = (event: ClipboardEvent<HTMLDivElement>) => {
+    private onPaste = (event: ClipboardEvent<HTMLDivElement>): boolean => {
         event.preventDefault(); // we always handle the paste ourselves
         if (this.props.onPaste && this.props.onPaste(event, this.props.model)) {
             // to prevent double handling, allow props.onPaste to skip internal onPaste
@@ -328,7 +320,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         replaceRangeAndMoveCaret(range, parts);
     };
 
-    private onInput = (event: Partial<InputEvent>) => {
+    private onInput = (event: Partial<InputEvent>): void => {
         // ignore any input while doing IME compositions
         if (this.isIMEComposing) {
             return;
@@ -339,7 +331,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.props.model.update(text, event.inputType, caret);
     };
 
-    private insertText(textToInsert: string, inputType = "insertText") {
+    private insertText(textToInsert: string, inputType = "insertText"): void {
         const sel = document.getSelection();
         const { caret, text } = getCaretOffsetAndText(this.editorRef.current, sel);
         const newText = text.substr(0, caret.offset) + textToInsert + text.substr(caret.offset);
@@ -353,14 +345,14 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     // we don't need to. But if the user is navigating the caret without input
     // we need to recalculate it, to be able to know where to insert content after
     // losing focus
-    private setLastCaretFromPosition(position: DocumentPosition) {
+    private setLastCaretFromPosition(position: DocumentPosition): void {
         const { model } = this.props;
         this._isCaretAtEnd = position.isAtEnd(model);
         this.lastCaret = position.asOffset(model);
         this.lastSelection = cloneSelection(document.getSelection());
     }
 
-    private refreshLastCaretIfNeeded() {
+    private refreshLastCaretIfNeeded(): DocumentOffset {
         // XXX: needed when going up and down in editing messages ... not sure why yet
         // because the editors should stop doing this when when blurred ...
         // maybe it's on focus and the _editorRef isn't available yet or something.
@@ -377,38 +369,38 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         return this.lastCaret;
     }
 
-    clearUndoHistory() {
+    public clearUndoHistory(): void {
         this.historyManager.clear();
     }
 
-    getCaret() {
+    public getCaret(): DocumentOffset {
         return this.lastCaret;
     }
 
-    isSelectionCollapsed() {
+    public isSelectionCollapsed(): boolean {
         return !this.lastSelection || this.lastSelection.isCollapsed;
     }
 
-    isCaretAtStart() {
+    public isCaretAtStart(): boolean {
         return this.getCaret().offset === 0;
     }
 
-    isCaretAtEnd() {
+    public isCaretAtEnd(): boolean {
         return this._isCaretAtEnd;
     }
 
-    private onBlur = () => {
+    private onBlur = (): void => {
         document.removeEventListener("selectionchange", this.onSelectionChange);
     };
 
-    private onFocus = () => {
+    private onFocus = (): void => {
         document.addEventListener("selectionchange", this.onSelectionChange);
         // force to recalculate
         this.lastSelection = null;
         this.refreshLastCaretIfNeeded();
     };
 
-    private onSelectionChange = () => {
+    private onSelectionChange = (): void => {
         const { isEmpty } = this.props.model;
 
         this.refreshLastCaretIfNeeded();
@@ -427,7 +419,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         }
     };
 
-    private onKeyDown = (event: React.KeyboardEvent) => {
+    private onKeyDown = (event: React.KeyboardEvent): void => {
         const model = this.props.model;
         let handled = false;
         const action = getKeyBindingsManager().getMessageComposerAction(event);
@@ -523,7 +515,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         }
     };
 
-    private async tabCompleteName() {
+    private async tabCompleteName(): Promise<void> {
         try {
             await new Promise<void>(resolve => this.setState({ showVisualBell: false }, resolve));
             const { model } = this.props;
@@ -557,27 +549,27 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         }
     }
 
-    isModified() {
+    public isModified(): boolean {
         return this.modifiedFlag;
     }
 
-    private onAutoCompleteConfirm = (completion: ICompletion) => {
+    private onAutoCompleteConfirm = (completion: ICompletion): void => {
         this.modifiedFlag = true;
         this.props.model.autoComplete.onComponentConfirm(completion);
     };
 
-    private onAutoCompleteSelectionChange = (completion: ICompletion, completionIndex: number) => {
+    private onAutoCompleteSelectionChange = (completion: ICompletion, completionIndex: number): void => {
         this.modifiedFlag = true;
         this.props.model.autoComplete.onComponentSelectionChange(completion);
         this.setState({ completionIndex });
     };
 
-    private configureEmoticonAutoReplace = () => {
+    private configureEmoticonAutoReplace = (): void => {
         const shouldReplace = SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji');
         this.props.model.setTransformCallback(shouldReplace ? this.replaceEmoticon : null);
     };
 
-    private configureShouldShowPillAvatar = () => {
+    private configureShouldShowPillAvatar = (): void => {
         const showPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
         this.setState({ showPillAvatar });
     };
@@ -611,8 +603,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.editorRef.current.focus();
     }
 
-    private getInitialCaretPosition() {
-        let caretPosition;
+    private getInitialCaretPosition(): DocumentPosition {
+        let caretPosition: DocumentPosition;
         if (this.props.initialCaret) {
             // if restoring state from a previous editor,
             // restore caret position from the state
@@ -625,7 +617,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         return caretPosition;
     }
 
-    private onFormatAction = (action: Formatting) => {
+    private onFormatAction = (action: Formatting): void => {
         const range = getRangeForSelection(this.editorRef.current, this.props.model, document.getSelection());
         // trim the range as we want it to exclude leading/trailing spaces
         range.trim();
@@ -680,9 +672,9 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         });
 
         const shortcuts = {
-            bold: ctrlShortcutLabel("B"),
-            italics: ctrlShortcutLabel("I"),
-            quote: ctrlShortcutLabel(">"),
+            [Formatting.Bold]: ctrlShortcutLabel("B"),
+            [Formatting.Italics]: ctrlShortcutLabel("I"),
+            [Formatting.Quote]: ctrlShortcutLabel(">"),
         };
 
         const { completionIndex } = this.state;
@@ -714,11 +706,11 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         </div>);
     }
 
-    focus() {
+    public focus(): void {
         this.editorRef.current.focus();
     }
 
-    public insertMention(userId: string) {
+    public insertMention(userId: string): void {
         const { model } = this.props;
         const { partCreator } = model;
         const member = this.props.room.getMember(userId);
@@ -736,7 +728,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.focus();
     }
 
-    public insertQuotedMessage(event: MatrixEvent) {
+    public insertQuotedMessage(event: MatrixEvent): void {
         const { model } = this.props;
         const { partCreator } = model;
         const quoteParts = parseEvent(event, partCreator, { isQuotedMessage: true });
@@ -751,7 +743,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.focus();
     }
 
-    public insertPlaintext(text: string) {
+    public insertPlaintext(text: string): void {
         const { model } = this.props;
         const { partCreator } = model;
         const caret = this.getCaret();

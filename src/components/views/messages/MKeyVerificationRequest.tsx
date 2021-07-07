@@ -28,7 +28,7 @@ import EventTileBubble from "./EventTileBubble";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
-    mxEvent: MatrixEvent
+    mxEvent: MatrixEvent;
 }
 
 @replaceableComponent("views.messages.MKeyVerificationRequest")
@@ -154,7 +154,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
                     <AccessibleButton kind="danger" onClick={this.onRejectClicked}>
                         {_t("Decline")}
                     </AccessibleButton>
-                    <AccessibleButton onClick={this.onAcceptClicked}>
+                    <AccessibleButton kind="primary" onClick={this.onAcceptClicked}>
                         {_t("Accept")}
                     </AccessibleButton>
                 </div>);

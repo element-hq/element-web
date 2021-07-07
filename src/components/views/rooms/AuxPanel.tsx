@@ -21,7 +21,6 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AppsDrawer from './AppsDrawer';
-import RateLimitedFunc from '../../../ratelimitedfunc';
 import SettingsStore from "../../../settings/SettingsStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { UIFeature } from "../../../settings/UIFeature";
@@ -29,35 +28,36 @@ import ResizeNotifier from "../../../utils/ResizeNotifier";
 import CallViewForRoom from '../voip/CallViewForRoom';
 import { objectHasDiff } from "../../../utils/objects";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { throttle } from 'lodash';
 
 interface IProps {
     // js-sdk room object
-    room: Room,
-    userId: string,
-    showApps: boolean, // Render apps
+    room: Room;
+    userId: string;
+    showApps: boolean; // Render apps
 
     // maxHeight attribute for the aux panel and the video
     // therein
-    maxHeight: number,
+    maxHeight: number;
 
     // a callback which is called when the content of the aux panel changes
     // content in a way that is likely to make it change size.
-    onResize: () => void,
-    fullHeight: boolean,
+    onResize: () => void;
+    fullHeight: boolean;
 
-    resizeNotifier: ResizeNotifier,
+    resizeNotifier: ResizeNotifier;
 }
 
 interface Counter {
-    title: string,
-    value: number,
-    link: string,
-    severity: string,
-    stateKey: string,
+    title: string;
+    value: number;
+    link: string;
+    severity: string;
+    stateKey: string;
 }
 
 interface IState {
-    counters: Counter[],
+    counters: Counter[];
 }
 
 @replaceableComponent("views.rooms.AuxPanel")
@@ -99,9 +99,9 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         }
     }
 
-    private rateLimitedUpdate = new RateLimitedFunc(() => {
+    private rateLimitedUpdate = throttle(() => {
         this.setState({ counters: this.computeCounters() });
-    }, 500);
+    }, 500, { leading: true, trailing: true });
 
     private computeCounters() {
         const counters = [];

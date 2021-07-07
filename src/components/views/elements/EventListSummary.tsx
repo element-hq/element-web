@@ -29,7 +29,7 @@ interface IProps {
     // The minimum number of events needed to trigger summarisation
     threshold?: number;
     // Whether or not to begin with state.expanded=true
-    startExpanded?: boolean,
+    startExpanded?: boolean;
     // The list of room members for which to show avatars next to the summary
     summaryMembers?: RoomMember[];
     // The text to show as the summary of this event list

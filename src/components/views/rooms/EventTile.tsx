@@ -265,7 +265,7 @@ interface IProps {
     showReactions?: boolean;
 
     // which layout to use
-    layout: Layout;
+    layout?: Layout;
 
     // whether or not to show flair at all
     enableFlair?: boolean;
@@ -285,10 +285,10 @@ interface IProps {
     permalinkCreator?: RoomPermalinkCreator;
 
     // Symbol of the root node
-    as?: string
+    as?: string;
 
     // whether or not to always show timestamps
-    alwaysShowTimestamps?: boolean
+    alwaysShowTimestamps?: boolean;
 }
 
 interface IState {
@@ -319,6 +319,7 @@ export default class EventTile extends React.Component<IProps, IState> {
     static defaultProps = {
         // no-op function because onHeightChanged is optional yet some sub-components assume its existence
         onHeightChanged: function() {},
+        layout: Layout.Group,
     };
 
     static contextType = MatrixClientContext;

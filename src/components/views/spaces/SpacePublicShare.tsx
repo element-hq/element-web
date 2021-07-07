@@ -16,11 +16,11 @@ limitations under the License.
 
 import React, { useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { sleep } from "matrix-js-sdk/src/utils";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import { copyPlaintext } from "../../../utils/strings";
-import { sleep } from "../../../utils/promise";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { showRoomInviteDialog } from "../../../RoomInvite";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";

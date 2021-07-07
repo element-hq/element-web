@@ -25,16 +25,16 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // What room we should display the call for
-    roomId: string,
+    roomId: string;
 
     // maxHeight style attribute for the video panel
     maxVideoHeight?: number;
 
-    resizeNotifier: ResizeNotifier,
+    resizeNotifier: ResizeNotifier;
 }
 
 interface IState {
-    call: MatrixCall,
+    call: MatrixCall;
 }
 
 /*

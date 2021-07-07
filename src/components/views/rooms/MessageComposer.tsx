@@ -43,6 +43,7 @@ import { E2EStatus } from '../../../utils/ShieldUtils';
 import SendMessageComposer from "./SendMessageComposer";
 import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../dispatcher/actions";
+import EditorModel from "../../../editor/model";
 
 interface IComposerAvatarProps {
     me: object;
@@ -318,14 +319,14 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         }
     };
 
-    addEmoji(emoji: string) {
+    private addEmoji(emoji: string) {
         dis.dispatch<ComposerInsertPayload>({
             action: Action.ComposerInsert,
             text: emoji,
         });
     }
 
-    sendMessage = async () => {
+    private sendMessage = async () => {
         if (this.state.haveRecording && this.voiceRecordingButton) {
             // There shouldn't be any text message to send when a voice recording is active, so
             // just send out the voice recording.
@@ -333,11 +334,10 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             return;
         }
 
-        // XXX: Private function access
-        this.messageComposerInput._sendMessage();
+        this.messageComposerInput.sendMessage();
     };
 
-    onChange = (model) => {
+    private onChange = (model: EditorModel) => {
         this.setState({
             isComposerEmpty: model.isEmpty,
         });

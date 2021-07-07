@@ -70,7 +70,7 @@ export default class EditorModel {
      * on the model that can span multiple parts. Also see `startRange()`.
      * @param {TransformCallback} transformCallback
      */
-    setTransformCallback(transformCallback: TransformCallback) {
+    public setTransformCallback(transformCallback: TransformCallback): void {
         this.transformCallback = transformCallback;
     }
 
@@ -78,23 +78,23 @@ export default class EditorModel {
      * Set a callback for rerendering the model after it has been updated.
      * @param {ModelCallback} updateCallback
      */
-    setUpdateCallback(updateCallback: UpdateCallback) {
+    public setUpdateCallback(updateCallback: UpdateCallback): void {
         this.updateCallback = updateCallback;
     }
 
-    get partCreator() {
+    public get partCreator(): PartCreator {
         return this._partCreator;
     }
 
-    get isEmpty() {
+    public get isEmpty(): boolean {
         return this._parts.reduce((len, part) => len + part.text.length, 0) === 0;
     }
 
-    clone() {
+    public clone(): EditorModel {
         return new EditorModel(this._parts, this._partCreator, this.updateCallback);
     }
 
-    private insertPart(index: number, part: Part) {
+    private insertPart(index: number, part: Part): void {
         this._parts.splice(index, 0, part);
         if (this.activePartIdx >= index) {
             ++this.activePartIdx;
@@ -104,7 +104,7 @@ export default class EditorModel {
         }
     }
 
-    private removePart(index: number) {
+    private removePart(index: number): void {
         this._parts.splice(index, 1);
         if (index === this.activePartIdx) {
             this.activePartIdx = null;
@@ -118,22 +118,22 @@ export default class EditorModel {
         }
     }
 
-    private replacePart(index: number, part: Part) {
+    private replacePart(index: number, part: Part): void {
         this._parts.splice(index, 1, part);
     }
 
-    get parts() {
+    public get parts(): Part[] {
         return this._parts;
     }
 
-    get autoComplete() {
+    public get autoComplete(): AutocompleteWrapperModel {
         if (this.activePartIdx === this.autoCompletePartIdx) {
             return this._autoComplete;
         }
         return null;
     }
 
-    getPositionAtEnd() {
+    public getPositionAtEnd(): DocumentPosition {
         if (this._parts.length) {
             const index = this._parts.length - 1;
             const part = this._parts[index];
@@ -144,11 +144,11 @@ export default class EditorModel {
         }
     }
 
-    serializeParts() {
+    public serializeParts(): SerializedPart[] {
         return this._parts.map(p => p.serialize());
     }
 
-    private diff(newValue: string, inputType: string, caret: DocumentOffset) {
+    private diff(newValue: string, inputType: string, caret: DocumentOffset): IDiff {
         const previousValue = this.parts.reduce((text, p) => text + p.text, "");
         // can't use caret position with drag and drop
         if (inputType === "deleteByDrag") {
@@ -158,7 +158,7 @@ export default class EditorModel {
         }
     }
 
-    reset(serializedParts: SerializedPart[], caret?: Caret, inputType?: string) {
+    public reset(serializedParts: SerializedPart[], caret?: Caret, inputType?: string): void {
         this._parts = serializedParts.map(p => this._partCreator.deserializePart(p));
         if (!caret) {
             caret = this.getPositionAtEnd();
@@ -180,7 +180,7 @@ export default class EditorModel {
      * @param {DocumentPosition} position the position to start inserting at
      * @return {Number} the amount of characters added
      */
-    insert(parts: Part[], position: IPosition) {
+    public insert(parts: Part[], position: IPosition): number {
         const insertIndex = this.splitAt(position);
         let newTextLength = 0;
         for (let i = 0; i < parts.length; ++i) {
@@ -191,7 +191,7 @@ export default class EditorModel {
         return newTextLength;
     }
 
-    update(newValue: string, inputType: string, caret: DocumentOffset) {
+    public update(newValue: string, inputType: string, caret: DocumentOffset): Promise<void> {
         const diff = this.diff(newValue, inputType, caret);
         const position = this.positionForOffset(diff.at, caret.atNodeEnd);
         let removedOffsetDecrease = 0;
@@ -220,7 +220,7 @@ export default class EditorModel {
         return Number.isFinite(result) ? result as number : 0;
     }
 
-    private setActivePart(pos: DocumentPosition, canOpenAutoComplete: boolean) {
+    private setActivePart(pos: DocumentPosition, canOpenAutoComplete: boolean): Promise<void> {
         const { index } = pos;
         const part = this._parts[index];
         if (part) {
@@ -250,7 +250,7 @@ export default class EditorModel {
         return Promise.resolve();
     }
 
-    private onAutoComplete = ({ replaceParts, close }: ICallback) => {
+    private onAutoComplete = ({ replaceParts, close }: ICallback): void => {
         let pos;
         if (replaceParts) {
             this._parts.splice(this.autoCompletePartIdx, this.autoCompletePartCount, ...replaceParts);
@@ -270,7 +270,7 @@ export default class EditorModel {
         this.updateCallback(pos);
     };
 
-    private mergeAdjacentParts() {
+    private mergeAdjacentParts(): void {
         let prevPart;
         for (let i = 0; i < this._parts.length; ++i) {
             let part = this._parts[i];
@@ -294,7 +294,7 @@ export default class EditorModel {
      * @return {Number} how many characters before pos were also removed,
      * usually because of non-editable parts that can only be removed in their entirety.
      */
-    removeText(pos: IPosition, len: number) {
+    public removeText(pos: IPosition, len: number): number {
         let { index, offset } = pos;
         let removedOffsetDecrease = 0;
         while (len > 0) {
@@ -329,7 +329,7 @@ export default class EditorModel {
     }
 
     // return part index where insertion will insert between at offset
-    private splitAt(pos: IPosition) {
+    private splitAt(pos: IPosition): number {
         if (pos.index === -1) {
             return 0;
         }
@@ -356,7 +356,7 @@ export default class EditorModel {
      * @return {Number} how far from position (in characters) the insertion ended.
      * This can be more than the length of `str` when crossing non-editable parts, which are skipped.
      */
-    private addText(pos: IPosition, str: string, inputType: string) {
+    private addText(pos: IPosition, str: string, inputType: string): number {
         let { index } = pos;
         const { offset } = pos;
         let addLen = str.length;
@@ -390,7 +390,7 @@ export default class EditorModel {
         return addLen;
     }
 
-    positionForOffset(totalOffset: number, atPartEnd = false) {
+    public positionForOffset(totalOffset: number, atPartEnd = false): DocumentPosition {
         let currentOffset = 0;
         const index = this._parts.findIndex(part => {
             const partLen = part.text.length;
@@ -416,11 +416,11 @@ export default class EditorModel {
      * @param {DocumentPosition?} positionB the other boundary of the range, optional
      * @return {Range}
      */
-    startRange(positionA: DocumentPosition, positionB = positionA) {
+    public startRange(positionA: DocumentPosition, positionB = positionA): Range {
         return new Range(this, positionA, positionB);
     }
 
-    replaceRange(startPosition: DocumentPosition, endPosition: DocumentPosition, parts: Part[]) {
+    public replaceRange(startPosition: DocumentPosition, endPosition: DocumentPosition, parts: Part[]): void {
         // convert end position to offset, so it is independent of how the document is split into parts
         // which we'll change when splitting up at the start position
         const endOffset = endPosition.asOffset(this);
@@ -445,9 +445,9 @@ export default class EditorModel {
      * @param {ManualTransformCallback} callback to run the transformations in
      * @return {Promise} a promise when auto-complete (if applicable) is done updating
      */
-    transform(callback: ManualTransformCallback) {
+    public transform(callback: ManualTransformCallback): Promise<void> {
         const pos = callback();
-        let acPromise = null;
+        let acPromise: Promise<void> = null;
         if (!(pos instanceof Range)) {
             acPromise = this.setActivePart(pos, true);
         } else {

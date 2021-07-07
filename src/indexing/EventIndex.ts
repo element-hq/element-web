@@ -16,16 +16,16 @@ limitations under the License.
 
 import { EventEmitter } from "events";
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
-import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
+import { Direction, EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { EventTimelineSet } from 'matrix-js-sdk/src/models/event-timeline-set';
 import { RoomState } from 'matrix-js-sdk/src/models/room-state';
 import { TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
+import { sleep } from "matrix-js-sdk/src/utils";
 
 import PlatformPeg from "../PlatformPeg";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { sleep } from "../utils/promise";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 import { ICrawlerCheckpoint, ILoadArgs, ISearchArgs } from "./BaseEventIndexManager";
@@ -109,7 +109,7 @@ export default class EventIndex extends EventEmitter {
         // our message crawler.
         await Promise.all(encryptedRooms.map(async (room) => {
             const timeline = room.getLiveTimeline();
-            const token = timeline.getPaginationToken("b");
+            const token = timeline.getPaginationToken(Direction.Backward);
 
             const backCheckpoint: ICrawlerCheckpoint = {
                 roomId: room.roomId,
@@ -371,7 +371,7 @@ export default class EventIndex extends EventEmitter {
         if (!room) return;
 
         const timeline = room.getLiveTimeline();
-        const token = timeline.getPaginationToken("b");
+        const token = timeline.getPaginationToken(Direction.Backward);
 
         if (!token) {
             // The room doesn't contain any tokens, meaning the live timeline
@@ -862,7 +862,7 @@ export default class EventIndex extends EventEmitter {
      * @returns {Promise<boolean>} Resolves to a boolean which is true if more
      * events were successfully retrieved.
      */
-    public paginateTimelineWindow(room: Room, timelineWindow: TimelineWindow, direction: string, limit: number) {
+    public paginateTimelineWindow(room: Room, timelineWindow: TimelineWindow, direction: Direction, limit: number) {
         const tl = timelineWindow.getTimelineIndex(direction);
 
         if (!tl) return Promise.resolve(false);

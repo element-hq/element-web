@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from "react";
 
-import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
@@ -30,6 +29,7 @@ import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/reque
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { Action } from "../../../dispatcher/actions";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import VerificationRequestDialog from "../dialogs/VerificationRequestDialog";
 
 interface IProps {
     toastKey: string;
@@ -123,7 +123,6 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                     },
                 });
             } else {
-                const VerificationRequestDialog = sdk.getComponent("views.dialogs.VerificationRequestDialog");
                 Modal.createTrackedDialog('Incoming Verification', '', VerificationRequestDialog, {
                     verificationRequest: request,
                     onFinished: () => {

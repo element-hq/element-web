@@ -46,19 +46,19 @@ interface ITermsDialogProps {
      * Array of [Service, policies] pairs, where policies is the response from the
      * /terms endpoint for that service
      */
-    policiesAndServicePairs: any[],
+    policiesAndServicePairs: any[];
 
     /**
      * urls that the user has already agreed to
      */
-    agreedUrls?: string[],
+    agreedUrls?: string[];
 
     /**
      * Called with:
      *     * success {bool} True if the user accepted any douments, false if cancelled
      *     * agreedUrls {string[]} List of agreed URLs
      */
-    onFinished: (success: boolean, agreedUrls?: string[]) => void,
+    onFinished: (success: boolean, agreedUrls?: string[]) => void;
 }
 
 interface IState {

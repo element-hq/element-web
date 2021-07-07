@@ -52,8 +52,8 @@ interface IProps {
 
 interface IState {
     fieldValid: Partial<Record<LoginField, boolean>>;
-    loginType: LoginField.Email | LoginField.MatrixId | LoginField.Phone,
-    password: "",
+    loginType: LoginField.Email | LoginField.MatrixId | LoginField.Phone;
+    password: "";
 }
 
 enum LoginField {

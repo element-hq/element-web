@@ -16,11 +16,13 @@ limitations under the License.
 
 import React, { createRef, ReactNode, SyntheticEvent } from 'react';
 import ReactDOM from "react-dom";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { TimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
-import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
+import { EventTimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
+import { Direction, EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
 import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
+import { EventType, RelationType } from 'matrix-js-sdk/src/@types/event';
+import { SyncState } from 'matrix-js-sdk/src/sync.api';
 
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/Layout";
@@ -39,10 +41,8 @@ import { UIFeature } from "../../settings/UIFeature";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import { arrayFastClone } from "../../utils/arrays";
 import MessagePanel from "./MessagePanel";
-import { SyncState } from 'matrix-js-sdk/src/sync.api';
 import { IScrollState } from "./ScrollPanel";
 import { ActionPayload } from "../../dispatcher/payloads";
-import { EventType } from 'matrix-js-sdk/src/@types/event';
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Spinner from "../views/elements/Spinner";
@@ -65,7 +65,7 @@ interface IProps {
     // representing.  This may or may not have a room, depending on what it's
     // a timeline representing.  If it has a room, we maintain RRs etc for
     // that room.
-    timelineSet: TimelineSet;
+    timelineSet: EventTimelineSet;
     showReadReceipts?: boolean;
     // Enable managing RRs and RMs. These require the timelineSet to have a room.
     manageReadReceipts?: boolean;
@@ -125,7 +125,7 @@ interface IProps {
     onReadMarkerUpdated?(): void;
 
     // callback which is called when we wish to paginate the timeline window.
-    onPaginationRequest?(timelineWindow: TimelineWindow, direction: string, size: number): Promise<boolean>,
+    onPaginationRequest?(timelineWindow: TimelineWindow, direction: string, size: number): Promise<boolean>;
 }
 
 interface IState {
@@ -388,7 +388,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     private onPaginationRequest = (
         timelineWindow: TimelineWindow,
-        direction: string,
+        direction: Direction,
         size: number,
     ): Promise<boolean> => {
         if (this.props.onPaginationRequest) {
@@ -579,7 +579,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         });
     };
 
-    private onRoomTimelineReset = (room: Room, timelineSet: TimelineSet): void => {
+    private onRoomTimelineReset = (room: Room, timelineSet: EventTimelineSet): void => {
         if (timelineSet !== this.props.timelineSet) return;
 
         if (this.messagePanel.current && this.messagePanel.current.isAtBottom()) {
@@ -792,8 +792,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
             // that sending an RR for the latest message will set our notif counter
             // to zero: it may not do this if we send an RR for somewhere before the end.
             if (this.isAtEndOfLiveTimeline()) {
-                this.props.timelineSet.room.setUnreadNotificationCount('total', 0);
-                this.props.timelineSet.room.setUnreadNotificationCount('highlight', 0);
+                this.props.timelineSet.room.setUnreadNotificationCount(NotificationCountType.Total, 0);
+                this.props.timelineSet.room.setUnreadNotificationCount(NotificationCountType.Highlight, 0);
                 dis.dispatch({
                     action: 'on_room_read',
                     roomId: this.props.timelineSet.room.roomId,
@@ -1416,7 +1416,11 @@ class TimelinePanel extends React.Component<IProps, IState> {
         });
     }
 
-    private getRelationsForEvent = (...args) => this.props.timelineSet.getRelationsForEvent(...args);
+    private getRelationsForEvent = (
+        eventId: string,
+        relationType: RelationType,
+        eventType: EventType | string,
+    ) => this.props.timelineSet.getRelationsForEvent(eventId, relationType, eventType);
 
     render() {
         // just show a spinner while the timeline loads.

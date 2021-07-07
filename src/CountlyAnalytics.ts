@@ -15,12 +15,13 @@ limitations under the License.
 */
 
 import { randomString } from "matrix-js-sdk/src/randomstring";
+import { IContent } from "matrix-js-sdk/src/models/event";
+import { sleep } from "matrix-js-sdk/src/utils";
 
 import { getCurrentLanguage } from './languageHandler';
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 import { MatrixClientPeg } from "./MatrixClientPeg";
-import { sleep } from "./utils/promise";
 import RoomViewStore from "./stores/RoomViewStore";
 import { Action } from "./dispatcher/actions";
 
@@ -255,7 +256,7 @@ interface ICreateRoomEvent extends IEvent {
         num_users: number;
         is_encrypted: boolean;
         is_public: boolean;
-    }
+    };
 }
 
 interface IJoinRoomEvent extends IEvent {
@@ -868,7 +869,7 @@ export default class CountlyAnalytics {
         roomId: string,
         isEdit: boolean,
         isReply: boolean,
-        content: {format?: string, msgtype: string},
+        content: IContent,
     ) {
         if (this.disabled) return;
         const cli = MatrixClientPeg.get();

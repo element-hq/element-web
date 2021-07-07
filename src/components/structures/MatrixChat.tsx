@@ -19,6 +19,8 @@ import { createClient } from "matrix-js-sdk/src/matrix";
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { sleep, defer, IDeferred } from "matrix-js-sdk/src/utils";
+
 // focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
 import 'focus-visible';
 // what-input helps improve keyboard accessibility
@@ -55,7 +57,6 @@ import DMRoomMap from '../../utils/DMRoomMap';
 import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
 import { FontWatcher } from '../../settings/watchers/FontWatcher';
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
-import { defer, IDeferred, sleep } from "../../utils/promise";
 import ToastStore from "../../stores/ToastStore";
 import * as StorageManager from "../../utils/StorageManager";
 import type LoggedInViewType from "./LoggedInView";
@@ -203,7 +204,7 @@ interface IState {
     resizeNotifier: ResizeNotifier;
     serverConfig?: ValidatedServerConfig;
     ready: boolean;
-    threepidInvite?: IThreepidInvite,
+    threepidInvite?: IThreepidInvite;
     roomOobData?: object;
     pendingInitialSync?: boolean;
     justRegistered?: boolean;

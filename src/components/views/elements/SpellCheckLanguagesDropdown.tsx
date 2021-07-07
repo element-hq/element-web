@@ -30,14 +30,14 @@ function languageMatchesSearchQuery(query, language) {
 }
 
 interface SpellCheckLanguagesDropdownIProps {
-    className: string,
-    value: string,
-    onOptionChange(language: string),
+    className: string;
+    value: string;
+    onOptionChange(language: string);
 }
 
 interface SpellCheckLanguagesDropdownIState {
-    searchQuery: string,
-    languages: any,
+    searchQuery: string;
+    languages: any;
 }
 
 @replaceableComponent("views.elements.SpellCheckLanguagesDropdown")

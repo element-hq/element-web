@@ -24,6 +24,8 @@ import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import * as KeyboardShortcuts from "../../../../../accessibility/KeyboardShortcuts";
+import AccessibleButton from "../../../elements/AccessibleButton";
 
 interface IState {
     autoLaunch: boolean;
@@ -45,6 +47,10 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
         'breadcrumbs',
     ];
 
+    static KEYBINDINGS_SETTINGS = [
+        'ctrlFForSearch',
+    ];
+
     static COMPOSER_SETTINGS = [
         'MessageComposerInput.autoReplaceEmoji',
         'MessageComposerInput.suggestEmoji',
@@ -53,28 +59,32 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
         'MessageComposerInput.showStickersButton',
     ];
 
-    static TIMELINE_SETTINGS = [
-        'showTypingNotifications',
-        'autoplayGifsAndVideos',
-        'urlPreviewsEnabled',
-        'TextualBody.enableBigEmoji',
-        'showReadReceipts',
+    static TIME_SETTINGS = [
         'showTwelveHourTimestamps',
         'alwaysShowTimestamps',
-        'showRedactions',
+    ];
+    static CODE_BLOCKS_SETTINGS = [
         'enableSyntaxHighlightLanguageDetection',
         'expandCodeByDefault',
-        'scrollToBottomOnMessageSent',
         'showCodeLineNumbers',
-        'showJoinLeaves',
-        'showAvatarChanges',
-        'showDisplaynameChanges',
-        'showImages',
-        'showChatEffects',
-        'Pill.shouldShowPillAvatar',
-        'ctrlFForSearch',
     ];
-
+    static IMAGES_AND_VIDEOS_SETTINGS = [
+        'urlPreviewsEnabled',
+        'autoplayGifsAndVideos',
+        'showImages',
+    ];
+    static TIMELINE_SETTINGS = [
+        'showTypingNotifications',
+        'showRedactions',
+        'showReadReceipts',
+        'showJoinLeaves',
+        'showDisplaynameChanges',
+        'showChatEffects',
+        'showAvatarChanges',
+        'Pill.shouldShowPillAvatar',
+        'TextualBody.enableBigEmoji',
+        'scrollToBottomOnMessageSent',
+    ];
     static GENERAL_SETTINGS = [
         'TagPanel.enableTagPanel',
         'promptBeforeInviteUnknownUsers',
@@ -223,8 +233,31 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
                 </div>
 
                 <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Keyboard shortcuts")}</span>
+                    <AccessibleButton className="mx_SettingsFlag" onClick={KeyboardShortcuts.toggleDialog}>
+                        { _t("To view all keyboard shortcuts, click here.") }
+                    </AccessibleButton>
+                    {this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
+                </div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Displaying time")}</span>
+                    {this.renderGroup(PreferencesUserSettingsTab.TIME_SETTINGS)}
+                </div>
+
+                <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Composer")}</span>
                     {this.renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
+                </div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Code blocks")}</span>
+                    {this.renderGroup(PreferencesUserSettingsTab.CODE_BLOCKS_SETTINGS)}
+                </div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Images, GIFs and videos")}</span>
+                    {this.renderGroup(PreferencesUserSettingsTab.IMAGES_AND_VIDEOS_SETTINGS)}
                 </div>
 
                 <div className="mx_SettingsTab_section">

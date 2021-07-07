@@ -27,10 +27,10 @@ const TYPING_SERVER_TIMEOUT = 30000;
 export default class TypingStore {
     private typingStates: {
         [roomId: string]: {
-            isTyping: boolean,
-            userTimer: Timer,
-            serverTimer: Timer,
-        },
+            isTyping: boolean;
+            userTimer: Timer;
+            serverTimer: Timer;
+        };
     };
 
     constructor() {
