@@ -712,6 +712,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     layout={this.props.layout}
                     enableFlair={this.props.enableFlair}
                     showReadReceipts={this.props.showReadReceipts}
+                    hideSender={this.props.room.getMembers().length <= 2}
                 />
             </TileErrorBoundary>,
         );

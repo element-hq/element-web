@@ -27,7 +27,7 @@ limitations under the License.
     position: relative;
     margin-top: var(--gutterSize);
     margin-left: 50px;
-    margin-right: 50px;
+    margin-right: 100px;
 
     &.mx_EventTile_continuation {
         margin-top: 2px;
@@ -45,7 +45,7 @@ limitations under the License.
             top: -1px;
             bottom: -1px;
             left: -60px;
-            right: -65px;
+            right: -60px;
             z-index: -1;
             background: $eventbubble-bg-hover;
             border-radius: 4px;
@@ -65,7 +65,9 @@ limitations under the License.
     }
 
     .mx_SenderProfile {
-        padding: 0 var(--gutterSize);
+        position: relative;
+        top: -2px;
+        left: calc(-1 * var(--gutterSize));
     }
 
     &[data-self=false] {
@@ -73,7 +75,7 @@ limitations under the License.
             border-bottom-right-radius: var(--cornerRadius);
         }
         .mx_EventTile_avatar {
-            left: calc(-1 * var(--avatarSize));
+            left: -48px;
         }
 
         .mx_MessageActionBar {
@@ -107,7 +109,7 @@ limitations under the License.
         }
         .mx_EventTile_avatar {
             top: -19px; // height of the sender block
-            right: -45px;
+            right: -35px;
         }
 
         --backgroundColor: $eventbubble-self-bg;
@@ -120,7 +122,7 @@ limitations under the License.
         border-top-right-radius: var(--cornerRadius);
         background: var(--backgroundColor);
         display: flex;
-        gap: var(--gutterSize);
+        gap: 5px;
         margin: 0 -12px 0 -22px;
         > a {
             position: absolute;
@@ -214,6 +216,29 @@ limitations under the License.
         .mx_EventListSummary_avatars {
             padding-top: 0;
         }
+
+        &::after {
+            content: "";
+            clear: both;
+        }
+
+        .mx_EventTile {
+            margin: 0 58px;
+        }
+    }
+
+    /* events that do not require bubble layout */
+    & ~ .mx_EventListSummary,
+    &.mx_EventTile_bad {
+        .mx_EventTile_line {
+            background: transparent;
+        }
+
+        &:hover {
+            &::before {
+                background: transparent;
+            }
+        }
     }
 
     & + .mx_EventListSummary {
@@ -229,13 +254,30 @@ limitations under the License.
 
     /* Special layout scenario for "Unable To Decrypt (UTD)" events */
     &.mx_EventTile_bad > .mx_EventTile_line {
-        flex-direction: column;
+        display: grid;
+        grid-template:
+            "reply reply" auto
+            "shield body" auto
+            "shield link" auto
+            / auto  1fr;
+        .mx_EventTile_e2eIcon {
+            grid-area: shield;
+        }
+        .mx_UnknownBody {
+            grid-area: body;
+        }
+        .mx_EventTile_keyRequestInfo {
+            grid-area: link;
+        }
+        .mx_ReplyThread_wrapper {
+            grid-area: reply;
+        }
     }
 
 
     .mx_EventTile_readAvatars {
         position: absolute;
-        right: -60px;
+        right: -110px;
         bottom: 0;
         top: auto;
     }

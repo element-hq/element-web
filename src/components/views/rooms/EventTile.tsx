@@ -289,6 +289,9 @@ interface IProps {
 
     // whether or not to always show timestamps
     alwaysShowTimestamps?: boolean;
+
+    // whether or not to display the sender
+    hideSender?: boolean;
 }
 
 interface IState {
@@ -978,7 +981,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             );
         }
 
-        if (needsSenderProfile) {
+        if (needsSenderProfile && this.props.hideSender !== true) {
             if (!this.props.tileShape || this.props.tileShape === 'reply' || this.props.tileShape === 'reply_preview') {
                 sender = <SenderProfile onClick={this.onSenderProfileClick}
                     mxEvent={this.props.mxEvent}
