@@ -123,7 +123,8 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 const lsRoomServer = localStorage.getItem(LAST_SERVER_KEY);
                 const lsInstanceId = localStorage.getItem(LAST_INSTANCE_KEY);
                 const configSevers = SdkConfig.get().roomDirectory?.servers || [];
-                const roomServer = configSevers.includes(lsRoomServer)
+                const settingsServers = SettingsStore.getValue("room_directory_servers") || [];
+                const roomServer = [...configSevers, ...settingsServers].includes(lsRoomServer)
                     ? lsRoomServer
                     : myHomeserver;
                 const instanceIds = [];
