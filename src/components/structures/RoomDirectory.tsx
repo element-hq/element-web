@@ -48,6 +48,9 @@ import { ActionPayload } from "../../dispatcher/payloads";
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 800;
 
+const LAST_SERVER_KEY = "mx_last_room_directory_server";
+const LAST_INSTANCE_KEY = "mx_last_room_directory_instance";
+
 function track(action: string) {
     Analytics.trackEvent('RoomDirectory', action);
 }
@@ -150,8 +153,8 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             publicRooms: [],
             loading: true,
             error: null,
-            instanceId: undefined,
-            roomServer: MatrixClientPeg.getHomeserverName(),
+            instanceId: localStorage.getItem(LAST_INSTANCE_KEY),
+            roomServer: localStorage.getItem(LAST_SERVER_KEY) || MatrixClientPeg.getHomeserverName(),
             filterString: this.props.initialText || "",
             selectedCommunityId,
             communityName: null,
@@ -342,7 +345,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         }
     };
 
-    private onOptionChange = (server: string, instanceId?: string | symbol) => {
+    private onOptionChange = (server: string, instanceId?: string) => {
         // clear next batch so we don't try to load more rooms
         this.nextBatch = null;
         this.setState({
@@ -360,6 +363,14 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         // find the five gitter ones, at which point we do not want
         // to render all those rooms when switching back to 'all networks'.
         // Easiest to just blow away the state & re-fetch.
+
+        // We have to be careful here so that we don't set instanceId = "undefined"
+        localStorage.setItem(LAST_SERVER_KEY, server);
+        if (instanceId) {
+            localStorage.setItem(LAST_INSTANCE_KEY, instanceId);
+        } else {
+            localStorage.removeItem(LAST_INSTANCE_KEY);
+        }
     };
 
     private onFillRequest = (backwards: boolean) => {
