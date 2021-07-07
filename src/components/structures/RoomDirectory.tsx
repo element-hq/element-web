@@ -119,7 +119,29 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         } else if (!selectedCommunityId) {
             MatrixClientPeg.get().getThirdpartyProtocols().then((response) => {
                 this.protocols = response;
-                this.setState({ protocolsLoading: false });
+                const myHomeserver = MatrixClientPeg.getHomeserverName();
+                const lsRoomServer = localStorage.getItem(LAST_SERVER_KEY);
+                const lsInstanceId = localStorage.getItem(LAST_INSTANCE_KEY);
+                const configSevers = SdkConfig.get().roomDirectory?.servers || [];
+                const roomServer = configSevers.includes(lsRoomServer)
+                    ? lsRoomServer
+                    : myHomeserver;
+                const instanceIds = [];
+                if (roomServer === myHomeserver) {
+                    Object.values(this.protocols).forEach((protocol) => {
+                        protocol.instances.forEach((instance) => instanceIds.push(instance.instance_id));
+                    });
+                }
+                const instanceId = (instanceIds.includes(lsInstanceId) || lsInstanceId === ALL_ROOMS)
+                    ? lsInstanceId
+                    : null;
+
+                this.setState({
+                    protocolsLoading: false,
+                    instanceId: instanceId,
+                    roomServer: roomServer,
+                });
+                this.refreshRoomList();
             }, (err) => {
                 console.warn(`error loading third party protocols: ${err}`);
                 this.setState({ protocolsLoading: false });
@@ -153,8 +175,8 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             publicRooms: [],
             loading: true,
             error: null,
-            instanceId: localStorage.getItem(LAST_INSTANCE_KEY),
-            roomServer: localStorage.getItem(LAST_SERVER_KEY) || MatrixClientPeg.getHomeserverName(),
+            instanceId: null,
+            roomServer: null,
             filterString: this.props.initialText || "",
             selectedCommunityId,
             communityName: null,
