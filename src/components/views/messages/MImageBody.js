@@ -18,6 +18,7 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
+import { Blurhash } from "react-blurhash";
 
 import MFileBody from './MFileBody';
 import Modal from '../../../Modal';
@@ -29,7 +30,6 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import InlineSpinner from '../elements/InlineSpinner';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromContent } from "../../../customisations/Media";
-import BlurhashPlaceholder from "../elements/BlurhashPlaceholder";
 import { BLURHASH_FIELD } from "../../../ContentMessages";
 
 @replaceableComponent("views.messages.MImageBody")
@@ -436,7 +436,7 @@ export default class MImageBody extends React.Component {
     // Overidden by MStickerBody
     getPlaceholder(width, height) {
         const blurhash = this.props.mxEvent.getContent().info[BLURHASH_FIELD];
-        if (blurhash) return <BlurhashPlaceholder blurhash={blurhash} width={width} height={height} />;
+        if (blurhash) return <Blurhash hash={blurhash} width={width} height={height} />;
         return <div className="mx_MImageBody_thumbnail_spinner">
             <InlineSpinner w={32} h={32} />
         </div>;

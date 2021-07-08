@@ -18,7 +18,6 @@ import React from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
-import * as sdk from "../../../../..";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import Modal from "../../../../../Modal";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
@@ -27,6 +26,7 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import SettingsFlag from '../../../elements/SettingsFlag';
 
 // Knock and private are reserved keywords which are not yet implemented.
 export enum JoinRule {
@@ -385,8 +385,6 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     }
 
     render() {
-        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
-
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const isEncrypted = this.state.encrypted;

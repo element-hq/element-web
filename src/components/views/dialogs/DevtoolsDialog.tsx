@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
-import * as sdk from '../../../index';
 import SyntaxHighlight from '../elements/SyntaxHighlight';
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
@@ -42,6 +41,8 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { SettingLevel } from '../../../settings/SettingLevel';
+import BaseDialog from "./BaseDialog";
+import TruncatedList from "../elements/TruncatedList";
 
 interface IGenericEditorProps {
     onBack: () => void;
@@ -369,7 +370,6 @@ class FilteredList extends React.PureComponent<IFilteredListProps, IFilteredList
     };
 
     render() {
-        const TruncatedList = sdk.getComponent("elements.TruncatedList");
         return <div>
             <Field label={_t('Filter results')} autoFocus={true} size={64}
                 type="text" autoComplete="off" value={this.props.query} onChange={this.onQuery}
@@ -1261,7 +1261,6 @@ export default class DevtoolsDialog extends React.PureComponent<IProps, IState> 
             </React.Fragment>;
         }
 
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished} title={_t('Developer Tools')}>
                 { body }

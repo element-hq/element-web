@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from "react";
 import classNames from "classnames";
-import * as sdk from "../../../index";
+import AccessibleButton from "./AccessibleButton";
 
 interface IProps {
     // Whether or not this toggle is in the 'on' position.
@@ -43,7 +43,6 @@ export default ({ checked, disabled = false, onChange, ...props }: IProps) => {
         "mx_ToggleSwitch_enabled": !disabled,
     });
 
-    const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
     return (
         <AccessibleButton {...props}
             className={classes}

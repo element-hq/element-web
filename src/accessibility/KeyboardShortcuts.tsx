@@ -17,10 +17,10 @@ limitations under the License.
 import * as React from "react";
 import classNames from "classnames";
 
-import * as sdk from "../index";
 import Modal from "../Modal";
 import { _t, _td } from "../languageHandler";
 import { isMac, Key } from "../Keyboard";
+import InfoDialog from "../components/views/dialogs/InfoDialog";
 
 // TS: once languageHandler is TS we can probably inline this into the enum
 _td("Navigation");
@@ -375,7 +375,6 @@ export const toggleDialog = () => {
         </div>;
     });
 
-    const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
     activeModal = Modal.createTrackedDialog("Keyboard Shortcuts", "", InfoDialog, {
         className: "mx_KeyboardShortcutsDialog",
         title: _t("Keyboard Shortcuts"),
