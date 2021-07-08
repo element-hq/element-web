@@ -842,7 +842,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 } else {
                     dis.dispatch({
                         ...payload,
-                        action: Action.FocusComposer,
+                        action: Action.FocusSendMessageComposer,
                     });
                 }
                 break;
@@ -1262,7 +1262,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         ContentMessages.sharedInstance().sendContentListToRoom(
             ev.dataTransfer.files, this.state.room.roomId, this.context,
         );
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
 
         this.setState({
             draggingFile: false,
@@ -1564,7 +1564,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         } else {
             // Otherwise we have to jump manually
             this.messagePanel.jumpToLiveTimeline();
-            dis.fire(Action.FocusComposer);
+            dis.fire(Action.FocusSendMessageComposer);
         }
     };
 
