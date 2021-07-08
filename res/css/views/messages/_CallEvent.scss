@@ -28,13 +28,17 @@ limitations under the License.
     height: 60px;
 
     &.mx_CallEvent_voice {
-        .mx_CallEvent_type_icon::before {
+        .mx_CallEvent_type_icon::before,
+        .mx_CallEvent_content_button_callBack span::before,
+        .mx_CallEvent_content_button_answer span::before {
             mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
         }
     }
 
     &.mx_CallEvent_video {
-        .mx_CallEvent_type_icon::before {
+        .mx_CallEvent_type_icon::before,
+        .mx_CallEvent_content_button_callBack span::before,
+        .mx_CallEvent_content_button_answer span::before {
             mask-image: url('$(res)/img/element-icons/call/video-call.svg');
         }
     }
@@ -95,10 +99,28 @@ limitations under the License.
             height: 24px;
             padding: 0px 12px;
             margin-left: 8px;
+
+            span {
+                padding: 8px 0;
+                display: flex;
+                align-items: center;
+
+                &::before {
+                    content: '';
+                    display: inline-block;
+                    background-color: $button-fg-color;
+                    mask-position: center;
+                    mask-repeat: no-repeat;
+                    mask-size: 16px;
+                    width: 16px;
+                    height: 16px;
+                    margin-right: 8px;
+                }
+            }
         }
 
-        .mx_CallEvent_content_button_callBack {
-            margin-left: 10px; // To match mx_callEvent
+        .mx_CallEvent_content_button_reject span::before {
+            mask-image: url('$(res)/img/element-icons/call/hangup.svg');
         }
 
         .mx_CallEvent_content_tooltip {
