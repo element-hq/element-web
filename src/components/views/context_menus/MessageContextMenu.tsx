@@ -179,7 +179,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
         const eventId = this.props.mxEvent.getId();
 
-        const pinnedIds = room?.currentState?.getStateEvents(EventType.RoomPinnedEvents, "")?.pinned || [];
+        const pinnedIds = room?.currentState?.getStateEvents(EventType.RoomPinnedEvents, "")?.getContent().pinned || [];
         if (pinnedIds.includes(eventId)) {
             pinnedIds.splice(pinnedIds.indexOf(eventId), 1);
         } else {
