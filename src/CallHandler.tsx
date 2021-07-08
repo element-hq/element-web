@@ -165,7 +165,7 @@ export default class CallHandler extends EventEmitter {
     // do the async lookup when we get new information and then store these mappings here
     private assertedIdentityNativeUsers = new Map<string, string>();
 
-    private silencedCalls = new Map<string, boolean>(); // callId -> silenced
+    private silencedCalls = new Set<string>(); // callIds
 
     static sharedInstance() {
         if (!window.mxCallHandler) {
@@ -228,7 +228,7 @@ export default class CallHandler extends EventEmitter {
     }
 
     public silenceCall(callId: string) {
-        this.silencedCalls.set(callId, true);
+        this.silencedCalls.add(callId);
         this.emit(CallHandlerEvent.SilencedCallsChanged, this.silencedCalls);
 
         // Don't pause audio if we have calls which are still ringing
@@ -237,13 +237,13 @@ export default class CallHandler extends EventEmitter {
     }
 
     public unSilenceCall(callId: string) {
-        this.silencedCalls.set(callId, false);
+        this.silencedCalls.delete(callId);
         this.emit(CallHandlerEvent.SilencedCallsChanged, this.silencedCalls);
         this.play(AudioID.Ring);
     }
 
     public isCallSilenced(callId: string): boolean {
-        return this.silencedCalls.get(callId);
+        return this.silencedCalls.has(callId);
     }
 
     /**
@@ -251,7 +251,7 @@ export default class CallHandler extends EventEmitter {
      * @returns {boolean}
      */
     private areAnyCallsUnsilenced(): boolean {
-        return [...this.silencedCalls.values()].includes(false);
+        return this.calls.size > this.silencedCalls.size;
     }
 
     private async checkProtocols(maxTries) {
@@ -478,6 +478,10 @@ export default class CallHandler extends EventEmitter {
                     break;
             }
 
+            if (newState !== CallState.Ringing) {
+                this.silencedCalls.delete(call.callId);
+            }
+
             switch (newState) {
                 case CallState.Ringing:
                     this.play(AudioID.Ring);
@@ -646,8 +650,6 @@ export default class CallHandler extends EventEmitter {
 
     private removeCallForRoom(roomId: string) {
         console.log("Removing call for room ", roomId);
-        this.silencedCalls.delete(this.calls.get(roomId).callId);
-        this.emit(CallHandlerEvent.SilencedCallsChanged, this.silencedCalls);
         this.calls.delete(roomId);
         this.emit(CallHandlerEvent.CallsChanged, this.calls);
     }
@@ -857,8 +859,6 @@ export default class CallHandler extends EventEmitter {
                     console.log("Adding call for room ", mappedRoomId);
                     this.calls.set(mappedRoomId, call);
                     this.emit(CallHandlerEvent.CallsChanged, this.calls);
-                    this.silencedCalls.set(call.callId, false);
-                    this.emit(CallHandlerEvent.SilencedCallsChanged, this.silencedCalls);
                     this.setCallListeners(call);
 
                     // get ready to send encrypted events in the room, so if the user does answer
