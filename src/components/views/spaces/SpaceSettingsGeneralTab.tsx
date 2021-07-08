@@ -96,7 +96,7 @@ const SpaceSettingsGeneralTab = ({ matrixClient: cli, space, onFinished }: IProp
 
         { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
 
-        <SpaceFeedbackPrompt onClick={() => onFinished(false)} />
+        <SpaceFeedbackPrompt />
 
         <div className="mx_SettingsTab_section">
             <SpaceBasicSettings
