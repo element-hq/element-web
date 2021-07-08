@@ -45,7 +45,7 @@ enum Phase {
 
 interface IProps {
     serverConfig: ValidatedServerConfig;
-    onServerConfigChange: () => void;
+    onServerConfigChange: (serverConfig: ValidatedServerConfig) => void;
     onLoginClick?: () => void;
     onComplete: () => void;
 }

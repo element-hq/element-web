@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { ensureDMExists } from "../../../createRoom";
 import { IDialogProps } from "./IDialogProps";
@@ -26,6 +25,10 @@ import Markdown from '../../../Markdown';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SettingsStore from "../../../settings/SettingsStore";
 import StyledRadioButton from "../elements/StyledRadioButton";
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
+import Field from "../elements/Field";
+import Spinner from "../elements/Spinner";
 
 interface IProps extends IDialogProps {
     mxEvent: MatrixEvent;
@@ -239,11 +242,6 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
     };
 
     render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const Loader = sdk.getComponent('elements.Spinner');
-        const Field = sdk.getComponent('elements.Field');
-
         let error = null;
         if (this.state.err) {
             error = <div className="error">
@@ -255,7 +253,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
         if (this.state.busy) {
             progress = (
                 <div className="progress">
-                    <Loader />
+                    <Spinner />
                 </div>
             );
         }

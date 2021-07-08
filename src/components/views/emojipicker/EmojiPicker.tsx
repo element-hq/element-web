@@ -33,7 +33,7 @@ export const EMOJI_HEIGHT = 37;
 export const EMOJIS_PER_ROW = 8;
 
 interface IProps {
-    selectedEmojis: Set<string>;
+    selectedEmojis?: Set<string>;
     showQuickReactions?: boolean;
     onChoose(unicode: string): boolean;
 }

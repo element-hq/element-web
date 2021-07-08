@@ -16,7 +16,7 @@ limitations under the License.
 
 import { IMatrixClientCreds } from "../MatrixClientPeg";
 import { Kind as SetupEncryptionKind } from "../toasts/SetupEncryptionToast";
-import { ISecretStorageKeyInfo } from 'matrix-js-sdk/src/matrix';
+import { ISecretStorageKeyInfo } from 'matrix-js-sdk/src/crypto/api';
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 function examineLoginResponse(
