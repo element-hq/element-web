@@ -3123,7 +3123,7 @@
     "Add some details to help people recognise it.": "Gib einige Infos über deinen neuen Space an.",
     "Spaces are new ways to group rooms and people. To join an existing space you'll need an invite.": "Mit Matrix-Spaces kannst du Räume und Personen gruppieren. Um einen existierenden Space zu betreten, musst du eingeladen werden.",
     "Spaces prototype. Incompatible with Communities, Communities v2 and Custom Tags. Requires compatible homeserver for some features.": "Spaces Prototyp. Inkompatibel mit Communities, Communities v2 und benutzerdefinierte Tags. Für einige Funktionen wird ein kompatibler Heimserver benötigt.",
-    "Invite to this space": "In diesen Space enladen",
+    "Invite to this space": "In diesen Space einladen",
     "Verify this login to access your encrypted messages and prove to others that this login is really you.": "Verifiziere diese Anmeldung um deine Identität zu bestätigen und Zugriff auf verschlüsselte Nachrichten zu erhalten.",
     "What projects are you working on?": "An welchen Projekten arbeitest du gerade?",
     "Failed to invite the following users to your space: %(csvUsers)s": "Die folgenden Leute konnten nicht eingeladen werden: %(csvUsers)s",
