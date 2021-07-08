@@ -13,13 +13,13 @@
 scripts/fetchdep.sh matrix-org matrix-js-sdk
 pushd matrix-js-sdk
 yarn link
-yarn install
+yarn install --pure-lockfile
 popd
 
 # Now set up the react-sdk
 yarn link matrix-js-sdk
 yarn link
-yarn install
+yarn install --pure-lockfile
 yarn reskindex
 
 # Finally, set up element-web
@@ -27,6 +27,6 @@ scripts/fetchdep.sh vector-im element-web
 pushd element-web
 yarn link matrix-js-sdk
 yarn link matrix-react-sdk
-yarn install
+yarn install --pure-lockfile
 yarn build:res
 popd

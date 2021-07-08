@@ -22,7 +22,6 @@ import AccessibleTooltipButton from '../../../elements/AccessibleTooltipButton';
 import SdkConfig from "../../../../../SdkConfig";
 import createRoom from "../../../../../createRoom";
 import Modal from "../../../../../Modal";
-import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
 import * as KeyboardShortcuts from "../../../../../accessibility/KeyboardShortcuts";
 import UpdateCheckButton from "../../UpdateCheckButton";
@@ -30,6 +29,8 @@ import { replaceableComponent } from "../../../../../utils/replaceableComponent"
 import { copyPlaintext } from "../../../../../utils/strings";
 import * as ContextMenu from "../../../../structures/ContextMenu";
 import { toRightOf } from "../../../../structures/ContextMenu";
+import BugReportDialog from '../../../dialogs/BugReportDialog';
+import GenericTextContextMenu from "../../../context_menus/GenericTextContextMenu";
 
 interface IProps {
     closeSettingsFn: () => void;
@@ -81,10 +82,6 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
     };
 
     private onBugReport = (e) => {
-        const BugReportDialog = sdk.getComponent("dialogs.BugReportDialog");
-        if (!BugReportDialog) {
-            return;
-        }
         Modal.createTrackedDialog('Bug Report Dialog', '', BugReportDialog, {});
     };
 
@@ -171,7 +168,6 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
 
         const successful = await copyPlaintext(MatrixClientPeg.get().getAccessToken());
         const buttonRect = target.getBoundingClientRect();
-        const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
         const { close } = ContextMenu.createMenu(GenericTextContextMenu, {
             ...toRightOf(buttonRect, 2),
             message: successful ? _t('Copied!') : _t('Failed to copy'),

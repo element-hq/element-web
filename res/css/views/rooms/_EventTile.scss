@@ -484,8 +484,7 @@ $hover-select-border: 4px;
 
     pre, code {
         font-family: $monospace-font-family !important;
-        // deliberate constants as we're behind an invert filter
-        color: #333;
+        background-color: $header-panel-bg-color;
     }
 
     pre {
@@ -494,11 +493,6 @@ $hover-select-border: 4px;
         // https://github.com/vector-im/vector-web/issues/754
         overflow-x: overlay;
         overflow-y: visible;
-    }
-
-    code {
-        // deliberate constants as we're behind an invert filter
-        background-color: #f8f8f8;
     }
 }
 

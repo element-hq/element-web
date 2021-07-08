@@ -17,11 +17,11 @@ limitations under the License.
 import React from 'react';
 
 import Dropdown from "../../views/elements/Dropdown";
-import * as sdk from '../../../index';
 import PlatformPeg from "../../../PlatformPeg";
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import Spinner from "./Spinner";
 
 function languageMatchesSearchQuery(query, language) {
     if (language.label.toUpperCase().includes(query.toUpperCase())) return true;
@@ -84,7 +84,6 @@ export default class SpellCheckLanguagesDropdown extends React.Component<SpellCh
 
     render() {
         if (this.state.languages === null) {
-            const Spinner = sdk.getComponent('elements.Spinner');
             return <Spinner />;
         }
 

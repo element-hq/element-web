@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ICryptoCallbacks, ISecretStorageKeyInfo } from 'matrix-js-sdk/src/matrix';
+import { ICryptoCallbacks } from 'matrix-js-sdk/src/matrix';
+import { ISecretStorageKeyInfo } from 'matrix-js-sdk/src/crypto/api';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import Modal from './Modal';
 import * as sdk from './index';
@@ -354,6 +355,7 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
                 throw new Error("Secret storage creation canceled");
             }
         } else {
+            // FIXME: Using an import will result in test failures
             const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
             await cli.bootstrapCrossSigning({
                 authUploadDeviceSigningKeys: async (makeRequest) => {
