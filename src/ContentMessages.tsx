@@ -49,8 +49,6 @@ const MAX_HEIGHT = 600;
 const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
 
 export const BLURHASH_FIELD = "xyz.amorgan.blurhash"; // MSC2448
-const BLURHASH_X_COMPONENTS = 6;
-const BLURHASH_Y_COMPONENTS = 6;
 
 export class UploadCanceledError extends Error {}
 
@@ -137,8 +135,9 @@ function createThumbnail(
             imageData.data,
             imageData.width,
             imageData.height,
-            BLURHASH_X_COMPONENTS,
-            BLURHASH_Y_COMPONENTS,
+            // use 4 components on the longer dimension, if square then both
+            imageData.width >= imageData.height ? 4 : 3,
+            imageData.height >= imageData.width ? 4 : 3,
         );
         canvas.toBlob(function(thumbnail) {
             resolve({
