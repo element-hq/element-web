@@ -239,6 +239,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_threading": {
+        isFeature: true,
+        displayName: _td("Threaded messaging"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_custom_status": {
         isFeature: true,
         displayName: _td("Custom user status messages"),
