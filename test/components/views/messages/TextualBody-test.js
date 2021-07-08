@@ -302,7 +302,7 @@ describe("<TextualBody />", () => {
             event: true,
         });
 
-        const wrapper = mount(<TextualBody mxEvent={ev} showUrlPreview={true} />);
+        const wrapper = mount(<TextualBody mxEvent={ev} showUrlPreview={true} onHeightChanged={() => {}} />);
         expect(wrapper.text()).toBe(ev.getContent().body);
 
         let widgets = wrapper.find("LinkPreviewWidget");
