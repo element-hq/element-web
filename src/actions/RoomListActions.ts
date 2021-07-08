@@ -19,13 +19,13 @@ import { asyncAction } from './actionCreators';
 import Modal from '../Modal';
 import * as Rooms from '../Rooms';
 import { _t } from '../languageHandler';
-import * as sdk from '../index';
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { AsyncActionPayload } from "../dispatcher/payloads";
 import RoomListStore from "../stores/room-list/RoomListStore";
 import { SortAlgorithm } from "../stores/room-list/algorithms/models";
 import { DefaultTagID } from "../stores/room-list/models";
+import ErrorDialog from '../components/views/dialogs/ErrorDialog';
 
 export default class RoomListActions {
     /**
@@ -88,7 +88,6 @@ export default class RoomListActions {
                 return Rooms.guessAndSetDMRoom(
                     room, newTag === DefaultTagID.DM,
                 ).catch((err) => {
-                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to set direct chat tag " + err);
                     Modal.createTrackedDialog('Failed to set direct chat tag', '', ErrorDialog, {
                         title: _t('Failed to set direct chat tag'),
@@ -109,7 +108,6 @@ export default class RoomListActions {
                 const promiseToDelete = matrixClient.deleteRoomTag(
                     roomId, oldTag,
                 ).catch(function(err) {
-                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to remove tag " + oldTag + " from room: " + err);
                     Modal.createTrackedDialog('Failed to remove tag from room', '', ErrorDialog, {
                         title: _t('Failed to remove tag %(tagName)s from room', { tagName: oldTag }),
@@ -129,7 +127,6 @@ export default class RoomListActions {
                 metaData = metaData || {};
 
                 const promiseToAdd = matrixClient.setRoomTag(roomId, newTag, metaData).catch(function(err) {
-                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to add tag " + newTag + " to room: " + err);
                     Modal.createTrackedDialog('Failed to add tag to room', '', ErrorDialog, {
                         title: _t('Failed to add tag %(tagName)s to room', { tagName: newTag }),
