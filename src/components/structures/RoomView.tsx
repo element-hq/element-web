@@ -818,17 +818,10 @@ export default class RoomView extends React.Component<IProps, IState> {
 
             case Action.ComposerInsert: {
                 // re-dispatch to the correct composer
-                if (this.state.editState) {
-                    dis.dispatch({
-                        ...payload,
-                        action: "edit_composer_insert",
-                    });
-                } else {
-                    dis.dispatch({
-                        ...payload,
-                        action: "send_composer_insert",
-                    });
-                }
+                dis.dispatch({
+                    ...payload,
+                    action: this.state.editState ? "edit_composer_insert" : "send_composer_insert",
+                });
                 break;
             }
 
