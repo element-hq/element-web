@@ -27,6 +27,18 @@ limitations under the License.
     box-sizing: border-box;
     height: 60px;
 
+    &.mx_CallEvent_voice {
+        .mx_CallEvent_type_icon::before {
+            mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
+        }
+    }
+
+    &.mx_CallEvent_video {
+        .mx_CallEvent_type_icon::before {
+            mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+        }
+    }
+
     .mx_CallEvent_info {
         display: flex;
         flex-direction: row;
@@ -67,14 +79,6 @@ limitations under the License.
                         mask-repeat: no-repeat;
                         mask-size: contain;
                     }
-                }
-
-                .mx_CallEvent_type_icon_voice::before {
-                    mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
-                }
-
-                .mx_CallEvent_type_icon_video::before {
-                    mask-image: url('$(res)/img/element-icons/call/video-call.svg');
                 }
             }
         }

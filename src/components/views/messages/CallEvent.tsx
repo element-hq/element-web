@@ -187,14 +187,14 @@ export default class CallEvent extends React.Component<IProps, IState> {
         const isVoice = this.props.callEventGrouper.isVoice;
         const callType = isVoice ? _t("Voice call") : _t("Video call");
         const content = this.renderContent(this.state.callState);
-        const callTypeIconClass = classNames({
-            mx_CallEvent_type_icon: true,
-            mx_CallEvent_type_icon_voice: isVoice,
-            mx_CallEvent_type_icon_video: !isVoice,
+        const className = classNames({
+            mx_CallEvent: true,
+            mx_CallEvent_voice: isVoice,
+            mx_CallEvent_video: !isVoice,
         });
 
         return (
-            <div className="mx_CallEvent">
+            <div className={className}>
                 <div className="mx_CallEvent_info">
                     <MemberAvatar
                         member={event.sender}
@@ -206,7 +206,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
                             { sender }
                         </div>
                         <div className="mx_CallEvent_type">
-                            <div className={callTypeIconClass}></div>
+                            <div className="mx_CallEvent_type_icon"></div>
                             { callType }
                         </div>
                     </div>
