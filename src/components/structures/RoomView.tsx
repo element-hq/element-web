@@ -834,17 +834,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
             case Action.FocusAComposer: {
                 // re-dispatch to the correct composer
-                if (this.state.editState) {
-                    dis.dispatch({
-                        ...payload,
-                        action: Action.FocusEditMessageComposer,
-                    });
-                } else {
-                    dis.dispatch({
-                        ...payload,
-                        action: Action.FocusSendMessageComposer,
-                    });
-                }
+                dis.fire(this.state.editState ? Action.FocusEditMessageComposer : Action.FocusSendMessageComposer);
                 break;
             }
 
