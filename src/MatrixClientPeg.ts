@@ -219,6 +219,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
         } catch (e) {
             if (e && e.name === 'InvalidCryptoStoreError') {
                 // The js-sdk found a crypto DB too new for it to use
+                // FIXME: Using an import will result in test failures
                 const CryptoStoreTooNewDialog =
                     sdk.getComponent("views.dialogs.CryptoStoreTooNewDialog");
                 Modal.createDialog(CryptoStoreTooNewDialog);

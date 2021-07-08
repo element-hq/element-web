@@ -24,7 +24,7 @@ import FocusLock from "react-focus-lock";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
-import { aboveLeftOf, ContextMenu } from '../../structures/ContextMenu';
+import { aboveLeftOf } from '../../structures/ContextMenu';
 import MessageTimestamp from "../messages/MessageTimestamp";
 import SettingsStore from "../../../settings/SettingsStore";
 import { formatFullDate } from "../../../DateUtils";
@@ -122,7 +122,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         const image = this.image.current;
         const imageWrapper = this.imageWrapper.current;
 
-        const rotation = inputRotation || this.state.rotation;
+        const rotation = inputRotation ?? this.state.rotation;
 
         const imageIsNotFlipped = rotation % 180 === 0;
 
@@ -304,17 +304,13 @@ export default class ImageView extends React.Component<IProps, IState> {
         let contextMenu = null;
         if (this.state.contextMenuDisplayed) {
             contextMenu = (
-                <ContextMenu
+                <MessageContextMenu
                     {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect())}
+                    mxEvent={this.props.mxEvent}
+                    permalinkCreator={this.props.permalinkCreator}
                     onFinished={this.onCloseContextMenu}
-                >
-                    <MessageContextMenu
-                        mxEvent={this.props.mxEvent}
-                        permalinkCreator={this.props.permalinkCreator}
-                        onFinished={this.onCloseContextMenu}
-                        onCloseDialog={this.props.onFinished}
-                    />
-                </ContextMenu>
+                    onCloseDialog={this.props.onFinished}
+                />
             );
         }
 

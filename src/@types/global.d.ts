@@ -46,6 +46,7 @@ import { VoiceRecordingStore } from "../stores/VoiceRecordingStore";
 import PerformanceMonitor from "../performance";
 import UIStore from "../stores/UIStore";
 import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
+import { RoomScrollStateStore } from "../stores/RoomScrollStateStore";
 
 declare global {
     interface Window {
@@ -87,6 +88,7 @@ declare global {
         mxPerformanceEntryNames: any;
         mxUIStore: UIStore;
         mxSetupEncryptionStore?: SetupEncryptionStore;
+        mxRoomScrollStateStore?: RoomScrollStateStore;
     }
 
     interface Document {
