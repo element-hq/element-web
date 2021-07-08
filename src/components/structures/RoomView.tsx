@@ -832,6 +832,22 @@ export default class RoomView extends React.Component<IProps, IState> {
                 break;
             }
 
+            case Action.FocusAComposer: {
+                // re-dispatch to the correct composer
+                if (this.state.editState) {
+                    dis.dispatch({
+                        ...payload,
+                        action: Action.FocusEditMessageComposer,
+                    });
+                } else {
+                    dis.dispatch({
+                        ...payload,
+                        action: Action.FocusComposer,
+                    });
+                }
+                break;
+            }
+
             case "scroll_to_bottom":
                 this.messagePanel?.jumpToLiveTimeline();
                 break;

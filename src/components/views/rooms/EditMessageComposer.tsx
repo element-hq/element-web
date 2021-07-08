@@ -452,6 +452,8 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
             } else if (payload.text) {
                 this.editorRef.current?.insertPlaintext(payload.text);
             }
+        } else if (payload.action === Action.FocusEditMessageComposer && this.editorRef.current) {
+            this.editorRef.current.focus();
         }
     };
 
