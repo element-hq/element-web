@@ -33,12 +33,17 @@ limitations under the License.
 .mx_LinkPreviewWidget_caption {
     margin-left: 15px;
     flex: 1 1 auto;
+    overflow-x: hidden; // cause it to wrap rather than clip
 }
 
 .mx_LinkPreviewWidget_title {
     display: inline;
     font-weight: bold;
     white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .mx_LinkPreviewWidget_siteName {
@@ -49,6 +54,9 @@ limitations under the License.
     margin-top: 8px;
     white-space: normal;
     word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 
 .mx_MatrixChat_useCompactLayout {
