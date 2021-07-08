@@ -27,6 +27,7 @@ interface IProps {
     value: string;
     label?: string;
     placeholder?: string;
+    disabled?: boolean;
     onChange?(value: string): void;
 }
 
@@ -68,6 +69,7 @@ export default class RoomAliasField extends React.PureComponent<IProps, IState> 
                 onChange={this.onChange}
                 value={this.props.value.substring(1, this.props.value.length - this.props.domain.length - 1)}
                 maxLength={maxlength}
+                disabled={this.props.disabled}
             />
         );
     }
