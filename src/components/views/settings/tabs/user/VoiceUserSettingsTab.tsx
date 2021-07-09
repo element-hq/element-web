@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
-import MediaDeviceHandler, { IMediaDevices } from "../../../../../MediaDeviceHandler";
+import MediaDeviceHandler, { IMediaDevices, MediaDeviceKindEnum } from "../../../../../MediaDeviceHandler";
 import Field from "../../../elements/Field";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
@@ -178,7 +178,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                 }
             };
 
-            const audioOutputs = this.state.mediaDevices.audioOutput.slice(0);
+            const audioOutputs = this.state.mediaDevices[MediaDeviceKindEnum.AudioOutput].slice(0);
             if (audioOutputs.length > 0) {
                 const defaultDevice = getDefaultDevice(audioOutputs);
                 speakerDropdown = (
@@ -190,7 +190,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                 );
             }
 
-            const audioInputs = this.state.mediaDevices.audioInput.slice(0);
+            const audioInputs = this.state.mediaDevices[MediaDeviceKindEnum.AudioInput].slice(0);
             if (audioInputs.length > 0) {
                 const defaultDevice = getDefaultDevice(audioInputs);
                 microphoneDropdown = (
@@ -202,7 +202,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                 );
             }
 
-            const videoInputs = this.state.mediaDevices.videoInput.slice(0);
+            const videoInputs = this.state.mediaDevices[MediaDeviceKindEnum.VideoInput].slice(0);
             if (videoInputs.length > 0) {
                 const defaultDevice = getDefaultDevice(videoInputs);
                 webcamDropdown = (
