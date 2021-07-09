@@ -138,12 +138,17 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                     instanceId = lsInstanceId;
                 }
 
-                this.setState({
-                    protocolsLoading: false,
-                    instanceId,
-                    roomServer,
-                });
-                this.refreshRoomList();
+                // Refresh the room list only if validation failed and we had to change these
+                if (this.state.instanceId !== instanceId || this.state.roomServer !== roomServer) {
+                    this.setState({
+                        protocolsLoading: false,
+                        instanceId,
+                        roomServer,
+                    });
+                    this.refreshRoomList();
+                    return;
+                }
+                this.setState({ protocolsLoading: false });
             }, (err) => {
                 console.warn(`error loading third party protocols: ${err}`);
                 this.setState({ protocolsLoading: false });
@@ -177,8 +182,8 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             publicRooms: [],
             loading: true,
             error: null,
-            instanceId: null,
-            roomServer: null,
+            instanceId: localStorage.getItem(LAST_INSTANCE_KEY),
+            roomServer: localStorage.getItem(LAST_SERVER_KEY),
             filterString: this.props.initialText || "",
             selectedCommunityId,
             communityName: null,
