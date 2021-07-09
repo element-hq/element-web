@@ -29,6 +29,7 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import UIStore from '../../../stores/UIStore';
 import { lerp } from '../../../utils/AnimationUtils';
+import { MarkedExecution } from '../../../utils/MarkedExecution';
 
 const PIP_VIEW_WIDTH = 336;
 const PIP_VIEW_HEIGHT = 232;
@@ -116,6 +117,10 @@ export default class CallPreview extends React.Component<IProps, IState> {
     private desiredTranslationX = UIStore.instance.windowWidth - PADDING.right - PIP_VIEW_WIDTH;
     private desiredTranslationY = UIStore.instance.windowHeight - PADDING.bottom - PIP_VIEW_WIDTH;
     private moving = false;
+    private scheduledUpdate = new MarkedExecution(
+        () => this.animationCallback(),
+        () => requestAnimationFrame(() => this.scheduledUpdate.trigger()),
+    );
 
     constructor(props: IProps) {
         super(props);
@@ -175,7 +180,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
             translationX: lerp(this.state.translationX, this.desiredTranslationX, amt),
             translationY: lerp(this.state.translationY, this.desiredTranslationY, amt),
         });
-        requestAnimationFrame(this.animationCallback);
+        this.scheduledUpdate.mark();
     };
 
     private setTranslation(inTranslationX: number, inTranslationY: number) {
@@ -232,7 +237,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
 
         // We start animating here because we want the PiP to move when we're
         // resizing the window
-        requestAnimationFrame(this.animationCallback);
+        this.scheduledUpdate.mark();
     };
 
     private onRoomViewStoreUpdate = (payload) => {
@@ -290,7 +295,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
         this.moving = true;
         this.initX = event.pageX - this.desiredTranslationX;
         this.initY = event.pageY - this.desiredTranslationY;
-        requestAnimationFrame(this.animationCallback);
+        this.scheduledUpdate.mark();
     };
 
     private onMoving = (event: React.MouseEvent | MouseEvent) => {
