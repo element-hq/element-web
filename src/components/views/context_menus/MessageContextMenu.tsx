@@ -1,6 +1,6 @@
 /*
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2015, 2016, 2018, 2019, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,12 +16,11 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { EventStatus } from 'matrix-js-sdk/src/models/event';
+import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import Resend from '../../../Resend';
@@ -29,53 +28,65 @@ import SettingsStore from '../../../settings/SettingsStore';
 import { isUrlPermitted } from '../../../HtmlUtils';
 import { isContentActionable } from '../../../utils/EventUtils';
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from './IconizedContextMenu';
-import { EventType } from "matrix-js-sdk/src/@types/event";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ReadPinsEventId } from "../right_panel/PinnedMessagesCard";
 import ForwardDialog from "../dialogs/ForwardDialog";
 import { Action } from "../../../dispatcher/actions";
+import ReportEventDialog from '../dialogs/ReportEventDialog';
+import ViewSource from '../../structures/ViewSource';
+import ConfirmRedactDialog from '../dialogs/ConfirmRedactDialog';
+import ErrorDialog from '../dialogs/ErrorDialog';
+import ShareDialog from '../dialogs/ShareDialog';
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 
-export function canCancel(eventStatus) {
+export function canCancel(eventStatus: EventStatus): boolean {
     return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;
 }
 
+interface IEventTileOps {
+    isWidgetHidden(): boolean;
+    unhideWidget(): void;
+}
+
+interface IProps {
+    /* the MatrixEvent associated with the context menu */
+    mxEvent: MatrixEvent;
+    /* an optional EventTileOps implementation that can be used to unhide preview widgets */
+    eventTileOps?: IEventTileOps;
+    permalinkCreator?: RoomPermalinkCreator;
+    /* an optional function to be called when the user clicks collapse thread, if not provided hide button */
+    collapseReplyThread?(): void;
+    /* callback called when the menu is dismissed */
+    onFinished(): void;
+    /* if the menu is inside a dialog, we sometimes need to close that dialog after click (forwarding) */
+    onCloseDialog?(): void;
+}
+
+interface IState {
+    canRedact: boolean;
+    canPin: boolean;
+}
+
 @replaceableComponent("views.context_menus.MessageContextMenu")
-export default class MessageContextMenu extends React.Component {
-    static propTypes = {
-        /* the MatrixEvent associated with the context menu */
-        mxEvent: PropTypes.object.isRequired,
-
-        /* an optional EventTileOps implementation that can be used to unhide preview widgets */
-        eventTileOps: PropTypes.object,
-
-        /* an optional function to be called when the user clicks collapse thread, if not provided hide button */
-        collapseReplyThread: PropTypes.func,
-
-        /* callback called when the menu is dismissed */
-        onFinished: PropTypes.func,
-
-        /* if the menu is inside a dialog, we sometimes need to close that dialog after click (forwarding) */
-        onCloseDialog: PropTypes.func,
-    };
-
+export default class MessageContextMenu extends React.Component<IProps, IState> {
     state = {
         canRedact: false,
         canPin: false,
     };
 
     componentDidMount() {
-        MatrixClientPeg.get().on('RoomMember.powerLevel', this._checkPermissions);
-        this._checkPermissions();
+        MatrixClientPeg.get().on('RoomMember.powerLevel', this.checkPermissions);
+        this.checkPermissions();
     }
 
     componentWillUnmount() {
         const cli = MatrixClientPeg.get();
         if (cli) {
-            cli.removeListener('RoomMember.powerLevel', this._checkPermissions);
+            cli.removeListener('RoomMember.powerLevel', this.checkPermissions);
         }
     }
 
-    _checkPermissions = () => {
+    private checkPermissions = (): void => {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
 
@@ -93,7 +104,7 @@ export default class MessageContextMenu extends React.Component {
         this.setState({ canRedact, canPin });
     };
 
-    _isPinned() {
+    private isPinned(): boolean {
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
         const pinnedEvent = room.currentState.getStateEvents(EventType.RoomPinnedEvents, '');
         if (!pinnedEvent) return false;
@@ -101,38 +112,35 @@ export default class MessageContextMenu extends React.Component {
         return content.pinned && Array.isArray(content.pinned) && content.pinned.includes(this.props.mxEvent.getId());
     }
 
-    onResendReactionsClick = () => {
-        for (const reaction of this._getUnsentReactions()) {
+    private onResendReactionsClick = (): void => {
+        for (const reaction of this.getUnsentReactions()) {
             Resend.resend(reaction);
         }
         this.closeMenu();
     };
 
-    onReportEventClick = () => {
-        const ReportEventDialog = sdk.getComponent("dialogs.ReportEventDialog");
+    private onReportEventClick = (): void => {
         Modal.createTrackedDialog('Report Event', '', ReportEventDialog, {
             mxEvent: this.props.mxEvent,
         }, 'mx_Dialog_reportEvent');
         this.closeMenu();
     };
 
-    onViewSourceClick = () => {
-        const ViewSource = sdk.getComponent('structures.ViewSource');
+    private onViewSourceClick = (): void => {
         Modal.createTrackedDialog('View Event Source', '', ViewSource, {
             mxEvent: this.props.mxEvent,
         }, 'mx_Dialog_viewsource');
         this.closeMenu();
     };
 
-    onRedactClick = () => {
-        const ConfirmRedactDialog = sdk.getComponent("dialogs.ConfirmRedactDialog");
+    private onRedactClick = (): void => {
         Modal.createTrackedDialog('Confirm Redact Dialog', '', ConfirmRedactDialog, {
-            onFinished: async (proceed, reason) => {
+            onFinished: async (proceed: boolean, reason?: string) => {
                 if (!proceed) return;
 
                 const cli = MatrixClientPeg.get();
                 try {
-                    if (this.props.onCloseDialog) this.props.onCloseDialog();
+                    this.props.onCloseDialog?.();
                     await cli.redactEvent(
                         this.props.mxEvent.getRoomId(),
                         this.props.mxEvent.getId(),
@@ -145,7 +153,6 @@ export default class MessageContextMenu extends React.Component {
                     // (e.g. no errcode or statusCode) as in that case the redactions end up in the
                     // detached queue and we show the room status bar to allow retry
                     if (typeof code !== "undefined") {
-                        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         // display error message stating you couldn't delete this.
                         Modal.createTrackedDialog('You cannot delete this message', '', ErrorDialog, {
                             title: _t('Error'),
@@ -158,7 +165,7 @@ export default class MessageContextMenu extends React.Component {
         this.closeMenu();
     };
 
-    onForwardClick = () => {
+    private onForwardClick = (): void => {
         Modal.createTrackedDialog('Forward Message', '', ForwardDialog, {
             matrixClient: MatrixClientPeg.get(),
             event: this.props.mxEvent,
@@ -167,12 +174,12 @@ export default class MessageContextMenu extends React.Component {
         this.closeMenu();
     };
 
-    onPinClick = () => {
+    private onPinClick = (): void => {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
         const eventId = this.props.mxEvent.getId();
 
-        const pinnedIds = room?.currentState?.getStateEvents(EventType.RoomPinnedEvents, "")?.pinned || [];
+        const pinnedIds = room?.currentState?.getStateEvents(EventType.RoomPinnedEvents, "")?.getContent().pinned || [];
         if (pinnedIds.includes(eventId)) {
             pinnedIds.splice(pinnedIds.indexOf(eventId), 1);
         } else {
@@ -188,18 +195,16 @@ export default class MessageContextMenu extends React.Component {
         this.closeMenu();
     };
 
-    closeMenu = () => {
-        if (this.props.onFinished) this.props.onFinished();
+    private closeMenu = (): void => {
+        this.props.onFinished();
     };
 
-    onUnhidePreviewClick = () => {
-        if (this.props.eventTileOps) {
-            this.props.eventTileOps.unhideWidget();
-        }
+    private onUnhidePreviewClick = (): void => {
+        this.props.eventTileOps?.unhideWidget();
         this.closeMenu();
     };
 
-    onQuoteClick = () => {
+    private onQuoteClick = (): void => {
         dis.dispatch({
             action: Action.ComposerInsert,
             event: this.props.mxEvent,
@@ -207,9 +212,8 @@ export default class MessageContextMenu extends React.Component {
         this.closeMenu();
     };
 
-    onPermalinkClick = (e) => {
+    private onPermalinkClick = (e: React.MouseEvent): void => {
         e.preventDefault();
-        const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
         Modal.createTrackedDialog('share room message dialog', '', ShareDialog, {
             target: this.props.mxEvent,
             permalinkCreator: this.props.permalinkCreator,
@@ -217,30 +221,27 @@ export default class MessageContextMenu extends React.Component {
         this.closeMenu();
     };
 
-    onCollapseReplyThreadClick = () => {
+    private onCollapseReplyThreadClick = (): void => {
         this.props.collapseReplyThread();
         this.closeMenu();
     };
 
-    _getReactions(filter) {
+    private getReactions(filter: (e: MatrixEvent) => boolean): MatrixEvent[] {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
         const eventId = this.props.mxEvent.getId();
         return room.getPendingEvents().filter(e => {
             const relation = e.getRelation();
-            return relation &&
-                relation.rel_type === "m.annotation" &&
-                relation.event_id === eventId &&
-                filter(e);
+            return relation?.rel_type === RelationType.Annotation && relation.event_id === eventId && filter(e);
         });
     }
 
-    _getPendingReactions() {
-        return this._getReactions(e => canCancel(e.status));
+    private getPendingReactions(): MatrixEvent[] {
+        return this.getReactions(e => canCancel(e.status));
     }
 
-    _getUnsentReactions() {
-        return this._getReactions(e => e.status === EventStatus.NOT_SENT);
+    private getUnsentReactions(): MatrixEvent[] {
+        return this.getReactions(e => e.status === EventStatus.NOT_SENT);
     }
 
     render() {
@@ -248,16 +249,17 @@ export default class MessageContextMenu extends React.Component {
         const me = cli.getUserId();
         const mxEvent = this.props.mxEvent;
         const eventStatus = mxEvent.status;
-        const unsentReactionsCount = this._getUnsentReactions().length;
-        let resendReactionsButton;
-        let redactButton;
-        let forwardButton;
-        let pinButton;
-        let unhidePreviewButton;
-        let externalURLButton;
-        let quoteButton;
-        let collapseReplyThread;
-        let redactItemList;
+        const unsentReactionsCount = this.getUnsentReactions().length;
+
+        let resendReactionsButton: JSX.Element;
+        let redactButton: JSX.Element;
+        let forwardButton: JSX.Element;
+        let pinButton: JSX.Element;
+        let unhidePreviewButton: JSX.Element;
+        let externalURLButton: JSX.Element;
+        let quoteButton: JSX.Element;
+        let collapseReplyThread: JSX.Element;
+        let redactItemList: JSX.Element;
 
         // status is SENT before remote-echo, null after
         const isSent = !eventStatus || eventStatus === EventStatus.SENT;
@@ -296,7 +298,7 @@ export default class MessageContextMenu extends React.Component {
                 pinButton = (
                     <IconizedContextMenuOption
                         iconClassName="mx_MessageContextMenu_iconPin"
-                        label={ this._isPinned() ? _t('Unpin') : _t('Pin') }
+                        label={ this.isPinned() ? _t('Unpin') : _t('Pin') }
                         onClick={this.onPinClick}
                     />
                 );
@@ -333,9 +335,14 @@ export default class MessageContextMenu extends React.Component {
                 onClick={this.onPermalinkClick}
                 label= {_t('Share')}
                 element="a"
-                href={permalink}
-                target="_blank"
-                rel="noreferrer noopener"
+                {
+                    // XXX: Typescript signature for AccessibleButton doesn't work properly for non-inputs like `a`
+                    ...{
+                        href: permalink,
+                        target: "_blank",
+                        rel: "noreferrer noopener",
+                    }
+                }
             />
         );
 
@@ -350,8 +357,8 @@ export default class MessageContextMenu extends React.Component {
         }
 
         // Bridges can provide a 'external_url' to link back to the source.
-        if (typeof (mxEvent.event.content.external_url) === "string" &&
-            isUrlPermitted(mxEvent.event.content.external_url)
+        if (typeof (mxEvent.getContent().external_url) === "string" &&
+            isUrlPermitted(mxEvent.getContent().external_url)
         ) {
             externalURLButton = (
                 <IconizedContextMenuOption
@@ -359,9 +366,14 @@ export default class MessageContextMenu extends React.Component {
                     onClick={this.closeMenu}
                     label={ _t('Source URL') }
                     element="a"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    href={mxEvent.event.content.external_url}
+                    {
+                        // XXX: Typescript signature for AccessibleButton doesn't work properly for non-inputs like `a`
+                        ...{
+                            target: "_blank",
+                            rel: "noreferrer noopener",
+                            href: mxEvent.getContent().external_url,
+                        }
+                    }
                 />
             );
         }
@@ -376,7 +388,7 @@ export default class MessageContextMenu extends React.Component {
             );
         }
 
-        let reportEventButton;
+        let reportEventButton: JSX.Element;
         if (mxEvent.getSender() !== me) {
             reportEventButton = (
                 <IconizedContextMenuOption
