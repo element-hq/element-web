@@ -398,7 +398,7 @@ class LoggedInView extends React.Component<IProps, IState> {
             // refocusing during a paste event will make the
             // paste end up in the newly focused element,
             // so dispatch synchronously before paste happens
-            dis.fire(Action.FocusComposer, true);
+            dis.fire(Action.FocusSendMessageComposer, true);
         }
     };
 
@@ -552,7 +552,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
             if (!isClickShortcut && ev.key !== Key.TAB && !canElementReceiveInput(ev.target)) {
                 // synchronous dispatch so we focus before key generates input
-                dis.fire(Action.FocusComposer, true);
+                dis.fire(Action.FocusSendMessageComposer, true);
                 ev.stopPropagation();
                 // we should *not* preventDefault() here as
                 // that would prevent typing in the now-focussed composer
