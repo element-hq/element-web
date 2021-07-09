@@ -28,7 +28,15 @@ import { MatrixClientPeg } from './MatrixClientPeg';
  * @returns {string} A display alias for the given room
  */
 export function getDisplayAliasForRoom(room: Room): string {
-    return room.getCanonicalAlias() || room.getAltAliases()[0];
+    return getDisplayAliasForAliasSet(
+        room.getCanonicalAlias(), room.getAltAliases(),
+    );
+}
+
+// The various display alias getters all feed through this one path so there's a
+// single place to change the logic.
+export function getDisplayAliasForAliasSet(canonicalAlias: string, altAliases: string[]): string {
+    return canonicalAlias || altAliases?.[0];
 }
 
 export function looksLikeDirectMessageRoom(room: Room, myUserId: string): boolean {
