@@ -122,25 +122,26 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 const myHomeserver = MatrixClientPeg.getHomeserverName();
                 const lsRoomServer = localStorage.getItem(LAST_SERVER_KEY);
                 const lsInstanceId = localStorage.getItem(LAST_INSTANCE_KEY);
-                const configSevers = SdkConfig.get().roomDirectory?.servers || [];
-                const settingsServers = SettingsStore.getValue("room_directory_servers") || [];
-                const roomServer = [...configSevers, ...settingsServers].includes(lsRoomServer)
-                    ? lsRoomServer
-                    : myHomeserver;
-                const instanceIds = [];
-                if (roomServer === myHomeserver) {
-                    Object.values(this.protocols).forEach((protocol) => {
-                        protocol.instances.forEach((instance) => instanceIds.push(instance.instance_id));
-                    });
+                const roomServer = (
+                    SdkConfig.get().roomDirectory?.servers?.includes(lsRoomServer) ||
+                    SettingsStore.getValue("room_directory_servers")?.includes(lsRoomServer)
+                ) ? lsRoomServer : myHomeserver;
+
+                let instanceId: string = null;
+                if (
+                    (lsInstanceId === ALL_ROOMS) ||
+                    (
+                        roomServer === myHomeserver &&
+                        Object.values(this.protocols).some(p => p.instances.some(i => i.instance_id === lsInstanceId))
+                    )
+                ) {
+                    instanceId = lsInstanceId;
                 }
-                const instanceId = (instanceIds.includes(lsInstanceId) || lsInstanceId === ALL_ROOMS)
-                    ? lsInstanceId
-                    : null;
 
                 this.setState({
                     protocolsLoading: false,
-                    instanceId: instanceId,
-                    roomServer: roomServer,
+                    instanceId,
+                    roomServer,
                 });
                 this.refreshRoomList();
             }, (err) => {
