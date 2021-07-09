@@ -124,7 +124,7 @@
     "mini-css-extract-plugin": "^0.12.0",
     "minimist": "^1.2.5",
     "mkdirp": "^1.0.4",
-    "modernizr": "^3.11.4",
+    "modernizr": "^3.11.7",
     "node-fetch": "^2.6.1",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "postcss-easings": "^2.0.0",
