@@ -33,10 +33,7 @@ const getDefaultDevice = (devices: Array<Partial<MediaDeviceInfo>>) => {
     // with deviceId == the empty string: this is because Chrome gives us a device
     // with deviceId 'default', so we're looking for this, not the one we are adding.
     if (!devices.some((i) => i.deviceId === 'default')) {
-        devices.unshift({
-        deviceId: '',
-        label: _t('Default Device'),
-        });
+        devices.unshift({ deviceId: '', label: _t('Default Device') });
         return '';
     } else {
         return 'default';
