@@ -22,16 +22,14 @@ import MediaDeviceHandler, { IMediaDevices, MediaDeviceKindEnum } from "../../..
 import Field from "../../../elements/Field";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
-import * as sdk from "../../../../../index";
 import Modal from "../../../../../Modal";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import SettingsFlag from '../../../elements/SettingsFlag';
+import ErrorDialog from '../../../dialogs/ErrorDialog';
 
-interface IState {
+interface IState extends Record<MediaDeviceKindEnum, string> {
     mediaDevices: IMediaDevices;
-    activeAudioOutput: string;
-    activeAudioInput: string;
-    activeVideoInput: string;
 }
 
 @replaceableComponent("views.settings.tabs.user.VoiceUserSettingsTab")
@@ -41,9 +39,9 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
 
         this.state = {
             mediaDevices: null,
-            activeAudioOutput: null,
-            activeAudioInput: null,
-            activeVideoInput: null,
+            [MediaDeviceKindEnum.AudioOutput]: null,
+            [MediaDeviceKindEnum.AudioInput]: null,
+            [MediaDeviceKindEnum.VideoInput]: null,
         };
     }
 
@@ -54,12 +52,12 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         }
     }
 
-    private refreshMediaDevices = async (stream?: MediaStream) => {
+    private refreshMediaDevices = async (stream?: MediaStream): Promise<void> => {
         this.setState({
             mediaDevices: await MediaDeviceHandler.getDevices(),
-            activeAudioOutput: MediaDeviceHandler.getAudioOutput(),
-            activeAudioInput: MediaDeviceHandler.getAudioInput(),
-            activeVideoInput: MediaDeviceHandler.getVideoInput(),
+            [MediaDeviceKindEnum.AudioOutput]: MediaDeviceHandler.getAudioOutput(),
+            [MediaDeviceKindEnum.AudioInput]: MediaDeviceHandler.getAudioInput(),
+            [MediaDeviceKindEnum.VideoInput]: MediaDeviceHandler.getVideoInput(),
         });
         if (stream) {
             // kill stream (after we've enumerated the devices, otherwise we'd get empty labels again)
@@ -69,7 +67,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         }
     };
 
-    private requestMediaPermissions = async () => {
+    private requestMediaPermissions = async (): Promise<void> => {
         let constraints;
         let stream;
         let error;
@@ -93,7 +91,6 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         if (error) {
             console.log("Failed to list userMedia devices", error);
             const brand = SdkConfig.get().brand;
-            const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
             Modal.createTrackedDialog('No media permissions', '', ErrorDialog, {
                 title: _t('No media permissions'),
                 description: _t(
@@ -106,44 +103,42 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         }
     };
 
-    private setAudioOutput = (e) => {
+    private setAudioOutput = (e): void => {
         MediaDeviceHandler.instance.setAudioOutput(e.target.value);
         this.setState({
-            activeAudioOutput: e.target.value,
+            [MediaDeviceKindEnum.AudioOutput]: e.target.value,
         });
     };
 
-    private setAudioInput = (e) => {
+    private setAudioInput = (e): void => {
         MediaDeviceHandler.instance.setAudioInput(e.target.value);
         this.setState({
-            activeAudioInput: e.target.value,
+            [MediaDeviceKindEnum.AudioInput]: e.target.value,
         });
     };
 
-    private setVideoInput = (e) => {
+    private setVideoInput = (e): void => {
         MediaDeviceHandler.instance.setVideoInput(e.target.value);
         this.setState({
-            activeVideoInput: e.target.value,
+            [MediaDeviceKindEnum.VideoInput]: e.target.value,
         });
     };
 
-    private changeWebRtcMethod = (p2p) => {
+    private changeWebRtcMethod = (p2p: boolean): void => {
         MatrixClientPeg.get().setForceTURN(!p2p);
     };
 
-    private changeFallbackICEServerAllowed = (allow) => {
+    private changeFallbackICEServerAllowed = (allow: boolean): void => {
         MatrixClientPeg.get().setFallbackICEServerAllowed(allow);
     };
 
-    private renderDeviceOptions(devices, category) {
+    private renderDeviceOptions(devices: Array<MediaDeviceInfo>, category: MediaDeviceKindEnum): Array<JSX.Element> {
         return devices.map((d) => {
             return (<option key={`${category}-${d.deviceId}`} value={d.deviceId}>{d.label}</option>);
         });
     }
 
     render() {
-        const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
-
         let requestButton = null;
         let speakerDropdown = null;
         let microphoneDropdown = null;
@@ -183,9 +178,9 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                 const defaultDevice = getDefaultDevice(audioOutputs);
                 speakerDropdown = (
                     <Field element="select" label={_t("Audio Output")}
-                        value={this.state.activeAudioOutput || defaultDevice}
+                        value={this.state[MediaDeviceKindEnum.AudioOutput] || defaultDevice}
                         onChange={this.setAudioOutput}>
-                        {this.renderDeviceOptions(audioOutputs, 'audioOutput')}
+                        {this.renderDeviceOptions(audioOutputs, MediaDeviceKindEnum.AudioOutput)}
                     </Field>
                 );
             }
@@ -195,9 +190,9 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                 const defaultDevice = getDefaultDevice(audioInputs);
                 microphoneDropdown = (
                     <Field element="select" label={_t("Microphone")}
-                        value={this.state.activeAudioInput || defaultDevice}
+                        value={this.state[MediaDeviceKindEnum.AudioInput] || defaultDevice}
                         onChange={this.setAudioInput}>
-                        {this.renderDeviceOptions(audioInputs, 'audioInput')}
+                        {this.renderDeviceOptions(audioInputs, MediaDeviceKindEnum.AudioInput)}
                     </Field>
                 );
             }
@@ -207,9 +202,9 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                 const defaultDevice = getDefaultDevice(videoInputs);
                 webcamDropdown = (
                     <Field element="select" label={_t("Camera")}
-                        value={this.state.activeVideoInput || defaultDevice}
+                        value={this.state[MediaDeviceKindEnum.VideoInput] || defaultDevice}
                         onChange={this.setVideoInput}>
-                        {this.renderDeviceOptions(videoInputs, 'videoInput')}
+                        {this.renderDeviceOptions(videoInputs, MediaDeviceKindEnum.VideoInput)}
                     </Field>
                 );
             }
