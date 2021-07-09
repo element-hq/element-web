@@ -17,6 +17,7 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
+import AliasCustomisations from './customisations/Alias';
 
 /**
  * Given a room object, return the alias we should use for it,
@@ -36,6 +37,9 @@ export function getDisplayAliasForRoom(room: Room): string {
 // The various display alias getters all feed through this one path so there's a
 // single place to change the logic.
 export function getDisplayAliasForAliasSet(canonicalAlias: string, altAliases: string[]): string {
+    if (AliasCustomisations.getDisplayAliasForAliasSet) {
+        return AliasCustomisations.getDisplayAliasForAliasSet(canonicalAlias, altAliases);
+    }
     return canonicalAlias || altAliases?.[0];
 }
 
