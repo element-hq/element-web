@@ -15,11 +15,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import BaseDialog from "./BaseDialog";
+import Spinner from "../elements/Spinner";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -106,9 +107,6 @@ export default class CreateGroupDialog extends React.Component<IProps, IState> {
     };
 
     render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const Spinner = sdk.getComponent('elements.Spinner');
-
         if (this.state.creating) {
             return <Spinner />;
         }

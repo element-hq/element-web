@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import { _t } from '../../../languageHandler';
-import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import * as Lifecycle from '../../../Lifecycle';
 import Modal from '../../../Modal';
@@ -26,6 +25,12 @@ import AuthPage from "../../views/auth/AuthPage";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY } from "../../../BasePlatform";
 import SSOButtons from "../../views/elements/SSOButtons";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import ConfirmWipeDeviceDialog from '../../views/dialogs/ConfirmWipeDeviceDialog';
+import Field from '../../views/elements/Field';
+import AccessibleButton from '../../views/elements/AccessibleButton';
+import Spinner from "../../views/elements/Spinner";
+import AuthHeader from "../../views/auth/AuthHeader";
+import AuthBody from "../../views/auth/AuthBody";
 
 const LOGIN_VIEW = {
     LOADING: 1,
@@ -94,7 +99,6 @@ export default class SoftLogout extends React.Component<IProps, IState> {
     }
 
     onClearAll = () => {
-        const ConfirmWipeDeviceDialog = sdk.getComponent('dialogs.ConfirmWipeDeviceDialog');
         Modal.createTrackedDialog('Clear Data', 'Soft Logout', ConfirmWipeDeviceDialog, {
             onFinished: (wipeData) => {
                 if (!wipeData) return;
@@ -202,7 +206,6 @@ export default class SoftLogout extends React.Component<IProps, IState> {
 
     private renderSignInSection() {
         if (this.state.loginView === LOGIN_VIEW.LOADING) {
-            const Spinner = sdk.getComponent("elements.Spinner");
             return <Spinner />;
         }
 
@@ -214,9 +217,6 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         }
 
         if (this.state.loginView === LOGIN_VIEW.PASSWORD) {
-            const Field = sdk.getComponent("elements.Field");
-            const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
             let error = null;
             if (this.state.errorText) {
                 error = <span className='mx_Login_error'>{this.state.errorText}</span>;
@@ -286,10 +286,6 @@ export default class SoftLogout extends React.Component<IProps, IState> {
     }
 
     render() {
-        const AuthHeader = sdk.getComponent("auth.AuthHeader");
-        const AuthBody = sdk.getComponent("auth.AuthBody");
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
         return (
             <AuthPage>
                 <AuthHeader />

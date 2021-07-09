@@ -390,6 +390,7 @@ export class Analytics {
             { expl: _td('Your device resolution'), value: resolution },
         ];
 
+        // FIXME: Using an import will result in test failures
         const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
         Modal.createTrackedDialog('Analytics Details', '', ErrorDialog, {
             title: _t('Analytics'),

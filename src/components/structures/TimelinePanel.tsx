@@ -32,7 +32,6 @@ import RoomContext from "../../contexts/RoomContext";
 import UserActivity from "../../UserActivity";
 import Modal from "../../Modal";
 import dis from "../../dispatcher/dispatcher";
-import * as sdk from "../../index";
 import { Key } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';
@@ -47,6 +46,7 @@ import ResizeNotifier from "../../utils/ResizeNotifier";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Spinner from "../views/elements/Spinner";
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
+import ErrorDialog from '../views/dialogs/ErrorDialog';
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -1096,7 +1096,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
             console.error(
                 `Error loading timeline panel at ${eventId}: ${error}`,
             );
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
             let onFinished;
 

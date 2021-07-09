@@ -23,7 +23,6 @@ import { User } from "matrix-js-sdk/src/models/user";
 import * as ContentHelpers from 'matrix-js-sdk/src/content-helpers';
 import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';
-import * as sdk from './index';
 import { _t, _td } from './languageHandler';
 import Modal from './Modal';
 import MultiInviter from './utils/MultiInviter';
@@ -50,6 +49,12 @@ import { CHAT_EFFECTS } from "./effects";
 import CallHandler from "./CallHandler";
 import { guessAndSetDMRoom } from "./Rooms";
 import { upgradeRoom } from './utils/RoomUpgrade';
+import UploadConfirmDialog from './components/views/dialogs/UploadConfirmDialog';
+import ErrorDialog from './components/views/dialogs/ErrorDialog';
+import DevtoolsDialog from './components/views/dialogs/DevtoolsDialog';
+import RoomUpgradeWarningDialog from "./components/views/dialogs/RoomUpgradeWarningDialog";
+import InfoDialog from "./components/views/dialogs/InfoDialog";
+import SlashCommandHelpDialog from "./components/views/dialogs/SlashCommandHelpDialog";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -63,7 +68,6 @@ const singleMxcUpload = async (): Promise<any> => {
         fileSelector.onchange = (ev: HTMLInputEvent) => {
             const file = ev.target.files[0];
 
-            const UploadConfirmDialog = sdk.getComponent("dialogs.UploadConfirmDialog");
             Modal.createTrackedDialog('Upload Files confirmation', '', UploadConfirmDialog, {
                 file,
                 onFinished: (shouldContinue) => {
@@ -246,7 +250,6 @@ export const Commands = [
         args: '<query>',
         description: _td('Searches DuckDuckGo for results'),
         runFn: function() {
-            const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
             // TODO Don't explain this away, actually show a search UI here.
             Modal.createTrackedDialog('Slash Commands', '/ddg is not a command', ErrorDialog, {
                 title: _t('/ddg is not a command'),
@@ -268,8 +271,6 @@ export const Commands = [
                 if (!room.currentState.mayClientSendStateEvent("m.room.tombstone", cli)) {
                     return reject(_t("You do not have the required permissions to use this command."));
                 }
-
-                const RoomUpgradeWarningDialog = sdk.getComponent("dialogs.RoomUpgradeWarningDialog");
 
                 const { finished } = Modal.createTrackedDialog('Slash Commands', 'upgrade room confirmation',
                     RoomUpgradeWarningDialog, { roomId: roomId, targetVersion: args }, /*className=*/null,
@@ -391,7 +392,6 @@ export const Commands = [
             const topic = topicEvents && topicEvents.getContent().topic;
             const topicHtml = topic ? linkifyAndSanitizeHtml(topic) : _t('This room has no topic.');
 
-            const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
             Modal.createTrackedDialog('Slash Commands', 'Topic', InfoDialog, {
                 title: room.name,
                 description: <div dangerouslySetInnerHTML={{ __html: topicHtml }} />,
@@ -694,7 +694,6 @@ export const Commands = [
                     ignoredUsers.push(userId); // de-duped internally in the js-sdk
                     return success(
                         cli.setIgnoredUsers(ignoredUsers).then(() => {
-                            const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
                             Modal.createTrackedDialog('Slash Commands', 'User ignored', InfoDialog, {
                                 title: _t('Ignored user'),
                                 description: <div>
@@ -725,7 +724,6 @@ export const Commands = [
                     if (index !== -1) ignoredUsers.splice(index, 1);
                     return success(
                         cli.setIgnoredUsers(ignoredUsers).then(() => {
-                            const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
                             Modal.createTrackedDialog('Slash Commands', 'User unignored', InfoDialog, {
                                 title: _t('Unignored user'),
                                 description: <div>
@@ -795,7 +793,6 @@ export const Commands = [
         command: 'devtools',
         description: _td('Opens the Developer Tools dialog'),
         runFn: function(roomId) {
-            const DevtoolsDialog = sdk.getComponent('dialogs.DevtoolsDialog');
             Modal.createDialog(DevtoolsDialog, { roomId });
             return success();
         },
@@ -900,7 +897,6 @@ export const Commands = [
                         await cli.setDeviceVerified(userId, deviceId, true);
 
                         // Tell the user we verified everything
-                        const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
                         Modal.createTrackedDialog('Slash Commands', 'Verified key', InfoDialog, {
                             title: _t('Verified key'),
                             description: <div>
@@ -957,8 +953,6 @@ export const Commands = [
         command: "help",
         description: _td("Displays list of commands with usages and descriptions"),
         runFn: function() {
-            const SlashCommandHelpDialog = sdk.getComponent('dialogs.SlashCommandHelpDialog');
-
             Modal.createTrackedDialog('Slash Commands', 'Help', SlashCommandHelpDialog);
             return success();
         },

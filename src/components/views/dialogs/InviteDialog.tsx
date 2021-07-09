@@ -18,7 +18,6 @@ import React, { createRef } from 'react';
 import classNames from 'classnames';
 
 import { _t, _td } from "../../../languageHandler";
-import * as sdk from "../../../index";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { makeRoomPermalink, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
@@ -65,6 +64,9 @@ import { copyPlaintext, selectText } from "../../../utils/strings";
 import * as ContextMenu from "../../structures/ContextMenu";
 import { toRightOf } from "../../structures/ContextMenu";
 import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
+import QuestionDialog from "./QuestionDialog";
+import Spinner from "../elements/Spinner";
+import BaseDialog from "./BaseDialog";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -1046,7 +1048,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         if (this.unmounted) return;
 
         if (failed.length > 0) {
-            const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
             Modal.createTrackedDialog('Invite Paste Fail', '', QuestionDialog, {
                 title: _t('Failed to find the following users'),
                 description: _t(
@@ -1158,7 +1159,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         const toRender = sourceMembers.slice(0, showNum);
         const hasMore = toRender.length < sourceMembers.length;
 
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
         let showMore = null;
         if (hasMore) {
             showMore = (
@@ -1269,10 +1269,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     };
 
     render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-        const Spinner = sdk.getComponent("elements.Spinner");
-
         let spinner = null;
         if (this.state.busy) {
             spinner = <Spinner w={20} h={20} />;

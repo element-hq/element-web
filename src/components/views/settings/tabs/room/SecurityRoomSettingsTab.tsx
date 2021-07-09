@@ -21,7 +21,6 @@ import { EventType } from 'matrix-js-sdk/src/@types/event';
 
 import { _t } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
-import * as sdk from "../../../../..";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import Modal from "../../../../../Modal";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
@@ -37,6 +36,7 @@ import ManageRestrictedJoinRuleDialog from '../../../dialogs/ManageRestrictedJoi
 import RoomUpgradeWarningDialog from '../../../dialogs/RoomUpgradeWarningDialog';
 import { upgradeRoom } from "../../../../../utils/RoomUpgrade";
 import { arrayHasDiff } from "../../../../../utils/arrays";
+import SettingsFlag from '../../../elements/SettingsFlag';
 
 interface IProps {
     roomId: string;
@@ -503,8 +503,6 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     }
 
     render() {
-        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
-
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const isEncrypted = this.state.encrypted;
