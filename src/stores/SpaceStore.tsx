@@ -335,6 +335,10 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         return sortBy(parents, r => r.roomId)?.[0] || null;
     }
 
+    public getKnownParents(roomId: string): Set<string> {
+        return this.parentMap.get(roomId) || new Set();
+    }
+
     public getSpaceFilteredRoomIds = (space: Room | null): Set<string> => {
         if (!space && SettingsStore.getValue("feature_spaces.all_rooms")) {
             return new Set(this.matrixClient.getVisibleRooms().map(r => r.roomId));

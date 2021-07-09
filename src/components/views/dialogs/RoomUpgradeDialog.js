@@ -17,10 +17,10 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { upgradeRoom } from "../../../utils/RoomUpgrade";
 
 @replaceableComponent("views.dialogs.RoomUpgradeDialog")
 export default class RoomUpgradeDialog extends React.Component {
@@ -45,7 +45,7 @@ export default class RoomUpgradeDialog extends React.Component {
 
     _onUpgradeClick = () => {
         this.setState({ busy: true });
-        MatrixClientPeg.get().upgradeRoom(this.props.room.roomId, this._targetVersion).then(() => {
+        upgradeRoom(this.props.room, this._targetVersion, false, false).then(() => {
             this.props.onFinished(true);
         }).catch((err) => {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
