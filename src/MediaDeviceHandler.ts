@@ -103,6 +103,14 @@ export default class MediaDeviceHandler extends EventEmitter {
         setMatrixCallVideoInput(deviceId);
     }
 
+    public setDevice(deviceId: string, kind: MediaDeviceKindEnum): void {
+        switch (kind) {
+            case MediaDeviceKindEnum.AudioOutput: this.setAudioOutput(deviceId); break;
+            case MediaDeviceKindEnum.AudioInput: this.setAudioInput(deviceId); break;
+            case MediaDeviceKindEnum.VideoInput: this.setVideoInput(deviceId); break;
+        }
+    }
+
     public static getAudioOutput(): string {
         return SettingsStore.getValueAt(SettingLevel.DEVICE, "webrtc_audiooutput");
     }
