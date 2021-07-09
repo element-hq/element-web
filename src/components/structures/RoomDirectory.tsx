@@ -122,19 +122,20 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 const myHomeserver = MatrixClientPeg.getHomeserverName();
                 const lsRoomServer = localStorage.getItem(LAST_SERVER_KEY);
                 const lsInstanceId = localStorage.getItem(LAST_INSTANCE_KEY);
-                const roomServer = (
+
+                let roomServer = myHomeserver;
+                if (
                     SdkConfig.get().roomDirectory?.servers?.includes(lsRoomServer) ||
                     SettingsStore.getValue("room_directory_servers")?.includes(lsRoomServer)
-                ) ? lsRoomServer : myHomeserver;
+                ) {
+                    roomServer = lsRoomServer;
+                }
 
                 let instanceId: string = null;
-                if (
-                    (lsInstanceId === ALL_ROOMS) ||
-                    (
-                        roomServer === myHomeserver &&
-                        Object.values(this.protocols).some(p => p.instances.some(i => i.instance_id === lsInstanceId))
-                    )
-                ) {
+                if (roomServer === myHomeserver && (
+                    lsInstanceId === ALL_ROOMS ||
+                    Object.values(this.protocols).some(p => p.instances.some(i => i.instance_id === lsInstanceId))
+                )) {
                     instanceId = lsInstanceId;
                 }
 
