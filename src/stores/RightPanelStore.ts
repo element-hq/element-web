@@ -68,6 +68,7 @@ const MEMBER_INFO_PHASES = [
 export default class RightPanelStore extends Store<ActionPayload> {
     private static instance: RightPanelStore;
     private state: RightPanelStoreState;
+    private lastRoomId: string;
 
     constructor() {
         super(dis);
@@ -147,8 +148,10 @@ export default class RightPanelStore extends Store<ActionPayload> {
     __onDispatch(payload: ActionPayload) {
         switch (payload.action) {
             case 'view_room':
+                if (payload.room_id === this.lastRoomId) break; // skip this transition, probably a permalink
+                // fallthrough
             case 'view_group':
-                if (payload.room_id === RoomViewStore.getRoomId()) break; // skip this transition, probably a permalink
+                this.lastRoomId = payload.room_id;
 
                 // Reset to the member list if we're viewing member info
                 if (MEMBER_INFO_PHASES.includes(this.state.lastRoomPhase)) {
