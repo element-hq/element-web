@@ -22,8 +22,11 @@ import { ListRule } from "../../../../../mjolnir/ListRule";
 import { BanList, RULE_SERVER, RULE_USER } from "../../../../../mjolnir/BanList";
 import Modal from "../../../../../Modal";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
-import * as sdk from "../../../../../index";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import ErrorDialog from "../../../dialogs/ErrorDialog";
+import QuestionDialog from "../../../dialogs/QuestionDialog";
+import AccessibleButton from "../../../elements/AccessibleButton";
+import Field from "../../../elements/Field";
 
 interface IState {
     busy: boolean;
@@ -68,7 +71,6 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         } catch (e) {
             console.error(e);
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to add Mjolnir rule', '', ErrorDialog, {
                 title: _t('Error adding ignored user/server'),
                 description: _t('Something went wrong. Please try again or view your console for hints.'),
@@ -90,7 +92,6 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         } catch (e) {
             console.error(e);
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to subscribe to Mjolnir list', '', ErrorDialog, {
                 title: _t('Error subscribing to list'),
                 description: _t('Please verify the room ID or address and try again.'),
@@ -108,7 +109,6 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         } catch (e) {
             console.error(e);
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to remove Mjolnir rule', '', ErrorDialog, {
                 title: _t('Error removing ignored user/server'),
                 description: _t('Something went wrong. Please try again or view your console for hints.'),
@@ -126,7 +126,6 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         } catch (e) {
             console.error(e);
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to unsubscribe from Mjolnir list', '', ErrorDialog, {
                 title: _t('Error unsubscribing from list'),
                 description: _t('Please try again or view your console for hints.'),
@@ -137,8 +136,6 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
     }
 
     private viewListRules(list: BanList) {
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-
         const room = MatrixClientPeg.get().getRoom(list.roomId);
         const name = room ? room.name : list.roomId;
 
@@ -168,8 +165,6 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
     }
 
     private renderPersonalBanListRules() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
         const list = Mjolnir.sharedInstance().getPersonalList();
         const rules = list ? [...list.userRules, ...list.serverRules] : [];
         if (!list || rules.length <= 0) return <i>{_t("You have not ignored anyone.")}</i>;
@@ -199,8 +194,6 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
     }
 
     private renderSubscribedBanLists() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
         const personalList = Mjolnir.sharedInstance().getPersonalList();
         const lists = Mjolnir.sharedInstance().lists.filter(b => {
             return personalList? personalList.roomId !== b.roomId : true;
@@ -241,8 +234,6 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
     }
 
     render() {
-        const Field = sdk.getComponent('elements.Field');
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const brand = SdkConfig.get().brand;
 
         return (

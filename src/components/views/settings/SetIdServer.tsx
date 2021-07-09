@@ -17,7 +17,6 @@ limitations under the License.
 import url from 'url';
 import React from 'react';
 import { _t } from "../../../languageHandler";
-import * as sdk from '../../../index';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from '../../../Modal';
 import dis from "../../../dispatcher/dispatcher";
@@ -28,6 +27,10 @@ import { getDefaultIdentityServerUrl, doesIdentityServerHaveTerms } from '../../
 import { timeout } from "../../../utils/promise";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ActionPayload } from '../../../dispatcher/payloads';
+import InlineSpinner from '../elements/InlineSpinner';
+import AccessibleButton from '../elements/AccessibleButton';
+import Field from '../elements/Field';
+import QuestionDialog from "../dialogs/QuestionDialog";
 
 // We'll wait up to this long when checking for 3PID bindings on the IS.
 const REACHABILITY_TIMEOUT = 10000; // ms
@@ -126,7 +129,6 @@ export default class SetIdServer extends React.Component<IProps, IState> {
 
     private getTooltip = () => {
         if (this.state.checking) {
-            const InlineSpinner = sdk.getComponent('views.elements.InlineSpinner');
             return <div>
                 <InlineSpinner />
                 { _t("Checking server") }
@@ -217,7 +219,6 @@ export default class SetIdServer extends React.Component<IProps, IState> {
     };
 
     private showNoTermsWarning(fullUrl) {
-        const QuestionDialog = sdk.getComponent("views.dialogs.QuestionDialog");
         const { finished } = Modal.createTrackedDialog('No Terms Warning', '', QuestionDialog, {
             title: _t("Identity server has no terms of service"),
             description: (
@@ -319,7 +320,6 @@ export default class SetIdServer extends React.Component<IProps, IState> {
             message = unboundMessage;
         }
 
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         const { finished } = Modal.createTrackedDialog('Identity Server Bound Warning', '', QuestionDialog, {
             title,
             description: message,
@@ -352,8 +352,6 @@ export default class SetIdServer extends React.Component<IProps, IState> {
     };
 
     render() {
-        const AccessibleButton = sdk.getComponent('views.elements.AccessibleButton');
-        const Field = sdk.getComponent('elements.Field');
         const idServerUrl = this.state.currentClientIdServer;
         let sectionTitle;
         let bodyText;
@@ -398,7 +396,6 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 discoButtonContent = _t("Do not use an identity server");
             }
             if (this.state.disconnectBusy) {
-                const InlineSpinner = sdk.getComponent('views.elements.InlineSpinner');
                 discoButtonContent = <InlineSpinner />;
             }
             discoSection = <div>

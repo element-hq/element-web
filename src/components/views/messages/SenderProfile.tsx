@@ -24,7 +24,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 interface IProps {
     mxEvent: MatrixEvent;
-    onClick(): void;
+    onClick?(): void;
     enableFlair: boolean;
 }
 
