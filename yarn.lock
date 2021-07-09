@@ -7251,7 +7251,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.5:
+lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.5:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -7804,14 +7804,14 @@ mkdirp@^1.0.4:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
-modernizr@^3.11.4:
-  version "3.11.4"
-  resolved "https://registry.yarnpkg.com/modernizr/-/modernizr-3.11.4.tgz#a31e88749cda234f9424692c936f707bfd3084f6"
-  integrity sha512-xLtXwvuOqh4WJEKusCmtWLncNWyyjpWDwR7ak9c0oPkR+00tC/6s51Atxf51NKxmPhfVmtQNHU0gYfbIhzixFg==
+modernizr@^3.11.7:
+  version "3.11.7"
+  resolved "https://registry.yarnpkg.com/modernizr/-/modernizr-3.11.7.tgz#905acd00a214b71593f39db1dd4b20a04f274740"
+  integrity sha512-mPu1qtT9gLVW8PhSiV7s0wnv8tx0OXwN+jkhsIg6zR9Bal/1t7TV2+bVjZkfnsyQGdOsMjPLUpp4K3xpOPr7Xw==
   dependencies:
     doctrine "^3.0.0"
     file "^0.2.2"
-    lodash "^4.17.20"
+    lodash "^4.17.21"
     markdown-it "^10.0.0"
     mkdirp "0.5.5"
     requirejs "^2.3.6"
