@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
-import MediaDeviceHandler from "../../../../../MediaDeviceHandler";
+import MediaDeviceHandler, { IMediaDevices } from "../../../../../MediaDeviceHandler";
 import Field from "../../../elements/Field";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
@@ -27,13 +27,20 @@ import Modal from "../../../../../Modal";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
+interface IState {
+    mediaDevices: IMediaDevices;
+    activeAudioOutput: string;
+    activeAudioInput: string;
+    activeVideoInput: string;
+}
+
 @replaceableComponent("views.settings.tabs.user.VoiceUserSettingsTab")
-export default class VoiceUserSettingsTab extends React.Component {
+export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
     constructor() {
-        super();
+        super({});
 
         this.state = {
-            mediaDevices: false,
+            mediaDevices: null,
             activeAudioOutput: null,
             activeAudioInput: null,
             activeVideoInput: null,
@@ -43,11 +50,11 @@ export default class VoiceUserSettingsTab extends React.Component {
     async componentDidMount() {
         const canSeeDeviceLabels = await MediaDeviceHandler.hasAnyLabeledDevices();
         if (canSeeDeviceLabels) {
-            this._refreshMediaDevices();
+            this.refreshMediaDevices();
         }
     }
 
-    _refreshMediaDevices = async (stream) => {
+    private refreshMediaDevices = async (stream?: MediaStream) => {
         this.setState({
             mediaDevices: await MediaDeviceHandler.getDevices(),
             activeAudioOutput: MediaDeviceHandler.getAudioOutput(),
@@ -62,7 +69,7 @@ export default class VoiceUserSettingsTab extends React.Component {
         }
     };
 
-    _requestMediaPermissions = async () => {
+    private requestMediaPermissions = async () => {
         let constraints;
         let stream;
         let error;
@@ -95,40 +102,40 @@ export default class VoiceUserSettingsTab extends React.Component {
                 ),
             });
         } else {
-            this._refreshMediaDevices(stream);
+            this.refreshMediaDevices(stream);
         }
     };
 
-    _setAudioOutput = (e) => {
+    private setAudioOutput = (e) => {
         MediaDeviceHandler.instance.setAudioOutput(e.target.value);
         this.setState({
             activeAudioOutput: e.target.value,
         });
     };
 
-    _setAudioInput = (e) => {
+    private setAudioInput = (e) => {
         MediaDeviceHandler.instance.setAudioInput(e.target.value);
         this.setState({
             activeAudioInput: e.target.value,
         });
     };
 
-    _setVideoInput = (e) => {
+    private setVideoInput = (e) => {
         MediaDeviceHandler.instance.setVideoInput(e.target.value);
         this.setState({
             activeVideoInput: e.target.value,
         });
     };
 
-    _changeWebRtcMethod = (p2p) => {
+    private changeWebRtcMethod = (p2p) => {
         MatrixClientPeg.get().setForceTURN(!p2p);
     };
 
-    _changeFallbackICEServerAllowed = (allow) => {
+    private changeFallbackICEServerAllowed = (allow) => {
         MatrixClientPeg.get().setFallbackICEServerAllowed(allow);
     };
 
-    _renderDeviceOptions(devices, category) {
+    private renderDeviceOptions(devices, category) {
         return devices.map((d) => {
             return (<option key={`${category}-${d.deviceId}`} value={d.deviceId}>{d.label}</option>);
         });
@@ -141,11 +148,11 @@ export default class VoiceUserSettingsTab extends React.Component {
         let speakerDropdown = null;
         let microphoneDropdown = null;
         let webcamDropdown = null;
-        if (this.state.mediaDevices === false) {
+        if (!this.state.mediaDevices) {
             requestButton = (
                 <div className='mx_VoiceUserSettingsTab_missingMediaPermissions'>
                     <p>{_t("Missing media permissions, click the button below to request.")}</p>
-                    <AccessibleButton onClick={this._requestMediaPermissions} kind="primary">
+                    <AccessibleButton onClick={this.requestMediaPermissions} kind="primary">
                         {_t("Request media permissions")}
                     </AccessibleButton>
                 </div>
@@ -177,8 +184,8 @@ export default class VoiceUserSettingsTab extends React.Component {
                 speakerDropdown = (
                     <Field element="select" label={_t("Audio Output")}
                         value={this.state.activeAudioOutput || defaultDevice}
-                        onChange={this._setAudioOutput}>
-                        {this._renderDeviceOptions(audioOutputs, 'audioOutput')}
+                        onChange={this.setAudioOutput}>
+                        {this.renderDeviceOptions(audioOutputs, 'audioOutput')}
                     </Field>
                 );
             }
@@ -189,8 +196,8 @@ export default class VoiceUserSettingsTab extends React.Component {
                 microphoneDropdown = (
                     <Field element="select" label={_t("Microphone")}
                         value={this.state.activeAudioInput || defaultDevice}
-                        onChange={this._setAudioInput}>
-                        {this._renderDeviceOptions(audioInputs, 'audioInput')}
+                        onChange={this.setAudioInput}>
+                        {this.renderDeviceOptions(audioInputs, 'audioInput')}
                     </Field>
                 );
             }
@@ -201,8 +208,8 @@ export default class VoiceUserSettingsTab extends React.Component {
                 webcamDropdown = (
                     <Field element="select" label={_t("Camera")}
                         value={this.state.activeVideoInput || defaultDevice}
-                        onChange={this._setVideoInput}>
-                        {this._renderDeviceOptions(videoInputs, 'videoInput')}
+                        onChange={this.setVideoInput}>
+                        {this.renderDeviceOptions(videoInputs, 'videoInput')}
                     </Field>
                 );
             }
@@ -220,12 +227,12 @@ export default class VoiceUserSettingsTab extends React.Component {
                     <SettingsFlag
                         name='webRtcAllowPeerToPeer'
                         level={SettingLevel.DEVICE}
-                        onChange={this._changeWebRtcMethod}
+                        onChange={this.changeWebRtcMethod}
                     />
                     <SettingsFlag
                         name='fallbackICEServerAllowed'
                         level={SettingLevel.DEVICE}
-                        onChange={this._changeFallbackICEServerAllowed}
+                        onChange={this.changeFallbackICEServerAllowed}
                     />
                 </div>
             </div>
