@@ -28,14 +28,29 @@ import { replaceableComponent } from "../../../../../utils/replaceableComponent"
 import SettingsFlag from '../../../elements/SettingsFlag';
 import ErrorDialog from '../../../dialogs/ErrorDialog';
 
+const getDefaultDevice = (devices: Array<Partial<MediaDeviceInfo>>) => {
+    // Note we're looking for a device with deviceId 'default' but adding a device
+    // with deviceId == the empty string: this is because Chrome gives us a device
+    // with deviceId 'default', so we're looking for this, not the one we are adding.
+    if (!devices.some((i) => i.deviceId === 'default')) {
+        devices.unshift({
+        deviceId: '',
+        label: _t('Default Device'),
+        });
+        return '';
+    } else {
+        return 'default';
+    }
+};
+
 interface IState extends Record<MediaDeviceKindEnum, string> {
     mediaDevices: IMediaDevices;
 }
 
 @replaceableComponent("views.settings.tabs.user.VoiceUserSettingsTab")
 export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
-    constructor() {
-        super({});
+    constructor(props: {}) {
+        super(props);
 
         this.state = {
             mediaDevices: null,
@@ -103,25 +118,9 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         }
     };
 
-    private setAudioOutput = (e): void => {
-        MediaDeviceHandler.instance.setAudioOutput(e.target.value);
-        this.setState({
-            [MediaDeviceKindEnum.AudioOutput]: e.target.value,
-        });
-    };
-
-    private setAudioInput = (e): void => {
-        MediaDeviceHandler.instance.setAudioInput(e.target.value);
-        this.setState({
-            [MediaDeviceKindEnum.AudioInput]: e.target.value,
-        });
-    };
-
-    private setVideoInput = (e): void => {
-        MediaDeviceHandler.instance.setVideoInput(e.target.value);
-        this.setState({
-            [MediaDeviceKindEnum.VideoInput]: e.target.value,
-        });
+    private setDevice = (deviceId: string, kind: MediaDeviceKindEnum): void => {
+        MediaDeviceHandler.instance.setDevice(deviceId, kind);
+        this.setState<null>({ [kind]: deviceId });
     };
 
     private changeWebRtcMethod = (p2p: boolean): void => {
@@ -136,6 +135,23 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         return devices.map((d) => {
             return (<option key={`${category}-${d.deviceId}`} value={d.deviceId}>{d.label}</option>);
         });
+    }
+
+    private renderDropdown(kind: MediaDeviceKindEnum, label: string): JSX.Element {
+        const devices = this.state.mediaDevices[kind].slice(0);
+        if (devices.length === 0) return null;
+
+        const defaultDevice = getDefaultDevice(devices);
+        return (
+            <Field
+                element="select"
+                label={label}
+                value={this.state[kind] || defaultDevice}
+                onChange={(e) => this.setDevice(e.target.value, kind)}
+            >
+                { this.renderDeviceOptions(devices, kind) }
+            </Field>
+        );
     }
 
     render() {
@@ -153,71 +169,28 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                 </div>
             );
         } else if (this.state.mediaDevices) {
-            speakerDropdown = <p>{ _t('No Audio Outputs detected') }</p>;
-            microphoneDropdown = <p>{ _t('No Microphones detected') }</p>;
-            webcamDropdown = <p>{ _t('No Webcams detected') }</p>;
-
-            const defaultOption = {
-                deviceId: '',
-                label: _t('Default Device'),
-            };
-            const getDefaultDevice = (devices) => {
-                // Note we're looking for a device with deviceId 'default' but adding a device
-                // with deviceId == the empty string: this is because Chrome gives us a device
-                // with deviceId 'default', so we're looking for this, not the one we are adding.
-                if (!devices.some((i) => i.deviceId === 'default')) {
-                    devices.unshift(defaultOption);
-                    return '';
-                } else {
-                    return 'default';
-                }
-            };
-
-            const audioOutputs = this.state.mediaDevices[MediaDeviceKindEnum.AudioOutput].slice(0);
-            if (audioOutputs.length > 0) {
-                const defaultDevice = getDefaultDevice(audioOutputs);
-                speakerDropdown = (
-                    <Field element="select" label={_t("Audio Output")}
-                        value={this.state[MediaDeviceKindEnum.AudioOutput] || defaultDevice}
-                        onChange={this.setAudioOutput}>
-                        {this.renderDeviceOptions(audioOutputs, MediaDeviceKindEnum.AudioOutput)}
-                    </Field>
-                );
-            }
-
-            const audioInputs = this.state.mediaDevices[MediaDeviceKindEnum.AudioInput].slice(0);
-            if (audioInputs.length > 0) {
-                const defaultDevice = getDefaultDevice(audioInputs);
-                microphoneDropdown = (
-                    <Field element="select" label={_t("Microphone")}
-                        value={this.state[MediaDeviceKindEnum.AudioInput] || defaultDevice}
-                        onChange={this.setAudioInput}>
-                        {this.renderDeviceOptions(audioInputs, MediaDeviceKindEnum.AudioInput)}
-                    </Field>
-                );
-            }
-
-            const videoInputs = this.state.mediaDevices[MediaDeviceKindEnum.VideoInput].slice(0);
-            if (videoInputs.length > 0) {
-                const defaultDevice = getDefaultDevice(videoInputs);
-                webcamDropdown = (
-                    <Field element="select" label={_t("Camera")}
-                        value={this.state[MediaDeviceKindEnum.VideoInput] || defaultDevice}
-                        onChange={this.setVideoInput}>
-                        {this.renderDeviceOptions(videoInputs, MediaDeviceKindEnum.VideoInput)}
-                    </Field>
-                );
-            }
+            speakerDropdown = (
+                this.renderDropdown(MediaDeviceKindEnum.AudioOutput, _t("Audio Output")) ||
+                <p>{ _t('No Audio Outputs detected') }</p>
+            );
+            microphoneDropdown = (
+                this.renderDropdown(MediaDeviceKindEnum.AudioInput, _t("Microphone")) ||
+                <p>{ _t('No Microphones detected') }</p>
+            );
+            webcamDropdown = (
+                this.renderDropdown(MediaDeviceKindEnum.VideoInput, _t("Camera")) ||
+                <p>{ _t('No Webcams detected') }</p>
+            );
         }
 
         return (
             <div className="mx_SettingsTab mx_VoiceUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Voice & Video")}</div>
                 <div className="mx_SettingsTab_section">
-                    {requestButton}
-                    {speakerDropdown}
-                    {microphoneDropdown}
-                    {webcamDropdown}
+                    { requestButton }
+                    { speakerDropdown }
+                    { microphoneDropdown }
+                    { webcamDropdown }
                     <SettingsFlag name='VideoView.flipVideoHorizontally' level={SettingLevel.ACCOUNT} />
                     <SettingsFlag
                         name='webRtcAllowPeerToPeer'
