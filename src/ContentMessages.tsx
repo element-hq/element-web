@@ -569,7 +569,7 @@ export default class ContentMessages {
         dis.dispatch<UploadStartedPayload>({ action: Action.UploadStarted, upload });
 
         // Focus the composer view
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
 
         function onProgress(ev) {
             upload.total = ev.total;

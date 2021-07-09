@@ -818,17 +818,16 @@ export default class RoomView extends React.Component<IProps, IState> {
 
             case Action.ComposerInsert: {
                 // re-dispatch to the correct composer
-                if (this.state.editState) {
-                    dis.dispatch({
-                        ...payload,
-                        action: "edit_composer_insert",
-                    });
-                } else {
-                    dis.dispatch({
-                        ...payload,
-                        action: "send_composer_insert",
-                    });
-                }
+                dis.dispatch({
+                    ...payload,
+                    action: this.state.editState ? "edit_composer_insert" : "send_composer_insert",
+                });
+                break;
+            }
+
+            case Action.FocusAComposer: {
+                // re-dispatch to the correct composer
+                dis.fire(this.state.editState ? Action.FocusEditMessageComposer : Action.FocusSendMessageComposer);
                 break;
             }
 
@@ -1246,7 +1245,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         ContentMessages.sharedInstance().sendContentListToRoom(
             ev.dataTransfer.files, this.state.room.roomId, this.context,
         );
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
 
         this.setState({
             draggingFile: false,
@@ -1548,7 +1547,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         } else {
             // Otherwise we have to jump manually
             this.messagePanel.jumpToLiveTimeline();
-            dis.fire(Action.FocusComposer);
+            dis.fire(Action.FocusSendMessageComposer);
         }
     };
 

@@ -118,12 +118,12 @@ export default class RoomStatusBar extends React.PureComponent {
             this.setState({ isResending: false });
         });
         this.setState({ isResending: true });
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
     };
 
     _onCancelAllClick = () => {
         Resend.cancelUnsentEvents(this.props.room);
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
     };
 
     _onRoomLocalEchoUpdated = (event, room, oldEventId, oldStatus) => {
