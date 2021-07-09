@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import "matrix-js-sdk/src/@types/global"; // load matrix-js-sdk's type extensions first
-import * as ModernizrStatic from "modernizr";
+import "@types/modernizr";
 
 import ContentMessages from "../ContentMessages";
 import { IMatrixClientPeg } from "../MatrixClientPeg";
@@ -50,7 +50,6 @@ import { RoomScrollStateStore } from "../stores/RoomScrollStateStore";
 
 declare global {
     interface Window {
-        Modernizr: ModernizrStatic;
         matrixChat: ReturnType<Renderer>;
         mxMatrixClientPeg: IMatrixClientPeg;
         Olm: {
