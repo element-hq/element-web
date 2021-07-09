@@ -171,7 +171,7 @@ const NetworkDropdown = ({ onOptionChange, protocols = {}, selectedServerName, s
 
             const protocolsList = server === hsName ? Object.values(protocols) : [];
             if (protocolsList.length > 0) {
-                // add a fake protocol with the ALL_ROOMS
+                // add a fake protocol with ALL_ROOMS
                 protocolsList.push({
                     instances: [{
                         fields: [],
