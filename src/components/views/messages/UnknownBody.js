@@ -15,9 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {forwardRef} from "react";
+import React, { forwardRef } from "react";
 
-export default forwardRef(({mxEvent}, ref) => {
+export default forwardRef(({ mxEvent }, ref) => {
     const text = mxEvent.getContent().body;
     return (
         <span className="mx_UnknownBody" ref={ref}>

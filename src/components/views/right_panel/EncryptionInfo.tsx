@@ -16,13 +16,13 @@ limitations under the License.
 
 import React from "react";
 
-import * as sdk from "../../../index";
 import { _t } from "../../../languageHandler";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { User } from "matrix-js-sdk/src/models/user";
+import AccessibleButton from "../elements/AccessibleButton";
+import Spinner from "../elements/Spinner";
 
-export const PendingActionSpinner = ({text}) => {
-    const Spinner = sdk.getComponent('elements.Spinner');
+export const PendingActionSpinner = ({ text }) => {
     return <div className="mx_EncryptionInfo_spinner">
         <Spinner />
         { text }
@@ -64,7 +64,6 @@ const EncryptionInfo: React.FC<IProps> = ({
         }
         content = <PendingActionSpinner text={text} />;
     } else {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         content = (
             <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={onStartVerification}>
                 {_t("Start Verification")}

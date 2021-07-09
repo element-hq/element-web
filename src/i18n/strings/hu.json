@@ -3376,5 +3376,22 @@
     "No results for \"%(query)s\"": "Nincs találat ehhez: %(query)s",
     "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "Próbáljon ki más szavakat vagy keressen elgépelést. Néhány találat azért nem látszik, mert privát és meghívóra van szüksége, hogy csatlakozhasson.",
     "The user you called is busy.": "A hívott felhasználó foglalt.",
-    "User Busy": "Felhasználó foglalt"
+    "User Busy": "Felhasználó foglalt",
+    "If you can't see who you’re looking for, send them your invite link below.": "Ha nem található a keresett személy, küldje el az alábbi hivatkozást neki.",
+    "Some suggestions may be hidden for privacy.": "Adatvédelem miatt néhány javaslat esetleg rejtve van.",
+    "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "Ha van hozzá jogosultsága, nyissa meg a menüt bármelyik üzenetben és válassza a <b>Kitűz</b> menüpontot a kitűzéshez.",
+    "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites. <a>Enable encryption in settings.</a>": "A személyes beszélgetések általában titkosítottak, de ez a szoba nem az. Ez azért lehet, mert nem támogatott eszköz vagy mód használt mint például e-mail meghívók. <a>Titkosítás engedélyezése a beállításokban.</a>",
+    "We're working on this as part of the beta, but just want to let you know.": "A béta funkció ezen részén dolgozunk, csak tudatni szerettük volna.",
+    "Teammates might not be able to view or join any private rooms you make.": "Csapattagok lehet, hogy nem láthatják vagy léphetnek be az ön által készített privát szobákba.",
+    "Or send invite link": "Vagy meghívó link küldése",
+    "Search for rooms or people": "Szobák vagy emberek keresése",
+    "Forward message": "Üzenet továbbítása",
+    "Open link": "Hivatkozás megnyitása",
+    "Sent": "Elküldve",
+    "You don't have permission to do this": "Nincs jogosultsága ehhez",
+    "Error - Mixed content": "Hiba - Vegyes tartalom",
+    "Error loading Widget": "Kisalkalmazás betöltési hiba",
+    "Pinned messages": "Kitűzött üzenetek",
+    "Nothing pinned, yet": "Semmi sincs kitűzve egyenlőre",
+    "End-to-end encryption isn't enabled": "Végpontok közötti titkosítás nincs engedélyezve"
 }

@@ -21,7 +21,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import { XOR } from "../../../@types/common";
 import { NOTIFICATION_STATE_UPDATE, NotificationState } from "../../../stores/notifications/NotificationState";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     notification: NotificationState;
@@ -86,7 +86,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
     }
 
     private countPreferenceChanged = () => {
-        this.setState({showCounts: SettingsStore.getValue("Notifications.alwaysShowBadgeCounts", this.roomId)});
+        this.setState({ showCounts: SettingsStore.getValue("Notifications.alwaysShowBadgeCounts", this.roomId) });
     };
 
     private onNotificationUpdate = () => {
@@ -95,7 +95,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
 
     public render(): React.ReactElement {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
-        const {notification, forceCount, roomId, onClick, ...props} = this.props;
+        const { notification, forceCount, roomId, onClick, ...props } = this.props;
 
         // Don't show a badge if we don't need to
         if (notification.isIdle) return null;

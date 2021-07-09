@@ -16,20 +16,20 @@ limitations under the License.
 */
 
 import React from 'react';
-import TabbedView, {Tab} from "../../structures/TabbedView";
-import {_t, _td} from "../../../languageHandler";
+import TabbedView, { Tab } from "../../structures/TabbedView";
+import { _t, _td } from "../../../languageHandler";
 import AdvancedRoomSettingsTab from "../settings/tabs/room/AdvancedRoomSettingsTab";
 import RolesRoomSettingsTab from "../settings/tabs/room/RolesRoomSettingsTab";
 import GeneralRoomSettingsTab from "../settings/tabs/room/GeneralRoomSettingsTab";
 import SecurityRoomSettingsTab from "../settings/tabs/room/SecurityRoomSettingsTab";
 import NotificationSettingsTab from "../settings/tabs/room/NotificationSettingsTab";
 import BridgeSettingsTab from "../settings/tabs/room/BridgeSettingsTab";
-import * as sdk from "../../../index";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
-import {UIFeature} from "../../../settings/UIFeature";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { UIFeature } from "../../../settings/UIFeature";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import BaseDialog from "./BaseDialog";
 
 export const ROOM_GENERAL_TAB = "ROOM_GENERAL_TAB";
 export const ROOM_SECURITY_TAB = "ROOM_SECURITY_TAB";
@@ -108,7 +108,10 @@ export default class RoomSettingsDialog extends React.Component<IProps> {
                 ROOM_ADVANCED_TAB,
                 _td("Advanced"),
                 "mx_RoomSettingsDialog_warningIcon",
-                <AdvancedRoomSettingsTab roomId={this.props.roomId} closeSettingsFn={this.props.onFinished} />,
+                <AdvancedRoomSettingsTab
+                    roomId={this.props.roomId}
+                    closeSettingsFn={() => this.props.onFinished(true)}
+                />,
             ));
         }
 
@@ -116,15 +119,13 @@ export default class RoomSettingsDialog extends React.Component<IProps> {
     }
 
     render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-
         const roomName = MatrixClientPeg.get().getRoom(this.props.roomId).name;
         return (
             <BaseDialog
                 className='mx_RoomSettingsDialog'
                 hasCancel={true}
                 onFinished={this.props.onFinished}
-                title={_t("Room Settings - %(roomName)s", {roomName})}
+                title={_t("Room Settings - %(roomName)s", { roomName })}
             >
                 <div className='mx_SettingsDialog_content'>
                     <TabbedView

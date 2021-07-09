@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import EventIndexPeg from "./indexing/EventIndexPeg";
-import {MatrixClientPeg} from "./MatrixClientPeg";
+import { MatrixClientPeg } from "./MatrixClientPeg";
 
 const SEARCH_LIMIT = 10;
 
@@ -43,7 +43,7 @@ async function serverSideSearch(term, roomId = undefined) {
         },
     };
 
-    const response = await client.search({body: body});
+    const response = await client.search({ body: body });
 
     const result = {
         response: response,
@@ -498,7 +498,7 @@ async function combinedPagination(searchResult) {
     // Fetch events from the server if we have a token for it and if it's the
     // local indexes turn or the local index has exhausted its results.
     if (searchResult.serverSideNextBatch && (oldestEventFrom === "local" || !searchArgs.next_batch)) {
-        const body = {body: searchResult._query, next_batch: searchResult.serverSideNextBatch};
+        const body = { body: searchResult._query, next_batch: searchResult.serverSideNextBatch };
         serverSideResult = await client.search(body);
     }
 

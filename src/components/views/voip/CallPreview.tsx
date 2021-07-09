@@ -26,7 +26,7 @@ import PersistentApp from "../elements/PersistentApp";
 import SettingsStore from "../../../settings/SettingsStore";
 import { CallEvent, CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import UIStore from '../../../stores/UIStore';
 import { lerp } from '../../../utils/AnimationUtils';
 
@@ -41,7 +41,7 @@ const PADDING = {
     bottom: 58,
     left: 76,
     right: 8,
-}
+};
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
@@ -51,7 +51,6 @@ const SHOW_CALL_IN_STATES = [
     CallState.CreateOffer,
     CallState.WaitLocalMedia,
 ];
-
 
 interface IProps {
 }
@@ -177,7 +176,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
             translationY: lerp(this.state.translationY, this.desiredTranslationY, amt),
         });
         requestAnimationFrame(this.animationCallback);
-    }
+    };
 
     private setTranslation(inTranslationX: number, inTranslationY: number) {
         const width = this.callViewWrapper.current?.clientWidth || PIP_VIEW_WIDTH;
@@ -234,7 +233,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
         // We start animating here because we want the PiP to move when we're
         // resizing the window
         requestAnimationFrame(this.animationCallback);
-    }
+    };
 
     private onRoomViewStoreUpdate = (payload) => {
         if (RoomViewStore.getRoomId() === this.state.roomId) return;

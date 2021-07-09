@@ -14,28 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ReactNode} from 'react';
-import {MatrixError} from "matrix-js-sdk/src/http-api";
+import React, { ReactNode } from 'react';
+import { MatrixError } from "matrix-js-sdk/src/http-api";
 
-import {_t, _td} from '../../../languageHandler';
-import * as sdk from '../../../index';
-import Login, {ISSOFlow, LoginFlow} from '../../../Login';
+import { _t, _td } from '../../../languageHandler';
+import Login, { ISSOFlow, LoginFlow } from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
-import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
 import classNames from "classnames";
 import AuthPage from "../../views/auth/AuthPage";
 import PlatformPeg from '../../../PlatformPeg';
 import SettingsStore from "../../../settings/SettingsStore";
-import {UIFeature} from "../../../settings/UIFeature";
+import { UIFeature } from "../../../settings/UIFeature";
 import CountlyAnalytics from "../../../CountlyAnalytics";
-import {IMatrixClientCreds} from "../../../MatrixClientPeg";
+import { IMatrixClientCreds } from "../../../MatrixClientPeg";
 import PasswordLogin from "../../views/auth/PasswordLogin";
 import InlineSpinner from "../../views/elements/InlineSpinner";
 import Spinner from "../../views/elements/Spinner";
 import SSOButtons from "../../views/elements/SSOButtons";
 import ServerPicker from "../../views/elements/ServerPicker";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import AuthBody from "../../views/auth/AuthBody";
+import AuthHeader from "../../views/auth/AuthHeader";
 
 // These are used in several places, and come from the js-sdk's autodiscovery
 // stuff. We define them here so that they'll be picked up by i18n.
@@ -166,7 +167,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
 
     onPasswordLogin = async (username, phoneCountry, phoneNumber, password) => {
         if (!this.state.serverIsAlive) {
-            this.setState({busy: true});
+            this.setState({ busy: true });
             // Do a quick liveliness check on the URLs
             let aliveAgain = true;
             try {
@@ -174,7 +175,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                     this.props.serverConfig.hsUrl,
                     this.props.serverConfig.isUrl,
                 );
-                this.setState({serverIsAlive: true, errorText: ""});
+                this.setState({ serverIsAlive: true, errorText: "" });
             } catch (e) {
                 const componentState = AutoDiscoveryUtils.authComponentStateForError(e);
                 this.setState({
@@ -201,7 +202,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         this.loginLogic.loginViaPassword(
             username, phoneCountry, phoneNumber, password,
         ).then((data) => {
-            this.setState({serverIsAlive: true}); // it must be, we logged in.
+            this.setState({ serverIsAlive: true }); // it must be, we logged in.
             this.props.onLoggedIn(data, password);
         }, (error) => {
             if (this.unmounted) {
@@ -252,7 +253,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                             <div className="mx_Login_smallError">
                                 {_t(
                                     'Please note you are logging into the %(hs)s server, not matrix.org.',
-                                    {hs: this.props.serverConfig.hsName},
+                                    { hs: this.props.serverConfig.hsName },
                                 )}
                             </div>
                         </div>
@@ -363,7 +364,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         }
     };
 
-    private async initLoginLogic({hsUrl, isUrl}: ValidatedServerConfig) {
+    private async initLoginLogic({ hsUrl, isUrl }: ValidatedServerConfig) {
         let isDefaultServer = false;
         if (this.props.serverConfig.isDefault
             && hsUrl === this.props.serverConfig.hsUrl
@@ -501,9 +502,9 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         return <React.Fragment>
             { flows.map(flow => {
                 const stepRenderer = this.stepRendererMap[flow.type];
-                return <React.Fragment key={flow.type}>{ stepRenderer() }</React.Fragment>
+                return <React.Fragment key={flow.type}>{ stepRenderer() }</React.Fragment>;
             }) }
-        </React.Fragment>
+        </React.Fragment>;
     }
 
     private renderPasswordStep = () => {
@@ -541,8 +542,6 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
     };
 
     render() {
-        const AuthHeader = sdk.getComponent("auth.AuthHeader");
-        const AuthBody = sdk.getComponent("auth.AuthBody");
         const loader = this.isBusy() && !this.state.busyLoggingIn ?
             <div className="mx_Login_loader"><Spinner /></div> : null;
 

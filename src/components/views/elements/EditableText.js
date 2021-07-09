@@ -15,10 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
-import {Key} from "../../../Keyboard";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { Key } from "../../../Keyboard";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.elements.EditableText")
 export default class EditableText extends React.Component {
@@ -209,7 +209,7 @@ export default class EditableText extends React.Component {
     };
 
     render() {
-        const {className, editable, initialValue, label, labelClassName} = this.props;
+        const { className, editable, initialValue, label, labelClassName } = this.props;
         let editableEl;
 
         if (!editable || (this.state.phase === EditableText.Phases.Display &&

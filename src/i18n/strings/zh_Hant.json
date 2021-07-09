@@ -3384,5 +3384,22 @@
     "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "嘗試不同的詞或是檢查拼字。某些結果可能不可見，因為其為私人的，您必須要有邀請才能加入。",
     "No results for \"%(query)s\"": "「%(query)s」沒有結果",
     "The user you called is busy.": "您想要通話的使用者目前忙碌中。",
-    "User Busy": "使用者忙碌"
+    "User Busy": "使用者忙碌",
+    "We're working on this as part of the beta, but just want to let you know.": "我們正將此作為測試版的一部分來處理，但只是想讓您知道。",
+    "Teammates might not be able to view or join any private rooms you make.": "隊友可能無法檢視或加入您建立的任何私人聊天室。",
+    "Or send invite link": "或傳送邀請連結",
+    "If you can't see who you’re looking for, send them your invite link below.": "如果您看不到您要找的人，請在下方向他們傳送您的邀請連結。",
+    "Some suggestions may be hidden for privacy.": "出於隱私考量，可能會隱藏一些建議。",
+    "Search for rooms or people": "搜尋聊天室或夥伴",
+    "Forward message": "轉寄訊息",
+    "Open link": "開啟連結",
+    "Sent": "已傳送",
+    "You don't have permission to do this": "您無權執行此動作",
+    "Error - Mixed content": "錯誤 - 混合內容",
+    "Error loading Widget": "載入小工具時發生錯誤",
+    "Pinned messages": "已釘選的訊息",
+    "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "如果您有權限，請開啟任何訊息的選單，並選取<b>釘選</b>以將它們貼到這裡。",
+    "Nothing pinned, yet": "尚未釘選任何東西",
+    "End-to-end encryption isn't enabled": "端到端加密未啟用",
+    "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites. <a>Enable encryption in settings.</a>": "您的私人訊息通常是被加密的，但此聊天室不是。一般來說，這可能是因為使用了不支援的裝置或方法，例如電子郵件邀請。<a>在設定中啟用加密。</a>"
 }

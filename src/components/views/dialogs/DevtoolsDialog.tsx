@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
-import * as sdk from '../../../index';
 import SyntaxHighlight from '../elements/SyntaxHighlight';
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
@@ -42,6 +41,8 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { SettingLevel } from '../../../settings/SettingLevel';
+import BaseDialog from "./BaseDialog";
+import TruncatedList from "../elements/TruncatedList";
 
 interface IGenericEditorProps {
     onBack: () => void;
@@ -62,13 +63,13 @@ abstract class GenericEditor<
         } else {
             this.props.onBack();
         }
-    }
+    };
 
     protected onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         // @ts-ignore: Unsure how to convince TS this is okay when the state
         // type can be extended.
-        this.setState({[e.target.id]: e.target.type === 'checkbox' ? e.target.checked : e.target.value});
-    }
+        this.setState({ [e.target.id]: e.target.type === 'checkbox' ? e.target.checked : e.target.value });
+    };
 
     protected abstract send();
 
@@ -119,7 +120,7 @@ export class SendCustomEvent extends GenericEditor<ISendCustomEventProps, ISendC
     constructor(props) {
         super(props);
 
-        const {eventType, stateKey, evContent} = Object.assign({
+        const { eventType, stateKey, evContent } = Object.assign({
             eventType: '',
             stateKey: '',
             evContent: '{\n\n}',
@@ -158,7 +159,7 @@ export class SendCustomEvent extends GenericEditor<ISendCustomEventProps, ISendC
             message = _t('Failed to send custom event.') + ' (' + e.toString() + ')';
         }
         this.setState({ message });
-    }
+    };
 
     render() {
         if (this.state.message) {
@@ -187,7 +188,7 @@ export class SendCustomEvent extends GenericEditor<ISendCustomEventProps, ISendC
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
                 { !this.state.message && <button onClick={this.send}>{ _t('Send') }</button> }
-                { showTglFlip && <div style={{float: "right"}}>
+                { showTglFlip && <div style={{ float: "right" }}>
                     <input id="isStateEvent" className="mx_DevTools_tgl mx_DevTools_tgl-flip"
                         type="checkbox"
                         checked={this.state.isStateEvent}
@@ -228,7 +229,7 @@ class SendAccountData extends GenericEditor<ISendAccountDataProps, ISendAccountD
     constructor(props) {
         super(props);
 
-        const {eventType, evContent} = Object.assign({
+        const { eventType, evContent } = Object.assign({
             eventType: '',
             evContent: '{\n\n}',
         }, this.props.inputs);
@@ -264,7 +265,7 @@ class SendAccountData extends GenericEditor<ISendAccountDataProps, ISendAccountD
             message = _t('Failed to send custom event.') + ' (' + e.toString() + ')';
         }
         this.setState({ message });
-    }
+    };
 
     render() {
         if (this.state.message) {
@@ -287,7 +288,7 @@ class SendAccountData extends GenericEditor<ISendAccountDataProps, ISendAccountD
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
                 { !this.state.message && <button onClick={this.send}>{ _t('Send') }</button> }
-                { !this.state.message && <div style={{float: "right"}}>
+                { !this.state.message && <div style={{ float: "right" }}>
                     <input id="isRoomAccountData" className="mx_DevTools_tgl mx_DevTools_tgl-flip"
                         type="checkbox"
                         checked={this.state.isRoomAccountData}
@@ -369,7 +370,6 @@ class FilteredList extends React.PureComponent<IFilteredListProps, IFilteredList
     };
 
     render() {
-        const TruncatedList = sdk.getComponent("elements.TruncatedList");
         return <div>
             <Field label={_t('Filter results')} autoFocus={true} size={64}
                 type="text" autoComplete="off" value={this.props.query} onChange={this.onQuery}
@@ -442,19 +442,19 @@ class RoomStateExplorer extends React.PureComponent<IExplorerProps, IRoomStateEx
         } else {
             this.props.onBack();
         }
-    }
+    };
 
     private editEv = () => {
         this.setState({ editing: true });
-    }
+    };
 
     private onQueryEventType = (filterEventType: string) => {
         this.setState({ queryEventType: filterEventType });
-    }
+    };
 
     private onQueryStateKey = (filterStateKey: string) => {
         this.setState({ queryStateKey: filterStateKey });
-    }
+    };
 
     render() {
         if (this.state.event) {
@@ -570,19 +570,19 @@ class AccountDataExplorer extends React.PureComponent<IExplorerProps, IAccountDa
         } else {
             this.props.onBack();
         }
-    }
+    };
 
     private onChange = (e: ChangeEvent<HTMLInputElement>) => {
-        this.setState({[e.target.id]: e.target.type === 'checkbox' ? e.target.checked : e.target.value});
-    }
+        this.setState({ [e.target.id]: e.target.type === 'checkbox' ? e.target.checked : e.target.value });
+    };
 
     private editEv = () => {
         this.setState({ editing: true });
-    }
+    };
 
     private onQueryEventType = (queryEventType: string) => {
         this.setState({ queryEventType });
-    }
+    };
 
     render() {
         if (this.state.event) {
@@ -630,7 +630,7 @@ class AccountDataExplorer extends React.PureComponent<IExplorerProps, IAccountDa
             </div>
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
-                <div style={{float: "right"}}>
+                <div style={{ float: "right" }}>
                     <input id="isRoomAccountData" className="mx_DevTools_tgl mx_DevTools_tgl-flip"
                         type="checkbox"
                         checked={this.state.isRoomAccountData}
@@ -676,7 +676,7 @@ class ServersInRoomList extends React.PureComponent<IExplorerProps, IServersInRo
 
     private onQuery = (query: string) => {
         this.setState({ query });
-    }
+    };
 
     render() {
         return <div>
@@ -704,7 +704,7 @@ const PHASE_MAP = {
 const VerificationRequestExplorer: React.FC<{
     txnId: string;
     request: VerificationRequest;
-}> = ({txnId, request}) => {
+}> = ({ txnId, request }) => {
     const [, updateState] = useState();
     const [timeout, setRequestTimeout] = useState(request.timeout);
 
@@ -739,7 +739,7 @@ const VerificationRequestExplorer: React.FC<{
             <dd>{JSON.stringify(request.observeOnly)}</dd>
         </dl>
     </div>);
-}
+};
 
 class VerificationExplorer extends React.PureComponent<IExplorerProps> {
     static getLabel() {
@@ -751,7 +751,7 @@ class VerificationExplorer extends React.PureComponent<IExplorerProps> {
 
     private onNewRequest = () => {
         this.forceUpdate();
-    }
+    };
 
     componentDidMount() {
         const cli = this.context;
@@ -766,7 +766,7 @@ class VerificationExplorer extends React.PureComponent<IExplorerProps> {
     render() {
         const cli = this.context;
         const room = this.props.room;
-        const inRoomChannel = cli.crypto._inRoomVerificationRequests;
+        const inRoomChannel = cli.crypto.inRoomVerificationRequests;
         const inRoomRequests = (inRoomChannel._requestsByRoomId || new Map()).get(room.roomId) || new Map();
 
         return (<div>
@@ -806,17 +806,17 @@ class WidgetExplorer extends React.Component<IExplorerProps, IWidgetExplorerStat
     };
 
     private onQueryChange = (query: string) => {
-        this.setState({query});
+        this.setState({ query });
     };
 
     private onEditWidget = (widget: IApp) => {
-        this.setState({editWidget: widget});
+        this.setState({ editWidget: widget });
     };
 
     private onBack = () => {
         const widgets = WidgetStore.instance.getApps(this.props.room.roomId);
         if (this.state.editWidget && widgets.includes(this.state.editWidget)) {
-            this.setState({editWidget: null});
+            this.setState({ editWidget: null });
         } else {
             this.props.onBack();
         }
@@ -908,22 +908,22 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
     }
 
     private onQueryChange = (ev: ChangeEvent<HTMLInputElement>) => {
-        this.setState({query: ev.target.value});
+        this.setState({ query: ev.target.value });
     };
 
     private onExplValuesEdit = (ev: ChangeEvent<HTMLTextAreaElement>) => {
-        this.setState({explicitValues: ev.target.value});
+        this.setState({ explicitValues: ev.target.value });
     };
 
     private onExplRoomValuesEdit = (ev: ChangeEvent<HTMLTextAreaElement>) => {
-        this.setState({explicitRoomValues: ev.target.value});
+        this.setState({ explicitRoomValues: ev.target.value });
     };
 
     private onBack = () => {
         if (this.state.editSetting) {
-            this.setState({editSetting: null});
+            this.setState({ editSetting: null });
         } else if (this.state.viewSetting) {
-            this.setState({viewSetting: null});
+            this.setState({ viewSetting: null });
         } else {
             this.props.onBack();
         }
@@ -931,7 +931,7 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
 
     private onViewClick = (ev: MouseEvent, settingId: string) => {
         ev.preventDefault();
-        this.setState({viewSetting: settingId});
+        this.setState({ viewSetting: settingId });
     };
 
     private onEditClick = (ev: MouseEvent, settingId: string) => {
@@ -1221,11 +1221,11 @@ export default class DevtoolsDialog extends React.PureComponent<IProps, IState> 
 
     private onBack = () => {
         this.setState({ mode: null });
-    }
+    };
 
     private onCancel = () => {
         this.props.onFinished(false);
-    }
+    };
 
     render() {
         let body;
@@ -1261,7 +1261,6 @@ export default class DevtoolsDialog extends React.PureComponent<IProps, IState> 
             </React.Fragment>;
         }
 
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished} title={_t('Developer Tools')}>
                 { body }

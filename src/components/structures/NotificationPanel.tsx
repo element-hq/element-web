@@ -22,6 +22,7 @@ import BaseCard from "../views/right_panel/BaseCard";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import TimelinePanel from "./TimelinePanel";
 import Spinner from "../views/elements/Spinner";
+import { TileShape } from "../views/rooms/EventTile";
 
 interface IProps {
     onClose(): void;
@@ -48,7 +49,7 @@ export default class NotificationPanel extends React.PureComponent<IProps> {
                     manageReadMarkers={false}
                     timelineSet={timelineSet}
                     showUrlPreview={false}
-                    tileShape="notif"
+                    tileShape={TileShape.Notif}
                     empty={emptyState}
                     alwaysShowTimestamps={true}
                 />

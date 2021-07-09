@@ -3381,5 +3381,22 @@
     "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "Intentao con outras palabras e fíxate nos erros de escritura. Algúns resultados poderían non ser visibles porque son privados e precisas un convite.",
     "No results for \"%(query)s\"": "Sen resultados para \"%(query)s\"",
     "The user you called is busy.": "A persoa á que chamas está ocupada.",
-    "User Busy": "Usuaria ocupada"
+    "User Busy": "Usuaria ocupada",
+    "We're working on this as part of the beta, but just want to let you know.": "Estamos traballando nesto como parte da beta, só queriamos que o soubeses.",
+    "Teammates might not be able to view or join any private rooms you make.": "As outras compañeiras de grupo poderían non ver ou unirse ás salas privadas que creas.",
+    "Or send invite link": "Ou envía ligazón de convite",
+    "If you can't see who you’re looking for, send them your invite link below.": "Se non podes a quen estás a buscar, envíalle ti esta ligazón de convite.",
+    "Some suggestions may be hidden for privacy.": "Algunhas suxestións poderían estar agochadas por privacidade.",
+    "Search for rooms or people": "Busca salas ou persoas",
+    "Forward message": "Reenviar mensaxe",
+    "Open link": "Abrir ligazón",
+    "Sent": "Enviado",
+    "You don't have permission to do this": "Non tes permiso para facer isto",
+    "Error - Mixed content": "Erro - Contido variado",
+    "Error loading Widget": "Erro ao cargar o Widget",
+    "Pinned messages": "Mensaxes fixadas",
+    "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "Se tes permisos, abre o menú en calquera mensaxe e elixe <b>Fixar</b> para pegalos aquí.",
+    "Nothing pinned, yet": "Nada fixado, por agora",
+    "End-to-end encryption isn't enabled": "Non está activado o cifrado de extremo-a-extremo",
+    "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites. <a>Enable encryption in settings.</a>": "As túas mensaxes privadas normalmente están cifradas, pero esta sala non. Habitualmente esto é debido a que se utiliza un dispositivo ou métodos no soportados, como convites por email. <a>Activa o cifrado nos axustes.</a>"
 }

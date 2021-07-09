@@ -27,6 +27,11 @@ export interface SetRightPanelPhasePayload extends ActionPayload {
 
     phase: RightPanelPhases;
     refireParams?: SetRightPanelPhaseRefireParams;
+
+    /**
+     * By default SetRightPanelPhase can close the panel, this allows overriding that behaviour
+     */
+    allowClose?: boolean;
 }
 
 export interface SetRightPanelPhaseRefireParams {

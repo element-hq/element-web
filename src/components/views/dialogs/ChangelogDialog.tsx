@@ -16,9 +16,10 @@ Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
  */
 
 import React from 'react';
-import * as sdk from '../../../index';
 import request from 'browser-request';
 import { _t } from '../../../languageHandler';
+import QuestionDialog from "./QuestionDialog";
+import Spinner from "../elements/Spinner";
 
 interface IProps {
     newVersion: string;
@@ -49,7 +50,7 @@ export default class ChangelogDialog extends React.Component<IProps> {
                     this.setState({ [REPOS[i]]: response.statusText });
                     return;
                 }
-                this.setState({[REPOS[i]]: JSON.parse(body).commits});
+                this.setState({ [REPOS[i]]: JSON.parse(body).commits });
             });
         }
     }
@@ -65,9 +66,6 @@ export default class ChangelogDialog extends React.Component<IProps> {
     }
 
     public render() {
-        const Spinner = sdk.getComponent('views.elements.Spinner');
-        const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
-
         const logs = REPOS.map(repo => {
             let content;
             if (this.state[repo] == null) {
@@ -92,7 +90,6 @@ export default class ChangelogDialog extends React.Component<IProps> {
                 {this.props.version == null || this.props.newVersion == null ? <h2>{_t("Unavailable")}</h2> : logs}
             </div>
         );
-
 
         return (
             <QuestionDialog

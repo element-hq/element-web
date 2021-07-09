@@ -47,7 +47,7 @@ function safariVersionCheck(ua) {
 async function isColrFontSupported() {
     console.log("Checking for COLR support");
 
-    const {userAgent} = navigator;
+    const { userAgent } = navigator;
     // Firefox has supported COLR fonts since version 26
     // but doesn't support the check below without
     // "Extract canvas data" permissions

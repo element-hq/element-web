@@ -16,8 +16,8 @@ limitations under the License.
 
 import EventEmitter from 'events';
 
-import {MatrixClientPeg} from '../MatrixClientPeg';
-import {WidgetMessagingStore} from "./widgets/WidgetMessagingStore";
+import { MatrixClientPeg } from '../MatrixClientPeg';
+import { WidgetMessagingStore } from "./widgets/WidgetMessagingStore";
 
 /**
  * Stores information about the widgets active in the app right now:

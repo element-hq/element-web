@@ -15,16 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../../index';
-import {MatrixClientPeg} from '../../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../../MatrixClientPeg';
 import FileSaver from 'file-saver';
-import {_t, _td} from '../../../../languageHandler';
+import { _t, _td } from '../../../../languageHandler';
 import Modal from '../../../../Modal';
 import { promptForBackupPassphrase } from '../../../../SecurityManager';
-import {copyNode} from "../../../../utils/strings";
-import {SSOAuthEntry} from "../../../../components/views/auth/InteractiveAuthEntryComponents";
+import { copyNode } from "../../../../utils/strings";
+import { SSOAuthEntry } from "../../../../components/views/auth/InteractiveAuthEntryComponents";
 import PassphraseField from "../../../../components/views/auth/PassphraseField";
 import StyledRadioButton from '../../../../components/views/elements/StyledRadioButton';
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
@@ -155,7 +155,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 backupSigStatus,
             };
         } catch (e) {
-            this.setState({phase: PHASE_LOADERROR});
+            this.setState({ phase: PHASE_LOADERROR });
         }
     }
 
@@ -385,7 +385,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _onLoadRetryClick = () => {
-        this.setState({phase: PHASE_LOADING});
+        this.setState({ phase: PHASE_LOADING });
         this._fetchBackupInfo();
     }
 
@@ -394,11 +394,11 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _onCancelClick = () => {
-        this.setState({phase: PHASE_CONFIRM_SKIP});
+        this.setState({ phase: PHASE_CONFIRM_SKIP });
     }
 
     _onGoBackClick = () => {
-        this.setState({phase: PHASE_CHOOSE_KEY_PASSPHRASE});
+        this.setState({ phase: PHASE_CHOOSE_KEY_PASSPHRASE });
     }
 
     _onPassPhraseNextClick = async (e) => {
@@ -412,7 +412,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             return;
         }
 
-        this.setState({phase: PHASE_PASSPHRASE_CONFIRM});
+        this.setState({ phase: PHASE_PASSPHRASE_CONFIRM });
     };
 
     _onPassPhraseConfirmNextClick = async (e) => {

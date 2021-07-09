@@ -164,6 +164,7 @@ class RoomViewStore extends Store<ActionPayload> {
                 }
                 break;
             case 'open_room_settings': {
+                // FIXME: Using an import will result in test failures
                 const RoomSettingsDialog = sdk.getComponent("dialogs.RoomSettingsDialog");
                 Modal.createTrackedDialog('Room settings', '', RoomSettingsDialog, {
                     roomId: payload.room_id || this.state.roomId,
@@ -276,7 +277,7 @@ class RoomViewStore extends Store<ActionPayload> {
         const address = this.state.roomAlias || this.state.roomId;
         const viaServers = this.state.viaServers || [];
         try {
-            await retry<void, MatrixError>(() => cli.joinRoom(address, {
+            await retry<any, MatrixError>(() => cli.joinRoom(address, {
                 viaServers,
                 ...payload.opts,
             }), NUM_JOIN_RETRY, (err) => {
@@ -340,6 +341,7 @@ class RoomViewStore extends Store<ActionPayload> {
             }
         }
 
+        // FIXME: Using an import will result in test failures
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Failed to join room', '', ErrorDialog, {
             title: _t("Failed to join room"),

@@ -14,34 +14,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ReactNode, useMemo, useState} from "react";
-import {Room} from "matrix-js-sdk/src/models/room";
-import {MatrixClient} from "matrix-js-sdk/src/client";
-import {EventType, RoomType} from "matrix-js-sdk/src/@types/event";
+import React, { ReactNode, useMemo, useState } from "react";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import classNames from "classnames";
-import {sortBy} from "lodash";
+import { sortBy } from "lodash";
 
-import {MatrixClientPeg} from "../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import dis from "../../dispatcher/dispatcher";
-import {_t} from "../../languageHandler";
-import AccessibleButton, {ButtonEvent} from "../views/elements/AccessibleButton";
+import { _t } from "../../languageHandler";
+import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
 import BaseDialog from "../views/dialogs/BaseDialog";
 import Spinner from "../views/elements/Spinner";
 import SearchBox from "./SearchBox";
 import RoomAvatar from "../views/avatars/RoomAvatar";
 import RoomName from "../views/elements/RoomName";
-import {useAsyncMemo} from "../../hooks/useAsyncMemo";
-import {EnhancedMap} from "../../utils/maps";
+import { useAsyncMemo } from "../../hooks/useAsyncMemo";
+import { EnhancedMap } from "../../utils/maps";
 import StyledCheckbox from "../views/elements/StyledCheckbox";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import BaseAvatar from "../views/avatars/BaseAvatar";
-import {mediaFromMxc} from "../../customisations/Media";
+import { mediaFromMxc } from "../../customisations/Media";
 import InfoTooltip from "../views/elements/InfoTooltip";
 import TextWithTooltip from "../views/elements/TextWithTooltip";
-import {useStateToggle} from "../../hooks/useStateToggle";
-import {getOrder} from "../../stores/SpaceStore";
+import { useStateToggle } from "../../hooks/useStateToggle";
+import { getChildOrder } from "../../stores/SpaceStore";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
-import {linkifyElement} from "../../HtmlUtils";
+import { linkifyElement } from "../../HtmlUtils";
 
 interface IHierarchyProps {
     space: Room;
@@ -58,7 +58,7 @@ export interface ISpaceSummaryRoom {
     avatar_url?: string;
     guest_can_join: boolean;
     name?: string;
-    num_joined_members: number
+    num_joined_members: number;
     room_id: string;
     topic?: string;
     world_readable: boolean;
@@ -112,12 +112,12 @@ const Tile: React.FC<ITileProps> = ({
         ev.preventDefault();
         ev.stopPropagation();
         onViewRoomClick(false);
-    }
+    };
     const onJoinClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         onViewRoomClick(true);
-    }
+    };
 
     let button;
     if (joinedRoom) {
@@ -137,7 +137,7 @@ const Tile: React.FC<ITileProps> = ({
         } else {
             checkbox = <TextWithTooltip
                 tooltip={_t("You don't have permission")}
-                onClick={ev => { ev.stopPropagation() }}
+                onClick={ev => { ev.stopPropagation(); }}
             >
                 <StyledCheckbox disabled={true} />
             </TextWithTooltip>;
@@ -286,7 +286,7 @@ export const HierarchyLevel = ({
     const children = Array.from(relations.get(spaceId)?.values() || []);
     const sortedChildren = sortBy(children, ev => {
         // XXX: Space Summary API doesn't give the child origin_server_ts but once it does we should use it for sorting
-        return getOrder(ev.content.order, null, ev.state_key);
+        return getChildOrder(ev.content.order, null, ev.state_key);
     });
     const [subspaces, childRooms] = sortedChildren.reduce((result, ev: ISpaceSummaryEvent) => {
         const roomId = ev.state_key;
@@ -340,7 +340,7 @@ export const HierarchyLevel = ({
                 </Tile>
             ))
         }
-    </React.Fragment>
+    </React.Fragment>;
 };
 
 // mutate argument refreshToken to force a reload
@@ -635,9 +635,9 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, onFinished, initialText }
             <div className="mx_Dialog_content">
                 { _t("If you can't find the room you're looking for, ask for an invite or <a>create a new room</a>.",
                     null,
-                    {a: sub => {
+                    { a: sub => {
                         return <AccessibleButton kind="link" onClick={onCreateRoomClick}>{sub}</AccessibleButton>;
-                    }},
+                    } },
                 ) }
 
                 <SpaceHierarchy

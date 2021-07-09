@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from 'prop-types';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 class ItemRange {
     constructor(topCount, renderCount, bottomCount) {
@@ -72,13 +72,13 @@ export default class LazyRenderList extends React.Component {
         // only update render Range if the list has shrunk/grown and we need to adjust padding OR
         // if the new range + overflowMargin isn't contained by the old anymore
         if (listHasChangedSize || !state.renderRange || !state.renderRange.contains(intersectRange)) {
-            return {renderRange};
+            return { renderRange };
         }
         return null;
     }
 
     static getVisibleRangeFromProps(props) {
-        const {items, itemHeight, scrollTop, height} = props;
+        const { items, itemHeight, scrollTop, height } = props;
         const length = items ? items.length : 0;
         const topCount = Math.min(Math.max(0, Math.floor(scrollTop / itemHeight)), length);
         const itemsAfterTop = length - topCount;
@@ -89,9 +89,9 @@ export default class LazyRenderList extends React.Component {
     }
 
     render() {
-        const {itemHeight, items, renderItem} = this.props;
-        const {renderRange} = this.state;
-        const {topCount, renderCount, bottomCount} = renderRange;
+        const { itemHeight, items, renderItem } = this.props;
+        const { renderRange } = this.state;
+        const { topCount, renderCount, bottomCount } = renderRange;
 
         const paddingTop = topCount * itemHeight;
         const paddingBottom = bottomCount * itemHeight;
@@ -102,7 +102,7 @@ export default class LazyRenderList extends React.Component {
 
         const element = this.props.element || "div";
         const elementProps = {
-            "style": {paddingTop: `${paddingTop}px`, paddingBottom: `${paddingBottom}px`},
+            "style": { paddingTop: `${paddingTop}px`, paddingBottom: `${paddingBottom}px` },
             "className": this.props.className,
         };
         return React.createElement(element, elementProps, renderedItems.map(renderItem));

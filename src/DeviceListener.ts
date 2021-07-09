@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from "./dispatcher/dispatcher";
 import {
     hideToast as hideBulkUnverifiedSessionsToast,
@@ -160,7 +160,8 @@ export default class DeviceListener {
         // which result in account data changes affecting checks below.
         if (
             ev.getType().startsWith('m.secret_storage.') ||
-            ev.getType().startsWith('m.cross_signing.')
+            ev.getType().startsWith('m.cross_signing.') ||
+            ev.getType() === 'm.megolm_backup.v1'
         ) {
             this._recheck();
         }

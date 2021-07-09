@@ -15,9 +15,10 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../languageHandler";
-import * as sdk from "../../../index";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { _t } from "../../../languageHandler";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -34,9 +35,6 @@ export default class ConfirmWipeDeviceDialog extends React.Component<IProps> {
     };
 
     render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
         return (
             <BaseDialog
                 className='mx_ConfirmWipeDeviceDialog'

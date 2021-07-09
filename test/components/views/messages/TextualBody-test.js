@@ -19,8 +19,8 @@ import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import { configure, mount } from "enzyme";
 
 import sdk from "../../../skinned-sdk";
-import {mkEvent, mkStubRoom} from "../../../test-utils";
-import {MatrixClientPeg} from "../../../../src/MatrixClientPeg";
+import { mkEvent, mkStubRoom } from "../../../test-utils";
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import * as languageHandler from "../../../../src/languageHandler";
 
 const TextualBody = sdk.getComponent("views.messages.TextualBody");
@@ -302,7 +302,7 @@ describe("<TextualBody />", () => {
             event: true,
         });
 
-        const wrapper = mount(<TextualBody mxEvent={ev} showUrlPreview={true} />);
+        const wrapper = mount(<TextualBody mxEvent={ev} showUrlPreview={true} onHeightChanged={() => {}} />);
         expect(wrapper.text()).toBe(ev.getContent().body);
 
         let widgets = wrapper.find("LinkPreviewWidget");
@@ -342,5 +342,4 @@ describe("<TextualBody />", () => {
         });
     });
 });
-
 

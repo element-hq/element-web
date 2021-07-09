@@ -15,9 +15,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import ConfirmRedactDialog from './ConfirmRedactDialog';
+import ErrorDialog from './ErrorDialog';
+import BaseDialog from "./BaseDialog";
+import Spinner from "../elements/Spinner";
 
 interface IProps {
     redact: () => Promise<void>;
@@ -53,14 +56,14 @@ export default class ConfirmAndWaitRedactDialog extends React.PureComponent<IPro
 
     public onParentFinished = async (proceed: boolean): Promise<void> => {
         if (proceed) {
-            this.setState({isRedacting: true});
+            this.setState({ isRedacting: true });
             try {
                 await this.props.redact();
                 this.props.onFinished(true);
             } catch (error) {
                 const code = error.errcode || error.statusCode;
                 if (typeof code !== "undefined") {
-                    this.setState({redactionErrorCode: code});
+                    this.setState({ redactionErrorCode: code });
                 } else {
                     this.props.onFinished(true);
                 }
@@ -73,18 +76,15 @@ export default class ConfirmAndWaitRedactDialog extends React.PureComponent<IPro
     public render() {
         if (this.state.isRedacting) {
             if (this.state.redactionErrorCode) {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 const code = this.state.redactionErrorCode;
                 return (
                     <ErrorDialog
                         onFinished={this.props.onFinished}
                         title={_t('Error')}
-                        description={_t('You cannot delete this message. (%(code)s)', {code})}
+                        description={_t('You cannot delete this message. (%(code)s)', { code })}
                     />
                 );
             } else {
-                const BaseDialog = sdk.getComponent("dialogs.BaseDialog");
-                const Spinner = sdk.getComponent('elements.Spinner');
                 return (
                     <BaseDialog
                         onFinished={this.props.onFinished}
@@ -95,7 +95,6 @@ export default class ConfirmAndWaitRedactDialog extends React.PureComponent<IPro
                 );
             }
         } else {
-            const ConfirmRedactDialog = sdk.getComponent("dialogs.ConfirmRedactDialog");
             return <ConfirmRedactDialog onFinished={this.onParentFinished} />;
         }
     }

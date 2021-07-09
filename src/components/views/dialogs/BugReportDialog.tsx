@@ -18,13 +18,17 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
-import sendBugReport, {downloadBugReport} from '../../../rageshake/submit-rageshake';
+import sendBugReport, { downloadBugReport } from '../../../rageshake/submit-rageshake';
 import AccessibleButton from "../elements/AccessibleButton";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import QuestionDialog from "./QuestionDialog";
+import BaseDialog from "./BaseDialog";
+import Field from '../elements/Field';
+import Spinner from "../elements/Spinner";
+import DialogButtons from "../elements/DialogButtons";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -68,7 +72,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
 
     private onCancel = (): void => {
         this.props.onFinished(false);
-    }
+    };
 
     private onSubmit = (): void => {
         if ((!this.state.text || !this.state.text.trim()) && (!this.state.issueUrl || !this.state.issueUrl.trim())) {
@@ -93,7 +97,6 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
         }).then(() => {
             if (!this.unmounted) {
                 this.props.onFinished(false);
-                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 // N.B. first param is passed to piwik and so doesn't want i18n
                 Modal.createTrackedDialog('Bug report sent', '', QuestionDialog, {
                     title: _t('Logs sent'),
@@ -110,7 +113,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                 });
             }
         });
-    }
+    };
 
     private onDownload = async (): Promise<void> => {
         this.setState({ downloadBusy: true });
@@ -139,32 +142,27 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
 
     private onTextChange = (ev: React.FormEvent<HTMLTextAreaElement>): void => {
         this.setState({ text: ev.currentTarget.value });
-    }
+    };
 
     private onIssueUrlChange = (ev: React.FormEvent<HTMLInputElement>): void => {
         this.setState({ issueUrl: ev.currentTarget.value });
-    }
+    };
 
     private sendProgressCallback = (progress: string): void => {
         if (this.unmounted) {
             return;
         }
         this.setState({ progress });
-    }
+    };
 
     private downloadProgressCallback = (downloadProgress: string): void => {
         if (this.unmounted) {
             return;
         }
         this.setState({ downloadProgress });
-    }
+    };
 
     public render() {
-        const Loader = sdk.getComponent("elements.Spinner");
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const Field = sdk.getComponent('elements.Field');
-
         let error = null;
         if (this.state.err) {
             error = <div className="error">
@@ -176,7 +174,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
         if (this.state.busy) {
             progress = (
                 <div className="progress">
-                    <Loader />
+                    <Spinner />
                     {this.state.progress} ...
                 </div>
             );
