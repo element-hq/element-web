@@ -33,7 +33,6 @@ import Presence from './Presence';
 import dis from './dispatcher/dispatcher';
 import DMRoomMap from './utils/DMRoomMap';
 import Modal from './Modal';
-import * as sdk from './index';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
 import PlatformPeg from "./PlatformPeg";
 import { sendLoginRequest } from "./Login";
@@ -52,6 +51,10 @@ import CallHandler from './CallHandler';
 import LifecycleCustomisations from "./customisations/Lifecycle";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import { _t } from "./languageHandler";
+import LazyLoadingResyncDialog from "./components/views/dialogs/LazyLoadingResyncDialog";
+import LazyLoadingDisabledDialog from "./components/views/dialogs/LazyLoadingDisabledDialog";
+import SessionRestoreErrorDialog from "./components/views/dialogs/SessionRestoreErrorDialog";
+import StorageEvictedDialog from "./components/views/dialogs/StorageEvictedDialog";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -238,8 +241,6 @@ export function handleInvalidStoreError(e: InvalidStoreError): Promise<void> {
         return Promise.resolve().then(() => {
             const lazyLoadEnabled = e.value;
             if (lazyLoadEnabled) {
-                const LazyLoadingResyncDialog =
-                    sdk.getComponent("views.dialogs.LazyLoadingResyncDialog");
                 return new Promise((resolve) => {
                     Modal.createDialog(LazyLoadingResyncDialog, {
                         onFinished: resolve,
@@ -250,8 +251,6 @@ export function handleInvalidStoreError(e: InvalidStoreError): Promise<void> {
                 // between LL/non-LL version on same host.
                 // as disabling LL when previously enabled
                 // is a strong indicator of this (/develop & /app)
-                const LazyLoadingDisabledDialog =
-                    sdk.getComponent("views.dialogs.LazyLoadingDisabledDialog");
                 return new Promise((resolve) => {
                     Modal.createDialog(LazyLoadingDisabledDialog, {
                         onFinished: resolve,
@@ -451,9 +450,6 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
 async function handleLoadSessionFailure(e: Error): Promise<boolean> {
     console.error("Unable to load session", e);
 
-    const SessionRestoreErrorDialog =
-          sdk.getComponent('views.dialogs.SessionRestoreErrorDialog');
-
     const modal = Modal.createTrackedDialog('Session Restore Error', '', SessionRestoreErrorDialog, {
         error: e.message,
     });
@@ -612,7 +608,6 @@ async function doSetLoggedIn(
 }
 
 function showStorageEvictedDialog(): Promise<boolean> {
-    const StorageEvictedDialog = sdk.getComponent('views.dialogs.StorageEvictedDialog');
     return new Promise(resolve => {
         Modal.createTrackedDialog('Storage evicted', '', StorageEvictedDialog, {
             onFinished: resolve,

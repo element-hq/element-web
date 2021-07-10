@@ -22,12 +22,12 @@ import AutocompleteProvider from './AutocompleteProvider';
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import QueryMatcher from './QueryMatcher';
 import { PillCompletion } from './Components';
-import * as sdk from '../index';
 import { sortBy } from "lodash";
 import { makeGroupPermalink } from "../utils/permalinks/Permalinks";
 import { ICompletion, ISelectionRange } from "./Autocompleter";
 import FlairStore from "../stores/FlairStore";
 import { mediaFromMxc } from "../customisations/Media";
+import BaseAvatar from '../components/views/avatars/BaseAvatar';
 
 const COMMUNITY_REGEX = /\B\+\S*/g;
 
@@ -56,8 +56,6 @@ export default class CommunityProvider extends AutocompleteProvider {
         force = false,
         limit = -1,
     ): Promise<ICompletion[]> {
-        const BaseAvatar = sdk.getComponent('views.avatars.BaseAvatar');
-
         // Disable autocompletions when composing commands because of various issues
         // (see https://github.com/vector-im/element-web/issues/4762)
         if (/^(\/join|\/leave)/.test(query)) {

@@ -497,7 +497,7 @@ export default class SendMessageComposer extends React.Component<IProps> {
 
         switch (payload.action) {
             case 'reply_to_event':
-            case Action.FocusComposer:
+            case Action.FocusSendMessageComposer:
                 this.editorRef.current?.focus();
                 break;
             case "send_composer_insert":

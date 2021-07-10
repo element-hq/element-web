@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
+import { SAS } from "matrix-js-sdk/src/crypto/verification/SAS";
+import { DeviceInfo } from "matrix-js-sdk/src//crypto/deviceinfo";
 import { _t, _td } from '../../../languageHandler';
 import { PendingActionSpinner } from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -23,24 +24,29 @@ import DialogButtons from "../elements/DialogButtons";
 import { fixupColorFonts } from '../../../utils/FontManager';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+interface IProps {
+    pending?: boolean;
+    displayName?: string; // required if pending is true
+    device?: DeviceInfo;
+    onDone: () => void;
+    onCancel: () => void;
+    sas: SAS.sas;
+    isSelf?: boolean;
+    inDialog?: boolean; // whether this component is being shown in a dialog and to use DialogButtons
+}
+
+interface IState {
+    pending: boolean;
+    cancelling?: boolean;
+}
+
 function capFirst(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 @replaceableComponent("views.verification.VerificationShowSas")
-export default class VerificationShowSas extends React.Component {
-    static propTypes = {
-        pending: PropTypes.bool,
-        displayName: PropTypes.string, // required if pending is true
-        device: PropTypes.object,
-        onDone: PropTypes.func.isRequired,
-        onCancel: PropTypes.func.isRequired,
-        sas: PropTypes.object.isRequired,
-        isSelf: PropTypes.bool,
-        inDialog: PropTypes.bool, // whether this component is being shown in a dialog and to use DialogButtons
-    };
-
-    constructor(props) {
+export default class VerificationShowSas extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -48,19 +54,19 @@ export default class VerificationShowSas extends React.Component {
         };
     }
 
-    componentWillMount() {
+    public componentWillMount(): void {
         // As this component is also used before login (during complete security),
         // also make sure we have a working emoji font to display the SAS emojis here.
         // This is also done from LoggedInView.
         fixupColorFonts();
     }
 
-    onMatchClick = () => {
+    private onMatchClick = (): void => {
         this.setState({ pending: true });
         this.props.onDone();
     };
 
-    onDontMatchClick = () => {
+    private onDontMatchClick = (): void => {
         this.setState({ cancelling: true });
         this.props.onCancel();
     };

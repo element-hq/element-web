@@ -34,7 +34,6 @@ import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
 import ResizeNotifier from '../../utils/ResizeNotifier';
 import ContentMessages from '../../ContentMessages';
 import Modal from '../../Modal';
-import * as sdk from '../../index';
 import CallHandler, { PlaceCallType } from '../../CallHandler';
 import dis from '../../dispatcher/dispatcher';
 import * as Rooms from '../../Rooms';
@@ -42,7 +41,7 @@ import eventSearch, { searchPagination } from '../../Searching';
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
 import RoomViewStore from '../../stores/RoomViewStore';
-import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
+import RoomScrollStateStore, { ScrollState } from '../../stores/RoomScrollStateStore';
 import WidgetEchoStore from '../../stores/WidgetEchoStore';
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/Layout";
@@ -82,6 +81,14 @@ import { replaceableComponent } from "../../utils/replaceableComponent";
 import UIStore from "../../stores/UIStore";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import { throttle } from "lodash";
+import ErrorDialog from '../views/dialogs/ErrorDialog';
+import SearchResultTile from '../views/rooms/SearchResultTile';
+import Spinner from "../views/elements/Spinner";
+import UploadBar from './UploadBar';
+import RoomStatusBar from "./RoomStatusBar";
+import MessageComposer from '../views/rooms/MessageComposer';
+import JumpToBottomButton from "../views/rooms/JumpToBottomButton";
+import TopUnreadMessagesBar from "../views/rooms/TopUnreadMessagesBar";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -811,17 +818,16 @@ export default class RoomView extends React.Component<IProps, IState> {
 
             case Action.ComposerInsert: {
                 // re-dispatch to the correct composer
-                if (this.state.editState) {
-                    dis.dispatch({
-                        ...payload,
-                        action: "edit_composer_insert",
-                    });
-                } else {
-                    dis.dispatch({
-                        ...payload,
-                        action: "send_composer_insert",
-                    });
-                }
+                dis.dispatch({
+                    ...payload,
+                    action: this.state.editState ? "edit_composer_insert" : "send_composer_insert",
+                });
+                break;
+            }
+
+            case Action.FocusAComposer: {
+                // re-dispatch to the correct composer
+                dis.fire(this.state.editState ? Action.FocusEditMessageComposer : Action.FocusSendMessageComposer);
                 break;
             }
 
@@ -1239,7 +1245,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         ContentMessages.sharedInstance().sendContentListToRoom(
             ev.dataTransfer.files, this.state.room.roomId, this.context,
         );
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
 
         this.setState({
             draggingFile: false,
@@ -1328,7 +1334,6 @@ export default class RoomView extends React.Component<IProps, IState> {
                 searchResults: results,
             });
         }, (error) => {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Search failed", error);
             Modal.createTrackedDialog('Search failed', '', ErrorDialog, {
                 title: _t("Search failed"),
@@ -1344,9 +1349,6 @@ export default class RoomView extends React.Component<IProps, IState> {
     }
 
     private getSearchResultTiles() {
-        const SearchResultTile = sdk.getComponent('rooms.SearchResultTile');
-        const Spinner = sdk.getComponent("elements.Spinner");
-
         // XXX: todo: merge overlapping results somehow?
         // XXX: why doesn't searching on name work?
 
@@ -1466,7 +1468,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             console.error("Failed to reject invite: %s", error);
 
             const msg = error.message ? error.message : JSON.stringify(error);
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to reject invite', '', ErrorDialog, {
                 title: _t("Failed to reject invite"),
                 description: msg,
@@ -1500,7 +1501,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             console.error("Failed to reject invite: %s", error);
 
             const msg = error.message ? error.message : JSON.stringify(error);
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to reject invite', '', ErrorDialog, {
                 title: _t("Failed to reject invite"),
                 description: msg,
@@ -1547,7 +1547,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         } else {
             // Otherwise we have to jump manually
             this.messagePanel.jumpToLiveTimeline();
-            dis.fire(Action.FocusComposer);
+            dis.fire(Action.FocusSendMessageComposer);
         }
     };
 
@@ -1577,7 +1577,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     // get the current scroll position of the room, so that it can be
     // restored when we switch back to it.
     //
-    private getScrollState() {
+    private getScrollState(): ScrollState {
         const messagePanel = this.messagePanel;
         if (!messagePanel) return null;
 
@@ -1834,10 +1834,8 @@ export default class RoomView extends React.Component<IProps, IState> {
         let isStatusAreaExpanded = true;
 
         if (ContentMessages.sharedInstance().getCurrentUploads().length > 0) {
-            const UploadBar = sdk.getComponent('structures.UploadBar');
             statusBar = <UploadBar room={this.state.room} />;
         } else if (!this.state.searchResults) {
-            const RoomStatusBar = sdk.getComponent('structures.RoomStatusBar');
             isStatusAreaExpanded = this.state.statusBarVisible;
             statusBar = <RoomStatusBar
                 room={this.state.room}
@@ -1943,12 +1941,9 @@ export default class RoomView extends React.Component<IProps, IState> {
             myMembership === 'join' && !this.state.searchResults
         );
         if (canSpeak) {
-            const MessageComposer = sdk.getComponent('rooms.MessageComposer');
             messageComposer =
                 <MessageComposer
                     room={this.state.room}
-                    callState={this.state.callState}
-                    showApps={this.state.showApps}
                     e2eStatus={this.state.e2eStatus}
                     resizeNotifier={this.props.resizeNotifier}
                     replyToEvent={this.state.replyToEvent}
@@ -2034,7 +2029,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         let topUnreadMessagesBar = null;
         // Do not show TopUnreadMessagesBar if we have search results showing, it makes no sense
         if (this.state.showTopUnreadMessagesBar && !this.state.searchResults) {
-            const TopUnreadMessagesBar = sdk.getComponent('rooms.TopUnreadMessagesBar');
             topUnreadMessagesBar = (
                 <TopUnreadMessagesBar onScrollUpClick={this.jumpToReadMarker} onCloseClick={this.forgetReadMarker} />
             );
@@ -2042,7 +2036,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         let jumpToBottom;
         // Do not show JumpToBottomButton if we have search results showing, it makes no sense
         if (!this.state.atEndOfLiveTimeline && !this.state.searchResults) {
-            const JumpToBottomButton = sdk.getComponent('rooms.JumpToBottomButton');
             jumpToBottom = (<JumpToBottomButton
                 highlight={this.state.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0}
                 numUnreadMessages={this.state.numUnreadMessages}

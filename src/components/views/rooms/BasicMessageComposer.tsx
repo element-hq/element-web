@@ -711,6 +711,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     public insertMention(userId: string): void {
+        this.modifiedFlag = true;
         const { model } = this.props;
         const { partCreator } = model;
         const member = this.props.room.getMember(userId);
@@ -729,6 +730,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     public insertQuotedMessage(event: MatrixEvent): void {
+        this.modifiedFlag = true;
         const { model } = this.props;
         const { partCreator } = model;
         const quoteParts = parseEvent(event, partCreator, { isQuotedMessage: true });
@@ -744,6 +746,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     public insertPlaintext(text: string): void {
+        this.modifiedFlag = true;
         const { model } = this.props;
         const { partCreator } = model;
         const caret = this.getCaret();
