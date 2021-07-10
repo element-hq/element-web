@@ -3448,7 +3448,7 @@
     "Decide who can view and join %(spaceName)s.": "決定誰可以檢視並加入 %(spaceName)s。",
     "Visibility": "能見度",
     "This may be useful for public spaces.": "這可能對公開空間很有用。",
-    "Guests can join a space without having an account.": "訪客毋需帳號帳號即可加入空間。",
+    "Guests can join a space without having an account.": "訪客毋需帳號即可加入空間。",
     "Enable guest access": "啟用訪客存取權",
     "Failed to update the history visibility of this space": "未能更新此空間的歷史紀錄能見度",
     "Failed to update the guest access of this space": "未能更新此空間的訪客存取權限",
