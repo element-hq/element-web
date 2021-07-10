@@ -109,11 +109,11 @@ export abstract class Member {
 
 class DirectoryMember extends Member {
     private readonly _userId: string;
-    private readonly displayName: string;
-    private readonly avatarUrl: string;
+    private readonly displayName?: string;
+    private readonly avatarUrl?: string;
 
     // eslint-disable-next-line camelcase
-    constructor(userDirResult: { user_id: string, display_name: string, avatar_url: string }) {
+    constructor(userDirResult: { user_id: string, display_name?: string, avatar_url?: string }) {
         super();
         this._userId = userDirResult.user_id;
         this.displayName = userDirResult.display_name;

@@ -20,6 +20,7 @@ import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { Visibility } from "matrix-js-sdk/lib/@types/partials";
 
 interface IProps {
     roomId: string;
@@ -49,7 +50,7 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
 
         client.setRoomDirectoryVisibility(
             this.props.roomId,
-            newValue ? 'public' : 'private',
+            newValue ? Visibility.Public : Visibility.Private,
         ).catch(() => {
             // Roll back the local echo on the change
             this.setState({ isRoomPublished: valueBefore });

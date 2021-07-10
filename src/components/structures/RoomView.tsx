@@ -25,8 +25,8 @@ import React, { createRef } from 'react';
 import classNames from 'classnames';
 import { IRecommendedVersion, NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 import { EventSubscription } from "fbemitter";
+import { ISearchResults } from 'matrix-js-sdk/src/@types/search';
 
 import shouldHideEvent from '../../shouldHideEvent';
 import { _t } from '../../languageHandler';
@@ -133,12 +133,7 @@ export interface IState {
     searching: boolean;
     searchTerm?: string;
     searchScope?: SearchScope;
-    searchResults?: XOR<{}, {
-        count: number;
-        highlights: string[];
-        results: SearchResult[];
-        next_batch: string; // eslint-disable-line camelcase
-    }>;
+    searchResults?: XOR<{}, ISearchResults>;
     searchHighlights?: string[];
     searchInProgress?: boolean;
     callState?: CallState;
@@ -1137,7 +1132,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         if (this.state.searchResults.next_batch) {
             debuglog("requesting more search results");
-            const searchPromise = searchPagination(this.state.searchResults);
+            const searchPromise = searchPagination(this.state.searchResults as ISearchResults);
             return this.handleSearchResult(searchPromise);
         } else {
             debuglog("no more search results");
