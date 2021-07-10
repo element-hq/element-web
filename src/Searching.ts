@@ -125,7 +125,7 @@ async function combinedSearch(searchTerm: string): Promise<ISearchResults> {
     const emptyResult: ISeshatSearchResults = {
         seshatQuery: localQuery,
         _query: serverQuery,
-        serverSideNextBatch: serverResponse.next_batch,
+        serverSideNextBatch: serverResponse.search_categories.room_events.next_batch,
         cachedEvents: [],
         oldestEventFrom: "server",
         results: [],
@@ -243,10 +243,10 @@ async function localPagination(searchResult: ISeshatSearchResults): Promise<ISes
     return result;
 }
 
-function compareOldestEvents(firstResults: IResultRoomEvents, secondResults: IResultRoomEvents): number {
+function compareOldestEvents(firstResults: ISearchResult[], secondResults: ISearchResult[]): number {
     try {
-        const oldestFirstEvent = firstResults.results[firstResults.results.length - 1].result;
-        const oldestSecondEvent = secondResults.results[secondResults.results.length - 1].result;
+        const oldestFirstEvent = firstResults[firstResults.length - 1].result;
+        const oldestSecondEvent = secondResults[secondResults.length - 1].result;
 
         if (oldestFirstEvent.origin_server_ts <= oldestSecondEvent.origin_server_ts) {
             return -1;
@@ -395,7 +395,7 @@ function combineEvents(
         // This is a first search call, combine the events from the server and
         // the local index. Note where our oldest event came from, we shall
         // fetch the next batch of events from the other source.
-        if (compareOldestEvents(localEvents, serverEvents) < 0) {
+        if (compareOldestEvents(localEvents.results, serverEvents.results) < 0) {
             oldestEventFrom = "local";
         }
 
@@ -406,7 +406,7 @@ function combineEvents(
         // meaning that our oldest event was on the server.
         // Change the source of the oldest event if our local event is older
         // than the cached one.
-        if (compareOldestEvents(localEvents, cachedEvents) < 0) {
+        if (compareOldestEvents(localEvents.results, cachedEvents) < 0) {
             oldestEventFrom = "local";
         }
         combineEventSources(previousSearchResult, response, localEvents.results, cachedEvents);
@@ -415,7 +415,7 @@ function combineEvents(
         // meaning that our oldest event was in the local index.
         // Change the source of the oldest event if our server event is older
         // than the cached one.
-        if (compareOldestEvents(serverEvents, cachedEvents) < 0) {
+        if (compareOldestEvents(serverEvents.results, cachedEvents) < 0) {
             oldestEventFrom = "server";
         }
         combineEventSources(previousSearchResult, response, serverEvents.results, cachedEvents);
