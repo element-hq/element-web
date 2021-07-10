@@ -20,7 +20,7 @@ import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { Visibility } from "matrix-js-sdk/lib/@types/partials";
+import { Visibility } from "matrix-js-sdk/src/@types/partials";
 
 interface IProps {
     roomId: string;

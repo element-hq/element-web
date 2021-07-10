@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from "react";
 import { IFieldType, IInstance, IProtocol, IPublicRoomsChunk } from "matrix-js-sdk/src/client";
-import { Visibility } from "matrix-js-sdk/lib/@types/partials";
+import { Visibility } from "matrix-js-sdk/src/@types/partials";
 import { IRoomDirectoryOptions } from "matrix-js-sdk/src/@types/requests";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
