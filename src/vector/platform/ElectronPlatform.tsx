@@ -22,10 +22,7 @@ import BaseEventIndexManager, {
     ICrawlerCheckpoint,
     IEventAndProfile,
     IIndexStats,
-    IMatrixEvent,
-    IMatrixProfile,
     ISearchArgs,
-    ISearchResult,
 } from 'matrix-react-sdk/src/indexing/BaseEventIndexManager';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import { _t, _td } from 'matrix-react-sdk/src/languageHandler';
@@ -54,6 +51,7 @@ import { CheckUpdatesPayload } from "matrix-react-sdk/src/dispatcher/payloads/Ch
 import ToastStore from "matrix-react-sdk/src/stores/ToastStore";
 import GenericExpiringToast from "matrix-react-sdk/src/components/views/toasts/GenericExpiringToast";
 import SettingsStore from 'matrix-react-sdk/src/settings/SettingsStore';
+import { IMatrixProfile, IEventWithRoomId as IMatrixEvent, IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
 
 import VectorBasePlatform from './VectorBasePlatform';
 
@@ -172,7 +170,7 @@ class SeshatIndexManager extends BaseEventIndexManager {
         return this._ipcCall('commitLiveEvents');
     }
 
-    async searchEventIndex(searchConfig: ISearchArgs): Promise<ISearchResult> {
+    async searchEventIndex(searchConfig: ISearchArgs): Promise<IResultRoomEvents> {
         return this._ipcCall('searchEventIndex', searchConfig);
     }
 
