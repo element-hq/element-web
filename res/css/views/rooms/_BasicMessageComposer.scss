@@ -47,6 +47,7 @@ limitations under the License.
         &.mx_BasicMessageComposer_input_shouldShowPillAvatar {
             span.mx_UserPill, span.mx_RoomPill {
                 position: relative;
+                cursor: pointer;
 
                 // avatar psuedo element
                 &::before {

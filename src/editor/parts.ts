@@ -25,6 +25,10 @@ import AutocompleteWrapperModel, {
     UpdateQuery,
 } from "./autocomplete";
 import * as Avatar from "../Avatar";
+import defaultDispatcher from "../dispatcher/dispatcher";
+import { Action } from "../dispatcher/actions";
+import singletonRoomViewStore from "../stores/RoomViewStore";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 
 interface ISerializedPart {
     type: Type.Plain | Type.Newline | Type.Command | Type.PillCandidate;
@@ -74,6 +78,7 @@ interface IPillCandidatePart extends Omit<IBasePart, "type" | "createAutoComplet
 interface IPillPart extends Omit<IBasePart, "type" | "resourceId"> {
     type: Type.AtRoomPill | Type.RoomPill | Type.UserPill;
     resourceId: string;
+    onClick?(): void;
 }
 
 export type Part = IBasePart | IPillCandidatePart | IPillPart;
@@ -250,6 +255,7 @@ abstract class PillPart extends BasePart implements IPillPart {
         const container = document.createElement("span");
         container.setAttribute("spellcheck", "false");
         container.setAttribute("contentEditable", "false");
+        container.onclick = this.onClick;
         container.className = this.className;
         container.appendChild(document.createTextNode(this.text));
         this.setAvatar(container);
@@ -303,6 +309,8 @@ abstract class PillPart extends BasePart implements IPillPart {
     abstract get type(): IPillPart["type"];
 
     abstract get className(): string;
+
+    abstract onClick?(): void;
 
     abstract setAvatar(node: HTMLElement): void;
 }
@@ -365,6 +373,9 @@ class RoomPillPart extends PillPart {
     get className() {
         return "mx_RoomPill mx_Pill";
     }
+
+    // FIXME: We do this to shut up the linter, is there a way to do this properly
+    onClick = undefined;
 }
 
 class AtRoomPillPart extends RoomPillPart {
@@ -402,6 +413,13 @@ class UserPillPart extends PillPart {
         }
         this._setAvatarVars(node, avatarUrl, initialLetter);
     }
+
+    onClick = () => {
+        defaultDispatcher.dispatch({
+            action: Action.ViewUser,
+            member: MatrixClientPeg.get().getRoom(singletonRoomViewStore.getRoomId()).getMember(this.resourceId),
+        });
+    };
 
     get type(): IPillPart["type"] {
         return Type.UserPill;
