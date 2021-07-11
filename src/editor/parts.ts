@@ -249,6 +249,7 @@ abstract class PillPart extends BasePart implements IPillPart {
     toDOMNode() {
         const container = document.createElement("span");
         container.setAttribute("spellcheck", "false");
+        container.setAttribute("contentEditable", "false");
         container.className = this.className;
         container.appendChild(document.createTextNode(this.text));
         this.setAvatar(container);
