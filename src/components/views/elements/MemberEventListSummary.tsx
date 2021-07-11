@@ -25,6 +25,7 @@ import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
 import { isValid3pidInvite } from "../../../RoomInvite";
 import EventListSummary from "./EventListSummary";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { join } from '../../../utils/ReactUtils';
 
 interface IProps extends Omit<ComponentProps<typeof EventListSummary>, "summaryText" | "summaryMembers"> {
     // The maximum number of names to show in either each summary e.g. 2 would result "A, B and 234 others left"
@@ -89,7 +90,10 @@ export default class MemberEventListSummary extends React.Component<IProps> {
      * `Object.keys(eventAggregates)`.
      * @returns {string} the textual summary of the aggregated events that occurred.
      */
-    private generateSummary(eventAggregates: Record<string, string[]>, orderedTransitionSequences: string[]) {
+    private generateSummary(
+        eventAggregates: Record<string, string[]>,
+        orderedTransitionSequences: string[],
+    ): string | JSX.Element {
         const summaries = orderedTransitionSequences.map((transitions) => {
             const userNames = eventAggregates[transitions];
             const nameList = this.renderNameList(userNames);
@@ -118,7 +122,7 @@ export default class MemberEventListSummary extends React.Component<IProps> {
             return null;
         }
 
-        return summaries.join(", ");
+        return join(summaries, ", ");
     }
 
     /**
@@ -212,7 +216,11 @@ export default class MemberEventListSummary extends React.Component<IProps> {
      * @param {number} repeats the number of times the transition was repeated in a row.
      * @returns {string} the written Human Readable equivalent of the transition.
      */
-    private static getDescriptionForTransition(t: TransitionType, userCount: number, repeats: number) {
+    private static getDescriptionForTransition(
+        t: TransitionType,
+        userCount: number,
+        repeats: number,
+    ): string | JSX.Element {
         // The empty interpolations 'severalUsers' and 'oneUser'
         // are there only to show translators to non-English languages
         // that the verb is conjugated to plural or singular Subject.
