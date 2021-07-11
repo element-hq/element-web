@@ -28,6 +28,6 @@ export function join(array: Array<string | JSX.Element>, joiner?: string | JSX.E
         newArray.push(element, (index === array.length - 1) ? null : joiner);
     });
     return (
-        <span> { newArray } </span>
+        <span>{ newArray }</span>
     );
 }
