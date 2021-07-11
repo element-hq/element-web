@@ -346,15 +346,17 @@ export default class MemberEventListSummary extends React.Component<IProps> {
      * if a transition is not recognised.
      */
     private static getTransition(e: IUserEvents): TransitionType {
-        if (e.mxEvent.getType() === EventType.RoomThirdPartyInvite) {
+        const type = e.mxEvent.getType();
+
+        if (type === EventType.RoomThirdPartyInvite) {
             // Handle 3pid invites the same as invites so they get bundled together
             if (!isValid3pidInvite(e.mxEvent)) {
                 return TransitionType.InviteWithdrawal;
             }
             return TransitionType.Invited;
-        } else if (e.mxEvent.getType() === EventType.RoomServerAcl) {
+        } else if (type === EventType.RoomServerAcl) {
             return TransitionType.ServerAcl;
-        } else if (e.mxEvent.getType() === EventType.RoomPinnedEvents) {
+        } else if (type === EventType.RoomPinnedEvents) {
             return TransitionType.PinnedMessages;
         }
 
@@ -444,22 +446,23 @@ export default class MemberEventListSummary extends React.Component<IProps> {
         // Object mapping user IDs to an array of IUserEvents
         const userEvents: Record<string, IUserEvents[]> = {};
         eventsToRender.forEach((e, index) => {
-            const userId = e.getType() === 'm.room.server_acl' ? e.getSender() : e.getStateKey();
+            const type = e.getType();
+            const userId = type === EventType.RoomServerAcl ? e.getSender() : e.getStateKey();
             // Initialise a user's events
             if (!userEvents[userId]) {
                 userEvents[userId] = [];
             }
 
-            if (SENDER_AS_DISPLAY_NAME_EVENTS.includes(e.getType() as EventType)) {
+            if (SENDER_AS_DISPLAY_NAME_EVENTS.includes(type as EventType)) {
                 latestUserAvatarMember.set(userId, e.sender);
             } else if (e.target) {
                 latestUserAvatarMember.set(userId, e.target);
             }
 
             let displayName = userId;
-            if (e.getType() === EventType.RoomThirdPartyInvite) {
+            if (type === EventType.RoomThirdPartyInvite) {
                 displayName = e.getContent().display_name;
-            } else if (SENDER_AS_DISPLAY_NAME_EVENTS.includes(e.getType() as EventType)) {
+            } else if (SENDER_AS_DISPLAY_NAME_EVENTS.includes(type as EventType)) {
                 displayName = e.sender.name;
             } else if (e.target) {
                 displayName = e.target.name;
