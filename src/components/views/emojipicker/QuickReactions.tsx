@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 
 import { _t } from '../../../languageHandler';
-import { getEmojiFromUnicode, IEmoji } from "../../../emoji";
+import { getEmojiFromUnicode, getShortcodes, IEmoji } from "../../../emoji";
 import Emoji from "./Emoji";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
@@ -62,6 +62,7 @@ class QuickReactions extends React.Component<IProps, IState> {
     };
 
     render() {
+        const shortcode = this.state.hover ? getShortcodes(this.state.hover)[0] : undefined;
         return (
             <section className="mx_EmojiPicker_footer mx_EmojiPicker_quick mx_EmojiPicker_category">
                 <h2 className="mx_EmojiPicker_quick_header mx_EmojiPicker_category_label">
@@ -69,7 +70,9 @@ class QuickReactions extends React.Component<IProps, IState> {
                         ? _t("Quick Reactions")
                         : <React.Fragment>
                             <span className="mx_EmojiPicker_name">{this.state.hover.annotation}</span>
-                            <span className="mx_EmojiPicker_shortcode">{this.state.hover.shortcodes[0]}</span>
+                            { shortcode ?
+                                <span className="mx_EmojiPicker_shortcode">{shortcode}</span> :
+                                null }
                         </React.Fragment>
                     }
                 </h2>

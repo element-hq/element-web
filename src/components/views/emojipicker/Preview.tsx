@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 
-import { IEmoji } from "../../../emoji";
+import { IEmoji, getShortcodes } from "../../../emoji";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
@@ -30,8 +30,8 @@ class Preview extends React.PureComponent<IProps> {
         const {
             unicode = "",
             annotation = "",
-            shortcodes: [shortcode = ""],
-        } = this.props.emoji || {};
+        } = this.props.emoji;
+        const shortcode = getShortcodes(this.props.emoji)[0];
 
         return (
             <div className="mx_EmojiPicker_footer mx_EmojiPicker_preview">
@@ -42,9 +42,9 @@ class Preview extends React.PureComponent<IProps> {
                     <div className="mx_EmojiPicker_name mx_EmojiPicker_preview_name">
                         {annotation}
                     </div>
-                    <div className="mx_EmojiPicker_shortcode">
-                        {shortcode}
-                    </div>
+                    { shortcode ?
+                        <div className="mx_EmojiPicker_shortcode">{shortcode}</div> :
+                        null }
                 </div>
             </div>
         );

@@ -15,14 +15,14 @@ limitations under the License.
 */
 
 import EMOJIBASE from 'emojibase-data/en/compact.json';
+import SHORTCODES from 'emojibase-data/en/shortcodes/iamcal.json';
 
 export interface IEmoji {
     annotation: string;
-    group: number;
+    group?: number;
     hexcode: string;
-    order: number;
-    shortcodes: string[];
-    tags: string[];
+    order?: number;
+    tags?: string[];
     unicode: string;
     emoticon?: string;
 }
@@ -34,9 +34,13 @@ interface IEmojiWithFilterString extends IEmoji {
 // The unicode is stored without the variant selector
 const UNICODE_TO_EMOJI = new Map<string, IEmojiWithFilterString>(); // not exported as gets for it are handled by getEmojiFromUnicode
 export const EMOTICON_TO_EMOJI = new Map<string, IEmojiWithFilterString>();
-export const SHORTCODE_TO_EMOJI = new Map<string, IEmojiWithFilterString>();
 
 export const getEmojiFromUnicode = unicode => UNICODE_TO_EMOJI.get(stripVariation(unicode));
+
+const toArray = (shortcodes?: string | string[]): string[] =>
+    typeof shortcodes === "string" ? [shortcodes] : (shortcodes ?? []);
+export const getShortcodes = (emoji: IEmoji): string[] =>
+    toArray(SHORTCODES[emoji.hexcode]);
 
 const EMOJIBASE_GROUP_ID_TO_CATEGORY = [
     "people", // smileys
@@ -66,12 +70,14 @@ const ZERO_WIDTH_JOINER = "\u200D";
 
 // Store various mappings from unicode/emoticon/shortcode to the Emoji objects
 EMOJIBASE.forEach((emoji: IEmojiWithFilterString) => {
+    const shortcodes = getShortcodes(emoji);
     const categoryId = EMOJIBASE_GROUP_ID_TO_CATEGORY[emoji.group];
     if (DATA_BY_CATEGORY.hasOwnProperty(categoryId)) {
         DATA_BY_CATEGORY[categoryId].push(emoji);
     }
+
     // This is used as the string to match the query against when filtering emojis
-    emoji.filterString = (`${emoji.annotation}\n${emoji.shortcodes.join('\n')}}\n${emoji.emoticon || ''}\n` +
+    emoji.filterString = (`${emoji.annotation}\n${shortcodes.join('\n')}}\n${emoji.emoticon || ''}\n` +
         `${emoji.unicode.split(ZERO_WIDTH_JOINER).join("\n")}`).toLowerCase();
 
     // Add mapping from unicode to Emoji object
@@ -86,13 +92,6 @@ EMOJIBASE.forEach((emoji: IEmojiWithFilterString) => {
     if (emoji.emoticon) {
         // Add mapping from emoticon to Emoji object
         EMOTICON_TO_EMOJI.set(emoji.emoticon, emoji);
-    }
-
-    if (emoji.shortcodes) {
-        // Add mapping from each shortcode to Emoji object
-        emoji.shortcodes.forEach(shortcode => {
-            SHORTCODE_TO_EMOJI.set(shortcode, emoji);
-        });
     }
 });
 
