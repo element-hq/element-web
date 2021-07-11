@@ -4,4 +4,4 @@ set -e
 ./synapse/install.sh
 # local testing doesn't need a Element fetched from master,
 # so not installing that by default
-yarn install
+yarn install --pure-lockfile

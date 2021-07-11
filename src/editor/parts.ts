@@ -552,7 +552,7 @@ export class PartCreator {
 // part creator that support auto complete for /commands,
 // used in SendMessageComposer
 export class CommandPartCreator extends PartCreator {
-    createPartForInput(text: string, partIndex: number) {
+    public createPartForInput(text: string, partIndex: number): Part {
         // at beginning and starts with /? create
         if (partIndex === 0 && text[0] === "/") {
             // text will be inserted by model, so pass empty string
@@ -562,11 +562,11 @@ export class CommandPartCreator extends PartCreator {
         }
     }
 
-    command(text: string) {
+    public command(text: string): CommandPart {
         return new CommandPart(text, this.autoCompleteCreator);
     }
 
-    deserializePart(part: Part): Part {
+    public deserializePart(part: SerializedPart): Part {
         if (part.type === "command") {
             return this.command(part.text);
         } else {
@@ -576,7 +576,7 @@ export class CommandPartCreator extends PartCreator {
 }
 
 class CommandPart extends PillCandidatePart {
-    get type(): IPillCandidatePart["type"] {
+    public get type(): IPillCandidatePart["type"] {
         return Type.Command;
     }
 }

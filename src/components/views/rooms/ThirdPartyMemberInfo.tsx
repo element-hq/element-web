@@ -20,13 +20,14 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
-import * as sdk from "../../../index";
 import Modal from "../../../Modal";
 import { isValid3pidInvite } from "../../../RoomInvite";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SettingsStore from "../../../settings/SettingsStore";
+import ErrorDialog from '../dialogs/ErrorDialog';
+import AccessibleButton from '../elements/AccessibleButton';
 
 interface IProps {
     event: MatrixEvent;
@@ -104,7 +105,6 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
                 // Revert echo because of error
                 this.setState({ invited: true });
 
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createTrackedDialog('Revoke 3pid invite failed', '', ErrorDialog, {
                     title: _t("Failed to revoke invite"),
                     description: _t(
@@ -119,8 +119,6 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
     };
 
     render() {
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-
         let adminTools = null;
         if (this.state.canKick && this.state.invited) {
             adminTools = (

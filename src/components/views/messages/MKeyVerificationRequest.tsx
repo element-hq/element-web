@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import { MatrixEvent } from 'matrix-js-sdk/src';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { getNameForEventRoom, userLabelForEventRoom }
     from '../../../utils/KeyVerificationStateObserver';
@@ -26,9 +25,10 @@ import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 import { Action } from "../../../dispatcher/actions";
 import EventTileBubble from "./EventTileBubble";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import AccessibleButton from '../elements/AccessibleButton';
 
 interface IProps {
-    mxEvent: MatrixEvent
+    mxEvent: MatrixEvent;
 }
 
 @replaceableComponent("views.messages.MKeyVerificationRequest")
@@ -115,8 +115,6 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
     }
 
     public render() {
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-
         const { mxEvent } = this.props;
         const request = mxEvent.verificationRequest;
 
@@ -154,7 +152,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
                     <AccessibleButton kind="danger" onClick={this.onRejectClicked}>
                         {_t("Decline")}
                     </AccessibleButton>
-                    <AccessibleButton onClick={this.onAcceptClicked}>
+                    <AccessibleButton kind="primary" onClick={this.onAcceptClicked}>
                         {_t("Accept")}
                     </AccessibleButton>
                 </div>);

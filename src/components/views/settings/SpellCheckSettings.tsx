@@ -21,17 +21,17 @@ import { _t } from "../../../languageHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface ExistingSpellCheckLanguageIProps {
-    language: string,
-    onRemoved(language: string),
+    language: string;
+    onRemoved(language: string);
 }
 
 interface SpellCheckLanguagesIProps {
-    languages: Array<string>,
-    onLanguagesChange(languages: Array<string>),
+    languages: Array<string>;
+    onLanguagesChange(languages: Array<string>);
 }
 
 interface SpellCheckLanguagesIState {
-    newLanguage: string,
+    newLanguage: string;
 }
 
 export class ExistingSpellCheckLanguage extends React.Component<ExistingSpellCheckLanguageIProps> {

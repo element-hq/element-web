@@ -37,6 +37,11 @@
 @import "./structures/_ViewSource.scss";
 @import "./structures/auth/_CompleteSecurity.scss";
 @import "./structures/auth/_Login.scss";
+@import "./views/audio_messages/_AudioPlayer.scss";
+@import "./views/audio_messages/_PlayPauseButton.scss";
+@import "./views/audio_messages/_PlaybackContainer.scss";
+@import "./views/audio_messages/_SeekBar.scss";
+@import "./views/audio_messages/_Waveform.scss";
 @import "./views/auth/_AuthBody.scss";
 @import "./views/auth/_AuthButtons.scss";
 @import "./views/auth/_AuthFooter.scss";
@@ -52,7 +57,6 @@
 @import "./views/avatars/_BaseAvatar.scss";
 @import "./views/avatars/_DecoratedRoomAvatar.scss";
 @import "./views/avatars/_MemberStatusMessageAvatar.scss";
-@import "./views/avatars/_PulsedAvatar.scss";
 @import "./views/avatars/_WidgetAvatar.scss";
 @import "./views/beta/_BetaCard.scss";
 @import "./views/context_menus/_CallContextMenu.scss";
@@ -165,6 +169,7 @@
 @import "./views/messages/_MTextBody.scss";
 @import "./views/messages/_MVideoBody.scss";
 @import "./views/messages/_MVoiceMessageBody.scss";
+@import "./views/messages/_MediaBody.scss";
 @import "./views/messages/_MessageActionBar.scss";
 @import "./views/messages/_MessageTimestamp.scss";
 @import "./views/messages/_MjolnirBody.scss";
@@ -196,6 +201,7 @@
 @import "./views/rooms/_GroupLayout.scss";
 @import "./views/rooms/_IRCLayout.scss";
 @import "./views/rooms/_JumpToBottomButton.scss";
+@import "./views/rooms/_LinkPreviewGroup.scss";
 @import "./views/rooms/_LinkPreviewWidget.scss";
 @import "./views/rooms/_MemberInfo.scss";
 @import "./views/rooms/_MemberList.scss";
@@ -253,12 +259,10 @@
 @import "./views/toasts/_AnalyticsToast.scss";
 @import "./views/toasts/_NonUrgentEchoFailureToast.scss";
 @import "./views/verification/_VerificationShowSas.scss";
-@import "./views/voice_messages/_PlayPauseButton.scss";
-@import "./views/voice_messages/_PlaybackContainer.scss";
-@import "./views/voice_messages/_Waveform.scss";
 @import "./views/voip/_CallContainer.scss";
 @import "./views/voip/_CallView.scss";
 @import "./views/voip/_CallViewForRoom.scss";
+@import "./views/voip/_CallPreview.scss";
 @import "./views/voip/_DialPad.scss";
 @import "./views/voip/_DialPadContextMenu.scss";
 @import "./views/voip/_DialPadModal.scss";

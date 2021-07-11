@@ -15,11 +15,11 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import BaseDialog from "./BaseDialog";
 
 interface IProps {
     unknownProfileUsers: Array<{
@@ -50,8 +50,6 @@ export default class AskInviteAnywayDialog extends React.Component<IProps> {
     };
 
     public render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-
         const errorList = this.props.unknownProfileUsers
             .map(address => <li key={address.userId}>{address.userId}: {address.errorText}</li>);
 

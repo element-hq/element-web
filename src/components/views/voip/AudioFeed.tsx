@@ -20,7 +20,7 @@ import { logger } from 'matrix-js-sdk/src/logger';
 import MediaDeviceHandler, { MediaDeviceHandlerEvent } from "../../../MediaDeviceHandler";
 
 interface IProps {
-    feed: CallFeed,
+    feed: CallFeed;
 }
 
 export default class AudioFeed extends React.Component<IProps> {

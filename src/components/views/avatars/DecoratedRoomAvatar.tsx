@@ -30,13 +30,14 @@ import { _t } from "../../../languageHandler";
 import TextWithTooltip from "../elements/TextWithTooltip";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { IOOBData } from "../../../stores/ThreepidInviteStore";
 
 interface IProps {
     room: Room;
     avatarSize: number;
     displayBadge?: boolean;
     forceCount?: boolean;
-    oobData?: object;
+    oobData?: IOOBData;
     viewAvatarOnClick?: boolean;
 }
 

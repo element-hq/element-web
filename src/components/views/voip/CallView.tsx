@@ -35,10 +35,10 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
         // The call for us to display
-        call: MatrixCall,
+        call: MatrixCall;
 
         // Another ongoing call to display information about
-        secondaryCall?: MatrixCall,
+        secondaryCall?: MatrixCall;
 
         // a callback which is called when the content in the CallView changes
         // in a way that is likely to cause a resize.
@@ -49,18 +49,21 @@ interface IProps {
         // This is sort of a proxy for a number of things but we currently have no
         // need to control those things separately, so this is simpler.
         pipMode?: boolean;
+
+        // Used for dragging the PiP CallView
+        onMouseDownOnHeader?: (event: React.MouseEvent) => void;
 }
 
 interface IState {
-    isLocalOnHold: boolean,
-    isRemoteOnHold: boolean,
-    micMuted: boolean,
-    vidMuted: boolean,
-    callState: CallState,
-    controlsVisible: boolean,
-    showMoreMenu: boolean,
-    showDialpad: boolean,
-    feeds: CallFeed[],
+    isLocalOnHold: boolean;
+    isRemoteOnHold: boolean;
+    micMuted: boolean;
+    vidMuted: boolean;
+    callState: CallState;
+    controlsVisible: boolean;
+    showMoreMenu: boolean;
+    showDialpad: boolean;
+    feeds: CallFeed[];
 }
 
 function getFullScreenElement() {
@@ -698,19 +701,24 @@ export default class CallView extends React.Component<IProps, IState> {
                 </span>;
             }
 
-            header = <div className="mx_CallView_header">
-                <AccessibleButton onClick={this.onRoomAvatarClick}>
-                    <RoomAvatar room={callRoom} height={32} width={32} />
-                </AccessibleButton>
-                <div className="mx_CallView_header_callInfo">
-                    <div className="mx_CallView_header_roomName">{callRoom.name}</div>
-                    <div className="mx_CallView_header_callTypeSmall">
-                        {callTypeText}
-                        {secondaryCallInfo}
+            header = (
+                <div
+                    className="mx_CallView_header"
+                    onMouseDown={this.props.onMouseDownOnHeader}
+                >
+                    <AccessibleButton onClick={this.onRoomAvatarClick}>
+                        <RoomAvatar room={callRoom} height={32} width={32} />
+                    </AccessibleButton>
+                    <div className="mx_CallView_header_callInfo">
+                        <div className="mx_CallView_header_roomName">{callRoom.name}</div>
+                        <div className="mx_CallView_header_callTypeSmall">
+                            {callTypeText}
+                            {secondaryCallInfo}
+                        </div>
                     </div>
+                    {headerControls}
                 </div>
-                {headerControls}
-            </div>;
+            );
             myClassName = 'mx_CallView_pip';
         }
 

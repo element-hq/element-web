@@ -18,23 +18,22 @@ limitations under the License.
 import React from "react";
 import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 import RoomContext from "../../../contexts/RoomContext";
-import { haveTileForEvent } from "./EventTile";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
+import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import DateSeparator from "../messages/DateSeparator";
-import EventTile from "./EventTile";
+import EventTile, { haveTileForEvent } from "./EventTile";
 
 interface IProps {
-    // The details of this result
+    // a matrix-js-sdk SearchResult containing the details of this result
     searchResult: SearchResult;
-    // Strings to be highlighted in the results
+    // a list of strings to be highlighted in the results
     searchHighlights?: string[];
     // href for the highlights in this result
     resultLink?: string;
-    onHeightChanged: () => void;
-    permalinkCreator: RoomPermalinkCreator;
+    onHeightChanged?: () => void;
+    permalinkCreator?: RoomPermalinkCreator;
 }
 
 @replaceableComponent("views.rooms.SearchResultTile")

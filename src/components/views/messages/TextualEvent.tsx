@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,12 +16,12 @@ limitations under the License.
 
 import React from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import RoomContext from "../../../contexts/RoomContext";
 import * as TextForEvent from "../../../TextForEvent";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
-    // The event to show
     mxEvent: MatrixEvent;
 }
 

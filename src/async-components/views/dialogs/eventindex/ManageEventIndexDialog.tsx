@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../../index';
 import { _t } from '../../../../languageHandler';
 import SdkConfig from '../../../../SdkConfig';
 import SettingsStore from "../../../../settings/SettingsStore";
@@ -24,6 +23,9 @@ import Modal from '../../../../Modal';
 import { formatBytes, formatCountLong } from "../../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
 import { SettingLevel } from "../../../../settings/SettingLevel";
+import Field from '../../../../components/views/elements/Field';
+import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
+import DialogButtons from "../../../../components/views/elements/DialogButtons";
 
 interface IProps {
     onFinished: (confirmed: boolean) => void;
@@ -145,7 +147,6 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
 
     render() {
         const brand = SdkConfig.get().brand;
-        const Field = sdk.getComponent('views.elements.Field');
 
         let crawlerState;
         if (this.state.currentRoom === null) {
@@ -176,14 +177,11 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
                     <Field
                         label={_t('Message downloading sleep time(ms)')}
                         type='number'
-                        value={this.state.crawlerSleepTime}
+                        value={this.state.crawlerSleepTime.toString()}
                         onChange={this.onCrawlerSleepTimeChange} />
                 </div>
             </div>
         );
-
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         return (
             <BaseDialog className='mx_ManageEventIndexDialog'
