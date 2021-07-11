@@ -50,7 +50,12 @@ import EditorStateTransfer from "../../utils/EditorStateTransfer";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
-const membershipTypes = [EventType.RoomMember, EventType.RoomThirdPartyInvite, EventType.RoomServerAcl];
+const membershipTypes = [
+    EventType.RoomMember,
+    EventType.RoomThirdPartyInvite,
+    EventType.RoomServerAcl,
+    EventType.RoomPinnedEvents,
+];
 
 // check if there is a previous event and it has the same sender as this event
 // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL

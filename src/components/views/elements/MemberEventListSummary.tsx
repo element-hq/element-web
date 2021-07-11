@@ -25,7 +25,22 @@ import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
 import { isValid3pidInvite } from "../../../RoomInvite";
 import EventListSummary from "./EventListSummary";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import defaultDispatcher from '../../../dispatcher/dispatcher';
+import { RightPanelPhases } from '../../../stores/RightPanelStorePhases';
+import { Action } from '../../../dispatcher/actions';
+import { SetRightPanelPhasePayload } from '../../../dispatcher/payloads/SetRightPanelPhasePayload';
 import { join } from '../../../utils/ReactUtils';
+import { EventType } from '../../../../../matrix-js-sdk/src/@types/event';
+
+const onPinnedMessagesClick = (): void => {
+    defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
+        action: Action.SetRightPanelPhase,
+        phase: RightPanelPhases.PinnedMessages,
+        allowClose: false,
+    });
+};
+
+const SENDER_AS_DISPLAY_NAME_EVENTS = [EventType.RoomServerAcl, EventType.RoomPinnedEvents];
 
 interface IProps extends Omit<ComponentProps<typeof EventListSummary>, "summaryText" | "summaryMembers"> {
     // The maximum number of names to show in either each summary e.g. 2 would result "A, B and 234 others left"
@@ -58,6 +73,7 @@ enum TransitionType {
     ChangedAvatar = "changed_avatar",
     NoChange = "no_change",
     ServerAcl = "server_acl",
+    PinnedMessages = "pinned_messages"
 }
 
 const SEP = ",";
@@ -303,6 +319,15 @@ export default class MemberEventListSummary extends React.Component<IProps> {
                         { severalUsers: "", count: repeats })
                     : _t("%(oneUser)schanged the server ACLs %(count)s times", { oneUser: "", count: repeats });
                 break;
+            case "pinned_messages":
+                res = (userCount > 1)
+                    ? _t("%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.",
+                        { severalUsers: "", count: repeats },
+                        { "a": (sub) => <a onClick={onPinnedMessagesClick}> { sub } </a> })
+                    : _t("%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times.",
+                        { oneUser: "", count: repeats },
+                        { "a": (sub) => <a onClick={onPinnedMessagesClick}> { sub } </a> });
+                break;
         }
 
         return res;
@@ -321,16 +346,16 @@ export default class MemberEventListSummary extends React.Component<IProps> {
      * if a transition is not recognised.
      */
     private static getTransition(e: IUserEvents): TransitionType {
-        if (e.mxEvent.getType() === 'm.room.third_party_invite') {
+        if (e.mxEvent.getType() === EventType.RoomThirdPartyInvite) {
             // Handle 3pid invites the same as invites so they get bundled together
             if (!isValid3pidInvite(e.mxEvent)) {
                 return TransitionType.InviteWithdrawal;
             }
             return TransitionType.Invited;
-        }
-
-        if (e.mxEvent.getType() === 'm.room.server_acl') {
+        } else if (e.mxEvent.getType() === EventType.RoomServerAcl) {
             return TransitionType.ServerAcl;
+        } else if (e.mxEvent.getType() === EventType.RoomPinnedEvents) {
+            return TransitionType.PinnedMessages;
         }
 
         switch (e.mxEvent.getContent().membership) {
@@ -425,16 +450,16 @@ export default class MemberEventListSummary extends React.Component<IProps> {
                 userEvents[userId] = [];
             }
 
-            if (e.getType() === 'm.room.server_acl') {
+            if (SENDER_AS_DISPLAY_NAME_EVENTS.includes(e.getType() as EventType)) {
                 latestUserAvatarMember.set(userId, e.sender);
             } else if (e.target) {
                 latestUserAvatarMember.set(userId, e.target);
             }
 
             let displayName = userId;
-            if (e.getType() === 'm.room.third_party_invite') {
+            if (e.getType() === EventType.RoomThirdPartyInvite) {
                 displayName = e.getContent().display_name;
-            } else if (e.getType() === 'm.room.server_acl') {
+            } else if (SENDER_AS_DISPLAY_NAME_EVENTS.includes(e.getType() as EventType)) {
                 displayName = e.sender.name;
             } else if (e.target) {
                 displayName = e.target.name;
