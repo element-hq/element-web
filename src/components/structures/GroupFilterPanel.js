@@ -30,7 +30,6 @@ import AutoHideScrollbar from "./AutoHideScrollbar";
 import SettingsStore from "../../settings/SettingsStore";
 import UserTagTile from "../views/elements/UserTagTile";
 import { replaceableComponent } from "../../utils/replaceableComponent";
-import BackdropPanel from "./BackdropPanel";
 import UIStore from "../../stores/UIStore";
 
 @replaceableComponent("structures.GroupFilterPanel")
@@ -153,14 +152,7 @@ class GroupFilterPanel extends React.Component {
             );
         }
 
-        const panelDimensions = UIStore.instance.getElementDimensions("GroupPanel");
-
         return <div className={classes} onClick={this.onClearFilterClick} ref={this.ref}>
-            <BackdropPanel
-                backgroundImage={this.props.backgroundImage}
-                width={panelDimensions?.width}
-                height={panelDimensions?.height}
-            />
             <AutoHideScrollbar
                 className="mx_GroupFilterPanel_scroller"
                 onClick={this.onClick}

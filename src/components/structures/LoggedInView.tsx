@@ -65,6 +65,7 @@ import ToastContainer from './ToastContainer';
 import MyGroups from "./MyGroups";
 import UserView from "./UserView";
 import GroupView from "./GroupView";
+import BackdropPanel from "./BackdropPanel";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -643,13 +644,15 @@ class LoggedInView extends React.Component<IProps, IState> {
                 >
                     <ToastContainer />
                     <div ref={this._resizeContainer} className={bodyClasses}>
+                        <BackdropPanel
+                            backgroundImage={this.state.backgroundImage}
+                        />
                         { SettingsStore.getValue("feature_spaces")
-                            ? <SpacePanel backgroundImage={this.state.backgroundImage} />
+                            ? <SpacePanel />
                             : null }
                         <LeftPanel
                             isMinimized={this.props.collapseLhs || false}
                             resizeNotifier={this.props.resizeNotifier}
-                            backgroundImage={this.state.backgroundImage}
                         />
                         <ResizeHandle />
                         { pageElement }

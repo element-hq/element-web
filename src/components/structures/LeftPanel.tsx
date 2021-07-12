@@ -43,12 +43,10 @@ import { replaceableComponent } from "../../utils/replaceableComponent";
 import SpaceStore, { UPDATE_SELECTED_SPACE } from "../../stores/SpaceStore";
 import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager";
 import UIStore from "../../stores/UIStore";
-import BackdropPanel from "./BackdropPanel";
 
 interface IProps {
     isMinimized: boolean;
     resizeNotifier: ResizeNotifier;
-    backgroundImage?: CanvasImageSource;
 }
 
 interface IState {
@@ -426,7 +424,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         if (this.state.showGroupFilterPanel) {
             leftLeftPanel = (
                 <div className="mx_LeftPanel_GroupFilterPanelContainer">
-                    <GroupFilterPanel backgroundImage={this.props.backgroundImage} />
+                    <GroupFilterPanel />
                     {SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null}
                 </div>
             );
@@ -453,15 +451,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             "mx_AutoHideScrollbar",
         );
 
-        const panelDimensions = UIStore.instance.getElementDimensions("LeftPanel");
-
         return (
             <div className={containerClasses} ref={this.ref}>
-                <BackdropPanel
-                    backgroundImage={this.props.backgroundImage}
-                    width={panelDimensions?.width}
-                    height={panelDimensions?.height}
-                />
                 {leftLeftPanel}
                 <aside className="mx_LeftPanel_roomListContainer">
                     {this.renderHeader()}

@@ -43,7 +43,6 @@ import { Key } from "../../../Keyboard";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 import SettingsStore from "../../../settings/SettingsStore";
-import BackdropPanel from "../../structures/BackdropPanel";
 import UIStore from "../../../stores/UIStore";
 
 interface IButtonProps {
@@ -180,9 +179,7 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({ children, isPanelCo
     </div>;
 });
 
-interface IProps {
-    backgroundImage?: CanvasImageSource;
-}
+interface IProps {}
 
 const SpacePanel = (props: IProps) => {
     // We don't need the handle as we position the menu in a constant location
@@ -274,7 +271,6 @@ const SpacePanel = (props: IProps) => {
             UIStore.instance.stopTrackingElementDimensions("SpacePanel");
         };
     }, []);
-    const panelDimensions = UIStore.instance.getElementDimensions("SpacePanel");
 
     return (
         <DragDropContext onDragEnd={result => {
@@ -288,12 +284,6 @@ const SpacePanel = (props: IProps) => {
                         onKeyDown={onKeyDownHandler}
                         ref={ref}
                     >
-                        <BackdropPanel
-                            backgroundImage={props.backgroundImage}
-                            width={panelDimensions?.width}
-                            height={panelDimensions?.height}
-                            opacity={.3}
-                        />
                         <Droppable droppableId="top-level-spaces">
                             {(provided, snapshot) => (
                                 <AutoHideScrollbar
