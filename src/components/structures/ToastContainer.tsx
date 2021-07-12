@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import * as React from "react";
-import ToastStore, {IToast} from "../../stores/ToastStore";
+import ToastStore, { IToast } from "../../stores/ToastStore";
 import classNames from "classnames";
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 
 interface IState {
     toasts: IToast<any>[];
@@ -55,9 +55,10 @@ export default class ToastContainer extends React.Component<{}, IState> {
         const totalCount = this.state.toasts.length;
         const isStacked = totalCount > 1;
         let toast;
+        let containerClasses;
         if (totalCount !== 0) {
             const topToast = this.state.toasts[0];
-            const {title, icon, key, component, className, props} = topToast;
+            const { title, icon, key, component, className, props } = topToast;
             const toastClasses = classNames("mx_Toast_toast", {
                 "mx_Toast_hasIcon": icon,
                 [`mx_Toast_icon_${icon}`]: icon,
@@ -79,16 +80,17 @@ export default class ToastContainer extends React.Component<{}, IState> {
                 </div>
                 <div className="mx_Toast_body">{React.createElement(component, toastProps)}</div>
             </div>);
+
+            containerClasses = classNames("mx_ToastContainer", {
+                "mx_ToastContainer_stacked": isStacked,
+            });
         }
-
-        const containerClasses = classNames("mx_ToastContainer", {
-            "mx_ToastContainer_stacked": isStacked,
-        });
-
-        return (
-            <div className={containerClasses} role="alert">
-                {toast}
-            </div>
-        );
+        return toast
+            ? (
+                <div className={containerClasses} role="alert">
+                    {toast}
+                </div>
+            )
+            : null;
     }
 }

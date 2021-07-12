@@ -16,14 +16,16 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../../../languageHandler";
+import { _t } from "../../../../../languageHandler";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import Field from "../../../elements/Field";
-import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
-import {SettingLevel} from "../../../../../settings/SettingLevel";
+import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import SettingsFlag from '../../../elements/SettingsFlag';
+import * as KeyboardShortcuts from "../../../../../accessibility/KeyboardShortcuts";
+import AccessibleButton from "../../../elements/AccessibleButton";
 
 interface IState {
     autoLaunch: boolean;
@@ -45,6 +47,10 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
         'breadcrumbs',
     ];
 
+    static KEYBINDINGS_SETTINGS = [
+        'ctrlFForSearch',
+    ];
+
     static COMPOSER_SETTINGS = [
         'MessageComposerInput.autoReplaceEmoji',
         'MessageComposerInput.suggestEmoji',
@@ -53,28 +59,32 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
         'MessageComposerInput.showStickersButton',
     ];
 
-    static TIMELINE_SETTINGS = [
-        'showTypingNotifications',
-        'autoplayGifsAndVideos',
-        'urlPreviewsEnabled',
-        'TextualBody.enableBigEmoji',
-        'showReadReceipts',
+    static TIME_SETTINGS = [
         'showTwelveHourTimestamps',
         'alwaysShowTimestamps',
-        'showRedactions',
+    ];
+    static CODE_BLOCKS_SETTINGS = [
         'enableSyntaxHighlightLanguageDetection',
         'expandCodeByDefault',
-        'scrollToBottomOnMessageSent',
         'showCodeLineNumbers',
-        'showJoinLeaves',
-        'showAvatarChanges',
-        'showDisplaynameChanges',
-        'showImages',
-        'showChatEffects',
-        'Pill.shouldShowPillAvatar',
-        'ctrlFForSearch',
     ];
-
+    static IMAGES_AND_VIDEOS_SETTINGS = [
+        'urlPreviewsEnabled',
+        'autoplayGifsAndVideos',
+        'showImages',
+    ];
+    static TIMELINE_SETTINGS = [
+        'showTypingNotifications',
+        'showRedactions',
+        'showReadReceipts',
+        'showJoinLeaves',
+        'showDisplaynameChanges',
+        'showChatEffects',
+        'showAvatarChanges',
+        'Pill.shouldShowPillAvatar',
+        'TextualBody.enableBigEmoji',
+        'scrollToBottomOnMessageSent',
+    ];
     static GENERAL_SETTINGS = [
         'TagPanel.enableTagPanel',
         'promptBeforeInviteUnknownUsers',
@@ -143,38 +153,37 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
     }
 
     private onAutoLaunchChange = (checked: boolean) => {
-        PlatformPeg.get().setAutoLaunchEnabled(checked).then(() => this.setState({autoLaunch: checked}));
+        PlatformPeg.get().setAutoLaunchEnabled(checked).then(() => this.setState({ autoLaunch: checked }));
     };
 
     private onWarnBeforeExitChange = (checked: boolean) => {
-        PlatformPeg.get().setWarnBeforeExit(checked).then(() => this.setState({warnBeforeExit: checked}));
-    }
+        PlatformPeg.get().setWarnBeforeExit(checked).then(() => this.setState({ warnBeforeExit: checked }));
+    };
 
     private onAlwaysShowMenuBarChange = (checked: boolean) => {
-        PlatformPeg.get().setAutoHideMenuBarEnabled(!checked).then(() => this.setState({alwaysShowMenuBar: checked}));
+        PlatformPeg.get().setAutoHideMenuBarEnabled(!checked).then(() => this.setState({ alwaysShowMenuBar: checked }));
     };
 
     private onMinimizeToTrayChange = (checked: boolean) => {
-        PlatformPeg.get().setMinimizeToTrayEnabled(checked).then(() => this.setState({minimizeToTray: checked}));
+        PlatformPeg.get().setMinimizeToTrayEnabled(checked).then(() => this.setState({ minimizeToTray: checked }));
     };
 
     private onAutocompleteDelayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({autocompleteDelay: e.target.value});
+        this.setState({ autocompleteDelay: e.target.value });
         SettingsStore.setValue("autocompleteDelay", null, SettingLevel.DEVICE, e.target.value);
     };
 
     private onReadMarkerInViewThresholdMs = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({readMarkerInViewThresholdMs: e.target.value});
+        this.setState({ readMarkerInViewThresholdMs: e.target.value });
         SettingsStore.setValue("readMarkerInViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
     private onReadMarkerOutOfViewThresholdMs = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({readMarkerOutOfViewThresholdMs: e.target.value});
+        this.setState({ readMarkerOutOfViewThresholdMs: e.target.value });
         SettingsStore.setValue("readMarkerOutOfViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
     private renderGroup(settingIds: string[]): React.ReactNodeArray {
-        const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
         return settingIds.filter(SettingsStore.isEnabled).map(i => {
             return <SettingsFlag key={i} name={i} level={SettingLevel.ACCOUNT} />;
         });
@@ -223,8 +232,31 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
                 </div>
 
                 <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Keyboard shortcuts")}</span>
+                    <AccessibleButton className="mx_SettingsFlag" onClick={KeyboardShortcuts.toggleDialog}>
+                        { _t("To view all keyboard shortcuts, click here.") }
+                    </AccessibleButton>
+                    {this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
+                </div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Displaying time")}</span>
+                    {this.renderGroup(PreferencesUserSettingsTab.TIME_SETTINGS)}
+                </div>
+
+                <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Composer")}</span>
                     {this.renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
+                </div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Code blocks")}</span>
+                    {this.renderGroup(PreferencesUserSettingsTab.CODE_BLOCKS_SETTINGS)}
+                </div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Images, GIFs and videos")}</span>
+                    {this.renderGroup(PreferencesUserSettingsTab.IMAGES_AND_VIDEOS_SETTINGS)}
                 </div>
 
                 <div className="mx_SettingsTab_section">

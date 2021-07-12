@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../../index';
-import {MatrixClientPeg} from '../../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../../MatrixClientPeg';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { _t } from '../../../../languageHandler';
 import { accessSecretStorage } from '../../../../SecurityManager';
@@ -327,11 +327,11 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             if (this.state.recoverInfo.total > this.state.recoverInfo.imported) {
                 failedToDecrypt = <p>{_t(
                     "Failed to decrypt %(failedCount)s sessions!",
-                    {failedCount: this.state.recoverInfo.total - this.state.recoverInfo.imported},
+                    { failedCount: this.state.recoverInfo.total - this.state.recoverInfo.imported },
                 )}</p>;
             }
             content = <div>
-                <p>{_t("Successfully restored %(sessionCount)s keys", {sessionCount: this.state.recoverInfo.imported})}</p>
+                <p>{_t("Successfully restored %(sessionCount)s keys", { sessionCount: this.state.recoverInfo.imported })}</p>
                 {failedToDecrypt}
                 <DialogButtons primaryButton={_t('OK')}
                     onPrimaryButtonClick={this._onDone}

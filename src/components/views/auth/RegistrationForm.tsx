@@ -17,7 +17,6 @@ limitations under the License.
 
 import React from 'react';
 
-import * as sdk from '../../../index';
 import * as Email from '../../../email';
 import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
 import Modal from '../../../Modal';
@@ -25,12 +24,13 @@ import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import { SAFE_LOCALPART_REGEX } from '../../../Registration';
 import withValidation from '../elements/Validation';
-import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
 import PassphraseField from "./PassphraseField";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import Field from '../elements/Field';
 import RegistrationEmailPromptDialog from '../dialogs/RegistrationEmailPromptDialog';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import CountryDropdown from "./CountryDropdown";
 
 enum RegistrationField {
     Email = "field_email",
@@ -471,7 +471,6 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         if (!this.showPhoneNumber()) {
             return null;
         }
-        const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
         const phoneLabel = this.authStepIsRequired('m.login.msisdn') ?
             _t("Phone") :
             _t("Phone (optional)");

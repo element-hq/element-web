@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {Dispatch, SetStateAction, useState} from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 // Hook to simplify interactions with a store-backed state values
 // Returns value and method to change the state value

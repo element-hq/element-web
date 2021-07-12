@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import EditorModel from "../../src/editor/model";
-import {createPartCreator, createRenderer} from "./mock";
-import {toggleInlineFormat} from "../../src/editor/operations";
+import { createPartCreator, createRenderer } from "./mock";
+import { toggleInlineFormat } from "../../src/editor/operations";
 
-const SERIALIZED_NEWLINE = {"text": "\n", "type": "newline"};
+const SERIALIZED_NEWLINE = { "text": "\n", "type": "newline" };
 
 describe('editor/operations: formatting operations', () => {
     describe('toggleInlineFormat', () => {
@@ -33,9 +33,9 @@ describe('editor/operations: formatting operations', () => {
                 model.positionForOffset(11, false));  // around "world"
 
             expect(range.parts[0].text).toBe("world");
-            expect(model.serializeParts()).toEqual([{"text": "hello world!", "type": "plain"}]);
+            expect(model.serializeParts()).toEqual([{ "text": "hello world!", "type": "plain" }]);
             toggleInlineFormat(range, "_");
-            expect(model.serializeParts()).toEqual([{"text": "hello _world_!", "type": "plain"}]);
+            expect(model.serializeParts()).toEqual([{ "text": "hello _world_!", "type": "plain" }]);
         });
 
         it('works for parts of words', () => {
@@ -49,9 +49,9 @@ describe('editor/operations: formatting operations', () => {
                 model.positionForOffset(10, false));  // around "orl"
 
             expect(range.parts[0].text).toBe("orl");
-            expect(model.serializeParts()).toEqual([{"text": "hello world!", "type": "plain"}]);
+            expect(model.serializeParts()).toEqual([{ "text": "hello world!", "type": "plain" }]);
             toggleInlineFormat(range, "*");
-            expect(model.serializeParts()).toEqual([{"text": "hello w*orl*d!", "type": "plain"}]);
+            expect(model.serializeParts()).toEqual([{ "text": "hello w*orl*d!", "type": "plain" }]);
         });
 
         it('works for around pills', () => {
@@ -68,15 +68,15 @@ describe('editor/operations: formatting operations', () => {
 
             expect(range.parts.map(p => p.text).join("")).toBe("there @room, how are you");
             expect(model.serializeParts()).toEqual([
-                {"text": "hello there ", "type": "plain"},
-                {"text": "@room", "type": "at-room-pill"},
-                {"text": ", how are you doing?", "type": "plain"},
+                { "text": "hello there ", "type": "plain" },
+                { "text": "@room", "type": "at-room-pill" },
+                { "text": ", how are you doing?", "type": "plain" },
             ]);
             toggleInlineFormat(range, "_");
             expect(model.serializeParts()).toEqual([
-                {"text": "hello _there ", "type": "plain"},
-                {"text": "@room", "type": "at-room-pill"},
-                {"text": ", how are you_ doing?", "type": "plain"},
+                { "text": "hello _there ", "type": "plain" },
+                { "text": "@room", "type": "at-room-pill" },
+                { "text": ", how are you_ doing?", "type": "plain" },
             ]);
         });
 
@@ -94,15 +94,15 @@ describe('editor/operations: formatting operations', () => {
 
             expect(range.parts.map(p => p.text).join("")).toBe("world,\nhow");
             expect(model.serializeParts()).toEqual([
-                {"text": "hello world,", "type": "plain"},
+                { "text": "hello world,", "type": "plain" },
                 SERIALIZED_NEWLINE,
-                {"text": "how are you doing?", "type": "plain"},
+                { "text": "how are you doing?", "type": "plain" },
             ]);
             toggleInlineFormat(range, "**");
             expect(model.serializeParts()).toEqual([
-                {"text": "hello **world,", "type": "plain"},
+                { "text": "hello **world,", "type": "plain" },
                 SERIALIZED_NEWLINE,
-                {"text": "how** are you doing?", "type": "plain"},
+                { "text": "how** are you doing?", "type": "plain" },
             ]);
         });
 
@@ -125,9 +125,9 @@ describe('editor/operations: formatting operations', () => {
             expect(model.serializeParts()).toEqual([
                 SERIALIZED_NEWLINE,
                 SERIALIZED_NEWLINE,
-                {"text": "hello world,", "type": "plain"},
+                { "text": "hello world,", "type": "plain" },
                 SERIALIZED_NEWLINE,
-                {"text": "how are you doing?", "type": "plain"},
+                { "text": "how are you doing?", "type": "plain" },
                 SERIALIZED_NEWLINE,
                 SERIALIZED_NEWLINE,
             ]);
@@ -135,9 +135,9 @@ describe('editor/operations: formatting operations', () => {
             expect(model.serializeParts()).toEqual([
                 SERIALIZED_NEWLINE,
                 SERIALIZED_NEWLINE,
-                {"text": "**hello world,", "type": "plain"},
+                { "text": "**hello world,", "type": "plain" },
                 SERIALIZED_NEWLINE,
-                {"text": "how are you doing?**", "type": "plain"},
+                { "text": "how are you doing?**", "type": "plain" },
                 SERIALIZED_NEWLINE,
                 SERIALIZED_NEWLINE,
             ]);
@@ -158,32 +158,32 @@ describe('editor/operations: formatting operations', () => {
             let range = model.startRange(model.positionForOffset(0, true), model.getPositionAtEnd()); // select-all
 
             expect(model.serializeParts()).toEqual([
-                {"text": "hello world,", "type": "plain"},
+                { "text": "hello world,", "type": "plain" },
                 SERIALIZED_NEWLINE,
-                {"text": "how are you doing?", "type": "plain"},
+                { "text": "how are you doing?", "type": "plain" },
                 SERIALIZED_NEWLINE,
                 SERIALIZED_NEWLINE,
-                {"text": "new paragraph", "type": "plain"},
+                { "text": "new paragraph", "type": "plain" },
             ]);
             toggleInlineFormat(range, "__");
             expect(model.serializeParts()).toEqual([
-                {"text": "__hello world,", "type": "plain"},
+                { "text": "__hello world,", "type": "plain" },
                 SERIALIZED_NEWLINE,
-                {"text": "how are you doing?__", "type": "plain"},
+                { "text": "how are you doing?__", "type": "plain" },
                 SERIALIZED_NEWLINE,
                 SERIALIZED_NEWLINE,
-                {"text": "__new paragraph__", "type": "plain"},
+                { "text": "__new paragraph__", "type": "plain" },
             ]);
             range = model.startRange(model.positionForOffset(0, true), model.getPositionAtEnd()); // select-all
             console.log("RANGE", range.parts);
             toggleInlineFormat(range, "__");
             expect(model.serializeParts()).toEqual([
-                {"text": "hello world,", "type": "plain"},
+                { "text": "hello world,", "type": "plain" },
                 SERIALIZED_NEWLINE,
-                {"text": "how are you doing?", "type": "plain"},
+                { "text": "how are you doing?", "type": "plain" },
                 SERIALIZED_NEWLINE,
                 SERIALIZED_NEWLINE,
-                {"text": "new paragraph", "type": "plain"},
+                { "text": "new paragraph", "type": "plain" },
             ]);
         });
     });

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export {default as FixedDistributor} from "./distributors/fixed";
-export {default as PercentageDistributor} from "./distributors/percentage";
-export {default as CollapseDistributor} from "./distributors/collapse";
-export {default as Resizer} from "./resizer";
+export { default as FixedDistributor } from "./distributors/fixed";
+export { default as PercentageDistributor } from "./distributors/percentage";
+export { default as CollapseDistributor } from "./distributors/collapse";
+export { default as Resizer } from "./resizer";

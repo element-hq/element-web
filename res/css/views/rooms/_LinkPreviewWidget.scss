@@ -33,38 +33,29 @@ limitations under the License.
 .mx_LinkPreviewWidget_caption {
     margin-left: 15px;
     flex: 1 1 auto;
+    overflow-x: hidden; // cause it to wrap rather than clip
 }
 
 .mx_LinkPreviewWidget_title {
-    display: inline;
     font-weight: bold;
     white-space: normal;
-}
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 
-.mx_LinkPreviewWidget_siteName {
-    display: inline;
+    .mx_LinkPreviewWidget_siteName {
+        font-weight: normal;
+    }
 }
 
 .mx_LinkPreviewWidget_description {
     margin-top: 8px;
     white-space: normal;
     word-wrap: break-word;
-}
-
-.mx_LinkPreviewWidget_cancel {
-    cursor: pointer;
-    width: 18px;
-    height: 18px;
-
-    img {
-        flex: 0 0 40px;
-        visibility: hidden;
-    }
-}
-
-.mx_LinkPreviewWidget:hover .mx_LinkPreviewWidget_cancel img,
-.mx_LinkPreviewWidget_cancel.focus-visible:focus img {
-    visibility: visible;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 
 .mx_MatrixChat_useCompactLayout {

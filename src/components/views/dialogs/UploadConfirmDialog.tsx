@@ -16,11 +16,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import filesize from "filesize";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { getBlobSafeMimeType } from '../../../utils/blobs';
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
 
 interface IProps {
     file: File;
@@ -36,7 +37,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
 
     static defaultProps = {
         totalFiles: 1,
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -56,20 +57,17 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
 
     private onCancelClick = () => {
         this.props.onFinished(false);
-    }
+    };
 
     private onUploadClick = () => {
         this.props.onFinished(true);
-    }
+    };
 
     private onUploadAllClick = () => {
         this.props.onFinished(true, true);
-    }
+    };
 
     render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
         let title;
         if (this.props.totalFiles > 1 && this.props.currentIndex !== undefined) {
             title = _t(

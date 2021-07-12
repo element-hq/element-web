@@ -16,7 +16,7 @@ limitations under the License.
 
 import FixedDistributor from "./fixed";
 import ResizeItem from "../item";
-import Resizer, {IConfig} from "../resizer";
+import Resizer, { IConfig } from "../resizer";
 import Sizer from "../sizer";
 
 export interface ICollapseConfig extends IConfig {

@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from '../MatrixClientPeg';
-import {uniq} from "lodash";
-import {Room} from "matrix-js-sdk/src/models/room";
-import {Event} from "matrix-js-sdk/src/models/event";
-import {MatrixClient} from "matrix-js-sdk/src/client";
+import { uniq } from "lodash";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+
+import { MatrixClientPeg } from '../MatrixClientPeg';
 
 /**
  * Class that takes a Matrix Client and flips the m.direct map
@@ -30,15 +30,13 @@ import {MatrixClient} from "matrix-js-sdk/src/client";
 export default class DMRoomMap {
     private static sharedInstance: DMRoomMap;
 
-    private matrixClient: MatrixClient;
     // TODO: convert these to maps
     private roomToUser: {[key: string]: string} = null;
     private userToRooms: {[key: string]: string[]} = null;
     private hasSentOutPatchDirectAccountDataPatch: boolean;
-    private mDirectEvent: Event;
+    private mDirectEvent: object;
 
-    constructor(matrixClient) {
-        this.matrixClient = matrixClient;
+    constructor(private readonly matrixClient: MatrixClient) {
         // see onAccountData
         this.hasSentOutPatchDirectAccountDataPatch = false;
 
@@ -88,7 +86,7 @@ export default class DMRoomMap {
             this.userToRooms = null;
             this.roomToUser = null;
         }
-    }
+    };
 
     /**
      * some client bug somewhere is causing some DMs to be marked
@@ -105,7 +103,7 @@ export default class DMRoomMap {
                 if (room) {
                     const userId = room.guessDMUserId();
                     if (userId && userId !== myUserId) {
-                        return {userId, roomId};
+                        return { userId, roomId };
                     }
                 }
             }).filter((ids) => !!ids); //filter out
@@ -118,7 +116,7 @@ export default class DMRoomMap {
                 return !guessedUserIdsThatChanged
                     .some((ids) => ids.roomId === roomId);
             });
-            guessedUserIdsThatChanged.forEach(({userId, roomId}) => {
+            guessedUserIdsThatChanged.forEach(({ userId, roomId }) => {
                 const roomIds = userToRooms[userId];
                 if (!roomIds) {
                     userToRooms[userId] = [roomId];
@@ -183,7 +181,7 @@ export default class DMRoomMap {
     public getUniqueRoomsWithIndividuals(): {[userId: string]: Room} {
         if (!this.roomToUser) return {}; // No rooms means no map.
         return Object.keys(this.roomToUser)
-            .map(r => ({userId: this.getUserIdForRoomId(r), room: this.matrixClient.getRoom(r)}))
+            .map(r => ({ userId: this.getUserIdForRoomId(r), room: this.matrixClient.getRoom(r) }))
             .filter(r => r.userId && r.room && r.room.getInvitedAndJoinedMemberCount() === 2)
             .reduce((obj, r) => (obj[r.userId] = r.room) && obj, {});
     }

@@ -20,9 +20,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
-import { UserAddressType } from '../../../UserAddress.js';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { UserAddressType } from '../../../UserAddress';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 @replaceableComponent("views.elements.AddressTile")
 export default class AddressTile extends React.Component {
@@ -53,7 +53,6 @@ export default class AddressTile extends React.Component {
         }
 
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         const nameClasses = classNames({
             "mx_AddressTile_name": true,
@@ -124,7 +123,7 @@ export default class AddressTile extends React.Component {
         if (this.props.canDismiss) {
             dismiss = (
                 <div className="mx_AddressTile_dismiss" onClick={this.props.onDismissed} >
-                    <TintableSvg src={require("../../../../res/img/icon-address-delete.svg")} width="9" height="9" />
+                    <img src={require("../../../../res/img/icon-address-delete.svg")} width="9" height="9" />
                 </div>
             );
         }

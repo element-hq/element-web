@@ -15,16 +15,18 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t, _td} from "../../../../../languageHandler";
-import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
-import * as sdk from "../../../../..";
+import { _t, _td } from "../../../../../languageHandler";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
-import {EventType} from "matrix-js-sdk/src/@types/event";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomState } from "matrix-js-sdk/src/models/room-state";
+import { compare } from "../../../../../utils/strings";
+import ErrorDialog from '../../../dialogs/ErrorDialog';
+import PowerSelector from "../../../elements/PowerSelector";
 
 const plEventsToLabels = {
     // These will be translated for us later.
@@ -44,18 +46,18 @@ const plEventsToLabels = {
 
 const plEventsToShow = {
     // If an event is listed here, it will be shown in the PL settings. Defaults will be calculated.
-    [EventType.RoomAvatar]: {isState: true},
-    [EventType.RoomName]: {isState: true},
-    [EventType.RoomCanonicalAlias]: {isState: true},
-    [EventType.RoomHistoryVisibility]: {isState: true},
-    [EventType.RoomPowerLevels]: {isState: true},
-    [EventType.RoomTopic]: {isState: true},
-    [EventType.RoomTombstone]: {isState: true},
-    [EventType.RoomEncryption]: {isState: true},
-    [EventType.RoomServerAcl]: {isState: true},
+    [EventType.RoomAvatar]: { isState: true },
+    [EventType.RoomName]: { isState: true },
+    [EventType.RoomCanonicalAlias]: { isState: true },
+    [EventType.RoomHistoryVisibility]: { isState: true },
+    [EventType.RoomPowerLevels]: { isState: true },
+    [EventType.RoomTopic]: { isState: true },
+    [EventType.RoomTombstone]: { isState: true },
+    [EventType.RoomEncryption]: { isState: true },
+    [EventType.RoomServerAcl]: { isState: true },
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
-    "im.vector.modular.widgets": {isState: true},
+    "im.vector.modular.widgets": { isState: true },
 };
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
@@ -75,7 +77,6 @@ interface IBannedUserProps {
 export class BannedUser extends React.Component<IBannedUserProps> {
     private onUnbanClick = (e) => {
         MatrixClientPeg.get().unban(this.props.member.roomId, this.props.member.userId).catch((err) => {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to unban: " + err);
             Modal.createTrackedDialog('Failed to unban', '', ErrorDialog, {
                 title: _t('Error'),
@@ -102,7 +103,7 @@ export class BannedUser extends React.Component<IBannedUserProps> {
         return (
             <li>
                 {unbanButton}
-                <span title={_t("Banned by %(displayName)s", {displayName: this.props.by})}>
+                <span title={_t("Banned by %(displayName)s", { displayName: this.props.by })}>
                     <strong>{ this.props.member.name }</strong> {userId}
                     {this.props.reason ? " " + _t('Reason') + ": " + this.props.reason : ""}
                 </span>
@@ -175,7 +176,6 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         client.sendStateEvent(this.props.roomId, "m.room.power_levels", plContent).catch(e => {
             console.error(e);
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Power level requirement change failed', '', ErrorDialog, {
                 title: _t('Error changing power level requirement'),
                 description: _t(
@@ -202,7 +202,6 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         client.sendStateEvent(this.props.roomId, "m.room.power_levels", plContent).catch(e => {
             console.error(e);
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Power level change failed', '', ErrorDialog, {
                 title: _t('Error changing power level'),
                 description: _t(
@@ -214,8 +213,6 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
     };
 
     render() {
-        const PowerSelector = sdk.getComponent('elements.PowerSelector');
-
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');
@@ -283,6 +280,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             const mutedUsers = [];
 
             Object.keys(userLevels).forEach((user) => {
+                if (!Number.isInteger(userLevels[user])) { return; }
                 const canChange = userLevels[user] < currentUserLevel && canChangeLevels;
                 if (userLevels[user] > defaultUserLevel) { // privileged
                     privilegedUsers.push(
@@ -312,7 +310,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             // comparator for sorting PL users lexicographically on PL descending, MXID ascending. (case-insensitive)
             const comparator = (a, b) => {
                 const plDiff = userLevels[b.key] - userLevels[a.key];
-                return plDiff !== 0 ? plDiff : a.key.toLocaleLowerCase().localeCompare(b.key.toLocaleLowerCase());
+                return plDiff !== 0 ? plDiff : compare(a.key.toLocaleLowerCase(), b.key.toLocaleLowerCase());
             };
 
             privilegedUsers.sort(comparator);
@@ -393,7 +391,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             if (label) {
                 label = _t(label);
             } else {
-                label = _t("Send %(eventType)s events", {eventType});
+                label = _t("Send %(eventType)s events", { eventType });
             }
             return (
                 <div className="" key={eventType}>

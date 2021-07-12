@@ -21,7 +21,7 @@ import "../skinned-sdk"; // Must be first for skinning to work
 import SpaceStore, {
     UPDATE_INVITED_SPACES,
     UPDATE_SELECTED_SPACE,
-    UPDATE_TOP_LEVEL_SPACES
+    UPDATE_TOP_LEVEL_SPACES,
 } from "../../src/stores/SpaceStore";
 import { resetAsyncStoreWithClient, setupAsyncStoreWithClient } from "../utils/test-utils";
 import { mkEvent, mkStubRoom, stubClient } from "../test-utils";
@@ -123,8 +123,15 @@ describe("SpaceStore", () => {
         jest.runAllTimers();
         client.getVisibleRooms.mockReturnValue(rooms = []);
         getValue.mockImplementation(settingName => {
-            if (settingName === "feature_spaces") {
-                return true;
+            switch (settingName) {
+                case "feature_spaces":
+                    return true;
+                case "feature_spaces.all_rooms":
+                    return true;
+                case "feature_spaces.space_member_dms":
+                    return true;
+                case "feature_spaces.space_dm_badges":
+                    return false;
             }
         });
     });

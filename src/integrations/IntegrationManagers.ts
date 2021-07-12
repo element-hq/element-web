@@ -14,20 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import type {MatrixClient} from "matrix-js-sdk/src/client";
-import type {MatrixEvent} from "matrix-js-sdk/src/models/event";
-import type {Room} from "matrix-js-sdk/src/models/room";
+import type { MatrixClient } from "matrix-js-sdk/src/client";
+import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import type { Room } from "matrix-js-sdk/src/models/room";
 
 import SdkConfig from '../SdkConfig';
 import Modal from '../Modal';
-import {IntegrationManagerInstance, Kind} from "./IntegrationManagerInstance";
+import { IntegrationManagerInstance, Kind } from "./IntegrationManagerInstance";
 import IntegrationsImpossibleDialog from "../components/views/dialogs/IntegrationsImpossibleDialog";
 import TabbedIntegrationManagerDialog from "../components/views/dialogs/TabbedIntegrationManagerDialog";
 import IntegrationsDisabledDialog from "../components/views/dialogs/IntegrationsDisabledDialog";
 import WidgetUtils from "../utils/WidgetUtils";
-import {MatrixClientPeg} from "../MatrixClientPeg";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
 import url from 'url';
+import { compare } from "../utils/strings";
 
 const KIND_PREFERENCE = [
     // Ordered: first is most preferred, last is least preferred.
@@ -152,7 +153,7 @@ export class IntegrationManagers {
 
             if (kind === Kind.Account) {
                 // Order by state_keys (IDs)
-                managers.sort((a, b) => a.id.localeCompare(b.id));
+                managers.sort((a, b) => compare(a.id, b.id));
             }
 
             ordered.push(...managers);
@@ -186,7 +187,7 @@ export class IntegrationManagers {
 
         Modal.createTrackedDialog(
             'Tabbed Integration Manager', '', TabbedIntegrationManagerDialog,
-            {room, screen, integrationId}, 'mx_TabbedIntegrationManagerDialog',
+            { room, screen, integrationId }, 'mx_TabbedIntegrationManagerDialog',
         );
     }
 

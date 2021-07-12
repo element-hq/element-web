@@ -55,7 +55,7 @@ limitations under the License.
 
 import React from 'react';
 
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { MatrixClientPeg } from './MatrixClientPeg';
 import PlatformPeg from './PlatformPeg';
 import Modal from './Modal';
 import { _t } from './languageHandler';
@@ -63,11 +63,11 @@ import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
 import SettingsStore from './settings/SettingsStore';
-import {Jitsi} from "./widgets/Jitsi";
-import {WidgetType} from "./widgets/WidgetType";
-import {SettingLevel} from "./settings/SettingLevel";
+import { Jitsi } from "./widgets/Jitsi";
+import { WidgetType } from "./widgets/WidgetType";
+import { SettingLevel } from "./settings/SettingLevel";
 import { ActionPayload } from "./dispatcher/payloads";
-import {base32} from "rfc4648";
+import { base32 } from "rfc4648";
 
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
@@ -77,10 +77,10 @@ import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
 import { MatrixCall, CallErrorCode, CallState, CallEvent, CallParty, CallType } from "matrix-js-sdk/src/webrtc/call";
 import Analytics from './Analytics';
 import CountlyAnalytics from "./CountlyAnalytics";
-import {UIFeature} from "./settings/UIFeature";
+import { UIFeature } from "./settings/UIFeature";
 import { CallError } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from 'matrix-js-sdk/src/logger';
-import DesktopCapturerSourcePicker from "./components/views/elements/DesktopCapturerSourcePicker"
+import DesktopCapturerSourcePicker from "./components/views/elements/DesktopCapturerSourcePicker";
 import { Action } from './dispatcher/actions';
 import VoipUserMapper from './VoipUserMapper';
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
@@ -99,7 +99,7 @@ const CHECK_PROTOCOLS_ATTEMPTS = 3;
 // (and store the ID of their native room)
 export const VIRTUAL_ROOM_EVENT_TYPE = 'im.vector.is_virtual_room';
 
-enum AudioID {
+export enum AudioID {
     Ring = 'ringAudio',
     Ringback = 'ringbackAudio',
     CallEnd = 'callendAudio',
@@ -124,9 +124,9 @@ interface ThirdpartyLookupResponseFields {
 }
 
 interface ThirdpartyLookupResponse {
-    userid: string,
-    protocol: string,
-    fields: ThirdpartyLookupResponseFields,
+    userid: string;
+    protocol: string;
+    fields: ThirdpartyLookupResponseFields;
 }
 
 // Unlike 'CallType' in js-sdk, this one includes screen sharing
@@ -166,7 +166,7 @@ export default class CallHandler extends EventEmitter {
 
     static sharedInstance() {
         if (!window.mxCallHandler) {
-            window.mxCallHandler = new CallHandler()
+            window.mxCallHandler = new CallHandler();
         }
 
         return window.mxCallHandler;
@@ -185,7 +185,7 @@ export default class CallHandler extends EventEmitter {
             const nativeUser = this.assertedIdentityNativeUsers[call.callId];
             if (nativeUser) {
                 const room = findDMForUser(MatrixClientPeg.get(), nativeUser);
-                if (room) return room.roomId
+                if (room) return room.roomId;
             }
         }
 
@@ -238,7 +238,7 @@ export default class CallHandler extends EventEmitter {
                 this.supportsPstnProtocol = null;
             }
 
-            dis.dispatch({action: Action.PstnSupportUpdated});
+            dis.dispatch({ action: Action.PstnSupportUpdated });
 
             if (protocols[PROTOCOL_SIP_NATIVE] !== undefined && protocols[PROTOCOL_SIP_VIRTUAL] !== undefined) {
                 this.supportsSipNativeVirtual = Boolean(
@@ -246,7 +246,7 @@ export default class CallHandler extends EventEmitter {
                 );
             }
 
-            dis.dispatch({action: Action.VirtualRoomSupportUpdated});
+            dis.dispatch({ action: Action.VirtualRoomSupportUpdated });
         } catch (e) {
             if (maxTries === 1) {
                 console.log("Failed to check for protocol support and no retries remain: assuming no support", e);
@@ -264,7 +264,7 @@ export default class CallHandler extends EventEmitter {
     }
 
     public getSupportsVirtualRooms() {
-        return this.supportsPstnProtocol;
+        return this.supportsSipNativeVirtual;
     }
 
     public pstnLookup(phoneNumber: string): Promise<ThirdpartyLookupResponse[]> {
@@ -299,7 +299,7 @@ export default class CallHandler extends EventEmitter {
             action: 'incoming_call',
             call: call,
         }, true);
-    }
+    };
 
     getCallForRoom(roomId: string): MatrixCall {
         return this.calls.get(roomId) || null;
@@ -462,6 +462,9 @@ export default class CallHandler extends EventEmitter {
                         if (call.hangupReason === CallErrorCode.UserHangup) {
                             title = _t("Call Declined");
                             description = _t("The other party declined the call.");
+                        } else if (call.hangupReason === CallErrorCode.UserBusy) {
+                            title = _t("User Busy");
+                            description = _t("The user you called is busy.");
                         } else if (call.hangupReason === CallErrorCode.InviteTimeout) {
                             title = _t("Call Failed");
                             // XXX: full stop appended as some relic here, but these
@@ -518,7 +521,9 @@ export default class CallHandler extends EventEmitter {
             let newNativeAssertedIdentity = newAssertedIdentity;
             if (newAssertedIdentity) {
                 const response = await this.sipNativeLookup(newAssertedIdentity);
-                if (response.length) newNativeAssertedIdentity = response[0].userid;
+                if (response.length && response[0].fields.lookup_success) {
+                    newNativeAssertedIdentity = response[0].userid;
+                }
             }
             console.log(`Asserted identity ${newAssertedIdentity} mapped to ${newNativeAssertedIdentity}`);
 
@@ -537,6 +542,7 @@ export default class CallHandler extends EventEmitter {
                 if (newMappedRoomId !== mappedRoomId) {
                     this.removeCallForRoom(mappedRoomId);
                     mappedRoomId = newMappedRoomId;
+                    console.log("Moving call to room " + mappedRoomId);
                     this.calls.set(mappedRoomId, call);
                     this.emit(CallHandlerEvent.CallChangeRoom, call);
                 }
@@ -602,6 +608,7 @@ export default class CallHandler extends EventEmitter {
     }
 
     private removeCallForRoom(roomId: string) {
+        console.log("Removing call for room ", roomId);
         this.calls.delete(roomId);
         this.emit(CallHandlerEvent.CallsChanged, this.calls);
     }
@@ -675,6 +682,7 @@ export default class CallHandler extends EventEmitter {
         console.log("Current turn creds expire in " + timeUntilTurnCresExpire + " ms");
         const call = MatrixClientPeg.get().createCall(mappedRoomId);
 
+        console.log("Adding call for room ", roomId);
         this.calls.set(roomId, call);
         this.emit(CallHandlerEvent.CallsChanged, this.calls);
         if (transferee) {
@@ -703,7 +711,7 @@ export default class CallHandler extends EventEmitter {
 
             call.placeScreenSharingCall(
                 async (): Promise<DesktopCapturerSource> => {
-                    const {finished} = Modal.createDialog(DesktopCapturerSourcePicker);
+                    const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
                     const [source] = await finished;
                     return source;
                 },
@@ -799,12 +807,16 @@ export default class CallHandler extends EventEmitter {
 
                     const mappedRoomId = CallHandler.sharedInstance().roomIdForCall(call);
                     if (this.getCallForRoom(mappedRoomId)) {
-                        // ignore multiple incoming calls to the same room
+                        console.log(
+                            "Got incoming call for room " + mappedRoomId +
+                            " but there's already a call for this room: ignoring",
+                        );
                         return;
                     }
 
                     Analytics.trackEvent('voip', 'receiveCall', 'type', call.type);
-                    this.calls.set(mappedRoomId, call)
+                    console.log("Adding call for room ", mappedRoomId);
+                    this.calls.set(mappedRoomId, call);
                     this.emit(CallHandlerEvent.CallsChanged, this.calls);
                     this.setCallListeners(call);
 
@@ -856,7 +868,41 @@ export default class CallHandler extends EventEmitter {
                 });
                 break;
             }
+            case Action.DialNumber:
+                this.dialNumber(payload.number);
+                break;
         }
+    };
+
+    private async dialNumber(number: string) {
+        const results = await this.pstnLookup(number);
+        if (!results || results.length === 0 || !results[0].userid) {
+            Modal.createTrackedDialog('', '', ErrorDialog, {
+                title: _t("Unable to look up phone number"),
+                description: _t("There was an error looking up the phone number"),
+            });
+            return;
+        }
+        const userId = results[0].userid;
+
+        // Now check to see if this is a virtual user, in which case we should find the
+        // native user
+        let nativeUserId;
+        if (this.getSupportsVirtualRooms()) {
+            const nativeLookupResults = await this.sipNativeLookup(userId);
+            const lookupSuccess = nativeLookupResults.length > 0 && nativeLookupResults[0].fields.lookup_success;
+            nativeUserId = lookupSuccess ? nativeLookupResults[0].userid : userId;
+            console.log("Looked up " + number + " to " + userId + " and mapped to native user " + nativeUserId);
+        } else {
+            nativeUserId = userId;
+        }
+
+        const roomId = await ensureDMExists(MatrixClientPeg.get(), nativeUserId);
+
+        dis.dispatch({
+            action: 'view_room',
+            room_id: roomId,
+        });
     }
 
     setActiveCallRoomId(activeCallRoomId: string) {
@@ -920,7 +966,7 @@ export default class CallHandler extends EventEmitter {
             confId = 'Jitsi' + random;
         }
 
-        let widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl({auth: jitsiAuth});
+        let widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl({ auth: jitsiAuth });
 
         // TODO: Remove URL hacks when the mobile clients eventually support v2 widgets
         const parsedUrl = new URL(widgetUrl);

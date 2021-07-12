@@ -17,14 +17,14 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from "prop-types";
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 
-const Spinner = ({w = 32, h = 32, message}) => (
+const Spinner = ({ w = 32, h = 32, message }) => (
     <div className="mx_Spinner">
         { message && <React.Fragment><div className="mx_Spinner_Msg">{ message }</div>&nbsp;</React.Fragment> }
         <div
             className="mx_Spinner_icon"
-            style={{width: w, height: h}}
+            style={{ width: w, height: h }}
             aria-label={_t("Loading...")}
         ></div>
     </div>

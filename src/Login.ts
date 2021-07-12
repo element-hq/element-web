@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 // @ts-ignore - XXX: tsc doesn't like this: our js-sdk imports are complex so this isn't surprising
-import {createClient} from "matrix-js-sdk/src/matrix";
+import { createClient } from "matrix-js-sdk/src/matrix";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { IMatrixClientCreds } from "./MatrixClientPeg";
 import SecurityCustomisations from "./customisations/Security";
@@ -31,12 +31,12 @@ interface IPasswordFlow {
 }
 
 export enum IdentityProviderBrand {
-    Gitlab = "org.matrix.gitlab",
-    Github = "org.matrix.github",
-    Apple = "org.matrix.apple",
-    Google = "org.matrix.google",
-    Facebook = "org.matrix.facebook",
-    Twitter = "org.matrix.twitter",
+    Gitlab = "gitlab",
+    Github = "github",
+    Apple = "apple",
+    Google = "google",
+    Facebook = "facebook",
+    Twitter = "twitter",
 }
 
 export interface IIdentityProvider {
@@ -48,7 +48,8 @@ export interface IIdentityProvider {
 
 export interface ISSOFlow {
     type: "m.login.sso" | "m.login.cas";
-    "org.matrix.msc2858.identity_providers": IIdentityProvider[]; // Unstable prefix for MSC2858
+    // eslint-disable-next-line camelcase
+    identity_providers: IIdentityProvider[];
 }
 
 export type LoginFlow = ISSOFlow | IPasswordFlow;
@@ -188,7 +189,6 @@ export default class Login {
         });
     }
 }
-
 
 /**
  * Send a login request to the given server, and format the response

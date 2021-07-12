@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {useState} from "react";
+import { useState } from "react";
 
 // Hook to simplify managing state of arrays of a common type
 export const useStateArray = <T>(initialSize: number, initialState: T | T[]): [T[], (i: number, v: T) => void] => {
@@ -25,5 +25,5 @@ export const useStateArray = <T>(initialSize: number, initialState: T | T[]): [T
         const copy = [...data];
         copy[index] = value;
         return copy;
-    })]
+    })];
 };

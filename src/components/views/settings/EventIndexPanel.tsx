@@ -18,15 +18,15 @@ import React from 'react';
 
 import { _t } from '../../../languageHandler';
 import SdkConfig from "../../../SdkConfig";
-import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
-import {formatBytes, formatCountLong} from "../../../utils/FormattingUtils";
+import { formatBytes, formatCountLong } from "../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
-import {SettingLevel} from "../../../settings/SettingLevel";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { SettingLevel } from "../../../settings/SettingLevel";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SeshatResetDialog from '../dialogs/SeshatResetDialog';
+import InlineSpinner from '../elements/InlineSpinner';
 
 interface IState {
     enabling: boolean;
@@ -118,7 +118,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                 onFinished: () => {},
             }, null, /* priority = */ false, /* static = */ true,
         );
-    }
+    };
 
     private onEnable = async () => {
         this.setState({
@@ -130,7 +130,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         await EventIndexPeg.get().startCrawler();
         await SettingsStore.setValue('enableEventIndexing', null, SettingLevel.DEVICE, true);
         await this.updateState();
-    }
+    };
 
     private confirmEventStoreReset = () => {
         const { close } = Modal.createDialog(SeshatResetDialog, {
@@ -143,11 +143,10 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                 }
             },
         });
-    }
+    };
 
     render() {
         let eventIndexingSettings = null;
-        const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
         const brand = SdkConfig.get().brand;
 
         if (EventIndexPeg.get() !== null) {
