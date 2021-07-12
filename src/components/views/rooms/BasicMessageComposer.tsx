@@ -507,7 +507,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             handled = true;
         } else if (event.key === Key.BACKSPACE || event.key === Key.DELETE) {
             this.formatBarRef.current.hide();
-            handled = this.fakeDeletion(event.key === Key.BACKSPACE ? "deleteContentBackward" : "deleteContentForward");
+            handled = this.fakeDeletion(event.key === Key.BACKSPACE);
         }
 
         if (handled) {
@@ -523,7 +523,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
      * @param direction in which to delete
      * @returns handled
      */
-    private fakeDeletion(direction: "deleteContentForward" | "deleteContentBackward" ): boolean {
+    private fakeDeletion(backward: boolean): boolean {
         const selection = document.getSelection();
         // Use the default handling for ranges
         if (selection.type === "Range") return false;
@@ -532,10 +532,10 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         const { caret, text } = getCaretOffsetAndText(this.editorRef.current, selection);
 
         // Do the deletion itself
-        if (direction === "deleteContentBackward") caret.offset--;
+        if (backward) caret.offset--;
         const newText = text.slice(0, caret.offset) + text.slice(caret.offset + 1);
 
-        this.props.model.update(newText, direction, caret);
+        this.props.model.update(newText, backward ? "deleteContentBackward" : "deleteContentForward", caret);
         return true;
     }
 
