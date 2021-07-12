@@ -240,7 +240,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
         this.scheduledUpdate.mark();
     };
 
-    private onRoomViewStoreUpdate = (payload) => {
+    private onRoomViewStoreUpdate = () => {
         if (RoomViewStore.getRoomId() === this.state.roomId) return;
 
         const roomId = RoomViewStore.getRoomId();
