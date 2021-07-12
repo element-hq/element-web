@@ -269,6 +269,9 @@ abstract class PillPart extends BasePart implements IPillPart {
         if (node.className !== this.className) {
             node.className = this.className;
         }
+        if (node.onclick !== this.onClick) {
+            node.onclick = this.onClick;
+        }
         this.setAvatar(node);
     }
 
