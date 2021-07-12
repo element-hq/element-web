@@ -18,22 +18,22 @@ limitations under the License.
 */
 
 import { ICreateClientOpts } from 'matrix-js-sdk/src/matrix';
-import {MatrixClient} from 'matrix-js-sdk/src/client';
-import {MemoryStore} from 'matrix-js-sdk/src/store/memory';
+import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { MemoryStore } from 'matrix-js-sdk/src/store/memory';
 import * as utils from 'matrix-js-sdk/src/utils';
-import {EventTimeline} from 'matrix-js-sdk/src/models/event-timeline';
-import {EventTimelineSet} from 'matrix-js-sdk/src/models/event-timeline-set';
+import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
+import { EventTimelineSet } from 'matrix-js-sdk/src/models/event-timeline-set';
 import * as sdk from './index';
 import createMatrixClient from './utils/createMatrixClient';
 import SettingsStore from './settings/SettingsStore';
 import MatrixActionCreators from './actions/MatrixActionCreators';
 import Modal from './Modal';
-import {verificationMethods} from 'matrix-js-sdk/src/crypto';
+import { verificationMethods } from 'matrix-js-sdk/src/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
 import { crossSigningCallbacks, tryToUnlockSecretStorageWithDehydrationKey } from './SecurityManager';
-import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
+import { SHOW_QR_CODE_METHOD } from "matrix-js-sdk/src/crypto/verification/QRCode";
 import SecurityCustomisations from "./customisations/Security";
 
 export interface IMatrixClientCreds {
@@ -219,6 +219,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
         } catch (e) {
             if (e && e.name === 'InvalidCryptoStoreError') {
                 // The js-sdk found a crypto DB too new for it to use
+                // FIXME: Using an import will result in test failures
                 const CryptoStoreTooNewDialog =
                     sdk.getComponent("views.dialogs.CryptoStoreTooNewDialog");
                 Modal.createDialog(CryptoStoreTooNewDialog);
@@ -261,7 +262,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
     }
 
     public getHomeserverName(): string {
-        const matches = /^@.+:(.+)$/.exec(this.matrixClient.credentials.userId);
+        const matches = /^@[^:]+:(.+)$/.exec(this.matrixClient.credentials.userId);
         if (matches === null || matches.length < 1) {
             throw new Error("Failed to derive homeserver name from user ID!");
         }
@@ -296,10 +297,11 @@ class _MatrixClientPeg implements IMatrixClientPeg {
         // These are always installed regardless of the labs flag so that
         // cross-signing features can toggle on without reloading and also be
         // accessed immediately after login.
-        const customisedCallbacks = {
-            getDehydrationKey: SecurityCustomisations.getDehydrationKey,
-        };
-        Object.assign(opts.cryptoCallbacks, crossSigningCallbacks, customisedCallbacks);
+        Object.assign(opts.cryptoCallbacks, crossSigningCallbacks);
+        if (SecurityCustomisations.getDehydrationKey) {
+            opts.cryptoCallbacks.getDehydrationKey =
+                SecurityCustomisations.getDehydrationKey;
+        }
 
         this.matrixClient = createMatrixClient(opts);
 

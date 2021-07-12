@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { arrayDiff, arrayHasDiff, arrayMerge, arrayUnion } from "./arrays";
+import { arrayDiff, arrayMerge, arrayUnion } from "./arrays";
 
 type ObjectExcluding<O extends {}, P extends (keyof O)[]> = {[k in Exclude<keyof O, P[number]>]: O[k]};
 
@@ -86,11 +86,14 @@ export function objectShallowClone<O extends {}>(a: O, propertyCloner?: (k: keyo
  * @returns True if there's a difference between the objects, false otherwise
  */
 export function objectHasDiff<O extends {}>(a: O, b: O): boolean {
+    if (a === b) return false;
     const aKeys = Object.keys(a);
     const bKeys = Object.keys(b);
-    if (arrayHasDiff(aKeys, bKeys)) return true;
-
+    if (aKeys.length !== bKeys.length) return true;
     const possibleChanges = arrayUnion(aKeys, bKeys);
+    // if the amalgamation of both sets of keys has the a different length to the inputs then there must be a change
+    if (possibleChanges.length !== aKeys.length) return true;
+
     return possibleChanges.some(k => a[k] !== b[k]);
 }
 
@@ -111,7 +114,7 @@ export function objectDiff<O extends {}>(a: O, b: O): Diff<keyof O> {
     const possibleChanges = arrayUnion(aKeys, bKeys);
     const changes = possibleChanges.filter(k => a[k] !== b[k]);
 
-    return {changed: changes, added: keyDiff.added, removed: keyDiff.removed};
+    return { changed: changes, added: keyDiff.added, removed: keyDiff.removed };
 }
 
 /**
@@ -137,4 +140,22 @@ export function objectKeyChanges<O extends {}>(a: O, b: O): (keyof O)[] {
  */
 export function objectClone<O extends {}>(obj: O): O {
     return JSON.parse(JSON.stringify(obj));
+}
+
+/**
+ * Converts a series of entries to an object.
+ * @param entries The entries to convert.
+ * @returns The converted object.
+ */
+// NOTE: Deprecated once we have Object.fromEntries() support.
+// @ts-ignore - return type is complaining about non-string keys, but we know better
+export function objectFromEntries<K, V>(entries: Iterable<[K, V]>): {[k: K]: V} {
+    const obj: {
+        // @ts-ignore - same as return type
+        [k: K]: V;} = {};
+    for (const e of entries) {
+        // @ts-ignore - same as return type
+        obj[e[0]] = e[1];
+    }
+    return obj;
 }

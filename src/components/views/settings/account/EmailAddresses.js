@@ -17,14 +17,15 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../../../languageHandler";
-import {MatrixClientPeg} from "../../../../MatrixClientPeg";
+import { _t } from "../../../../languageHandler";
+import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Field from "../../elements/Field";
 import AccessibleButton from "../../elements/AccessibleButton";
 import * as Email from "../../../../email";
 import AddThreepid from "../../../../AddThreepid";
 import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
+import { replaceableComponent } from "../../../../utils/replaceableComponent";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -56,14 +57,14 @@ export class ExistingEmailAddress extends React.Component {
         e.stopPropagation();
         e.preventDefault();
 
-        this.setState({verifyRemove: true});
+        this.setState({ verifyRemove: true });
     };
 
     _onDontRemove = (e) => {
         e.stopPropagation();
         e.preventDefault();
 
-        this.setState({verifyRemove: false});
+        this.setState({ verifyRemove: false });
     };
 
     _onActuallyRemove = (e) => {
@@ -87,14 +88,20 @@ export class ExistingEmailAddress extends React.Component {
             return (
                 <div className="mx_ExistingEmailAddress">
                     <span className="mx_ExistingEmailAddress_promptText">
-                        {_t("Remove %(email)s?", {email: this.props.email.address} )}
+                        {_t("Remove %(email)s?", { email: this.props.email.address } )}
                     </span>
-                    <AccessibleButton onClick={this._onActuallyRemove} kind="danger_sm"
-                                      className="mx_ExistingEmailAddress_confirmBtn">
+                    <AccessibleButton
+                        onClick={this._onActuallyRemove}
+                        kind="danger_sm"
+                        className="mx_ExistingEmailAddress_confirmBtn"
+                    >
                         {_t("Remove")}
                     </AccessibleButton>
-                    <AccessibleButton onClick={this._onDontRemove} kind="link_sm"
-                                      className="mx_ExistingEmailAddress_confirmBtn">
+                    <AccessibleButton
+                        onClick={this._onDontRemove}
+                        kind="link_sm"
+                        className="mx_ExistingEmailAddress_confirmBtn"
+                    >
                         {_t("Cancel")}
                     </AccessibleButton>
                 </div>
@@ -112,6 +119,7 @@ export class ExistingEmailAddress extends React.Component {
     }
 }
 
+@replaceableComponent("views.settings.account.EmailAddresses")
 export default class EmailAddresses extends React.Component {
     static propTypes = {
         emails: PropTypes.array.isRequired,
@@ -159,13 +167,13 @@ export default class EmailAddresses extends React.Component {
         }
 
         const task = new AddThreepid();
-        this.setState({verifying: true, continueDisabled: true, addTask: task});
+        this.setState({ verifying: true, continueDisabled: true, addTask: task });
 
         task.addEmailAddress(email).then(() => {
-            this.setState({continueDisabled: false});
+            this.setState({ continueDisabled: false });
         }).catch((err) => {
             console.error("Unable to add email address " + email + " " + err);
-            this.setState({verifying: false, continueDisabled: false, addTask: null});
+            this.setState({ verifying: false, continueDisabled: false, addTask: null });
             Modal.createTrackedDialog('Unable to add email address', '', ErrorDialog, {
                 title: _t("Unable to add email address"),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
@@ -177,22 +185,26 @@ export default class EmailAddresses extends React.Component {
         e.stopPropagation();
         e.preventDefault();
 
-        this.setState({continueDisabled: true});
-        this.state.addTask.checkEmailLinkClicked().then(() => {
-            const email = this.state.newEmailAddress;
+        this.setState({ continueDisabled: true });
+        this.state.addTask.checkEmailLinkClicked().then(([finished]) => {
+            let newEmailAddress = this.state.newEmailAddress;
+            if (finished) {
+                const email = this.state.newEmailAddress;
+                const emails = [
+                    ...this.props.emails,
+                    { address: email, medium: "email" },
+                ];
+                this.props.onEmailsChange(emails);
+                newEmailAddress = "";
+            }
             this.setState({
                 addTask: null,
                 continueDisabled: false,
                 verifying: false,
-                newEmailAddress: "",
+                newEmailAddress,
             });
-            const emails = [
-                ...this.props.emails,
-                { address: email, medium: "email" },
-            ];
-            this.props.onEmailsChange(emails);
         }).catch((err) => {
-            this.setState({continueDisabled: false});
+            this.setState({ continueDisabled: false });
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             if (err.errcode === 'M_THREEPID_AUTH_FAILED') {
                 Modal.createTrackedDialog("Email hasn't been verified yet", "", ErrorDialog, {
@@ -222,21 +234,28 @@ export default class EmailAddresses extends React.Component {
         );
         if (this.state.verifying) {
             addButton = (
-              <div>
-                  <div>{_t("We've sent you an email to verify your address. Please follow the instructions there and then click the button below.")}</div>
-                  <AccessibleButton onClick={this._onContinueClick} kind="primary"
-                                    disabled={this.state.continueDisabled}>
-                      {_t("Continue")}
-                  </AccessibleButton>
-              </div>
+                <div>
+                    <div>{_t("We've sent you an email to verify your address. Please follow the instructions there and then click the button below.")}</div>
+                    <AccessibleButton
+                        onClick={this._onContinueClick}
+                        kind="primary"
+                        disabled={this.state.continueDisabled}
+                    >
+                        {_t("Continue")}
+                    </AccessibleButton>
+                </div>
             );
         }
 
         return (
             <div className="mx_EmailAddresses">
                 {existingEmailElements}
-                <form onSubmit={this._onAddClick} autoComplete="off"
-                      noValidate={true} className="mx_EmailAddresses_new">
+                <form
+                    onSubmit={this._onAddClick}
+                    autoComplete="off"
+                    noValidate={true}
+                    className="mx_EmailAddresses_new"
+                >
                     <Field
                         type="text"
                         label={_t("Email Address")}

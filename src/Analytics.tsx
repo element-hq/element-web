@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 
-import {getCurrentLanguage, _t, _td, IVariables} from './languageHandler';
+import { getCurrentLanguage, _t, _td, IVariables } from './languageHandler';
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 import Modal from './Modal';
@@ -390,6 +390,7 @@ export class Analytics {
             { expl: _td('Your device resolution'), value: resolution },
         ];
 
+        // FIXME: Using an import will result in test failures
         const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
         Modal.createTrackedDialog('Analytics Details', '', ErrorDialog, {
             title: _t('Analytics'),

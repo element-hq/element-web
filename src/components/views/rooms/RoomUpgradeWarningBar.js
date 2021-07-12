@@ -20,9 +20,11 @@ import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 
 import { _t } from '../../../languageHandler';
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-export default class RoomUpgradeWarningBar extends React.Component {
+@replaceableComponent("views.rooms.RoomUpgradeWarningBar")
+export default class RoomUpgradeWarningBar extends React.PureComponent {
     static propTypes = {
         room: PropTypes.object.isRequired,
         recommendation: PropTypes.object.isRequired,
@@ -35,7 +37,7 @@ export default class RoomUpgradeWarningBar extends React.Component {
 
     componentDidMount() {
         const tombstone = this.props.room.currentState.getStateEvents("m.room.tombstone", "");
-        this.setState({upgraded: tombstone && tombstone.getContent().replacement_room});
+        this.setState({ upgraded: tombstone && tombstone.getContent().replacement_room });
 
         MatrixClientPeg.get().on("RoomState.events", this._onStateEvents);
     }
@@ -55,12 +57,12 @@ export default class RoomUpgradeWarningBar extends React.Component {
         if (event.getType() !== "m.room.tombstone") return;
 
         const tombstone = this.props.room.currentState.getStateEvents("m.room.tombstone", "");
-        this.setState({upgraded: tombstone && tombstone.getContent().replacement_room});
+        this.setState({ upgraded: tombstone && tombstone.getContent().replacement_room });
     };
 
     onUpgradeClick = () => {
         const RoomUpgradeDialog = sdk.getComponent('dialogs.RoomUpgradeDialog');
-        Modal.createTrackedDialog('Upgrade Room Version', '', RoomUpgradeDialog, {room: this.props.room});
+        Modal.createTrackedDialog('Upgrade Room Version', '', RoomUpgradeDialog, { room: this.props.room });
     };
 
     render() {

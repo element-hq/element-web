@@ -15,15 +15,17 @@ limitations under the License.
 */
 
 import React from "react";
-import Adapter from "enzyme-adapter-react-16";
+import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import { configure, mount } from "enzyme";
 
 import sdk from "../../../skinned-sdk";
-import {mkEvent, mkStubRoom} from "../../../test-utils";
-import {MatrixClientPeg} from "../../../../src/MatrixClientPeg";
+import { mkEvent, mkStubRoom } from "../../../test-utils";
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import * as languageHandler from "../../../../src/languageHandler";
+import * as TestUtils from "../../../test-utils";
 
-const TextualBody = sdk.getComponent("views.messages.TextualBody");
+const _TextualBody = sdk.getComponent("views.messages.TextualBody");
+const TextualBody = TestUtils.wrapInMatrixClientContext(_TextualBody);
 
 configure({ adapter: new Adapter() });
 
@@ -37,6 +39,7 @@ describe("<TextualBody />", () => {
             getRoom: () => mkStubRoom("room_id"),
             getAccountData: () => undefined,
             isGuest: () => false,
+            mxcUrlToHttp: (s) => s,
         };
 
         const ev = mkEvent({
@@ -61,6 +64,7 @@ describe("<TextualBody />", () => {
             getRoom: () => mkStubRoom("room_id"),
             getAccountData: () => undefined,
             isGuest: () => false,
+            mxcUrlToHttp: (s) => s,
         };
 
         const ev = mkEvent({
@@ -86,6 +90,7 @@ describe("<TextualBody />", () => {
                 getRoom: () => mkStubRoom("room_id"),
                 getAccountData: () => undefined,
                 isGuest: () => false,
+                mxcUrlToHttp: (s) => s,
             };
         });
 
@@ -139,6 +144,7 @@ describe("<TextualBody />", () => {
                 on: () => undefined,
                 removeListener: () => undefined,
                 isGuest: () => false,
+                mxcUrlToHttp: (s) => s,
             };
         });
 
@@ -208,7 +214,7 @@ describe("<TextualBody />", () => {
             const content = wrapper.find(".mx_EventTile_body");
             expect(content.html()).toBe('<span class="mx_EventTile_body markdown-body" dir="auto">' +
                 'Hey <span>' +
-                '<a class="mx_Pill mx_UserPill" title="@user:server">' +
+                '<a class="mx_Pill mx_UserPill">' +
                 '<img class="mx_BaseAvatar mx_BaseAvatar_image" src="mxc://avatar.url/image.png" ' +
                 'style="width: 16px; height: 16px;" title="@member:domain.bla" alt="" aria-hidden="true">Member</a>' +
                 '</span></span>');
@@ -267,8 +273,8 @@ describe("<TextualBody />", () => {
             expect(content.html()).toBe(
                 '<span class="mx_EventTile_body markdown-body" dir="auto">' +
                 'A <span><a class="mx_Pill mx_RoomPill" href="#/room/!ZxbRYPQXDXKGmDnJNg:example.com' +
-                '?via=example.com&amp;via=bob.com" ' +
-                'title="!ZxbRYPQXDXKGmDnJNg:example.com"><img class="mx_BaseAvatar mx_BaseAvatar_image" ' +
+                '?via=example.com&amp;via=bob.com"' +
+                '><img class="mx_BaseAvatar mx_BaseAvatar_image" ' +
                 'src="mxc://avatar.url/room.png" ' +
                 'style="width: 16px; height: 16px;" alt="" aria-hidden="true">' +
                 '!ZxbRYPQXDXKGmDnJNg:example.com</a></span> with vias</span>',
@@ -284,6 +290,7 @@ describe("<TextualBody />", () => {
             getAccountData: () => undefined,
             getUrlPreview: (url) => new Promise(() => {}),
             isGuest: () => false,
+            mxcUrlToHttp: (s) => s,
         };
 
         const ev = mkEvent({
@@ -297,13 +304,12 @@ describe("<TextualBody />", () => {
             event: true,
         });
 
-        const wrapper = mount(<TextualBody mxEvent={ev} showUrlPreview={true} />);
+        const wrapper = mount(<TextualBody mxEvent={ev} showUrlPreview={true} onHeightChanged={() => {}} />);
         expect(wrapper.text()).toBe(ev.getContent().body);
 
-        let widgets = wrapper.find("LinkPreviewWidget");
-        // at this point we should have exactly one widget
-        expect(widgets.length).toBe(1);
-        expect(widgets.at(0).prop("link")).toBe("https://matrix.org/");
+        let widgets = wrapper.find("LinkPreviewGroup");
+        // at this point we should have exactly one link
+        expect(widgets.at(0).prop("links")).toEqual(["https://matrix.org/"]);
 
         // simulate an event edit and check the transition from the old URL preview to the new one
         const ev2 = mkEvent({
@@ -328,14 +334,11 @@ describe("<TextualBody />", () => {
 
             // XXX: this is to give TextualBody enough time for state to settle
             wrapper.setState({}, () => {
-                widgets = wrapper.find("LinkPreviewWidget");
-                // at this point we should have exactly two widgets (not the matrix.org one anymore)
-                expect(widgets.length).toBe(2);
-                expect(widgets.at(0).prop("link")).toBe("https://vector.im/");
-                expect(widgets.at(1).prop("link")).toBe("https://riot.im/");
+                widgets = wrapper.find("LinkPreviewGroup");
+                // at this point we should have exactly two links (not the matrix.org one anymore)
+                expect(widgets.at(0).prop("links")).toEqual(["https://vector.im/", "https://riot.im/"]);
             });
         });
     });
 });
-
 

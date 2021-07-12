@@ -16,10 +16,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import * as sdk from "../../../index";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.IntegrationsImpossibleDialog")
 export default class IntegrationsImpossibleDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
@@ -35,9 +37,12 @@ export default class IntegrationsImpossibleDialog extends React.Component {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         return (
-            <BaseDialog className='mx_IntegrationsImpossibleDialog' hasCancel={false}
-                        onFinished={this.props.onFinished}
-                        title={_t("Integrations not allowed")}>
+            <BaseDialog
+                className='mx_IntegrationsImpossibleDialog'
+                hasCancel={false}
+                onFinished={this.props.onFinished}
+                title={_t("Integrations not allowed")}
+            >
                 <div className='mx_IntegrationsImpossibleDialog_content'>
                     <p>
                         {_t(

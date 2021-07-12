@@ -15,21 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+const { measureStart, measureStop } = require('../util');
+
 async function openRoomDirectory(session) {
     const roomDirectoryButton = await session.query('.mx_LeftPanel_exploreButton');
     await roomDirectoryButton.click();
 }
 
 async function findSublist(session, name) {
-    const sublists = await session.queryAll('.mx_RoomSublist');
-    for (const sublist of sublists) {
-        const header = await sublist.$('.mx_RoomSublist_headerText');
-        const headerText = await session.innerText(header);
-        if (headerText.toLowerCase().includes(name.toLowerCase())) {
-            return sublist;
-        }
-    }
-    throw new Error(`could not find room list section that contains '${name}' in header`);
+    return await session.query(`.mx_RoomSublist[aria-label="${name}" i]`);
 }
 
 async function createRoom(session, roomName, encrypted=false) {
@@ -60,6 +54,8 @@ async function createRoom(session, roomName, encrypted=false) {
 async function createDm(session, invitees) {
     session.log.step(`creates DM with ${JSON.stringify(invitees)}`);
 
+    await measureStart(session, "mx_CreateDM");
+
     const dmsSublist = await findSublist(session, "people");
     const startChatButton = await dmsSublist.$(".mx_RoomSublist_auxButton");
     await startChatButton.click();
@@ -84,6 +80,8 @@ async function createDm(session, invitees) {
 
     await session.query('.mx_MessageComposer');
     session.log.done();
+
+    await measureStop(session, "mx_CreateDM");
 }
 
-module.exports = {openRoomDirectory, findSublist, createRoom, createDm};
+module.exports = { openRoomDirectory, findSublist, createRoom, createDm };

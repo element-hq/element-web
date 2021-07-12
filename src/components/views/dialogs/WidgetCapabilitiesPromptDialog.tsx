@@ -29,6 +29,7 @@ import StyledCheckbox from "../elements/StyledCheckbox";
 import DialogButtons from "../elements/DialogButtons";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { CapabilityText } from "../../../widgets/CapabilityText";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 export function getRememberedCapabilitiesForWidget(widget: Widget): Capability[] {
     return JSON.parse(localStorage.getItem(`widget_${widget.id}_approved_caps`) || "[]");
@@ -54,6 +55,7 @@ interface IState {
     rememberSelection: boolean;
 }
 
+@replaceableComponent("views.dialogs.WidgetCapabilitiesPromptDialog")
 export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<IProps, IState> {
     private eventPermissionsMap = new Map<Capability, WidgetEventCapability>();
 
@@ -75,11 +77,11 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
     private onToggle = (capability: Capability) => {
         const newStates = objectShallowClone(this.state.booleanStates);
         newStates[capability] = !newStates[capability];
-        this.setState({booleanStates: newStates});
+        this.setState({ booleanStates: newStates });
     };
 
     private onRememberSelectionChange = (newVal: boolean) => {
-        this.setState({rememberSelection: newVal});
+        this.setState({ rememberSelection: newVal });
     };
 
     private onSubmit = async (ev) => {
@@ -96,7 +98,7 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
         if (this.state.rememberSelection) {
             setRememberedCapabilitiesForWidget(this.props.widget, approved);
         }
-        this.props.onFinished({approved});
+        this.props.onFinished({ approved });
     }
 
     public render() {

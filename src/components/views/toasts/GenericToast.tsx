@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,13 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ReactNode} from "react";
+import React, { ReactNode } from "react";
+import AccessibleButton from "../elements/AccessibleButton";
 
-import FormButton from "../elements/FormButton";
-import {XOR} from "../../../@types/common";
+import { XOR } from "../../../@types/common";
 
 export interface IProps {
     description: ReactNode;
+    detail?: ReactNode;
     acceptLabel: string;
 
     onAccept();
@@ -33,18 +34,28 @@ interface IPropsExtended extends IProps {
 
 const GenericToast: React.FC<XOR<IPropsExtended, IProps>> = ({
     description,
+    detail,
     acceptLabel,
     rejectLabel,
     onAccept,
     onReject,
 }) => {
+    const detailContent = detail ? <div className="mx_Toast_detail">
+        {detail}
+    </div> : null;
+
     return <div>
         <div className="mx_Toast_description">
-            { description }
+            {description}
+            {detailContent}
         </div>
         <div className="mx_Toast_buttons" aria-live="off">
-            {onReject && rejectLabel && <FormButton label={rejectLabel} kind="danger" onClick={onReject} /> }
-            <FormButton label={acceptLabel} onClick={onAccept} />
+            {onReject && rejectLabel && <AccessibleButton kind="danger_outline" onClick={onReject}>
+                { rejectLabel }
+            </AccessibleButton> }
+            <AccessibleButton onClick={onAccept} kind="primary">
+                { acceptLabel }
+            </AccessibleButton>
         </div>
     </div>;
 };

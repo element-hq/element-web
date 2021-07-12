@@ -20,8 +20,8 @@ import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 
-import {TextualCompletion} from './Components';
-import {ICompletion, ISelectionRange} from "./Autocompleter";
+import { TextualCompletion } from './Components';
+import { ICompletion, ISelectionRange } from "./Autocompleter";
 
 const DDG_REGEX = /\/ddg\s+(.+)$/g;
 const REFERRER = 'vector';
@@ -36,8 +36,13 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
          + `&format=json&no_redirect=1&no_html=1&t=${encodeURIComponent(REFERRER)}`;
     }
 
-    async getCompletions(query: string, selection: ISelectionRange, force= false): Promise<ICompletion[]> {
-        const {command, range} = this.getCurrentCommand(query, selection);
+    async getCompletions(
+        query: string,
+        selection: ISelectionRange,
+        force = false,
+        limit = -1,
+    ): Promise<ICompletion[]> {
+        const { command, range } = this.getCurrentCommand(query, selection);
         if (!query || !command) {
             return [];
         }
@@ -46,7 +51,8 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
             method: 'GET',
         });
         const json = await response.json();
-        const results = json.Results.map((result) => {
+        const maxLength = limit > -1 ? limit : json.Results.length;
+        const results = json.Results.slice(0, maxLength).map((result) => {
             return {
                 completion: result.Text,
                 component: (

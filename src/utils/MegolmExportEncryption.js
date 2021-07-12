@@ -15,19 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-"use strict";
-
-// polyfill textencoder if necessary
-import * as TextEncodingUtf8 from 'text-encoding-utf-8';
-let TextEncoder = window.TextEncoder;
-if (!TextEncoder) {
-    TextEncoder = TextEncodingUtf8.TextEncoder;
-}
-let TextDecoder = window.TextDecoder;
-if (!TextDecoder) {
-    TextDecoder = TextEncodingUtf8.TextDecoder;
-}
-
 import { _t } from '../languageHandler';
 import SdkConfig from '../SdkConfig';
 
@@ -94,7 +81,7 @@ export async function decryptMegolmKeyFile(data, password) {
     let isValid;
     try {
         isValid = await subtleCrypto.verify(
-            {name: 'HMAC'},
+            { name: 'HMAC' },
             hmacKey,
             hmac,
             toVerify,
@@ -124,7 +111,6 @@ export async function decryptMegolmKeyFile(data, password) {
 
     return new TextDecoder().decode(new Uint8Array(plaintext));
 }
-
 
 /**
  * Encrypt a megolm key file
@@ -187,14 +173,13 @@ export async function encryptMegolmKeyFile(data, password, options) {
     let hmac;
     try {
         hmac = await subtleCrypto.sign(
-            {name: 'HMAC'},
+            { name: 'HMAC' },
             hmacKey,
             toSign,
         );
     } catch (e) {
         throw friendlyError('subtleCrypto.sign failed: ' + e, cryptoFailMsg());
     }
-
 
     const hmacArray = new Uint8Array(hmac);
     resultBuffer.set(hmacArray, idx);
@@ -217,7 +202,7 @@ async function deriveKeys(salt, iterations, password) {
         key = await subtleCrypto.importKey(
             'raw',
             new TextEncoder().encode(password),
-            {name: 'PBKDF2'},
+            { name: 'PBKDF2' },
             false,
             ['deriveBits'],
         );
@@ -250,7 +235,7 @@ async function deriveKeys(salt, iterations, password) {
     const aesProm = subtleCrypto.importKey(
         'raw',
         aesKey,
-        {name: 'AES-CTR'},
+        { name: 'AES-CTR' },
         false,
         ['encrypt', 'decrypt'],
     ).catch((e) => {
@@ -262,7 +247,7 @@ async function deriveKeys(salt, iterations, password) {
         hmacKey,
         {
             name: 'HMAC',
-            hash: {name: 'SHA-256'},
+            hash: { name: 'SHA-256' },
         },
         false,
         ['sign', 'verify'],
@@ -312,8 +297,7 @@ function unpackMegolmKeyFile(data) {
     // look for the end line
     while (1) {
         const lineEnd = fileStr.indexOf('\n', lineStart);
-        const line = fileStr.slice(lineStart, lineEnd < 0 ? undefined : lineEnd)
-              .trim();
+        const line = fileStr.slice(lineStart, lineEnd < 0 ? undefined : lineEnd).trim();
         if (line === TRAILER_LINE) {
             break;
         }

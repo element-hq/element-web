@@ -14,23 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
-import {_t} from "../../../languageHandler";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import React, { createRef } from 'react';
+import { _t } from "../../../languageHandler";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
 import { getHostingLink } from '../../../utils/HostingLink';
 import * as sdk from "../../../index";
-import {OwnProfileStore} from "../../../stores/OwnProfileStore";
+import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
+@replaceableComponent("views.settings.ProfileSettings")
 export default class ProfileSettings extends React.Component {
     constructor() {
         super();
 
         const client = MatrixClientPeg.get();
         let avatarUrl = OwnProfileStore.instance.avatarMxc;
-        if (avatarUrl) avatarUrl = client.mxcUrlToHttp(avatarUrl, 96, 96, 'crop', false);
+        if (avatarUrl) avatarUrl = mediaFromMxc(avatarUrl).getSquareThumbnailHttp(96);
         this.state = {
             userId: client.getUserId(),
             originalDisplayName: OwnProfileStore.instance.displayName,
@@ -76,15 +79,17 @@ export default class ProfileSettings extends React.Component {
         e.preventDefault();
 
         if (!this.state.enableProfileSave) return;
-        this.setState({enableProfileSave: false});
+        this.setState({ enableProfileSave: false });
 
         const client = MatrixClientPeg.get();
         const newState = {};
 
+        const displayName = this.state.displayName.trim();
         try {
             if (this.state.originalDisplayName !== this.state.displayName) {
-                await client.setDisplayName(this.state.displayName);
-                newState.originalDisplayName = this.state.displayName;
+                await client.setDisplayName(displayName);
+                newState.originalDisplayName = displayName;
+                newState.displayName = displayName;
             }
 
             if (this.state.avatarFile) {
@@ -93,7 +98,7 @@ export default class ProfileSettings extends React.Component {
                     ` (${this.state.avatarFile.size}) bytes`);
                 const uri = await client.uploadContent(this.state.avatarFile);
                 await client.setAvatarUrl(uri);
-                newState.avatarUrl = client.mxcUrlToHttp(uri, 96, 96, 'crop', false);
+                newState.avatarUrl = mediaFromMxc(uri).getSquareThumbnailHttp(96);
                 newState.originalAvatarUrl = newState.avatarUrl;
                 newState.avatarFile = null;
             } else if (this.state.originalAvatarUrl !== this.state.avatarUrl) {
@@ -165,8 +170,12 @@ export default class ProfileSettings extends React.Component {
                 noValidate={true}
                 className="mx_ProfileSettings_profileForm"
             >
-                <input type="file" ref={this._avatarUpload} className="mx_ProfileSettings_avatarUpload"
-                       onChange={this._onAvatarChanged} accept="image/*" />
+                <input
+                    type="file"
+                    ref={this._avatarUpload} className="mx_ProfileSettings_avatarUpload"
+                    onChange={this._onAvatarChanged}
+                    accept="image/*"
+                />
                 <div className="mx_ProfileSettings_profile">
                     <div className="mx_ProfileSettings_controls">
                         <span className="mx_SettingsTab_subheading">{_t("Profile")}</span>

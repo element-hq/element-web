@@ -15,11 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {KeyboardEvent} from "react";
+import { KeyboardEvent } from "react";
 
-import {Part, CommandPartCreator, PartCreator} from "./parts";
+import { Part, CommandPartCreator, PartCreator } from "./parts";
 import DocumentPosition from "./position";
-import {ICompletion} from "../autocomplete/Autocompleter";
+import { ICompletion } from "../autocomplete/Autocompleter";
 import Autocomplete from "../components/views/rooms/Autocomplete";
 
 export interface ICallback {
@@ -52,7 +52,7 @@ export default class AutocompleteWrapperModel {
     }
 
     public close() {
-        this.updateCallback({close: true});
+        this.updateCallback({ close: true });
     }
 
     public hasSelection() {
@@ -65,27 +65,27 @@ export default class AutocompleteWrapperModel {
     }
 
     public onEnter() {
-        this.updateCallback({close: true});
+        this.updateCallback({ close: true });
     }
 
-    public async onTab(e: KeyboardEvent) {
+    /**
+     * If there is no current autocompletion, start one and move to the first selection.
+     */
+    public async startSelection() {
         const acComponent = this.getAutocompleterComponent();
-
         if (acComponent.countCompletions() === 0) {
             // Force completions to show for the text currently entered
             await acComponent.forceComplete();
             // Select the first item by moving "down"
             await acComponent.moveSelection(+1);
-        } else {
-            await acComponent.moveSelection(e.shiftKey ? -1 : +1);
         }
     }
 
-    public onUpArrow(e: KeyboardEvent) {
+    public selectPreviousSelection() {
         this.getAutocompleterComponent().moveSelection(-1);
     }
 
-    public onDownArrow(e: KeyboardEvent) {
+    public selectNextSelection() {
         this.getAutocompleterComponent().moveSelection(+1);
     }
 
@@ -117,7 +117,7 @@ export default class AutocompleteWrapperModel {
     }
 
     private partForCompletion(completion: ICompletion) {
-        const {completionId} = completion;
+        const { completionId } = completion;
         const text = completion.completion;
         switch (completion.type) {
             case "room":
@@ -125,10 +125,8 @@ export default class AutocompleteWrapperModel {
             case "at-room":
                 return [this.partCreator.atRoomPill(completionId), this.partCreator.plain(completion.suffix)];
             case "user":
-                // not using suffix here, because we also need to calculate
-                // the suffix when clicking a display name to insert a mention,
-                // which happens in createMentionParts
-                return this.partCreator.createMentionParts(this.partIndex, text, completionId);
+                // Insert suffix only if the pill is the part with index 0 - we are at the start of the composer
+                return this.partCreator.createMentionParts(this.partIndex === 0, text, completionId);
             case "command":
                 // command needs special handling for auto complete, but also renders as plain texts
                 return [(this.partCreator as CommandPartCreator).command(text)];

@@ -21,6 +21,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import { XOR } from "../../../@types/common";
 import { NOTIFICATION_STATE_UPDATE, NotificationState } from "../../../stores/notifications/NotificationState";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     notification: NotificationState;
@@ -29,7 +30,7 @@ interface IProps {
      * If true, the badge will show a count if at all possible. This is typically
      * used to override the user's preference for things like room sublists.
      */
-    forceCount: boolean;
+    forceCount?: boolean;
 
     /**
      * The room ID, if any, the badge represents.
@@ -48,6 +49,7 @@ interface IState {
     showCounts: boolean; // whether or not to show counts. Independent of props.forceCount
 }
 
+@replaceableComponent("views.rooms.NotificationBadge")
 export default class NotificationBadge extends React.PureComponent<XOR<IProps, IClickableProps>, IState> {
     private countWatcherRef: string;
 
@@ -84,7 +86,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
     }
 
     private countPreferenceChanged = () => {
-        this.setState({showCounts: SettingsStore.getValue("Notifications.alwaysShowBadgeCounts", this.roomId)});
+        this.setState({ showCounts: SettingsStore.getValue("Notifications.alwaysShowBadgeCounts", this.roomId) });
     };
 
     private onNotificationUpdate = () => {
@@ -93,7 +95,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
 
     public render(): React.ReactElement {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
-        const {notification, forceCount, roomId, onClick, ...props} = this.props;
+        const { notification, forceCount, roomId, onClick, ...props } = this.props;
 
         // Don't show a badge if we don't need to
         if (notification.isIdle) return null;

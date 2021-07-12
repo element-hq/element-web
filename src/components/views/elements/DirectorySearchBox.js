@@ -18,7 +18,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.DirectorySearchBox")
 export default class DirectorySearchBox extends React.Component {
     constructor(props) {
         super(props);
@@ -40,7 +42,7 @@ export default class DirectorySearchBox extends React.Component {
     }
 
     _onClearClick() {
-        this.setState({value: ''});
+        this.setState({ value: '' });
 
         if (this.input) {
             this.input.focus();
@@ -53,7 +55,7 @@ export default class DirectorySearchBox extends React.Component {
 
     _onChange(ev) {
         if (!this.input) return;
-        this.setState({value: ev.target.value});
+        this.setState({ value: ev.target.value });
 
         if (this.props.onChange) {
             this.props.onChange(ev.target.value);

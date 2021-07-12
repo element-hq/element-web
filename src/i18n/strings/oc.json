@@ -62,7 +62,7 @@
     "Server error": "Error servidor",
     "Single Sign On": "Autentificacion unica",
     "Confirm": "Confirmar",
-    "Dismiss": "Far desaparéisser",
+    "Dismiss": "Refusar",
     "OK": "D’acòrdi",
     "Continue": "Contunhar",
     "Go Back": "En arrièr",
@@ -118,7 +118,7 @@
     "Incoming call": "Sonada entranta",
     "Accept": "Acceptar",
     "Start": "Començament",
-    "Cancelling…": "Anullacion...",
+    "Cancelling…": "Anullacion…",
     "Fish": "Pes",
     "Butterfly": "Parpalhòl",
     "Tree": "Arborescéncia",
@@ -338,5 +338,13 @@
     "Esc": "Escap",
     "Enter": "Entrada",
     "Space": "Espaci",
-    "End": "Fin"
+    "End": "Fin",
+    "Explore rooms": "Percórrer las salas",
+    "Create Account": "Crear un compte",
+    "Click the button below to confirm adding this email address.": "Clicatz sus lo boton aicí dejós per confirmar l'adicion de l'adreça e-mail.",
+    "Confirm adding email": "Confirmar l'adicion de l'adressa e-mail",
+    "Confirm adding this email address by using Single Sign On to prove your identity.": "Confirmatz l'adicion d'aquela adreça e-mail en utilizant l'autentificacion unica per provar la vòstra identitat.",
+    "Use Single Sign On to continue": "Utilizar l'autentificacion unica (SSO) per contunhar",
+    "This phone number is already in use": "Aquel numèro de telefòn es ja utilizat",
+    "This email address is already in use": "Aquela adreça e-mail es ja utilizada"
 }

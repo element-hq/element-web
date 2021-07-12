@@ -16,16 +16,16 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
-import {_t} from "../../../languageHandler";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { _t } from "../../../languageHandler";
 import Pill from "../elements/Pill";
-import {makeUserPermalink} from "../../../utils/permalinks/Permalinks";
+import { makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import BaseAvatar from "../avatars/BaseAvatar";
 import SettingsStore from "../../../settings/SettingsStore";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { isUrlPermitted } from '../../../HtmlUtils';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 interface IProps {
     ev: MatrixEvent;
@@ -64,11 +64,12 @@ interface IBridgeStateEvent {
     };
 }
 
+@replaceableComponent("views.settings.BridgeTile")
 export default class BridgeTile extends React.PureComponent<IProps> {
     static propTypes = {
         ev: PropTypes.object.isRequired,
         room: PropTypes.object.isRequired,
-    }
+    };
 
     render() {
         const content: IBridgeStateEvent = this.props.ev.getContent();
@@ -112,10 +113,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
         let networkIcon;
 
         if (protocol.avatar_url) {
-            const avatarUrl = getHttpUriForMxc(
-                MatrixClientPeg.get().getHomeserverUrl(),
-                protocol.avatar_url, 64, 64, "crop",
-            );
+            const avatarUrl = mediaFromMxc(protocol.avatar_url).getSquareThumbnailHttp(64);
 
             networkIcon = <BaseAvatar className="protocol-icon"
                 width={48}
@@ -133,7 +131,9 @@ export default class BridgeTile extends React.PureComponent<IProps> {
             const networkName = network.displayname || network.id;
             let networkLink = <span>{networkName}</span>;
             if (typeof network.external_url === "string" && isUrlPermitted(network.external_url)) {
-                networkLink = <a href={network.external_url} target="_blank" rel="noreferrer noopener">{networkName}</a>
+                networkLink = (
+                    <a href={network.external_url} target="_blank" rel="noreferrer noopener">{networkName}</a>
+                );
             }
             networkItem = _t("Workspace: <networkLink/>", {}, {
                 networkLink: () => networkLink,
@@ -142,7 +142,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
 
         let channelLink = <span>{channelName}</span>;
         if (typeof channel.external_url === "string" && isUrlPermitted(channel.external_url)) {
-            channelLink = <a href={channel.external_url} target="_blank" rel="noreferrer noopener">{channelName}</a>
+            channelLink = <a href={channel.external_url} target="_blank" rel="noreferrer noopener">{channelName}</a>;
         }
 
         const id = this.props.ev.getId();

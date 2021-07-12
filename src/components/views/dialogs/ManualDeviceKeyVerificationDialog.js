@@ -20,11 +20,13 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import { _t } from '../../../languageHandler';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.ManualDeviceKeyVerificationDialog")
 export default class ManualDeviceKeyVerificationDialog extends React.Component {
     static propTypes = {
         userId: PropTypes.string.isRequired,

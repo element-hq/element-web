@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,12 +46,14 @@ import ActiveWidgetStore from "../ActiveWidgetStore";
 import { objectShallowClone } from "../../utils/objects";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ElementWidgetActions, IViewRoomApiRequest } from "./ElementWidgetActions";
-import {ModalWidgetStore} from "../ModalWidgetStore";
+import { ModalWidgetStore } from "../ModalWidgetStore";
 import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
-import {getCustomTheme} from "../../theme";
+import { getCustomTheme } from "../../theme";
 import CountlyAnalytics from "../../CountlyAnalytics";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent, IEvent } from "matrix-js-sdk/src/models/event";
+import { ELEMENT_CLIENT_ID } from "../../identifiers";
+import { getUserLanguage } from "../../languageHandler";
 
 // TODO: Destroy all of this code
 
@@ -178,22 +180,25 @@ export class StopGapWidget extends EventEmitter {
      * The URL to use in the iframe
      */
     public get embedUrl(): string {
-        return this.runUrlTemplate({asPopout: false});
+        return this.runUrlTemplate({ asPopout: false });
     }
 
     /**
      * The URL to use in the popout
      */
     public get popoutUrl(): string {
-        return this.runUrlTemplate({asPopout: true});
+        return this.runUrlTemplate({ asPopout: true });
     }
 
-    private runUrlTemplate(opts = {asPopout: false}): string {
+    private runUrlTemplate(opts = { asPopout: false }): string {
         const templated = this.mockWidget.getCompleteUrl({
             widgetRoomId: this.roomId,
             currentUserId: MatrixClientPeg.get().getUserId(),
             userDisplayName: OwnProfileStore.instance.displayName,
             userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl(),
+            clientId: ELEMENT_CLIENT_ID,
+            clientTheme: SettingsStore.getValue("theme"),
+            clientLanguage: getUserLanguage(),
         }, opts?.asPopout);
 
         const parsed = new URL(templated);
@@ -239,7 +244,7 @@ export class StopGapWidget extends EventEmitter {
                 error: {
                     message: "Unable to open modal at this time",
                 },
-            })
+            });
         }
     };
 
@@ -265,14 +270,14 @@ export class StopGapWidget extends EventEmitter {
             const targetRoomId = (ev.detail.data || {}).room_id;
             if (!targetRoomId) {
                 return this.messaging.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
-                    error: {message: "Room ID not supplied."},
+                    error: { message: "Room ID not supplied." },
                 });
             }
 
             // Check the widget's permission
             if (!this.messaging.hasCapability(ElementWidgetCapabilities.CanChangeViewedRoom)) {
                 return this.messaging.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
-                    error: {message: "This widget does not have permission for this action (denied)."},
+                    error: { message: "This widget does not have permission for this action (denied)." },
                 });
             }
 
@@ -330,12 +335,12 @@ export class StopGapWidget extends EventEmitter {
                     this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
 
                     // First close the stickerpicker
-                    defaultDispatcher.dispatch({action: "stickerpicker_close"});
+                    defaultDispatcher.dispatch({ action: "stickerpicker_close" });
 
                     // Now open the integration manager
                     // TODO: Spec this interaction.
                     const data = ev.detail.data;
-                    const integType = data?.integType
+                    const integType = data?.integType;
                     const integId = <string>data?.integId;
 
                     // TODO: Open the right integration manager for the widget
@@ -379,7 +384,7 @@ export class StopGapWidget extends EventEmitter {
         }
     }
 
-    public stop(opts = {forceDestroy: false}) {
+    public stop(opts = { forceDestroy: false }) {
         if (!opts?.forceDestroy && ActiveWidgetStore.getPersistentWidgetId() === this.mockWidget.id) {
             console.log("Skipping destroy - persistent widget");
             return;
@@ -395,6 +400,7 @@ export class StopGapWidget extends EventEmitter {
     }
 
     private onEvent = (ev: MatrixEvent) => {
+        MatrixClientPeg.get().decryptEventIfNeeded(ev);
         if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
         if (ev.getRoomId() !== this.eventListenerRoomId) return;
         this.feedEvent(ev);
@@ -409,7 +415,7 @@ export class StopGapWidget extends EventEmitter {
     private feedEvent(ev: MatrixEvent) {
         if (!this.messaging) return;
 
-        const raw = ev.event;
+        const raw = ev.event as IEvent;
         this.messaging.feedEvent(raw).catch(e => {
             console.error("Error sending event to widget: ", e);
         });

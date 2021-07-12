@@ -15,14 +15,17 @@ limitations under the License.
 */
 
 $groupFilterPanelWidth: 56px; // only applies in this file, used for calculations
+$roomListCollapsedWidth: 68px;
 
 .mx_LeftPanel {
     background-color: $roomlist-bg-color;
-    min-width: 260px;
+    // TODO decrease this once Spaces launches as it'll no longer need to include the 56px Community Panel
+    min-width: 206px;
     max-width: 50%;
 
     // Create a row-based flexbox for the GroupFilterPanel and the room list
     display: flex;
+    contain: content;
 
     .mx_LeftPanel_GroupFilterPanelContainer {
         flex-grow: 0;
@@ -37,18 +40,12 @@ $groupFilterPanelWidth: 56px; // only applies in this file, used for calculation
         // GroupFilterPanel handles its own CSS
     }
 
-    &:not(.mx_LeftPanel_hasGroupFilterPanel) {
-        .mx_LeftPanel_roomListContainer {
-            width: 100%;
-        }
-    }
-
     // Note: The 'room list' in this context is actually everything that isn't the tag
     // panel, such as the menu options, breadcrumbs, filtering, etc
     .mx_LeftPanel_roomListContainer {
-        width: calc(100% - $groupFilterPanelWidth);
         background-color: $roomlist-bg-color;
-
+        flex: 1 0 0;
+        min-width: 0;
         // Create another flexbox (this time a column) for the room list components
         display: flex;
         flex-direction: column;
@@ -74,6 +71,7 @@ $groupFilterPanelWidth: 56px; // only applies in this file, used for calculation
             // aligned correctly. This is also a row-based flexbox.
             display: flex;
             align-items: center;
+            contain: content;
 
             &.mx_IndicatorScrollbar_leftOverflow {
                 mask-image: linear-gradient(90deg, transparent, black 5%);
@@ -113,6 +111,29 @@ $groupFilterPanelWidth: 56px; // only applies in this file, used for calculation
                 }
             }
 
+            .mx_LeftPanel_dialPadButton {
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+                background-color: $roomlist-button-bg-color;
+                position: relative;
+                margin-left: 8px;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 8px;
+                    left: 8px;
+                    width: 16px;
+                    height: 16px;
+                    mask-image: url('$(res)/img/element-icons/call/dialpad.svg');
+                    mask-position: center;
+                    mask-size: contain;
+                    mask-repeat: no-repeat;
+                    background: $secondary-fg-color;
+                }
+            }
+
             .mx_LeftPanel_exploreButton {
                 width: 32px;
                 height: 32px;
@@ -133,6 +154,10 @@ $groupFilterPanelWidth: 56px; // only applies in this file, used for calculation
                     mask-size: contain;
                     mask-repeat: no-repeat;
                     background: $secondary-fg-color;
+                }
+
+                &.mx_LeftPanel_exploreButton_space::before {
+                    mask-image: url('$(res)/img/element-icons/roomlist/browse.svg');
                 }
             }
         }
@@ -168,17 +193,10 @@ $groupFilterPanelWidth: 56px; // only applies in this file, used for calculation
     // These styles override the defaults for the minimized (66px) layout
     &.mx_LeftPanel_minimized {
         min-width: unset;
-
-        // We have to forcefully set the width to override the resizer's style attribute.
-        &.mx_LeftPanel_hasGroupFilterPanel {
-            width: calc(68px + $groupFilterPanelWidth) !important;
-        }
-        &:not(.mx_LeftPanel_hasGroupFilterPanel) {
-            width: 68px !important;
-        }
+        width: unset !important;
 
         .mx_LeftPanel_roomListContainer {
-            width: 68px;
+            width: $roomListCollapsedWidth;
 
             .mx_LeftPanel_userHeader {
                 flex-direction: row;
@@ -189,6 +207,12 @@ $groupFilterPanelWidth: 56px; // only applies in this file, used for calculation
                 // Organize the flexbox into a centered column layout
                 flex-direction: column;
                 justify-content: center;
+
+                .mx_LeftPanel_dialPadButton {
+                    margin-left: 0;
+                    margin-top: 8px;
+                    background-color: transparent;
+                }
 
                 .mx_LeftPanel_exploreButton {
                     margin-left: 0;

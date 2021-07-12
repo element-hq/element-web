@@ -16,15 +16,17 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../../../../languageHandler";
+import { _t } from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
 import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import SettingsStore from "../../../../../settings/SettingsStore";
-import {UIFeature} from "../../../../../settings/UIFeature";
+import { UIFeature } from "../../../../../settings/UIFeature";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.tabs.room.GeneralRoomSettingsTab")
 export default class GeneralRoomSettingsTab extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
@@ -58,7 +60,6 @@ export default class GeneralRoomSettingsTab extends React.Component {
         const canSetAliases = true; // Previously, we arbitrarily only allowed admins to do this
         const canSetCanonical = room.currentState.mayClientSendStateEvent("m.room.canonical_alias", client);
         const canonicalAliasEv = room.currentState.getStateEvents("m.room.canonical_alias", '');
-        const aliasEvents = room.currentState.getStateEvents("m.room.aliases");
 
         const canChangeGroups = room.currentState.mayClientSendStateEvent("m.room.related_groups", client);
         const groupsEvent = room.currentState.getStateEvents("m.room.related_groups", "");
@@ -78,9 +79,11 @@ export default class GeneralRoomSettingsTab extends React.Component {
             flairSection = <>
                 <span className='mx_SettingsTab_subheading'>{_t("Flair")}</span>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    <RelatedGroupSettings roomId={room.roomId}
-                                          canSetRelatedGroups={canChangeGroups}
-                                          relatedGroupsEvent={groupsEvent} />
+                    <RelatedGroupSettings
+                        roomId={room.roomId}
+                        canSetRelatedGroups={canChangeGroups}
+                        relatedGroupsEvent={groupsEvent}
+                    />
                 </div>
             </>;
         }
@@ -95,8 +98,8 @@ export default class GeneralRoomSettingsTab extends React.Component {
                 <div className="mx_SettingsTab_heading">{_t("Room Addresses")}</div>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                     <AliasSettings roomId={this.props.roomId}
-                                   canSetCanonicalAlias={canSetCanonical} canSetAliases={canSetAliases}
-                                   canonicalAliasEvent={canonicalAliasEv} aliasEvents={aliasEvents} />
+                        canSetCanonicalAlias={canSetCanonical} canSetAliases={canSetAliases}
+                        canonicalAliasEvent={canonicalAliasEv} />
                 </div>
                 <div className="mx_SettingsTab_heading">{_t("Other")}</div>
                 { flairSection }

@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
-import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "./IFilterCondition";
+import { FILTER_CHANGED, FilterKind, IFilterCondition } from "./IFilterCondition";
 import { EventEmitter } from "events";
-import { removeHiddenChars } from "matrix-js-sdk/src/utils";
+import { normalize } from "matrix-js-sdk/src/utils";
 import { throttle } from "lodash";
 
 /**
@@ -31,9 +31,8 @@ export class NameFilterCondition extends EventEmitter implements IFilterConditio
         super();
     }
 
-    public get relativePriority(): FilterPriority {
-        // We want this one to be at the highest priority so it can search within other filters.
-        return FilterPriority.Highest;
+    public get kind(): FilterKind {
+        return FilterKind.Runtime;
     }
 
     public get search(): string {
@@ -47,7 +46,7 @@ export class NameFilterCondition extends EventEmitter implements IFilterConditio
 
     private callUpdate = throttle(() => {
         this.emit(FILTER_CHANGED);
-    }, 200, {trailing: true, leading: true});
+    }, 200, { trailing: true, leading: true });
 
     public isVisible(room: Room): boolean {
         const lcFilter = this.search.toLowerCase();
@@ -63,15 +62,10 @@ export class NameFilterCondition extends EventEmitter implements IFilterConditio
 
         if (!room.name) return false; // should realistically not happen: the js-sdk always calculates a name
 
-        return this.matches(room.name);
+        return this.matches(room.normalizedName);
     }
 
-    public matches(val: string): boolean {
-        // Note: we have to match the filter with the removeHiddenChars() room name because the
-        // function strips spaces and other characters (M becomes RN for example, in lowercase).
-        // We also doubly convert to lowercase to work around oddities of the library.
-        const noSecretsFilter = removeHiddenChars(this.search.toLowerCase()).toLowerCase();
-        const noSecretsName = removeHiddenChars(val.toLowerCase()).toLowerCase();
-        return noSecretsName.includes(noSecretsFilter);
+    public matches(normalizedName: string): boolean {
+        return normalizedName.includes(normalize(this.search));
     }
 }

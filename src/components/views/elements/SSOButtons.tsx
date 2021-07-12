@@ -17,13 +17,14 @@ limitations under the License.
 import React from "react";
 import { chunk } from "lodash";
 import classNames from "classnames";
-import {MatrixClient} from "matrix-js-sdk/src/client";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import PlatformPeg from "../../../PlatformPeg";
 import AccessibleButton from "./AccessibleButton";
-import {_t} from "../../../languageHandler";
-import {IdentityProviderBrand, IIdentityProvider, ISSOFlow} from "../../../Login";
+import { _t } from "../../../languageHandler";
+import { IdentityProviderBrand, IIdentityProvider, ISSOFlow } from "../../../Login";
 import AccessibleTooltipButton from "./AccessibleTooltipButton";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 interface ISSOButtonProps extends Omit<IProps, "flow"> {
     idp: IIdentityProvider;
@@ -47,7 +48,7 @@ const getIcon = (brand: IdentityProviderBrand | string) => {
         default:
             return null;
     }
-}
+};
 
 const SSOButton: React.FC<ISSOButtonProps> = ({
     matrixClient,
@@ -72,7 +73,7 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
         brandClass = `mx_SSOButton_brand_${brandName}`;
         icon = <img src={brandIcon} height="24" width="24" alt={brandName} />;
     } else if (typeof idp?.icon === "string" && idp.icon.startsWith("mxc://")) {
-        const src = matrixClient.mxcUrlToHttp(idp.icon, 24, 24, "crop", true);
+        const src = mediaFromMxc(idp.icon, matrixClient).getSquareThumbnailHttp(24);
         icon = <img src={src} height="24" width="24" alt={idp.name} />;
     }
 
@@ -110,8 +111,8 @@ interface IProps {
 
 const MAX_PER_ROW = 6;
 
-const SSOButtons: React.FC<IProps> = ({matrixClient, flow, loginType, fragmentAfterLogin, primary}) => {
-    const providers = flow["org.matrix.msc2858.identity_providers"] || [];
+const SSOButtons: React.FC<IProps> = ({ matrixClient, flow, loginType, fragmentAfterLogin, primary }) => {
+    const providers = flow.identity_providers || [];
     if (providers.length < 2) {
         return <div className="mx_SSOButtons">
             <SSOButton

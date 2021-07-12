@@ -26,7 +26,7 @@ describe("mkClient self-test", function() {
         ["@TF:h", true],
         ["@FT:h", false],
         ["@FF:h", false]],
-        )("behaves well for user trust %s", (userId, trust) => {
+    )("behaves well for user trust %s", (userId, trust) => {
         expect(mkClient().checkUserTrust(userId).isCrossSigningVerified()).toBe(trust);
     });
 
@@ -35,7 +35,7 @@ describe("mkClient self-test", function() {
         ["@TF:h", false],
         ["@FT:h", true],
         ["@FF:h", false]],
-        )("behaves well for device trust %s", (userId, trust) => {
+    )("behaves well for device trust %s", (userId, trust) => {
         expect(mkClient().checkDeviceTrust(userId, "device").isVerified()).toBe(trust);
     });
 });
@@ -54,7 +54,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
         const client = mkClient(trusted);
         const room = {
             roomId: dm ? "DM" : "other",
-            getEncryptionTargetMembers: () => ["@self:localhost", "@FF1:h", "@FF2:h"].map((userId) => ({userId})),
+            getEncryptionTargetMembers: () => ["@self:localhost", "@FF1:h", "@FF2:h"].map((userId) => ({ userId })),
         };
         const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual("normal");
@@ -67,7 +67,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
         const client = mkClient(trusted);
         const room = {
             roomId: dm ? "DM" : "other",
-            getEncryptionTargetMembers: () => ["@self:localhost", "@TT1:h", "@TT2:h"].map((userId) => ({userId})),
+            getEncryptionTargetMembers: () => ["@self:localhost", "@TT1:h", "@TT2:h"].map((userId) => ({ userId })),
         };
         const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);
@@ -80,7 +80,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
         const client = mkClient(trusted);
         const room = {
             roomId: dm ? "DM" : "other",
-            getEncryptionTargetMembers: () => ["@self:localhost", "@TT1:h", "@FF2:h"].map((userId) => ({userId})),
+            getEncryptionTargetMembers: () => ["@self:localhost", "@TT1:h", "@FF2:h"].map((userId) => ({ userId })),
         };
         const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);
@@ -93,7 +93,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
         const client = mkClient(trusted);
         const room = {
             roomId: dm ? "DM" : "other",
-            getEncryptionTargetMembers: () => ["@self:localhost"].map((userId) => ({userId})),
+            getEncryptionTargetMembers: () => ["@self:localhost"].map((userId) => ({ userId })),
         };
         const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);
@@ -106,7 +106,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
         const client = mkClient(trusted);
         const room = {
             roomId: dm ? "DM" : "other",
-            getEncryptionTargetMembers: () => ["@self:localhost", "@TT:h"].map((userId) => ({userId})),
+            getEncryptionTargetMembers: () => ["@self:localhost", "@TT:h"].map((userId) => ({ userId })),
         };
         const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);
@@ -119,7 +119,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
         const client = mkClient(trusted);
         const room = {
             roomId: dm ? "DM" : "other",
-            getEncryptionTargetMembers: () => ["@self:localhost", "@FF:h"].map((userId) => ({userId})),
+            getEncryptionTargetMembers: () => ["@self:localhost", "@FF:h"].map((userId) => ({ userId })),
         };
         const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);
@@ -128,7 +128,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
 
 describe("shieldStatusForMembership other-trust behaviour", function() {
     beforeAll(() => {
-        DMRoomMap._sharedInstance = {
+        DMRoomMap.sharedInstance = {
             getUserIdForRoomId: (roomId) => roomId === "DM" ? "@any:h" : null,
         };
     });
@@ -139,7 +139,7 @@ describe("shieldStatusForMembership other-trust behaviour", function() {
         const client = mkClient(true);
         const room = {
             roomId: dm ? "DM" : "other",
-            getEncryptionTargetMembers: () => ["@self:localhost", "@TF:h"].map((userId) => ({userId})),
+            getEncryptionTargetMembers: () => ["@self:localhost", "@TF:h"].map((userId) => ({ userId })),
         };
         const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);
@@ -151,7 +151,7 @@ describe("shieldStatusForMembership other-trust behaviour", function() {
         const client = mkClient(true);
         const room = {
             roomId: dm ? "DM" : "other",
-            getEncryptionTargetMembers: () => ["@self:localhost", "@TF:h", "@TT:h"].map((userId) => ({userId})),
+            getEncryptionTargetMembers: () => ["@self:localhost", "@TF:h", "@TT:h"].map((userId) => ({ userId })),
         };
         const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);
@@ -163,7 +163,7 @@ describe("shieldStatusForMembership other-trust behaviour", function() {
         const client = mkClient(true);
         const room = {
             roomId: dm ? "DM" : "other",
-            getEncryptionTargetMembers: () => ["@self:localhost", "@FF:h", "@FT:h"].map((userId) => ({userId})),
+            getEncryptionTargetMembers: () => ["@self:localhost", "@FF:h", "@FT:h"].map((userId) => ({ userId })),
         };
         const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);
@@ -175,7 +175,7 @@ describe("shieldStatusForMembership other-trust behaviour", function() {
         const client = mkClient(true);
         const room = {
             roomId: dm ? "DM" : "other",
-            getEncryptionTargetMembers: () => ["@self:localhost", "@WF:h", "@FT:h"].map((userId) => ({userId})),
+            getEncryptionTargetMembers: () => ["@self:localhost", "@WF:h", "@FT:h"].map((userId) => ({ userId })),
         };
         const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);

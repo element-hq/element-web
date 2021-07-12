@@ -16,12 +16,14 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import * as sdk from "../../../index";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
-import {Widget} from "matrix-widget-api";
-import {OIDCState, WidgetPermissionStore} from "../../../stores/widgets/WidgetPermissionStore";
+import { Widget } from "matrix-widget-api";
+import { OIDCState, WidgetPermissionStore } from "../../../stores/widgets/WidgetPermissionStore";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.WidgetOpenIDPermissionsDialog")
 export default class WidgetOpenIDPermissionsDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
@@ -60,7 +62,7 @@ export default class WidgetOpenIDPermissionsDialog extends React.Component {
     }
 
     _onRememberSelectionChange = (newVal) => {
-        this.setState({rememberSelection: newVal});
+        this.setState({ rememberSelection: newVal });
     };
 
     render() {
@@ -68,9 +70,12 @@ export default class WidgetOpenIDPermissionsDialog extends React.Component {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         return (
-            <BaseDialog className='mx_WidgetOpenIDPermissionsDialog' hasCancel={true}
-                        onFinished={this.props.onFinished}
-                        title={_t("Allow this widget to verify your identity")}>
+            <BaseDialog
+                className='mx_WidgetOpenIDPermissionsDialog'
+                hasCancel={true}
+                onFinished={this.props.onFinished}
+                title={_t("Allow this widget to verify your identity")}
+            >
                 <div className='mx_WidgetOpenIDPermissionsDialog_content'>
                     <p>
                         {_t("The widget will verify your user ID, but won't be able to perform actions for you:")}

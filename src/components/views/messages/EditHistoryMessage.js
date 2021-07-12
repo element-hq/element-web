@@ -14,25 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import * as HtmlUtils from '../../../HtmlUtils';
 import { editBodyDiffToHtml } from '../../../utils/MessageDiffUtils';
-import {formatTime} from '../../../DateUtils';
-import {MatrixEvent} from 'matrix-js-sdk';
-import {pillifyLinks, unmountPills} from '../../../utils/pillify';
+import { formatTime } from '../../../DateUtils';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { pillifyLinks, unmountPills } from '../../../utils/pillify';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import classNames from 'classnames';
 import RedactedBody from "./RedactedBody";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 function getReplacedContent(event) {
     const originalContent = event.getOriginalContent();
     return originalContent["m.new_content"] || originalContent;
 }
 
+@replaceableComponent("views.messages.EditHistoryMessage")
 export default class EditHistoryMessage extends React.PureComponent {
     static propTypes = {
         // the message event being edited
@@ -44,21 +46,21 @@ export default class EditHistoryMessage extends React.PureComponent {
     constructor(props) {
         super(props);
         const cli = MatrixClientPeg.get();
-        const {userId} = cli.credentials;
+        const { userId } = cli.credentials;
         const event = this.props.mxEvent;
         const room = cli.getRoom(event.getRoomId());
         if (event.localRedactionEvent()) {
             event.localRedactionEvent().on("status", this._onAssociatedStatusChanged);
         }
         const canRedact = room.currentState.maySendRedactionForEvent(event, userId);
-        this.state = {canRedact, sendStatus: event.getAssociatedStatus()};
+        this.state = { canRedact, sendStatus: event.getAssociatedStatus() };
 
         this._content = createRef();
         this._pills = [];
     }
 
     _onAssociatedStatusChanged = () => {
-        this.setState({sendStatus: this.props.mxEvent.getAssociatedStatus()});
+        this.setState({ sendStatus: this.props.mxEvent.getAssociatedStatus() });
     };
 
     _onRedactClick = async () => {
@@ -74,9 +76,7 @@ export default class EditHistoryMessage extends React.PureComponent {
     _onViewSourceClick = () => {
         const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createTrackedDialog('View Event Source', 'Edit history', ViewSource, {
-            roomId: this.props.mxEvent.getRoomId(),
-            eventId: this.props.mxEvent.getId(),
-            content: this.props.mxEvent.event,
+            mxEvent: this.props.mxEvent,
         }, 'mx_Dialog_viewsource');
     };
 
@@ -129,7 +129,7 @@ export default class EditHistoryMessage extends React.PureComponent {
     }
 
     render() {
-        const {mxEvent} = this.props;
+        const { mxEvent } = this.props;
         const content = getReplacedContent(mxEvent);
         let contentContainer;
         if (mxEvent.isRedacted()) {
@@ -139,7 +139,7 @@ export default class EditHistoryMessage extends React.PureComponent {
             if (this.props.previousEdit) {
                 contentElements = editBodyDiffToHtml(getReplacedContent(this.props.previousEdit), content);
             } else {
-                contentElements = HtmlUtils.bodyToHtml(content, null, {stripReplyFallback: true});
+                contentElements = HtmlUtils.bodyToHtml(content, null, { stripReplyFallback: true });
             }
             if (mxEvent.getContent().msgtype === "m.emote") {
                 const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
@@ -158,8 +158,8 @@ export default class EditHistoryMessage extends React.PureComponent {
         const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.state.sendStatus) !== -1);
         const classes = classNames({
             "mx_EventTile": true,
+            // Note: we keep the `sending` state class for tests, not for our styles
             "mx_EventTile_sending": isSending,
-            "mx_EventTile_notSent": this.state.sendStatus === 'not_sent',
         });
         return (
             <li>

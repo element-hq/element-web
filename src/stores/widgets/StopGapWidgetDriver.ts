@@ -43,7 +43,8 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { CHAT_EFFECTS } from "../../effects";
 import { containsEmoji } from "../../effects/utils";
 import dis from "../../dispatcher/dispatcher";
-import {tryTransformPermalinkToLocalHref} from "../../utils/permalinks/Permalinks";
+import { tryTransformPermalinkToLocalHref } from "../../utils/permalinks/Permalinks";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 // TODO: Purge this from the universe
 
@@ -135,13 +136,57 @@ export class StopGapWidgetDriver extends WidgetDriver {
             if (eventType === EventType.RoomMessage) {
                 CHAT_EFFECTS.forEach((effect) => {
                     if (containsEmoji(content, effect.emojis)) {
-                        dis.dispatch({action: `effects.${effect.command}`});
+                        dis.dispatch({ action: `effects.${effect.command}` });
                     }
                 });
             }
         }
 
-        return {roomId, eventId: r.event_id};
+        return { roomId, eventId: r.event_id };
+    }
+
+    public async readRoomEvents(eventType: string, msgtype: string | undefined, limit: number): Promise<object[]> {
+        limit = limit > 0 ? Math.min(limit, 25) : 25; // arbitrary choice
+
+        const client = MatrixClientPeg.get();
+        const roomId = ActiveRoomObserver.activeRoomId;
+        const room = client.getRoom(roomId);
+        if (!client || !roomId || !room) throw new Error("Not in a room or not attached to a client");
+
+        const results: MatrixEvent[] = [];
+        const events = room.getLiveTimeline().getEvents(); // timelines are most recent last
+        for (let i = events.length - 1; i > 0; i--) {
+            if (results.length >= limit) break;
+
+            const ev = events[i];
+            if (ev.getType() !== eventType) continue;
+            if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()['msgtype']) continue;
+            results.push(ev);
+        }
+
+        return results.map(e => e.event);
+    }
+
+    public async readStateEvents(eventType: string, stateKey: string | undefined, limit: number): Promise<object[]> {
+        limit = limit > 0 ? Math.min(limit, 100) : 100; // arbitrary choice
+
+        const client = MatrixClientPeg.get();
+        const roomId = ActiveRoomObserver.activeRoomId;
+        const room = client.getRoom(roomId);
+        if (!client || !roomId || !room) throw new Error("Not in a room or not attached to a client");
+
+        const results: MatrixEvent[] = [];
+        const state: Map<string, MatrixEvent> = room.currentState.events.get(eventType);
+        if (state) {
+            if (stateKey === "" || !!stateKey) {
+                const forKey = state.get(stateKey);
+                if (forKey) results.push(forKey);
+            } else {
+                results.push(...Array.from(state.values()));
+            }
+        }
+
+        return results.slice(0, limit).map(e => e.event);
     }
 
     public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>) {
@@ -154,13 +199,13 @@ export class StopGapWidgetDriver extends WidgetDriver {
         };
 
         if (oidcState === OIDCState.Denied) {
-            return observer.update({state: OpenIDRequestState.Blocked});
+            return observer.update({ state: OpenIDRequestState.Blocked });
         }
         if (oidcState === OIDCState.Allowed) {
-            return observer.update({state: OpenIDRequestState.Allowed, token: await getToken()});
+            return observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
         }
 
-        observer.update({state: OpenIDRequestState.PendingUserConfirmation});
+        observer.update({ state: OpenIDRequestState.PendingUserConfirmation });
 
         Modal.createTrackedDialog("OpenID widget permissions", '', WidgetOpenIDPermissionsDialog, {
             widget: this.forWidget,
@@ -169,10 +214,10 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
             onFinished: async (confirm) => {
                 if (!confirm) {
-                    return observer.update({state: OpenIDRequestState.Blocked});
+                    return observer.update({ state: OpenIDRequestState.Blocked });
                 }
 
-                return observer.update({state: OpenIDRequestState.Allowed, token: await getToken()});
+                return observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
             },
         });
     }

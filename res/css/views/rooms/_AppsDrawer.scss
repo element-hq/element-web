@@ -370,11 +370,6 @@ $MinWidth: 240px;
     display: none;
 }
 
-/* Avoid apptile iframes capturing mouse event focus when resizing */
-.mx_AppsDrawer_resizing iframe {
-    pointer-events: none;
-}
-
 .mx_AppsDrawer_resizing .mx_AppTile_persistedWrapper {
     z-index: 1;
 }

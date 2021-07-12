@@ -19,7 +19,7 @@ import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 
 import MockHttpBackend from 'matrix-mock-request';
-import {MatrixClientPeg} from '../../../src/MatrixClientPeg';
+import { MatrixClientPeg } from '../../../src/MatrixClientPeg';
 import sdk from '../../skinned-sdk';
 import Matrix from 'matrix-js-sdk';
 
@@ -262,7 +262,8 @@ describe('GroupView', function() {
             expect(longDescElement.innerHTML).toContain('<ul>');
             expect(longDescElement.innerHTML).toContain('<li>And lists!</li>');
 
-            const imgSrc = "https://my.home.server/_matrix/media/r0/thumbnail/someimageurl?width=800&amp;height=600";
+            const imgSrc = "https://my.home.server/_matrix/media/r0/thumbnail/someimageurl" +
+                "?width=800&amp;height=600&amp;method=scale";
             expect(longDescElement.innerHTML).toContain('<img src="' + imgSrc + '">');
         });
 

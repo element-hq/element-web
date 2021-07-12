@@ -18,6 +18,10 @@ limitations under the License.
     margin-left: 8px;
     margin-bottom: 4px;
 
+    &.mx_RoomSublist_hidden {
+        display: none;
+    }
+
     .mx_RoomSublist_headerContainer {
         // Create a flexbox to make alignment easy
         display: flex;
@@ -37,7 +41,9 @@ limitations under the License.
         // The combined height must be set in the LeftPanel component for sticky headers
         // to work correctly.
         padding-bottom: 8px;
-        height: 24px;
+        // Allow the container to collapse on itself if its children
+        // are not in the normal document flow
+        max-height: 24px;
         color: $roomlist-header-color;
 
         .mx_RoomSublist_stickable {
@@ -55,8 +61,8 @@ limitations under the License.
             &.mx_RoomSublist_headerContainer_sticky {
                 position: fixed;
                 height: 32px; // to match the header container
-                // width set by JS
-                width: calc(100% - 22px);
+                // width set by JS because of a compat issue between Firefox and Chrome
+                width: calc(100% - 15px);
             }
 
             // We don't have a top style because the top is dependent on the room list header's
@@ -92,7 +98,7 @@ limitations under the License.
             position: relative;
             width: 24px;
             height: 24px;
-            border-radius: 32px;
+            border-radius: 8px;
 
             &::before {
                 content: '';
@@ -106,6 +112,11 @@ limitations under the License.
                 mask-repeat: no-repeat;
                 background: $muted-fg-color;
             }
+        }
+
+        .mx_RoomSublist_auxButton:hover,
+        .mx_RoomSublist_menuButton:hover {
+            background: $roomlist-button-bg-color;
         }
 
         // Hide the menu button by default
@@ -187,6 +198,7 @@ limitations under the License.
             // as the box model should be top aligned. Happens in both FF and Chromium
             display: flex;
             flex-direction: column;
+            align-self: stretch;
 
             mask-image: linear-gradient(0deg, transparent, black 4px);
         }

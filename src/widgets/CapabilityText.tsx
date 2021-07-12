@@ -96,6 +96,16 @@ export class CapabilityText {
                 [EventDirection.Receive]: _td("See when the avatar changes in your active room"),
             },
         },
+        [EventType.RoomMember]: {
+            [WidgetKind.Room]: {
+                [EventDirection.Send]: _td("Kick, ban, or invite people to this room, and make you leave"),
+                [EventDirection.Receive]: _td("See when people join, leave, or are invited to this room"),
+            },
+            [GENERIC_WIDGET_KIND]: {
+                [EventDirection.Send]: _td("Kick, ban, or invite people to your active room, and make you leave"),
+                [EventDirection.Receive]: _td("See when people join, leave, or are invited to your active room"),
+            },
+        },
     };
 
     private static nonStateSendRecvCaps: ISendRecvStaticCapText = {
@@ -115,7 +125,7 @@ export class CapabilityText {
         if (eventCap.isState) {
             return !eventCap.keyStr
                 ? _t("with an empty state key")
-                : _t("with state key %(stateKey)s", {stateKey: eventCap.keyStr});
+                : _t("with state key %(stateKey)s", { stateKey: eventCap.keyStr });
         }
         return null; // room messages are handled specially
     }
@@ -124,8 +134,8 @@ export class CapabilityText {
         // First see if we have a super simple line of text to provide back
         if (CapabilityText.simpleCaps[capability]) {
             const textForKind = CapabilityText.simpleCaps[capability];
-            if (textForKind[kind]) return {primary: _t(textForKind[kind])};
-            if (textForKind[GENERIC_WIDGET_KIND]) return {primary: _t(textForKind[GENERIC_WIDGET_KIND])};
+            if (textForKind[kind]) return { primary: _t(textForKind[kind]) };
+            if (textForKind[GENERIC_WIDGET_KIND]) return { primary: _t(textForKind[GENERIC_WIDGET_KIND]) };
 
             // ... we'll fall through to the generic capability processing at the end of this
             // function if we fail to locate a simple string and the capability isn't for an
@@ -205,7 +215,7 @@ export class CapabilityText {
 
         // We don't have enough context to render this capability specially, so we'll present it as-is
         return {
-            primary: _t("The <b>%(capability)s</b> capability", {capability}, {
+            primary: _t("The <b>%(capability)s</b> capability", { capability }, {
                 b: sub => <b>{sub}</b>,
             }),
         };
@@ -338,7 +348,7 @@ export class CapabilityText {
                         });
                     }
                 }
-                return {primary};
+                return { primary };
             }
         }
     }

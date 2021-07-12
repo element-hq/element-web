@@ -20,6 +20,9 @@ $tertiary-fg-color: $primary-fg-color;
 $primary-bg-color: $bg-color;
 $muted-fg-color: $header-panel-text-primary-color;
 
+// Legacy theme backports
+$quaternary-fg-color: #6F7882;
+
 // used for dialog box text
 $light-fg-color: $header-panel-text-secondary-color;
 
@@ -61,6 +64,8 @@ $input-invalid-border-color: $warning-color;
 
 $field-focused-label-bg-color: $bg-color;
 
+$resend-button-divider-color: $muted-fg-color;
+
 // scrollbars
 $scrollbar-thumb-color: rgba(255, 255, 255, 0.2);
 $scrollbar-track-color: transparent;
@@ -83,6 +88,7 @@ $dialog-close-fg-color: #9fa9ba;
 
 $dialog-background-bg-color: $header-panel-bg-color;
 $lightbox-background-bg-color: #000;
+$lightbox-background-bg-opacity: 0.85;
 
 $settings-grey-fg-color: #a2a2a2;
 $settings-profile-placeholder-bg-color: #e7e7e7;
@@ -106,11 +112,13 @@ $header-divider-color: $header-panel-text-primary-color;
 $composer-e2e-icon-color: $header-panel-text-primary-color;
 
 // this probably shouldn't have it's own colour
-$voipcall-plinth-color: #f2f5f8;
+$voipcall-plinth-color: #394049;
 
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
+$dialpad-button-bg-color: #6F7882;
+
 
 $roomlist-button-bg-color: #1A1D23; // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-filter-active-bg-color: $roomlist-button-bg-color;
@@ -131,9 +139,6 @@ $panel-divider-color: $header-panel-border-color;
 
 $widget-menu-bar-bg-color: $header-panel-bg-color;
 $widget-body-bg-color: #1A1D23;
-
-// event tile lifecycle
-$event-sending-color: $text-secondary-color;
 
 // event redaction
 $event-redacted-fg-color: #606060;
@@ -167,6 +172,9 @@ $button-link-bg-color: transparent;
 // Toggle switch
 $togglesw-off-color: $room-highlight-color;
 
+$progressbar-fg-color: $accent-color;
+$progressbar-bg-color: #21262c;
+
 $visual-bell-bg-color: #800;
 
 $room-warning-bg-color: $header-panel-bg-color;
@@ -196,6 +204,18 @@ $interactive-tooltip-fg-color: #ffffff;
 $breadcrumb-placeholder-bg-color: #272c35;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
+
+$message-body-panel-fg-color: $secondary-fg-color;
+$message-body-panel-bg-color: #394049;
+$message-body-panel-icon-fg-color: $primary-bg-color;
+$message-body-panel-icon-bg-color: $secondary-fg-color;
+
+// See non-legacy dark for variable information
+$voice-record-stop-border-color: #6F7882;
+$voice-record-waveform-incomplete-fg-color: #6F7882;
+$voice-record-icon-color: #6F7882;
+$voice-playback-button-bg-color: $tertiary-fg-color;
+$voice-playback-button-fg-color: #21262C;
 
 // Appearance tab colors
 $appearance-tab-border-color: $room-highlight-color;
@@ -229,7 +249,7 @@ $composer-shadow-color: tranparent;
 @define-mixin mx_DialogButton_secondary {
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color ! important;
+    border: 1px solid $accent-color !important;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
 }
@@ -247,18 +267,7 @@ $composer-shadow-color: tranparent;
 }
 
 // markdown overrides:
-.mx_EventTile_content .markdown-body pre:hover {
-    border-color: #808080 !important; // inverted due to rules below
-}
 .mx_EventTile_content .markdown-body {
-    pre, code {
-        filter: invert(1);
-    }
-
-    pre code {
-        filter: none;
-    }
-
     table {
         tr {
             background-color: #000000;
@@ -270,12 +279,7 @@ $composer-shadow-color: tranparent;
     }
 }
 
-// diff highlight colors
-// intentionally swapped to avoid inversion
-.hljs-addition {
-    background: #fdd;
-}
-
-.hljs-deletion {
-    background: #dfd;
+// highlight.js overrides:
+.hljs-tag {
+    color: inherit; // Without this they'd be weirdly blue which doesn't match the theme
 }

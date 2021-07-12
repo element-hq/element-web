@@ -1,8 +1,6 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd
 Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015-2017, 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,6 +17,7 @@ limitations under the License.
 
 import React, { createRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import classNames from "classnames";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
@@ -51,6 +50,9 @@ import IconizedContextMenu, {
     IconizedContextMenuRadio,
 } from "../context_menus/IconizedContextMenu";
 import { CommunityPrototypeStore, IRoomProfile } from "../../../stores/CommunityPrototypeStore";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { getUnsentMessages } from "../../structures/RoomStatusBar";
+import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 
 interface IProps {
     room: Room;
@@ -66,6 +68,7 @@ interface IState {
     notificationsMenuPosition: PartialDOMRect;
     generalMenuPosition: PartialDOMRect;
     messagePreview?: string;
+    hasUnsentEvents: boolean;
 }
 
 const messagePreviewId = (roomId: string) => `mx_RoomTile_messagePreview_${roomId}`;
@@ -75,9 +78,10 @@ const contextMenuBelow = (elementRect: PartialDOMRect) => {
     const left = elementRect.left + window.pageXOffset - 9;
     const top = elementRect.bottom + window.pageYOffset + 17;
     const chevronFace = ChevronFace.None;
-    return {left, top, chevronFace};
+    return { left, top, chevronFace };
 };
 
+@replaceableComponent("views.rooms.RoomTile")
 export default class RoomTile extends React.PureComponent<IProps, IState> {
     private dispatcherRef: string;
     private roomTileRef = createRef<HTMLDivElement>();
@@ -91,34 +95,32 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             selected: ActiveRoomObserver.activeRoomId === this.props.room.roomId,
             notificationsMenuPosition: null,
             generalMenuPosition: null,
+            hasUnsentEvents: this.countUnsentEvents() > 0,
 
             // generatePreview() will return nothing if the user has previews disabled
-            messagePreview: this.generatePreview(),
+            messagePreview: "",
         };
+        this.generatePreview();
 
-        ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
-        this.dispatcherRef = defaultDispatcher.register(this.onAction);
-        MessagePreviewStore.instance.on(
-            MessagePreviewStore.getPreviewChangedEventName(this.props.room),
-            this.onRoomPreviewChanged,
-        );
         this.notificationState = RoomNotificationStateStore.instance.getRoomState(this.props.room);
-        this.notificationState.on(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
         this.roomProps = EchoChamber.forRoom(this.props.room);
-        this.roomProps.on(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
-        CommunityPrototypeStore.instance.on(
-            CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
-            this.onCommunityUpdate,
-        );
-        this.props.room.on("Room.name", this.onRoomNameUpdate);
+    }
+
+    private countUnsentEvents(): number {
+        return getUnsentMessages(this.props.room).length;
     }
 
     private onRoomNameUpdate = (room) => {
         this.forceUpdate();
-    }
+    };
 
     private onNotificationUpdate = () => {
         this.forceUpdate(); // notification state changed - update
+    };
+
+    private onLocalEchoUpdated = (ev: MatrixEvent, room: Room) => {
+        if (room?.roomId !== this.props.room.roomId) return;
+        this.setState({ hasUnsentEvents: this.countUnsentEvents() > 0 });
     };
 
     private onRoomPropertyUpdate = (property: CachedRoomKey) => {
@@ -135,8 +137,10 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>) {
-        if (prevProps.showMessagePreview !== this.props.showMessagePreview && this.showMessagePreview) {
-            this.setState({messagePreview: this.generatePreview()});
+        const showMessageChanged = prevProps.showMessagePreview !== this.props.showMessagePreview;
+        const minimizedChanged = prevProps.isMinimized !== this.props.isMinimized;
+        if (showMessageChanged || minimizedChanged) {
+            this.generatePreview();
         }
         if (prevProps.room?.roomId !== this.props.room?.roomId) {
             MessagePreviewStore.instance.off(
@@ -165,6 +169,21 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         if (this.state.selected) {
             this.scrollIntoView();
         }
+
+        ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
+        this.dispatcherRef = defaultDispatcher.register(this.onAction);
+        MessagePreviewStore.instance.on(
+            MessagePreviewStore.getPreviewChangedEventName(this.props.room),
+            this.onRoomPreviewChanged,
+        );
+        this.notificationState.on(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
+        this.roomProps.on(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
+        this.roomProps.on("Room.name", this.onRoomNameUpdate);
+        CommunityPrototypeStore.instance.on(
+            CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
+            this.onCommunityUpdate,
+        );
+        MatrixClientPeg.get().on("Room.localEchoUpdated", this.onLocalEchoUpdated);
     }
 
     public componentWillUnmount() {
@@ -180,8 +199,16 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             );
             this.props.room.off("Room.name", this.onRoomNameUpdate);
         }
+        ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
         defaultDispatcher.unregister(this.dispatcherRef);
         this.notificationState.off(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
+        this.roomProps.off(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
+        this.roomProps.off("Room.name", this.onRoomNameUpdate);
+        CommunityPrototypeStore.instance.off(
+            CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
+            this.onCommunityUpdate,
+        );
+        MatrixClientPeg.get()?.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
     }
 
     private onAction = (payload: ActionPayload) => {
@@ -199,17 +226,17 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
     private onRoomPreviewChanged = (room: Room) => {
         if (this.props.room && room.roomId === this.props.room.roomId) {
-            // generatePreview() will return nothing if the user has previews disabled
-            this.setState({messagePreview: this.generatePreview()});
+            this.generatePreview();
         }
     };
 
-    private generatePreview(): string | null {
+    private async generatePreview() {
         if (!this.showMessagePreview) {
             return null;
         }
 
-        return MessagePreviewStore.instance.getPreviewForRoom(this.props.room, this.props.tag);
+        const messagePreview = await MessagePreviewStore.instance.getPreviewForRoom(this.props.room, this.props.tag);
+        this.setState({ messagePreview });
     }
 
     private scrollIntoView = () => {
@@ -232,25 +259,25 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     };
 
     private onActiveRoomUpdate = (isActive: boolean) => {
-        this.setState({selected: isActive});
+        this.setState({ selected: isActive });
     };
 
     private onNotificationsMenuOpenClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
-        this.setState({notificationsMenuPosition: target.getBoundingClientRect()});
+        this.setState({ notificationsMenuPosition: target.getBoundingClientRect() });
     };
 
     private onCloseNotificationsMenu = () => {
-        this.setState({notificationsMenuPosition: null});
+        this.setState({ notificationsMenuPosition: null });
     };
 
     private onGeneralMenuOpenClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
-        this.setState({generalMenuPosition: target.getBoundingClientRect()});
+        this.setState({ generalMenuPosition: target.getBoundingClientRect() });
     };
 
     private onContextMenu = (ev: React.MouseEvent) => {
@@ -268,7 +295,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     };
 
     private onCloseGeneralMenu = () => {
-        this.setState({generalMenuPosition: null});
+        this.setState({ generalMenuPosition: null });
     };
 
     private onTagRoom = (ev: ButtonEvent, tagId: TagID) => {
@@ -289,12 +316,12 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 0,
             ));
         } else {
-            console.warn(`Unexpected tag ${tagId} applied to ${this.props.room.room_id}`);
+            console.warn(`Unexpected tag ${tagId} applied to ${this.props.room.roomId}`);
         }
 
         if ((ev as React.KeyboardEvent).key === Key.ENTER) {
             // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
-            this.setState({generalMenuPosition: null}); // hide the menu
+            this.setState({ generalMenuPosition: null }); // hide the menu
         }
     };
 
@@ -306,7 +333,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             action: 'leave_room',
             room_id: this.props.room.roomId,
         });
-        this.setState({generalMenuPosition: null}); // hide the menu
+        this.setState({ generalMenuPosition: null }); // hide the menu
     };
 
     private onForgetRoomClick = (ev: ButtonEvent) => {
@@ -317,7 +344,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             action: 'forget_room',
             room_id: this.props.room.roomId,
         });
-        this.setState({generalMenuPosition: null}); // hide the menu
+        this.setState({ generalMenuPosition: null }); // hide the menu
     };
 
     private onOpenRoomSettings = (ev: ButtonEvent) => {
@@ -328,7 +355,18 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             action: 'open_room_settings',
             room_id: this.props.room.roomId,
         });
-        this.setState({generalMenuPosition: null}); // hide the menu
+        this.setState({ generalMenuPosition: null }); // hide the menu
+    };
+
+    private onInviteClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        dis.dispatch({
+            action: 'view_invite',
+            roomId: this.props.room.roomId,
+        });
+        this.setState({ generalMenuPosition: null }); // hide the menu
     };
 
     private async saveNotifState(ev: ButtonEvent, newState: Volume) {
@@ -341,7 +379,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         const key = (ev as React.KeyboardEvent).key;
         if (key === Key.ENTER) {
             // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
-            this.setState({notificationsMenuPosition: null}); // hide the menu
+            this.setState({ notificationsMenuPosition: null }); // hide the menu
         }
     }
 
@@ -451,6 +489,8 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             const isLowPriority = roomTags.includes(DefaultTagID.LowPriority);
             const lowPriorityLabel = _t("Low Priority");
 
+            const userId = MatrixClientPeg.get().getUserId();
+            const canInvite = this.props.room.canInvite(userId);
             contextMenu = <IconizedContextMenu
                 {...contextMenuBelow(this.state.generalMenuPosition)}
                 onFinished={this.onCloseGeneralMenu}
@@ -470,7 +510,13 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                         label={lowPriorityLabel}
                         iconClassName="mx_RoomTile_iconArrowDown"
                     />
-
+                    {canInvite ? (
+                        <IconizedContextMenuOption
+                            onClick={this.onInviteClick}
+                            label={_t("Invite People")}
+                            iconClassName="mx_RoomTile_iconInvite"
+                        />
+                    ) : null}
                     <IconizedContextMenuOption
                         onClick={this.onOpenRoomSettings}
                         label={_t("Settings")}
@@ -508,7 +554,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             'mx_RoomTile_minimized': this.props.isMinimized,
         });
 
-        let roomProfile: IRoomProfile = {displayName: null, avatarMxc: null};
+        let roomProfile: IRoomProfile = { displayName: null, avatarMxc: null };
         if (this.props.tag === DefaultTagID.Invite) {
             roomProfile = CommunityPrototypeStore.instance.getInviteProfile(this.props.room.roomId);
         }
@@ -520,29 +566,45 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         const roomAvatar = <DecoratedRoomAvatar
             room={this.props.room}
             avatarSize={32}
-            tag={this.props.tag}
             displayBadge={this.props.isMinimized}
-            oobData={({avatarUrl: roomProfile.avatarMxc})}
+            oobData={({ avatarUrl: roomProfile.avatarMxc })}
         />;
 
         let badge: React.ReactNode;
         if (!this.props.isMinimized) {
             // aria-hidden because we summarise the unread count/highlight status in a manual aria-label below
-            badge = (
-                <div className="mx_RoomTile_badgeContainer" aria-hidden="true">
-                    <NotificationBadge
-                        notification={this.notificationState}
-                        forceCount={false}
-                        roomId={this.props.room.roomId}
-                    />
-                </div>
-            );
+            if (this.state.hasUnsentEvents) {
+                // hardcode the badge to a danger state when there's unsent messages
+                badge = (
+                    <div className="mx_RoomTile_badgeContainer" aria-hidden="true">
+                        <NotificationBadge
+                            notification={StaticNotificationState.RED_EXCLAMATION}
+                            forceCount={false}
+                            roomId={this.props.room.roomId}
+                        />
+                    </div>
+                );
+            } else if (this.notificationState) {
+                badge = (
+                    <div className="mx_RoomTile_badgeContainer" aria-hidden="true">
+                        <NotificationBadge
+                            notification={this.notificationState}
+                            forceCount={false}
+                            roomId={this.props.room.roomId}
+                        />
+                    </div>
+                );
+            }
         }
 
         let messagePreview = null;
         if (this.showMessagePreview && this.state.messagePreview) {
             messagePreview = (
-                <div className="mx_RoomTile_messagePreview" id={messagePreviewId(this.props.room.roomId)}>
+                <div
+                    className="mx_RoomTile_messagePreview"
+                    id={messagePreviewId(this.props.room.roomId)}
+                    title={this.state.messagePreview}
+                >
                     {this.state.messagePreview}
                 </div>
             );
@@ -597,7 +659,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         return (
             <React.Fragment>
                 <RovingTabIndexWrapper inputRef={this.roomTileRef}>
-                    {({onFocus, isActive, ref}) =>
+                    {({ onFocus, isActive, ref }) =>
                         <Button
                             {...props}
                             onFocus={onFocus}

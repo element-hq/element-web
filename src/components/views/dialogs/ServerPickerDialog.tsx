@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from "react";
-import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
+import React, { createRef } from "react";
+import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
 
-import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
 import BaseDialog from './BaseDialog';
 import { _t } from '../../../languageHandler';
 import AccessibleButton from "../elements/AccessibleButton";
@@ -25,7 +25,8 @@ import SdkConfig from "../../../SdkConfig";
 import Field from "../elements/Field";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import TextWithTooltip from "../elements/TextWithTooltip";
-import withValidation, {IFieldState} from "../elements/Validation";
+import withValidation, { IFieldState } from "../elements/Validation";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     title?: string;
@@ -38,6 +39,7 @@ interface IState {
     otherHomeserver: string;
 }
 
+@replaceableComponent("views.dialogs.ServerPickerDialog")
 export default class ServerPickerDialog extends React.PureComponent<IProps, IState> {
     private readonly defaultServer: ValidatedServerConfig;
     private readonly fieldRef = createRef<Field>();
@@ -108,7 +110,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                 console.error(e);
 
                 const stateForError = AutoDiscoveryUtils.authComponentStateForError(e);
-                if (stateForError.isFatalError) {
+                if (stateForError.serverErrorIsFatal) {
                     let error = _t("Unable to validate homeserver");
                     if (e.translatedMessage) {
                         error = e.translatedMessage;
@@ -166,7 +168,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
             text = _t("Matrix.org is the biggest public homeserver in the world, so it’s a good place for many.");
         }
 
-        let defaultServerName = this.defaultServer.hsName;
+        let defaultServerName: React.ReactNode = this.defaultServer.hsName;
         if (this.defaultServer.hsNameIsDifferent) {
             defaultServerName = (
                 <TextWithTooltip class="mx_Login_underlinedServerName" tooltip={this.defaultServer.hsUrl}>
@@ -215,6 +217,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                         value={this.state.otherHomeserver}
                         validateOnChange={false}
                         validateOnFocus={false}
+                        id="mx_homeserverInput"
                     />
                 </StyledRadioButton>
                 <p>

@@ -19,13 +19,14 @@ import classNames from 'classnames';
 
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
-import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
 import AccessibleButton from "../elements/AccessibleButton";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import withValidation from "../elements/Validation";
 import * as Email from "../../../email";
 import Field from "../elements/Field";
 import CountryDropdown from "./CountryDropdown";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -51,8 +52,8 @@ interface IProps {
 
 interface IState {
     fieldValid: Partial<Record<LoginField, boolean>>;
-    loginType: LoginField.Email | LoginField.MatrixId | LoginField.Phone,
-    password: "",
+    loginType: LoginField.Email | LoginField.MatrixId | LoginField.Phone;
+    password: "";
 }
 
 enum LoginField {
@@ -66,6 +67,7 @@ enum LoginField {
  * A pure UI component which displays a username/password form.
  * The email/username/phone fields are fully-controlled, the password field is not.
  */
+@replaceableComponent("views.auth.PasswordLogin")
 export default class PasswordLogin extends React.PureComponent<IProps, IState> {
     static defaultProps = {
         onUsernameChanged: function() {},
@@ -164,7 +166,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
     };
 
     private onPasswordChanged = ev => {
-        this.setState({password: ev.target.value});
+        this.setState({ password: ev.target.value });
     };
 
     private async verifyFieldsBeforeSubmit() {
@@ -320,7 +322,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
         const result = await this.validatePasswordRules(fieldState);
         this.markFieldValid(LoginField.Password, result.valid);
         return result;
-    }
+    };
 
     private renderLoginField(loginType: IState["loginType"], autoFocus: boolean) {
         const classes = {

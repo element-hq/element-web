@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ limitations under the License.
                 &::before {
                     background-color: #ffffff;
                     mask-image: url('$(res)/img/e2e/normal.svg');
-                    mask-size: 90%;
+                    mask-size: 80%;
                 }
 
                 &::after {
@@ -135,9 +135,13 @@ limitations under the License.
             float: right;
             display: flex;
 
-            .mx_FormButton {
+            .mx_AccessibleButton {
                 min-width: 96px;
                 box-sizing: border-box;
+            }
+
+            .mx_AccessibleButton + .mx_AccessibleButton {
+                margin-left: 5px;
             }
         }
 
@@ -156,6 +160,10 @@ limitations under the License.
             a {
                 text-decoration: none;
             }
+        }
+
+        .mx_Toast_detail {
+            color: $secondary-fg-color;
         }
 
         .mx_Toast_deviceID {

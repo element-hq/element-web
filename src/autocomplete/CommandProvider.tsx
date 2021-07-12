@@ -18,12 +18,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from '../languageHandler';
+import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import QueryMatcher from './QueryMatcher';
-import {TextualCompletion} from './Components';
-import {ICompletion, ISelectionRange} from "./Autocompleter";
-import {Command, Commands, CommandMap} from '../SlashCommands';
+import { TextualCompletion } from './Components';
+import { ICompletion, ISelectionRange } from "./Autocompleter";
+import { Command, Commands, CommandMap } from '../SlashCommands';
 
 const COMMAND_RE = /(^\/\w*)(?: .*)?/g;
 
@@ -34,12 +34,17 @@ export default class CommandProvider extends AutocompleteProvider {
         super(COMMAND_RE);
         this.matcher = new QueryMatcher(Commands, {
             keys: ['command', 'args', 'description'],
-            funcs: [({aliases}) => aliases.join(" ")], // aliases
+            funcs: [({ aliases }) => aliases.join(" ")], // aliases
         });
     }
 
-    async getCompletions(query: string, selection: ISelectionRange, force?: boolean): Promise<ICompletion[]> {
-        const {command, range} = this.getCurrentCommand(query, selection);
+    async getCompletions(
+        query: string,
+        selection: ISelectionRange,
+        force?: boolean,
+        limit = -1,
+    ): Promise<ICompletion[]> {
+        const { command, range } = this.getCurrentCommand(query, selection);
         if (!command) return [];
 
         let matches = [];
@@ -55,13 +60,13 @@ export default class CommandProvider extends AutocompleteProvider {
         } else {
             if (query === '/') {
                 // If they have just entered `/` show everything
+                // We exclude the limit on purpose to have a comprehensive list
                 matches = Commands;
             } else {
                 // otherwise fuzzy match against all of the fields
-                matches = this.matcher.match(command[1]);
+                matches = this.matcher.match(command[1], limit);
             }
         }
-
 
         return matches.filter(cmd => cmd.isEnabled()).map((result) => {
             let completion = result.getCommand() + ' ';

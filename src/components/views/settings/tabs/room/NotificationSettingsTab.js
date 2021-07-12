@@ -14,15 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../../../../languageHandler";
-import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
+import { _t } from "../../../../../languageHandler";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Notifier from "../../../../../Notifier";
 import SettingsStore from '../../../../../settings/SettingsStore';
-import {SettingLevel} from "../../../../../settings/SettingLevel";
+import { SettingLevel } from "../../../../../settings/SettingLevel";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.tabs.room.NotificationsSettingsTab")
 export default class NotificationsSettingsTab extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
@@ -45,7 +47,7 @@ export default class NotificationsSettingsTab extends React.Component {
         if (!soundData) {
             return;
         }
-        this.setState({currentSound: soundData.name || soundData.url});
+        this.setState({ currentSound: soundData.name || soundData.url });
     }
 
     async _triggerUploader(e) {
@@ -153,7 +155,7 @@ export default class NotificationsSettingsTab extends React.Component {
                     <div>
                         <span>{_t("Notification sound")}: <code>{this.state.currentSound}</code></span><br />
                         <AccessibleButton className="mx_NotificationSound_resetSound" disabled={this.state.currentSound == "default"} onClick={this._clearSound.bind(this)} kind="primary">
-                                {_t("Reset")}
+                            {_t("Reset")}
                         </AccessibleButton>
                     </div>
                     <div>
@@ -165,11 +167,11 @@ export default class NotificationsSettingsTab extends React.Component {
                         {currentUploadedFile}
 
                         <AccessibleButton className="mx_NotificationSound_browse" onClick={this._triggerUploader.bind(this)} kind="primary">
-                                {_t("Browse")}
+                            {_t("Browse")}
                         </AccessibleButton>
 
                         <AccessibleButton className="mx_NotificationSound_save" disabled={this.state.uploadedFile == null} onClick={this._onClickSaveSound.bind(this)} kind="primary">
-                                {_t("Save")}
+                            {_t("Save")}
                         </AccessibleButton>
                         <br />
                     </div>
