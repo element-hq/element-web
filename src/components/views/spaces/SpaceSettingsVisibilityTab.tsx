@@ -39,7 +39,7 @@ enum SpaceVisibility {
 
 const useLocalEcho = <T extends any>(
     currentFactory: () => T,
-    setterFn: (value: T) => Promise<any>,
+    setterFn: (value: T) => Promise<unknown>,
     errorFn: (error: Error) => void,
 ): [value: T, handler: (value: T) => void] => {
     const [value, setValue] = useState(currentFactory);
