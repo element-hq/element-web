@@ -78,7 +78,6 @@ interface IPillCandidatePart extends Omit<IBasePart, "type" | "createAutoComplet
 interface IPillPart extends Omit<IBasePart, "type" | "resourceId"> {
     type: Type.AtRoomPill | Type.RoomPill | Type.UserPill;
     resourceId: string;
-    onClick?(): void;
 }
 
 export type Part = IBasePart | IPillCandidatePart | IPillPart;
@@ -310,7 +309,7 @@ abstract class PillPart extends BasePart implements IPillPart {
 
     abstract get className(): string;
 
-    abstract onClick?(): void;
+    protected onClick?: () => void;
 
     abstract setAvatar(node: HTMLElement): void;
 }
@@ -373,9 +372,6 @@ class RoomPillPart extends PillPart {
     get className() {
         return "mx_RoomPill mx_Pill";
     }
-
-    // FIXME: We do this to shut up the linter, is there a way to do this properly
-    onClick = undefined;
 }
 
 class AtRoomPillPart extends RoomPillPart {
@@ -414,7 +410,7 @@ class UserPillPart extends PillPart {
         this._setAvatarVars(node, avatarUrl, initialLetter);
     }
 
-    onClick = () => {
+    protected onClick = () => {
         defaultDispatcher.dispatch({
             action: Action.ViewUser,
             member: MatrixClientPeg.get().getRoom(RoomViewStore.getRoomId()).getMember(this.resourceId),
