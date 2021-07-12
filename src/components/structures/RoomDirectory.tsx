@@ -44,6 +44,7 @@ import NetworkDropdown from "../views/directory/NetworkDropdown";
 import ScrollPanel from "./ScrollPanel";
 import Spinner from "../views/elements/Spinner";
 import { ActionPayload } from "../../dispatcher/payloads";
+import { getDisplayAliasForAliasSet } from "../../Rooms";
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 800;
@@ -854,5 +855,5 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
 // Similar to matrix-react-sdk's MatrixTools.getDisplayAliasForRoom
 // but works with the objects we get from the public room list
 function getDisplayAliasForRoom(room: IRoom) {
-    return room.canonical_alias || room.aliases?.[0] || "";
+    return getDisplayAliasForAliasSet(room.canonical_alias, room.aliases);
 }
