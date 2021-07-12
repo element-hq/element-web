@@ -34,8 +34,8 @@ export function getDisplayAliasForRoom(room: Room): string {
     );
 }
 
-// The various display alias getters all feed through this one path so there's a
-// single place to change the logic.
+// The various display alias getters should all feed through this one path so
+// there's a single place to change the logic.
 export function getDisplayAliasForAliasSet(canonicalAlias: string, altAliases: string[]): string {
     if (AliasCustomisations.getDisplayAliasForAliasSet) {
         return AliasCustomisations.getDisplayAliasForAliasSet(canonicalAlias, altAliases);
