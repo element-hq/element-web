@@ -160,7 +160,8 @@ export default class DeviceListener {
         // which result in account data changes affecting checks below.
         if (
             ev.getType().startsWith('m.secret_storage.') ||
-            ev.getType().startsWith('m.cross_signing.')
+            ev.getType().startsWith('m.cross_signing.') ||
+            ev.getType() === 'm.megolm_backup.v1'
         ) {
             this._recheck();
         }

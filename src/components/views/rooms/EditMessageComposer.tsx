@@ -131,11 +131,12 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
         super(props);
         this.context = context; // otherwise React will only set it prior to render due to type def above
 
+        const isRestored = this.createEditorModel();
+        const ev = this.props.editState.getEvent();
         this.state = {
-            saveDisabled: true,
+            saveDisabled: !isRestored || !this.isContentModified(createEditContent(this.model, ev)["m.new_content"]),
         };
 
-        this.createEditorModel();
         window.addEventListener("beforeunload", this.saveStoredEditorState);
         this.dispatcherRef = dis.register(this.onAction);
     }
@@ -180,7 +181,7 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
                 } else {
                     this.clearStoredEditorState();
                     dis.dispatch({ action: 'edit_event', event: null });
-                    dis.fire(Action.FocusComposer);
+                    dis.fire(Action.FocusSendMessageComposer);
                 }
                 event.preventDefault();
                 break;
@@ -199,7 +200,7 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
     private cancelEdit = (): void => {
         this.clearStoredEditorState();
         dis.dispatch({ action: "edit_event", event: null });
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
     };
 
     private get shouldSaveStoredEditorState(): boolean {
@@ -230,12 +231,12 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
         }
     }
 
-    private saveStoredEditorState(): void {
+    private saveStoredEditorState = (): void => {
         const item = SendHistoryManager.createItem(this.model);
         this.clearPreviousEdit();
         localStorage.setItem(this.editorRoomKey, this.props.editState.getEvent().getId());
         localStorage.setItem(this.editorStateKey, JSON.stringify(item));
-    }
+    };
 
     private isSlashCommand(): boolean {
         const parts = this.model.parts;
@@ -256,10 +257,9 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
     private isContentModified(newContent: IContent): boolean {
         // if nothing has changed then bail
         const oldContent = this.props.editState.getEvent().getContent();
-        if (!this.editorRef.current?.isModified() ||
-            (oldContent["msgtype"] === newContent["msgtype"] && oldContent["body"] === newContent["body"] &&
+        if (oldContent["msgtype"] === newContent["msgtype"] && oldContent["body"] === newContent["body"] &&
             oldContent["format"] === newContent["format"] &&
-            oldContent["formatted_body"] === newContent["formatted_body"])) {
+            oldContent["formatted_body"] === newContent["formatted_body"]) {
             return false;
         }
         return true;
@@ -375,7 +375,7 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
 
         // close the event editing and focus composer
         dis.dispatch({ action: "edit_event", event: null });
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
     };
 
     private cancelPreviousPendingEdit(): void {
@@ -410,36 +410,27 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
         dis.unregister(this.dispatcherRef);
     }
 
-    private createEditorModel(): void {
+    private createEditorModel(): boolean {
         const { editState } = this.props;
         const room = this.getRoom();
         const partCreator = new CommandPartCreator(room, this.context);
+
         let parts;
+        let isRestored = false;
         if (editState.hasEditorState()) {
             // if restoring state from a previous editor,
             // restore serialized parts from the state
             parts = editState.getSerializedParts().map(p => partCreator.deserializePart(p));
         } else {
-            //otherwise, either restore serialized parts from localStorage or parse the body of the event
-            parts = this.restoreStoredEditorState(partCreator) || parseEvent(editState.getEvent(), partCreator);
+            // otherwise, either restore serialized parts from localStorage or parse the body of the event
+            const restoredParts = this.restoreStoredEditorState(partCreator);
+            parts = restoredParts || parseEvent(editState.getEvent(), partCreator);
+            isRestored = !!restoredParts;
         }
         this.model = new EditorModel(parts, partCreator);
         this.saveStoredEditorState();
-    }
 
-    private getInitialCaretPosition(): CaretPosition {
-        const { editState } = this.props;
-        let caretPosition;
-        if (editState.hasEditorState() && editState.getCaret()) {
-            // if restoring state from a previous editor,
-            // restore caret position from the state
-            const caret = editState.getCaret();
-            caretPosition = this.model.positionForOffset(caret.offset, caret.atNodeEnd);
-        } else {
-            // otherwise, set it at the end
-            caretPosition = this.model.getPositionAtEnd();
-        }
-        return caretPosition;
+        return isRestored;
     }
 
     private onChange = (): void => {
@@ -461,6 +452,8 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
             } else if (payload.text) {
                 this.editorRef.current?.insertPlaintext(payload.text);
             }
+        } else if (payload.action === Action.FocusEditMessageComposer && this.editorRef.current) {
+            this.editorRef.current.focus();
         }
     };
 

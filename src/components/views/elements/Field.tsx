@@ -260,6 +260,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         });
 
         // Handle displaying feedback on validity
+        // FIXME: Using an import will result in test failures
         const Tooltip = sdk.getComponent("elements.Tooltip");
         let fieldTooltip;
         if (tooltipContent || this.state.feedback) {

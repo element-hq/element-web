@@ -24,7 +24,6 @@ import { Key } from '../../Keyboard';
 import PageTypes from '../../PageTypes';
 import MediaDeviceHandler from '../../MediaDeviceHandler';
 import { fixupColorFonts } from '../../utils/FontManager';
-import * as sdk from '../../index';
 import dis from '../../dispatcher/dispatcher';
 import { IMatrixClientCreds } from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
@@ -61,6 +60,11 @@ import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import AudioFeedArrayForCall from '../views/voip/AudioFeedArrayForCall';
 import { OwnProfileStore } from '../../stores/OwnProfileStore';
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
+import RoomView from './RoomView';
+import ToastContainer from './ToastContainer';
+import MyGroups from "./MyGroups";
+import UserView from "./UserView";
+import GroupView from "./GroupView";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -80,8 +84,8 @@ interface IProps {
     hideToSRUsers: boolean;
     resizeNotifier: ResizeNotifier;
     // eslint-disable-next-line camelcase
-    page_type: string;
-    autoJoin: boolean;
+    page_type?: string;
+    autoJoin?: boolean;
     threepidInvite?: IThreepidInvite;
     roomOobData?: IOOBData;
     currentRoomId: string;
@@ -406,7 +410,7 @@ class LoggedInView extends React.Component<IProps, IState> {
             // refocusing during a paste event will make the
             // paste end up in the newly focused element,
             // so dispatch synchronously before paste happens
-            dis.fire(Action.FocusComposer, true);
+            dis.fire(Action.FocusSendMessageComposer, true);
         }
     };
 
@@ -560,7 +564,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
             if (!isClickShortcut && ev.key !== Key.TAB && !canElementReceiveInput(ev.target)) {
                 // synchronous dispatch so we focus before key generates input
-                dis.fire(Action.FocusComposer, true);
+                dis.fire(Action.FocusSendMessageComposer, true);
                 ev.stopPropagation();
                 // we should *not* preventDefault() here as
                 // that would prevent typing in the now-focussed composer
@@ -579,12 +583,6 @@ class LoggedInView extends React.Component<IProps, IState> {
     };
 
     render() {
-        const RoomView = sdk.getComponent('structures.RoomView');
-        const UserView = sdk.getComponent('structures.UserView');
-        const GroupView = sdk.getComponent('structures.GroupView');
-        const MyGroups = sdk.getComponent('structures.MyGroups');
-        const ToastContainer = sdk.getComponent('structures.ToastContainer');
-
         let pageElement;
 
         switch (this.props.page_type) {
