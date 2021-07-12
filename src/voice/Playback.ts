@@ -52,12 +52,17 @@ function makePlaybackWaveform(input: number[]): number[] {
 }
 
 export class Playback extends EventEmitter implements IDestroyable {
+    /**
+     * Stable waveform for representing a thumbnail of the media. Values are
+     * guaranteed to be between zero and one, inclusive.
+     */
+    public readonly thumbnailWaveform: number[];
+
     private readonly context: AudioContext;
     private source: AudioBufferSourceNode;
     private state = PlaybackState.Decoding;
     private audioBuf: AudioBuffer;
     private resampledWaveform: number[];
-    private thumbnailWaveform: number[];
     private waveformObservable = new SimpleObservable<number[]>();
     private readonly clock: PlaybackClock;
     private readonly fileSize: number;
@@ -93,14 +98,6 @@ export class Playback extends EventEmitter implements IDestroyable {
      */
     public get waveform(): number[] {
         return this.resampledWaveform;
-    }
-
-    /**
-     * Stable waveform for representing a thumbnail of the media. Values are
-     * guaranteed to be between zero and one, inclusive.
-     */
-    public get waveformThumbnail(): number[] {
-        return this.thumbnailWaveform;
     }
 
     public get waveformData(): SimpleObservable<number[]> {

@@ -95,7 +95,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 duration: Math.round(this.state.recorder.durationSeconds * 1000),
 
                 // https://github.com/matrix-org/matrix-doc/pull/3246
-                waveform: this.state.recorder.getPlayback().waveformThumbnail.map(v => Math.round(v * 1024)),
+                waveform: this.state.recorder.getPlayback().thumbnailWaveform.map(v => Math.round(v * 1024)),
             },
             "org.matrix.msc3245.voice": {}, // No content, this is a rendering hint
         });
