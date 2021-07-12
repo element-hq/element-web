@@ -208,7 +208,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         });
     };
 
-    private _setRoomAccess = (roomAccess: string) => {
+    private setRoomAccess = (roomAccess: string) => {
         //                         join_rule
         //                      INVITE  |  PUBLIC
         //        ----------------------+----------------
@@ -278,7 +278,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         return shouldCreate;
     };
 
-    private onRoomAccessRadioToggle = (roomAccess) => {
+    private onRoomAccessRadioToggle = (roomAccess: string) => {
         if (
             this.state.encrypted &&
             this.state.joinRule != "public" &&
@@ -306,11 +306,11 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     )} </p>
                 </div>,
                 onFinished: (confirm) => {
-                    if (confirm) this._setRoomAccess(roomAccess);
+                    if (confirm) this.setRoomAccess(roomAccess);
                 },
             });
         } else {
-            this._setRoomAccess(roomAccess);
+            this.setRoomAccess(roomAccess);
         }
     };
 
