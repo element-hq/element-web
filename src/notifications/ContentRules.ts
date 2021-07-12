@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { PushRuleVectorState, State } from "./PushRuleVectorState";
+import { PushRuleVectorState, VectorState } from "./PushRuleVectorState";
 import { IAnnotatedPushRule, IPushRules, PushRuleKind } from "matrix-js-sdk/src/@types/PushRules";
 
 export interface IContentRules {
-    vectorState: State;
+    vectorState: VectorState;
     rules: IAnnotatedPushRule[];
     externalRules: IAnnotatedPushRule[];
 }
@@ -58,7 +58,7 @@ export class ContentRules {
 
         if (contentRules.loud.length) {
             return {
-                vectorState: State.Loud,
+                vectorState: VectorState.Loud,
                 rules: contentRules.loud,
                 externalRules: [
                     ...contentRules.loud_but_disabled,
@@ -69,25 +69,25 @@ export class ContentRules {
             };
         } else if (contentRules.loud_but_disabled.length) {
             return {
-                vectorState: State.Off,
+                vectorState: VectorState.Off,
                 rules: contentRules.loud_but_disabled,
                 externalRules: [...contentRules.on, ...contentRules.on_but_disabled, ...contentRules.other],
             };
         } else if (contentRules.on.length) {
             return {
-                vectorState: State.On,
+                vectorState: VectorState.On,
                 rules: contentRules.on,
                 externalRules: [...contentRules.on_but_disabled, ...contentRules.other],
             };
         } else if (contentRules.on_but_disabled.length) {
             return {
-                vectorState: State.Off,
+                vectorState: VectorState.Off,
                 rules: contentRules.on_but_disabled,
                 externalRules: contentRules.other,
             };
         } else {
             return {
-                vectorState: State.On,
+                vectorState: VectorState.On,
                 rules: [],
                 externalRules: contentRules.other,
             };
@@ -116,14 +116,14 @@ export class ContentRules {
                 r.kind = kind;
 
                 switch (PushRuleVectorState.contentRuleVectorStateKind(r)) {
-                    case State.On:
+                    case VectorState.On:
                         if (r.enabled) {
                             contentRules.on.push(r);
                         } else {
                             contentRules.on_but_disabled.push(r);
                         }
                         break;
-                    case State.Loud:
+                    case VectorState.Loud:
                         if (r.enabled) {
                             contentRules.loud.push(r);
                         } else {
