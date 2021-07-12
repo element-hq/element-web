@@ -22,7 +22,6 @@ import { RightPanelPhases, RIGHT_PANEL_PHASES_NO_ARGS } from "./RightPanelStoreP
 import { ActionPayload } from "../dispatcher/payloads";
 import { Action } from '../dispatcher/actions';
 import { SettingLevel } from "../settings/SettingLevel";
-import RoomViewStore from './RoomViewStore';
 
 interface RightPanelStoreState {
     // Whether or not to show the right panel at all. We split out rooms and groups
