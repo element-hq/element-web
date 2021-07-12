@@ -55,7 +55,6 @@ module.exports = (env, argv) => {
 
         entry: {
             "bundle": "./src/vector/index.ts",
-            "indexeddb-worker": "./src/vector/indexeddb-worker.ts",
             "mobileguide": "./src/vector/mobile_guide/index.ts",
             "jitsi": "./src/vector/jitsi/index.ts",
             "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.js",
@@ -151,6 +150,10 @@ module.exports = (env, argv) => {
                 /olm[\\/](javascript[\\/])?olm\.js$/,
             ],
             rules: [
+                {
+                    test: /\.worker\.ts$/,
+                    loader: "worker-loader",
+                },
                 {
                     test: /\.(ts|js)x?$/,
                     include: (f) => {

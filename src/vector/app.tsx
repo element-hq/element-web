@@ -30,7 +30,6 @@ import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
 import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
 import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
 import type MatrixChatType from "matrix-react-sdk/src/components/structures/MatrixChat";
-import { MatrixClientPeg } from 'matrix-react-sdk/src/MatrixClientPeg';
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 
 import { parseQs, parseQsFromFragment } from './url_utils';
@@ -129,18 +128,6 @@ function onTokenLoginCompleted() {
 }
 
 export async function loadApp(fragParams: {}) {
-    // XXX: the way we pass the path to the worker script from webpack via html in body's dataset is a hack
-    // but alternatives seem to require changing the interface to passing Workers to js-sdk
-    const vectorIndexeddbWorkerScript = document.body.dataset.vectorIndexeddbWorkerScript;
-    if (!vectorIndexeddbWorkerScript) {
-        // If this is missing, something has probably gone wrong with
-        // the bundling. The js-sdk will just fall back to accessing
-        // indexeddb directly with no worker script, but we want to
-        // make sure the indexeddb script is present, so fail hard.
-        throw newTranslatableError(_td("Missing indexeddb worker script!"));
-    }
-    MatrixClientPeg.setIndexedDbWorkerScript(vectorIndexeddbWorkerScript);
-
     window.addEventListener('hashchange', onHashChange);
 
     const platform = PlatformPeg.get();
