@@ -56,6 +56,7 @@ export class Playback extends EventEmitter implements IDestroyable {
     private state = PlaybackState.Decoding;
     private audioBuf: AudioBuffer;
     private resampledWaveform: number[];
+    private thumbnailWaveform: number[];
     private waveformObservable = new SimpleObservable<number[]>();
     private readonly clock: PlaybackClock;
     private readonly fileSize: number;
@@ -72,6 +73,7 @@ export class Playback extends EventEmitter implements IDestroyable {
         this.fileSize = this.buf.byteLength;
         this.context = createAudioContext();
         this.resampledWaveform = arrayFastResample(seedWaveform ?? DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES);
+        this.thumbnailWaveform = arrayFastResample(seedWaveform ?? DEFAULT_WAVEFORM, 100);
         this.waveformObservable.update(this.resampledWaveform);
         this.clock = new PlaybackClock(this.context);
     }
@@ -90,6 +92,14 @@ export class Playback extends EventEmitter implements IDestroyable {
      */
     public get waveform(): number[] {
         return this.resampledWaveform;
+    }
+
+    /**
+     * Stable waveform for representing a thumbnail of the media. Values are
+     * guaranteed to be between zero and one, inclusive.
+     */
+    public get waveformThumbnail(): number[] {
+        return this.thumbnailWaveform;
     }
 
     public get waveformData(): SimpleObservable<number[]> {
