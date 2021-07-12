@@ -370,7 +370,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     };
 
     private closeCopiedTooltip: () => void;
-    private debounceTimer: NodeJS.Timeout = null; // actually number because we're in the browser
+    private debounceTimer: number = null; // actually number because we're in the browser
     private editorRef = createRef<HTMLInputElement>();
     private unmounted = false;
 

@@ -78,7 +78,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
     private readonly startTime: number;
     private unmounted = false;
     private nextBatch: string = null;
-    private filterTimeout: NodeJS.Timeout;
+    private filterTimeout: number;
     private protocols: Protocols;
 
     constructor(props) {

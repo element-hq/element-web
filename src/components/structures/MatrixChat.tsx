@@ -251,7 +251,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private pageChanging: boolean;
     private tokenLogin?: boolean;
     private accountPassword?: string;
-    private accountPasswordTimer?: NodeJS.Timeout;
+    private accountPasswordTimer?: number;
     private focusComposer: boolean;
     private subTitleStatus: string;
     private prevWindowWidth: number;
