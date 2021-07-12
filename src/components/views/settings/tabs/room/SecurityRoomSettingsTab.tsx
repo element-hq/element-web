@@ -27,6 +27,8 @@ import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import SettingsFlag from '../../../elements/SettingsFlag';
+import createRoom, { IOpts } from '../../../../../createRoom';
+import CreateRoomDialog from '../../../dialogs/CreateRoomDialog';
 
 // Knock and private are reserved keywords which are not yet implemented.
 export enum JoinRule {
@@ -124,7 +126,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         if (refreshWhenTypes.includes(e.getType())) this.forceUpdate();
     };
 
-    private onEncryptionChange = async (e: React.ChangeEvent) => {
+    private onEncryptionChange = async () => {
         if (this.state.joinRule == "public") {
             const { finished } = Modal.createTrackedDialog('Confirm Public Encrypted Room', '', QuestionDialog, {
                 title: _t('Enable encryption in a public room?'),
@@ -262,20 +264,47 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         });
     };
 
+    private createNewRoom = async (defaultPublic: boolean) => {
+        const modal = Modal.createTrackedDialog<[boolean, IOpts]>(
+            "Create Room",
+            "Create room after trying to make an E2EE room public",
+            CreateRoomDialog,
+            { defaultPublic },
+        );
+        const [shouldCreate, opts] = await modal.finished;
+        if (shouldCreate) {
+            await createRoom(opts);
+        }
+        return shouldCreate;
+    };
+
     private onRoomAccessRadioToggle = (roomAccess) => {
         if (
             this.state.encrypted &&
             this.state.joinRule != "public" &&
             roomAccess != "invite_only"
         ) {
-            Modal.createTrackedDialog('Confirm Public Encrypted Room', '', QuestionDialog, {
-                title: _t('Confirm making this room public?'),
-                description: _t(
-                    "Making end-to-end encrypted rooms public renders the " +
-                    "encryption pointless, wastes processing power, and can cause " +
-                    "performance problems. Please consider creating a separate " +
-                    "unencrypted public room.",
-                ),
+            const dialog = Modal.createTrackedDialog('Confirm Public Encrypted Room', '', QuestionDialog, {
+                title: _t("Are you sure you want to make this encrypted room public?"),
+                description: <div>
+                    <p> { _t(
+                        "<b> It’s not recommended to make end-to-end encrypted rooms public. </b> It " +
+                        "means anyone can find and join this room, so anyone can read messages. You’ll " +
+                        "get none of the benefits of encryption. Encrypting messages in a public room " +
+                        "will also likely make receiving and sending messages slower than necessary.",
+                        null,
+                        { "b": (sub) => <b> { sub } </b> },
+                    )} </p>
+                    <p> { _t(
+                        "To avoid these issues, create a <a> new public room </a> for the conversation " +
+                        "you plan to have.",
+                        null,
+                        { "a": (sub) => <a onClick={() => {
+                            dialog.close();
+                            this.createNewRoom(true);
+                        }}> {sub} </a> },
+                    )} </p>
+                </div>,
                 onFinished: (confirm) => {
                     if (confirm) this._setRoomAccess(roomAccess);
                 },
