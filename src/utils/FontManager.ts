@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ limitations under the License.
  * MIT license
  */
 
-function safariVersionCheck(ua) {
+function safariVersionCheck(ua: string): boolean {
     console.log("Browser is Safari - checking version for COLR support");
     try {
         const safariVersionMatch = ua.match(/Mac OS X ([\d|_]+).*Version\/([\d|.]+).*Safari/);
@@ -44,7 +44,7 @@ function safariVersionCheck(ua) {
     return false;
 }
 
-async function isColrFontSupported() {
+async function isColrFontSupported(): Promise<boolean> {
     console.log("Checking for COLR support");
 
     const { userAgent } = navigator;
@@ -101,7 +101,7 @@ async function isColrFontSupported() {
 }
 
 let colrFontCheckStarted = false;
-export async function fixupColorFonts() {
+export async function fixupColorFonts(): Promise<void> {
     if (colrFontCheckStarted) {
         return;
     }
@@ -112,14 +112,14 @@ export async function fixupColorFonts() {
         document.fonts.add(new FontFace("Twemoji", path, {}));
         // For at least Chrome on Windows 10, we have to explictly add extra
         // weights for the emoji to appear in bold messages, etc.
-        document.fonts.add(new FontFace("Twemoji", path, { weight: 600 }));
-        document.fonts.add(new FontFace("Twemoji", path, { weight: 700 }));
+        document.fonts.add(new FontFace("Twemoji", path, { weight: "600" }));
+        document.fonts.add(new FontFace("Twemoji", path, { weight: "700" }));
     } else {
         // fall back to SBIX, generated via https://github.com/matrix-org/twemoji-colr/tree/matthew/sbix
         const path = `url('${require("../../res/fonts/Twemoji_Mozilla/TwemojiMozilla-sbix.woff2")}')`;
         document.fonts.add(new FontFace("Twemoji", path, {}));
-        document.fonts.add(new FontFace("Twemoji", path, { weight: 600 }));
-        document.fonts.add(new FontFace("Twemoji", path, { weight: 700 }));
+        document.fonts.add(new FontFace("Twemoji", path, { weight: "600" }));
+        document.fonts.add(new FontFace("Twemoji", path, { weight: "700" }));
     }
     // ...and if SBIX is not supported, the browser will fall back to one of the native fonts specified.
 }
