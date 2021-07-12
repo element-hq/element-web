@@ -27,7 +27,7 @@ import AutocompleteWrapperModel, {
 import * as Avatar from "../Avatar";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
-import singletonRoomViewStore from "../stores/RoomViewStore";
+import RoomViewStore from "../stores/RoomViewStore";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 
 interface ISerializedPart {
@@ -417,7 +417,7 @@ class UserPillPart extends PillPart {
     onClick = () => {
         defaultDispatcher.dispatch({
             action: Action.ViewUser,
-            member: MatrixClientPeg.get().getRoom(singletonRoomViewStore.getRoomId()).getMember(this.resourceId),
+            member: MatrixClientPeg.get().getRoom(RoomViewStore.getRoomId()).getMember(this.resourceId),
         });
     };
 
