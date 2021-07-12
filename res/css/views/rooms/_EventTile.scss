@@ -480,6 +480,11 @@ $hover-select-border: 4px;
         background-color: $header-panel-bg-color;
     }
 
+    pre code > * {
+        display: inline-block;
+        width: 100%;
+    }
+
     pre {
         // have to use overlay rather than auto otherwise Linux and Windows
         // Chrome gets very confused about vertical spacing:
