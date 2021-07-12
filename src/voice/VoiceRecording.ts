@@ -29,7 +29,6 @@ import { createAudioContext } from "./compat";
 import { IEncryptedFile } from "matrix-js-sdk/src/@types/event";
 import { uploadFile } from "../ContentMessages";
 import { FixedRollingArray } from "../utils/FixedRollingArray";
-import { arraySeed } from "../utils/arrays";
 import { clamp } from "../utils/numbers";
 
 const CHANNELS = 1; // stereo isn't important

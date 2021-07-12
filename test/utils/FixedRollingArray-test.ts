@@ -42,8 +42,8 @@ describe('FixedRollingArray', () => {
         const width = 24;
         const array = new FixedRollingArray(width, seed);
 
-        let maxValue = width * 2;
-        let minValue = width; // because we're forcing a rollover
+        const maxValue = width * 2;
+        const minValue = width; // because we're forcing a rollover
         for (let i = 0; i <= maxValue; i++) {
             array.pushValue(i);
         }
