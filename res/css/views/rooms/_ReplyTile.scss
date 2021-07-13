@@ -29,12 +29,13 @@ limitations under the License.
     color: $primary-fg-color;
 }
 
-.mx_ReplyTile > .mx_RedactedBody {
-    padding: 18px;
+.mx_ReplyTile .mx_RedactedBody {
+    padding: 4px 0 2px 20px;
 
     &::before {
         height: 13px;
         width: 13px;
+        top: 5px;
     }
 }
 
