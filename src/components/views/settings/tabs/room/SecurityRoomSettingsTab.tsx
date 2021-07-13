@@ -155,11 +155,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
             const { finished } = dialog;
             const [confirm] = await finished;
-
-            if (!confirm) {
-                this.setState({ encrypted: false });
-                return;
-            }
+            if (!confirm) return;
         }
 
         Modal.createTrackedDialog('Enable encryption', '', QuestionDialog, {
