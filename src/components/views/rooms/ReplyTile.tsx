@@ -26,7 +26,7 @@ import SenderProfile from "../messages/SenderProfile";
 import TextualBody from "../messages/TextualBody";
 import MImageReplyBody from "../messages/MImageReplyBody";
 import * as sdk from '../../../index';
-import { EventType } from 'matrix-js-sdk/src/@types/event';
+import { EventType, RelationType } from 'matrix-js-sdk/src/@types/event';
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -90,7 +90,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         // source tile when there's no regular tile for an event and also for
         // replace relations (which otherwise would display as a confusing
         // duplicate of the thing they are replacing).
-        const useSource = !tileHandler || this.props.mxEvent.isRelation("m.replace");
+        const useSource = !tileHandler || this.props.mxEvent.isRelation(RelationType.Replace);
         if (useSource && SettingsStore.getValue("showHiddenEventsInTimeline")) {
             tileHandler = "messages.ViewSourceEvent";
             // Reuse info message avatar and sender profile styling
