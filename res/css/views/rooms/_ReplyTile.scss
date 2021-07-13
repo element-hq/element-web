@@ -42,7 +42,6 @@ limitations under the License.
 .mx_ReplyTile .mx_EventTile_content {
     $reply-lines: 2;
     $line-height: $font-22px;
-    $max-height: 66px;
 
     pointer-events: none;
 
@@ -51,7 +50,6 @@ limitations under the License.
     -webkit-box-orient: vertical;
     -webkit-line-clamp: $reply-lines;
     line-height: $line-height;
-    max-height: $max-height;
 
     .mx_EventTile_body.mx_EventTile_bigEmoji {
         line-height: $line-height !important;
