@@ -39,7 +39,7 @@ export default class MImageReplyBody extends MImageBody {
             return super.render();
         }
 
-        const content = this.props.mxEvent.getContent() as IMediaEventContent;
+        const content = this.props.mxEvent.getContent<IMediaEventContent>();
 
         const contentUrl = this.getContentUrl();
         const thumbnail = this.messageContent(contentUrl, this.getThumbUrl(), content);
