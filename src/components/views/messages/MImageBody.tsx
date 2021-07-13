@@ -33,6 +33,7 @@ import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { IMediaEventContent } from '../../../customisations/models/IMediaEventContent';
 import ImageView from '../elements/ImageView';
+import { SyncState } from 'matrix-js-sdk/src/sync.api';
 
 export interface IProps {
     /* the MatrixEvent to show */
@@ -85,7 +86,7 @@ export default class MImageBody extends React.Component<IProps, IState> {
     }
 
     // FIXME: factor this out and apply it to MVideoBody and MAudioBody too!
-    private onClientSync = (syncState, prevState): void => {
+    private onClientSync = (syncState: SyncState, prevState: SyncState): void => {
         if (this.unmounted) return;
         // Consider the client reconnected if there is no error with syncing.
         // This means the state could be RECONNECTING, SYNCING, PREPARED or CATCHUP.
