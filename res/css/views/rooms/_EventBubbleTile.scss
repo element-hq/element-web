@@ -67,7 +67,7 @@ limitations under the License.
     .mx_SenderProfile {
         position: relative;
         top: -2px;
-        left: calc(-1 * var(--gutterSize));
+        left: 2px;
     }
 
     &[data-self=false] {
@@ -75,7 +75,7 @@ limitations under the License.
             border-bottom-right-radius: var(--cornerRadius);
         }
         .mx_EventTile_avatar {
-            left: -48px;
+            left: -34px;
         }
 
         .mx_MessageActionBar {
@@ -91,7 +91,7 @@ limitations under the License.
             float: right;
             > a {
                 left: auto;
-                right: -35px;
+                right: -48px;
             }
         }
         .mx_SenderProfile {
@@ -123,10 +123,10 @@ limitations under the License.
         background: var(--backgroundColor);
         display: flex;
         gap: 5px;
-        margin: 0 -12px 0 -22px;
+        margin: 0 -12px 0 -9px;
         > a {
             position: absolute;
-            left: -35px;
+            left: -48px;
         }
     }
 
@@ -167,6 +167,7 @@ limitations under the License.
             margin: 0 calc(-1 * var(--gutterSize));
 
             .mx_EventTile_reply {
+                max-width: 90%;
                 padding: 0;
                 > a {
                     display: none !important;
@@ -184,6 +185,23 @@ limitations under the License.
                 }
             }
         }
+    }
+
+    .mx_EditMessageComposer_buttons {
+        position: static;
+        padding: 0;
+        margin: 0;
+        background: transparent;
+    }
+
+    .mx_ReactionsRow {
+        margin-right: -18px;
+        margin-left: -9px;
+    }
+
+    .mx_ReplyThread {
+        border-left-width: 2px;
+        border-left-color: $eventbubble-reply-color;
     }
 
     &.mx_EventTile_bubbleContainer,
@@ -224,6 +242,19 @@ limitations under the License.
 
         .mx_EventTile {
             margin: 0 58px;
+        }
+
+        .mx_EventTile_line {
+            margin: 0 5px;
+            > a {
+                left: auto;
+                right: 0;
+                transform: translateX(calc(100% + 5px));
+            }
+        }
+
+        .mx_MessageActionBar {
+            transform: translate3d(50%, 0, 0);
         }
     }
 
@@ -283,7 +314,6 @@ limitations under the License.
     }
 
     .mx_MTextBody {
-        /* 30px equates to the width of the timestamp */
-        max-width: calc(100% - 35px - var(--gutterSize));
+        max-width: 100%;
     }
 }
