@@ -25,7 +25,7 @@ $hover-select-border: 4px;
     font-size: $font-14px;
     position: relative;
 
-    .mx_EventTile.mx_EventTile_info {
+    &.mx_EventTile_info {
         padding-top: 1px;
     }
 
@@ -36,12 +36,12 @@ $hover-select-border: 4px;
         user-select: none;
     }
 
-    .mx_EventTile.mx_EventTile_info .mx_EventTile_avatar {
+    &.mx_EventTile_info .mx_EventTile_avatar {
         top: $font-6px;
         left: $left-gutter;
     }
 
-    .mx_EventTile_continuation {
+    &.mx_EventTile_continuation {
         padding-top: 0px !important;
 
         &.mx_EventTile_isEditing {
@@ -50,11 +50,11 @@ $hover-select-border: 4px;
         }
     }
 
-    .mx_EventTile_isEditing {
+    &.mx_EventTile_isEditing {
         background-color: $header-panel-bg-color;
     }
 
-    .mx_EventTile .mx_SenderProfile {
+    .mx_SenderProfile {
         color: $primary-fg-color;
         font-size: $font-14px;
         display: inline-block; /* anti-zalgo, with overflow hidden */
@@ -69,7 +69,7 @@ $hover-select-border: 4px;
         max-width: calc(100% - $left-gutter);
     }
 
-    .mx_EventTile .mx_SenderProfile .mx_Flair {
+    .mx_SenderProfile .mx_Flair {
         opacity: 0.7;
         margin-left: 5px;
         display: inline-block;
@@ -84,11 +84,11 @@ $hover-select-border: 4px;
         }
     }
 
-    .mx_EventTile_isEditing .mx_MessageTimestamp {
+    &.mx_EventTile_isEditing .mx_MessageTimestamp {
         visibility: hidden;
     }
 
-    .mx_EventTile .mx_MessageTimestamp {
+    .mx_MessageTimestamp {
         display: block;
         white-space: nowrap;
         left: 0px;
@@ -96,7 +96,7 @@ $hover-select-border: 4px;
         user-select: none;
     }
 
-    .mx_EventTile_continuation .mx_EventTile_line {
+    &.mx_EventTile_continuation .mx_EventTile_line {
         clear: both;
     }
 
@@ -119,21 +119,21 @@ $hover-select-border: 4px;
         margin-right: 10px;
     }
 
-    .mx_EventTile_selected > div > a > .mx_MessageTimestamp {
+    &.mx_EventTile_selected > div > a > .mx_MessageTimestamp {
         left: calc(-$hover-select-border);
     }
 
     /* this is used for the tile for the event which is selected via the URL.
      * TODO: ultimately we probably want some transition on here.
      */
-    .mx_EventTile_selected > .mx_EventTile_line {
+    &.mx_EventTile_selected > .mx_EventTile_line {
         border-left: $accent-color 4px solid;
         padding-left: calc($left-gutter - $hover-select-border);
         background-color: $event-selected-color;
     }
 
-    .mx_EventTile_highlight,
-    .mx_EventTile_highlight .markdown-body {
+    &.mx_EventTile_highlight,
+    &.mx_EventTile_highlight .markdown-body {
         color: $event-highlight-fg-color;
 
         .mx_EventTile_line {
@@ -141,17 +141,17 @@ $hover-select-border: 4px;
         }
     }
 
-    .mx_EventTile_info .mx_EventTile_line {
+    &.mx_EventTile_info .mx_EventTile_line {
         padding-left: calc($left-gutter + 18px);
     }
 
-    .mx_EventTile_selected.mx_EventTile_info .mx_EventTile_line {
+    &.mx_EventTile_selected.mx_EventTile_info .mx_EventTile_line {
         padding-left: calc($left-gutter + 18px - $hover-select-border);
     }
 
-    .mx_EventTile:hover .mx_EventTile_line,
-    .mx_EventTile.mx_EventTile_actionBarFocused .mx_EventTile_line,
-    .mx_EventTile.focus-visible:focus-within .mx_EventTile_line {
+    &.mx_EventTile:hover .mx_EventTile_line,
+    &.mx_EventTile.mx_EventTile_actionBarFocused .mx_EventTile_line,
+    &.mx_EventTile.focus-visible:focus-within .mx_EventTile_line {
         background-color: $event-selected-color;
     }
 
@@ -195,7 +195,7 @@ $hover-select-border: 4px;
         mask-image: url('$(res)/img/element-icons/circle-sending.svg');
     }
 
-    .mx_EventTile_contextual {
+    &.mx_EventTile_contextual {
         opacity: 0.4;
     }
 
@@ -254,46 +254,46 @@ $hover-select-border: 4px;
         filter: none;
     }
 
-    .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line,
-    .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line,
-    .mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line {
+    &:hover.mx_EventTile_verified .mx_EventTile_line,
+    &:hover.mx_EventTile_unverified .mx_EventTile_line,
+    &:hover.mx_EventTile_unknown .mx_EventTile_line {
         padding-left: calc($left-gutter - $hover-select-border);
     }
 
-    .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line {
+    &:hover.mx_EventTile_verified .mx_EventTile_line {
         border-left: $e2e-verified-color $EventTile_e2e_state_indicator_width solid;
     }
 
-    .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line {
+    &:hover.mx_EventTile_unverified .mx_EventTile_line {
         border-left: $e2e-unverified-color $EventTile_e2e_state_indicator_width solid;
     }
 
-    .mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line {
+    &:hover.mx_EventTile_unknown .mx_EventTile_line {
         border-left: $e2e-unknown-color $EventTile_e2e_state_indicator_width solid;
     }
 
-    .mx_EventTile:hover.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
-    .mx_EventTile:hover.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
-    .mx_EventTile:hover.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
+    &:hover.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
+    &:hover.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
+    &:hover.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
         padding-left: calc($left-gutter + 18px - $hover-select-border);
     }
 
     /* End to end encryption stuff */
-    .mx_EventTile:hover .mx_EventTile_e2eIcon {
+    &:hover .mx_EventTile_e2eIcon {
         opacity: 1;
     }
 
     // Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
-    .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line > a > .mx_MessageTimestamp,
-    .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line > a > .mx_MessageTimestamp,
-    .mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line > a > .mx_MessageTimestamp {
+    &:hover.mx_EventTile_verified .mx_EventTile_line > a > .mx_MessageTimestamp,
+    &:hover.mx_EventTile_unverified .mx_EventTile_line > a > .mx_MessageTimestamp,
+    &:hover.mx_EventTile_unknown .mx_EventTile_line > a > .mx_MessageTimestamp {
         left: calc(-$hover-select-border);
     }
 
     // Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
-    .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line > .mx_EventTile_e2eIcon,
-    .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line > .mx_EventTile_e2eIcon,
-    .mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line > .mx_EventTile_e2eIcon {
+    &:hover.mx_EventTile_verified .mx_EventTile_line > .mx_EventTile_e2eIcon,
+    &:hover.mx_EventTile_unverified .mx_EventTile_line > .mx_EventTile_e2eIcon,
+    &:hover.mx_EventTile_unknown .mx_EventTile_line > .mx_EventTile_e2eIcon {
         display: block;
         left: 41px;
     }
