@@ -26,6 +26,7 @@ import SenderProfile from "../messages/SenderProfile";
 import TextualBody from "../messages/TextualBody";
 import MImageReplyBody from "../messages/MImageReplyBody";
 import * as sdk from '../../../index';
+import { EventType } from 'matrix-js-sdk/src/@types/event';
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -78,9 +79,11 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         const eventType = this.props.mxEvent.getType();
 
         // Info messages are basically information about commands processed on a room
-        let isInfoMessage = (
-            eventType !== 'm.room.message' && eventType !== 'm.sticker' && eventType !== 'm.room.create'
-        );
+        let isInfoMessage = [
+            EventType.RoomMessage,
+            EventType.Sticker,
+            EventType.RoomCreate,
+        ].includes(eventType as EventType);
 
         let tileHandler = getHandlerTile(this.props.mxEvent);
         // If we're showing hidden events in the timeline, we should use the
