@@ -6264,7 +6264,7 @@ Changes in [1.5.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/
    [\#3245](https://github.com/matrix-org/matrix-react-sdk/pull/3245)
  * Keep widget URL in permission screen to one line
    [\#3243](https://github.com/matrix-org/matrix-react-sdk/pull/3243)
- * Avoid visual glitch when terms appear for Integration Manager
+ * Avoid visual glitch when terms appear for integration manager
    [\#3242](https://github.com/matrix-org/matrix-react-sdk/pull/3242)
  * Show diff for formatted messages in the edit history
    [\#3244](https://github.com/matrix-org/matrix-react-sdk/pull/3244)
@@ -7271,7 +7271,7 @@ Changes in [1.0.4-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/
    [\#2783](https://github.com/matrix-org/matrix-react-sdk/pull/2783)
  * Add versioning to integration manager API /register and /account calls
    [\#2782](https://github.com/matrix-org/matrix-react-sdk/pull/2782)
- * Ensure scalar_token is valid before opening integrations manager
+ * Ensure scalar_token is valid before opening integration manager
    [\#2777](https://github.com/matrix-org/matrix-react-sdk/pull/2777)
  * Switch to `yarn` for dependency management
    [\#2773](https://github.com/matrix-org/matrix-react-sdk/pull/2773)

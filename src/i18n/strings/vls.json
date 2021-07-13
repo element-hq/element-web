@@ -1416,7 +1416,7 @@
     "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "Je makt vo de moment gebruuk van <server></server> vo deur je contactn gevoundn te kunn wordn, en von hunder te kunn viendn. Je kut hierounder jen identiteitsserver wyzign.",
     "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.": "Je makt vo de moment geen gebruuk van een identiteitsserver. Voegt der hierounder één toe vo deur je contactn gevoundn te kunn wordn en von hunder te kunn viendn.",
     "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "De verbindienge me jen identiteitsserver verbreekn goat dervoorn zorgn da je nie mi deur andere gebruukers gevoundn goa kunn wordn, en dat andere menschn je nie via e-mail of telefong goan kunn uutnodign.",
-    "Integration Manager": "Integroasjebeheerder",
+    "Integration manager": "Integroasjebeheerder",
     "Discovery": "Ountdekkienge",
     "Deactivate account": "Account deactiveern",
     "Always show the window menu bar": "De veinstermenubalk alsan toogn",

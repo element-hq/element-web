@@ -1700,7 +1700,7 @@
     "This widget may use cookies.": "Овај виџет може користити колачиће.",
     "Widget added by": "Додао је виџет",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "Коришћење овог виџета може да дели податке <helpIcon /> са %(widgetDomain)s.",
-    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.": "Коришћење овог виџета може да дели податке <helpIcon /> са %(widgetDomain)s и вашим интеграционим менаџером.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Коришћење овог виџета може да дели податке <helpIcon /> са %(widgetDomain)s и вашим интеграционим менаџером.",
     "Widget ID": "ИД виџета",
     "Room ID": "ИД собе",
     "%(brand)s URL": "%(brand)s УРЛ",
