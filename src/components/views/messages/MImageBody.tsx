@@ -148,7 +148,7 @@ export default class MImageBody extends React.Component<IProps, IState> {
         imgElement.src = this.getContentUrl();
     };
 
-    private onImageLeave = (e: React.MouseEvent): void => {
+    private onImageLeave = (e: React.MouseEvent<HTMLImageElement>): void => {
         this.setState({ hover: false });
 
         if (!this.state.showImage || !this.isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
