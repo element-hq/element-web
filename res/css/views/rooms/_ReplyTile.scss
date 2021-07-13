@@ -15,8 +15,6 @@ limitations under the License.
 */
 
 .mx_ReplyTile {
-    max-width: 100%;
-    clear: both;
     padding-top: 2px;
     padding-bottom: 2px;
     font-size: $font-14px;
@@ -101,8 +99,4 @@ limitations under the License.
     white-space: nowrap;
     text-overflow: ellipsis;
     max-width: calc(100% - 65px);
-}
-
-.mx_ReplyTile_contextual {
-    opacity: 0.4;
 }
