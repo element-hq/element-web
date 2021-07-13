@@ -135,7 +135,7 @@ export default class MImageBody extends React.Component<IProps, IState> {
 
     private isGif = (): boolean => {
         const content = this.props.mxEvent.getContent();
-        return content?.info?.mimetype === "image/gif";
+        return content.info?.mimetype === "image/gif";
     };
 
     private onImageEnter = (e: React.MouseEvent): void => {
