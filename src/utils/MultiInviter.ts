@@ -133,12 +133,12 @@ export default class MultiInviter {
             if (!room) throw new Error("Room not found");
 
             const member = room.getMember(addr);
-            if (member.membership === "join") {
+            if (member?.membership === "join") {
                 throw new MatrixError({
                     errcode: USER_ALREADY_JOINED,
                     error: "Member already joined",
                 });
-            } else if (member.membership === "invite") {
+            } else if (member?.membership === "invite") {
                 throw new MatrixError({
                     errcode: USER_ALREADY_INVITED,
                     error: "Member already invited",
