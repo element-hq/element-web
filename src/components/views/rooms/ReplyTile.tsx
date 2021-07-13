@@ -108,8 +108,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
 
         const EventTileType = sdk.getComponent(tileHandler);
 
-        const classes = classNames({
-            mx_ReplyTile: true,
+        const classes = classNames("mx_ReplyTile", {
             mx_ReplyTile_info: isInfoMessage,
         });
 
