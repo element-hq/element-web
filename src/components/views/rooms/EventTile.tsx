@@ -54,6 +54,7 @@ import TooltipButton from '../elements/TooltipButton';
 import ReadReceiptMarker from "./ReadReceiptMarker";
 import MessageActionBar from "../messages/MessageActionBar";
 import ReactionsRow from '../messages/ReactionsRow';
+import { getEventDisplayInfo } from '../../../utils/EventUtils';
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -845,35 +846,9 @@ export default class EventTile extends React.Component<IProps, IState> {
     };
 
     render() {
-        //console.info("EventTile showUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
+        const msgtype = this.props.mxEvent.getContent().msgtype;
+        const { tileHandler, isBubbleMessage, isInfoMessage } = getEventDisplayInfo(this.props.mxEvent);
 
-        const content = this.props.mxEvent.getContent();
-        const msgtype = content.msgtype;
-        const eventType = this.props.mxEvent.getType();
-
-        let tileHandler = getHandlerTile(this.props.mxEvent);
-
-        // Info messages are basically information about commands processed on a room
-        let isBubbleMessage = eventType.startsWith("m.key.verification") ||
-            (eventType === EventType.RoomMessage && msgtype && msgtype.startsWith("m.key.verification")) ||
-            (eventType === EventType.RoomCreate) ||
-            (eventType === EventType.RoomEncryption) ||
-            (tileHandler === "messages.MJitsiWidgetEvent");
-        let isInfoMessage = (
-            !isBubbleMessage && eventType !== EventType.RoomMessage &&
-            eventType !== EventType.Sticker && eventType !== EventType.RoomCreate
-        );
-
-        // If we're showing hidden events in the timeline, we should use the
-        // source tile when there's no regular tile for an event and also for
-        // replace relations (which otherwise would display as a confusing
-        // duplicate of the thing they are replacing).
-        if (SettingsStore.getValue("showHiddenEventsInTimeline") && !haveTileForEvent(this.props.mxEvent)) {
-            tileHandler = "messages.ViewSourceEvent";
-            isBubbleMessage = false;
-            // Reuse info message avatar and sender profile styling
-            isInfoMessage = true;
-        }
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
         if (!tileHandler) {

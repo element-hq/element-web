@@ -28,6 +28,7 @@ import MImageReplyBody from "../messages/MImageReplyBody";
 import * as sdk from '../../../index';
 import { EventType, MsgType, RelationType } from 'matrix-js-sdk/src/@types/event';
 import { replaceableComponent } from '../../../utils/replaceableComponent';
+import { getEventDisplayInfo } from '../../../utils/EventUtils';
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -80,28 +81,9 @@ export default class ReplyTile extends React.PureComponent<IProps> {
     };
 
     render() {
-        const content = this.props.mxEvent.getContent();
-        const msgtype = content.msgtype;
-        const eventType = this.props.mxEvent.getType();
+        const msgtype = this.props.mxEvent.getContent().msgtype;
 
-        // Info messages are basically information about commands processed on a room
-        let isInfoMessage = ![
-            EventType.RoomMessage,
-            EventType.Sticker,
-            EventType.RoomCreate,
-        ].includes(eventType as EventType);
-
-        let tileHandler = getHandlerTile(this.props.mxEvent);
-        // If we're showing hidden events in the timeline, we should use the
-        // source tile when there's no regular tile for an event and also for
-        // replace relations (which otherwise would display as a confusing
-        // duplicate of the thing they are replacing).
-        const useSource = !tileHandler || this.props.mxEvent.isRelation(RelationType.Replace);
-        if (useSource && SettingsStore.getValue("showHiddenEventsInTimeline")) {
-            tileHandler = "messages.ViewSourceEvent";
-            // Reuse info message avatar and sender profile styling
-            isInfoMessage = true;
-        }
+        const { tileHandler, isInfoMessage } = getEventDisplayInfo(this.props.mxEvent);
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
         if (!tileHandler) {
