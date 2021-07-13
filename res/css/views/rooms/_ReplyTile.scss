@@ -83,7 +83,7 @@ limitations under the License.
 }
 
 .mx_ReplyTile.mx_ReplyTile_info {
-    padding-top: 0px;
+    padding-top: 0;
 }
 
 .mx_ReplyTile .mx_SenderProfile {
@@ -92,10 +92,10 @@ limitations under the License.
     display: inline-block; /* anti-zalgo, with overflow hidden */
     overflow: hidden;
     cursor: pointer;
-    padding-left: 0px; /* left gutter */
-    padding-bottom: 0px;
-    padding-top: 0px;
-    margin: 0px;
+    padding-left: 0; /* left gutter */
+    padding-bottom: 0;
+    padding-top: 0;
+    margin: 0;
     line-height: 17px;
     /* the next three lines, along with overflow hidden, truncate long display names */
     white-space: nowrap;
