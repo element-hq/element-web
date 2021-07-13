@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from "react";
-import { encode } from "blurhash";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import dis from './dispatcher/dispatcher';
@@ -28,7 +27,6 @@ import RoomViewStore from './stores/RoomViewStore';
 import encrypt from "browser-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
 import Spinner from "./components/views/elements/Spinner";
-
 import { Action } from "./dispatcher/actions";
 import CountlyAnalytics from "./CountlyAnalytics";
 import {
@@ -40,6 +38,7 @@ import {
 } from "./dispatcher/payloads/UploadPayload";
 import { IUpload } from "./models/IUpload";
 import { IAbortablePromise, IImageInfo } from "matrix-js-sdk/src/@types/partials";
+import { BlurhashEncoder } from "./BlurhashEncoder";
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
@@ -103,55 +102,67 @@ interface IThumbnail {
  * @return {Promise} A promise that resolves with an object with an info key
  *  and a thumbnail key.
  */
-function createThumbnail(
+async function createThumbnail(
     element: ThumbnailableElement,
     inputWidth: number,
     inputHeight: number,
     mimeType: string,
 ): Promise<IThumbnail> {
-    return new Promise((resolve) => {
-        let targetWidth = inputWidth;
-        let targetHeight = inputHeight;
-        if (targetHeight > MAX_HEIGHT) {
-            targetWidth = Math.floor(targetWidth * (MAX_HEIGHT / targetHeight));
-            targetHeight = MAX_HEIGHT;
-        }
-        if (targetWidth > MAX_WIDTH) {
-            targetHeight = Math.floor(targetHeight * (MAX_WIDTH / targetWidth));
-            targetWidth = MAX_WIDTH;
-        }
+    let targetWidth = inputWidth;
+    let targetHeight = inputHeight;
+    if (targetHeight > MAX_HEIGHT) {
+        targetWidth = Math.floor(targetWidth * (MAX_HEIGHT / targetHeight));
+        targetHeight = MAX_HEIGHT;
+    }
+    if (targetWidth > MAX_WIDTH) {
+        targetHeight = Math.floor(targetHeight * (MAX_WIDTH / targetWidth));
+        targetWidth = MAX_WIDTH;
+    }
 
-        const canvas = document.createElement("canvas");
+    let canvas: HTMLCanvasElement | OffscreenCanvas;
+    if (window.OffscreenCanvas) {
+        canvas = new window.OffscreenCanvas(targetWidth, targetHeight);
+    } else {
+        canvas = document.createElement("canvas");
         canvas.width = targetWidth;
         canvas.height = targetHeight;
-        const context = canvas.getContext("2d");
-        context.drawImage(element, 0, 0, targetWidth, targetHeight);
-        const imageData = context.getImageData(0, 0, targetWidth, targetHeight);
-        const blurhash = encode(
-            imageData.data,
-            imageData.width,
-            imageData.height,
-            // use 4 components on the longer dimension, if square then both
-            imageData.width >= imageData.height ? 4 : 3,
-            imageData.height >= imageData.width ? 4 : 3,
-        );
-        canvas.toBlob(function(thumbnail) {
-            resolve({
-                info: {
-                    thumbnail_info: {
-                        w: targetWidth,
-                        h: targetHeight,
-                        mimetype: thumbnail.type,
-                        size: thumbnail.size,
-                    },
-                    w: inputWidth,
-                    h: inputHeight,
-                    [BLURHASH_FIELD]: blurhash,
-                },
-                thumbnail,
-            });
-        }, mimeType);
-    });
+    }
+
+    const context = canvas.getContext("2d");
+    context.drawImage(element, 0, 0, targetWidth, targetHeight);
+
+    let thumbnailPromise: Promise<Blob>;
+
+    if (window.OffscreenCanvas) {
+        thumbnailPromise = (canvas as OffscreenCanvas).convertToBlob({ type: mimeType });
+    } else {
+        thumbnailPromise = new Promise<Blob>(resolve => (canvas as HTMLCanvasElement).toBlob(resolve, mimeType));
+    }
+
+    const imageData = context.getImageData(0, 0, targetWidth, targetHeight);
+
+    const [
+        thumbnail,
+        blurhash,
+    ] = await Promise.all([
+        thumbnailPromise,
+        BlurhashEncoder.instance.getBlurhash(imageData),
+    ]);
+
+    return {
+        info: {
+            thumbnail_info: {
+                w: targetWidth,
+                h: targetHeight,
+                mimetype: thumbnail.type,
+                size: thumbnail.size,
+            },
+            w: inputWidth,
+            h: inputHeight,
+            [BLURHASH_FIELD]: blurhash,
+        },
+        thumbnail,
+    };
 }
 
 /**
