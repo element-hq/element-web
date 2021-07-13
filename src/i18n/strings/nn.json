@@ -758,7 +758,7 @@
     "Account": "Brukar",
     "click to reveal": "klikk for å visa",
     "Homeserver is": "Heimtenaren er",
-    "Identity server is": "Identitetstenaren er",
+    "Identity Server is": "Identitetstenaren er",
     "%(brand)s version:": "%(brand)s versjon:",
     "olm version:": "olm versjon:",
     "Failed to send email": "Fekk ikkje til å senda eposten",
@@ -1373,7 +1373,7 @@
     "Explore all public rooms": "Utforsk alle offentlege rom",
     "Explore public rooms": "Utforsk offentlege rom",
     "Use Ctrl + F to search": "Bruk Ctrl + F for søk",
-    "Identity server": "Identitetstenar",
+    "Identity Server": "Identitetstenar",
     "Email Address": "E-postadresse",
     "Go Back": "Gå attende",
     "Notification settings": "Varslingsinnstillingar"
