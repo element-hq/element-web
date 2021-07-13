@@ -45,11 +45,14 @@ export default class ReplyTile extends React.PureComponent<IProps> {
 
     componentDidMount() {
         this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
-        this.props.mxEvent.on("Event.beforeRedaction", this.onBeforeRedaction);
+        this.props.mxEvent.on("Event.beforeRedaction", this.onEventRequiresUpdate);
+        this.props.mxEvent.on("Event.replaced", this.onEventRequiresUpdate);
     }
 
     componentWillUnmount() {
         this.props.mxEvent.removeListener("Event.decrypted", this.onDecrypted);
+        this.props.mxEvent.removeListener("Event.beforeRedaction", this.onEventRequiresUpdate);
+        this.props.mxEvent.removeListener("Event.replaced", this.onEventRequiresUpdate);
     }
 
     private onDecrypted = (): void => {
@@ -59,8 +62,8 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         }
     };
 
-    private onBeforeRedaction = (): void => {
-        // When the event gets redacted, update it, so that a different tile handler is used
+    private onEventRequiresUpdate = (): void => {
+        // Force update when necessary - redactions and edits
         this.forceUpdate();
     };
 
@@ -155,6 +158,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
                         showUrlPreview={false}
                         overrideBodyTypes={msgtypeOverrides}
                         overrideEventTypes={evOverrides}
+                        replacingEventId={this.props.mxEvent.replacingEventId()}
                         maxImageHeight={96} />
                 </a>
             </div>
