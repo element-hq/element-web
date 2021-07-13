@@ -4933,7 +4933,7 @@ All Changes
    [\#3869](https://github.com/matrix-org/matrix-react-sdk/pull/3869)
  * Move feature flag check for new session toast
    [\#3865](https://github.com/matrix-org/matrix-react-sdk/pull/3865)
- * Catch exception in checkTerms if no identity server
+ * Catch exception in checkTerms if no ID server
    [\#3863](https://github.com/matrix-org/matrix-react-sdk/pull/3863)
  * Catch exception if passphrase dialog cancelled
    [\#3862](https://github.com/matrix-org/matrix-react-sdk/pull/3862)
@@ -6049,15 +6049,15 @@ Changes in [1.6.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/
    [\#3320](https://github.com/matrix-org/matrix-react-sdk/pull/3320)
  *  Prompt for terms of service on identity server changes
    [\#3317](https://github.com/matrix-org/matrix-react-sdk/pull/3317)
- * Allow 3pids to be added with no identity server set
+ * Allow 3pids to be added with no ID server set
    [\#3323](https://github.com/matrix-org/matrix-react-sdk/pull/3323)
  * Fix up remove threepid confirmation UX
    [\#3324](https://github.com/matrix-org/matrix-react-sdk/pull/3324)
  * Improve Discovery section when no IS set
    [\#3322](https://github.com/matrix-org/matrix-react-sdk/pull/3322)
- * Allow password reset without an identity server
+ * Allow password reset without an ID Server
    [\#3319](https://github.com/matrix-org/matrix-react-sdk/pull/3319)
- * Allow registering with email if no identity server
+ * Allow registering with email if no ID Server
    [\#3318](https://github.com/matrix-org/matrix-react-sdk/pull/3318)
  * Update from Weblate
    [\#3321](https://github.com/matrix-org/matrix-react-sdk/pull/3321)
@@ -6081,7 +6081,7 @@ Changes in [1.6.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/
    [\#3311](https://github.com/matrix-org/matrix-react-sdk/pull/3311)
  * Disconnect from IS Button
    [\#3305](https://github.com/matrix-org/matrix-react-sdk/pull/3305)
- * Add UI in settings to change identity server
+ * Add UI in settings to change ID Server
    [\#3300](https://github.com/matrix-org/matrix-react-sdk/pull/3300)
  * Read integration managers from account data (widgets)
    [\#3302](https://github.com/matrix-org/matrix-react-sdk/pull/3302)
@@ -6117,7 +6117,7 @@ Changes in [1.6.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/
    [\#3288](https://github.com/matrix-org/matrix-react-sdk/pull/3288)
  * Reuse DMs whenever possible instead of asking to reuse them
    [\#3286](https://github.com/matrix-org/matrix-react-sdk/pull/3286)
- * Work with no identity server set
+ * Work with no ID server set
    [\#3285](https://github.com/matrix-org/matrix-react-sdk/pull/3285)
  * Split MessageEditor up in edit-specifics & reusable parts for main composer
    [\#3282](https://github.com/matrix-org/matrix-react-sdk/pull/3282)
@@ -6264,7 +6264,7 @@ Changes in [1.5.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/
    [\#3245](https://github.com/matrix-org/matrix-react-sdk/pull/3245)
  * Keep widget URL in permission screen to one line
    [\#3243](https://github.com/matrix-org/matrix-react-sdk/pull/3243)
- * Avoid visual glitch when terms appear for integration manager
+ * Avoid visual glitch when terms appear for Integration Manager
    [\#3242](https://github.com/matrix-org/matrix-react-sdk/pull/3242)
  * Show diff for formatted messages in the edit history
    [\#3244](https://github.com/matrix-org/matrix-react-sdk/pull/3244)
@@ -7271,7 +7271,7 @@ Changes in [1.0.4-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/
    [\#2783](https://github.com/matrix-org/matrix-react-sdk/pull/2783)
  * Add versioning to integration manager API /register and /account calls
    [\#2782](https://github.com/matrix-org/matrix-react-sdk/pull/2782)
- * Ensure scalar_token is valid before opening integration manager
+ * Ensure scalar_token is valid before opening integrations manager
    [\#2777](https://github.com/matrix-org/matrix-react-sdk/pull/2777)
  * Switch to `yarn` for dependency management
    [\#2773](https://github.com/matrix-org/matrix-react-sdk/pull/2773)
