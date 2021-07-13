@@ -695,6 +695,7 @@
     "Error leaving room": "Error leaving room",
     "Unrecognised address": "Unrecognised address",
     "You do not have permission to invite people to this room.": "You do not have permission to invite people to this room.",
+    "User %(userId)s is already invited to the room": "User %(userId)s is already invited to the room",
     "User %(userId)s is already in the room": "User %(userId)s is already in the room",
     "User %(user_id)s does not exist": "User %(user_id)s does not exist",
     "User %(user_id)s may or may not exist": "User %(user_id)s may or may not exist",
