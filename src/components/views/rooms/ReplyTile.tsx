@@ -42,10 +42,6 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         onHeightChanged: () => {},
     };
 
-    constructor(props: IProps) {
-        super(props);
-    }
-
     componentDidMount() {
         this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
     }
