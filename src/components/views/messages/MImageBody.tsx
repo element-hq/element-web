@@ -138,7 +138,7 @@ export default class MImageBody extends React.Component<IProps, IState> {
         return content.info?.mimetype === "image/gif";
     };
 
-    private onImageEnter = (e: React.MouseEvent): void => {
+    private onImageEnter = (e: React.MouseEvent<HTMLImageElement>): void => {
         this.setState({ hover: true });
 
         if (!this.state.showImage || !this.isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
