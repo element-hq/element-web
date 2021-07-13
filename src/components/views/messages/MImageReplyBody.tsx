@@ -15,16 +15,12 @@ limitations under the License.
 */
 
 import React from "react";
-import MImageBody, { IProps as MImageBodyIProps } from "./MImageBody";
+import MImageBody from "./MImageBody";
 import { presentableTextForFile } from "./MFileBody";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 import SenderProfile from "./SenderProfile";
 
 export default class MImageReplyBody extends MImageBody {
-    constructor(props: MImageBodyIProps) {
-        super(props);
-    }
-
     public onClick = (ev: React.MouseEvent): void => {
         ev.preventDefault();
     };
