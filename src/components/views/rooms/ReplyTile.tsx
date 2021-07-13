@@ -27,6 +27,7 @@ import TextualBody from "../messages/TextualBody";
 import MImageReplyBody from "../messages/MImageReplyBody";
 import * as sdk from '../../../index';
 import { EventType, MsgType, RelationType } from 'matrix-js-sdk/src/@types/event';
+import { replaceableComponent } from '../../../utils/replaceableComponent';
 
 interface IProps {
     mxEvent: MatrixEvent;
