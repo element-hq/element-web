@@ -458,7 +458,7 @@ export default class MImageBody extends React.Component<IProps, IState> {
     }
 
     render() {
-        const content = this.props.mxEvent.getContent() as IMediaEventContent;
+        const content = this.props.mxEvent.getContent<IMediaEventContent>();
 
         if (this.state.error !== null) {
             return (
