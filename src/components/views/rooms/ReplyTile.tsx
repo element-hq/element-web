@@ -85,7 +85,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         const eventType = this.props.mxEvent.getType();
 
         // Info messages are basically information about commands processed on a room
-        let isInfoMessage = [
+        let isInfoMessage = ![
             EventType.RoomMessage,
             EventType.Sticker,
             EventType.RoomCreate,
