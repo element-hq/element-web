@@ -575,7 +575,7 @@
     "Your homeserver's URL": "L'URL del teu servidor propi",
     "Analytics": "Analítiques",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s ha canviat el seu nom visible a %(displayName)s.",
-    "Identity Server is": "El servidor d'identitat és",
+    "Identity server is": "El servidor d'identitat és",
     "Submit debug logs": "Enviar logs de depuració",
     "The platform you're on": "La plataforma a la que et trobes",
     "Your language of choice": "El teu idioma desitjat",

@@ -90,7 +90,7 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
     private nameForServiceType(serviceType: SERVICE_TYPES, host: string): JSX.Element {
         switch (serviceType) {
             case SERVICE_TYPES.IS:
-                return <div>{_t("Identity Server")}<br />({host})</div>;
+                return <div>{_t("Identity server")}<br />({host})</div>;
             case SERVICE_TYPES.IM:
                 return <div>{_t("Integration Manager")}<br />({host})</div>;
         }

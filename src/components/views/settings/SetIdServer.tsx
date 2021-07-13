@@ -44,7 +44,7 @@ const REACHABILITY_TIMEOUT = 10000; // ms
 async function checkIdentityServerUrl(u) {
     const parsedUrl = url.parse(u);
 
-    if (parsedUrl.protocol !== 'https:') return _t("Identity Server URL must be HTTPS");
+    if (parsedUrl.protocol !== 'https:') return _t("Identity server URL must be HTTPS");
 
     // XXX: duplicated logic from js-sdk but it's quite tied up in the validation logic in the
     // js-sdk so probably as easy to duplicate it than to separate it out so we can reuse it
@@ -53,12 +53,12 @@ async function checkIdentityServerUrl(u) {
         if (response.ok) {
             return null;
         } else if (response.status < 200 || response.status >= 300) {
-            return _t("Not a valid Identity Server (status code %(code)s)", { code: response.status });
+            return _t("Not a valid identity server (status code %(code)s)", { code: response.status });
         } else {
-            return _t("Could not connect to Identity Server");
+            return _t("Could not connect to identity server");
         }
     } catch (e) {
-        return _t("Could not connect to Identity Server");
+        return _t("Could not connect to identity server");
     }
 }
 
@@ -320,7 +320,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
             message = unboundMessage;
         }
 
-        const { finished } = Modal.createTrackedDialog('Identity Server Bound Warning', '', QuestionDialog, {
+        const { finished } = Modal.createTrackedDialog('Identity server Bound Warning', '', QuestionDialog, {
             title,
             description: message,
             button,
@@ -356,7 +356,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         let sectionTitle;
         let bodyText;
         if (idServerUrl) {
-            sectionTitle = _t("Identity Server (%(server)s)", { server: abbreviateUrl(idServerUrl) });
+            sectionTitle = _t("Identity server (%(server)s)", { server: abbreviateUrl(idServerUrl) });
             bodyText = _t(
                 "You are currently using <server></server> to discover and be discoverable by " +
                 "existing contacts you know. You can change your identity server below.",
@@ -371,7 +371,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 );
             }
         } else {
-            sectionTitle = _t("Identity Server");
+            sectionTitle = _t("Identity server");
             bodyText = _t(
                 "You are not currently using an identity server. " +
                 "To discover and be discoverable by existing contacts you know, " +
