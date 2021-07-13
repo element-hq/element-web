@@ -35,6 +35,7 @@ interface IProps {
     onHeightChanged?(): void;
 }
 
+@replaceableComponent("views.rooms.ReplyTile")
 export default class ReplyTile extends React.PureComponent<IProps> {
     static defaultProps = {
         onHeightChanged: () => {},
