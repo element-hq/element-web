@@ -63,7 +63,7 @@ async function checkIdentityServerUrl(u) {
 }
 
 interface IProps {
-    // Whether or not the ID server is missing terms. This affects the text
+    // Whether or not the identity server is missing terms. This affects the text
     // shown to the user.
     missingTerms: boolean;
 }
@@ -87,7 +87,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
 
         let defaultIdServer = '';
         if (!MatrixClientPeg.get().getIdentityServerUrl() && getDefaultIdentityServerUrl()) {
-            // If no ID server is configured but there's one in the config, prepopulate
+            // If no identity server is configured but there's one in the config, prepopulate
             // the field to help the user.
             defaultIdServer = abbreviateUrl(getDefaultIdentityServerUrl());
         }
@@ -112,7 +112,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
     }
 
     private onAction = (payload: ActionPayload) => {
-        // We react to changes in the ID server in the event the user is staring at this form
+        // We react to changes in the identity server in the event the user is staring at this form
         // when changing their identity server on another device.
         if (payload.action !== "id_server_changed") return;
 

@@ -4933,7 +4933,7 @@ All Changes
    [\#3869](https://github.com/matrix-org/matrix-react-sdk/pull/3869)
  * Move feature flag check for new session toast
    [\#3865](https://github.com/matrix-org/matrix-react-sdk/pull/3865)
- * Catch exception in checkTerms if no ID server
+ * Catch exception in checkTerms if no identity server
    [\#3863](https://github.com/matrix-org/matrix-react-sdk/pull/3863)
  * Catch exception if passphrase dialog cancelled
    [\#3862](https://github.com/matrix-org/matrix-react-sdk/pull/3862)
@@ -6049,15 +6049,15 @@ Changes in [1.6.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/
    [\#3320](https://github.com/matrix-org/matrix-react-sdk/pull/3320)
  *  Prompt for terms of service on identity server changes
    [\#3317](https://github.com/matrix-org/matrix-react-sdk/pull/3317)
- * Allow 3pids to be added with no ID server set
+ * Allow 3pids to be added with no identity server set
    [\#3323](https://github.com/matrix-org/matrix-react-sdk/pull/3323)
  * Fix up remove threepid confirmation UX
    [\#3324](https://github.com/matrix-org/matrix-react-sdk/pull/3324)
  * Improve Discovery section when no IS set
    [\#3322](https://github.com/matrix-org/matrix-react-sdk/pull/3322)
- * Allow password reset without an ID Server
+ * Allow password reset without an identity server
    [\#3319](https://github.com/matrix-org/matrix-react-sdk/pull/3319)
- * Allow registering with email if no ID Server
+ * Allow registering with email if no identity server
    [\#3318](https://github.com/matrix-org/matrix-react-sdk/pull/3318)
  * Update from Weblate
    [\#3321](https://github.com/matrix-org/matrix-react-sdk/pull/3321)
@@ -6081,7 +6081,7 @@ Changes in [1.6.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/
    [\#3311](https://github.com/matrix-org/matrix-react-sdk/pull/3311)
  * Disconnect from IS Button
    [\#3305](https://github.com/matrix-org/matrix-react-sdk/pull/3305)
- * Add UI in settings to change ID Server
+ * Add UI in settings to change identity server
    [\#3300](https://github.com/matrix-org/matrix-react-sdk/pull/3300)
  * Read integration managers from account data (widgets)
    [\#3302](https://github.com/matrix-org/matrix-react-sdk/pull/3302)
@@ -6117,7 +6117,7 @@ Changes in [1.6.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/
    [\#3288](https://github.com/matrix-org/matrix-react-sdk/pull/3288)
  * Reuse DMs whenever possible instead of asking to reuse them
    [\#3286](https://github.com/matrix-org/matrix-react-sdk/pull/3286)
- * Work with no ID server set
+ * Work with no identity server set
    [\#3285](https://github.com/matrix-org/matrix-react-sdk/pull/3285)
  * Split MessageEditor up in edit-specifics & reusable parts for main composer
    [\#3282](https://github.com/matrix-org/matrix-react-sdk/pull/3282)
