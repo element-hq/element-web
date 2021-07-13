@@ -43,7 +43,7 @@ const ZOOM_COEFFICIENT = 0.0025;
 // If we have moved only this much we can zoom
 const ZOOM_DISTANCE = 10;
 
-export interface IProps {
+interface IProps {
     src: string; // the source of the image being displayed
     name?: string; // the main title ('name') for the image
     link?: string; // the link (if any) applied to the name of the image

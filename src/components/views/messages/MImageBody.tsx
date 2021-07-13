@@ -16,12 +16,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from 'react';
+import React, { ComponentProps, createRef } from 'react';
 import { Blurhash } from "react-blurhash";
 
 import MFileBody from './MFileBody';
 import Modal from '../../../Modal';
-import * as sdk from '../../../index';
 import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -33,7 +32,7 @@ import { BLURHASH_FIELD } from "../../../ContentMessages";
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { IMediaEventContent } from '../../../customisations/models/IMediaEventContent';
-import { IProps as ImageViewIProps } from "../elements/ImageView";
+import ImageView from '../elements/ImageView';
 
 export interface IProps {
     /* the MatrixEvent to show */
@@ -115,8 +114,7 @@ export default class MImageBody extends React.Component<IProps, IState> {
 
             const content = this.props.mxEvent.getContent() as IMediaEventContent;
             const httpUrl = this.getContentUrl();
-            const ImageView = sdk.getComponent("elements.ImageView");
-            const params: ImageViewIProps = {
+            const params: ComponentProps<typeof ImageView> = {
                 src: httpUrl,
                 name: content.body?.length > 0 ? content.body : _t('Attachment'),
                 mxEvent: this.props.mxEvent,
