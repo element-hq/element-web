@@ -50,9 +50,9 @@ export default class MImageReplyBody extends MImageBody {
         />;
 
         return <div className="mx_MImageReplyBody">
-            <div className="mx_MImageReplyBody_thumbnail">{thumbnail}</div>
-            <div className="mx_MImageReplyBody_sender">{sender}</div>
-            <div className="mx_MImageReplyBody_filename">{fileBody}</div>
+            <div className="mx_MImageReplyBody_thumbnail">{ thumbnail }</div>
+            <div className="mx_MImageReplyBody_sender">{ sender }</div>
+            <div className="mx_MImageReplyBody_filename">{ fileBody }</div>
         </div>;
     }
 }
