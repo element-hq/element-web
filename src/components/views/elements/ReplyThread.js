@@ -70,10 +70,7 @@ export default class ReplyThread extends React.Component {
         };
 
         this.unmounted = false;
-        this.context.on("Event.replaced", this.onEventReplaced);
         this.room = this.context.getRoom(this.props.parentEv.getRoomId());
-        this.room.on("Room.redaction", this.onRoomRedaction);
-        this.room.on("Room.redactionCancelled", this.onRoomRedaction);
 
         this.onQuoteClick = this.onQuoteClick.bind(this);
         this.canCollapse = this.canCollapse.bind(this);
@@ -239,35 +236,7 @@ export default class ReplyThread extends React.Component {
 
     componentWillUnmount() {
         this.unmounted = true;
-        this.context.removeListener("Event.replaced", this.onEventReplaced);
-        if (this.room) {
-            this.room.removeListener("Room.redaction", this.onRoomRedaction);
-            this.room.removeListener("Room.redactionCancelled", this.onRoomRedaction);
-        }
     }
-
-    updateForEventId = (eventId) => {
-        if (this.state.events.some(event => event.getId() === eventId)) {
-            this.forceUpdate();
-        }
-    };
-
-    onEventReplaced = (ev) => {
-        if (this.unmounted) return;
-
-        // If one of the events we are rendering gets replaced, force a re-render
-        this.updateForEventId(ev.getId());
-    };
-
-    onRoomRedaction = (ev) => {
-        if (this.unmounted) return;
-
-        const eventId = ev.getAssociatedId();
-        if (!eventId) return;
-
-        // If one of the events we are rendering gets redacted, force a re-render
-        this.updateForEventId(eventId);
-    };
 
     async initialize() {
         const { parentEv } = this.props;
