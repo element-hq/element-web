@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import Spinner from "../elements/Spinner";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { IAnnotatedPushRule, IPusher, PushRuleKind, RuleId } from "matrix-js-sdk/src/@types/PushRules";
+import { IAnnotatedPushRule, IPusher, PushRuleAction, PushRuleKind, RuleId } from "matrix-js-sdk/src/@types/PushRules";
 import {
     ContentRules,
     IContentRules,
@@ -351,12 +351,40 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
         this.setState({ phase: Phase.Persisting });
 
         try {
+            const cli = MatrixClientPeg.get();
             if (rule.ruleId === KEYWORD_RULE_ID) {
-                console.log("@@ KEYWORDS");
+                // Update all the keywords
+                for (const rule of this.state.vectorKeywordRuleInfo.rules) {
+                    let enabled: boolean;
+                    let actions: PushRuleAction[];
+                    if (checkedState === VectorState.On) {
+                        if (rule.actions.length !== 1) { // XXX: Magic number
+                            actions = PushRuleVectorState.actionsFor(checkedState);
+                        }
+                        if (this.state.vectorKeywordRuleInfo.vectorState === VectorState.Off) {
+                            enabled = true;
+                        }
+                    } else if (checkedState === VectorState.Loud) {
+                        if (rule.actions.length !== 3) { // XXX: Magic number
+                            actions = PushRuleVectorState.actionsFor(checkedState);
+                        }
+                        if (this.state.vectorKeywordRuleInfo.vectorState === VectorState.Off) {
+                            enabled = true;
+                        }
+                    } else {
+                        enabled = false;
+                    }
+
+                    if (actions) {
+                        await cli.setPushRuleActions('global', rule.kind, rule.rule_id, actions);
+                    }
+                    if (enabled !== undefined) {
+                        await cli.setPushRuleEnabled('global', rule.kind, rule.rule_id, enabled);
+                    }
+                }
             } else {
                 const definition = VectorPushRulesDefinitions[rule.ruleId];
                 const actions = definition.vectorStateToActions[checkedState];
-                const cli = MatrixClientPeg.get();
                 if (!actions) {
                     await cli.setPushRuleEnabled('global', rule.rule.kind, rule.rule.rule_id, false);
                 } else {
