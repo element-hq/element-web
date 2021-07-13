@@ -99,7 +99,6 @@
     "autoprefixer": "^9.8.6",
     "babel-jest": "^26.6.3",
     "babel-loader": "^8.2.2",
-    "canvas": "^2.6.1",
     "chokidar": "^3.5.1",
     "concurrently": "^5.3.0",
     "cpx": "^1.5.0",
@@ -169,7 +168,8 @@
       "decoderWorker\\.min\\.js": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js",
       "decoderWorker\\.min\\.wasm": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js",
       "waveWorker\\.min\\.js": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js",
-      "context-filter-polyfill": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js"
+      "context-filter-polyfill": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js",
+      "FontManager.ts": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/FontManager.js"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$",

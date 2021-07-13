@@ -298,6 +298,7 @@ cd element-web
 yarn link matrix-js-sdk
 yarn link matrix-react-sdk
 yarn install
+yarn reskindex
 yarn start
 ```
 
