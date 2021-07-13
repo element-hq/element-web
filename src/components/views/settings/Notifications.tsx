@@ -1,6 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2016 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,539 +14,240 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import * as sdk from '../../../index';
-import { _t } from '../../../languageHandler';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import SettingsStore from '../../../settings/SettingsStore';
-import Modal from '../../../Modal';
+import React from "react";
+import Spinner from "../elements/Spinner";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { IAnnotatedPushRule, IPusher, PushRuleKind, RuleId, } from "matrix-js-sdk/src/@types/PushRules";
 import {
-    VectorPushRulesDefinitions,
-    PushRuleVectorState,
     ContentRules,
-} from '../../../notifications';
-import SdkConfig from "../../../SdkConfig";
+    IContentRules,
+    PushRuleVectorState,
+    VectorPushRulesDefinitions,
+    VectorState,
+} from "../../../notifications";
+import { _t, TranslatedString } from "../../../languageHandler";
+import { IThirdPartyIdentifier, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
-import AccessibleButton from "../elements/AccessibleButton";
+import SettingsStore from "../../../settings/SettingsStore";
+import StyledRadioButton from "../elements/StyledRadioButton";
 import { SettingLevel } from "../../../settings/SettingLevel";
-import { UIFeature } from "../../../settings/UIFeature";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
+import Modal from "../../../Modal";
+import ErrorDialog from "../dialogs/ErrorDialog";
+import SdkConfig from "../../../SdkConfig";
+import AccessibleButton from "../elements/AccessibleButton";
+import TagComposer from "../elements/TagComposer";
+import { objectClone } from "../../../utils/objects";
+import { arrayDiff } from "../../../utils/arrays";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
 
-// TODO: this component also does a lot of direct poking into this.state, which
-// is VERY NAUGHTY.
+enum Phase {
+    Loading = "loading",
+    Ready = "ready",
+    Persisting = "persisting", // technically a meta-state for Ready, but whatever
+    Error = "error",
+}
 
-@replaceableComponent("views.settings.Notifications")
-export default class Notifications extends React.Component {
-    static phases = {
-        LOADING: "LOADING", // The component is loading or sending data to the hs
-        DISPLAY: "DISPLAY", // The component is ready and display data
-        ERROR: "ERROR", // There was an error
+enum RuleClass {
+    Master = "master",
+
+    // The vector sections map approximately to UI sections
+    VectorGlobal = "vector_global",
+    VectorMentions = "vector_mentions",
+    VectorOther = "vector_other",
+    Other = "other", // unknown rules, essentially
+}
+
+const KEYWORD_RULE_ID = "_keywords"; // used as a placeholder "Rule ID" throughout this component
+const KEYWORD_RULE_CATEGORY = RuleClass.VectorMentions;
+
+// This array doesn't care about categories: it's just used for a simple sort
+const RULE_DISPLAY_ORDER: string[] = [
+    // Global
+    RuleId.DM,
+    RuleId.EncryptedDM,
+    RuleId.Message,
+    RuleId.EncryptedMessage,
+
+    // Mentions
+    RuleId.ContainsDisplayName,
+    RuleId.ContainsUserName,
+    RuleId.AtRoomNotification,
+
+    // Other
+    RuleId.InviteToSelf,
+    RuleId.IncomingCall,
+    RuleId.SuppressNotices,
+    RuleId.Tombstone,
+]
+
+interface IVectorPushRule {
+    ruleId: RuleId | typeof KEYWORD_RULE_ID | string;
+    rule?: IAnnotatedPushRule;
+    description: TranslatedString | string;
+    vectorState: VectorState;
+}
+
+interface IProps {}
+
+interface IState {
+    phase: Phase;
+
+    // Optional stuff is required when `phase === Ready`
+    masterPushRule?: IAnnotatedPushRule;
+    vectorKeywordRuleInfo?: IContentRules;
+    vectorPushRules?: {
+        [category in RuleClass]?: IVectorPushRule[];
     };
+    pushers?: IPusher[];
+    threepids?: IThirdPartyIdentifier[];
+}
 
-    state = {
-        phase: Notifications.phases.LOADING,
-        masterPushRule: undefined, // The master rule ('.m.rule.master')
-        vectorPushRules: [], // HS default push rules displayed in Vector UI
-        vectorContentRules: { // Keyword push rules displayed in Vector UI
-            vectorState: PushRuleVectorState.ON,
-            rules: [],
-        },
-        externalPushRules: [], // Push rules (except content rule) that have been defined outside Vector UI
-        externalContentRules: [], // Keyword push rules that have been defined outside Vector UI
-        threepids: [], // used for email notifications
-        pushers: undefined,
-    };
+export default class Notifications extends React.PureComponent<IProps, IState> {
+    public constructor(props: IProps) {
+        super(props);
 
-    componentDidMount() {
-        this._refreshFromServer();
+        this.state = {
+            phase: Phase.Loading,
+        };
     }
 
-    onEnableNotificationsChange = (checked) => {
-        const self = this;
-        this.setState({
-            phase: Notifications.phases.LOADING,
-        });
-
-        MatrixClientPeg.get().setPushRuleEnabled(
-            'global', self.state.masterPushRule.kind, self.state.masterPushRule.rule_id, !checked,
-        ).then(function() {
-            self._refreshFromServer();
-        });
-    };
-
-    onEnableDesktopNotificationsChange = (checked) => {
-        SettingsStore.setValue(
-            "notificationsEnabled", null,
-            SettingLevel.DEVICE,
-            checked,
-        ).finally(() => {
-            this.forceUpdate();
-        });
-    };
-
-    onEnableDesktopNotificationBodyChange = (checked) => {
-        SettingsStore.setValue(
-            "notificationBodyEnabled", null,
-            SettingLevel.DEVICE,
-            checked,
-        ).finally(() => {
-            this.forceUpdate();
-        });
-    };
-
-    onEnableAudioNotificationsChange = (checked) => {
-        SettingsStore.setValue(
-            "audioNotificationsEnabled", null,
-            SettingLevel.DEVICE,
-            checked,
-        ).finally(() => {
-            this.forceUpdate();
-        });
-    };
-
-    /*
-     * Returns the email pusher (pusher of type 'email') for a given
-     * email address. Email pushers all have the same app ID, so since
-     * pushers are unique over (app ID, pushkey), there will be at most
-     * one such pusher.
-     */
-    getEmailPusher(pushers, address) {
-        if (pushers === undefined) {
-            return undefined;
-        }
-        for (let i = 0; i < pushers.length; ++i) {
-            if (pushers[i].kind === 'email' && pushers[i].pushkey === address) {
-                return pushers[i];
-            }
-        }
-        return undefined;
+    private get isInhibited(): boolean {
+        // Caution: The master rule's enabled state is inverted from expectation. When
+        // the master rule is *enabled* it means all other rules are *disabled* (or
+        // inhibited). Conversely, when the master rule is *disabled* then all other rules
+        // are *enabled* (or operate fine).
+        return this.state.masterPushRule?.enabled;
     }
 
-    onEnableEmailNotificationsChange = (address, checked) => {
-        let emailPusherPromise;
-        if (checked) {
-            const data = {};
-            data['brand'] = SdkConfig.get().brand;
-            emailPusherPromise = MatrixClientPeg.get().setPusher({
-                kind: 'email',
-                app_id: 'm.email',
-                pushkey: address,
-                app_display_name: 'Email Notifications',
-                device_display_name: address,
-                lang: navigator.language,
-                data: data,
-                append: true, // We always append for email pushers since we don't want to stop other accounts notifying to the same email address
-            });
-        } else {
-            const emailPusher = this.getEmailPusher(this.state.pushers, address);
-            emailPusher.kind = null;
-            emailPusherPromise = MatrixClientPeg.get().setPusher(emailPusher);
-        }
-        emailPusherPromise.then(() => {
-            this._refreshFromServer();
-        }, (error) => {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Error saving email notification preferences', '', ErrorDialog, {
-                title: _t('Error saving email notification preferences'),
-                description: _t('An error occurred whilst saving your email notification preferences.'),
-            });
-        });
-    };
-
-    onNotifStateButtonClicked = (event) => {
-        // FIXME: use .bind() rather than className metadata here surely
-        const vectorRuleId = event.target.className.split("-")[0];
-        const newPushRuleVectorState = event.target.className.split("-")[1];
-
-        if ("_keywords" === vectorRuleId) {
-            this._setKeywordsPushRuleVectorState(newPushRuleVectorState);
-        } else {
-            const rule = this.getRule(vectorRuleId);
-            if (rule) {
-                this._setPushRuleVectorState(rule, newPushRuleVectorState);
-            }
-        }
-    };
-
-    onKeywordsClicked = (event) => {
-        // Compute the keywords list to display
-        let keywords: any[]|string = [];
-        for (const i in this.state.vectorContentRules.rules) {
-            const rule = this.state.vectorContentRules.rules[i];
-            keywords.push(rule.pattern);
-        }
-        if (keywords.length) {
-            // As keeping the order of per-word push rules hs side is a bit tricky to code,
-            // display the keywords in alphabetical order to the user
-            keywords.sort();
-
-            keywords = keywords.join(", ");
-        } else {
-            keywords = "";
-        }
-
-        const TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
-        Modal.createTrackedDialog('Keywords Dialog', '', TextInputDialog, {
-            title: _t('Keywords'),
-            description: _t('Enter keywords separated by a comma:'),
-            button: _t('OK'),
-            value: keywords,
-            onFinished: (shouldLeave, newValue) => {
-                if (shouldLeave && newValue !== keywords) {
-                    let newKeywords = newValue.split(',');
-                    for (const i in newKeywords) {
-                        newKeywords[i] = newKeywords[i].trim();
-                    }
-
-                    // Remove duplicates and empty
-                    newKeywords = newKeywords.reduce(function(array, keyword) {
-                        if (keyword !== "" && array.indexOf(keyword) < 0) {
-                            array.push(keyword);
-                        }
-                        return array;
-                    }, []);
-
-                    this._setKeywords(newKeywords);
-                }
-            },
-        });
-    };
-
-    getRule(vectorRuleId) {
-        for (const i in this.state.vectorPushRules) {
-            const rule = this.state.vectorPushRules[i];
-            if (rule.vectorRuleId === vectorRuleId) {
-                return rule;
-            }
-        }
+    public componentDidMount() {
+        // noinspection JSIgnoredPromiseFromCall
+        this.refreshFromServer();
     }
 
-    _setPushRuleVectorState(rule, newPushRuleVectorState) {
-        if (rule && rule.vectorState !== newPushRuleVectorState) {
+    private async refreshFromServer() {
+        try {
+            const newState = (await Promise.all([
+                this.refreshRules(),
+                this.refreshPushers(),
+                this.refreshThreepids(),
+            ])).reduce((p, c) => Object.assign(c, p), {});
+
             this.setState({
-                phase: Notifications.phases.LOADING,
+                ...newState,
+                phase: Phase.Ready,
             });
-
-            const self = this;
-            const cli = MatrixClientPeg.get();
-            const deferreds = [];
-            const ruleDefinition = VectorPushRulesDefinitions[rule.vectorRuleId];
-
-            if (rule.rule) {
-                const actions = ruleDefinition.vectorStateToActions[newPushRuleVectorState];
-
-                if (!actions) {
-                    // The new state corresponds to disabling the rule.
-                    deferreds.push(cli.setPushRuleEnabled('global', rule.rule.kind, rule.rule.rule_id, false));
-                } else {
-                    // The new state corresponds to enabling the rule and setting specific actions
-                    deferreds.push(this._updatePushRuleActions(rule.rule, actions, true));
-                }
-            }
-
-            Promise.all(deferreds).then(function() {
-                self._refreshFromServer();
-            }, function(error) {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                console.error("Failed to change settings: " + error);
-                Modal.createTrackedDialog('Failed to change settings', '', ErrorDialog, {
-                    title: _t('Failed to change settings'),
-                    description: ((error && error.message) ? error.message : _t('Operation failed')),
-                    onFinished: self._refreshFromServer,
-                });
-            });
+        } catch (e) {
+            console.error("Error setting up notifications for settings: ", e);
+            this.setState({ phase: Phase.Error });
         }
     }
 
-    _setKeywordsPushRuleVectorState(newPushRuleVectorState) {
-        // Is there really a change?
-        if (this.state.vectorContentRules.vectorState === newPushRuleVectorState
-            || this.state.vectorContentRules.rules.length === 0) {
-            return;
-        }
+    private async refreshRules(): Promise<Partial<IState>> {
+        const ruleSets = await MatrixClientPeg.get().getPushRules();
 
-        const self = this;
-        const cli = MatrixClientPeg.get();
+        const categories = {
+            [RuleId.Master]: RuleClass.Master,
 
-        this.setState({
-            phase: Notifications.phases.LOADING,
-        });
+            [RuleId.DM]: RuleClass.VectorGlobal,
+            [RuleId.EncryptedDM]: RuleClass.VectorGlobal,
+            [RuleId.Message]: RuleClass.VectorGlobal,
+            [RuleId.EncryptedMessage]: RuleClass.VectorGlobal,
 
-        // Update all rules in self.state.vectorContentRules
-        const deferreds = [];
-        for (const i in this.state.vectorContentRules.rules) {
-            const rule = this.state.vectorContentRules.rules[i];
+            [RuleId.ContainsDisplayName]: RuleClass.VectorMentions,
+            [RuleId.ContainsUserName]: RuleClass.VectorMentions,
+            [RuleId.AtRoomNotification]: RuleClass.VectorMentions,
 
-            let enabled; let actions;
-            switch (newPushRuleVectorState) {
-                case PushRuleVectorState.ON:
-                    if (rule.actions.length !== 1) {
-                        actions = PushRuleVectorState.actionsFor(PushRuleVectorState.ON);
-                    }
+            [RuleId.InviteToSelf]: RuleClass.VectorOther,
+            [RuleId.IncomingCall]: RuleClass.VectorOther,
+            [RuleId.SuppressNotices]: RuleClass.VectorOther,
+            [RuleId.Tombstone]: RuleClass.VectorOther,
 
-                    if (this.state.vectorContentRules.vectorState === PushRuleVectorState.OFF) {
-                        enabled = true;
-                    }
-                    break;
-
-                case PushRuleVectorState.LOUD:
-                    if (rule.actions.length !== 3) {
-                        actions = PushRuleVectorState.actionsFor(PushRuleVectorState.LOUD);
-                    }
-
-                    if (this.state.vectorContentRules.vectorState === PushRuleVectorState.OFF) {
-                        enabled = true;
-                    }
-                    break;
-
-                case PushRuleVectorState.OFF:
-                    enabled = false;
-                    break;
-            }
-
-            if (actions) {
-                // Note that the workaround in _updatePushRuleActions will automatically
-                // enable the rule
-                deferreds.push(this._updatePushRuleActions(rule, actions, enabled));
-            } else if (enabled != undefined) {
-                deferreds.push(cli.setPushRuleEnabled('global', rule.kind, rule.rule_id, enabled));
-            }
-        }
-
-        Promise.all(deferreds).then(function(resps) {
-            self._refreshFromServer();
-        }, function(error) {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            console.error("Can't update user notification settings: " + error);
-            Modal.createTrackedDialog('Can\'t update user notifcation settings', '', ErrorDialog, {
-                title: _t('Can\'t update user notification settings'),
-                description: ((error && error.message) ? error.message : _t('Operation failed')),
-                onFinished: self._refreshFromServer,
-            });
-        });
-    }
-
-    _setKeywords(newKeywords) {
-        this.setState({
-            phase: Notifications.phases.LOADING,
-        });
-
-        const self = this;
-        const cli = MatrixClientPeg.get();
-        const removeDeferreds = [];
-
-        // Remove per-word push rules of keywords that are no more in the list
-        const vectorContentRulesPatterns = [];
-        for (const i in self.state.vectorContentRules.rules) {
-            const rule = self.state.vectorContentRules.rules[i];
-
-            vectorContentRulesPatterns.push(rule.pattern);
-
-            if (newKeywords.indexOf(rule.pattern) < 0) {
-                removeDeferreds.push(cli.deletePushRule('global', rule.kind, rule.rule_id));
-            }
-        }
-
-        // If the keyword is part of `externalContentRules`, remove the rule
-        // before recreating it in the right Vector path
-        for (const i in self.state.externalContentRules) {
-            const rule = self.state.externalContentRules[i];
-
-            if (newKeywords.indexOf(rule.pattern) >= 0) {
-                removeDeferreds.push(cli.deletePushRule('global', rule.kind, rule.rule_id));
-            }
-        }
-
-        const onError = function(error) {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            console.error("Failed to update keywords: " + error);
-            Modal.createTrackedDialog('Failed to update keywords', '', ErrorDialog, {
-                title: _t('Failed to update keywords'),
-                description: ((error && error.message) ? error.message : _t('Operation failed')),
-                onFinished: self._refreshFromServer,
-            });
+            // Everything maps to a generic "other" (unknown rule)
         };
 
-        // Then, add the new ones
-        Promise.all(removeDeferreds).then(function(resps) {
-            const deferreds = [];
+        const defaultRules: {
+            [k in RuleClass]: IAnnotatedPushRule[];
+        } = {
+            [RuleClass.Master]: [],
+            [RuleClass.VectorGlobal]: [],
+            [RuleClass.VectorMentions]: [],
+            [RuleClass.VectorOther]: [],
+            [RuleClass.Other]: [],
+        };
 
-            let pushRuleVectorStateKind = self.state.vectorContentRules.vectorState;
-            if (pushRuleVectorStateKind === PushRuleVectorState.OFF) {
-                // When the current global keywords rule is OFF, we need to look at
-                // the flavor of rules in 'vectorContentRules' to apply the same actions
-                // when creating the new rule.
-                // Thus, this new rule will join the 'vectorContentRules' set.
-                if (self.state.vectorContentRules.rules.length) {
-                    pushRuleVectorStateKind = PushRuleVectorState.contentRuleVectorStateKind(
-                        self.state.vectorContentRules.rules[0],
-                    );
-                } else {
-                    // ON is default
-                    pushRuleVectorStateKind = PushRuleVectorState.ON;
+        for (const k in ruleSets.global) {
+            // noinspection JSUnfilteredForInLoop
+            const kind = k as PushRuleKind;
+            for (const r of ruleSets.global[kind]) {
+                const rule: IAnnotatedPushRule = Object.assign(r, {kind});
+                const category = categories[rule.rule_id] ?? RuleClass.Other;
+
+                if (rule.rule_id[0] === '.') {
+                    defaultRules[category].push(rule);
                 }
             }
+        }
 
-            for (const i in newKeywords) {
-                const keyword = newKeywords[i];
+        const preparedNewState: Partial<IState> = {};
+        if (defaultRules.master.length > 0) {
+            preparedNewState.masterPushRule = defaultRules.master[0];
+        } else {
+            // XXX: Can this even happen? How do we safely recover?
+            throw new Error("Failed to locate a master push rule");
+        }
 
-                if (vectorContentRulesPatterns.indexOf(keyword) < 0) {
-                    if (self.state.vectorContentRules.vectorState !== PushRuleVectorState.OFF) {
-                        deferreds.push(cli.addPushRule('global', 'content', keyword, {
-                            actions: PushRuleVectorState.actionsFor(pushRuleVectorStateKind),
-                            pattern: keyword,
-                        }));
-                    } else {
-                        deferreds.push(self._addDisabledPushRule('global', 'content', keyword, {
-                           actions: PushRuleVectorState.actionsFor(pushRuleVectorStateKind),
-                           pattern: keyword,
-                        }));
-                    }
-                }
-            }
+        // Parse keyword rules
+        preparedNewState.vectorKeywordRuleInfo = ContentRules.parseContentRules(ruleSets);
 
-            Promise.all(deferreds).then(function(resps) {
-                self._refreshFromServer();
-            }, onError);
-        }, onError);
-    }
+        // Prepare rendering for all of our known rules
+        preparedNewState.vectorPushRules = {};
+        const vectorCategories = [RuleClass.VectorGlobal, RuleClass.VectorMentions, RuleClass.VectorOther];
+        for (const category of vectorCategories) {
+            preparedNewState.vectorPushRules[category] = [];
+            for (const rule of defaultRules[category]) {
+                const definition = VectorPushRulesDefinitions[rule.rule_id];
+                const vectorState = definition.ruleToVectorState(rule);
+                preparedNewState.vectorPushRules[category].push({
+                    ruleId: rule.rule_id,
+                    rule, vectorState,
+                    description: _t(definition.description),
+                });
 
-    // Create a push rule but disabled
-    _addDisabledPushRule(scope, kind, ruleId, body) {
-        const cli = MatrixClientPeg.get();
-        return cli.addPushRule(scope, kind, ruleId, body).then(() =>
-            cli.setPushRuleEnabled(scope, kind, ruleId, false),
-        );
-    }
-
-    _refreshFromServer = () => {
-        const self = this;
-        const pushRulesPromise = MatrixClientPeg.get().getPushRules().then(function(rulesets) {
-            /// XXX seriously? wtf is this?
-            MatrixClientPeg.get().pushRules = rulesets;
-
-            // Get homeserver default rules and triage them by categories
-            const ruleCategories = {
-                // The master rule (all notifications disabling)
-                '.m.rule.master': 'master',
-
-                // The default push rules displayed by Vector UI
-                '.m.rule.contains_display_name': 'vector',
-                '.m.rule.contains_user_name': 'vector',
-                '.m.rule.roomnotif': 'vector',
-                '.m.rule.room_one_to_one': 'vector',
-                '.m.rule.encrypted_room_one_to_one': 'vector',
-                '.m.rule.message': 'vector',
-                '.m.rule.encrypted': 'vector',
-                '.m.rule.invite_for_me': 'vector',
-                //'.m.rule.member_event': 'vector',
-                '.m.rule.call': 'vector',
-                '.m.rule.suppress_notices': 'vector',
-                '.m.rule.tombstone': 'vector',
-
-                // Others go to others
-            };
-
-            // HS default rules
-            const defaultRules = { master: [], vector: {}, others: [] };
-
-            for (const kind in rulesets.global) {
-                for (let i = 0; i < Object.keys(rulesets.global[kind]).length; ++i) {
-                    const r = rulesets.global[kind][i];
-                    const cat = ruleCategories[r.rule_id];
-                    r.kind = kind;
-
-                    if (r.rule_id[0] === '.') {
-                        if (cat === 'vector') {
-                            defaultRules.vector[r.rule_id] = r;
-                        } else if (cat === 'master') {
-                            defaultRules.master.push(r);
-                        } else {
-                            defaultRules['others'].push(r);
-                        }
-                    }
-                }
-            }
-
-            // Get the master rule if any defined by the hs
-            if (defaultRules.master.length > 0) {
-                self.state.masterPushRule = defaultRules.master[0];
-            }
-
-            // parse the keyword rules into our state
-            const contentRules = ContentRules.parseContentRules(rulesets);
-            self.state.vectorContentRules = {
-                vectorState: contentRules.vectorState,
-                rules: contentRules.rules,
-            };
-            self.state.externalContentRules = contentRules.externalRules;
-
-            // Build the rules displayed in the Vector UI matrix table
-            self.state.vectorPushRules = [];
-            self.state.externalPushRules = [];
-
-            const vectorRuleIds = [
-                '.m.rule.contains_display_name',
-                '.m.rule.contains_user_name',
-                '.m.rule.roomnotif',
-                '_keywords',
-                '.m.rule.room_one_to_one',
-                '.m.rule.encrypted_room_one_to_one',
-                '.m.rule.message',
-                '.m.rule.encrypted',
-                '.m.rule.invite_for_me',
-                //'im.vector.rule.member_event',
-                '.m.rule.call',
-                '.m.rule.suppress_notices',
-                '.m.rule.tombstone',
-            ];
-            for (const i in vectorRuleIds) {
-                const vectorRuleId = vectorRuleIds[i];
-
-                if (vectorRuleId === '_keywords') {
-                    // keywords needs a special handling
-                    // For Vector UI, this is a single global push rule but translated in Matrix,
-                    // it corresponds to all content push rules (stored in self.state.vectorContentRule)
-                    self.state.vectorPushRules.push({
-                        "vectorRuleId": "_keywords",
-                        "description": (
-                            <span>
-                                { _t('Messages containing <span>keywords</span>',
-                                    {},
-                                    { 'span': (sub) =>
-                                        <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>{sub}</span>,
-                                    },
-                                )}
-                            </span>
-                        ),
-                        "vectorState": self.state.vectorContentRules.vectorState,
-                    });
-                } else {
-                    const ruleDefinition = VectorPushRulesDefinitions[vectorRuleId];
-                    const rule = defaultRules.vector[vectorRuleId];
-
-                    const vectorState = ruleDefinition.ruleToVectorState(rule);
-
-                    //console.log("Refreshing vectorPushRules for " + vectorRuleId +", "+ ruleDefinition.description +", " + rule +", " + vectorState);
-
-                    self.state.vectorPushRules.push({
-                        "vectorRuleId": vectorRuleId,
-                        "description": _t(ruleDefinition.description), // Text from VectorPushRulesDefinitions.js
-                        "rule": rule,
-                        "vectorState": vectorState,
-                    });
-
+                // XXX: Do we need this block from the previous component?
+                /*
                     // if there was a rule which we couldn't parse, add it to the external list
                     if (rule && !vectorState) {
                         rule.description = ruleDefinition.description;
                         self.state.externalPushRules.push(rule);
                     }
-                }
+                 */
             }
 
+            // Quickly sort the rules for display purposes
+            preparedNewState.vectorPushRules[category].sort((a, b) => {
+                let idxA = RULE_DISPLAY_ORDER.indexOf(a.ruleId);
+                let idxB = RULE_DISPLAY_ORDER.indexOf(b.ruleId);
+
+                // Assume unknown things go at the end
+                if (idxA < 0) idxA = RULE_DISPLAY_ORDER.length;
+                if (idxB < 0) idxB = RULE_DISPLAY_ORDER.length;
+
+                return idxA - idxB;
+            });
+
+            if (category === KEYWORD_RULE_CATEGORY) {
+                preparedNewState.vectorPushRules[category].push({
+                    ruleId: KEYWORD_RULE_ID,
+                    description: _t("Messages containing keywords"),
+                    vectorState: preparedNewState.vectorKeywordRuleInfo.vectorState,
+                });
+            }
+        }
+
+        // XXX: Do we need this block from the previous component?
+        /*
             // Build the rules not managed by Vector UI
             const otherRulesDescriptions = {
                 '.m.rule.message': _t('Notify for all other messages/rooms'),
@@ -564,294 +264,384 @@ export default class Notifications extends React.Component {
                     self.state.externalPushRules.push(rule);
                 }
             }
-        });
+         */
 
-        const pushersPromise = MatrixClientPeg.get().getPushers().then(function(resp) {
-            self.setState({ pushers: resp.pushers });
-        });
+        return preparedNewState;
+    }
 
-        Promise.all([pushRulesPromise, pushersPromise]).then(function() {
-            self.setState({
-                phase: Notifications.phases.DISPLAY,
-            });
-        }, function(error) {
-            console.error(error);
-            self.setState({
-                phase: Notifications.phases.ERROR,
-            });
-        }).finally(() => {
-            // actually explicitly update our state  having been deep-manipulating it
-            self.setState({
-                masterPushRule: self.state.masterPushRule,
-                vectorContentRules: self.state.vectorContentRules,
-                vectorPushRules: self.state.vectorPushRules,
-                externalContentRules: self.state.externalContentRules,
-                externalPushRules: self.state.externalPushRules,
-            });
-        });
+    private async refreshPushers(): Promise<Partial<IState>> {
+        return { ...(await MatrixClientPeg.get().getPushers()) };
+    }
 
-        MatrixClientPeg.get().getThreePids().then((r) => this.setState({ threepids: r.threepids }));
+    private async refreshThreepids(): Promise<Partial<IState>> {
+        return { ...(await MatrixClientPeg.get().getThreePids()) };
+    }
+
+    private showSaveError() {
+        Modal.createTrackedDialog('Error saving notification preferences', '', ErrorDialog, {
+            title: _t('Error saving notification preferences'),
+            description: _t('An error occurred whilst saving your notification preferences.'),
+        });
+    }
+
+    private onMasterRuleChanged = async (checked: boolean) => {
+        this.setState({ phase: Phase.Persisting });
+
+        try {
+            const masterRule = this.state.masterPushRule;
+            await MatrixClientPeg.get().setPushRuleEnabled('global', masterRule.kind, masterRule.rule_id, !checked);
+            await this.refreshFromServer();
+        } catch (e) {
+            this.setState({ phase: Phase.Error });
+            console.error("Error updating master push rule:", e);
+            this.showSaveError();
+        }
     };
 
-    _onClearNotifications = () => {
-        const cli = MatrixClientPeg.get();
+    private onEmailNotificationsChanged = async (email: string, checked: boolean) => {
+        this.setState({ phase: Phase.Persisting });
 
-        cli.getRooms().forEach(r => {
+        try {
+            if (checked) {
+                await MatrixClientPeg.get().setPusher({
+                    kind: "email",
+                    app_id: "m.email",
+                    pushkey: email,
+                    app_display_name: "Email Notifications",
+                    device_display_name: email,
+                    lang: navigator.language,
+                    data: {
+                        brand: SdkConfig.get().brand,
+                    },
+
+                    // We always append for email pushers since we don't want to stop other
+                    // accounts notifying to the same email address
+                    append: true,
+                });
+            } else {
+                const pusher = this.state.pushers.find(p => p.kind === "email" && p.pushkey === email);
+                pusher.kind = null; // flag for delete
+                await MatrixClientPeg.get().setPusher(pusher);
+            }
+
+            await this.refreshFromServer();
+        } catch (e) {
+            this.setState({ phase: Phase.Error });
+            console.error("Error updating email pusher:", e);
+            this.showSaveError();
+        }
+    };
+
+    private onDesktopNotificationsChanged = async (checked: boolean) => {
+        await SettingsStore.setValue("notificationsEnabled", null, SettingLevel.DEVICE, checked);
+        this.forceUpdate(); // the toggle is controlled by SettingsStore#getValue()
+    };
+
+    private onDesktopShowBodyChanged = async (checked: boolean) => {
+        await SettingsStore.setValue("notificationBodyEnabled", null, SettingLevel.DEVICE, checked);
+        this.forceUpdate(); // the toggle is controlled by SettingsStore#getValue()
+    };
+
+    private onAudioNotificationsChanged = async (checked: boolean) => {
+        await SettingsStore.setValue("audioNotificationsEnabled", null, SettingLevel.DEVICE, checked);
+        this.forceUpdate(); // the toggle is controlled by SettingsStore#getValue()
+    };
+
+    private onRadioChecked = async (rule: IVectorPushRule, checkedState: VectorState) => {
+        this.setState({ phase: Phase.Persisting });
+
+        try {
+            if (rule.ruleId === KEYWORD_RULE_ID) {
+                console.log("@@ KEYWORDS");
+            } else {
+                const definition = VectorPushRulesDefinitions[rule.ruleId];
+                const actions = definition.vectorStateToActions[checkedState];
+                if (!actions) {
+                    await MatrixClientPeg.get().setPushRuleEnabled('global', rule.rule.kind, rule.rule.rule_id, false);
+                } else {
+                    await MatrixClientPeg.get().setPushRuleActions('global', rule.rule.kind, rule.rule.rule_id, actions);
+                    await MatrixClientPeg.get().setPushRuleEnabled('global', rule.rule.kind, rule.rule.rule_id, true);
+                }
+            }
+
+            await this.refreshFromServer();
+        } catch (e) {
+            this.setState({ phase: Phase.Error });
+            console.error("Error updating push rule:", e);
+            this.showSaveError();
+        }
+    };
+
+    private onClearNotificationsClicked = () => {
+        MatrixClientPeg.get().getRooms().forEach(r => {
             if (r.getUnreadNotificationCount() > 0) {
                 const events = r.getLiveTimeline().getEvents();
-                if (events.length) cli.sendReadReceipt(events.pop());
+                if (events.length) {
+                    // noinspection JSIgnoredPromiseFromCall
+                    MatrixClientPeg.get().sendReadReceipt(events[events.length - 1]);
+                }
             }
         });
     };
 
-    _updatePushRuleActions(rule, actions, enabled) {
-        const cli = MatrixClientPeg.get();
+    private async setKeywords(keywords: string[], originalRules: IAnnotatedPushRule[]) {
+        try {
+            // De-duplicate and remove empties
+            keywords = Array.from(new Set(keywords)).filter(k => !!k);
+            const oldKeywords = Array.from(new Set(originalRules.map(r => r.pattern))).filter(k => !!k);
 
-        return cli.setPushRuleActions(
-            'global', rule.kind, rule.rule_id, actions,
-        ).then( function() {
-            // Then, if requested, enabled or disabled the rule
-            if (undefined != enabled) {
-                return cli.setPushRuleEnabled(
-                    'global', rule.kind, rule.rule_id, enabled,
-                );
+            // Note: Technically because of the UI interaction (at the time of writing), the diff
+            // will only ever be +/-1 so we don't really have to worry about efficiently handling
+            // tons of keyword changes.
+
+            const diff = arrayDiff(oldKeywords, keywords);
+
+            for (const word of diff.removed) {
+                for (const rule of originalRules.filter(r => r.pattern === word)) {
+                    await MatrixClientPeg.get().deletePushRule('global', rule.kind, rule.rule_id);
+                }
             }
+
+            let ruleVectorState = this.state.vectorKeywordRuleInfo.vectorState;
+            if (ruleVectorState === VectorState.Off) {
+                // When the current global keywords rule is OFF, we need to look at
+                // the flavor of existing rules to apply the same actions
+                // when creating the new rule.
+                if (originalRules.length) {
+                    ruleVectorState = PushRuleVectorState.contentRuleVectorStateKind(originalRules[0]);
+                } else {
+                    ruleVectorState = VectorState.On; // default
+                }
+            }
+            const kind = PushRuleKind.ContentSpecific;
+            for (const word of diff.added) {
+                await MatrixClientPeg.get().addPushRule('global', kind, word, {
+                    actions: PushRuleVectorState.actionsFor(ruleVectorState),
+                    pattern: word,
+                });
+                if (ruleVectorState === VectorState.Off) {
+                    await MatrixClientPeg.get().setPushRuleEnabled('global', kind, word, false);
+                }
+            }
+
+            await this.refreshFromServer();
+        } catch (e) {
+            this.setState({ phase: Phase.Error });
+            console.error("Error updating keyword push rules:", e);
+            this.showSaveError();
+        }
+    }
+
+    private onKeywordAdd = (keyword: string) => {
+        const originalRules = objectClone(this.state.vectorKeywordRuleInfo.rules);
+
+        // We add the keyword immediately as a sort of local echo effect
+        this.setState({
+            phase: Phase.Persisting,
+            vectorKeywordRuleInfo: {
+                ...this.state.vectorKeywordRuleInfo,
+                rules: [
+                    ...this.state.vectorKeywordRuleInfo.rules,
+
+                    // XXX: Horrible assumption that we don't need the remaining fields
+                    { pattern: keyword } as IAnnotatedPushRule,
+                ],
+            },
+        }, async () => {
+            await this.setKeywords(this.state.vectorKeywordRuleInfo.rules.map(r => r.pattern), originalRules);
         });
+    };
+
+    private onKeywordRemove = (keyword: string) => {
+        const originalRules = objectClone(this.state.vectorKeywordRuleInfo.rules);
+
+        // We remove the keyword immediately as a sort of local echo effect
+        this.setState({
+            phase: Phase.Persisting,
+            vectorKeywordRuleInfo: {
+                ...this.state.vectorKeywordRuleInfo,
+                rules: this.state.vectorKeywordRuleInfo.rules.filter(r => r.pattern !== keyword),
+            },
+        }, async () => {
+            await this.setKeywords(this.state.vectorKeywordRuleInfo.rules.map(r => r.pattern), originalRules);
+        });
+    };
+
+    private renderTopSection() {
+        const masterSwitch = <LabelledToggleSwitch
+            value={!this.isInhibited}
+            label={_t("Enable for this account")}
+            onChange={this.onMasterRuleChanged}
+            disabled={this.state.phase === Phase.Persisting}
+        />;
+
+        // If all the rules are inhibited, don't show anything.
+        if (this.isInhibited) {
+            return masterSwitch;
+        }
+
+        const emailSwitches = this.state.threepids.filter(t => t.medium === ThreepidMedium.Email)
+            .map(e => <LabelledToggleSwitch
+                key={e.address}
+                value={this.state.pushers.some(p => p.kind === "email" && p.pushkey === e.address)}
+                label={_t("Enable email notifications for %(email)s", { email: e.address })}
+                onChange={this.onEmailNotificationsChanged.bind(this, e.address)}
+                disabled={this.state.phase === Phase.Persisting}
+            />);
+
+        return <>
+            { masterSwitch }
+
+            <LabelledToggleSwitch
+                value={SettingsStore.getValue("notificationsEnabled")}
+                onChange={this.onDesktopNotificationsChanged}
+                label={_t('Enable desktop notifications for this session')}
+                disabled={this.state.phase === Phase.Persisting}
+            />
+
+            <LabelledToggleSwitch
+                value={SettingsStore.getValue("notificationBodyEnabled")}
+                onChange={this.onDesktopShowBodyChanged}
+                label={_t('Show message in desktop notification')}
+                disabled={this.state.phase === Phase.Persisting}
+            />
+
+            <LabelledToggleSwitch
+                value={SettingsStore.getValue("audioNotificationsEnabled")}
+                onChange={this.onAudioNotificationsChanged}
+                label={_t('Enable audible notifications for this session')}
+                disabled={this.state.phase === Phase.Persisting}
+            />
+
+            { emailSwitches }
+        </>;
     }
 
-    renderNotifRulesTableRow(title, className, pushRuleVectorState) {
-        return (
-            <tr key={ className }>
-                <th>
-                    { title }
-                </th>
+    private renderCategory(category: RuleClass) {
+        if (category !== RuleClass.VectorOther && this.isInhibited) {
+            return null; // nothing to show for the section
+        }
 
-                <th>
-                    <input className= {className + "-" + PushRuleVectorState.OFF}
-                        type="radio"
-                        checked={ pushRuleVectorState === PushRuleVectorState.OFF }
-                        onChange={ this.onNotifStateButtonClicked } />
-                </th>
+        let clearNotifsButton: JSX.Element;
+        if (
+            category === RuleClass.VectorOther
+            && MatrixClientPeg.get().getRooms().some(r => r.getUnreadNotificationCount() > 0)
+        ) {
+            clearNotifsButton = <AccessibleButton
+                onClick={this.onClearNotificationsClicked}
+                kind='danger'
+                className='mx_UserNotifSettings_clearNotifsButton'
+            >{ _t("Clear notifications") }</AccessibleButton>;
+        }
 
-                <th>
-                    <input className= {className + "-" + PushRuleVectorState.ON}
-                        type="radio"
-                        checked={ pushRuleVectorState === PushRuleVectorState.ON }
-                        onChange={ this.onNotifStateButtonClicked } />
-                </th>
+        if (category === RuleClass.VectorOther && this.isInhibited) {
+            // only render the utility buttons (if needed)
+            if (clearNotifsButton) {
+                return <div className='mx_UserNotifSettings_floatingSection'>
+                    <div>{ _t("Other") }</div>
+                    { clearNotifsButton }
+                </div>;
+            }
+            return null;
+        }
 
-                <th>
-                    <input className= {className + "-" + PushRuleVectorState.LOUD}
-                        type="radio"
-                        checked={ pushRuleVectorState === PushRuleVectorState.LOUD }
-                        onChange={ this.onNotifStateButtonClicked } />
-                </th>
-            </tr>
+        let keywordComposer: JSX.Element;
+        if (category === RuleClass.VectorMentions) {
+            keywordComposer = <TagComposer
+                tags={this.state.vectorKeywordRuleInfo?.rules.map(r => r.pattern)}
+                onAdd={this.onKeywordAdd}
+                onRemove={this.onKeywordRemove}
+                disabled={this.state.phase === Phase.Persisting}
+                label={_t("Keyword")}
+                placeholder={_t("New keyword")}
+            />;
+        }
+
+        const makeRadio = (r: IVectorPushRule, s: VectorState) => (
+            <StyledRadioButton
+                key={r.ruleId}
+                name={r.ruleId}
+                checked={r.vectorState === s}
+                onChange={this.onRadioChecked.bind(this, r, s)}
+                disabled={this.state.phase === Phase.Persisting}
+            />
         );
-    }
 
-    renderNotifRulesTableRows() {
-        const rows = [];
-        for (const i in this.state.vectorPushRules) {
-            const rule = this.state.vectorPushRules[i];
-            if (rule.rule === undefined && rule.vectorRuleId.startsWith(".m.")) {
-                console.warn(`Skipping render of rule ${rule.vectorRuleId} due to no underlying rule`);
-                continue;
-            }
-            //console.log("rendering: " + rule.description + ", " + rule.vectorRuleId + ", " + rule.vectorState);
-            rows.push(this.renderNotifRulesTableRow(rule.description, rule.vectorRuleId, rule.vectorState));
-        }
-        return rows;
-    }
+        const rows = this.state.vectorPushRules[category].map(r => <tr key={category + r.ruleId}>
+            <td>{ r.description }</td>
+            <td>{ makeRadio(r, VectorState.On) }</td>
+            <td>{ makeRadio(r, VectorState.Off) }</td>
+            <td>{ makeRadio(r, VectorState.Loud) }</td>
+        </tr>);
 
-    hasEmailPusher(pushers, address) {
-        if (pushers === undefined) {
-            return false;
-        }
-        for (let i = 0; i < pushers.length; ++i) {
-            if (pushers[i].kind === 'email' && pushers[i].pushkey === address) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    emailNotificationsRow(address, label) {
-        return <LabelledToggleSwitch value={this.hasEmailPusher(this.state.pushers, address)}
-            onChange={this.onEnableEmailNotificationsChange.bind(this, address)}
-            label={label} key={`emailNotif_${label}`} />;
-    }
-
-    render() {
-        let spinner;
-        if (this.state.phase === Notifications.phases.LOADING) {
-            const Loader = sdk.getComponent("elements.Spinner");
-            spinner = <Loader />;
+        let sectionName: TranslatedString;
+        switch (category) {
+            case RuleClass.VectorGlobal:
+                sectionName = _t("Global");
+                break;
+            case RuleClass.VectorMentions:
+                sectionName = _t("Mentions & keywords");
+                break;
+            case RuleClass.VectorOther:
+                sectionName = _t("Other");
+                break;
+            default:
+                throw new Error("Developer error: Unnamed notifications section: " + category);
         }
 
-        let masterPushRuleDiv;
-        if (this.state.masterPushRule) {
-            masterPushRuleDiv = <LabelledToggleSwitch value={!this.state.masterPushRule.enabled}
-                onChange={this.onEnableNotificationsChange}
-                label={_t('Enable notifications for this account')} />;
-        }
-
-        let clearNotificationsButton;
-        if (MatrixClientPeg.get().getRooms().some(r => r.getUnreadNotificationCount() > 0)) {
-            clearNotificationsButton = <AccessibleButton onClick={this._onClearNotifications} kind='danger'>
-                {_t("Clear notifications")}
-            </AccessibleButton>;
-        }
-
-        // When enabled, the master rule inhibits all existing rules
-        // So do not show all notification settings
-        if (this.state.masterPushRule && this.state.masterPushRule.enabled) {
-            return (
-                <div>
-                    {masterPushRuleDiv}
-
-                    <div className="mx_UserNotifSettings_notifTable">
-                        { _t('All notifications are currently disabled for all targets.') }
-                    </div>
-
-                    {clearNotificationsButton}
-                </div>
-            );
-        }
-
-        const emailThreepids = this.state.threepids.filter((tp) => tp.medium === "email");
-        let emailNotificationsRows;
-        if (emailThreepids.length > 0) {
-            emailNotificationsRows = emailThreepids.map((threePid) => this.emailNotificationsRow(
-                threePid.address, `${_t('Enable email notifications')} (${threePid.address})`,
-            ));
-        } else if (SettingsStore.getValue(UIFeature.ThirdPartyID)) {
-            emailNotificationsRows = <div>
-                { _t('Add an email address to configure email notifications') }
-            </div>;
-        }
-
-        // Build external push rules
-        const externalRules = [];
-        for (const i in this.state.externalPushRules) {
-            const rule = this.state.externalPushRules[i];
-            externalRules.push(<li>{ _t(rule.description) }</li>);
-        }
-
-        // Show keywords not displayed by the vector UI as a single external push rule
-        let externalKeywords: any[]|string = [];
-        for (const i in this.state.externalContentRules) {
-            const rule = this.state.externalContentRules[i];
-            externalKeywords.push(rule.pattern);
-        }
-        if (externalKeywords.length) {
-            externalKeywords = externalKeywords.join(", ");
-            externalRules.push(<li>
-                {_t('Notifications on the following keywords follow rules which can’t be displayed here:') }
-                { externalKeywords }
-            </li>);
-        }
-
-        let devicesSection;
-        if (this.state.pushers === undefined) {
-            devicesSection = <div className="error">{ _t('Unable to fetch notification target list') }</div>;
-        } else if (this.state.pushers.length === 0) {
-            devicesSection = null;
-        } else {
-            // TODO: It would be great to be able to delete pushers from here too,
-            // and this wouldn't be hard to add.
-            const rows = [];
-            for (let i = 0; i < this.state.pushers.length; ++i) {
-                rows.push(<tr key={ i }>
-                    <td>{this.state.pushers[i].app_display_name}</td>
-                    <td>{this.state.pushers[i].device_display_name}</td>
-                </tr>);
-            }
-            devicesSection = (<table className="mx_UserNotifSettings_devicesTable">
+        return <>
+            <table className='mx_UserNotifSettings_pushRulesTable'>
+                <thead>
+                    <tr>
+                        <th>{ sectionName }</th>
+                        <th>{ _t("On") }</th>
+                        <th>{ _t("Off") }</th>
+                        <th>{ _t("Noisy") }</th>
+                    </tr>
+                </thead>
                 <tbody>
-                    {rows}
+                    { rows }
                 </tbody>
-            </table>);
+            </table>
+            { clearNotifsButton }
+            { keywordComposer }
+        </>;
+    }
+
+    private renderTargets() {
+        if (this.isInhibited) return null; // no targets if there's no notifications
+
+        const rows = this.state.pushers.map(p => <tr key={p.kind+p.pushkey}>
+            <td>{ p.app_display_name }</td>
+            <td>{ p.device_display_name }</td>
+        </tr>);
+
+        if (!rows.length) return null; // no targets to show
+
+        return <div className='mx_UserNotifSettings_floatingSection'>
+            <div>{ _t("Notification targets") }</div>
+            <table>
+                <tbody>
+                    { rows }
+                </tbody>
+            </table>
+        </div>;
+    }
+
+    public render() {
+        if (this.state.phase === Phase.Loading) {
+            // Ends up default centered
+            return <Spinner />;
+        } else if (this.state.phase === Phase.Error) {
+            return <p>{ _t("There was an error loading your notification settings.") }</p>;
         }
-        if (devicesSection) {
-            devicesSection = (<div>
-                <h3>{ _t('Notification targets') }</h3>
-                { devicesSection }
-            </div>);
-        }
 
-        let advancedSettings;
-        if (externalRules.length) {
-            const brand = SdkConfig.get().brand;
-            advancedSettings = (
-                <div>
-                    <h3>{ _t('Advanced notification settings') }</h3>
-                    { _t('There are advanced notifications which are not shown here.') }<br />
-                    {_t(
-                        'You might have configured them in a client other than %(brand)s. ' +
-                        'You cannot tune them in %(brand)s but they still apply.',
-                        { brand },
-                    )}
-                    <ul>
-                        { externalRules }
-                    </ul>
-                </div>
-            );
-        }
-
-        return (
-            <div>
-
-                {masterPushRuleDiv}
-
-                <div className="mx_UserNotifSettings_notifTable">
-
-                    { spinner }
-
-                    <LabelledToggleSwitch value={SettingsStore.getValue("notificationsEnabled")}
-                        onChange={this.onEnableDesktopNotificationsChange}
-                        label={_t('Enable desktop notifications for this session')} />
-
-                    <LabelledToggleSwitch value={SettingsStore.getValue("notificationBodyEnabled")}
-                        onChange={this.onEnableDesktopNotificationBodyChange}
-                        label={_t('Show message in desktop notification')} />
-
-                    <LabelledToggleSwitch value={SettingsStore.getValue("audioNotificationsEnabled")}
-                        onChange={this.onEnableAudioNotificationsChange}
-                        label={_t('Enable audible notifications for this session')} />
-
-                    { emailNotificationsRows }
-
-                    <div className="mx_UserNotifSettings_pushRulesTableWrapper">
-                        <table className="mx_UserNotifSettings_pushRulesTable">
-                            <thead>
-                                <tr>
-                                    {/* @ts-ignore*/}
-                                    <th width="55%"/>
-                                    {/* @ts-ignore*/}
-                                    <th width="15%">{ _t('Off') }</th>
-                                    {/* @ts-ignore*/}
-                                    <th width="15%">{ _t('On') }</th>
-                                    {/* @ts-ignore*/}
-                                    <th width="15%">{ _t('Noisy') }</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                { this.renderNotifRulesTableRows() }
-
-                            </tbody>
-                        </table>
-                    </div>
-
-                    { advancedSettings }
-
-                    { devicesSection }
-
-                    { clearNotificationsButton }
-                </div>
-
-            </div>
-        );
+        return <div className='mx_UserNotifSettings'>
+            { this.renderTopSection() }
+            { this.renderCategory(RuleClass.VectorGlobal) }
+            { this.renderCategory(RuleClass.VectorMentions) }
+            { this.renderCategory(RuleClass.VectorOther) }
+            { this.renderTargets() }
+        </div>;
     }
 }
