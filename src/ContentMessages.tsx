@@ -140,14 +140,9 @@ async function createThumbnail(
     }
 
     const imageData = context.getImageData(0, 0, targetWidth, targetHeight);
-
-    const [
-        thumbnail,
-        blurhash,
-    ] = await Promise.all([
-        thumbnailPromise,
-        BlurhashEncoder.instance.getBlurhash(imageData),
-    ]);
+    // thumbnailPromise and blurhash promise are being awaited concurrently
+    const blurhash = await BlurhashEncoder.instance.getBlurhash(imageData);
+    const thumbnail = await thumbnailPromise;
 
     return {
         info: {
