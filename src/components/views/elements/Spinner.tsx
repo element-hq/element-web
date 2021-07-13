@@ -36,7 +36,7 @@ export default class Spinner extends React.PureComponent<IProps> {
                 { message && <React.Fragment><div className="mx_Spinner_Msg">{ message }</div>&nbsp;</React.Fragment> }
                 <div
                     className="mx_Spinner_icon"
-                    style={{width: w, height: h}}
+                    style={{ width: w, height: h }}
                     aria-label={_t("Loading...")}
                 />
             </div>

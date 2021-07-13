@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import Spinner from "../elements/Spinner";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { IAnnotatedPushRule, IPusher, PushRuleKind, RuleId, } from "matrix-js-sdk/src/@types/PushRules";
+import { IAnnotatedPushRule, IPusher, PushRuleKind, RuleId } from "matrix-js-sdk/src/@types/PushRules";
 import {
     ContentRules,
     IContentRules,
@@ -80,7 +80,7 @@ const RULE_DISPLAY_ORDER: string[] = [
     RuleId.IncomingCall,
     RuleId.SuppressNotices,
     RuleId.Tombstone,
-]
+];
 
 interface IVectorPushRule {
     ruleId: RuleId | typeof KEYWORD_RULE_ID | string;
@@ -181,7 +181,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             // noinspection JSUnfilteredForInLoop
             const kind = k as PushRuleKind;
             for (const r of ruleSets.global[kind]) {
-                const rule: IAnnotatedPushRule = Object.assign(r, {kind});
+                const rule: IAnnotatedPushRule = Object.assign(r, { kind });
                 const category = categories[rule.rule_id] ?? RuleClass.Other;
 
                 if (rule.rule_id[0] === '.') {
@@ -356,11 +356,12 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             } else {
                 const definition = VectorPushRulesDefinitions[rule.ruleId];
                 const actions = definition.vectorStateToActions[checkedState];
+                const cli = MatrixClientPeg.get();
                 if (!actions) {
-                    await MatrixClientPeg.get().setPushRuleEnabled('global', rule.rule.kind, rule.rule.rule_id, false);
+                    await cli.setPushRuleEnabled('global', rule.rule.kind, rule.rule.rule_id, false);
                 } else {
-                    await MatrixClientPeg.get().setPushRuleActions('global', rule.rule.kind, rule.rule.rule_id, actions);
-                    await MatrixClientPeg.get().setPushRuleEnabled('global', rule.rule.kind, rule.rule.rule_id, true);
+                    await cli.setPushRuleActions('global', rule.rule.kind, rule.rule.rule_id, actions);
+                    await cli.setPushRuleEnabled('global', rule.rule.kind, rule.rule.rule_id, true);
                 }
             }
 
