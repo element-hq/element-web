@@ -19,7 +19,7 @@ limitations under the License.
     clear: both;
     padding-top: 2px;
     padding-bottom: 2px;
-    font-size: 14px;
+    font-size: $font-14px;
     position: relative;
     line-height: 16px;
 }
@@ -43,7 +43,7 @@ limitations under the License.
 // We do reply size limiting with CSS to avoid duplicating the TextualBody component.
 .mx_ReplyTile .mx_EventTile_content {
     $reply-lines: 2;
-    $line-height: 22px;
+    $line-height: $font-22px;
     $max-height: 66px;
 
     pointer-events: none;
@@ -58,7 +58,7 @@ limitations under the License.
     .mx_EventTile_body.mx_EventTile_bigEmoji {
         line-height: $line-height !important;
         // Override the big emoji override
-        font-size: 14px !important;
+        font-size: $font-14px !important;
     }
 
     // Hack to cut content in <pre> tags too
@@ -88,7 +88,7 @@ limitations under the License.
 
 .mx_ReplyTile .mx_SenderProfile {
     color: $primary-fg-color;
-    font-size: 14px;
+    font-size: $font-14px;
     display: inline-block; /* anti-zalgo, with overflow hidden */
     overflow: hidden;
     cursor: pointer;
@@ -96,7 +96,7 @@ limitations under the License.
     padding-bottom: 0;
     padding-top: 0;
     margin: 0;
-    line-height: 17px;
+    line-height: $font-17px;
     /* the next three lines, along with overflow hidden, truncate long display names */
     white-space: nowrap;
     text-overflow: ellipsis;
