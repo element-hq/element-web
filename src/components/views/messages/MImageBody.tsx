@@ -154,7 +154,7 @@ export default class MImageBody extends React.Component<IProps, IState> {
         if (!this.state.showImage || !this.isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
             return;
         }
-        const imgElement = e.target as HTMLImageElement;
+        const imgElement = e.currentTarget;
         imgElement.src = this.getThumbUrl();
     };
 
