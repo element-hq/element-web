@@ -332,7 +332,12 @@ export default class MImageBody extends React.Component<IProps, IState> {
     _afterComponentWillUnmount() {
     }
 
-    protected messageContent(contentUrl: string, thumbUrl: string, content: IMediaEventContent): JSX.Element {
+    protected messageContent(
+        contentUrl: string,
+        thumbUrl: string,
+        content: IMediaEventContent,
+        forcedHeight?: number,
+    ): JSX.Element {
         let infoWidth;
         let infoHeight;
 
@@ -367,7 +372,7 @@ export default class MImageBody extends React.Component<IProps, IState> {
         }
 
         // The maximum height of the thumbnail as it is rendered as an <img>
-        const maxHeight = Math.min(this.props.maxImageHeight || 600, infoHeight);
+        const maxHeight = forcedHeight || Math.min((this.props.maxImageHeight || 600), infoHeight);
         // The maximum width of the thumbnail, as dictated by its natural
         // maximum height.
         const maxWidth = infoWidth * maxHeight / infoHeight;
@@ -407,9 +412,9 @@ export default class MImageBody extends React.Component<IProps, IState> {
         }
 
         const thumbnail = (
-            <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight: maxHeight + "px" }} >
+            <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight: maxHeight + "px", maxWidth: maxWidth + "px" }} >
                 { /* Calculate aspect ratio, using %padding will size _container correctly */ }
-                <div style={{ paddingBottom: (100 * infoHeight / infoWidth) + '%' }} />
+                <div style={{ paddingBottom: forcedHeight ? (forcedHeight + "px") : ((100 * infoHeight / infoWidth) + '%') }} />
                 { showPlaceholder &&
                     <div className="mx_MImageBody_thumbnail" style={{
                         // Constrain width here so that spinner appears central to the loaded thumbnail

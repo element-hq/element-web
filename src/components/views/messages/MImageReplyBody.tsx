@@ -42,7 +42,7 @@ export default class MImageReplyBody extends MImageBody {
         const content = this.props.mxEvent.getContent<IMediaEventContent>();
 
         const contentUrl = this.getContentUrl();
-        const thumbnail = this.messageContent(contentUrl, this.getThumbUrl(), content);
+        const thumbnail = this.messageContent(contentUrl, this.getThumbUrl(), content, 44);
         const fileBody = this.getFileBody();
         const sender = <SenderProfile
             mxEvent={this.props.mxEvent}
@@ -50,9 +50,11 @@ export default class MImageReplyBody extends MImageBody {
         />;
 
         return <div className="mx_MImageReplyBody">
-            <div className="mx_MImageReplyBody_thumbnail">{ thumbnail }</div>
-            <div className="mx_MImageReplyBody_sender">{ sender }</div>
-            <div className="mx_MImageReplyBody_filename">{ fileBody }</div>
+            { thumbnail }
+            <div className="mx_MImageReplyBody_info">
+                <div className="mx_MImageReplyBody_sender">{ sender }</div>
+                <div className="mx_MImageReplyBody_filename">{ fileBody }</div>
+            </div>
         </div>;
     }
 }

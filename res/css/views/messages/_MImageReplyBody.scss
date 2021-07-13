@@ -15,19 +15,11 @@ limitations under the License.
 */
 
 .mx_MImageReplyBody {
-    display: grid;
-    grid-template:
-        "image sender"   20px
-        "image filename" 20px
-        / 44px  auto;
-    grid-gap: 4px;
-}
-
-.mx_MImageReplyBody_thumbnail {
-    grid-area: image;
+    display: flex;
 
     .mx_MImageBody_thumbnail_container {
-        max-height: 44px !important;
+        flex: 1;
+        padding-right: 4px;
     }
 }
 
