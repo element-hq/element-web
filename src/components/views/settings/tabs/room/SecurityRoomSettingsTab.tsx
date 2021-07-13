@@ -128,16 +128,34 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
     private onEncryptionChange = async () => {
         if (this.state.joinRule == "public") {
-            const { finished } = Modal.createTrackedDialog('Confirm Public Encrypted Room', '', QuestionDialog, {
-                title: _t('Enable encryption in a public room?'),
-                description: _t(
-                    "Note that enabling encryption in public rooms renders the " +
-                    "encryption pointless, wastes processing power, and can cause " +
-                    "performance problems. Please consider creating a separate " +
-                    "encrypted room.",
-                ),
+            const dialog = Modal.createTrackedDialog('Confirm Public Encrypted Room', '', QuestionDialog, {
+                title: _t('Are you sure you want to add encryption to this public room?'),
+                description: <div>
+                    <p> { _t(
+                        "<b> It’s not recommended to turn on encryption on for public rooms. </b>" +
+                        "Anyone can find and join public rooms, so anyone can read messages. You’ll " +
+                        "get none of the benefits of encryption, and you won't be able to turn it " +
+                        "off later. Encrypting messages in a public room will also likely make " +
+                        "receiving and sending messages slower than necessary.",
+                        null,
+                        { "b": (sub) => <b> { sub } </b> },
+                    )} </p>
+                    <p> { _t(
+                        "To avoid these issues, create a <a> new private encrypted room </a> for " +
+                        "the conversation you plan to have.",
+                        null,
+                        { "a": (sub) => <a onClick={() => {
+                            dialog.close();
+                            this.createNewRoom(false, true);
+                        }}> {sub} </a> },
+                    )} </p>
+                </div>,
+
             });
+
+            const { finished } = dialog;
             const [confirm] = await finished;
+
             if (!confirm) {
                 this.setState({ encrypted: false });
                 return;
@@ -264,12 +282,12 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         });
     };
 
-    private createNewRoom = async (defaultPublic: boolean) => {
+    private createNewRoom = async (defaultPublic: boolean, defaultEncrypted: boolean) => {
         const modal = Modal.createTrackedDialog<[boolean, IOpts]>(
             "Create Room",
             "Create room after trying to make an E2EE room public",
             CreateRoomDialog,
-            { defaultPublic },
+            { defaultPublic, defaultEncrypted },
         );
         const [shouldCreate, opts] = await modal.finished;
         if (shouldCreate) {
@@ -301,7 +319,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                         null,
                         { "a": (sub) => <a onClick={() => {
                             dialog.close();
-                            this.createNewRoom(true);
+                            this.createNewRoom(true, false);
                         }}> {sub} </a> },
                     )} </p>
                 </div>,
