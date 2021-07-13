@@ -45,6 +45,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
 
     componentDidMount() {
         this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
+        this.props.mxEvent.on("Event.beforeRedaction", this.onBeforeRedaction);
     }
 
     componentWillUnmount() {
@@ -56,6 +57,11 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         if (this.props.onHeightChanged) {
             this.props.onHeightChanged();
         }
+    };
+
+    private onBeforeRedaction = (): void => {
+        // When the event gets redacted, update it, so that a different tile handler is used
+        this.forceUpdate();
     };
 
     private onClick = (e: React.MouseEvent): void => {
