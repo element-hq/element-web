@@ -18,15 +18,13 @@ import React from 'react';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
-import SettingsStore from "../../../settings/SettingsStore";
-import { getHandlerTile } from "./EventTile";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import SenderProfile from "../messages/SenderProfile";
 import TextualBody from "../messages/TextualBody";
 import MImageReplyBody from "../messages/MImageReplyBody";
 import * as sdk from '../../../index';
-import { EventType, MsgType, RelationType } from 'matrix-js-sdk/src/@types/event';
+import { EventType, MsgType } from 'matrix-js-sdk/src/@types/event';
 import { replaceableComponent } from '../../../utils/replaceableComponent';
 import { getEventDisplayInfo } from '../../../utils/EventUtils';
 

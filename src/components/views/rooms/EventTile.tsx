@@ -27,7 +27,6 @@ import { _t } from '../../../languageHandler';
 import { hasText } from "../../../TextForEvent";
 import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';
-import SettingsStore from "../../../settings/SettingsStore";
 import { Layout } from "../../../settings/Layout";
 import { formatTime } from "../../../DateUtils";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
