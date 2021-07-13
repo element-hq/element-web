@@ -70,7 +70,14 @@ limitations under the License.
         -webkit-line-clamp: $reply-lines;
         padding: 4px;
     }
-    .markdown-body blockquote, .markdown-body dl, .markdown-body ol, .markdown-body p, .markdown-body pre, .markdown-body table, .markdown-body ul {
+
+    .markdown-body blockquote,
+    .markdown-body dl,
+    .markdown-body ol,
+    .markdown-body p,
+    .markdown-body pre,
+    .markdown-body table,
+    .markdown-body ul {
         margin-bottom: 4px;
     }
 }
