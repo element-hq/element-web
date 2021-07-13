@@ -26,7 +26,7 @@ import SenderProfile from "../messages/SenderProfile";
 import TextualBody from "../messages/TextualBody";
 import MImageReplyBody from "../messages/MImageReplyBody";
 import * as sdk from '../../../index';
-import { EventType, RelationType } from 'matrix-js-sdk/src/@types/event';
+import { EventType, MsgType, RelationType } from 'matrix-js-sdk/src/@types/event';
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -119,7 +119,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         }
 
         let sender;
-        const needsSenderProfile = msgtype !== 'm.image' && tileHandler !== 'messages.RoomCreate' && !isInfoMessage;
+        const needsSenderProfile = msgtype !== MsgType.Image && tileHandler !== EventType.RoomCreate && !isInfoMessage;
 
         if (needsSenderProfile) {
             sender = <SenderProfile
