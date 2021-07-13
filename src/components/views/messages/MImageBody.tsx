@@ -448,7 +448,7 @@ export default class MImageBody extends React.Component<IProps, IState> {
     }
 
     // Overidden by MStickerBody
-    protected getTooltip() {
+    protected getTooltip(): JSX.Element {
         return null;
     }
 
