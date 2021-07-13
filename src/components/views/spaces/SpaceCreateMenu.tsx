@@ -220,6 +220,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
                         value={alias}
                         placeholder={name ? nameToAlias(name, domain) : _t("e.g. my-space")}
                         label={_t("Address")}
+                        disabled={busy}
                     />
                     : null
                 }

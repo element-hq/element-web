@@ -49,8 +49,6 @@ const MAX_HEIGHT = 600;
 const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
 
 export const BLURHASH_FIELD = "xyz.amorgan.blurhash"; // MSC2448
-const BLURHASH_X_COMPONENTS = 6;
-const BLURHASH_Y_COMPONENTS = 6;
 
 export class UploadCanceledError extends Error {}
 
@@ -137,8 +135,9 @@ function createThumbnail(
             imageData.data,
             imageData.width,
             imageData.height,
-            BLURHASH_X_COMPONENTS,
-            BLURHASH_Y_COMPONENTS,
+            // use 4 components on the longer dimension, if square then both
+            imageData.width >= imageData.height ? 4 : 3,
+            imageData.height >= imageData.width ? 4 : 3,
         );
         canvas.toBlob(function(thumbnail) {
             resolve({
@@ -419,6 +418,7 @@ export default class ContentMessages {
 
         const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
         if (isQuoting) {
+            // FIXME: Using an import will result in Element crashing
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             const { finished } = Modal.createTrackedDialog<[boolean]>('Upload Reply Warning', '', QuestionDialog, {
                 title: _t('Replying With Files'),
@@ -453,6 +453,7 @@ export default class ContentMessages {
         }
 
         if (tooBigFiles.length > 0) {
+            // FIXME: Using an import will result in Element crashing
             const UploadFailureDialog = sdk.getComponent("dialogs.UploadFailureDialog");
             const { finished } = Modal.createTrackedDialog<[boolean]>('Upload Failure', '', UploadFailureDialog, {
                 badFiles: tooBigFiles,
@@ -463,7 +464,6 @@ export default class ContentMessages {
             if (!shouldContinue) return;
         }
 
-        const UploadConfirmDialog = sdk.getComponent("dialogs.UploadConfirmDialog");
         let uploadAll = false;
         // Promise to complete before sending next file into room, used for synchronisation of file-sending
         // to match the order the files were specified in
@@ -471,6 +471,8 @@ export default class ContentMessages {
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             if (!uploadAll) {
+                // FIXME: Using an import will result in Element crashing
+                const UploadConfirmDialog = sdk.getComponent("dialogs.UploadConfirmDialog");
                 const { finished } = Modal.createTrackedDialog<[boolean, boolean]>('Upload Files confirmation',
                     '', UploadConfirmDialog, {
                         file,
@@ -567,7 +569,7 @@ export default class ContentMessages {
         dis.dispatch<UploadStartedPayload>({ action: Action.UploadStarted, upload });
 
         // Focus the composer view
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
 
         function onProgress(ev) {
             upload.total = ev.total;
@@ -606,6 +608,7 @@ export default class ContentMessages {
                         { fileName: upload.fileName },
                     );
                 }
+                // FIXME: Using an import will result in Element crashing
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createTrackedDialog('Upload failed', '', ErrorDialog, {
                     title: _t('Upload Failed'),

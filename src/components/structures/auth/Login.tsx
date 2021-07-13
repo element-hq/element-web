@@ -18,7 +18,6 @@ import React, { ReactNode } from 'react';
 import { MatrixError } from "matrix-js-sdk/src/http-api";
 
 import { _t, _td } from '../../../languageHandler';
-import * as sdk from '../../../index';
 import Login, { ISSOFlow, LoginFlow } from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
@@ -36,6 +35,8 @@ import Spinner from "../../views/elements/Spinner";
 import SSOButtons from "../../views/elements/SSOButtons";
 import ServerPicker from "../../views/elements/ServerPicker";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import AuthBody from "../../views/auth/AuthBody";
+import AuthHeader from "../../views/auth/AuthHeader";
 
 // These are used in several places, and come from the js-sdk's autodiscovery
 // stuff. We define them here so that they'll be picked up by i18n.
@@ -541,8 +542,6 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
     };
 
     render() {
-        const AuthHeader = sdk.getComponent("auth.AuthHeader");
-        const AuthBody = sdk.getComponent("auth.AuthBody");
         const loader = this.isBusy() && !this.state.busyLoggingIn ?
             <div className="mx_Login_loader"><Spinner /></div> : null;
 

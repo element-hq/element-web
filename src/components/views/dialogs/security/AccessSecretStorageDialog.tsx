@@ -17,7 +17,7 @@ limitations under the License.
 import { debounce } from "lodash";
 import classNames from 'classnames';
 import React, { ChangeEvent, FormEvent } from 'react';
-import { ISecretStorageKeyInfo } from "matrix-js-sdk/src";
+import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
 
 import * as sdk from '../../../../index';
 import { MatrixClientPeg } from '../../../../MatrixClientPeg';
