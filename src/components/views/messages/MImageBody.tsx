@@ -195,7 +195,7 @@ export default class MImageBody extends React.Component<IProps, IState> {
         const thumbWidth = 800;
         const thumbHeight = 600;
 
-        const content = this.props.mxEvent.getContent() as IMediaEventContent;
+        const content = this.props.mxEvent.getContent<IMediaEventContent>();
         const media = mediaFromContent(content);
 
         if (media.isEncrypted) {
