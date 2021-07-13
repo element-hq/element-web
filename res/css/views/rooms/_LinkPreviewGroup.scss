@@ -14,24 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export const WORKLET_NAME = "mx-voice-worklet";
+.mx_LinkPreviewGroup {
+    .mx_LinkPreviewGroup_hide {
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
 
-export enum PayloadEvent {
-    Timekeep = "timekeep",
-    AmplitudeMark = "amplitude_mark",
-}
+        img {
+            flex: 0 0 40px;
+            visibility: hidden;
+        }
+    }
 
-export interface IPayload {
-    ev: PayloadEvent;
-}
+    &:hover .mx_LinkPreviewGroup_hide img,
+    .mx_LinkPreviewGroup_hide.focus-visible:focus img {
+        visibility: visible;
+    }
 
-export interface ITimingPayload extends IPayload {
-    ev: PayloadEvent.Timekeep;
-    timeSeconds: number;
-}
-
-export interface IAmplitudePayload extends IPayload {
-    ev: PayloadEvent.AmplitudeMark;
-    forIndex: number;
-    amplitude: number;
+    > .mx_AccessibleButton {
+        color: $accent-color;
+        text-align: center;
+    }
 }

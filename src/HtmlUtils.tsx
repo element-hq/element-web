@@ -60,6 +60,8 @@ const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
 export const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet'];
 
+const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)\/(.+?)(?:[?/]|$)/;
+
 /*
  * Return true if the given string contains emoji
  * Uses a much, much simpler regex than emojibase's so will give false
@@ -176,18 +178,31 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
         return { tagName, attribs };
     },
     'img': function(tagName: string, attribs: sanitizeHtml.Attributes) {
+        let src = attribs.src;
         // Strip out imgs that aren't `mxc` here instead of using allowedSchemesByTag
         // because transformTags is used _before_ we filter by allowedSchemesByTag and
         // we don't want to allow images with `https?` `src`s.
         // We also drop inline images (as if they were not present at all) when the "show
         // images" preference is disabled. Future work might expose some UI to reveal them
         // like standalone image events have.
-        if (!attribs.src || !attribs.src.startsWith('mxc://') || !SettingsStore.getValue("showImages")) {
+        if (!src || !SettingsStore.getValue("showImages")) {
             return { tagName, attribs: {} };
         }
+
+        if (!src.startsWith("mxc://")) {
+            const match = MEDIA_API_MXC_REGEX.exec(src);
+            if (match) {
+                src = `mxc://${match[1]}/${match[2]}`;
+            }
+        }
+
+        if (!src.startsWith("mxc://")) {
+            return { tagName, attribs: {} };
+        }
+
         const width = Number(attribs.width) || 800;
         const height = Number(attribs.height) || 600;
-        attribs.src = mediaFromMxc(attribs.src).getThumbnailOfSourceHttp(width, height);
+        attribs.src = mediaFromMxc(src).getThumbnailOfSourceHttp(width, height);
         return { tagName, attribs };
     },
     'code': function(tagName: string, attribs: sanitizeHtml.Attributes) {

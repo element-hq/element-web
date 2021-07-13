@@ -304,7 +304,7 @@ export default class ReplyThread extends React.Component {
             events,
         });
 
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
     }
 
     getReplyThreadColorClass(ev) {
