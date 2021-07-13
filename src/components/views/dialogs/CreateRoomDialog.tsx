@@ -37,6 +37,7 @@ interface IProps {
     defaultPublic?: boolean;
     defaultName?: string;
     parentSpace?: Room;
+    defaultEncrypted?: boolean;
     onFinished(proceed: boolean, opts?: IOpts): void;
 }
 
@@ -63,7 +64,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         const config = SdkConfig.get();
         this.state = {
             isPublic: this.props.defaultPublic || false,
-            isEncrypted: privateShouldBeEncrypted(),
+            isEncrypted: this.props.defaultEncrypted ?? privateShouldBeEncrypted(),
             name: this.props.defaultName || "",
             topic: "",
             alias: "",
