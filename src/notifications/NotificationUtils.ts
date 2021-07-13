@@ -29,7 +29,7 @@ export class NotificationUtils {
     //   "highlight: true/false,
     // }
     // to a list of push actions.
-    static encodeActions(action: IEncodedActions) {
+    static encodeActions(action: IEncodedActions): PushRuleAction[] {
         const notify = action.notify;
         const sound = action.sound;
         const highlight = action.highlight;
