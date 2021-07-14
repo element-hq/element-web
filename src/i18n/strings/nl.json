@@ -6,7 +6,7 @@
     "Welcome to Element": "Welkom bij Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Gedecentraliseerd en versleuteld chatten &amp; samenwerken dankzij [matrix]",
     "Sign In": "Inloggen",
-    "Create Account": "Registeren",
+    "Create Account": "Registreren",
     "Explore rooms": "Gesprekken ontdekken",
     "Unexpected error preparing the app. See console for details.": "Er is een onverwachte fout opgetreden bij het voorbereiden van de app. Zie de console voor details.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuratiefout: kan slechts één van default_server_config, default_server_name, of default_hs_url opgeven.",
@@ -33,5 +33,6 @@
     "Your browser can't run %(brand)s": "Uw browser kan %(brand)s niet starten",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s gebruikt geavanceerde functies die niet ondersteund worden in uw huidige browser.",
     "Powered by Matrix": "Mogelijk gemaakt door Matrix",
-    "Use %(brand)s on mobile": "Gebruik %(brand)s op uw mobiel"
+    "Use %(brand)s on mobile": "Gebruik %(brand)s op uw mobiel",
+    "Switch to space by number": "Wissel naar space per nummer"
 }
