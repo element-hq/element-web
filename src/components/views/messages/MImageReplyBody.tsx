@@ -20,6 +20,8 @@ import { presentableTextForFile } from "./MFileBody";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 import SenderProfile from "./SenderProfile";
 
+const FORCED_IMAGE_HEIGHT = 44;
+
 export default class MImageReplyBody extends MImageBody {
     public onClick = (ev: React.MouseEvent): void => {
         ev.preventDefault();
@@ -42,7 +44,7 @@ export default class MImageReplyBody extends MImageBody {
         const content = this.props.mxEvent.getContent<IMediaEventContent>();
 
         const contentUrl = this.getContentUrl();
-        const thumbnail = this.messageContent(contentUrl, this.getThumbUrl(), content, 44);
+        const thumbnail = this.messageContent(contentUrl, this.getThumbUrl(), content, FORCED_IMAGE_HEIGHT);
         const fileBody = this.getFileBody();
         const sender = <SenderProfile
             mxEvent={this.props.mxEvent}
