@@ -21,7 +21,6 @@ import dis from '../../../dispatcher/dispatcher';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import SenderProfile from "../messages/SenderProfile";
-import TextualBody from "../messages/TextualBody";
 import MImageReplyBody from "../messages/MImageReplyBody";
 import * as sdk from '../../../index';
 import { EventType, MsgType } from 'matrix-js-sdk/src/@types/event';
