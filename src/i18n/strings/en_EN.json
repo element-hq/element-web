@@ -3044,5 +3044,6 @@
     "Space": "Space",
     "End": "End",
     "[number]": "[number]",
-    "Unable to copy room": "Unable to copy room"
+    "Unable to copy room": "Unable to copy room",
+    "Unable to copy the room to the clipboard.": "Unable to copy the room to the clipboard."
 }

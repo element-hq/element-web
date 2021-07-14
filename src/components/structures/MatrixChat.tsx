@@ -1204,7 +1204,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (!success) {
             Modal.createTrackedDialog("Unable to copy room", "", ErrorDialog, {
                 title: _t("Unable to copy room"),
-                description: _t("Unable to copy room"),
+                description: _t("Unable to copy the room to the clipboard."),
             });
         }
     }
