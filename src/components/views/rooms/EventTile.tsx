@@ -192,6 +192,7 @@ export enum TileShape {
     FileGrid = "file_grid",
     Reply = "reply",
     ReplyPreview = "reply_preview",
+    Pinned = "pinned",
 }
 
 interface IProps {
@@ -907,7 +908,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             mx_EventTile_12hr: this.props.isTwelveHour,
             // Note: we keep the `sending` state class for tests, not for our styles
             mx_EventTile_sending: !isEditing && isSending,
-            mx_EventTile_highlight: this.props.tileShape === 'notif' ? false : this.shouldHighlight(),
+            mx_EventTile_highlight: this.props.tileShape === TileShape.Notif ? false : this.shouldHighlight(),
             mx_EventTile_selected: this.props.isSelectedEvent,
             mx_EventTile_continuation: this.props.tileShape ? '' : this.props.continuation,
             mx_EventTile_last: this.props.last,
@@ -940,7 +941,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         let avatarSize;
         let needsSenderProfile;
 
-        if (this.props.tileShape === "notif") {
+        if (this.props.tileShape === TileShape.Notif) {
             avatarSize = 24;
             needsSenderProfile = true;
         } else if (tileHandler === 'messages.RoomCreate' || isBubbleMessage) {
@@ -954,7 +955,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         } else if (this.props.layout == Layout.IRC) {
             avatarSize = 14;
             needsSenderProfile = true;
-        } else if (this.props.continuation && this.props.tileShape !== "file_grid") {
+        } else if (this.props.continuation && this.props.tileShape !== TileShape.FileGrid) {
             // no avatar or sender profile for continuation messages
             avatarSize = 0;
             needsSenderProfile = false;
@@ -984,7 +985,11 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         if (needsSenderProfile && this.props.hideSender !== true) {
-            if (!this.props.tileShape || this.props.tileShape === 'reply' || this.props.tileShape === 'reply_preview') {
+            if (
+                !this.props.tileShape
+                || this.props.tileShape === TileShape.Reply
+                || this.props.tileShape === TileShape.ReplyPreview
+            ) {
                 sender = <SenderProfile onClick={this.onSenderProfileClick}
                     mxEvent={this.props.mxEvent}
                     enableFlair={this.props.enableFlair}
@@ -1074,7 +1079,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         switch (this.props.tileShape) {
-            case 'notif': {
+            case TileShape.Notif: {
                 const room = this.context.getRoom(this.props.mxEvent.getRoomId());
                 return React.createElement(this.props.as || "li", {
                     "className": classes,
@@ -1102,11 +1107,12 @@ export default class EventTile extends React.Component<IProps, IState> {
                             highlightLink={this.props.highlightLink}
                             showUrlPreview={this.props.showUrlPreview}
                             onHeightChanged={this.props.onHeightChanged}
+                            tileShape={this.props.tileShape}
                         />
                     </div>,
                 ]);
             }
-            case 'file_grid': {
+            case TileShape.FileGrid: {
                 return React.createElement(this.props.as || "li", {
                     "className": classes,
                     "aria-live": ariaLive,
@@ -1137,10 +1143,10 @@ export default class EventTile extends React.Component<IProps, IState> {
                 ]);
             }
 
-            case 'reply':
-            case 'reply_preview': {
+            case TileShape.Reply:
+            case TileShape.ReplyPreview: {
                 let thread;
-                if (this.props.tileShape === 'reply_preview') {
+                if (this.props.tileShape === TileShape.ReplyPreview) {
                     thread = ReplyThread.makeThread(
                         this.props.mxEvent,
                         this.props.onHeightChanged,
