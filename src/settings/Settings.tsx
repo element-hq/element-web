@@ -325,7 +325,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "feature_new_layout_switcher": {
         isFeature: true,
         supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Explore new ways switching layouts (including a new bubble layout)"),
+        displayName: _td("New layout switcher (with message bubbles)"),
         default: false,
         controller: new NewLayoutSwitcherController(),
     },
