@@ -64,7 +64,8 @@ export default class RecordingPlayback extends React.PureComponent<IProps, IStat
     };
 
     public render(): ReactNode {
-        return <div className='mx_MediaBody mx_VoiceMessagePrimaryContainer'>
+        const shapeClass = !this.isWaveformable ? 'mx_VoiceMessagePrimaryContainer_noWaveform' : '';
+        return <div className={'mx_MediaBody mx_VoiceMessagePrimaryContainer ' + shapeClass}>
             <PlayPauseButton playback={this.props.playback} playbackPhase={this.state.playbackPhase} />
             <PlaybackClock playback={this.props.playback} />
             { this.isWaveformable && <PlaybackWaveform playback={this.props.playback} /> }
