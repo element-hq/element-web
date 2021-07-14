@@ -1,7 +1,6 @@
 /*
-Copyright 2017 New Vector Ltd
+Copyright 2017 - 2021 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,6 +31,7 @@ import sanitizeHtml from "sanitize-html";
 import { UIFeature } from "../../../settings/UIFeature";
 import { PERMITTED_URL_SCHEMES } from "../../../HtmlUtils";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { TileShape } from "../rooms/EventTile";
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
@@ -384,7 +384,7 @@ export default class ReplyThread extends React.Component {
                 { dateSep }
                 <EventTile
                     mxEvent={ev}
-                    tileShape="reply"
+                    tileShape={TileShape.Reply}
                     onHeightChanged={this.props.onHeightChanged}
                     permalinkCreator={this.props.permalinkCreator}
                     isRedacted={ev.isRedacted()}

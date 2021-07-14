@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import IndexedDBWorker from "../workers/indexeddb.worker.ts"; // `.ts` is needed here to make TS happy
+// @ts-ignore - `.ts` is needed here to make TS happy
+import IndexedDBWorker from "../workers/indexeddb.worker.ts";
 import { createClient, ICreateClientOpts } from "matrix-js-sdk/src/matrix";
 import { IndexedDBCryptoStore } from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
 import { WebStorageSessionStore } from "matrix-js-sdk/src/store/session/webstorage";

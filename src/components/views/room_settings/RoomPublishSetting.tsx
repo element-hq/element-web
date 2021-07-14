@@ -15,13 +15,13 @@ limitations under the License.
 */
 
 import React from "react";
+import { Visibility } from "matrix-js-sdk/src/@types/partials";
 
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import DirectoryCustomisations from '../../../customisations/Directory';
-import { Visibility } from "matrix-js-sdk/src/@types/partials";
 
 interface IProps {
     roomId: string;

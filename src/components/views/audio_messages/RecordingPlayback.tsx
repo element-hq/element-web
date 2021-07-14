@@ -17,15 +17,18 @@ limitations under the License.
 import { Playback, PlaybackState } from "../../../voice/Playback";
 import React, { ReactNode } from "react";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
-import PlaybackWaveform from "./PlaybackWaveform";
 import PlayPauseButton from "./PlayPauseButton";
 import PlaybackClock from "./PlaybackClock";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { TileShape } from "../rooms/EventTile";
+import PlaybackWaveform from "./PlaybackWaveform";
 
 interface IProps {
     // Playback instance to render. Cannot change during component lifecycle: create
     // an all-new component instead.
     playback: Playback;
+
+    tileShape?: TileShape;
 }
 
 interface IState {
@@ -50,15 +53,22 @@ export default class RecordingPlayback extends React.PureComponent<IProps, IStat
         this.props.playback.prepare();
     }
 
+    private get isWaveformable(): boolean {
+        return this.props.tileShape !== TileShape.Notif
+            && this.props.tileShape !== TileShape.FileGrid
+            && this.props.tileShape !== TileShape.Pinned;
+    }
+
     private onPlaybackUpdate = (ev: PlaybackState) => {
         this.setState({ playbackPhase: ev });
     };
 
     public render(): ReactNode {
-        return <div className='mx_MediaBody mx_VoiceMessagePrimaryContainer'>
+        const shapeClass = !this.isWaveformable ? 'mx_VoiceMessagePrimaryContainer_noWaveform' : '';
+        return <div className={'mx_MediaBody mx_VoiceMessagePrimaryContainer ' + shapeClass}>
             <PlayPauseButton playback={this.props.playback} playbackPhase={this.state.playbackPhase} />
             <PlaybackClock playback={this.props.playback} />
-            <PlaybackWaveform playback={this.props.playback} />
+            { this.isWaveformable && <PlaybackWaveform playback={this.props.playback} /> }
         </div>;
     }
 }

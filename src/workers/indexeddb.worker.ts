@@ -16,6 +16,8 @@ limitations under the License.
 
 import { IndexedDBStoreWorker } from "matrix-js-sdk/src/indexeddb-worker";
 
-const remoteWorker = new IndexedDBStoreWorker(postMessage as InstanceType<typeof Worker>["postMessage"]);
+const ctx: Worker = self as any;
 
-global.onmessage = remoteWorker.onMessage;
+const remoteWorker = new IndexedDBStoreWorker(ctx.postMessage);
+
+ctx.onmessage = remoteWorker.onMessage;
