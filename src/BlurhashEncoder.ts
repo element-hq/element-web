@@ -16,6 +16,7 @@ limitations under the License.
 
 import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 
+// @ts-ignore - `.ts` is needed here to make TS happy
 import BlurhashWorker from "./workers/blurhash.worker.ts";
 
 interface IBlurhashWorkerResponse {
