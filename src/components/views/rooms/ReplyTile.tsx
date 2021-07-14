@@ -80,7 +80,9 @@ export default class ReplyTile extends React.PureComponent<IProps> {
     };
 
     render() {
-        const msgtype = this.props.mxEvent.getContent().msgtype;
+        const mxEvent = this.props.mxEvent;
+        const msgtype = mxEvent.getContent().msgtype;
+        const evType = mxEvent.getType() as EventType;
 
         const { tileHandler, isInfoMessage } = getEventDisplayInfo(this.props.mxEvent);
         // This shouldn't happen: the caller should check we support this type
@@ -105,7 +107,12 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         }
 
         let sender;
-        const needsSenderProfile = msgtype !== MsgType.Image && tileHandler !== EventType.RoomCreate && !isInfoMessage;
+        const needsSenderProfile = (
+            !isInfoMessage &&
+            msgtype !== MsgType.Image &&
+            tileHandler !== EventType.RoomCreate &&
+            evType !== EventType.Sticker
+        );
 
         if (needsSenderProfile) {
             sender = <SenderProfile
@@ -121,7 +128,8 @@ export default class ReplyTile extends React.PureComponent<IProps> {
             [MsgType.Video]: MFileBody,
         };
         const evOverrides = {
-            [EventType.Sticker]: TextualBody,
+            // Use MImageReplyBody so that the sticker isn't taking up a lot of space
+            [EventType.Sticker]: MImageReplyBody,
         };
 
         return (
