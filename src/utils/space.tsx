@@ -15,17 +15,17 @@ limitations under the License.
 */
 
 import React from "react";
-import {Room} from "matrix-js-sdk/src/models/room";
-import {MatrixClient} from "matrix-js-sdk/src/client";
-import {EventType} from "matrix-js-sdk/src/@types/event";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
-import {calculateRoomVia} from "../utils/permalinks/Permalinks";
+import { calculateRoomVia } from "../utils/permalinks/Permalinks";
 import Modal from "../Modal";
 import SpaceSettingsDialog from "../components/views/dialogs/SpaceSettingsDialog";
 import AddExistingToSpaceDialog from "../components/views/dialogs/AddExistingToSpaceDialog";
 import CreateRoomDialog from "../components/views/dialogs/CreateRoomDialog";
-import createRoom, {IOpts} from "../createRoom";
-import {_t} from "../languageHandler";
+import createRoom, { IOpts } from "../createRoom";
+import { _t } from "../languageHandler";
 import SpacePublicShare from "../components/views/spaces/SpacePublicShare";
 import InfoDialog from "../components/views/dialogs/InfoDialog";
 import { showRoomInviteDialog } from "../RoomInvite";
@@ -83,6 +83,7 @@ export const showCreateNewRoom = async (cli: MatrixClient, space: Room) => {
     if (shouldCreate) {
         await createRoom(opts);
     }
+    return shouldCreate;
 };
 
 export const showSpaceInvite = (space: Room, initialText = "") => {

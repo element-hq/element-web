@@ -19,23 +19,39 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomListStoreClass } from "./RoomListStore";
 import { SpaceFilterCondition } from "./filters/SpaceFilterCondition";
 import SpaceStore, { UPDATE_SELECTED_SPACE } from "../SpaceStore";
+import SettingsStore from "../../settings/SettingsStore";
 
 /**
  * Watches for changes in spaces to manage the filter on the provided RoomListStore
  */
 export class SpaceWatcher {
-    private filter = new SpaceFilterCondition();
+    private filter: SpaceFilterCondition;
     private activeSpace: Room = SpaceStore.instance.activeSpace;
 
     constructor(private store: RoomListStoreClass) {
-        this.updateFilter(); // get the filter into a consistent state
-        store.addFilter(this.filter);
+        if (!SettingsStore.getValue("feature_spaces.all_rooms")) {
+            this.filter = new SpaceFilterCondition();
+            this.updateFilter();
+            store.addFilter(this.filter);
+        }
         SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdated);
     }
 
-    private onSelectedSpaceUpdated = (activeSpace: Room) => {
+    private onSelectedSpaceUpdated = (activeSpace?: Room) => {
         this.activeSpace = activeSpace;
-        this.updateFilter();
+
+        if (this.filter) {
+            if (activeSpace || !SettingsStore.getValue("feature_spaces.all_rooms")) {
+                this.updateFilter();
+            } else {
+                this.store.removeFilter(this.filter);
+                this.filter = null;
+            }
+        } else if (activeSpace) {
+            this.filter = new SpaceFilterCondition();
+            this.updateFilter();
+            this.store.addFilter(this.filter);
+        }
     };
 
     private updateFilter = () => {

@@ -21,9 +21,9 @@ import PropTypes from 'prop-types';
 import dis from '../../../dispatcher/dispatcher';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { _t } from '../../../languageHandler';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import EventTileBubble from "./EventTileBubble";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.messages.RoomCreate")
 export default class RoomCreate extends React.Component {

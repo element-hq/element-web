@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import QuestionDialog from './QuestionDialog';
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
@@ -29,7 +29,6 @@ import StyledRadioGroup from "../elements/StyledRadioGroup";
 const existingIssuesUrl = "https://github.com/vector-im/element-web/issues" +
     "?q=is%3Aopen+is%3Aissue+sort%3Areactions-%2B1-desc";
 const newIssueUrl = "https://github.com/vector-im/element-web/issues/new";
-
 
 export default (props) => {
     const [rating, setRating] = useState("");

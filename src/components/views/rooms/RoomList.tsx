@@ -22,7 +22,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { _t, _td } from "../../../languageHandler";
 import { RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
-import { ResizeNotifier } from "../../../utils/ResizeNotifier";
+import ResizeNotifier from "../../../utils/ResizeNotifier";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import RoomViewStore from "../../../stores/RoomViewStore";
 import { ITagMap } from "../../../stores/room-list/algorithms/models";
@@ -45,18 +45,17 @@ import { objectShallowClone, objectWithOnly } from "../../../utils/objects";
 import { IconizedContextMenuOption, IconizedContextMenuOptionList } from "../context_menus/IconizedContextMenu";
 import AccessibleButton from "../elements/AccessibleButton";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
-import CallHandler from "../../../CallHandler";
-import SpaceStore, {SUGGESTED_ROOMS} from "../../../stores/SpaceStore";
-import {showAddExistingRooms, showCreateNewRoom, showSpaceInvite} from "../../../utils/space";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import SpaceStore, { ISuggestedRoom, SUGGESTED_ROOMS } from "../../../stores/SpaceStore";
+import { showAddExistingRooms, showCreateNewRoom, showSpaceInvite } from "../../../utils/space";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import RoomAvatar from "../avatars/RoomAvatar";
-import { ISpaceSummaryRoom } from "../../structures/SpaceRoomDirectory";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
     onFocus: (ev: React.FocusEvent) => void;
     onBlur: (ev: React.FocusEvent) => void;
     onResize: () => void;
+    onListCollapse?: (isExpanded: boolean) => void;
     resizeNotifier: ResizeNotifier;
     isMinimized: boolean;
     activeSpace: Room;
@@ -66,7 +65,7 @@ interface IState {
     sublists: ITagMap;
     isNameFiltering: boolean;
     currentRoomId?: string;
-    suggestedRooms: ISpaceSummaryRoom[];
+    suggestedRooms: ISuggestedRoom[];
 }
 
 const TAG_ORDER: TagID[] = [
@@ -103,38 +102,6 @@ interface ITagAestheticsMap {
     [tagId: TagID]: ITagAesthetics;
 }
 
-// If we have no dialer support, we just show the create chat dialog
-const dmOnAddRoom = (dispatcher?: Dispatcher<ActionPayload>) => {
-    (dispatcher || defaultDispatcher).dispatch({action: 'view_create_chat'});
-};
-
-// If we have dialer support, show a context menu so the user can pick between
-// the dialer and the create chat dialog
-const dmAddRoomContextMenu = (onFinished: () => void) => {
-    return <IconizedContextMenuOptionList first>
-        <IconizedContextMenuOption
-            label={_t("Start a Conversation")}
-            iconClassName="mx_RoomList_iconPlus"
-            onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onFinished();
-                defaultDispatcher.dispatch({action: "view_create_chat"});
-            }}
-        />
-        <IconizedContextMenuOption
-            label={_t("Open dial pad")}
-            iconClassName="mx_RoomList_iconDialpad"
-            onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onFinished();
-                defaultDispatcher.fire(Action.OpenDialPad);
-            }}
-        />
-    </IconizedContextMenuOptionList>;
-};
-
 const TAG_AESTHETICS: ITagAestheticsMap = {
     [DefaultTagID.Invite]: {
         sectionLabel: _td("Invites"),
@@ -151,8 +118,9 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
         isInvite: false,
         defaultHidden: false,
         addRoomLabel: _td("Start chat"),
-        // Either onAddRoom or addRoomContextMenu are set depending on whether we
-        // have dialer support.
+        onAddRoom: (dispatcher?: Dispatcher<ActionPayload>) => {
+            (dispatcher || defaultDispatcher).dispatch({ action: 'view_create_chat' });
+        },
     },
     [DefaultTagID.Untagged]: {
         sectionLabel: _td("Rooms"),
@@ -212,7 +180,7 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
                         e.preventDefault();
                         e.stopPropagation();
                         onFinished();
-                        defaultDispatcher.dispatch({action: "view_create_room"});
+                        defaultDispatcher.dispatch({ action: "view_create_room" });
                     }}
                 />
                 <IconizedContextMenuOption
@@ -271,7 +239,6 @@ function customTagAesthetics(tagId: TagID): ITagAesthetics {
 export default class RoomList extends React.PureComponent<IProps, IState> {
     private dispatcherRef;
     private customTagStoreRef;
-    private tagAesthetics: ITagAestheticsMap;
     private roomStoreToken: fbEmitter.EventSubscription;
 
     constructor(props: IProps) {
@@ -282,10 +249,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             isNameFiltering: !!RoomListStore.instance.getFirstNameFilterCondition(),
             suggestedRooms: SpaceStore.instance.suggestedRooms,
         };
-
-        // shallow-copy from the template as we need to make modifications to it
-        this.tagAesthetics = objectShallowClone(TAG_AESTHETICS);
-        this.updateDmAddRoomAction();
     }
 
     public componentDidMount(): void {
@@ -311,17 +274,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         });
     };
 
-    private updateDmAddRoomAction() {
-        const dmTagAesthetics = objectShallowClone(TAG_AESTHETICS[DefaultTagID.DM]);
-        if (CallHandler.sharedInstance().getSupportsPstnProtocol()) {
-            dmTagAesthetics.addRoomContextMenu = dmAddRoomContextMenu;
-        } else {
-            dmTagAesthetics.onAddRoom = dmOnAddRoom;
-        }
-
-        this.tagAesthetics[DefaultTagID.DM] = dmTagAesthetics;
-    }
-
     private onAction = (payload: ActionPayload) => {
         if (payload.action === Action.ViewRoomDelta) {
             const viewRoomDeltaPayload = payload as ViewRoomDeltaPayload;
@@ -335,7 +287,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                 });
             }
         } else if (payload.action === Action.PstnSupportUpdated) {
-            this.updateDmAddRoomAction();
             this.updateLists();
         }
     };
@@ -363,7 +314,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         return room;
     };
 
-    private updateSuggestedRooms = (suggestedRooms: ISpaceSummaryRoom[]) => {
+    private updateSuggestedRooms = (suggestedRooms: ISuggestedRoom[]) => {
         this.setState({ suggestedRooms });
     };
 
@@ -405,7 +356,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             const newSublists = objectWithOnly(newLists, newListIds);
             const sublists = objectShallowClone(newSublists, (k, v) => arrayFastClone(v));
 
-            this.setState({sublists, isNameFiltering}, () => {
+            this.setState({ sublists, isNameFiltering }, () => {
                 this.props.onResize();
             });
         }
@@ -428,7 +379,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     private renderSuggestedRooms(): ReactComponentElement<typeof ExtraTile>[] {
         return this.state.suggestedRooms.map(room => {
-            const name = room.name || room.canonical_alias || room.aliases.pop() || _t("Empty room");
+            const name = room.name || room.canonical_alias || room.aliases?.[0] || _t("Empty room");
             const avatar = (
                 <RoomAvatar
                     oobData={{
@@ -443,7 +394,9 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             const viewRoom = () => {
                 defaultDispatcher.dispatch({
                     action: "view_room",
+                    room_alias: room.canonical_alias || room.aliases?.[0],
                     room_id: room.room_id,
+                    via_servers: room.viaServers,
                     oobData: {
                         avatarUrl: room.avatar_url,
                         name,
@@ -464,6 +417,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     }
 
     private renderCommunityInvites(): ReactComponentElement<typeof ExtraTile>[] {
+        if (SettingsStore.getValue("feature_spaces")) return [];
         // TODO: Put community invites in a more sensible place (not in the room list)
         // See https://github.com/vector-im/element-web/issues/14456
         return MatrixClientPeg.get().getGroups().filter(g => {
@@ -521,7 +475,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
                 const aesthetics: ITagAesthetics = isCustomTag(orderedTagId)
                     ? customTagAesthetics(orderedTagId)
-                    : this.tagAesthetics[orderedTagId];
+                    : TAG_AESTHETICS[orderedTagId];
                 if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
 
                 // The cost of mounting/unmounting this component offsets the cost
@@ -536,11 +490,12 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     addRoomLabel={aesthetics.addRoomLabel ? _t(aesthetics.addRoomLabel) : aesthetics.addRoomLabel}
                     addRoomContextMenu={aesthetics.addRoomContextMenu}
                     isMinimized={this.props.isMinimized}
-                    onResize={this.props.onResize}
                     showSkeleton={showSkeleton}
                     extraTiles={extraTiles}
+                    resizeNotifier={this.props.resizeNotifier}
                     alwaysVisible={ALWAYS_VISIBLE_TAGS.includes(orderedTagId)}
-                />
+                    onListCollapse={this.props.onListCollapse}
+                />;
             });
     }
 
@@ -587,7 +542,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     </AccessibleButton> }
                 </div>;
             } else if (Object.values(this.state.sublists).some(list => list.length > 0)) {
-                const unfilteredLists = RoomListStore.instance.unfilteredLists
+                const unfilteredLists = RoomListStore.instance.unfilteredLists;
                 const unfilteredRooms = unfilteredLists[DefaultTagID.Untagged] || [];
                 const unfilteredHistorical = unfilteredLists[DefaultTagID.Archived] || [];
                 const unfilteredFavourite = unfilteredLists[DefaultTagID.Favourite] || [];
@@ -617,7 +572,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         const sublists = this.renderSublists();
         return (
             <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={this.props.onKeyDown}>
-                {({onKeyDownHandler}) => (
+                {({ onKeyDownHandler }) => (
                     <div
                         onFocus={this.props.onFocus}
                         onBlur={this.props.onBlur}

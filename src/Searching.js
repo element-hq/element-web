@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import EventIndexPeg from "./indexing/EventIndexPeg";
-import {MatrixClientPeg} from "./MatrixClientPeg";
+import { MatrixClientPeg } from "./MatrixClientPeg";
 
 const SEARCH_LIMIT = 10;
 
@@ -43,7 +43,7 @@ async function serverSideSearch(term, roomId = undefined) {
         },
     };
 
-    const response = await client.search({body: body});
+    const response = await client.search({ body: body });
 
     const result = {
         response: response,
@@ -66,7 +66,7 @@ async function serverSideSearchProcess(term, roomId = undefined) {
         highlights: [],
     };
 
-    return client._processRoomEventsSearch(searchResult, result.response);
+    return client.processRoomEventsSearch(searchResult, result.response);
 }
 
 function compareEvents(a, b) {
@@ -131,7 +131,7 @@ async function combinedSearch(searchTerm) {
         },
     };
 
-    const result = client._processRoomEventsSearch(emptyResult, response);
+    const result = client.processRoomEventsSearch(emptyResult, response);
 
     // Restore our encryption info so we can properly re-verify the events.
     restoreEncryptionInfo(result.results);
@@ -185,7 +185,7 @@ async function localSearchProcess(searchTerm, roomId = undefined) {
         },
     };
 
-    const processedResult = MatrixClientPeg.get()._processRoomEventsSearch(emptyResult, response);
+    const processedResult = MatrixClientPeg.get().processRoomEventsSearch(emptyResult, response);
     // Restore our encryption info so we can properly re-verify the events.
     restoreEncryptionInfo(processedResult.results);
 
@@ -210,7 +210,7 @@ async function localPagination(searchResult) {
         },
     };
 
-    const result = MatrixClientPeg.get()._processRoomEventsSearch(searchResult, response);
+    const result = MatrixClientPeg.get().processRoomEventsSearch(searchResult, response);
 
     // Restore our encryption info so we can properly re-verify the events.
     const newSlice = result.results.slice(Math.max(result.results.length - newResultCount, 0));
@@ -468,7 +468,7 @@ function restoreEncryptionInfo(searchResultSlice = []) {
                     ev.event.curve25519Key,
                     ev.event.ed25519Key,
                 );
-                ev._forwardingCurve25519KeyChain = ev.event.forwardingCurve25519KeyChain;
+                ev.forwardingCurve25519KeyChain = ev.event.forwardingCurve25519KeyChain;
 
                 delete ev.event.curve25519Key;
                 delete ev.event.ed25519Key;
@@ -498,7 +498,7 @@ async function combinedPagination(searchResult) {
     // Fetch events from the server if we have a token for it and if it's the
     // local indexes turn or the local index has exhausted its results.
     if (searchResult.serverSideNextBatch && (oldestEventFrom === "local" || !searchArgs.next_batch)) {
-        const body = {body: searchResult._query, next_batch: searchResult.serverSideNextBatch};
+        const body = { body: searchResult._query, next_batch: searchResult.serverSideNextBatch };
         serverSideResult = await client.search(body);
     }
 
@@ -520,7 +520,7 @@ async function combinedPagination(searchResult) {
     const oldResultCount = searchResult.results ? searchResult.results.length : 0;
 
     // Let the client process the combined result.
-    const result = client._processRoomEventsSearch(searchResult, response);
+    const result = client.processRoomEventsSearch(searchResult, response);
 
     // Restore our encryption info so we can properly re-verify the events.
     const newResultCount = result.results.length - oldResultCount;

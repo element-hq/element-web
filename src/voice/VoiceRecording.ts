@@ -16,22 +16,28 @@ limitations under the License.
 
 import * as Recorder from 'opus-recorder';
 import encoderPath from 'opus-recorder/dist/encoderWorker.min.js';
-import {MatrixClient} from "matrix-js-sdk/src/client";
-import CallMediaHandler from "../CallMediaHandler";
-import {SimpleObservable} from "matrix-widget-api";
-import {clamp} from "../utils/numbers";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import MediaDeviceHandler from "../MediaDeviceHandler";
+import { SimpleObservable } from "matrix-widget-api";
 import EventEmitter from "events";
-import {IDestroyable} from "../utils/IDestroyable";
-import {Singleflight} from "../utils/Singleflight";
-import {PayloadEvent, WORKLET_NAME} from "./consts";
-import {UPDATE_EVENT} from "../stores/AsyncStore";
-import {Playback} from "./Playback";
+import { IDestroyable } from "../utils/IDestroyable";
+import { Singleflight } from "../utils/Singleflight";
+import { PayloadEvent, WORKLET_NAME } from "./consts";
+import { UPDATE_EVENT } from "../stores/AsyncStore";
+import { Playback } from "./Playback";
+import { createAudioContext } from "./compat";
+import { IEncryptedFile } from "matrix-js-sdk/src/@types/event";
+import { uploadFile } from "../ContentMessages";
+import { FixedRollingArray } from "../utils/FixedRollingArray";
+import { clamp } from "../utils/numbers";
 
 const CHANNELS = 1; // stereo isn't important
-const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
+export const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
 const BITRATE = 24000; // 24kbps is pretty high quality for our use case in opus.
 const TARGET_MAX_LENGTH = 120; // 2 minutes in seconds. Somewhat arbitrary, though longer == larger files.
 const TARGET_WARN_TIME_LEFT = 10; // 10 seconds, also somewhat arbitrary.
+
+export const RECORDING_PLAYBACK_SAMPLES = 44;
 
 export interface IRecordingUpdate {
     waveform: number[]; // floating points between 0 (low) and 1 (high).
@@ -46,19 +52,25 @@ export enum RecordingState {
     Uploaded = "uploaded",
 }
 
+export interface IUpload {
+    mxc?: string; // for unencrypted uploads
+    encrypted?: IEncryptedFile;
+}
+
 export class VoiceRecording extends EventEmitter implements IDestroyable {
     private recorder: Recorder;
     private recorderContext: AudioContext;
     private recorderSource: MediaStreamAudioSourceNode;
     private recorderStream: MediaStream;
-    private recorderFFT: AnalyserNode;
     private recorderWorklet: AudioWorkletNode;
+    private recorderProcessor: ScriptProcessorNode;
     private buffer = new Uint8Array(0); // use this.audioBuffer to access
-    private mxc: string;
+    private lastUpload: IUpload;
     private recording = false;
     private observable: SimpleObservable<IRecordingUpdate>;
     private amplitudes: number[] = []; // at each second mark, generated
     private playback: Playback;
+    private liveWaveform = new FixedRollingArray(RECORDING_PLAYBACK_SAMPLES, 0);
 
     public constructor(private client: MatrixClient) {
         super();
@@ -88,78 +100,98 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
     }
 
     private async makeRecorder() {
-        this.recorderStream = await navigator.mediaDevices.getUserMedia({
-            audio: {
-                channelCount: CHANNELS,
-                noiseSuppression: true, // browsers ignore constraints they can't honour
-                deviceId: CallMediaHandler.getAudioInput(),
-            },
-        });
-        this.recorderContext = new AudioContext({
-            // latencyHint: "interactive", // we don't want a latency hint (this causes data smoothing)
-        });
-        this.recorderSource = this.recorderContext.createMediaStreamSource(this.recorderStream);
-        this.recorderFFT = this.recorderContext.createAnalyser();
+        try {
+            this.recorderStream = await navigator.mediaDevices.getUserMedia({
+                audio: {
+                    channelCount: CHANNELS,
+                    noiseSuppression: true, // browsers ignore constraints they can't honour
+                    deviceId: MediaDeviceHandler.getAudioInput(),
+                },
+            });
+            this.recorderContext = createAudioContext({
+                // latencyHint: "interactive", // we don't want a latency hint (this causes data smoothing)
+            });
+            this.recorderSource = this.recorderContext.createMediaStreamSource(this.recorderStream);
 
-        // Bring the FFT time domain down a bit. The default is 2048, and this must be a power
-        // of two. We use 64 points because we happen to know down the line we need less than
-        // that, but 32 would be too few. Large numbers are not helpful here and do not add
-        // precision: they introduce higher precision outputs of the FFT (frequency data), but
-        // it makes the time domain less than helpful.
-        this.recorderFFT.fftSize = 64;
-
-        // Set up our worklet. We use this for timing information and waveform analysis: the
-        // web audio API prefers this be done async to avoid holding the main thread with math.
-        const mxRecorderWorkletPath = document.body.dataset.vectorRecorderWorkletScript;
-        if (!mxRecorderWorkletPath) {
-            throw new Error("Unable to create recorder: no worklet script registered");
-        }
-        await this.recorderContext.audioWorklet.addModule(mxRecorderWorkletPath);
-        this.recorderWorklet = new AudioWorkletNode(this.recorderContext, WORKLET_NAME);
-
-        // Connect our inputs and outputs
-        this.recorderSource.connect(this.recorderFFT);
-        this.recorderSource.connect(this.recorderWorklet);
-        this.recorderWorklet.connect(this.recorderContext.destination);
-
-        // Dev note: we can't use `addEventListener` for some reason. It just doesn't work.
-        this.recorderWorklet.port.onmessage = (ev) => {
-            switch (ev.data['ev']) {
-                case PayloadEvent.Timekeep:
-                    this.processAudioUpdate(ev.data['timeSeconds']);
-                    break;
-                case PayloadEvent.AmplitudeMark:
-                    // Sanity check to make sure we're adding about one sample per second
-                    if (ev.data['forSecond'] === this.amplitudes.length) {
-                        this.amplitudes.push(ev.data['amplitude']);
-                    }
-                    break;
+            // Set up our worklet. We use this for timing information and waveform analysis: the
+            // web audio API prefers this be done async to avoid holding the main thread with math.
+            const mxRecorderWorkletPath = document.body.dataset.vectorRecorderWorkletScript;
+            if (!mxRecorderWorkletPath) {
+                // noinspection ExceptionCaughtLocallyJS
+                throw new Error("Unable to create recorder: no worklet script registered");
             }
-        };
 
-        this.recorder = new Recorder({
-            encoderPath, // magic from webpack
-            encoderSampleRate: SAMPLE_RATE,
-            encoderApplication: 2048, // voice (default is "audio")
-            streamPages: true, // this speeds up the encoding process by using CPU over time
-            encoderFrameSize: 20, // ms, arbitrary frame size we send to the encoder
-            numberOfChannels: CHANNELS,
-            sourceNode: this.recorderSource,
-            encoderBitRate: BITRATE,
+            // Connect our inputs and outputs
+            if (this.recorderContext.audioWorklet) {
+                await this.recorderContext.audioWorklet.addModule(mxRecorderWorkletPath);
+                this.recorderWorklet = new AudioWorkletNode(this.recorderContext, WORKLET_NAME);
+                this.recorderSource.connect(this.recorderWorklet);
+                this.recorderWorklet.connect(this.recorderContext.destination);
 
-            // We use low values for the following to ease CPU usage - the resulting waveform
-            // is indistinguishable for a voice message. Note that the underlying library will
-            // pick defaults which prefer the highest possible quality, CPU be damned.
-            encoderComplexity: 3, // 0-10, 10 is slow and high quality.
-            resampleQuality: 3, // 0-10, 10 is slow and high quality
-        });
-        this.recorder.ondataavailable = (a: ArrayBuffer) => {
-            const buf = new Uint8Array(a);
-            const newBuf = new Uint8Array(this.buffer.length + buf.length);
-            newBuf.set(this.buffer, 0);
-            newBuf.set(buf, this.buffer.length);
-            this.buffer = newBuf;
-        };
+                // Dev note: we can't use `addEventListener` for some reason. It just doesn't work.
+                this.recorderWorklet.port.onmessage = (ev) => {
+                    switch (ev.data['ev']) {
+                        case PayloadEvent.Timekeep:
+                            this.processAudioUpdate(ev.data['timeSeconds']);
+                            break;
+                        case PayloadEvent.AmplitudeMark:
+                            // Sanity check to make sure we're adding about one sample per second
+                            if (ev.data['forIndex'] === this.amplitudes.length) {
+                                this.amplitudes.push(ev.data['amplitude']);
+                                this.liveWaveform.pushValue(ev.data['amplitude']);
+                            }
+                            break;
+                    }
+                };
+            } else {
+                // Safari fallback: use a processor node instead, buffered to 1024 bytes of data
+                // like the worklet is.
+                this.recorderProcessor = this.recorderContext.createScriptProcessor(1024, CHANNELS, CHANNELS);
+                this.recorderSource.connect(this.recorderProcessor);
+                this.recorderProcessor.connect(this.recorderContext.destination);
+                this.recorderProcessor.addEventListener("audioprocess", this.onAudioProcess);
+            }
+
+            this.recorder = new Recorder({
+                encoderPath, // magic from webpack
+                encoderSampleRate: SAMPLE_RATE,
+                encoderApplication: 2048, // voice (default is "audio")
+                streamPages: true, // this speeds up the encoding process by using CPU over time
+                encoderFrameSize: 20, // ms, arbitrary frame size we send to the encoder
+                numberOfChannels: CHANNELS,
+                sourceNode: this.recorderSource,
+                encoderBitRate: BITRATE,
+
+                // We use low values for the following to ease CPU usage - the resulting waveform
+                // is indistinguishable for a voice message. Note that the underlying library will
+                // pick defaults which prefer the highest possible quality, CPU be damned.
+                encoderComplexity: 3, // 0-10, 10 is slow and high quality.
+                resampleQuality: 3, // 0-10, 10 is slow and high quality
+            });
+            this.recorder.ondataavailable = (a: ArrayBuffer) => {
+                const buf = new Uint8Array(a);
+                const newBuf = new Uint8Array(this.buffer.length + buf.length);
+                newBuf.set(this.buffer, 0);
+                newBuf.set(buf, this.buffer.length);
+                this.buffer = newBuf;
+            };
+        } catch (e) {
+            console.error("Error starting recording: ", e);
+            if (e instanceof DOMException) { // Unhelpful DOMExceptions are common - parse them sanely
+                console.error(`${e.name} (${e.code}): ${e.message}`);
+            }
+
+            // Clean up as best as possible
+            if (this.recorderStream) this.recorderStream.getTracks().forEach(t => t.stop());
+            if (this.recorderSource) this.recorderSource.disconnect();
+            if (this.recorder) this.recorder.close();
+            if (this.recorderContext) {
+                // noinspection ES6MissingAwait - not important that we wait
+                this.recorderContext.close();
+            }
+
+            throw e; // rethrow so upstream can handle it
+        }
     }
 
     private get audioBuffer(): Uint8Array {
@@ -181,37 +213,18 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         return this.buffer.length > 0;
     }
 
-    public get mxcUri(): string {
-        if (!this.mxc) {
-            throw new Error("Recording has not been uploaded yet");
-        }
-        return this.mxc;
-    }
+    private onAudioProcess = (ev: AudioProcessingEvent) => {
+        this.processAudioUpdate(ev.playbackTime);
+
+        // We skip the functionality of the worklet regarding waveform calculations: we
+        // should get that information pretty quick during the playback info.
+    };
 
     private processAudioUpdate = (timeSeconds: number) => {
         if (!this.recording) return;
 
-        // The time domain is the input to the FFT, which means we use an array of the same
-        // size. The time domain is also known as the audio waveform. We're ignoring the
-        // output of the FFT here (frequency data) because we're not interested in it.
-        const data = new Float32Array(this.recorderFFT.fftSize);
-        this.recorderFFT.getFloatTimeDomainData(data);
-
-        // We can't just `Array.from()` the array because we're dealing with 32bit floats
-        // and the built-in function won't consider that when converting between numbers.
-        // However, the runtime will convert the float32 to a float64 during the math operations
-        // which is why the loop works below. Note that a `.map()` call also doesn't work
-        // and will instead return a Float32Array still.
-        const translatedData: number[] = [];
-        for (let i = 0; i < data.length; i++) {
-            // We're clamping the values so we can do that math operation mentioned above,
-            // and to ensure that we produce consistent data (it's possible for the array
-            // to exceed the specified range with some audio input devices).
-            translatedData.push(clamp(data[i], 0, 1));
-        }
-
         this.observable.update({
-            waveform: translatedData,
+            waveform: this.liveWaveform.value.map(v => clamp(v, 0, 1)),
             timeSeconds: timeSeconds,
         });
 
@@ -234,14 +247,14 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             this.stop();
         } else if (secondsLeft <= TARGET_WARN_TIME_LEFT) {
             Singleflight.for(this, "ending_soon").do(() => {
-                this.emit(RecordingState.EndingSoon, {secondsLeft});
+                this.emit(RecordingState.EndingSoon, { secondsLeft });
                 return Singleflight.Void;
             });
         }
     };
 
     public async start(): Promise<void> {
-        if (this.mxc || this.hasRecording) {
+        if (this.lastUpload || this.hasRecording) {
             throw new Error("Recording already prepared");
         }
         if (this.recording) {
@@ -266,7 +279,11 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             // Disconnect the source early to start shutting down resources
             await this.recorder.stop(); // stop first to flush the last frame
             this.recorderSource.disconnect();
-            this.recorderWorklet.disconnect();
+            if (this.recorderWorklet) this.recorderWorklet.disconnect();
+            if (this.recorderProcessor) {
+                this.recorderProcessor.disconnect();
+                this.recorderProcessor.removeEventListener("audioprocess", this.onAudioProcess);
+            }
 
             // close the context after the recorder so the recorder doesn't try to
             // connect anything to the context (this would generate a warning)
@@ -309,20 +326,19 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         this.observable.close();
     }
 
-    public async upload(): Promise<string> {
+    public async upload(inRoomId: string): Promise<IUpload> {
         if (!this.hasRecording) {
             throw new Error("No recording available to upload");
         }
 
-        if (this.mxc) return this.mxc;
+        if (this.lastUpload) return this.lastUpload;
 
         this.emit(RecordingState.Uploading);
-        this.mxc = await this.client.uploadContent(new Blob([this.audioBuffer], {
+        const { url: mxc, file: encrypted } = await uploadFile(this.client, inRoomId, new Blob([this.audioBuffer], {
             type: this.contentType,
-        }), {
-            onlyContentUri: false, // to stop the warnings in the console
-        }).then(r => r['content_uri']);
+        }));
+        this.lastUpload = { mxc, encrypted };
         this.emit(RecordingState.Uploaded);
-        return this.mxc;
+        return this.lastUpload;
     }
 }

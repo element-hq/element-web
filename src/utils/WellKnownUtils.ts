@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from '../MatrixClientPeg';
+import { MatrixClientPeg } from '../MatrixClientPeg';
 
 const CALL_BEHAVIOUR_WK_KEY = "io.element.call_behaviour";
 const E2EE_WK_KEY = "io.element.e2ee";
@@ -43,7 +43,7 @@ export function getE2EEWellKnown(): IE2EEWellKnown {
         return clientWellKnown[E2EE_WK_KEY];
     }
     if (clientWellKnown && clientWellKnown[E2EE_WK_KEY_DEPRECATED]) {
-        return clientWellKnown[E2EE_WK_KEY_DEPRECATED]
+        return clientWellKnown[E2EE_WK_KEY_DEPRECATED];
     }
     return null;
 }

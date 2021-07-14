@@ -19,7 +19,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 
 import { FILTER_CHANGED, FilterKind, IFilterCondition } from "./IFilterCondition";
 import { IDestroyable } from "../../../utils/IDestroyable";
-import SpaceStore, {HOME_SPACE} from "../../SpaceStore";
+import SpaceStore, { HOME_SPACE } from "../../SpaceStore";
 import { setHasDiff } from "../../../utils/sets";
 
 /**
@@ -29,7 +29,7 @@ import { setHasDiff } from "../../../utils/sets";
  *  + All DMs
  */
 export class SpaceFilterCondition extends EventEmitter implements IFilterCondition, IDestroyable {
-    private roomIds = new Set<Room>();
+    private roomIds = new Set<string>();
     private space: Room = null;
 
     public get kind(): FilterKind {

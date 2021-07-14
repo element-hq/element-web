@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {PartCreator} from "../../src/editor/parts";
+import { PartCreator } from "../../src/editor/parts";
 
 class MockAutoComplete {
     constructor(updateCallback, partCreator, completions) {
@@ -25,7 +25,7 @@ class MockAutoComplete {
     }
 
     close() {
-        this._updateCallback({close: true});
+        this._updateCallback({ close: true });
     }
 
     tryComplete(close = true) {
@@ -40,7 +40,7 @@ class MockAutoComplete {
             } else {
                 pill = this._partCreator.roomPill(match.resourceId);
             }
-            this._updateCallback({replaceParts: [pill], close});
+            this._updateCallback({ replaceParts: [pill], close });
         }
     }
 

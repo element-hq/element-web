@@ -24,13 +24,12 @@ import * as sdk from '../../index';
 import dis from '../../dispatcher/dispatcher';
 import { _t } from '../../languageHandler';
 
-import { Droppable } from 'react-beautiful-dnd';
 import classNames from 'classnames';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import SettingsStore from "../../settings/SettingsStore";
 import UserTagTile from "../views/elements/UserTagTile";
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 
 @replaceableComponent("structures.GroupFilterPanel")
 class GroupFilterPanel extends React.Component {
@@ -83,15 +82,15 @@ class GroupFilterPanel extends React.Component {
         }
     };
 
-    onMouseDown = e => {
+    onClick = e => {
         // only dispatch if its not a no-op
         if (this.state.selectedTags.length > 0) {
-            dis.dispatch({action: 'deselect_tags'});
+            dis.dispatch({ action: 'deselect_tags' });
         }
     };
 
     onClearFilterClick = ev => {
-        dis.dispatch({action: 'deselect_tags'});
+        dis.dispatch({ action: 'deselect_tags' });
     };
 
     renderGlobalIcon() {
@@ -123,12 +122,19 @@ class GroupFilterPanel extends React.Component {
             mx_GroupFilterPanel_items_selected: itemsSelected,
         });
 
+        let betaDot;
+        if (SettingsStore.getBetaInfo("feature_spaces") && !localStorage.getItem("mx_seenSpacesBeta")) {
+            betaDot = <div className="mx_BetaDot" />;
+        }
+
         let createButton = (
             <ActionButton
                 tooltip
                 label={_t("Communities")}
                 action="toggle_my_groups"
-                className="mx_TagTile mx_TagTile_plus" />
+                className="mx_TagTile mx_TagTile_plus">
+                { betaDot }
+            </ActionButton>
         );
 
         if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
@@ -144,28 +150,15 @@ class GroupFilterPanel extends React.Component {
         return <div className={classes} onClick={this.onClearFilterClick}>
             <AutoHideScrollbar
                 className="mx_GroupFilterPanel_scroller"
-                // XXX: Use onMouseDown as a workaround for https://github.com/atlassian/react-beautiful-dnd/issues/273
-                // instead of onClick. Otherwise we experience https://github.com/vector-im/element-web/issues/6253
-                onMouseDown={this.onMouseDown}
+                onClick={this.onClick}
             >
-                <Droppable
-                    droppableId="tag-panel-droppable"
-                    type="draggable-TagTile"
-                >
-                    { (provided, snapshot) => (
-                            <div
-                                className="mx_GroupFilterPanel_tagTileContainer"
-                                ref={provided.innerRef}
-                            >
-                                { this.renderGlobalIcon() }
-                                { tags }
-                                <div>
-                                    {createButton}
-                                </div>
-                                { provided.placeholder }
-                            </div>
-                    ) }
-                </Droppable>
+                <div className="mx_GroupFilterPanel_tagTileContainer">
+                    { this.renderGlobalIcon() }
+                    { tags }
+                    <div>
+                        { createButton }
+                    </div>
+                </div>
             </AutoHideScrollbar>
         </div>;
     }

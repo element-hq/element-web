@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useRef, useState} from "react";
+import React, { useRef, useState } from "react";
 
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 
 interface IProps {
     avatarUrl?: string;
     avatarDisabled?: boolean;
-    name?: string,
+    name?: string;
     nameDisabled?: boolean;
     topic?: string;
     topicDisabled?: boolean;
@@ -32,17 +32,11 @@ interface IProps {
     setTopic(topic: string): void;
 }
 
-const SpaceBasicSettings = ({
+export const SpaceAvatar = ({
     avatarUrl,
     avatarDisabled = false,
     setAvatar,
-    name = "",
-    nameDisabled = false,
-    setName,
-    topic = "",
-    topicDisabled = false,
-    setTopic,
-}: IProps) => {
+}: Pick<IProps, "avatarUrl" | "avatarDisabled" | "setAvatar">) => {
     const avatarUploadRef = useRef<HTMLInputElement>();
     const [avatar, setAvatarDataUrl] = useState(avatarUrl); // avatar data url cache
 
@@ -81,20 +75,34 @@ const SpaceBasicSettings = ({
         }
     }
 
+    return <div className="mx_SpaceBasicSettings_avatarContainer">
+        { avatarSection }
+        <input type="file" ref={avatarUploadRef} onChange={(e) => {
+            if (!e.target.files?.length) return;
+            const file = e.target.files[0];
+            setAvatar(file);
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                setAvatarDataUrl(ev.target.result as string);
+            };
+            reader.readAsDataURL(file);
+        }} accept="image/*" />
+    </div>;
+};
+
+const SpaceBasicSettings = ({
+    avatarUrl,
+    avatarDisabled = false,
+    setAvatar,
+    name = "",
+    nameDisabled = false,
+    setName,
+    topic = "",
+    topicDisabled = false,
+    setTopic,
+}: IProps) => {
     return <div className="mx_SpaceBasicSettings">
-        <div className="mx_SpaceBasicSettings_avatarContainer">
-            { avatarSection }
-            <input type="file" ref={avatarUploadRef} onChange={(e) => {
-                if (!e.target.files?.length) return;
-                const file = e.target.files[0];
-                setAvatar(file);
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    setAvatarDataUrl(ev.target.result as string);
-                };
-                reader.readAsDataURL(file);
-            }} accept="image/*" />
-        </div>
+        <SpaceAvatar avatarUrl={avatarUrl} avatarDisabled={avatarDisabled} setAvatar={setAvatar} />
 
         <Field
             name="spaceName"

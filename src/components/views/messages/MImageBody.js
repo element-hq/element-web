@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
+import { Blurhash } from "react-blurhash";
 
 import MFileBody from './MFileBody';
 import Modal from '../../../Modal';
@@ -27,8 +28,9 @@ import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import InlineSpinner from '../elements/InlineSpinner';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromContent} from "../../../customisations/Media";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromContent } from "../../../customisations/Media";
+import { BLURHASH_FIELD } from "../../../ContentMessages";
 
 @replaceableComponent("views.messages.MImageBody")
 export default class MImageBody extends React.Component {
@@ -90,7 +92,7 @@ export default class MImageBody extends React.Component {
 
     showImage() {
         localStorage.setItem("mx_ShowImage_" + this.props.mxEvent.getId(), "true");
-        this.setState({showImage: true});
+        this.setState({ showImage: true });
         this._downloadImage();
     }
 
@@ -125,9 +127,9 @@ export default class MImageBody extends React.Component {
     _isGif() {
         const content = this.props.mxEvent.getContent();
         return (
-          content &&
-          content.info &&
-          content.info.mimetype === "image/gif"
+            content &&
+            content.info &&
+            content.info.mimetype === "image/gif"
         );
     }
 
@@ -296,7 +298,7 @@ export default class MImageBody extends React.Component {
         if (showImage) {
             // Don't download anything becaue we don't want to display anything.
             this._downloadImage();
-            this.setState({showImage: true});
+            this.setState({ showImage: true });
         }
 
         this._afterComponentDidMount();
@@ -333,7 +335,8 @@ export default class MImageBody extends React.Component {
             infoWidth = content.info.w;
             infoHeight = content.info.h;
         } else {
-            // Whilst the image loads, display nothing.
+            // Whilst the image loads, display nothing. We also don't display a blurhash image
+            // because we don't really know what size of image we'll end up with.
             //
             // Once loaded, use the loaded image dimensions stored in `loadedImageDimensions`.
             //
@@ -345,10 +348,10 @@ export default class MImageBody extends React.Component {
                     imageElement = <HiddenImagePlaceholder />;
                 } else {
                     imageElement = (
-                        <img style={{display: 'none'}} src={thumbUrl} ref={this._image}
-                             alt={content.body}
-                             onError={this.onImageError}
-                             onLoad={this.onImageLoad}
+                        <img style={{ display: 'none' }} src={thumbUrl} ref={this._image}
+                            alt={content.body}
+                            onError={this.onImageError}
+                            onLoad={this.onImageLoad}
                         />
                     );
                 }
@@ -368,12 +371,8 @@ export default class MImageBody extends React.Component {
         let placeholder = null;
         let gifLabel = null;
 
-        // e2e image hasn't been decrypted yet
-        if (content.file !== undefined && this.state.decryptedUrl === null) {
-            placeholder = <InlineSpinner w={32} h={32} />;
-        } else if (!this.state.imgLoaded) {
-            // Deliberately, getSpinner is left unimplemented here, MStickerBody overides
-            placeholder = this.getPlaceholder();
+        if (!this.state.imgLoaded) {
+            placeholder = this.getPlaceholder(maxWidth, maxHeight);
         }
 
         let showPlaceholder = Boolean(placeholder);
@@ -384,18 +383,18 @@ export default class MImageBody extends React.Component {
             // mx_MImageBody_thumbnail resizes img to exactly container size
             img = (
                 <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref={this._image}
-                     style={{ maxWidth: maxWidth + "px" }}
-                     alt={content.body}
-                     onError={this.onImageError}
-                     onLoad={this.onImageLoad}
-                     onMouseEnter={this.onImageEnter}
-                     onMouseLeave={this.onImageLeave} />
+                    style={{ maxWidth: maxWidth + "px" }}
+                    alt={content.body}
+                    onError={this.onImageError}
+                    onLoad={this.onImageLoad}
+                    onMouseEnter={this.onImageEnter}
+                    onMouseLeave={this.onImageLeave} />
             );
         }
 
         if (!this.state.showImage) {
             img = <HiddenImagePlaceholder style={{ maxWidth: maxWidth + "px" }} />;
-            showPlaceholder = false; // because we're hiding the image, so don't show the sticker icon.
+            showPlaceholder = false; // because we're hiding the image, so don't show the placeholder.
         }
 
         if (this._isGif() && !SettingsStore.getValue("autoplayGifsAndVideos") && !this.state.hover) {
@@ -411,13 +410,11 @@ export default class MImageBody extends React.Component {
                         // Constrain width here so that spinner appears central to the loaded thumbnail
                         maxWidth: infoWidth + "px",
                     }}>
-                        <div className="mx_MImageBody_thumbnail_spinner">
-                            { placeholder }
-                        </div>
+                        { placeholder }
                     </div>
                 }
 
-                <div style={{display: !showPlaceholder ? undefined : 'none'}}>
+                <div style={{ display: !showPlaceholder ? undefined : 'none' }}>
                     { img }
                     { gifLabel }
                 </div>
@@ -437,9 +434,12 @@ export default class MImageBody extends React.Component {
     }
 
     // Overidden by MStickerBody
-    getPlaceholder() {
-        // MImageBody doesn't show a placeholder whilst the image loads, (but it could do)
-        return null;
+    getPlaceholder(width, height) {
+        const blurhash = this.props.mxEvent.getContent().info[BLURHASH_FIELD];
+        if (blurhash) return <Blurhash hash={blurhash} width={width} height={height} />;
+        return <div className="mx_MImageBody_thumbnail_spinner">
+            <InlineSpinner w={32} h={32} />
+        </div>;
     }
 
     // Overidden by MStickerBody
@@ -467,9 +467,9 @@ export default class MImageBody extends React.Component {
         const contentUrl = this._getContentUrl();
         let thumbUrl;
         if (this._isGif() && SettingsStore.getValue("autoplayGifsAndVideos")) {
-          thumbUrl = contentUrl;
+            thumbUrl = contentUrl;
         } else {
-          thumbUrl = this._getThumbUrl();
+            thumbUrl = this._getThumbUrl();
         }
 
         const thumbnail = this._messageContent(contentUrl, thumbUrl, content);

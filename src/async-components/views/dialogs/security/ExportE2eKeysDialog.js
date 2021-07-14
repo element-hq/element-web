@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import FileSaver from 'file-saver';
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../../languageHandler';
 
@@ -55,11 +55,11 @@ export default class ExportE2eKeysDialog extends React.Component {
 
         const passphrase = this._passphrase1.current.value;
         if (passphrase !== this._passphrase2.current.value) {
-            this.setState({errStr: _t('Passphrases must match')});
+            this.setState({ errStr: _t('Passphrases must match') });
             return false;
         }
         if (!passphrase) {
-            this.setState({errStr: _t('Passphrase must not be empty')});
+            this.setState({ errStr: _t('Passphrase must not be empty') });
             return false;
         }
 
@@ -170,8 +170,11 @@ export default class ExportE2eKeysDialog extends React.Component {
                         </div>
                     </div>
                     <div className='mx_Dialog_buttons'>
-                        <input className='mx_Dialog_primary' type='submit' value={_t('Export')}
-                             disabled={disableForm}
+                        <input
+                            className='mx_Dialog_primary'
+                            type='submit'
+                            value={_t('Export')}
+                            disabled={disableForm}
                         />
                         <button onClick={this._onCancelClick} disabled={disableForm}>
                             { _t("Cancel") }

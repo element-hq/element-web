@@ -20,7 +20,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.rooms.TopUnreadMessagesBar")
 export default class TopUnreadMessagesBar extends React.Component {

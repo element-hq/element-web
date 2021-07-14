@@ -16,7 +16,7 @@ limitations under the License.
 
 import * as React from "react";
 import AccessibleButton from "../elements/AccessibleButton";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const BUTTONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'];
 
@@ -35,7 +35,7 @@ interface IButtonProps {
 class DialPadButton extends React.PureComponent<IButtonProps> {
     onClick = () => {
         this.props.onButtonPress(this.props.digit);
-    }
+    };
 
     render() {
         switch (this.props.kind) {

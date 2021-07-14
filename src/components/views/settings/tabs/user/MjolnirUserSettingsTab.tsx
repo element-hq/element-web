@@ -15,15 +15,18 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../../../languageHandler";
+import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
-import {Mjolnir} from "../../../../../mjolnir/Mjolnir";
-import {ListRule} from "../../../../../mjolnir/ListRule";
-import {BanList, RULE_SERVER, RULE_USER} from "../../../../../mjolnir/BanList";
+import { Mjolnir } from "../../../../../mjolnir/Mjolnir";
+import { ListRule } from "../../../../../mjolnir/ListRule";
+import { BanList, RULE_SERVER, RULE_USER } from "../../../../../mjolnir/BanList";
 import Modal from "../../../../../Modal";
-import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
-import * as sdk from "../../../../../index";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import ErrorDialog from "../../../dialogs/ErrorDialog";
+import QuestionDialog from "../../../dialogs/QuestionDialog";
+import AccessibleButton from "../../../elements/AccessibleButton";
+import Field from "../../../elements/Field";
 
 interface IState {
     busy: boolean;
@@ -44,11 +47,11 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
     }
 
     private onPersonalRuleChanged = (e) => {
-        this.setState({newPersonalRule: e.target.value});
+        this.setState({ newPersonalRule: e.target.value });
     };
 
     private onNewListChanged = (e) => {
-        this.setState({newList: e.target.value});
+        this.setState({ newList: e.target.value });
     };
 
     private onAddPersonalRule = async (e) => {
@@ -60,21 +63,20 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
             kind = RULE_USER;
         }
 
-        this.setState({busy: true});
+        this.setState({ busy: true });
         try {
             const list = await Mjolnir.sharedInstance().getOrCreatePersonalList();
             await list.banEntity(kind, this.state.newPersonalRule, _t("Ignored/Blocked"));
-            this.setState({newPersonalRule: ""}); // this will also cause the new rule to be rendered
+            this.setState({ newPersonalRule: "" }); // this will also cause the new rule to be rendered
         } catch (e) {
             console.error(e);
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to add Mjolnir rule', '', ErrorDialog, {
                 title: _t('Error adding ignored user/server'),
                 description: _t('Something went wrong. Please try again or view your console for hints.'),
             });
         } finally {
-            this.setState({busy: false});
+            this.setState({ busy: false });
         }
     };
 
@@ -82,63 +84,58 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         e.preventDefault();
         e.stopPropagation();
 
-        this.setState({busy: true});
+        this.setState({ busy: true });
         try {
             const room = await MatrixClientPeg.get().joinRoom(this.state.newList);
             await Mjolnir.sharedInstance().subscribeToList(room.roomId);
-            this.setState({newList: ""}); // this will also cause the new rule to be rendered
+            this.setState({ newList: "" }); // this will also cause the new rule to be rendered
         } catch (e) {
             console.error(e);
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to subscribe to Mjolnir list', '', ErrorDialog, {
                 title: _t('Error subscribing to list'),
                 description: _t('Please verify the room ID or address and try again.'),
             });
         } finally {
-            this.setState({busy: false});
+            this.setState({ busy: false });
         }
     };
 
     private async removePersonalRule(rule: ListRule) {
-        this.setState({busy: true});
+        this.setState({ busy: true });
         try {
             const list = Mjolnir.sharedInstance().getPersonalList();
             await list.unbanEntity(rule.kind, rule.entity);
         } catch (e) {
             console.error(e);
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to remove Mjolnir rule', '', ErrorDialog, {
                 title: _t('Error removing ignored user/server'),
                 description: _t('Something went wrong. Please try again or view your console for hints.'),
             });
         } finally {
-            this.setState({busy: false});
+            this.setState({ busy: false });
         }
     }
 
     private async unsubscribeFromList(list: BanList) {
-        this.setState({busy: true});
+        this.setState({ busy: true });
         try {
             await Mjolnir.sharedInstance().unsubscribeFromList(list.roomId);
             await MatrixClientPeg.get().leave(list.roomId);
         } catch (e) {
             console.error(e);
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to unsubscribe from Mjolnir list', '', ErrorDialog, {
                 title: _t('Error unsubscribing from list'),
                 description: _t('Please try again or view your console for hints.'),
             });
         } finally {
-            this.setState({busy: false});
+            this.setState({ busy: false });
         }
     }
 
     private viewListRules(list: BanList) {
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-
         const room = MatrixClientPeg.get().getRoom(list.roomId);
         const name = room ? room.name : list.roomId;
 
@@ -153,7 +150,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         };
 
         Modal.createTrackedDialog('View Mjolnir list rules', '', QuestionDialog, {
-            title: _t("Ban list rules - %(roomName)s", {roomName: name}),
+            title: _t("Ban list rules - %(roomName)s", { roomName: name }),
             description: (
                 <div>
                     <h3>{_t("Server rules")}</h3>
@@ -168,8 +165,6 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
     }
 
     private renderPersonalBanListRules() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
         const list = Mjolnir.sharedInstance().getPersonalList();
         const rules = list ? [...list.userRules, ...list.serverRules] : [];
         if (!list || rules.length <= 0) return <i>{_t("You have not ignored anyone.")}</i>;
@@ -199,8 +194,6 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
     }
 
     private renderSubscribedBanLists() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
         const personalList = Mjolnir.sharedInstance().getPersonalList();
         const lists = Mjolnir.sharedInstance().lists.filter(b => {
             return personalList? personalList.roomId !== b.roomId : true;
@@ -241,8 +234,6 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
     }
 
     render() {
-        const Field = sdk.getComponent('elements.Field');
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const brand = SdkConfig.get().brand;
 
         return (
@@ -256,7 +247,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                             "Add users and servers you want to ignore here. Use asterisks " +
                             "to have %(brand)s match any characters. For example, <code>@bot:*</code> " +
                             "would ignore all users that have the name 'bot' on any server.",
-                            { brand }, {code: (s) => <code>{s}</code>},
+                            { brand }, { code: (s) => <code>{s}</code> },
                         )}<br />
                         <br />
                         {_t(

@@ -52,13 +52,12 @@ const USERNAME_RULE = {
     rule_id: ".m.rule.contains_user_name",
 };
 
-
 describe("ContentRules", function() {
     describe("parseContentRules", function() {
         it("should handle there being no keyword rules", function() {
             const rules = { 'global': { 'content': [
                     USERNAME_RULE,
-            ]}};
+            ] } };
             const parsed = ContentRules.parseContentRules(rules);
             expect(parsed.rules).toEqual([]);
             expect(parsed.vectorState).toEqual(PushRuleVectorState.ON);
@@ -69,7 +68,7 @@ describe("ContentRules", function() {
             const rules = { 'global': { 'content': [
                 NORMAL_RULE,
                 USERNAME_RULE,
-            ]}};
+            ] } };
 
             const parsed = ContentRules.parseContentRules(rules);
             expect(parsed.rules.length).toEqual(1);
@@ -82,7 +81,7 @@ describe("ContentRules", function() {
             const rules = { 'global': { 'content': [
                 LOUD_RULE,
                 USERNAME_RULE,
-            ]}};
+            ] } };
 
             const parsed = ContentRules.parseContentRules(rules);
             expect(parsed.rules.length).toEqual(1);
@@ -96,7 +95,7 @@ describe("ContentRules", function() {
                 LOUD_RULE,
                 NORMAL_RULE,
                 USERNAME_RULE,
-            ]}};
+            ] } };
 
             const parsed = ContentRules.parseContentRules(rules);
             expect(parsed.rules.length).toEqual(1);

@@ -17,15 +17,15 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t, _td } from '../../languageHandler';
-import {MatrixClientPeg} from '../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../MatrixClientPeg';
 import Resend from '../../Resend';
 import dis from '../../dispatcher/dispatcher';
-import {messageForResourceLimitError} from '../../utils/ErrorUtils';
-import {Action} from "../../dispatcher/actions";
-import {replaceableComponent} from "../../utils/replaceableComponent";
-import {EventStatus} from "matrix-js-sdk/src/models/event";
+import { messageForResourceLimitError } from '../../utils/ErrorUtils';
+import { Action } from "../../dispatcher/actions";
+import { replaceableComponent } from "../../utils/replaceableComponent";
+import { EventStatus } from "matrix-js-sdk/src/models/event";
 import NotificationBadge from "../views/rooms/NotificationBadge";
-import {StaticNotificationState} from "../../stores/notifications/StaticNotificationState";
+import { StaticNotificationState } from "../../stores/notifications/StaticNotificationState";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import InlineSpinner from "../views/elements/InlineSpinner";
 
@@ -41,7 +41,7 @@ export function getUnsentMessages(room) {
 }
 
 @replaceableComponent("structures.RoomStatusBar")
-export default class RoomStatusBar extends React.Component {
+export default class RoomStatusBar extends React.PureComponent {
     static propTypes = {
         // the room this statusbar is representing.
         room: PropTypes.object.isRequired,
@@ -115,15 +115,15 @@ export default class RoomStatusBar extends React.Component {
 
     _onResendAllClick = () => {
         Resend.resendUnsentEvents(this.props.room).then(() => {
-            this.setState({isResending: false});
+            this.setState({ isResending: false });
         });
-        this.setState({isResending: true});
-        dis.fire(Action.FocusComposer);
+        this.setState({ isResending: true });
+        dis.fire(Action.FocusSendMessageComposer);
     };
 
     _onCancelAllClick = () => {
         Resend.cancelUnsentEvents(this.props.room);
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
     };
 
     _onRoomLocalEchoUpdated = (event, room, oldEventId, oldStatus) => {
@@ -200,20 +200,22 @@ export default class RoomStatusBar extends React.Component {
         } else if (resourceLimitError) {
             title = messageForResourceLimitError(
                 resourceLimitError.data.limit_type,
-                resourceLimitError.data.admin_contact, {
-                'monthly_active_user': _td(
-                    "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. " +
-                    "Please <a>contact your service administrator</a> to continue using the service.",
-                ),
-                'hs_disabled': _td(
-                    "Your message wasn't sent because this homeserver has been blocked by it's administrator. " +
-                    "Please <a>contact your service administrator</a> to continue using the service.",
-                ),
-                '': _td(
-                    "Your message wasn't sent because this homeserver has exceeded a resource limit. " +
-                    "Please <a>contact your service administrator</a> to continue using the service.",
-                ),
-            });
+                resourceLimitError.data.admin_contact,
+                {
+                    'monthly_active_user': _td(
+                        "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. " +
+                        "Please <a>contact your service administrator</a> to continue using the service.",
+                    ),
+                    'hs_disabled': _td(
+                        "Your message wasn't sent because this homeserver has been blocked by it's administrator. " +
+                        "Please <a>contact your service administrator</a> to continue using the service.",
+                    ),
+                    '': _td(
+                        "Your message wasn't sent because this homeserver has exceeded a resource limit. " +
+                        "Please <a>contact your service administrator</a> to continue using the service.",
+                    ),
+                },
+            );
         } else {
             title = _t('Some of your messages have not been sent');
         }
@@ -265,7 +267,7 @@ export default class RoomStatusBar extends React.Component {
                     <div role="alert">
                         <div className="mx_RoomStatusBar_connectionLostBar">
                             <img src={require("../../../res/img/feather-customised/warning-triangle.svg")} width="24"
-                                 height="24" title="/!\ " alt="/!\ " />
+                                height="24" title="/!\ " alt="/!\ " />
                             <div>
                                 <div className="mx_RoomStatusBar_connectionLostBar_title">
                                     {_t('Connectivity to the server has been lost.')}

@@ -28,6 +28,9 @@ $tertiary-fg-color: $primary-fg-color;
 $primary-bg-color: #ffffff;
 $muted-fg-color: #61708b; // Commonly used in headings and relevant alt text
 
+// Legacy theme backports
+$quaternary-fg-color: #C1C6CD;
+
 // used for dialog box text
 $light-fg-color: #747474;
 
@@ -181,6 +184,8 @@ $voipcall-plinth-color: #F4F6FA;
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
+$dialpad-button-bg-color: #e3e8f0;
+
 
 $roomlist-button-bg-color: #fff; // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-filter-active-bg-color: $roomlist-button-bg-color;
@@ -190,14 +195,6 @@ $roomsublist-divider-color: $primary-fg-color;
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%);
 
 $groupFilterPanel-divider-color: $roomlist-header-color;
-
-// See non-legacy _light for variable information
-$voice-record-stop-border-color: #E3E8F0;
-$voice-record-stop-symbol-color: #ff4b55;
-$voice-record-waveform-bg-color: #E3E8F0;
-$voice-record-waveform-fg-color: $muted-fg-color;
-$voice-record-waveform-incomplete-fg-color: #C1C6CD;
-$voice-record-live-circle-color: #ff4b55;
 
 $roomtile-preview-color: #9e9e9e;
 $roomtile-default-badge-bg-color: #61708b;
@@ -331,9 +328,19 @@ $breadcrumb-placeholder-bg-color: #e8eef5;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
 
-$message-body-panel-bg-color: #e3e8f082;
-$message-body-panel-icon-bg-color: #ffffff;
-$message-body-panel-fg-color: $muted-fg-color;
+$message-body-panel-fg-color: $secondary-fg-color;
+$message-body-panel-bg-color: #E3E8F0;
+$message-body-panel-icon-fg-color: $secondary-fg-color;
+$message-body-panel-icon-bg-color: $primary-bg-color;
+
+// See non-legacy _light for variable information
+$voice-record-stop-symbol-color: #ff4b55;
+$voice-record-live-circle-color: #ff4b55;
+$voice-record-stop-border-color: #E3E8F0;
+$voice-record-waveform-incomplete-fg-color: #C1C6CD;
+$voice-record-icon-color: $tertiary-fg-color;
+$voice-playback-button-bg-color: $message-body-panel-icon-bg-color;
+$voice-playback-button-fg-color: $message-body-panel-icon-fg-color;
 
 // FontSlider colors
 $appearance-tab-border-color: $input-darker-bg-color;

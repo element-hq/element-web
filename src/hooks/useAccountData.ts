@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {useCallback, useState} from "react";
-import {MatrixClient} from "matrix-js-sdk/src/client";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { useCallback, useState } from "react";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room } from "matrix-js-sdk/src/models/room";
 
-import {useEventEmitter} from "./useEventEmitter";
+import { useEventEmitter } from "./useEventEmitter";
 
-const tryGetContent = (ev?: MatrixEvent) => ev ? ev.getContent() : undefined;
+const tryGetContent = <T extends {}>(ev?: MatrixEvent) => ev ? ev.getContent<T>() : undefined;
 
 // Hook to simplify listening to Matrix account data
 export const useAccountData = <T extends {}>(cli: MatrixClient, eventType: string) => {
-    const [value, setValue] = useState<T>(() => tryGetContent(cli.getAccountData(eventType)));
+    const [value, setValue] = useState<T>(() => tryGetContent<T>(cli.getAccountData(eventType)));
 
     const handler = useCallback((event) => {
         if (event.getType() !== eventType) return;
@@ -38,7 +38,7 @@ export const useAccountData = <T extends {}>(cli: MatrixClient, eventType: strin
 
 // Hook to simplify listening to Matrix room account data
 export const useRoomAccountData = <T extends {}>(room: Room, eventType: string) => {
-    const [value, setValue] = useState<T>(() => tryGetContent(room.getAccountData(eventType)));
+    const [value, setValue] = useState<T>(() => tryGetContent<T>(room.getAccountData(eventType)));
 
     const handler = useCallback((event) => {
         if (event.getType() !== eventType) return;

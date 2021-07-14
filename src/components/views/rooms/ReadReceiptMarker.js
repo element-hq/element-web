@@ -15,14 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-import {formatDate} from '../../../DateUtils';
+import { formatDate } from '../../../DateUtils';
 import NodeAnimator from "../../../NodeAnimator";
 import * as sdk from "../../../index";
-import {toPx} from "../../../utils/units";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { toPx } from "../../../utils/units";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.rooms.ReadReceiptMarker")
 export default class ReadReceiptMarker extends React.PureComponent {
@@ -173,22 +173,21 @@ export default class ReadReceiptMarker extends React.PureComponent {
             if (!this.props.member || this.props.fallbackUserId === this.props.member.rawDisplayName) {
                 title = _t(
                     "Seen by %(userName)s at %(dateTime)s",
-                    {userName: this.props.fallbackUserId,
-                    dateTime: dateString},
+                    { userName: this.props.fallbackUserId,
+                    dateTime: dateString },
                 );
             } else {
                 title = _t(
                     "Seen by %(displayName)s (%(userName)s) at %(dateTime)s",
-                    {displayName: this.props.member.rawDisplayName,
+                    { displayName: this.props.member.rawDisplayName,
                     userName: this.props.fallbackUserId,
-                    dateTime: dateString},
+                    dateTime: dateString },
                 );
             }
         }
 
         return (
-            <NodeAnimator
-                    startStyles={this.state.startStyles} >
+            <NodeAnimator startStyles={this.state.startStyles}>
                 <MemberAvatar
                     member={this.props.member}
                     fallbackUserId={this.props.fallbackUserId}

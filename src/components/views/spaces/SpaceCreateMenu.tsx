@@ -14,18 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useContext, useState} from "react";
+import React, { useContext, useRef, useState } from "react";
 import classNames from "classnames";
-import {EventType, RoomType, RoomCreateTypeField} from "matrix-js-sdk/src/@types/event";
-
-import {_t} from "../../../languageHandler";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import {ChevronFace, ContextMenu} from "../../structures/ContextMenu";
-import createRoom, {IStateEvent, Preset} from "../../../createRoom";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import SpaceBasicSettings from "./SpaceBasicSettings";
-import AccessibleButton from "../elements/AccessibleButton";
+import { EventType, RoomType, RoomCreateTypeField } from "matrix-js-sdk/src/@types/event";
 import FocusLock from "react-focus-lock";
+
+import { _t } from "../../../languageHandler";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import { ChevronFace, ContextMenu } from "../../structures/ContextMenu";
+import createRoom from "../../../createRoom";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { SpaceAvatar } from "./SpaceBasicSettings";
+import AccessibleButton from "../elements/AccessibleButton";
+import { BetaPill } from "../beta/BetaCard";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
+import { UserTab } from "../dialogs/UserSettingsDialog";
+import Field from "../elements/Field";
+import withValidation from "../elements/Validation";
+import { SpaceFeedbackPrompt } from "../../structures/SpaceRoomView";
+import { Preset } from "matrix-js-sdk/src/@types/partials";
+import { ICreateRoomStateEvent } from "matrix-js-sdk/src/@types/requests";
+import RoomAliasField from "../elements/RoomAliasField";
 
 const SpaceCreateMenuType = ({ title, description, className, onClick }) => {
     return (
@@ -41,18 +51,54 @@ enum Visibility {
     Private,
 }
 
+const spaceNameValidator = withValidation({
+    rules: [
+        {
+            key: "required",
+            test: async ({ value }) => !!value,
+            invalid: () => _t("Please enter a name for the space"),
+        },
+    ],
+});
+
+const nameToAlias = (name: string, domain: string): string => {
+    const localpart = name.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9_-]+/gi, "");
+    return `#${localpart}:${domain}`;
+};
+
 const SpaceCreateMenu = ({ onFinished }) => {
     const cli = useContext(MatrixClientContext);
     const [visibility, setVisibility] = useState<Visibility>(null);
-    const [name, setName] = useState("");
-    const [avatar, setAvatar] = useState<File>(null);
-    const [topic, setTopic] = useState<string>("");
     const [busy, setBusy] = useState<boolean>(false);
 
-    const onSpaceCreateClick = async () => {
+    const [name, setName] = useState("");
+    const spaceNameField = useRef<Field>();
+    const [alias, setAlias] = useState("");
+    const spaceAliasField = useRef<RoomAliasField>();
+    const [avatar, setAvatar] = useState<File>(null);
+    const [topic, setTopic] = useState<string>("");
+
+    const onSpaceCreateClick = async (e) => {
+        e.preventDefault();
         if (busy) return;
+
         setBusy(true);
-        const initialState: IStateEvent[] = [
+        // require & validate the space name field
+        if (!await spaceNameField.current.validate({ allowEmpty: false })) {
+            spaceNameField.current.focus();
+            spaceNameField.current.validate({ allowEmpty: false, focused: true });
+            setBusy(false);
+            return;
+        }
+        // validate the space name alias field but do not require it
+        if (visibility === Visibility.Public && !await spaceAliasField.current.validate({ allowEmpty: true })) {
+            spaceAliasField.current.focus();
+            spaceAliasField.current.validate({ allowEmpty: true, focused: true });
+            setBusy(false);
+            return;
+        }
+
+        const initialState: ICreateRoomStateEvent[] = [
             {
                 type: EventType.RoomHistoryVisibility,
                 content: {
@@ -68,12 +114,6 @@ const SpaceCreateMenu = ({ onFinished }) => {
                 content: { url },
             });
         }
-        if (topic) {
-            initialState.push({
-                type: EventType.RoomTopic,
-                content: { topic },
-            });
-        }
 
         try {
             await createRoom({
@@ -81,7 +121,6 @@ const SpaceCreateMenu = ({ onFinished }) => {
                     preset: visibility === Visibility.Public ? Preset.PublicChat : Preset.PrivateChat,
                     name,
                     creation_content: {
-                        // Based on MSC1840
                         [RoomCreateTypeField]: RoomType.Space,
                     },
                     initial_state: initialState,
@@ -90,6 +129,10 @@ const SpaceCreateMenu = ({ onFinished }) => {
                         events_default: 100,
                         ...Visibility.Public ? { invite: 0 } : {},
                     },
+                    room_alias_name: visibility === Visibility.Public && alias
+                        ? alias.substr(1, alias.indexOf(":") - 1)
+                        : undefined,
+                    topic,
                 },
                 spinner: false,
                 encryption: false,
@@ -107,7 +150,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
     if (visibility === null) {
         body = <React.Fragment>
             <h2>{ _t("Create a space") }</h2>
-            <p>{ _t("Spaces are new ways to group rooms and people. " +
+            <p>{ _t("Spaces are a new way to group rooms and people. " +
                 "To join an existing space you'll need an invite.") }</p>
 
             <SpaceCreateMenuType
@@ -124,8 +167,11 @@ const SpaceCreateMenu = ({ onFinished }) => {
             />
 
             <p>{ _t("You can change this later") }</p>
+
+            <SpaceFeedbackPrompt onClick={onFinished} />
         </React.Fragment>;
     } else {
+        const domain = cli.getDomain();
         body = <React.Fragment>
             <AccessibleTooltipButton
                 className="mx_SpaceCreateMenu_back"
@@ -146,9 +192,51 @@ const SpaceCreateMenu = ({ onFinished }) => {
                 }
             </p>
 
-            <SpaceBasicSettings setAvatar={setAvatar} name={name} setName={setName} topic={topic} setTopic={setTopic} />
+            <form className="mx_SpaceBasicSettings" onSubmit={onSpaceCreateClick}>
+                <SpaceAvatar setAvatar={setAvatar} avatarDisabled={busy} />
 
-            <AccessibleButton kind="primary" onClick={onSpaceCreateClick} disabled={!name || busy}>
+                <Field
+                    name="spaceName"
+                    label={_t("Name")}
+                    autoFocus={true}
+                    value={name}
+                    onChange={ev => {
+                        const newName = ev.target.value;
+                        if (!alias || alias === nameToAlias(name, domain)) {
+                            setAlias(nameToAlias(newName, domain));
+                        }
+                        setName(newName);
+                    }}
+                    ref={spaceNameField}
+                    onValidate={spaceNameValidator}
+                    disabled={busy}
+                />
+
+                { visibility === Visibility.Public
+                    ? <RoomAliasField
+                        ref={spaceAliasField}
+                        onChange={setAlias}
+                        domain={domain}
+                        value={alias}
+                        placeholder={name ? nameToAlias(name, domain) : _t("e.g. my-space")}
+                        label={_t("Address")}
+                        disabled={busy}
+                    />
+                    : null
+                }
+
+                <Field
+                    name="spaceTopic"
+                    element="textarea"
+                    label={_t("Description")}
+                    value={topic}
+                    onChange={ev => setTopic(ev.target.value)}
+                    rows={3}
+                    disabled={busy}
+                />
+            </form>
+
+            <AccessibleButton kind="primary" onClick={onSpaceCreateClick} disabled={busy}>
                 { busy ? _t("Creating...") : _t("Create") }
             </AccessibleButton>
         </React.Fragment>;
@@ -164,9 +252,16 @@ const SpaceCreateMenu = ({ onFinished }) => {
         managed={false}
     >
         <FocusLock returnFocus={true}>
+            <BetaPill onClick={() => {
+                onFinished();
+                defaultDispatcher.dispatch({
+                    action: Action.ViewUserSettings,
+                    initialTabId: UserTab.Labs,
+                });
+            }} />
             { body }
         </FocusLock>
     </ContextMenu>;
-}
+};
 
 export default SpaceCreateMenu;

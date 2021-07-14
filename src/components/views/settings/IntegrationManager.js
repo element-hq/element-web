@@ -20,8 +20,8 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
-import {Key} from "../../../Keyboard";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { Key } from "../../../Keyboard";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.settings.IntegrationManager")
 export default class IntegrationManager extends React.Component {

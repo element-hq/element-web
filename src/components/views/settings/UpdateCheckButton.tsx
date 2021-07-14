@@ -14,17 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState} from "react";
+import React, { useState } from "react";
 
-import {UpdateCheckStatus} from "../../../BasePlatform";
+import { UpdateCheckStatus } from "../../../BasePlatform";
 import PlatformPeg from "../../../PlatformPeg";
-import {useDispatcher} from "../../../hooks/useDispatcher";
+import { useDispatcher } from "../../../hooks/useDispatcher";
 import dis from "../../../dispatcher/dispatcher";
-import {Action} from "../../../dispatcher/actions";
-import {_t} from "../../../languageHandler";
+import { Action } from "../../../dispatcher/actions";
+import { _t } from "../../../languageHandler";
 import InlineSpinner from "../../../components/views/elements/InlineSpinner";
 import AccessibleButton from "../../../components/views/elements/AccessibleButton";
-import {CheckUpdatesPayload} from "../../../dispatcher/payloads/CheckUpdatesPayload";
+import { CheckUpdatesPayload } from "../../../dispatcher/payloads/CheckUpdatesPayload";
 
 function installUpdate() {
     PlatformPeg.get().installUpdate();
@@ -61,7 +61,7 @@ const UpdateCheckButton = () => {
         PlatformPeg.get().startUpdateCheck();
     };
 
-    useDispatcher(dis, ({action, ...params}) => {
+    useDispatcher(dis, ({ action, ...params }) => {
         if (action === Action.CheckUpdates) {
             setState(params as CheckUpdatesPayload);
         }

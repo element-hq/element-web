@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useCallback, useState, useEffect, useContext} from "react";
+import React, { useCallback, useState, useEffect, useContext } from "react";
 import classNames from "classnames";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useIsEncrypted } from '../../../hooks/useIsEncrypted';
@@ -25,26 +25,28 @@ import { _t } from '../../../languageHandler';
 import RoomAvatar from "../avatars/RoomAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {Action} from "../../../dispatcher/actions";
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
-import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
+import { Action } from "../../../dispatcher/actions";
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
+import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import Modal from "../../../Modal";
 import ShareDialog from '../dialogs/ShareDialog';
-import {useEventEmitter} from "../../../hooks/useEventEmitter";
+import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import WidgetUtils from "../../../utils/WidgetUtils";
-import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
+import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
 import TextWithTooltip from "../elements/TextWithTooltip";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import WidgetStore, {IApp} from "../../../stores/WidgetStore";
+import WidgetStore, { IApp } from "../../../stores/WidgetStore";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import RoomContext from "../../../contexts/RoomContext";
-import {UIFeature} from "../../../settings/UIFeature";
-import {ChevronFace, ContextMenuTooltipButton, useContextMenu} from "../../structures/ContextMenu";
+import { UIFeature } from "../../../settings/UIFeature";
+import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
-import {useRoomMemberCount} from "../../../hooks/useRoomMembers";
+import { useRoomMemberCount } from "../../../hooks/useRoomMembers";
 import { Container, MAX_PINNED, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import RoomName from "../elements/RoomName";
+import UIStore from "../../../stores/UIStore";
 
 interface IProps {
     room: Room;
@@ -115,8 +117,8 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
         const rect = handle.current.getBoundingClientRect();
         contextMenu = <WidgetContextMenu
             chevronFace={ChevronFace.None}
-            right={window.innerWidth - rect.right}
-            bottom={window.innerHeight - rect.top}
+            right={UIStore.instance.windowWidth - rect.right}
+            bottom={UIStore.instance.windowHeight - rect.top}
             onFinished={closeMenu}
             app={app}
         />;
@@ -249,7 +251,13 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
             />
         </div>
 
-        <h2 title={room.name}>{ room.name }</h2>
+        <RoomName room={room}>
+            { name => (
+                <h2 title={name}>
+                    { name }
+                </h2>
+            )}
+        </RoomName>
         <div className="mx_RoomSummaryCard_alias" title={alias}>
             { alias }
         </div>

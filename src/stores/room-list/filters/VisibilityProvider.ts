@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Room} from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/models/room";
 import CallHandler from "../../../CallHandler";
 import { RoomListCustomisations } from "../../../customisations/RoomList";
 import VoipUserMapper from "../../../VoipUserMapper";
@@ -50,7 +50,7 @@ export class VisibilityProvider {
         }
 
         // hide space rooms as they'll be shown in the SpacePanel
-        if (room.isSpaceRoom() && SettingsStore.getValue("feature_spaces")) {
+        if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) {
             return false;
         }
 

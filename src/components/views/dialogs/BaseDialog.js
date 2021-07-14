@@ -23,10 +23,10 @@ import classNames from 'classnames';
 
 import { Key } from '../../../Keyboard';
 import AccessibleButton from '../elements/AccessibleButton';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 /*
  * Basic container for modal dialogs.

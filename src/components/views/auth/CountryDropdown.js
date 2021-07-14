@@ -19,10 +19,10 @@ import PropTypes from 'prop-types';
 
 import * as sdk from '../../../index';
 
-import {COUNTRIES, getEmojiFlag} from '../../../phonenumber';
+import { COUNTRIES, getEmojiFlag } from '../../../phonenumber';
 import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const COUNTRIES_BY_ISO2 = {};
 for (const c of COUNTRIES) {

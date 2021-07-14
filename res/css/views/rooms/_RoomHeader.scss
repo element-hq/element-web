@@ -277,24 +277,6 @@ limitations under the License.
     margin-top: 18px;
 }
 
-.mx_RoomHeader_pinnedButton::before {
-    mask-image: url('$(res)/img/element-icons/room/pin.svg');
-}
-
-.mx_RoomHeader_pinsIndicator {
-    position: absolute;
-    right: 0;
-    bottom: 4px;
-    width: 8px;
-    height: 8px;
-    border-radius: 8px;
-    background-color: $pinned-color;
-}
-
-.mx_RoomHeader_pinsIndicatorUnread {
-    background-color: $pinned-unread-color;
-}
-
 @media only screen and (max-width: 480px) {
     .mx_RoomHeader_wrapper {
         padding: 0;

@@ -18,48 +18,52 @@ limitations under the License.
 import React, { createRef, CSSProperties } from 'react';
 import dis from '../../../dispatcher/dispatcher';
 import CallHandler from '../../../CallHandler';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t, _td } from '../../../languageHandler';
-import VideoFeed, { VideoFeedType } from "./VideoFeed";
+import VideoFeed from './VideoFeed';
 import RoomAvatar from "../avatars/RoomAvatar";
-import { CallState, CallType, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
-import { CallEvent } from 'matrix-js-sdk/src/webrtc/call';
+import { CallState, CallType, MatrixCall, CallEvent } from 'matrix-js-sdk/src/webrtc/call';
 import classNames from 'classnames';
 import AccessibleButton from '../elements/AccessibleButton';
-import {isOnlyCtrlOrCmdKeyEvent, Key} from '../../../Keyboard';
-import {alwaysAboveLeftOf, alwaysAboveRightOf, ChevronFace, ContextMenuButton} from '../../structures/ContextMenu';
+import { isOnlyCtrlOrCmdKeyEvent, Key } from '../../../Keyboard';
+import { alwaysAboveLeftOf, alwaysAboveRightOf, ChevronFace, ContextMenuButton } from '../../structures/ContextMenu';
 import CallContextMenu from '../context_menus/CallContextMenu';
 import { avatarUrlForMember } from '../../../Avatar';
 import DialpadContextMenu from '../context_menus/DialpadContextMenu';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { CallFeed } from 'matrix-js-sdk/src/webrtc/callFeed';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
         // The call for us to display
-        call: MatrixCall,
+        call: MatrixCall;
 
         // Another ongoing call to display information about
-        secondaryCall?: MatrixCall,
+        secondaryCall?: MatrixCall;
 
-        // a callback which is called when the content in the callview changes
+        // a callback which is called when the content in the CallView changes
         // in a way that is likely to cause a resize.
         onResize?: any;
 
-        // Whether this call view is for picture-in-pictue mode
+        // Whether this call view is for picture-in-picture mode
         // otherwise, it's the larger call view when viewing the room the call is in.
         // This is sort of a proxy for a number of things but we currently have no
         // need to control those things separately, so this is simpler.
         pipMode?: boolean;
+
+        // Used for dragging the PiP CallView
+        onMouseDownOnHeader?: (event: React.MouseEvent) => void;
 }
 
 interface IState {
-    isLocalOnHold: boolean,
-    isRemoteOnHold: boolean,
-    micMuted: boolean,
-    vidMuted: boolean,
-    callState: CallState,
-    controlsVisible: boolean,
-    showMoreMenu: boolean,
-    showDialpad: boolean,
+    isLocalOnHold: boolean;
+    isRemoteOnHold: boolean;
+    micMuted: boolean;
+    vidMuted: boolean;
+    callState: CallState;
+    controlsVisible: boolean;
+    showMoreMenu: boolean;
+    showDialpad: boolean;
+    feeds: CallFeed[];
 }
 
 function getFullScreenElement() {
@@ -115,7 +119,8 @@ export default class CallView extends React.Component<IProps, IState> {
             controlsVisible: true,
             showMoreMenu: false,
             showDialpad: false,
-        }
+            feeds: this.props.call.getFeeds(),
+        };
 
         this.updateCallListeners(null, this.props.call);
     }
@@ -172,11 +177,13 @@ export default class CallView extends React.Component<IProps, IState> {
             oldCall.removeListener(CallEvent.State, this.onCallState);
             oldCall.removeListener(CallEvent.LocalHoldUnhold, this.onCallLocalHoldUnhold);
             oldCall.removeListener(CallEvent.RemoteHoldUnhold, this.onCallRemoteHoldUnhold);
+            oldCall.removeListener(CallEvent.FeedsChanged, this.onFeedsChanged);
         }
         if (newCall) {
             newCall.on(CallEvent.State, this.onCallState);
             newCall.on(CallEvent.LocalHoldUnhold, this.onCallLocalHoldUnhold);
             newCall.on(CallEvent.RemoteHoldUnhold, this.onCallRemoteHoldUnhold);
+            newCall.on(CallEvent.FeedsChanged, this.onFeedsChanged);
         }
     }
 
@@ -184,6 +191,10 @@ export default class CallView extends React.Component<IProps, IState> {
         this.setState({
             callState: state,
         });
+    };
+
+    private onFeedsChanged = (newFeeds: Array<CallFeed>) => {
+        this.setState({ feeds: newFeeds });
     };
 
     private onCallLocalHoldUnhold = () => {
@@ -220,11 +231,11 @@ export default class CallView extends React.Component<IProps, IState> {
         this.setState({
             controlsVisible: false,
         });
-    }
+    };
 
     private onMouseMove = () => {
         this.showControls();
-    }
+    };
 
     private showControls() {
         if (this.state.showMoreMenu || this.state.showDialpad) return;
@@ -261,21 +272,21 @@ export default class CallView extends React.Component<IProps, IState> {
                 showDialpad: false,
             });
         }
-    }
+    };
 
     private onMicMuteClick = () => {
         const newVal = !this.state.micMuted;
 
         this.props.call.setMicrophoneMuted(newVal);
-        this.setState({micMuted: newVal});
-    }
+        this.setState({ micMuted: newVal });
+    };
 
     private onVidMuteClick = () => {
         const newVal = !this.state.vidMuted;
 
         this.props.call.setLocalVideoMuted(newVal);
-        this.setState({vidMuted: newVal});
-    }
+        this.setState({ vidMuted: newVal });
+    };
 
     private onMoreClick = () => {
         if (this.controlsHideTimer) {
@@ -287,24 +298,24 @@ export default class CallView extends React.Component<IProps, IState> {
             showMoreMenu: true,
             controlsVisible: true,
         });
-    }
+    };
 
     private closeDialpad = () => {
         this.setState({
             showDialpad: false,
         });
         this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
-    }
+    };
 
     private closeContextMenu = () => {
         this.setState({
             showMoreMenu: false,
         });
         this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
-    }
+    };
 
     // we register global shortcuts here, they *must not conflict* with local shortcuts elsewhere or both will fire
-    // Note that this assumes we always have a callview on screen at any given time
+    // Note that this assumes we always have a CallView on screen at any given time
     // CallHandler would probably be a better place for this
     private onNativeKeyDown = ev => {
         let handled = false;
@@ -342,7 +353,7 @@ export default class CallView extends React.Component<IProps, IState> {
             action: 'view_room',
             room_id: userFacingRoomId,
         });
-    }
+    };
 
     private onSecondaryRoomAvatarClick = () => {
         const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.secondaryCall);
@@ -351,17 +362,17 @@ export default class CallView extends React.Component<IProps, IState> {
             action: 'view_room',
             room_id: userFacingRoomId,
         });
-    }
+    };
 
     private onCallResumeClick = () => {
         const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
         CallHandler.sharedInstance().setActiveCallRoomId(userFacingRoomId);
-    }
+    };
 
     private onTransferClick = () => {
         const transfereeCall = CallHandler.sharedInstance().getTransfereeForCallId(this.props.call.callId);
         this.props.call.transferToCall(transfereeCall);
-    }
+    };
 
     public render() {
         const client = MatrixClientPeg.get();
@@ -474,6 +485,8 @@ export default class CallView extends React.Component<IProps, IState> {
             {contextMenuButton}
         </div>;
 
+        const avatarSize = this.props.pipMode ? 76 : 160;
+
         // The 'content' for the call, ie. the videos for a video call and profile picture
         // for voice calls (fills the bg)
         let contentView: React.ReactNode;
@@ -524,43 +537,87 @@ export default class CallView extends React.Component<IProps, IState> {
             </div>;
         }
 
-        if (this.props.call.type === CallType.Video) {
-            let localVideoFeed = null;
-            let onHoldBackground = null;
-            const backgroundStyle: CSSProperties = {};
-            const containerClasses = classNames({
-                mx_CallView_video: true,
-                mx_CallView_video_hold: isOnHold,
-            });
-            if (isOnHold) {
+        // This is a bit messy. I can't see a reason to have two onHold/transfer screens
+        if (isOnHold || transfereeCall) {
+            if (this.props.call.type === CallType.Video) {
+                const containerClasses = classNames({
+                    mx_CallView_content: true,
+                    mx_CallView_video: true,
+                    mx_CallView_video_hold: isOnHold,
+                });
+                let onHoldBackground = null;
+                const backgroundStyle: CSSProperties = {};
                 const backgroundAvatarUrl = avatarUrlForMember(
-                    // is it worth getting the size of the div to pass here?
+                // is it worth getting the size of the div to pass here?
                     this.props.call.getOpponentMember(), 1024, 1024, 'crop',
                 );
                 backgroundStyle.backgroundImage = 'url(' + backgroundAvatarUrl + ')';
                 onHoldBackground = <div className="mx_CallView_video_holdBackground" style={backgroundStyle} />;
-            }
-            if (!this.state.vidMuted) {
-                localVideoFeed = <VideoFeed type={VideoFeedType.Local} call={this.props.call} />;
-            }
 
-            contentView = <div className={containerClasses} ref={this.contentRef} onMouseMove={this.onMouseMove}>
-                {onHoldBackground}
-                <VideoFeed type={VideoFeedType.Remote} call={this.props.call} onResize={this.props.onResize} />
-                {localVideoFeed}
-                {holdTransferContent}
-                {callControls}
-            </div>;
-        } else {
-            const avatarSize = this.props.pipMode ? 76 : 160;
+                contentView = (
+                    <div className={containerClasses} ref={this.contentRef} onMouseMove={this.onMouseMove}>
+                        {onHoldBackground}
+                        {holdTransferContent}
+                        {callControls}
+                    </div>
+                );
+            } else {
+                const classes = classNames({
+                    mx_CallView_content: true,
+                    mx_CallView_voice: true,
+                    mx_CallView_voice_hold: isOnHold,
+                });
+
+                contentView =(
+                    <div className={classes} onMouseMove={this.onMouseMove}>
+                        <div className="mx_CallView_voice_avatarsContainer">
+                            <div
+                                className="mx_CallView_voice_avatarContainer"
+                                style={{ width: avatarSize, height: avatarSize }}
+                            >
+                                <RoomAvatar
+                                    room={callRoom}
+                                    height={avatarSize}
+                                    width={avatarSize}
+                                />
+                            </div>
+                        </div>
+                        {holdTransferContent}
+                        {callControls}
+                    </div>
+                );
+            }
+        } else if (this.props.call.noIncomingFeeds()) {
+            // Here we're reusing the css classes from voice on hold, because
+            // I am lazy. If this gets merged, the CallView might be subject
+            // to change anyway - I might take an axe to this file in order to
+            // try to get other things working
             const classes = classNames({
+                mx_CallView_content: true,
                 mx_CallView_voice: true,
-                mx_CallView_voice_hold: isOnHold,
             });
 
+            const feeds = this.props.call.getLocalFeeds().map((feed, i) => {
+                // Here we check to hide local audio feeds to achieve the same UI/UX
+                // as before. But once again this might be subject to change
+                if (feed.isVideoMuted()) return;
+                return (
+                    <VideoFeed
+                        key={i}
+                        feed={feed}
+                        call={this.props.call}
+                        pipMode={this.props.pipMode}
+                        onResize={this.props.onResize}
+                    />
+                );
+            });
+
+            // Saying "Connecting" here isn't really true, but the best thing
+            // I can come up with, but this might be subject to change as well
             contentView = <div className={classes} onMouseMove={this.onMouseMove}>
+                {feeds}
                 <div className="mx_CallView_voice_avatarsContainer">
-                    <div className="mx_CallView_voice_avatarContainer" style={{width: avatarSize, height: avatarSize}}>
+                    <div className="mx_CallView_voice_avatarContainer" style={{ width: avatarSize, height: avatarSize }}>
                         <RoomAvatar
                             room={callRoom}
                             height={avatarSize}
@@ -568,7 +625,35 @@ export default class CallView extends React.Component<IProps, IState> {
                         />
                     </div>
                 </div>
-                {holdTransferContent}
+                <div className="mx_CallView_holdTransferContent">{_t("Connecting")}</div>
+                {callControls}
+            </div>;
+        } else {
+            const containerClasses = classNames({
+                mx_CallView_content: true,
+                mx_CallView_video: true,
+            });
+
+            // TODO: Later the CallView should probably be reworked to support
+            // any number of feeds but now we can always expect there to be two
+            // feeds. This is because the js-sdk ignores any new incoming streams
+            const feeds = this.state.feeds.map((feed, i) => {
+                // Here we check to hide local audio feeds to achieve the same UI/UX
+                // as before. But once again this might be subject to change
+                if (feed.isVideoMuted() && feed.isLocal()) return;
+                return (
+                    <VideoFeed
+                        key={i}
+                        feed={feed}
+                        call={this.props.call}
+                        pipMode={this.props.pipMode}
+                        onResize={this.props.onResize}
+                    />
+                );
+            });
+
+            contentView = <div className={containerClasses} ref={this.contentRef} onMouseMove={this.onMouseMove}>
+                {feeds}
                 {callControls}
             </div>;
         }
@@ -616,19 +701,24 @@ export default class CallView extends React.Component<IProps, IState> {
                 </span>;
             }
 
-            header = <div className="mx_CallView_header">
-                <AccessibleButton onClick={this.onRoomAvatarClick}>
-                    <RoomAvatar room={callRoom} height={32} width={32} />
-                </AccessibleButton>
-                <div className="mx_CallView_header_callInfo">
-                    <div className="mx_CallView_header_roomName">{callRoom.name}</div>
-                    <div className="mx_CallView_header_callTypeSmall">
-                        {callTypeText}
-                        {secondaryCallInfo}
+            header = (
+                <div
+                    className="mx_CallView_header"
+                    onMouseDown={this.props.onMouseDownOnHeader}
+                >
+                    <AccessibleButton onClick={this.onRoomAvatarClick}>
+                        <RoomAvatar room={callRoom} height={32} width={32} />
+                    </AccessibleButton>
+                    <div className="mx_CallView_header_callInfo">
+                        <div className="mx_CallView_header_roomName">{callRoom.name}</div>
+                        <div className="mx_CallView_header_callTypeSmall">
+                            {callTypeText}
+                            {secondaryCallInfo}
+                        </div>
                     </div>
+                    {headerControls}
                 </div>
-                {headerControls}
-            </div>;
+            );
             myClassName = 'mx_CallView_pip';
         }
 

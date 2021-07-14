@@ -57,14 +57,15 @@ limitations under the License.
 
 @keyframes mx_RoomView_fileDropTarget_image_animation {
     from {
-        width: 0px;
+        transform: scaleX(0);
     }
     to {
-        width: 32px;
+        transform: scaleX(1);
     }
 }
 
 .mx_RoomView_fileDropTarget_image {
+    width: 32px;
     animation: mx_RoomView_fileDropTarget_image_animation;
     animation-duration: 0.5s;
     margin-bottom: 16px;
@@ -152,6 +153,7 @@ limitations under the License.
     flex: 1;
     display: flex;
     flex-direction: column;
+    contain: content;
 }
 
 .mx_RoomView_statusArea {
@@ -237,6 +239,7 @@ hr.mx_RoomView_myReadMarker {
     position: relative;
     top: -1px;
     z-index: 1;
+    will-change: width;
     transition: width 400ms easeinsine 1s, opacity 400ms easeinsine 1s;
     width: 99%;
     opacity: 1;

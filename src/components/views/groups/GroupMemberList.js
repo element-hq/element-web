@@ -23,10 +23,10 @@ import GroupStore from '../../../stores/GroupStore';
 import PropTypes from 'prop-types';
 import { showGroupInviteDialog } from '../../../GroupAddressPicker';
 import AccessibleButton from '../elements/AccessibleButton';
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import {Action} from "../../../dispatcher/actions";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { Action } from "../../../dispatcher/actions";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 
@@ -178,9 +178,15 @@ export default class GroupMemberList extends React.Component {
         }
 
         const inputBox = (
-            <input className="mx_GroupMemberList_query mx_textinput" id="mx_GroupMemberList_query" type="text"
-                    onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                    placeholder={_t('Filter community members')} autoComplete="off" />
+            <input
+                className="mx_GroupMemberList_query mx_textinput"
+                id="mx_GroupMemberList_query"
+                type="text"
+                onChange={this.onSearchQueryChanged}
+                value={this.state.searchQuery}
+                placeholder={_t('Filter community members')}
+                autoComplete="off"
+            />
         );
 
         const joined = this.state.members ? <div className="mx_MemberList_joined">

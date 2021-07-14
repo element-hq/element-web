@@ -22,7 +22,7 @@ import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.dialogs.SessionRestoreErrorDialog")
 export default class SessionRestoreErrorDialog extends React.Component {
@@ -98,7 +98,7 @@ export default class SessionRestoreErrorDialog extends React.Component {
                         "may be incompatible with this version. Close this window and return " +
                         "to the more recent version.",
                         { brand },
-                     ) }</p>
+                    ) }</p>
 
                     <p>{ _t(
                         "Clearing your browser's storage may fix the problem, but will sign you " +

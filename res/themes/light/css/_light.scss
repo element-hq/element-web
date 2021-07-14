@@ -21,6 +21,7 @@ $notice-primary-bg-color: rgba(255, 75, 85, 0.16);
 $primary-fg-color: #2e2f32;
 $secondary-fg-color: #737D8C;
 $tertiary-fg-color: #8D99A5;
+$quaternary-fg-color: #C1C6CD;
 $header-panel-bg-color: #f3f8fd;
 
 // typical text (dark-on-white in light skin)
@@ -172,6 +173,8 @@ $voipcall-plinth-color: #F4F6FA;
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
+$dialpad-button-bg-color: #e3e8f0;
+
 
 $roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-filter-active-bg-color: #ffffff;
@@ -181,13 +184,6 @@ $roomsublist-divider-color: $primary-fg-color;
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%);
 
 $groupFilterPanel-divider-color: $roomlist-header-color;
-
-$voice-record-stop-border-color: #E3E8F0;
-$voice-record-stop-symbol-color: #ff4b55; // $warning-color, but without letting people change it in themes
-$voice-record-waveform-bg-color: #E3E8F0;
-$voice-record-waveform-fg-color: $muted-fg-color;
-$voice-record-waveform-incomplete-fg-color: #C1C6CD;
-$voice-record-live-circle-color: #ff4b55; // $warning-color, but without letting people change it in themes
 
 $roomtile-preview-color: $secondary-fg-color;
 $roomtile-default-badge-bg-color: #61708b;
@@ -328,9 +324,21 @@ $breadcrumb-placeholder-bg-color: #e8eef5;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
 
-$message-body-panel-bg-color: #e3e8f082;
-$message-body-panel-icon-bg-color: #ffffff;
-$message-body-panel-fg-color: $muted-fg-color;
+$message-body-panel-fg-color: $secondary-fg-color;
+$message-body-panel-bg-color: #E3E8F0; // "Separator"
+$message-body-panel-icon-fg-color: $secondary-fg-color;
+$message-body-panel-icon-bg-color: $primary-bg-color;
+
+// These two don't change between themes. They are the $warning-color, but we don't
+// want custom themes to affect them by accident.
+$voice-record-stop-symbol-color: #ff4b55;
+$voice-record-live-circle-color: #ff4b55;
+
+$voice-record-stop-border-color: #E3E8F0; // "Separator"
+$voice-record-waveform-incomplete-fg-color: $quaternary-fg-color;
+$voice-record-icon-color: $tertiary-fg-color;
+$voice-playback-button-bg-color: $message-body-panel-icon-bg-color;
+$voice-playback-button-fg-color: $message-body-panel-icon-fg-color;
 
 // FontSlider colors
 $appearance-tab-border-color: $input-darker-bg-color;

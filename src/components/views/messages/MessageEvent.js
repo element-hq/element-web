@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import SettingsStore from "../../../settings/SettingsStore";
-import {Mjolnir} from "../../../mjolnir/Mjolnir";
+import { Mjolnir } from "../../../mjolnir/Mjolnir";
 import RedactedBody from "./RedactedBody";
 import UnknownBody from "./UnknownBody";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.messages.MessageEvent")
 export default class MessageEvent extends React.Component {
@@ -72,12 +72,8 @@ export default class MessageEvent extends React.Component {
             'm.emote': sdk.getComponent('messages.TextualBody'),
             'm.image': sdk.getComponent('messages.MImageBody'),
             'm.file': sdk.getComponent('messages.MFileBody'),
-            'm.audio': sdk.getComponent('messages.MAudioBody'),
+            'm.audio': sdk.getComponent('messages.MVoiceOrAudioBody'),
             'm.video': sdk.getComponent('messages.MVideoBody'),
-
-            // TODO: @@ TravisR: Use labs flag determination.
-            // MSC: https://github.com/matrix-org/matrix-doc/pull/2516
-            'org.matrix.msc2516.voice': sdk.getComponent('messages.MAudioBody'),
         };
         const evTypes = {
             'm.sticker': sdk.getComponent('messages.MStickerBody'),

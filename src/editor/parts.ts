@@ -15,9 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClient} from "matrix-js-sdk/src/client";
-import {RoomMember} from "matrix-js-sdk/src/models/room-member";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 import AutocompleteWrapperModel, {
     GetAutocompleterComponent,
@@ -34,7 +34,7 @@ interface ISerializedPart {
 interface ISerializedPillPart {
     type: Type.AtRoomPill | Type.RoomPill | Type.UserPill;
     text: string;
-    resourceId: string;
+    resourceId?: string;
 }
 
 export type SerializedPart = ISerializedPart | ISerializedPillPart;
@@ -287,6 +287,14 @@ abstract class PillPart extends BasePart implements IPillPart {
         }
     }
 
+    serialize(): ISerializedPillPart {
+        return {
+            type: this.type,
+            text: this.text,
+            resourceId: this.resourceId,
+        };
+    }
+
     get canEdit() {
         return false;
     }
@@ -366,6 +374,13 @@ class AtRoomPillPart extends RoomPillPart {
     get type(): IPillPart["type"] {
         return Type.AtRoomPill;
     }
+
+    serialize(): ISerializedPillPart {
+        return {
+            type: this.type,
+            text: this.text,
+        };
+    }
 }
 
 class UserPillPart extends PillPart {
@@ -393,14 +408,6 @@ class UserPillPart extends PillPart {
 
     get className() {
         return "mx_UserPill mx_Pill";
-    }
-
-    serialize(): ISerializedPillPart {
-        return {
-            type: this.type,
-            text: this.text,
-            resourceId: this.resourceId,
-        };
     }
 }
 
@@ -459,7 +466,7 @@ export class PartCreator {
     constructor(private room: Room, private client: MatrixClient, autoCompleteCreator: AutoCompleteCreator = null) {
         // pre-create the creator as an object even without callback so it can already be passed
         // to PillCandidatePart (e.g. while deserializing) and set later on
-        this.autoCompleteCreator = {create: autoCompleteCreator && autoCompleteCreator(this)};
+        this.autoCompleteCreator = { create: autoCompleteCreator && autoCompleteCreator(this) };
     }
 
     setAutoCompleteCreator(autoCompleteCreator: AutoCompleteCreator) {
@@ -495,7 +502,7 @@ export class PartCreator {
             case Type.PillCandidate:
                 return this.pillCandidate(part.text);
             case Type.RoomPill:
-                return this.roomPill(part.text);
+                return this.roomPill(part.resourceId);
             case Type.UserPill:
                 return this.userPill(part.text, part.resourceId);
         }
@@ -545,7 +552,7 @@ export class PartCreator {
 // part creator that support auto complete for /commands,
 // used in SendMessageComposer
 export class CommandPartCreator extends PartCreator {
-    createPartForInput(text: string, partIndex: number) {
+    public createPartForInput(text: string, partIndex: number): Part {
         // at beginning and starts with /? create
         if (partIndex === 0 && text[0] === "/") {
             // text will be inserted by model, so pass empty string
@@ -555,11 +562,11 @@ export class CommandPartCreator extends PartCreator {
         }
     }
 
-    command(text: string) {
+    public command(text: string): CommandPart {
         return new CommandPart(text, this.autoCompleteCreator);
     }
 
-    deserializePart(part: Part): Part {
+    public deserializePart(part: SerializedPart): Part {
         if (part.type === "command") {
             return this.command(part.text);
         } else {
@@ -569,7 +576,7 @@ export class CommandPartCreator extends PartCreator {
 }
 
 class CommandPart extends PillCandidatePart {
-    get type(): IPillCandidatePart["type"] {
+    public get type(): IPillCandidatePart["type"] {
         return Type.Command;
     }
 }
