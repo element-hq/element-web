@@ -35,3 +35,9 @@ RUN sed -i '3i\ \ \ \ application/wasm wasm\;' /etc/nginx/mime.types
 
 RUN rm -rf /usr/share/nginx/html \
   && ln -s /app /usr/share/nginx/html
+
+RUN mkdir -p /var/log/nginx /var/cache/nginx /var/run/nginx \
+  && chown -R nginx:nginx /var/log/nginx /var/run/nginx /var/cache/nginx \
+  && sed -e 's#/var/run/nginx.pid#/var/run/nginx/nginx.pid#' -i /etc/nginx/nginx.conf
+
+USER nginx
