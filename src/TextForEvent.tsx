@@ -705,5 +705,5 @@ export function textForEvent(ev: MatrixEvent): string;
 export function textForEvent(ev: MatrixEvent, allowJSX: true, showHiddenEvents?: boolean): string | JSX.Element;
 export function textForEvent(ev: MatrixEvent, allowJSX = false, showHiddenEvents?: boolean): string | JSX.Element {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
-    return handler?.(ev, allowJSX, showHiddenEvents)?.() ?? '';
+    return handler?.(ev, allowJSX, showHiddenEvents)?.() || '';
 }
