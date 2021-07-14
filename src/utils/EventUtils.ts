@@ -101,7 +101,7 @@ export function findEditableEvent(room: Room, isForward: boolean, fromEventId: s
 
 export function getEventDisplayInfo(mxEvent: MatrixEvent): {
     isInfoMessage: boolean;
-    tileHandler;
+    tileHandler: string;
     isBubbleMessage: boolean;
 } {
     const content = mxEvent.getContent();
