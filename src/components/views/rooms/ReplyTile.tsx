@@ -27,6 +27,7 @@ import * as sdk from '../../../index';
 import { EventType, MsgType } from 'matrix-js-sdk/src/@types/event';
 import { replaceableComponent } from '../../../utils/replaceableComponent';
 import { getEventDisplayInfo } from '../../../utils/EventUtils';
+import MFileBody from "../messages/MFileBody";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -115,8 +116,9 @@ export default class ReplyTile extends React.PureComponent<IProps> {
 
         const msgtypeOverrides = {
             [MsgType.Image]: MImageReplyBody,
-            [MsgType.Audio]: TextualBody,
-            [MsgType.Video]: TextualBody,
+            // Override audio and video body with file body. We also hide the download/decrypt button using CSS
+            [MsgType.Audio]: MFileBody,
+            [MsgType.Video]: MFileBody,
         };
         const evOverrides = {
             [EventType.Sticker]: TextualBody,

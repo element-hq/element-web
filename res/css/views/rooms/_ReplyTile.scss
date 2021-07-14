@@ -21,8 +21,14 @@ limitations under the License.
     position: relative;
     line-height: $font-16px;
 
-    .mx_MFileBody_info {
-        margin: 5px 0;
+    .mx_MFileBody {
+        .mx_MFileBody_info {
+            margin: 5px 0;
+        }
+
+        .mx_MFileBody_download {
+            display: none;
+        }
     }
 }
 
