@@ -194,6 +194,7 @@ export enum TileShape {
     FileGrid = "file_grid",
     Reply = "reply",
     ReplyPreview = "reply_preview",
+    Pinned = "pinned",
 }
 
 interface IProps {
@@ -1097,6 +1098,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             highlightLink={this.props.highlightLink}
                             showUrlPreview={this.props.showUrlPreview}
                             onHeightChanged={this.props.onHeightChanged}
+                            tileShape={this.props.tileShape}
                         />
                     </div>,
                 ]);
