@@ -1093,6 +1093,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             highlightLink={this.props.highlightLink}
                             showUrlPreview={this.props.showUrlPreview}
                             onHeightChanged={this.props.onHeightChanged}
+                            tileShape={this.props.tileShape}
                         />
                     </div>,
                 ]);
