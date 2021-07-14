@@ -20,6 +20,10 @@ limitations under the License.
     font-size: $font-14px;
     position: relative;
     line-height: $font-16px;
+
+    .mx_MFileBody_info {
+        margin: 5px 0;
+    }
 }
 
 .mx_ReplyTile > a {
