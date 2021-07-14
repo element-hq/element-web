@@ -51,15 +51,6 @@ export interface IMatrixClientPeg {
     opts: IStartClientOpts;
 
     /**
-     * Sets the script href passed to the IndexedDB web worker
-     * If set, a separate web worker will be started to run the IndexedDB
-     * queries on.
-     *
-     * @param {string} script href to the script to be passed to the web worker
-     */
-    setIndexedDbWorkerScript(script: string): void;
-
-    /**
      * Return the server name of the user's homeserver
      * Throws an error if unable to deduce the homeserver name
      * (eg. if the user is not logged in)
@@ -131,10 +122,6 @@ class _MatrixClientPeg implements IMatrixClientPeg {
     private currentClientCreds: IMatrixClientCreds;
 
     constructor() {
-    }
-
-    public setIndexedDbWorkerScript(script: string): void {
-        createMatrixClient.indexedDbWorkerScript = script;
     }
 
     public get(): MatrixClient {
