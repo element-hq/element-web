@@ -350,17 +350,14 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         const options = [
             {
                 value: HistoryVisibility.Shared,
-                disabled: !canChangeHistory,
                 label: _t('Members only (since the point in time of selecting this option)'),
             },
             {
                 value: HistoryVisibility.Invited,
-                disabled: !canChangeHistory,
                 label: _t('Members only (since they were invited)'),
             },
             {
                 value: HistoryVisibility.Joined,
-                disabled: !canChangeHistory,
                 label: _t('Members only (since they joined)'),
             },
         ];
@@ -369,7 +366,6 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         if (!this.state.encrypted || history === HistoryVisibility.WorldReadable) {
             options.unshift({
                 value: HistoryVisibility.WorldReadable,
-                disabled: !canChangeHistory,
                 label: _t("Anyone"),
             });
         }
@@ -384,6 +380,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     name="historyVis"
                     value={history}
                     onChange={this.onHistoryRadioToggle}
+                    disabled={!canChangeHistory}
                     definitions={options}
                 />
             </div>
