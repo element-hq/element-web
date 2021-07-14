@@ -3476,5 +3476,17 @@
     "Address": "Cím",
     "e.g. my-space": "pl. én-terem",
     "Silence call": "Némít",
-    "Sound on": "Hang be"
+    "Sound on": "Hang be",
+    "Use Command + F to search timeline": "Command + F az idővonalon való kereséshez",
+    "Unnamed audio": "Névtelen hang",
+    "Error processing audio message": "Hiba a hangüzenet feldolgozásánál",
+    "Show %(count)s other previews|one": "%(count)s további előnézet megjelenítése",
+    "Show %(count)s other previews|other": "%(count)s további előnézet megjelenítése",
+    "Images, GIFs and videos": "Képek, GIFek és videók",
+    "Code blocks": "Kód blokkok",
+    "Displaying time": "Idő megjelenítése",
+    "To view all keyboard shortcuts, click here.": "A billentyűzet kombinációk megjelenítéséhez kattintson ide.",
+    "Keyboard shortcuts": "Billentyűzet kombinációk",
+    "Use Ctrl + F to search timeline": "Ctrl + F az idővonalon való kereséshez",
+    "User %(userId)s is already invited to the room": "%(userId)s felhasználó már kapott meghívót a szobába"
 }
