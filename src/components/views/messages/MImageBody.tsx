@@ -316,7 +316,6 @@ export default class MImageBody extends React.Component<IProps, IState> {
     componentWillUnmount() {
         this.unmounted = true;
         this.context.removeListener('sync', this.onClientSync);
-        this._afterComponentWillUnmount();
 
         if (this.state.decryptedUrl) {
             URL.revokeObjectURL(this.state.decryptedUrl);
@@ -324,11 +323,6 @@ export default class MImageBody extends React.Component<IProps, IState> {
         if (this.state.decryptedThumbnailUrl) {
             URL.revokeObjectURL(this.state.decryptedThumbnailUrl);
         }
-    }
-
-    // To be overridden by subclasses (e.g. MStickerBody) for further
-    // cleanup after componentWillUnmount
-    _afterComponentWillUnmount() {
     }
 
     protected messageContent(
