@@ -43,6 +43,7 @@ import { useStateToggle } from "../../hooks/useStateToggle";
 import { getChildOrder } from "../../stores/SpaceStore";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { linkifyElement } from "../../HtmlUtils";
+import { getDisplayAliasForAliasSet } from "../../Rooms";
 
 interface IHierarchyProps {
     space: Room;
@@ -637,5 +638,5 @@ export default SpaceRoomDirectory;
 // Similar to matrix-react-sdk's MatrixTools.getDisplayAliasForRoom
 // but works with the objects we get from the public room list
 function getDisplayAliasForRoom(room: ISpaceSummaryRoom) {
-    return room.canonical_alias || (room.aliases ? room.aliases[0] : "");
+    return getDisplayAliasForAliasSet(room.canonical_alias, room.aliases);
 }
