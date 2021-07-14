@@ -75,7 +75,7 @@ interface IState extends IThemeState {
 export default class AppearanceUserSettingsTab extends React.Component<IProps, IState> {
     private readonly MESSAGE_PREVIEW_TEXT = _t("Hey you. You're the best!");
 
-    private themeTimer: NodeJS.Timeout;
+    private themeTimer: number;
 
     constructor(props: IProps) {
         super(props);

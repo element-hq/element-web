@@ -109,11 +109,11 @@ export abstract class Member {
 
 class DirectoryMember extends Member {
     private readonly _userId: string;
-    private readonly displayName: string;
-    private readonly avatarUrl: string;
+    private readonly displayName?: string;
+    private readonly avatarUrl?: string;
 
     // eslint-disable-next-line camelcase
-    constructor(userDirResult: { user_id: string, display_name: string, avatar_url: string }) {
+    constructor(userDirResult: { user_id: string, display_name?: string, avatar_url?: string }) {
         super();
         this._userId = userDirResult.user_id;
         this.displayName = userDirResult.display_name;
@@ -370,7 +370,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     };
 
     private closeCopiedTooltip: () => void;
-    private debounceTimer: NodeJS.Timeout = null; // actually number because we're in the browser
+    private debounceTimer: number = null; // actually number because we're in the browser
     private editorRef = createRef<HTMLInputElement>();
     private unmounted = false;
 

@@ -39,7 +39,7 @@ import {
     UploadStartedPayload,
 } from "./dispatcher/payloads/UploadPayload";
 import { IUpload } from "./models/IUpload";
-import { IImageInfo } from "matrix-js-sdk/src/@types/partials";
+import { IAbortablePromise, IImageInfo } from "matrix-js-sdk/src/@types/partials";
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
@@ -83,10 +83,6 @@ interface IThumbnail {
         [BLURHASH_FIELD]: string;
     };
     thumbnail: Blob;
-}
-
-interface IAbortablePromise<T> extends Promise<T> {
-    abort(): void;
 }
 
 /**
@@ -333,7 +329,7 @@ export function uploadFile(
     roomId: string,
     file: File | Blob,
     progressHandler?: any, // TODO: Types
-): Promise<{url?: string, file?: any}> { // TODO: Types
+): IAbortablePromise<{url?: string, file?: any}> { // TODO: Types
     let canceled = false;
     if (matrixClient.isRoomEncrypted(roomId)) {
         // If the room is encrypted then encrypt the file before uploading it.
@@ -365,8 +361,8 @@ export function uploadFile(
                 encryptInfo.mimetype = file.type;
             }
             return { "file": encryptInfo };
-        });
-        (prom as IAbortablePromise<any>).abort = () => {
+        }) as IAbortablePromise<{ file: any }>;
+        prom.abort = () => {
             canceled = true;
             if (uploadPromise) matrixClient.cancelUpload(uploadPromise);
         };
@@ -379,8 +375,8 @@ export function uploadFile(
             if (canceled) throw new UploadCanceledError();
             // If the attachment isn't encrypted then include the URL directly.
             return { url };
-        });
-        (promise1 as any).abort = () => {
+        }) as IAbortablePromise<{ url: string }>;
+        promise1.abort = () => {
             canceled = true;
             matrixClient.cancelUpload(basePromise);
         };
@@ -551,10 +547,10 @@ export default class ContentMessages {
                 content.msgtype = 'm.file';
                 resolve();
             }
-        });
+        }) as IAbortablePromise<void>;
 
         // create temporary abort handler for before the actual upload gets passed off to js-sdk
-        (prom as IAbortablePromise<any>).abort = () => {
+        prom.abort = () => {
             upload.canceled = true;
         };
 
@@ -583,9 +579,7 @@ export default class ContentMessages {
             // XXX: upload.promise must be the promise that
             // is returned by uploadFile as it has an abort()
             // method hacked onto it.
-            upload.promise = uploadFile(
-                matrixClient, roomId, file, onProgress,
-            );
+            upload.promise = uploadFile(matrixClient, roomId, file, onProgress);
             return upload.promise.then(function(result) {
                 content.file = result.file;
                 content.url = result.url;

@@ -18,6 +18,7 @@ import { ListIteratee, Many, sortBy, throttle } from "lodash";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { ISpaceSummaryRoom } from "matrix-js-sdk/src/@types/spaces";
 
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
@@ -31,7 +32,6 @@ import { RoomNotificationStateStore } from "./notifications/RoomNotificationStat
 import { DefaultTagID } from "./room-list/models";
 import { EnhancedMap, mapDiff } from "../utils/maps";
 import { setHasDiff } from "../utils/sets";
-import { ISpaceSummaryEvent, ISpaceSummaryRoom } from "../components/structures/SpaceRoomDirectory";
 import RoomViewStore from "./RoomViewStore";
 import { Action } from "../dispatcher/actions";
 import { arrayHasDiff } from "../utils/arrays";
@@ -184,10 +184,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
     public fetchSuggestedRooms = async (space: Room, limit = MAX_SUGGESTED_ROOMS): Promise<ISuggestedRoom[]> => {
         try {
-            const data: {
-                rooms: ISpaceSummaryRoom[];
-                events: ISpaceSummaryEvent[];
-            } = await this.matrixClient.getSpaceSummary(space.roomId, 0, true, false, limit);
+            const data = await this.matrixClient.getSpaceSummary(space.roomId, 0, true, false, limit);
 
             const viaMap = new EnhancedMap<string, Set<string>>();
             data.events.forEach(ev => {

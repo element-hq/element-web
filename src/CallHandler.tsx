@@ -154,7 +154,7 @@ export default class CallHandler extends EventEmitter {
     private supportsPstnProtocol = null;
     private pstnSupportPrefixed = null; // True if the server only support the prefixed pstn protocol
     private supportsSipNativeVirtual = null; // im.vector.protocol.sip_virtual and im.vector.protocol.sip_native
-    private pstnSupportCheckTimer: NodeJS.Timeout; // number actually because we're in the browser
+    private pstnSupportCheckTimer: number;
     // For rooms we've been invited to, true if they're from virtual user, false if we've checked and they aren't.
     private invitedRoomsAreVirtual = new Map<string, boolean>();
     private invitedRoomCheckInProgress = false;
