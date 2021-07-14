@@ -3043,5 +3043,6 @@
     "Enter": "Enter",
     "Space": "Space",
     "End": "End",
-    "[number]": "[number]"
+    "[number]": "[number]",
+    "Unable to copy room": "Unable to copy room"
 }
