@@ -33,5 +33,6 @@
     "Powered by Matrix": "Drivs av Matrix",
     "Your browser can't run %(brand)s": "Din webbläsare kan inte köra %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s använder avancerade webbläsarfunktioner som inte stöds av din aktuella webbläsare.",
-    "Use %(brand)s on mobile": "Använd %(brand)s på mobilen"
+    "Use %(brand)s on mobile": "Använd %(brand)s på mobilen",
+    "Switch to space by number": "Byt till utrymme med nummer"
 }
