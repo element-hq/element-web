@@ -244,7 +244,11 @@ export default class TextualBody extends React.Component<IProps, IState> {
     }
 
     private highlightCode(code: HTMLElement): void {
-        if (SettingsStore.getValue("enableSyntaxHighlightLanguageDetection")) {
+        // Auto-detect language only if enabled and only for codeblocks
+        if (
+            SettingsStore.getValue("enableSyntaxHighlightLanguageDetection") &&
+            code.parentElement instanceof HTMLPreElement
+        ) {
             highlight.highlightBlock(code);
         } else {
             // Only syntax highlight if there's a class starting with language-

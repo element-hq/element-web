@@ -31,6 +31,7 @@ export enum PlaybackState {
 }
 
 export const PLAYBACK_WAVEFORM_SAMPLES = 39;
+const THUMBNAIL_WAVEFORM_SAMPLES = 100; // arbitrary: [30,120]
 const DEFAULT_WAVEFORM = arraySeed(0, PLAYBACK_WAVEFORM_SAMPLES);
 
 function makePlaybackWaveform(input: number[]): number[] {
@@ -51,6 +52,12 @@ function makePlaybackWaveform(input: number[]): number[] {
 }
 
 export class Playback extends EventEmitter implements IDestroyable {
+    /**
+     * Stable waveform for representing a thumbnail of the media. Values are
+     * guaranteed to be between zero and one, inclusive.
+     */
+    public readonly thumbnailWaveform: number[];
+
     private readonly context: AudioContext;
     private source: AudioBufferSourceNode;
     private state = PlaybackState.Decoding;
@@ -72,6 +79,7 @@ export class Playback extends EventEmitter implements IDestroyable {
         this.fileSize = this.buf.byteLength;
         this.context = createAudioContext();
         this.resampledWaveform = arrayFastResample(seedWaveform ?? DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES);
+        this.thumbnailWaveform = arrayFastResample(seedWaveform ?? DEFAULT_WAVEFORM, THUMBNAIL_WAVEFORM_SAMPLES);
         this.waveformObservable.update(this.resampledWaveform);
         this.clock = new PlaybackClock(this.context);
     }

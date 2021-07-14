@@ -446,7 +446,8 @@ function textForPowerEvent(event: MatrixEvent): () => string | null {
         !event.getContent() || !event.getContent().users) {
         return null;
     }
-    const userDefault = event.getContent().users_default || 0;
+    const previousUserDefault = event.getPrevContent().users_default || 0;
+    const currentUserDefault = event.getContent().users_default || 0;
     // Construct set of userIds
     const users = [];
     Object.keys(event.getContent().users).forEach(
@@ -462,9 +463,16 @@ function textForPowerEvent(event: MatrixEvent): () => string | null {
     const diffs = [];
     users.forEach((userId) => {
         // Previous power level
-        const from = event.getPrevContent().users[userId];
+        let from = event.getPrevContent().users[userId];
+        if (!Number.isInteger(from)) {
+            from = previousUserDefault;
+        }
         // Current power level
-        const to = event.getContent().users[userId];
+        let to = event.getContent().users[userId];
+        if (!Number.isInteger(to)) {
+            to = currentUserDefault;
+        }
+        if (from === previousUserDefault && to === currentUserDefault) { return; }
         if (to !== from) {
             diffs.push({ userId, from, to });
         }
@@ -478,8 +486,8 @@ function textForPowerEvent(event: MatrixEvent): () => string | null {
         powerLevelDiffText: diffs.map(diff =>
             _t('%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s', {
                 userId: diff.userId,
-                fromPowerLevel: Roles.textualPowerLevel(diff.from, userDefault),
-                toPowerLevel: Roles.textualPowerLevel(diff.to, userDefault),
+                fromPowerLevel: Roles.textualPowerLevel(diff.from, previousUserDefault),
+                toPowerLevel: Roles.textualPowerLevel(diff.to, currentUserDefault),
             }),
         ).join(", "),
     });
