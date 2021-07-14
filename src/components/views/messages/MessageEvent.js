@@ -42,7 +42,7 @@ export default class MessageEvent extends React.Component {
         onHeightChanged: PropTypes.func,
 
         /* the shape of the tile, used */
-        tileShape: PropTypes.string,
+        tileShape: PropTypes.string, // TODO: Use TileShape enum
 
         /* the maximum image height to use, if the event is an image */
         maxImageHeight: PropTypes.number,
