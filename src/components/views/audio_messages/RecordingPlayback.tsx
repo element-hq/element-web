@@ -54,7 +54,9 @@ export default class RecordingPlayback extends React.PureComponent<IProps, IStat
     }
 
     private get isWaveformable(): boolean {
-        return this.props.tileShape !== TileShape.Notif && this.props.tileShape !== TileShape.FileGrid;
+        return this.props.tileShape !== TileShape.Notif
+            && this.props.tileShape !== TileShape.FileGrid
+            && this.props.tileShape !== TileShape.Pinned;
     }
 
     private onPlaybackUpdate = (ev: PlaybackState) => {

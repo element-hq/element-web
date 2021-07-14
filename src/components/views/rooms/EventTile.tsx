@@ -194,6 +194,7 @@ export enum TileShape {
     FileGrid = "file_grid",
     Reply = "reply",
     ReplyPreview = "reply_preview",
+    Pinned = "pinned",
 }
 
 interface IProps {
