@@ -31,7 +31,7 @@ import { getEventDisplayInfo } from '../../../utils/EventUtils';
 interface IProps {
     mxEvent: MatrixEvent;
     permalinkCreator?: RoomPermalinkCreator;
-    highlights?: Array<string>;
+    highlights?: string[];
     highlightLink?: string;
     onHeightChanged?(): void;
 }
