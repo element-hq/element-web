@@ -452,6 +452,8 @@ export default class ImageView extends React.Component<IProps, IState> {
                 <div className="mx_ImageView_panel">
                     { info }
                     <div className="mx_ImageView_toolbar">
+                        { zoomOutButton }
+                        { zoomInButton }
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_rotateCCW"
                             title={_t("Rotate Left")}
@@ -462,8 +464,6 @@ export default class ImageView extends React.Component<IProps, IState> {
                             title={_t("Rotate Right")}
                             onClick={this.onRotateClockwiseClick}>
                         </AccessibleTooltipButton>
-                        { zoomOutButton }
-                        { zoomInButton }
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_download"
                             title={_t("Download")}

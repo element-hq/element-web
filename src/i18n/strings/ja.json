@@ -2503,5 +2503,6 @@
     "Support": "サポート",
     "You can change these anytime.": "ここで入力した情報はいつでも編集できます。",
     "Add some details to help people recognise it.": "情報を入力してください。",
-    "View dev tools": "開発者ツールを表示"
+    "View dev tools": "開発者ツールを表示",
+    "To view %(spaceName)s, you need an invite": "%(spaceName)s を閲覧するには招待が必要です"
 }
