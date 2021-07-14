@@ -320,7 +320,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
             message = unboundMessage;
         }
 
-        const { finished } = Modal.createTrackedDialog('Identity server Bound Warning', '', QuestionDialog, {
+        const { finished } = Modal.createTrackedDialog('Identity Server Bound Warning', '', QuestionDialog, {
             title,
             description: message,
             button,
