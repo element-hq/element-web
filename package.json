@@ -172,7 +172,7 @@
       "waveWorker\\.min\\.js": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js",
       "context-filter-polyfill": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js",
       "FontManager.ts": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/FontManager.js",
-      "workers/(.+)\\.worker\\.ts": "<rootDir>/__mocks__/workerMock.js"
+      "workers/(.+)\\.worker\\.ts": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/workerMock.js"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$",
