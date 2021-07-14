@@ -164,7 +164,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
             results.push(ev);
         }
 
-        return results.map(e => e.event);
+        return results.map(e => e.getClearEvent());
     }
 
     public async readStateEvents(eventType: string, stateKey: string | undefined, limit: number): Promise<object[]> {
