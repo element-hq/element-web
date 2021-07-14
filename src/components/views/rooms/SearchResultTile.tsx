@@ -50,6 +50,7 @@ export default class SearchResultTile extends React.Component<IProps> {
         const layout = SettingsStore.getValue("layout");
         const isTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
         const alwaysShowTimestamps = SettingsStore.getValue("alwaysShowTimestamps");
+        const enableFlair = SettingsStore.getValue(UIFeature.Flair);
 
         const timeline = result.context.getTimeline();
         for (let j = 0; j < timeline.length; j++) {
@@ -72,7 +73,7 @@ export default class SearchResultTile extends React.Component<IProps> {
                         onHeightChanged={this.props.onHeightChanged}
                         isTwelveHour={isTwelveHour}
                         alwaysShowTimestamps={alwaysShowTimestamps}
-                        enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+                        enableFlair={enableFlair}
                     />,
                 );
             }
