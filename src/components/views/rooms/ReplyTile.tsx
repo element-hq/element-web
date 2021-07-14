@@ -117,7 +117,6 @@ export default class ReplyTile extends React.PureComponent<IProps> {
             [MsgType.Image]: MImageReplyBody,
             // We don't want a download link for files, just the file name is enough.
             [MsgType.File]: TextualBody,
-            "m.sticker": TextualBody,
             [MsgType.Audio]: TextualBody,
             [MsgType.Video]: TextualBody,
         };
