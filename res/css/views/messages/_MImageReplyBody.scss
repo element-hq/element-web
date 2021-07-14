@@ -21,12 +21,17 @@ limitations under the License.
         flex: 1;
         padding-right: 4px;
     }
+
+    .mx_MImageReplyBody_info {
+        flex: 1;
+
+        .mx_MImageReplyBody_sender {
+            grid-area: sender;
+        }
+
+        .mx_MImageReplyBody_filename {
+            grid-area: filename;
+        }
+    }
 }
 
-.mx_MImageReplyBody_sender {
-    grid-area: sender;
-}
-
-.mx_MImageReplyBody_filename {
-    grid-area: filename;
-}
