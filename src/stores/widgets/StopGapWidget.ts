@@ -415,7 +415,7 @@ export class StopGapWidget extends EventEmitter {
     private feedEvent(ev: MatrixEvent) {
         if (!this.messaging) return;
 
-        const raw = ev.getClearEvent() as IEvent;
+        const raw = ev.getEffectiveEvent();
         this.messaging.feedEvent(raw).catch(e => {
             console.error("Error sending event to widget: ", e);
         });
