@@ -20,6 +20,7 @@ import { Media, mediaFromContent } from "../customisations/Media";
 import { decryptFile } from "./DecryptFile";
 import { IMediaEventContent } from "../customisations/models/IMediaEventContent";
 import { IDestroyable } from "./IDestroyable";
+import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 
 // TODO: We should consider caching the blobs. https://github.com/vector-im/element-web/issues/17192
 
@@ -87,4 +88,24 @@ export class MediaEventHelper implements IDestroyable {
 
         return fetch(this.media.thumbnailHttp).then(r => r.blob());
     };
+
+    public static isEligible(event: MatrixEvent): boolean {
+        if (!event) return false;
+        if (event.isRedacted()) return false;
+        if (event.getType() === EventType.Sticker) return true;
+        if (event.getType() !== EventType.RoomMessage) return false;
+
+        const content = event.getContent();
+        const mediaMsgTypes: string[] = [
+            MsgType.Video,
+            MsgType.Audio,
+            MsgType.Image,
+            MsgType.File,
+        ];
+        if (mediaMsgTypes.includes(content.msgtype)) return true;
+        if (typeof(content.url) === 'string') return true;
+
+        // Finally, it's probably not media
+        return false;
+    }
 }

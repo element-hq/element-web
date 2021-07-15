@@ -18,15 +18,12 @@ limitations under the License.
 import React from 'react';
 import { decode } from "blurhash";
 
-import MFileBody from './MFileBody';
-import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import InlineSpinner from '../elements/InlineSpinner';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD } from "../../../ContentMessages";
-import { IMediaBody } from "./IMediaBody";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 import { MatrixEvent } from "matrix-js-sdk/src";
@@ -36,6 +33,7 @@ interface IProps {
     mxEvent: MatrixEvent;
     /* called when the video has loaded */
     onHeightChanged: () => void;
+    mediaEventHelper: MediaEventHelper;
 }
 
 interface IState {
@@ -49,9 +47,8 @@ interface IState {
 }
 
 @replaceableComponent("views.messages.MVideoBody")
-export default class MVideoBody extends React.PureComponent<IProps, IState> implements IMediaBody {
+export default class MVideoBody extends React.PureComponent<IProps, IState> {
     private videoRef = React.createRef<HTMLVideoElement>();
-    private mediaHelper: MediaEventHelper;
 
     constructor(props) {
         super(props);
@@ -65,8 +62,6 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> impl
             posterLoading: false,
             blurhashUrl: null,
         };
-
-        this.mediaHelper = new MediaEventHelper(this.props.mxEvent);
     }
 
     thumbScale(fullWidth: number, fullHeight: number, thumbWidth = 480, thumbHeight = 360) {
@@ -88,10 +83,6 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> impl
             // height is the dominant dimension so scaling will be fixed on that
             return heightMulti;
         }
-    }
-
-    public getMediaHelper(): MediaEventHelper {
-        return this.mediaHelper;
     }
 
     private getContentUrl(): string|null {
@@ -166,15 +157,15 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> impl
         const autoplay = SettingsStore.getValue("autoplayGifsAndVideos") as boolean;
         this.loadBlurhash();
 
-        if (this.mediaHelper.media.isEncrypted && this.state.decryptedUrl === null) {
+        if (this.props.mediaEventHelper.media.isEncrypted && this.state.decryptedUrl === null) {
             try {
-                const thumbnailUrl = await this.mediaHelper.thumbnailUrl.value;
+                const thumbnailUrl = await this.props.mediaEventHelper.thumbnailUrl.value;
                 if (autoplay) {
                     console.log("Preloading video");
                     this.setState({
-                        decryptedUrl: await this.mediaHelper.sourceUrl.value,
+                        decryptedUrl: await this.props.mediaEventHelper.sourceUrl.value,
                         decryptedThumbnailUrl: thumbnailUrl,
-                        decryptedBlob: await this.mediaHelper.sourceBlob.value,
+                        decryptedBlob: await this.props.mediaEventHelper.sourceBlob.value,
                     });
                     this.props.onHeightChanged();
                 } else {
@@ -199,16 +190,6 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> impl
         }
     }
 
-    componentWillUnmount() {
-        if (this.state.decryptedUrl) {
-            URL.revokeObjectURL(this.state.decryptedUrl);
-        }
-        if (this.state.decryptedThumbnailUrl) {
-            URL.revokeObjectURL(this.state.decryptedThumbnailUrl);
-        }
-        this.mediaHelper.destroy();
-    }
-
     private videoOnPlay = async () => {
         if (this.hasContentUrl() || this.state.fetchingData || this.state.error) {
             // We have the file, we are fetching the file, or there is an error.
@@ -218,15 +199,15 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> impl
             // To stop subsequent download attempts
             fetchingData: true,
         });
-        if (!this.mediaHelper.media.isEncrypted) {
+        if (!this.props.mediaEventHelper.media.isEncrypted) {
             this.setState({
                 error: "No file given in content",
             });
             return;
         }
         this.setState({
-            decryptedUrl: await this.mediaHelper.sourceUrl.value,
-            decryptedBlob: await this.mediaHelper.sourceBlob.value,
+            decryptedUrl: await this.props.mediaEventHelper.sourceUrl.value,
+            decryptedBlob: await this.props.mediaEventHelper.sourceBlob.value,
             fetchingData: false,
         }, () => {
             if (!this.videoRef.current) return;
