@@ -214,15 +214,6 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
                     rule, vectorState,
                     description: _t(definition.description),
                 });
-
-                // XXX: Do we need this block from the previous component?
-                /*
-                    // if there was a rule which we couldn't parse, add it to the external list
-                    if (rule && !vectorState) {
-                        rule.description = ruleDefinition.description;
-                        self.state.externalPushRules.push(rule);
-                    }
-                 */
             }
 
             // Quickly sort the rules for display purposes
@@ -245,26 +236,6 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
                 });
             }
         }
-
-        // XXX: Do we need this block from the previous component?
-        /*
-            // Build the rules not managed by Vector UI
-            const otherRulesDescriptions = {
-                '.m.rule.message': _t('Notify for all other messages/rooms'),
-                '.m.rule.fallback': _t('Notify me for anything else'),
-            };
-
-            for (const i in defaultRules.others) {
-                const rule = defaultRules.others[i];
-                const ruleDescription = otherRulesDescriptions[rule.rule_id];
-
-                // Show enabled default rules that was modified by the user
-                if (ruleDescription && rule.enabled && !rule.default) {
-                    rule.description = ruleDescription;
-                    self.state.externalPushRules.push(rule);
-                }
-            }
-         */
 
         return preparedNewState;
     }
