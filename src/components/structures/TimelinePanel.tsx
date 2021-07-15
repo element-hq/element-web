@@ -555,9 +555,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 // more than the timeout on userActiveRecently.
                 //
                 const myUserId = MatrixClientPeg.get().credentials.userId;
-                const sender = ev.sender ? ev.sender.userId : null;
                 callRMUpdated = false;
-                if (sender != myUserId && !UserActivity.sharedInstance().userActiveRecently()) {
+                if (ev.getSender() !== myUserId && !UserActivity.sharedInstance().userActiveRecently()) {
                     updatedState.readMarkerVisible = true;
                 } else if (lastLiveEvent && this.getReadMarkerPosition() === 0) {
                     // we know we're stuckAtBottom, so we can advance the RM
@@ -863,7 +862,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const myUserId = MatrixClientPeg.get().credentials.userId;
         for (i++; i < events.length; i++) {
             const ev = events[i];
-            if (!ev.sender || ev.sender.userId != myUserId) {
+            if (ev.getSender() !== myUserId) {
                 break;
             }
         }
@@ -1337,7 +1336,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             }
 
             const shouldIgnore = !!ev.status || // local echo
-                (ignoreOwn && ev.sender && ev.sender.userId == myUserId);   // own message
+                (ignoreOwn && ev.getSender() === myUserId); // own message
             const isWithoutTile = !haveTileForEvent(ev) || shouldHideEvent(ev, this.context);
 
             if (isWithoutTile || !node) {
