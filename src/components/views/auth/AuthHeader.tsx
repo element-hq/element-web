@@ -16,17 +16,16 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-@replaceableComponent("views.auth.AuthHeader")
-export default class AuthHeader extends React.Component {
-    static propTypes = {
-        disableLanguageSelector: PropTypes.bool,
-    };
+interface IProps {
+    disableLanguageSelector?: boolean;
+}
 
-    render() {
+@replaceableComponent("views.auth.AuthHeader")
+export default class AuthHeader extends React.Component<IProps> {
+    public render(): React.ReactNode {
         const AuthHeaderLogo = sdk.getComponent('auth.AuthHeaderLogo');
         const LanguageSelector = sdk.getComponent('views.auth.LanguageSelector');
 
