@@ -552,7 +552,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                     model.autoComplete.close();
                 }
             } else {
-                this.setState({showVisualBell: true});
+                this.setState({ showVisualBell: true });
             }
         } catch (err) {
             console.error(err);

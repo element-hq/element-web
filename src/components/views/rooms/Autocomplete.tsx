@@ -85,7 +85,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this.applyNewProps();
     }
 
-    private applyNewProps(oldQuery?: string, oldRoom?: Room) {
+    private applyNewProps(oldQuery?: string, oldRoom?: Room): void {
         if (oldRoom && this.props.room.roomId !== oldRoom.roomId) {
             this.autocompleter.destroy();
             this.autocompleter = new Autocompleter(this.props.room);
@@ -103,7 +103,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this.autocompleter.destroy();
     }
 
-    complete(query: string, selection: ISelectionRange) {
+    private complete(query: string, selection: ISelectionRange): Promise<void> {
         this.queryRequested = query;
         if (this.debounceCompletionsRequest) {
             clearTimeout(this.debounceCompletionsRequest);
@@ -134,7 +134,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         });
     }
 
-    processQuery(query: string, selection: ISelectionRange) {
+    private processQuery(query: string, selection: ISelectionRange): Promise<void> {
         return this.autocompleter.getCompletions(
             query, selection, this.state.forceComplete, MAX_PROVIDER_MATCHES,
         ).then((completions) => {
@@ -146,7 +146,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         });
     }
 
-    processCompletions(completions: IProviderCompletions[]) {
+    private processCompletions(completions: IProviderCompletions[]): void {
         const completionList = flatMap(completions, (provider) => provider.completions);
 
         // Reset selection when completion list becomes empty.
@@ -186,16 +186,16 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         });
     }
 
-    hasSelection(): boolean {
+    public hasSelection(): boolean {
         return this.countCompletions() > 0 && this.state.selectionOffset !== 0;
     }
 
-    countCompletions(): number {
+    public countCompletions(): number {
         return this.state.completionList.length;
     }
 
     // called from MessageComposerInput
-    moveSelection(delta: number) {
+    public moveSelection(delta: number): void {
         const completionCount = this.countCompletions();
         if (completionCount === 0) return; // there are no items to move the selection through
 
@@ -204,7 +204,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this.setSelection(1 + index);
     }
 
-    onEscape(e: KeyboardEvent): boolean {
+    public onEscape(e: KeyboardEvent): boolean {
         const completionCount = this.countCompletions();
         if (completionCount === 0) {
             // autocomplete is already empty, so don't preventDefault
@@ -217,7 +217,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this.hide();
     }
 
-    hide = () => {
+    private hide = (): void => {
         this.setState({
             hide: true,
             selectionOffset: 1,
@@ -226,7 +226,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         });
     };
 
-    forceComplete() {
+    public forceComplete(): Promise<number> {
         return new Promise((resolve) => {
             this.setState({
                 forceComplete: true,
@@ -239,11 +239,11 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         });
     }
 
-    onConfirmCompletion = () => {
+    public onConfirmCompletion = (): void => {
         this.onCompletionClicked(this.state.selectionOffset);
-    }
+    };
 
-    onCompletionClicked = (selectionOffset: number): boolean => {
+    private onCompletionClicked = (selectionOffset: number): boolean => {
         const count = this.countCompletions();
         if (count === 0 || selectionOffset < 1 || selectionOffset > count) {
             return false;
@@ -255,7 +255,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         return true;
     };
 
-    setSelection(selectionOffset: number) {
+    private setSelection(selectionOffset: number): void {
         this.setState({ selectionOffset, hide: false });
         if (this.props.onSelectionChange) {
             this.props.onSelectionChange(selectionOffset - 1);
