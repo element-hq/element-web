@@ -917,6 +917,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     // called when state.room is first initialised (either at initial load,
     // after a successful peek, or after we join the room).
     private onRoomLoaded = (room: Room) => {
+        if (this.unmounted) return;
         // Attach a widget store listener only when we get a room
         WidgetLayoutStore.instance.on(WidgetLayoutStore.emissionForRoom(room), this.onWidgetLayoutChange);
         this.onWidgetLayoutChange(); // provoke an update
@@ -931,9 +932,9 @@ export default class RoomView extends React.Component<IProps, IState> {
     };
 
     private async calculateRecommendedVersion(room: Room) {
-        this.setState({
-            upgradeRecommendation: await room.getRecommendedVersion(),
-        });
+        const upgradeRecommendation = await room.getRecommendedVersion();
+        if (this.unmounted) return;
+        this.setState({ upgradeRecommendation });
     }
 
     private async loadMembersIfJoined(room: Room) {
@@ -1023,23 +1024,19 @@ export default class RoomView extends React.Component<IProps, IState> {
     };
 
     private async updateE2EStatus(room: Room) {
-        if (!this.context.isRoomEncrypted(room.roomId)) {
-            return;
-        }
-        if (!this.context.isCryptoEnabled()) {
-            // If crypto is not currently enabled, we aren't tracking devices at all,
-            // so we don't know what the answer is. Let's error on the safe side and show
-            // a warning for this case.
-            this.setState({
-                e2eStatus: E2EStatus.Warning,
-            });
-            return;
+        if (!this.context.isRoomEncrypted(room.roomId)) return;
+
+        // If crypto is not currently enabled, we aren't tracking devices at all,
+        // so we don't know what the answer is. Let's error on the safe side and show
+        // a warning for this case.
+        let e2eStatus = E2EStatus.Warning;
+        if (this.context.isCryptoEnabled()) {
+            /* At this point, the user has encryption on and cross-signing on */
+            e2eStatus = await shieldStatusForRoom(this.context, room);
         }
 
-        /* At this point, the user has encryption on and cross-signing on */
-        this.setState({
-            e2eStatus: await shieldStatusForRoom(this.context, room),
-        });
+        if (this.unmounted) return;
+        this.setState({ e2eStatus });
     }
 
     private onAccountData = (event: MatrixEvent) => {

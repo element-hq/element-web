@@ -74,6 +74,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
 
     constructor() {
         super(defaultDispatcher);
+        this.setMaxListeners(20); // CustomRoomTagStore + RoomList + LeftPanel + 8xRoomSubList + spares
     }
 
     private setupWatchers() {
