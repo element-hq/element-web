@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 
 import * as sdk from '../../../index';
 
-import { COUNTRIES, getEmojiFlag } from '../../../phonenumber';
+import { COUNTRIES, getEmojiFlag, PhoneNumberCountryDefinition } from '../../../phonenumber';
 import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -29,7 +29,7 @@ for (const c of COUNTRIES) {
     COUNTRIES_BY_ISO2[c.iso2] = c;
 }
 
-function countryMatchesSearchQuery(query, country) {
+function countryMatchesSearchQuery(query: string, country: PhoneNumberCountryDefinition): boolean {
     // Remove '+' if present (when searching for a prefix)
     if (query[0] === '+') {
         query = query.slice(1);
@@ -41,15 +41,26 @@ function countryMatchesSearchQuery(query, country) {
     return false;
 }
 
-@replaceableComponent("views.auth.CountryDropdown")
-export default class CountryDropdown extends React.Component {
-    constructor(props) {
-        super(props);
-        this._onSearchChange = this._onSearchChange.bind(this);
-        this._onOptionChange = this._onOptionChange.bind(this);
-        this._getShortOption = this._getShortOption.bind(this);
+interface IProps {
+    value?: string;
+    onOptionChange: (country: PhoneNumberCountryDefinition) => void;
+    isSmall: boolean;
+    showPrefix: boolean;
+    className?: string;
+    disabled?: boolean;
+}
 
-        let defaultCountry = COUNTRIES[0];
+interface IState {
+    searchQuery: string;
+    defaultCountry: PhoneNumberCountryDefinition;
+}
+
+@replaceableComponent("views.auth.CountryDropdown")
+export default class CountryDropdown extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
+        super(props);
+
+        let defaultCountry: PhoneNumberCountryDefinition = COUNTRIES[0];
         const defaultCountryCode = SdkConfig.get()["defaultCountryCode"];
         if (defaultCountryCode) {
             const country = COUNTRIES.find(c => c.iso2 === defaultCountryCode.toUpperCase());
@@ -62,7 +73,7 @@ export default class CountryDropdown extends React.Component {
         };
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         if (!this.props.value) {
             // If no value is given, we start with the default
             // country selected, but our parent component
@@ -71,21 +82,21 @@ export default class CountryDropdown extends React.Component {
         }
     }
 
-    _onSearchChange(search) {
+    private onSearchChange = (search: string): void => {
         this.setState({
             searchQuery: search,
         });
-    }
+    };
 
-    _onOptionChange(iso2) {
+    private onOptionChange = (iso2: string): void => {
         this.props.onOptionChange(COUNTRIES_BY_ISO2[iso2]);
-    }
+    };
 
-    _flagImgForIso2(iso2) {
+    private flagImgForIso2(iso2: string): React.ReactNode {
         return <div className="mx_Dropdown_option_emoji">{ getEmojiFlag(iso2) }</div>;
     }
 
-    _getShortOption(iso2) {
+    private getShortOption = (iso2: string): React.ReactNode => {
         if (!this.props.isSmall) {
             return undefined;
         }
@@ -94,12 +105,12 @@ export default class CountryDropdown extends React.Component {
             countryPrefix = '+' + COUNTRIES_BY_ISO2[iso2].prefix;
         }
         return <span className="mx_CountryDropdown_shortOption">
-            { this._flagImgForIso2(iso2) }
+            { this.flagImgForIso2(iso2) }
             { countryPrefix }
         </span>;
-    }
+    };
 
-    render() {
+    public render(): React.ReactNode {
         const Dropdown = sdk.getComponent('elements.Dropdown');
 
         let displayedCountries;
@@ -124,7 +135,7 @@ export default class CountryDropdown extends React.Component {
 
         const options = displayedCountries.map((country) => {
             return <div className="mx_CountryDropdown_option" key={country.iso2}>
-                { this._flagImgForIso2(country.iso2) }
+                { this.flagImgForIso2(country.iso2) }
                 { _t(country.name) } (+{ country.prefix })
             </div>;
         });
@@ -136,10 +147,10 @@ export default class CountryDropdown extends React.Component {
         return <Dropdown
             id="mx_CountryDropdown"
             className={this.props.className + " mx_CountryDropdown"}
-            onOptionChange={this._onOptionChange}
-            onSearchChange={this._onSearchChange}
+            onOptionChange={this.onOptionChange}
+            onSearchChange={this.onSearchChange}
             menuWidth={298}
-            getShortOption={this._getShortOption}
+            getShortOption={this.getShortOption}
             value={value}
             searchEnabled={true}
             disabled={this.props.disabled}
