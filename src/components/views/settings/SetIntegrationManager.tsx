@@ -65,13 +65,13 @@ export default class SetIntegrationManager extends React.Component<IProps, IStat
         if (currentManager) {
             managerName = `(${currentManager.name})`;
             bodyText = _t(
-                "Use an Integration Manager <b>(%(serverName)s)</b> to manage bots, widgets, " +
+                "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, " +
                 "and sticker packs.",
                 { serverName: currentManager.name },
                 { b: sub => <b>{sub}</b> },
             );
         } else {
-            bodyText = _t("Use an Integration Manager to manage bots, widgets, and sticker packs.");
+            bodyText = _t("Use an integration manager to manage bots, widgets, and sticker packs.");
         }
 
         return (
@@ -86,7 +86,7 @@ export default class SetIntegrationManager extends React.Component<IProps, IStat
                     <br />
                     <br />
                     {_t(
-                        "Integration Managers receive configuration data, and can modify widgets, " +
+                        "Integration managers receive configuration data, and can modify widgets, " +
                         "send room invites, and set power levels on your behalf.",
                     )}
                 </span>

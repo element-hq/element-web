@@ -224,7 +224,7 @@ export default class Stickerpicker extends React.PureComponent {
     }
 
     _getStickerpickerContent() {
-        // Handle Integration Manager errors
+        // Handle integration manager errors
         if (this.state._imError) {
             return this._errorStickerpickerContent();
         }

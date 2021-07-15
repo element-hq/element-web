@@ -41,7 +41,7 @@ import CaptchaForm from "./CaptchaForm";
  *                         one HS whilst beign a guest on another).
  * loginType:              the login type of the auth stage being attempted
  * authSessionId:          session id from the server
- * clientSecret:           The client secret in use for ID server auth sessions
+ * clientSecret:           The client secret in use for identity server auth sessions
  * stageParams:            params from the server for the stage being attempted
  * errorText:              error message from a previous attempt to authenticate
  * submitAuthDict:         a function which will be called with the new auth dict
@@ -54,8 +54,8 @@ import CaptchaForm from "./CaptchaForm";
  *                         Defined keys for stages are:
  *                             m.login.email.identity:
  *                              * emailSid: string representing the sid of the active
- *                                          verification session from the ID server, or
- *                                          null if no session is active.
+ *                                          verification session from the identity server,
+ *                                          or null if no session is active.
  * fail:                   a function which should be called with an error object if an
  *                         error occurred during the auth stage. This will cause the auth
  *                         session to be failed and the process to go back to the start.
