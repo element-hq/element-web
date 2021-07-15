@@ -21,6 +21,14 @@ limitations under the License.
     position: relative;
     line-height: $font-16px;
 
+    &.mx_ReplyTile_audio .mx_MFileBody_info_icon::before {
+        mask-image: url("$(res)/img/element-icons/speaker.svg");
+    }
+
+    &.mx_ReplyTile_video .mx_MFileBody_info_icon::before {
+        mask-image: url("$(res)/img/element-icons/call/video-call.svg");
+    }
+
     .mx_MFileBody {
         .mx_MFileBody_info {
             margin: 5px 0;

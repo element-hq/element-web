@@ -80,7 +80,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
 
     render() {
         const mxEvent = this.props.mxEvent;
-        const msgtype = mxEvent.getContent().msgtype;
+        const msgType = mxEvent.getContent().msgtype;
         const evType = mxEvent.getType() as EventType;
 
         const { tileHandler, isInfoMessage } = getEventDisplayInfo(this.props.mxEvent);
@@ -98,6 +98,8 @@ export default class ReplyTile extends React.PureComponent<IProps> {
 
         const classes = classNames("mx_ReplyTile", {
             mx_ReplyTile_info: isInfoMessage && !this.props.mxEvent.isRedacted(),
+            mx_ReplyTile_audio: msgType === MsgType.Audio,
+            mx_ReplyTile_video: msgType === MsgType.Video,
         });
 
         let permalink = "#";
@@ -108,7 +110,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         let sender;
         const needsSenderProfile = (
             !isInfoMessage &&
-            msgtype !== MsgType.Image &&
+            msgType !== MsgType.Image &&
             tileHandler !== EventType.RoomCreate &&
             evType !== EventType.Sticker
         );
