@@ -33,6 +33,7 @@ import { canCancel } from "../context_menus/MessageContextMenu";
 import Resend from "../../../Resend";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { canTileDownload } from "./IMediaBody";
+import {MediaEventHelper} from "../../../utils/MediaEventHelper";
 
 const OptionsButton = ({ mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
@@ -177,6 +178,11 @@ export default class MessageActionBar extends React.PureComponent {
     };
 
     onDownloadClick = async (ev) => {
+        if (!this.props.getTile || !this.props.getTile().getMediaHelper) {
+            console.warn("Action bar triggered a download but the event tile is missing a media helper");
+            return;
+        }
+
         // TODO: Maybe just call into MFileBody and render it as null
         const src = this.props.getTile().getMediaHelper();
         const a = document.createElement("a");
@@ -279,8 +285,8 @@ export default class MessageActionBar extends React.PureComponent {
                     />);
                 }
 
-                const tile = this.props.getTile && this.props.getTile();
-                if (canTileDownload(tile)) {
+                // XXX: Assuming that the underlying tile will be a media event if it is eligible media.
+                if (MediaEventHelper.isEligible(this.props.mxEvent)) {
                     toolbarOpts.splice(0, 0, <RovingAccessibleTooltipButton
                         className="mx_MessageActionBar_maskButton mx_MessageActionBar_downloadButton"
                         title={_t("Download")}
