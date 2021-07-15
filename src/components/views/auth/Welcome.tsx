@@ -29,15 +29,19 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 // translatable strings for Welcome pages
 _td("Sign in with SSO");
 
+interface IProps {
+
+}
+
 @replaceableComponent("views.auth.Welcome")
-export default class Welcome extends React.PureComponent {
-    constructor(props) {
+export default class Welcome extends React.PureComponent<IProps> {
+    constructor(props: IProps) {
         super(props);
 
         CountlyAnalytics.instance.track("onboarding_welcome");
     }
 
-    render() {
+    public render(): React.ReactNode {
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         const LanguageSelector = sdk.getComponent('auth.LanguageSelector');
 

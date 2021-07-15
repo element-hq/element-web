@@ -160,13 +160,3 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
         </Dropdown>;
     }
 }
-
-CountryDropdown.propTypes = {
-    className: PropTypes.string,
-    isSmall: PropTypes.bool,
-    // if isSmall, show +44 in the selected value
-    showPrefix: PropTypes.bool,
-    onOptionChange: PropTypes.func.isRequired,
-    value: PropTypes.string,
-    disabled: PropTypes.bool,
-};

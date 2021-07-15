@@ -23,7 +23,7 @@ const DIV_ID = 'mx_recaptcha';
 
 interface IProps {
     sitePublicKey?: string;
-    onCaptchaResponse: () => void;
+    onCaptchaResponse: (response: string) => void;
 }
 
 interface IState {
