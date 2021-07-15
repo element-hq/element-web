@@ -38,7 +38,7 @@ interface IState {
 @replaceableComponent("views.messages.SenderProfile")
 export default class SenderProfile extends React.Component<IProps, IState> {
     static contextType = MatrixClientContext;
-    private unmounted: boolean;
+    private unmounted = false;
 
     constructor(props: IProps) {
         super(props);
@@ -51,7 +51,6 @@ export default class SenderProfile extends React.Component<IProps, IState> {
     }
 
     componentDidMount() {
-        this.unmounted = false;
         this.updateRelatedGroups();
 
         if (this.state.userGroups.length === 0) {
@@ -67,30 +66,24 @@ export default class SenderProfile extends React.Component<IProps, IState> {
     }
 
     private async getPublicisedGroups() {
-        if (!this.unmounted) {
-            const userGroups = await FlairStore.getPublicisedGroupsCached(
-                this.context, this.props.mxEvent.getSender(),
-            );
-            this.setState({ userGroups });
-        }
+        const userGroups = await FlairStore.getPublicisedGroupsCached(this.context, this.props.mxEvent.getSender());
+        if (this.unmounted) return;
+        this.setState({ userGroups });
     }
 
     private onRoomStateEvents = (event: MatrixEvent) => {
-        if (event.getType() === 'm.room.related_groups' &&
-            event.getRoomId() === this.props.mxEvent.getRoomId()
-        ) {
+        if (event.getType() === 'm.room.related_groups' && event.getRoomId() === this.props.mxEvent.getRoomId()) {
             this.updateRelatedGroups();
         }
     };
 
     private updateRelatedGroups() {
-        if (this.unmounted) return;
         const room = this.context.getRoom(this.props.mxEvent.getRoomId());
         if (!room) return;
 
         const relatedGroupsEvent = room.currentState.getStateEvents('m.room.related_groups', '');
         this.setState({
-            relatedGroups: relatedGroupsEvent ? relatedGroupsEvent.getContent().groups || [] : [],
+            relatedGroups: relatedGroupsEvent?.getContent().groups || [],
         });
     }
 

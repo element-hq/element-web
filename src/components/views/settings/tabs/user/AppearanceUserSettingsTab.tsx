@@ -76,6 +76,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     private readonly MESSAGE_PREVIEW_TEXT = _t("Hey you. You're the best!");
 
     private themeTimer: number;
+    private unmounted = false;
 
     constructor(props: IProps) {
         super(props);
@@ -101,12 +102,17 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         const client = MatrixClientPeg.get();
         const userId = client.getUserId();
         const profileInfo = await client.getProfileInfo(userId);
+        if (this.unmounted) return;
 
         this.setState({
             userId,
             displayName: profileInfo.displayname,
             avatarUrl: profileInfo.avatar_url,
         });
+    }
+
+    componentWillUnmount() {
+        this.unmounted = true;
     }
 
     private calculateThemeState(): IThemeState {
