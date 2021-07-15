@@ -589,24 +589,18 @@ export default class ElectronPlatform extends VectorBasePlatform {
                     handled = true;
                 }
                 break;
+        }
 
-            case "1":
-            case "2":
-            case "3":
-            case "4":
-            case "5":
-            case "6":
-            case "7":
-            case "8":
-            case "9":
-            case "0":
-                // ideally we would use SpaceStore.spacesEnabled here but importing SpaceStore in this platform
-                // breaks skinning as the platform is instantiated prior to the skin being loaded
-                if (SettingsStore.getValue("feature_spaces") && isOnlyCtrlOrCmdKeyEvent(ev)) {
-                    this.navigateToSpace(parseInt(ev.key, 10));
-                    handled = true;
-                }
-                break;
+        if (!handled &&
+            // ideally we would use SpaceStore.spacesEnabled here but importing SpaceStore in this platform
+            // breaks skinning as the platform is instantiated prior to the skin being loaded
+            SettingsStore.getValue("feature_spaces") &&
+            ev.code.startsWith("Digit") &&
+            isOnlyCtrlOrCmdKeyEvent(ev)
+        ) {
+            const spaceNumber = ev.code.slice(5); // Cut off the first 5 characters - "Digit"
+            this.navigateToSpace(parseInt(spaceNumber, 10));
+            handled = true;
         }
 
         return handled;
