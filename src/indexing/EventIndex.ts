@@ -23,6 +23,7 @@ import { EventTimelineSet } from 'matrix-js-sdk/src/models/event-timeline-set';
 import { RoomState } from 'matrix-js-sdk/src/models/room-state';
 import { TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
 import { sleep } from "matrix-js-sdk/src/utils";
+import { IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
 
 import PlatformPeg from "../PlatformPeg";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -114,14 +115,14 @@ export default class EventIndex extends EventEmitter {
             const backCheckpoint: ICrawlerCheckpoint = {
                 roomId: room.roomId,
                 token: token,
-                direction: "b",
+                direction: Direction.Backward,
                 fullCrawl: true,
             };
 
             const forwardCheckpoint: ICrawlerCheckpoint = {
                 roomId: room.roomId,
                 token: token,
-                direction: "f",
+                direction: Direction.Forward,
             };
 
             try {
@@ -384,7 +385,7 @@ export default class EventIndex extends EventEmitter {
             roomId: room.roomId,
             token: token,
             fullCrawl: fullCrawl,
-            direction: "b",
+            direction: Direction.Backward,
         };
 
         console.log("EventIndex: Adding checkpoint", checkpoint);
@@ -671,10 +672,10 @@ export default class EventIndex extends EventEmitter {
      * @param {ISearchArgs} searchArgs The search configuration for the search,
      * sets the search term and determines the search result contents.
      *
-     * @return {Promise<[SearchResult]>} A promise that will resolve to an array
+     * @return {Promise<IResultRoomEvents[]>} A promise that will resolve to an array
      * of search results once the search is done.
      */
-    public async search(searchArgs: ISearchArgs) {
+    public async search(searchArgs: ISearchArgs): Promise<IResultRoomEvents> {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         return indexManager.searchEventIndex(searchArgs);
     }

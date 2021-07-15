@@ -54,7 +54,7 @@ export default class InteractiveAuthComponent extends React.Component {
         //      * emailSid {string} If email auth was performed, the sid of
         //            the auth session.
         //      * clientSecret {string} The client secret used in auth
-        //            sessions with the ID server.
+        //            sessions with the identity server.
         onAuthFinished: PropTypes.func.isRequired,
 
         // Inputs provided by the user to the auth process

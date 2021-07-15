@@ -35,6 +35,7 @@ import { NameFilterCondition } from "./filters/NameFilterCondition";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
 import { VisibilityProvider } from "./filters/VisibilityProvider";
 import { SpaceWatcher } from "./SpaceWatcher";
+import SpaceStore from "../SpaceStore";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -73,10 +74,11 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
 
     constructor() {
         super(defaultDispatcher);
+        this.setMaxListeners(20); // CustomRoomTagStore + RoomList + LeftPanel + 8xRoomSubList + spares
     }
 
     private setupWatchers() {
-        if (SettingsStore.getValue("feature_spaces")) {
+        if (SpaceStore.spacesEnabled) {
             this.spaceWatcher = new SpaceWatcher(this);
         } else {
             this.tagWatcher = new TagWatcher(this);
@@ -608,9 +610,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
 
         // if spaces are enabled only consider the prefilter conditions when there are no runtime conditions
         // for the search all spaces feature
-        if (this.prefilterConditions.length > 0
-            && (!SettingsStore.getValue("feature_spaces") || !this.filterConditions.length)
-        ) {
+        if (this.prefilterConditions.length > 0 && (!SpaceStore.spacesEnabled || !this.filterConditions.length)) {
             rooms = rooms.filter(r => {
                 for (const filter of this.prefilterConditions) {
                     if (!filter.isVisible(r)) {
@@ -682,7 +682,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         } else {
             this.filterConditions.push(filter);
             // Runtime filters with spaces disable prefiltering for the search all spaces feature
-            if (SettingsStore.getValue("feature_spaces")) {
+            if (SpaceStore.spacesEnabled) {
                 // this has to be awaited so that `setKnownRooms` is called in time for the `addFilterCondition` below
                 // this way the runtime filters are only evaluated on one dataset and not both.
                 await this.recalculatePrefiltering();
@@ -715,7 +715,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
                 this.algorithm.removeFilterCondition(filter);
             }
             // Runtime filters with spaces disable prefiltering for the search all spaces feature
-            if (SettingsStore.getValue("feature_spaces")) {
+            if (SpaceStore.spacesEnabled) {
                 promise = this.recalculatePrefiltering();
             }
         }

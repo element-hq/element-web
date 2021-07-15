@@ -1123,10 +1123,10 @@ export default class EventTile extends React.Component<IProps, IState> {
                         "data-scroll-tokens": scrollToken,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
-                    }, [
-                        ircTimestamp,
-                        sender,
-                        ircPadlock,
+                    }, <>
+                        { ircTimestamp }
+                        { sender }
+                        { ircPadlock }
                         <div className="mx_EventTile_line" key="mx_EventTile_line">
                             { groupTimestamp }
                             { groupPadlock }
@@ -1144,11 +1144,10 @@ export default class EventTile extends React.Component<IProps, IState> {
                             { keyRequestInfo }
                             { reactionsRow }
                             { actionBar }
-                        </div>,
-                        msgOption,
-                        avatar,
-
-                    ])
+                        </div>
+                        { msgOption }
+                        { avatar }
+                    </>)
                 );
             }
         }

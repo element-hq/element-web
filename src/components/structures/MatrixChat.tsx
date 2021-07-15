@@ -251,7 +251,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private pageChanging: boolean;
     private tokenLogin?: boolean;
     private accountPassword?: string;
-    private accountPasswordTimer?: NodeJS.Timeout;
+    private accountPasswordTimer?: number;
     private focusComposer: boolean;
     private subTitleStatus: string;
     private prevWindowWidth: number;
@@ -561,7 +561,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         switch (payload.action) {
             case 'MatrixActions.accountData':
                 // XXX: This is a collection of several hacks to solve a minor problem. We want to
-                // update our local state when the ID server changes, but don't want to put that in
+                // update our local state when the identity server changes, but don't want to put that in
                 // the js-sdk as we'd be then dictating how all consumers need to behave. However,
                 // this component is already bloated and we probably don't want this tiny logic in
                 // here, but there's no better place in the react-sdk for it. Additionally, we're
@@ -1099,7 +1099,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private leaveRoomWarnings(roomId: string) {
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
-        const isSpace = SettingsStore.getValue("feature_spaces") && roomToLeave?.isSpaceRoom();
+        const isSpace = SpaceStore.spacesEnabled && roomToLeave?.isSpaceRoom();
         // Show a warning if there are additional complications.
         const warnings = [];
 
@@ -1137,7 +1137,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
         const warnings = this.leaveRoomWarnings(roomId);
 
-        const isSpace = SettingsStore.getValue("feature_spaces") && roomToLeave?.isSpaceRoom();
+        const isSpace = SpaceStore.spacesEnabled && roomToLeave?.isSpaceRoom();
         Modal.createTrackedDialog(isSpace ? "Leave space" : "Leave room", '', QuestionDialog, {
             title: isSpace ? _t("Leave space") : _t("Leave room"),
             description: (
@@ -1687,7 +1687,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             const type = screen === "start_sso" ? "sso" : "cas";
             PlatformPeg.get().startSingleSignOn(cli, type, this.getFragmentAfterLogin());
         } else if (screen === 'groups') {
-            if (SettingsStore.getValue("feature_spaces")) {
+            if (SpaceStore.spacesEnabled) {
                 dis.dispatch({ action: "view_home_page" });
                 return;
             }
@@ -1774,7 +1774,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 subAction: params.action,
             });
         } else if (screen.indexOf('group/') === 0) {
-            if (SettingsStore.getValue("feature_spaces")) {
+            if (SpaceStore.spacesEnabled) {
                 dis.dispatch({ action: "view_home_page" });
                 return;
             }
