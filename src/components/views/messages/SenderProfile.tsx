@@ -16,13 +16,13 @@
 
 import React from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MsgType } from "matrix-js-sdk/src/@types/event";
 
 import Flair from '../elements/Flair';
 import FlairStore from '../../../stores/FlairStore';
 import { getUserNameColorClass } from '../../../utils/FormattingUtils';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { MsgType } from "matrix-js-sdk/lib/@types/event";
 
 interface IProps {
     mxEvent: MatrixEvent;
