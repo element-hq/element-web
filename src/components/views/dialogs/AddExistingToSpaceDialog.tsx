@@ -14,30 +14,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ReactNode, useContext, useMemo, useState} from "react";
+import React, { ReactNode, useContext, useMemo, useState } from "react";
 import classNames from "classnames";
-import {Room} from "matrix-js-sdk/src/models/room";
-import {MatrixClient} from "matrix-js-sdk/src/client";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { sleep } from "matrix-js-sdk/src/utils";
 
-import {_t} from '../../../languageHandler';
-import {IDialogProps} from "./IDialogProps";
+import { _t } from '../../../languageHandler';
+import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
 import Dropdown from "../elements/Dropdown";
 import SearchBox from "../../structures/SearchBox";
 import SpaceStore from "../../../stores/SpaceStore";
 import RoomAvatar from "../avatars/RoomAvatar";
-import {getDisplayAliasForRoom} from "../../../Rooms";
+import { getDisplayAliasForRoom } from "../../../Rooms";
 import AccessibleButton from "../elements/AccessibleButton";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import {sleep} from "../../../utils/promise";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import {calculateRoomVia} from "../../../utils/permalinks/Permalinks";
+import { calculateRoomVia } from "../../../utils/permalinks/Permalinks";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {sortRooms} from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
+import { sortRooms } from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 import ProgressBar from "../elements/ProgressBar";
-import {SpaceFeedbackPrompt} from "../../structures/SpaceRoomView";
+import { SpaceFeedbackPrompt } from "../../structures/SpaceRoomView";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
+import QueryMatcher from "../../../autocomplete/QueryMatcher";
+import TruncatedList from "../elements/TruncatedList";
+import EntityTile from "../rooms/EntityTile";
+import BaseAvatar from "../avatars/BaseAvatar";
 
 interface IProps extends IDialogProps {
     matrixClient: MatrixClient;
@@ -74,37 +78,47 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     onFinished,
 }) => {
     const cli = useContext(MatrixClientContext);
-    const visibleRooms = useMemo(() => sortRooms(cli.getVisibleRooms()), [cli]);
+    const visibleRooms = useMemo(() => cli.getVisibleRooms().filter(r => r.getMyMembership() === "join"), [cli]);
 
     const [selectedToAdd, setSelectedToAdd] = useState(new Set<Room>());
     const [progress, setProgress] = useState<number>(null);
     const [error, setError] = useState<Error>(null);
     const [query, setQuery] = useState("");
-    const lcQuery = query.toLowerCase();
+    const lcQuery = query.toLowerCase().trim();
 
-    const existingSubspaces = SpaceStore.instance.getChildSpaces(space.roomId);
-    const existingSubspacesSet = new Set(existingSubspaces);
-    const existingRoomsSet = new Set(SpaceStore.instance.getChildRooms(space.roomId));
+    const existingSubspacesSet = useMemo(() => new Set(SpaceStore.instance.getChildSpaces(space.roomId)), [space]);
+    const existingRoomsSet = useMemo(() => new Set(SpaceStore.instance.getChildRooms(space.roomId)), [space]);
 
-    const joinRule = space.getJoinRule();
-    const [spaces, rooms, dms] = visibleRooms.reduce((arr, room) => {
-        if (room.getMyMembership() !== "join") return arr;
-        if (!room.name.toLowerCase().includes(lcQuery)) return arr;
+    const [spaces, rooms, dms] = useMemo(() => {
+        let rooms = visibleRooms;
 
-        if (room.isSpaceRoom()) {
-            if (room !== space && !existingSubspacesSet.has(room)) {
-                arr[0].push(room);
-            }
-        } else if (!existingRoomsSet.has(room)) {
-            if (!DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
-                arr[1].push(room);
-            } else if (joinRule !== "public") {
-                // Only show DMs for non-public spaces as they make very little sense in spaces other than "Just Me" ones.
-                arr[2].push(room);
-            }
+        if (lcQuery) {
+            const matcher = new QueryMatcher<Room>(visibleRooms, {
+                keys: ["name"],
+                funcs: [r => [r.getCanonicalAlias(), ...r.getAltAliases()].filter(Boolean)],
+                shouldMatchWordsOnly: false,
+            });
+
+            rooms = matcher.match(lcQuery);
         }
-        return arr;
-    }, [[], [], []]);
+
+        const joinRule = space.getJoinRule();
+        return sortRooms(rooms).reduce((arr, room) => {
+            if (room.isSpaceRoom()) {
+                if (room !== space && !existingSubspacesSet.has(room)) {
+                    arr[0].push(room);
+                }
+            } else if (!existingRoomsSet.has(room)) {
+                if (!DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
+                    arr[1].push(room);
+                } else if (joinRule !== "public") {
+                    // Only show DMs for non-public spaces as they make very little sense in spaces other than "Just Me" ones.
+                    arr[2].push(room);
+                }
+            }
+            return arr;
+        }, [[], [], []]);
+    }, [visibleRooms, space, lcQuery, existingRoomsSet, existingSubspacesSet]);
 
     const addRooms = async () => {
         setError(null);
@@ -193,6 +207,17 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         setSelectedToAdd(new Set(selectedToAdd));
     } : null;
 
+    const [truncateAt, setTruncateAt] = useState(20);
+    function overflowTile(overflowCount, totalCount) {
+        const text = _t("and %(count)s others...", { count: overflowCount });
+        return (
+            <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
+                <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
+            } name={text} presenceState="online" suppressOnHover={true}
+            onClick={() => setTruncateAt(totalCount)} />
+        );
+    }
+
     return <div className="mx_AddExistingToSpace">
         <SearchBox
             className="mx_textinput_icon mx_textinput_search"
@@ -201,20 +226,25 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
             autoComplete={true}
             autoFocus={true}
         />
-        <AutoHideScrollbar className="mx_AddExistingToSpace_content" id="mx_AddExistingToSpace">
+        <AutoHideScrollbar className="mx_AddExistingToSpace_content">
             { rooms.length > 0 ? (
                 <div className="mx_AddExistingToSpace_section">
                     <h3>{ _t("Rooms") }</h3>
-                    { rooms.map(room => {
-                        return <Entry
-                            key={room.roomId}
-                            room={room}
-                            checked={selectedToAdd.has(room)}
-                            onChange={onChange ? (checked) => {
-                                onChange(checked, room);
-                            } : null}
-                        />;
-                    }) }
+                    <TruncatedList
+                        truncateAt={truncateAt}
+                        createOverflowElement={overflowTile}
+                        getChildren={(start, end) => rooms.slice(start, end).map(room =>
+                            <Entry
+                                key={room.roomId}
+                                room={room}
+                                checked={selectedToAdd.has(room)}
+                                onChange={onChange ? (checked) => {
+                                    onChange(checked, room);
+                                } : null}
+                            />,
+                        )}
+                        getChildCount={() => rooms.length}
+                    />
                 </div>
             ) : undefined }
 

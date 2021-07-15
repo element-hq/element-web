@@ -14,32 +14,38 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import { CallFeed, CallFeedEvent } from 'matrix-js-sdk/src/webrtc/callFeed';
 import { logger } from 'matrix-js-sdk/src/logger';
-import CallMediaHandler from "../../../CallMediaHandler";
+import MediaDeviceHandler, { MediaDeviceHandlerEvent } from "../../../MediaDeviceHandler";
 
 interface IProps {
-    feed: CallFeed,
+    feed: CallFeed;
 }
 
 export default class AudioFeed extends React.Component<IProps> {
     private element = createRef<HTMLAudioElement>();
 
     componentDidMount() {
+        MediaDeviceHandler.instance.addListener(
+            MediaDeviceHandlerEvent.AudioOutputChanged,
+            this.onAudioOutputChanged,
+        );
         this.props.feed.addListener(CallFeedEvent.NewStream, this.onNewStream);
         this.playMedia();
     }
 
     componentWillUnmount() {
+        MediaDeviceHandler.instance.removeListener(
+            MediaDeviceHandlerEvent.AudioOutputChanged,
+            this.onAudioOutputChanged,
+        );
         this.props.feed.removeListener(CallFeedEvent.NewStream, this.onNewStream);
         this.stopMedia();
     }
 
-    private playMedia() {
+    private onAudioOutputChanged = (audioOutput: string) => {
         const element = this.element.current;
-        const audioOutput = CallMediaHandler.getAudioOutput();
-
         if (audioOutput) {
             try {
                 // This seems quite unreliable in Chrome, although I haven't yet managed to make a jsfiddle where
@@ -52,7 +58,11 @@ export default class AudioFeed extends React.Component<IProps> {
                 logger.warn("Couldn't set requested audio output device: using default", e);
             }
         }
+    };
 
+    private playMedia() {
+        const element = this.element.current;
+        this.onAudioOutputChanged(MediaDeviceHandler.getAudioOutput());
         element.muted = false;
         element.srcObject = this.props.feed.stream;
         element.autoplay = true;
@@ -67,7 +77,7 @@ export default class AudioFeed extends React.Component<IProps> {
             // should serialise the ones that need to be serialised but then be able to interrupt
             // them with another load() which will cancel the pending one, but since we don't call
             // load() explicitly, it shouldn't be a problem. - Dave
-            element.play()
+            element.play();
         } catch (e) {
             logger.info("Failed to play media element with feed", this.props.feed, e);
         }

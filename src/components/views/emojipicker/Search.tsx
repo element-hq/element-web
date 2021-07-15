@@ -18,8 +18,8 @@ limitations under the License.
 import React from 'react';
 
 import { _t } from '../../../languageHandler';
-import {Key} from "../../../Keyboard";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { Key } from "../../../Keyboard";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     query: string;

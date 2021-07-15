@@ -15,22 +15,25 @@ limitations under the License.
 */
 
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import {_t} from "../../../languageHandler";
-import React, {ReactNode} from "react";
-import {RecordingState, VoiceRecording} from "../../../voice/VoiceRecording";
-import {Room} from "matrix-js-sdk/src/models/room";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { _t } from "../../../languageHandler";
+import React, { ReactNode } from "react";
+import {
+    RecordingState,
+    VoiceRecording,
+} from "../../../voice/VoiceRecording";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import classNames from "classnames";
-import LiveRecordingWaveform from "../voice_messages/LiveRecordingWaveform";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import LiveRecordingClock from "../voice_messages/LiveRecordingClock";
-import {VoiceRecordingStore} from "../../../stores/VoiceRecordingStore";
-import {UPDATE_EVENT} from "../../../stores/AsyncStore";
-import RecordingPlayback from "../voice_messages/RecordingPlayback";
-import {MsgType} from "matrix-js-sdk/src/@types/event";
+import LiveRecordingWaveform from "../audio_messages/LiveRecordingWaveform";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import LiveRecordingClock from "../audio_messages/LiveRecordingClock";
+import { VoiceRecordingStore } from "../../../stores/VoiceRecordingStore";
+import { UPDATE_EVENT } from "../../../stores/AsyncStore";
+import RecordingPlayback from "../audio_messages/RecordingPlayback";
+import { MsgType } from "matrix-js-sdk/src/@types/event";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import CallMediaHandler from "../../../CallMediaHandler";
+import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../MediaDeviceHandler";
 
 interface IProps {
     room: Room;
@@ -65,22 +68,25 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         }
 
         await this.state.recorder.stop();
-        const mxc = await this.state.recorder.upload();
+        const upload = await this.state.recorder.upload(this.props.room.roomId);
         MatrixClientPeg.get().sendMessage(this.props.room.roomId, {
             "body": "Voice message",
             //"msgtype": "org.matrix.msc2516.voice",
             "msgtype": MsgType.Audio,
-            "url": mxc,
+            "url": upload.mxc,
+            "file": upload.encrypted,
             "info": {
                 duration: Math.round(this.state.recorder.durationSeconds * 1000),
                 mimetype: this.state.recorder.contentType,
                 size: this.state.recorder.contentLength,
             },
 
-            // MSC1767 experiment
+            // MSC1767 + Ideals of MSC2516 as MSC3245
+            // https://github.com/matrix-org/matrix-doc/pull/3245
             "org.matrix.msc1767.text": "Voice message",
             "org.matrix.msc1767.file": {
-                url: mxc,
+                url: upload.mxc,
+                file: upload.encrypted,
                 name: "Voice message.ogg",
                 mimetype: this.state.recorder.contentType,
                 size: this.state.recorder.contentLength,
@@ -88,14 +94,10 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             "org.matrix.msc1767.audio": {
                 duration: Math.round(this.state.recorder.durationSeconds * 1000),
 
-                // Events can't have floats, so we try to maintain resolution by using 1024
-                // as a maximum value. The waveform contains values between zero and 1, so this
-                // should come out largely sane.
-                //
-                // We're expecting about one data point per second of audio.
-                waveform: this.state.recorder.getPlayback().waveform.map(v => Math.round(v * 1024)),
+                // https://github.com/matrix-org/matrix-doc/pull/3246
+                waveform: this.state.recorder.getPlayback().thumbnailWaveform.map(v => Math.round(v * 1024)),
             },
-            "org.matrix.msc2516.voice": {}, // No content, this is a rendering hint
+            "org.matrix.msc3245.voice": {}, // No content, this is a rendering hint
         });
         await this.disposeRecording();
     }
@@ -104,7 +106,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         await VoiceRecordingStore.instance.disposeRecording();
 
         // Reset back to no recording, which means no phase (ie: restart component entirely)
-        this.setState({recorder: null, recordingPhase: null});
+        this.setState({ recorder: null, recordingPhase: null });
     }
 
     private onCancel = async () => {
@@ -132,8 +134,8 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         // Do a sanity test to ensure we're about to grab a valid microphone reference. Things might
         // change between this and recording, but at least we will have tried.
         try {
-            const devices = await CallMediaHandler.getDevices();
-            if (!devices?.['audioinput']?.length) {
+            const devices = await MediaDeviceHandler.getDevices();
+            if (!devices?.[MediaDeviceKindEnum.AudioInput]?.length) {
                 Modal.createTrackedDialog('No Microphone Error', '', ErrorDialog, {
                     title: _t("No microphone found"),
                     description: <>
@@ -158,10 +160,10 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             // We don't need to remove the listener: the recorder will clean that up for us.
             recorder.on(UPDATE_EVENT, (ev: RecordingState) => {
                 if (ev === RecordingState.EndingSoon) return; // ignore this state: it has no UI purpose here
-                this.setState({recordingPhase: ev});
+                this.setState({ recordingPhase: ev });
             });
 
-            this.setState({recorder, recordingPhase: RecordingState.Started});
+            this.setState({ recorder, recordingPhase: RecordingState.Started });
         } catch (e) {
             console.error("Error starting recording: ", e);
             accessError();
@@ -180,7 +182,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         }
 
         // only other UI is the recording-in-progress UI
-        return <div className="mx_VoiceMessagePrimaryContainer mx_VoiceRecordComposerTile_recording">
+        return <div className="mx_MediaBody mx_VoiceMessagePrimaryContainer mx_VoiceRecordComposerTile_recording">
             <LiveRecordingClock recorder={this.state.recorder} />
             <LiveRecordingWaveform recorder={this.state.recorder} />
         </div>;

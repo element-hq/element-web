@@ -15,18 +15,19 @@ limitations under the License.
 */
 
 import React from 'react';
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
-import {Room} from "matrix-js-sdk/src/models/room";
-import {_t} from "../../../languageHandler";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
-import * as sdk from "../../../index";
 import Modal from "../../../Modal";
-import {isValid3pidInvite} from "../../../RoomInvite";
+import { isValid3pidInvite } from "../../../RoomInvite";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SettingsStore from "../../../settings/SettingsStore";
+import ErrorDialog from '../dialogs/ErrorDialog';
+import AccessibleButton from '../elements/AccessibleButton';
 
 interface IProps {
     event: MatrixEvent;
@@ -83,7 +84,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
             const newDisplayName = ev.getContent().display_name;
             const isInvited = isValid3pidInvite(ev);
 
-            const newState = {invited: isInvited};
+            const newState = { invited: isInvited };
             if (newDisplayName) newState['displayName'] = newDisplayName;
             this.setState(newState);
         }
@@ -102,9 +103,8 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
                 console.error(err);
 
                 // Revert echo because of error
-                this.setState({invited: true});
+                this.setState({ invited: true });
 
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createTrackedDialog('Revoke 3pid invite failed', '', ErrorDialog, {
                     title: _t("Failed to revoke invite"),
                     description: _t(
@@ -115,12 +115,10 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
             });
 
         // Local echo
-        this.setState({invited: false});
+        this.setState({ invited: false });
     };
 
     render() {
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-
         let adminTools = null;
         if (this.state.canKick && this.state.invited) {
             adminTools = (
@@ -157,7 +155,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
                 <div className="mx_MemberInfo_container">
                     <div className="mx_MemberInfo_profile">
                         <div className="mx_MemberInfo_profileField">
-                            {_t("Invited by %(sender)s", {sender: this.state.senderName})}
+                            {_t("Invited by %(sender)s", { sender: this.state.senderName })}
                         </div>
                     </div>
                 </div>

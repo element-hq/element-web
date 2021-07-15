@@ -17,9 +17,9 @@ limitations under the License.
 
 import React from 'react';
 
-import {MenuItem} from "../../structures/ContextMenu";
-import {IEmoji} from "../../../emoji";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { MenuItem } from "../../structures/ContextMenu";
+import { IEmoji } from "../../../emoji";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     emoji: IEmoji;

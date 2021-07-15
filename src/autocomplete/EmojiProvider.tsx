@@ -21,9 +21,9 @@ import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import QueryMatcher from './QueryMatcher';
-import {PillCompletion} from './Components';
-import {ICompletion, ISelectionRange} from './Autocompleter';
-import {uniq, sortBy} from 'lodash';
+import { PillCompletion } from './Components';
+import { ICompletion, ISelectionRange } from './Autocompleter';
+import { uniq, sortBy } from 'lodash';
 import SettingsStore from "../settings/SettingsStore";
 import { shortcodeToUnicode } from '../HtmlUtils';
 import { EMOJI, IEmoji } from '../emoji';
@@ -95,7 +95,7 @@ export default class EmojiProvider extends AutocompleteProvider {
         }
 
         let completions = [];
-        const {command, range} = this.getCurrentCommand(query, selection);
+        const { command, range } = this.getCurrentCommand(query, selection);
         if (command) {
             const matchedString = command[0];
             completions = this.matcher.match(matchedString, limit);
@@ -121,7 +121,7 @@ export default class EmojiProvider extends AutocompleteProvider {
             sorters.push((c) => c._orderBy);
             completions = sortBy(uniq(completions), sorters);
 
-            completions = completions.map(({shortname}) => {
+            completions = completions.map(({ shortname }) => {
                 const unicode = shortcodeToUnicode(shortname);
                 return {
                     completion: unicode,

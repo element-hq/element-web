@@ -56,9 +56,21 @@ export enum Action {
     CheckUpdates = "check_updates",
 
     /**
-     * Focuses the user's cursor to the composer. No additional payload information required.
+     * Focuses the user's cursor to the send message composer. No additional payload information required.
      */
-    FocusComposer = "focus_composer",
+    FocusSendMessageComposer = "focus_send_message_composer",
+
+    /**
+     * Focuses the user's cursor to the edit message composer. No additional payload information required.
+     */
+    FocusEditMessageComposer = "focus_edit_message_composer",
+
+    /**
+     * Focuses the user's cursor to the edit message composer or send message
+     * composer based on the current edit state. No additional payload
+     * information required.
+     */
+    FocusAComposer = "focus_a_composer",
 
     /**
      * Opens the user menu (previously known as the top left menu). No additional payload information required.
@@ -101,6 +113,24 @@ export enum Action {
     OpenDialPad = "open_dial_pad",
 
     /**
+     * Dial the phone number in the payload
+     * payload: DialNumberPayload
+     */
+    DialNumber = "dial_number",
+
+    /**
+     * Start a call transfer to a Matrix ID
+     * payload: TransferCallPayload
+     */
+    TransferCallToMatrixID = "transfer_call_to_matrix_id",
+
+    /**
+     * Start a call transfer to a phone number
+     * payload: TransferCallPayload
+     */
+     TransferCallToPhoneNumber = "transfer_call_to_phone_number",
+
+    /**
      * Fired when CallHandler has checked for PSTN protocol support
      * payload: none
      * XXX: Is an action the right thing for this?
@@ -138,4 +168,29 @@ export enum Action {
      * Fired when an upload is cancelled by the user. Should be used with UploadCanceledPayload.
      */
     UploadCanceled = "upload_canceled",
+
+    /**
+     * Fired when requesting to join a room
+     */
+    JoinRoom = "join_room",
+
+    /**
+     * Fired when successfully joining a room
+     */
+    JoinRoomReady = "join_room_ready",
+
+    /**
+     * Fired when joining a room failed
+     */
+    JoinRoomError = "join_room_error",
+
+    /**
+     * Inserts content into the active composer. Should be used with ComposerInsertPayload
+     */
+    ComposerInsert = "composer_insert",
+
+    /**
+     * Switches space. Should be used with SwitchSpacePayload.
+     */
+    SwitchSpace = "switch_space",
 }

@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016, 2018, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,16 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import filesize from 'filesize';
 import { _t } from '../../../languageHandler';
-import {decryptFile} from '../../../utils/DecryptFile';
+import { decryptFile } from '../../../utils/DecryptFile';
 import Modal from '../../../Modal';
 import AccessibleButton from "../elements/AccessibleButton";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromContent} from "../../../customisations/Media";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromContent } from "../../../customisations/Media";
 import ErrorDialog from "../dialogs/ErrorDialog";
+import { TileShape } from "../rooms/EventTile";
 
 let downloadIconUrl; // cached copy of the download.svg asset for the sandboxed iframe later on
 
@@ -242,7 +243,7 @@ export default class MFileBody extends React.Component {
                 <span className="mx_MFileBody">
                     {placeholder}
                     <div className="mx_MFileBody_download">
-                        <div style={{display: "none"}}>
+                        <div style={{ display: "none" }}>
                             { /*
                               * Add dummy copy of the "a" tag
                               * We'll use it to learn how the download link
@@ -306,7 +307,7 @@ export default class MFileBody extends React.Component {
             // If the attachment is not encrypted then we check whether we
             // are being displayed in the room timeline or in a list of
             // files in the right hand side of the screen.
-            if (this.props.tileShape === "file_grid") {
+            if (this.props.tileShape === TileShape.FileGrid) {
                 return (
                     <span className="mx_MFileBody">
                         {placeholder}

@@ -15,8 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {PushRuleVectorState, State} from "./PushRuleVectorState";
-import {IExtendedPushRule, IRuleSets} from "./types";
+import { PushRuleVectorState, State } from "./PushRuleVectorState";
+import { IExtendedPushRule, IRuleSets } from "./types";
 
 export interface IContentRules {
     vectorState: State;

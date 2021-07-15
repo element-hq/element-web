@@ -156,7 +156,7 @@ const messageComposerBindings = (): KeyBinding<MessageComposerAction>[] => {
         }
     }
     return bindings;
-}
+};
 
 const autocompleteBindings = (): KeyBinding<AutocompleteAction>[] => {
     return [
@@ -205,7 +205,7 @@ const autocompleteBindings = (): KeyBinding<AutocompleteAction>[] => {
             },
         },
     ];
-}
+};
 
 const roomListBindings = (): KeyBinding<RoomListAction>[] => {
     return [
@@ -246,7 +246,7 @@ const roomListBindings = (): KeyBinding<RoomListAction>[] => {
             },
         },
     ];
-}
+};
 
 const roomBindings = (): KeyBinding<RoomAction>[] => {
     const bindings: KeyBinding<RoomAction>[] = [
@@ -310,7 +310,7 @@ const roomBindings = (): KeyBinding<RoomAction>[] => {
     }
 
     return bindings;
-}
+};
 
 const navigationBindings = (): KeyBinding<NavigationAction>[] => {
     return [
@@ -394,7 +394,7 @@ const navigationBindings = (): KeyBinding<NavigationAction>[] => {
             },
         },
     ];
-}
+};
 
 export const defaultBindingsProvider: IKeyBindingsProvider = {
     getMessageComposerBindings: messageComposerBindings,
@@ -402,4 +402,4 @@ export const defaultBindingsProvider: IKeyBindingsProvider = {
     getRoomListBindings: roomListBindings,
     getRoomBindings: roomBindings,
     getNavigationBindings: navigationBindings,
-}
+};

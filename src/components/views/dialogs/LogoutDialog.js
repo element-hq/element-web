@@ -22,7 +22,7 @@ import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import RestoreKeyBackupDialog from './security/RestoreKeyBackupDialog';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.dialogs.LogoutDialog")
 export default class LogoutDialog extends React.Component {
@@ -85,7 +85,7 @@ export default class LogoutDialog extends React.Component {
 
     _onFinished(confirmed) {
         if (confirmed) {
-            dis.dispatch({action: 'logout'});
+            dis.dispatch({ action: 'logout' });
         }
         // close dialog
         this.props.onFinished();
@@ -112,7 +112,7 @@ export default class LogoutDialog extends React.Component {
     }
 
     _onLogoutConfirm() {
-        dis.dispatch({action: 'logout'});
+        dis.dispatch({ action: 'logout' });
 
         // close dialog
         this.props.onFinished();

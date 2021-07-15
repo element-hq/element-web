@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import classNames from 'classnames';
 import { UserAddressType } from '../../../UserAddress';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.elements.AddressSelector")
 export default class AddressSelector extends React.Component {

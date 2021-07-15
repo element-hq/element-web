@@ -81,19 +81,39 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
     constructor(props, context) {
         super(props, context);
 
-        if (props.reactions) {
-            props.reactions.on("Relations.add", this.onReactionsChange);
-            props.reactions.on("Relations.remove", this.onReactionsChange);
-            props.reactions.on("Relations.redaction", this.onReactionsChange);
-        }
-
         this.state = {
             myReactions: this.getMyReactions(),
             showAll: false,
         };
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidMount() {
+        const { mxEvent, reactions } = this.props;
+
+        if (mxEvent.isBeingDecrypted() || mxEvent.shouldAttemptDecryption()) {
+            mxEvent.once("Event.decrypted", this.onDecrypted);
+        }
+
+        if (reactions) {
+            reactions.on("Relations.add", this.onReactionsChange);
+            reactions.on("Relations.remove", this.onReactionsChange);
+            reactions.on("Relations.redaction", this.onReactionsChange);
+        }
+    }
+
+    componentWillUnmount() {
+        const { mxEvent, reactions } = this.props;
+
+        mxEvent.off("Event.decrypted", this.onDecrypted);
+
+        if (reactions) {
+            reactions.off("Relations.add", this.onReactionsChange);
+            reactions.off("Relations.remove", this.onReactionsChange);
+            reactions.off("Relations.redaction", this.onReactionsChange);
+        }
+    }
+
+    componentDidUpdate(prevProps: IProps) {
         if (prevProps.reactions !== this.props.reactions) {
             this.props.reactions.on("Relations.add", this.onReactionsChange);
             this.props.reactions.on("Relations.remove", this.onReactionsChange);
@@ -102,24 +122,12 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         }
     }
 
-    componentWillUnmount() {
-        if (this.props.reactions) {
-            this.props.reactions.removeListener(
-                "Relations.add",
-                this.onReactionsChange,
-            );
-            this.props.reactions.removeListener(
-                "Relations.remove",
-                this.onReactionsChange,
-            );
-            this.props.reactions.removeListener(
-                "Relations.redaction",
-                this.onReactionsChange,
-            );
-        }
-    }
+    private onDecrypted = () => {
+        // Decryption changes whether the event is actionable
+        this.forceUpdate();
+    };
 
-    onReactionsChange = () => {
+    private onReactionsChange = () => {
         // TODO: Call `onHeightChanged` as needed
         this.setState({
             myReactions: this.getMyReactions(),
@@ -128,9 +136,9 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         // has changed (this is triggered by events for that purpose only) and
         // `PureComponent`s shallow state / props compare would otherwise filter this out.
         this.forceUpdate();
-    }
+    };
 
-    getMyReactions() {
+    private getMyReactions() {
         const reactions = this.props.reactions;
         if (!reactions) {
             return null;
@@ -143,11 +151,11 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         return [...myReactions.values()];
     }
 
-    onShowAllClick = () => {
+    private onShowAllClick = () => {
         this.setState({
             showAll: true,
         });
-    }
+    };
 
     render() {
         const { mxEvent, reactions } = this.props;
@@ -198,7 +206,8 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         const cli = this.context;
 
         let addReactionButton;
-        if (cli.getRoom(mxEvent.getRoomId()).currentState.maySendEvent(EventType.Reaction, cli.getUserId())) {
+        const room = cli.getRoom(mxEvent.getRoomId());
+        if (room.getMyMembership() === "join" && room.currentState.maySendEvent(EventType.Reaction, cli.getUserId())) {
             addReactionButton = <ReactButton mxEvent={mxEvent} reactions={reactions} />;
         }
 

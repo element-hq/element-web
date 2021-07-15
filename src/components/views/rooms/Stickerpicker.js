@@ -15,22 +15,22 @@ limitations under the License.
 */
 import React from 'react';
 import classNames from 'classnames';
-import {_t, _td} from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import AppTile from '../elements/AppTile';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import AccessibleButton from '../elements/AccessibleButton';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import PersistedElement from "../elements/PersistedElement";
-import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
+import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
-import {ContextMenu} from "../../structures/ContextMenu";
-import {WidgetType} from "../../../widgets/WidgetType";
+import { ContextMenu } from "../../structures/ContextMenu";
+import { WidgetType } from "../../../widgets/WidgetType";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import {Action} from "../../../dispatcher/actions";
-import {WidgetMessagingStore} from "../../../stores/widgets/WidgetMessagingStore";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { Action } from "../../../dispatcher/actions";
+import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 // This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
 // We sit in a context menu, so this should be given to the context menu.
@@ -40,7 +40,7 @@ const STICKERPICKER_Z_INDEX = 3500;
 const PERSISTED_ELEMENT_KEY = "stickerPicker";
 
 @replaceableComponent("views.rooms.Stickerpicker")
-export default class Stickerpicker extends React.Component {
+export default class Stickerpicker extends React.PureComponent {
     static currentWidget;
 
     constructor(props) {
@@ -103,7 +103,7 @@ export default class Stickerpicker extends React.Component {
             console.warn('No widget ID specified, not disabling assets');
         }
 
-        this.setState({showStickers: false});
+        this.setState({ showStickers: false });
         WidgetUtils.removeStickerpickerWidgets().then(() => {
             this.forceUpdate();
         }).catch((e) => {
@@ -150,7 +150,7 @@ export default class Stickerpicker extends React.Component {
         const stickerpickerWidget = WidgetUtils.getStickerpickerWidgets()[0];
         if (!stickerpickerWidget) {
             Stickerpicker.currentWidget = null;
-            this.setState({stickerpickerWidget: null, widgetId: null});
+            this.setState({ stickerpickerWidget: null, widgetId: null });
             return;
         }
 
@@ -183,12 +183,12 @@ export default class Stickerpicker extends React.Component {
                 this.forceUpdate();
                 break;
             case "stickerpicker_close":
-                this.setState({showStickers: false});
+                this.setState({ showStickers: false });
                 break;
             case Action.AfterRightPanelPhaseChange:
             case "show_left_panel":
             case "hide_left_panel":
-                this.setState({showStickers: false});
+                this.setState({ showStickers: false });
                 break;
         }
     }
@@ -206,7 +206,7 @@ export default class Stickerpicker extends React.Component {
 
     _errorStickerpickerContent() {
         return (
-            <div style={{"text-align": "center"}} className="error">
+            <div style={{ "text-align": "center" }} className="error">
                 <p> { this.state.imError } </p>
             </div>
         );
@@ -224,7 +224,7 @@ export default class Stickerpicker extends React.Component {
     }
 
     _getStickerpickerContent() {
-        // Handle Integration Manager errors
+        // Handle integration manager errors
         if (this.state._imError) {
             return this._errorStickerpickerContent();
         }
@@ -341,27 +341,33 @@ export default class Stickerpicker extends React.Component {
      * @param  {Event} ev Event that triggered the function call
      */
     _onHideStickersClick(ev) {
-        this.setState({showStickers: false});
+        if (this.state.showStickers) {
+            this.setState({ showStickers: false });
+        }
     }
 
     /**
      * Called when the window is resized
      */
     _onResize() {
-        this.setState({showStickers: false});
+        if (this.state.showStickers) {
+            this.setState({ showStickers: false });
+        }
     }
 
     /**
      * The stickers picker was hidden
      */
     _onFinished() {
-        this.setState({showStickers: false});
+        if (this.state.showStickers) {
+            this.setState({ showStickers: false });
+        }
     }
 
     /**
      * Launch the integration manager on the stickers integration page
      */
-    _launchManageIntegrations() {
+    _launchManageIntegrations = () => {
         // TODO: Open the right integration manager for the widget
         if (SettingsStore.getValue("feature_many_integration_managers")) {
             IntegrationManagers.sharedInstance().openAll(
@@ -376,7 +382,7 @@ export default class Stickerpicker extends React.Component {
                 this.state.widgetId,
             );
         }
-    }
+    };
 
     render() {
         let stickerPicker;
@@ -395,7 +401,7 @@ export default class Stickerpicker extends React.Component {
                     key="controls_hide_stickers"
                     className={className}
                     onClick={this._onHideStickersClick}
-                    active={this.state.showStickers}
+                    active={this.state.showStickers.toString()}
                     title={_t("Hide Stickers")}
                 >
                 </AccessibleButton>;

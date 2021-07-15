@@ -38,6 +38,15 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/view-community.svg');
 }
 
+.mx_TagTileContextMenu_moveUp::before {
+    transform: rotate(180deg);
+    mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+}
+
+.mx_TagTileContextMenu_moveDown::before {
+    mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+}
+
 .mx_TagTileContextMenu_hideCommunity::before {
     mask-image: url('$(res)/img/element-icons/hide.svg');
 }

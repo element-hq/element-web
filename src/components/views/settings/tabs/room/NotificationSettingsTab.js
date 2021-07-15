@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../../../../languageHandler";
-import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
+import { _t } from "../../../../../languageHandler";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Notifier from "../../../../../Notifier";
 import SettingsStore from '../../../../../settings/SettingsStore';
-import {SettingLevel} from "../../../../../settings/SettingLevel";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import { SettingLevel } from "../../../../../settings/SettingLevel";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
 @replaceableComponent("views.settings.tabs.room.NotificationsSettingsTab")
 export default class NotificationsSettingsTab extends React.Component {
@@ -47,7 +47,7 @@ export default class NotificationsSettingsTab extends React.Component {
         if (!soundData) {
             return;
         }
-        this.setState({currentSound: soundData.name || soundData.url});
+        this.setState({ currentSound: soundData.name || soundData.url });
     }
 
     async _triggerUploader(e) {

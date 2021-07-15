@@ -31,7 +31,7 @@ import {
     IPostmessageResponseData,
     PostmessageAction,
 } from "./HostSignupDialogTypes";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const HOST_SIGNUP_KEY = "host_signup";
 
@@ -86,7 +86,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
             case PostmessageAction.CloseDialog:
                 return this.closeDialog();
         }
-    }
+    };
 
     private maximizeDialog = () => {
         this.setState({
@@ -96,7 +96,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         this.sendMessage({
             action: PostmessageAction.Maximize,
         });
-    }
+    };
 
     private minimizeDialog = () => {
         this.setState({
@@ -106,7 +106,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         this.sendMessage({
             action: PostmessageAction.Minimize,
         });
-    }
+    };
 
     private closeDialog = async () => {
         window.removeEventListener("message", this.messageHandler);
@@ -114,7 +114,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         PersistedElement.destroyElement("host_signup");
         // Finally clear the flag in
         return HostSignupStore.instance.setHostSignupActive(false);
-    }
+    };
 
     private onCloseClick = async () => {
         if (this.state.completed) {
@@ -137,16 +137,16 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                 },
             );
         }
-    }
+    };
 
     private sendMessage = (message: IPostmessageResponseData) => {
         this.iframeRef.current.contentWindow.postMessage(message, this.config.url);
-    }
+    };
 
     private async sendAccountDetails() {
         const openIdToken = await MatrixClientPeg.get().getOpenIdToken();
         if (!openIdToken || !openIdToken.access_token) {
-            console.warn("Failed to connect to homeserver for OpenID token.")
+            console.warn("Failed to connect to homeserver for OpenID token.");
             this.setState({
                 completed: true,
                 error: _t("Failed to connect to your homeserver. Please close this dialog and try again."),
@@ -171,7 +171,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
             return this.sendAccountDetails();
         }
         return this.closeDialog();
-    }
+    };
 
     private onAccountDetailsRequest = () => {
         const textComponent = (
@@ -215,7 +215,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                 onFinished: this.onAccountDetailsDialogFinished,
             },
         );
-    }
+    };
 
     public componentDidMount() {
         window.addEventListener("message", this.messageHandler);
