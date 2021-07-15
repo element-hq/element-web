@@ -114,7 +114,7 @@ export default class AppPermission extends React.Component {
 
         // Due to i18n limitations, we can't dedupe the code for variables in these two messages.
         const warning = this.state.isWrapped
-            ? _t("Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.",
+            ? _t("Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.",
                 { widgetDomain: this.state.widgetDomain }, { helpIcon: () => warningTooltip })
             : _t("Using this widget may share data <helpIcon /> with %(widgetDomain)s.",
                 { widgetDomain: this.state.widgetDomain }, { helpIcon: () => warningTooltip });

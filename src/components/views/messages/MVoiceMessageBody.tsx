@@ -25,9 +25,11 @@ import { mediaFromContent } from "../../../customisations/Media";
 import { decryptFile } from "../../../utils/DecryptFile";
 import RecordingPlayback from "../audio_messages/RecordingPlayback";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
+import { TileShape } from "../rooms/EventTile";
 
 interface IProps {
     mxEvent: MatrixEvent;
+    tileShape?: TileShape;
 }
 
 interface IState {
@@ -103,7 +105,7 @@ export default class MVoiceMessageBody extends React.PureComponent<IProps, IStat
         // At this point we should have a playable state
         return (
             <span className="mx_MVoiceMessageBody">
-                <RecordingPlayback playback={this.state.playback} />
+                <RecordingPlayback playback={this.state.playback} tileShape={this.props.tileShape} />
                 <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />
             </span>
         );

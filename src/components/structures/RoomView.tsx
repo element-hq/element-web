@@ -25,8 +25,8 @@ import React, { createRef } from 'react';
 import classNames from 'classnames';
 import { IRecommendedVersion, NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 import { EventSubscription } from "fbemitter";
+import { ISearchResults } from 'matrix-js-sdk/src/@types/search';
 
 import shouldHideEvent from '../../shouldHideEvent';
 import { _t } from '../../languageHandler';
@@ -133,12 +133,7 @@ export interface IState {
     searching: boolean;
     searchTerm?: string;
     searchScope?: SearchScope;
-    searchResults?: XOR<{}, {
-        count: number;
-        highlights: string[];
-        results: SearchResult[];
-        next_batch: string; // eslint-disable-line camelcase
-    }>;
+    searchResults?: XOR<{}, ISearchResults>;
     searchHighlights?: string[];
     searchInProgress?: boolean;
     callState?: CallState;
@@ -818,17 +813,16 @@ export default class RoomView extends React.Component<IProps, IState> {
 
             case Action.ComposerInsert: {
                 // re-dispatch to the correct composer
-                if (this.state.editState) {
-                    dis.dispatch({
-                        ...payload,
-                        action: "edit_composer_insert",
-                    });
-                } else {
-                    dis.dispatch({
-                        ...payload,
-                        action: "send_composer_insert",
-                    });
-                }
+                dis.dispatch({
+                    ...payload,
+                    action: this.state.editState ? "edit_composer_insert" : "send_composer_insert",
+                });
+                break;
+            }
+
+            case Action.FocusAComposer: {
+                // re-dispatch to the correct composer
+                dis.fire(this.state.editState ? Action.FocusEditMessageComposer : Action.FocusSendMessageComposer);
                 break;
             }
 
@@ -1138,7 +1132,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         if (this.state.searchResults.next_batch) {
             debuglog("requesting more search results");
-            const searchPromise = searchPagination(this.state.searchResults);
+            const searchPromise = searchPagination(this.state.searchResults as ISearchResults);
             return this.handleSearchResult(searchPromise);
         } else {
             debuglog("no more search results");
@@ -1246,7 +1240,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         ContentMessages.sharedInstance().sendContentListToRoom(
             ev.dataTransfer.files, this.state.room.roomId, this.context,
         );
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
 
         this.setState({
             draggingFile: false,
@@ -1548,7 +1542,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         } else {
             // Otherwise we have to jump manually
             this.messagePanel.jumpToLiveTimeline();
-            dis.fire(Action.FocusComposer);
+            dis.fire(Action.FocusSendMessageComposer);
         }
     };
 

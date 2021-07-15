@@ -17,6 +17,7 @@ limitations under the License.
 
 import React, { useEffect, useState } from "react";
 import { MatrixError } from "matrix-js-sdk/src/http-api";
+import { IProtocol } from "matrix-js-sdk/src/client";
 
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { instanceForInstanceId } from '../../../utils/DirectoryUtils';
@@ -41,7 +42,8 @@ import QuestionDialog from "../dialogs/QuestionDialog";
 import UIStore from "../../../stores/UIStore";
 import { compare } from "../../../utils/strings";
 
-export const ALL_ROOMS = Symbol("ALL_ROOMS");
+// XXX: We would ideally use a symbol here but we can't since we save this value to localStorage
+export const ALL_ROOMS = "ALL_ROOMS";
 
 const SETTING_NAME = "room_directory_servers";
 
@@ -82,38 +84,13 @@ const validServer = withValidation<undefined, { error?: MatrixError }>({
     ],
 });
 
-/* eslint-disable camelcase */
-export interface IFieldType {
-    regexp: string;
-    placeholder: string;
-}
-
-export interface IInstance {
-    desc: string;
-    icon?: string;
-    fields: object;
-    network_id: string;
-    // XXX: this is undocumented but we rely on it.
-    // we inject a fake entry with a symbolic instance_id.
-    instance_id: string | symbol;
-}
-
-export interface IProtocol {
-    user_fields: string[];
-    location_fields: string[];
-    icon: string;
-    field_types: Record<string, IFieldType>;
-    instances: IInstance[];
-}
-/* eslint-enable camelcase */
-
 export type Protocols = Record<string, IProtocol>;
 
 interface IProps {
     protocols: Protocols;
     selectedServerName: string;
-    selectedInstanceId: string | symbol;
-    onOptionChange(server: string, instanceId?: string | symbol): void;
+    selectedInstanceId: string;
+    onOptionChange(server: string, instanceId?: string): void;
 }
 
 // This dropdown sources homeservers from three places:
@@ -171,7 +148,7 @@ const NetworkDropdown = ({ onOptionChange, protocols = {}, selectedServerName, s
 
             const protocolsList = server === hsName ? Object.values(protocols) : [];
             if (protocolsList.length > 0) {
-                // add a fake protocol with the ALL_ROOMS symbol
+                // add a fake protocol with ALL_ROOMS
                 protocolsList.push({
                     instances: [{
                         fields: [],

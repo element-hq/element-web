@@ -32,6 +32,6 @@ export interface ITimingPayload extends IPayload {
 
 export interface IAmplitudePayload extends IPayload {
     ev: PayloadEvent.AmplitudeMark;
-    forSecond: number;
+    forIndex: number;
     amplitude: number;
 }

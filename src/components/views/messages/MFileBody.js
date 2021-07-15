@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016, 2018, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromContent } from "../../../customisations/Media";
 import ErrorDialog from "../dialogs/ErrorDialog";
+import { TileShape } from "../rooms/EventTile";
 
 let downloadIconUrl; // cached copy of the download.svg asset for the sandboxed iframe later on
 
@@ -306,7 +307,7 @@ export default class MFileBody extends React.Component {
             // If the attachment is not encrypted then we check whether we
             // are being displayed in the room timeline or in a list of
             // files in the right hand side of the screen.
-            if (this.props.tileShape === "file_grid") {
+            if (this.props.tileShape === TileShape.FileGrid) {
                 return (
                     <span className="mx_MFileBody">
                         {placeholder}
