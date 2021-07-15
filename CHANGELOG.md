@@ -1,3 +1,37 @@
+Changes in [1.7.32](https://github.com/vector-im/element-web/releases/tag/v1.7.32) (2021-07-05)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.32-rc.1...v1.7.32)
+
+ * No changes from rc.1
+
+Changes in [1.7.32-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.32-rc.1) (2021-06-29)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.31...v1.7.32-rc.1)
+
+ * Update to react-sdk v3.25.0-rc.1 and js-sdk v12.0.1-rc.1
+ * Translations update from Weblate
+   [\#17832](https://github.com/vector-im/element-web/pull/17832)
+ * Fix canvas-filter-polyfill mock path
+   [\#17785](https://github.com/vector-im/element-web/pull/17785)
+ * Mock context-filter-polyfill for app-tests
+   [\#17774](https://github.com/vector-im/element-web/pull/17774)
+ * Add libera.chat to default room directory
+   [\#17772](https://github.com/vector-im/element-web/pull/17772)
+ * Improve typing of Event Index Manager / Seshat
+   [\#17704](https://github.com/vector-im/element-web/pull/17704)
+ * Bump dns-packet from 1.3.1 to 1.3.4
+   [\#17478](https://github.com/vector-im/element-web/pull/17478)
+ * Update matrix-widget-api to fix build issues
+   [\#17747](https://github.com/vector-im/element-web/pull/17747)
+ * Fix whitespace in Dockerfile
+   [\#17742](https://github.com/vector-im/element-web/pull/17742)
+ * Upgrade @types/react and @types/react-dom
+   [\#17723](https://github.com/vector-im/element-web/pull/17723)
+ * Spaces keyboard shortcuts first cut
+   [\#17457](https://github.com/vector-im/element-web/pull/17457)
+ * Labs: feature_report_to_moderators
+   [\#17694](https://github.com/vector-im/element-web/pull/17694)
+
 Changes in [1.7.31](https://github.com/vector-im/element-web/releases/tag/v1.7.31) (2021-06-21)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.31-rc.1...v1.7.31)
