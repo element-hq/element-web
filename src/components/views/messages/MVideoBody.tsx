@@ -26,10 +26,14 @@ import InlineSpinner from '../elements/InlineSpinner';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD } from "../../../ContentMessages";
+import { IMediaBody } from "./IMediaBody";
+import { MediaEventHelper } from "../../../utils/MediaEventHelper";
+import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
+import { MatrixEvent } from "matrix-js-sdk/src";
 
 interface IProps {
     /* the MatrixEvent to show */
-    mxEvent: any;
+    mxEvent: MatrixEvent;
     /* called when the video has loaded */
     onHeightChanged: () => void;
 }
@@ -45,11 +49,13 @@ interface IState {
 }
 
 @replaceableComponent("views.messages.MVideoBody")
-export default class MVideoBody extends React.PureComponent<IProps, IState> {
+export default class MVideoBody extends React.PureComponent<IProps, IState> implements IMediaBody {
     private videoRef = React.createRef<HTMLVideoElement>();
+    private mediaHelper: MediaEventHelper;
 
     constructor(props) {
         super(props);
+
         this.state = {
             fetchingData: false,
             decryptedUrl: null,
@@ -59,6 +65,8 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
             posterLoading: false,
             blurhashUrl: null,
         };
+
+        this.mediaHelper = new MediaEventHelper(this.props.mxEvent);
     }
 
     thumbScale(fullWidth: number, fullHeight: number, thumbWidth = 480, thumbHeight = 360) {
@@ -82,6 +90,10 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         }
     }
 
+    public getMediaHelper(): MediaEventHelper {
+        return this.mediaHelper;
+    }
+
     private getContentUrl(): string|null {
         const media = mediaFromContent(this.props.mxEvent.getContent());
         if (media.isEncrypted) {
@@ -97,7 +109,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
     }
 
     private getThumbUrl(): string|null {
-        const content = this.props.mxEvent.getContent();
+        const content = this.props.mxEvent.getContent<IMediaEventContent>();
         const media = mediaFromContent(content);
 
         if (media.isEncrypted && this.state.decryptedThumbnailUrl) {
@@ -139,7 +151,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
             posterLoading: true,
         });
 
-        const content = this.props.mxEvent.getContent();
+        const content = this.props.mxEvent.getContent<IMediaEventContent>();
         const media = mediaFromContent(content);
         if (media.hasThumbnail) {
             const image = new Image();
@@ -152,30 +164,22 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
 
     async componentDidMount() {
         const autoplay = SettingsStore.getValue("autoplayGifsAndVideos") as boolean;
-        const content = this.props.mxEvent.getContent();
         this.loadBlurhash();
 
-        if (content.file !== undefined && this.state.decryptedUrl === null) {
-            let thumbnailPromise = Promise.resolve(null);
-            if (content?.info?.thumbnail_file) {
-                thumbnailPromise = decryptFile(content.info.thumbnail_file)
-                    .then(blob => URL.createObjectURL(blob));
-            }
-
+        if (this.mediaHelper.media.isEncrypted && this.state.decryptedUrl === null) {
             try {
-                const thumbnailUrl = await thumbnailPromise;
+                const thumbnailUrl = await this.mediaHelper.thumbnailUrl.value;
                 if (autoplay) {
                     console.log("Preloading video");
-                    const decryptedBlob = await decryptFile(content.file);
-                    const contentUrl = URL.createObjectURL(decryptedBlob);
                     this.setState({
-                        decryptedUrl: contentUrl,
+                        decryptedUrl: await this.mediaHelper.sourceUrl.value,
                         decryptedThumbnailUrl: thumbnailUrl,
-                        decryptedBlob: decryptedBlob,
+                        decryptedBlob: await this.mediaHelper.sourceBlob.value,
                     });
                     this.props.onHeightChanged();
                 } else {
                     console.log("NOT preloading video");
+                    const content = this.props.mxEvent.getContent<IMediaEventContent>();
                     this.setState({
                         // For Chrome and Electron, we need to set some non-empty `src` to
                         // enable the play button. Firefox does not seem to care either
@@ -202,6 +206,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         if (this.state.decryptedThumbnailUrl) {
             URL.revokeObjectURL(this.state.decryptedThumbnailUrl);
         }
+        this.mediaHelper.destroy();
     }
 
     private videoOnPlay = async () => {
@@ -213,18 +218,15 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
             // To stop subsequent download attempts
             fetchingData: true,
         });
-        const content = this.props.mxEvent.getContent();
-        if (!content.file) {
+        if (!this.mediaHelper.media.isEncrypted) {
             this.setState({
                 error: "No file given in content",
             });
             return;
         }
-        const decryptedBlob = await decryptFile(content.file);
-        const contentUrl = URL.createObjectURL(decryptedBlob);
         this.setState({
-            decryptedUrl: contentUrl,
-            decryptedBlob: decryptedBlob,
+            decryptedUrl: await this.mediaHelper.sourceUrl.value,
+            decryptedBlob: await this.mediaHelper.sourceBlob.value,
             fetchingData: false,
         }, () => {
             if (!this.videoRef.current) return;
@@ -295,7 +297,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
                     onPlay={this.videoOnPlay}
                 >
                 </video>
-                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />
+                {/*<MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />*/}
             </span>
         );
     }

@@ -22,6 +22,7 @@ import { Mjolnir } from "../../../mjolnir/Mjolnir";
 import RedactedBody from "./RedactedBody";
 import UnknownBody from "./UnknownBody";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { IMediaBody } from "./IMediaBody";
 
 @replaceableComponent("views.messages.MessageEvent")
 export default class MessageEvent extends React.Component {
@@ -68,6 +69,13 @@ export default class MessageEvent extends React.Component {
     onTileUpdate = () => {
         this.forceUpdate();
     };
+
+    getMediaHelper() {
+        if (!this._body.current || !this._body.current.getMediaHelper) {
+            return null;
+        }
+        return this._body.current.getMediaHelper();
+    }
 
     render() {
         const bodyTypes = {

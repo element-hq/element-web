@@ -32,6 +32,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { canCancel } from "../context_menus/MessageContextMenu";
 import Resend from "../../../Resend";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { canTileDownload } from "./IMediaBody";
 
 const OptionsButton = ({ mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
@@ -175,6 +176,16 @@ export default class MessageActionBar extends React.PureComponent {
         });
     };
 
+    onDownloadClick = async (ev) => {
+        // TODO: Maybe just call into MFileBody and render it as null
+        const src = this.props.getTile().getMediaHelper();
+        const a = document.createElement("a");
+        a.href = await src.sourceUrl.value;
+        a.download = "todo.png";
+        a.target = "_blank";
+        a.click();
+    };
+
     /**
      * Runs a given fn on the set of possible events to test. The first event
      * that passes the checkFn will have fn executed on it. Both functions take
@@ -265,6 +276,17 @@ export default class MessageActionBar extends React.PureComponent {
                         reactions={this.props.reactions}
                         onFocusChange={this.onFocusChange}
                         key="react"
+                    />);
+                }
+
+                const tile = this.props.getTile && this.props.getTile();
+                if (canTileDownload(tile)) {
+                    toolbarOpts.splice(0, 0, <RovingAccessibleTooltipButton
+                        className="mx_MessageActionBar_maskButton mx_MessageActionBar_downloadButton"
+                        title={_t("Download")}
+                        onClick={this.onDownloadClick}
+                        disabled={false}
+                        key="download"
                     />);
                 }
             }
