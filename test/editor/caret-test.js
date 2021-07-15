@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import "../skinned-sdk"; // Must be first for skinning to work
 import { getLineAndNodePosition } from "../../src/editor/caret";
 import EditorModel from "../../src/editor/model";
 import { createPartCreator } from "./mock";
