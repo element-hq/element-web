@@ -90,6 +90,8 @@ declare global {
         mxUIStore: UIStore;
         mxSetupEncryptionStore?: SetupEncryptionStore;
         mxRoomScrollStateStore?: RoomScrollStateStore;
+        grecaptcha: any;
+        mx_on_recaptcha_loaded: () => void;
     }
 
     interface Document {
