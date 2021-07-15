@@ -600,6 +600,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
             case "8":
             case "9":
             case "0":
+                // ideally we would use SpaceStore.spacesEnabled here but importing SpaceStore in this platform
+                // breaks skinning as the platform is instantiated prior to the skin being loaded
                 if (SettingsStore.getValue("feature_spaces") && isOnlyCtrlOrCmdKeyEvent(ev)) {
                     this.navigateToSpace(parseInt(ev.key, 10));
                     handled = true;
