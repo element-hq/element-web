@@ -76,6 +76,11 @@ limitations under the License.
         font-size: $font-14px !important;
     }
 
+    // Hide line numbers
+    .mx_EventTile_lineNumbers {
+        display: none;
+    }
+
     // Hack to cut content in <pre> tags too
     .mx_EventTile_pre_container > pre {
         overflow: hidden;
