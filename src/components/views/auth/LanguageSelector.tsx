@@ -22,14 +22,18 @@ import * as sdk from '../../../index';
 import React from 'react';
 import { SettingLevel } from "../../../settings/SettingLevel";
 
-function onChange(newLang) {
+function onChange(newLang: string): void {
     if (getCurrentLanguage() !== newLang) {
         SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLang);
         PlatformPeg.get().reload();
     }
 }
 
-export default function LanguageSelector({ disabled }) {
+interface IProps {
+    disabled?: boolean;
+}
+
+export default function LanguageSelector({ disabled }: IProps): React.ReactNode {
     if (SdkConfig.get()['disable_login_language_selector']) return <div />;
 
     const LanguageDropdown = sdk.getComponent('views.elements.LanguageDropdown');
