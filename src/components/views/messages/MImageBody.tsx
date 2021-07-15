@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
 Copyright 2018, 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +20,6 @@ import { Blurhash } from "react-blurhash";
 
 import MFileBody from './MFileBody';
 import Modal from '../../../Modal';
-import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -34,6 +32,7 @@ import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { IMediaEventContent } from '../../../customisations/models/IMediaEventContent';
 import ImageView from '../elements/ImageView';
 import { SyncState } from 'matrix-js-sdk/src/sync.api';
+import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 
 export interface IProps {
     /* the MatrixEvent to show */
@@ -46,6 +45,7 @@ export interface IProps {
 
     /* the permalinkCreator */
     permalinkCreator?: RoomPermalinkCreator;
+    mediaEventHelper: MediaEventHelper;
 }
 
 interface IState {
@@ -257,38 +257,24 @@ export default class MImageBody extends React.Component<IProps, IState> {
         }
     }
 
-    private downloadImage(): void {
+    private async downloadImage() {
         const content = this.props.mxEvent.getContent();
-        if (content.file !== undefined && this.state.decryptedUrl === null) {
-            let thumbnailPromise = Promise.resolve(null);
-            if (content.info && content.info.thumbnail_file) {
-                thumbnailPromise = decryptFile(
-                    content.info.thumbnail_file,
-                ).then(function(blob) {
-                    return URL.createObjectURL(blob);
+        if (this.props.mediaEventHelper.media.isEncrypted && this.state.decryptedUrl === null) {
+            try {
+                const thumbnailUrl = await this.props.mediaEventHelper.thumbnailUrl.value;
+                this.setState({
+                    decryptedUrl: await this.props.mediaEventHelper.sourceUrl.value,
+                    decryptedThumbnailUrl: thumbnailUrl,
+                    decryptedBlob: await this.props.mediaEventHelper.sourceBlob.value,
                 });
-            }
-            let decryptedBlob;
-            thumbnailPromise.then((thumbnailUrl) => {
-                return decryptFile(content.file).then(function(blob) {
-                    decryptedBlob = blob;
-                    return URL.createObjectURL(blob);
-                }).then((contentUrl) => {
-                    if (this.unmounted) return;
-                    this.setState({
-                        decryptedUrl: contentUrl,
-                        decryptedThumbnailUrl: thumbnailUrl,
-                        decryptedBlob: decryptedBlob,
-                    });
-                });
-            }).catch((err) => {
+            } catch (err) {
                 if (this.unmounted) return;
                 console.warn("Unable to decrypt attachment: ", err);
                 // Set a placeholder image when we can't decrypt the image.
                 this.setState({
                     error: err,
                 });
-            });
+            }
         }
     }
 
@@ -300,10 +286,10 @@ export default class MImageBody extends React.Component<IProps, IState> {
             localStorage.getItem("mx_ShowImage_" + this.props.mxEvent.getId()) === "true";
 
         if (showImage) {
-            // Don't download anything becaue we don't want to display anything.
+            // noinspection JSIgnoredPromiseFromCall
             this.downloadImage();
             this.setState({ showImage: true });
-        }
+        } // else don't download anything because we don't want to display anything.
 
         this._afterComponentDidMount();
     }
@@ -316,13 +302,6 @@ export default class MImageBody extends React.Component<IProps, IState> {
     componentWillUnmount() {
         this.unmounted = true;
         this.context.removeListener('sync', this.onClientSync);
-
-        if (this.state.decryptedUrl) {
-            URL.revokeObjectURL(this.state.decryptedUrl);
-        }
-        if (this.state.decryptedThumbnailUrl) {
-            URL.revokeObjectURL(this.state.decryptedThumbnailUrl);
-        }
     }
 
     protected messageContent(
