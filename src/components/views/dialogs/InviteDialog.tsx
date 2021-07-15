@@ -67,6 +67,7 @@ import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
 import QuestionDialog from "./QuestionDialog";
 import Spinner from "../elements/Spinner";
 import BaseDialog from "./BaseDialog";
+import SpaceStore from "../../../stores/SpaceStore";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -1364,7 +1365,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             </div>;
         } else if (this.props.kind === KIND_INVITE) {
             const room = MatrixClientPeg.get()?.getRoom(this.props.roomId);
-            const isSpace = SettingsStore.getValue("feature_spaces") && room?.isSpaceRoom();
+            const isSpace = SpaceStore.spacesEnabled && room?.isSpaceRoom();
             title = isSpace
                 ? _t("Invite to %(spaceName)s", {
                     spaceName: room.name || _t("Unnamed Space"),

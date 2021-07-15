@@ -62,7 +62,6 @@ import IconizedContextMenu, {
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { BetaPill } from "../views/beta/BetaCard";
 import { UserTab } from "../views/dialogs/UserSettingsDialog";
-import SettingsStore from "../../settings/SettingsStore";
 import Modal from "../../Modal";
 import BetaFeedbackDialog from "../views/dialogs/BetaFeedbackDialog";
 import SdkConfig from "../../SdkConfig";
@@ -178,7 +177,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
 
     const [busy, setBusy] = useState(false);
 
-    const spacesEnabled = SettingsStore.getValue("feature_spaces");
+    const spacesEnabled = SpaceStore.spacesEnabled;
 
     const cannotJoin = getEffectiveMembership(myMembership) === EffectiveMembership.Leave
         && space.getJoinRule() !== JoinRule.Public;
@@ -854,7 +853,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     private renderBody() {
         switch (this.state.phase) {
             case Phase.Landing:
-                if (this.state.myMembership === "join" && SettingsStore.getValue("feature_spaces")) {
+                if (this.state.myMembership === "join" && SpaceStore.spacesEnabled) {
                     return <SpaceLanding space={this.props.space} />;
                 } else {
                     return <SpacePreview

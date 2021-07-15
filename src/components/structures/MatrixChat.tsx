@@ -1099,7 +1099,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private leaveRoomWarnings(roomId: string) {
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
-        const isSpace = SettingsStore.getValue("feature_spaces") && roomToLeave?.isSpaceRoom();
+        const isSpace = SpaceStore.spacesEnabled && roomToLeave?.isSpaceRoom();
         // Show a warning if there are additional complications.
         const warnings = [];
 
@@ -1137,7 +1137,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
         const warnings = this.leaveRoomWarnings(roomId);
 
-        const isSpace = SettingsStore.getValue("feature_spaces") && roomToLeave?.isSpaceRoom();
+        const isSpace = SpaceStore.spacesEnabled && roomToLeave?.isSpaceRoom();
         Modal.createTrackedDialog(isSpace ? "Leave space" : "Leave room", '', QuestionDialog, {
             title: isSpace ? _t("Leave space") : _t("Leave room"),
             description: (
@@ -1687,7 +1687,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             const type = screen === "start_sso" ? "sso" : "cas";
             PlatformPeg.get().startSingleSignOn(cli, type, this.getFragmentAfterLogin());
         } else if (screen === 'groups') {
-            if (SettingsStore.getValue("feature_spaces")) {
+            if (SpaceStore.spacesEnabled) {
                 dis.dispatch({ action: "view_home_page" });
                 return;
             }
@@ -1774,7 +1774,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 subAction: params.action,
             });
         } else if (screen.indexOf('group/') === 0) {
-            if (SettingsStore.getValue("feature_spaces")) {
+            if (SpaceStore.spacesEnabled) {
                 dis.dispatch({ action: "view_home_page" });
                 return;
             }

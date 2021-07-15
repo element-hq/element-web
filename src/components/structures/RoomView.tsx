@@ -89,6 +89,7 @@ import RoomStatusBar from "./RoomStatusBar";
 import MessageComposer from '../views/rooms/MessageComposer';
 import JumpToBottomButton from "../views/rooms/JumpToBottomButton";
 import TopUnreadMessagesBar from "../views/rooms/TopUnreadMessagesBar";
+import SpaceStore from "../../stores/SpaceStore";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -1748,10 +1749,8 @@ export default class RoomView extends React.Component<IProps, IState> {
         }
 
         const myMembership = this.state.room.getMyMembership();
-        if (myMembership === "invite"
-            // SpaceRoomView handles invites itself
-            && (!SettingsStore.getValue("feature_spaces") || !this.state.room.isSpaceRoom())
-        ) {
+        // SpaceRoomView handles invites itself
+        if (myMembership === "invite" && (!SpaceStore.spacesEnabled || !this.state.room.isSpaceRoom())) {
             if (this.state.joining || this.state.rejecting) {
                 return (
                     <ErrorBoundary>
@@ -1882,7 +1881,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                     room={this.state.room}
                 />
             );
-            if (!this.state.canPeek && (!SettingsStore.getValue("feature_spaces") || !this.state.room?.isSpaceRoom())) {
+            if (!this.state.canPeek && (!SpaceStore.spacesEnabled || !this.state.room?.isSpaceRoom())) {
                 return (
                     <div className="mx_RoomView">
                         { previewBar }
