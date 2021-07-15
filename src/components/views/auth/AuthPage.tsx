@@ -22,7 +22,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.auth.AuthPage")
 export default class AuthPage extends React.PureComponent {
-    render() {
+    public render(): React.ReactNode {
         const AuthFooter = sdk.getComponent('auth.AuthFooter');
 
         return (
