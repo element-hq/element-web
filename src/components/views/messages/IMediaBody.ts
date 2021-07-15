@@ -14,19 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import EventTile from "../rooms/EventTile";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 
 export interface IMediaBody {
     getMediaHelper(): MediaEventHelper;
-}
-
-export function canTileDownload(tile: EventTile): boolean {
-    if (!tile) return false;
-
-    // Cast so we can check for IMediaBody interface safely.
-    // Note that we don't cast to the IMediaBody interface as that causes IDEs
-    // to complain about conditions always being true.
-    const tileAsAny = <any>tile;
-    return !!tileAsAny.getMediaHelper;
 }
