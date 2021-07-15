@@ -50,7 +50,7 @@ import { showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/Update
 import { CheckUpdatesPayload } from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
 import ToastStore from "matrix-react-sdk/src/stores/ToastStore";
 import GenericExpiringToast from "matrix-react-sdk/src/components/views/toasts/GenericExpiringToast";
-import SettingsStore from 'matrix-react-sdk/src/settings/SettingsStore';
+import SpaceStore from "matrix-react-sdk/src/stores/SpaceStore";
 import { IMatrixProfile, IEventWithRoomId as IMatrixEvent, IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
 
 import VectorBasePlatform from './VectorBasePlatform';
@@ -600,7 +600,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
             case "8":
             case "9":
             case "0":
-                if (SettingsStore.getValue("feature_spaces") && isOnlyCtrlOrCmdKeyEvent(ev)) {
+                if (SpaceStore.spacesEnabled && isOnlyCtrlOrCmdKeyEvent(ev)) {
                     this.navigateToSpace(parseInt(ev.key, 10));
                     handled = true;
                 }
