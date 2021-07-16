@@ -404,17 +404,21 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return !this.isMounted;
     };
 
+    private get showHiddenEvents(): boolean {
+        return this.context?.showHiddenEventsInTimeline ?? this.showHiddenEventsInTimeline;
+    }
+
     // TODO: Implement granular (per-room) hide options
     public shouldShowEvent(mxEv: MatrixEvent): boolean {
         if (MatrixClientPeg.get().isUserIgnored(mxEv.getSender())) {
             return false; // ignored = no show (only happens if the ignore happens after an event was received)
         }
 
-        if (this.context?.showHiddenEventsInTimeline ?? this.showHiddenEventsInTimeline) {
+        if (this.showHiddenEvents) {
             return true;
         }
 
-        if (!haveTileForEvent(mxEv, this.context?.showHiddenEventsInTimeline)) {
+        if (!haveTileForEvent(mxEv, this.showHiddenEvents)) {
             return false; // no tile = no show
         }
 
@@ -574,7 +578,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
             if (grouper) {
                 if (grouper.shouldGroup(mxEv)) {
-                    grouper.add(mxEv, this.context?.showHiddenEventsInTimeline);
+                    grouper.add(mxEv, this.showHiddenEvents);
                     continue;
                 } else {
                     // not part of group, so get the group tiles, close the
@@ -655,7 +659,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         // is this a continuation of the previous message?
         const continuation = !wantsDateSeparator &&
-            shouldFormContinuation(prevEvent, mxEv, this.context?.showHiddenEventsInTimeline);
+            shouldFormContinuation(prevEvent, mxEv, this.showHiddenEvents);
 
         const eventId = mxEv.getId();
         const highlight = (eventId === this.props.highlightedEventId);
