@@ -1160,7 +1160,7 @@ function isMessageEvent(ev) {
     return (messageTypes.includes(ev.getType()));
 }
 
-export function haveTileForEvent(e) {
+export function haveTileForEvent(e: MatrixEvent, showHiddenEvents?: boolean) {
     // Only messages have a tile (black-rectangle) if redacted
     if (e.isRedacted() && !isMessageEvent(e)) return false;
 
@@ -1170,7 +1170,7 @@ export function haveTileForEvent(e) {
     const handler = getHandlerTile(e);
     if (handler === undefined) return false;
     if (handler === 'messages.TextualEvent') {
-        return hasText(e);
+        return hasText(e, showHiddenEvents);
     } else if (handler === 'messages.RoomCreate') {
         return Boolean(e.getContent()['predecessor']);
     } else {
