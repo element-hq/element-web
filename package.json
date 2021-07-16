@@ -153,7 +153,7 @@
   "jest": {
     "testEnvironment": "jest-environment-jsdom-sixteen",
     "testMatch": [
-      "<rootDir>/test/**/*-test.js"
+      "<rootDir>/test/**/*-test.[tj]s"
     ],
     "setupFilesAfterEnv": [
       "<rootDir>/node_modules/matrix-react-sdk/test/setupTests.js"
