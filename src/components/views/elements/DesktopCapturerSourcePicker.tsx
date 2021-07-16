@@ -51,22 +51,22 @@ export class ExistingSource extends React.Component<ExistingSourceIProps> {
     };
 
     render() {
-        const classes = classNames({
-            mx_desktopCapturerSourcePicker_stream_button: true,
-            mx_desktopCapturerSourcePicker_stream_button_selected: this.props.selected,
+        const thumbnailClasses = classNames({
+            mx_desktopCapturerSourcePicker_source_thumbnail: true,
+            mx_desktopCapturerSourcePicker_source_thumbnail_selected: this.props.selected,
         });
 
         return (
             <AccessibleButton
-                className={classes}
+                className="mx_desktopCapturerSourcePicker_source"
                 title={this.props.source.name}
                 onClick={this.onClick}
             >
                 <img
-                    className="mx_desktopCapturerSourcePicker_stream_thumbnail"
+                    className={thumbnailClasses}
                     src={this.props.source.thumbnailURL}
                 />
-                <span className="mx_desktopCapturerSourcePicker_stream_name">{this.props.source.name}</span>
+                <span className="mx_desktopCapturerSourcePicker_source_name">{this.props.source.name}</span>
             </AccessibleButton>
         );
     }
@@ -147,7 +147,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<
         });
 
         return new Tab(type, label, null, (
-            <div className="mx_desktopCapturerSourcePicker_panel">
+            <div className="mx_desktopCapturerSourcePicker_tab">
                 { sources }
             </div>
         ));
