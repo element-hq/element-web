@@ -3420,5 +3420,16 @@
     "%(targetName)s accepted an invitation": "%(targetName)s ha aceptado una invitación",
     "%(targetName)s accepted the invitation for %(displayName)s": "%(targetName)s ha aceptado la invitación a %(displayName)s",
     "We sent the others, but the below people couldn't be invited to <RoomName/>": "Hemos enviado el resto, pero no hemos podido invitar las siguientes personas a la sala <RoomName/>",
-    "Some invites couldn't be sent": "No se han podido enviar algunas invitaciones"
+    "Some invites couldn't be sent": "No se han podido enviar algunas invitaciones",
+    "Integration manager": "Administrador de integración",
+    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s no utilizar un \"gestor de integración\" para hacer esto. Por favor, contacta con un administrador.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Usar este widget puede resultar en que se compartan datos <helpIcon /> con %(widgetDomain)s y su administrador de integración.",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Los administradores de integración reciben datos de configuración, y pueden modificar widgets, enviar invitaciones de sala, y establecer niveles de poder en tu nombre.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Utiliza un administrador de integración para gestionar los bots, los widgets y los paquetes de pegatinas.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Usar un gestor de integraciones <b>(%(serverName)s)</b> para manejar los bots, widgets y paquetes de pegatinas.",
+    "Identity server": "Servidor de identidad",
+    "Identity server (%(server)s)": "Servidor de identidad %(server)s",
+    "Could not connect to identity server": "No se ha podido conectar al servidor de identidad",
+    "Not a valid identity server (status code %(code)s)": "No es un servidor de identidad válido (código de estado %(code)s)",
+    "Identity server URL must be HTTPS": "La URL del servidor de identidad debe ser tipo HTTPS"
 }
