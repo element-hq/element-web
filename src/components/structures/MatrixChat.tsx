@@ -105,6 +105,8 @@ import VerificationRequestToast from '../views/toasts/VerificationRequestToast';
 import PerformanceMonitor, { PerformanceEntryNames } from "../../performance";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 import SoftLogout from './auth/SoftLogout';
+import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
+import { copyPlaintext } from "../../utils/strings";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -626,6 +628,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case 'forget_room':
                 this.forgetRoom(payload.room_id);
+                break;
+            case 'copy_room':
+                this.copyRoom(payload.room_id);
                 break;
             case 'reject_invite':
                 Modal.createTrackedDialog('Reject invitation', '', QuestionDialog, {
@@ -1191,6 +1196,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
         });
+    }
+
+    private async copyRoom(roomId: string) {
+        const roomLink = makeRoomPermalink(roomId);
+        const success = await copyPlaintext(roomLink);
+        if (!success) {
+            Modal.createTrackedDialog("Unable to copy room link", "", ErrorDialog, {
+                title: _t("Unable to copy room link"),
+                description: _t("Unable to copy a link to the room to the clipboard."),
+            });
+        }
     }
 
     /**
