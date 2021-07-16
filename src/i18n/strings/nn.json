@@ -1381,5 +1381,7 @@
     "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Vi tilrår at du slettar personleg informasjon, som e-postadresser og telefonnummer frå identitetstenaren før du koplar frå.",
     "Privacy": "Personvern",
     "Versions": "Versjonar",
-    "Legal": "Juridisk"
+    "Legal": "Juridisk",
+    "Identity server is": "Identitetstenaren er",
+    "Identity server": "Identitetstenar"
 }
