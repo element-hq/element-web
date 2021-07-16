@@ -415,7 +415,10 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
     // Overidden by MStickerBody
     protected getFileBody(): JSX.Element {
-        return <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />;
+        // We only ever need the download bar if we're appearing outside of the timeline
+        if (this.props.tileShape) {
+            return <MFileBody {...this.props} showGenericPlaceholder={false} />;
+        }
     }
 
     render() {

@@ -15,18 +15,15 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-import PropTypes from 'prop-types';
 import filesize from 'filesize';
 import { _t } from '../../../languageHandler';
-import { decryptFile } from '../../../utils/DecryptFile';
 import Modal from '../../../Modal';
 import AccessibleButton from "../elements/AccessibleButton";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromContent } from "../../../customisations/Media";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { TileShape } from "../rooms/EventTile";
-import { IContent, MatrixEvent } from "matrix-js-sdk/src";
-import { MediaEventHelper } from "../../../utils/MediaEventHelper";
+import { IContent } from "matrix-js-sdk/src";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 import { IBodyProps } from "./IBodyProps";
 
@@ -181,6 +178,8 @@ export default class MFileBody extends React.Component<IProps, IState> {
             );
         }
 
+        const showDownloadLink = this.props.tileShape || !this.props.showGenericPlaceholder;
+
         if (isEncrypted) {
             if (!this.state.decryptedBlob) {
                 // Need to decrypt the attachment
@@ -205,12 +204,12 @@ export default class MFileBody extends React.Component<IProps, IState> {
                 // but it is not guaranteed between various browsers' settings.
                 return (
                     <span className="mx_MFileBody">
-                        {placeholder}
-                        <div className="mx_MFileBody_download">
+                        { placeholder }
+                        { showDownloadLink && <div className="mx_MFileBody_download">
                             <AccessibleButton onClick={decrypt}>
                                 { _t("Decrypt %(text)s", { text: text }) }
                             </AccessibleButton>
-                        </div>
+                        </div> }
                     </span>
                 );
             }
@@ -237,8 +236,8 @@ export default class MFileBody extends React.Component<IProps, IState> {
             // If the attachment is encrypted then put the link inside an iframe.
             return (
                 <span className="mx_MFileBody">
-                    {placeholder}
-                    <div className="mx_MFileBody_download">
+                    { placeholder }
+                    { showDownloadLink && <div className="mx_MFileBody_download">
                         <div style={{ display: "none" }}>
                             { /*
                               * Add dummy copy of the "a" tag
@@ -252,7 +251,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
                             onLoad={onIframeLoad}
                             ref={this.iframe}
                             sandbox="allow-scripts allow-downloads allow-downloads-without-user-activation" />
-                    </div>
+                    </div> }
                 </span>
             );
         } else if (contentUrl) {
@@ -300,40 +299,24 @@ export default class MFileBody extends React.Component<IProps, IState> {
                 downloadProps["download"] = fileName;
             }
 
-            // If the attachment is not encrypted then we check whether we
-            // are being displayed in the room timeline or in a list of
-            // files in the right hand side of the screen.
-            if (this.props.tileShape === TileShape.FileGrid) {
-                return (
-                    <span className="mx_MFileBody">
-                        {placeholder}
-                        <div className="mx_MFileBody_download">
-                            <a className="mx_MFileBody_downloadLink" {...downloadProps}>
-                                { fileName }
-                            </a>
-                            <div className="mx_MImageBody_size">
-                                { content.info && content.info.size ? filesize(content.info.size) : "" }
-                            </div>
-                        </div>
-                    </span>
-                );
-            } else {
-                return (
-                    <span className="mx_MFileBody">
-                        {placeholder}
-                        <div className="mx_MFileBody_download">
-                            <a {...downloadProps}>
-                                <span className="mx_MFileBody_download_icon" />
-                                { _t("Download %(text)s", { text: text }) }
-                            </a>
-                        </div>
-                    </span>
-                );
-            }
+            return (
+                <span className="mx_MFileBody">
+                    { placeholder }
+                    { showDownloadLink && <div className="mx_MFileBody_download">
+                        <a {...downloadProps}>
+                            <span className="mx_MFileBody_download_icon" />
+                            { _t("Download %(text)s", { text: text }) }
+                        </a>
+                        { this.props.tileShape === TileShape.FileGrid && <div className="mx_MImageBody_size">
+                            { content.info && content.info.size ? filesize(content.info.size) : "" }
+                        </div>}
+                    </div> }
+                </span>
+            );
         } else {
             const extra = text ? (': ' + text) : '';
             return <span className="mx_MFileBody">
-                {placeholder}
+                { placeholder }
                 { _t("Invalid file%(extra)s", { extra: extra }) }
             </span>;
         }

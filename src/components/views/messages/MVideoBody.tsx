@@ -25,6 +25,7 @@ import { mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD } from "../../../ContentMessages";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 import { IBodyProps } from "./IBodyProps";
+import MFileBody from "./MFileBody";
 
 interface IState {
     decryptedUrl?: string;
@@ -268,7 +269,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
                     onPlay={this.videoOnPlay}
                 >
                 </video>
-                {/*<MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />*/}
+                { this.props.tileShape && <MFileBody {...this.props} showGenericPlaceholder={false} /> }
             </span>
         );
     }

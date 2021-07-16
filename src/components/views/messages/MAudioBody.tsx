@@ -97,7 +97,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         return (
             <span className="mx_MAudioBody">
                 <AudioPlayer playback={this.state.playback} mediaName={this.props.mxEvent.getContent().body} />
-                {/*<MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />*/}
+                { this.props.tileShape && <MFileBody {...this.props} showGenericPlaceholder={false} /> }
             </span>
         );
     }

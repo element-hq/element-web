@@ -20,6 +20,7 @@ import InlineSpinner from '../elements/InlineSpinner';
 import { _t } from "../../../languageHandler";
 import RecordingPlayback from "../audio_messages/RecordingPlayback";
 import MAudioBody from "./MAudioBody";
+import MFileBody from "./MFileBody";
 
 @replaceableComponent("views.messages.MVoiceMessageBody")
 export default class MVoiceMessageBody extends MAudioBody {
@@ -50,7 +51,7 @@ export default class MVoiceMessageBody extends MAudioBody {
         return (
             <span className="mx_MVoiceMessageBody">
                 <RecordingPlayback playback={this.state.playback} tileShape={this.props.tileShape} />
-                {/*<MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />*/}
+                { this.props.tileShape && <MFileBody {...this.props} showGenericPlaceholder={false} /> }
             </span>
         );
     }
