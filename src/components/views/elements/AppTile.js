@@ -39,7 +39,6 @@ import { MatrixCapabilities } from "matrix-widget-api";
 import RoomWidgetContextMenu from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { urlSearchParamsToObject } from "../../../utils/UrlUtils";
 
 @replaceableComponent("views.elements.AppTile")
 export default class AppTile extends React.Component {

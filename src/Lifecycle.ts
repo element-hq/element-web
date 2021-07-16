@@ -21,6 +21,7 @@ import { createClient } from 'matrix-js-sdk/src/matrix';
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { decryptAES, encryptAES, IEncryptedPayload } from "matrix-js-sdk/src/crypto/aes";
+import { QueryDict } from 'matrix-js-sdk/src/utils';
 
 import { IMatrixClientCreds, MatrixClientPeg } from './MatrixClientPeg';
 import SecurityCustomisations from "./customisations/Security";
@@ -65,7 +66,7 @@ interface ILoadSessionOpts {
     guestIsUrl?: string;
     ignoreGuest?: boolean;
     defaultDeviceDisplayName?: string;
-    fragmentQueryParams?: Record<string, string>;
+    fragmentQueryParams?: QueryDict;
 }
 
 /**
@@ -118,8 +119,8 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
         ) {
             console.log("Using guest access credentials");
             return doSetLoggedIn({
-                userId: fragmentQueryParams.guest_user_id,
-                accessToken: fragmentQueryParams.guest_access_token,
+                userId: fragmentQueryParams.guest_user_id as string,
+                accessToken: fragmentQueryParams.guest_access_token as string,
                 homeserverUrl: guestHsUrl,
                 identityServerUrl: guestIsUrl,
                 guest: true,
@@ -173,7 +174,7 @@ export async function getStoredSessionOwner(): Promise<[string, boolean]> {
  *    login, else false
  */
 export function attemptTokenLogin(
-    queryParams: Record<string, string>,
+    queryParams: QueryDict,
     defaultDeviceDisplayName?: string,
     fragmentAfterLogin?: string,
 ): Promise<boolean> {
@@ -198,7 +199,7 @@ export function attemptTokenLogin(
         homeserver,
         identityServer,
         "m.login.token", {
-            token: queryParams.loginToken,
+            token: queryParams.loginToken as string,
             initial_device_display_name: defaultDeviceDisplayName,
         },
     ).then(function(creds) {
