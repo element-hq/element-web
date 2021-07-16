@@ -535,7 +535,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                     />
                     <IconizedContextMenuOption
                         onClick={this.onCopyRoomClick}
-                        label={_t("Copy")}
+                        label={_t("Copy Link")}
                         iconClassName="mx_RoomTile_iconSettings"
                     />
                 </IconizedContextMenuOptionList>
