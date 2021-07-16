@@ -1630,5 +1630,14 @@
     "Send text messages as you in this room": "Надіслати текстові повідомлення у цю кімнату від свого імені",
     "Send messages as you in your active room": "Надіслати повідомлення у свою активну кімнату від свого імені",
     "Send messages as you in this room": "Надіслати повідомлення у цю кімнату від свого імені",
-    "Sends the given message as a spoiler": "Надсилає вказане повідомлення згорненим"
+    "Sends the given message as a spoiler": "Надсилає вказане повідомлення згорненим",
+    "Integration manager": "Менеджер інтеграцій",
+    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Ваш %(brand)s не дозволяє вам використовувати для цього менеджер інтеграцій. Зверніться, будь ласка, до адміністратора.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Користування цим знадобом може призвести до поширення ваших даних <helpIcon /> з %(widgetDomain)s та вашим менеджером інтеграцій.",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Менеджери інтеграцій отримують дані конфігурації та можуть змінювати знадоби, надсилати запрошення у кімнати й встановлювати рівні повноважень від вашого імені.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Використовувати менеджер інтеграцій для керування ботами, знадобами та паками наліпок.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Використовувати менеджер інтеграцій <b>%(serverName)s</b> для керування ботами, знадобами та паками наліпок.",
+    "Identity server": "Сервер ідентифікації",
+    "Identity server (%(server)s)": "Сервер ідентифікації (%(server)s)",
+    "Could not connect to identity server": "Неможливо під'єднатись до сервера ідентифікації"
 }
