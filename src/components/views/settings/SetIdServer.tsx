@@ -44,7 +44,7 @@ const REACHABILITY_TIMEOUT = 10000; // ms
 async function checkIdentityServerUrl(u) {
     const parsedUrl = url.parse(u);
 
-    if (parsedUrl.protocol !== 'https:') return _t("Identity Server URL must be HTTPS");
+    if (parsedUrl.protocol !== 'https:') return _t("Identity server URL must be HTTPS");
 
     // XXX: duplicated logic from js-sdk but it's quite tied up in the validation logic in the
     // js-sdk so probably as easy to duplicate it than to separate it out so we can reuse it
@@ -53,17 +53,17 @@ async function checkIdentityServerUrl(u) {
         if (response.ok) {
             return null;
         } else if (response.status < 200 || response.status >= 300) {
-            return _t("Not a valid Identity Server (status code %(code)s)", { code: response.status });
+            return _t("Not a valid identity server (status code %(code)s)", { code: response.status });
         } else {
-            return _t("Could not connect to Identity Server");
+            return _t("Could not connect to identity server");
         }
     } catch (e) {
-        return _t("Could not connect to Identity Server");
+        return _t("Could not connect to identity server");
     }
 }
 
 interface IProps {
-    // Whether or not the ID server is missing terms. This affects the text
+    // Whether or not the identity server is missing terms. This affects the text
     // shown to the user.
     missingTerms: boolean;
 }
@@ -87,7 +87,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
 
         let defaultIdServer = '';
         if (!MatrixClientPeg.get().getIdentityServerUrl() && getDefaultIdentityServerUrl()) {
-            // If no ID server is configured but there's one in the config, prepopulate
+            // If no identity server is configured but there's one in the config, prepopulate
             // the field to help the user.
             defaultIdServer = abbreviateUrl(getDefaultIdentityServerUrl());
         }
@@ -112,7 +112,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
     }
 
     private onAction = (payload: ActionPayload) => {
-        // We react to changes in the ID server in the event the user is staring at this form
+        // We react to changes in the identity server in the event the user is staring at this form
         // when changing their identity server on another device.
         if (payload.action !== "id_server_changed") return;
 
@@ -356,7 +356,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         let sectionTitle;
         let bodyText;
         if (idServerUrl) {
-            sectionTitle = _t("Identity Server (%(server)s)", { server: abbreviateUrl(idServerUrl) });
+            sectionTitle = _t("Identity server (%(server)s)", { server: abbreviateUrl(idServerUrl) });
             bodyText = _t(
                 "You are currently using <server></server> to discover and be discoverable by " +
                 "existing contacts you know. You can change your identity server below.",
@@ -371,7 +371,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 );
             }
         } else {
-            sectionTitle = _t("Identity Server");
+            sectionTitle = _t("Identity server");
             bodyText = _t(
                 "You are not currently using an identity server. " +
                 "To discover and be discoverable by existing contacts you know, " +

@@ -364,8 +364,8 @@ export default class CountlyAnalytics {
 
     private initTime = CountlyAnalytics.getTimestamp();
     private firstPage = true;
-    private heartbeatIntervalId: NodeJS.Timeout;
-    private activityIntervalId: NodeJS.Timeout;
+    private heartbeatIntervalId: number;
+    private activityIntervalId: number;
     private trackTime = true;
     private lastBeat: number;
     private storedDuration = 0;

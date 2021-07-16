@@ -1055,6 +1055,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
             { windowLimit: this.props.timelineCap });
 
         const onLoaded = () => {
+            if (this.unmounted) return;
+
             // clear the timeline min-height when
             // (re)loading the timeline
             if (this.messagePanel.current) {
@@ -1096,6 +1098,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
         };
 
         const onError = (error) => {
+            if (this.unmounted) return;
+
             this.setState({ timelineLoading: false });
             console.error(
                 `Error loading timeline panel at ${eventId}: ${error}`,
