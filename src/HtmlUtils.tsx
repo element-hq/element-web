@@ -34,7 +34,7 @@ import { IExtendedSanitizeOptions } from './@types/sanitize-html';
 import linkifyMatrix from './linkify-matrix';
 import SettingsStore from './settings/SettingsStore';
 import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";
-import { getEmojiFromUnicode, getShortcodes } from "./emoji";
+import { getEmojiFromUnicode } from "./emoji";
 import ReplyThread from "./components/views/elements/ReplyThread";
 import { mediaFromMxc } from "./customisations/Media";
 
@@ -80,7 +80,7 @@ function mightContainEmoji(str: string): boolean {
  * @return {String} The shortcode (such as :thumbup:)
  */
 export function unicodeToShortcode(char: string): string {
-    const shortcodes = getShortcodes(getEmojiFromUnicode(char));
+    const shortcodes = getEmojiFromUnicode(char).shortcodes;
     return shortcodes.length > 0 ? `:${shortcodes[0]}:` : '';
 }
 

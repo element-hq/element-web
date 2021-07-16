@@ -25,7 +25,7 @@ import { PillCompletion } from './Components';
 import { ICompletion, ISelectionRange } from './Autocompleter';
 import { uniq, sortBy } from 'lodash';
 import SettingsStore from "../settings/SettingsStore";
-import { EMOJI, IEmoji, getShortcodes } from '../emoji';
+import { EMOJI, IEmoji } from '../emoji';
 
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
 
@@ -37,8 +37,6 @@ const EMOJI_REGEX = new RegExp('(' + EMOTICON_REGEX.source + '|(?:^|\\s):[+-\\w]
 
 interface IEmojiShort {
     emoji: IEmoji;
-    shortcode: string;
-    altShortcodes: string[];
     _orderBy: number;
 }
 
@@ -47,16 +45,11 @@ const EMOJI_SHORTCODES: IEmojiShort[] = EMOJI.sort((a, b) => {
         return a.order - b.order;
     }
     return a.group - b.group;
-}).map((emoji, index) => {
-    const [shortcode, ...altShortcodes] = getShortcodes(emoji);
-    return {
-        emoji,
-        shortcode: shortcode ? `:${shortcode}:` : undefined,
-        altShortcodes: altShortcodes.map(s => `:${s}:`),
-        // Include the index so that we can preserve the original order
-        _orderBy: index,
-    };
-}).filter(emoji => emoji.shortcode);
+}).map((emoji, index) => ({
+    emoji,
+    // Include the index so that we can preserve the original order
+    _orderBy: index,
+})).filter(o => o.emoji.shortcodes[0]);
 
 function score(query, space) {
     const index = space.indexOf(query);
@@ -74,10 +67,8 @@ export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
         super(EMOJI_REGEX);
         this.matcher = new QueryMatcher<IEmojiShort>(EMOJI_SHORTCODES, {
-            keys: ['emoji.emoticon', 'shortcode'],
-            funcs: [
-                o => o.altShortcodes.join(" "), // aliases
-            ],
+            keys: ['emoji.emoticon'],
+            funcs: [o => o.emoji.shortcodes.map(s => `:${s}:`).join(" ")],
             // For matching against ascii equivalents
             shouldMatchWordsOnly: false,
         });
@@ -112,16 +103,16 @@ export default class EmojiProvider extends AutocompleteProvider {
             sorters.push(c => score(matchedString, c.emoji.emoticon || ""));
 
             // then sort by score (Infinity if matchedString not in shortcode)
-            sorters.push(c => score(matchedString, c.shortcode));
+            sorters.push(c => score(matchedString, c.emoji.shortcodes[0]));
             // then sort by max score of all shortcodes, trim off the `:`
             sorters.push(c => Math.min(
-                ...[c.shortcode, ...c.altShortcodes].map(s => score(matchedString.substring(1), s)),
+                ...c.emoji.shortcodes.map(s => score(matchedString.substring(1), s)),
             ));
             // If the matchedString is not empty, sort by length of shortcode. Example:
             //  matchedString = ":bookmark"
             //  completions = [":bookmark:", ":bookmark_tabs:", ...]
             if (matchedString.length > 1) {
-                sorters.push(c => c.shortcode.length);
+                sorters.push(c => c.emoji.shortcodes[0].length);
             }
             // Finally, sort by original ordering
             sorters.push(c => c._orderBy);
@@ -130,7 +121,7 @@ export default class EmojiProvider extends AutocompleteProvider {
             completions = completions.map(c => ({
                 completion: c.emoji.unicode,
                 component: (
-                    <PillCompletion title={c.shortcode} aria-label={c.emoji.unicode}>
+                    <PillCompletion title={`:${c.emoji.shortcodes[0]}:`} aria-label={c.emoji.unicode}>
                         <span>{ c.emoji.unicode }</span>
                     </PillCompletion>
                 ),
