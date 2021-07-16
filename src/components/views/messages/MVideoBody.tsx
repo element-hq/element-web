@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,17 +23,8 @@ import InlineSpinner from '../elements/InlineSpinner';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD } from "../../../ContentMessages";
-import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
-import { MatrixEvent } from "matrix-js-sdk/src";
-
-interface IProps {
-    /* the MatrixEvent to show */
-    mxEvent: MatrixEvent;
-    /* called when the video has loaded */
-    onHeightChanged: () => void;
-    mediaEventHelper: MediaEventHelper;
-}
+import { IBodyProps } from "./IBodyProps";
 
 interface IState {
     decryptedUrl?: string;
@@ -47,7 +37,7 @@ interface IState {
 }
 
 @replaceableComponent("views.messages.MVideoBody")
-export default class MVideoBody extends React.PureComponent<IProps, IState> {
+export default class MVideoBody extends React.PureComponent<IBodyProps, IState> {
     private videoRef = React.createRef<HTMLVideoElement>();
 
     constructor(props) {

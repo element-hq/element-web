@@ -15,21 +15,14 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { Playback } from "../../../voice/Playback";
 import InlineSpinner from '../elements/InlineSpinner';
 import { _t } from "../../../languageHandler";
 import AudioPlayer from "../audio_messages/AudioPlayer";
-import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
-import { TileShape } from "../rooms/EventTile";
-
-interface IProps {
-    mxEvent: MatrixEvent;
-    tileShape?: TileShape;
-    mediaEventHelper: MediaEventHelper;
-}
+import MFileBody from "./MFileBody";
+import { IBodyProps } from "./IBodyProps";
 
 interface IState {
     error?: Error;
@@ -37,8 +30,8 @@ interface IState {
 }
 
 @replaceableComponent("views.messages.MAudioBody")
-export default class MAudioBody extends React.PureComponent<IProps, IState> {
-    constructor(props: IProps) {
+export default class MAudioBody extends React.PureComponent<IBodyProps, IState> {
+    constructor(props: IBodyProps) {
         super(props);
 
         this.state = {};

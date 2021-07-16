@@ -22,45 +22,17 @@ import RedactedBody from "./RedactedBody";
 import UnknownBody from "./UnknownBody";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { IMediaBody } from "./IMediaBody";
-import { MatrixEvent } from "matrix-js-sdk/src";
-import { TileShape } from "../rooms/EventTile";
-import PermalinkConstructor from "../../../utils/permalinks/PermalinkConstructor";
 import { IOperableEventTile } from "../context_menus/MessageContextMenu";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { ReactAnyComponent } from "../../../@types/common";
 import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
+import { IBodyProps } from "./IBodyProps";
 
-interface IProps {
-    /* the MatrixEvent to show */
-    mxEvent: MatrixEvent;
-
-    /* a list of words to highlight */
-    highlights: string[];
-
-    /* link URL for the highlights */
-    highlightLink: string;
-
-    /* should show URL previews for this event */
-    showUrlPreview: boolean;
-
-    /* callback called when dynamic content in events are loaded */
-    onHeightChanged: () => void;
-
-    /* the shape of the tile, used */
-    tileShape: TileShape;
-
-    /* the maximum image height to use, if the event is an image */
-    maxImageHeight?: number;
-
+// onMessageAllowed is handled internally
+interface IProps extends Omit<IBodyProps, "onMessageAllowed"> {
     /* overrides for the msgtype-specific components, used by ReplyTile to override file rendering */
     overrideBodyTypes?: Record<string, React.Component>;
     overrideEventTypes?: Record<string, React.Component>;
-
-    /* the permalinkCreator */
-    permalinkCreator: PermalinkConstructor;
-
-    replacingEventId?: string;
-    editState?: unknown;
 }
 
 @replaceableComponent("views.messages.MessageEvent")

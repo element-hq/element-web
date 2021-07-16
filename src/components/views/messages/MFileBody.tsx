@@ -28,6 +28,7 @@ import { TileShape } from "../rooms/EventTile";
 import { IContent, MatrixEvent } from "matrix-js-sdk/src";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
+import { IBodyProps } from "./IBodyProps";
 
 let downloadIconUrl; // cached copy of the download.svg asset for the sandboxed iframe later on
 
@@ -123,17 +124,9 @@ export function presentableTextForFile(content: IContent, withSize = true): stri
     return linkText;
 }
 
-interface IProps {
-    /* the MatrixEvent to show */
-    mxEvent: MatrixEvent;
-    /* called when the download link iframe is shown */
-    onHeightChanged: () => void;
-    /* the shape of the tile, used */
-    tileShape: TileShape;
+interface IProps extends IBodyProps {
     /* whether or not to show the default placeholder for the file. Defaults to true. */
     showGenericPlaceholder: boolean;
-    /* helper which contains the file access */
-    mediaEventHelper: MediaEventHelper;
 }
 
 interface IState {

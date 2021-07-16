@@ -27,26 +27,10 @@ import InlineSpinner from '../elements/InlineSpinner';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD } from "../../../ContentMessages";
-import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { IMediaEventContent } from '../../../customisations/models/IMediaEventContent';
 import ImageView from '../elements/ImageView';
 import { SyncState } from 'matrix-js-sdk/src/sync.api';
-import { MediaEventHelper } from "../../../utils/MediaEventHelper";
-
-export interface IProps {
-    /* the MatrixEvent to show */
-    mxEvent: MatrixEvent;
-    /* called when the image has loaded */
-    onHeightChanged(): void;
-
-    /* the maximum image height to use */
-    maxImageHeight?: number;
-
-    /* the permalinkCreator */
-    permalinkCreator?: RoomPermalinkCreator;
-    mediaEventHelper: MediaEventHelper;
-}
+import { IBodyProps } from "./IBodyProps";
 
 interface IState {
     decryptedUrl?: string;
@@ -64,12 +48,12 @@ interface IState {
 }
 
 @replaceableComponent("views.messages.MImageBody")
-export default class MImageBody extends React.Component<IProps, IState> {
+export default class MImageBody extends React.Component<IBodyProps, IState> {
     static contextType = MatrixClientContext;
     private unmounted = true;
     private image = createRef<HTMLImageElement>();
 
-    constructor(props: IProps) {
+    constructor(props: IBodyProps) {
         super(props);
 
         this.state = {
