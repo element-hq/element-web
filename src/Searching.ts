@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,26 +14,42 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import {
+    IResultRoomEvents,
+    ISearchRequestBody,
+    ISearchResponse,
+    ISearchResult,
+    ISearchResults,
+    SearchOrderBy,
+} from "matrix-js-sdk/src/@types/search";
+import { IRoomEventFilter } from "matrix-js-sdk/src/filter";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+
+import { ISearchArgs } from "./indexing/BaseEventIndexManager";
 import EventIndexPeg from "./indexing/EventIndexPeg";
 import { MatrixClientPeg } from "./MatrixClientPeg";
+import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 
 const SEARCH_LIMIT = 10;
 
-async function serverSideSearch(term, roomId = undefined) {
+async function serverSideSearch(
+    term: string,
+    roomId: string = undefined,
+): Promise<{ response: ISearchResponse, query: ISearchRequestBody }> {
     const client = MatrixClientPeg.get();
 
-    const filter = {
+    const filter: IRoomEventFilter = {
         limit: SEARCH_LIMIT,
     };
 
     if (roomId !== undefined) filter.rooms = [roomId];
 
-    const body = {
+    const body: ISearchRequestBody = {
         search_categories: {
             room_events: {
                 search_term: term,
                 filter: filter,
-                order_by: "recent",
+                order_by: SearchOrderBy.Recent,
                 event_context: {
                     before_limit: 1,
                     after_limit: 1,
@@ -45,31 +61,26 @@ async function serverSideSearch(term, roomId = undefined) {
 
     const response = await client.search({ body: body });
 
-    const result = {
-        response: response,
-        query: body,
-    };
-
-    return result;
+    return { response, query: body };
 }
 
-async function serverSideSearchProcess(term, roomId = undefined) {
+async function serverSideSearchProcess(term: string, roomId: string = undefined): Promise<ISearchResults> {
     const client = MatrixClientPeg.get();
     const result = await serverSideSearch(term, roomId);
 
     // The js-sdk method backPaginateRoomEventsSearch() uses _query internally
-    // so we're reusing the concept here since we wan't to delegate the
+    // so we're reusing the concept here since we want to delegate the
     // pagination back to backPaginateRoomEventsSearch() in some cases.
-    const searchResult = {
+    const searchResults: ISearchResults = {
         _query: result.query,
         results: [],
         highlights: [],
     };
 
-    return client.processRoomEventsSearch(searchResult, result.response);
+    return client.processRoomEventsSearch(searchResults, result.response);
 }
 
-function compareEvents(a, b) {
+function compareEvents(a: ISearchResult, b: ISearchResult): number {
     const aEvent = a.result;
     const bEvent = b.result;
 
@@ -79,7 +90,7 @@ function compareEvents(a, b) {
     return 0;
 }
 
-async function combinedSearch(searchTerm) {
+async function combinedSearch(searchTerm: string): Promise<ISearchResults> {
     const client = MatrixClientPeg.get();
 
     // Create two promises, one for the local search, one for the
@@ -111,10 +122,10 @@ async function combinedSearch(searchTerm) {
     // returns since that one can be either a server-side one, a local one or a
     // fake one to fetch the remaining cached events. See the docs for
     // combineEvents() for an explanation why we need to cache events.
-    const emptyResult = {
+    const emptyResult: ISeshatSearchResults = {
         seshatQuery: localQuery,
         _query: serverQuery,
-        serverSideNextBatch: serverResponse.next_batch,
+        serverSideNextBatch: serverResponse.search_categories.room_events.next_batch,
         cachedEvents: [],
         oldestEventFrom: "server",
         results: [],
@@ -125,7 +136,7 @@ async function combinedSearch(searchTerm) {
     const combinedResult = combineResponses(emptyResult, localResponse, serverResponse.search_categories.room_events);
 
     // Let the client process the combined result.
-    const response = {
+    const response: ISearchResponse = {
         search_categories: {
             room_events: combinedResult,
         },
@@ -139,10 +150,14 @@ async function combinedSearch(searchTerm) {
     return result;
 }
 
-async function localSearch(searchTerm, roomId = undefined, processResult = true) {
+async function localSearch(
+    searchTerm: string,
+    roomId: string = undefined,
+    processResult = true,
+): Promise<{ response: IResultRoomEvents, query: ISearchArgs }> {
     const eventIndex = EventIndexPeg.get();
 
-    const searchArgs = {
+    const searchArgs: ISearchArgs = {
         search_term: searchTerm,
         before_limit: 1,
         after_limit: 1,
@@ -167,11 +182,18 @@ async function localSearch(searchTerm, roomId = undefined, processResult = true)
     return result;
 }
 
-async function localSearchProcess(searchTerm, roomId = undefined) {
+export interface ISeshatSearchResults extends ISearchResults {
+    seshatQuery?: ISearchArgs;
+    cachedEvents?: ISearchResult[];
+    oldestEventFrom?: "local" | "server";
+    serverSideNextBatch?: string;
+}
+
+async function localSearchProcess(searchTerm: string, roomId: string = undefined): Promise<ISeshatSearchResults> {
     const emptyResult = {
         results: [],
         highlights: [],
-    };
+    } as ISeshatSearchResults;
 
     if (searchTerm === "") return emptyResult;
 
@@ -179,7 +201,7 @@ async function localSearchProcess(searchTerm, roomId = undefined) {
 
     emptyResult.seshatQuery = result.query;
 
-    const response = {
+    const response: ISearchResponse = {
         search_categories: {
             room_events: result.response,
         },
@@ -192,7 +214,7 @@ async function localSearchProcess(searchTerm, roomId = undefined) {
     return processedResult;
 }
 
-async function localPagination(searchResult) {
+async function localPagination(searchResult: ISeshatSearchResults): Promise<ISeshatSearchResults> {
     const eventIndex = EventIndexPeg.get();
 
     const searchArgs = searchResult.seshatQuery;
@@ -221,10 +243,10 @@ async function localPagination(searchResult) {
     return result;
 }
 
-function compareOldestEvents(firstResults, secondResults) {
+function compareOldestEvents(firstResults: ISearchResult[], secondResults: ISearchResult[]): number {
     try {
-        const oldestFirstEvent = firstResults.results[firstResults.results.length - 1].result;
-        const oldestSecondEvent = secondResults.results[secondResults.results.length - 1].result;
+        const oldestFirstEvent = firstResults[firstResults.length - 1].result;
+        const oldestSecondEvent = secondResults[secondResults.length - 1].result;
 
         if (oldestFirstEvent.origin_server_ts <= oldestSecondEvent.origin_server_ts) {
             return -1;
@@ -236,7 +258,12 @@ function compareOldestEvents(firstResults, secondResults) {
     }
 }
 
-function combineEventSources(previousSearchResult, response, a, b) {
+function combineEventSources(
+    previousSearchResult: ISeshatSearchResults,
+    response: IResultRoomEvents,
+    a: ISearchResult[],
+    b: ISearchResult[],
+): void {
     // Merge event sources and sort the events.
     const combinedEvents = a.concat(b).sort(compareEvents);
     // Put half of the events in the response, and cache the other half.
@@ -353,8 +380,12 @@ function combineEventSources(previousSearchResult, response, a, b) {
  * different event sources.
  *
  */
-function combineEvents(previousSearchResult, localEvents = undefined, serverEvents = undefined) {
-    const response = {};
+function combineEvents(
+    previousSearchResult: ISeshatSearchResults,
+    localEvents: IResultRoomEvents = undefined,
+    serverEvents: IResultRoomEvents = undefined,
+): IResultRoomEvents {
+    const response = {} as IResultRoomEvents;
 
     const cachedEvents = previousSearchResult.cachedEvents;
     let oldestEventFrom = previousSearchResult.oldestEventFrom;
@@ -364,7 +395,7 @@ function combineEvents(previousSearchResult, localEvents = undefined, serverEven
         // This is a first search call, combine the events from the server and
         // the local index. Note where our oldest event came from, we shall
         // fetch the next batch of events from the other source.
-        if (compareOldestEvents(localEvents, serverEvents) < 0) {
+        if (compareOldestEvents(localEvents.results, serverEvents.results) < 0) {
             oldestEventFrom = "local";
         }
 
@@ -375,7 +406,7 @@ function combineEvents(previousSearchResult, localEvents = undefined, serverEven
         // meaning that our oldest event was on the server.
         // Change the source of the oldest event if our local event is older
         // than the cached one.
-        if (compareOldestEvents(localEvents, cachedEvents) < 0) {
+        if (compareOldestEvents(localEvents.results, cachedEvents) < 0) {
             oldestEventFrom = "local";
         }
         combineEventSources(previousSearchResult, response, localEvents.results, cachedEvents);
@@ -384,7 +415,7 @@ function combineEvents(previousSearchResult, localEvents = undefined, serverEven
         // meaning that our oldest event was in the local index.
         // Change the source of the oldest event if our server event is older
         // than the cached one.
-        if (compareOldestEvents(serverEvents, cachedEvents) < 0) {
+        if (compareOldestEvents(serverEvents.results, cachedEvents) < 0) {
             oldestEventFrom = "server";
         }
         combineEventSources(previousSearchResult, response, serverEvents.results, cachedEvents);
@@ -412,7 +443,11 @@ function combineEvents(previousSearchResult, localEvents = undefined, serverEven
  * @return {object} A response object that combines the events from the
  * different event sources.
  */
-function combineResponses(previousSearchResult, localEvents = undefined, serverEvents = undefined) {
+function combineResponses(
+    previousSearchResult: ISeshatSearchResults,
+    localEvents: IResultRoomEvents = undefined,
+    serverEvents: IResultRoomEvents = undefined,
+): IResultRoomEvents {
     // Combine our events first.
     const response = combineEvents(previousSearchResult, localEvents, serverEvents);
 
@@ -454,42 +489,51 @@ function combineResponses(previousSearchResult, localEvents = undefined, serverE
     return response;
 }
 
-function restoreEncryptionInfo(searchResultSlice = []) {
+interface IEncryptedSeshatEvent {
+    curve25519Key: string;
+    ed25519Key: string;
+    algorithm: string;
+    forwardingCurve25519KeyChain: string[];
+}
+
+function restoreEncryptionInfo(searchResultSlice: SearchResult[] = []): void {
     for (let i = 0; i < searchResultSlice.length; i++) {
         const timeline = searchResultSlice[i].context.getTimeline();
 
         for (let j = 0; j < timeline.length; j++) {
-            const ev = timeline[j];
+            const mxEv = timeline[j];
+            const ev = mxEv.event as IEncryptedSeshatEvent;
 
-            if (ev.event.curve25519Key) {
-                ev.makeEncrypted(
-                    "m.room.encrypted",
-                    { algorithm: ev.event.algorithm },
-                    ev.event.curve25519Key,
-                    ev.event.ed25519Key,
+            if (ev.curve25519Key) {
+                mxEv.makeEncrypted(
+                    EventType.RoomMessageEncrypted,
+                    { algorithm: ev.algorithm },
+                    ev.curve25519Key,
+                    ev.ed25519Key,
                 );
-                ev.forwardingCurve25519KeyChain = ev.event.forwardingCurve25519KeyChain;
+                // @ts-ignore
+                mxEv.forwardingCurve25519KeyChain = ev.forwardingCurve25519KeyChain;
 
-                delete ev.event.curve25519Key;
-                delete ev.event.ed25519Key;
-                delete ev.event.algorithm;
-                delete ev.event.forwardingCurve25519KeyChain;
+                delete ev.curve25519Key;
+                delete ev.ed25519Key;
+                delete ev.algorithm;
+                delete ev.forwardingCurve25519KeyChain;
             }
         }
     }
 }
 
-async function combinedPagination(searchResult) {
+async function combinedPagination(searchResult: ISeshatSearchResults): Promise<ISeshatSearchResults> {
     const eventIndex = EventIndexPeg.get();
     const client = MatrixClientPeg.get();
 
     const searchArgs = searchResult.seshatQuery;
     const oldestEventFrom = searchResult.oldestEventFrom;
 
-    let localResult;
-    let serverSideResult;
+    let localResult: IResultRoomEvents;
+    let serverSideResult: ISearchResponse;
 
-    // Fetch events from the local index if we have a token for itand if it's
+    // Fetch events from the local index if we have a token for it and if it's
     // the local indexes turn or the server has exhausted its results.
     if (searchArgs.next_batch && (!searchResult.serverSideNextBatch || oldestEventFrom === "server")) {
         localResult = await eventIndex.search(searchArgs);
@@ -502,7 +546,7 @@ async function combinedPagination(searchResult) {
         serverSideResult = await client.search(body);
     }
 
-    let serverEvents;
+    let serverEvents: IResultRoomEvents;
 
     if (serverSideResult) {
         serverEvents = serverSideResult.search_categories.room_events;
@@ -532,8 +576,8 @@ async function combinedPagination(searchResult) {
     return result;
 }
 
-function eventIndexSearch(term, roomId = undefined) {
-    let searchPromise;
+function eventIndexSearch(term: string, roomId: string = undefined): Promise<ISearchResults> {
+    let searchPromise: Promise<ISearchResults>;
 
     if (roomId !== undefined) {
         if (MatrixClientPeg.get().isRoomEncrypted(roomId)) {
@@ -554,7 +598,7 @@ function eventIndexSearch(term, roomId = undefined) {
     return searchPromise;
 }
 
-function eventIndexSearchPagination(searchResult) {
+function eventIndexSearchPagination(searchResult: ISeshatSearchResults): Promise<ISeshatSearchResults> {
     const client = MatrixClientPeg.get();
 
     const seshatQuery = searchResult.seshatQuery;
@@ -580,7 +624,7 @@ function eventIndexSearchPagination(searchResult) {
     }
 }
 
-export function searchPagination(searchResult) {
+export function searchPagination(searchResult: ISearchResults): Promise<ISearchResults> {
     const eventIndex = EventIndexPeg.get();
     const client = MatrixClientPeg.get();
 
@@ -590,7 +634,7 @@ export function searchPagination(searchResult) {
     else return eventIndexSearchPagination(searchResult);
 }
 
-export default function eventSearch(term, roomId = undefined) {
+export default function eventSearch(term: string, roomId: string = undefined): Promise<ISearchResults> {
     const eventIndex = EventIndexPeg.get();
 
     if (eventIndex === null) return serverSideSearchProcess(term, roomId);

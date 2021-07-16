@@ -187,7 +187,7 @@ export default class ScrollPanel extends React.Component<IProps> {
     private fillRequestWhileRunning: boolean;
     private scrollState: IScrollState;
     private preventShrinkingState: IPreventShrinkingState;
-    private unfillDebouncer: NodeJS.Timeout;
+    private unfillDebouncer: number;
     private bottomGrowth: number;
     private pages: number;
     private heightUpdateInProgress: boolean;

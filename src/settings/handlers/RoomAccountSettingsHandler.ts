@@ -86,22 +86,24 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
         return settings[settingName];
     }
 
-    public setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
+    public async setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
         // Special case URL previews
         if (settingName === "urlPreviewsEnabled") {
             const content = this.getSettings(roomId, "org.matrix.room.preview_urls") || {};
             content['disable'] = !newValue;
-            return MatrixClientPeg.get().setRoomAccountData(roomId, "org.matrix.room.preview_urls", content);
+            await MatrixClientPeg.get().setRoomAccountData(roomId, "org.matrix.room.preview_urls", content);
+            return;
         }
 
         // Special case allowed widgets
         if (settingName === "allowedWidgets") {
-            return MatrixClientPeg.get().setRoomAccountData(roomId, ALLOWED_WIDGETS_EVENT_TYPE, newValue);
+            await MatrixClientPeg.get().setRoomAccountData(roomId, ALLOWED_WIDGETS_EVENT_TYPE, newValue);
+            return;
         }
 
         const content = this.getSettings(roomId) || {};
         content[settingName] = newValue;
-        return MatrixClientPeg.get().setRoomAccountData(roomId, "im.vector.web.settings", content);
+        await MatrixClientPeg.get().setRoomAccountData(roomId, "im.vector.web.settings", content);
     }
 
     public canSetValue(settingName: string, roomId: string): boolean {

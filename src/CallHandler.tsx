@@ -155,7 +155,7 @@ export default class CallHandler extends EventEmitter {
     private supportsPstnProtocol = null;
     private pstnSupportPrefixed = null; // True if the server only support the prefixed pstn protocol
     private supportsSipNativeVirtual = null; // im.vector.protocol.sip_virtual and im.vector.protocol.sip_native
-    private pstnSupportCheckTimer: NodeJS.Timeout; // number actually because we're in the browser
+    private pstnSupportCheckTimer: number;
     // For rooms we've been invited to, true if they're from virtual user, false if we've checked and they aren't.
     private invitedRoomsAreVirtual = new Map<string, boolean>();
     private invitedRoomCheckInProgress = false;
@@ -431,7 +431,7 @@ export default class CallHandler extends EventEmitter {
     }
 
     private setCallListeners(call: MatrixCall) {
-        let mappedRoomId = CallHandler.sharedInstance().roomIdForCall(call);
+        let mappedRoomId = this.roomIdForCall(call);
 
         call.on(CallEvent.Error, (err: CallError) => {
             if (!this.matchesCallForThisRoom(call)) return;
@@ -912,6 +912,12 @@ export default class CallHandler extends EventEmitter {
             case Action.DialNumber:
                 this.dialNumber(payload.number);
                 break;
+            case Action.TransferCallToMatrixID:
+                this.startTransferToMatrixID(payload.call, payload.destination, payload.consultFirst);
+                break;
+            case Action.TransferCallToPhoneNumber:
+                this.startTransferToPhoneNumber(payload.call, payload.destination, payload.consultFirst);
+                break;
         }
     };
 
@@ -944,6 +950,48 @@ export default class CallHandler extends EventEmitter {
             action: 'view_room',
             room_id: roomId,
         });
+    }
+
+    private async startTransferToPhoneNumber(call: MatrixCall, destination: string, consultFirst: boolean) {
+        const results = await this.pstnLookup(destination);
+        if (!results || results.length === 0 || !results[0].userid) {
+            Modal.createTrackedDialog('', '', ErrorDialog, {
+                title: _t("Unable to transfer call"),
+                description: _t("There was an error looking up the phone number"),
+            });
+            return;
+        }
+
+        await this.startTransferToMatrixID(call, results[0].userid, consultFirst);
+    }
+
+    private async startTransferToMatrixID(call: MatrixCall, destination: string, consultFirst: boolean) {
+        if (consultFirst) {
+            const dmRoomId = await ensureDMExists(MatrixClientPeg.get(), destination);
+
+            dis.dispatch({
+                action: 'place_call',
+                type: call.type,
+                room_id: dmRoomId,
+                transferee: call,
+            });
+            dis.dispatch({
+                action: 'view_room',
+                room_id: dmRoomId,
+                should_peek: false,
+                joining: false,
+            });
+        } else {
+            try {
+                await call.transfer(destination);
+            } catch (e) {
+                console.log("Failed to transfer call", e);
+                Modal.createTrackedDialog('Failed to transfer call', '', ErrorDialog, {
+                    title: _t('Transfer Failed'),
+                    description: _t('Failed to transfer call'),
+                });
+            }
+        }
     }
 
     setActiveCallRoomId(activeCallRoomId: string) {

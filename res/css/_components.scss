@@ -120,6 +120,7 @@
 @import "./views/elements/_AddressTile.scss";
 @import "./views/elements/_DesktopBuildsNotice.scss";
 @import "./views/elements/_DesktopCapturerSourcePicker.scss";
+@import "./views/elements/_DialPadBackspaceButton.scss";
 @import "./views/elements/_DirectorySearchBox.scss";
 @import "./views/elements/_Dropdown.scss";
 @import "./views/elements/_EditableItemList.scss";
@@ -164,6 +165,7 @@
 @import "./views/messages/_MEmoteBody.scss";
 @import "./views/messages/_MFileBody.scss";
 @import "./views/messages/_MImageBody.scss";
+@import "./views/messages/_MImageReplyBody.scss";
 @import "./views/messages/_MJitsiWidgetEvent.scss";
 @import "./views/messages/_MNoticeBody.scss";
 @import "./views/messages/_MStickerBody.scss";
@@ -202,6 +204,7 @@
 @import "./views/rooms/_GroupLayout.scss";
 @import "./views/rooms/_IRCLayout.scss";
 @import "./views/rooms/_JumpToBottomButton.scss";
+@import "./views/rooms/_LinkPreviewGroup.scss";
 @import "./views/rooms/_LinkPreviewWidget.scss";
 @import "./views/rooms/_MemberInfo.scss";
 @import "./views/rooms/_MemberList.scss";
@@ -212,6 +215,7 @@
 @import "./views/rooms/_PinnedEventTile.scss";
 @import "./views/rooms/_PresenceLabel.scss";
 @import "./views/rooms/_ReplyPreview.scss";
+@import "./views/rooms/_ReplyTile.scss";
 @import "./views/rooms/_RoomBreadcrumbs.scss";
 @import "./views/rooms/_RoomHeader.scss";
 @import "./views/rooms/_RoomList.scss";
@@ -262,6 +266,7 @@
 @import "./views/voip/_CallContainer.scss";
 @import "./views/voip/_CallView.scss";
 @import "./views/voip/_CallViewForRoom.scss";
+@import "./views/voip/_CallPreview.scss";
 @import "./views/voip/_DialPad.scss";
 @import "./views/voip/_DialPadContextMenu.scss";
 @import "./views/voip/_DialPadModal.scss";

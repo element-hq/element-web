@@ -238,6 +238,7 @@ export default class AppTile extends React.Component {
                 case 'm.sticker':
                     if (this._sgWidget.widgetApi.hasCapability(MatrixCapabilities.StickerSending)) {
                         dis.dispatch({ action: 'post_sticker_message', data: payload.data });
+                        dis.dispatch({ action: 'stickerpicker_close' });
                     } else {
                         console.warn('Ignoring sticker message. Invalid capability');
                     }

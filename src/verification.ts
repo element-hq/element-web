@@ -22,7 +22,7 @@ import Modal from './Modal';
 import { RightPanelPhases } from "./stores/RightPanelStorePhases";
 import { findDMForUser } from './createRoom';
 import { accessSecretStorage } from './SecurityManager';
-import { verificationMethods } from 'matrix-js-sdk/src/crypto';
+import { verificationMethods as VerificationMethods } from 'matrix-js-sdk/src/crypto';
 import { Action } from './dispatcher/actions';
 import UntrustedDeviceDialog from "./components/views/dialogs/UntrustedDeviceDialog";
 import { IDevice } from "./components/views/right_panel/UserInfo";
@@ -63,7 +63,7 @@ export async function verifyDevice(user: User, device: IDevice) {
                 const verificationRequestPromise = cli.legacyDeviceVerification(
                     user.userId,
                     device.deviceId,
-                    verificationMethods.SAS,
+                    VerificationMethods.SAS,
                 );
                 dis.dispatch({
                     action: Action.SetRightPanelPhase,

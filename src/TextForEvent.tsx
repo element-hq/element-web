@@ -31,7 +31,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 // any text to display at all. For this reason they return deferred values
 // to avoid the expense of looking up translations when they're not needed.
 
-function textForMemberEvent(ev): () => string | null {
+function textForMemberEvent(ev: MatrixEvent): () => string | null {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
     const senderName = ev.sender ? ev.sender.name : ev.getSender();
     const targetName = ev.target ? ev.target.name : ev.getStateKey();
@@ -126,7 +126,7 @@ function textForMemberEvent(ev): () => string | null {
     }
 }
 
-function textForTopicEvent(ev): () => string | null {
+function textForTopicEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     return () => _t('%(senderDisplayName)s changed the topic to "%(topic)s".', {
         senderDisplayName,
@@ -134,7 +134,7 @@ function textForTopicEvent(ev): () => string | null {
     });
 }
 
-function textForRoomNameEvent(ev): () => string | null {
+function textForRoomNameEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
 
     if (!ev.getContent().name || ev.getContent().name.trim().length === 0) {
@@ -153,12 +153,12 @@ function textForRoomNameEvent(ev): () => string | null {
     });
 }
 
-function textForTombstoneEvent(ev): () => string | null {
+function textForTombstoneEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     return () => _t('%(senderDisplayName)s upgraded this room.', { senderDisplayName });
 }
 
-function textForJoinRulesEvent(ev): () => string | null {
+function textForJoinRulesEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     switch (ev.getContent().join_rule) {
         case "public":
@@ -178,7 +178,7 @@ function textForJoinRulesEvent(ev): () => string | null {
     }
 }
 
-function textForGuestAccessEvent(ev): () => string | null {
+function textForGuestAccessEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     switch (ev.getContent().guest_access) {
         case "can_join":
@@ -194,7 +194,7 @@ function textForGuestAccessEvent(ev): () => string | null {
     }
 }
 
-function textForRelatedGroupsEvent(ev): () => string | null {
+function textForRelatedGroupsEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const groups = ev.getContent().groups || [];
     const prevGroups = ev.getPrevContent().groups || [];
@@ -224,7 +224,7 @@ function textForRelatedGroupsEvent(ev): () => string | null {
     }
 }
 
-function textForServerACLEvent(ev): () => string | null {
+function textForServerACLEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const prevContent = ev.getPrevContent();
     const current = ev.getContent();
@@ -254,7 +254,7 @@ function textForServerACLEvent(ev): () => string | null {
     return getText;
 }
 
-function textForMessageEvent(ev): () => string | null {
+function textForMessageEvent(ev: MatrixEvent): () => string | null {
     return () => {
         const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
         let message = senderDisplayName + ': ' + ev.getContent().body;
@@ -267,7 +267,7 @@ function textForMessageEvent(ev): () => string | null {
     };
 }
 
-function textForCanonicalAliasEvent(ev): () => string | null {
+function textForCanonicalAliasEvent(ev: MatrixEvent): () => string | null {
     const senderName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const oldAlias = ev.getPrevContent().alias;
     const oldAltAliases = ev.getPrevContent().alt_aliases || [];
@@ -362,7 +362,8 @@ function textForPowerEvent(event): () => string | null {
         !event.getContent() || !event.getContent().users) {
         return null;
     }
-    const userDefault = event.getContent().users_default || 0;
+    const previousUserDefault = event.getPrevContent().users_default || 0;
+    const currentUserDefault = event.getContent().users_default || 0;
     // Construct set of userIds
     const users = [];
     Object.keys(event.getContent().users).forEach(
@@ -378,9 +379,16 @@ function textForPowerEvent(event): () => string | null {
     const diffs = [];
     users.forEach((userId) => {
         // Previous power level
-        const from = event.getPrevContent().users[userId];
+        let from = event.getPrevContent().users[userId];
+        if (!Number.isInteger(from)) {
+            from = previousUserDefault;
+        }
         // Current power level
-        const to = event.getContent().users[userId];
+        let to = event.getContent().users[userId];
+        if (!Number.isInteger(to)) {
+            to = currentUserDefault;
+        }
+        if (from === previousUserDefault && to === currentUserDefault) { return; }
         if (to !== from) {
             diffs.push({ userId, from, to });
         }
@@ -394,8 +402,8 @@ function textForPowerEvent(event): () => string | null {
         powerLevelDiffText: diffs.map(diff =>
             _t('%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s', {
                 userId: diff.userId,
-                fromPowerLevel: Roles.textualPowerLevel(diff.from, userDefault),
-                toPowerLevel: Roles.textualPowerLevel(diff.to, userDefault),
+                fromPowerLevel: Roles.textualPowerLevel(diff.from, previousUserDefault),
+                toPowerLevel: Roles.textualPowerLevel(diff.to, currentUserDefault),
             }),
         ).join(", "),
     });
@@ -585,7 +593,7 @@ for (const evType of ALL_RULE_TYPES) {
     stateHandlers[evType] = textForMjolnirEvent;
 }
 
-export function hasText(ev): boolean {
+export function hasText(ev: MatrixEvent): boolean {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
     return Boolean(handler?.(ev));
 }

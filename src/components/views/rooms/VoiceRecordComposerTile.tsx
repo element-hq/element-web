@@ -33,7 +33,7 @@ import RecordingPlayback from "../audio_messages/RecordingPlayback";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import MediaDeviceHandler from "../../../MediaDeviceHandler";
+import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../MediaDeviceHandler";
 
 interface IProps {
     room: Room;
@@ -95,7 +95,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 duration: Math.round(this.state.recorder.durationSeconds * 1000),
 
                 // https://github.com/matrix-org/matrix-doc/pull/3246
-                waveform: this.state.recorder.getPlayback().waveform.map(v => Math.round(v * 1024)),
+                waveform: this.state.recorder.getPlayback().thumbnailWaveform.map(v => Math.round(v * 1024)),
             },
             "org.matrix.msc3245.voice": {}, // No content, this is a rendering hint
         });
@@ -135,7 +135,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         // change between this and recording, but at least we will have tried.
         try {
             const devices = await MediaDeviceHandler.getDevices();
-            if (!devices?.['audioInput']?.length) {
+            if (!devices?.[MediaDeviceKindEnum.AudioInput]?.length) {
                 Modal.createTrackedDialog('No Microphone Error', '', ErrorDialog, {
                     title: _t("No microphone found"),
                     description: <>
