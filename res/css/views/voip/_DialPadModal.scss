@@ -19,14 +19,23 @@ limitations under the License.
 }
 
 .mx_DialPadModal {
-    width: 192px;
-    height: 368px;
+    width: 292px;
+    height: 370px;
+    padding: 16px 0px 0px 0px;
 }
 
 .mx_DialPadModal_header {
-    margin-top: 12px;
-    margin-left: 12px;
-    margin-right: 12px;
+    margin-top: 32px;
+    margin-left: 40px;
+    margin-right: 40px;
+
+    /* a separator between the input line and the dial buttons */
+    border-bottom: 1px solid $quaternary-fg-color;
+    transition: border-bottom 0.25s;
+}
+
+.mx_DialPadModal_header:focus-within {
+    border-bottom: 1px solid $accent-color;
 }
 
 .mx_DialPadModal_title {
@@ -45,11 +54,18 @@ limitations under the License.
     height: 14px;
     background-color: $dialog-close-fg-color;
     cursor: pointer;
+    margin-right: 16px;
 }
 
 .mx_DialPadModal_field {
     border: none;
     margin: 0px;
+    height: 30px;
+}
+
+.mx_DialPadModal_field .mx_Field_postfix {
+    /* Remove border separator between postfix and field content */
+    border-left: none;
 }
 
 .mx_DialPadModal_field input {
@@ -61,14 +77,4 @@ limitations under the License.
     margin-left: 16px;
     margin-right: 16px;
     margin-top: 16px;
-}
-
-.mx_DialPadModal_horizSep {
-    position: relative;
-    &::before {
-        content: '';
-        position: absolute;
-        width: 100%;
-        border-bottom: 1px solid $input-darker-bg-color;
-    }
 }

@@ -17,6 +17,7 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
+import AliasCustomisations from './customisations/Alias';
 
 /**
  * Given a room object, return the alias we should use for it,
@@ -28,7 +29,18 @@ import { MatrixClientPeg } from './MatrixClientPeg';
  * @returns {string} A display alias for the given room
  */
 export function getDisplayAliasForRoom(room: Room): string {
-    return room.getCanonicalAlias() || room.getAltAliases()[0];
+    return getDisplayAliasForAliasSet(
+        room.getCanonicalAlias(), room.getAltAliases(),
+    );
+}
+
+// The various display alias getters should all feed through this one path so
+// there's a single place to change the logic.
+export function getDisplayAliasForAliasSet(canonicalAlias: string, altAliases: string[]): string {
+    if (AliasCustomisations.getDisplayAliasForAliasSet) {
+        return AliasCustomisations.getDisplayAliasForAliasSet(canonicalAlias, altAliases);
+    }
+    return canonicalAlias || altAliases?.[0];
 }
 
 export function looksLikeDirectMessageRoom(room: Room, myUserId: string): boolean {
@@ -72,10 +84,8 @@ export function guessAndSetDMRoom(room: Room, isDirect: boolean): Promise<void> 
                    this room as a DM room
  * @returns {object} A promise
  */
-export function setDMRoom(roomId: string, userId: string): Promise<void> {
-    if (MatrixClientPeg.get().isGuest()) {
-        return Promise.resolve();
-    }
+export async function setDMRoom(roomId: string, userId: string): Promise<void> {
+    if (MatrixClientPeg.get().isGuest()) return;
 
     const mDirectEvent = MatrixClientPeg.get().getAccountData('m.direct');
     let dmRoomMap = {};
@@ -104,7 +114,7 @@ export function setDMRoom(roomId: string, userId: string): Promise<void> {
         dmRoomMap[userId] = roomList;
     }
 
-    return MatrixClientPeg.get().setAccountData('m.direct', dmRoomMap);
+    await MatrixClientPeg.get().setAccountData('m.direct', dmRoomMap);
 }
 
 /**

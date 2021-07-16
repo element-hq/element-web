@@ -32,7 +32,7 @@ interface IProps {
     hasAvatar: boolean;
     noAvatarLabel?: string;
     hasAvatarLabel?: string;
-    setAvatarUrl(url: string): Promise<void>;
+    setAvatarUrl(url: string): Promise<unknown>;
 }
 
 const MiniAvatarUploader: React.FC<IProps> = ({ hasAvatar, hasAvatarLabel, noAvatarLabel, setAvatarUrl, children }) => {
