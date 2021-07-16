@@ -3481,5 +3481,17 @@
     "Keyboard shortcuts": "Shkurtore tastiere",
     "Use Ctrl + F to search timeline": "Përdorni Ctrl + F që të kërkohet te rrjedha kohore",
     "Use Command + F to search timeline": "Përdorni Command + F që të kërkohet te rrjedha kohore",
-    "User %(userId)s is already invited to the room": "Përdoruesi %(userId)s është ftuar tashmë te dhoma"
+    "User %(userId)s is already invited to the room": "Përdoruesi %(userId)s është ftuar tashmë te dhoma",
+    "Integration manager": "Përgjegjës Integrimesh",
+    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s-i juah nuk ju lejon të përdorni një Përgjegjës Integrimesh për të bërë këtë. Ju lutemi, lidhuni me përgjegjësin.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Përdorimi i këtij widget-i mund të sjellë ndarje të dhënash <helpIcon /> me %(widgetDomain)s & Përgjegjësin tuaj të Integrimeve.",
+    "Identity server is": "Shërbyes Identitetesh është",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Përgjegjësit e Integrimeve marrin të dhëna formësimi, dhe mund të ndryshojnë widget-e, të dërgojnë ftesa dhome, dhe të caktojnë shkallë pushteti në emër tuajin.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Përdorni një Përgjegjës Integrimesh që të administroni robotë, widget-e dhe paketa ngjitësish.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Përdorni një Përgjegjës Integrimesh <b>(%(serverName)s)</b> që të administroni robotë, widget-e dhe paketa ngjitësish.",
+    "Identity server": "Shërbyes identitetesh",
+    "Identity server (%(server)s)": "Shërbyes Identitetesh (%(server)s)",
+    "Could not connect to identity server": "S’u lidh dot te shërbyes identitetesh",
+    "Not a valid identity server (status code %(code)s)": "Shërbyes Identitetesh i pavlefshëm (kod gjendjeje %(code)s)",
+    "Identity server URL must be HTTPS": "URL-ja e Shërbyesit të Identiteteve duhet të jetë HTTPS"
 }
