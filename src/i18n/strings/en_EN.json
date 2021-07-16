@@ -1870,6 +1870,7 @@
     "Saturday": "Saturday",
     "Today": "Today",
     "Yesterday": "Yesterday",
+    "Downloading": "Downloading",
     "Download": "Download",
     "View Source": "View Source",
     "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their avatar.": "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their avatar.",
