@@ -21,8 +21,8 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
     outlined?: boolean;
     // If true (default), the children will be contained within a <label> element
-    // If false, they'll be in a div. Putting interactive components like Fields in labels can
-    // cause strange bugs like https://github.com/vector-im/element-web/issues/18031
+    // If false, they'll be in a div. Putting interactive components that have labels
+    // themselves in labels can cause strange bugs like https://github.com/vector-im/element-web/issues/18031
     childrenInLabel?: boolean;
 }
 
