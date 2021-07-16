@@ -242,7 +242,6 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     }
 
     private async downloadImage() {
-        const content = this.props.mxEvent.getContent();
         if (this.props.mediaEventHelper.media.isEncrypted && this.state.decryptedUrl === null) {
             try {
                 const thumbnailUrl = await this.props.mediaEventHelper.thumbnailUrl.value;
