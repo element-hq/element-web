@@ -22,6 +22,7 @@ import ImageView from '../elements/ImageView';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import * as Avatar from '../../../Avatar';
+import DMRoomMap from "../../../utils/DMRoomMap";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { IOOBData } from '../../../stores/ThreepidInviteStore';
@@ -131,11 +132,14 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
         const { room, oobData, viewAvatarOnClick, onClick, ...otherProps } = this.props;
 
         const roomName = room ? room.name : oobData.name;
+        // If the room is a DM, we use the other user's ID for the color hash
+        // in order to match the room avatar with their avatar
+        const idName = room ? (DMRoomMap.shared().getUserIdForRoomId(room.roomId) ?? room.roomId) : null;
 
         return (
             <BaseAvatar {...otherProps}
                 name={roomName}
-                idName={room ? room.roomId : null}
+                idName={idName}
                 urls={this.state.urls}
                 onClick={viewAvatarOnClick && this.state.urls[0] ? this.onRoomAvatarClick : onClick}
             />
