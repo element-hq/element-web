@@ -48,6 +48,7 @@ import NotificationPanel from "./NotificationPanel";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import PinnedMessagesCard from "../views/right_panel/PinnedMessagesCard";
 import { throttle } from 'lodash';
+import SpaceStore from "../../stores/SpaceStore";
 
 interface IProps {
     room?: Room; // if showing panels for a given room, this is set
@@ -107,7 +108,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
                 return RightPanelPhases.GroupMemberList;
             }
             return rps.groupPanelPhase;
-        } else if (SettingsStore.getValue("feature_spaces") && this.props.room?.isSpaceRoom()
+        } else if (SpaceStore.spacesEnabled && this.props.room?.isSpaceRoom()
             && !RIGHT_PANEL_SPACE_PHASES.includes(rps.roomPanelPhase)
         ) {
             return RightPanelPhases.SpaceMemberList;

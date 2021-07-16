@@ -46,8 +46,8 @@ export class DecryptionFailureTracker {
     };
 
     // Set to an interval ID when `start` is called
-    public checkInterval: NodeJS.Timeout = null;
-    public trackInterval: NodeJS.Timeout = null;
+    public checkInterval: number = null;
+    public trackInterval: number = null;
 
     // Spread the load on `Analytics` by tracking at a low frequency, `TRACK_INTERVAL_MS`.
     static TRACK_INTERVAL_MS = 60000;

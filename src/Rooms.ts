@@ -84,10 +84,8 @@ export function guessAndSetDMRoom(room: Room, isDirect: boolean): Promise<void> 
                    this room as a DM room
  * @returns {object} A promise
  */
-export function setDMRoom(roomId: string, userId: string): Promise<void> {
-    if (MatrixClientPeg.get().isGuest()) {
-        return Promise.resolve();
-    }
+export async function setDMRoom(roomId: string, userId: string): Promise<void> {
+    if (MatrixClientPeg.get().isGuest()) return;
 
     const mDirectEvent = MatrixClientPeg.get().getAccountData('m.direct');
     let dmRoomMap = {};
@@ -116,7 +114,7 @@ export function setDMRoom(roomId: string, userId: string): Promise<void> {
         dmRoomMap[userId] = roomList;
     }
 
-    return MatrixClientPeg.get().setAccountData('m.direct', dmRoomMap);
+    await MatrixClientPeg.get().setAccountData('m.direct', dmRoomMap);
 }
 
 /**

@@ -25,7 +25,6 @@ import _linkifyElement from 'linkifyjs/element';
 import _linkifyString from 'linkifyjs/string';
 import classNames from 'classnames';
 import EMOJIBASE_REGEX from 'emojibase-regex';
-import url from 'url';
 import katex from 'katex';
 import { AllHtmlEntities } from 'html-entities';
 import { IContent } from 'matrix-js-sdk/src/models/event';
@@ -153,10 +152,8 @@ export function getHtmlText(insaneHtml: string): string {
  */
 export function isUrlPermitted(inputUrl: string): boolean {
     try {
-        const parsed = url.parse(inputUrl);
-        if (!parsed.protocol) return false;
         // URL parser protocol includes the trailing colon
-        return PERMITTED_URL_SCHEMES.includes(parsed.protocol.slice(0, -1));
+        return PERMITTED_URL_SCHEMES.includes(new URL(inputUrl).protocol.slice(0, -1));
     } catch (e) {
         return false;
     }

@@ -42,7 +42,6 @@ import {
 import { Key } from "../../../Keyboard";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
-import SettingsStore from "../../../settings/SettingsStore";
 
 interface IButtonProps {
     space?: Room;
@@ -134,7 +133,7 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({ children, isPanelCo
     const [invites, spaces, activeSpace] = useSpaces();
     const activeSpaces = activeSpace ? [activeSpace] : [];
 
-    const homeNotificationState = SettingsStore.getValue("feature_spaces.all_rooms")
+    const homeNotificationState = SpaceStore.spacesTweakAllRoomsEnabled
         ? RoomNotificationStateStore.instance.globalState : SpaceStore.instance.getNotificationState(HOME_SPACE);
 
     return <div className="mx_SpaceTreeLevel">
@@ -142,7 +141,7 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({ children, isPanelCo
             className="mx_SpaceButton_home"
             onClick={() => SpaceStore.instance.setActiveSpace(null)}
             selected={!activeSpace}
-            tooltip={SettingsStore.getValue("feature_spaces.all_rooms") ? _t("All rooms") : _t("Home")}
+            tooltip={SpaceStore.spacesTweakAllRoomsEnabled ? _t("All rooms") : _t("Home")}
             notificationState={homeNotificationState}
             isNarrow={isPanelCollapsed}
         />

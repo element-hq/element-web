@@ -21,7 +21,7 @@ import { ResizeMethod } from "matrix-js-sdk/src/@types/partials";
 
 import DMRoomMap from './utils/DMRoomMap';
 import { mediaFromMxc } from "./customisations/Media";
-import SettingsStore from "./settings/SettingsStore";
+import SpaceStore from "./stores/SpaceStore";
 
 // Not to be used for BaseAvatar urls as that has similar default avatar fallback already
 export function avatarUrlForMember(
@@ -153,7 +153,7 @@ export function avatarUrlForRoom(room: Room, width: number, height: number, resi
     }
 
     // space rooms cannot be DMs so skip the rest
-    if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) return null;
+    if (SpaceStore.spacesEnabled && room.isSpaceRoom()) return null;
 
     let otherMember = null;
     const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);

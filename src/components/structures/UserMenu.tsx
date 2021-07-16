@@ -90,7 +90,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         };
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
-        if (SettingsStore.getValue("feature_spaces")) {
+        if (SpaceStore.spacesEnabled) {
             SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
         }
 
@@ -115,7 +115,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onProfileUpdate);
         this.tagStoreRef.remove();
-        if (SettingsStore.getValue("feature_spaces")) {
+        if (SpaceStore.spacesEnabled) {
             SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
         }
         MatrixClientPeg.get().removeListener("Room", this.onRoom);

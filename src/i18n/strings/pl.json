@@ -438,7 +438,7 @@
     "%(senderName)s changed the pinned messages for the room.": "%(senderName)s zmienił(a) przypiętą wiadomość dla tego pokoju.",
     "Message Pinning": "Przypinanie wiadomości",
     "Send": "Wyślij",
-    "Mirror local video feed": "Powiel lokalne wideo",
+    "Mirror local video feed": "Lustrzane odbicie wideo",
     "Enable inline URL previews by default": "Włącz domyślny podgląd URL w tekście",
     "Enable URL previews for this room (only affects you)": "Włącz podgląd URL dla tego pokoju (dotyczy tylko Ciebie)",
     "Enable URL previews by default for participants in this room": "Włącz domyślny podgląd URL dla uczestników w tym pokoju",
