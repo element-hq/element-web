@@ -3467,5 +3467,15 @@
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s erlaubt dir nicht, einen Integrationsmanager dafür zu verwenden. Bitte kontaktiere einen Admin.",
     "Copy Link": "Link kopieren",
     "Transfer Failed": "Übertragen fehlgeschlagen",
-    "Unable to transfer call": "Übertragen des Anrufs fehlgeschlagen"
+    "Unable to transfer call": "Übertragen des Anrufs fehlgeschlagen",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Wenn du dieses Widget verwendest, können Daten <helpIcon /> zu %(widgetDomain)s und deinem Integrationsserver übertragen werden.",
+    "Identity server is": "Der Identitätsserver ist",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Integrationsverwalter erhalten Konfigurationsdaten und können Widgets modifizieren, Raumeinladungen verschicken und in deinem Namen Berechtigungslevel setzen.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Verwende einen Integrationsverwalter, um Bots, Widgets und Stickerpakete zu verwalten.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Nutze einen Integrationsverwalter <b>(%(serverName)s)</b>, um Bots, Widgets und Stickerpakete zu verwalten.",
+    "Identity server": "Identitätsserver",
+    "Identity server (%(server)s)": "Identitätsserver (%(server)s)",
+    "Could not connect to identity server": "Verbindung zum Identitätsserver konnte nicht hergestellt werden",
+    "Not a valid identity server (status code %(code)s)": "Ungültiger Identitätsserver (Fehlercode %(code)s)",
+    "Identity server URL must be HTTPS": "Identitätsserver-URL muss HTTPS sein"
 }
