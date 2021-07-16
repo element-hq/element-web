@@ -19,7 +19,7 @@ import { createClient } from "matrix-js-sdk/src/matrix";
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { sleep, defer, IDeferred } from "matrix-js-sdk/src/utils";
+import { sleep, defer, IDeferred, QueryDict } from "matrix-js-sdk/src/utils";
 
 // focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
 import 'focus-visible';
@@ -155,7 +155,7 @@ const ONBOARDING_FLOW_STARTERS = [
 
 interface IScreen {
     screen: string;
-    params?: object;
+    params?: QueryDict;
 }
 
 /* eslint-disable camelcase */
@@ -185,9 +185,9 @@ interface IProps { // TODO type things better
     onNewScreen: (screen: string, replaceLast: boolean) => void;
     enableGuest?: boolean;
     // the queryParams extracted from the [real] query-string of the URI
-    realQueryParams?: Record<string, string>;
+    realQueryParams?: QueryDict;
     // the initial queryParams extracted from the hash-fragment of the URI
-    startingFragmentQueryParams?: Record<string, string>;
+    startingFragmentQueryParams?: QueryDict;
     // called when we have completed a token login
     onTokenLoginCompleted?: () => void;
     // Represents the screen to display as a result of parsing the initial window.location
@@ -195,7 +195,7 @@ interface IProps { // TODO type things better
     // displayname, if any, to set on the device when logging in/registering.
     defaultDeviceDisplayName?: string;
     // A function that makes a registration URL
-    makeRegistrationUrl: (object) => string;
+    makeRegistrationUrl: (params: QueryDict) => string;
 }
 
 interface IState {
@@ -298,7 +298,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             if (this.screenAfterLogin.screen.startsWith("room/") && params['signurl'] && params['email']) {
                 // probably a threepid invite - try to store it
                 const roomId = this.screenAfterLogin.screen.substring("room/".length);
-                ThreepidInviteStore.instance.storeInvite(roomId, params as IThreepidInviteWireFormat);
+                ThreepidInviteStore.instance.storeInvite(roomId, params as unknown as IThreepidInviteWireFormat);
             }
         }
 
@@ -1952,7 +1952,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setState({ serverConfig });
     };
 
-    private makeRegistrationUrl = (params: {[key: string]: string}) => {
+    private makeRegistrationUrl = (params: QueryDict) => {
         if (this.props.startingFragmentQueryParams.referrer) {
             params.referrer = this.props.startingFragmentQueryParams.referrer;
         }
@@ -2107,7 +2107,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     onForgotPasswordClick={showPasswordReset ? this.onForgotPasswordClick : undefined}
                     onServerConfigChange={this.onServerConfigChange}
                     fragmentAfterLogin={fragmentAfterLogin}
-                    defaultUsername={this.props.startingFragmentQueryParams.defaultUsername}
+                    defaultUsername={this.props.startingFragmentQueryParams.defaultUsername as string}
                     {...this.getServerProperties()}
                 />
             );
