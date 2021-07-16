@@ -16,8 +16,10 @@ limitations under the License.
 
 import { Room } from "matrix-js-sdk/src/models/room";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
-import DMRoomMap from "../../../utils/DMRoomMap";
 import { EventEmitter } from "events";
+import AwaitLock from "await-lock";
+
+import DMRoomMap from "../../../utils/DMRoomMap";
 import { arrayDiff, arrayHasDiff } from "../../../utils/arrays";
 import { DefaultTagID, RoomUpdateCause, TagID } from "../models";
 import {
@@ -78,6 +80,7 @@ export class Algorithm extends EventEmitter {
     } = {};
     private allowedByFilter: Map<IFilterCondition, Room[]> = new Map<IFilterCondition, Room[]>();
     private allowedRoomsByFilters: Set<Room> = new Set<Room>();
+    private stickyLock = new AwaitLock();
 
     /**
      * Set to true to suspend emissions of algorithm updates.
@@ -123,7 +126,12 @@ export class Algorithm extends EventEmitter {
      * @param val The new room to sticky.
      */
     public async setStickyRoom(val: Room) {
-        await this.updateStickyRoom(val);
+        await this.stickyLock.acquireAsync();
+        try {
+            await this.updateStickyRoom(val);
+        } finally {
+            this.stickyLock.release();
+        }
     }
 
     public getTagSorting(tagId: TagID): SortAlgorithm {
@@ -519,82 +527,87 @@ export class Algorithm extends EventEmitter {
         if (isNullOrUndefined(rooms)) throw new Error(`Array of rooms cannot be null`);
         if (!this.sortAlgorithms) throw new Error(`Cannot set known rooms without a tag sorting map`);
 
-        if (!this.updatesInhibited) {
-            // We only log this if we're expecting to be publishing updates, which means that
-            // this could be an unexpected invocation. If we're inhibited, then this is probably
-            // an intentional invocation.
-            console.warn("Resetting known rooms, initiating regeneration");
-        }
+        await this.stickyLock.acquireAsync();
+        try {
+            if (!this.updatesInhibited) {
+                // We only log this if we're expecting to be publishing updates, which means that
+                // this could be an unexpected invocation. If we're inhibited, then this is probably
+                // an intentional invocation.
+                console.warn("Resetting known rooms, initiating regeneration");
+            }
 
-        // Before we go any further we need to clear (but remember) the sticky room to
-        // avoid accidentally duplicating it in the list.
-        const oldStickyRoom = this._stickyRoom;
-        await this.updateStickyRoom(null);
+            // Before we go any further we need to clear (but remember) the sticky room to
+            // avoid accidentally duplicating it in the list.
+            const oldStickyRoom = this._stickyRoom;
+            if (oldStickyRoom) await this.updateStickyRoom(null);
 
-        this.rooms = rooms;
+            this.rooms = rooms;
 
-        const newTags: ITagMap = {};
-        for (const tagId in this.sortAlgorithms) {
-            // noinspection JSUnfilteredForInLoop
-            newTags[tagId] = [];
-        }
+            const newTags: ITagMap = {};
+            for (const tagId in this.sortAlgorithms) {
+                // noinspection JSUnfilteredForInLoop
+                newTags[tagId] = [];
+            }
 
-        // If we can avoid doing work, do so.
-        if (!rooms.length) {
-            await this.generateFreshTags(newTags); // just in case it wants to do something
-            this.cachedRooms = newTags;
-            return;
-        }
+            // If we can avoid doing work, do so.
+            if (!rooms.length) {
+                await this.generateFreshTags(newTags); // just in case it wants to do something
+                this.cachedRooms = newTags;
+                return;
+            }
 
-        // Split out the easy rooms first (leave and invite)
-        const memberships = splitRoomsByMembership(rooms);
-        for (const room of memberships[EffectiveMembership.Invite]) {
-            newTags[DefaultTagID.Invite].push(room);
-        }
-        for (const room of memberships[EffectiveMembership.Leave]) {
-            newTags[DefaultTagID.Archived].push(room);
-        }
+            // Split out the easy rooms first (leave and invite)
+            const memberships = splitRoomsByMembership(rooms);
+            for (const room of memberships[EffectiveMembership.Invite]) {
+                newTags[DefaultTagID.Invite].push(room);
+            }
+            for (const room of memberships[EffectiveMembership.Leave]) {
+                newTags[DefaultTagID.Archived].push(room);
+            }
 
-        // Now process all the joined rooms. This is a bit more complicated
-        for (const room of memberships[EffectiveMembership.Join]) {
-            const tags = this.getTagsOfJoinedRoom(room);
+            // Now process all the joined rooms. This is a bit more complicated
+            for (const room of memberships[EffectiveMembership.Join]) {
+                const tags = this.getTagsOfJoinedRoom(room);
 
-            let inTag = false;
-            if (tags.length > 0) {
-                for (const tag of tags) {
-                    if (!isNullOrUndefined(newTags[tag])) {
-                        newTags[tag].push(room);
-                        inTag = true;
+                let inTag = false;
+                if (tags.length > 0) {
+                    for (const tag of tags) {
+                        if (!isNullOrUndefined(newTags[tag])) {
+                            newTags[tag].push(room);
+                            inTag = true;
+                        }
+                    }
+                }
+
+                if (!inTag) {
+                    if (DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
+                        newTags[DefaultTagID.DM].push(room);
+                    } else {
+                        newTags[DefaultTagID.Untagged].push(room);
                     }
                 }
             }
 
-            if (!inTag) {
-                if (DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
-                    newTags[DefaultTagID.DM].push(room);
-                } else {
-                    newTags[DefaultTagID.Untagged].push(room);
+            await this.generateFreshTags(newTags);
+
+            this.cachedRooms = newTags; // this recalculates the filtered rooms for us
+            this.updateTagsFromCache();
+
+            // Now that we've finished generation, we need to update the sticky room to what
+            // it was. It's entirely possible that it changed lists though, so if it did then
+            // we also have to update the position of it.
+            if (oldStickyRoom && oldStickyRoom.room) {
+                await this.updateStickyRoom(oldStickyRoom.room);
+                if (this._stickyRoom && this._stickyRoom.room) { // just in case the update doesn't go according to plan
+                    if (this._stickyRoom.tag !== oldStickyRoom.tag) {
+                        // We put the sticky room at the top of the list to treat it as an obvious tag change.
+                        this._stickyRoom.position = 0;
+                        this.recalculateStickyRoom(this._stickyRoom.tag);
+                    }
                 }
             }
-        }
-
-        await this.generateFreshTags(newTags);
-
-        this.cachedRooms = newTags; // this recalculates the filtered rooms for us
-        this.updateTagsFromCache();
-
-        // Now that we've finished generation, we need to update the sticky room to what
-        // it was. It's entirely possible that it changed lists though, so if it did then
-        // we also have to update the position of it.
-        if (oldStickyRoom && oldStickyRoom.room) {
-            await this.updateStickyRoom(oldStickyRoom.room);
-            if (this._stickyRoom && this._stickyRoom.room) { // just in case the update doesn't go according to plan
-                if (this._stickyRoom.tag !== oldStickyRoom.tag) {
-                    // We put the sticky room at the top of the list to treat it as an obvious tag change.
-                    this._stickyRoom.position = 0;
-                    this.recalculateStickyRoom(this._stickyRoom.tag);
-                }
-            }
+        } finally {
+            this.stickyLock.release();
         }
     }
 
@@ -685,9 +698,9 @@ export class Algorithm extends EventEmitter {
         if (!this.algorithms) throw new Error("Not ready: no algorithms to determine tags from");
 
         // Note: check the isSticky against the room ID just in case the reference is wrong
-        const isSticky = this._stickyRoom && this._stickyRoom.room && this._stickyRoom.room.roomId === room.roomId;
+        const isSticky = this._stickyRoom?.room?.roomId === room.roomId;
         if (cause === RoomUpdateCause.NewRoom) {
-            const isForLastSticky = this._lastStickyRoom && this._lastStickyRoom.room === room;
+            const isForLastSticky = this._lastStickyRoom?.room === room;
             const roomTags = this.roomIdsToTags[room.roomId];
             const hasTags = roomTags && roomTags.length > 0;
 
