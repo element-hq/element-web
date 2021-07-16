@@ -2829,7 +2829,7 @@
     "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their avatar.": "Sõnumid siin jututoas on läbivalt krüptitud. Klõpsides tunnuspilti saad kontrollida kasutaja %(displayName)s profiili.",
     "%(creator)s created this DM.": "%(creator)s alustas seda otsesuhtlust.",
     "This is the start of <roomName/>.": "See on <roomName/> jututoa algus.",
-    "Add a photo, so people can easily spot your room.": "Selle, et teised märkaks sinu jututuba lihtsamini, palun lisa üks pilt.",
+    "Add a photo, so people can easily spot your room.": "Selleks, et teised märkaks sinu jututuba lihtsamini, palun lisa üks pilt.",
     "%(displayName)s created this room.": "%(displayName)s lõi selle jututoa.",
     "You created this room.": "Sa lõid selle jututoa.",
     "<a>Add a topic</a> to help people know what it is about.": "Selleks, et teised teaks millega on tegemist, palun <a>lisa teema</a>.",
@@ -3450,5 +3450,11 @@
     "This user is spamming the room with ads, links to ads or to propaganda.\nThis will be reported to the room moderators.": "See kasutaja spämmib jututuba reklaamidega, reklaamlinkidega või propagandaga.\nJututoa moderaatorid saavad selle kohta teate.",
     "This user is displaying toxic behaviour, for instance by insulting other users or sharing  adult-only content in a family-friendly room  or otherwise violating the rules of this room.\nThis will be reported to the room moderators.": "Selle kasutaja tegevus on äärmiselt ebasobilik, milleks võib olla teiste jututoas osalejate solvamine, peresõbralikku jututuppa täiskasvanutele mõeldud sisu lisamine või muul viisil jututoa reeglite rikkumine.\nJututoa moderaatorid saavad selle kohta teate.",
     "Please provide an address": "Palun sisesta aadress",
-    "Report to moderators prototype. In rooms that support moderation, the `report` button will let you report abuse to room moderators": "Meie esimene katsetus modereerimisega. Kui jututoas on modereerimine toetatud, siis „Teata moderaatorile“ nupust võid saada teate ebasobiliku sisu kohta"
+    "Report to moderators prototype. In rooms that support moderation, the `report` button will let you report abuse to room moderators": "Meie esimene katsetus modereerimisega. Kui jututoas on modereerimine toetatud, siis „Teata moderaatorile“ nupust võid saada teate ebasobiliku sisu kohta",
+    "Unnamed audio": "Nimetu helifail",
+    "Code blocks": "Lähtekoodi lõigud",
+    "Images, GIFs and videos": "Pildid, gif'id ja videod",
+    "Show %(count)s other previews|other": "Näita %(count)s muud eelvaadet",
+    "Show %(count)s other previews|one": "Näita veel %(count)s eelvaadet",
+    "Error processing audio message": "Viga häälsõnumi töötlemisel"
 }

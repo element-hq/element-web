@@ -3468,5 +3468,18 @@
     "%(targetName)s accepted an invitation": "%(targetName)s pranoi një ftesë",
     "%(targetName)s accepted the invitation for %(displayName)s": "%(targetName)s pranoi ftesën për %(displayName)s",
     "Some invites couldn't be sent": "S’u dërguan dot disa nga ftesat",
-    "We sent the others, but the below people couldn't be invited to <RoomName/>": "I dërguam të tjerat, por personat më poshtë s’u ftuan dot te <RoomName/>"
+    "We sent the others, but the below people couldn't be invited to <RoomName/>": "I dërguam të tjerat, por personat më poshtë s’u ftuan dot te <RoomName/>",
+    "Unnamed audio": "Audio pa emër",
+    "Forward": "Përcille",
+    "Sent": "U dërgua",
+    "Error processing audio message": "Gabim në përpunim mesazhi audio",
+    "Show %(count)s other previews|one": "Shfaq %(count)s paraparje tjetër",
+    "Show %(count)s other previews|other": "Shfaq %(count)s paraparje të tjera",
+    "Images, GIFs and videos": "Figura, GIF-e dhe video",
+    "Code blocks": "Blloqe kodi",
+    "To view all keyboard shortcuts, click here.": "Që të shihni krejt shkurtoret e tastierës, klikoni këtu.",
+    "Keyboard shortcuts": "Shkurtore tastiere",
+    "Use Ctrl + F to search timeline": "Përdorni Ctrl + F që të kërkohet te rrjedha kohore",
+    "Use Command + F to search timeline": "Përdorni Command + F që të kërkohet te rrjedha kohore",
+    "User %(userId)s is already invited to the room": "Përdoruesi %(userId)s është ftuar tashmë te dhoma"
 }

@@ -3484,5 +3484,17 @@
     "%(targetName)s accepted an invitation": "%(targetName)s 接受了邀請",
     "%(targetName)s accepted the invitation for %(displayName)s": "%(targetName)s 已接受 %(displayName)s 的邀請",
     "Some invites couldn't be sent": "部份邀請無法傳送",
-    "We sent the others, but the below people couldn't be invited to <RoomName/>": "我們已將邀請傳送給其他人，但以下的人無法邀請至 <RoomName/>"
+    "We sent the others, but the below people couldn't be invited to <RoomName/>": "我們已將邀請傳送給其他人，但以下的人無法邀請至 <RoomName/>",
+    "Unnamed audio": "未命名的音訊",
+    "Error processing audio message": "處理音訊訊息時出現問題",
+    "Show %(count)s other previews|one": "顯示 %(count)s 個其他預覽",
+    "Show %(count)s other previews|other": "顯示 %(count)s 個其他預覽",
+    "Images, GIFs and videos": "圖片、GIF 與影片",
+    "Code blocks": "程式碼區塊",
+    "Displaying time": "顯示時間",
+    "To view all keyboard shortcuts, click here.": "要檢視所有鍵盤快捷鍵，請點擊此處。",
+    "Keyboard shortcuts": "鍵盤快捷鍵",
+    "Use Ctrl + F to search timeline": "使用 Ctrl + F 來搜尋時間軸",
+    "Use Command + F to search timeline": "使用 Command + F 來搜尋時間軸",
+    "User %(userId)s is already invited to the room": "使用者 %(userId)s 已被邀請至聊天室"
 }

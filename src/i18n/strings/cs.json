@@ -3400,5 +3400,14 @@
     "Some invites couldn't be sent": "Některé pozvánky nebylo možné odeslat",
     "We sent the others, but the below people couldn't be invited to <RoomName/>": "Poslali jsme ostatním, ale níže uvedení lidé nemohli být pozváni do <RoomName/>",
     "Visibility": "Viditelnost",
-    "Address": "Adresa"
+    "Address": "Adresa",
+    "To view all keyboard shortcuts, click here.": "Pro zobrazení všech klávesových zkratek, klikněte zde.",
+    "Unnamed audio": "Nepojmenovaný audio soubor",
+    "Error processing audio message": "Došlo k chybě při zpracovávání hlasové zprávy",
+    "Images, GIFs and videos": "Obrázky, GIFy a videa",
+    "Code blocks": "Bloky kódu",
+    "Displaying time": "Zobrazování času",
+    "Keyboard shortcuts": "Klávesové zkratky",
+    "Use Ctrl + F to search timeline": "Stiskněte Ctrl + F k vyhledávání v časové ose",
+    "Use Command + F to search timeline": "Stiskněte Command + F k vyhledávání v časové ose"
 }
