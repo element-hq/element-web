@@ -1,32 +1,32 @@
-# How to translate riot-web
+# How to translate Element
 
 ## Requirements
 
 - Web Browser
 - Be able to understand English
-- Be able to understand the language you want to translate riot-web into
+- Be able to understand the language you want to translate Element into
 
-## Step 0: Join #riotweb-translations:matrix.org
+## Step 0: Join #element-translations:matrix.org
 
-1. Come and join https://matrix.to/#/#riotweb-translations:matrix.org
+1. Come and join https://matrix.to/#/#element-translations:matrix.org
 2. Read scrollback and/or ask if anyone else is working on your language, and co-ordinate if needed.  In general little-or-no coordination is needed though :)
 
 ## Step 1: Preparing your Weblate Profile
 
-1. Head to https://translate.riot.im and register either via Github or email
+1. Head to https://translate.element.io and register either via Github or email
 2. After registering check if you got an email to verify your account and click the link (if there is none head to step 1.4)
 3. Log into weblate
-4. Head to https://translate.riot.im/accounts/profile/ and select the languages you know and maybe another language you know too.
-6. Head to https://translate.riot.im/accounts/profile/#subscriptions and select Riot Web as Project
+4. Head to https://translate.element.io/accounts/profile/ and select the languages you know and maybe another language you know too.
+6. Head to https://translate.element.io/accounts/profile/#subscriptions and select Element Web as Project
 
 ## How to check if your language already is being translated
 
-Go to https://translate.riot.im/projects/riot-web/ and visit the 2 sub-projects.
+Go to https://translate.element.io/projects/element-web/ and visit the 2 sub-projects.
 If your language is listed go to Step 2a and if not go to Step 2b
 
 ## Step 2a: Helping on existing languages.
 
-1. Head to one of the projects listed https://translate.riot.im/projects/riot-web/
+1. Head to one of the projects listed https://translate.element.io/projects/element-web/
 2. Click on the ``translate`` button on the right side of your language
 3. Fill in the translations in the writeable field. You will see the original English string and the string of your second language above.
 
@@ -34,7 +34,7 @@ Head to the explanations under Steb 2b
 
 ## Step 2b: Adding a new language
 
-1. Go to one of the projects listed https://translate.riot.im/projects/riot-web/
+1. Go to one of the projects listed https://translate.element.io/projects/element-web/
 2. Click the ``Start new translation`` button at the bottom
 3. Select a language
 4. Start translating like in 2a.3
@@ -50,7 +50,7 @@ The yellow button has to be used if you are unsure about the translation but you
 
 ### What are "%(something)s"?
 
-These things are variables that are expanded when displayed by Riot. They can be room names, usernames or similar. If you find one, you can move to the right place for your language, but not delete it as the variable will be missing if you do.
+These things are variables that are expanded when displayed by Element. They can be room names, usernames or similar. If you find one, you can move to the right place for your language, but not delete it as the variable will be missing if you do.
 
 A special case is `%(urlStart)s` and `%(urlEnd)s` which are used to mark the beginning of a hyperlink (i.e. `<a href="/somewhere">` and `</a>`.  You must keep these markers surrounding the equivalent string in your language that needs to be hyperlinked.
 

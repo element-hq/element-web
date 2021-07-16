@@ -1,9 +1,6 @@
 {
   "minify": true,
-  "classPrefix": "modernizr_",
-  "options": [
-    "setClasses"
-  ],
+  "enableClasses": false,
   "feature-detects": [
     "test/css/animations",
     "test/css/displaytable",
@@ -29,6 +26,7 @@
     "test/url/urlsearchparams",
 
     "test/cors",
+    "test/crypto",
     "test/iframe/sandbox",
     "test/json",
     "test/network/fetch",

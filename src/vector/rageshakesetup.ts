@@ -31,14 +31,15 @@ import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import sendBugReport from "matrix-react-sdk/src/rageshake/submit-rageshake";
 
 export function initRageshake() {
-    const prom = rageshake.init();
+    // we manually check persistence for rageshakes ourselves
+    const prom = rageshake.init(/*setUpPersistence=*/false);
     prom.then(() => {
         console.log("Initialised rageshake.");
         console.log("To fix line numbers in Chrome: " +
-            "Meatball menu → Settings → Blackboxing → Add /rageshake\\.js$");
+            "Meatball menu → Settings → Ignore list → Add /rageshake\\.js$");
 
         window.addEventListener('beforeunload', (e) => {
-            console.log('riot-web closing');
+            console.log('element-web closing');
             // try to flush the logs to indexeddb
             rageshake.flush();
         });
@@ -50,13 +51,23 @@ export function initRageshake() {
     return prom;
 }
 
+export function initRageshakeStore() {
+    return rageshake.tryInitStorage();
+}
+
 window.mxSendRageshake = function(text: string, withLogs?: boolean) {
+    const url = SdkConfig.get().bug_report_endpoint_url;
+    if (!url) {
+        console.error("Cannot send a rageshake - no bug_report_endpoint_url configured");
+        return;
+    }
+
     if (withLogs === undefined) withLogs = true;
     if (!text || !text.trim()) {
         console.error("Cannot send a rageshake without a message - please tell us what went wrong");
         return;
     }
-    sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
+    sendBugReport(url, {
         userText: text,
         sendLogs: withLogs,
         progressCallback: console.log.bind(console),

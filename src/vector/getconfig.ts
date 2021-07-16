@@ -18,7 +18,7 @@ import request from 'browser-request';
 
 // Load the config file. First try to load up a domain-specific config of the
 // form "config.$domain.json" and if that fails, fall back to config.json.
-export async function getVectorConfig(relativeLocation: string='') {
+export async function getVectorConfig(relativeLocation='') {
     if (relativeLocation !== '' && !relativeLocation.endsWith('/')) relativeLocation += '/';
 
     const specificConfigPromise = getConfig(`${relativeLocation}config.${document.domain}.json`);
@@ -55,7 +55,7 @@ function getConfig(configJsonFilename: string): Promise<{}> {
                                 resolve({});
                             }
                         }
-                        reject({err: err, response: response});
+                        reject({ err: err, response: response });
                         return;
                     }
 
@@ -65,7 +65,7 @@ function getConfig(configJsonFilename: string): Promise<{}> {
                     // loading from the filesystem (see above).
                     resolve(JSON.parse(body));
                 } catch (e) {
-                    reject({err: e});
+                    reject({ err: e });
                 }
             },
         );

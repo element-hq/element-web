@@ -2,10 +2,12 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: bug
+labels: T-Defect
 assignees: ''
 
 ---
+
+<!-- A picture's worth a thousand words: PLEASE INCLUDE A SCREENSHOT :P -->
 
 <!-- Please report security issues by email to security@matrix.org -->
 
@@ -19,11 +21,11 @@ that aren't relevant to your particular case.
 Text between <!-- and --​> marks will be invisible in the report.
 -->
 
-### Description
+#### Description
 
 Describe here the problem that you are experiencing, or the feature you are requesting.
 
-### Steps to reproduce
+#### Steps to reproduce
 
 - For bugs, list the steps
 - that reproduce the bug
@@ -38,7 +40,7 @@ Logs being sent: yes/no
 
 <!-- Include screenshots if possible: you can drag and drop images below. -->
 
-### Version information
+#### Version information
 
 <!-- IMPORTANT: please answer the following questions, to help us narrow down the problem -->
 
@@ -46,9 +48,9 @@ Logs being sent: yes/no
 
 For the web app:
 
-- **Browser**: Chrome, Safari, Firefox? which version?
+- **Browser**: Chrome, Firefox, Safari, Edge? which version?
 - **OS**: Windows, macOS, Ubuntu, Arch Linux, etc?
-- **URL**: riot.im/develop / riot.im/app / somewhere else? If a private server, what version of riot-web?
+- **URL**: develop.element.io / app.element.io / somewhere else? If a private server, what version of Element Web?
 
 For the desktop app:
 

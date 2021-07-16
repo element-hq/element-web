@@ -1,6 +1,6 @@
 ## Memory leaks
 
-Riot usually emits slow behaviour just before it is about to crash. Getting a 
+Element usually emits slow behaviour just before it is about to crash. Getting a 
 memory snapshot (below) just before that happens is ideal in figuring out what
 is going wrong.
 
@@ -14,14 +14,14 @@ this happens though so we can try and narrow down what might have gone wrong.
 ## Memory profiles/snapshots
 
 When investigating memory leaks/problems it's usually important to compare snapshots
-from different points in the Riot session lifecycle. Most importantly, a snapshot
+from different points in the Element session lifecycle. Most importantly, a snapshot
 to establish the baseline or "normal" memory usage is useful. Taking a snapshot
-roughly 30-60 minutes after starting Riot is a good time to establish "normal"
+roughly 30-60 minutes after starting Element is a good time to establish "normal"
 memory usage for the app - anything after that is at risk of hiding the memory leak
 and anything newer is still in the warmup stages of the app.
 
 **Memory profiles can contain sensitive information.** If you are submitting a memory
-profile to us for debugging purposes, please pick the appropriate Riot developer and
+profile to us for debugging purposes, please pick the appropriate Element developer and
 send them over an encrypted private message. *Do not share your memory profile in
 public channels or with people you do not trust.*
 
@@ -42,7 +42,7 @@ While the profile is in progress, the tab might be frozen or unresponsive.
 
 1. Press CTRL+SHIFT+I (I as in eye).
 2. Click the Memory tab.
-3. Select "Heap Snapshot" and the riot.im VM instance (not the indexeddb one).
+3. Select "Heap Snapshot" and the app.element.io VM instance (not the indexeddb one).
 4. Click "Take Snapshot".
 5. Wait a bit (coffee is a good option).
 6. When the save button appears on the left side of the panel, click it to save the

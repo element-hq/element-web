@@ -1,3 +1,1208 @@
+Changes in [1.7.32](https://github.com/vector-im/element-web/releases/tag/v1.7.32) (2021-07-05)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.32-rc.1...v1.7.32)
+
+ * No changes from rc.1
+
+Changes in [1.7.32-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.32-rc.1) (2021-06-29)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.31...v1.7.32-rc.1)
+
+ * Update to react-sdk v3.25.0-rc.1 and js-sdk v12.0.1-rc.1
+ * Translations update from Weblate
+   [\#17832](https://github.com/vector-im/element-web/pull/17832)
+ * Fix canvas-filter-polyfill mock path
+   [\#17785](https://github.com/vector-im/element-web/pull/17785)
+ * Mock context-filter-polyfill for app-tests
+   [\#17774](https://github.com/vector-im/element-web/pull/17774)
+ * Add libera.chat to default room directory
+   [\#17772](https://github.com/vector-im/element-web/pull/17772)
+ * Improve typing of Event Index Manager / Seshat
+   [\#17704](https://github.com/vector-im/element-web/pull/17704)
+ * Bump dns-packet from 1.3.1 to 1.3.4
+   [\#17478](https://github.com/vector-im/element-web/pull/17478)
+ * Update matrix-widget-api to fix build issues
+   [\#17747](https://github.com/vector-im/element-web/pull/17747)
+ * Fix whitespace in Dockerfile
+   [\#17742](https://github.com/vector-im/element-web/pull/17742)
+ * Upgrade @types/react and @types/react-dom
+   [\#17723](https://github.com/vector-im/element-web/pull/17723)
+ * Spaces keyboard shortcuts first cut
+   [\#17457](https://github.com/vector-im/element-web/pull/17457)
+ * Labs: feature_report_to_moderators
+   [\#17694](https://github.com/vector-im/element-web/pull/17694)
+
+Changes in [1.7.31](https://github.com/vector-im/element-web/releases/tag/v1.7.31) (2021-06-21)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.31-rc.1...v1.7.31)
+
+ * Upgrade to React SDK 3.24.0 and JS SDK 12.0.0
+
+Changes in [1.7.31-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.31-rc.1) (2021-06-15)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.30...v1.7.31-rc.1)
+
+ * Upgrade to React SDK 3.24.0-rc.1 and JS SDK 12.0.0-rc.1
+ * Translations update from Weblate
+   [\#17655](https://github.com/vector-im/element-web/pull/17655)
+ * Upgrade matrix-react-test-utils for React 17 peer deps
+   [\#17653](https://github.com/vector-im/element-web/pull/17653)
+ * Fix lint errors in Webpack config
+   [\#17626](https://github.com/vector-im/element-web/pull/17626)
+ * Preload only `woff2` fonts
+   [\#17614](https://github.com/vector-im/element-web/pull/17614)
+ * ⚛️ Upgrade to React@17
+   [\#17601](https://github.com/vector-im/element-web/pull/17601)
+
+Changes in [1.7.30](https://github.com/vector-im/element-web/releases/tag/v1.7.30) (2021-06-07)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.30-rc.1...v1.7.30)
+
+ * Upgrade to React SDK 3.23.0 and JS SDK 11.2.0
+
+Changes in [1.7.30-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.30-rc.1) (2021-06-01)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.29...v1.7.30-rc.1)
+
+ * Upgrade to React SDK 3.23.0-rc.1 and JS SDK 11.2.0-rc.1
+ * Translations update from Weblate
+   [\#17526](https://github.com/vector-im/element-web/pull/17526)
+ * Add Modernizr test for Promise.allSettled given js-sdk and react-sdk depend
+   on it
+   [\#17464](https://github.com/vector-im/element-web/pull/17464)
+ * Bump libolm dependency, and update package name.
+   [\#17433](https://github.com/vector-im/element-web/pull/17433)
+ * Remove logo spinner
+   [\#17423](https://github.com/vector-im/element-web/pull/17423)
+
+Changes in [1.7.29](https://github.com/vector-im/element-web/releases/tag/v1.7.29) (2021-05-24)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.29-rc.1...v1.7.29)
+
+## Security notice
+
+Element Web 1.7.29 fixes (by upgrading to olm 3.2.3) an issue in code used for
+decrypting server-side stored secrets. The issue could potentially allow a
+malicious homeserver to cause a stack buffer overflow in the affected function
+and to control that function's local variables.
+
+## All changes
+
+ * Upgrade to React SDK 3.22.0 and JS SDK 11.1.0
+ * [Release] Bump libolm dependency, and update package name
+   [\#17456](https://github.com/vector-im/element-web/pull/17456)
+
+Changes in [1.7.29-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.29-rc.1) (2021-05-19)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.28...v1.7.29-rc.1)
+
+ * Upgrade to React SDK 3.22.0-rc.1 and JS SDK 11.1.0-rc.1
+ * Translations update from Weblate
+   [\#17384](https://github.com/vector-im/element-web/pull/17384)
+ * Prevent minification of `.html` files
+   [\#17349](https://github.com/vector-im/element-web/pull/17349)
+ * Update matrix-widget-api/react-sdk dependency reference
+   [\#17346](https://github.com/vector-im/element-web/pull/17346)
+ * Add `yarn start:https`
+   [\#16989](https://github.com/vector-im/element-web/pull/16989)
+ * Translations update from Weblate
+   [\#17239](https://github.com/vector-im/element-web/pull/17239)
+ * Remove "in development" flag from voice messages labs documentation
+   [\#17204](https://github.com/vector-im/element-web/pull/17204)
+ * Add required webpack+jest config to load Safari support modules
+   [\#17193](https://github.com/vector-im/element-web/pull/17193)
+
+Changes in [1.7.28](https://github.com/vector-im/element-web/releases/tag/v1.7.28) (2021-05-17)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.28-rc.1...v1.7.28)
+
+## Security notice
+
+Element Web 1.7.28 fixes (by upgrading to matrix-react-sdk 3.21.0) a low
+severity issue (GHSA-8796-gc9j-63rv) related to file upload. When uploading a
+file, the local file preview can lead to execution of scripts embedded in the
+uploaded file, but only after several user interactions to open the preview in
+a separate tab. This only impacts the local user while in the process of
+uploading. It cannot be exploited remotely or by other users. Thanks to
+[Muhammad Zaid Ghifari](https://github.com/MR-ZHEEV) for responsibly disclosing
+this via Matrix's Security Disclosure Policy.
+
+## All changes
+
+ * Upgrade to React SDK 3.21.0 and JS SDK 11.0.0
+
+Changes in [1.7.28-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.28-rc.1) (2021-05-11)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.27...v1.7.28-rc.1)
+
+ * Upgrade to React SDK 3.21.0-rc.1 and JS SDK 11.0.0-rc.1
+ * Switch back to release version of `sanitize-html`
+   [\#17231](https://github.com/vector-im/element-web/pull/17231)
+ * Bump url-parse from 1.4.7 to 1.5.1
+   [\#17199](https://github.com/vector-im/element-web/pull/17199)
+ * Bump lodash from 4.17.20 to 4.17.21
+   [\#17205](https://github.com/vector-im/element-web/pull/17205)
+ * Bump hosted-git-info from 2.8.8 to 2.8.9
+   [\#17219](https://github.com/vector-im/element-web/pull/17219)
+ * Disable host checking on the webpack dev server
+   [\#17194](https://github.com/vector-im/element-web/pull/17194)
+ * Bump ua-parser-js from 0.7.23 to 0.7.24
+   [\#17190](https://github.com/vector-im/element-web/pull/17190)
+
+Changes in [1.7.27](https://github.com/vector-im/element-web/releases/tag/v1.7.27) (2021-05-10)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.27-rc.1...v1.7.27)
+
+ * Upgrade to React SDK 3.20.0 and JS SDK 10.1.0
+
+Changes in [1.7.27-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.27-rc.1) (2021-05-04)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.26...v1.7.27-rc.1)
+
+ * Upgrade to React SDK 3.20.0-rc.1 and JS SDK 10.1.0-rc.1
+ * Translations update from Weblate
+   [\#17160](https://github.com/vector-im/element-web/pull/17160)
+ * Document option for obeying asserted identity
+   [\#17008](https://github.com/vector-im/element-web/pull/17008)
+ * Implement IPC call to Electron to set language
+   [\#17052](https://github.com/vector-im/element-web/pull/17052)
+ * Convert Vector skin react components to Typescript
+   [\#17061](https://github.com/vector-im/element-web/pull/17061)
+ * Add code quality review policy
+   [\#16980](https://github.com/vector-im/element-web/pull/16980)
+ * Register RecorderWorklet from react-sdk
+   [\#17013](https://github.com/vector-im/element-web/pull/17013)
+ * Preload Inter font to avoid FOIT on slow connections
+   [\#17039](https://github.com/vector-im/element-web/pull/17039)
+ * Disable `postcss-calc`'s noisy `warnWhenCannotResolve` option
+   [\#17041](https://github.com/vector-im/element-web/pull/17041)
+
+Changes in [1.7.26](https://github.com/vector-im/element-web/releases/tag/v1.7.26) (2021-04-26)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.26-rc.1...v1.7.26)
+
+ * Upgrade to React SDK 3.19.0 and JS SDK 10.0.0
+
+Changes in [1.7.26-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.26-rc.1) (2021-04-21)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.25...v1.7.26-rc.1)
+
+ * Upgrade to React SDK 3.19.0-rc.1 and JS SDK 10.0.0-rc.1
+ * Translations update from Weblate
+   [\#17031](https://github.com/vector-im/element-web/pull/17031)
+ * Bump ssri from 6.0.1 to 6.0.2
+   [\#17010](https://github.com/vector-im/element-web/pull/17010)
+ * Fix `NODE_ENV` value for CI environments
+   [\#17003](https://github.com/vector-im/element-web/pull/17003)
+ * Use React production mode in CI builds
+   [\#16969](https://github.com/vector-im/element-web/pull/16969)
+ * Labs documentation for DND mode
+   [\#16962](https://github.com/vector-im/element-web/pull/16962)
+ * Rename blackboxing to new option ignore list
+   [\#16965](https://github.com/vector-im/element-web/pull/16965)
+ * Remove velocity-animate from lockfile
+   [\#16963](https://github.com/vector-im/element-web/pull/16963)
+ * Add mobile download link configuration
+   [\#16890](https://github.com/vector-im/element-web/pull/16890)
+ * Switch develop to not-staging Scalar by default
+   [\#16883](https://github.com/vector-im/element-web/pull/16883)
+ * Support a config option to skip login/welcome and go to SSO
+   [\#16880](https://github.com/vector-im/element-web/pull/16880)
+
+Changes in [1.7.25](https://github.com/vector-im/element-web/releases/tag/v1.7.25) (2021-04-12)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.25-rc.1...v1.7.25)
+
+ * Upgrade to React SDK 3.18.0 and JS SDK 9.11.0
+
+Changes in [1.7.25-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.25-rc.1) (2021-04-07)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.24...v1.7.25-rc.1)
+
+ * Upgrade to React SDK 3.18.0-rc.1 and JS SDK 9.11.0-rc.1
+ * Translations update from Weblate
+   [\#16882](https://github.com/vector-im/element-web/pull/16882)
+ * Revert "Docker image: serve pre-compressed assets using gzip_static"
+   [\#16838](https://github.com/vector-im/element-web/pull/16838)
+ * Move native node modules documentation to element-desktop
+   [\#16814](https://github.com/vector-im/element-web/pull/16814)
+ * Add user settings for warn before exit
+   [\#16781](https://github.com/vector-im/element-web/pull/16781)
+ * Change ISSUE_TEMPLATE bold lines to proper headers
+   [\#16768](https://github.com/vector-im/element-web/pull/16768)
+ * Add example for deployment into Kubernetes
+   [\#16447](https://github.com/vector-im/element-web/pull/16447)
+ * Create bare-bones `PULL_REQUEST_TEMPLATE.md`
+   [\#16770](https://github.com/vector-im/element-web/pull/16770)
+ * Add webpack config and labs flag docs for voice messages
+   [\#16705](https://github.com/vector-im/element-web/pull/16705)
+
+Changes in [1.7.24](https://github.com/vector-im/element-web/releases/tag/v1.7.24) (2021-03-29)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.24-rc.1...v1.7.24)
+
+ * Upgrade to React SDK 3.17.0 and JS SDK 9.10.0
+
+Changes in [1.7.24-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.24-rc.1) (2021-03-25)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.23...v1.7.24-rc.1)
+
+ * Upgrade to React SDK 3.17.0-rc.2 and JS SDK 9.10.0-rc.1
+ * Translations update from Weblate
+   [\#16766](https://github.com/vector-im/element-web/pull/16766)
+ * Docker image: serve pre-compressed assets using gzip_static
+   [\#16698](https://github.com/vector-im/element-web/pull/16698)
+ * Fix style lint issues
+   [\#16732](https://github.com/vector-im/element-web/pull/16732)
+ * Updated expected webpack output in setup guide
+   [\#16740](https://github.com/vector-im/element-web/pull/16740)
+ * Docs for `loginForWelcome`
+   [\#16468](https://github.com/vector-im/element-web/pull/16468)
+ * Disable rageshake persistence if no logs would be submitted
+   [\#16697](https://github.com/vector-im/element-web/pull/16697)
+
+Changes in [1.7.23](https://github.com/vector-im/element-web/releases/tag/v1.7.23) (2021-03-15)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.23-rc.1...v1.7.23)
+
+ * Upgrade to React SDK 3.16.0 and JS SDK 9.9.0
+
+Changes in [1.7.23-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.23-rc.1) (2021-03-10)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.22...v1.7.23-rc.1)
+
+ * Upgrade to React SDK 3.16.0-rc.2 and JS SDK 9.9.0-rc.1
+ * Translations update from Weblate
+   [\#16655](https://github.com/vector-im/element-web/pull/16655)
+ * Improve docs for customisations
+   [\#16652](https://github.com/vector-im/element-web/pull/16652)
+ * Update triage guide to match the new label scheme
+   [\#16612](https://github.com/vector-im/element-web/pull/16612)
+ * Remove a couple useless 'use strict' calls
+   [\#16650](https://github.com/vector-im/element-web/pull/16650)
+ * Remove old conferencing doc
+   [\#16648](https://github.com/vector-im/element-web/pull/16648)
+ * Bump elliptic from 6.5.3 to 6.5.4
+   [\#16644](https://github.com/vector-im/element-web/pull/16644)
+ * Add option for audio live streaming
+   [\#16604](https://github.com/vector-im/element-web/pull/16604)
+ * Update velocity-animate dependency
+   [\#16605](https://github.com/vector-im/element-web/pull/16605)
+ * Add Edge to the supported tier
+   [\#16611](https://github.com/vector-im/element-web/pull/16611)
+ * Add multi language spell check
+   [\#15851](https://github.com/vector-im/element-web/pull/15851)
+ * Document feature_spaces
+   [\#16538](https://github.com/vector-im/element-web/pull/16538)
+
+Changes in [1.7.22](https://github.com/vector-im/element-web/releases/tag/v1.7.22) (2021-03-01)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.22-rc.1...v1.7.22)
+
+## Security notice
+
+Element Web 1.7.22 fixes (by upgrading to matrix-react-sdk 3.15.0) a moderate
+severity issue (CVE-2021-21320) where the user content sandbox can be abused to
+trick users into opening unexpected documents after several user interactions.
+The content can be opened with a `blob` origin from the Matrix client, so it is
+possible for a malicious document to access user messages and secrets. Thanks to
+@keerok for responsibly disclosing this via Matrix's Security Disclosure Policy.
+
+## All changes
+
+ * Upgrade to React SDK 3.15.0 and JS SDK 9.8.0
+
+Changes in [1.7.22-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.22-rc.1) (2021-02-24)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.21...v1.7.22-rc.1)
+
+ * Upgrade to React SDK 3.15.0-rc.1 and JS SDK 9.8.0-rc.1
+ * Translations update from Weblate
+   [\#16529](https://github.com/vector-im/element-web/pull/16529)
+ * Add hostSignup config for element.io clients
+   [\#16515](https://github.com/vector-im/element-web/pull/16515)
+ * VoIP virtual rooms, mkII
+   [\#16442](https://github.com/vector-im/element-web/pull/16442)
+ * Jitsi widget: Read room name from query parameters
+   [\#16456](https://github.com/vector-im/element-web/pull/16456)
+ * fix / sso: make sure to delete only loginToken after redirect
+   [\#16415](https://github.com/vector-im/element-web/pull/16415)
+ * Disable Countly
+   [\#16433](https://github.com/vector-im/element-web/pull/16433)
+
+Changes in [1.7.21](https://github.com/vector-im/element-web/releases/tag/v1.7.21) (2021-02-16)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.21-rc.1...v1.7.21)
+
+ * Upgrade to React SDK 3.14.0 and JS SDK 9.7.0
+
+Changes in [1.7.21-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.21-rc.1) (2021-02-10)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.20...v1.7.21-rc.1)
+
+ * Upgrade to React SDK 3.14.0-rc.1 and JS SDK 9.7.0-rc.1
+ * Translations update from Weblate
+   [\#16427](https://github.com/vector-im/element-web/pull/16427)
+ * Add RegExp dotAll feature test
+   [\#16408](https://github.com/vector-im/element-web/pull/16408)
+ * Fix Electron type merging
+   [\#16405](https://github.com/vector-im/element-web/pull/16405)
+ * README: remove Jenkins reference
+   [\#16381](https://github.com/vector-im/element-web/pull/16381)
+ * Enable PostCSS Calc in webpack builds
+   [\#16307](https://github.com/vector-im/element-web/pull/16307)
+ * Add configuration security best practices to the README.
+   [\#16367](https://github.com/vector-im/element-web/pull/16367)
+ * Upgrade matrix-widget-api
+   [\#16347](https://github.com/vector-im/element-web/pull/16347)
+
+Changes in [1.7.20](https://github.com/vector-im/element-web/releases/tag/v1.7.20) (2021-02-04)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.19...v1.7.20)
+
+ * Upgrade to React SDK 3.13.1
+
+Changes in [1.7.19](https://github.com/vector-im/element-web/releases/tag/v1.7.19) (2021-02-03)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.19-rc.1...v1.7.19)
+
+ * Upgrade to React SDK 3.13.0 and JS SDK 9.6.0
+ * [Release] Upgrade matrix-widget-api
+   [\#16348](https://github.com/vector-im/element-web/pull/16348)
+
+Changes in [1.7.19-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.19-rc.1) (2021-01-29)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.18...v1.7.19-rc.1)
+
+ * Upgrade to React SDK 3.13.0-rc.1 and JS SDK 9.6.0-rc.1
+ * Translations update from Weblate
+   [\#16314](https://github.com/vector-im/element-web/pull/16314)
+ * Use history replaceState instead of redirect for SSO flow
+   [\#16292](https://github.com/vector-im/element-web/pull/16292)
+ * Document the mobile guide toast option
+   [\#16301](https://github.com/vector-im/element-web/pull/16301)
+ * Update widget-api to beta.12
+   [\#16303](https://github.com/vector-im/element-web/pull/16303)
+ * Upgrade deps 2021-01
+   [\#16294](https://github.com/vector-im/element-web/pull/16294)
+ * Move to newer base image for Docker builds
+   [\#16275](https://github.com/vector-im/element-web/pull/16275)
+ * Docs for the VoIP translate pattern option
+   [\#16236](https://github.com/vector-im/element-web/pull/16236)
+ * Fix Riot->Element in permalinkPrefix docs
+   [\#16227](https://github.com/vector-im/element-web/pull/16227)
+ * Supply server_name for optional federation-capable Jitsi auth
+   [\#16215](https://github.com/vector-im/element-web/pull/16215)
+ * Fix Widget API version confusion
+   [\#16212](https://github.com/vector-im/element-web/pull/16212)
+ * Add Hebrew language
+   [\#16210](https://github.com/vector-im/element-web/pull/16210)
+ * Update widget-api to beta 11
+   [\#16177](https://github.com/vector-im/element-web/pull/16177)
+ * Fix develop Docker builds
+   [\#16192](https://github.com/vector-im/element-web/pull/16192)
+ * Skip the service worker for Electron
+   [\#16157](https://github.com/vector-im/element-web/pull/16157)
+ * Use isolated IPC API
+   [\#16137](https://github.com/vector-im/element-web/pull/16137)
+
+Changes in [1.7.18](https://github.com/vector-im/element-web/releases/tag/v1.7.18) (2021-01-26)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.17...v1.7.18)
+
+ * Upgrade to React SDK 3.12.1 and JS SDK 9.5.1
+
+Changes in [1.7.17](https://github.com/vector-im/element-web/releases/tag/v1.7.17) (2021-01-18)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.17-rc.1...v1.7.17)
+
+ * Upgrade to React SDK 3.12.0 and JS SDK 9.5.0
+
+Changes in [1.7.17-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.17-rc.1) (2021-01-13)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.16...v1.7.17-rc.1)
+
+ * Upgrade to React SDK 3.12.0-rc.1 and JS SDK 9.5.0-rc.1
+ * Translations update from Weblate
+   [\#16131](https://github.com/vector-im/element-web/pull/16131)
+ * webplatform: Fix notification closing
+   [\#16028](https://github.com/vector-im/element-web/pull/16028)
+ * Stop building code and types for Element layer
+   [\#15999](https://github.com/vector-im/element-web/pull/15999)
+
+Changes in [1.7.16](https://github.com/vector-im/element-web/releases/tag/v1.7.16) (2020-12-21)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.16-rc.1...v1.7.16)
+
+ * Upgrade to React SDK 3.11.1 and JS SDK 9.4.1
+
+Changes in [1.7.16-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.16-rc.1) (2020-12-16)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.15...v1.7.16-rc.1)
+
+ * Upgrade to React SDK 3.11.0-rc.2 and JS SDK 9.4.0-rc.2
+ * Translations update from Weblate
+   [\#15979](https://github.com/vector-im/element-web/pull/15979)
+ * Bump ini from 1.3.5 to 1.3.7
+   [\#15949](https://github.com/vector-im/element-web/pull/15949)
+ * Document pull request previews
+   [\#15937](https://github.com/vector-im/element-web/pull/15937)
+ * Improve asset path for KaTeX fonts
+   [\#15939](https://github.com/vector-im/element-web/pull/15939)
+ * Fix an important semicolon
+   [\#15912](https://github.com/vector-im/element-web/pull/15912)
+ * Bump highlight.js from 10.1.2 to 10.4.1
+   [\#15898](https://github.com/vector-im/element-web/pull/15898)
+ * Add gitter.im to room directory
+   [\#15894](https://github.com/vector-im/element-web/pull/15894)
+ * Extend Platform to support idpId for SSO flows
+   [\#15771](https://github.com/vector-im/element-web/pull/15771)
+ * Include KaTeX CSS as a dependency
+   [\#15843](https://github.com/vector-im/element-web/pull/15843)
+
+Changes in [1.7.15](https://github.com/vector-im/element-web/releases/tag/v1.7.15) (2020-12-07)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.15-rc.1...v1.7.15)
+
+ * Upgrade to React SDK 3.10.0 and JS SDK 9.3.0
+
+Changes in [1.7.15-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.15-rc.1) (2020-12-02)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.14...v1.7.15-rc.1)
+
+ * Upgrade to React SDK 3.10.0-rc.1 and JS SDK 9.3.0-rc.1
+ * Include KaTeX CSS as a dependency
+   [\#15843](https://github.com/vector-im/element-web/pull/15843)
+ * Translations update from Weblate
+   [\#15884](https://github.com/vector-im/element-web/pull/15884)
+ * added katex.min.css to webpack for math support (main PR in matrix-react-
+   sdk)
+   [\#15277](https://github.com/vector-im/element-web/pull/15277)
+ * Rebrand package name and other details
+   [\#15828](https://github.com/vector-im/element-web/pull/15828)
+ * Bump highlight.js from 9.18.1 to 10.1.2
+   [\#15819](https://github.com/vector-im/element-web/pull/15819)
+ * Update branding of packaging artifacts
+   [\#15810](https://github.com/vector-im/element-web/pull/15810)
+ * Update the react-sdk reference in the lockfile
+   [\#15814](https://github.com/vector-im/element-web/pull/15814)
+ * Update widget API for good measure in Element Web
+   [\#15812](https://github.com/vector-im/element-web/pull/15812)
+ * Stop publishing Element to NPM
+   [\#15811](https://github.com/vector-im/element-web/pull/15811)
+ * Add inotify instance limit info to README
+   [\#15795](https://github.com/vector-im/element-web/pull/15795)
+
+Changes in [1.7.14](https://github.com/vector-im/element-web/releases/tag/v1.7.14) (2020-11-23)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.14-rc.1...v1.7.14)
+
+ * Upgrade to React SDK 3.9.0 and JS SDK 9.2.0
+
+Changes in [1.7.14-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.14-rc.1) (2020-11-18)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.13...v1.7.14-rc.1)
+
+ * Upgrade to React SDK 3.9.0-rc.1 and JS SDK 9.2.0-rc.1
+ * Translations update from Weblate
+   [\#15767](https://github.com/vector-im/element-web/pull/15767)
+ * Update the widget-api for element-web
+   [\#15717](https://github.com/vector-im/element-web/pull/15717)
+
+Changes in [1.7.13](https://github.com/vector-im/element-web/releases/tag/v1.7.13) (2020-11-09)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.13-rc.1...v1.7.13)
+
+ * Upgrade to React SDK 3.8.0 and JS SDK 9.1.0
+
+Changes in [1.7.13-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.13-rc.1) (2020-11-04)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.12...v1.7.13-rc.1)
+
+ * Upgrade to React SDK 3.8.0-rc.1 and JS SDK 9.1.0-rc.1
+ * Translations update from Weblate
+   [\#15644](https://github.com/vector-im/element-web/pull/15644)
+ * Add countly experiment to develop/nightly configs
+   [\#15614](https://github.com/vector-im/element-web/pull/15614)
+ * Add documentation for new UIFeature flag regarding room history settings
+   [\#15592](https://github.com/vector-im/element-web/pull/15592)
+ * Rename Docker repo in docs
+   [\#15590](https://github.com/vector-im/element-web/pull/15590)
+ * Fix Jitsi regressions with custom themes
+   [\#15575](https://github.com/vector-im/element-web/pull/15575)
+
+Changes in [1.7.12](https://github.com/vector-im/element-web/releases/tag/v1.7.12) (2020-10-28)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.11...v1.7.12)
+
+ * Upgrade to React SDK 3.7.1 and JS SDK 9.0.1
+ * [Release] Fix Jitsi regressions with custom themes
+   [\#15577](https://github.com/vector-im/element-web/pull/15577)
+
+Changes in [1.7.11](https://github.com/vector-im/element-web/releases/tag/v1.7.11) (2020-10-26)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.11-rc.1...v1.7.11)
+
+ * Upgrade to React SDK 3.7.0 and JS SDK 9.0.0
+
+Changes in [1.7.11-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.11-rc.1) (2020-10-21)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.10...v1.7.11-rc.1)
+
+ * Upgrade to React SDK 3.7.0-rc.2 and JS SDK 9.0.0-rc.1
+ * Update Weblate URL
+   [\#15516](https://github.com/vector-im/element-web/pull/15516)
+ * Translations update from Weblate
+   [\#15517](https://github.com/vector-im/element-web/pull/15517)
+ * Jitsi accept theme variable and restyle
+   [\#15499](https://github.com/vector-im/element-web/pull/15499)
+ * Skip editor confirmation of upgrades
+   [\#15506](https://github.com/vector-im/element-web/pull/15506)
+ * Adjust for new widget messaging APIs
+   [\#15495](https://github.com/vector-im/element-web/pull/15495)
+ * Use HTTPS_PROXY environment variable for downloading external_api.min…
+   [\#15479](https://github.com/vector-im/element-web/pull/15479)
+ * Document customisation points
+   [\#15475](https://github.com/vector-im/element-web/pull/15475)
+ * Don't fatally end the Jitsi widget when it's not being used as a widget
+   [\#15466](https://github.com/vector-im/element-web/pull/15466)
+ * electron-platform: Pass the user/devce id pair when initializing the event
+   index.
+   [\#15455](https://github.com/vector-im/element-web/pull/15455)
+
+Changes in [1.7.10](https://github.com/vector-im/element-web/releases/tag/v1.7.10) (2020-10-20)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.9...v1.7.10)
+
+ * [Release] Adjust for new widget messaging APIs
+   [\#15497](https://github.com/vector-im/element-web/pull/15497)
+ * Upgrade to React SDK 3.6.1
+
+Changes in [1.7.9](https://github.com/vector-im/element-web/releases/tag/v1.7.9) (2020-10-12)
+=============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.9-rc.1...v1.7.9)
+
+ * Upgrade to React SDK 3.6.0 and JS SDK 8.5.0
+
+Changes in [1.7.9-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.9-rc.1) (2020-10-07)
+=======================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.8...v1.7.9-rc.1)
+
+ * Upgrade to React SDK 3.6.0-rc.1 and JS SDK 8.5.0-rc.1
+ * Update from Weblate
+   [\#15406](https://github.com/vector-im/element-web/pull/15406)
+ * Update Jest and JSDOM
+   [\#15402](https://github.com/vector-im/element-web/pull/15402)
+ * Add support for dehydration/fallback keys
+   [\#15398](https://github.com/vector-im/element-web/pull/15398)
+ * Remove riot-bot from sample config
+   [\#15376](https://github.com/vector-im/element-web/pull/15376)
+ * Switch to using the Widget API SDK for Jitsi widgets
+   [\#15102](https://github.com/vector-im/element-web/pull/15102)
+ * Remove workbox
+   [\#15352](https://github.com/vector-im/element-web/pull/15352)
+ * Disable workbox when running in webpack dev server, not in dev mode
+   [\#15345](https://github.com/vector-im/element-web/pull/15345)
+ * Update Riot -> Element in contribute.json
+   [\#15326](https://github.com/vector-im/element-web/pull/15326)
+ * Update Riot -> Element in redeploy.py
+   [\#15336](https://github.com/vector-im/element-web/pull/15336)
+ * Update Riot -> Element in docs/feature-flags.md
+   [\#15325](https://github.com/vector-im/element-web/pull/15325)
+ * Update Riot -> Element in element.io/README.md
+   [\#15327](https://github.com/vector-im/element-web/pull/15327)
+ * Update Riot -> Element in VectorAuthFooter
+   [\#15328](https://github.com/vector-im/element-web/pull/15328)
+ * Update Riot -> Element in VectorEmbeddedPage
+   [\#15329](https://github.com/vector-im/element-web/pull/15329)
+ * Update Riot -> Element in docs/review.md
+   [\#15330](https://github.com/vector-im/element-web/pull/15330)
+ * Update Riot -> Element in welcome.html
+   [\#15332](https://github.com/vector-im/element-web/pull/15332)
+ * Update Riot -> Element in issues-burndown.pl
+   [\#15333](https://github.com/vector-im/element-web/pull/15333)
+ * Update Riot -> Element in redeploy.py
+   [\#15334](https://github.com/vector-im/element-web/pull/15334)
+ * Update Riot -> Element in index.ts
+   [\#15335](https://github.com/vector-im/element-web/pull/15335)
+ * Update Riot -> Element Web in issue templates
+   [\#15324](https://github.com/vector-im/element-web/pull/15324)
+ * Give the Jitsi widget an icon to help with discovery
+   [\#15316](https://github.com/vector-im/element-web/pull/15316)
+ * Jitsi widget wrapper updates for hangup button
+   [\#15219](https://github.com/vector-im/element-web/pull/15219)
+ * Tidy up Service Worker, only run Workbox in production
+   [\#15271](https://github.com/vector-im/element-web/pull/15271)
+ * Remove conference handler
+   [\#15274](https://github.com/vector-im/element-web/pull/15274)
+ * Rebrand the webpack pipeline for Element
+   [\#15266](https://github.com/vector-im/element-web/pull/15266)
+ * Replace dummy sw.js with pre-caching and runtime-caching workbox SW
+   [\#15196](https://github.com/vector-im/element-web/pull/15196)
+
+Changes in [1.7.8](https://github.com/vector-im/element-web/releases/tag/v1.7.8) (2020-09-28)
+=============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.8-rc.1...v1.7.8)
+
+ * Upgrade to React SDK 3.5.0 and JS SDK 8.4.1
+
+Changes in [1.7.8-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.8-rc.1) (2020-09-23)
+=======================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.7...v1.7.8-rc.1)
+
+ * Upgrade to React SDK 3.5.0-rc.1 and JS SDK 8.4.0-rc.1
+ * Update from Weblate
+   [\#15262](https://github.com/vector-im/element-web/pull/15262)
+ * Upgrade sanitize-html
+   [\#15260](https://github.com/vector-im/element-web/pull/15260)
+ * Document config for preferring Secure Backup setup methods
+   [\#15251](https://github.com/vector-im/element-web/pull/15251)
+ * Add end-user documentation for UI features
+   [\#15190](https://github.com/vector-im/element-web/pull/15190)
+ * Update git checkout instructions
+   [\#15218](https://github.com/vector-im/element-web/pull/15218)
+ * If no bug_report_endpoint_url, hide rageshaking from the App
+   [\#15201](https://github.com/vector-im/element-web/pull/15201)
+ * Bump node-fetch from 2.6.0 to 2.6.1
+   [\#15153](https://github.com/vector-im/element-web/pull/15153)
+ * Remove references to Travis CI
+   [\#15137](https://github.com/vector-im/element-web/pull/15137)
+ * Fix onNewScreen to use replace when going from roomId->roomAlias
+   [\#15127](https://github.com/vector-im/element-web/pull/15127)
+ * Enable Estonian in language menu
+   [\#15136](https://github.com/vector-im/element-web/pull/15136)
+
+Changes in [1.7.7](https://github.com/vector-im/element-web/releases/tag/v1.7.7) (2020-09-14)
+=============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.6...v1.7.7)
+
+ * Upgrade to React SDK 3.4.1
+
+Changes in [1.7.6](https://github.com/vector-im/element-web/releases/tag/v1.7.6) (2020-09-14)
+=============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.6-rc.1...v1.7.6)
+
+ * Upgrade to React SDK 3.4.0 and JS SDK 8.3.0
+
+Changes in [1.7.6-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.6-rc.1) (2020-09-09)
+=======================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.5...v1.7.6-rc.1)
+
+ * Upgrade to React SDK 3.4.0-rc.1 and JS SDK 8.3.0-rc.1
+ * Update from Weblate
+   [\#15125](https://github.com/vector-im/element-web/pull/15125)
+ * Support usage of Jitsi widgets with "openidtoken-jwt" auth
+   [\#15114](https://github.com/vector-im/element-web/pull/15114)
+ * Fix eslint ts override tsx matching and delint
+   [\#15064](https://github.com/vector-im/element-web/pull/15064)
+ * Add testing to review guidelines
+   [\#15050](https://github.com/vector-im/element-web/pull/15050)
+
+Changes in [1.7.5](https://github.com/vector-im/element-web/releases/tag/v1.7.5) (2020-09-01)
+=============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.5-rc.1...v1.7.5)
+
+## Security notice
+
+Element Web 1.7.5 fixes an issue where encrypted state events could break incoming call handling.
+Thanks to @awesome-michael from Awesome Technologies for responsibly disclosing this via Matrix's
+Security Disclosure Policy.
+
+## All changes
+
+ * Upgrade to React SDK 3.3.0 and JS SDK 8.2.0
+
+Changes in [1.7.5-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.5-rc.1) (2020-08-26)
+=======================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.4...v1.7.5-rc.1)
+
+ * Upgrade to React SDK 3.3.0-rc.1 and JS SDK 8.2.0-rc.1
+ * Update from Weblate
+   [\#15045](https://github.com/vector-im/element-web/pull/15045)
+ * Document .well-known E2EE secure backup setting
+   [\#15003](https://github.com/vector-im/element-web/pull/15003)
+ * Add docs for communities v2 prototyping feature flag
+   [\#15013](https://github.com/vector-im/element-web/pull/15013)
+ * Update links in README.md to point to Element
+   [\#14973](https://github.com/vector-im/element-web/pull/14973)
+ * Make kabyle translation available
+   [\#15027](https://github.com/vector-im/element-web/pull/15027)
+ * Change Riot to Element in readme
+   [\#15016](https://github.com/vector-im/element-web/pull/15016)
+ * Update links to element in the readme
+   [\#15014](https://github.com/vector-im/element-web/pull/15014)
+ * Link to Element in F-Droid as well
+   [\#15002](https://github.com/vector-im/element-web/pull/15002)
+ * Settings v3: Update documentation and configs for new feature flag behaviour
+   [\#14986](https://github.com/vector-im/element-web/pull/14986)
+ * Update jitsi.md with Element Android details
+   [\#14952](https://github.com/vector-im/element-web/pull/14952)
+ * TypeScript: enable es2019 lib for newer definitions
+   [\#14983](https://github.com/vector-im/element-web/pull/14983)
+ * Add reaction preview labs flags to develop
+   [\#14979](https://github.com/vector-im/element-web/pull/14979)
+ * Document new labs tweaks
+   [\#14958](https://github.com/vector-im/element-web/pull/14958)
+
+Changes in [1.7.4](https://github.com/vector-im/element-web/releases/tag/v1.7.4) (2020-08-17)
+=============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.4-rc.1...v1.7.4)
+
+ * Upgrade to React SDK 3.2.0 and JS SDK 8.1.0
+
+Changes in [1.7.4-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.4-rc.1) (2020-08-13)
+=======================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.3...v1.7.4-rc.1)
+
+ * Upgrade to React SDK 3.2.0-rc.1 and JS SDK 8.1.0-rc.1
+ * Update policy links to element.io
+   [\#14905](https://github.com/vector-im/element-web/pull/14905)
+ * Update from Weblate
+   [\#14949](https://github.com/vector-im/element-web/pull/14949)
+ * Try to close notification on all platforms which support it, not just
+   electron
+   [\#14939](https://github.com/vector-im/element-web/pull/14939)
+ * Update bug report submission URL
+   [\#14903](https://github.com/vector-im/element-web/pull/14903)
+ * Fix arm docker build
+   [\#14522](https://github.com/vector-im/element-web/pull/14522)
+
+Changes in [1.7.3](https://github.com/vector-im/element-web/releases/tag/v1.7.3) (2020-08-05)
+=============================================================================================
+
+## Security notice
+
+Element Web 1.7.3 (as well as the earlier release 1.7.2) fixes an issue where
+replying to a specially formatted message would make it seem like the replier
+said something they did not. Thanks to Sorunome for responsibly disclosing this
+via Matrix's Security Disclosure Policy.
+
+Element Web 1.7.3 (as well as the earlier release 1.7.2) fixes an issue where an
+unexpected language ID in a code block could cause Element to crash. Thanks to
+SakiiR for responsibly disclosing this via Matrix's Security Disclosure Policy.
+
+## All changes
+
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.3-rc.1...v1.7.3)
+
+ * Upgrade to React SDK 3.1.0 and JS SDK 8.0.1
+
+Changes in [1.7.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.7.3-rc.1) (2020-07-31)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.7.2...v1.7.3-rc.1)
+
+ * Upgrade to React SDK 3.1.0-rc.1 and JS SDK 8.0.1-rc.1
+ * Make Lojban translation available
+   [\#14703](https://github.com/vector-im/riot-web/pull/14703)
+ * Update from Weblate
+   [\#14841](https://github.com/vector-im/riot-web/pull/14841)
+ * Remove redundant lint dependencies
+   [\#14810](https://github.com/vector-im/riot-web/pull/14810)
+ * Bump elliptic from 6.5.2 to 6.5.3
+   [\#14826](https://github.com/vector-im/riot-web/pull/14826)
+ * Update mobile config intercept URL
+   [\#14796](https://github.com/vector-im/riot-web/pull/14796)
+ * Fix typo in https://
+   [\#14791](https://github.com/vector-im/riot-web/pull/14791)
+
+Changes in [1.7.2](https://github.com/vector-im/riot-web/releases/tag/v1.7.2) (2020-07-27)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.7.1...v1.7.2)
+
+ * Upgrade to React SDK 3.0.0 and JS SDK 8.0.0
+ * Update from Weblate
+   [\#14778](https://github.com/vector-im/riot-web/pull/14778)
+ * Capitalize letters
+   [\#14566](https://github.com/vector-im/riot-web/pull/14566)
+ * Configure eslint package and fix lint issues
+   [\#14673](https://github.com/vector-im/riot-web/pull/14673)
+ * Riot → Element
+   [\#14581](https://github.com/vector-im/riot-web/pull/14581)
+ * Remove labs info for the new room list
+   [\#14603](https://github.com/vector-im/riot-web/pull/14603)
+ * Convince Webpack to use development on CI
+   [\#14593](https://github.com/vector-im/riot-web/pull/14593)
+ * Move dev dep to the right place
+   [\#14572](https://github.com/vector-im/riot-web/pull/14572)
+ * Bump lodash from 4.17.15 to 4.17.19
+   [\#14552](https://github.com/vector-im/riot-web/pull/14552)
+ * Update all mobile links to match marketing site
+   [\#14541](https://github.com/vector-im/riot-web/pull/14541)
+
+Changes in [1.7.1](https://github.com/vector-im/riot-web/releases/tag/v1.7.1) (2020-07-16)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.7.0...v1.7.1)
+
+ * Upgrade to React SDK 2.10.1
+ * Fix SSO session ID paramater
+   [\#14544](https://github.com/vector-im/riot-web/pull/14544)
+ * Run pngcrush on vector-icons
+   [\#14488](https://github.com/vector-im/riot-web/pull/14488)
+ * Fix hosting signup link
+   [\#14502](https://github.com/vector-im/riot-web/pull/14502)
+ * Use the right protocol for SSO URLs
+   [\#14513](https://github.com/vector-im/riot-web/pull/14513)
+ * Fix mstile-310x150 by renaming it
+   [\#14485](https://github.com/vector-im/riot-web/pull/14485)
+ * Update blog and twitter links to point to Element
+   [\#14478](https://github.com/vector-im/riot-web/pull/14478)
+
+Changes in [1.7.0](https://github.com/vector-im/riot-web/releases/tag/v1.7.0) (2020-07-15)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.8...v1.7.0)
+
+ * App name changed from Riot to Element
+ * Upgrade to React SDK 2.10.0
+ * Remove redundant enum
+   [\#14472](https://github.com/vector-im/riot-web/pull/14472)
+ * Remove font scaling from labs
+   [\#14355](https://github.com/vector-im/riot-web/pull/14355)
+ * Update documentation and remove labs flag for new room list
+   [\#14375](https://github.com/vector-im/riot-web/pull/14375)
+ * Update from Weblate
+   [\#14434](https://github.com/vector-im/riot-web/pull/14434)
+ * Release the irc layout from labs
+   [\#14350](https://github.com/vector-im/riot-web/pull/14350)
+ * Fix welcomeBackgroundUrl array causing background to change during use
+   [\#14368](https://github.com/vector-im/riot-web/pull/14368)
+ * Be more explicit about type when calling platform startUpdater
+   [\#14299](https://github.com/vector-im/riot-web/pull/14299)
+
+Changes in [1.6.8](https://github.com/vector-im/riot-web/releases/tag/v1.6.8) (2020-07-03)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.8-rc.1...v1.6.8)
+
+ * Upgrade to JS SDK 7.1.0 and React SDK 2.9.0
+
+Changes in [1.6.8-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.6.8-rc.1) (2020-07-01)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.7...v1.6.8-rc.1)
+
+ * Upgrade to JS SDK 7.1.0-rc.1 and React SDK 2.9.0-rc.1
+ * Update from Weblate
+   [\#14282](https://github.com/vector-im/riot-web/pull/14282)
+ * Show a download completed toast in electron
+   [\#14248](https://github.com/vector-im/riot-web/pull/14248)
+ * Add the new spinner feature labs flag
+   [\#14213](https://github.com/vector-im/riot-web/pull/14213)
+ * Fix loading-test for SSO plaf changes
+   [\#14212](https://github.com/vector-im/riot-web/pull/14212)
+ * Fix spelling on startup error page
+   [\#14199](https://github.com/vector-im/riot-web/pull/14199)
+ * Document fonts in custom theme
+   [\#14175](https://github.com/vector-im/riot-web/pull/14175)
+ * Update from Weblate
+   [\#14129](https://github.com/vector-im/riot-web/pull/14129)
+ * ElectronPlatform: Implement the isRoomIndexed method.
+   [\#13957](https://github.com/vector-im/riot-web/pull/13957)
+ * ElectronPlatform: Add support to set and get the index user version.
+   [\#14080](https://github.com/vector-im/riot-web/pull/14080)
+ * Mark the new room list as ready for general testing
+   [\#14102](https://github.com/vector-im/riot-web/pull/14102)
+
+Changes in [1.6.7](https://github.com/vector-im/riot-web/releases/tag/v1.6.7) (2020-06-29)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.6...v1.6.7)
+
+ * Upgrade to React SDK 2.8.1
+
+Changes in [1.6.6](https://github.com/vector-im/riot-web/releases/tag/v1.6.6) (2020-06-23)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.6-rc.1...v1.6.6)
+
+ * Upgrade to JS SDK 7.0.0 and React SDK 2.8.0
+
+Changes in [1.6.6-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.6.6-rc.1) (2020-06-17)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.5...v1.6.6-rc.1)
+
+ * Upgrade to JS SDK 7.0.0-rc.1 and React SDK 2.8.0-rc.1
+ * Update from Weblate
+   [\#14067](https://github.com/vector-im/riot-web/pull/14067)
+ * Update from Weblate
+   [\#14032](https://github.com/vector-im/riot-web/pull/14032)
+ * Attempt to fix decoder ring for relative hosted riots
+   [\#13987](https://github.com/vector-im/riot-web/pull/13987)
+ * Upgrade deps
+   [\#13952](https://github.com/vector-im/riot-web/pull/13952)
+ * Fix riot-desktop manual update check getting stuck on Downloading...
+   [\#13946](https://github.com/vector-im/riot-web/pull/13946)
+ * Bump websocket-extensions from 0.1.3 to 0.1.4
+   [\#13943](https://github.com/vector-im/riot-web/pull/13943)
+ * Add e2ee-default:false docs
+   [\#13914](https://github.com/vector-im/riot-web/pull/13914)
+ * make IPC calls to get pickle key
+   [\#13846](https://github.com/vector-im/riot-web/pull/13846)
+ * fix loading test for new sso pattern
+   [\#13913](https://github.com/vector-im/riot-web/pull/13913)
+ * Fix login loop where the sso flow returns to `#/login`
+   [\#13889](https://github.com/vector-im/riot-web/pull/13889)
+ * Fix typo in docs
+   [\#13905](https://github.com/vector-im/riot-web/pull/13905)
+ * Remove cross-signing from labs
+   [\#13904](https://github.com/vector-im/riot-web/pull/13904)
+ * Add PWA Platform with PWA-specific badge controls
+   [\#13890](https://github.com/vector-im/riot-web/pull/13890)
+ * Modernizr check for subtle crypto as we require it all over the place
+   [\#13828](https://github.com/vector-im/riot-web/pull/13828)
+
+Changes in [1.6.5](https://github.com/vector-im/riot-web/releases/tag/v1.6.5) (2020-06-16)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.4...v1.6.5)
+
+* Upgrade to JS SDK 6.2.2 and React SDK 2.7.2
+
+Changes in [1.6.4](https://github.com/vector-im/riot-web/releases/tag/v1.6.4) (2020-06-05)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.3...v1.6.4)
+
+* Upgrade to JS SDK 6.2.1 and React SDK 2.7.1
+
+Changes in [1.6.3](https://github.com/vector-im/riot-web/releases/tag/v1.6.3) (2020-06-04)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.3-rc.1...v1.6.3)
+
+## Security notice
+
+Riot Web 1.6.3 fixes a vulnerability in single sign-on (SSO) deployments where Riot Web could be confused into sending authentication details to an attacker-controlled server. Thanks to Quentin Gliech for responsibly disclosing this via Matrix's Security Disclosure Policy.
+
+## All changes
+
+ * Fix login loop where the sso flow returns to `#/login` to release
+   [\#13915](https://github.com/vector-im/riot-web/pull/13915)
+
+Changes in [1.6.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.6.3-rc.1) (2020-06-02)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.2...v1.6.3-rc.1)
+
+ * Upgrade to JS SDK 6.2.0-rc.1 and React SDK 2.7.0-rc.2
+ * Get rid of welcome.html's Chat with Riot Bot button
+   [\#13842](https://github.com/vector-im/riot-web/pull/13842)
+ * Update from Weblate
+   [\#13886](https://github.com/vector-im/riot-web/pull/13886)
+ * Allow deferring of Update Toast until the next morning
+   [\#13864](https://github.com/vector-im/riot-web/pull/13864)
+ * Give contextual feedback for manual update check instead of banner
+   [\#13862](https://github.com/vector-im/riot-web/pull/13862)
+ * Add app-load doc
+   [\#13834](https://github.com/vector-im/riot-web/pull/13834)
+ * Update Modular hosting link
+   [\#13777](https://github.com/vector-im/riot-web/pull/13777)
+ * Replace New Version Bar with a Toast
+   [\#13776](https://github.com/vector-im/riot-web/pull/13776)
+ * Remove webpack-build-notifier from lockfile
+   [\#13814](https://github.com/vector-im/riot-web/pull/13814)
+ *  Add media queries and mobile viewport (#12142)
+   [\#13818](https://github.com/vector-im/riot-web/pull/13818)
+ * Fix @types/react conflict in matrix-react-sdk
+   [\#13809](https://github.com/vector-im/riot-web/pull/13809)
+ * Fix manual update checking, super in arrow funcs doesn't work
+   [\#13808](https://github.com/vector-im/riot-web/pull/13808)
+ * Update from Weblate
+   [\#13806](https://github.com/vector-im/riot-web/pull/13806)
+ * Convert platforms to Typescript
+   [\#13756](https://github.com/vector-im/riot-web/pull/13756)
+ * Fix EventEmitter typescript signature in node typings
+   [\#13764](https://github.com/vector-im/riot-web/pull/13764)
+ * Add docs and labs flag for new room list implementation
+   [\#13675](https://github.com/vector-im/riot-web/pull/13675)
+ * Add font scaling labs setting.
+   [\#13352](https://github.com/vector-im/riot-web/pull/13352)
+ * Add labs flag for alternate message layouts
+   [\#13350](https://github.com/vector-im/riot-web/pull/13350)
+ * Move dispatcher references in support of TypeScript conversion
+   [\#13666](https://github.com/vector-im/riot-web/pull/13666)
+ * Update from Weblate
+   [\#13704](https://github.com/vector-im/riot-web/pull/13704)
+ * Replace favico.js dependency with simplified variant grown from it
+   [\#13649](https://github.com/vector-im/riot-web/pull/13649)
+ * Remove Electron packaging scripts
+   [\#13688](https://github.com/vector-im/riot-web/pull/13688)
+ * Fix postcss order to allow mixin variables to work
+   [\#13674](https://github.com/vector-im/riot-web/pull/13674)
+ * Pass screenAfterLogin through SSO in the callback url
+   [\#13650](https://github.com/vector-im/riot-web/pull/13650)
+
+Changes in [1.6.2](https://github.com/vector-im/riot-web/releases/tag/v1.6.2) (2020-05-22)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.1...v1.6.2)
+
+ * Upgrade to React SDK 2.6.1
+
+Changes in [1.6.1](https://github.com/vector-im/riot-web/releases/tag/v1.6.1) (2020-05-19)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.1-rc.1...v1.6.1)
+
+ * Upgrade to React SDK 2.6.0 and JS SDK 6.1.0
+
+Changes in [1.6.1-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.6.1-rc.1) (2020-05-14)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.0...v1.6.1-rc.1)
+
+ * Upgrade to React SDK 2.6.0-rc.1 and JS SDK 6.1.0-rc.1
+ * Update from Weblate
+   [\#13673](https://github.com/vector-im/riot-web/pull/13673)
+ * Add notranslate class to matrixchat to prevent translation by Google
+   Translate
+   [\#13669](https://github.com/vector-im/riot-web/pull/13669)
+ * Added Anchor Link to the development of matrix sdk
+   [\#13638](https://github.com/vector-im/riot-web/pull/13638)
+ * Prefetch the formatting button mask svg images
+   [\#13631](https://github.com/vector-im/riot-web/pull/13631)
+ * use a different image in previews
+   [\#13488](https://github.com/vector-im/riot-web/pull/13488)
+ * Update from Weblate
+   [\#13625](https://github.com/vector-im/riot-web/pull/13625)
+ * Remove electron_app as we now have riot-desktop repo
+   [\#13544](https://github.com/vector-im/riot-web/pull/13544)
+ * add new images for PWA icons
+   [\#13556](https://github.com/vector-im/riot-web/pull/13556)
+ * Remove unused feature flag from config
+   [\#13504](https://github.com/vector-im/riot-web/pull/13504)
+ * Update from Weblate
+   [\#13486](https://github.com/vector-im/riot-web/pull/13486)
+ * Developer tool: convert rageshake error locations back to sourcecode
+   locations
+   [\#13357](https://github.com/vector-im/riot-web/pull/13357)
+ * App load tweaks, improve error pages
+   [\#13329](https://github.com/vector-im/riot-web/pull/13329)
+ * Tweak default device name to be more compact
+   [\#13465](https://github.com/vector-im/riot-web/pull/13465)
+ * Tweak default device name on macOS
+   [\#13460](https://github.com/vector-im/riot-web/pull/13460)
+ * Update docs with custom theming changes
+   [\#13406](https://github.com/vector-im/riot-web/pull/13406)
+ * Update from Weblate
+   [\#13395](https://github.com/vector-im/riot-web/pull/13395)
+ * Remove docs and config for invite only padlocks
+   [\#13374](https://github.com/vector-im/riot-web/pull/13374)
+ * Revert "Add font scaling labs setting."
+   [\#13351](https://github.com/vector-im/riot-web/pull/13351)
+ * Expand feature flag docs to cover additional release channels
+   [\#13341](https://github.com/vector-im/riot-web/pull/13341)
+ * Optimized image assets by recompressing without affecting quality.
+   [\#13034](https://github.com/vector-im/riot-web/pull/13034)
+ * Add font scaling labs setting.
+   [\#13199](https://github.com/vector-im/riot-web/pull/13199)
+ * Remove encrypted message search feature flag
+   [\#13325](https://github.com/vector-im/riot-web/pull/13325)
+ * Fix `default_federate` settting description
+   [\#13312](https://github.com/vector-im/riot-web/pull/13312)
+ * Clarify that the .well-known method for Jitsi isn't available yet
+   [\#13314](https://github.com/vector-im/riot-web/pull/13314)
+ * add config option to tsc resolveJsonModule
+   [\#13296](https://github.com/vector-im/riot-web/pull/13296)
+ * Fix dispatcher import to be extension agnostic
+   [\#13297](https://github.com/vector-im/riot-web/pull/13297)
+ * Document more config options in config.md (fixes #13089)
+   [\#13260](https://github.com/vector-im/riot-web/pull/13260)
+ * Fix tests post-js-sdk-filters change
+   [\#13295](https://github.com/vector-im/riot-web/pull/13295)
+ * Make Jitsi download script a JS script
+   [\#13227](https://github.com/vector-im/riot-web/pull/13227)
+ * Use matrix-react-sdk type extensions as a base
+   [\#13271](https://github.com/vector-im/riot-web/pull/13271)
+ * Allow Riot Web to randomly pick welcome backgrounds
+   [\#13235](https://github.com/vector-im/riot-web/pull/13235)
+ * Update cross-signing feature docs and document fallback procedures
+   [\#13224](https://github.com/vector-im/riot-web/pull/13224)
+
+Changes in [1.6.0](https://github.com/vector-im/riot-web/releases/tag/v1.6.0) (2020-05-05)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.0-rc.6...v1.6.0)
+
+ * Cross-signing and E2EE by default for DMs and private rooms enabled
+ * Upgrade to React SDK 2.5.0 and JS SDK 6.0.0
+
+Changes in [1.6.0-rc.6](https://github.com/vector-im/riot-web/releases/tag/v1.6.0-rc.6) (2020-05-01)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.0-rc.5...v1.6.0-rc.6)
+
+ * Upgrade to React SDK 2.5.0-rc.6 and JS SDK 6.0.0-rc.2
+
+Changes in [1.6.0-rc.5](https://github.com/vector-im/riot-web/releases/tag/v1.6.0-rc.5) (2020-04-30)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.0-rc.4...v1.6.0-rc.5)
+
+ * Upgrade to React SDK 2.5.0-rc.5 and JS SDK 6.0.0-rc.1
+ * Remove feature flag docs from docs on release
+   [\#13375](https://github.com/vector-im/riot-web/pull/13375)
+
+Changes in [1.6.0-rc.4](https://github.com/vector-im/riot-web/releases/tag/v1.6.0-rc.4) (2020-04-23)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.0-rc.3...v1.6.0-rc.4)
+
+ * Upgrade to React SDK 2.5.0-rc.4 and JS SDK 5.3.1-rc.4
+
+Changes in [1.6.0-rc.3](https://github.com/vector-im/riot-web/releases/tag/v1.6.0-rc.3) (2020-04-17)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.0-rc.2...v1.6.0-rc.3)
+
+ * Upgrade to React SDK 2.5.0-rc.3 and JS SDK 5.3.1-rc.3
+
+Changes in [1.6.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v1.6.0-rc.2) (2020-04-16)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.0-rc.1...v1.6.0-rc.2)
+
+ * Upgrade to React SDK 2.5.0-rc.2 and JS SDK 5.3.1-rc.2
+ * Enable cross-signing / E2EE by default for DM without config changes
+
+Changes in [1.6.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.6.0-rc.1) (2020-04-15)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.16-rc.1...v1.6.0-rc.1)
+
+ * Enable cross-signing / E2EE by default for DM on release
+   [\#13179](https://github.com/vector-im/riot-web/pull/13179)
+ * Upgrade to React SDK 2.5.0-rc.1 and JS SDK 5.3.1-rc.1
+ * Add instruction to resolve the inotify watch limit issue
+   [\#13128](https://github.com/vector-im/riot-web/pull/13128)
+ * docs: labs: add a pointer to config.md
+   [\#13149](https://github.com/vector-im/riot-web/pull/13149)
+ * Fix Electron SSO handling to support multiple profiles
+   [\#13028](https://github.com/vector-im/riot-web/pull/13028)
+ * Add riot-desktop shortcuts for forward/back matching browsers&slack
+   [\#13133](https://github.com/vector-im/riot-web/pull/13133)
+ * Allow rageshake to fail in init
+   [\#13164](https://github.com/vector-im/riot-web/pull/13164)
+ * Fix broken yarn install link in README.md
+   [\#13125](https://github.com/vector-im/riot-web/pull/13125)
+ * fix build:jitsi scripts crash caused by a missing folder
+   [\#13122](https://github.com/vector-im/riot-web/pull/13122)
+ * App load order changes to catch errors better
+   [\#13095](https://github.com/vector-im/riot-web/pull/13095)
+ * Upgrade deps
+   [\#13080](https://github.com/vector-im/riot-web/pull/13080)
+
+Changes in [1.5.16-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.16-rc.1) (2020-04-08)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.15...v1.5.16-rc.1)
+
+ * Upgrade React SDK to 2.4.0-rc.1 and JS SDK to 5.3.0-rc.1
+ * Update from Weblate
+   [\#13078](https://github.com/vector-im/riot-web/pull/13078)
+ * Mention Jitsi support at the .well-known level in Jitsi docs
+   [\#13047](https://github.com/vector-im/riot-web/pull/13047)
+ * Add new default home page fallback
+   [\#13049](https://github.com/vector-im/riot-web/pull/13049)
+ * App load order tweaks for code splitting
+   [\#13032](https://github.com/vector-im/riot-web/pull/13032)
+ * Add some docs about Jitsi widgets and Jitsi configuration
+   [\#13027](https://github.com/vector-im/riot-web/pull/13027)
+ * Bump minimist from 1.2.2 to 1.2.3 in /electron_app
+   [\#13030](https://github.com/vector-im/riot-web/pull/13030)
+ * Fix Electron mac-specific shortcut being registered on Web too.
+   [\#13020](https://github.com/vector-im/riot-web/pull/13020)
+ * Add a console warning that errors from Jitsi Meet are fine
+   [\#12968](https://github.com/vector-im/riot-web/pull/12968)
+ * Fix popout support for jitsi widgets
+   [\#12975](https://github.com/vector-im/riot-web/pull/12975)
+ * Some grammar and clarifications
+   [\#12925](https://github.com/vector-im/riot-web/pull/12925)
+ * Don't immediately remove notifications from notification trays
+   [\#12861](https://github.com/vector-im/riot-web/pull/12861)
+ * Remove welcome user from config
+   [\#12894](https://github.com/vector-im/riot-web/pull/12894)
+
 Changes in [1.5.15](https://github.com/vector-im/riot-web/releases/tag/v1.5.15) (2020-04-01)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.14...v1.5.15)

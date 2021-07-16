@@ -1,0 +1,52 @@
+{
+    "default_server_name": "matrix.org",
+    "brand": "Element",
+    "integrations_ui_url": "https://scalar.vector.im/",
+    "integrations_rest_url": "https://scalar.vector.im/api",
+    "integrations_widgets_urls": [
+        "https://scalar.vector.im/_matrix/integrations/v1",
+        "https://scalar.vector.im/api",
+        "https://scalar-staging.vector.im/_matrix/integrations/v1",
+        "https://scalar-staging.vector.im/api",
+        "https://scalar-staging.riot.im/scalar/api"
+    ],
+    "hosting_signup_link": "https://element.io/matrix-services?utm_source=element-web&utm_medium=web",
+    "bug_report_endpoint_url": "https://element.io/bugreports/submit",
+    "showLabsSettings": false,
+    "piwik": {
+        "url": "https://piwik.riot.im/",
+        "siteId": 1,
+        "policyUrl": "https://element.io/cookie-policy"
+    },
+    "roomDirectory": {
+        "servers": [
+            "matrix.org",
+            "gitter.im",
+            "libera.chat"
+        ]
+    },
+    "enable_presence_by_hs_url": {
+        "https://matrix.org": false,
+        "https://matrix-client.matrix.org": false
+    },
+    "terms_and_conditions_links": [
+        {
+            "url": "https://element.io/privacy",
+            "text": "Privacy Policy"
+        },
+        {
+            "url": "https://element.io/cookie-policy",
+            "text": "Cookie Policy"
+        }
+    ],
+    "hostSignup": {
+      "brand": "Element Home",
+      "cookiePolicyUrl": "https://element.io/cookie-policy",
+      "domains": [
+          "matrix.org"
+      ],
+      "privacyPolicyUrl": "https://element.io/privacy",
+      "termsOfServiceUrl": "https://element.io/terms-of-service",
+      "url": "https://ems.element.io/element-home/in-app-loader"
+    }
+}

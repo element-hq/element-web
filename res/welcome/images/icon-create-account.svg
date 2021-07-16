@@ -1,17 +1,3 @@
-
-<svg width="24px" height="20px" viewBox="0 0 24 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="Experiments" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Home" transform="translate(-880.000000, -478.000000)" stroke="#FFFFFF" stroke-width="1.6">
-            <g id="Group-11" transform="translate(621.000000, 176.000000)">
-                <g id="Group-7-Copy" transform="translate(243.000000, 290.000000)">
-                    <g id="user-plus" transform="translate(17.000000, 13.000000)">
-                        <path d="M15,18 L15,16 C15,13.790861 13.209139,12 11,12 L4,12 C1.790861,12 2.22044605e-16,13.790861 0,16 L0,18" id="Path"></path>
-                        <circle id="Oval" cx="7.5" cy="4" r="4"></circle>
-                        <path d="M19,5 L19,11" id="Path"></path>
-                        <path d="M22,8 L16,8" id="Path"></path>
-                    </g>
-                </g>
-            </g>
-        </g>
-    </g>
+<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M17 9C17 13.4183 13.4183 17 9 17C4.58172 17 1 13.4183 1 9C1 4.58172 4.58172 1 9 1C13.4183 1 17 4.58172 17 9ZM5.25 9C5.25 8.58579 5.58579 8.25 6 8.25H8.25V6C8.25 5.58579 8.58579 5.25 9 5.25C9.41421 5.25 9.75 5.58579 9.75 6V8.25H12C12.4142 8.25 12.75 8.58579 12.75 9C12.75 9.41421 12.4142 9.75 12 9.75H9.75V12C9.75 12.4142 9.41421 12.75 9 12.75C8.58579 12.75 8.25 12.4142 8.25 12V9.75H6C5.58579 9.75 5.25 9.41421 5.25 9Z" fill="white"/>
 </svg>

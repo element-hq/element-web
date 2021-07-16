@@ -2,26 +2,27 @@
 <html lang="en" style="height: 100%;">
   <head>
     <meta charset="utf-8">
-    <title>Riot</title>
-    <link rel="apple-touch-icon" sizes="57x57" href="<%= require('../../res/vector-icons/apple-touch-icon-57x57.png') %>">
-    <link rel="apple-touch-icon" sizes="60x60" href="<%= require('../../res/vector-icons/apple-touch-icon-60x60.png') %>">
-    <link rel="apple-touch-icon" sizes="72x72" href="<%= require('../../res/vector-icons/apple-touch-icon-72x72.png') %>">
-    <link rel="apple-touch-icon" sizes="76x76" href="<%= require('../../res/vector-icons/apple-touch-icon-76x76.png') %>">
-    <link rel="apple-touch-icon" sizes="114x114" href="<%= require('../../res/vector-icons/apple-touch-icon-114x114.png') %>">
-    <link rel="apple-touch-icon" sizes="120x120" href="<%= require('../../res/vector-icons/apple-touch-icon-120x120.png') %>">
-    <link rel="apple-touch-icon" sizes="144x144" href="<%= require('../../res/vector-icons/apple-touch-icon-144x144.png') %>">
-    <link rel="apple-touch-icon" sizes="152x152" href="<%= require('../../res/vector-icons/apple-touch-icon-152x152.png') %>">
-    <link rel="apple-touch-icon" sizes="180x180" href="<%= require('../../res/vector-icons/apple-touch-icon-180x180.png') %>">
+    <title>Element</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="<%= require('../../res/vector-icons/apple-touch-icon-57.png') %>">
+    <link rel="apple-touch-icon" sizes="60x60" href="<%= require('../../res/vector-icons/apple-touch-icon-60.png') %>">
+    <link rel="apple-touch-icon" sizes="72x72" href="<%= require('../../res/vector-icons/apple-touch-icon-72.png') %>">
+    <link rel="apple-touch-icon" sizes="76x76" href="<%= require('../../res/vector-icons/apple-touch-icon-76.png') %>">
+    <link rel="apple-touch-icon" sizes="114x114" href="<%= require('../../res/vector-icons/apple-touch-icon-114.png') %>">
+    <link rel="apple-touch-icon" sizes="120x120" href="<%= require('../../res/vector-icons/apple-touch-icon-120.png') %>">
+    <link rel="apple-touch-icon" sizes="144x144" href="<%= require('../../res/vector-icons/apple-touch-icon-144.png') %>">
+    <link rel="apple-touch-icon" sizes="152x152" href="<%= require('../../res/vector-icons/apple-touch-icon-152.png') %>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<%= require('../../res/vector-icons/apple-touch-icon-180.png') %>">
     <link rel="manifest" href="manifest.json">
     <meta name="referrer" content="no-referrer">
     <link rel="shortcut icon" href="<%= require('../../res/vector-icons/favicon.ico') %>">
-    <meta name="apple-mobile-web-app-title" content="Riot">
-    <meta name="application-name" content="Riot">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-title" content="Element">
+    <meta name="application-name" content="Element">
     <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="msapplication-TileImage" content="<%= require('../../res/vector-icons/mstile-144x144.png') %>">
+    <meta name="msapplication-TileImage" content="<%= require('../../res/vector-icons/mstile-150.png') %>">
     <meta name="msapplication-config" content="<%= require('../../res/vector-icons/browserconfig.xml') %>">
     <meta name="theme-color" content="#ffffff">
-    <meta property="og:image" content="<%= htmlWebpackPlugin.options.vars.og_image_url %>" />
+    <meta property="og:image" content="<%= og_image_url %>" />
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'none';
         style-src 'self' 'unsafe-inline';
@@ -34,7 +35,6 @@
         worker-src 'self';
         frame-src * blob: data:;
         form-action 'self';
-        object-src 'self';
         manifest-src 'self';
     ">
     <% for (var i=0; i < htmlWebpackPlugin.files.css.length; i++) {
@@ -48,14 +48,34 @@
            <link rel="stylesheet" href="<%= file %>">
         <% }
     } %>
+
+    <% for (var i=0; i < htmlWebpackPlugin.tags.headTags.length; i++) {
+        var tag = htmlWebpackPlugin.tags.headTags[i];
+        var path = tag.attributes && tag.attributes.href;
+        if (path.indexOf("Inter") !== -1) { %>
+            <link rel="preload" as="font" href="<%= path %>" crossorigin="anonymous"/>
+        <% }
+    } %>
+
   </head>
-  <body style="height: 100%;" data-vector-indexeddb-worker-script="<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>">
-    <noscript>Sorry, Riot requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
-    <section id="matrixchat" style="height: 100%; overflow: auto;"></section>
-    <script src="<%= htmlWebpackPlugin.files.chunks['bundle'].entry %>"></script>
+  <body
+      style="height: 100%; margin: 0;"
+      data-vector-recorder-worklet-script="<%= htmlWebpackPlugin.files.js.find(entry => entry.includes("recorder-worklet.js")) %>"
+  >
+    <noscript>Sorry, Element requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
+    <section id="matrixchat" style="height: 100%;" class="notranslate"></section>
+    <script src="<%= htmlWebpackPlugin.files.js.find(entry => entry.includes("bundle.js")) %>"></script>
+
+    <!-- Legacy supporting Prefetch images -->
     <img src="<%= require('matrix-react-sdk/res/img/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
     <img src="<%= require('matrix-react-sdk/res/img/e2e/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
     <img src="<%= require('matrix-react-sdk/res/img/feather-customised/warning-triangle.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/bold.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/code.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/italics.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/quote.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/strikethrough.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+
     <audio id="messageAudio">
         <source src="media/message.ogg" type="audio/ogg" />
         <source src="media/message.mp3" type="audio/mpeg" />

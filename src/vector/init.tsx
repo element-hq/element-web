@@ -1,8 +1,8 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2018, 2019, 2020 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2018 - 2021 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,34 +17,45 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import olmWasmPath from "olm/olm.wasm";
-import Olm from 'olm';
+import olmWasmPath from "@matrix-org/olm/olm.wasm";
+import Olm from '@matrix-org/olm';
 import * as ReactDOM from "react-dom";
 import * as React from "react";
 
 import * as languageHandler from "matrix-react-sdk/src/languageHandler";
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
 import ElectronPlatform from "./platform/ElectronPlatform";
+import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
 import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import {setTheme} from "matrix-react-sdk/src/theme";
+import { setTheme } from "matrix-react-sdk/src/theme";
 
-import { initRageshake } from "./rageshakesetup";
-
+import { initRageshake, initRageshakeStore } from "./rageshakesetup";
 
 export const rageshakePromise = initRageshake();
 
 export function preparePlatform() {
-    if (window.ipcRenderer) {
+    if (window.electron) {
         console.log("Using Electron platform");
-        const plaf = new ElectronPlatform();
-        PlatformPeg.set(plaf);
+        PlatformPeg.set(new ElectronPlatform());
+    } else if (window.matchMedia('(display-mode: standalone)').matches) {
+        console.log("Using PWA platform");
+        PlatformPeg.set(new PWAPlatform());
     } else {
         console.log("Using Web platform");
         PlatformPeg.set(new WebPlatform());
     }
+}
+
+export function setupLogStorage() {
+    if (SdkConfig.get().bug_report_endpoint_url) {
+        return initRageshakeStore();
+    }
+    console.warn("No bug report endpoint set - logs will not be persisted");
+    return Promise.resolve();
 }
 
 export async function loadConfig() {
@@ -122,8 +133,9 @@ export async function loadSkin() {
             /* webpackPreload: true */
             "matrix-react-sdk"),
         import(
-            /* webpackChunkName: "riot-web-component-index" */
+            /* webpackChunkName: "element-web-component-index" */
             /* webpackPreload: true */
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore - this module is generated so may fail lint
             "../component-index"),
     ]);
@@ -138,7 +150,7 @@ export async function loadTheme() {
 export async function loadApp(fragParams: {}) {
     // load app.js async so that its code is not executed immediately and we can catch any exceptions
     const module = await import(
-        /* webpackChunkName: "riot-web-app" */
+        /* webpackChunkName: "element-web-app" */
         /* webpackPreload: true */
         "./app");
     window.matrixChat = ReactDOM.render(await module.loadApp(fragParams),
@@ -148,18 +160,16 @@ export async function loadApp(fragParams: {}) {
 export async function showError(title: string, messages?: string[]) {
     const ErrorView = (await import(
         /* webpackChunkName: "error-view" */
-        /* webpackPreload: true */
-        "../components/structures/ErrorView")).default;
+        "../async-components/structures/ErrorView")).default;
     window.matrixChat = ReactDOM.render(<ErrorView title={title} messages={messages} />,
         document.getElementById('matrixchat'));
 }
 
 export async function showIncompatibleBrowser(onAccept) {
-    const CompatibilityPage = (await import(
-        /* webpackChunkName: "compatibility-page" */
-        /* webpackPreload: true */
-        "matrix-react-sdk/src/components/structures/CompatibilityPage")).default;
-    window.matrixChat = ReactDOM.render(<CompatibilityPage onAccept={onAccept} />,
+    const CompatibilityView = (await import(
+        /* webpackChunkName: "compatibility-view" */
+        "../async-components/structures/CompatibilityView")).default;
+    window.matrixChat = ReactDOM.render(<CompatibilityView onAccept={onAccept} />,
         document.getElementById('matrixchat'));
 }
 
