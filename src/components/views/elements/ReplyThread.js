@@ -1,7 +1,6 @@
 /*
-Copyright 2017 New Vector Ltd
+Copyright 2017 - 2021 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,24 +15,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
-import * as sdk from '../../../index';
-import {_t} from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher/dispatcher';
-import {wantsDateSeparator} from '../../../DateUtils';
-import {MatrixEvent} from 'matrix-js-sdk';
-import {makeUserPermalink, RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { makeUserPermalink, RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
+import { LayoutPropType } from "../../../settings/Layout";
 import escapeHtml from "escape-html";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {Action} from "../../../dispatcher/actions";
+import { getUserNameColorClass } from "../../../utils/FormattingUtils";
+import { Action } from "../../../dispatcher/actions";
 import sanitizeHtml from "sanitize-html";
-import {UIFeature} from "../../../settings/UIFeature";
-import {PERMITTED_URL_SCHEMES} from "../../../HtmlUtils";
+import { PERMITTED_URL_SCHEMES } from "../../../HtmlUtils";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import Spinner from './Spinner';
+import ReplyTile from "../rooms/ReplyTile";
+import Pill from './Pill';
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
 // be low as each event being loaded (after the first) is triggered by an explicit user action.
+@replaceableComponent("views.elements.ReplyThread")
 export default class ReplyThread extends React.Component {
     static propTypes = {
         // the latest event in this chain of replies
@@ -42,7 +45,9 @@ export default class ReplyThread extends React.Component {
         onHeightChanged: PropTypes.func.isRequired,
         permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
         // Specifies which layout to use.
-        useIRCLayout: PropTypes.bool,
+        layout: LayoutPropType,
+        // Whether to always show a timestamp
+        alwaysShowTimestamps: PropTypes.bool,
     };
 
     static contextType = MatrixClientContext;
@@ -64,10 +69,7 @@ export default class ReplyThread extends React.Component {
         };
 
         this.unmounted = false;
-        this.context.on("Event.replaced", this.onEventReplaced);
         this.room = this.context.getRoom(this.props.parentEv.getRoomId());
-        this.room.on("Room.redaction", this.onRoomRedaction);
-        this.room.on("Room.redactionCancelled", this.onRoomRedaction);
 
         this.onQuoteClick = this.onQuoteClick.bind(this);
         this.canCollapse = this.canCollapse.bind(this);
@@ -125,7 +127,7 @@ export default class ReplyThread extends React.Component {
     static getNestedReplyText(ev, permalinkCreator) {
         if (!ev) return null;
 
-        let {body, formatted_body: html} = ev.getContent();
+        let { body, formatted_body: html } = ev.getContent();
         if (this.getParentEventId(ev)) {
             if (body) body = this.stripPlainReply(body);
         }
@@ -195,7 +197,7 @@ export default class ReplyThread extends React.Component {
                 return null;
         }
 
-        return {body, html};
+        return { body, html };
     }
 
     static makeReplyMixIn(ev) {
@@ -209,16 +211,17 @@ export default class ReplyThread extends React.Component {
         };
     }
 
-    static makeThread(parentEv, onHeightChanged, permalinkCreator, ref, useIRCLayout) {
+    static makeThread(parentEv, onHeightChanged, permalinkCreator, ref, layout, alwaysShowTimestamps) {
         if (!ReplyThread.getParentEventId(parentEv)) {
-            return <div className="mx_ReplyThread_wrapper_empty" />;
+            return null;
         }
         return <ReplyThread
             parentEv={parentEv}
             onHeightChanged={onHeightChanged}
             ref={ref}
             permalinkCreator={permalinkCreator}
-            useIRCLayout={useIRCLayout}
+            layout={layout}
+            alwaysShowTimestamps={alwaysShowTimestamps}
         />;
     }
 
@@ -232,74 +235,38 @@ export default class ReplyThread extends React.Component {
 
     componentWillUnmount() {
         this.unmounted = true;
-        this.context.removeListener("Event.replaced", this.onEventReplaced);
-        if (this.room) {
-            this.room.removeListener("Room.redaction", this.onRoomRedaction);
-            this.room.removeListener("Room.redactionCancelled", this.onRoomRedaction);
-        }
     }
 
-    updateForEventId = (eventId) => {
-        if (this.state.events.some(event => event.getId() === eventId)) {
-            this.forceUpdate();
-        }
-    };
-
-    onEventReplaced = (ev) => {
-        if (this.unmounted) return;
-
-        // If one of the events we are rendering gets replaced, force a re-render
-        this.updateForEventId(ev.getId());
-    };
-
-    onRoomRedaction = (ev) => {
-        if (this.unmounted) return;
-
-        const eventId = ev.getAssociatedId();
-        if (!eventId) return;
-
-        // If one of the events we are rendering gets redacted, force a re-render
-        this.updateForEventId(eventId);
-    };
-
     async initialize() {
-        const {parentEv} = this.props;
+        const { parentEv } = this.props;
         // at time of making this component we checked that props.parentEv has a parentEventId
         const ev = await this.getEvent(ReplyThread.getParentEventId(parentEv));
+
         if (this.unmounted) return;
 
         if (ev) {
+            const loadedEv = await this.getNextEvent(ev);
             this.setState({
                 events: [ev],
-            }, this.loadNextEvent);
+                loadedEv,
+                loading: false,
+            });
         } else {
-            this.setState({err: true});
+            this.setState({ err: true });
         }
     }
 
-    async loadNextEvent() {
-        if (this.unmounted) return;
-        const ev = this.state.events[0];
-        const inReplyToEventId = ReplyThread.getParentEventId(ev);
-
-        if (!inReplyToEventId) {
-            this.setState({
-                loading: false,
-            });
-            return;
-        }
-
-        const loadedEv = await this.getEvent(inReplyToEventId);
-        if (this.unmounted) return;
-
-        if (loadedEv) {
-            this.setState({loadedEv});
-        } else {
-            this.setState({err: true});
+    async getNextEvent(ev) {
+        try {
+            const inReplyToEventId = ReplyThread.getParentEventId(ev);
+            return await this.getEvent(inReplyToEventId);
+        } catch (e) {
+            return null;
         }
     }
 
     async getEvent(eventId) {
+        if (!eventId) return null;
         const event = this.room.findEventById(eventId);
         if (event) return event;
 
@@ -323,15 +290,24 @@ export default class ReplyThread extends React.Component {
         this.initialize();
     }
 
-    onQuoteClick() {
+    async onQuoteClick() {
         const events = [this.state.loadedEv, ...this.state.events];
 
-        this.setState({
-            loadedEv: null,
-            events,
-        }, this.loadNextEvent);
+        let loadedEv = null;
+        if (events.length > 0) {
+            loadedEv = await this.getNextEvent(events[0]);
+        }
 
-        dis.fire(Action.FocusComposer);
+        this.setState({
+            loadedEv,
+            events,
+        });
+
+        dis.fire(Action.FocusSendMessageComposer);
+    }
+
+    getReplyThreadColorClass(ev) {
+        return getUserNameColorClass(ev.getSender()).replace("Username", "ReplyThread");
     }
 
     render() {
@@ -346,9 +322,8 @@ export default class ReplyThread extends React.Component {
             </blockquote>;
         } else if (this.state.loadedEv) {
             const ev = this.state.loadedEv;
-            const Pill = sdk.getComponent('elements.Pill');
             const room = this.context.getRoom(ev.getRoomId());
-            header = <blockquote className="mx_ReplyThread">
+            header = <blockquote className={`mx_ReplyThread ${this.getReplyThreadColorClass(ev)}`}>
                 {
                     _t('<a>In reply to</a> <pill>', {}, {
                         'a': (sub) => <a onClick={this.onQuoteClick} className="mx_ReplyThread_show">{ sub }</a>,
@@ -364,31 +339,15 @@ export default class ReplyThread extends React.Component {
                 }
             </blockquote>;
         } else if (this.state.loading) {
-            const Spinner = sdk.getComponent("elements.Spinner");
             header = <Spinner w={16} h={16} />;
         }
 
-        const EventTile = sdk.getComponent('views.rooms.EventTile');
-        const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const evTiles = this.state.events.map((ev) => {
-            let dateSep = null;
-
-            if (wantsDateSeparator(this.props.parentEv.getDate(), ev.getDate())) {
-                dateSep = <a href={this.props.url}><DateSeparator ts={ev.getTs()} /></a>;
-            }
-
-            return <blockquote className="mx_ReplyThread" key={ev.getId()}>
-                { dateSep }
-                <EventTile
+            return <blockquote className={`mx_ReplyThread ${this.getReplyThreadColorClass(ev)}`} key={ev.getId()}>
+                <ReplyTile
                     mxEvent={ev}
-                    tileShape="reply"
                     onHeightChanged={this.props.onHeightChanged}
                     permalinkCreator={this.props.permalinkCreator}
-                    isRedacted={ev.isRedacted()}
-                    isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
-                    useIRCLayout={this.props.useIRCLayout}
-                    enableFlair={SettingsStore.getValue(UIFeature.Flair)}
-                    replacingEventId={ev.replacingEventId()}
                 />
             </blockquote>;
         });

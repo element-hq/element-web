@@ -16,10 +16,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from "./MatrixClientPeg";
+import { MatrixClientPeg } from "./MatrixClientPeg";
 import dis from "./dispatcher/dispatcher";
 import Timer from './utils/Timer';
-import {ActionPayload} from "./dispatcher/payloads";
+import { ActionPayload } from "./dispatcher/payloads";
 
 // Time in ms after that a user is considered as unavailable/away
 const UNAVAILABLE_TIME_MS = 3 * 60 * 1000; // 3 mins
@@ -78,7 +78,7 @@ class Presence {
             this.setState(State.Online);
             this.unavailableTimer.restart();
         }
-    }
+    };
 
     /**
      * Set the presence state.
@@ -98,10 +98,10 @@ class Presence {
         }
 
         try {
-            await MatrixClientPeg.get().setPresence(this.state);
-            console.info("Presence: %s", newState);
+            await MatrixClientPeg.get().setPresence({ presence: this.state });
+            console.info("Presence:", newState);
         } catch (err) {
-            console.error("Failed to set presence: %s", err);
+            console.error("Failed to set presence:", err);
             this.state = oldState;
         }
     }

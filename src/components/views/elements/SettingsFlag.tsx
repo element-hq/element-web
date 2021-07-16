@@ -21,6 +21,7 @@ import { _t } from '../../../languageHandler';
 import ToggleSwitch from "./ToggleSwitch";
 import StyledCheckbox from "./StyledCheckbox";
 import { SettingLevel } from "../../../settings/SettingLevel";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // The setting must be a boolean
@@ -39,6 +40,7 @@ interface IState {
     value: boolean;
 }
 
+@replaceableComponent("views.elements.SettingsFlag")
 export default class SettingsFlag extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
@@ -75,9 +77,10 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
     public render() {
         const canChange = SettingsStore.canSetValue(this.props.name, this.props.roomId, this.props.level);
 
-        let label = this.props.label;
-        if (!label) label = SettingsStore.getDisplayName(this.props.name, this.props.level);
-        else label = _t(label);
+        const label = this.props.label
+            ? _t(this.props.label)
+            : SettingsStore.getDisplayName(this.props.name, this.props.level);
+        const description = SettingsStore.getDescription(this.props.name);
 
         if (this.props.useCheckbox) {
             return <StyledCheckbox
@@ -97,6 +100,9 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
                         disabled={this.props.disabled || !canChange}
                         aria-label={label}
                     />
+                    { description && <div className="mx_SettingsFlag_microcopy">
+                        { description }
+                    </div> }
                 </div>
             );
         }

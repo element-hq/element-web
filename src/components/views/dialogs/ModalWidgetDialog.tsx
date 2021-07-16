@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,54 +16,72 @@ limitations under the License.
 
 import * as React from 'react';
 import BaseDialog from './BaseDialog';
-import { _t } from '../../../languageHandler';
+import { _t, getUserLanguage } from '../../../languageHandler';
 import AccessibleButton from "../elements/AccessibleButton";
 import {
     ClientWidgetApi,
     IModalWidgetCloseRequest,
     IModalWidgetOpenRequestData,
     IModalWidgetReturnData,
+    ISetModalButtonEnabledActionRequest,
+    IWidgetApiAcknowledgeResponseData,
+    IWidgetApiErrorResponseData,
+    BuiltInModalButtonID,
+    ModalButtonID,
     ModalButtonKind,
     Widget,
     WidgetApiFromWidgetAction,
+    WidgetKind,
 } from "matrix-widget-api";
-import {StopGapWidgetDriver} from "../../../stores/widgets/StopGapWidgetDriver";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import RoomViewStore from "../../../stores/RoomViewStore";
-import {OwnProfileStore} from "../../../stores/OwnProfileStore";
+import { StopGapWidgetDriver } from "../../../stores/widgets/StopGapWidgetDriver";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { OwnProfileStore } from "../../../stores/OwnProfileStore";
+import { arrayFastClone } from "../../../utils/arrays";
+import { ElementWidget } from "../../../stores/widgets/StopGapWidget";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { ELEMENT_CLIENT_ID } from "../../../identifiers";
+import SettingsStore from "../../../settings/SettingsStore";
 
 interface IProps {
     widgetDefinition: IModalWidgetOpenRequestData;
+    widgetRoomId?: string;
     sourceWidgetId: string;
     onFinished(success: boolean, data?: IModalWidgetReturnData): void;
 }
 
 interface IState {
     messaging?: ClientWidgetApi;
+    disabledButtonIds: ModalButtonID[];
 }
 
 const MAX_BUTTONS = 3;
 
+@replaceableComponent("views.dialogs.ModalWidgetDialog")
 export default class ModalWidgetDialog extends React.PureComponent<IProps, IState> {
     private readonly widget: Widget;
+    private readonly possibleButtons: ModalButtonID[];
     private appFrame: React.RefObject<HTMLIFrameElement> = React.createRef();
 
-    state: IState = {};
+    state: IState = {
+        disabledButtonIds: (this.props.widgetDefinition.buttons || []).filter(b => b.disabled)
+            .map(b => b.id),
+    };
 
     constructor(props) {
         super(props);
 
-        this.widget = new Widget({
+        this.widget = new ElementWidget({
             ...this.props.widgetDefinition,
             creatorUserId: MatrixClientPeg.get().getUserId(),
             id: `modal_${this.props.sourceWidgetId}`,
         });
+        this.possibleButtons = (this.props.widgetDefinition.buttons || []).map(b => b.id);
     }
 
     public componentDidMount() {
-        const driver = new StopGapWidgetDriver( []);
+        const driver = new StopGapWidgetDriver( [], this.widget, WidgetKind.Modal);
         const messaging = new ClientWidgetApi(this.widget, this.appFrame.current, driver);
-        this.setState({messaging});
+        this.setState({ messaging });
     }
 
     public componentWillUnmount() {
@@ -79,18 +97,44 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     private onLoad = () => {
         this.state.messaging.once("ready", this.onReady);
         this.state.messaging.on(`action:${WidgetApiFromWidgetAction.CloseModalWidget}`, this.onWidgetClose);
+        this.state.messaging.on(`action:${WidgetApiFromWidgetAction.SetModalButtonEnabled}`, this.onButtonEnableToggle);
     };
 
     private onWidgetClose = (ev: CustomEvent<IModalWidgetCloseRequest>) => {
         this.props.onFinished(true, ev.detail.data);
-    }
+    };
+
+    private onButtonEnableToggle = (ev: CustomEvent<ISetModalButtonEnabledActionRequest>) => {
+        ev.preventDefault();
+        const isClose = ev.detail.data.button === BuiltInModalButtonID.Close;
+        if (isClose || !this.possibleButtons.includes(ev.detail.data.button)) {
+            return this.state.messaging.transport.reply(ev.detail, {
+                error: { message: "Invalid button" },
+            } as IWidgetApiErrorResponseData);
+        }
+
+        let buttonIds: ModalButtonID[];
+        if (ev.detail.data.enabled) {
+            buttonIds = arrayFastClone(this.state.disabledButtonIds).filter(i => i !== ev.detail.data.button);
+        } else {
+            // use a set to swap the operation to avoid memory leaky arrays.
+            const tempSet = new Set(this.state.disabledButtonIds);
+            tempSet.add(ev.detail.data.button);
+            buttonIds = Array.from(tempSet);
+        }
+        this.setState({ disabledButtonIds: buttonIds });
+        this.state.messaging.transport.reply(ev.detail, {} as IWidgetApiAcknowledgeResponseData);
+    };
 
     public render() {
         const templated = this.widget.getCompleteUrl({
-            currentRoomId: RoomViewStore.getRoomId(),
+            widgetRoomId: this.props.widgetRoomId,
             currentUserId: MatrixClientPeg.get().getUserId(),
             userDisplayName: OwnProfileStore.instance.displayName,
             userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl(),
+            clientId: ELEMENT_CLIENT_ID,
+            clientTheme: SettingsStore.getValue("theme"),
+            clientLanguage: getUserLanguage(),
         });
 
         const parsed = new URL(templated);
@@ -116,7 +160,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                         break;
                     case ModalButtonKind.Secondary:
                         kind = "primary_outline";
-                        break
+                        break;
                     case ModalButtonKind.Danger:
                         kind = "danger";
                         break;
@@ -126,7 +170,9 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                     this.state.messaging.notifyModalWidgetButtonClicked(def.id);
                 };
 
-                return <AccessibleButton key={def.id} kind={kind} onClick={onClick}>
+                const isDisabled = this.state.disabledButtonIds.includes(def.id);
+
+                return <AccessibleButton key={def.id} kind={kind} onClick={onClick} disabled={isDisabled}>
                     { def.label }
                 </AccessibleButton>;
             });

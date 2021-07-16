@@ -15,14 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import { Key } from '../../Keyboard';
 import dis from '../../dispatcher/dispatcher';
-import {throttle} from 'lodash';
+import { throttle } from 'lodash';
 import AccessibleButton from '../../components/views/elements/AccessibleButton';
 import classNames from 'classnames';
+import { replaceableComponent } from "../../utils/replaceableComponent";
 
+@replaceableComponent("structures.SearchBox")
 export default class SearchBox extends React.Component {
     static propTypes = {
         onSearch: PropTypes.func,
@@ -30,6 +32,8 @@ export default class SearchBox extends React.Component {
         onKeyDown: PropTypes.func,
         className: PropTypes.string,
         placeholder: PropTypes.string.isRequired,
+        autoFocus: PropTypes.bool,
+        initialValue: PropTypes.string,
 
         // If true, the search box will focus and clear itself
         // on room search focus action (it would be nicer to take
@@ -47,7 +51,7 @@ export default class SearchBox extends React.Component {
         this._search = createRef();
 
         this.state = {
-            searchTerm: "",
+            searchTerm: this.props.initialValue || "",
             blurred: true,
         };
     }
@@ -85,7 +89,7 @@ export default class SearchBox extends React.Component {
 
     onSearch = throttle(() => {
         this.props.onSearch(this._search.current.value);
-    }, 200, {trailing: true, leading: true});
+    }, 200, { trailing: true, leading: true });
 
     _onKeyDown = ev => {
         switch (ev.key) {
@@ -97,7 +101,7 @@ export default class SearchBox extends React.Component {
     };
 
     _onFocus = ev => {
-        this.setState({blurred: false});
+        this.setState({ blurred: false });
         ev.target.select();
         if (this.props.onFocus) {
             this.props.onFocus(ev);
@@ -105,7 +109,7 @@ export default class SearchBox extends React.Component {
     };
 
     _onBlur = ev => {
-        this.setState({blurred: true});
+        this.setState({ blurred: true });
         if (this.props.onBlur) {
             this.props.onBlur(ev);
         }
@@ -143,7 +147,7 @@ export default class SearchBox extends React.Component {
             this.props.placeholder;
         const className = this.props.className || "";
         return (
-            <div className={classNames("mx_SearchBox", "mx_textinput", {"mx_SearchBox_blurred": this.state.blurred})}>
+            <div className={classNames("mx_SearchBox", "mx_textinput", { "mx_SearchBox_blurred": this.state.blurred })}>
                 <input
                     key="searchfield"
                     type="text"
@@ -156,6 +160,7 @@ export default class SearchBox extends React.Component {
                     onBlur={this._onBlur}
                     placeholder={ placeholder }
                     autoComplete="off"
+                    autoFocus={this.props.autoFocus}
                 />
                 { clearButton }
             </div>

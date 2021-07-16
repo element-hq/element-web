@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import QuestionDialog from './QuestionDialog';
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
@@ -29,7 +29,6 @@ import StyledRadioGroup from "../elements/StyledRadioGroup";
 const existingIssuesUrl = "https://github.com/vector-im/element-web/issues" +
     "?q=is%3Aopen+is%3Aissue+sort%3Areactions-%2B1-desc";
 const newIssueUrl = "https://github.com/vector-im/element-web/issues/new";
-
 
 export default (props) => {
     const [rating, setRating] = useState("");
@@ -48,8 +47,8 @@ export default (props) => {
                 title: _t('Feedback sent'),
                 description: _t('Thank you!'),
             });
-            props.onFinished();
         }
+        props.onFinished();
     };
 
     const brand = SdkConfig.get().brand;
@@ -100,6 +99,20 @@ export default (props) => {
         );
     }
 
+    let bugReports = null;
+    if (SdkConfig.get().bug_report_endpoint_url) {
+        bugReports = (
+            <p>{
+                _t("PRO TIP: If you start a bug, please submit <debugLogsLink>debug logs</debugLogsLink> " +
+                    "to help us track down the problem.", {}, {
+                    debugLogsLink: sub => (
+                        <AccessibleButton kind="link" onClick={onDebugLogsLinkClick}>{sub}</AccessibleButton>
+                    ),
+                })
+            }</p>
+        );
+    }
+
     return (<QuestionDialog
         className="mx_FeedbackDialog"
         hasCancelButton={!!hasFeedback}
@@ -120,14 +133,7 @@ export default (props) => {
                         },
                     })
                 }</p>
-                <p>{
-                    _t("PRO TIP: If you start a bug, please submit <debugLogsLink>debug logs</debugLogsLink> " +
-                        "to help us track down the problem.", {}, {
-                        debugLogsLink: sub => (
-                            <AccessibleButton kind="link" onClick={onDebugLogsLinkClick}>{sub}</AccessibleButton>
-                        ),
-                    })
-                }</p>
+                {bugReports}
             </div>
             { countlyFeedbackSection }
         </React.Fragment>}

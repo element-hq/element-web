@@ -16,12 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { MatrixClientPeg } from './MatrixClientPeg';
 import * as sdk from './index';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 import IdentityAuthClient from './IdentityAuthClient';
-import {SSOAuthEntry} from "./components/views/auth/InteractiveAuthEntryComponents";
+import { SSOAuthEntry } from "./components/views/auth/InteractiveAuthEntryComponents";
 
 function getIdServerDomain() {
     return MatrixClientPeg.get().idBaseUrl.split("://")[1];
@@ -189,7 +189,6 @@ export default class AddThreepid {
                         // pop up an interactive auth dialog
                         const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
 
-
                         const dialogAesthetics = {
                             [SSOAuthEntry.PHASE_PREAUTH]: {
                                 title: _t("Use Single Sign On to continue"),
@@ -249,7 +248,7 @@ export default class AddThreepid {
 
     /**
      * Takes a phone number verification code as entered by the user and validates
-     * it with the ID server, then if successful, adds the phone number.
+     * it with the identity server, then if successful, adds the phone number.
      * @param {string} msisdnToken phone number verification code as entered by the user
      * @return {Promise} Resolves if the phone number was added. Rejects with an object
      * with a "message" property which contains a human-readable message detailing why

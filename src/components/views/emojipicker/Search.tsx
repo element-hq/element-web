@@ -18,7 +18,8 @@ limitations under the License.
 import React from 'react';
 
 import { _t } from '../../../languageHandler';
-import {Key} from "../../../Keyboard";
+import { Key } from "../../../Keyboard";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     query: string;
@@ -26,6 +27,7 @@ interface IProps {
     onEnter(): void;
 }
 
+@replaceableComponent("views.emojipicker.Search")
 class Search extends React.PureComponent<IProps> {
     private inputRef = React.createRef<HTMLInputElement>();
 

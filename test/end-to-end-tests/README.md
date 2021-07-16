@@ -5,9 +5,9 @@ This directory contains tests for matrix-react-sdk. The tests fire up a headless
 ## Setup
 
 Run `./install.sh`. This will:
- - install Synapse, fetches the master branch at the moment. If anything fails here, please refer to the Synapse README to see if you're missing one of the prerequisites.
- - install Riot, this fetches the master branch at the moment.
- - install dependencies (will download copy of chrome)
+ - install Synapse, fetches the develop branch at the moment. If anything fails here, please refer to the Synapse README to see if you're missing one of the prerequisites.
+ - install Element Web, this fetches the develop branch at the moment.
+ - install dependencies (will download copy of Chrome)
 
 ## Running the tests
 
@@ -15,7 +15,7 @@ Run tests with `./run.sh`.
 
 ### Debug tests locally.
 
-`./run.sh` will run the tests against the Riot copy present in `riot/riot-web` served by a static Python HTTP server. You can symlink your `riot-web` develop copy here but that doesn't work well with Webpack recompiling. You can run the test runner directly and specify parameters to get more insight into a failure or run the tests against your local Webpack server.
+`./run.sh` will run the tests against the Element copy present in `element/element-web` served by a static Python HTTP server. You can symlink your `element-web` develop copy here but that doesn't work well with Webpack recompiling. You can run the test runner directly and specify parameters to get more insight into a failure or run the tests against your local Webpack server.
 
 ```
 ./synapse/stop.sh && \
@@ -26,8 +26,7 @@ It's important to always stop and start Synapse before each run of the tests to 
 
 start.js accepts these parameters (and more, see `node start.js --help`) that can help running the tests locally:
 
- - `--riot-url <url>` don't use the Riot copy and static server provided by the tests, but use a running server like the Webpack watch server to run the tests against. Make sure to have the following local config:
-   - `welcomeUserId` disabled as the tests assume there is no riot-bot currently.
+ - `--app-url <url>` don't use the Element Web copy and static server provided by the tests, but use a running server like the Webpack watch server to run the tests against.
  - `--slow-mo` type at a human speed, useful with `--windowed`.
  - `--throttle-cpu <factor>` throttle cpu in the browser by the given factor. Useful to reproduce failures because of insufficient timeouts happening on the slower CI server.
  - `--windowed` run the tests in an actual browser window Try to limit interacting with the windows while the tests are running. Hovering over the window tends to fail the tests, dragging the title bar should be fine though.

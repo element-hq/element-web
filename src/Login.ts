@@ -1,9 +1,6 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +16,7 @@ limitations under the License.
 */
 
 // @ts-ignore - XXX: tsc doesn't like this: our js-sdk imports are complex so this isn't surprising
-import Matrix from "matrix-js-sdk";
+import { createClient } from "matrix-js-sdk/src/matrix";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { IMatrixClientCreds } from "./MatrixClientPeg";
 import SecurityCustomisations from "./customisations/Security";
@@ -29,14 +26,38 @@ interface ILoginOptions {
 }
 
 // TODO: Move this to JS SDK
-interface ILoginFlow {
-    type: string;
+interface IPasswordFlow {
+    type: "m.login.password";
 }
+
+export enum IdentityProviderBrand {
+    Gitlab = "gitlab",
+    Github = "github",
+    Apple = "apple",
+    Google = "google",
+    Facebook = "facebook",
+    Twitter = "twitter",
+}
+
+export interface IIdentityProvider {
+    id: string;
+    name: string;
+    icon?: string;
+    brand?: IdentityProviderBrand | string;
+}
+
+export interface ISSOFlow {
+    type: "m.login.sso" | "m.login.cas";
+    // eslint-disable-next-line camelcase
+    identity_providers: IIdentityProvider[];
+}
+
+export type LoginFlow = ISSOFlow | IPasswordFlow;
 
 // TODO: Move this to JS SDK
 /* eslint-disable camelcase */
 interface ILoginParams {
-    identifier?: string;
+    identifier?: object;
     password?: string;
     token?: string;
     device_id?: string;
@@ -48,9 +69,8 @@ export default class Login {
     private hsUrl: string;
     private isUrl: string;
     private fallbackHsUrl: string;
-    private currentFlowIndex: number;
     // TODO: Flows need a type in JS SDK
-    private flows: Array<ILoginFlow>;
+    private flows: Array<LoginFlow>;
     private defaultDeviceDisplayName: string;
     private tempClient: MatrixClient;
 
@@ -63,7 +83,6 @@ export default class Login {
         this.hsUrl = hsUrl;
         this.isUrl = isUrl;
         this.fallbackHsUrl = fallbackHsUrl;
-        this.currentFlowIndex = 0;
         this.flows = [];
         this.defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
         this.tempClient = null; // memoize
@@ -94,31 +113,17 @@ export default class Login {
      */
     public createTemporaryClient(): MatrixClient {
         if (this.tempClient) return this.tempClient; // use memoization
-        return this.tempClient = Matrix.createClient({
+        return this.tempClient = createClient({
             baseUrl: this.hsUrl,
             idBaseUrl: this.isUrl,
         });
     }
 
-    public async getFlows(): Promise<Array<ILoginFlow>> {
+    public async getFlows(): Promise<Array<LoginFlow>> {
         const client = this.createTemporaryClient();
         const { flows } = await client.loginFlows();
         this.flows = flows;
-        this.currentFlowIndex = 0;
-        // technically the UI should display options for all flows for the
-        // user to then choose one, so return all the flows here.
         return this.flows;
-    }
-
-    public chooseFlow(flowIndex): void {
-        this.currentFlowIndex = flowIndex;
-    }
-
-    public getCurrentFlowStep(): string {
-        // technically the flow can have multiple steps, but no one does this
-        // for login so we can ignore it.
-        const flowStep = this.flows[this.currentFlowIndex];
-        return flowStep ? flowStep.type : null;
     }
 
     public loginViaPassword(
@@ -185,7 +190,6 @@ export default class Login {
     }
 }
 
-
 /**
  * Send a login request to the given server, and format the response
  * as a MatrixClientCreds
@@ -203,7 +207,7 @@ export async function sendLoginRequest(
     loginType: string,
     loginParams: ILoginParams,
 ): Promise<IMatrixClientCreds> {
-    const client = Matrix.createClient({
+    const client = createClient({
         baseUrl: hsUrl,
         idBaseUrl: isUrl,
     });

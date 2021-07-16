@@ -569,5 +569,8 @@
     "Try using turn.matrix.org": "Tente utilizar turn.matrix.org",
     "Whether you're using %(brand)s on a device where touch is the primary input mechanism": "Quer esteja a usar o %(brand)s num dispositivo onde o touch é o mecanismo de entrada primário",
     "Whether you're using %(brand)s as an installed Progressive Web App": "Quer esteja a usar o %(brand)s como uma Progressive Web App (PWA)",
-    "Your user agent": "O seu user agent"
+    "Your user agent": "O seu user agent",
+    "Explore rooms": "Explorar rooms",
+    "Sign In": "Iniciar sessão",
+    "Create Account": "Criar conta"
 }

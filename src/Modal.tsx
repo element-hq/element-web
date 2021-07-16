@@ -15,14 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
+import { defer } from "matrix-js-sdk/src/utils";
 
 import Analytics from './Analytics';
 import dis from './dispatcher/dispatcher';
-import {defer} from './utils/promise';
 import AsyncWrapper from './AsyncWrapper';
 
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
@@ -36,6 +35,7 @@ export interface IModal<T extends any[]> {
     onBeforeClose?(reason?: string): Promise<boolean>;
     onFinished(...args: T): void;
     close(...args: T): void;
+    hidden?: boolean;
 }
 
 export interface IHandle<T extends any[]> {
@@ -93,6 +93,12 @@ export class ModalManager {
         return container;
     }
 
+    public toggleCurrentDialogVisibility() {
+        const modal = this.getCurrentModal();
+        if (!modal) return;
+        modal.hidden = !modal.hidden;
+    }
+
     public hasDialogs() {
         return this.priorityModal || this.staticModal || this.modals.length > 0;
     }
@@ -147,6 +153,15 @@ export class ModalManager {
         return this.appendDialogAsync<T>(...rest);
     }
 
+    public closeCurrentModal(reason: string) {
+        const modal = this.getCurrentModal();
+        if (!modal) {
+            return;
+        }
+        modal.closeReason = reason;
+        modal.close();
+    }
+
     private buildModal<T extends any[]>(
         prom: Promise<React.ComponentType>,
         props?: IProps<T>,
@@ -177,7 +192,7 @@ export class ModalManager {
         modal.elem = <AsyncWrapper key={modalCount} prom={prom} {...props} onFinished={closeDialog} />;
         modal.close = closeDialog;
 
-        return {modal, closeDialog, onFinishedProm};
+        return { modal, closeDialog, onFinishedProm };
     }
 
     private getCloseFn<T extends any[]>(
@@ -266,7 +281,7 @@ export class ModalManager {
         isStaticModal = false,
         options: IOptions<T> = {},
     ): IHandle<T> {
-        const {modal, closeDialog, onFinishedProm} = this.buildModal<T>(prom, props, className, options);
+        const { modal, closeDialog, onFinishedProm } = this.buildModal<T>(prom, props, className, options);
         if (isPriorityModal) {
             // XXX: This is destructive
             this.priorityModal = modal;
@@ -289,7 +304,7 @@ export class ModalManager {
         props?: IProps<T>,
         className?: string,
     ): IHandle<T> {
-        const {modal, closeDialog, onFinishedProm} = this.buildModal<T>(prom, props, className, {});
+        const { modal, closeDialog, onFinishedProm } = this.buildModal<T>(prom, props, className, {});
 
         this.modals.push(modal);
         this.reRender();
@@ -355,7 +370,7 @@ export class ModalManager {
         }
 
         const modal = this.getCurrentModal();
-        if (modal !== this.staticModal) {
+        if (modal !== this.staticModal && !modal.hidden) {
             const classes = classNames("mx_Dialog_wrapper", modal.className, {
                 mx_Dialog_wrapperWithStaticUnder: this.staticModal,
             });
@@ -369,7 +384,7 @@ export class ModalManager {
                 </div>
             );
 
-            ReactDOM.render(dialog, ModalManager.getOrCreateContainer());
+            setImmediate(() => ReactDOM.render(dialog, ModalManager.getOrCreateContainer()));
         } else {
             // This is safe to call repeatedly if we happen to do that
             ReactDOM.unmountComponentAtNode(ModalManager.getOrCreateContainer());

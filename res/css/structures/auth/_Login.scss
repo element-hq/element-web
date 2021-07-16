@@ -18,7 +18,7 @@ limitations under the License.
 .mx_Login_submit {
     @mixin mx_DialogButton;
     width: 100%;
-    margin-top: 35px;
+    margin-top: 24px;
     margin-bottom: 24px;
     box-sizing: border-box;
     text-align: center;
@@ -31,12 +31,6 @@ limitations under the License.
 .mx_Login_submit:disabled {
     opacity: 0.3;
     cursor: default;
-}
-
-.mx_AuthBody a.mx_Login_sso_link:link,
-.mx_AuthBody a.mx_Login_sso_link:hover,
-.mx_AuthBody a.mx_Login_sso_link:visited {
-    color: $button-primary-fg-color;
 }
 
 .mx_Login_loader {
@@ -87,10 +81,13 @@ limitations under the License.
 }
 
 .mx_Login_underlinedServerName {
+    width: max-content;
     border-bottom: 1px dashed $accent-color;
 }
 
 div.mx_AccessibleButton_kind_link.mx_Login_forgot {
+    display: block;
+    margin: 0 auto;
     // style it as a link
     font-size: inherit;
     padding: 0;

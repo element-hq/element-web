@@ -15,73 +15,43 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClient} from "matrix-js-sdk/src/client";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
-import * as sdk from './index';
 import { _t } from './languageHandler';
 import dis from "./dispatcher/dispatcher";
 import * as Rooms from "./Rooms";
 import DMRoomMap from "./utils/DMRoomMap";
-import {getAddressType} from "./UserAddress";
+import { getAddressType } from "./UserAddress";
 import { getE2EEWellKnown } from "./utils/WellKnownUtils";
 import GroupStore from "./stores/GroupStore";
 import CountlyAnalytics from "./CountlyAnalytics";
+import { isJoinedOrNearlyJoined } from "./utils/membership";
+import { VIRTUAL_ROOM_EVENT_TYPE } from "./CallHandler";
+import SpaceStore from "./stores/SpaceStore";
+import { makeSpaceParentEvent } from "./utils/space";
+import { Action } from "./dispatcher/actions";
+import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
+import { Preset, Visibility } from "matrix-js-sdk/src/@types/partials";
+import ErrorDialog from "./components/views/dialogs/ErrorDialog";
+import Spinner from "./components/views/elements/Spinner";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
 
-// TODO move these interfaces over to js-sdk once it has been typescripted enough to accept them
-enum Visibility {
-    Public = "public",
-    Private = "private",
-}
-
-enum Preset {
-    PrivateChat = "private_chat",
-    TrustedPrivateChat = "trusted_private_chat",
-    PublicChat = "public_chat",
-}
-
-interface Invite3PID {
-    id_server: string;
-    id_access_token?: string; // this gets injected by the js-sdk
-    medium: string;
-    address: string;
-}
-
-interface IStateEvent {
-    type: string;
-    state_key?: string; // defaults to an empty string
-    content: object;
-}
-
-interface ICreateOpts {
-    visibility?: Visibility;
-    room_alias_name?: string;
-    name?: string;
-    topic?: string;
-    invite?: string[];
-    invite_3pid?: Invite3PID[];
-    room_version?: string;
-    creation_content?: object;
-    initial_state?: IStateEvent[];
-    preset?: Preset;
-    is_direct?: boolean;
-    power_level_content_override?: object;
-}
-
-interface IOpts {
+export interface IOpts {
     dmUserId?: string;
-    createOpts?: ICreateOpts;
+    createOpts?: ICreateRoomOpts;
     spinner?: boolean;
     guestAccess?: boolean;
     encryption?: boolean;
     inlineErrors?: boolean;
     andView?: boolean;
     associatedWithCommunity?: string;
+    parentSpace?: Room;
 }
 
 /**
@@ -111,19 +81,16 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
 
     const startTime = CountlyAnalytics.getTimestamp();
 
-    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-    const Loader = sdk.getComponent("elements.Spinner");
-
     const client = MatrixClientPeg.get();
     if (client.isGuest()) {
-        dis.dispatch({action: 'require_registration'});
+        dis.dispatch({ action: 'require_registration' });
         return Promise.resolve(null);
     }
 
     const defaultPreset = opts.dmUserId ? Preset.TrustedPrivateChat : Preset.PrivateChat;
 
     // set some defaults for the creation
-    const createOpts = opts.createOpts || {};
+    const createOpts: ICreateRoomOpts = opts.createOpts || {};
     createOpts.preset = createOpts.preset || defaultPreset;
     createOpts.visibility = createOpts.visibility || Visibility.Private;
     if (opts.dmUserId && createOpts.invite === undefined) {
@@ -173,8 +140,18 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
         });
     }
 
+    if (opts.parentSpace) {
+        opts.createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
+        opts.createOpts.initial_state.push({
+            type: EventType.RoomHistoryVisibility,
+            content: {
+                "history_visibility": opts.createOpts.preset === Preset.PublicChat ? "world_readable" : "invited",
+            },
+        });
+    }
+
     let modal;
-    if (opts.spinner) modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
+    if (opts.spinner) modal = Modal.createDialog(Spinner, null, 'mx_Dialog_spinner');
 
     let roomId;
     return client.createRoom(createOpts).finally(function() {
@@ -187,6 +164,9 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
             return Promise.resolve();
         }
     }).then(() => {
+        if (opts.parentSpace) {
+            return SpaceStore.instance.addRoomToSpace(opts.parentSpace, roomId, [client.getDomain()], true);
+        }
         if (opts.associatedWithCommunity) {
             return GroupStore.addRoomToGroup(opts.associatedWithCommunity, roomId, false);
         }
@@ -195,6 +175,9 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
         // room has been created, so we race here with the client knowing that
         // the room exists, causing things like
         // https://github.com/vector-im/vector-web/issues/1813
+        // Even if we were to block on the echo, servers tend to split the room
+        // state over multiple syncs so we can't atomically know when we have the
+        // entire thing.
         if (opts.andView) {
             dis.dispatch({
                 action: 'view_room',
@@ -204,6 +187,7 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
                 // so we are expecting the room to come down the sync
                 // stream, if it hasn't already.
                 joining: true,
+                justCreatedOpts: opts,
             });
         }
         CountlyAnalytics.instance.trackRoomCreate(startTime, roomId);
@@ -214,7 +198,8 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
 
         // We also failed to join the room (this sets joining to false in RoomViewStore)
         dis.dispatch({
-            action: 'join_room_error',
+            action: Action.JoinRoomError,
+            roomId,
         });
         console.error("Failed to create room " + roomId + " " + err);
         let description = _t("Server may be unavailable, overloaded, or you hit a bug.");
@@ -236,9 +221,16 @@ export function findDMForUser(client: MatrixClient, userId: string): Room {
     const roomIds = DMRoomMap.shared().getDMRoomsForUserId(userId);
     const rooms = roomIds.map(id => client.getRoom(id));
     const suitableDMRooms = rooms.filter(r => {
+        // Validate that we are joined and the other person is also joined. We'll also make sure
+        // that the room also looks like a DM (until we have canonical DMs to tell us). For now,
+        // a DM is a room of two people that contains those two people exactly. This does mean
+        // that bots, assistants, etc will ruin a room's DM-ness, though this is a problem for
+        // canonical DMs to solve.
         if (r && r.getMyMembership() === "join") {
-            const member = r.getMember(userId);
-            return member && (member.membership === "invite" || member.membership === "join");
+            const members = r.currentState.getMembers();
+            const joinedMembers = members.filter(m => isJoinedOrNearlyJoined(m.membership));
+            const otherMember = joinedMembers.find(m => m.userId === userId);
+            return otherMember && joinedMembers.length === 2;
         }
         return false;
     }).sort((r1, r2) => {
@@ -292,6 +284,34 @@ export async function canEncryptToAllUsers(client: MatrixClient, userIds: string
     }
 }
 
+// Similar to ensureDMExists but also adds creation content
+// without polluting ensureDMExists with unrelated stuff (also
+// they're never encrypted).
+export async function ensureVirtualRoomExists(
+    client: MatrixClient, userId: string, nativeRoomId: string,
+): Promise<string> {
+    const existingDMRoom = findDMForUser(client, userId);
+    let roomId;
+    if (existingDMRoom) {
+        roomId = existingDMRoom.roomId;
+    } else {
+        roomId = await createRoom({
+            dmUserId: userId,
+            spinner: false,
+            andView: false,
+            createOpts: {
+                creation_content: {
+                    // This allows us to recognise that the room is a virtual room
+                    // when it comes down our sync stream (we also put the ID of the
+                    // respective native room in there because why not?)
+                    [VIRTUAL_ROOM_EVENT_TYPE]: nativeRoomId,
+                },
+            },
+        });
+    }
+    return roomId;
+}
+
 export async function ensureDMExists(client: MatrixClient, userId: string): Promise<string> {
     const existingDMRoom = findDMForUser(client, userId);
     let roomId;
@@ -302,7 +322,8 @@ export async function ensureDMExists(client: MatrixClient, userId: string): Prom
         if (privateShouldBeEncrypted()) {
             encryption = await canEncryptToAllUsers(client, [userId]);
         }
-        roomId = await createRoom({encryption, dmUserId: userId, spinner: false, andView: false});
+
+        roomId = await createRoom({ encryption, dmUserId: userId, spinner: false, andView: false });
         await _waitForMember(client, roomId, userId);
     }
     return roomId;

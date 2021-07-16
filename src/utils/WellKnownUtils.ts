@@ -14,12 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from '../MatrixClientPeg';
+import { MatrixClientPeg } from '../MatrixClientPeg';
 
+const CALL_BEHAVIOUR_WK_KEY = "io.element.call_behaviour";
 const E2EE_WK_KEY = "io.element.e2ee";
 const E2EE_WK_KEY_DEPRECATED = "im.vector.riot.e2ee";
 
 /* eslint-disable camelcase */
+export interface ICallBehaviourWellKnown {
+    widget_build_url?: string;
+}
+
 export interface IE2EEWellKnown {
     default?: boolean;
     secure_backup_required?: boolean;
@@ -27,13 +32,18 @@ export interface IE2EEWellKnown {
 }
 /* eslint-enable camelcase */
 
+export function getCallBehaviourWellKnown(): ICallBehaviourWellKnown {
+    const clientWellKnown = MatrixClientPeg.get().getClientWellKnown();
+    return clientWellKnown?.[CALL_BEHAVIOUR_WK_KEY];
+}
+
 export function getE2EEWellKnown(): IE2EEWellKnown {
     const clientWellKnown = MatrixClientPeg.get().getClientWellKnown();
     if (clientWellKnown && clientWellKnown[E2EE_WK_KEY]) {
         return clientWellKnown[E2EE_WK_KEY];
     }
     if (clientWellKnown && clientWellKnown[E2EE_WK_KEY_DEPRECATED]) {
-        return clientWellKnown[E2EE_WK_KEY_DEPRECATED]
+        return clientWellKnown[E2EE_WK_KEY_DEPRECATED];
     }
     return null;
 }

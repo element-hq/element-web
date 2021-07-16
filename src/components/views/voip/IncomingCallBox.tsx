@@ -17,23 +17,27 @@ limitations under the License.
 */
 
 import React from 'react';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import { ActionPayload } from '../../../dispatcher/payloads';
-import CallHandler from '../../../CallHandler';
-import PulsedAvatar from '../avatars/PulsedAvatar';
+import CallHandler, { AudioID } from '../../../CallHandler';
 import RoomAvatar from '../avatars/RoomAvatar';
-import FormButton from '../elements/FormButton';
-import { CallState } from 'matrix-js-sdk/lib/webrtc/call';
+import AccessibleButton from '../elements/AccessibleButton';
+import { CallState } from 'matrix-js-sdk/src/webrtc/call';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
+import classNames from 'classnames';
 
 interface IProps {
 }
 
 interface IState {
     incomingCall: any;
+    silenced: boolean;
 }
 
+@replaceableComponent("views.voip.IncomingCallBox")
 export default class IncomingCallBox extends React.Component<IProps, IState> {
     private dispatcherRef: string;
 
@@ -43,6 +47,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
         this.dispatcherRef = dis.register(this.onAction);
         this.state = {
             incomingCall: null,
+            silenced: false,
         };
     }
 
@@ -57,6 +62,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
                 if (call && call.state === CallState.Ringing) {
                     this.setState({
                         incomingCall: call,
+                        silenced: false, // Reset silenced state for new call
                     });
                 } else {
                     this.setState({
@@ -71,7 +77,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
         e.stopPropagation();
         dis.dispatch({
             action: 'answer',
-            room_id: this.state.incomingCall.roomId,
+            room_id: CallHandler.sharedInstance().roomIdForCall(this.state.incomingCall),
         });
     };
 
@@ -79,8 +85,15 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
         e.stopPropagation();
         dis.dispatch({
             action: 'reject',
-            room_id: this.state.incomingCall.roomId,
+            room_id: CallHandler.sharedInstance().roomIdForCall(this.state.incomingCall),
         });
+    };
+
+    private onSilenceClick: React.MouseEventHandler = (e) => {
+        e.stopPropagation();
+        const newState = !this.state.silenced;
+        this.setState({ silenced: newState });
+        newState ? CallHandler.sharedInstance().pause(AudioID.Ring) : CallHandler.sharedInstance().play(AudioID.Ring);
     };
 
     public render() {
@@ -90,7 +103,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
 
         let room = null;
         if (this.state.incomingCall) {
-            room = MatrixClientPeg.get().getRoom(this.state.incomingCall.roomId);
+            room = MatrixClientPeg.get().getRoom(CallHandler.sharedInstance().roomIdForCall(this.state.incomingCall));
         }
 
         const caller = room ? room.name : _t("Unknown caller");
@@ -106,36 +119,46 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
             }
         }
 
+        const silenceClass = classNames({
+            "mx_IncomingCallBox_iconButton": true,
+            "mx_IncomingCallBox_unSilence": this.state.silenced,
+            "mx_IncomingCallBox_silence": !this.state.silenced,
+        });
+
         return <div className="mx_IncomingCallBox">
             <div className="mx_IncomingCallBox_CallerInfo">
-                <PulsedAvatar>
-                    <RoomAvatar
-                        room={room}
-                        height={32}
-                        width={32}
-                    />
-                </PulsedAvatar>
+                <RoomAvatar
+                    room={room}
+                    height={32}
+                    width={32}
+                />
                 <div>
                     <h1>{caller}</h1>
                     <p>{incomingCallText}</p>
                 </div>
+                <AccessibleTooltipButton
+                    className={silenceClass}
+                    onClick={this.onSilenceClick}
+                    title={this.state.silenced ? _t("Sound on"): _t("Silence call")}
+                />
             </div>
             <div className="mx_IncomingCallBox_buttons">
-                <FormButton
+                <AccessibleButton
                     className={"mx_IncomingCallBox_decline"}
                     onClick={this.onRejectClick}
                     kind="danger"
-                    label={_t("Decline")}
-                />
+                >
+                    { _t("Decline") }
+                </AccessibleButton>
                 <div className="mx_IncomingCallBox_spacer" />
-                <FormButton
+                <AccessibleButton
                     className={"mx_IncomingCallBox_accept"}
                     onClick={this.onAnswerClick}
                     kind="primary"
-                    label={_t("Accept")}
-                />
+                >
+                    { _t("Accept") }
+                </AccessibleButton>
             </div>
         </div>;
     }
 }
-

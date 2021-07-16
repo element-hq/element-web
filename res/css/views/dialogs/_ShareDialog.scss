@@ -50,7 +50,8 @@ limitations under the License.
     margin-left: 20px;
     display: inherit;
 }
-.mx_ShareDialog_matrixto_copy > div {
+.mx_ShareDialog_matrixto_copy::after {
+    content: "";
     mask-image: url($copy-button-url);
     background-color: $message-action-bar-fg-color;
     margin-left: 5px;

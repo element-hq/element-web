@@ -27,7 +27,7 @@ import PlatformPeg from "./PlatformPeg";
 // @ts-ignore - $webapp is a webpack resolve alias pointing to the output directory, see webpack config
 import webpackLangJsonUrl from "$webapp/i18n/languages.json";
 import { SettingLevel } from "./settings/SettingLevel";
-import {retry} from "./utils/promise";
+import { retry } from "./utils/promise";
 
 const i18nFolder = 'i18n/';
 
@@ -54,6 +54,15 @@ export function newTranslatableError(message: string) {
     const error = new Error(message) as ITranslatableError;
     error.translatedMessage = _t(message);
     return error;
+}
+
+export function getUserLanguage(): string {
+    const language = SettingsStore.getValue("language", null, /*excludeDefault:*/true);
+    if (language) {
+        return language;
+    } else {
+        return normalizeLanguageKey(getLanguageFromBrowser());
+    }
 }
 
 // Function which only purpose is to mark that a string is translatable
@@ -91,17 +100,21 @@ function safeCounterpartTranslate(text: string, options?: object) {
     if (translated === undefined && count !== undefined) {
         // counterpart does not do fallback if no pluralisation exists
         // in the preferred language, so do it here
-        translated = counterpart.translate(text, Object.assign({}, options, {locale: 'en'}));
+        translated = counterpart.translate(text, Object.assign({}, options, { locale: 'en' }));
     }
     return translated;
 }
 
+type SubstitutionValue = number | string | React.ReactNode | ((sub: string) => React.ReactNode);
+
 export interface IVariables {
     count?: number;
-    [key: string]: number | string;
+    [key: string]: SubstitutionValue;
 }
 
-type Tags = Record<string, (sub: string) => React.ReactNode>;
+export type Tags = Record<string, SubstitutionValue>;
+
+export type TranslatedString = string | React.ReactNode;
 
 /*
  * Translates text and optionally also replaces XML-ish elements in the text with e.g. React components
@@ -121,7 +134,7 @@ type Tags = Record<string, (sub: string) => React.ReactNode>;
  */
 export function _t(text: string, variables?: IVariables): string;
 export function _t(text: string, variables: IVariables, tags: Tags): React.ReactNode;
-export function _t(text: string, variables?: IVariables, tags?: Tags): string | React.ReactNode {
+export function _t(text: string, variables?: IVariables, tags?: Tags): TranslatedString {
     // Don't do substitutions in counterpart. We handle it ourselves so we can replace with React components
     // However, still pass the variables to counterpart so that it can choose the correct plural if count is given
     // It is enough to pass the count variable, but in the future counterpart might make use of other information too
@@ -236,7 +249,7 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
                 let replaced;
                 // If substitution is a function, call it
                 if (mapping[regexpString] instanceof Function) {
-                    replaced = (mapping as Tags)[regexpString].apply(null, capturedGroups);
+                    replaced = ((mapping as Tags)[regexpString] as Function)(...capturedGroups);
                 } else {
                     replaced = mapping[regexpString];
                 }
@@ -333,7 +346,10 @@ export function setLanguage(preferredLangs: string | string[]) {
         counterpart.registerTranslations(langToUse, langData);
         counterpart.setLocale(langToUse);
         SettingsStore.setValue("language", null, SettingLevel.DEVICE, langToUse);
-        console.log("set language to " + langToUse);
+        // Adds a lot of noise to test runs, so disable logging there.
+        if (process.env.NODE_ENV !== "test") {
+            console.log("set language to " + langToUse);
+        }
 
         // Set 'en' as fallback language:
         if (langToUse !== "en") {
@@ -453,8 +469,12 @@ function getLangsJson(): Promise<object> {
         request(
             { method: "GET", url },
             (err, response, body) => {
-                if (err || response.status < 200 || response.status >= 300) {
+                if (err) {
                     reject(err);
+                    return;
+                }
+                if (response.status < 200 || response.status >= 300) {
+                    reject(new Error(`Failed to load ${url}, got ${response.status}`));
                     return;
                 }
                 resolve(JSON.parse(body));
@@ -496,8 +516,12 @@ function getLanguage(langPath: string): Promise<object> {
         request(
             { method: "GET", url: langPath },
             (err, response, body) => {
-                if (err || response.status < 200 || response.status >= 300) {
+                if (err) {
                     reject(err);
+                    return;
+                }
+                if (response.status < 200 || response.status >= 300) {
+                    reject(new Error(`Failed to load ${langPath}, got ${response.status}`));
                     return;
                 }
                 resolve(weblateToCounterpart(JSON.parse(body)));

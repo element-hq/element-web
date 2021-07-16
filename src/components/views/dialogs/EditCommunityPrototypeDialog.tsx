@@ -23,6 +23,8 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import FlairStore from "../../../stores/FlairStore";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 interface IProps extends IDialogProps {
     communityId: string;
@@ -38,6 +40,7 @@ interface IState {
 }
 
 // XXX: This is a lot of duplication from the create dialog, just in a different shape
+@replaceableComponent("views.dialogs.EditCommunityPrototypeDialog")
 export default class EditCommunityPrototypeDialog extends React.PureComponent<IProps, IState> {
     private avatarUploadRef: React.RefObject<HTMLInputElement> = React.createRef();
 
@@ -57,7 +60,7 @@ export default class EditCommunityPrototypeDialog extends React.PureComponent<IP
     }
 
     private onNameChange = (ev: ChangeEvent<HTMLInputElement>) => {
-        this.setState({name: ev.target.value});
+        this.setState({ name: ev.target.value });
     };
 
     private onSubmit = async (ev) => {
@@ -68,7 +71,7 @@ export default class EditCommunityPrototypeDialog extends React.PureComponent<IP
 
         // We'll create the community now to see if it's taken, leaving it active in
         // the background for the user to look at while they invite people.
-        this.setState({busy: true});
+        this.setState({ busy: true });
         try {
             let avatarUrl = this.state.currentAvatarUrl || ""; // must be a string for synapse to accept it
             if (this.state.avatarFile) {
@@ -96,13 +99,13 @@ export default class EditCommunityPrototypeDialog extends React.PureComponent<IP
 
     private onAvatarChanged = (e: ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files || !e.target.files.length) {
-            this.setState({avatarFile: null});
+            this.setState({ avatarFile: null });
         } else {
-            this.setState({busy: true});
+            this.setState({ busy: true });
             const file = e.target.files[0];
             const reader = new FileReader();
             reader.onload = (ev: ProgressEvent<FileReader>) => {
-                this.setState({avatarFile: file, busy: false, avatarPreview: ev.target.result as string});
+                this.setState({ avatarFile: file, busy: false, avatarPreview: ev.target.result as string });
             };
             reader.readAsDataURL(file);
         }
@@ -116,10 +119,10 @@ export default class EditCommunityPrototypeDialog extends React.PureComponent<IP
         let preview = <img src={this.state.avatarPreview} className="mx_EditCommunityPrototypeDialog_avatar" />;
         if (!this.state.avatarPreview) {
             if (this.state.currentAvatarUrl) {
-                const url = MatrixClientPeg.get().mxcUrlToHttp(this.state.currentAvatarUrl);
+                const url = mediaFromMxc(this.state.currentAvatarUrl).srcHttp;
                 preview = <img src={url} className="mx_EditCommunityPrototypeDialog_avatar" />;
             } else {
-                preview = <div className="mx_EditCommunityPrototypeDialog_placeholderAvatar" />
+                preview = <div className="mx_EditCommunityPrototypeDialog_placeholderAvatar" />;
             }
         }
 
@@ -141,7 +144,7 @@ export default class EditCommunityPrototypeDialog extends React.PureComponent<IP
                         </div>
                         <div className="mx_EditCommunityPrototypeDialog_rowAvatar">
                             <input
-                                type="file" style={{display: "none"}}
+                                type="file" style={{ display: "none" }}
                                 ref={this.avatarUploadRef} accept="image/*"
                                 onChange={this.onAvatarChanged}
                             />

@@ -17,12 +17,14 @@ limitations under the License.
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import {throttle} from "lodash";
+import { throttle } from "lodash";
 import ResizeObserver from 'resize-observer-polyfill';
 
 import dis from '../../../dispatcher/dispatcher';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -55,12 +57,16 @@ function getOrCreateContainer(containerId) {
  * children are made visible and are positioned into a div that is given the same
  * bounding rect as the parent of PE.
  */
+@replaceableComponent("views.elements.PersistedElement")
 export default class PersistedElement extends React.Component {
     static propTypes = {
         // Unique identifier for this PersistedElement instance
         // Any PersistedElements with the same persistKey will use
         // the same DOM container.
         persistKey: PropTypes.string.isRequired,
+
+        // z-index for the element. Defaults to 9.
+        zIndex: PropTypes.number,
     };
 
     constructor() {
@@ -133,6 +139,8 @@ export default class PersistedElement extends React.Component {
     _onAction(payload) {
         if (payload.action === 'timeline_resize') {
             this._repositionChild();
+        } else if (payload.action === 'logout') {
+            PersistedElement.destroyElement(this.props.persistKey);
         }
     }
 
@@ -165,17 +173,18 @@ export default class PersistedElement extends React.Component {
 
         const parentRect = parent.getBoundingClientRect();
         Object.assign(child.style, {
+            zIndex: isNullOrUndefined(this.props.zIndex) ? 9 : this.props.zIndex,
             position: 'absolute',
             top: parentRect.top + 'px',
             left: parentRect.left + 'px',
             width: parentRect.width + 'px',
             height: parentRect.height + 'px',
         });
-    }, 100, {trailing: true, leading: true});
+    }, 100, { trailing: true, leading: true });
 
     render() {
         return <div ref={this.collectChildContainer} />;
     }
 }
 
-export const getPersistKey = (appId: string) => 'widget_' + appId;
+export const getPersistKey = (appId) => 'widget_' + appId;

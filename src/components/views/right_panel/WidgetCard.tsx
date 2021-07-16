@@ -14,22 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useContext, useEffect} from "react";
-import {Room} from "matrix-js-sdk/src/models/room";
+import React, { useContext, useEffect } from "react";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import BaseCard from "./BaseCard";
 import WidgetUtils from "../../../utils/WidgetUtils";
 import AppTile from "../elements/AppTile";
-import {_t} from "../../../languageHandler";
-import {useWidgets} from "./RoomSummaryCard";
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
+import { _t } from "../../../languageHandler";
+import { useWidgets } from "./RoomSummaryCard";
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
-import {Action} from "../../../dispatcher/actions";
-import WidgetStore from "../../../stores/WidgetStore";
-import {ChevronFace, ContextMenuButton, useContextMenu} from "../../structures/ContextMenu";
+import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
+import { Action } from "../../../dispatcher/actions";
+import { ChevronFace, ContextMenuButton, useContextMenu } from "../../structures/ContextMenu";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
+import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import UIStore from "../../../stores/UIStore";
 
 interface IProps {
     room: Room;
@@ -42,7 +43,7 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
 
     const apps = useWidgets(room);
     const app = apps.find(a => a.id === widgetId);
-    const isPinned = app && WidgetStore.instance.isPinned(app.id);
+    const isPinned = app && WidgetLayoutStore.instance.isInContainer(room, app, Container.Top);
 
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
 
@@ -65,7 +66,7 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
         contextMenu = (
             <WidgetContextMenu
                 chevronFace={ChevronFace.None}
-                right={window.innerWidth - rect.right - 12}
+                right={UIStore.instance.windowWidth - rect.right - 12}
                 top={rect.bottom + 12}
                 onFinished={closeMenu}
                 app={app}
@@ -103,7 +104,6 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
             creatorUserId={app.creatorUserId}
             widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
             waitForIframeLoad={app.waitForIframeLoad}
-            whitelistCapabilities={WidgetUtils.getCapWhitelistForAppTypeInRoomId(app.type, room.roomId)}
         />
     </BaseCard>;
 };

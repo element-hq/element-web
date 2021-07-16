@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 const assert = require('assert');
-const {openMemberInfo} = require("./memberlist");
+const { openMemberInfo } = require("./memberlist");
 
 async function startVerification(session, name) {
     session.log.step("opens their opponent's profile and starts verification");
@@ -74,7 +74,7 @@ async function doSasVerification(session) {
     return sasCodes;
 }
 
-module.exports.startSasVerifcation = async function(session, name) {
+module.exports.startSasVerification = async function(session, name) {
     session.log.startGroup("starts verification");
     await startVerification(session, name);
 
@@ -93,7 +93,7 @@ module.exports.acceptSasVerification = async function(session, name) {
     // verify the toast is for verification
     const toastHeader = await requestToast.$("h2");
     const toastHeaderText = await session.innerText(toastHeader);
-    assert.equal(toastHeaderText, 'Verification Request');
+    assert.equal(toastHeaderText, 'Verification requested');
     const toastDescription = await requestToast.$(".mx_Toast_description");
     const toastDescText = await session.innerText(toastDescription);
     assert.equal(toastDescText.startsWith(name), true,

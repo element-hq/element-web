@@ -32,7 +32,11 @@ module.exports.goBackToRoomSummaryCard = async function(session) {
             // Sometimes our tests have this opened to MemberInfo
             await backButton.click();
         } catch (e) {
-            break; // stop trying to go further back
+            // explicitly check for TimeoutError as this sometimes returned
+            // `Error: Node is detached from document` due to a re-render race or similar
+            if (e.name === "TimeoutError") {
+                break; // stop trying to go further back
+            }
         }
     }
 };

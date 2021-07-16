@@ -48,6 +48,10 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
         return CommunityPrototypeStore.internalInstance;
     }
 
+    public static getUpdateEventName(roomId: string): string {
+        return `${UPDATE_EVENT}:${roomId}`;
+    }
+
     public getSelectedCommunityId(): string {
         if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
             return GroupFilterOrderStore.getSelectedTags()[0];
@@ -103,8 +107,9 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
 
         const pl = generalChat.currentState.getStateEvents("m.room.power_levels", "");
         if (!pl) return this.isAdminOf(communityId);
+        const plContent = pl.getContent();
 
-        const invitePl = isNullOrUndefined(pl.invite) ? 50 : Number(pl.invite);
+        const invitePl = isNullOrUndefined(plContent.invite) ? 50 : Number(plContent.invite);
         return invitePl <= myMember.powerLevel;
     }
 
@@ -121,11 +126,11 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
 
             if (membership === EffectiveMembership.Invite) {
                 try {
-                    const path = utils.encodeUri("/rooms/$roomId/group_info", {$roomId: room.roomId});
-                    const profile = await this.matrixClient._http.authedRequest(
+                    const path = utils.encodeUri("/rooms/$roomId/group_info", { $roomId: room.roomId });
+                    const profile = await this.matrixClient.http.authedRequest(
                         undefined, "GET", path,
                         undefined, undefined,
-                        {prefix: "/_matrix/client/unstable/im.vector.custom"});
+                        { prefix: "/_matrix/client/unstable/im.vector.custom" });
                     // we use global account data because per-room account data on invites is unreliable
                     await this.matrixClient.setAccountData("im.vector.group_info." + room.roomId, profile);
                 } catch (e) {
@@ -134,7 +139,8 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
             }
         } else if (payload.action === "MatrixActions.accountData") {
             if (payload.event_type.startsWith("im.vector.group_info.")) {
-                this.emit(UPDATE_EVENT, payload.event_type.substring("im.vector.group_info.".length));
+                const roomId = payload.event_type.substring("im.vector.group_info.".length);
+                this.emit(CommunityPrototypeStore.getUpdateEventName(roomId), roomId);
             }
         } else if (payload.action === "select_tag") {
             // Automatically select the general chat when switching communities
@@ -149,15 +155,21 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
     }
 
     public getInviteProfile(roomId: string): IRoomProfile {
-        if (!this.matrixClient) return {displayName: null, avatarMxc: null};
+        if (!this.matrixClient) return { displayName: null, avatarMxc: null };
         const room = this.matrixClient.getRoom(roomId);
         if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
             const data = this.matrixClient.getAccountData("im.vector.group_info." + roomId);
             if (data && data.getContent()) {
-                return {displayName: data.getContent().name, avatarMxc: data.getContent().avatar_url};
+                return {
+                    displayName: data.getContent().name,
+                    avatarMxc: data.getContent().avatar_url,
+                };
             }
         }
-        return {displayName: room.name, avatarMxc: room.avatar_url};
+        return {
+            displayName: room.name,
+            avatarMxc: room.getMxcAvatarUrl(),
+        };
     }
 
     protected async onReady(): Promise<any> {
@@ -167,7 +179,7 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
             if (getEffectiveMembership(myMember.membership) === EffectiveMembership.Invite) {
                 // Fake an update for anything that might have started listening before the invite
                 // data was available (eg: RoomPreviewBar after a refresh)
-                this.emit(UPDATE_EVENT, room.roomId);
+                this.emit(CommunityPrototypeStore.getUpdateEventName(room.roomId), room.roomId);
             }
         }
     }

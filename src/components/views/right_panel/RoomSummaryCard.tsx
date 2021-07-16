@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useCallback, useState, useEffect, useContext} from "react";
+import React, { useCallback, useState, useEffect, useContext } from "react";
 import classNames from "classnames";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useIsEncrypted } from '../../../hooks/useIsEncrypted';
@@ -25,24 +25,28 @@ import { _t } from '../../../languageHandler';
 import RoomAvatar from "../avatars/RoomAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {Action} from "../../../dispatcher/actions";
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
-import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
+import { Action } from "../../../dispatcher/actions";
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
+import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import Modal from "../../../Modal";
 import ShareDialog from '../dialogs/ShareDialog';
-import {useEventEmitter} from "../../../hooks/useEventEmitter";
+import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import WidgetUtils from "../../../utils/WidgetUtils";
-import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
+import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
 import TextWithTooltip from "../elements/TextWithTooltip";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import WidgetStore, {IApp, MAX_PINNED} from "../../../stores/WidgetStore";
+import WidgetStore, { IApp } from "../../../stores/WidgetStore";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import RoomContext from "../../../contexts/RoomContext";
-import {UIFeature} from "../../../settings/UIFeature";
-import {ChevronFace, ContextMenuTooltipButton, useContextMenu} from "../../structures/ContextMenu";
+import { UIFeature } from "../../../settings/UIFeature";
+import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
+import { useRoomMemberCount } from "../../../hooks/useRoomMembers";
+import { Container, MAX_PINNED, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import RoomName from "../elements/RoomName";
+import UIStore from "../../../stores/UIStore";
 
 interface IProps {
     room: Room;
@@ -75,17 +79,19 @@ export const useWidgets = (room: Room) => {
         setApps([...WidgetStore.instance.getApps(room.roomId)]);
     }, [room]);
 
-    useEffect(updateApps, [room]);
+    useEffect(updateApps, [room, updateApps]);
     useEventEmitter(WidgetStore.instance, room.roomId, updateApps);
+    useEventEmitter(WidgetLayoutStore.instance, WidgetLayoutStore.emissionForRoom(room), updateApps);
 
     return apps;
 };
 
 interface IAppRowProps {
     app: IApp;
+    room: Room;
 }
 
-const AppRow: React.FC<IAppRowProps> = ({ app }) => {
+const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
     const name = WidgetUtils.getWidgetName(app);
     const dataTitle = WidgetUtils.getWidgetDataTitle(app);
     const subtitle = dataTitle && " - " + dataTitle;
@@ -100,10 +106,10 @@ const AppRow: React.FC<IAppRowProps> = ({ app }) => {
         });
     };
 
-    const isPinned = WidgetStore.instance.isPinned(app.id);
+    const isPinned = WidgetLayoutStore.instance.isInContainer(room, app, Container.Top);
     const togglePin = isPinned
-        ? () => { WidgetStore.instance.unpinWidget(app.id); }
-        : () => { WidgetStore.instance.pinWidget(app.id); };
+        ? () => { WidgetLayoutStore.instance.moveToContainer(room, app, Container.Right); }
+        : () => { WidgetLayoutStore.instance.moveToContainer(room, app, Container.Top); };
 
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
     let contextMenu;
@@ -111,14 +117,14 @@ const AppRow: React.FC<IAppRowProps> = ({ app }) => {
         const rect = handle.current.getBoundingClientRect();
         contextMenu = <WidgetContextMenu
             chevronFace={ChevronFace.None}
-            right={window.innerWidth - rect.right}
-            bottom={window.innerHeight - rect.top}
+            right={UIStore.instance.windowWidth - rect.right}
+            bottom={UIStore.instance.windowHeight - rect.top}
             onFinished={closeMenu}
             app={app}
         />;
     }
 
-    const cannotPin = !isPinned && !WidgetStore.instance.canPin(app.id);
+    const cannotPin = !isPinned && !WidgetLayoutStore.instance.canAddToContainer(room, Container.Top);
 
     let pinTitle: string;
     if (cannotPin) {
@@ -182,9 +188,18 @@ const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
         }
     };
 
-    return <Group className="mx_RoomSummaryCard_appsGroup" title={_t("Widgets")}>
-        { apps.map(app => <AppRow key={app.id} app={app} />) }
+    let copyLayoutBtn = null;
+    if (apps.length > 0 && WidgetLayoutStore.instance.canCopyLayoutToRoom(room)) {
+        copyLayoutBtn = (
+            <AccessibleButton kind="link" onClick={() => WidgetLayoutStore.instance.copyLayoutToRoom(room)}>
+                { _t("Set my room layout for everyone") }
+            </AccessibleButton>
+        );
+    }
 
+    return <Group className="mx_RoomSummaryCard_appsGroup" title={_t("Widgets")}>
+        { apps.map(app => <AppRow key={app.id} app={app} room={room} />) }
+        { copyLayoutBtn }
         <AccessibleButton kind="link" onClick={onManageIntegrations}>
             { apps.length > 0 ? _t("Edit widgets, bridges & bots") : _t("Add widgets, bridges & bots") }
         </AccessibleButton>
@@ -207,14 +222,6 @@ const onRoomFilesClick = () => {
 
 const onRoomSettingsClick = () => {
     defaultDispatcher.dispatch({ action: "open_room_settings" });
-};
-
-const useMemberCount = (room: Room) => {
-    const [count, setCount] = useState(room.getJoinedMembers().length);
-    useEventEmitter(room.currentState, "RoomState.members", () => {
-        setCount(room.getJoinedMembers().length);
-    });
-    return count;
 };
 
 const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
@@ -244,13 +251,19 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
             />
         </div>
 
-        <h2 title={room.name}>{ room.name }</h2>
+        <RoomName room={room}>
+            { name => (
+                <h2 title={name}>
+                    { name }
+                </h2>
+            )}
+        </RoomName>
         <div className="mx_RoomSummaryCard_alias" title={alias}>
             { alias }
         </div>
     </React.Fragment>;
 
-    const memberCount = useMemberCount(room);
+    const memberCount = useRoomMemberCount(room);
 
     return <BaseCard header={header} className="mx_RoomSummaryCard" onClose={onClose}>
         <Group title={_t("About")} className="mx_RoomSummaryCard_aboutGroup">

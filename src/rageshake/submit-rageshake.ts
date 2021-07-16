@@ -18,20 +18,15 @@ limitations under the License.
 
 import pako from 'pako';
 
-import {MatrixClientPeg} from '../MatrixClientPeg';
+import { MatrixClientPeg } from '../MatrixClientPeg';
 import PlatformPeg from '../PlatformPeg';
 import { _t } from '../languageHandler';
 import Tar from "tar-js";
 
 import * as rageshake from './rageshake';
 
-// polyfill textencoder if necessary
-import * as TextEncodingUtf8 from 'text-encoding-utf-8';
 import SettingsStore from "../settings/SettingsStore";
-let TextEncoder = window.TextEncoder;
-if (!TextEncoder) {
-    TextEncoder = TextEncodingUtf8.TextEncoder;
-}
+import SdkConfig from "../SdkConfig";
 
 interface IOpts {
     label?: string;
@@ -91,29 +86,29 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
             body.append('cross_signing_key', client.getCrossSigningId());
 
             // add cross-signing status information
-            const crossSigning = client._crypto._crossSigningInfo;
-            const secretStorage = client._crypto._secretStorage;
+            const crossSigning = client.crypto.crossSigningInfo;
+            const secretStorage = client.crypto.secretStorage;
 
             body.append("cross_signing_ready", String(await client.isCrossSigningReady()));
             body.append("cross_signing_supported_by_hs",
                 String(await client.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")));
             body.append("cross_signing_key", crossSigning.getId());
-            body.append("cross_signing_pk_in_secret_storage",
+            body.append("cross_signing_privkey_in_secret_storage",
                 String(!!(await crossSigning.isStoredInSecretStorage(secretStorage))));
 
             const pkCache = client.getCrossSigningCacheCallbacks();
-            body.append("cross_signing_master_pk_cached",
+            body.append("cross_signing_master_privkey_cached",
                 String(!!(pkCache && await pkCache.getCrossSigningKeyCache("master"))));
-            body.append("cross_signing_self_signing_pk_cached",
+            body.append("cross_signing_self_signing_privkey_cached",
                 String(!!(pkCache && await pkCache.getCrossSigningKeyCache("self_signing"))));
-            body.append("cross_signing_user_signing_pk_cached",
+            body.append("cross_signing_user_signing_privkey_cached",
                 String(!!(pkCache && await pkCache.getCrossSigningKeyCache("user_signing"))));
 
             body.append("secret_storage_ready", String(await client.isSecretStorageReady()));
             body.append("secret_storage_key_in_account", String(!!(await secretStorage.hasKey())));
 
             body.append("session_backup_key_in_secret_storage", String(!!(await client.isKeyBackupKeyStored())));
-            const sessionBackupKeyFromCache = await client._crypto.getSessionBackupPrivateKey();
+            const sessionBackupKeyFromCache = await client.crypto.getSessionBackupPrivateKey();
             body.append("session_backup_key_cached", String(!!sessionBackupKeyFromCache));
             body.append("session_backup_key_well_formed", String(sessionBackupKeyFromCache instanceof Uint8Array));
         }
@@ -235,7 +230,7 @@ export async function downloadBugReport(opts: IOpts = {}) {
     let i = 0;
     for (const [key, value] of body.entries()) {
         if (key === 'compressed-log') {
-            await new Promise((resolve => {
+            await new Promise<void>((resolve => {
                 const reader = new FileReader();
                 reader.addEventListener('loadend', ev => {
                     tape.append(`log-${i++}.log`, new TextDecoder().decode(ev.target.result as ArrayBuffer));
@@ -268,8 +263,37 @@ function uint8ToString(buf: Buffer) {
     return out;
 }
 
+export async function submitFeedback(
+    endpoint: string,
+    label: string,
+    comment: string,
+    canContact = false,
+    extraData: Record<string, string> = {},
+) {
+    let version = "UNKNOWN";
+    try {
+        version = await PlatformPeg.get().getAppVersion();
+    } catch (err) {} // PlatformPeg already logs this.
+
+    const body = new FormData();
+    body.append("label", label);
+    body.append("text", comment);
+    body.append("can_contact", canContact ? "yes" : "no");
+
+    body.append("app", "element-web");
+    body.append("version", version);
+    body.append("platform", PlatformPeg.get().getHumanReadableName());
+    body.append("user_id", MatrixClientPeg.get()?.getUserId());
+
+    for (const k in extraData) {
+        body.append(k, extraData[k]);
+    }
+
+    await _submitReport(SdkConfig.get().bug_report_endpoint_url, body, () => {});
+}
+
 function _submitReport(endpoint: string, body: FormData, progressCallback: (string) => void) {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
         const req = new XMLHttpRequest();
         req.open("POST", endpoint);
         req.timeout = 5 * 60 * 1000;

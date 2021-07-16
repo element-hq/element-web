@@ -1,7 +1,5 @@
 /*
-Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2017 - 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,27 +17,20 @@ import React from 'react';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import classNames from 'classnames';
-import { Room, RoomMember } from 'matrix-js-sdk';
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import PropTypes from 'prop-types';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import FlairStore from "../../../stores/FlairStore";
-import {getPrimaryPermalinkEntity} from "../../../utils/permalinks/Permalinks";
+import { getPrimaryPermalinkEntity, parseAppLocalLink } from "../../../utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {Action} from "../../../dispatcher/actions";
+import { Action } from "../../../dispatcher/actions";
+import { mediaFromMxc } from "../../../customisations/Media";
+import Tooltip from './Tooltip';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-// For URLs of matrix.to links in the timeline which have been reformatted by
-// HttpUtils transformTags to relative links. This excludes event URLs (with `[^\/]*`)
-const REGEX_LOCAL_PERMALINK = /^#\/(?:user|room|group)\/(([#!@+]).*?)(?=\/|\?|$)/;
-
+@replaceableComponent("views.elements.Pill")
 class Pill extends React.Component {
-    static isPillUrl(url) {
-        return !!getPrimaryPermalinkEntity(url);
-    }
-
-    static isMessagePillUrl(url) {
-        return !!REGEX_LOCAL_PERMALINK.exec(url);
-    }
-
     static roomNotifPos(text) {
         return text.indexOf("@room");
     }
@@ -56,7 +47,7 @@ class Pill extends React.Component {
     static propTypes = {
         // The Type of this Pill. If url is given, this is auto-detected.
         type: PropTypes.string,
-        // The URL to pillify (no validation is done, see isPillUrl and isMessagePillUrl)
+        // The URL to pillify (no validation is done)
         url: PropTypes.string,
         // Whether the pill is in a message
         inMessage: PropTypes.bool,
@@ -80,6 +71,8 @@ class Pill extends React.Component {
         group: null,
         // The room related to the room pill
         room: null,
+        // Is the user hovering the pill
+        hover: false,
     };
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
@@ -90,12 +83,9 @@ class Pill extends React.Component {
 
         if (nextProps.url) {
             if (nextProps.inMessage) {
-                // Default to the empty array if no match for simplicity
-                // resource and prefix will be undefined instead of throwing
-                const matrixToMatch = REGEX_LOCAL_PERMALINK.exec(nextProps.url) || [];
-
-                resourceId = matrixToMatch[1]; // The room/user ID
-                prefix = matrixToMatch[2]; // The first character of prefix
+                const parts = parseAppLocalLink(nextProps.url);
+                resourceId = parts.primaryEntityId; // The room/user ID
+                prefix = parts.sigil; // The first character of prefix
             } else {
                 resourceId = getPrimaryPermalinkEntity(nextProps.url);
                 prefix = resourceId ? resourceId[0] : undefined;
@@ -154,7 +144,7 @@ class Pill extends React.Component {
                 }
             }
         }
-        this.setState({resourceId, pillType, member, group, room});
+        this.setState({ resourceId, pillType, member, group, room });
     }
 
     componentDidMount() {
@@ -169,6 +159,18 @@ class Pill extends React.Component {
         this._unmounted = true;
     }
 
+    onMouseOver = () => {
+        this.setState({
+            hover: true,
+        });
+    };
+
+    onMouseLeave = () => {
+        this.setState({
+            hover: false,
+        });
+    };
+
     doProfileLookup(userId, member) {
         MatrixClientPeg.get().getProfileInfo(userId).then((resp) => {
             if (this._unmounted) {
@@ -178,13 +180,13 @@ class Pill extends React.Component {
             member.rawDisplayName = resp.displayname;
             member.events.member = {
                 getContent: () => {
-                    return {avatar_url: resp.avatar_url};
+                    return { avatar_url: resp.avatar_url };
                 },
                 getDirectionalContent: function() {
                     return this.getContent();
                 },
             };
-            this.setState({member});
+            this.setState({ member });
         }).catch((err) => {
             console.error('Could not retrieve profile data for ' + userId + ':', err);
         });
@@ -223,25 +225,25 @@ class Pill extends React.Component {
             }
                 break;
             case Pill.TYPE_USER_MENTION: {
-                    // If this user is not a member of this room, default to the empty member
-                    const member = this.state.member;
-                    if (member) {
-                        userId = member.userId;
-                        member.rawDisplayName = member.rawDisplayName || '';
-                        linkText = member.rawDisplayName;
-                        if (this.props.shouldShowPillAvatar) {
-                            avatar = <MemberAvatar member={member} width={16} height={16} aria-hidden="true" />;
-                        }
-                        pillClass = 'mx_UserPill';
-                        href = null;
-                        onClick = this.onUserPillClicked;
+                // If this user is not a member of this room, default to the empty member
+                const member = this.state.member;
+                if (member) {
+                    userId = member.userId;
+                    member.rawDisplayName = member.rawDisplayName || '';
+                    linkText = member.rawDisplayName;
+                    if (this.props.shouldShowPillAvatar) {
+                        avatar = <MemberAvatar member={member} width={16} height={16} aria-hidden="true" />;
                     }
+                    pillClass = 'mx_UserPill';
+                    href = null;
+                    onClick = this.onUserPillClicked;
+                }
             }
                 break;
             case Pill.TYPE_ROOM_MENTION: {
                 const room = this.state.room;
                 if (room) {
-                    linkText = resource;
+                    linkText = room.name || resource;
                     if (this.props.shouldShowPillAvatar) {
                         avatar = <RoomAvatar room={room} width={16} height={16} aria-hidden="true" />;
                     }
@@ -251,13 +253,13 @@ class Pill extends React.Component {
                 break;
             case Pill.TYPE_GROUP_MENTION: {
                 if (this.state.group) {
-                    const {avatarUrl, groupId, name} = this.state.group;
-                    const cli = MatrixClientPeg.get();
+                    const { avatarUrl, groupId, name } = this.state.group;
 
                     linkText = groupId;
                     if (this.props.shouldShowPillAvatar) {
-                        avatar = <BaseAvatar name={name || groupId} width={16} height={16} aria-hidden="true"
-                                             url={avatarUrl ? cli.mxcUrlToHttp(avatarUrl, 16, 16) : null} />;
+                        avatar = <BaseAvatar
+                            name={name || groupId} width={16} height={16} aria-hidden="true"
+                            url={avatarUrl ? mediaFromMxc(avatarUrl).getSquareThumbnailHttp(16) : null} />;
                     }
                     pillClass = 'mx_GroupPill';
                 }
@@ -271,15 +273,36 @@ class Pill extends React.Component {
         });
 
         if (this.state.pillType) {
+            const { yOffset } = this.props;
+
+            let tip;
+            if (this.state.hover && resource) {
+                tip = <Tooltip label={resource} yOffset={yOffset} />;
+            }
+
             return <MatrixClientContext.Provider value={this._matrixClient}>
                 { this.props.inMessage ?
-                    <a className={classes} href={href} onClick={onClick} title={resource} data-offset-key={this.props.offsetKey}>
+                    <a
+                        className={classes}
+                        href={href}
+                        onClick={onClick}
+                        data-offset-key={this.props.offsetKey}
+                        onMouseOver={this.onMouseOver}
+                        onMouseLeave={this.onMouseLeave}
+                    >
                         { avatar }
                         { linkText }
+                        { tip }
                     </a> :
-                    <span className={classes} title={resource} data-offset-key={this.props.offsetKey}>
+                    <span
+                        className={classes}
+                        data-offset-key={this.props.offsetKey}
+                        onMouseOver={this.onMouseOver}
+                        onMouseLeave={this.onMouseLeave}
+                    >
                         { avatar }
                         { linkText }
+                        { tip }
                     </span> }
             </MatrixClientContext.Provider>;
         } else {

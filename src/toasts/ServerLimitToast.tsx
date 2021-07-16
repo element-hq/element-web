@@ -19,13 +19,14 @@ import React from "react";
 import { _t, _td } from "../languageHandler";
 import GenericToast from "../components/views/toasts/GenericToast";
 import ToastStore from "../stores/ToastStore";
-import {messageForResourceLimitError} from "../utils/ErrorUtils";
+import { messageForResourceLimitError } from "../utils/ErrorUtils";
 
 const TOAST_KEY = "serverlimit";
 
-export const showToast = (limitType: string, adminContact?: string, syncError?: boolean) => {
+export const showToast = (limitType: string, onHideToast: () => void, adminContact?: string, syncError?: boolean) => {
     const errorText = messageForResourceLimitError(limitType, adminContact, {
         'monthly_active_user': _td("Your homeserver has exceeded its user limit."),
+        'hs_blocked': _td("This homeserver has been blocked by it's administrator."),
         '': _td("Your homeserver has exceeded one of its resource limits."),
     });
     const contactText = messageForResourceLimitError(limitType, adminContact, {
@@ -38,7 +39,10 @@ export const showToast = (limitType: string, adminContact?: string, syncError?: 
         props: {
             description: <React.Fragment>{errorText} {contactText}</React.Fragment>,
             acceptLabel: _t("Ok"),
-            onAccept: hideToast,
+            onAccept: () => {
+                hideToast();
+                if (onHideToast) onHideToast();
+            },
         },
         component: GenericToast,
         priority: 70,

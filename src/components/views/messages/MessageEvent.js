@@ -14,14 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import SettingsStore from "../../../settings/SettingsStore";
-import {Mjolnir} from "../../../mjolnir/Mjolnir";
+import { Mjolnir } from "../../../mjolnir/Mjolnir";
 import RedactedBody from "./RedactedBody";
 import UnknownBody from "./UnknownBody";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.MessageEvent")
 export default class MessageEvent extends React.Component {
     static propTypes = {
         /* the MatrixEvent to show */
@@ -40,10 +42,17 @@ export default class MessageEvent extends React.Component {
         onHeightChanged: PropTypes.func,
 
         /* the shape of the tile, used */
-        tileShape: PropTypes.string,
+        tileShape: PropTypes.string, // TODO: Use TileShape enum
 
         /* the maximum image height to use, if the event is an image */
         maxImageHeight: PropTypes.number,
+
+        /* overrides for the msgtype-specific components, used by ReplyTile to override file rendering */
+        overrideBodyTypes: PropTypes.object,
+        overrideEventTypes: PropTypes.object,
+
+        /* the permalinkCreator */
+        permalinkCreator: PropTypes.object,
     };
 
     constructor(props) {
@@ -67,11 +76,14 @@ export default class MessageEvent extends React.Component {
             'm.emote': sdk.getComponent('messages.TextualBody'),
             'm.image': sdk.getComponent('messages.MImageBody'),
             'm.file': sdk.getComponent('messages.MFileBody'),
-            'm.audio': sdk.getComponent('messages.MAudioBody'),
+            'm.audio': sdk.getComponent('messages.MVoiceOrAudioBody'),
             'm.video': sdk.getComponent('messages.MVideoBody'),
+
+            ...(this.props.overrideBodyTypes || {}),
         };
         const evTypes = {
             'm.sticker': sdk.getComponent('messages.MStickerBody'),
+            ...(this.props.overrideEventTypes || {}),
         };
 
         const content = this.props.mxEvent.getContent();
@@ -108,7 +120,7 @@ export default class MessageEvent extends React.Component {
             }
         }
 
-        return <BodyType
+        return BodyType ? <BodyType
             ref={this._body}
             mxEvent={this.props.mxEvent}
             highlights={this.props.highlights}
@@ -120,6 +132,7 @@ export default class MessageEvent extends React.Component {
             editState={this.props.editState}
             onHeightChanged={this.props.onHeightChanged}
             onMessageAllowed={this.onTileUpdate}
-        />;
+            permalinkCreator={this.props.permalinkCreator}
+        /> : null;
     }
 }

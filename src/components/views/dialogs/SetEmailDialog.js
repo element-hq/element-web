@@ -22,13 +22,14 @@ import * as Email from '../../../email';
 import AddThreepid from '../../../AddThreepid';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
-
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 /*
  * Prompt the user to set an email address.
  *
  * On success, `onFinished(true)` is called.
  */
+@replaceableComponent("views.dialogs.SetEmailDialog")
 export default class SetEmailDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
@@ -69,14 +70,14 @@ export default class SetEmailDialog extends React.Component {
                 onFinished: this.onEmailDialogFinished,
             });
         }, (err) => {
-            this.setState({emailBusy: false});
+            this.setState({ emailBusy: false });
             console.error("Unable to add email address " + emailAddress + " " + err);
             Modal.createTrackedDialog('Unable to add email address', '', ErrorDialog, {
                 title: _t("Unable to add email address"),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
         });
-        this.setState({emailBusy: true});
+        this.setState({ emailBusy: true });
     };
 
     onCancelled = () => {
@@ -87,7 +88,7 @@ export default class SetEmailDialog extends React.Component {
         if (ok) {
             this.verifyEmailAddress();
         } else {
-            this.setState({emailBusy: false});
+            this.setState({ emailBusy: false });
         }
     };
 
@@ -95,7 +96,7 @@ export default class SetEmailDialog extends React.Component {
         this._addThreepid.checkEmailLinkClicked().then(() => {
             this.props.onFinished(true);
         }, (err) => {
-            this.setState({emailBusy: false});
+            this.setState({ emailBusy: false });
             if (err.errcode == 'M_THREEPID_AUTH_FAILED') {
                 const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 const message = _t("Unable to verify email address.") + " " +

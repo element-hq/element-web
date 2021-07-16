@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Vector Creations Ltd
+Copyright 2017, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,8 +15,11 @@ limitations under the License.
 */
 
 import React from 'react';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
+
 import BaseAvatar from './BaseAvatar';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 export interface IProps {
         groupId?: string;
@@ -24,10 +27,11 @@ export interface IProps {
         groupAvatarUrl?: string;
         width?: number;
         height?: number;
-        resizeMethod?: string;
+        resizeMethod?: ResizeMethod;
         onClick?: React.MouseEventHandler;
 }
 
+@replaceableComponent("views.avatars.GroupAvatar")
 export default class GroupAvatar extends React.Component<IProps> {
     public static defaultProps = {
         width: 36,
@@ -36,8 +40,8 @@ export default class GroupAvatar extends React.Component<IProps> {
     };
 
     getGroupAvatarUrl() {
-        return MatrixClientPeg.get().mxcUrlToHttp(
-            this.props.groupAvatarUrl,
+        if (!this.props.groupAvatarUrl) return null;
+        return mediaFromMxc(this.props.groupAvatarUrl).getThumbnailOfSourceHttp(
             this.props.width,
             this.props.height,
             this.props.resizeMethod,
@@ -48,7 +52,7 @@ export default class GroupAvatar extends React.Component<IProps> {
         // extract the props we use from props so we can pass any others through
         // should consider adding this as a global rule in js-sdk?
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
-        const {groupId, groupAvatarUrl, groupName, ...otherProps} = this.props;
+        const { groupId, groupAvatarUrl, groupName, ...otherProps } = this.props;
 
         return (
             <BaseAvatar

@@ -75,6 +75,11 @@ limitations under the License.
                 background-color: $menu-selected-color;
             }
 
+            &.mx_AccessibleButton_disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
             img, .mx_IconizedContextMenu_icon { // icons
                 width: 16px;
                 min-width: 16px;

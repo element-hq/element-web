@@ -21,7 +21,7 @@ import * as sdk from "../../../../index";
 import dis from "../../../../dispatcher/dispatcher";
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
-import {Action} from "../../../../dispatcher/actions";
+import { Action } from "../../../../dispatcher/actions";
 
 export default class RecoveryMethodRemovedDialog extends React.PureComponent {
     static propTypes = {
@@ -56,7 +56,7 @@ export default class RecoveryMethodRemovedDialog extends React.PureComponent {
             >
                 <div>
                     <p>{_t(
-                        "This session has detected that your recovery passphrase and key " +
+                        "This session has detected that your Security Phrase and key " +
                         "for Secure Messages have been removed.",
                     )}</p>
                     <p>{_t(

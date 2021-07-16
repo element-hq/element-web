@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 $left-gutter: 64px;
+$hover-select-border: 4px;
 
 .mx_EventTile {
     max-width: 100%;
@@ -25,17 +26,8 @@ $left-gutter: 64px;
     position: relative;
 }
 
-.mx_EventTile_bubble {
-    background-color: $dark-panel-bg-color;
-    padding: 10px;
-    border-radius: 5px;
-    margin: 10px auto;
-    max-width: 75%;
-    box-sizing: border-box;
-}
-
 .mx_EventTile.mx_EventTile_info {
-    padding-top: 0px;
+    padding-top: 1px;
 }
 
 .mx_EventTile_avatar {
@@ -46,7 +38,7 @@ $left-gutter: 64px;
 }
 
 .mx_EventTile.mx_EventTile_info .mx_EventTile_avatar {
-    top: $font-8px;
+    top: $font-6px;
     left: $left-gutter;
 }
 
@@ -83,7 +75,6 @@ $left-gutter: 64px;
     margin-left: 5px;
     display: inline-block;
     vertical-align: top;
-    height: 16px;
     overflow: hidden;
     user-select: none;
 
@@ -95,12 +86,11 @@ $left-gutter: 64px;
 }
 
 .mx_EventTile_isEditing .mx_MessageTimestamp {
-    visibility: hidden !important;
+    visibility: hidden;
 }
 
 .mx_EventTile .mx_MessageTimestamp {
     display: block;
-    visibility: hidden;
     white-space: nowrap;
     left: 0px;
     text-align: center;
@@ -114,7 +104,7 @@ $left-gutter: 64px;
 .mx_EventTile_line, .mx_EventTile_reply {
     position: relative;
     padding-left: $left-gutter;
-    border-radius: 4px;
+    border-radius: 8px;
 }
 
 .mx_RoomView_timeline_rr_enabled,
@@ -131,9 +121,10 @@ $left-gutter: 64px;
     grid-template-columns: 1fr 100px;
 
     .mx_EventTile_line {
-        margin-right: 0px;
+        margin-right: 0;
         grid-column: 1 / 3;
-        padding: 0;
+        // override default padding of mx_EventTile_line so that we can be centered
+        padding: 0 !important;
     }
 
     .mx_EventTile_msgOption {
@@ -151,26 +142,8 @@ $left-gutter: 64px;
     line-height: 57px !important;
 }
 
-.mx_MessagePanel_alwaysShowTimestamps .mx_MessageTimestamp {
-    visibility: visible;
-}
-
 .mx_EventTile_selected > div > a > .mx_MessageTimestamp {
-    left: 3px;
-    width: auto;
-}
-
-// Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
-// The first set is to handle the 'group layout' (default) and the second for the IRC layout
-.mx_EventTile_last > div > a > .mx_MessageTimestamp,
-.mx_EventTile:hover > div > a > .mx_MessageTimestamp,
-.mx_EventTile.mx_EventTile_actionBarFocused > div > a > .mx_MessageTimestamp,
-.mx_EventTile.focus-visible:focus-within > div > a > .mx_MessageTimestamp,
-.mx_IRCLayout .mx_EventTile_last > a > .mx_MessageTimestamp,
-.mx_IRCLayout .mx_EventTile:hover > a > .mx_MessageTimestamp,
-.mx_IRCLayout .mx_EventTile.mx_EventTile_actionBarFocused > a > .mx_MessageTimestamp,
-.mx_IRCLayout .mx_EventTile.focus-visible:focus-within > a > .mx_MessageTimestamp {
-    visibility: visible;
+    left: calc(-$hover-select-border);
 }
 
 .mx_EventTile:hover .mx_MessageActionBar,
@@ -185,7 +158,7 @@ $left-gutter: 64px;
  */
 .mx_EventTile_selected > .mx_EventTile_line {
     border-left: $accent-color 4px solid;
-    padding-left: 60px;
+    padding-left: calc($left-gutter - $hover-select-border);
     background-color: $event-selected-color;
 }
 
@@ -198,8 +171,12 @@ $left-gutter: 64px;
     }
 }
 
+.mx_EventTile_info .mx_EventTile_line {
+    padding-left: calc($left-gutter + 18px);
+}
+
 .mx_EventTile_selected.mx_EventTile_info .mx_EventTile_line {
-    padding-left: 78px;
+    padding-left: calc($left-gutter + 18px - $hover-select-border);
 }
 
 .mx_EventTile:hover .mx_EventTile_line,
@@ -222,21 +199,30 @@ $left-gutter: 64px;
     color: $accent-fg-color;
 }
 
-.mx_EventTile_encrypting {
-    color: $event-encrypting-color !important;
-}
+.mx_EventTile_receiptSent,
+.mx_EventTile_receiptSending {
+    // We don't use `position: relative` on the element because then it won't line
+    // up with the other read receipts
 
-.mx_EventTile_sending {
-    color: $event-sending-color;
+    &::before {
+        background-color: $tertiary-fg-color;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 14px;
+        width: 14px;
+        height: 14px;
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
 }
-
-.mx_EventTile_sending .mx_UserPill,
-.mx_EventTile_sending .mx_RoomPill {
-    opacity: 0.5;
+.mx_EventTile_receiptSent::before {
+    mask-image: url('$(res)/img/element-icons/circle-sent.svg');
 }
-
-.mx_EventTile_notSent {
-    color: $event-notsent-color;
+.mx_EventTile_receiptSending::before {
+    mask-image: url('$(res)/img/element-icons/circle-sending.svg');
 }
 
 .mx_EventTile_contextual {
@@ -266,15 +252,11 @@ $left-gutter: 64px;
     display: inline-block;
     width: 14px;
     height: 14px;
-    top: 29px;
+    // This aligns the avatar with the last line of the
+    // message. We want to move it one line up - 2.2rem
+    top: -2.2rem;
     user-select: none;
     z-index: 1;
-}
-
-.mx_EventTile_continuation .mx_EventTile_readAvatars,
-.mx_EventTile_info .mx_EventTile_readAvatars,
-.mx_EventTile_emote .mx_EventTile_readAvatars {
-    top: 7px;
 }
 
 .mx_EventTile_readAvatars .mx_BaseAvatar {
@@ -282,6 +264,11 @@ $left-gutter: 64px;
     display: inline-block;
     height: $font-14px;
     width: $font-14px;
+
+    will-change: left, top;
+    transition:
+        left var(--transition-short) ease-out,
+        top var(--transition-standard) ease-out;
 }
 
 .mx_EventTile_readAvatarRemainder {
@@ -358,7 +345,7 @@ $left-gutter: 64px;
         mask-image: url('$(res)/img/e2e/normal.svg');
         mask-repeat: no-repeat;
         mask-position: center;
-        mask-size: 90%;
+        mask-size: 80%;
     }
 }
 
@@ -425,25 +412,25 @@ $left-gutter: 64px;
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line,
 .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line,
 .mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line {
-    padding-left: 60px;
+    padding-left: calc($left-gutter - $hover-select-border);
 }
 
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line {
-    border-left: $e2e-verified-color 4px solid;
+    border-left: $e2e-verified-color $EventTile_e2e_state_indicator_width solid;
 }
 
 .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line {
-    border-left: $e2e-unverified-color 4px solid;
+    border-left: $e2e-unverified-color $EventTile_e2e_state_indicator_width solid;
 }
 
 .mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line {
-    border-left: $e2e-unknown-color 4px solid;
+    border-left: $e2e-unknown-color $EventTile_e2e_state_indicator_width solid;
 }
 
 .mx_EventTile:hover.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
 .mx_EventTile:hover.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
 .mx_EventTile:hover.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
-    padding-left: 78px;
+    padding-left: calc($left-gutter + 18px - $hover-select-border);
 }
 
 /* End to end encryption stuff */
@@ -455,8 +442,7 @@ $left-gutter: 64px;
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line > a > .mx_MessageTimestamp,
 .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line > a > .mx_MessageTimestamp,
 .mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line > a > .mx_MessageTimestamp {
-    left: 3px;
-    width: auto;
+    left: calc(-$hover-select-border);
 }
 
 // Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
@@ -491,8 +477,7 @@ $left-gutter: 64px;
 
     pre, code {
         font-family: $monospace-font-family !important;
-        // deliberate constants as we're behind an invert filter
-        color: #333;
+        background-color: $header-panel-bg-color;
     }
 
     pre {
@@ -501,13 +486,23 @@ $left-gutter: 64px;
         // https://github.com/vector-im/vector-web/issues/754
         overflow-x: overlay;
         overflow-y: visible;
-        max-height: 30vh;
     }
+}
 
-    code {
-        // deliberate constants as we're behind an invert filter
-        background-color: #f8f8f8;
-    }
+.mx_EventTile_lineNumbers {
+    float: left;
+    margin: 0 0.5em 0 -1.5em;
+    color: gray;
+}
+
+.mx_EventTile_lineNumber {
+    text-align: right;
+    display: block;
+    padding-left: 1em;
+}
+
+.mx_EventTile_collapsedCodeBlock {
+    max-height: 30vh;
 }
 
 .mx_EventTile:hover .mx_EventTile_body pre,
@@ -521,21 +516,42 @@ $left-gutter: 64px;
 }
 
 // Inserted adjacent to <pre> blocks, (See TextualBody)
-.mx_EventTile_copyButton {
+.mx_EventTile_button {
     position: absolute;
     display: inline-block;
     visibility: hidden;
     cursor: pointer;
-    top: 6px;
-    right: 6px;
+    top: 8px;
+    right: 8px;
     width: 19px;
     height: 19px;
-    mask-image: url($copy-button-url);
     background-color: $message-action-bar-fg-color;
+}
+.mx_EventTile_buttonBottom {
+    top: 33px;
+}
+.mx_EventTile_copyButton {
+    mask-image: url($copy-button-url);
+}
+.mx_EventTile_collapseButton {
+    mask-size: 75%;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-image: url($collapse-button-url);
+}
+.mx_EventTile_expandButton {
+    mask-size: 75%;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-image: url($expand-button-url);
 }
 
 .mx_EventTile_body .mx_EventTile_pre_container:focus-within .mx_EventTile_copyButton,
-.mx_EventTile_body .mx_EventTile_pre_container:hover .mx_EventTile_copyButton {
+.mx_EventTile_body .mx_EventTile_pre_container:hover .mx_EventTile_copyButton,
+.mx_EventTile_body .mx_EventTile_pre_container:focus-within .mx_EventTile_collapseButton,
+.mx_EventTile_body .mx_EventTile_pre_container:hover .mx_EventTile_collapseButton,
+.mx_EventTile_body .mx_EventTile_pre_container:focus-within .mx_EventTile_expandButton,
+.mx_EventTile_body .mx_EventTile_pre_container:hover .mx_EventTile_expandButton {
     visibility: visible;
 }
 

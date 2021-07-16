@@ -17,10 +17,10 @@ limitations under the License.
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
-import Modal, {IHandle, IModal} from "../Modal";
+import Modal, { IHandle, IModal } from "../Modal";
 import ModalWidgetDialog from "../components/views/dialogs/ModalWidgetDialog";
-import {WidgetMessagingStore} from "./widgets/WidgetMessagingStore";
-import {IModalWidgetOpenRequestData, IModalWidgetReturnData, Widget} from "matrix-widget-api";
+import { WidgetMessagingStore } from "./widgets/WidgetMessagingStore";
+import { IModalWidgetOpenRequestData, IModalWidgetReturnData, Widget } from "matrix-widget-api";
 
 interface IState {
     modal?: IModal<any>;
@@ -48,11 +48,16 @@ export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
         return !this.modalInstance;
     };
 
-    public openModalWidget = (requestData: IModalWidgetOpenRequestData, sourceWidget: Widget) => {
+    public openModalWidget = (
+        requestData: IModalWidgetOpenRequestData,
+        sourceWidget: Widget,
+        widgetRoomId?: string,
+    ) => {
         if (this.modalInstance) return;
         this.openSourceWidgetId = sourceWidget.id;
         this.modalInstance = Modal.createTrackedDialog('Modal Widget', '', ModalWidgetDialog, {
-            widgetDefinition: {...requestData},
+            widgetDefinition: { ...requestData },
+            widgetRoomId,
             sourceWidgetId: sourceWidget.id,
             onFinished: (success: boolean, data?: IModalWidgetReturnData) => {
                 if (!success) {
@@ -64,7 +69,7 @@ export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
                 this.openSourceWidgetId = null;
                 this.modalInstance = null;
             },
-        });
+        }, null, /* priority = */ false, /* static = */ true);
     };
 
     public closeModalWidget = (sourceWidget: Widget, data?: IModalWidgetReturnData) => {

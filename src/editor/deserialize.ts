@@ -21,6 +21,7 @@ import { walkDOMDepthFirst } from "./dom";
 import { checkBlockNode } from "../HtmlUtils";
 import { getPrimaryPermalinkEntity } from "../utils/permalinks/Permalinks";
 import { PartCreator } from "./parts";
+import SdkConfig from "../SdkConfig";
 
 function parseAtRoomMentions(text: string, partCreator: PartCreator) {
     const ATROOM = "@room";
@@ -41,7 +42,7 @@ function parseAtRoomMentions(text: string, partCreator: PartCreator) {
 }
 
 function parseLink(a: HTMLAnchorElement, partCreator: PartCreator) {
-    const {href} = a;
+    const { href } = a;
     const resourceId = getPrimaryPermalinkEntity(href); // The room/user ID
     const prefix = resourceId ? resourceId[0] : undefined; // First character of ID
     switch (prefix) {
@@ -57,6 +58,11 @@ function parseLink(a: HTMLAnchorElement, partCreator: PartCreator) {
             }
         }
     }
+}
+
+function parseImage(img: HTMLImageElement, partCreator: PartCreator) {
+    const { src } = img;
+    return partCreator.plain(`![${img.alt.replace(/[[\\\]]/g, c => "\\" + c)}](${src})`);
 }
 
 function parseCodeBlock(n: HTMLElement, partCreator: PartCreator) {
@@ -101,6 +107,8 @@ function parseElement(n: HTMLElement, partCreator: PartCreator, lastNode: HTMLEl
             return parseHeader(n, partCreator);
         case "A":
             return parseLink(<HTMLAnchorElement>n, partCreator);
+        case "IMG":
+            return parseImage(<HTMLImageElement>n, partCreator);
         case "BR":
             return partCreator.newline();
         case "EM":
@@ -127,6 +135,23 @@ function parseElement(n: HTMLElement, partCreator: PartCreator, lastNode: HTMLEl
         case "P": {
             if (lastNode) {
                 return partCreator.newline();
+            }
+            break;
+        }
+        case "DIV":
+        case "SPAN": {
+            // math nodes are translated back into delimited latex strings
+            if (n.hasAttribute("data-mx-maths")) {
+                const delimLeft = (n.nodeName == "SPAN") ?
+                    ((SdkConfig.get()['latex_maths_delims'] || {})['inline'] || {})['left'] || "\\(" :
+                    ((SdkConfig.get()['latex_maths_delims'] || {})['display'] || {})['left'] || "\\[";
+                const delimRight = (n.nodeName == "SPAN") ?
+                    ((SdkConfig.get()['latex_maths_delims'] || {})['inline'] || {})['right'] || "\\)" :
+                    ((SdkConfig.get()['latex_maths_delims'] || {})['display'] || {})['right'] || "\\]";
+                const tex = n.getAttribute("data-mx-maths");
+                return partCreator.plain(delimLeft + tex + delimRight);
+            } else if (!checkDescendInto(n)) {
+                return partCreator.plain(n.textContent);
             }
             break;
         }
@@ -272,7 +297,7 @@ export function parsePlainTextMessage(body: string, partCreator: PartCreator, is
     }, []);
 }
 
-export function parseEvent(event: MatrixEvent, partCreator: PartCreator, {isQuotedMessage = false} = {}) {
+export function parseEvent(event: MatrixEvent, partCreator: PartCreator, { isQuotedMessage = false } = {}) {
     const content = event.getContent();
     let parts;
     if (content.format === "org.matrix.custom.html") {

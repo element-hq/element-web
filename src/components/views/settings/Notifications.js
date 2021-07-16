@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import SettingsStore from '../../../settings/SettingsStore';
 import Modal from '../../../Modal';
 import {
@@ -30,14 +30,15 @@ import {
 import SdkConfig from "../../../SdkConfig";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import AccessibleButton from "../elements/AccessibleButton";
-import {SettingLevel} from "../../../settings/SettingLevel";
+import { SettingLevel } from "../../../settings/SettingLevel";
+import { UIFeature } from "../../../settings/UIFeature";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
 
 // TODO: this component also does a lot of direct poking into this.state, which
 // is VERY NAUGHTY.
-
 
 /**
  * Rules that Vector used to set in order to override the actions of default rules.
@@ -64,6 +65,7 @@ function portLegacyActions(actions) {
     }
 }
 
+@replaceableComponent("views.settings.Notifications")
 export default class Notifications extends React.Component {
     static phases = {
         LOADING: "LOADING", // The component is loading or sending data to the hs
@@ -97,7 +99,7 @@ export default class Notifications extends React.Component {
         MatrixClientPeg.get().setPushRuleEnabled(
             'global', self.state.masterPushRule.kind, self.state.masterPushRule.rule_id, !checked,
         ).then(function() {
-           self._refreshFromServer();
+            self._refreshFromServer();
         });
     };
 
@@ -514,7 +516,7 @@ export default class Notifications extends React.Component {
             };
 
             // HS default rules
-            const defaultRules = {master: [], vector: {}, others: []};
+            const defaultRules = { master: [], vector: {}, others: [] };
 
             for (const kind in rulesets.global) {
                 for (let i = 0; i < Object.keys(rulesets.global[kind]).length; ++i) {
@@ -577,12 +579,12 @@ export default class Notifications extends React.Component {
                         "vectorRuleId": "_keywords",
                         "description": (
                             <span>
-                            { _t('Messages containing <span>keywords</span>',
-                                {},
-                                { 'span': (sub) =>
-                                    <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>{sub}</span>,
-                                },
-                            )}
+                                { _t('Messages containing <span>keywords</span>',
+                                    {},
+                                    { 'span': (sub) =>
+                                        <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>{sub}</span>,
+                                    },
+                                )}
                             </span>
                         ),
                         "vectorState": self.state.vectorContentRules.vectorState,
@@ -629,7 +631,7 @@ export default class Notifications extends React.Component {
         });
 
         const pushersPromise = MatrixClientPeg.get().getPushers().then(function(resp) {
-            self.setState({pushers: resp.pushers});
+            self.setState({ pushers: resp.pushers });
         });
 
         Promise.all([pushRulesPromise, pushersPromise]).then(function() {
@@ -652,7 +654,7 @@ export default class Notifications extends React.Component {
             });
         });
 
-        MatrixClientPeg.get().getThreePids().then((r) => this.setState({threepids: r.threepids}));
+        MatrixClientPeg.get().getThreePids().then((r) => this.setState({ threepids: r.threepids }));
     };
 
     _onClearNotifications = () => {
@@ -740,8 +742,8 @@ export default class Notifications extends React.Component {
 
     emailNotificationsRow(address, label) {
         return <LabelledToggleSwitch value={this.hasEmailPusher(this.state.pushers, address)}
-                                     onChange={this.onEnableEmailNotificationsChange.bind(this, address)}
-                                     label={label} key={`emailNotif_${label}`} />;
+            onChange={this.onEnableEmailNotificationsChange.bind(this, address)}
+            label={label} key={`emailNotif_${label}`} />;
     }
 
     render() {
@@ -754,8 +756,8 @@ export default class Notifications extends React.Component {
         let masterPushRuleDiv;
         if (this.state.masterPushRule) {
             masterPushRuleDiv = <LabelledToggleSwitch value={!this.state.masterPushRule.enabled}
-                                                      onChange={this.onEnableNotificationsChange}
-                                                      label={_t('Enable notifications for this account')} />;
+                onChange={this.onEnableNotificationsChange}
+                label={_t('Enable notifications for this account')} />;
         }
 
         let clearNotificationsButton;
@@ -783,14 +785,14 @@ export default class Notifications extends React.Component {
 
         const emailThreepids = this.state.threepids.filter((tp) => tp.medium === "email");
         let emailNotificationsRows;
-        if (emailThreepids.length === 0) {
-            emailNotificationsRows = <div>
-                { _t('Add an email address to configure email notifications') }
-            </div>;
-        } else {
+        if (emailThreepids.length > 0) {
             emailNotificationsRows = emailThreepids.map((threePid) => this.emailNotificationsRow(
                 threePid.address, `${_t('Enable email notifications')} (${threePid.address})`,
             ));
+        } else if (SettingsStore.getValue(UIFeature.ThirdPartyID)) {
+            emailNotificationsRows = <div>
+                { _t('Add an email address to configure email notifications') }
+            </div>;
         }
 
         // Build external push rules
@@ -871,16 +873,16 @@ export default class Notifications extends React.Component {
                     { spinner }
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("notificationsEnabled")}
-                                          onChange={this.onEnableDesktopNotificationsChange}
-                                          label={_t('Enable desktop notifications for this session')} />
+                        onChange={this.onEnableDesktopNotificationsChange}
+                        label={_t('Enable desktop notifications for this session')} />
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("notificationBodyEnabled")}
-                                          onChange={this.onEnableDesktopNotificationBodyChange}
-                                          label={_t('Show message in desktop notification')} />
+                        onChange={this.onEnableDesktopNotificationBodyChange}
+                        label={_t('Show message in desktop notification')} />
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("audioNotificationsEnabled")}
-                                          onChange={this.onEnableAudioNotificationsChange}
-                                          label={_t('Enable audible notifications for this session')} />
+                        onChange={this.onEnableAudioNotificationsChange}
+                        label={_t('Enable audible notifications for this session')} />
 
                     { emailNotificationsRows }
 

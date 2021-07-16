@@ -18,7 +18,6 @@ limitations under the License.
     display: flex;
     flex-direction: column;
     align-items: center;
-
     &.mx_WelcomePage_registrationDisabled {
         .mx_ButtonCreateAccount {
             display: none;
@@ -27,6 +26,6 @@ limitations under the License.
 }
 
 .mx_Welcome .mx_AuthBody_language {
-    width: 120px;
+    width: 160px;
     margin-bottom: 10px;
 }

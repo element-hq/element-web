@@ -15,16 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../../index';
-import {MatrixClientPeg} from '../../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../../MatrixClientPeg';
 import FileSaver from 'file-saver';
-import {_t, _td} from '../../../../languageHandler';
+import { _t, _td } from '../../../../languageHandler';
 import Modal from '../../../../Modal';
 import { promptForBackupPassphrase } from '../../../../SecurityManager';
-import {copyNode} from "../../../../utils/strings";
-import {SSOAuthEntry} from "../../../../components/views/auth/InteractiveAuthEntryComponents";
+import { copyNode } from "../../../../utils/strings";
+import { SSOAuthEntry } from "../../../../components/views/auth/InteractiveAuthEntryComponents";
 import PassphraseField from "../../../../components/views/auth/PassphraseField";
 import StyledRadioButton from '../../../../components/views/elements/StyledRadioButton';
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
@@ -155,7 +155,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 backupSigStatus,
             };
         } catch (e) {
-            this.setState({phase: PHASE_LOADERROR});
+            this.setState({ phase: PHASE_LOADERROR });
         }
     }
 
@@ -235,7 +235,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const blob = new Blob([this._recoveryKey.encodedPrivateKey], {
             type: 'text/plain;charset=us-ascii',
         });
-        FileSaver.saveAs(blob, 'recovery-key.txt');
+        FileSaver.saveAs(blob, 'security-key.txt');
 
         this.setState({
             downloaded: true,
@@ -385,7 +385,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _onLoadRetryClick = () => {
-        this.setState({phase: PHASE_LOADING});
+        this.setState({ phase: PHASE_LOADING });
         this._fetchBackupInfo();
     }
 
@@ -394,11 +394,11 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _onCancelClick = () => {
-        this.setState({phase: PHASE_CONFIRM_SKIP});
+        this.setState({ phase: PHASE_CONFIRM_SKIP });
     }
 
     _onGoBackClick = () => {
-        this.setState({phase: PHASE_CHOOSE_KEY_PASSPHRASE});
+        this.setState({ phase: PHASE_CHOOSE_KEY_PASSPHRASE });
     }
 
     _onPassPhraseNextClick = async (e) => {
@@ -412,7 +412,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             return;
         }
 
-        this.setState({phase: PHASE_PASSPHRASE_CONFIRM});
+        this.setState({ phase: PHASE_PASSPHRASE_CONFIRM });
     };
 
     _onPassPhraseConfirmNextClick = async (e) => {
@@ -593,10 +593,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     onValidate={this._onPassPhraseValidate}
                     fieldRef={this._passphraseField}
                     autoFocus={true}
-                    label={_td("Enter a recovery passphrase")}
-                    labelEnterPassword={_td("Enter a recovery passphrase")}
-                    labelStrongPassword={_td("Great! This recovery passphrase looks strong enough.")}
-                    labelAllowedButUnsafe={_td("Great! This recovery passphrase looks strong enough.")}
+                    label={_td("Enter a Security Phrase")}
+                    labelEnterPassword={_td("Enter a Security Phrase")}
+                    labelStrongPassword={_td("Great! This Security Phrase looks strong enough.")}
+                    labelAllowedButUnsafe={_td("Great! This Security Phrase looks strong enough.")}
                 />
             </div>
 
@@ -647,7 +647,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         }
         return <form onSubmit={this._onPassPhraseConfirmNextClick}>
             <p>{_t(
-                "Enter your recovery passphrase a second time to confirm it.",
+                "Enter your Security Phrase a second time to confirm it.",
             )}</p>
             <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
                 <Field
@@ -655,7 +655,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     onChange={this._onPassPhraseConfirmChange}
                     value={this.state.passPhraseConfirm}
                     className="mx_CreateSecretStorageDialog_passPhraseField"
-                    label={_t("Confirm your recovery passphrase")}
+                    label={_t("Confirm your Security Phrase")}
                     autoFocus={true}
                     autoComplete="new-password"
                 />
@@ -856,9 +856,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 hasCancel={this.props.hasCancel && [PHASE_PASSPHRASE].includes(this.state.phase)}
                 fixedWidth={false}
             >
-            <div>
-                {content}
-            </div>
+                <div>
+                    {content}
+                </div>
             </BaseDialog>
         );
     }

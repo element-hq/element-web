@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019, 2021 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import lolex from 'lolex';
+import FakeTimers from '@sinonjs/fake-timers';
 import EventEmitter from 'events';
 import UserActivity from '../src/UserActivity';
 
@@ -39,7 +39,7 @@ describe('UserActivity', function() {
         fakeDocument = new FakeDomEventEmitter();
         userActivity = new UserActivity(fakeWindow, fakeDocument);
         userActivity.start();
-        clock = lolex.install();
+        clock = FakeTimers.install();
     });
 
     afterEach(function() {

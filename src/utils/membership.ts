@@ -78,6 +78,11 @@ export function getEffectiveMembership(membership: string): EffectiveMembership 
     }
 }
 
+export function isJoinedOrNearlyJoined(membership: string): boolean {
+    const effective = getEffectiveMembership(membership);
+    return effective === EffectiveMembership.Join || effective === EffectiveMembership.Invite;
+}
+
 export async function leaveRoomBehaviour(roomId: string) {
     let leavingAllVersions = true;
     const history = await MatrixClientPeg.get().getRoomUpgradeHistory(roomId);
@@ -97,7 +102,7 @@ export async function leaveRoomBehaviour(roomId: string) {
         } catch (e) {
             if (e && e.data && e.data.errcode) {
                 const message = e.data.error || _t("Unexpected server error trying to leave the room");
-                results[roomId] = Object.assign(new Error(message), {errcode: e.data.errcode});
+                results[roomId] = Object.assign(new Error(message), { errcode: e.data.errcode });
             } else {
                 results[roomId] = e || new Error("Failed to leave room for unknown causes");
             }
@@ -135,6 +140,6 @@ export async function leaveRoomBehaviour(roomId: string) {
     }
 
     if (RoomViewStore.getRoomId() === roomId) {
-        dis.dispatch({action: 'view_next_room'});
+        dis.dispatch({ action: 'view_home_page' });
     }
 }

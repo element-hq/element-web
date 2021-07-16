@@ -64,12 +64,13 @@ export const showToast = (policyUrl?: string) => {
                     ) : sub,
                 },
             ),
-            acceptLabel: _t("I want to help"),
+            acceptLabel: _t("Yes"),
             onAccept,
             rejectLabel: _t("No"),
             onReject,
         },
         component: GenericToast,
+        className: "mx_AnalyticsToast",
         priority: 10,
     });
 };

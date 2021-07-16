@@ -16,19 +16,21 @@ limitations under the License.
 */
 
 import React from 'react';
-import {RoomMember} from "matrix-js-sdk/src/models/room-member";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
 
 import dis from "../../../dispatcher/dispatcher";
-import {Action} from "../../../dispatcher/actions";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { Action } from "../../../dispatcher/actions";
 import BaseAvatar from "./BaseAvatar";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url"> {
     member: RoomMember;
     fallbackUserId?: string;
     width: number;
     height: number;
-    resizeMethod?: string;
+    resizeMethod?: ResizeMethod;
     // The onClick to give the avatar
     onClick?: React.MouseEventHandler;
     // Whether the onClick of the avatar should be overriden to dispatch `Action.ViewUser`
@@ -42,6 +44,7 @@ interface IState {
     imageUrl?: string;
 }
 
+@replaceableComponent("views.avatars.MemberAvatar")
 export default class MemberAvatar extends React.Component<IProps, IState> {
     public static defaultProps = {
         width: 40,
@@ -61,18 +64,19 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
     }
 
     private static getState(props: IProps): IState {
-        if (props.member && props.member.name) {
+        if (props.member?.name) {
+            let imageUrl = null;
+            if (props.member.getMxcAvatarUrl()) {
+                imageUrl = mediaFromMxc(props.member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(
+                    props.width,
+                    props.height,
+                    props.resizeMethod,
+                );
+            }
             return {
                 name: props.member.name,
                 title: props.title || props.member.userId,
-                imageUrl: props.member.getAvatarUrl(
-                    MatrixClientPeg.get().getHomeserverUrl(),
-                    Math.floor(props.width * window.devicePixelRatio),
-                    Math.floor(props.height * window.devicePixelRatio),
-                    props.resizeMethod,
-                    false,
-                    false,
-                ),
+                imageUrl: imageUrl,
             };
         } else if (props.fallbackUserId) {
             return {
@@ -85,7 +89,7 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
     }
 
     render() {
-        let {member, fallbackUserId, onClick, viewUserOnClick, ...otherProps} = this.props;
+        let { member, fallbackUserId, onClick, viewUserOnClick, ...otherProps } = this.props;
         const userId = member ? member.userId : fallbackUserId;
 
         if (viewUserOnClick) {

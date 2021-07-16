@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {Room} from "matrix-js-sdk/src/models/room";
-import {RoomMember} from "matrix-js-sdk/src/models/room-member";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
-import {MatrixClientPeg} from "./MatrixClientPeg";
+import { MatrixClientPeg } from "./MatrixClientPeg";
 import { _t } from './languageHandler';
 
 export function usersTypingApartFromMeAndIgnored(room: Room): RoomMember[] {
@@ -61,7 +61,7 @@ export function whoIsTypingString(whoIsTyping: RoomMember[], limit: number): str
     if (whoIsTyping.length === 0) {
         return '';
     } else if (whoIsTyping.length === 1) {
-        return _t('%(displayName)s is typing …', {displayName: whoIsTyping[0].name});
+        return _t('%(displayName)s is typing …', { displayName: whoIsTyping[0].name });
     }
 
     const names = whoIsTyping.map(m => m.name);
@@ -73,6 +73,6 @@ export function whoIsTypingString(whoIsTyping: RoomMember[], limit: number): str
         });
     } else {
         const lastPerson = names.pop();
-        return _t('%(names)s and %(lastPerson)s are typing …', {names: names.join(', '), lastPerson: lastPerson});
+        return _t('%(names)s and %(lastPerson)s are typing …', { names: names.join(', '), lastPerson: lastPerson });
     }
 }

@@ -173,26 +173,12 @@ limitations under the License.
 
         margin: 6px 0;
 
-        .mx_IconButton, .mx_Spinner {
-            margin-left: 20px;
-            width: 16px;
-            height: 16px;
-
-            &::before {
-                mask-size: 80%;
-            }
-        }
-
         .mx_UserInfo_roleDescription {
             display: flex;
             justify-content: center;
             align-items: center;
             // try to make it the same height as the dropdown
             margin: 11px 0 12px 0;
-
-            .mx_IconButton {
-                margin-left: 6px;
-            }
         }
 
         .mx_Field {
@@ -273,16 +259,6 @@ limitations under the License.
 
     .mx_AccessibleButton.mx_AccessibleButton_hasKind {
         padding: 8px 18px;
-
-        &.mx_AccessibleButton_kind_primary {
-            color: $accent-color;
-            background-color: $accent-bg-color;
-        }
-
-        &.mx_AccessibleButton_kind_danger {
-            color: $notice-primary-color;
-            background-color: $notice-primary-bg-color;
-        }
     }
 
     .mx_VerificationShowSas .mx_AccessibleButton,

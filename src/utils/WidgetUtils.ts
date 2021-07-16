@@ -16,20 +16,20 @@ limitations under the License.
 */
 
 import * as url from "url";
+import { Capability, IWidget, IWidgetData, MatrixCapabilities } from "matrix-widget-api";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
-import {MatrixClientPeg} from '../MatrixClientPeg';
+import { MatrixClientPeg } from '../MatrixClientPeg';
 import SdkConfig from "../SdkConfig";
 import dis from '../dispatcher/dispatcher';
 import WidgetEchoStore from '../stores/WidgetEchoStore';
 import SettingsStore from "../settings/SettingsStore";
-import ActiveWidgetStore from "../stores/ActiveWidgetStore";
-import {IntegrationManagers} from "../integrations/IntegrationManagers";
-import {Room} from "matrix-js-sdk/src/models/room";
-import {WidgetType} from "../widgets/WidgetType";
-import {objectClone} from "./objects";
-import {_t} from "../languageHandler";
-import {Capability, IWidgetData, MatrixCapabilities} from "matrix-widget-api";
-import {IApp} from "../stores/WidgetStore"; // TODO @@
+import { IntegrationManagers } from "../integrations/IntegrationManagers";
+import { WidgetType } from "../widgets/WidgetType";
+import { objectClone } from "./objects";
+import { _t } from "../languageHandler";
+import { IApp } from "../stores/WidgetStore";
 
 // How long we wait for the state event echo to come back from the server
 // before waitFor[Room/User]Widget rejects its promise
@@ -298,6 +298,16 @@ export default class WidgetUtils {
             content = {};
         }
 
+        return WidgetUtils.setRoomWidgetContent(roomId, widgetId, content);
+    }
+
+    static setRoomWidgetContent(
+        roomId: string,
+        widgetId: string,
+        content: IWidget,
+    ) {
+        const addingWidget = !!content.url;
+
         WidgetEchoStore.setRoomWidgetEcho(roomId, widgetId, content);
 
         const client = MatrixClientPeg.get();
@@ -368,28 +378,28 @@ export default class WidgetUtils {
         return widgets.filter(w => w.content && w.content.type === "m.integration_manager");
     }
 
-    static getRoomWidgetsOfType(room: Room, type: WidgetType): IWidgetEvent[] {
-        const widgets = WidgetUtils.getRoomWidgets(room);
-        return (widgets || []).filter(w => {
+    static getRoomWidgetsOfType(room: Room, type: WidgetType): MatrixEvent[] {
+        const widgets = WidgetUtils.getRoomWidgets(room) || [];
+        return widgets.filter(w => {
             const content = w.getContent();
             return content.url && type.matches(content.type);
         });
     }
 
-    static removeIntegrationManagerWidgets(): Promise<void> {
+    static async removeIntegrationManagerWidgets(): Promise<void> {
         const client = MatrixClientPeg.get();
         if (!client) {
             throw new Error('User not logged in');
         }
         const widgets = client.getAccountData('m.widgets');
         if (!widgets) return;
-        const userWidgets: IWidgetEvent[] = widgets.getContent() || {};
+        const userWidgets: Record<string, IWidgetEvent> = widgets.getContent() || {};
         Object.entries(userWidgets).forEach(([key, widget]) => {
             if (widget.content && widget.content.type === "m.integration_manager") {
                 delete userWidgets[key];
             }
         });
-        return client.setAccountData('m.widgets', userWidgets);
+        await client.setAccountData('m.widgets', userWidgets);
     }
 
     static addIntegrationManagerWidget(name: string, uiUrl: string, apiUrl: string): Promise<void> {
@@ -397,8 +407,8 @@ export default class WidgetUtils {
             "integration_manager_" + (new Date().getTime()),
             WidgetType.INTEGRATION_MANAGER,
             uiUrl,
-            "Integration Manager: " + name,
-            {"api_url": apiUrl},
+            "Integration manager: " + name,
+            { "api_url": apiUrl },
         );
     }
 
@@ -406,7 +416,7 @@ export default class WidgetUtils {
      * Remove all stickerpicker widgets (stickerpickers are user widgets by nature)
      * @return {Promise} Resolves on account data updated
      */
-    static removeStickerpickerWidgets(): Promise<void> {
+    static async removeStickerpickerWidgets(): Promise<void> {
         const client = MatrixClientPeg.get();
         if (!client) {
             throw new Error('User not logged in');
@@ -419,7 +429,7 @@ export default class WidgetUtils {
                 delete userWidgets[key];
             }
         });
-        return client.setAccountData('m.widgets', userWidgets);
+        await client.setAccountData('m.widgets', userWidgets);
     }
 
     static makeAppConfig(
@@ -457,27 +467,6 @@ export default class WidgetUtils {
         return capWhitelist;
     }
 
-    static getWidgetSecurityKey(widgetId: string, widgetUrl: string, isUserWidget: boolean): string {
-        let widgetLocation = ActiveWidgetStore.getRoomId(widgetId);
-
-        if (isUserWidget) {
-            const userWidget = WidgetUtils.getUserWidgetsArray()
-                .find((w) => w.id === widgetId && w.content && w.content.url === widgetUrl);
-
-            if (!userWidget) {
-                throw new Error("No matching user widget to form security key");
-            }
-
-            widgetLocation = userWidget.sender;
-        }
-
-        if (!widgetLocation) {
-            throw new Error("Failed to locate where the widget resides");
-        }
-
-        return encodeURIComponent(`${widgetLocation}::${widgetUrl}`);
-    }
-
     static getLocalJitsiWrapperUrl(opts: {forLocalRender?: boolean, auth?: string} = {}) {
         // NB. we can't just encodeURIComponent all of these because the $ signs need to be there
         const queryStringParts = [
@@ -489,6 +478,7 @@ export default class WidgetUtils {
             'userId=$matrix_user_id',
             'roomId=$matrix_room_id',
             'theme=$theme',
+            'roomName=$roomName',
         ];
         if (opts.auth) {
             queryStringParts.push(`auth=${opts.auth}`);

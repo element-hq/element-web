@@ -15,9 +15,11 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../../../languageHandler";
+import { _t } from "../../../../../languageHandler";
 import GroupUserSettings from "../../../groups/GroupUserSettings";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.tabs.user.FlairUserSettingsTab")
 export default class FlairUserSettingsTab extends React.Component {
     render() {
         return (

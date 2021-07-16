@@ -16,14 +16,16 @@ limitations under the License.
 
 import React from 'react';
 
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import Spinner from '../elements/Spinner';
 import InteractiveAuthDialog from '../dialogs/InteractiveAuthDialog';
 import ConfirmDestroyCrossSigningDialog from '../dialogs/security/ConfirmDestroyCrossSigningDialog';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.CrossSigningPanel")
 export default class CrossSigningPanel extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -77,8 +79,8 @@ export default class CrossSigningPanel extends React.PureComponent {
     async _getUpdatedStatus() {
         const cli = MatrixClientPeg.get();
         const pkCache = cli.getCrossSigningCacheCallbacks();
-        const crossSigning = cli._crypto._crossSigningInfo;
-        const secretStorage = cli._crypto._secretStorage;
+        const crossSigning = cli.crypto.crossSigningInfo;
+        const secretStorage = cli.crypto.secretStorage;
         const crossSigningPublicKeysOnDevice = crossSigning.getId();
         const crossSigningPrivateKeysInStorage = await crossSigning.isStoredInSecretStorage(secretStorage);
         const masterPrivateKeyCached = !!(pkCache && await pkCache.getCrossSigningKeyCache("master"));
@@ -257,7 +259,7 @@ export default class CrossSigningPanel extends React.PureComponent {
                             <td>{_t("Homeserver feature support:")}</td>
                             <td>{homeserverSupportsCrossSigning ? _t("exists") : _t("not found")}</td>
                         </tr>
-                   </tbody></table>
+                    </tbody></table>
                 </details>
                 {errorSection}
                 {actionRow}

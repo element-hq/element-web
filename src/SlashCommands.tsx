@@ -17,27 +17,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 import * as React from 'react';
+import { User } from "matrix-js-sdk/src/models/user";
 
-import {MatrixClientPeg} from './MatrixClientPeg';
+import * as ContentHelpers from 'matrix-js-sdk/src/content-helpers';
+import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';
-import * as sdk from './index';
-import {_t, _td} from './languageHandler';
+import { _t, _td } from './languageHandler';
 import Modal from './Modal';
 import MultiInviter from './utils/MultiInviter';
 import { linkifyAndSanitizeHtml } from './HtmlUtils';
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import WidgetUtils from "./utils/WidgetUtils";
-import {textToHtmlRainbow} from "./utils/colour";
+import { textToHtmlRainbow } from "./utils/colour";
 import { getAddressType } from './UserAddress';
 import { abbreviateUrl } from './utils/UrlUtils';
 import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from './utils/IdentityServerUtils';
-import {isPermalinkHost, parsePermalink} from "./utils/permalinks/Permalinks";
-import {inviteUsersToRoom} from "./RoomInvite";
+import { isPermalinkHost, parsePermalink } from "./utils/permalinks/Permalinks";
+import { inviteUsersToRoom } from "./RoomInvite";
 import { WidgetType } from "./widgets/WidgetType";
 import { Jitsi } from "./widgets/Jitsi";
-import { parseFragment as parseHtml } from "parse5";
+import { parseFragment as parseHtml, Element as ChildElement } from "parse5";
 import BugReportDialog from "./components/views/dialogs/BugReportDialog";
 import { ensureDMExists } from "./createRoom";
 import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
@@ -45,7 +45,16 @@ import { Action } from "./dispatcher/actions";
 import { EffectiveMembership, getEffectiveMembership, leaveRoomBehaviour } from "./utils/membership";
 import SdkConfig from "./SdkConfig";
 import SettingsStore from "./settings/SettingsStore";
-import {UIFeature} from "./settings/UIFeature";
+import { UIFeature } from "./settings/UIFeature";
+import { CHAT_EFFECTS } from "./effects";
+import CallHandler from "./CallHandler";
+import { guessAndSetDMRoom } from "./Rooms";
+import UploadConfirmDialog from './components/views/dialogs/UploadConfirmDialog';
+import ErrorDialog from './components/views/dialogs/ErrorDialog';
+import DevtoolsDialog from './components/views/dialogs/DevtoolsDialog';
+import RoomUpgradeWarningDialog from "./components/views/dialogs/RoomUpgradeWarningDialog";
+import InfoDialog from "./components/views/dialogs/InfoDialog";
+import SlashCommandHelpDialog from "./components/views/dialogs/SlashCommandHelpDialog";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -59,7 +68,6 @@ const singleMxcUpload = async (): Promise<any> => {
         fileSelector.onchange = (ev: HTMLInputEvent) => {
             const file = ev.target.files[0];
 
-            const UploadConfirmDialog = sdk.getComponent("dialogs.UploadConfirmDialog");
             Modal.createTrackedDialog('Upload Files confirmation', '', UploadConfirmDialog, {
                 file,
                 onFinished: (shouldContinue) => {
@@ -77,6 +85,7 @@ export const CommandCategories = {
     "actions": _td("Actions"),
     "admin": _td("Admin"),
     "advanced": _td("Advanced"),
+    "effects": _td("Effects"),
     "other": _td("Other"),
 };
 
@@ -122,10 +131,10 @@ export class Command {
         return this.getCommand() + " " + this.args;
     }
 
-    run(roomId: string, args: string, cmd: string) {
+    run(roomId: string, args: string) {
         // if it has no runFn then its an ignored/nop command (autocomplete only) e.g `/me`
         if (!this.runFn) return reject(_t("Command error"));
-        return this.runFn.bind(this)(roomId, args, cmd);
+        return this.runFn.bind(this)(roomId, args);
     }
 
     getUsage() {
@@ -138,11 +147,15 @@ export class Command {
 }
 
 function reject(error) {
-    return {error};
+    return { error };
 }
 
 function success(promise?: Promise<any>) {
-    return {promise};
+    return { promise };
+}
+
+function successSync(value: any) {
+    return success(Promise.resolve(value));
 }
 
 /* Disable the "unexpected this" error for these commands - all of the run
@@ -150,6 +163,18 @@ function success(promise?: Promise<any>) {
  */
 
 export const Commands = [
+    new Command({
+        command: 'spoiler',
+        args: '<message>',
+        description: _td('Sends the given message as a spoiler'),
+        runFn: function(roomId, message) {
+            return successSync(ContentHelpers.makeHtmlMessage(
+                message,
+                `<span data-mx-spoiler>${message}</span>`,
+            ));
+        },
+        category: CommandCategories.messages,
+    }),
     new Command({
         command: 'shrug',
         args: '<message>',
@@ -159,7 +184,33 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
+            return successSync(ContentHelpers.makeTextMessage(message));
+        },
+        category: CommandCategories.messages,
+    }),
+    new Command({
+        command: 'tableflip',
+        args: '<message>',
+        description: _td('Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message'),
+        runFn: function(roomId, args) {
+            let message = '(╯°□°）╯︵ ┻━┻';
+            if (args) {
+                message = message + ' ' + args;
+            }
+            return successSync(ContentHelpers.makeTextMessage(message));
+        },
+        category: CommandCategories.messages,
+    }),
+    new Command({
+        command: 'unflip',
+        args: '<message>',
+        description: _td('Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message'),
+        runFn: function(roomId, args) {
+            let message = '┬──┬ ノ( ゜-゜ノ)';
+            if (args) {
+                message = message + ' ' + args;
+            }
+            return successSync(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -172,7 +223,7 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
+            return successSync(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -181,7 +232,7 @@ export const Commands = [
         args: '<message>',
         description: _td('Sends a message as plain text, without interpreting it as markdown'),
         runFn: function(roomId, messages) {
-            return success(MatrixClientPeg.get().sendTextMessage(roomId, messages));
+            return successSync(ContentHelpers.makeTextMessage(messages));
         },
         category: CommandCategories.messages,
     }),
@@ -190,7 +241,7 @@ export const Commands = [
         args: '<message>',
         description: _td('Sends a message as html, without interpreting it as markdown'),
         runFn: function(roomId, messages) {
-            return success(MatrixClientPeg.get().sendHtmlMessage(roomId, messages, messages));
+            return successSync(ContentHelpers.makeHtmlMessage(messages, messages));
         },
         category: CommandCategories.messages,
     }),
@@ -199,7 +250,6 @@ export const Commands = [
         args: '<query>',
         description: _td('Searches DuckDuckGo for results'),
         runFn: function() {
-            const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
             // TODO Don't explain this away, actually show a search UI here.
             Modal.createTrackedDialog('Slash Commands', '/ddg is not a command', ErrorDialog, {
                 title: _t('/ddg is not a command'),
@@ -222,10 +272,8 @@ export const Commands = [
                     return reject(_t("You do not have the required permissions to use this command."));
                 }
 
-                const RoomUpgradeWarningDialog = sdk.getComponent("dialogs.RoomUpgradeWarningDialog");
-
-                const {finished} = Modal.createTrackedDialog('Slash Commands', 'upgrade room confirmation',
-                    RoomUpgradeWarningDialog, {roomId: roomId, targetVersion: args}, /*className=*/null,
+                const { finished } = Modal.createTrackedDialog('Slash Commands', 'upgrade room confirmation',
+                    RoomUpgradeWarningDialog, { roomId: roomId, targetVersion: args }, /*className=*/null,
                     /*isPriority=*/false, /*isStatic=*/true);
 
                 return success(finished.then(async ([resp]) => {
@@ -241,7 +289,7 @@ export const Commands = [
                         if (resp.invite) {
                             checkForUpgradeFn = async (newRoom) => {
                                 // The upgradePromise should be done by the time we await it here.
-                                const {replacement_room: newRoomId} = await upgradePromise;
+                                const { replacement_room: newRoomId } = await upgradePromise;
                                 if (newRoom.roomId !== newRoomId) return;
 
                                 const toInvite = [
@@ -267,7 +315,6 @@ export const Commands = [
 
                         if (checkForUpgradeFn) cli.removeListener('Room', checkForUpgradeFn);
 
-                        const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
                         Modal.createTrackedDialog('Slash Commands', 'room upgrade error', ErrorDialog, {
                             title: _t('Error upgrading room'),
                             description: _t(
@@ -323,7 +370,7 @@ export const Commands = [
 
             return success(promise.then((url) => {
                 if (!url) return;
-                return MatrixClientPeg.get().sendStateEvent(roomId, 'm.room.avatar', {url}, '');
+                return MatrixClientPeg.get().sendStateEvent(roomId, 'm.room.avatar', { url }, '');
             }));
         },
         category: CommandCategories.actions,
@@ -387,7 +434,6 @@ export const Commands = [
             const topic = topicEvents && topicEvents.getContent().topic;
             const topicHtml = topic ? linkifyAndSanitizeHtml(topic) : _t('This room has no topic.');
 
-            const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
             Modal.createTrackedDialog('Slash Commands', 'Topic', InfoDialog, {
                 title: room.name,
                 description: <div dangerouslySetInnerHTML={{ __html: topicHtml }} />,
@@ -411,15 +457,14 @@ export const Commands = [
     }),
     new Command({
         command: 'invite',
-        args: '<user-id>',
+        args: '<user-id> [<reason>]',
         description: _td('Invites user with given id to current room'),
         runFn: function(roomId, args) {
             if (args) {
-                const matches = args.match(/^(\S+)$/);
-                if (matches) {
+                const [address, reason] = args.split(/\s+(.+)/);
+                if (address) {
                     // We use a MultiInviter to re-use the invite logic, even though
                     // we're only inviting one user.
-                    const address = matches[1];
                     // If we need an identity server but don't have one, things
                     // get a bit more complex here, but we try to show something
                     // meaningful.
@@ -460,7 +505,7 @@ export const Commands = [
                     }
                     const inviter = new MultiInviter(roomId);
                     return success(prom.then(() => {
-                        return inviter.invite([address]);
+                        return inviter.invite([address], reason);
                     }).then(() => {
                         if (inviter.getCompletionState(address) !== "invited") {
                             throw new Error(inviter.getErrorText(address));
@@ -691,11 +736,10 @@ export const Commands = [
                     ignoredUsers.push(userId); // de-duped internally in the js-sdk
                     return success(
                         cli.setIgnoredUsers(ignoredUsers).then(() => {
-                            const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
                             Modal.createTrackedDialog('Slash Commands', 'User ignored', InfoDialog, {
                                 title: _t('Ignored user'),
                                 description: <div>
-                                    <p>{ _t('You are now ignoring %(userId)s', {userId}) }</p>
+                                    <p>{ _t('You are now ignoring %(userId)s', { userId }) }</p>
                                 </div>,
                             });
                         }),
@@ -722,11 +766,10 @@ export const Commands = [
                     if (index !== -1) ignoredUsers.splice(index, 1);
                     return success(
                         cli.setIgnoredUsers(ignoredUsers).then(() => {
-                            const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
                             Modal.createTrackedDialog('Slash Commands', 'User unignored', InfoDialog, {
                                 title: _t('Unignored user'),
                                 description: <div>
-                                    <p>{ _t('You are no longer ignoring %(userId)s', {userId}) }</p>
+                                    <p>{ _t('You are no longer ignoring %(userId)s', { userId }) }</p>
                                 </div>,
                             });
                         }),
@@ -792,8 +835,7 @@ export const Commands = [
         command: 'devtools',
         description: _td('Opens the Developer Tools dialog'),
         runFn: function(roomId) {
-            const DevtoolsDialog = sdk.getComponent('dialogs.DevtoolsDialog');
-            Modal.createDialog(DevtoolsDialog, {roomId});
+            Modal.createDialog(DevtoolsDialog, { roomId });
             return success();
         },
         category: CommandCategories.advanced,
@@ -814,7 +856,7 @@ export const Commands = [
                 // some superfast regex over the text so we don't have to.
                 const embed = parseHtml(widgetUrl);
                 if (embed && embed.childNodes && embed.childNodes.length === 1) {
-                    const iframe = embed.childNodes[0];
+                    const iframe = embed.childNodes[0] as ChildElement;
                     if (iframe.tagName.toLowerCase() === 'iframe' && iframe.attrs) {
                         const srcAttr = iframe.attrs.find(a => a.name === 'src');
                         console.log("Pulling URL out of iframe (embed code)");
@@ -897,7 +939,6 @@ export const Commands = [
                         await cli.setDeviceVerified(userId, deviceId, true);
 
                         // Tell the user we verified everything
-                        const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
                         Modal.createTrackedDialog('Slash Commands', 'Verified key', InfoDialog, {
                             title: _t('Verified key'),
                             description: <div>
@@ -905,7 +946,7 @@ export const Commands = [
                                     {
                                         _t('The signing key you provided matches the signing key you received ' +
                                             'from %(userId)s\'s session %(deviceId)s. Session marked as verified.',
-                                        {userId, deviceId})
+                                        { userId, deviceId })
                                     }
                                 </p>
                             </div>,
@@ -936,7 +977,7 @@ export const Commands = [
         args: '<message>',
         runFn: function(roomId, args) {
             if (!args) return reject(this.getUserId());
-            return success(MatrixClientPeg.get().sendHtmlMessage(roomId, args, textToHtmlRainbow(args)));
+            return successSync(ContentHelpers.makeHtmlMessage(args, textToHtmlRainbow(args)));
         },
         category: CommandCategories.messages,
     }),
@@ -946,7 +987,7 @@ export const Commands = [
         args: '<message>',
         runFn: function(roomId, args) {
             if (!args) return reject(this.getUserId());
-            return success(MatrixClientPeg.get().sendHtmlEmote(roomId, args, textToHtmlRainbow(args)));
+            return successSync(ContentHelpers.makeHtmlEmote(args, textToHtmlRainbow(args)));
         },
         category: CommandCategories.messages,
     }),
@@ -954,8 +995,6 @@ export const Commands = [
         command: "help",
         description: _td("Displays list of commands with usages and descriptions"),
         runFn: function() {
-            const SlashCommandHelpDialog = sdk.getComponent('dialogs.SlashCommandHelpDialog');
-
             Modal.createTrackedDialog('Slash Commands', 'Help', SlashCommandHelpDialog);
             return success();
         },
@@ -973,9 +1012,8 @@ export const Commands = [
             const member = MatrixClientPeg.get().getRoom(roomId).getMember(userId);
             dis.dispatch<ViewUserPayload>({
                 action: Action.ViewUser,
-                // XXX: We should be using a real member object and not assuming what the
-                // receiver wants.
-                member: member || {userId},
+                // XXX: We should be using a real member object and not assuming what the receiver wants.
+                member: member || { userId } as User,
             });
             return success();
         },
@@ -1001,14 +1039,27 @@ export const Commands = [
         description: _td("Opens chat with the given user"),
         args: "<user-id>",
         runFn: function(roomId, userId) {
-            if (!userId || !userId.startsWith("@") || !userId.includes(":")) {
+            // easter-egg for now: look up phone numbers through the thirdparty API
+            // (very dumb phone number detection...)
+            const isPhoneNumber = userId && /^\+?[0123456789]+$/.test(userId);
+            if (!userId || (!userId.startsWith("@") || !userId.includes(":")) && !isPhoneNumber) {
                 return reject(this.getUsage());
             }
 
             return success((async () => {
+                if (isPhoneNumber) {
+                    const results = await CallHandler.sharedInstance().pstnLookup(this.state.value);
+                    if (!results || results.length === 0 || !results[0].userid) {
+                        throw new Error("Unable to find Matrix ID for phone number");
+                    }
+                    userId = results[0].userid;
+                }
+
+                const roomId = await ensureDMExists(MatrixClientPeg.get(), userId);
+
                 dis.dispatch({
                     action: 'view_room',
-                    room_id: await ensureDMExists(MatrixClientPeg.get(), userId),
+                    room_id: roomId,
                 });
             })());
         },
@@ -1042,6 +1093,50 @@ export const Commands = [
         },
         category: CommandCategories.actions,
     }),
+    new Command({
+        command: "holdcall",
+        description: _td("Places the call in the current room on hold"),
+        category: CommandCategories.other,
+        runFn: function(roomId, args) {
+            const call = CallHandler.sharedInstance().getCallForRoom(roomId);
+            if (!call) {
+                return reject("No active call in this room");
+            }
+            call.setRemoteOnHold(true);
+            return success();
+        },
+    }),
+    new Command({
+        command: "unholdcall",
+        description: _td("Takes the call in the current room off hold"),
+        category: CommandCategories.other,
+        runFn: function(roomId, args) {
+            const call = CallHandler.sharedInstance().getCallForRoom(roomId);
+            if (!call) {
+                return reject("No active call in this room");
+            }
+            call.setRemoteOnHold(false);
+            return success();
+        },
+    }),
+    new Command({
+        command: "converttodm",
+        description: _td("Converts the room to a DM"),
+        category: CommandCategories.other,
+        runFn: function(roomId, args) {
+            const room = MatrixClientPeg.get().getRoom(roomId);
+            return success(guessAndSetDMRoom(room, true));
+        },
+    }),
+    new Command({
+        command: "converttoroom",
+        description: _td("Converts the DM to a room"),
+        category: CommandCategories.other,
+        runFn: function(roomId, args) {
+            const room = MatrixClientPeg.get().getRoom(roomId);
+            return success(guessAndSetDMRoom(room, false));
+        },
+    }),
 
     // Command definitions for autocompletion ONLY:
     // /me is special because its not handled by SlashCommands.js and is instead done inside the Composer classes
@@ -1052,10 +1147,34 @@ export const Commands = [
         category: CommandCategories.messages,
         hideCompletionAfterSpace: true,
     }),
+
+    ...CHAT_EFFECTS.map((effect) => {
+        return new Command({
+            command: effect.command,
+            description: effect.description(),
+            args: '<message>',
+            runFn: function(roomId, args) {
+                return success((async () => {
+                    if (!args) {
+                        args = effect.fallbackMessage();
+                        MatrixClientPeg.get().sendEmoteMessage(roomId, args);
+                    } else {
+                        const content = {
+                            msgtype: effect.msgType,
+                            body: args,
+                        };
+                        MatrixClientPeg.get().sendMessage(roomId, content);
+                    }
+                    dis.dispatch({ action: `effects.${effect.command}` });
+                })());
+            },
+            category: CommandCategories.effects,
+        });
+    }),
 ];
 
 // build a map from names and aliases to the Command objects.
-export const CommandMap = new Map();
+export const CommandMap = new Map<string, Command>();
 Commands.forEach(cmd => {
     CommandMap.set(cmd.command, cmd);
     cmd.aliases.forEach(alias => {
@@ -1063,15 +1182,15 @@ Commands.forEach(cmd => {
     });
 });
 
-export function parseCommandString(input: string) {
+export function parseCommandString(input: string): { cmd?: string, args?: string } {
     // trim any trailing whitespace, as it can confuse the parser for
     // IRC-style commands
     input = input.replace(/\s+$/, '');
     if (input[0] !== '/') return {}; // not a command
 
-    const bits = input.match(/^(\S+?)(?: +((.|\n)*))?$/);
-    let cmd;
-    let args;
+    const bits = input.match(/^(\S+?)(?:[ \n]+((.|\n)*))?$/);
+    let cmd: string;
+    let args: string;
     if (bits) {
         cmd = bits[1].substring(1).toLowerCase();
         args = bits[2];
@@ -1079,7 +1198,12 @@ export function parseCommandString(input: string) {
         cmd = input;
     }
 
-    return {cmd, args};
+    return { cmd, args };
+}
+
+interface ICmd {
+    cmd?: Command;
+    args?: string;
 }
 
 /**
@@ -1090,10 +1214,14 @@ export function parseCommandString(input: string) {
  * processing the command, or 'promise' if a request was sent out.
  * Returns null if the input didn't match a command.
  */
-export function getCommand(roomId: string, input: string) {
-    const {cmd, args} = parseCommandString(input);
+export function getCommand(input: string): ICmd {
+    const { cmd, args } = parseCommandString(input);
 
     if (CommandMap.has(cmd) && CommandMap.get(cmd).isEnabled()) {
-        return () => CommandMap.get(cmd).run(roomId, args, cmd);
+        return {
+            cmd: CommandMap.get(cmd),
+            args,
+        };
     }
+    return {};
 }

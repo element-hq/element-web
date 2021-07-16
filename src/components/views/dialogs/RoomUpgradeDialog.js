@@ -17,10 +17,12 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.RoomUpgradeDialog")
 export default class RoomUpgradeDialog extends React.Component {
     static propTypes = {
         room: PropTypes.object.isRequired,
@@ -34,7 +36,7 @@ export default class RoomUpgradeDialog extends React.Component {
     async componentDidMount() {
         const recommended = await this.props.room.getRecommendedVersion();
         this._targetVersion = recommended.version;
-        this.setState({busy: false});
+        this.setState({ busy: false });
     }
 
     _onCancelClick = () => {
@@ -42,7 +44,7 @@ export default class RoomUpgradeDialog extends React.Component {
     };
 
     _onUpgradeClick = () => {
-        this.setState({busy: true});
+        this.setState({ busy: true });
         MatrixClientPeg.get().upgradeRoom(this.props.room.roomId, this._targetVersion).then(() => {
             this.props.onFinished(true);
         }).catch((err) => {
@@ -52,7 +54,7 @@ export default class RoomUpgradeDialog extends React.Component {
                 description: ((err && err.message) ? err.message : _t("The room upgrade could not be completed")),
             });
         }).finally(() => {
-            this.setState({busy: false});
+            this.setState({ busy: false });
         });
     };
 
@@ -68,7 +70,7 @@ export default class RoomUpgradeDialog extends React.Component {
             buttons = <DialogButtons
                 primaryButton={_t(
                     'Upgrade this room to version %(version)s',
-                    {version: this._targetVersion},
+                    { version: this._targetVersion },
                 )}
                 primaryButtonClass="danger"
                 hasCancel={true}

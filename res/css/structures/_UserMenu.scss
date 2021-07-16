@@ -72,6 +72,7 @@ limitations under the License.
             position: relative; // to make default avatars work
             margin-right: 8px;
             height: 32px; // to remove the unknown 4px gap the browser puts below it
+            padding: 3px 0; // to align with and without using doubleName
 
             .mx_UserMenu_userAvatar {
                 border-radius: 32px; // should match avatar size
@@ -116,23 +117,45 @@ limitations under the License.
         .mx_UserMenu_headerButtons {
             // No special styles: the rest of the layout happens to make it work.
         }
+
+        .mx_UserMenu_dnd {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            position: relative;
+
+            &::before {
+                content: '';
+                position: absolute;
+                width: 24px;
+                height: 24px;
+                mask-position: center;
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                background: $muted-fg-color;
+            }
+
+            &.mx_UserMenu_dnd_noisy::before {
+                mask-image: url('$(res)/img/element-icons/notifications.svg');
+            }
+
+            &.mx_UserMenu_dnd_muted::before {
+                mask-image: url('$(res)/img/element-icons/roomlist/notifications-off.svg');
+            }
+        }
     }
 
     &.mx_UserMenu_minimized {
-        .mx_UserMenu_userHeader {
-            .mx_UserMenu_row {
-                justify-content: center;
-            }
+        padding-right: 0px;
 
-            .mx_UserMenu_userAvatarContainer {
-                margin-right: 0;
-            }
+        .mx_UserMenu_userAvatarContainer {
+            margin-right: 0px;
         }
     }
 }
 
 .mx_UserMenu_contextMenu {
-    width: 247px;
+    width: 258px;
 
     // These override the styles already present on the user menu rather than try to
     // define a new menu. They are specifically for the stacked menu when a community
@@ -231,8 +254,28 @@ limitations under the License.
             justify-content: center;
         }
 
+        &.mx_UserMenu_contextMenu_guestPrompts,
         &.mx_UserMenu_contextMenu_hostingLink {
             padding-top: 0;
+        }
+
+        &.mx_UserMenu_contextMenu_guestPrompts {
+            display: inline-block;
+
+            > span {
+                font-weight: 600;
+                display: block;
+
+                & + span {
+                    margin-top: 8px;
+                }
+            }
+
+            .mx_AccessibleButton_kind_link {
+                font-weight: normal;
+                font-size: inherit;
+                padding: 0;
+            }
         }
     }
 
@@ -255,6 +298,9 @@ limitations under the License.
 
     .mx_UserMenu_iconHome::before {
         mask-image: url('$(res)/img/element-icons/roomlist/home.svg');
+    }
+    .mx_UserMenu_iconHosting::before {
+        mask-image: url('$(res)/img/element-icons/brands/element.svg');
     }
 
     .mx_UserMenu_iconBell::before {

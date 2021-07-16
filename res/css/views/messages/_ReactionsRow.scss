@@ -17,18 +17,56 @@ limitations under the License.
 .mx_ReactionsRow {
     margin: 6px 0;
     color: $primary-fg-color;
+
+    .mx_ReactionsRow_addReactionButton {
+        position: relative;
+        display: inline-block;
+        visibility: hidden; // show on hover of the .mx_EventTile
+        width: 24px;
+        height: 24px;
+        vertical-align: middle;
+        margin-left: 4px;
+
+        &::before {
+            content: '';
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            mask-size: 16px;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            background-color: $tertiary-fg-color;
+            mask-image: url('$(res)/img/element-icons/room/message-bar/emoji.svg');
+        }
+
+        &.mx_ReactionsRow_addReactionButton_active {
+            visibility: visible; // keep showing whilst the context menu is shown
+        }
+
+        &:hover, &.mx_ReactionsRow_addReactionButton_active {
+            &::before {
+                background-color: $primary-fg-color;
+            }
+        }
+    }
+}
+
+.mx_EventTile:hover .mx_ReactionsRow_addReactionButton {
+    visibility: visible;
 }
 
 .mx_ReactionsRow_showAll {
     text-decoration: none;
-    font-size: $font-10px;
-    font-weight: 600;
-    margin-left: 6px;
-    vertical-align: top;
+    font-size: $font-12px;
+    line-height: $font-20px;
+    margin-left: 4px;
+    vertical-align: middle;
 
-    &:hover,
-    &:link,
-    &:visited {
-        color: $accent-color;
+    &:link, &:visited {
+        color: $tertiary-fg-color;
+    }
+
+    &:hover {
+        color: $primary-fg-color;
     }
 }

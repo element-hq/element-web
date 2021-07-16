@@ -27,13 +27,16 @@ import * as TextForEvent from './TextForEvent';
 import Analytics from './Analytics';
 import * as Avatar from './Avatar';
 import dis from './dispatcher/dispatcher';
-import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
 import SettingsStore from "./settings/SettingsStore";
 import { hideToast as hideNotificationsToast } from "./toasts/DesktopNotificationsToast";
-import {SettingLevel} from "./settings/SettingLevel";
-import {isPushNotifyDisabled} from "./settings/controllers/NotificationControllers";
+import { SettingLevel } from "./settings/SettingLevel";
+import { isPushNotifyDisabled } from "./settings/controllers/NotificationControllers";
+import RoomViewStore from "./stores/RoomViewStore";
+import UserActivity from "./UserActivity";
+import { mediaFromMxc } from "./customisations/Media";
+import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 
 /*
  * Dispatches:
@@ -65,7 +68,7 @@ export const Notifier = {
     // or not
     pendingEncryptedEventIds: [],
 
-    notificationMessageForEvent: function(ev: MatrixEvent) {
+    notificationMessageForEvent: function(ev: MatrixEvent): string {
         if (typehandlers.hasOwnProperty(ev.getContent().msgtype)) {
             return typehandlers[ev.getContent().msgtype](ev);
         }
@@ -148,7 +151,7 @@ export const Notifier = {
         // Ideally in here we could use MSC1310 to detect the type of file, and reject it.
 
         return {
-            url: MatrixClientPeg.get().mxcUrlToHttp(content.url),
+            url: mediaFromMxc(content.url).srcHttp,
             name: content.name,
             type: content.type,
             size: content.size,
@@ -237,7 +240,6 @@ export const Notifier = {
                         ? _t('%(brand)s does not have permission to send you notifications - ' +
                             'please check your browser settings', { brand })
                         : _t('%(brand)s was not given permission to send notifications - please try again', { brand });
-                    const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
                     Modal.createTrackedDialog('Unable to enable Notifications', result, ErrorDialog, {
                         title: _t('Unable to enable Notifications'),
                         description,
@@ -326,7 +328,9 @@ export const Notifier = {
 
     onEvent: function(ev: MatrixEvent) {
         if (!this.isSyncing) return; // don't alert for any messages initially
-        if (ev.sender && ev.sender.userId === MatrixClientPeg.get().credentials.userId) return;
+        if (ev.getSender() === MatrixClientPeg.get().credentials.userId) return;
+
+        MatrixClientPeg.get().decryptEventIfNeeded(ev);
 
         // If it's an encrypted event and the type is still 'm.room.encrypted',
         // it hasn't yet been decrypted, so wait until it is.
@@ -376,6 +380,15 @@ export const Notifier = {
         const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
         const actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
         if (actions && actions.notify) {
+            if (RoomViewStore.getRoomId() === room.roomId && UserActivity.sharedInstance().userActiveRecently()) {
+                // don't bother notifying as user was recently active in this room
+                return;
+            }
+            if (SettingsStore.getValue("doNotDisturb")) {
+                // Don't bother the user if they didn't ask to be bothered
+                return;
+            }
+
             if (this.isEnabled()) {
                 this._displayPopupNotification(ev, room);
             }

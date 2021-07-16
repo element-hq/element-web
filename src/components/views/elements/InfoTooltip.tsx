@@ -18,8 +18,9 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 
-import Tooltip from './Tooltip';
+import Tooltip, { Alignment } from './Tooltip';
 import { _t } from "../../../languageHandler";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface ITooltipProps {
     tooltip?: React.ReactNode;
@@ -30,6 +31,7 @@ interface IState {
     hover: boolean;
 }
 
+@replaceableComponent("views.elements.InfoTooltip")
 export default class InfoTooltip extends React.PureComponent<ITooltipProps, IState> {
     constructor(props: ITooltipProps) {
         super(props);
@@ -51,7 +53,7 @@ export default class InfoTooltip extends React.PureComponent<ITooltipProps, ISta
     };
 
     render() {
-        const {tooltip, children, tooltipClassName} = this.props;
+        const { tooltip, children, tooltipClassName } = this.props;
         const title = _t("Information");
 
         // Tooltip are forced on the right for a more natural feel to them on info icons
@@ -59,7 +61,7 @@ export default class InfoTooltip extends React.PureComponent<ITooltipProps, ISta
             className="mx_InfoTooltip_container"
             tooltipClassName={classNames("mx_InfoTooltip_tooltip", tooltipClassName)}
             label={tooltip || title}
-            forceOnRight={true}
+            alignment={Alignment.Right}
         /> : <div />;
         return (
             <div onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} className="mx_InfoTooltip">

@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import "../skinned-sdk"; // Must be first for skinning to work
 import EditorModel from "../../src/editor/model";
-import {htmlSerializeIfNeeded} from "../../src/editor/serialize";
-import {createPartCreator} from "./mock";
+import { htmlSerializeIfNeeded } from "../../src/editor/serialize";
+import { createPartCreator } from "./mock";
 
 describe('editor/serialize', function() {
     it('user pill turns message into html', function() {

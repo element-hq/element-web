@@ -14,16 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {PureComponent, RefCallback, RefObject} from "react";
+import React, { PureComponent, RefCallback, RefObject } from "react";
 import classNames from "classnames";
 import zxcvbn from "zxcvbn";
 
 import SdkConfig from "../../../SdkConfig";
-import withValidation, {IFieldState, IValidationResult} from "../elements/Validation";
-import {_t, _td} from "../../../languageHandler";
-import Field from "../elements/Field";
+import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
+import { _t, _td } from "../../../languageHandler";
+import Field, { IInputProps } from "../elements/Field";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-interface IProps {
+interface IProps extends Omit<IInputProps, "onValidate"> {
     autoFocus?: boolean;
     id?: string;
     className?: string;
@@ -40,6 +41,7 @@ interface IProps {
     onValidate(result: IValidationResult);
 }
 
+@replaceableComponent("views.auth.PassphraseField")
 class PassphraseField extends PureComponent<IProps> {
     static defaultProps = {
         label: _td("Password"),

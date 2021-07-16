@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ReactNode} from 'react';
+import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
-import {Action} from "../../../dispatcher/actions";
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
+import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
+import { Action } from "../../../dispatcher/actions";
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 
 interface IProps {
     header?: ReactNode;
@@ -33,6 +33,7 @@ interface IProps {
     previousPhase?: RightPanelPhases;
     closeLabel?: string;
     onClose?(): void;
+    refireParams?;
 }
 
 interface IGroupProps {
@@ -56,6 +57,7 @@ const BaseCard: React.FC<IProps> = ({
     withoutScrollContainer,
     previousPhase,
     children,
+    refireParams,
 }) => {
     let backButton;
     if (previousPhase) {
@@ -63,6 +65,7 @@ const BaseCard: React.FC<IProps> = ({
             defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
                 action: Action.SetRightPanelPhase,
                 phase: previousPhase,
+                refireParams: refireParams,
             });
         };
         backButton = <AccessibleButton className="mx_BaseCard_back" onClick={onBackClick} title={_t("Back")} />;

@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import type {ICompletion, ISelectionRange} from './Autocompleter';
+import type { ICompletion, ISelectionRange } from './Autocompleter';
 
 export interface ICommand {
     command: string | null;
@@ -93,7 +93,12 @@ export default class AutocompleteProvider {
         };
     }
 
-    async getCompletions(query: string, selection: ISelectionRange, force = false): Promise<ICompletion[]> {
+    async getCompletions(
+        query: string,
+        selection: ISelectionRange,
+        force = false,
+        limit = -1,
+    ): Promise<ICompletion[]> {
         return [];
     }
 

@@ -20,7 +20,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t } from "../../../languageHandler";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
 import ReplyThread from "../../../components/views/elements/ReplyThread";
-import { sanitizedHtmlNodeInnerText } from "../../../HtmlUtils";
+import { getHtmlText } from "../../../HtmlUtils";
 
 export class MessageEventPreview implements IPreview {
     public getTextFor(event: MatrixEvent, tagId?: TagID): string {
@@ -55,17 +55,17 @@ export class MessageEventPreview implements IPreview {
         }
 
         if (hasHtml) {
-            body = sanitizedHtmlNodeInnerText(body);
+            body = getHtmlText(body);
         }
 
         if (msgtype === 'm.emote') {
-            return _t("* %(senderName)s %(emote)s", {senderName: getSenderName(event), emote: body});
+            return _t("* %(senderName)s %(emote)s", { senderName: getSenderName(event), emote: body });
         }
 
         if (isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
             return body;
         } else {
-            return _t("%(senderName)s: %(message)s", {senderName: getSenderName(event), message: body});
+            return _t("%(senderName)s: %(message)s", { senderName: getSenderName(event), message: body });
         }
     }
 }

@@ -20,16 +20,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
-import {_t} from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import classNames from 'classnames';
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {ContextMenu, ContextMenuButton, toRightOf} from "../../structures/ContextMenu";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { ContextMenu, ContextMenuButton, toRightOf } from "../../structures/ContextMenu";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {RovingTabIndexWrapper} from "../../../accessibility/RovingTabIndex";
+import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 // XXX this class copies a lot from RoomTile.js
+@replaceableComponent("views.groups.GroupInviteTile")
 export default class GroupInviteTile extends React.Component {
-    static propTypes: {
+    static propTypes = {
         group: PropTypes.object.isRequired,
     };
 
@@ -54,7 +57,7 @@ export default class GroupInviteTile extends React.Component {
     };
 
     onMouseEnter = () => {
-        const state = {hover: true};
+        const state = { hover: true };
         // Only allow non-guests to access the context menu
         if (!this.context.isGuest()) {
             state.badgeHover = true;
@@ -115,8 +118,9 @@ export default class GroupInviteTile extends React.Component {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
 
         const groupName = this.props.group.name || this.props.group.groupId;
-        const httpAvatarUrl = this.props.group.avatarUrl ?
-            this.context.mxcUrlToHttp(this.props.group.avatarUrl, 24, 24) : null;
+        const httpAvatarUrl = this.props.group.avatarUrl
+            ? mediaFromMxc(this.props.group.avatarUrl).getSquareThumbnailHttp(24)
+            : null;
 
         const av = <BaseAvatar name={groupName} width={24} height={24} url={httpAvatarUrl} />;
 
@@ -161,7 +165,7 @@ export default class GroupInviteTile extends React.Component {
 
         return <React.Fragment>
             <RovingTabIndexWrapper>
-                {({onFocus, isActive, ref}) =>
+                {({ onFocus, isActive, ref }) =>
                     <AccessibleButton
                         onFocus={onFocus}
                         tabIndex={isActive ? 0 : -1}
