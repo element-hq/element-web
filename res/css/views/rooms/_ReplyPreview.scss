@@ -29,10 +29,14 @@ limitations under the License.
 }
 
 .mx_ReplyPreview_header {
-    margin: 12px;
+    margin: 8px;
     color: $primary-fg-color;
     font-weight: 400;
     opacity: 0.4;
+}
+
+.mx_ReplyPreview_tile {
+    margin: 0 8px;
 }
 
 .mx_ReplyPreview_title {
@@ -42,6 +46,7 @@ limitations under the License.
 .mx_ReplyPreview_cancel {
     float: right;
     cursor: pointer;
+    display: flex;
 }
 
 .mx_ReplyPreview_clear {

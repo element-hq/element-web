@@ -22,14 +22,29 @@ declare const currentTime: number;
 // declare const currentFrame: number;
 // declare const sampleRate: number;
 
+// We rate limit here to avoid overloading downstream consumers with amplitude information.
+// The two major consumers are the voice message waveform thumbnail (resampled down to an
+// appropriate length) and the live waveform shown to the user. Effectively, this controls
+// the refresh rate of that live waveform and the number of samples the thumbnail has to
+// work with.
+const TARGET_AMPLITUDE_FREQUENCY = 16; // Hz
+
+function roundTimeToTargetFreq(seconds: number): number {
+    // Epsilon helps avoid floating point rounding issues (1 + 1 = 1.999999, etc)
+    return Math.round((seconds + Number.EPSILON) * TARGET_AMPLITUDE_FREQUENCY) / TARGET_AMPLITUDE_FREQUENCY;
+}
+
+function nextTimeForTargetFreq(roundedSeconds: number): number {
+    // The extra round is just to make sure we cut off any floating point issues
+    return roundTimeToTargetFreq(roundedSeconds + (1 / TARGET_AMPLITUDE_FREQUENCY));
+}
+
 class MxVoiceWorklet extends AudioWorkletProcessor {
     private nextAmplitudeSecond = 0;
+    private amplitudeIndex = 0;
 
     process(inputs, outputs, parameters) {
-        // We only fire amplitude updates once a second to avoid flooding the recording instance
-        // with useless data. Much of the data would end up discarded, so we ratelimit ourselves
-        // here.
-        const currentSecond = Math.round(currentTime);
+        const currentSecond = roundTimeToTargetFreq(currentTime);
         if (currentSecond === this.nextAmplitudeSecond) {
             // We're expecting exactly one mono input source, so just grab the very first frame of
             // samples for the analysis.
@@ -47,9 +62,9 @@ class MxVoiceWorklet extends AudioWorkletProcessor {
             this.port.postMessage(<IAmplitudePayload>{
                 ev: PayloadEvent.AmplitudeMark,
                 amplitude: amplitude,
-                forSecond: currentSecond,
+                forIndex: this.amplitudeIndex++,
             });
-            this.nextAmplitudeSecond++;
+            this.nextAmplitudeSecond = nextTimeForTargetFreq(currentSecond);
         }
 
         // We mostly use this worklet to fire regular clock updates through to components

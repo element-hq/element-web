@@ -44,7 +44,7 @@ interface IState {
 
 @replaceableComponent("views.toasts.VerificationRequestToast")
 export default class VerificationRequestToast extends React.PureComponent<IProps, IState> {
-    private intervalHandle: NodeJS.Timeout;
+    private intervalHandle: number;
 
     constructor(props) {
         super(props);

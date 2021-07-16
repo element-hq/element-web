@@ -20,6 +20,7 @@ import * as React from "react";
 import { _t } from '../../languageHandler';
 import AutoHideScrollbar from './AutoHideScrollbar';
 import { replaceableComponent } from "../../utils/replaceableComponent";
+import classNames from "classnames";
 import AccessibleButton from "../views/elements/AccessibleButton";
 
 /**
@@ -37,9 +38,16 @@ export class Tab {
     }
 }
 
+export enum TabLocation {
+    LEFT = 'left',
+    TOP = 'top',
+}
+
 interface IProps {
     tabs: Tab[];
     initialTabId?: string;
+    tabLocation: TabLocation;
+    onChange?: (tabId: string) => void;
 }
 
 interface IState {
@@ -62,6 +70,10 @@ export default class TabbedView extends React.Component<IProps, IState> {
         };
     }
 
+    static defaultProps = {
+        tabLocation: TabLocation.LEFT,
+    };
+
     private _getActiveTabIndex() {
         if (!this.state || !this.state.activeTabIndex) return 0;
         return this.state.activeTabIndex;
@@ -75,6 +87,7 @@ export default class TabbedView extends React.Component<IProps, IState> {
     private _setActiveTab(tab: Tab) {
         const idx = this.props.tabs.indexOf(tab);
         if (idx !== -1) {
+            if (this.props.onChange) this.props.onChange(tab.id);
             this.setState({ activeTabIndex: idx });
         } else {
             console.error("Could not find tab " + tab.label + " in tabs");
@@ -119,8 +132,14 @@ export default class TabbedView extends React.Component<IProps, IState> {
         const labels = this.props.tabs.map(tab => this._renderTabLabel(tab));
         const panel = this._renderTabPanel(this.props.tabs[this._getActiveTabIndex()]);
 
+        const tabbedViewClasses = classNames({
+            'mx_TabbedView': true,
+            'mx_TabbedView_tabsOnLeft': this.props.tabLocation == TabLocation.LEFT,
+            'mx_TabbedView_tabsOnTop': this.props.tabLocation == TabLocation.TOP,
+        });
+
         return (
-            <div className="mx_TabbedView">
+            <div className={tabbedViewClasses}>
                 <div className="mx_TabbedView_tabLabels">
                     {labels}
                 </div>

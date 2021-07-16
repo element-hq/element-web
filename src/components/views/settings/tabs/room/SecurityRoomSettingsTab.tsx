@@ -347,6 +347,29 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         const state = client.getRoom(this.props.roomId).currentState;
         const canChangeHistory = state.mayClientSendStateEvent('m.room.history_visibility', client);
 
+        const options = [
+            {
+                value: HistoryVisibility.Shared,
+                label: _t('Members only (since the point in time of selecting this option)'),
+            },
+            {
+                value: HistoryVisibility.Invited,
+                label: _t('Members only (since they were invited)'),
+            },
+            {
+                value: HistoryVisibility.Joined,
+                label: _t('Members only (since they joined)'),
+            },
+        ];
+
+        // World readable doesn't make sense for encrypted rooms
+        if (!this.state.encrypted || history === HistoryVisibility.WorldReadable) {
+            options.unshift({
+                value: HistoryVisibility.WorldReadable,
+                label: _t("Anyone"),
+            });
+        }
+
         return (
             <div>
                 <div>
@@ -357,28 +380,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     name="historyVis"
                     value={history}
                     onChange={this.onHistoryRadioToggle}
-                    definitions={[
-                        {
-                            value: HistoryVisibility.WorldReadable,
-                            disabled: !canChangeHistory,
-                            label: _t("Anyone"),
-                        },
-                        {
-                            value: HistoryVisibility.Shared,
-                            disabled: !canChangeHistory,
-                            label: _t('Members only (since the point in time of selecting this option)'),
-                        },
-                        {
-                            value: HistoryVisibility.Invited,
-                            disabled: !canChangeHistory,
-                            label: _t('Members only (since they were invited)'),
-                        },
-                        {
-                            value: HistoryVisibility.Joined,
-                            disabled: !canChangeHistory,
-                            label: _t('Members only (since they joined)'),
-                        },
-                    ]}
+                    disabled={!canChangeHistory}
+                    definitions={options}
                 />
             </div>
         );

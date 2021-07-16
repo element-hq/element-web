@@ -25,8 +25,8 @@ import React, { createRef } from 'react';
 import classNames from 'classnames';
 import { IRecommendedVersion, NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 import { EventSubscription } from "fbemitter";
+import { ISearchResults } from 'matrix-js-sdk/src/@types/search';
 
 import shouldHideEvent from '../../shouldHideEvent';
 import { _t } from '../../languageHandler';
@@ -89,6 +89,7 @@ import RoomStatusBar from "./RoomStatusBar";
 import MessageComposer from '../views/rooms/MessageComposer';
 import JumpToBottomButton from "../views/rooms/JumpToBottomButton";
 import TopUnreadMessagesBar from "../views/rooms/TopUnreadMessagesBar";
+import SpaceStore from "../../stores/SpaceStore";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -133,12 +134,7 @@ export interface IState {
     searching: boolean;
     searchTerm?: string;
     searchScope?: SearchScope;
-    searchResults?: XOR<{}, {
-        count: number;
-        highlights: string[];
-        results: SearchResult[];
-        next_batch: string; // eslint-disable-line camelcase
-    }>;
+    searchResults?: XOR<{}, ISearchResults>;
     searchHighlights?: string[];
     searchInProgress?: boolean;
     callState?: CallState;
@@ -257,7 +253,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.context.on("userTrustStatusChanged", this.onUserVerificationChanged);
         this.context.on("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
         this.context.on("Event.decrypted", this.onEventDecrypted);
-        this.context.on("event", this.onEvent);
         // Start listening for RoomViewStore updates
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         this.rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this.onRightPanelStoreUpdate);
@@ -641,7 +636,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             this.context.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
             this.context.removeListener("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
             this.context.removeListener("Event.decrypted", this.onEventDecrypted);
-            this.context.removeListener("event", this.onEvent);
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
@@ -818,17 +812,16 @@ export default class RoomView extends React.Component<IProps, IState> {
 
             case Action.ComposerInsert: {
                 // re-dispatch to the correct composer
-                if (this.state.editState) {
-                    dis.dispatch({
-                        ...payload,
-                        action: "edit_composer_insert",
-                    });
-                } else {
-                    dis.dispatch({
-                        ...payload,
-                        action: "send_composer_insert",
-                    });
-                }
+                dis.dispatch({
+                    ...payload,
+                    action: this.state.editState ? "edit_composer_insert" : "send_composer_insert",
+                });
+                break;
+            }
+
+            case Action.FocusAComposer: {
+                // re-dispatch to the correct composer
+                dis.fire(this.state.editState ? Action.FocusEditMessageComposer : Action.FocusSendMessageComposer);
                 break;
             }
 
@@ -842,8 +835,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         if (this.unmounted) return;
 
         // ignore events for other rooms
-        if (!room) return;
-        if (!this.state.room || room.roomId != this.state.room.roomId) return;
+        if (!room || room.roomId !== this.state.room?.roomId) return;
 
         // ignore events from filtered timelines
         if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
@@ -864,6 +856,10 @@ export default class RoomView extends React.Component<IProps, IState> {
         // we'll only be showing a spinner.
         if (this.state.joining) return;
 
+        if (!ev.isBeingDecrypted() && !ev.isDecryptionFailure()) {
+            this.handleEffects(ev);
+        }
+
         if (ev.getSender() !== this.context.credentials.userId) {
             // update unread count when scrolled up
             if (!this.state.searchResults && this.state.atEndOfLiveTimeline) {
@@ -876,20 +872,14 @@ export default class RoomView extends React.Component<IProps, IState> {
         }
     };
 
-    private onEventDecrypted = (ev) => {
+    private onEventDecrypted = (ev: MatrixEvent) => {
+        if (!this.state.room || !this.state.matrixClientIsReady) return; // not ready at all
+        if (ev.getRoomId() !== this.state.room.roomId) return; // not for us
         if (ev.isDecryptionFailure()) return;
         this.handleEffects(ev);
     };
 
-    private onEvent = (ev) => {
-        if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
-        this.handleEffects(ev);
-    };
-
-    private handleEffects = (ev) => {
-        if (!this.state.room || !this.state.matrixClientIsReady) return; // not ready at all
-        if (ev.getRoomId() !== this.state.room.roomId) return; // not for us
-
+    private handleEffects = (ev: MatrixEvent) => {
         const notifState = RoomNotificationStateStore.instance.getRoomState(this.state.room);
         if (!notifState.isUnread) return;
 
@@ -922,6 +912,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     // called when state.room is first initialised (either at initial load,
     // after a successful peek, or after we join the room).
     private onRoomLoaded = (room: Room) => {
+        if (this.unmounted) return;
         // Attach a widget store listener only when we get a room
         WidgetLayoutStore.instance.on(WidgetLayoutStore.emissionForRoom(room), this.onWidgetLayoutChange);
         this.onWidgetLayoutChange(); // provoke an update
@@ -936,9 +927,9 @@ export default class RoomView extends React.Component<IProps, IState> {
     };
 
     private async calculateRecommendedVersion(room: Room) {
-        this.setState({
-            upgradeRecommendation: await room.getRecommendedVersion(),
-        });
+        const upgradeRecommendation = await room.getRecommendedVersion();
+        if (this.unmounted) return;
+        this.setState({ upgradeRecommendation });
     }
 
     private async loadMembersIfJoined(room: Room) {
@@ -1028,23 +1019,19 @@ export default class RoomView extends React.Component<IProps, IState> {
     };
 
     private async updateE2EStatus(room: Room) {
-        if (!this.context.isRoomEncrypted(room.roomId)) {
-            return;
-        }
-        if (!this.context.isCryptoEnabled()) {
-            // If crypto is not currently enabled, we aren't tracking devices at all,
-            // so we don't know what the answer is. Let's error on the safe side and show
-            // a warning for this case.
-            this.setState({
-                e2eStatus: E2EStatus.Warning,
-            });
-            return;
+        if (!this.context.isRoomEncrypted(room.roomId)) return;
+
+        // If crypto is not currently enabled, we aren't tracking devices at all,
+        // so we don't know what the answer is. Let's error on the safe side and show
+        // a warning for this case.
+        let e2eStatus = E2EStatus.Warning;
+        if (this.context.isCryptoEnabled()) {
+            /* At this point, the user has encryption on and cross-signing on */
+            e2eStatus = await shieldStatusForRoom(this.context, room);
         }
 
-        /* At this point, the user has encryption on and cross-signing on */
-        this.setState({
-            e2eStatus: await shieldStatusForRoom(this.context, room),
-        });
+        if (this.unmounted) return;
+        this.setState({ e2eStatus });
     }
 
     private onAccountData = (event: MatrixEvent) => {
@@ -1138,7 +1125,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         if (this.state.searchResults.next_batch) {
             debuglog("requesting more search results");
-            const searchPromise = searchPagination(this.state.searchResults);
+            const searchPromise = searchPagination(this.state.searchResults as ISearchResults);
             return this.handleSearchResult(searchPromise);
         } else {
             debuglog("no more search results");
@@ -1246,7 +1233,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         ContentMessages.sharedInstance().sendContentListToRoom(
             ev.dataTransfer.files, this.state.room.roomId, this.context,
         );
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
 
         this.setState({
             draggingFile: false,
@@ -1548,7 +1535,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         } else {
             // Otherwise we have to jump manually
             this.messagePanel.jumpToLiveTimeline();
-            dis.fire(Action.FocusComposer);
+            dis.fire(Action.FocusSendMessageComposer);
         }
     };
 
@@ -1754,10 +1741,8 @@ export default class RoomView extends React.Component<IProps, IState> {
         }
 
         const myMembership = this.state.room.getMyMembership();
-        if (myMembership === "invite"
-            // SpaceRoomView handles invites itself
-            && (!SettingsStore.getValue("feature_spaces") || !this.state.room.isSpaceRoom())
-        ) {
+        // SpaceRoomView handles invites itself
+        if (myMembership === "invite" && (!SpaceStore.spacesEnabled || !this.state.room.isSpaceRoom())) {
             if (this.state.joining || this.state.rejecting) {
                 return (
                     <ErrorBoundary>
@@ -1888,7 +1873,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                     room={this.state.room}
                 />
             );
-            if (!this.state.canPeek && (!SettingsStore.getValue("feature_spaces") || !this.state.room?.isSpaceRoom())) {
+            if (!this.state.canPeek && (!SpaceStore.spacesEnabled || !this.state.room?.isSpaceRoom())) {
                 return (
                     <div className="mx_RoomView">
                         { previewBar }

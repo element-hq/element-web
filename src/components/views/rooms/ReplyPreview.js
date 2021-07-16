@@ -1,5 +1,5 @@
 /*
-Copyright 2017 New Vector Ltd
+Copyright 2017 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,14 +16,12 @@ limitations under the License.
 
 import React from 'react';
 import dis from '../../../dispatcher/dispatcher';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import RoomViewStore from '../../../stores/RoomViewStore';
-import SettingsStore from "../../../settings/SettingsStore";
 import PropTypes from "prop-types";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { UIFeature } from "../../../settings/UIFeature";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import ReplyTile from './ReplyTile';
 
 function cancelQuoting() {
     dis.dispatch({
@@ -71,8 +69,6 @@ export default class ReplyPreview extends React.Component {
     render() {
         if (!this.state.event) return null;
 
-        const EventTile = sdk.getComponent('rooms.EventTile');
-
         return <div className="mx_ReplyPreview">
             <div className="mx_ReplyPreview_section">
                 <div className="mx_ReplyPreview_header mx_ReplyPreview_title">
@@ -88,15 +84,12 @@ export default class ReplyPreview extends React.Component {
                     />
                 </div>
                 <div className="mx_ReplyPreview_clear" />
-                <EventTile
-                    alwaysShowTimestamps={true}
-                    tileShape="reply_preview"
-                    mxEvent={this.state.event}
-                    permalinkCreator={this.props.permalinkCreator}
-                    isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
-                    enableFlair={SettingsStore.getValue(UIFeature.Flair)}
-                    as="div"
-                />
+                <div className="mx_ReplyPreview_tile">
+                    <ReplyTile
+                        mxEvent={this.state.event}
+                        permalinkCreator={this.props.permalinkCreator}
+                    />
+                </div>
             </div>
         </div>;
     }
