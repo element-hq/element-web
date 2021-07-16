@@ -14,11 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {urlSearchParamsToObject} from "matrix-react-sdk/src/utils/UrlUtils";
-
-interface IParamsObject {
-    [key: string]: string;
-}
+import { QueryDict, decodeParams } from "matrix-js-sdk/src/utils";
 
 // We want to support some name / value pairs in the fragment
 // so we're re-using query string like format
@@ -36,15 +32,15 @@ export function parseQsFromFragment(location: Location) {
 
     const result = {
         location: decodeURIComponent(hashparts[0]),
-        params: <IParamsObject>{},
+        params: <QueryDict>{},
     };
 
     if (hashparts.length > 1) {
-        result.params = urlSearchParamsToObject<IParamsObject>(new URLSearchParams(hashparts[1]));
+        result.params = decodeParams(hashparts[1]);
     }
     return result;
 }
 
-export function parseQs(location: Location) {
-    return urlSearchParamsToObject<IParamsObject>(new URLSearchParams(location.search));
+export function parseQs(location: Location): QueryDict {
+    return decodeParams(location.search.substring(1));
 }
