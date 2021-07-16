@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ export function urlSearchParamsToObject<T extends {}>(params: URLSearchParams) {
  * @param {string} u The url to be abbreviated
  * @returns {string} The abbreviated url
  */
-export function abbreviateUrl(u) {
+export function abbreviateUrl(u: string): string {
     if (!u) return '';
 
     const parsedUrl = url.parse(u);
@@ -41,7 +41,7 @@ export function abbreviateUrl(u) {
     return u;
 }
 
-export function unabbreviateUrl(u) {
+export function unabbreviateUrl(u: string): string {
     if (!u) return '';
 
     let longUrl = u;

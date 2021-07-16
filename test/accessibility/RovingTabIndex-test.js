@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import '../skinned-sdk'; // Must be first for skinning to work
 import React from "react";
-import Adapter from "enzyme-adapter-react-16";
+import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import { configure, mount } from "enzyme";
 
 import {
@@ -101,7 +102,7 @@ describe("RovingTabIndex", () => {
                 { button1 }
                 { button2 }
                 <RovingTabIndexWrapper>
-                    {({onFocus, isActive, ref}) =>
+                    {({ onFocus, isActive, ref }) =>
                         <button onFocus={onFocus} tabIndex={isActive ? 0 : -1} ref={ref}>.</button>
                     }
                 </RovingTabIndexWrapper>
@@ -117,5 +118,4 @@ describe("RovingTabIndex", () => {
         checkTabIndexes(wrapper.find("button"), [-1, -1, 0]);
     });
 });
-
 

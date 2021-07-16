@@ -17,12 +17,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.TextWithTooltip")
 export default class TextWithTooltip extends React.Component {
     static propTypes = {
         class: PropTypes.string,
         tooltipClass: PropTypes.string,
         tooltip: PropTypes.node.isRequired,
+        tooltipProps: PropTypes.object,
     };
 
     constructor() {
@@ -34,24 +37,27 @@ export default class TextWithTooltip extends React.Component {
     }
 
     onMouseOver = () => {
-        this.setState({hover: true});
+        this.setState({ hover: true });
     };
 
-    onMouseOut = () => {
-        this.setState({hover: false});
+    onMouseLeave = () => {
+        this.setState({ hover: false });
     };
 
     render() {
         const Tooltip = sdk.getComponent("elements.Tooltip");
 
+        const { class: className, children, tooltip, tooltipClass, tooltipProps, ...props } = this.props;
+
         return (
-            <span onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} className={this.props.class}>
-                {this.props.children}
-                <Tooltip
-                    label={this.props.tooltip}
-                    visible={this.state.hover}
-                    tooltipClassName={this.props.tooltipClass}
-                    className={"mx_TextWithTooltip_tooltip"} />
+            <span {...props} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} className={className}>
+                {children}
+                {this.state.hover && <Tooltip
+                    {...tooltipProps}
+                    label={tooltip}
+                    tooltipClassName={tooltipClass}
+                    className={"mx_TextWithTooltip_tooltip"}
+                /> }
             </span>
         );
     }

@@ -17,33 +17,29 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import * as sdk from "../../../index";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import { _t } from '../../../languageHandler';
-import { UserAddressType } from '../../../UserAddress.js';
+import { UserAddressType } from '../../../UserAddress';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
-
-export default createReactClass({
-    displayName: 'AddressTile',
-
-    propTypes: {
+@replaceableComponent("views.elements.AddressTile")
+export default class AddressTile extends React.Component {
+    static propTypes = {
         address: UserAddressType.isRequired,
         canDismiss: PropTypes.bool,
         onDismissed: PropTypes.func,
         justified: PropTypes.bool,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            canDismiss: false,
-            onDismissed: function() {}, // NOP
-            justified: false,
-        };
-    },
+    static defaultProps = {
+        canDismiss: false,
+        onDismissed: function() {}, // NOP
+        justified: false,
+    };
 
-    render: function() {
+    render() {
         const address = this.props.address;
         const name = address.displayName || address.address;
 
@@ -51,27 +47,12 @@ export default createReactClass({
         const isMatrixAddress = ['mx-user-id', 'mx-room-id'].includes(address.addressType);
 
         if (isMatrixAddress && address.avatarMxc) {
-            imgUrls.push(MatrixClientPeg.get().mxcUrlToHttp(
-                address.avatarMxc, 25, 25, 'crop',
-            ));
+            imgUrls.push(mediaFromMxc(address.avatarMxc).getSquareThumbnailHttp(25));
         } else if (address.addressType === 'email') {
             imgUrls.push(require("../../../../res/img/icon-email-user.svg"));
         }
 
-        // Removing networks for now as they're not really supported
-        /*
-        var network;
-        if (this.props.networkUrl !== "") {
-            network = (
-                <div className="mx_AddressTile_network">
-                    <BaseAvatar width={25} height={25} name={this.props.networkName} title="Riot" url={this.props.networkUrl} />
-                </div>
-            );
-        }
-        */
-
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         const nameClasses = classNames({
             "mx_AddressTile_name": true,
@@ -142,7 +123,7 @@ export default createReactClass({
         if (this.props.canDismiss) {
             dismiss = (
                 <div className="mx_AddressTile_dismiss" onClick={this.props.onDismissed} >
-                    <TintableSvg src={require("../../../../res/img/icon-address-delete.svg")} width="9" height="9" />
+                    <img src={require("../../../../res/img/icon-address-delete.svg")} width="9" height="9" />
                 </div>
             );
         }
@@ -156,5 +137,5 @@ export default createReactClass({
                 { dismiss }
             </div>
         );
-    },
-});
+    }
+}

@@ -14,13 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_GeneralUserSettingsTab_changePassword .mx_Field,
-.mx_GeneralUserSettingsTab_themeSection .mx_Field {
+.mx_GeneralUserSettingsTab_changePassword .mx_Field {
     @mixin mx_Settings_fullWidthField;
 }
 
 .mx_GeneralUserSettingsTab_changePassword .mx_Field:first-child {
     margin-top: 0;
+}
+
+// TODO: Make this selector less painful
+.mx_GeneralUserSettingsTab_accountSection .mx_SettingsTab_subheading:nth-child(n + 1),
+.mx_GeneralUserSettingsTab_discovery .mx_SettingsTab_subheading:nth-child(n + 2),
+.mx_SetIdServer .mx_SettingsTab_subheading {
+    margin-top: 24px;
+}
+
+.mx_GeneralUserSettingsTab_accountSection .mx_Spinner,
+.mx_GeneralUserSettingsTab_discovery .mx_Spinner {
+    // Move the spinner to the left side of the container (default center)
+    justify-content: left;
 }
 
 .mx_GeneralUserSettingsTab_accountSection .mx_EmailAddresses,

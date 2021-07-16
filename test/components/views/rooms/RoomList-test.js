@@ -1,29 +1,37 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
-import lolex from 'lolex';
 
 import * as TestUtils from '../../../test-utils';
 
-import {MatrixClientPeg} from '../../../../src/MatrixClientPeg';
+import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import sdk from '../../../skinned-sdk';
-import { DragDropContext } from 'react-beautiful-dnd';
 
-import dis from '../../../../src/dispatcher';
-import DMRoomMap from '../../../../src/utils/DMRoomMap.js';
-import GroupStore from '../../../../src/stores/GroupStore.js';
+import dis from '../../../../src/dispatcher/dispatcher';
+import DMRoomMap from '../../../../src/utils/DMRoomMap';
+import GroupStore from '../../../../src/stores/GroupStore';
 
 import { MatrixClient, Room, RoomMember } from 'matrix-js-sdk';
-import {TAG_DM} from "../../../../src/stores/RoomListStore";
+import { DefaultTagID } from "../../../../src/stores/room-list/models";
+import RoomListStore, { LISTS_UPDATE_EVENT, RoomListStoreClass } from "../../../../src/stores/room-list/RoomListStore";
+import RoomListLayoutStore from "../../../../src/stores/room-list/RoomListLayoutStore";
 
 function generateRoomId() {
     return '!' + Math.random().toString().slice(2, 10) + ':domain';
 }
 
+function waitForRoomListStoreUpdate() {
+    return new Promise((resolve) => {
+        RoomListStore.instance.once(LISTS_UPDATE_EVENT, () => resolve());
+    });
+}
 
 describe('RoomList', () => {
     function createRoom(opts) {
-        const room = new Room(generateRoomId(), null, client.getUserId());
+        const room = new Room(generateRoomId(), MatrixClientPeg.get(), client.getUserId(), {
+            // The room list now uses getPendingEvents(), so we need a detached ordering.
+            pendingEventOrdering: "detached",
+        });
         if (opts) {
             Object.assign(room, opts);
         }
@@ -34,7 +42,6 @@ describe('RoomList', () => {
     let client = null;
     let root = null;
     const myUserId = '@me:domain';
-    let clock = null;
 
     const movingRoomId = '!someroomid';
     let movingRoom;
@@ -43,14 +50,14 @@ describe('RoomList', () => {
     let myMember;
     let myOtherMember;
 
-    beforeEach(function() {
+    beforeEach(async function(done) {
+        RoomListStoreClass.TEST_MODE = true;
+
         TestUtils.stubClient();
         client = MatrixClientPeg.get();
-        client.credentials = {userId: myUserId};
+        client.credentials = { userId: myUserId };
         //revert this to prototype method as the test-utils monkey-patches this to return a hardcoded value
         client.getUserId = MatrixClient.prototype.getUserId;
-
-        clock = lolex.install();
 
         DMRoomMap.makeShared();
 
@@ -60,13 +67,12 @@ describe('RoomList', () => {
         const RoomList = sdk.getComponent('views.rooms.RoomList');
         const WrappedRoomList = TestUtils.wrapInMatrixClientContext(RoomList);
         root = ReactDOM.render(
-            <DragDropContext>
-                <WrappedRoomList searchFilter="" />
-            </DragDropContext>
-        , parentDiv);
+            <WrappedRoomList searchFilter="" onResize={() => {}} />,
+            parentDiv,
+        );
         ReactTestUtils.findRenderedComponentWithType(root, RoomList);
 
-        movingRoom = createRoom({name: 'Moving room'});
+        movingRoom = createRoom({ name: 'Moving room' });
         expect(movingRoom.roomId).not.toBe(null);
 
         // Mock joined member
@@ -77,7 +83,7 @@ describe('RoomList', () => {
             [client.credentials.userId]: myMember,
         }[userId]);
 
-        otherRoom = createRoom({name: 'Other room'});
+        otherRoom = createRoom({ name: 'Other room' });
         myOtherMember = new RoomMember(otherRoom.roomId, myUserId);
         myOtherMember.membership = 'join';
         otherRoom.updateMyMembership('join');
@@ -89,10 +95,10 @@ describe('RoomList', () => {
         client.getRooms = () => [
             movingRoom,
             otherRoom,
-            createRoom({tags: {'m.favourite': {order: 0.1}}, name: 'Some other room'}),
-            createRoom({tags: {'m.favourite': {order: 0.2}}, name: 'Some other room 2'}),
-            createRoom({tags: {'m.lowpriority': {}}, name: 'Some unimportant room'}),
-            createRoom({tags: {'custom.tag': {}}, name: 'Some room customly tagged'}),
+            createRoom({ tags: { 'm.favourite': { order: 0.1 } }, name: 'Some other room' }),
+            createRoom({ tags: { 'm.favourite': { order: 0.2 } }, name: 'Some other room 2' }),
+            createRoom({ tags: { 'm.lowpriority': {} }, name: 'Some unimportant room' }),
+            createRoom({ tags: { 'custom.tag': {} }, name: 'Some room customly tagged' }),
         ];
         client.getVisibleRooms = client.getRooms;
 
@@ -102,22 +108,28 @@ describe('RoomList', () => {
         });
 
         client.getRoom = (roomId) => roomMap[roomId];
+
+        // Now that everything has been set up, prepare and update the store
+        await RoomListStore.instance.makeReady(client);
+
+        done();
     });
 
-    afterEach((done) => {
+    afterEach(async (done) => {
         if (parentDiv) {
             ReactDOM.unmountComponentAtNode(parentDiv);
             parentDiv.remove();
             parentDiv = null;
         }
 
-        clock.uninstall();
+        await RoomListLayoutStore.instance.resetLayouts();
+        await RoomListStore.instance.resetStore();
 
         done();
     });
 
     function expectRoomInSubList(room, subListTest) {
-        const RoomSubList = sdk.getComponent('structures.RoomSubList');
+        const RoomSubList = sdk.getComponent('views.rooms.RoomSublist');
         const RoomTile = sdk.getComponent('views.rooms.RoomTile');
 
         const subLists = ReactTestUtils.scryRenderedComponentsWithType(root, RoomSubList);
@@ -126,7 +138,7 @@ describe('RoomList', () => {
         let expectedRoomTile;
         try {
             const roomTiles = ReactTestUtils.scryRenderedComponentsWithType(containingSubList, RoomTile);
-            console.info({roomTiles: roomTiles.length});
+            console.info({ roomTiles: roomTiles.length });
             expectedRoomTile = roomTiles.find((tile) => tile.props.room === room);
         } catch (err) {
             // truncate the error message because it's spammy
@@ -140,38 +152,33 @@ describe('RoomList', () => {
         expect(expectedRoomTile.props.room).toBe(room);
     }
 
-    function expectCorrectMove(oldTag, newTag) {
-        const getTagSubListTest = (tag) => {
-            if (tag === undefined) return (s) => s.props.label.endsWith('Rooms');
-            return (s) => s.props.tagName === tag;
+    function expectCorrectMove(oldTagId, newTagId) {
+        const getTagSubListTest = (tagId) => {
+            return (s) => s.props.tagId === tagId;
         };
 
         // Default to finding the destination sublist with newTag
-        const destSubListTest = getTagSubListTest(newTag);
-        const srcSubListTest = getTagSubListTest(oldTag);
+        const destSubListTest = getTagSubListTest(newTagId);
+        const srcSubListTest = getTagSubListTest(oldTagId);
 
         // Set up the room that will be moved such that it has the correct state for a room in
-        // the section for oldTag
-        if (['m.favourite', 'm.lowpriority'].includes(oldTag)) movingRoom.tags = {[oldTag]: {}};
-        if (oldTag === TAG_DM) {
+        // the section for oldTagId
+        if (oldTagId === DefaultTagID.Favourite || oldTagId === DefaultTagID.LowPriority) {
+            movingRoom.tags = { [oldTagId]: {} };
+        } else if (oldTagId === DefaultTagID.DM) {
             // Mock inverse m.direct
             DMRoomMap.shared().roomToUser = {
                 [movingRoom.roomId]: '@someotheruser:domain',
             };
         }
 
-        dis.dispatch({action: 'MatrixActions.sync', prevState: null, state: 'PREPARED', matrixClient: client});
-
-        clock.runAll();
+        dis.dispatch({ action: 'MatrixActions.sync', prevState: null, state: 'PREPARED', matrixClient: client });
 
         expectRoomInSubList(movingRoom, srcSubListTest);
 
-        dis.dispatch({action: 'RoomListActions.tagRoom.pending', request: {
-            oldTag, newTag, room: movingRoom,
-        }});
-
-        // Run all setTimeouts for dispatches and room list rate limiting
-        clock.runAll();
+        dis.dispatch({ action: 'RoomListActions.tagRoom.pending', request: {
+            oldTagId, newTagId, room: movingRoom,
+        } });
 
         expectRoomInSubList(movingRoom, destSubListTest);
     }
@@ -180,7 +187,7 @@ describe('RoomList', () => {
         // TODO: Re-enable dragging tests when we support dragging again.
         describe.skip('does correct optimistic update when dragging from', () => {
             it('rooms to people', () => {
-                expectCorrectMove(undefined, TAG_DM);
+                expectCorrectMove(undefined, DefaultTagID.DM);
             });
 
             it('rooms to favourites', () => {
@@ -195,15 +202,15 @@ describe('RoomList', () => {
             // Whe running the app live, it updates when some other event occurs (likely the
             // m.direct arriving) that these tests do not fire.
             xit('people to rooms', () => {
-                expectCorrectMove(TAG_DM, undefined);
+                expectCorrectMove(DefaultTagID.DM, undefined);
             });
 
             it('people to favourites', () => {
-                expectCorrectMove(TAG_DM, 'm.favourite');
+                expectCorrectMove(DefaultTagID.DM, 'm.favourite');
             });
 
             it('people to lowpriority', () => {
-                expectCorrectMove(TAG_DM, 'm.lowpriority');
+                expectCorrectMove(DefaultTagID.DM, 'm.lowpriority');
             });
 
             it('low priority to rooms', () => {
@@ -211,7 +218,7 @@ describe('RoomList', () => {
             });
 
             it('low priority to people', () => {
-                expectCorrectMove('m.lowpriority', TAG_DM);
+                expectCorrectMove('m.lowpriority', DefaultTagID.DM);
             });
 
             it('low priority to low priority', () => {
@@ -223,7 +230,7 @@ describe('RoomList', () => {
             });
 
             it('favourites to people', () => {
-                expectCorrectMove('m.favourite', TAG_DM);
+                expectCorrectMove('m.favourite', DefaultTagID.DM);
             });
 
             it('favourites to low priority', () => {
@@ -269,29 +276,36 @@ describe('RoomList', () => {
             };
             GroupStore._notifyListeners();
 
+            // We also have to mock the client's getGroup function for the room list to filter it.
+            // It's not smart enough to tell the difference between a real group and a template though.
+            client.getGroup = (groupId) => {
+                return { groupId };
+            };
+
             // Select tag
-            dis.dispatch({action: 'select_tag', tag: '+group:domain'}, true);
+            dis.dispatch({ action: 'select_tag', tag: '+group:domain' }, true);
         }
 
         beforeEach(() => {
             setupSelectedTag();
         });
 
-        it('displays the correct rooms when the groups rooms are changed', () => {
+        it('displays the correct rooms when the groups rooms are changed', async () => {
             GroupStore.getGroupRooms = (groupId) => {
                 return [movingRoom, otherRoom];
             };
             GroupStore._notifyListeners();
 
-            // Run through RoomList debouncing
-            clock.runAll();
+            await waitForRoomListStoreUpdate();
 
-            // By default, the test will
-            expectRoomInSubList(otherRoom, (s) => s.props.label.endsWith('Rooms'));
+            // XXX: Even though the store updated, it can take a bit before the update makes
+            // it to the components. This gives it plenty of time to figure out what to do.
+            await (new Promise(resolve => setTimeout(resolve, 500)));
+
+            expectRoomInSubList(otherRoom, (s) => s.props.tagId === DefaultTagID.Untagged);
         });
 
         itDoesCorrectOptimisticUpdatesForDraggedRoomTiles();
     });
 });
-
 

@@ -16,15 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import request from 'browser-request';
 import { _t } from '../../languageHandler';
 import sanitizeHtml from 'sanitize-html';
-import dis from '../../dispatcher';
-import {MatrixClientPeg} from '../../MatrixClientPeg';
+import dis from '../../dispatcher/dispatcher';
+import { MatrixClientPeg } from '../../MatrixClientPeg';
 import classnames from 'classnames';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
@@ -43,8 +41,8 @@ export default class EmbeddedPage extends React.PureComponent {
 
     static contextType = MatrixClientContext;
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this._dispatcherRef = null;
 

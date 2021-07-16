@@ -31,13 +31,14 @@ limitations under the License.
 }
 
 .mx_ContextualMenu {
-    border-radius: 4px;
+    border-radius: 8px;
     box-shadow: 4px 4px 12px 0 $menu-box-shadow-color;
     background-color: $menu-bg-color;
     color: $primary-fg-color;
     position: absolute;
     font-size: $font-14px;
     z-index: 5001;
+    contain: content;
 }
 
 .mx_ContextualMenu_right {
@@ -114,9 +115,4 @@ limitations under the License.
     border-left: 8px solid transparent;
     border-top: 8px solid $menu-bg-color;
     border-right: 8px solid transparent;
-}
-
-.mx_ContextualMenu_spinner {
-    display: block;
-    margin: 0 auto;
 }

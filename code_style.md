@@ -4,7 +4,7 @@ Matrix JavaScript/ECMAScript Style Guide
 The intention of this guide is to make Matrix's JavaScript codebase clean,
 consistent with other popular JavaScript styles and consistent with the rest of
 the Matrix codebase. For reference, the Matrix Python style guide can be found
-at https://github.com/matrix-org/synapse/blob/master/docs/code_style.rst
+at https://github.com/matrix-org/synapse/blob/master/docs/code_style.md
 
 This document reflects how we would like Matrix JavaScript code to look, with
 acknowledgement that a significant amount of code is written to older
@@ -17,7 +17,7 @@ writing in modern ECMAScript and using a transpile step to generate the file
 that applications can then include. There are significant benefits in being
 able to use modern ECMAScript, although the tooling for doing so can be awkward
 for library code, especially with regard to translating source maps and line
-number throgh from the original code to the final application.
+number through from the original code to the final application.
 
 General Style
 -------------
@@ -35,12 +35,6 @@ General Style
 - lowerCamelCase for functions and variables.
 - Single line ternary operators are fine.
 - UPPER_SNAKE_CASE for constants
-- Single quotes for strings by default, for consistency with most JavaScript styles:
-
-  ```javascript
-  "bad" // Bad
-  'good' // Good
-  ```
 - Use parentheses or `` ` `` instead of `\` for line continuation where ever possible
 - Open braces on the same line (consistent with Node):
 
@@ -151,6 +145,7 @@ General Style
   Don't set things to undefined. Reserve that value to mean "not yet set to anything."
   Boolean objects are verboten.
 - Use JSDoc
+- Use switch-case statements where there are 5 or more branches running against the same variable.
 
 ECMAScript
 ----------
@@ -161,7 +156,14 @@ ECMAScript
   - Be careful mixing arrow functions and regular functions, eg. if one function in a promise chain is an
     arrow function, they probably all should be.
 - Apart from that, newer ES features should be used whenever the author deems them to be appropriate.
-- Flow annotations are welcome and encouraged.
+
+TypeScript
+----------
+- TypeScript is preferred over the use of JavaScript
+- It's desirable to convert existing JavaScript files to TypeScript. TypeScript conversions should be done in small
+  chunks without functional changes to ease the review process.
+- Use full type definitions for function parameters and return values.
+- Avoid `any` types and `any` casts
 
 React
 -----
@@ -200,6 +202,8 @@ React
     this.state = { counter: 0 };
   }
   ```
+- Prefer class components over function components and hooks (not a strict rule though)
+
 - Think about whether your component really needs state: are you duplicating
   information in component state that could be derived from the model?
 

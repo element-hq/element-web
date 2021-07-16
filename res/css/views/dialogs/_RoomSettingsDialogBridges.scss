@@ -89,24 +89,18 @@ limitations under the License.
             }
         }
 
-        .mx_showMore {
-            display: block;
-            text-align: left;
-            margin-top: 10px;
-        }
-
         .metadata {
             color: $muted-fg-color;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
             margin-bottom: 0;
-        }
-
-        .metadata.visible {
             overflow-y: visible;
             text-overflow: ellipsis;
             white-space: normal;
+            padding: 0;
+
+            > li {
+                padding: 0;
+                border: 0;
+            }
         }
     }
 }

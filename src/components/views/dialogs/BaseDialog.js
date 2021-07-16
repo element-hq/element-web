@@ -17,27 +17,26 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import FocusLock from 'react-focus-lock';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import { Key } from '../../../Keyboard';
 import AccessibleButton from '../elements/AccessibleButton';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-/**
+/*
  * Basic container for modal dialogs.
  *
  * Includes a div for the title, and a keypress handler which cancels the
  * dialog on escape.
  */
-export default createReactClass({
-    displayName: 'BaseDialog',
-
-    propTypes: {
+@replaceableComponent("views.dialogs.BaseDialog")
+export default class BaseDialog extends React.Component {
+    static propTypes = {
         // onFinished callback to call when Escape is pressed
         // Take a boolean which is true if the dialog was dismissed
         // with a positive / confirm action or false if it was
@@ -75,23 +74,26 @@ export default createReactClass({
         // If provided, this is used to add a aria-describedby attribute
         contentId: PropTypes.string,
 
-        // optional additional class for the title element
-        titleClass: PropTypes.string,
-    },
+        // optional additional class for the title element (basically anything that can be passed to classnames)
+        titleClass: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.object,
+            PropTypes.arrayOf(PropTypes.string),
+        ]),
+    };
 
-    getDefaultProps: function() {
-        return {
-            hasCancel: true,
-            fixedWidth: true,
-        };
-    },
+    static defaultProps = {
+        hasCancel: true,
+        fixedWidth: true,
+    };
 
-    // TODO: [REACT-WARNING] Move this to constructor
-    UNSAFE_componentWillMount() {
+    constructor(props) {
+        super(props);
+
         this._matrixClient = MatrixClientPeg.get();
-    },
+    }
 
-    _onKeyDown: function(e) {
+    _onKeyDown = (e) => {
         if (this.props.onKeyDown) {
             this.props.onKeyDown(e);
         }
@@ -100,13 +102,13 @@ export default createReactClass({
             e.preventDefault();
             this.props.onFinished(false);
         }
-    },
+    };
 
-    _onCancelClick: function(e) {
+    _onCancelClick = (e) => {
         this.props.onFinished(false);
-    },
+    };
 
-    render: function() {
+    render() {
         let cancelButton;
         if (this.props.hasCancel) {
             cancelButton = (
@@ -144,6 +146,7 @@ export default createReactClass({
                 >
                     <div className={classNames('mx_Dialog_header', {
                         'mx_Dialog_headerWithButton': !!this.props.headerButton,
+                        'mx_Dialog_headerWithCancel': !!cancelButton,
                     })}>
                         <div className={classNames('mx_Dialog_title', this.props.titleClass)} id='mx_BaseDialog_title'>
                             {headerImage}
@@ -156,5 +159,5 @@ export default createReactClass({
                 </FocusLock>
             </MatrixClientContext.Provider>
         );
-    },
-});
+    }
+}

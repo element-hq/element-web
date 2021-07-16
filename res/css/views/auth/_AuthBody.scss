@@ -34,7 +34,11 @@ limitations under the License.
     h3 {
         font-size: $font-14px;
         font-weight: 600;
-        color: $authpage-primary-color;
+        color: $authpage-secondary-color;
+    }
+
+    h3.mx_AuthBody_centered {
+        text-align: center;
     }
 
     a:link,
@@ -96,12 +100,6 @@ limitations under the License.
     }
 }
 
-.mx_AuthBody_editServerDetails {
-    padding-left: 1em;
-    font-size: $font-12px;
-    font-weight: normal;
-}
-
 .mx_AuthBody_fieldRow {
     display: flex;
     margin-bottom: 10px;
@@ -119,36 +117,52 @@ limitations under the License.
     margin-right: 0;
 }
 
+.mx_AuthBody_paddedFooter {
+    height: 80px; // height of the submit button + register link
+    padding-top: 28px;
+    text-align: center;
+
+    .mx_AuthBody_paddedFooter_title {
+        margin-top: 16px;
+        font-size: $font-15px;
+        line-height: $font-24px;
+
+        .mx_InlineSpinner img {
+            vertical-align: sub;
+            margin-right: 5px;
+        }
+    }
+
+    .mx_AuthBody_paddedFooter_subtitle {
+        margin-top: 8px;
+        font-size: $font-10px;
+        line-height: $font-14px;
+    }
+}
+
 .mx_AuthBody_changeFlow {
     display: block;
     text-align: center;
     width: 100%;
+
+    > a {
+        font-weight: $font-semi-bold;
+    }
+}
+
+.mx_SSOButtons + .mx_AuthBody_changeFlow {
+    margin-top: 24px;
 }
 
 .mx_AuthBody_spinner {
     margin: 1em 0;
 }
 
-.mx_AuthBody_passwordScore {
-    width: 100%;
-    appearance: none;
-    height: 4px;
-    border: 0;
-    border-radius: 2px;
-    position: absolute;
-    top: -12px;
-
-    &::-moz-progress-bar {
-        border-radius: 2px;
-        background-color: $accent-color;
-    }
-
-    &::-webkit-progress-bar,
-    &::-webkit-progress-value {
-        border-radius: 2px;
-    }
-
-    &::-webkit-progress-value {
-        background-color: $accent-color;
+@media only screen and (max-width: 480px) {
+    .mx_AuthBody {
+        border-radius: 4px;
+        width: auto;
+        max-width: 500px;
+        padding: 10px;
     }
 }

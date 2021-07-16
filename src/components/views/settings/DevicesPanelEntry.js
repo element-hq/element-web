@@ -19,9 +19,12 @@ import PropTypes from 'prop-types';
 
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import {formatDate} from '../../../DateUtils';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import { formatDate } from '../../../DateUtils';
+import StyledCheckbox from '../elements/StyledCheckbox';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.DevicesPanelEntry")
 export default class DevicesPanelEntry extends React.Component {
     constructor(props) {
         super(props);
@@ -81,7 +84,7 @@ export default class DevicesPanelEntry extends React.Component {
                     { lastSeen }
                 </div>
                 <div className="mx_DevicesPanel_deviceButtons">
-                    <input type="checkbox" onChange={this.onDeviceToggled} checked={this.props.selected} />
+                    <StyledCheckbox onChange={this.onDeviceToggled} checked={this.props.selected} />
                 </div>
             </div>
         );

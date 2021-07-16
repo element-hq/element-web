@@ -1,3 +1,4 @@
 node_modules
 *.png
-riot/env
+element/env
+performance-entries.json

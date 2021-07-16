@@ -17,8 +17,8 @@ limitations under the License.
 import url from 'url';
 
 import SdkConfig from '../SdkConfig';
-import {MatrixClientPeg} from '../MatrixClientPeg';
-import {urlSearchParamsToObject} from "./UrlUtils";
+import { MatrixClientPeg } from '../MatrixClientPeg';
+import { urlSearchParamsToObject } from "./UrlUtils";
 
 export function getHostingLink(campaign) {
     const hostingLink = SdkConfig.get().hosting_signup_link;

@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import PropTypes from 'prop-types';
-import { _t } from './languageHandler.js';
+
+import { _t } from './languageHandler';
 
 export const GroupMemberType = PropTypes.shape({
     userId: PropTypes.string.isRequired,

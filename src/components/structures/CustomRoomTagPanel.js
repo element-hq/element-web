@@ -18,10 +18,12 @@ import React from 'react';
 import CustomRoomTagStore from '../../stores/CustomRoomTagStore';
 import AutoHideScrollbar from './AutoHideScrollbar';
 import * as sdk from '../../index';
-import dis from '../../dispatcher';
+import dis from '../../dispatcher/dispatcher';
 import classNames from 'classnames';
 import * as FormattingUtils from '../../utils/FormattingUtils';
+import { replaceableComponent } from "../../utils/replaceableComponent";
 
+@replaceableComponent("structures.CustomRoomTagPanel")
 class CustomRoomTagPanel extends React.Component {
     constructor(props) {
         super(props);
@@ -32,7 +34,7 @@ class CustomRoomTagPanel extends React.Component {
 
     componentDidMount() {
         this._tagStoreToken = CustomRoomTagStore.addListener(() => {
-            this.setState({tags: CustomRoomTagStore.getSortedTags()});
+            this.setState({ tags: CustomRoomTagStore.getSortedTags() });
         });
     }
 
@@ -62,7 +64,7 @@ class CustomRoomTagPanel extends React.Component {
 
 class CustomRoomTagTile extends React.Component {
     onClick = () => {
-        dis.dispatch({action: 'select_custom_room_tag', tag: this.props.tag.name});
+        dis.dispatch({ action: 'select_custom_room_tag', tag: this.props.tag.name });
     };
 
     render() {
@@ -72,17 +74,17 @@ class CustomRoomTagTile extends React.Component {
         const tag = this.props.tag;
         const avatarHeight = 40;
         const className = classNames({
-            CustomRoomTagPanel_tileSelected: tag.selected,
+            "CustomRoomTagPanel_tileSelected": tag.selected,
         });
         const name = tag.name;
-        const badge = tag.badge;
+        const badgeNotifState = tag.badgeNotifState;
         let badgeElement;
-        if (badge) {
+        if (badgeNotifState) {
             const badgeClasses = classNames({
                 "mx_TagTile_badge": true,
-                "mx_TagTile_badgeHighlight": badge.highlight,
+                "mx_TagTile_badgeHighlight": badgeNotifState.hasMentions,
             });
-            badgeElement = (<div className={badgeClasses}>{FormattingUtils.formatCount(badge.count)}</div>);
+            badgeElement = (<div className={badgeClasses}>{FormattingUtils.formatCount(badgeNotifState.count)}</div>);
         }
 
         return (

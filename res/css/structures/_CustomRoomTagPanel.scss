@@ -14,13 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_LeftPanel_tagPanelContainer {
-    display: flex;
-    flex-direction: column;
-}
+// TODO: Update design for custom tags to match new designs
 
 .mx_CustomRoomTagPanel {
-    background-color: $tagpanel-bg-color;
+    background-color: $groupFilterPanel-bg-color;
     max-height: 40vh;
 }
 
@@ -50,7 +47,7 @@ limitations under the License.
     background-color: $accent-color-alt;
     width: 5px;
     position: absolute;
-    left: -15px;
+    left: -9px;
     border-radius: 0 3px 3px 0;
-    top: 2px; // 10 [padding-top] - (56 - 40)/2
+    top: 5px; // just feels right (see comment above about designs needing to be updated)
 }

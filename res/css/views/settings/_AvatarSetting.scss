@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,44 +15,65 @@ limitations under the License.
 */
 
 .mx_AvatarSetting_avatar {
-    width: 88px;
-    height: 88px;
-    margin-left: 13px;
+    width: 90px;
+    min-width: 90px; // so it doesn't get crushed by the flexbox in languages with longer words
+    height: 90px;
+    margin-top: 8px;
     position: relative;
 
+    .mx_AvatarSetting_hover {
+        transition: opacity $hover-transition;
+
+        // position to place the hover bg over the entire thing
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        pointer-events: none; // let the pointer fall through the underlying thing
+
+        line-height: 90px;
+        text-align: center;
+
+        > span {
+            color: #fff; // hardcoded to contrast with background
+            position: relative; // tricks the layout engine into putting this on top of the bg
+            font-weight: 500;
+        }
+
+        .mx_AvatarSetting_hoverBg {
+            // absolute position to lazily fill the entire container
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+
+            opacity: 0.5;
+            background-color: $settings-profile-overlay-placeholder-fg-color;
+            border-radius: 90px;
+        }
+    }
+
+    &.mx_AvatarSetting_avatar_hovering .mx_AvatarSetting_hover {
+        opacity: 1;
+    }
+
+    &:not(.mx_AvatarSetting_avatar_hovering) .mx_AvatarSetting_hover {
+        opacity: 0;
+    }
+
     & > * {
-        width: 88px;
         box-sizing: border-box;
     }
 
     .mx_AccessibleButton.mx_AccessibleButton_kind_primary {
         margin-top: 8px;
-
-        div {
-            position: relative;
-            height: 12px;
-            width: 12px;
-            display: inline;
-            padding-right: 6px; // 0.5 * 12px
-            left: -6px; // 0.5 * 12px
-            top: 3px;
-        }
-
-        div::before {
-            content: '';
-            position: absolute;
-            height: 12px;
-            width: 12px;
-
-            background-color: $button-primary-fg-color;
-            mask-repeat: no-repeat;
-            mask-size: contain;
-            mask-image: url('$(res)/img/feather-customised/upload.svg');
-        }
     }
 
     .mx_AccessibleButton.mx_AccessibleButton_kind_link_sm {
-        color: $button-danger-bg-color;
+        width: 100%;
     }
 
     & > img {
@@ -63,8 +84,10 @@ limitations under the License.
     & > img,
     .mx_AvatarSetting_avatarPlaceholder {
         display: block;
-        height: 88px;
-        border-radius: 4px;
+        height: 90px;
+        width: inherit;
+        border-radius: 90px;
+        cursor: pointer;
     }
 
     .mx_AvatarSetting_avatarPlaceholder::before {
@@ -79,6 +102,29 @@ limitations under the License.
         bottom: 0;
         left: 0;
         right: 0;
+    }
+
+    .mx_AvatarSetting_uploadButton {
+        width: 32px;
+        height: 32px;
+        border-radius: 32px;
+        background-color: $settings-profile-button-bg-color;
+
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+
+    .mx_AvatarSetting_uploadButton::before {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 100%;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 55%;
+        background-color: $settings-profile-button-fg-color;
+        mask-image: url('$(res)/img/feather-customised/edit.svg');
     }
 }
 

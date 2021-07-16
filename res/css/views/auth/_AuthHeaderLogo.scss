@@ -17,9 +17,15 @@ limitations under the License.
 .mx_AuthHeaderLogo {
     margin-top: 15px;
     flex: 1;
-    padding: 0 10px;
+    padding: 0 25px;
 }
 
 .mx_AuthHeaderLogo img {
     width: 100%;
+}
+
+@media only screen and (max-width: 480px) {
+    .mx_AuthHeaderLogo {
+        display: none;
+    }
 }

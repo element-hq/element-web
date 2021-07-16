@@ -14,16 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import {_t} from "../../../languageHandler";
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import { _t } from "../../../languageHandler";
 import MemberAvatar from '../avatars/MemberAvatar';
 import classNames from 'classnames';
 import StatusMessageContextMenu from "../context_menus/StatusMessageContextMenu";
 import SettingsStore from "../../../settings/SettingsStore";
-import {ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
+import { ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.avatars.MemberStatusMessageAvatar")
 export default class MemberStatusMessageAvatar extends React.Component {
     static propTypes = {
         member: PropTypes.object.isRequired,
@@ -53,7 +55,7 @@ export default class MemberStatusMessageAvatar extends React.Component {
         if (this.props.member.userId !== MatrixClientPeg.get().getUserId()) {
             throw new Error("Cannot use MemberStatusMessageAvatar on anyone but the logged in user");
         }
-        if (!SettingsStore.isFeatureEnabled("feature_custom_status")) {
+        if (!SettingsStore.getValue("feature_custom_status")) {
             return;
         }
         const { user } = this.props.member;
@@ -105,7 +107,7 @@ export default class MemberStatusMessageAvatar extends React.Component {
             resizeMethod={this.props.resizeMethod}
         />;
 
-        if (!SettingsStore.isFeatureEnabled("feature_custom_status")) {
+        if (!SettingsStore.getValue("feature_custom_status")) {
             return avatar;
         }
 

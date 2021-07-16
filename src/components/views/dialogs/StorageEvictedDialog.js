@@ -20,7 +20,9 @@ import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.StorageEvictedDialog")
 export default class StorageEvictedDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
@@ -43,10 +45,12 @@ export default class StorageEvictedDialog extends React.Component {
         let logRequest;
         if (SdkConfig.get().bug_report_endpoint_url) {
             logRequest = _t(
-                "To help us prevent this in future, please <a>send us logs</a>.", {},
-            {
-                a: text => <a href="#" onClick={this._sendBugReport}>{text}</a>,
-            });
+                "To help us prevent this in future, please <a>send us logs</a>.",
+                {},
+                {
+                    a: text => <a href="#" onClick={this._sendBugReport}>{text}</a>,
+                },
+            );
         }
 
         return (

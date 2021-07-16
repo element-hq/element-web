@@ -50,11 +50,14 @@ limitations under the License.
     margin-left: 20px;
     display: inherit;
 }
-.mx_ShareDialog_matrixto_copy > div {
-    background-image: url($copy-button-url);
+.mx_ShareDialog_matrixto_copy::after {
+    content: "";
+    mask-image: url($copy-button-url);
+    background-color: $message-action-bar-fg-color;
     margin-left: 5px;
     width: 20px;
     height: 20px;
+    background-repeat: no-repeat;
 }
 
 .mx_ShareDialog_split {
@@ -64,17 +67,17 @@ limitations under the License.
 
 .mx_ShareDialog_qrcode_container {
     float: left;
-    background-color: #ffffff;
-    padding: 5px; // makes qr code more readable in dark theme
-    border-radius: 5px;
     height: 256px;
     width: 256px;
     margin-right: 64px;
 }
 
+.mx_ShareDialog_qrcode_container + .mx_ShareDialog_social_container {
+    width: 299px;
+}
+
 .mx_ShareDialog_social_container {
     display: inline-block;
-    width: 299px;
 }
 
 .mx_ShareDialog_social_icon {

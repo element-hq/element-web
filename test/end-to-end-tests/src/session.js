@@ -18,16 +18,16 @@ limitations under the License.
 const puppeteer = require('puppeteer');
 const Logger = require('./logger');
 const LogBuffer = require('./logbuffer');
-const {delay} = require('./util');
+const { delay } = require('./util');
 
 const DEFAULT_TIMEOUT = 20000;
 
-module.exports = class RiotSession {
-    constructor(browser, page, username, riotserver, hsUrl) {
+module.exports = class ElementSession {
+    constructor(browser, page, username, elementServer, hsUrl) {
         this.browser = browser;
         this.page = page;
         this.hsUrl = hsUrl;
-        this.riotserver = riotserver;
+        this.elementServer = elementServer;
         this.username = username;
         this.consoleLog = new LogBuffer(page, "console", (msg) => `${msg.text()}\n`);
         this.networkLog = new LogBuffer(page, "requestfinished", async (req) => {
@@ -38,7 +38,7 @@ module.exports = class RiotSession {
         this.log = new Logger(this.username);
     }
 
-    static async create(username, puppeteerOptions, riotserver, hsUrl, throttleCpuFactor = 1) {
+    static async create(username, puppeteerOptions, elementServer, hsUrl, throttleCpuFactor = 1) {
         const browser = await puppeteer.launch(puppeteerOptions);
         const page = await browser.newPage();
         await page.setViewport({
@@ -50,7 +50,7 @@ module.exports = class RiotSession {
             console.log("throttling cpu by a factor of", throttleCpuFactor);
             await client.send('Emulation.setCPUThrottlingRate', { rate: throttleCpuFactor });
         }
-        return new RiotSession(browser, page, username, riotserver, hsUrl);
+        return new ElementSession(browser, page, username, elementServer, hsUrl);
     }
 
     async tryGetInnertext(selector) {
@@ -75,6 +75,10 @@ module.exports = class RiotSession {
         return this.getElementProperty(field, 'outerHTML');
     }
 
+    isChecked(field) {
+        return this.getElementProperty(field, 'checked');
+    }
+
     consoleLogs() {
         return this.consoleLog.buffer;
     }
@@ -89,10 +93,10 @@ module.exports = class RiotSession {
             const type = req.resourceType();
             const response = await req.response();
             //if (type === 'xhr' || type === 'fetch') {
-                buffer += `${type} ${response.status()} ${req.method()} ${req.url()} \n`;
-                // if (req.method() === "POST") {
-                //   buffer += "  Post data: " + req.postData();
-                // }
+            buffer += `${type} ${response.status()} ${req.method()} ${req.url()} \n`;
+            // if (req.method() === "POST") {
+            //   buffer += "  Post data: " + req.postData();
+            // }
             //}
         });
         return {
@@ -108,7 +112,7 @@ module.exports = class RiotSession {
 
     async replaceInputText(input, text) {
         // click 3 times to select all text
-        await input.click({clickCount: 3});
+        await input.click({ clickCount: 3 });
         // waiting here solves not having selected all the text by the 3x click above,
         // presumably because of the Field label animation.
         await this.delay(300);
@@ -118,8 +122,8 @@ module.exports = class RiotSession {
         await input.type(text);
     }
 
-    query(selector, timeout = DEFAULT_TIMEOUT) {
-        return this.page.waitForSelector(selector, {visible: true, timeout});
+    query(selector, timeout = DEFAULT_TIMEOUT, hidden = false) {
+        return this.page.waitForSelector(selector, { visible: true, timeout, hidden });
     }
 
     async queryAll(selector) {
@@ -190,7 +194,7 @@ module.exports = class RiotSession {
     }
 
     url(path) {
-        return this.riotserver + path;
+        return this.elementServer + path;
     }
 
     delay(ms) {
@@ -204,7 +208,7 @@ module.exports = class RiotSession {
         this.log.done();
     }
 
-    close() {
+    async close() {
         return this.browser.close();
     }
 

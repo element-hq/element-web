@@ -18,8 +18,3 @@ limitations under the License.
     margin-top: 10px;
     display: flex;
 }
-
-.mx_GroupAddressPicker_checkboxContainer input[type="checkbox"] {
-    /* Stop flex from shrinking the checkbox */
-    width: 20px;
-}

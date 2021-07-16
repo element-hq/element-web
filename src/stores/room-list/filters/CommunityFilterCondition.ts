@@ -1,0 +1,66 @@
+/*
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+import { Room } from "matrix-js-sdk/src/models/room";
+import { FILTER_CHANGED, FilterKind, IFilterCondition } from "./IFilterCondition";
+import { Group } from "matrix-js-sdk/src/models/group";
+import { EventEmitter } from "events";
+import GroupStore from "../../GroupStore";
+import { IDestroyable } from "../../../utils/IDestroyable";
+import DMRoomMap from "../../../utils/DMRoomMap";
+import { setHasDiff } from "../../../utils/sets";
+
+/**
+ * A filter condition for the room list which reveals rooms which
+ * are a member of a given community.
+ */
+export class CommunityFilterCondition extends EventEmitter implements IFilterCondition, IDestroyable {
+    private roomIds = new Set<string>();
+    private userIds = new Set<string>();
+
+    constructor(private community: Group) {
+        super();
+        GroupStore.on("update", this.onStoreUpdate);
+
+        // noinspection JSIgnoredPromiseFromCall
+        this.onStoreUpdate(); // trigger a false update to seed the store
+    }
+
+    public get kind(): FilterKind {
+        return FilterKind.Prefilter;
+    }
+
+    public isVisible(room: Room): boolean {
+        return this.roomIds.has(room.roomId) || this.userIds.has(DMRoomMap.shared().getUserIdForRoomId(room.roomId));
+    }
+
+    private onStoreUpdate = async (): Promise<any> => {
+        // We don't actually know if the room list changed for the community, so just check it again.
+        const beforeRoomIds = this.roomIds;
+        this.roomIds = new Set((await GroupStore.getGroupRooms(this.community.groupId)).map(r => r.roomId));
+
+        const beforeUserIds = this.userIds;
+        this.userIds = new Set((await GroupStore.getGroupMembers(this.community.groupId)).map(u => u.userId));
+
+        if (setHasDiff(beforeRoomIds, this.roomIds) || setHasDiff(beforeUserIds, this.userIds)) {
+            this.emit(FILTER_CHANGED);
+        }
+    };
+
+    public destroy(): void {
+        GroupStore.off("update", this.onStoreUpdate);
+    }
+}

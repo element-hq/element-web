@@ -51,20 +51,26 @@ limitations under the License.
 .mx_Tooltip {
     display: none;
     position: fixed;
-    border: 1px solid $menu-border-color;
-    border-radius: 4px;
+    border-radius: 8px;
     box-shadow: 4px 4px 12px 0 $menu-box-shadow-color;
-    background-color: $menu-bg-color;
-    z-index: 4000; // Higher than dialogs so tooltips can be used in dialogs
+    z-index: 6000; // Higher than context menu so tooltips can be used everywhere
     padding: 10px;
     pointer-events: none;
     line-height: $font-14px;
     font-size: $font-12px;
-    font-weight: 600;
-    color: $primary-fg-color;
+    font-weight: 500;
     max-width: 200px;
     word-break: break-word;
     margin-right: 50px;
+
+    background-color: $inverted-bg-color;
+    color: $accent-fg-color;
+    border: 0;
+    text-align: center;
+
+    .mx_Tooltip_chevron {
+        display: none;
+    }
 
     &.mx_Tooltip_visible {
         animation: mx_fadein 0.2s forwards;
@@ -75,18 +81,23 @@ limitations under the License.
     }
 }
 
-.mx_Tooltip_timeline {
-    box-shadow: none;
-    background-color: $tooltip-timeline-bg-color;
-    color: $tooltip-timeline-fg-color;
-    text-align: center;
-    border: none;
-    border-radius: 3px;
-    font-size: $font-14px;
-    line-height: 1.2;
-    padding: 6px 8px;
+// These tooltips use an older style with a chevron
+.mx_Field_tooltip {
+    background-color: $menu-bg-color;
+    color: $primary-fg-color;
+    border: 1px solid $menu-border-color;
+    text-align: unset;
 
-    .mx_Tooltip_chevron::after {
-        border-right-color: $tooltip-timeline-bg-color;
+    .mx_Tooltip_chevron {
+        display: unset;
     }
+}
+
+.mx_Tooltip_title {
+    font-weight: 600;
+}
+
+.mx_Tooltip_sub {
+    opacity: 0.7;
+    margin-top: 4px;
 }

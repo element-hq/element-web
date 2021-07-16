@@ -15,11 +15,15 @@ limitations under the License.
 */
 
 import SdkConfig from "../SdkConfig";
-import {MatrixClientPeg} from "../MatrixClientPeg";
-import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 
 const JITSI_WK_PROPERTY = "im.vector.riot.jitsi";
-const JITSI_WK_CHECK_INTERVAL = 2 * 60 * 60 * 1000; // 2 hours, arbitrarily selected
+
+export interface JitsiWidgetData {
+    conferenceId: string;
+    isAudioOnly: boolean;
+    domain: string;
+}
 
 export class Jitsi {
     private static instance: Jitsi;
@@ -30,38 +34,66 @@ export class Jitsi {
         return this.domain || 'jitsi.riot.im';
     }
 
-    constructor() {
-        // We rely on the first call to be an .update() instead of doing one here. Doing one
-        // here could result in duplicate calls to the homeserver.
-
-        // Start a timer to update the server info regularly
-        setInterval(() => this.update(), JITSI_WK_CHECK_INTERVAL);
+    /**
+     * Checks for auth needed by looking up a well-known file
+     *
+     * If the file does not exist, we assume no auth.
+     *
+     * See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
+     */
+    public async getJitsiAuth(): Promise<string|null> {
+        if (!this.preferredDomain) {
+            return null;
+        }
+        let data;
+        try {
+            const response = await fetch(`https://${this.preferredDomain}/.well-known/element/jitsi`);
+            data = await response.json();
+        } catch (error) {
+            return null;
+        }
+        if (data.auth) {
+            return data.auth;
+        }
+        return null;
     }
 
-    public async update(): Promise<any> {
+    public start() {
+        const cli = MatrixClientPeg.get();
+        cli.on("WellKnown.client", this.update);
+        // call update initially in case we missed the first WellKnown.client event and for if no well-known present
+        this.update(cli.getClientWellKnown());
+    }
+
+    private update = async (discoveryResponse): Promise<any> => {
         // Start with a default of the config's domain
         let domain = (SdkConfig.get()['jitsi'] || {})['preferredDomain'] || 'jitsi.riot.im';
 
-        // Now request the .well-known config to see if it changed
-        if (MatrixClientPeg.get()) {
-            try {
-                console.log("Attempting to get Jitsi conference information from homeserver");
-
-                const homeserverDomain = MatrixClientPeg.getHomeserverName();
-                const discoveryResponse = await AutoDiscovery.getRawClientConfig(homeserverDomain);
-                if (discoveryResponse && discoveryResponse[JITSI_WK_PROPERTY]) {
-                    const wkPreferredDomain = discoveryResponse[JITSI_WK_PROPERTY]['preferredDomain'];
-                    if (wkPreferredDomain) domain = wkPreferredDomain;
-                }
-            } catch (e) {
-                // These are non-fatal errors
-                console.error(e);
-            }
+        console.log("Attempting to get Jitsi conference information from homeserver");
+        if (discoveryResponse && discoveryResponse[JITSI_WK_PROPERTY]) {
+            const wkPreferredDomain = discoveryResponse[JITSI_WK_PROPERTY]['preferredDomain'];
+            if (wkPreferredDomain) domain = wkPreferredDomain;
         }
 
         // Put the result into memory for us to use later
         this.domain = domain;
         console.log("Jitsi conference domain:", this.preferredDomain);
+    };
+
+    /**
+     * Parses the given URL into the data needed for a Jitsi widget, if the widget
+     * URL matches the preferredDomain for the app.
+     * @param {string} url The URL to parse.
+     * @returns {JitsiWidgetData} The widget data if eligible, otherwise null.
+     */
+    public parsePreferredConferenceUrl(url: string): JitsiWidgetData {
+        const parsed = new URL(url);
+        if (parsed.hostname !== this.preferredDomain) return null; // invalid
+        return {
+            conferenceId: parsed.pathname,
+            domain: parsed.hostname,
+            isAudioOnly: false,
+        };
     }
 
     public static getInstance(): Jitsi {

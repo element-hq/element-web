@@ -14,25 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useCallback} from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { _t } from "../../../languageHandler";
+import AccessibleButton from "../elements/AccessibleButton";
+import classNames from "classnames";
 
-import * as sdk from "../../../index";
-import {_t} from "../../../languageHandler";
-import Modal from "../../../Modal";
+const AvatarSetting = ({ avatarUrl, avatarAltText, avatarName, uploadAvatar, removeAvatar }) => {
+    const [isHovering, setIsHovering] = useState(false);
+    const hoveringProps = {
+        onMouseEnter: () => setIsHovering(true),
+        onMouseLeave: () => setIsHovering(false),
+    };
 
-const AvatarSetting = ({avatarUrl, avatarAltText, avatarName, uploadAvatar, removeAvatar}) => {
-    const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
-    const openImageView = useCallback(() => {
-        const ImageView = sdk.getComponent("elements.ImageView");
-        Modal.createDialog(ImageView, {
-            src: avatarUrl,
-            name: avatarName,
-        }, "mx_Dialog_lightbox");
-    }, [avatarUrl, avatarName]);
-
-    let avatarElement = <div className="mx_AvatarSetting_avatarPlaceholder" />;
+    let avatarElement = <AccessibleButton
+        element="div"
+        onClick={uploadAvatar}
+        className="mx_AvatarSetting_avatarPlaceholder"
+        {...hoveringProps}
+    />;
     if (avatarUrl) {
         avatarElement = (
             <AccessibleButton
@@ -40,17 +40,20 @@ const AvatarSetting = ({avatarUrl, avatarAltText, avatarName, uploadAvatar, remo
                 src={avatarUrl}
                 alt={avatarAltText}
                 aria-label={avatarAltText}
-                onClick={openImageView} />
+                onClick={uploadAvatar}
+                {...hoveringProps}
+            />
         );
     }
 
     let uploadAvatarBtn;
     if (uploadAvatar) {
         // insert an empty div to be the host for a css mask containing the upload.svg
-        uploadAvatarBtn = <AccessibleButton onClick={uploadAvatar} kind="primary">
-            <div>&nbsp;</div>
-            {_t("Upload")}
-        </AccessibleButton>;
+        uploadAvatarBtn = <AccessibleButton
+            onClick={uploadAvatar}
+            className='mx_AvatarSetting_uploadButton'
+            {...hoveringProps}
+        />;
     }
 
     let removeAvatarBtn;
@@ -60,10 +63,18 @@ const AvatarSetting = ({avatarUrl, avatarAltText, avatarName, uploadAvatar, remo
         </AccessibleButton>;
     }
 
-    return <div className="mx_AvatarSetting_avatar">
-        { avatarElement }
-        { uploadAvatarBtn }
-        { removeAvatarBtn }
+    const avatarClasses = classNames({
+        "mx_AvatarSetting_avatar": true,
+        "mx_AvatarSetting_avatar_hovering": isHovering && uploadAvatar,
+    });
+    return <div className={avatarClasses}>
+        {avatarElement}
+        <div className="mx_AvatarSetting_hover">
+            <div className="mx_AvatarSetting_hoverBg" />
+            <span>{_t("Upload")}</span>
+        </div>
+        {uploadAvatarBtn}
+        {removeAvatarBtn}
     </div>;
 };
 

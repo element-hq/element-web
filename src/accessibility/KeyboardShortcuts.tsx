@@ -17,10 +17,10 @@ limitations under the License.
 import * as React from "react";
 import classNames from "classnames";
 
-import * as sdk from "../index";
 import Modal from "../Modal";
 import { _t, _td } from "../languageHandler";
-import {isMac, Key} from "../Keyboard";
+import { isMac, Key } from "../Keyboard";
+import InfoDialog from "../components/views/dialogs/InfoDialog";
 
 // TS: once languageHandler is TS we can probably inline this into the enum
 _td("Navigation");
@@ -34,6 +34,7 @@ export enum Categories {
     CALLS = "Calls",
     COMPOSER = "Composer",
     ROOM_LIST = "Room List",
+    ROOM = "Room",
     AUTOCOMPLETE = "Autocomplete",
 }
 
@@ -56,6 +57,8 @@ export enum Modifiers {
 
 // Meta-modifier: isMac ? CMD : CONTROL
 export const CMD_OR_CTRL = isMac ? Modifiers.COMMAND : Modifiers.CONTROL;
+// Meta-key representing the digits [0-9] often found at the top of standard keyboard layouts
+export const DIGITS = "digits";
 
 interface IKeybind {
     modifiers?: Modifiers[];
@@ -142,6 +145,40 @@ const shortcuts: Record<Categories, IShortcut[]> = {
         },
     ],
 
+    [Categories.ROOM]: [
+        {
+            keybinds: [{
+                key: Key.PAGE_UP,
+            }, {
+                key: Key.PAGE_DOWN,
+            }],
+            description: _td("Scroll up/down in the timeline"),
+        }, {
+            keybinds: [{
+                key: Key.ESCAPE,
+            }],
+            description: _td("Dismiss read marker and jump to bottom"),
+        }, {
+            keybinds: [{
+                modifiers: [Modifiers.SHIFT],
+                key: Key.PAGE_UP,
+            }],
+                description: _td("Jump to oldest unread message"),
+        }, {
+            keybinds: [{
+                modifiers: [CMD_OR_CTRL, Modifiers.SHIFT],
+                key: Key.U,
+            }],
+            description: _td("Upload a file"),
+        }, {
+            keybinds: [{
+                modifiers: [CMD_OR_CTRL],
+                key: Key.F,
+            }],
+            description: _td("Search (must be enabled)"),
+        },
+    ],
+
     [Categories.ROOM_LIST]: [
         {
             keybinds: [{
@@ -181,13 +218,6 @@ const shortcuts: Record<Categories, IShortcut[]> = {
 
     [Categories.NAVIGATION]: [
         {
-            keybinds: [{
-                key: Key.PAGE_UP,
-            }, {
-                key: Key.PAGE_DOWN,
-            }],
-            description: _td("Scroll up/down in the timeline"),
-        }, {
             keybinds: [{
                 modifiers: [Modifiers.ALT, Modifiers.SHIFT],
                 key: Key.ARROW_UP,
@@ -235,6 +265,12 @@ const shortcuts: Record<Categories, IShortcut[]> = {
                 key: Key.SLASH,
             }],
             description: _td("Toggle this dialog"),
+        }, {
+            keybinds: [{
+                modifiers: [Modifiers.CONTROL, isMac ? Modifiers.SHIFT : Modifiers.ALT],
+                key: Key.H,
+            }],
+            description: _td("Go to Home View"),
         },
     ],
 
@@ -257,10 +293,11 @@ const shortcuts: Record<Categories, IShortcut[]> = {
 
 const categoryOrder = [
     Categories.COMPOSER,
-    Categories.CALLS,
-    Categories.ROOM_LIST,
     Categories.AUTOCOMPLETE,
+    Categories.ROOM,
+    Categories.ROOM_LIST,
     Categories.NAVIGATION,
+    Categories.CALLS,
 ];
 
 interface IModal {
@@ -284,6 +321,7 @@ const alternateKeyName: Record<string, string> = {
     [Key.SPACE]: _td("Space"),
     [Key.HOME]: _td("Home"),
     [Key.END]: _td("End"),
+    [DIGITS]: _td("[number]"),
 };
 const keyIcon: Record<string, string> = {
     [Key.ARROW_UP]: "↑",
@@ -294,7 +332,7 @@ const keyIcon: Record<string, string> = {
 
 const Shortcut: React.FC<{
     shortcut: IShortcut;
-}> = ({shortcut}) => {
+}> = ({ shortcut }) => {
     const classes = classNames({
         "mx_KeyboardShortcutsDialog_inline": shortcut.keybinds.every(k => !k.modifiers || k.modifiers.length === 0),
     });
@@ -337,7 +375,6 @@ export const toggleDialog = () => {
         </div>;
     });
 
-    const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
     activeModal = Modal.createTrackedDialog("Keyboard Shortcuts", "", InfoDialog, {
         className: "mx_KeyboardShortcutsDialog",
         title: _t("Keyboard Shortcuts"),

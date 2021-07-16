@@ -20,7 +20,7 @@ const assert = require('assert');
 async function assertDialog(session, expectedTitle) {
     const titleElement = await session.query(".mx_Dialog .mx_Dialog_title");
     const dialogHeader = await session.innerText(titleElement);
-    assert(dialogHeader, expectedTitle);
+    assert.equal(dialogHeader, expectedTitle);
 }
 
 async function acceptDialog(session, expectedTitle) {

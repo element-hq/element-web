@@ -17,12 +17,16 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from "prop-types";
-import Matrix from "matrix-js-sdk";
-import {MatrixClientPeg} from "../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import * as sdk from "../../index";
 import Modal from '../../Modal';
 import { _t } from '../../languageHandler';
+import HomePage from "./HomePage";
+import { replaceableComponent } from "../../utils/replaceableComponent";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
+@replaceableComponent("structures.UserView")
 export default class UserView extends React.Component {
     static get propTypes() {
         return {
@@ -42,14 +46,17 @@ export default class UserView extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.userId !== this.props.userId) {
+        // XXX: We shouldn't need to null check the userId here, but we declare
+        // it as optional and MatrixChat sometimes fires in a way which results
+        // in an NPE when we try to update the profile info.
+        if (prevProps.userId !== this.props.userId && this.props.userId) {
             this._loadProfileInfo();
         }
     }
 
     async _loadProfileInfo() {
         const cli = MatrixClientPeg.get();
-        this.setState({loading: true});
+        this.setState({ loading: true });
         let profileInfo;
         try {
             profileInfo = await cli.getProfileInfo(this.props.userId);
@@ -59,13 +66,13 @@ export default class UserView extends React.Component {
                 title: _t('Could not load user profile'),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
-            this.setState({loading: false});
+            this.setState({ loading: false });
             return;
         }
-        const fakeEvent = new Matrix.MatrixEvent({type: "m.room.member", content: profileInfo});
-        const member = new Matrix.RoomMember(null, this.props.userId);
+        const fakeEvent = new MatrixEvent({ type: "m.room.member", content: profileInfo });
+        const member = new RoomMember(null, this.props.userId);
         member.setMembershipEvent(fakeEvent);
-        this.setState({member, loading: false});
+        this.setState({ member, loading: false });
     }
 
     render() {
@@ -76,7 +83,9 @@ export default class UserView extends React.Component {
             const RightPanel = sdk.getComponent('structures.RightPanel');
             const MainSplit = sdk.getComponent('structures.MainSplit');
             const panel = <RightPanel user={this.state.member} />;
-            return (<MainSplit panel={panel}><div style={{flex: "1"}} /></MainSplit>);
+            return (<MainSplit panel={panel} resizeNotifier={this.props.resizeNotifier}>
+                <HomePage />
+            </MainSplit>);
         } else {
             return (<div />);
         }

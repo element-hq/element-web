@@ -17,4 +17,5 @@ limitations under the License.
 .mx_MessageTimestamp {
     color: $event-timestamp-color;
     font-size: $font-10px;
+    font-variant-numeric: tabular-nums;
 }

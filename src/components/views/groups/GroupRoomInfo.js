@@ -17,59 +17,56 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import GroupStore from '../../../stores/GroupStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
-export default createReactClass({
-    displayName: 'GroupRoomInfo',
+@replaceableComponent("views.groups.GroupRoomInfo")
+export default class GroupRoomInfo extends React.Component {
+    static contextType = MatrixClientContext;
 
-    statics: {
-        contextType: MatrixClientContext,
-    },
-
-    propTypes: {
+    static propTypes = {
         groupId: PropTypes.string,
         groupRoomId: PropTypes.string,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            isUserPrivilegedInGroup: null,
-            groupRoom: null,
-            groupRoomPublicityLoading: false,
-            groupRoomRemoveLoading: false,
-        };
-    },
+    state = {
+        isUserPrivilegedInGroup: null,
+        groupRoom: null,
+        groupRoomPublicityLoading: false,
+        groupRoomRemoveLoading: false,
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         this._initGroupStore(this.props.groupId);
-    },
+    }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.groupId !== this.props.groupId) {
             this._unregisterGroupStore(this.props.groupId);
             this._initGroupStore(newProps.groupId);
         }
-    },
+    }
 
     componentWillUnmount() {
         this._unregisterGroupStore(this.props.groupId);
-    },
+    }
 
     _initGroupStore(groupId) {
         GroupStore.registerListener(groupId, this.onGroupStoreUpdated);
-    },
+    }
 
     _unregisterGroupStore(groupId) {
         GroupStore.unregisterListener(this.onGroupStoreUpdated);
-    },
+    }
 
     _updateGroupRoom() {
         this.setState({
@@ -77,28 +74,28 @@ export default createReactClass({
                 (r) => r.roomId === this.props.groupRoomId,
             ),
         });
-    },
+    }
 
-    onGroupStoreUpdated: function() {
+    onGroupStoreUpdated = () => {
         this.setState({
             isUserPrivilegedInGroup: GroupStore.isUserPrivileged(this.props.groupId),
         });
         this._updateGroupRoom();
-    },
+    };
 
-    _onRemove: function(e) {
+    _onRemove = e => {
         const groupId = this.props.groupId;
         const roomName = this.state.groupRoom.displayname;
         e.preventDefault();
         e.stopPropagation();
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createTrackedDialog('Confirm removal of group from room', '', QuestionDialog, {
-            title: _t("Are you sure you want to remove '%(roomName)s' from %(groupId)s?", {roomName, groupId}),
+            title: _t("Are you sure you want to remove '%(roomName)s' from %(groupId)s?", { roomName, groupId }),
             description: _t("Removing a room from the community will also remove it from the community page."),
             button: _t("Remove"),
             onFinished: (proceed) => {
                 if (!proceed) return;
-                this.setState({groupRoomRemoveLoading: true});
+                this.setState({ groupRoomRemoveLoading: true });
                 const groupId = this.props.groupId;
                 const roomId = this.props.groupRoomId;
                 GroupStore.removeRoomFromGroup(this.props.groupId, roomId).then(() => {
@@ -111,23 +108,23 @@ export default createReactClass({
                     Modal.createTrackedDialog('Failed to remove room from group', '', ErrorDialog, {
                         title: _t("Failed to remove room from community"),
                         description: _t(
-                            "Failed to remove '%(roomName)s' from %(groupId)s", {groupId, roomName},
+                            "Failed to remove '%(roomName)s' from %(groupId)s", { groupId, roomName },
                         ),
                     });
                 }).finally(() => {
-                    this.setState({groupRoomRemoveLoading: false});
+                    this.setState({ groupRoomRemoveLoading: false });
                 });
             },
         });
-    },
+    };
 
-    _onCancel: function(e) {
+    _onCancel = e => {
         dis.dispatch({
             action: "view_group_room_list",
         });
-    },
+    };
 
-    _changeGroupRoomPublicity(e) {
+    _changeGroupRoomPublicity = e => {
         const isPublic = e.target.value === "public";
         this.setState({
             groupRoomPublicityLoading: true,
@@ -142,7 +139,7 @@ export default createReactClass({
                 title: _t("Something went wrong!"),
                 description: _t(
                     "The visibility of '%(roomName)s' in %(groupId)s could not be updated.",
-                    {roomName, groupId},
+                    { roomName, groupId },
                 ),
             });
         }).finally(() => {
@@ -150,9 +147,9 @@ export default createReactClass({
                 groupRoomPublicityLoading: false,
             });
         });
-    },
+    };
 
-    render: function() {
+    render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
         if (this.state.groupRoomRemoveLoading || !this.state.groupRoom) {
@@ -208,10 +205,8 @@ export default createReactClass({
         const avatarUrl = this.state.groupRoom.avatarUrl;
         let avatarElement;
         if (avatarUrl) {
-            const httpUrl = this.context.mxcUrlToHttp(avatarUrl, 800, 800);
-            avatarElement = (<div className="mx_MemberInfo_avatar">
-                            <img src={httpUrl} />
-                        </div>);
+            const httpUrl = mediaFromMxc(avatarUrl).getSquareThumbnailHttp(800);
+            avatarElement = <div className="mx_MemberInfo_avatar"><img src={httpUrl} /></div>;
         }
 
         const groupRoomName = this.state.groupRoom.displayname;
@@ -235,5 +230,5 @@ export default createReactClass({
                 </AutoHideScrollbar>
             </div>
         );
-    },
-});
+    }
+}

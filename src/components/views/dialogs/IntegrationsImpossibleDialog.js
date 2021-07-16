@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,9 +16,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
+import SdkConfig from "../../../SdkConfig";
 import * as sdk from "../../../index";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.IntegrationsImpossibleDialog")
 export default class IntegrationsImpossibleDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
@@ -29,18 +32,23 @@ export default class IntegrationsImpossibleDialog extends React.Component {
     };
 
     render() {
+        const brand = SdkConfig.get().brand;
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         return (
-            <BaseDialog className='mx_IntegrationsImpossibleDialog' hasCancel={false}
-                        onFinished={this.props.onFinished}
-                        title={_t("Integrations not allowed")}>
+            <BaseDialog
+                className='mx_IntegrationsImpossibleDialog'
+                hasCancel={false}
+                onFinished={this.props.onFinished}
+                title={_t("Integrations not allowed")}
+            >
                 <div className='mx_IntegrationsImpossibleDialog_content'>
                     <p>
                         {_t(
-                            "Your Riot doesn't allow you to use an Integration Manager to do this. " +
+                            "Your %(brand)s doesn't allow you to use an integration manager to do this. " +
                             "Please contact an admin.",
+                            { brand },
                         )}
                     </p>
                 </div>

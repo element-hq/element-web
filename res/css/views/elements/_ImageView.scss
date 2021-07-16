@@ -14,139 +14,113 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* This has got to be the most fragile piece of CSS ever written.
-   But empirically it works on Chrome/FF/Safari
- */
+$button-size: 32px;
+$icon-size: 22px;
+$button-gap: 24px;
 
 .mx_ImageView {
     display: flex;
     width: 100%;
     height: 100%;
-    align-items: center;
-}
-
-.mx_ImageView_lhs {
-    order: 1;
-    flex: 1 1 10%;
-    min-width: 60px;
-    // background-color: #080;
-    // height: 20px;
-}
-
-.mx_ImageView_content {
-    order: 2;
-    /* min-width hack needed for FF */
-    min-width: 0px;
-    height: 90%;
-    flex: 15 15 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mx_ImageView_content img {
-    max-width: 100%;
-    /* XXX: max-height interacts badly with flex on Chrome and doesn't relayout properly until you refresh */
-    max-height: 100%;
-    /* object-fit hack needed for Chrome due to Chrome not re-laying-out until you refresh */
-    object-fit: contain;
-    /* background-image: url('$(res)/img/trans.png'); */
-    pointer-events: all;
-}
-
-.mx_ImageView_labelWrapper {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    height: 100%;
-    overflow: auto;
-    pointer-events: all;
-}
-
-.mx_ImageView_label {
-    text-align: left;
-    display: flex;
-    justify-content: center;
     flex-direction: column;
-    padding-left: 30px;
-    padding-right: 30px;
-    min-height: 100%;
-    max-width: 240px;
+}
+
+.mx_ImageView_image_wrapper {
+    pointer-events: initial;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    overflow: hidden;
+}
+
+.mx_ImageView_image {
+    flex-shrink: 0;
+}
+
+.mx_ImageView_panel {
+    width: 100%;
+    height: 68px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mx_ImageView_info_wrapper {
+    pointer-events: initial;
+    padding-left: 32px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     color: $lightbox-fg-color;
 }
 
-.mx_ImageView_cancel {
-    position: absolute;
-    // hack for mx_Dialog having a top padding of 40px
-    top: 40px;
-    right: 0px;
-    padding-top: 35px;
-    padding-right: 35px;
-    cursor: pointer;
+.mx_ImageView_info {
+    padding-left: 12px;
+    display: flex;
+    flex-direction: column;
 }
 
-.mx_ImageView_rotateClockwise {
-    position: absolute;
-    top: 40px;
-    right: 70px;
-    padding-top: 35px;
-    cursor: pointer;
+.mx_ImageView_info_sender {
+    font-weight: bold;
 }
 
-.mx_ImageView_rotateCounterClockwise {
-    position: absolute;
-    top: 40px;
-    right: 105px;
-    padding-top: 35px;
-    cursor: pointer;
-}
-
-.mx_ImageView_name {
-    font-size: $font-18px;
-    margin-bottom: 6px;
-    word-wrap: break-word;
-}
-
-.mx_ImageView_metadata {
-    font-size: $font-15px;
-    opacity: 0.5;
-}
-
-.mx_ImageView_download {
-    display: table;
-    margin-top: 24px;
-    margin-bottom: 6px;
-    border-radius: 5px;
-    background-color: $lightbox-bg-color;
-    font-size: $font-14px;
-    padding: 9px;
-    border: 1px solid $lightbox-border-color;
-}
-
-.mx_ImageView_size {
-    font-size: $font-11px;
-}
-
-.mx_ImageView_link {
-    color: $lightbox-fg-color !important;
-    text-decoration: none !important;
+.mx_ImageView_toolbar {
+    padding-right: 16px;
+    pointer-events: initial;
+    display: flex;
+    align-items: center;
+    gap: calc($button-gap - ($button-size - $icon-size));
 }
 
 .mx_ImageView_button {
-    font-size: $font-15px;
-    opacity: 0.5;
-    margin-top: 18px;
-    cursor: pointer;
+    padding: calc(($button-size - $icon-size) / 2);
+    display: block;
+
+    &::before {
+        content: '';
+        height: $icon-size;
+        width: $icon-size;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+        display: block;
+        background-color: $icon-button-color;
+    }
 }
 
-.mx_ImageView_shim {
-    height: 30px;
+.mx_ImageView_button_rotateCW::before {
+    mask-image: url('$(res)/img/image-view/rotate-cw.svg');
 }
 
-.mx_ImageView_rhs {
-    order: 3;
-    flex: 1 1 10%;
-    min-width: 300px;
-    // background-color: #800;
-    // height: 20px;
+.mx_ImageView_button_rotateCCW::before {
+    mask-image: url('$(res)/img/image-view/rotate-ccw.svg');
+}
+
+.mx_ImageView_button_zoomOut::before {
+    mask-image: url('$(res)/img/image-view/zoom-out.svg');
+}
+
+.mx_ImageView_button_zoomIn::before {
+    mask-image: url('$(res)/img/image-view/zoom-in.svg');
+}
+
+.mx_ImageView_button_download::before {
+    mask-image: url('$(res)/img/image-view/download.svg');
+}
+
+.mx_ImageView_button_more::before {
+    mask-image: url('$(res)/img/image-view/more.svg');
+}
+
+.mx_ImageView_button_close {
+    padding: calc($button-size - $button-size);
+    border-radius: 100%;
+    background: #21262c; // same on all themes
+    &::before {
+        width: $button-size;
+        height: $button-size;
+        mask-image: url('$(res)/img/image-view/close.svg');
+        mask-size: 40%;
+    }
 }

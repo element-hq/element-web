@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const RiotSession = require('./src/session');
+const ElementSession = require('./src/session');
 const scenario = require('./src/scenario');
 const RestSessionCreator = require('./src/rest/creator');
 const fs = require("fs");
@@ -22,7 +22,7 @@ const fs = require("fs");
 const program = require('commander');
 program
     .option('--no-logs', "don't output logs, document html on error", false)
-    .option('--riot-url [url]', "riot url to test", "http://localhost:5000")
+    .option('--app-url [url]', "url to test", "http://localhost:5000")
     .option('--windowed', "dont run tests headless", false)
     .option('--slow-mo', "type at a human speed", false)
     .option('--dev-tools', "open chrome devtools in browser window", false)
@@ -57,7 +57,7 @@ async function runTests() {
     );
 
     async function createSession(username) {
-        const session = await RiotSession.create(username, options, program.riotUrl, hsUrl, program.throttleCpu);
+        const session = await ElementSession.create(username, options, program.appUrl, hsUrl, program.throttleCpu);
         sessions.push(session);
         return session;
     }
@@ -79,8 +79,34 @@ async function runTests() {
         await new Promise((resolve) => setTimeout(resolve, 5 * 60 * 1000));
     }
 
-    await Promise.all(sessions.map((session) => session.close()));
+    let performanceEntries;
 
+    await Promise.all(sessions.map(async (session) => {
+        // Collecting all performance monitoring data before closing the session
+        const measurements = await session.page.evaluate(() => {
+            let measurements = [];
+            window.mxPerformanceMonitor.addPerformanceDataCallback({
+                entryNames: [
+                    window.mxPerformanceEntryNames.REGISTER,
+                    window.mxPerformanceEntryNames.LOGIN,
+                    window.mxPerformanceEntryNames.JOIN_ROOM,
+                    window.mxPerformanceEntryNames.CREATE_DM,
+                    window.mxPerformanceEntryNames.VERIFY_E2EE_USER,
+                ],
+                callback: (events) => {
+                    measurements = JSON.stringify(events);
+                },
+            }, true);
+            return measurements;
+        });
+
+        /**
+         * TODO: temporary only use one user session data
+         */
+        performanceEntries = JSON.parse(measurements);
+        return session.close();
+    }));
+    fs.writeFileSync(`performance-entries.json`, JSON.stringify(performanceEntries));
     if (failure) {
         process.exit(-1);
     } else {
@@ -93,7 +119,13 @@ async function writeLogs(sessions, dir) {
     for (let i = 0; i < sessions.length; ++i) {
         const session = sessions[i];
         const userLogDir = `${dir}/${session.username}`;
-        fs.mkdirSync(userLogDir);
+        try {
+            fs.mkdirSync(userLogDir);
+        } catch (e) {
+            // typically this will be EEXIST. If it's something worse, the next few
+            // lines will fail too.
+            console.warn(`non-fatal error creating ${userLogDir} :`, e.message);
+        }
         const consoleLogName = `${userLogDir}/console.log`;
         const networkLogName = `${userLogDir}/network.log`;
         const appHtmlName = `${userLogDir}/app.html`;
@@ -101,7 +133,7 @@ async function writeLogs(sessions, dir) {
         fs.writeFileSync(appHtmlName, documentHtml);
         fs.writeFileSync(networkLogName, session.networkLogs());
         fs.writeFileSync(consoleLogName, session.consoleLogs());
-        await session.page.screenshot({path: `${userLogDir}/screenshot.png`});
+        await session.page.screenshot({ path: `${userLogDir}/screenshot.png` });
     }
     return logs;
 }

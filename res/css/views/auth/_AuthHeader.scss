@@ -18,6 +18,12 @@ limitations under the License.
     display: flex;
     flex-direction: column;
     width: 206px;
-    padding: 25px 40px;
+    padding: 25px 25px;
     box-sizing: border-box;
+}
+
+@media only screen and (max-width: 480px) {
+    .mx_AuthHeader {
+        display: none;
+    }
 }

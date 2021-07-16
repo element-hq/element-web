@@ -14,46 +14,45 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
-import createReactClass from 'create-react-class';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
+import CountlyAnalytics from "../../../CountlyAnalytics";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const DIV_ID = 'mx_recaptcha';
 
 /**
  * A pure UI component which displays a captcha form.
  */
-export default createReactClass({
-    displayName: 'CaptchaForm',
-
-    propTypes: {
+@replaceableComponent("views.auth.CaptchaForm")
+export default class CaptchaForm extends React.Component {
+    static propTypes = {
         sitePublicKey: PropTypes.string,
 
         // called with the captcha response
         onCaptchaResponse: PropTypes.func,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            onCaptchaResponse: () => {},
-        };
-    },
+    static defaultProps = {
+        onCaptchaResponse: () => {},
+    };
 
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+
+        this.state = {
             errorText: null,
         };
-    },
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
         this._captchaWidgetId = null;
 
         this._recaptchaContainer = createRef();
-    },
 
-    componentDidMount: function() {
+        CountlyAnalytics.instance.track("onboarding_grecaptcha_begin");
+    }
+
+    componentDidMount() {
         // Just putting a script tag into the returned jsx doesn't work, annoyingly,
         // so we do this instead.
         if (global.grecaptcha) {
@@ -68,13 +67,13 @@ export default createReactClass({
             );
             this._recaptchaContainer.current.appendChild(scriptTag);
         }
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         this._resetRecaptcha();
-    },
+    }
 
-    _renderRecaptcha: function(divId) {
+    _renderRecaptcha(divId) {
         if (!global.grecaptcha) {
             console.error("grecaptcha not loaded!");
             throw new Error("Recaptcha did not load successfully");
@@ -93,26 +92,32 @@ export default createReactClass({
             sitekey: publicKey,
             callback: this.props.onCaptchaResponse,
         });
-    },
+    }
 
-    _resetRecaptcha: function() {
+    _resetRecaptcha() {
         if (this._captchaWidgetId !== null) {
             global.grecaptcha.reset(this._captchaWidgetId);
         }
-    },
+    }
 
-    _onCaptchaLoaded: function() {
+    _onCaptchaLoaded() {
         console.log("Loaded recaptcha script.");
         try {
             this._renderRecaptcha(DIV_ID);
+            // clear error if re-rendered
+            this.setState({
+                errorText: null,
+            });
+            CountlyAnalytics.instance.track("onboarding_grecaptcha_loaded");
         } catch (e) {
             this.setState({
                 errorText: e.toString(),
             });
+            CountlyAnalytics.instance.track("onboarding_grecaptcha_error", { error: e.toString() });
         }
-    },
+    }
 
-    render: function() {
+    render() {
         let error = null;
         if (this.state.errorText) {
             error = (
@@ -131,5 +136,5 @@ export default createReactClass({
                 { error }
             </div>
         );
-    },
-});
+    }
+}

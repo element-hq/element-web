@@ -15,17 +15,28 @@ limitations under the License.
 */
 
 import React from 'react';
+import classNames from "classnames";
+
 import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import AuthPage from "./AuthPage";
-import * as Matrix from "matrix-js-sdk";
-import {_td} from "../../../languageHandler";
-import PlatformPeg from "../../../PlatformPeg";
+import { _td } from "../../../languageHandler";
+import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
+import CountlyAnalytics from "../../../CountlyAnalytics";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 // translatable strings for Welcome pages
 _td("Sign in with SSO");
 
+@replaceableComponent("views.auth.Welcome")
 export default class Welcome extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        CountlyAnalytics.instance.track("onboarding_welcome");
+    }
+
     render() {
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         const LanguageSelector = sdk.getComponent('auth.LanguageSelector');
@@ -39,23 +50,17 @@ export default class Welcome extends React.PureComponent {
             pageUrl = 'welcome.html';
         }
 
-        const {hsUrl, isUrl} = this.props.serverConfig;
-        const tmpClient = Matrix.createClient({
-            baseUrl: hsUrl,
-            idBaseUrl: isUrl,
-        });
-        const plaf = PlatformPeg.get();
-        const callbackUrl = plaf.getSSOCallbackUrl(tmpClient.getHomeserverUrl(), tmpClient.getIdentityServerUrl());
-
         return (
             <AuthPage>
-                <div className="mx_Welcome">
+                <div className={classNames("mx_Welcome", {
+                    mx_WelcomePage_registrationDisabled: !SettingsStore.getValue(UIFeature.Registration),
+                })}>
                     <EmbeddedPage
                         className="mx_WelcomePage"
                         url={pageUrl}
                         replaceMap={{
-                            "$riot:ssoUrl": tmpClient.getSsoLoginUrl(callbackUrl.toString(), "sso"),
-                            "$riot:casUrl": tmpClient.getSsoLoginUrl(callbackUrl.toString(), "cas"),
+                            "$riot:ssoUrl": "#/start_sso",
+                            "$riot:casUrl": "#/start_cas",
                         }}
                     />
                     <LanguageSelector />

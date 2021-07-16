@@ -16,19 +16,24 @@ limitations under the License.
 */
 
 import React from "react";
-import createReactClass from 'create-react-class';
+import PropTypes from "prop-types";
+import { _t } from "../../../languageHandler";
 
-export default createReactClass({
-    displayName: 'Spinner',
+const Spinner = ({ w = 32, h = 32, message }) => (
+    <div className="mx_Spinner">
+        { message && <React.Fragment><div className="mx_Spinner_Msg">{ message }</div>&nbsp;</React.Fragment> }
+        <div
+            className="mx_Spinner_icon"
+            style={{ width: w, height: h }}
+            aria-label={_t("Loading...")}
+        ></div>
+    </div>
+);
 
-    render: function() {
-        const w = this.props.w || 32;
-        const h = this.props.h || 32;
-        const imgClass = this.props.imgClassName || "";
-        return (
-            <div className="mx_Spinner">
-                <img src={require("../../../../res/img/spinner.gif")} width={w} height={h} className={imgClass} />
-            </div>
-        );
-    },
-});
+Spinner.propTypes = {
+    w: PropTypes.number,
+    h: PropTypes.number,
+    message: PropTypes.node,
+};
+
+export default Spinner;

@@ -16,62 +16,37 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
-import AccessibleButton from '../elements/AccessibleButton';
-import * as sdk from '../../../index';
-import { _t } from '../../../languageHandler';
-
-// cancel button which is shared between room header and simple room header
-export function CancelButton(props) {
-    const {onClick} = props;
-
-    return (
-        <AccessibleButton className='mx_RoomHeader_cancelButton' onClick={onClick}>
-            <img src={require("../../../../res/img/cancel.svg")} className='mx_filterFlipColor'
-                width="18" height="18" alt={_t("Cancel")} />
-        </AccessibleButton>
-    );
-}
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 /*
  * A stripped-down room header used for things like the user settings
  * and room directory.
  */
-export default createReactClass({
-    displayName: 'SimpleRoomHeader',
-
-    propTypes: {
+@replaceableComponent("views.rooms.SimpleRoomHeader")
+export default class SimpleRoomHeader extends React.Component {
+    static propTypes = {
         title: PropTypes.string,
-        onCancelClick: PropTypes.func,
 
-        // `src` to a TintableSvg. Optional.
+        // `src` to an image. Optional.
         icon: PropTypes.string,
-    },
+    };
 
-    render: function() {
-        let cancelButton;
+    render() {
         let icon;
-        if (this.props.onCancelClick) {
-            cancelButton = <CancelButton onClick={this.props.onCancelClick} />;
-        }
         if (this.props.icon) {
-            const TintableSvg = sdk.getComponent('elements.TintableSvg');
-            icon = <TintableSvg
+            icon = <img
                 className="mx_RoomHeader_icon" src={this.props.icon}
                 width="25" height="25"
             />;
         }
 
         return (
-            <div className="mx_RoomHeader" >
-                <div className="mx_RoomHeader_wrapper">
-                    <div className="mx_RoomHeader_simpleHeader">
-                        { icon }
-                        { this.props.title }
-                        { cancelButton }
-                    </div>
+            <div className="mx_RoomHeader mx_RoomHeader_wrapper" >
+                <div className="mx_RoomHeader_simpleHeader">
+                    { icon }
+                    { this.props.title }
                 </div>
             </div>
         );
-    },
-});
+    }
+}

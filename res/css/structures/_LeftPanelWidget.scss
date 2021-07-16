@@ -1,0 +1,145 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_LeftPanelWidget {
+    // largely based on RoomSublist
+    margin-left: 8px;
+    margin-bottom: 4px;
+
+    .mx_LeftPanelWidget_headerContainer {
+        display: flex;
+        align-items: center;
+
+        height: 24px;
+        color: $roomlist-header-color;
+        margin-top: 4px;
+
+        .mx_LeftPanelWidget_stickable {
+            flex: 1;
+            max-width: 100%;
+
+            display: flex;
+            align-items: center;
+        }
+
+        .mx_LeftPanelWidget_headerText {
+            flex: 1;
+            max-width: calc(100% - 16px);
+            line-height: $font-16px;
+            font-size: $font-13px;
+            font-weight: 600;
+
+            // Ellipsize any text overflow
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+
+            .mx_LeftPanelWidget_collapseBtn {
+                display: inline-block;
+                position: relative;
+                width: 14px;
+                height: 14px;
+                margin-right: 6px;
+
+                &::before {
+                    content: '';
+                    width: 18px;
+                    height: 18px;
+                    position: absolute;
+                    mask-position: center;
+                    mask-size: contain;
+                    mask-repeat: no-repeat;
+                    background-color: $roomlist-header-color;
+                    mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+                }
+
+                &.mx_LeftPanelWidget_collapseBtn_collapsed::before {
+                    transform: rotate(-90deg);
+                }
+            }
+        }
+    }
+
+    .mx_LeftPanelWidget_resizeBox {
+        position: relative;
+
+        display: flex;
+        flex-direction: column;
+        overflow: visible; // let the resize handle out
+    }
+
+    .mx_AppTileFullWidth {
+        flex: 1 0 0;
+        overflow: hidden;
+        // need this to be flex otherwise the overflow hidden from above
+        // sometimes vertically centers the clipped list ... no idea why it would do this
+        // as the box model should be top aligned. Happens in both FF and Chromium
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+
+        mask-image: linear-gradient(0deg, transparent, black 4px);
+    }
+
+    .mx_LeftPanelWidget_resizerHandle {
+        cursor: ns-resize;
+        border-radius: 3px;
+
+        // Override styles from library
+        width: unset !important;
+        height: 4px !important;
+
+        position: absolute;
+        top: -24px !important; // override from library - puts it in the margin-top of the headerContainer
+
+        // Together, these make the bar 64px wide
+        // These are also overridden from the library
+        left: calc(50% - 32px) !important;
+        right: calc(50% - 32px) !important;
+    }
+
+    &:hover .mx_LeftPanelWidget_resizerHandle {
+        opacity: 0.8;
+        background-color: $primary-fg-color;
+    }
+
+    .mx_LeftPanelWidget_maximizeButton {
+        margin-left: 8px;
+        margin-right: 7px;
+        position: relative;
+        width: 24px;
+        height: 24px;
+        border-radius: 32px;
+
+        &::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            mask-image: url('$(res)/img/feather-customised/maximise.svg');
+            background: $muted-fg-color;
+        }
+    }
+}
+
+.mx_LeftPanelWidget_maximizeButtonTooltip {
+    margin-top: -3px;
+}

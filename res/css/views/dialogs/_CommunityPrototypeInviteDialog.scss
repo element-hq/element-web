@@ -1,0 +1,88 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_CommunityPrototypeInviteDialog {
+    &.mx_Dialog_fixedWidth {
+        width: 360px;
+    }
+
+    .mx_Dialog_content {
+        margin-bottom: 0;
+
+        .mx_CommunityPrototypeInviteDialog_people {
+            position: relative;
+            margin-bottom: 4px;
+
+            .mx_AccessibleButton {
+                display: inline-block;
+                background-color: $focus-bg-color; // XXX: Abuse of variables
+                border-radius: 4px;
+                padding: 3px 5px;
+                font-size: $font-12px;
+                float: right;
+            }
+        }
+
+        .mx_CommunityPrototypeInviteDialog_morePeople {
+            margin-top: 8px;
+        }
+
+        .mx_CommunityPrototypeInviteDialog_person {
+            position: relative;
+            margin-top: 4px;
+
+            & > * {
+                vertical-align: middle;
+            }
+
+            .mx_Checkbox {
+                position: absolute;
+                right: 0;
+                top: calc(50% - 8px); // checkbox is 16px high
+                width: 16px; // to force a square
+            }
+
+            .mx_CommunityPrototypeInviteDialog_personIdentifiers {
+                display: inline-block;
+
+                & > * {
+                    display: block;
+                }
+
+                .mx_CommunityPrototypeInviteDialog_personName {
+                    font-weight: 600;
+                    font-size: $font-14px;
+                    color: $primary-fg-color;
+                    margin-left: 7px;
+                }
+
+                .mx_CommunityPrototypeInviteDialog_personId {
+                    font-size: $font-12px;
+                    color: $muted-fg-color;
+                    margin-left: 7px;
+                }
+            }
+        }
+
+        .mx_CommunityPrototypeInviteDialog_primaryButton {
+            display: block;
+            font-size: $font-13px;
+            line-height: 20px;
+            height: 20px;
+            margin-top: 24px;
+        }
+    }
+}

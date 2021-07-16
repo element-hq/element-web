@@ -21,7 +21,7 @@
     "Close": "Зачыніць",
     "Notifications": "Апавяшчэнні",
     "Low Priority": "Нізкі прыярытэт",
-    "Riot does not know how to join a room on this network": "Riot не ведае, як увайсці ў пакой у гэтай сетке",
+    "%(brand)s does not know how to join a room on this network": "%(brand)s не ведае, як увайсці ў пакой у гэтай сетке",
     "Members": "Удзельнікі",
     "Can't update user notification settings": "Немагчыма абнавіць налады апавяшчэнняў карыстальніка",
     "Failed to change settings": "Не атрымалася змяніць налады",
@@ -30,7 +30,6 @@
     "On": "Уключыць",
     "remove %(name)s from the directory.": "выдаліць %(name)s з каталога.",
     "Off": "Выключыць",
-    "Delete the room alias %(alias)s and remove %(name)s from the directory?": "Выдаліць псеўданім пакоя %(alias)s і выдаліць %(name)s з каталога?",
     "Invite to this room": "Запрасіць у гэты пакой",
     "Notifications on the following keywords follow rules which can’t be displayed here:": "Апавяшчэнні па наступных ключавых словах прытрымліваюцца правілаў, якія не могуць быць адлюстраваны тут:",
     "Mentions only": "Толькі згадкі",
@@ -42,7 +41,6 @@
     "No rooms to show": "Няма пакояў для паказу",
     "Download this file": "Спампаваць гэты файл",
     "Operation failed": "Не атрымалася выканаць аперацыю",
-    "delete the alias.": "выдаліць псеўданім.",
     "Forget": "Забыць",
     "Mute": "Без гуку",
     "Error saving email notification preferences": "Памылка захавання налад апавяшчэнняў па электроннай пошце",
@@ -59,6 +57,5 @@
     "An error occurred whilst saving your email notification preferences.": "Адбылася памылка падчас захавання налады апавяшчэнняў па электроннай пошце.",
     "Room not found": "Пакой не знойдзены",
     "Notify for all other messages/rooms": "Апавяшчаць для ўсіх іншых паведамленняў/пакояў",
-    "There are advanced notifications which are not shown here": "Ёсць пашыраныя апавяшчэння, якія не паказаныя тут",
     "The server may be unavailable or overloaded": "Сервер можа быць недаступны ці перагружаны"
 }

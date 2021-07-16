@@ -23,6 +23,7 @@ limitations under the License.
     border-radius: 3px;
     border: solid 1px $accent-color;
     cursor: pointer;
+    z-index: 1;
 }
 
 .mx_AddressSelector.mx_AddressSelector_empty {

@@ -16,53 +16,50 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import { isOnlyCtrlOrCmdIgnoreShiftKeyEvent } from '../../../Keyboard';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 
 import FlairStore from '../../../stores/FlairStore';
 import GroupStore from '../../../stores/GroupStore';
-import TagOrderStore from '../../../stores/TagOrderStore';
-import {ContextMenu, toRightOf} from "../../structures/ContextMenu";
+import GroupFilterOrderStore from '../../../stores/GroupFilterOrderStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import AccessibleButton from "./AccessibleButton";
+import SettingsStore from "../../../settings/SettingsStore";
+import { mediaFromMxc } from "../../../customisations/Media";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-// A class for a child of TagPanel (possibly wrapped in a DNDTagTile) that represents
+// A class for a child of GroupFilterPanel (possibly wrapped in a DNDTagTile) that represents
 // a thing to click on for the user to filter the visible rooms in the RoomList to:
 //  - Rooms that are part of the group
 //  - Direct messages with members of the group
 // with the intention that this could be expanded to arbitrary tags in future.
-export default createReactClass({
-    displayName: 'TagTile',
-
-    propTypes: {
+@replaceableComponent("views.elements.TagTile")
+export default class TagTile extends React.Component {
+    static propTypes = {
         // A string tag such as "m.favourite" or a group ID such as "+groupid:domain.bla"
         // For now, only group IDs are handled.
         tag: PropTypes.string,
-    },
+        contextMenuButtonRef: PropTypes.object,
+        openMenu: PropTypes.func,
+        menuDisplayed: PropTypes.bool,
+        selected: PropTypes.bool,
+    };
 
-    statics: {
-        contextType: MatrixClientContext,
-    },
+    static contextType = MatrixClientContext;
 
-    getInitialState() {
-        return {
-            // Whether the mouse is over the tile
-            hover: false,
-            // The profile data of the group if this.props.tag is a group ID
-            profile: null,
-            // Whether or not the context menu is open
-            menuDisplayed: false,
-        };
-    },
+    state = {
+        // Whether the mouse is over the tile
+        hover: false,
+        // The profile data of the group if this.props.tag is a group ID
+        profile: null,
+    };
 
     componentDidMount() {
-        this._contextMenuButton = createRef();
-
         this.unmounted = false;
         if (this.props.tag[0] === '+') {
             FlairStore.addListener('updateGroupProfile', this._onFlairStoreUpdated);
@@ -70,34 +67,34 @@ export default createReactClass({
             // New rooms or members may have been added to the group, fetch async
             this._refreshGroup(this.props.tag);
         }
-    },
+    }
 
     componentWillUnmount() {
         this.unmounted = true;
         if (this.props.tag[0] === '+') {
             FlairStore.removeListener('updateGroupProfile', this._onFlairStoreUpdated);
         }
-    },
+    }
 
-    _onFlairStoreUpdated() {
+    _onFlairStoreUpdated = () => {
         if (this.unmounted) return;
         FlairStore.getGroupProfileCached(
             this.context,
             this.props.tag,
         ).then((profile) => {
             if (this.unmounted) return;
-            this.setState({profile});
+            this.setState({ profile });
         }).catch((err) => {
             console.warn('Could not fetch group profile for ' + this.props.tag, err);
         });
-    },
+    };
 
     _refreshGroup(groupId) {
         GroupStore.refreshGroupRooms(groupId);
         GroupStore.refreshGroupMembers(groupId);
-    },
+    }
 
-    onClick: function(e) {
+    onClick = e => {
         e.preventDefault();
         e.stopPropagation();
         dis.dispatch({
@@ -110,51 +107,47 @@ export default createReactClass({
             // New rooms or members may have been added to the group, fetch async
             this._refreshGroup(this.props.tag);
         }
-    },
+    };
 
-    onMouseOver: function() {
-        this.setState({hover: true});
-    },
+    onMouseOver = () => {
+        if (SettingsStore.getValue("feature_communities_v2_prototypes")) return;
+        this.setState({ hover: true });
+    };
 
-    onMouseOut: function() {
-        this.setState({hover: false});
-    },
+    onMouseLeave = () => {
+        this.setState({ hover: false });
+    };
 
-    openMenu: function(e) {
+    openMenu = e => {
         // Prevent the TagTile onClick event firing as well
         e.stopPropagation();
         e.preventDefault();
+        if (SettingsStore.getValue("feature_communities_v2_prototypes")) return;
+        this.setState({ hover: false });
+        this.props.openMenu();
+    };
 
-        this.setState({
-            menuDisplayed: true,
-            hover: false,
-        });
-    },
-
-    closeMenu: function() {
-        this.setState({
-            menuDisplayed: false,
-        });
-    },
-
-    render: function() {
+    render() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const profile = this.state.profile || {};
         const name = profile.name || this.props.tag;
-        const avatarHeight = 40;
+        const avatarSize = 32;
 
-        const httpUrl = profile.avatarUrl ? this.context.mxcUrlToHttp(
-            profile.avatarUrl, avatarHeight, avatarHeight, "crop",
-        ) : null;
+        const httpUrl = profile.avatarUrl
+            ? mediaFromMxc(profile.avatarUrl).getSquareThumbnailHttp(avatarSize)
+            : null;
 
+        const isPrototype = SettingsStore.getValue("feature_communities_v2_prototypes");
         const className = classNames({
             mx_TagTile: true,
-            mx_TagTile_selected: this.props.selected,
+            mx_TagTile_prototype: isPrototype,
+            mx_TagTile_selected: this.props.selected && !isPrototype,
+            mx_TagTile_selected_prototype: this.props.selected && isPrototype,
         });
 
-        const badge = TagOrderStore.getGroupBadge(this.props.tag);
+        const badge = GroupFilterOrderStore.getGroupBadge(this.props.tag);
         let badgeElement;
-        if (badge && !this.state.hover) {
+        if (badge && !this.state.hover && !this.props.menuDisplayed) {
             const badgeClasses = classNames({
                 "mx_TagTile_badge": true,
                 "mx_TagTile_badgeHighlight": badge.highlight,
@@ -162,40 +155,38 @@ export default createReactClass({
             badgeElement = (<div className={badgeClasses}>{FormattingUtils.formatCount(badge.count)}</div>);
         }
 
-        // FIXME: this ought to use AccessibleButton for a11y but that causes onMouseOut/onMouseOver to fire too much
-        const contextButton = this.state.hover || this.state.menuDisplayed ?
-            <div className="mx_TagTile_context_button" onClick={this.openMenu} ref={this._contextMenuButton}>
-                { "\u00B7\u00B7\u00B7" }
-            </div> : <div ref={this._contextMenuButton} />;
-
-        let contextMenu;
-        if (this.state.menuDisplayed) {
-            const elementRect = this._contextMenuButton.current.getBoundingClientRect();
-            const TagTileContextMenu = sdk.getComponent('context_menus.TagTileContextMenu');
-            contextMenu = (
-                <ContextMenu {...toRightOf(elementRect)} onFinished={this.closeMenu}>
-                    <TagTileContextMenu tag={this.props.tag} onFinished={this.closeMenu} />
-                </ContextMenu>
-            );
-        }
+        const contextButton = this.state.hover || this.props.menuDisplayed ?
+            <AccessibleButton
+                className="mx_TagTile_context_button"
+                onClick={this.openMenu}
+                inputRef={this.props.contextMenuButtonRef}
+            >
+                {"\u00B7\u00B7\u00B7"}
+            </AccessibleButton> : <div ref={this.props.contextMenuButtonRef} />;
 
         const AccessibleTooltipButton = sdk.getComponent("elements.AccessibleTooltipButton");
-        return <React.Fragment>
-            <AccessibleTooltipButton className={className} onClick={this.onClick} onContextMenu={this.openMenu} title={name}>
-                <div className="mx_TagTile_avatar" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
-                    <BaseAvatar
-                        name={name}
-                        idName={this.props.tag}
-                        url={httpUrl}
-                        width={avatarHeight}
-                        height={avatarHeight}
-                    />
-                    { contextButton }
-                    { badgeElement }
-                </div>
-            </AccessibleTooltipButton>
 
-            { contextMenu }
-        </React.Fragment>;
-    },
-});
+        return <AccessibleTooltipButton
+            className={className}
+            onClick={this.onClick}
+            onContextMenu={this.openMenu}
+            title={name}
+        >
+            <div
+                className="mx_TagTile_avatar"
+                onMouseOver={this.onMouseOver}
+                onMouseLeave={this.onMouseLeave}
+            >
+                <BaseAvatar
+                    name={name}
+                    idName={this.props.tag}
+                    url={httpUrl}
+                    width={avatarSize}
+                    height={avatarSize}
+                />
+                {contextButton}
+                {badgeElement}
+            </div>
+        </AccessibleTooltipButton>;
+    }
+}

@@ -18,61 +18,61 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
-import {_t} from '../../../languageHandler';
+import dis from '../../../dispatcher/dispatcher';
+import { _t } from '../../../languageHandler';
 import classNames from 'classnames';
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {ContextMenu, ContextMenuButton, toRightOf} from "../../structures/ContextMenu";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { ContextMenu, ContextMenuButton, toRightOf } from "../../structures/ContextMenu";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {RovingTabIndexWrapper} from "../../../accessibility/RovingTabIndex";
+import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 // XXX this class copies a lot from RoomTile.js
-export default createReactClass({
-    displayName: 'GroupInviteTile',
-
-    propTypes: {
+@replaceableComponent("views.groups.GroupInviteTile")
+export default class GroupInviteTile extends React.Component {
+    static propTypes = {
         group: PropTypes.object.isRequired,
-    },
+    };
 
-    statics: {
-        contextType: MatrixClientContext,
-    },
+    static contextType = MatrixClientContext;
 
-    getInitialState: function() {
-        return ({
+    constructor(props, context) {
+        super(props, context);
+
+        this.state = {
             hover: false,
             badgeHover: false,
             menuDisplayed: false,
             selected: this.props.group.groupId === null, // XXX: this needs linking to LoggedInView/GroupView state
-        });
-    },
+        };
+    }
 
-    onClick: function(e) {
+    onClick = e => {
         dis.dispatch({
             action: 'view_group',
             group_id: this.props.group.groupId,
         });
-    },
+    };
 
-    onMouseEnter: function() {
-        const state = {hover: true};
+    onMouseEnter = () => {
+        const state = { hover: true };
         // Only allow non-guests to access the context menu
         if (!this.context.isGuest()) {
             state.badgeHover = true;
         }
         this.setState(state);
-    },
+    };
 
-    onMouseLeave: function() {
+    onMouseLeave = () => {
         this.setState({
             badgeHover: false,
             hover: false,
         });
-    },
+    };
 
-    _showContextMenu: function(boundingClientRect) {
+    _showContextMenu(boundingClientRect) {
         // Only allow non-guests to access the context menu
         if (MatrixClientPeg.get().isGuest()) return;
 
@@ -86,17 +86,17 @@ export default createReactClass({
         }
 
         this.setState(state);
-    },
+    }
 
-    onContextMenuButtonClick: function(e) {
+    onContextMenuButtonClick = e => {
         // Prevent the RoomTile onClick event firing as well
         e.stopPropagation();
         e.preventDefault();
 
         this._showContextMenu(e.target.getBoundingClientRect());
-    },
+    };
 
-    onContextMenu: function(e) {
+    onContextMenu = e => {
         // Prevent the native context menu
         e.preventDefault();
 
@@ -105,21 +105,22 @@ export default createReactClass({
             top: e.clientY,
             height: 0,
         });
-    },
+    };
 
-    closeMenu: function() {
+    closeMenu = () => {
         this.setState({
             contextMenuPosition: null,
         });
-    },
+    };
 
-    render: function() {
+    render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
 
         const groupName = this.props.group.name || this.props.group.groupId;
-        const httpAvatarUrl = this.props.group.avatarUrl ?
-            this.context.mxcUrlToHttp(this.props.group.avatarUrl, 24, 24) : null;
+        const httpAvatarUrl = this.props.group.avatarUrl
+            ? mediaFromMxc(this.props.group.avatarUrl).getSquareThumbnailHttp(24)
+            : null;
 
         const av = <BaseAvatar name={groupName} width={24} height={24} url={httpAvatarUrl} />;
 
@@ -164,7 +165,7 @@ export default createReactClass({
 
         return <React.Fragment>
             <RovingTabIndexWrapper>
-                {({onFocus, isActive, ref}) =>
+                {({ onFocus, isActive, ref }) =>
                     <AccessibleButton
                         onFocus={onFocus}
                         tabIndex={isActive ? 0 : -1}
@@ -197,5 +198,5 @@ export default createReactClass({
 
             { contextMenu }
         </React.Fragment>;
-    },
-});
+    }
+}

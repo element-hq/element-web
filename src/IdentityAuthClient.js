@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { createClient, SERVICE_TYPES } from 'matrix-js-sdk';
+import { SERVICE_TYPES } from 'matrix-js-sdk/src/service-types';
+import { createClient } from 'matrix-js-sdk/src/matrix';
 
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
 import * as sdk from './index';
 import { _t } from './languageHandler';
@@ -126,7 +127,7 @@ export default class IdentityAuthClient {
             await this._matrixClient.getIdentityAccount(token);
         } catch (e) {
             if (e.errcode === "M_TERMS_NOT_SIGNED") {
-                console.log("Identity Server requires new terms to be agreed to");
+                console.log("Identity server requires new terms to be agreed to");
                 await startTermsFlow([new Service(
                     SERVICE_TYPES.IS,
                     identityServerUrl,
@@ -162,9 +163,10 @@ export default class IdentityAuthClient {
                     </div>
                 ),
                 button: _t("Trust"),
-            });
+                });
             const [confirmed] = await finished;
             if (confirmed) {
+                // eslint-disable-next-line react-hooks/rules-of-hooks
                 useDefaultIdentityServer();
             } else {
                 throw new AbortedIdentityActionError(
@@ -177,7 +179,7 @@ export default class IdentityAuthClient {
         // appropriately. We already clear storage on sign out, but we'll need
         // additional clearing when changing ISes in settings as part of future
         // privacy work.
-        // See also https://github.com/vector-im/riot-web/issues/10455.
+        // See also https://github.com/vector-im/element-web/issues/10455.
     }
 
     async registerForToken(check=true) {

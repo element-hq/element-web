@@ -17,54 +17,62 @@ limitations under the License.
 */
 
 import * as React from "react";
-import {_t} from '../../languageHandler';
-import * as PropTypes from "prop-types";
-import * as sdk from "../../index";
+import { _t } from '../../languageHandler';
 import AutoHideScrollbar from './AutoHideScrollbar';
-import { ReactNode } from "react";
+import { replaceableComponent } from "../../utils/replaceableComponent";
+import classNames from "classnames";
+import AccessibleButton from "../views/elements/AccessibleButton";
 
 /**
  * Represents a tab for the TabbedView.
  */
 export class Tab {
-    public label: string;
-    public icon: string;
-    public body: React.ReactNode;
-
     /**
      * Creates a new tab.
-     * @param {string} tabLabel The untranslated tab label.
-     * @param {string} tabIconClass The class for the tab icon. This should be a simple mask.
-     * @param {React.ReactNode} tabJsx The JSX for the tab container.
+     * @param {string} id The tab's ID.
+     * @param {string} label The untranslated tab label.
+     * @param {string} icon The class for the tab icon. This should be a simple mask.
+     * @param {React.ReactNode} body The JSX for the tab container.
      */
-    constructor(tabLabel: string, tabIconClass: string, tabJsx: React.ReactNode) {
-        this.label = tabLabel;
-        this.icon = tabIconClass;
-        this.body = tabJsx;
+    constructor(public id: string, public label: string, public icon: string, public body: React.ReactNode) {
     }
+}
+
+export enum TabLocation {
+    LEFT = 'left',
+    TOP = 'top',
 }
 
 interface IProps {
     tabs: Tab[];
+    initialTabId?: string;
+    tabLocation: TabLocation;
+    onChange?: (tabId: string) => void;
 }
 
 interface IState {
     activeTabIndex: number;
 }
 
+@replaceableComponent("structures.TabbedView")
 export default class TabbedView extends React.Component<IProps, IState> {
-    static propTypes = {
-        // The tabs to show
-        tabs: PropTypes.arrayOf(PropTypes.instanceOf(Tab)).isRequired,
-    };
-
     constructor(props: IProps) {
         super(props);
 
+        let activeTabIndex = 0;
+        if (props.initialTabId) {
+            const tabIndex = props.tabs.findIndex(t => t.id === props.initialTabId);
+            if (tabIndex >= 0) activeTabIndex = tabIndex;
+        }
+
         this.state = {
-            activeTabIndex: 0,
+            activeTabIndex,
         };
     }
+
+    static defaultProps = {
+        tabLocation: TabLocation.LEFT,
+    };
 
     private _getActiveTabIndex() {
         if (!this.state || !this.state.activeTabIndex) return 0;
@@ -79,15 +87,14 @@ export default class TabbedView extends React.Component<IProps, IState> {
     private _setActiveTab(tab: Tab) {
         const idx = this.props.tabs.indexOf(tab);
         if (idx !== -1) {
-            this.setState({activeTabIndex: idx});
+            if (this.props.onChange) this.props.onChange(tab.id);
+            this.setState({ activeTabIndex: idx });
         } else {
             console.error("Could not find tab " + tab.label + " in tabs");
         }
     }
 
     private _renderTabLabel(tab: Tab) {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
         let classes = "mx_TabbedView_tabLabel ";
 
         const idx = this.props.tabs.indexOf(tab);
@@ -125,8 +132,14 @@ export default class TabbedView extends React.Component<IProps, IState> {
         const labels = this.props.tabs.map(tab => this._renderTabLabel(tab));
         const panel = this._renderTabPanel(this.props.tabs[this._getActiveTabIndex()]);
 
+        const tabbedViewClasses = classNames({
+            'mx_TabbedView': true,
+            'mx_TabbedView_tabsOnLeft': this.props.tabLocation == TabLocation.LEFT,
+            'mx_TabbedView_tabsOnTop': this.props.tabLocation == TabLocation.TOP,
+        });
+
         return (
-            <div className="mx_TabbedView">
+            <div className={tabbedViewClasses}>
                 <div className="mx_TabbedView_tabLabels">
                     {labels}
                 </div>

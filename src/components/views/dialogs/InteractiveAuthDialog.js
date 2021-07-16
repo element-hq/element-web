@@ -17,19 +17,19 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 import AccessibleButton from '../elements/AccessibleButton';
-import {ERROR_USER_CANCELLED} from "../../structures/InteractiveAuth";
+import { ERROR_USER_CANCELLED } from "../../structures/InteractiveAuth";
+import { SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-export default createReactClass({
-    displayName: 'InteractiveAuthDialog',
-
-    propTypes: {
+@replaceableComponent("views.dialogs.InteractiveAuthDialog")
+export default class InteractiveAuthDialog extends React.Component {
+    static propTypes = {
         // matrix client to use for UI auth requests
         matrixClient: PropTypes.object.isRequired,
 
@@ -66,20 +66,42 @@ export default createReactClass({
         //         }
         //     }
         // }
+        //
+        // Default is defined in _getDefaultDialogAesthetics()
         aestheticsForStagePhases: PropTypes.object,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            authError: null,
+    state = {
+        authError: null,
 
-            // See _onUpdateStagePhase()
-            uiaStage: null,
-            uiaStagePhase: null,
+        // See _onUpdateStagePhase()
+        uiaStage: null,
+        uiaStagePhase: null,
+    };
+
+    _getDefaultDialogAesthetics() {
+        const ssoAesthetics = {
+            [SSOAuthEntry.PHASE_PREAUTH]: {
+                title: _t("Use Single Sign On to continue"),
+                body: _t("To continue, use Single Sign On to prove your identity."),
+                continueText: _t("Single Sign On"),
+                continueKind: "primary",
+            },
+            [SSOAuthEntry.PHASE_POSTAUTH]: {
+                title: _t("Confirm to continue"),
+                body: _t("Click the button below to confirm your identity."),
+                continueText: _t("Confirm"),
+                continueKind: "primary",
+            },
         };
-    },
 
-    _onAuthFinished: function(success, result) {
+        return {
+            [SSOAuthEntry.LOGIN_TYPE]: ssoAesthetics,
+            [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: ssoAesthetics,
+        };
+    }
+
+    _onAuthFinished = (success, result) => {
         if (success) {
             this.props.onFinished(true, result);
         } else {
@@ -91,18 +113,18 @@ export default createReactClass({
                 });
             }
         }
-    },
+    };
 
-    _onUpdateStagePhase: function(newStage, newPhase) {
+    _onUpdateStagePhase = (newStage, newPhase) => {
         // We copy the stage and stage phase params into state for title selection in render()
-        this.setState({uiaStage: newStage, uiaStagePhase: newPhase});
-    },
+        this.setState({ uiaStage: newStage, uiaStagePhase: newPhase });
+    };
 
-    _onDismissClick: function() {
+    _onDismissClick = () => {
         this.props.onFinished(false);
-    },
+    };
 
-    render: function() {
+    render() {
         const InteractiveAuth = sdk.getComponent("structures.InteractiveAuth");
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
@@ -113,9 +135,10 @@ export default createReactClass({
         let body = this.state.authError ? null : this.props.body;
         let continueText = null;
         let continueKind = null;
-        if (!this.state.authError && this.props.aestheticsForStagePhases) {
-            if (this.props.aestheticsForStagePhases[this.state.uiaStage]) {
-                const aesthetics = this.props.aestheticsForStagePhases[this.state.uiaStage][this.state.uiaStagePhase];
+        const dialogAesthetics = this.props.aestheticsForStagePhases || this._getDefaultDialogAesthetics();
+        if (!this.state.authError && dialogAesthetics) {
+            if (dialogAesthetics[this.state.uiaStage]) {
+                const aesthetics = dialogAesthetics[this.state.uiaStage][this.state.uiaStagePhase];
                 if (aesthetics && aesthetics.title) title = aesthetics.title;
                 if (aesthetics && aesthetics.body) body = aesthetics.body;
                 if (aesthetics && aesthetics.continueText) continueText = aesthetics.continueText;
@@ -164,5 +187,5 @@ export default createReactClass({
                 { content }
             </BaseDialog>
         );
-    },
-});
+    }
+}

@@ -19,9 +19,10 @@ import PropTypes from 'prop-types';
 
 import * as sdk from '../../../index';
 
-import { COUNTRIES } from '../../../phonenumber';
+import { COUNTRIES, getEmojiFlag } from '../../../phonenumber';
 import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const COUNTRIES_BY_ISO2 = {};
 for (const c of COUNTRIES) {
@@ -40,6 +41,7 @@ function countryMatchesSearchQuery(query, country) {
     return false;
 }
 
+@replaceableComponent("views.auth.CountryDropdown")
 export default class CountryDropdown extends React.Component {
     constructor(props) {
         super(props);
@@ -80,7 +82,7 @@ export default class CountryDropdown extends React.Component {
     }
 
     _flagImgForIso2(iso2) {
-        return <img src={require(`../../../../res/img/flags/${iso2}.png`)} />;
+        return <div className="mx_Dropdown_option_emoji">{ getEmojiFlag(iso2) }</div>;
     }
 
     _getShortOption(iso2) {
@@ -123,7 +125,7 @@ export default class CountryDropdown extends React.Component {
         const options = displayedCountries.map((country) => {
             return <div className="mx_CountryDropdown_option" key={country.iso2}>
                 { this._flagImgForIso2(country.iso2) }
-                { country.name } (+{ country.prefix })
+                { _t(country.name) } (+{ country.prefix })
             </div>;
         });
 

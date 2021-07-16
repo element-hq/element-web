@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,12 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_ProfileSettings_controls_topic {
+    & > textarea {
+        resize: vertical;
+    }
+}
+
 .mx_ProfileSettings_profile {
     display: flex;
 }
 
 .mx_ProfileSettings_controls {
     flex-grow: 1;
+    margin-right: 54px;
+
+    // We put the header under the controls with some minor styling to cheat
+    // alignment of the field with the avatar
+    .mx_SettingsTab_subheading {
+        margin-top: 0;
+    }
 }
 
 .mx_ProfileSettings_controls .mx_Field #profileTopic {
@@ -40,4 +53,18 @@ limitations under the License.
 
 .mx_ProfileSettings_avatarUpload {
     display: none;
+}
+
+.mx_ProfileSettings_profileForm {
+    @mixin mx_Settings_fullWidthField;
+    border-bottom: 1px solid $menu-border-color;
+}
+
+.mx_ProfileSettings_buttons {
+    margin-top: 10px; // 18px is already accounted for by the <p> above the buttons
+    margin-bottom: 28px;
+
+    > .mx_AccessibleButton_kind_link {
+        padding-left: 0; // to align with left side
+    }
 }

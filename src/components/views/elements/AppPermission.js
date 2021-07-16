@@ -1,7 +1,7 @@
 /*
 Copyright 2017 Vector Creations Ltd
 Copyright 2018, 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,9 +21,12 @@ import PropTypes from 'prop-types';
 import url from 'url';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import SdkConfig from '../../../SdkConfig';
 import WidgetUtils from "../../../utils/WidgetUtils";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.AppPermission")
 export default class AppPermission extends React.Component {
     static propTypes = {
         url: PropTypes.string.isRequired,
@@ -76,6 +79,7 @@ export default class AppPermission extends React.Component {
     }
 
     render() {
+        const brand = SdkConfig.get().brand;
         const AccessibleButton = sdk.getComponent("views.elements.AccessibleButton");
         const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
         const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
@@ -96,7 +100,7 @@ export default class AppPermission extends React.Component {
                     <li>{_t("Your avatar URL")}</li>
                     <li>{_t("Your user ID")}</li>
                     <li>{_t("Your theme")}</li>
-                    <li>{_t("Riot URL")}</li>
+                    <li>{_t("%(brand)s URL", { brand })}</li>
                     <li>{_t("Room ID")}</li>
                     <li>{_t("Widget ID")}</li>
                 </ul>
@@ -110,10 +114,10 @@ export default class AppPermission extends React.Component {
 
         // Due to i18n limitations, we can't dedupe the code for variables in these two messages.
         const warning = this.state.isWrapped
-            ? _t("Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.",
-                {widgetDomain: this.state.widgetDomain}, {helpIcon: () => warningTooltip})
+            ? _t("Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.",
+                { widgetDomain: this.state.widgetDomain }, { helpIcon: () => warningTooltip })
             : _t("Using this widget may share data <helpIcon /> with %(widgetDomain)s.",
-                {widgetDomain: this.state.widgetDomain}, {helpIcon: () => warningTooltip});
+                { widgetDomain: this.state.widgetDomain }, { helpIcon: () => warningTooltip });
 
         const encryptionWarning = this.props.isRoomEncrypted ? _t("Widgets do not use message encryption.") : null;
 

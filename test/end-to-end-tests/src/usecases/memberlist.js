@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 const assert = require('assert');
+const { openRoomSummaryCard } = require("./rightpanel");
 
 async function openMemberInfo(session, name) {
     const membersAndNames = await getMembersInMemberlist(session);
@@ -48,7 +49,6 @@ module.exports.verifyDeviceForUser = async function(session, name, expectedDevic
     const sasLabels = await Promise.all(sasLabelElements.map(e => session.innerText(e)));
     console.log("my sas labels", sasLabels);
 
-
     const dialogCodeFields = await session.queryAll(".mx_QuestionDialog code");
     assert.equal(dialogCodeFields.length, 2);
     const deviceId = await session.innerText(dialogCodeFields[0]);
@@ -63,20 +63,14 @@ module.exports.verifyDeviceForUser = async function(session, name, expectedDevic
 };
 
 async function getMembersInMemberlist(session) {
-    const memberPanelButton = await session.query(".mx_RightPanel_membersButton");
-    try {
-        await session.query(".mx_RightPanel_headerButton_highlight", 500);
-        // Right panel is open - toggle it to ensure it's the member list
-        // Sometimes our tests have this opened to MemberInfo
-        await memberPanelButton.click();
-        await memberPanelButton.click();
-    } catch (e) {
-        // Member list is closed - open it
-        await memberPanelButton.click();
-    }
+    await openRoomSummaryCard(session);
+    const memberPanelButton = await session.query(".mx_RoomSummaryCard_icon_people");
+    // We are back at the room summary card
+    await memberPanelButton.click();
+
     const memberNameElements = await session.queryAll(".mx_MemberList .mx_EntityTile_name");
     return Promise.all(memberNameElements.map(async (el) => {
-        return {label: el, displayName: await session.innerText(el)};
+        return { label: el, displayName: await session.innerText(el) };
     }));
 }
 

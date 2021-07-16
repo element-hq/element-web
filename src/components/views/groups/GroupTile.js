@@ -16,62 +16,66 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
-import { Draggable, Droppable } from 'react-beautiful-dnd';
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import FlairStore from '../../../stores/FlairStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
+import { _t } from "../../../languageHandler";
+import TagOrderActions from "../../../actions/TagOrderActions";
+import GroupFilterOrderStore from "../../../stores/GroupFilterOrderStore";
 
-function nop() {}
-
-const GroupTile = createReactClass({
-    displayName: 'GroupTile',
-
-    propTypes: {
+@replaceableComponent("views.groups.GroupTile")
+class GroupTile extends React.Component {
+    static propTypes = {
         groupId: PropTypes.string.isRequired,
         // Whether to show the short description of the group on the tile
         showDescription: PropTypes.bool,
         // Height of the group avatar in pixels
         avatarHeight: PropTypes.number,
-        draggable: PropTypes.bool,
-    },
+    };
 
-    statics: {
-        contextType: MatrixClientContext,
-    },
+    static contextType = MatrixClientContext;
 
-    getInitialState() {
-        return {
-            profile: null,
-        };
-    },
+    static defaultProps = {
+        showDescription: true,
+        avatarHeight: 50,
+    };
 
-    getDefaultProps() {
-        return {
-            showDescription: true,
-            avatarHeight: 50,
-            draggable: true,
-        };
-    },
+    state = {
+        profile: null,
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         FlairStore.getGroupProfileCached(this.context, this.props.groupId).then((profile) => {
-            this.setState({profile});
+            this.setState({ profile });
         }).catch((err) => {
             console.error('Error whilst getting cached profile for GroupTile', err);
         });
-    },
+    }
 
-    onMouseDown: function(e) {
+    onClick = e => {
         e.preventDefault();
         dis.dispatch({
             action: 'view_group',
             group_id: this.props.groupId,
         });
-    },
+    };
 
-    render: function() {
+    onPinClick = e => {
+        e.preventDefault();
+        e.stopPropagation();
+        dis.dispatch(TagOrderActions.moveTag(this.context, this.props.groupId, 0));
+    };
+
+    onUnpinClick = e => {
+        e.preventDefault();
+        e.stopPropagation();
+        dis.dispatch(TagOrderActions.removeTag(this.context, this.props.groupId));
+    };
+
+    render() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const profile = this.state.profile || {};
@@ -80,10 +84,11 @@ const GroupTile = createReactClass({
         const descElement = this.props.showDescription ?
             <div className="mx_GroupTile_desc">{ profile.shortDescription }</div> :
             <div />;
-        const httpUrl = profile.avatarUrl ? this.context.mxcUrlToHttp(
-            profile.avatarUrl, avatarHeight, avatarHeight, "crop") : null;
+        const httpUrl = profile.avatarUrl
+            ? mediaFromMxc(profile.avatarUrl).getSquareThumbnailHttp(avatarHeight)
+            : null;
 
-        let avatarElement = (
+        const avatarElement = (
             <div className="mx_GroupTile_avatar">
                 <BaseAvatar
                     name={name}
@@ -93,49 +98,24 @@ const GroupTile = createReactClass({
                     height={avatarHeight} />
             </div>
         );
-        if (this.props.draggable) {
-            const avatarClone = avatarElement;
-            avatarElement = (
-                <Droppable droppableId="my-groups-droppable" type="draggable-TagTile">
-                    { (droppableProvided, droppableSnapshot) => (
-                        <div ref={droppableProvided.innerRef}>
-                            <Draggable
-                                key={"GroupTile " + this.props.groupId}
-                                draggableId={"GroupTile " + this.props.groupId}
-                                index={this.props.groupId}
-                                type="draggable-TagTile"
-                            >
-                                { (provided, snapshot) => (
-                                    <div>
-                                        <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                        >
-                                            {avatarClone}
-                                        </div>
-                                        { /* Instead of a blank placeholder, use a copy of the avatar itself. */ }
-                                        { provided.placeholder ? avatarClone : <div /> }
-                                    </div>
-                                ) }
-                            </Draggable>
-                        </div>
-                    ) }
-                </Droppable>
-            );
-        }
 
-        // XXX: Use onMouseDown as a workaround for https://github.com/atlassian/react-beautiful-dnd/issues/273
-        // instead of onClick. Otherwise we experience https://github.com/vector-im/riot-web/issues/6156
-        return <AccessibleButton className="mx_GroupTile" onMouseDown={this.onMouseDown} onClick={nop}>
+        return <AccessibleButton className="mx_GroupTile" onClick={this.onClick}>
             { avatarElement }
             <div className="mx_GroupTile_profile">
                 <div className="mx_GroupTile_name">{ name }</div>
                 { descElement }
                 <div className="mx_GroupTile_groupId">{ this.props.groupId }</div>
+                { !(GroupFilterOrderStore.getOrderedTags() || []).includes(this.props.groupId)
+                    ? <AccessibleButton kind="link" onClick={this.onPinClick}>
+                        { _t("Pin") }
+                    </AccessibleButton>
+                    : <AccessibleButton kind="link" onClick={this.onUnpinClick}>
+                        { _t("Unpin") }
+                    </AccessibleButton>
+                }
             </div>
         </AccessibleButton>;
-    },
-});
+    }
+}
 
 export default GroupTile;

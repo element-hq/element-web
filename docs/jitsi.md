@@ -25,7 +25,7 @@ which takes several parameters:
   be null.
 
 The react-sdk will assume that `jitsi.html` is at the path of wherever it is currently
-being served. For example, `https://riot.im/develop/jitsi.html` or `vector://webapp/jitsi.html`.
+being served. For example, `https://develop.element.io/jitsi.html` or `vector://webapp/jitsi.html`.
 
 The `jitsi.html` wrapper can use the react-sdk's `WidgetApi` to communicate, making
 it easier to actually implement the feature.
