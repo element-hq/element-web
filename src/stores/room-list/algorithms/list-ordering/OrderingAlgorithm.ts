@@ -17,7 +17,6 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomUpdateCause, TagID } from "../../models";
 import { SortAlgorithm } from "../models";
-import AwaitLock from "await-lock";
 
 /**
  * Represents a list ordering algorithm. Subclasses should populate the
