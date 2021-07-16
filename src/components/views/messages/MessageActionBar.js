@@ -33,6 +33,7 @@ import { canCancel } from "../context_menus/MessageContextMenu";
 import Resend from "../../../Resend";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
+import { DownloadActionButton } from "./DownloadActionButton";
 
 const OptionsButton = ({ mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
@@ -176,21 +177,6 @@ export default class MessageActionBar extends React.PureComponent {
         });
     };
 
-    onDownloadClick = async (ev) => {
-        if (!this.props.getTile || !this.props.getTile().getMediaHelper) {
-            console.warn("Action bar triggered a download but the event tile is missing a media helper");
-            return;
-        }
-
-        // TODO: Maybe just call into MFileBody and render it as null
-        const src = this.props.getTile().getMediaHelper();
-        const a = document.createElement("a");
-        a.href = await src.sourceUrl.value;
-        a.download = "todo.png";
-        a.target = "_blank";
-        a.click();
-    };
-
     /**
      * Runs a given fn on the set of possible events to test. The first event
      * that passes the checkFn will have fn executed on it. Both functions take
@@ -286,11 +272,9 @@ export default class MessageActionBar extends React.PureComponent {
 
                 // XXX: Assuming that the underlying tile will be a media event if it is eligible media.
                 if (MediaEventHelper.isEligible(this.props.mxEvent)) {
-                    toolbarOpts.splice(0, 0, <RovingAccessibleTooltipButton
-                        className="mx_MessageActionBar_maskButton mx_MessageActionBar_downloadButton"
-                        title={_t("Download")}
-                        onClick={this.onDownloadClick}
-                        disabled={false}
+                    toolbarOpts.splice(0, 0, <DownloadActionButton
+                        mxEvent={this.props.mxEvent}
+                        mediaEventHelperGet={() => this.props.getTile?.().getMediaHelper?.()}
                         key="download"
                     />);
                 }

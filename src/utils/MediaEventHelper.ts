@@ -40,6 +40,10 @@ export class MediaEventHelper implements IDestroyable {
         this.media = mediaFromContent(this.event.getContent());
     }
 
+    public get fileName(): string {
+        return this.event.getContent<IMediaEventContent>().body || "download";
+    }
+
     public destroy() {
         if (this.media.isEncrypted) {
             if (this.sourceUrl.present) URL.revokeObjectURL(this.sourceUrl.cachedValue);

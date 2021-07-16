@@ -27,12 +27,12 @@ import { IContent } from "matrix-js-sdk/src";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 import { IBodyProps } from "./IBodyProps";
 
-let downloadIconUrl; // cached copy of the download.svg asset for the sandboxed iframe later on
+export let DOWNLOAD_ICON_URL; // cached copy of the download.svg asset for the sandboxed iframe later on
 
 async function cacheDownloadIcon() {
-    if (downloadIconUrl) return; // cached already
+    if (DOWNLOAD_ICON_URL) return; // cached already
     const svg = await fetch(require("../../../../res/img/download.svg")).then(r => r.text());
-    downloadIconUrl = "data:image/svg+xml;base64," + window.btoa(svg);
+    DOWNLOAD_ICON_URL = "data:image/svg+xml;base64," + window.btoa(svg);
 }
 
 // Cache the asset immediately
@@ -74,7 +74,7 @@ cacheDownloadIcon();
  * @param {HTMLElement} element The element to get the current style of.
  * @return {string} The CSS style encoded as a string.
  */
-function computedStyle(element) {
+export function computedStyle(element: HTMLElement) {
     if (!element) {
         return "";
     }
@@ -217,7 +217,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
             // When the iframe loads we tell it to render a download link
             const onIframeLoad = (ev) => {
                 ev.target.contentWindow.postMessage({
-                    imgSrc: downloadIconUrl,
+                    imgSrc: DOWNLOAD_ICON_URL,
                     imgStyle: null, // it handles this internally for us. Useful if a downstream changes the icon.
                     style: computedStyle(this.dummyLink.current),
                     blob: this.state.decryptedBlob,
