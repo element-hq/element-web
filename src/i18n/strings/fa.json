@@ -3007,5 +3007,15 @@
     "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>": "این کار آنها را به %(communityName)s دعوت نمی‌کند. برای دعوت افراد به %(communityName)s،<a>اینجا</a> کلیک کنید",
     "Start a conversation with someone using their name or username (like <userId/>).": "با استفاده از نام یا نام کاربری (مانند <userId/>)، گفتگوی جدیدی را با دیگران شروع کنید.",
     "Start a conversation with someone using their name, email address or username (like <userId/>).": "با استفاده از نام، آدرس ایمیل و یا نام کاربری (مانند <userId/>)، یک گفتگوی جدید را شروع کنید.",
-    "May include members not in %(communityName)s": "ممکن شامل اعضایی که در %(communityName)s نیستند نیز شود"
+    "May include members not in %(communityName)s": "ممکن شامل اعضایی که در %(communityName)s نیستند نیز شود",
+    "Integration manager": "مدیر یکپارچه‌سازی",
+    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s شما اجازه استفاده از سیستم مدیریت ادغام را برای این کار نمی دهد. لطفا با ادمین تماس بگیرید.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "استفاده از این ابزارک ممکن است داده‌هایی <helpIcon /> را با %(widgetDomain)s و سیستم مدیریت ادغام به اشتراک بگذارد.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "از یک مدیر پکپارچه‌سازی برای مدیریت بات‌ها، ویجت‌ها و پک‌های استیکر مورد نظرتان استفاده نمائید.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "از یک مدیر پکپارچه‌سازی <b>(%(serverName)s)</b> برای مدیریت بات‌ها، ویجت‌ها و پک‌های استیکر استفاده کنید.",
+    "Identity server": "سرور هویت‌سنجی",
+    "Identity server (%(server)s)": "سرور هویت‌سنجی (%(server)s)",
+    "Could not connect to identity server": "اتصال به سرور هیوت‌سنجی امکان پذیر نیست",
+    "Not a valid identity server (status code %(code)s)": "سرور هویت‌سنجی معتبر نیست (کد وضعیت %(code)s)",
+    "Identity server URL must be HTTPS": "پروتکل آدرس سرور هویت‌سنجی باید HTTPS باشد"
 }
