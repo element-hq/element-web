@@ -358,6 +358,17 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         this.setState({ generalMenuPosition: null }); // hide the menu
     };
 
+    private onCopyRoomClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        dis.dispatch({
+            action: 'copy_room',
+            room_id: this.props.room.roomId,
+        });
+        this.setState({ generalMenuPosition: null }); // hide the menu
+    };
+
     private onInviteClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
@@ -517,6 +528,11 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                             iconClassName="mx_RoomTile_iconInvite"
                         />
                     ) : null}
+                    <IconizedContextMenuOption
+                        onClick={this.onCopyRoomClick}
+                        label={_t("Copy Link")}
+                        iconClassName="mx_RoomTile_iconCopyLink"
+                    />
                     <IconizedContextMenuOption
                         onClick={this.onOpenRoomSettings}
                         label={_t("Settings")}

@@ -159,12 +159,12 @@ export class StopGapWidgetDriver extends WidgetDriver {
             if (results.length >= limit) break;
 
             const ev = events[i];
-            if (ev.getType() !== eventType) continue;
+            if (ev.getType() !== eventType || ev.isState()) continue;
             if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()['msgtype']) continue;
             results.push(ev);
         }
 
-        return results.map(e => e.event);
+        return results.map(e => e.getEffectiveEvent());
     }
 
     public async readStateEvents(eventType: string, stateKey: string | undefined, limit: number): Promise<object[]> {
