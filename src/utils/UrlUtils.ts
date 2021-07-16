@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as url from "url";
+import url from "url";
 
 /**
  * If a url has no path component, etc. abbreviate it to just the hostname
