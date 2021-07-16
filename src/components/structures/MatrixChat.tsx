@@ -1202,9 +1202,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const roomLink = makeRoomPermalink(roomId);
         const success = await copyPlaintext(roomLink);
         if (!success) {
-            Modal.createTrackedDialog("Unable to copy room", "", ErrorDialog, {
-                title: _t("Unable to copy room"),
-                description: _t("Unable to copy the room to the clipboard."),
+            Modal.createTrackedDialog("Unable to copy room link", "", ErrorDialog, {
+                title: _t("Unable to copy room link"),
+                description: _t("Unable to copy a link to the room to the clipboard."),
             });
         }
     }
