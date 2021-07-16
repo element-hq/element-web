@@ -34,6 +34,7 @@ import { OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
 import SettingsStore from "../../../settings/SettingsStore";
 import { VisibilityProvider } from "../filters/VisibilityProvider";
+import SpaceStore from "../../SpaceStore";
 
 /**
  * Fired when the Algorithm has determined a list has been updated.
@@ -199,7 +200,7 @@ export class Algorithm extends EventEmitter {
     }
 
     private async doUpdateStickyRoom(val: Room) {
-        if (SettingsStore.getValue("feature_spaces") && val?.isSpaceRoom() && val.getMyMembership() !== "invite") {
+        if (SpaceStore.spacesEnabled && val?.isSpaceRoom() && val.getMyMembership() !== "invite") {
             // no-op sticky rooms for spaces - they're effectively virtual rooms
             val = null;
         }

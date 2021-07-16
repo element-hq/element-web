@@ -126,6 +126,7 @@
     "@types/classnames": "^2.2.11",
     "@types/commonmark": "^0.27.4",
     "@types/counterpart": "^0.18.1",
+    "@types/css-font-loading-module": "^0.0.6",
     "@types/diff-match-patch": "^1.0.32",
     "@types/flux": "^3.1.9",
     "@types/jest": "^26.0.20",
@@ -186,7 +187,8 @@
       "\\$webapp/i18n/languages.json": "<rootDir>/__mocks__/languages.json",
       "decoderWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
       "decoderWorker\\.min\\.wasm": "<rootDir>/__mocks__/empty.js",
-      "waveWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js"
+      "waveWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
+      "workers/(.+)\\.worker\\.ts": "<rootDir>/__mocks__/workerMock.js"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$"

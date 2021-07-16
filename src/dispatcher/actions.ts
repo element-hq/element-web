@@ -119,6 +119,18 @@ export enum Action {
     DialNumber = "dial_number",
 
     /**
+     * Start a call transfer to a Matrix ID
+     * payload: TransferCallPayload
+     */
+    TransferCallToMatrixID = "transfer_call_to_matrix_id",
+
+    /**
+     * Start a call transfer to a phone number
+     * payload: TransferCallPayload
+     */
+     TransferCallToPhoneNumber = "transfer_call_to_phone_number",
+
+    /**
      * Fired when CallHandler has checked for PSTN protocol support
      * payload: none
      * XXX: Is an action the right thing for this?
