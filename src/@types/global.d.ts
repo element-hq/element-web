@@ -35,11 +35,6 @@ type ElectronChannel =
 
 declare global {
     interface Window {
-        Modernizr: ModernizrAPI & FeatureDetects;
-        Olm: {
-            init: () => Promise<void>;
-        };
-
         mxSendRageshake: (text: string, withLogs?: boolean) => void;
         matrixChat: ReturnType<Renderer>;
 
