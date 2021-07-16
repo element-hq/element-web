@@ -3398,5 +3398,17 @@
     "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "Se tes permisos, abre o menú en calquera mensaxe e elixe <b>Fixar</b> para pegalos aquí.",
     "Nothing pinned, yet": "Nada fixado, por agora",
     "End-to-end encryption isn't enabled": "Non está activado o cifrado de extremo-a-extremo",
-    "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites. <a>Enable encryption in settings.</a>": "As túas mensaxes privadas normalmente están cifradas, pero esta sala non. Habitualmente esto é debido a que se utiliza un dispositivo ou métodos no soportados, como convites por email. <a>Activa o cifrado nos axustes.</a>"
+    "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites. <a>Enable encryption in settings.</a>": "As túas mensaxes privadas normalmente están cifradas, pero esta sala non. Habitualmente esto é debido a que se utiliza un dispositivo ou métodos no soportados, como convites por email. <a>Activa o cifrado nos axustes.</a>",
+    "Integration manager": "Xestor de Integracións",
+    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "O teu %(brand)s non permite que uses o Xestor de Integracións, contacta coa administración.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Ao utilizar este widget poderías compartir datos <helpIcon /> con %(widgetDomain)s e o teu Xestor de integracións.",
+    "Identity server is": "O servidor de identidade é",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Os xestores de integracións reciben datos de configuración, e poden modificar os widgets, enviar convites das salas, e establecer roles no teu nome.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Usa un Xestor de Integracións para xestionar bots, widgets e paquetes de pegatinas.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Usa un Xestor de Integración <b>(%(serverName)s)</b> para xestionar bots, widgets e paquetes de pegatinas.",
+    "Identity server": "Servidor de identidade",
+    "Identity server (%(server)s)": "Servidor de Identidade (%(server)s)",
+    "Could not connect to identity server": "Non hai conexión co Servidor de Identidade",
+    "Not a valid identity server (status code %(code)s)": "Servidor de Identidade non válido (código de estado %(code)s)",
+    "Identity server URL must be HTTPS": "O URL do servidor de identidade debe comezar HTTPS"
 }

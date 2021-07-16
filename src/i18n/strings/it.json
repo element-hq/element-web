@@ -3481,5 +3481,17 @@
     "%(senderName)s changed their profile picture": "%(senderName)s ha cambiato la propria immagine del profilo",
     "%(senderName)s removed their profile picture": "%(senderName)s ha rimosso la propria immagine del profilo",
     "%(senderName)s removed their display name (%(oldDisplayName)s)": "%(senderName)s ha rimosso il proprio nome (%(oldDisplayName)s)",
-    "%(senderName)s set their display name to %(displayName)s": "%(senderName)s ha impostato il proprio nome a %(displayName)s"
+    "%(senderName)s set their display name to %(displayName)s": "%(senderName)s ha impostato il proprio nome a %(displayName)s",
+    "Integration manager": "Gestore dell'integrazione",
+    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Il tuo %(brand)s non ti permette di usare il gestore di integrazioni per questa azione. Contatta un amministratore.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Usando questo widget i dati possono essere condivisi <helpIcon /> con %(widgetDomain)s e il tuo Gestore di Integrazione.",
+    "Identity server is": "Il server di identità è",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "I gestori di integrazione ricevono dati di configurazione e possono modificare widget, inviare inviti alla stanza, assegnare permessi a tuo nome.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Usa un gestore di integrazioni per gestire bot, widget e pacchetti di adesivi.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Usa un gestore di integrazioni <b>(%(serverName)s)</b> per gestire bot, widget e pacchetti di adesivi.",
+    "Identity server": "Server di identità",
+    "Identity server (%(server)s)": "Server di identità (%(server)s)",
+    "Could not connect to identity server": "Impossibile connettersi al server di identità",
+    "Not a valid identity server (status code %(code)s)": "Non è un server di identità valido (codice di stato %(code)s)",
+    "Identity server URL must be HTTPS": "L'URL di Identita' Server deve essere HTTPS"
 }
