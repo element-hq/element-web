@@ -2579,5 +2579,12 @@
     "You can change this later": "Bunu daha sonra değiştirebilirsiniz",
     "Change which room, message, or user you're viewing": "Görüntülediğiniz odayı, mesajı veya kullanıcıyı değiştirin",
     "%(targetName)s accepted an invitation": "%(targetName)s daveti kabul etti",
-    "%(targetName)s accepted the invitation for %(displayName)s": "%(targetName)s, %(displayName)s kişisinin davetini kabul etti"
+    "%(targetName)s accepted the invitation for %(displayName)s": "%(targetName)s, %(displayName)s kişisinin davetini kabul etti",
+    "Integration manager": "Bütünleştirme Yöneticisi",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Botları, görsel bileşenleri ve çıkartma paketlerini yönetmek için bir entegrasyon yöneticisi kullanın.",
+    "Identity server": "Kimlik sunucusu",
+    "Identity server (%(server)s)": "(%(server)s) Kimlik Sunucusu",
+    "Could not connect to identity server": "Kimlik Sunucusuna bağlanılamadı",
+    "Not a valid identity server (status code %(code)s)": "Geçerli bir Kimlik Sunucu değil ( durum kodu %(code)s )",
+    "Identity server URL must be HTTPS": "Kimlik Sunucu URL adresi HTTPS olmak zorunda"
 }
