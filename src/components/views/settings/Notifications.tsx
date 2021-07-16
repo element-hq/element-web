@@ -26,7 +26,7 @@ import {
     VectorState,
 } from "../../../notifications";
 import { _t, TranslatedString } from "../../../languageHandler";
-import { IThirdPartyIdentifier, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
+import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import SettingsStore from "../../../settings/SettingsStore";
 import StyledRadioButton from "../elements/StyledRadioButton";
@@ -101,7 +101,7 @@ interface IState {
         [category in RuleClass]?: IVectorPushRule[];
     };
     pushers?: IPusher[];
-    threepids?: IThirdPartyIdentifier[];
+    threepids?: IThreepid[];
 }
 
 export default class Notifications extends React.PureComponent<IProps, IState> {
