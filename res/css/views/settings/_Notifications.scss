@@ -25,7 +25,7 @@ limitations under the License.
         margin-top: 40px;
 
         tr > th {
-            font-weight: 600; // semi bold
+            font-weight: $font-semi-bold;
         }
 
         tr > th:first-child {
@@ -67,7 +67,7 @@ limitations under the License.
 
         & > div:first-child { // section header
             font-size: $font-18px;
-            font-weight: 600; // semi bold
+            font-weight: $font-semi-bold;
         }
 
         > table {
