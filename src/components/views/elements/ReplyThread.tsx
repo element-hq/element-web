@@ -14,14 +14,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 import React from 'react';
 import { _t } from '../../../languageHandler';
-import PropTypes from 'prop-types';
 import dis from '../../../dispatcher/dispatcher';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { makeUserPermalink, RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
-import { LayoutPropType } from "../../../settings/Layout";
+import { Layout } from "../../../settings/Layout";
 import escapeHtml from "escape-html";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
@@ -32,51 +32,54 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Spinner from './Spinner';
 import ReplyTile from "../rooms/ReplyTile";
 import Pill from './Pill';
+import { Room } from 'matrix-js-sdk/src/models/room';
+
+interface IProps {
+    // the latest event in this chain of replies
+    parentEv?: MatrixEvent,
+    // called when the ReplyThread contents has changed, including EventTiles thereof
+    onHeightChanged: () => void,
+    permalinkCreator: RoomPermalinkCreator,
+    // Specifies which layout to use.
+    layout?: Layout,
+    // Whether to always show a timestamp
+    alwaysShowTimestamps?: boolean,
+}
+
+interface IState {
+    // The loaded events to be rendered as linear-replies
+    events: MatrixEvent[],
+    // The latest loaded event which has not yet been shown
+    loadedEv: MatrixEvent,
+    // Whether the component is still loading more events
+    loading: boolean,
+    // Whether as error was encountered fetching a replied to event.
+    err: boolean,
+}
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
 // be low as each event being loaded (after the first) is triggered by an explicit user action.
 @replaceableComponent("views.elements.ReplyThread")
-export default class ReplyThread extends React.Component {
-    static propTypes = {
-        // the latest event in this chain of replies
-        parentEv: PropTypes.instanceOf(MatrixEvent),
-        // called when the ReplyThread contents has changed, including EventTiles thereof
-        onHeightChanged: PropTypes.func.isRequired,
-        permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
-        // Specifies which layout to use.
-        layout: LayoutPropType,
-        // Whether to always show a timestamp
-        alwaysShowTimestamps: PropTypes.bool,
-    };
-
+export default class ReplyThread extends React.Component<IProps, IState> {
     static contextType = MatrixClientContext;
+    private unmounted = false;
+    private room: Room;
 
     constructor(props, context) {
         super(props, context);
 
         this.state = {
-            // The loaded events to be rendered as linear-replies
             events: [],
-
-            // The latest loaded event which has not yet been shown
             loadedEv: null,
-            // Whether the component is still loading more events
             loading: true,
-
-            // Whether as error was encountered fetching a replied to event.
             err: false,
         };
 
-        this.unmounted = false;
         this.room = this.context.getRoom(this.props.parentEv.getRoomId());
-
-        this.onQuoteClick = this.onQuoteClick.bind(this);
-        this.canCollapse = this.canCollapse.bind(this);
-        this.collapse = this.collapse.bind(this);
     }
 
-    static getParentEventId(ev) {
+    public static getParentEventId(ev: MatrixEvent): string {
         if (!ev || ev.isRedacted()) return;
 
         // XXX: For newer relations (annotations, replacements, etc.), we now
@@ -92,7 +95,7 @@ export default class ReplyThread extends React.Component {
     }
 
     // Part of Replies fallback support
-    static stripPlainReply(body) {
+    public static stripPlainReply(body: string): string {
         // Removes lines beginning with `> ` until you reach one that doesn't.
         const lines = body.split('\n');
         while (lines.length && lines[0].startsWith('> ')) lines.shift();
@@ -102,7 +105,7 @@ export default class ReplyThread extends React.Component {
     }
 
     // Part of Replies fallback support
-    static stripHTMLReply(html) {
+    public static stripHTMLReply(html: string): string {
         // Sanitize the original HTML for inclusion in <mx-reply>.  We allow
         // any HTML, since the original sender could use special tags that we
         // don't recognize, but want to pass along to any recipients who do
@@ -124,7 +127,10 @@ export default class ReplyThread extends React.Component {
     }
 
     // Part of Replies fallback support
-    static getNestedReplyText(ev, permalinkCreator) {
+    public static getNestedReplyText(
+        ev: MatrixEvent,
+        permalinkCreator: RoomPermalinkCreator,
+    ): { body: string, html: string } {
         if (!ev) return null;
 
         let { body, formatted_body: html } = ev.getContent();
@@ -200,7 +206,7 @@ export default class ReplyThread extends React.Component {
         return { body, html };
     }
 
-    static makeReplyMixIn(ev) {
+    public static makeReplyMixIn(ev: MatrixEvent) {
         if (!ev) return {};
         return {
             'm.relates_to': {
@@ -211,10 +217,15 @@ export default class ReplyThread extends React.Component {
         };
     }
 
-    static makeThread(parentEv, onHeightChanged, permalinkCreator, ref, layout, alwaysShowTimestamps) {
-        if (!ReplyThread.getParentEventId(parentEv)) {
-            return null;
-        }
+    public static makeThread(
+        parentEv: MatrixEvent,
+        onHeightChanged: () => void,
+        permalinkCreator: RoomPermalinkCreator,
+        ref: React.RefObject<ReplyThread>,
+        layout: Layout,
+        alwaysShowTimestamps: boolean,
+    ): JSX.Element {
+        if (!ReplyThread.getParentEventId(parentEv)) return null;
         return <ReplyThread
             parentEv={parentEv}
             onHeightChanged={onHeightChanged}
@@ -237,7 +248,7 @@ export default class ReplyThread extends React.Component {
         this.unmounted = true;
     }
 
-    async initialize() {
+    private async initialize(): Promise<void> {
         const { parentEv } = this.props;
         // at time of making this component we checked that props.parentEv has a parentEventId
         const ev = await this.getEvent(ReplyThread.getParentEventId(parentEv));
@@ -256,7 +267,7 @@ export default class ReplyThread extends React.Component {
         }
     }
 
-    async getNextEvent(ev) {
+    private async getNextEvent(ev: MatrixEvent): Promise<MatrixEvent> {
         try {
             const inReplyToEventId = ReplyThread.getParentEventId(ev);
             return await this.getEvent(inReplyToEventId);
@@ -265,7 +276,7 @@ export default class ReplyThread extends React.Component {
         }
     }
 
-    async getEvent(eventId) {
+    private async getEvent(eventId: string): Promise<MatrixEvent> {
         if (!eventId) return null;
         const event = this.room.findEventById(eventId);
         if (event) return event;
@@ -282,15 +293,15 @@ export default class ReplyThread extends React.Component {
         return this.room.findEventById(eventId);
     }
 
-    canCollapse() {
+    public canCollapse = (): boolean => {
         return this.state.events.length > 1;
-    }
+    };
 
-    collapse() {
+    public collapse = (): void => {
         this.initialize();
-    }
+    };
 
-    async onQuoteClick() {
+    private onQuoteClick = async (): Promise<void> => {
         const events = [this.state.loadedEv, ...this.state.events];
 
         let loadedEv = null;
@@ -304,9 +315,9 @@ export default class ReplyThread extends React.Component {
         });
 
         dis.fire(Action.FocusSendMessageComposer);
-    }
+    };
 
-    getReplyThreadColorClass(ev) {
+    private getReplyThreadColorClass(ev: MatrixEvent): string {
         return getUserNameColorClass(ev.getSender()).replace("Username", "ReplyThread");
     }
 
