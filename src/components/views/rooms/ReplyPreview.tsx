@@ -18,7 +18,6 @@ import React from 'react';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import RoomViewStore from '../../../stores/RoomViewStore';
-import PropTypes from "prop-types";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import ReplyTile from './ReplyTile';
@@ -33,11 +32,11 @@ function cancelQuoting() {
 }
 
 interface IProps {
-    permalinkCreator: RoomPermalinkCreator,
+    permalinkCreator: RoomPermalinkCreator;
 }
 
 interface IState {
-    event: MatrixEvent
+    event: MatrixEvent;
 }
 
 @replaceableComponent("views.rooms.ReplyPreview")

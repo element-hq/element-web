@@ -36,25 +36,25 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 
 interface IProps {
     // the latest event in this chain of replies
-    parentEv?: MatrixEvent,
+    parentEv?: MatrixEvent;
     // called when the ReplyThread contents has changed, including EventTiles thereof
-    onHeightChanged: () => void,
-    permalinkCreator: RoomPermalinkCreator,
+    onHeightChanged: () => void;
+    permalinkCreator: RoomPermalinkCreator;
     // Specifies which layout to use.
-    layout?: Layout,
+    layout?: Layout;
     // Whether to always show a timestamp
-    alwaysShowTimestamps?: boolean,
+    alwaysShowTimestamps?: boolean;
 }
 
 interface IState {
     // The loaded events to be rendered as linear-replies
-    events: MatrixEvent[],
+    events: MatrixEvent[];
     // The latest loaded event which has not yet been shown
-    loadedEv: MatrixEvent,
+    loadedEv: MatrixEvent;
     // Whether the component is still loading more events
-    loading: boolean,
+    loading: boolean;
     // Whether as error was encountered fetching a replied to event.
-    err: boolean,
+    err: boolean;
 }
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
