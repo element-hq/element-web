@@ -488,7 +488,6 @@ export default class ImageView extends React.Component<IProps, IState> {
                 >
                     <img
                         src={this.props.src}
-                        title={this.props.name}
                         style={style}
                         ref={this.image}
                         className="mx_ImageView_image"
