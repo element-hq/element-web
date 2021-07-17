@@ -166,6 +166,7 @@ export interface IState {
     canReply: boolean;
     layout: Layout;
     lowBandwidth: boolean;
+    showHiddenEventsInTimeline: boolean;
     showReadReceipts: boolean;
     showRedactions: boolean;
     showJoinLeaves: boolean;
@@ -230,6 +231,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             canReply: false,
             layout: SettingsStore.getValue("layout"),
             lowBandwidth: SettingsStore.getValue("lowBandwidth"),
+            showHiddenEventsInTimeline: SettingsStore.getValue("showHiddenEventsInTimeline"),
             showReadReceipts: true,
             showRedactions: true,
             showJoinLeaves: true,
@@ -253,7 +255,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.context.on("userTrustStatusChanged", this.onUserVerificationChanged);
         this.context.on("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
         this.context.on("Event.decrypted", this.onEventDecrypted);
-        this.context.on("event", this.onEvent);
         // Start listening for RoomViewStore updates
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         this.rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this.onRightPanelStoreUpdate);
@@ -267,6 +268,9 @@ export default class RoomView extends React.Component<IProps, IState> {
             ),
             SettingsStore.watchSetting("lowBandwidth", null, () =>
                 this.setState({ lowBandwidth: SettingsStore.getValue("lowBandwidth") }),
+            ),
+            SettingsStore.watchSetting("showHiddenEventsInTimeline", null, () =>
+                this.setState({ showHiddenEventsInTimeline: SettingsStore.getValue("showHiddenEventsInTimeline") }),
             ),
         ];
     }
@@ -637,7 +641,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             this.context.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
             this.context.removeListener("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
             this.context.removeListener("Event.decrypted", this.onEventDecrypted);
-            this.context.removeListener("event", this.onEvent);
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
@@ -837,8 +840,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         if (this.unmounted) return;
 
         // ignore events for other rooms
-        if (!room) return;
-        if (!this.state.room || room.roomId != this.state.room.roomId) return;
+        if (!room || room.roomId !== this.state.room?.roomId) return;
 
         // ignore events from filtered timelines
         if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
@@ -859,6 +861,10 @@ export default class RoomView extends React.Component<IProps, IState> {
         // we'll only be showing a spinner.
         if (this.state.joining) return;
 
+        if (!ev.isBeingDecrypted() && !ev.isDecryptionFailure()) {
+            this.handleEffects(ev);
+        }
+
         if (ev.getSender() !== this.context.credentials.userId) {
             // update unread count when scrolled up
             if (!this.state.searchResults && this.state.atEndOfLiveTimeline) {
@@ -871,20 +877,14 @@ export default class RoomView extends React.Component<IProps, IState> {
         }
     };
 
-    private onEventDecrypted = (ev) => {
+    private onEventDecrypted = (ev: MatrixEvent) => {
+        if (!this.state.room || !this.state.matrixClientIsReady) return; // not ready at all
+        if (ev.getRoomId() !== this.state.room.roomId) return; // not for us
         if (ev.isDecryptionFailure()) return;
         this.handleEffects(ev);
     };
 
-    private onEvent = (ev) => {
-        if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
-        this.handleEffects(ev);
-    };
-
-    private handleEffects = (ev) => {
-        if (!this.state.room || !this.state.matrixClientIsReady) return; // not ready at all
-        if (ev.getRoomId() !== this.state.room.roomId) return; // not for us
-
+    private handleEffects = (ev: MatrixEvent) => {
         const notifState = RoomNotificationStateStore.instance.getRoomState(this.state.room);
         if (!notifState.isUnread) return;
 
@@ -1393,7 +1393,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 continue;
             }
 
-            if (!haveTileForEvent(mxEv)) {
+            if (!haveTileForEvent(mxEv, this.state.showHiddenEventsInTimeline)) {
                 // XXX: can this ever happen? It will make the result count
                 // not match the displayed count.
                 continue;
