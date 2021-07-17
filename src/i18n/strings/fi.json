@@ -3003,5 +3003,17 @@
     "Allow Peer-to-Peer for 1:1 calls (if you enable this, the other party might be able to see your IP address)": "Salli vertaisyhteydet 1:1-puheluille (jos otat tämän käyttöön, toinen osapuoli saattaa nähdä IP-osoitteesi)",
     "Send and receive voice messages": "Lähetä ja vastaanota ääniviestejä",
     "Show options to enable 'Do not disturb' mode": "Näytä asetukset Älä häiritse -tilan ottamiseksi käyttöön",
-    "%(deviceId)s from %(ip)s": "%(deviceId)s osoitteesta %(ip)s"
+    "%(deviceId)s from %(ip)s": "%(deviceId)s osoitteesta %(ip)s",
+    "Integration manager": "Integraatioiden lähde",
+    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s-instanssisi ei salli sinun käyttävän integraatioiden lähdettä tämän tekemiseen. Ota yhteys ylläpitäjääsi.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Tämän sovelman käyttäminen saattaa jakaa tietoa <helpIcon /> osoitteille %(widgetDomain)s ja käyttämällesi integraatioiden lähteelle.",
+    "Identity server is": "Identiteettipalvelin on",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Integraatioiden lähteet vastaanottavat asetusdataa ja voivat muokata sovelmia, lähettää kutsuja huoneeseen ja asettaa oikeustasoja puolestasi.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Käytä integraatioiden lähdettä bottien, sovelmien ja tarrapakettien hallintaan.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Käytä integraatioiden lähdettä <b>(%(serverName)s)</b> bottien, sovelmien ja tarrapakettien hallintaan.",
+    "Identity server": "Identiteettipalvelin",
+    "Identity server (%(server)s)": "Identiteettipalvelin (%(server)s)",
+    "Could not connect to identity server": "Identiteettipalvelimeen ei saatu yhteyttä",
+    "Not a valid identity server (status code %(code)s)": "Ei kelvollinen identiteettipalvelin (tilakoodi %(code)s)",
+    "Identity server URL must be HTTPS": "Identiteettipalvelimen URL-osoitteen täytyy olla HTTPS-alkuinen"
 }
