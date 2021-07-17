@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 import React from 'react';
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
@@ -31,7 +30,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 // any text to display at all. For this reason they return deferred values
 // to avoid the expense of looking up translations when they're not needed.
 
-function textForMemberEvent(ev: MatrixEvent): () => string | null {
+function textForMemberEvent(ev: MatrixEvent, allowJSX: boolean, showHiddenEvents?: boolean): () => string | null {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
     const senderName = ev.sender ? ev.sender.name : ev.getSender();
     const targetName = ev.target ? ev.target.name : ev.getStateKey();
@@ -83,7 +82,7 @@ function textForMemberEvent(ev: MatrixEvent): () => string | null {
                     return () => _t('%(senderName)s changed their profile picture', { senderName });
                 } else if (!prevContent.avatar_url && content.avatar_url) {
                     return () => _t('%(senderName)s set a profile picture', { senderName });
-                } else if (SettingsStore.getValue("showHiddenEventsInTimeline")) {
+                } else if (showHiddenEvents ?? SettingsStore.getValue("showHiddenEventsInTimeline")) {
                     // This is a null rejoin, it will only be visible if using 'show hidden events' (labs)
                     return () => _t("%(senderName)s made no change", { senderName });
                 } else {
@@ -318,7 +317,7 @@ function textForCanonicalAliasEvent(ev: MatrixEvent): () => string | null {
     });
 }
 
-function textForThreePidInviteEvent(event): () => string | null {
+function textForThreePidInviteEvent(event: MatrixEvent): () => string | null {
     const senderName = event.sender ? event.sender.name : event.getSender();
 
     if (!isValid3pidInvite(event)) {
@@ -334,7 +333,7 @@ function textForThreePidInviteEvent(event): () => string | null {
     });
 }
 
-function textForHistoryVisibilityEvent(event): () => string | null {
+function textForHistoryVisibilityEvent(event: MatrixEvent): () => string | null {
     const senderName = event.sender ? event.sender.name : event.getSender();
     switch (event.getContent().history_visibility) {
         case 'invited':
@@ -356,7 +355,7 @@ function textForHistoryVisibilityEvent(event): () => string | null {
 }
 
 // Currently will only display a change if a user's power level is changed
-function textForPowerEvent(event): () => string | null {
+function textForPowerEvent(event: MatrixEvent): () => string | null {
     const senderName = event.sender ? event.sender.name : event.getSender();
     if (!event.getPrevContent() || !event.getPrevContent().users ||
         !event.getContent() || !event.getContent().users) {
@@ -438,7 +437,7 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string
     return () => _t("%(senderName)s changed the pinned messages for the room.", { senderName });
 }
 
-function textForWidgetEvent(event): () => string | null {
+function textForWidgetEvent(event: MatrixEvent): () => string | null {
     const senderName = event.getSender();
     const { name: prevName, type: prevType, url: prevUrl } = event.getPrevContent();
     const { name, type, url } = event.getContent() || {};
@@ -468,12 +467,12 @@ function textForWidgetEvent(event): () => string | null {
     }
 }
 
-function textForWidgetLayoutEvent(event): () => string | null {
+function textForWidgetLayoutEvent(event: MatrixEvent): () => string | null {
     const senderName = event.sender?.name || event.getSender();
     return () => _t("%(senderName)s has updated the widget layout", { senderName });
 }
 
-function textForMjolnirEvent(event): () => string | null {
+function textForMjolnirEvent(event: MatrixEvent): () => string | null {
     const senderName = event.getSender();
     const { entity: prevEntity } = event.getPrevContent();
     const { entity, recommendation, reason } = event.getContent();
@@ -561,7 +560,9 @@ function textForMjolnirEvent(event): () => string | null {
 }
 
 interface IHandlers {
-    [type: string]: (ev: MatrixEvent, allowJSX?: boolean) => (() => string | JSX.Element | null);
+    [type: string]:
+        (ev: MatrixEvent, allowJSX: boolean, showHiddenEvents?: boolean) =>
+            (() => string | JSX.Element | null);
 }
 
 const handlers: IHandlers = {
@@ -593,14 +594,27 @@ for (const evType of ALL_RULE_TYPES) {
     stateHandlers[evType] = textForMjolnirEvent;
 }
 
-export function hasText(ev: MatrixEvent): boolean {
+/**
+ * Determines whether the given event has text to display.
+ * @param ev The event
+ * @param showHiddenEvents An optional cached setting value for showHiddenEventsInTimeline
+ *     to avoid hitting the settings store
+ */
+export function hasText(ev: MatrixEvent, showHiddenEvents?: boolean): boolean {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
-    return Boolean(handler?.(ev));
+    return Boolean(handler?.(ev, false, showHiddenEvents));
 }
 
+/**
+ * Gets the textual content of the given event.
+ * @param ev The event
+ * @param allowJSX Whether to output rich JSX content
+ * @param showHiddenEvents An optional cached setting value for showHiddenEventsInTimeline
+ *     to avoid hitting the settings store
+ */
 export function textForEvent(ev: MatrixEvent): string;
-export function textForEvent(ev: MatrixEvent, allowJSX: true): string | JSX.Element;
-export function textForEvent(ev: MatrixEvent, allowJSX = false): string | JSX.Element {
+export function textForEvent(ev: MatrixEvent, allowJSX: true, showHiddenEvents?: boolean): string | JSX.Element;
+export function textForEvent(ev: MatrixEvent, allowJSX = false, showHiddenEvents?: boolean): string | JSX.Element {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
-    return handler?.(ev, allowJSX)?.() || '';
+    return handler?.(ev, allowJSX, showHiddenEvents)?.() || '';
 }

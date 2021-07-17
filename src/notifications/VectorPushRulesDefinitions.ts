@@ -1,6 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2016 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,19 +16,24 @@ limitations under the License.
 
 import { _td } from '../languageHandler';
 import { StandardActions } from "./StandardActions";
-import { PushRuleVectorState } from "./PushRuleVectorState";
+import { PushRuleVectorState, VectorState } from "./PushRuleVectorState";
 import { NotificationUtils } from "./NotificationUtils";
+import { PushRuleAction, PushRuleKind } from "matrix-js-sdk/src/@types/PushRules";
+
+type StateToActionsMap = {
+    [state in VectorState]?: PushRuleAction[];
+};
 
 interface IProps {
-    kind: Kind;
+    kind: PushRuleKind;
     description: string;
-    vectorStateToActions: Action;
+    vectorStateToActions: StateToActionsMap;
 }
 
 class VectorPushRuleDefinition {
-    private kind: Kind;
+    private kind: PushRuleKind;
     private description: string;
-    private vectorStateToActions: Action;
+    public readonly vectorStateToActions: StateToActionsMap;
 
     constructor(opts: IProps) {
         this.kind = opts.kind;
@@ -73,73 +77,62 @@ class VectorPushRuleDefinition {
     }
 }
 
-enum Kind {
-    Override = "override",
-    Underride = "underride",
-}
-
-interface Action {
-    on: StandardActions;
-    loud: StandardActions;
-    off: StandardActions;
-}
-
 /**
  * The descriptions of rules managed by the Vector UI.
  */
 export const VectorPushRulesDefinitions = {
     // Messages containing user's display name
     ".m.rule.contains_display_name": new VectorPushRuleDefinition({
-        kind: Kind.Override,
+        kind: PushRuleKind.Override,
         description: _td("Messages containing my display name"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
-            on: StandardActions.ACTION_NOTIFY,
-            loud: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
-            off: StandardActions.ACTION_DISABLED,
+            [VectorState.On]: StandardActions.ACTION_NOTIFY,
+            [VectorState.Loud]: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
+            [VectorState.Off]: StandardActions.ACTION_DISABLED,
         },
     }),
 
     // Messages containing user's username (localpart/MXID)
     ".m.rule.contains_user_name": new VectorPushRuleDefinition({
-        kind: Kind.Override,
+        kind: PushRuleKind.Override,
         description: _td("Messages containing my username"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
-            on: StandardActions.ACTION_NOTIFY,
-            loud: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
-            off: StandardActions.ACTION_DISABLED,
+            [VectorState.On]: StandardActions.ACTION_NOTIFY,
+            [VectorState.Loud]: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
+            [VectorState.Off]: StandardActions.ACTION_DISABLED,
         },
     }),
 
     // Messages containing @room
     ".m.rule.roomnotif": new VectorPushRuleDefinition({
-        kind: Kind.Override,
+        kind: PushRuleKind.Override,
         description: _td("Messages containing @room"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
-            on: StandardActions.ACTION_NOTIFY,
-            loud: StandardActions.ACTION_HIGHLIGHT,
-            off: StandardActions.ACTION_DISABLED,
+            [VectorState.On]: StandardActions.ACTION_NOTIFY,
+            [VectorState.Loud]: StandardActions.ACTION_HIGHLIGHT,
+            [VectorState.Off]: StandardActions.ACTION_DISABLED,
         },
     }),
 
     // Messages just sent to the user in a 1:1 room
     ".m.rule.room_one_to_one": new VectorPushRuleDefinition({
-        kind: Kind.Underride,
+        kind: PushRuleKind.Underride,
         description: _td("Messages in one-to-one chats"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
-            on: StandardActions.ACTION_NOTIFY,
-            loud: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
-            off: StandardActions.ACTION_DONT_NOTIFY,
+            [VectorState.On]: StandardActions.ACTION_NOTIFY,
+            [VectorState.Loud]: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
+            [VectorState.Off]: StandardActions.ACTION_DONT_NOTIFY,
         },
     }),
 
     // Encrypted messages just sent to the user in a 1:1 room
     ".m.rule.encrypted_room_one_to_one": new VectorPushRuleDefinition({
-        kind: Kind.Underride,
+        kind: PushRuleKind.Underride,
         description: _td("Encrypted messages in one-to-one chats"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
-            on: StandardActions.ACTION_NOTIFY,
-            loud: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
-            off: StandardActions.ACTION_DONT_NOTIFY,
+            [VectorState.On]: StandardActions.ACTION_NOTIFY,
+            [VectorState.Loud]: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
+            [VectorState.Off]: StandardActions.ACTION_DONT_NOTIFY,
         },
     }),
 
@@ -147,12 +140,12 @@ export const VectorPushRulesDefinitions = {
     // 1:1 room messages are catched by the .m.rule.room_one_to_one rule if any defined
     // By opposition, all other room messages are from group chat rooms.
     ".m.rule.message": new VectorPushRuleDefinition({
-        kind: Kind.Underride,
+        kind: PushRuleKind.Underride,
         description: _td("Messages in group chats"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
-            on: StandardActions.ACTION_NOTIFY,
-            loud: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
-            off: StandardActions.ACTION_DONT_NOTIFY,
+            [VectorState.On]: StandardActions.ACTION_NOTIFY,
+            [VectorState.Loud]: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
+            [VectorState.Off]: StandardActions.ACTION_DONT_NOTIFY,
         },
     }),
 
@@ -160,57 +153,57 @@ export const VectorPushRulesDefinitions = {
     // Encrypted 1:1 room messages are catched by the .m.rule.encrypted_room_one_to_one rule if any defined
     // By opposition, all other room messages are from group chat rooms.
     ".m.rule.encrypted": new VectorPushRuleDefinition({
-        kind: Kind.Underride,
+        kind: PushRuleKind.Underride,
         description: _td("Encrypted messages in group chats"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
-            on: StandardActions.ACTION_NOTIFY,
-            loud: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
-            off: StandardActions.ACTION_DONT_NOTIFY,
+            [VectorState.On]: StandardActions.ACTION_NOTIFY,
+            [VectorState.Loud]: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
+            [VectorState.Off]: StandardActions.ACTION_DONT_NOTIFY,
         },
     }),
 
     // Invitation for the user
     ".m.rule.invite_for_me": new VectorPushRuleDefinition({
-        kind: Kind.Underride,
+        kind: PushRuleKind.Underride,
         description: _td("When I'm invited to a room"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
-            on: StandardActions.ACTION_NOTIFY,
-            loud: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
-            off: StandardActions.ACTION_DISABLED,
+            [VectorState.On]: StandardActions.ACTION_NOTIFY,
+            [VectorState.Loud]: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
+            [VectorState.Off]: StandardActions.ACTION_DISABLED,
         },
     }),
 
     // Incoming call
     ".m.rule.call": new VectorPushRuleDefinition({
-        kind: Kind.Underride,
+        kind: PushRuleKind.Underride,
         description: _td("Call invitation"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
-            on: StandardActions.ACTION_NOTIFY,
-            loud: StandardActions.ACTION_NOTIFY_RING_SOUND,
-            off: StandardActions.ACTION_DISABLED,
+            [VectorState.On]: StandardActions.ACTION_NOTIFY,
+            [VectorState.Loud]: StandardActions.ACTION_NOTIFY_RING_SOUND,
+            [VectorState.Off]: StandardActions.ACTION_DISABLED,
         },
     }),
 
     // Notifications from bots
     ".m.rule.suppress_notices": new VectorPushRuleDefinition({
-        kind: Kind.Override,
+        kind: PushRuleKind.Override,
         description: _td("Messages sent by bot"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
             // .m.rule.suppress_notices is a "negative" rule, we have to invert its enabled value for vector UI
-            on: StandardActions.ACTION_DISABLED,
-            loud: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
-            off: StandardActions.ACTION_DONT_NOTIFY,
+            [VectorState.On]: StandardActions.ACTION_DISABLED,
+            [VectorState.Loud]: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
+            [VectorState.Off]: StandardActions.ACTION_DONT_NOTIFY,
         },
     }),
 
     // Room upgrades (tombstones)
     ".m.rule.tombstone": new VectorPushRuleDefinition({
-        kind: Kind.Override,
+        kind: PushRuleKind.Override,
         description: _td("When rooms are upgraded"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
-            on: StandardActions.ACTION_NOTIFY,
-            loud: StandardActions.ACTION_HIGHLIGHT,
-            off: StandardActions.ACTION_DISABLED,
+            [VectorState.On]: StandardActions.ACTION_NOTIFY,
+            [VectorState.Loud]: StandardActions.ACTION_HIGHLIGHT,
+            [VectorState.Off]: StandardActions.ACTION_DISABLED,
         },
     }),
 };

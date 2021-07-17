@@ -166,6 +166,7 @@ export interface IState {
     canReply: boolean;
     layout: Layout;
     lowBandwidth: boolean;
+    showHiddenEventsInTimeline: boolean;
     showReadReceipts: boolean;
     showRedactions: boolean;
     showJoinLeaves: boolean;
@@ -230,6 +231,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             canReply: false,
             layout: SettingsStore.getValue("layout"),
             lowBandwidth: SettingsStore.getValue("lowBandwidth"),
+            showHiddenEventsInTimeline: SettingsStore.getValue("showHiddenEventsInTimeline"),
             showReadReceipts: true,
             showRedactions: true,
             showJoinLeaves: true,
@@ -266,6 +268,9 @@ export default class RoomView extends React.Component<IProps, IState> {
             ),
             SettingsStore.watchSetting("lowBandwidth", null, () =>
                 this.setState({ lowBandwidth: SettingsStore.getValue("lowBandwidth") }),
+            ),
+            SettingsStore.watchSetting("showHiddenEventsInTimeline", null, () =>
+                this.setState({ showHiddenEventsInTimeline: SettingsStore.getValue("showHiddenEventsInTimeline") }),
             ),
         ];
     }
@@ -1388,7 +1393,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 continue;
             }
 
-            if (!haveTileForEvent(mxEv)) {
+            if (!haveTileForEvent(mxEv, this.state.showHiddenEventsInTimeline)) {
                 // XXX: can this ever happen? It will make the result count
                 // not match the displayed count.
                 continue;

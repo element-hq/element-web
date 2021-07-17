@@ -1,0 +1,77 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_TagComposer {
+    .mx_TagComposer_input {
+        display: flex;
+
+        .mx_Field {
+            flex: 1;
+            margin: 0; // override from field styles
+        }
+
+        .mx_AccessibleButton {
+            min-width: 70px;
+            padding: 0; // override from button styles
+            margin-left: 16px; // distance from <Field>
+        }
+
+        .mx_Field, .mx_Field input, .mx_AccessibleButton {
+            // So they look related to each other by feeling the same
+            border-radius: 8px;
+        }
+    }
+
+    .mx_TagComposer_tags {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 12px; // this plus 12px from the tags makes 24px from the input
+
+        .mx_TagComposer_tag {
+            padding: 6px 8px 8px 12px;
+            position: relative;
+            margin-right: 12px;
+            margin-top: 12px;
+
+            // Cheaty way to get an opacified variable colour background
+            &::before {
+                content: '';
+                border-radius: 20px;
+                background-color: $tertiary-fg-color;
+                opacity: 0.15;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+
+                // Pass through the pointer otherwise we have effectively put a whole div
+                // on top of the component, which makes it hard to interact with buttons.
+                pointer-events: none;
+            }
+        }
+
+        .mx_AccessibleButton {
+            background-image: url('$(res)/img/subtract.svg');
+            width: 16px;
+            height: 16px;
+            margin-left: 8px;
+            display: inline-block;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+    }
+}
