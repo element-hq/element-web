@@ -59,11 +59,11 @@ export default class TagComposer extends React.PureComponent<IProps, IState> {
         this.setState({ newTag: "" });
     };
 
-    private onRemove = (tag: string) => {
+    private onRemove(tag: string) {
         // We probably don't need to proxy this, but for
         // sanity of `this` we'll do so anyways.
         this.props.onRemove(tag);
-    };
+    }
 
     public render() {
         return <div className='mx_TagComposer'>

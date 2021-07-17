@@ -240,12 +240,12 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
         return preparedNewState;
     }
 
-    private async refreshPushers(): Promise<Partial<IState>> {
-        return { ...(await MatrixClientPeg.get().getPushers()) };
+    private refreshPushers(): Promise<Partial<IState>> {
+        return MatrixClientPeg.get().getPushers();
     }
 
-    private async refreshThreepids(): Promise<Partial<IState>> {
-        return { ...(await MatrixClientPeg.get().getThreePids()) };
+    private refreshThreepids(): Promise<Partial<IState>> {
+        return MatrixClientPeg.get().getThreePids();
     }
 
     private showSaveError() {
