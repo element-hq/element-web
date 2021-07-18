@@ -3494,5 +3494,21 @@
     "Could not connect to identity server": "S’u lidh dot te shërbyes identitetesh",
     "Not a valid identity server (status code %(code)s)": "Shërbyes identitetesh i pavlefshëm (kod gjendjeje %(code)s)",
     "Identity server URL must be HTTPS": "URL-ja e shërbyesit të identiteteve duhet të jetë HTTPS",
-    "Unable to transfer call": "S’arrihet të shpërngulet thirrje"
+    "Unable to transfer call": "S’arrihet të shpërngulet thirrje",
+    "Unable to copy a link to the room to the clipboard.": "S’arrihet të kopjohet në të papastër një lidhje për te dhoma.",
+    "Unable to copy room link": "S’arrihet të kopjohet lidhja e dhomës",
+    "User Directory": "Drejtori Përdoruesi",
+    "Copy Link": "Kopjoji Lidhjen",
+    "Displaying time": "Kohë shfaqjeje",
+    "There was an error loading your notification settings.": "Pati një gabim në ngarkimin e rregullimeve tuaja për njoftimet.",
+    "Mentions & keywords": "Përmendje & fjalëkyçe",
+    "Global": "Global",
+    "New keyword": "Fjalëkyç i ri",
+    "Keyword": "Fjalëkyç",
+    "Enable email notifications for %(email)s": "Aktivizo njoftime me email për %(email)s",
+    "Enable for this account": "Aktivizoje për këtë llogari",
+    "An error occurred whilst saving your notification preferences.": "Ndodhi një gabim teksa ruheshin parapëlqimet tuaja për njoftimet.",
+    "Error saving notification preferences": "Gabim në ruajtje parapëlqimesh për njoftimet",
+    "Messages containing keywords": "Mesazhe që përmbajnë fjalëkyçe",
+    "Transfer Failed": "Shpërngulja Dështoi"
 }
