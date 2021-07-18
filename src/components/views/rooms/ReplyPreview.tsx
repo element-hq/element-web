@@ -42,7 +42,7 @@ interface IState {
 @replaceableComponent("views.rooms.ReplyPreview")
 export default class ReplyPreview extends React.Component<IProps, IState> {
     private unmounted = false;
-    private roomStoreToken: EventSubscription;
+    private readonly roomStoreToken: EventSubscription;
 
     constructor(props) {
         super(props);
