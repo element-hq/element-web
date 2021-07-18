@@ -39,7 +39,7 @@ interface IState {
 }
 
 @replaceableComponent("views.messages.DownloadActionButton")
-export class DownloadActionButton extends React.PureComponent<IProps, IState> {
+export default class DownloadActionButton extends React.PureComponent<IProps, IState> {
     private iframe: React.RefObject<HTMLIFrameElement> = createRef();
 
     public constructor(props: IProps) {
