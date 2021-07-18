@@ -320,7 +320,7 @@ export default class EventTile extends React.Component<IProps, IState> {
     private suppressReadReceiptAnimation: boolean;
     private isListeningForReceipts: boolean;
     private tile = React.createRef();
-    private replyThread = React.createRef();
+    private replyThread = React.createRef<ReplyThread>();
 
     public readonly ref = createRef<HTMLElement>();
 
