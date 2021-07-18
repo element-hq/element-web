@@ -19,11 +19,11 @@ import React from 'react';
 
 import { Filter } from 'matrix-js-sdk/src/filter';
 import { EventTimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
+import { Direction } from "matrix-js-sdk/src/models/event-timeline";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
 
-import * as sdk from '../../index';
 import { MatrixClientPeg } from '../../MatrixClientPeg';
 import EventIndexPeg from "../../indexing/EventIndexPeg";
 import { _t } from '../../languageHandler';
@@ -33,11 +33,14 @@ import DesktopBuildsNotice, { WarningKind } from "../views/elements/DesktopBuild
 import { replaceableComponent } from "../../utils/replaceableComponent";
 
 import ResizeNotifier from '../../utils/ResizeNotifier';
+import TimelinePanel from "./TimelinePanel";
+import Spinner from "../views/elements/Spinner";
+import { TileShape } from '../views/rooms/EventTile';
 
 interface IProps {
     roomId: string;
     onClose: () => void;
-    resizeNotifier: ResizeNotifier
+    resizeNotifier: ResizeNotifier;
 }
 
 interface IState {
@@ -129,7 +132,7 @@ class FilePanel extends React.Component<IProps, IState> {
         }
     }
 
-    public async fetchFileEventsServer(room: Room): Promise<void> {
+    public async fetchFileEventsServer(room: Room): Promise<EventTimelineSet> {
         const client = MatrixClientPeg.get();
 
         const filter = new Filter(client.credentials.userId);
@@ -153,7 +156,11 @@ class FilePanel extends React.Component<IProps, IState> {
         return timelineSet;
     }
 
-    private onPaginationRequest = (timelineWindow: TimelineWindow, direction: string, limit: number): void => {
+    private onPaginationRequest = (
+        timelineWindow: TimelineWindow,
+        direction: Direction,
+        limit: number,
+    ): Promise<boolean> => {
         const client = MatrixClientPeg.get();
         const eventIndex = EventIndexPeg.get();
         const roomId = this.props.roomId;
@@ -232,8 +239,6 @@ class FilePanel extends React.Component<IProps, IState> {
         }
 
         // wrap a TimelinePanel with the jump-to-event bits turned off.
-        const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
-        const Loader = sdk.getComponent("elements.Spinner");
 
         const emptyState = (<div className="mx_RightPanel_empty mx_FilePanel_empty">
             <h2>{_t('No files visible in this room')}</h2>
@@ -259,7 +264,7 @@ class FilePanel extends React.Component<IProps, IState> {
                         timelineSet={this.state.timelineSet}
                         showUrlPreview = {false}
                         onPaginationRequest={this.onPaginationRequest}
-                        tileShape="file_grid"
+                        tileShape={TileShape.FileGrid}
                         resizeNotifier={this.props.resizeNotifier}
                         empty={emptyState}
                     />
@@ -272,7 +277,7 @@ class FilePanel extends React.Component<IProps, IState> {
                     onClose={this.props.onClose}
                     previousPhase={RightPanelPhases.RoomSummary}
                 >
-                    <Loader />
+                    <Spinner />
                 </BaseCard>
             );
         }

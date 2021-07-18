@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import React from 'react';
+import React, { ReactHTML } from 'react';
 
 import { Key } from '../../../Keyboard';
 import classnames from 'classnames';
@@ -29,7 +29,7 @@ export type ButtonEvent = React.MouseEvent<Element> | React.KeyboardEvent<Elemen
  */
 interface IProps extends React.InputHTMLAttributes<Element> {
     inputRef?: React.Ref<Element>;
-    element?: string;
+    element?: keyof ReactHTML;
     // The kind of button, similar to how Bootstrap works.
     // See available classes for AccessibleButton for options.
     kind?: string;
@@ -122,7 +122,7 @@ export default function AccessibleButton({
 }
 
 AccessibleButton.defaultProps = {
-    element: 'div',
+    element: 'div' as keyof ReactHTML,
     role: 'button',
     tabIndex: 0,
 };

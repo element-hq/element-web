@@ -20,13 +20,14 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
-import * as sdk from "../../../index";
 import Modal from "../../../Modal";
 import { isValid3pidInvite } from "../../../RoomInvite";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import SettingsStore from "../../../settings/SettingsStore";
+import ErrorDialog from '../dialogs/ErrorDialog';
+import AccessibleButton from '../elements/AccessibleButton';
+import SpaceStore from "../../../stores/SpaceStore";
 
 interface IProps {
     event: MatrixEvent;
@@ -104,7 +105,6 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
                 // Revert echo because of error
                 this.setState({ invited: true });
 
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createTrackedDialog('Revoke 3pid invite failed', '', ErrorDialog, {
                     title: _t("Failed to revoke invite"),
                     description: _t(
@@ -119,8 +119,6 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
     };
 
     render() {
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-
         let adminTools = null;
         if (this.state.canKick && this.state.invited) {
             adminTools = (
@@ -136,7 +134,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
         }
 
         let scopeHeader;
-        if (SettingsStore.getValue("feature_spaces") && this.room.isSpaceRoom()) {
+        if (SpaceStore.spacesEnabled && this.room.isSpaceRoom()) {
             scopeHeader = <div className="mx_RightPanel_scopeHeader">
                 <RoomAvatar room={this.room} height={32} width={32} />
                 <RoomName room={this.room} />

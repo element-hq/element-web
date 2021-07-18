@@ -152,7 +152,7 @@ export function objectClone<O extends {}>(obj: O): O {
 export function objectFromEntries<K, V>(entries: Iterable<[K, V]>): {[k: K]: V} {
     const obj: {
         // @ts-ignore - same as return type
-        [k: K]: V} = {};
+        [k: K]: V;} = {};
     for (const e of entries) {
         // @ts-ignore - same as return type
         obj[e[0]] = e[1];

@@ -77,6 +77,7 @@ export default class AsyncWrapper extends React.Component<IProps, IState> {
             const Component = this.state.component;
             return <Component {...this.props} />;
         } else if (this.state.error) {
+            // FIXME: Using an import will result in test failures
             const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             return <BaseDialog onFinished={this.props.onFinished} title={_t("Error")}>

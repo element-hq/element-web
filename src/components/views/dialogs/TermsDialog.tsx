@@ -16,11 +16,12 @@ limitations under the License.
 
 import url from 'url';
 import React from 'react';
-import * as sdk from '../../../index';
 import { _t, pickBestLanguage } from '../../../languageHandler';
 
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
+import DialogButtons from "../elements/DialogButtons";
+import BaseDialog from "./BaseDialog";
 
 interface ITermsCheckboxProps {
     onChange: (url: string, checked: boolean) => void;
@@ -46,19 +47,19 @@ interface ITermsDialogProps {
      * Array of [Service, policies] pairs, where policies is the response from the
      * /terms endpoint for that service
      */
-    policiesAndServicePairs: any[],
+    policiesAndServicePairs: any[];
 
     /**
      * urls that the user has already agreed to
      */
-    agreedUrls?: string[],
+    agreedUrls?: string[];
 
     /**
      * Called with:
      *     * success {bool} True if the user accepted any douments, false if cancelled
      *     * agreedUrls {string[]} List of agreed URLs
      */
-    onFinished: (success: boolean, agreedUrls?: string[]) => void,
+    onFinished: (success: boolean, agreedUrls?: string[]) => void;
 }
 
 interface IState {
@@ -89,9 +90,9 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
     private nameForServiceType(serviceType: SERVICE_TYPES, host: string): JSX.Element {
         switch (serviceType) {
             case SERVICE_TYPES.IS:
-                return <div>{_t("Identity Server")}<br />({host})</div>;
+                return <div>{_t("Identity server")}<br />({host})</div>;
             case SERVICE_TYPES.IM:
-                return <div>{_t("Integration Manager")}<br />({host})</div>;
+                return <div>{_t("Integration manager")}<br />({host})</div>;
         }
     }
 
@@ -117,9 +118,6 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
     };
 
     public render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
         const rows = [];
         for (const policiesAndService of this.props.policiesAndServicePairs) {
             const parsedBaseUrl = url.parse(policiesAndService.service.baseUrl);

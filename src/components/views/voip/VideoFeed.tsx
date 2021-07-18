@@ -24,9 +24,9 @@ import MemberAvatar from "../avatars/MemberAvatar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
-    call: MatrixCall,
+    call: MatrixCall;
 
-    feed: CallFeed,
+    feed: CallFeed;
 
     // Whether this call view is for picture-in-picture mode
     // otherwise, it's the larger call view when viewing the room the call is in.
@@ -36,7 +36,7 @@ interface IProps {
 
     // a callback which is called when the video element is resized
     // due to a change in video metadata
-    onResize?: (e: Event) => void,
+    onResize?: (e: Event) => void;
 }
 
 interface IState {

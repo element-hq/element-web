@@ -18,7 +18,6 @@ import React from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
-import * as sdk from "../../../../..";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import Modal from "../../../../../Modal";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
@@ -27,6 +26,7 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import SettingsFlag from '../../../elements/SettingsFlag';
 
 // Knock and private are reserved keywords which are not yet implemented.
 export enum JoinRule {
@@ -347,6 +347,29 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         const state = client.getRoom(this.props.roomId).currentState;
         const canChangeHistory = state.mayClientSendStateEvent('m.room.history_visibility', client);
 
+        const options = [
+            {
+                value: HistoryVisibility.Shared,
+                label: _t('Members only (since the point in time of selecting this option)'),
+            },
+            {
+                value: HistoryVisibility.Invited,
+                label: _t('Members only (since they were invited)'),
+            },
+            {
+                value: HistoryVisibility.Joined,
+                label: _t('Members only (since they joined)'),
+            },
+        ];
+
+        // World readable doesn't make sense for encrypted rooms
+        if (!this.state.encrypted || history === HistoryVisibility.WorldReadable) {
+            options.unshift({
+                value: HistoryVisibility.WorldReadable,
+                label: _t("Anyone"),
+            });
+        }
+
         return (
             <div>
                 <div>
@@ -357,36 +380,14 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     name="historyVis"
                     value={history}
                     onChange={this.onHistoryRadioToggle}
-                    definitions={[
-                        {
-                            value: HistoryVisibility.WorldReadable,
-                            disabled: !canChangeHistory,
-                            label: _t("Anyone"),
-                        },
-                        {
-                            value: HistoryVisibility.Shared,
-                            disabled: !canChangeHistory,
-                            label: _t('Members only (since the point in time of selecting this option)'),
-                        },
-                        {
-                            value: HistoryVisibility.Invited,
-                            disabled: !canChangeHistory,
-                            label: _t('Members only (since they were invited)'),
-                        },
-                        {
-                            value: HistoryVisibility.Joined,
-                            disabled: !canChangeHistory,
-                            label: _t('Members only (since they joined)'),
-                        },
-                    ]}
+                    disabled={!canChangeHistory}
+                    definitions={options}
                 />
             </div>
         );
     }
 
     render() {
-        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
-
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const isEncrypted = this.state.encrypted;

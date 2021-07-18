@@ -97,7 +97,7 @@ export const sortRooms = (rooms: Room[]): Room[] => {
  * useful to the user.
  */
 export class RecentAlgorithm implements IAlgorithm {
-    public async sortRooms(rooms: Room[], tagId: TagID): Promise<Room[]> {
+    public sortRooms(rooms: Room[], tagId: TagID): Room[] {
         return sortRooms(rooms);
     }
 }

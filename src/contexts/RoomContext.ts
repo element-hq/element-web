@@ -45,6 +45,7 @@ const RoomContext = createContext<IState>({
     showTwelveHourTimestamps: false,
     readMarkerInViewThresholdMs: 3000,
     readMarkerOutOfViewThresholdMs: 30000,
+    showHiddenEventsInTimeline: false,
     showReadReceipts: true,
     showRedactions: true,
     showJoinLeaves: true,

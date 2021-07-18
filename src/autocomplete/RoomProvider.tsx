@@ -28,7 +28,7 @@ import { PillCompletion } from './Components';
 import { makeRoomPermalink } from "../utils/permalinks/Permalinks";
 import { ICompletion, ISelectionRange } from "./Autocompleter";
 import RoomAvatar from '../components/views/avatars/RoomAvatar';
-import SettingsStore from "../settings/SettingsStore";
+import SpaceStore from "../stores/SpaceStore";
 
 const ROOM_REGEX = /\B#\S*/g;
 
@@ -59,7 +59,8 @@ export default class RoomProvider extends AutocompleteProvider {
         const cli = MatrixClientPeg.get();
         let rooms = cli.getVisibleRooms();
 
-        if (SettingsStore.getValue("feature_spaces")) {
+        // if spaces are enabled then filter them out here as they get their own autocomplete provider
+        if (SpaceStore.spacesEnabled) {
             rooms = rooms.filter(r => !r.isSpaceRoom());
         }
 

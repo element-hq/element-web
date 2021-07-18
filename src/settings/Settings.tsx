@@ -455,7 +455,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "ctrlFForSearch": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: isMac ? _td("Use Command + F to search") : _td("Use Ctrl + F to search"),
+        displayName: isMac ? _td("Use Command + F to search timeline") : _td("Use Ctrl + F to search timeline"),
         default: false,
     },
     "MessageComposerInput.ctrlEnterToSend": {
@@ -812,7 +812,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     [UIFeature.IdentityServer]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
-        // Identity Server (Discovery) Settings make no sense if 3PIDs in general are hidden
+        // Identity server (discovery) settings make no sense if 3PIDs in general are hidden
         controller: new UIFeatureController(UIFeature.ThirdPartyID),
     },
     [UIFeature.ThirdPartyID]: {

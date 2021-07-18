@@ -39,9 +39,8 @@ interface IProps {
     member: RoomMember | User;
     onClose: () => void;
     verificationRequest: VerificationRequest;
-    verificationRequestPromise: Promise<VerificationRequest>;
+    verificationRequestPromise?: Promise<VerificationRequest>;
     layout: string;
-    inDialog: boolean;
     isRoomEncrypted: boolean;
 }
 
@@ -82,6 +81,7 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
     const changeHandler = useCallback(() => {
         // handle transitions -> cancelled for mismatches which fire a modal instead of showing a card
         if (request && request.cancelled && MISMATCHES.includes(request.cancellationCode)) {
+            // FIXME: Using an import will result in test failures
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog("Verification failed", "insecure", ErrorDialog, {
                 headerImage: require("../../../../res/img/e2e/warning.svg"),

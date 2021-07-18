@@ -14,18 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import "../../../skinned-sdk";
+
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
 
 import * as TestUtils from '../../../test-utils';
-import sdk from '../../../skinned-sdk';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { User } from "matrix-js-sdk/src/models/user";
 import { compare } from "../../../../src/utils/strings";
 import MemberList from "../../../../src/components/views/rooms/MemberList";
+import MemberTile from '../../../../src/components/views/rooms/MemberTile';
 
 function generateRoomId() {
     return '!' + Math.random().toString().slice(2, 10) + ':domain';
@@ -206,7 +208,6 @@ describe('MemberList', () => {
     }
 
     function itDoesOrderMembersCorrectly(enablePresence) {
-        const MemberTile = sdk.getComponent("rooms.MemberTile");
         describe('does order members correctly', () => {
             // Note: even if presence is disabled, we still expect that the presence
             // tests will pass. All expectOrderedByPresenceAndPowerLevel does is ensure

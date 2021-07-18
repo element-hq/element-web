@@ -16,11 +16,13 @@ limitations under the License.
 
 import React, { createRef, ReactNode, SyntheticEvent } from 'react';
 import ReactDOM from "react-dom";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { TimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
-import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
+import { EventTimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
+import { Direction, EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
 import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
+import { EventType, RelationType } from 'matrix-js-sdk/src/@types/event';
+import { SyncState } from 'matrix-js-sdk/src/sync.api';
 
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/Layout";
@@ -30,7 +32,6 @@ import RoomContext from "../../contexts/RoomContext";
 import UserActivity from "../../UserActivity";
 import Modal from "../../Modal";
 import dis from "../../dispatcher/dispatcher";
-import * as sdk from "../../index";
 import { Key } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';
@@ -39,14 +40,13 @@ import { UIFeature } from "../../settings/UIFeature";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import { arrayFastClone } from "../../utils/arrays";
 import MessagePanel from "./MessagePanel";
-import { SyncState } from 'matrix-js-sdk/src/sync.api';
 import { IScrollState } from "./ScrollPanel";
 import { ActionPayload } from "../../dispatcher/payloads";
-import { EventType } from 'matrix-js-sdk/src/@types/event';
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Spinner from "../views/elements/Spinner";
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
+import ErrorDialog from '../views/dialogs/ErrorDialog';
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -65,7 +65,7 @@ interface IProps {
     // representing.  This may or may not have a room, depending on what it's
     // a timeline representing.  If it has a room, we maintain RRs etc for
     // that room.
-    timelineSet: TimelineSet;
+    timelineSet: EventTimelineSet;
     showReadReceipts?: boolean;
     // Enable managing RRs and RMs. These require the timelineSet to have a room.
     manageReadReceipts?: boolean;
@@ -125,7 +125,7 @@ interface IProps {
     onReadMarkerUpdated?(): void;
 
     // callback which is called when we wish to paginate the timeline window.
-    onPaginationRequest?(timelineWindow: TimelineWindow, direction: string, size: number): Promise<boolean>,
+    onPaginationRequest?(timelineWindow: TimelineWindow, direction: string, size: number): Promise<boolean>;
 }
 
 interface IState {
@@ -388,7 +388,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     private onPaginationRequest = (
         timelineWindow: TimelineWindow,
-        direction: string,
+        direction: Direction,
         size: number,
     ): Promise<boolean> => {
         if (this.props.onPaginationRequest) {
@@ -555,9 +555,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 // more than the timeout on userActiveRecently.
                 //
                 const myUserId = MatrixClientPeg.get().credentials.userId;
-                const sender = ev.sender ? ev.sender.userId : null;
                 callRMUpdated = false;
-                if (sender != myUserId && !UserActivity.sharedInstance().userActiveRecently()) {
+                if (ev.getSender() !== myUserId && !UserActivity.sharedInstance().userActiveRecently()) {
                     updatedState.readMarkerVisible = true;
                 } else if (lastLiveEvent && this.getReadMarkerPosition() === 0) {
                     // we know we're stuckAtBottom, so we can advance the RM
@@ -579,7 +578,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         });
     };
 
-    private onRoomTimelineReset = (room: Room, timelineSet: TimelineSet): void => {
+    private onRoomTimelineReset = (room: Room, timelineSet: EventTimelineSet): void => {
         if (timelineSet !== this.props.timelineSet) return;
 
         if (this.messagePanel.current && this.messagePanel.current.isAtBottom()) {
@@ -792,8 +791,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
             // that sending an RR for the latest message will set our notif counter
             // to zero: it may not do this if we send an RR for somewhere before the end.
             if (this.isAtEndOfLiveTimeline()) {
-                this.props.timelineSet.room.setUnreadNotificationCount('total', 0);
-                this.props.timelineSet.room.setUnreadNotificationCount('highlight', 0);
+                this.props.timelineSet.room.setUnreadNotificationCount(NotificationCountType.Total, 0);
+                this.props.timelineSet.room.setUnreadNotificationCount(NotificationCountType.Highlight, 0);
                 dis.dispatch({
                     action: 'on_room_read',
                     roomId: this.props.timelineSet.room.roomId,
@@ -863,7 +862,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const myUserId = MatrixClientPeg.get().credentials.userId;
         for (i++; i < events.length; i++) {
             const ev = events[i];
-            if (!ev.sender || ev.sender.userId != myUserId) {
+            if (ev.getSender() !== myUserId) {
                 break;
             }
         }
@@ -1051,6 +1050,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
             { windowLimit: this.props.timelineCap });
 
         const onLoaded = () => {
+            if (this.unmounted) return;
+
             // clear the timeline min-height when
             // (re)loading the timeline
             if (this.messagePanel.current) {
@@ -1092,11 +1093,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
         };
 
         const onError = (error) => {
+            if (this.unmounted) return;
+
             this.setState({ timelineLoading: false });
             console.error(
                 `Error loading timeline panel at ${eventId}: ${error}`,
             );
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
             let onFinished;
 
@@ -1334,8 +1336,9 @@ class TimelinePanel extends React.Component<IProps, IState> {
             }
 
             const shouldIgnore = !!ev.status || // local echo
-                (ignoreOwn && ev.sender && ev.sender.userId == myUserId);   // own message
-            const isWithoutTile = !haveTileForEvent(ev) || shouldHideEvent(ev, this.context);
+                (ignoreOwn && ev.getSender() === myUserId); // own message
+            const isWithoutTile = !haveTileForEvent(ev, this.context?.showHiddenEventsInTimeline) ||
+                shouldHideEvent(ev, this.context);
 
             if (isWithoutTile || !node) {
                 // don't start counting if the event should be ignored,
@@ -1416,7 +1419,11 @@ class TimelinePanel extends React.Component<IProps, IState> {
         });
     }
 
-    private getRelationsForEvent = (...args) => this.props.timelineSet.getRelationsForEvent(...args);
+    private getRelationsForEvent = (
+        eventId: string,
+        relationType: RelationType,
+        eventType: EventType | string,
+    ) => this.props.timelineSet.getRelationsForEvent(eventId, relationType, eventType);
 
     render() {
         // just show a spinner while the timeline loads.

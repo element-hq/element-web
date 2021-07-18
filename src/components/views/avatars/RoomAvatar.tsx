@@ -22,16 +22,17 @@ import ImageView from '../elements/ImageView';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import * as Avatar from '../../../Avatar';
+import DMRoomMap from "../../../utils/DMRoomMap";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
+import { IOOBData } from '../../../stores/ThreepidInviteStore';
 
 interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick"> {
     // Room may be left unset here, but if it is,
     // oobData.avatarUrl should be set (else there
     // would be nowhere to get the avatar from)
     room?: Room;
-    // TODO: type when js-sdk has types
-    oobData?: any;
+    oobData?: IOOBData;
     width?: number;
     height?: number;
     resizeMethod?: ResizeMethod;
@@ -131,11 +132,14 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
         const { room, oobData, viewAvatarOnClick, onClick, ...otherProps } = this.props;
 
         const roomName = room ? room.name : oobData.name;
+        // If the room is a DM, we use the other user's ID for the color hash
+        // in order to match the room avatar with their avatar
+        const idName = room ? (DMRoomMap.shared().getUserIdForRoomId(room.roomId) ?? room.roomId) : null;
 
         return (
             <BaseAvatar {...otherProps}
                 name={roomName}
-                idName={room ? room.roomId : null}
+                idName={idName}
                 urls={this.state.urls}
                 onClick={viewAvatarOnClick && this.state.urls[0] ? this.onRoomAvatarClick : onClick}
             />
