@@ -147,7 +147,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
                 className={classNames(className, {
                     mx_RoomAvatar_isSpaceRoom: room?.isSpaceRoom(),
                 })}
-                name={room ? room.name : oobData.name}
+                name={roomName}
                 idName={idName}
                 urls={this.state.urls}
                 onClick={viewAvatarOnClick && this.state.urls[0] ? this.onRoomAvatarClick : onClick}
