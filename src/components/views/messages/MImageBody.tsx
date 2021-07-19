@@ -451,7 +451,7 @@ export default class MImageBody extends React.Component<IProps, IState> {
     }
 
     // Overidden by MStickerBody
-    protected getFileBody(): JSX.Element {
+    protected getFileBody(): string | JSX.Element {
         return <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />;
     }
 
