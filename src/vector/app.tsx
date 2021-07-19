@@ -73,6 +73,11 @@ function onNewScreen(screen: string, replaceLast = false) {
     const hash = '#/' + screen;
     lastLocationHashSet = hash;
 
+    // if the new hash is a substring of the old one then we are stripping fields e.g `via` so replace history
+    if (screen.startsWith("room/") && window.location.hash.startsWith(hash)) {
+        replaceLast = true;
+    }
+
     if (replaceLast) {
         window.location.replace(hash);
     } else {
