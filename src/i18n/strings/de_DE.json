@@ -3477,5 +3477,18 @@
     "Identity server (%(server)s)": "Identitätsserver (%(server)s)",
     "Could not connect to identity server": "Verbindung zum Identitätsserver konnte nicht hergestellt werden",
     "Not a valid identity server (status code %(code)s)": "Ungültiger Identitätsserver (Fehlercode %(code)s)",
-    "Identity server URL must be HTTPS": "Identitätsserver-URL muss HTTPS sein"
+    "Identity server URL must be HTTPS": "Identitätsserver-URL muss HTTPS sein",
+    "Error processing audio message": "Fehler beim Verarbeiten der Audionachricht",
+    "Copy Room Link": "Raumlink kopieren",
+    "Code blocks": "Codeblöcke",
+    "There was an error loading your notification settings.": "Fehler beim Laden der Benachrichtigungseinstellungen.",
+    "Mentions & keywords": "Erwähnungen und Schlüsselwörter",
+    "Global": "Global",
+    "New keyword": "Neues Schlüsselwort",
+    "Keyword": "Schlüsselwort",
+    "Enable email notifications for %(email)s": "E-Mail-Benachrichtigungen für %(email)s aktivieren",
+    "Enable for this account": "Für dieses Konto aktivieren",
+    "An error occurred whilst saving your notification preferences.": "Beim Speichern der Benachrichtigungseinstellungen ist ein Fehler aufgetreten.",
+    "Error saving notification preferences": "Fehler beim Speichern der Benachrichtigungseinstellungen",
+    "Messages containing keywords": "Nachrichten mit Schlüsselwörtern"
 }
