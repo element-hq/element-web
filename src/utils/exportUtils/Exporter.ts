@@ -154,7 +154,7 @@ export default abstract class Exporter {
 
         let prevToken: string|null = null;
         let limit = this.getLimit();
-        let events: MatrixEvent[] = [];
+        const events: MatrixEvent[] = [];
 
         while (limit) {
             const eventsPerCrawl = Math.min(limit, 1000);
@@ -187,7 +187,9 @@ export default abstract class Exporter {
             prevToken = res.end;
         }
         // Reverse the events so that we preserve the order
-        events = events.reverse();
+        for (let i = 0; i < Math.floor(events.length/2); i++) {
+            [events[i], events[events.length - i - 1]] = [events[events.length - i - 1], events[i]];
+        }
 
         const decryptionPromises = events
             .filter(event => event.isEncrypted())
