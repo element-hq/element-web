@@ -158,7 +158,12 @@ export default abstract class Exporter {
 
         while (limit) {
             const eventsPerCrawl = Math.min(limit, 1000);
-            const res: any = await this.client.createMessagesRequest(this.room.roomId, prevToken, eventsPerCrawl, Direction.Backward);
+            const res = await this.client.createMessagesRequest(
+                this.room.roomId,
+                prevToken,
+                eventsPerCrawl,
+                Direction.Backward,
+            );
 
             if (this.cancelled) {
                 this.cleanUp();
