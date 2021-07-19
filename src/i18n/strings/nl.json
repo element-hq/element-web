@@ -3407,5 +3407,7 @@
     "Error saving notification preferences": "Fout bij het opslaan van meldingsvoorkeuren",
     "Messages containing keywords": "Berichten met trefwoord",
     "Transfer Failed": "Doorverbinden is mislukt",
-    "Unable to transfer call": "Doorverbinden is mislukt"
+    "Unable to transfer call": "Doorverbinden is mislukt",
+    "Unable to copy a link to the room to the clipboard.": "Kopiëren van gesprekslink naar het klembord is mislukt.",
+    "Unable to copy room link": "Kopiëren van gesprekslink is mislukt"
 }
