@@ -6,7 +6,7 @@ import { exportOptions, exportTypes } from "./exportUtils";
 import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay } from "../../DateUtils";
-import { MatrixClient } from "matrix-js-sdk";
+import { Direction, MatrixClient } from "matrix-js-sdk";
 import streamToZIP from "./ZipStream";
 import * as ponyfill from "web-streams-polyfill/ponyfill";
 import "web-streams-polyfill/ponyfill"; // to support streams API for older browsers
@@ -158,7 +158,7 @@ export default abstract class Exporter {
 
         while (limit) {
             const eventsPerCrawl = Math.min(limit, 1000);
-            const res: any = await this.client.createMessagesRequest(this.room.roomId, prevToken, eventsPerCrawl, "b");
+            const res: any = await this.client.createMessagesRequest(this.room.roomId, prevToken, eventsPerCrawl, Direction.Backward);
 
             if (this.cancelled) {
                 this.cleanUp();

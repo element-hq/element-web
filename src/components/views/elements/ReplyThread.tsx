@@ -44,7 +44,7 @@ interface IProps {
     layout?: Layout;
     // Whether to always show a timestamp
     alwaysShowTimestamps?: boolean;
-    forExport?: boolean,
+    forExport?: boolean;
 }
 
 interface IState {
