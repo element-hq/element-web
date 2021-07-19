@@ -3219,5 +3219,17 @@
     "Send and receive voice messages": "Отправлять и получать голосовые сообщения",
     "%(deviceId)s from %(ip)s": "%(deviceId)s с %(ip)s",
     "The user you called is busy.": "Вызываемый пользователь занят.",
-    "User Busy": "Пользователь занят"
+    "User Busy": "Пользователь занят",
+    "Integration manager": "Менеджер интеграции",
+    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Ваш %(brand)s не позволяет вам использовать для этого Менеджер Интеграции. Пожалуйста, свяжитесь с администратором.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Используя этот виджет, вы можете делиться данными <helpIcon /> с %(widgetDomain)s и вашим Менеджером Интеграции.",
+    "Identity server is": "Сервер идентификации",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Менеджеры интеграции получают данные конфигурации и могут изменять виджеты, отправлять приглашения в комнаты и устанавливать уровни доступа от вашего имени.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Используйте Менеджер интеграциями для управления ботами, виджетами и стикерами.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Используйте менеджер интеграций <b>%(serverName)s</b> для управления ботами, виджетами и стикерами.",
+    "Identity server": "Сервер идентификаций",
+    "Identity server (%(server)s)": "Сервер идентификации (%(server)s)",
+    "Could not connect to identity server": "Не смог подключиться к серверу идентификации",
+    "Not a valid identity server (status code %(code)s)": "Неправильный Сервер идентификации (код статуса %(code)s)",
+    "Identity server URL must be HTTPS": "URL-адрес сервера идентификации должен быть HTTPS"
 }

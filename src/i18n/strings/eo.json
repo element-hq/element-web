@@ -3326,5 +3326,16 @@
     "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "Provu aliajn vortojn aŭ kontorolu, ĉu vi ne tajperaris. Iuj rezultoj eble ne videblos, ĉar ili estas privataj kaj vi bezonus inviton por aliĝi.",
     "No results for \"%(query)s\"": "Neniuj rezultoj por «%(query)s»",
     "The user you called is busy.": "La uzanto, kiun vi vokis, estas okupata.",
-    "User Busy": "Uzanto estas okupata"
+    "User Busy": "Uzanto estas okupata",
+    "Integration manager": "Kunigilo",
+    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Via %(brand)so ne permesas al vi uzi kunigilon por tio. Bonvolu kontakti administranton.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Uzo de tiu ĉi fenestraĵo eble havigos datumojn <helpIcon /> kun %(widgetDomain)s kaj via kunigilo.",
+    "Identity server is": "Identiga servilo estas",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Kunigiloj ricevas agordajn datumojn, kaj povas modifi fenestraĵojn, sendi invitojn al ĉambroj, kaj vianome agordi povnivelojn.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Uzu kunigilon por administrado de robotoj, fenestraĵoj, kaj glumarkaroj.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Uzu kunigilon <b>(%(serverName)s)</b> por administrado de robotoj, fenestraĵoj, kaj glumarkaroj.",
+    "Identity server": "Identiga servilo",
+    "Identity server (%(server)s)": "Identiga servilo (%(server)s)",
+    "Could not connect to identity server": "Ne povis konektiĝi al identiga servilo",
+    "Not a valid identity server (status code %(code)s)": "Nevalida identiga servilo (statkodo %(code)s)"
 }
