@@ -27,7 +27,7 @@ interface ICaptchaFormProps {
 }
 
 interface ICaptchaFormState {
-    errorText: string | null;
+    errorText?: string;
 
 }
 
@@ -40,14 +40,14 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         onCaptchaResponse: () => {},
     };
 
-    private captchaWidgetId: string | null = null;
+    private captchaWidgetId?: string;
     private recaptchaContainer = createRef<HTMLDivElement>();
 
     constructor(props: ICaptchaFormProps) {
         super(props);
 
         this.state = {
-            errorText: null,
+            errorText: undefined,
         };
 
         CountlyAnalytics.instance.track("onboarding_grecaptcha_begin");
