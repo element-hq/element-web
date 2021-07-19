@@ -408,10 +408,10 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         this.setState({ addRoomContextMenuPosition: null });
     };
 
-    private onUnreadFirstChanged = async () => {
+    private onUnreadFirstChanged = () => {
         const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
         const newAlgorithm = isUnreadFirst ? ListAlgorithm.Natural : ListAlgorithm.Importance;
-        await RoomListStore.instance.setListOrder(this.props.tagId, newAlgorithm);
+        RoomListStore.instance.setListOrder(this.props.tagId, newAlgorithm);
         this.forceUpdate(); // because if the sublist doesn't have any changes then we will miss the list order change
     };
 

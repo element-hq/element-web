@@ -42,13 +42,17 @@ export default class MessageEvent extends React.Component {
         onHeightChanged: PropTypes.func,
 
         /* the shape of the tile, used */
-        tileShape: PropTypes.string,
+        tileShape: PropTypes.string, // TODO: Use TileShape enum
 
         /* to set source to local file path during export */
         forExport: PropTypes.bool,
 
         /* the maximum image height to use, if the event is an image */
         maxImageHeight: PropTypes.number,
+
+        /* overrides for the msgtype-specific components, used by ReplyTile to override file rendering */
+        overrideBodyTypes: PropTypes.object,
+        overrideEventTypes: PropTypes.object,
 
         /* the permalinkCreator */
         permalinkCreator: PropTypes.object,
@@ -77,9 +81,12 @@ export default class MessageEvent extends React.Component {
             'm.file': sdk.getComponent('messages.MFileBody'),
             'm.audio': sdk.getComponent('messages.MVoiceOrAudioBody'),
             'm.video': sdk.getComponent('messages.MVideoBody'),
+
+            ...(this.props.overrideBodyTypes || {}),
         };
         const evTypes = {
             'm.sticker': sdk.getComponent('messages.MStickerBody'),
+            ...(this.props.overrideEventTypes || {}),
         };
 
         const content = this.props.mxEvent.getContent();
@@ -116,7 +123,7 @@ export default class MessageEvent extends React.Component {
             }
         }
 
-        return <BodyType
+        return BodyType ? <BodyType
             ref={this._body}
             mxEvent={this.props.mxEvent}
             highlights={this.props.highlights}
@@ -130,6 +137,6 @@ export default class MessageEvent extends React.Component {
             onHeightChanged={this.props.onHeightChanged}
             onMessageAllowed={this.onTileUpdate}
             permalinkCreator={this.props.permalinkCreator}
-        />;
+        /> : null;
     }
 }

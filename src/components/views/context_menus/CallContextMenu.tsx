@@ -53,7 +53,7 @@ export default class CallContextMenu extends React.Component<IProps> {
     onTransferClick = () => {
         Modal.createTrackedDialog(
             'Transfer Call', '', InviteDialog, { kind: KIND_CALL_TRANSFER, call: this.props.call },
-            /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
+            /*className=*/"mx_InviteDialog_transferWrapper", /*isPriority=*/false, /*isStatic=*/true,
         );
         this.props.onFinished();
     };
