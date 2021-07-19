@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020 Tulir Asokan <tulir@maunium.net>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,18 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room } from "matrix-js-sdk/src/models/room";
-import { TagID } from "../../models";
-import { IAlgorithm } from "./IAlgorithm";
-import { compare } from "../../../../utils/strings";
+.mx_MImageReplyBody {
+    display: flex;
 
-/**
- * Sorts rooms according to the browser's determination of alphabetic.
- */
-export class AlphabeticAlgorithm implements IAlgorithm {
-    public sortRooms(rooms: Room[], tagId: TagID): Room[] {
-        return rooms.sort((a, b) => {
-            return compare(a.name, b.name);
-        });
+    .mx_MImageBody_thumbnail_container {
+        flex: 1;
+        margin-right: 4px;
+    }
+
+    .mx_MImageReplyBody_info {
+        flex: 1;
+
+        .mx_MImageReplyBody_sender {
+            grid-area: sender;
+        }
+
+        .mx_MImageReplyBody_filename {
+            grid-area: filename;
+        }
     }
 }
+

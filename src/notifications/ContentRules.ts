@@ -1,6 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2016 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { PushRuleVectorState, State } from "./PushRuleVectorState";
-import { IExtendedPushRule, IRuleSets } from "./types";
+import { PushRuleVectorState, VectorState } from "./PushRuleVectorState";
+import { IAnnotatedPushRule, IPushRules, PushRuleKind } from "matrix-js-sdk/src/@types/PushRules";
 
 export interface IContentRules {
-    vectorState: State;
-    rules: IExtendedPushRule[];
-    externalRules: IExtendedPushRule[];
+    vectorState: VectorState;
+    rules: IAnnotatedPushRule[];
+    externalRules: IAnnotatedPushRule[];
 }
 
 export const SCOPE = "global";
@@ -39,9 +38,9 @@ export class ContentRules {
      *   externalRules: a list of other keyword rules, with states other than
      *      vectorState
      */
-    static parseContentRules(rulesets: IRuleSets): IContentRules {
+    public static parseContentRules(rulesets: IPushRules): IContentRules {
         // first categorise the keyword rules in terms of their actions
-        const contentRules = this._categoriseContentRules(rulesets);
+        const contentRules = ContentRules.categoriseContentRules(rulesets);
 
         // Decide which content rules to display in Vector UI.
         // Vector displays a single global rule for a list of keywords
@@ -59,7 +58,7 @@ export class ContentRules {
 
         if (contentRules.loud.length) {
             return {
-                vectorState: State.Loud,
+                vectorState: VectorState.Loud,
                 rules: contentRules.loud,
                 externalRules: [
                     ...contentRules.loud_but_disabled,
@@ -70,33 +69,33 @@ export class ContentRules {
             };
         } else if (contentRules.loud_but_disabled.length) {
             return {
-                vectorState: State.Off,
+                vectorState: VectorState.Off,
                 rules: contentRules.loud_but_disabled,
                 externalRules: [...contentRules.on, ...contentRules.on_but_disabled, ...contentRules.other],
             };
         } else if (contentRules.on.length) {
             return {
-                vectorState: State.On,
+                vectorState: VectorState.On,
                 rules: contentRules.on,
                 externalRules: [...contentRules.on_but_disabled, ...contentRules.other],
             };
         } else if (contentRules.on_but_disabled.length) {
             return {
-                vectorState: State.Off,
+                vectorState: VectorState.Off,
                 rules: contentRules.on_but_disabled,
                 externalRules: contentRules.other,
             };
         } else {
             return {
-                vectorState: State.On,
+                vectorState: VectorState.On,
                 rules: [],
                 externalRules: contentRules.other,
             };
         }
     }
 
-    static _categoriseContentRules(rulesets: IRuleSets) {
-        const contentRules: Record<"on"|"on_but_disabled"|"loud"|"loud_but_disabled"|"other", IExtendedPushRule[]> = {
+    private static categoriseContentRules(rulesets: IPushRules) {
+        const contentRules: Record<"on"|"on_but_disabled"|"loud"|"loud_but_disabled"|"other", IAnnotatedPushRule[]> = {
             on: [],
             on_but_disabled: [],
             loud: [],
@@ -109,7 +108,7 @@ export class ContentRules {
                 const r = rulesets.global[kind][i];
 
                 // check it's not a default rule
-                if (r.rule_id[0] === '.' || kind !== "content") {
+                if (r.rule_id[0] === '.' || kind !== PushRuleKind.ContentSpecific) {
                     continue;
                 }
 
@@ -117,14 +116,14 @@ export class ContentRules {
                 r.kind = kind;
 
                 switch (PushRuleVectorState.contentRuleVectorStateKind(r)) {
-                    case State.On:
+                    case VectorState.On:
                         if (r.enabled) {
                             contentRules.on.push(r);
                         } else {
                             contentRules.on_but_disabled.push(r);
                         }
                         break;
-                    case State.Loud:
+                    case VectorState.Loud:
                         if (r.enabled) {
                             contentRules.loud.push(r);
                         } else {

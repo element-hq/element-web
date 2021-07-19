@@ -30,6 +30,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import UIStore from '../../../stores/UIStore';
 import { lerp } from '../../../utils/AnimationUtils';
 import { MarkedExecution } from '../../../utils/MarkedExecution';
+import { EventSubscription } from 'fbemitter';
 
 const PIP_VIEW_WIDTH = 336;
 const PIP_VIEW_HEIGHT = 232;
@@ -108,7 +109,7 @@ function getPrimarySecondaryCalls(calls: MatrixCall[]): [MatrixCall, MatrixCall[
  */
 @replaceableComponent("views.voip.CallPreview")
 export default class CallPreview extends React.Component<IProps, IState> {
-    private roomStoreToken: any;
+    private roomStoreToken: EventSubscription;
     private dispatcherRef: string;
     private settingsWatcherRef: string;
     private callViewWrapper = createRef<HTMLDivElement>();
@@ -240,7 +241,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
         this.scheduledUpdate.mark();
     };
 
-    private onRoomViewStoreUpdate = (payload) => {
+    private onRoomViewStoreUpdate = () => {
         if (RoomViewStore.getRoomId() === this.state.roomId) return;
 
         const roomId = RoomViewStore.getRoomId();
