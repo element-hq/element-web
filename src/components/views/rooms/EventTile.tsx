@@ -430,7 +430,7 @@ export default class EventTile extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Move into constructor
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillMount() {
         this.verifyEvent(this.props.mxEvent);
     }
@@ -452,7 +452,7 @@ export default class EventTile extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillReceiveProps(nextProps) {
         // re-check the sender verification as outgoing events progress through
         // the send process.
@@ -1250,7 +1250,7 @@ class E2ePadlock extends React.Component<IE2ePadlockProps, IE2ePadlockState> {
                 className={classes}
                 onMouseEnter={this.onHoverStart}
                 onMouseLeave={this.onHoverEnd}
-            >{tooltip}</div>
+            >{ tooltip }</div>
         );
     }
 }
@@ -1314,8 +1314,8 @@ class SentReceipt extends React.PureComponent<ISentReceiptProps, ISentReceiptSta
             <div className="mx_EventTile_msgOption">
                 <span className="mx_EventTile_readAvatars">
                     <span className={receiptClasses} onMouseEnter={this.onHoverStart} onMouseLeave={this.onHoverEnd}>
-                        {nonCssBadge}
-                        {tooltip}
+                        { nonCssBadge }
+                        { tooltip }
                     </span>
                 </span>
             </div>

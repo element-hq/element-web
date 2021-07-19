@@ -50,6 +50,8 @@ import UIStore from "../stores/UIStore";
 import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 import { RoomScrollStateStore } from "../stores/RoomScrollStateStore";
 
+/* eslint-disable @typescript-eslint/naming-convention */
+
 declare global {
     interface Window {
         matrixChat: ReturnType<Renderer>;
@@ -186,3 +188,5 @@ declare global {
         }
     );
 }
+
+/* eslint-enable @typescript-eslint/naming-convention */

@@ -122,14 +122,14 @@ export class ModalManager {
     }
 
     public createDialog<T extends any[]>(
-        Element: React.ComponentType,
+        Element: React.ComponentType, // eslint-disable-line @typescript-eslint/naming-convention
         ...rest: ParametersWithoutFirst<ModalManager["createDialogAsync"]>
     ) {
         return this.createDialogAsync<T>(Promise.resolve(Element), ...rest);
     }
 
     public appendDialog<T extends any[]>(
-        Element: React.ComponentType,
+        Element: React.ComponentType, // eslint-disable-line @typescript-eslint/naming-convention
         ...rest: ParametersWithoutFirst<ModalManager["appendDialogAsync"]>
     ) {
         return this.appendDialogAsync<T>(Promise.resolve(Element), ...rest);
@@ -378,7 +378,7 @@ export class ModalManager {
             const dialog = (
                 <div className={classes}>
                     <div className="mx_Dialog">
-                        {modal.elem}
+                        { modal.elem }
                     </div>
                     <div className="mx_Dialog_background" onClick={this.onBackgroundClick} />
                 </div>

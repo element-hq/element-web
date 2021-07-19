@@ -44,7 +44,7 @@ export default class EmbeddedPage extends React.PureComponent {
     constructor(props, context) {
         super(props, context);
 
-        this._dispatcherRef = null;
+        this.dispatcherRef = null;
 
         this.state = {
             page: '',
@@ -125,11 +125,11 @@ export default class EmbeddedPage extends React.PureComponent {
 
         if (this.props.scrollbar) {
             return <AutoHideScrollbar className={classes}>
-                {content}
+                { content }
             </AutoHideScrollbar>;
         } else {
             return <div className={classes}>
-                {content}
+                { content }
             </div>;
         }
     }

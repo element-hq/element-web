@@ -36,14 +36,14 @@ class Preview extends React.PureComponent<IProps> {
         return (
             <div className="mx_EmojiPicker_footer mx_EmojiPicker_preview">
                 <div className="mx_EmojiPicker_preview_emoji">
-                    {unicode}
+                    { unicode }
                 </div>
                 <div className="mx_EmojiPicker_preview_text">
                     <div className="mx_EmojiPicker_name mx_EmojiPicker_preview_name">
-                        {annotation}
+                        { annotation }
                     </div>
                     <div className="mx_EmojiPicker_shortcode">
-                        {shortcode}
+                        { shortcode }
                     </div>
                 </div>
             </div>

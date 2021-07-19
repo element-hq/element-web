@@ -116,8 +116,8 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
                             "to the new version of the room.</i> We'll post a link to the new room in the old " +
                             "version of the room - room members will have to click this link to join the new room.",
                             {}, {
-                                "b": (sub) => <b>{sub}</b>,
-                                "i": (sub) => <i>{sub}</i>,
+                                "b": (sub) => <b>{ sub }</b>,
+                                "i": (sub) => <i>{ sub }</i>,
                             },
                         ) }
                     </p>

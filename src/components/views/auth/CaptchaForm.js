@@ -129,9 +129,9 @@ export default class CaptchaForm extends React.Component {
 
         return (
             <div ref={this._recaptchaContainer}>
-                <p>{_t(
+                <p>{ _t(
                     "This homeserver would like to make sure you are not a robot.",
-                )}</p>
+                ) }</p>
                 <div id={DIV_ID} />
                 { error }
             </div>

@@ -156,7 +156,7 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({ children, isPanelCo
         )) }
         { spaces.map((s, i) => (
             <Draggable key={s.roomId} draggableId={s.roomId} index={i}>
-                {(provided, snapshot) => (
+                { (provided, snapshot) => (
                     <SpaceItem
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
@@ -170,7 +170,7 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({ children, isPanelCo
                         isPanelCollapsed={isPanelCollapsed}
                         onExpand={() => setPanelCollapsed(false)}
                     />
-                )}
+                ) }
             </Draggable>
         )) }
         { children }
@@ -266,13 +266,13 @@ const SpacePanel = () => {
             SpaceStore.instance.moveRootSpace(result.source.index, result.destination.index);
         }}>
             <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={onKeyDown}>
-                {({ onKeyDownHandler }) => (
+                { ({ onKeyDownHandler }) => (
                     <ul
                         className={classNames("mx_SpacePanel", { collapsed: isPanelCollapsed })}
                         onKeyDown={onKeyDownHandler}
                     >
                         <Droppable droppableId="top-level-spaces">
-                            {(provided, snapshot) => (
+                            { (provided, snapshot) => (
                                 <AutoHideScrollbar
                                     {...provided.droppableProps}
                                     wrappedRef={provided.innerRef}
@@ -297,7 +297,7 @@ const SpacePanel = () => {
                                         isNarrow={isPanelCollapsed}
                                     />
                                 </AutoHideScrollbar>
-                            )}
+                            ) }
                         </Droppable>
                         <AccessibleTooltipButton
                             className={classNames("mx_SpacePanel_toggleCollapse", { expanded: !isPanelCollapsed })}
@@ -306,7 +306,7 @@ const SpacePanel = () => {
                         />
                         { contextMenu }
                     </ul>
-                )}
+                ) }
             </RovingTabIndexProvider>
         </DragDropContext>
     );

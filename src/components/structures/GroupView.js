@@ -431,7 +431,7 @@ export default class GroupView extends React.Component {
 
         this._initGroupStore(this.props.groupId, true);
 
-        this._dispatcherRef = dis.register(this._onAction);
+        this.dispatcherRef = dis.register(this._onAction);
         this._rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this._onRightPanelStoreUpdate);
     }
 
@@ -819,12 +819,12 @@ export default class GroupView extends React.Component {
         let hostingSignup = null;
         if (hostingSignupLink && this.state.isUserPrivileged) {
             hostingSignup = <div className="mx_GroupView_hostingSignup">
-                {_t(
+                { _t(
                     "Want more than a community? <a>Get your own server</a>", {},
                     {
-                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">{sub}</a>,
+                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">{ sub }</a>,
                     },
-                )}
+                ) }
                 <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">
                     <img src={require("../../../res/img/external-link.svg")} width="11" height="10" alt='' />
                 </a>

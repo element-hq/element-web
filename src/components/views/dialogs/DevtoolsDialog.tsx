@@ -337,7 +337,7 @@ class FilteredList extends React.PureComponent<IFilteredListProps, IFilteredList
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
+    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line
         if (this.props.children === nextProps.children && this.props.query === nextProps.query) return;
         this.setState({
             filteredChildren: FilteredList.filterChildren(nextProps.children, nextProps.query),
@@ -494,7 +494,7 @@ class RoomStateExplorer extends React.PureComponent<IExplorerProps, IRoomStateEx
                         }
 
                         return <button className={classes} key={eventType} onClick={onClickFn}>
-                            {eventType}
+                            { eventType }
                         </button>;
                     })
                 }
@@ -726,17 +726,17 @@ const VerificationRequestExplorer: React.FC<{
     return (<div className="mx_DevTools_VerificationRequest">
         <dl>
             <dt>Transaction</dt>
-            <dd>{txnId}</dd>
+            <dd>{ txnId }</dd>
             <dt>Phase</dt>
-            <dd>{PHASE_MAP[request.phase] || request.phase}</dd>
+            <dd>{ PHASE_MAP[request.phase] || request.phase }</dd>
             <dt>Timeout</dt>
-            <dd>{Math.floor(timeout / 1000)}</dd>
+            <dd>{ Math.floor(timeout / 1000) }</dd>
             <dt>Methods</dt>
-            <dd>{request.methods && request.methods.join(", ")}</dd>
+            <dd>{ request.methods && request.methods.join(", ") }</dd>
             <dt>requestingUserId</dt>
-            <dd>{request.requestingUserId}</dd>
+            <dd>{ request.requestingUserId }</dd>
             <dt>observeOnly</dt>
-            <dd>{JSON.stringify(request.observeOnly)}</dd>
+            <dd>{ JSON.stringify(request.observeOnly) }</dd>
         </dl>
     </div>);
 };
@@ -771,12 +771,12 @@ class VerificationExplorer extends React.PureComponent<IExplorerProps> {
 
         return (<div>
             <div className="mx_Dialog_content">
-                {Array.from(inRoomRequests.entries()).reverse().map(([txnId, request]) =>
+                { Array.from(inRoomRequests.entries()).reverse().map(([txnId, request]) =>
                     <VerificationRequestExplorer txnId={txnId} request={request} key={txnId} />,
-                )}
+                ) }
             </div>
             <div className="mx_Dialog_buttons">
-                <button onClick={this.props.onBack}>{_t("Back")}</button>
+                <button onClick={this.props.onBack}>{ _t("Back") }</button>
             </div>
         </div>);
     }
@@ -844,9 +844,9 @@ class WidgetExplorer extends React.Component<IExplorerProps, IWidgetExplorerStat
             const stateEv = allState.find(ev => ev.getId() === editWidget.eventId);
             if (!stateEv) { // "should never happen"
                 return <div>
-                    {_t("There was an error finding this widget.")}
+                    { _t("There was an error finding this widget.") }
                     <div className="mx_Dialog_buttons">
-                        <button onClick={this.onBack}>{_t("Back")}</button>
+                        <button onClick={this.onBack}>{ _t("Back") }</button>
                     </div>
                 </div>;
             }
@@ -865,17 +865,17 @@ class WidgetExplorer extends React.Component<IExplorerProps, IWidgetExplorerStat
         return (<div>
             <div className="mx_Dialog_content">
                 <FilteredList query={this.state.query} onChange={this.onQueryChange}>
-                    {widgets.map(w => {
+                    { widgets.map(w => {
                         return <button
                             className='mx_DevTools_RoomStateExplorer_button'
                             key={w.url + w.eventId}
                             onClick={() => this.onEditWidget(w)}
-                        >{w.url}</button>;
-                    })}
+                        >{ w.url }</button>;
+                    }) }
                 </FilteredList>
             </div>
             <div className="mx_Dialog_buttons">
-                <button onClick={this.onBack}>{_t("Back")}</button>
+                <button onClick={this.onBack}>{ _t("Back") }</button>
             </div>
         </div>);
     }
@@ -1007,7 +1007,7 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
     private renderCanEditLevel(roomId: string, level: SettingLevel): React.ReactNode {
         const canEdit = SettingsStore.canSetValue(this.state.editSetting, roomId, level);
         const className = canEdit ? 'mx_DevTools_SettingsExplorer_mutable' : 'mx_DevTools_SettingsExplorer_immutable';
-        return <td className={className}><code>{canEdit.toString()}</code></td>;
+        return <td className={className}><code>{ canEdit.toString() }</code></td>;
     }
 
     render() {
@@ -1028,17 +1028,17 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
                         <table>
                             <thead>
                                 <tr>
-                                    <th>{_t("Setting ID")}</th>
-                                    <th>{_t("Value")}</th>
-                                    <th>{_t("Value in this room")}</th>
+                                    <th>{ _t("Setting ID") }</th>
+                                    <th>{ _t("Value") }</th>
+                                    <th>{ _t("Value in this room") }</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {allSettings.map(i => (
+                                { allSettings.map(i => (
                                     <tr key={i}>
                                         <td>
                                             <a href="" onClick={(e) => this.onViewClick(e, i)}>
-                                                <code>{i}</code>
+                                                <code>{ i }</code>
                                             </a>
                                             <a href="" onClick={(e) => this.onEditClick(e, i)}
                                                 className='mx_DevTools_SettingsExplorer_edit'
@@ -1047,20 +1047,20 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
                                             </a>
                                         </td>
                                         <td>
-                                            <code>{this.renderSettingValue(SettingsStore.getValue(i))}</code>
+                                            <code>{ this.renderSettingValue(SettingsStore.getValue(i)) }</code>
                                         </td>
                                         <td>
                                             <code>
-                                                {this.renderSettingValue(SettingsStore.getValue(i, room.roomId))}
+                                                { this.renderSettingValue(SettingsStore.getValue(i, room.roomId)) }
                                             </code>
                                         </td>
                                     </tr>
-                                ))}
+                                )) }
                             </tbody>
                         </table>
                     </div>
                     <div className="mx_Dialog_buttons">
-                        <button onClick={this.onBack}>{_t("Back")}</button>
+                        <button onClick={this.onBack}>{ _t("Back") }</button>
                     </div>
                 </div>
             );
@@ -1068,36 +1068,36 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
             return (
                 <div>
                     <div className="mx_Dialog_content mx_DevTools_SettingsExplorer">
-                        <h3>{_t("Setting:")} <code>{this.state.editSetting}</code></h3>
+                        <h3>{ _t("Setting:") } <code>{ this.state.editSetting }</code></h3>
 
                         <div className='mx_DevTools_SettingsExplorer_warning'>
-                            <b>{_t("Caution:")}</b> {_t(
+                            <b>{ _t("Caution:") }</b> { _t(
                                 "This UI does NOT check the types of the values. Use at your own risk.",
-                            )}
+                            ) }
                         </div>
 
                         <div>
-                            {_t("Setting definition:")}
-                            <pre><code>{JSON.stringify(SETTINGS[this.state.editSetting], null, 4)}</code></pre>
+                            { _t("Setting definition:") }
+                            <pre><code>{ JSON.stringify(SETTINGS[this.state.editSetting], null, 4) }</code></pre>
                         </div>
 
                         <div>
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>{_t("Level")}</th>
-                                        <th>{_t("Settable at global")}</th>
-                                        <th>{_t("Settable at room")}</th>
+                                        <th>{ _t("Level") }</th>
+                                        <th>{ _t("Settable at global") }</th>
+                                        <th>{ _t("Settable at room") }</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {LEVEL_ORDER.map(lvl => (
+                                    { LEVEL_ORDER.map(lvl => (
                                         <tr key={lvl}>
-                                            <td><code>{lvl}</code></td>
-                                            {this.renderCanEditLevel(null, lvl)}
-                                            {this.renderCanEditLevel(room.roomId, lvl)}
+                                            <td><code>{ lvl }</code></td>
+                                            { this.renderCanEditLevel(null, lvl) }
+                                            { this.renderCanEditLevel(room.roomId, lvl) }
                                         </tr>
-                                    ))}
+                                    )) }
                                 </tbody>
                             </table>
                         </div>
@@ -1122,8 +1122,8 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
 
                     </div>
                     <div className="mx_Dialog_buttons">
-                        <button onClick={this.onSaveClick}>{_t("Save setting values")}</button>
-                        <button onClick={this.onBack}>{_t("Back")}</button>
+                        <button onClick={this.onSaveClick}>{ _t("Save setting values") }</button>
+                        <button onClick={this.onBack}>{ _t("Back") }</button>
                     </div>
                 </div>
             );
@@ -1131,39 +1131,39 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
             return (
                 <div>
                     <div className="mx_Dialog_content mx_DevTools_SettingsExplorer">
-                        <h3>{_t("Setting:")} <code>{this.state.viewSetting}</code></h3>
+                        <h3>{ _t("Setting:") } <code>{ this.state.viewSetting }</code></h3>
 
                         <div>
-                            {_t("Setting definition:")}
-                            <pre><code>{JSON.stringify(SETTINGS[this.state.viewSetting], null, 4)}</code></pre>
+                            { _t("Setting definition:") }
+                            <pre><code>{ JSON.stringify(SETTINGS[this.state.viewSetting], null, 4) }</code></pre>
                         </div>
 
                         <div>
-                            {_t("Value:")}&nbsp;
-                            <code>{this.renderSettingValue(
+                            { _t("Value:") }&nbsp;
+                            <code>{ this.renderSettingValue(
                                 SettingsStore.getValue(this.state.viewSetting),
-                            )}</code>
+                            ) }</code>
                         </div>
 
                         <div>
-                            {_t("Value in this room:")}&nbsp;
-                            <code>{this.renderSettingValue(
+                            { _t("Value in this room:") }&nbsp;
+                            <code>{ this.renderSettingValue(
                                 SettingsStore.getValue(this.state.viewSetting, room.roomId),
-                            )}</code>
+                            ) }</code>
                         </div>
 
                         <div>
-                            {_t("Values at explicit levels:")}
-                            <pre><code>{this.renderExplicitSettingValues(
+                            { _t("Values at explicit levels:") }
+                            <pre><code>{ this.renderExplicitSettingValues(
                                 this.state.viewSetting, null,
-                            )}</code></pre>
+                            ) }</code></pre>
                         </div>
 
                         <div>
-                            {_t("Values at explicit levels in this room:")}
-                            <pre><code>{this.renderExplicitSettingValues(
+                            { _t("Values at explicit levels in this room:") }
+                            <pre><code>{ this.renderExplicitSettingValues(
                                 this.state.viewSetting, room.roomId,
-                            )}</code></pre>
+                            ) }</code></pre>
                         </div>
 
                     </div>
@@ -1171,7 +1171,7 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
                         <button onClick={(e) => this.onEditClick(e, this.state.viewSetting)}>{
                             _t("Edit Values")
                         }</button>
-                        <button onClick={this.onBack}>{_t("Back")}</button>
+                        <button onClick={this.onBack}>{ _t("Back") }</button>
                     </div>
                 </div>
             );
@@ -1232,12 +1232,12 @@ export default class DevtoolsDialog extends React.PureComponent<IProps, IState> 
 
         if (this.state.mode) {
             body = <MatrixClientContext.Consumer>
-                {(cli) => <React.Fragment>
+                { (cli) => <React.Fragment>
                     <div className="mx_DevTools_label_left">{ this.state.mode.getLabel() }</div>
                     <div className="mx_DevTools_label_right">Room ID: { this.props.roomId }</div>
                     <div className="mx_DevTools_label_bottom" />
                     <this.state.mode onBack={this.onBack} room={cli.getRoom(this.props.roomId)} />
-                </React.Fragment>}
+                </React.Fragment> }
             </MatrixClientContext.Consumer>;
         } else {
             const classes = "mx_DevTools_RoomStateExplorer_button";
