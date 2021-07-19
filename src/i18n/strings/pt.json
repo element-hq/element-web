@@ -572,5 +572,7 @@
     "Your user agent": "O seu user agent",
     "Explore rooms": "Explorar rooms",
     "Sign In": "Iniciar sessão",
-    "Create Account": "Criar conta"
+    "Create Account": "Criar conta",
+    "Not a valid identity server (status code %(code)s)": "Servidor de Identidade inválido (código de status %(code)s)",
+    "Identity server URL must be HTTPS": "O link do servidor de identidade deve começar com HTTPS"
 }
