@@ -196,7 +196,7 @@ declare global {
                   divId: string,
                   options: {
                       sitekey: string;
-                      callback: () => void;
+                      callback: (response: string) => void;
                   }
               ) => string;
               isReady: () => boolean;

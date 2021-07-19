@@ -22,12 +22,12 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 const DIV_ID = 'mx_recaptcha';
 
 interface ICaptchaFormProps {
-    sitePublicKey: string
-    onCaptchaResponse: () => void
+    sitePublicKey: string;
+    onCaptchaResponse: (response: string) => void;
 }
 
 interface ICaptchaFormState {
-    errorText: string | null
+    errorText: string | null;
 
 }
 
@@ -37,18 +37,18 @@ interface ICaptchaFormState {
 @replaceableComponent("views.auth.CaptchaForm")
 export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICaptchaFormState> {
     static defaultProps = {
-        onCaptchaResponse: () => { },
+        onCaptchaResponse: () => {},
     };
 
-    private _captchaWidgetId: string | null = null;
-    private _recaptchaContainer: React.RefObject<HTMLDivElement> = createRef();
-
-    state = {
-        errorText: null,
-    };
+    private captchaWidgetId: string | null = null;
+    private recaptchaContainer = createRef<HTMLDivElement>();
 
     constructor(props: ICaptchaFormProps) {
         super(props);
+
+        this.state = {
+            errorText: null,
+        };
 
         CountlyAnalytics.instance.track("onboarding_grecaptcha_begin");
     }
@@ -58,30 +58,30 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         // so we do this instead.
         if (this.isRecaptchaReady()) {
             // already loaded
-            this._onCaptchaLoaded();
+            this.onCaptchaLoaded();
         } else {
             console.log("Loading recaptcha script...");
-            window.mxOnRecaptchaLoaded = () => { this._onCaptchaLoaded(); };
+            window.mxOnRecaptchaLoaded = () => { this.onCaptchaLoaded(); };
             const scriptTag = document.createElement('script');
             scriptTag.setAttribute(
                 'src', `https://www.recaptcha.net/recaptcha/api.js?onload=mxOnRecaptchaLoaded&render=explicit`,
             );
-            this._recaptchaContainer.current.appendChild(scriptTag);
+            this.recaptchaContainer.current.appendChild(scriptTag);
         }
     }
 
     componentWillUnmount() {
-        this._resetRecaptcha();
+        this.resetRecaptcha();
     }
 
     // Borrowed directly from: https://github.com/codeep/react-recaptcha-google/commit/e118fa5670fa268426969323b2e7fe77698376ba
-    private isRecaptchaReady() {
+    private isRecaptchaReady(): boolean {
         return typeof window !== "undefined" &&
             typeof global.grecaptcha !== "undefined" &&
             typeof global.grecaptcha.render === 'function';
     }
 
-    private _renderRecaptcha(divId) {
+    private renderRecaptcha(divId: string) {
         if (!this.isRecaptchaReady()) {
             console.error("grecaptcha not loaded!");
             throw new Error("Recaptcha did not load successfully");
@@ -96,22 +96,22 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         }
 
         console.info("Rendering to %s", divId);
-        this._captchaWidgetId = global.grecaptcha.render(divId, {
+        this.captchaWidgetId = global.grecaptcha.render(divId, {
             sitekey: publicKey,
             callback: this.props.onCaptchaResponse,
         });
     }
 
-    private _resetRecaptcha() {
-        if (this._captchaWidgetId !== null) {
-            global.grecaptcha.reset(this._captchaWidgetId);
+    private resetRecaptcha() {
+        if (this.captchaWidgetId !== null) {
+            global.grecaptcha.reset(this.captchaWidgetId);
         }
     }
 
-    private _onCaptchaLoaded() {
+    private onCaptchaLoaded() {
         console.log("Loaded recaptcha script.");
         try {
-            this._renderRecaptcha(DIV_ID);
+            this.renderRecaptcha(DIV_ID);
             // clear error if re-rendered
             this.setState({
                 errorText: null,
@@ -136,12 +136,12 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         }
 
         return (
-            <div ref={this._recaptchaContainer}>
+            <div ref={this.recaptchaContainer}>
                 <p>{_t(
                     "This homeserver would like to make sure you are not a robot.",
                 )}</p>
                 <div id={DIV_ID} />
-                {error}
+                { error }
             </div>
         );
     }
