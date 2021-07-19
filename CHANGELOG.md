@@ -1,3 +1,10 @@
+Changes in [3.26.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.26.0) (2021-07-19)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.26.0-rc.1...v3.26.0)
+
+ * Fix 'User' type import
+   [\#6376](https://github.com/matrix-org/matrix-react-sdk/pull/6376)
+
 Changes in [3.26.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.26.0-rc.1) (2021-07-14)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.25.0...v3.26.0-rc.1)
