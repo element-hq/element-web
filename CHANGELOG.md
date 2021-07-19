@@ -1,3 +1,152 @@
+Changes in [3.26.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.26.0) (2021-07-19)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.26.0-rc.1...v3.26.0)
+
+ * Fix 'User' type import
+   [\#6376](https://github.com/matrix-org/matrix-react-sdk/pull/6376)
+
+Changes in [3.26.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.26.0-rc.1) (2021-07-14)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.25.0...v3.26.0-rc.1)
+
+ * Fix voice messages in right panels
+   [\#6370](https://github.com/matrix-org/matrix-react-sdk/pull/6370)
+ * Use TileShape enum more universally
+   [\#6369](https://github.com/matrix-org/matrix-react-sdk/pull/6369)
+ * Translations update from Weblate
+   [\#6373](https://github.com/matrix-org/matrix-react-sdk/pull/6373)
+ * Hide world readable history option in encrypted rooms
+   [\#5947](https://github.com/matrix-org/matrix-react-sdk/pull/5947)
+ * Make the Image View buttons easier to hit
+   [\#6372](https://github.com/matrix-org/matrix-react-sdk/pull/6372)
+ * Reorder buttons in the Image View
+   [\#6368](https://github.com/matrix-org/matrix-react-sdk/pull/6368)
+ * Add VS Code to gitignore
+   [\#6367](https://github.com/matrix-org/matrix-react-sdk/pull/6367)
+ * Fix inviter exploding due to member being null
+   [\#6362](https://github.com/matrix-org/matrix-react-sdk/pull/6362)
+ * Increase sample count in voice message thumbnail
+   [\#6359](https://github.com/matrix-org/matrix-react-sdk/pull/6359)
+ * Improve arraySeed utility
+   [\#6360](https://github.com/matrix-org/matrix-react-sdk/pull/6360)
+ * Convert FontManager to TS and stub it out for tests
+   [\#6358](https://github.com/matrix-org/matrix-react-sdk/pull/6358)
+ * Adjust recording waveform behaviour for voice messages
+   [\#6357](https://github.com/matrix-org/matrix-react-sdk/pull/6357)
+ * Do not honor string power levels
+   [\#6245](https://github.com/matrix-org/matrix-react-sdk/pull/6245)
+ * Add alias and directory customisation points
+   [\#6343](https://github.com/matrix-org/matrix-react-sdk/pull/6343)
+ * Fix multiinviter user already in room and clean up code
+   [\#6354](https://github.com/matrix-org/matrix-react-sdk/pull/6354)
+ * Fix right panel not closing user info when changing rooms
+   [\#6341](https://github.com/matrix-org/matrix-react-sdk/pull/6341)
+ * Quit sticker picker on m.sticker
+   [\#5679](https://github.com/matrix-org/matrix-react-sdk/pull/5679)
+ * Don't autodetect language in inline code blocks
+   [\#6350](https://github.com/matrix-org/matrix-react-sdk/pull/6350)
+ * Make ghost button background transparent
+   [\#6331](https://github.com/matrix-org/matrix-react-sdk/pull/6331)
+ * only consider valid & loaded url previews for show N more prompt
+   [\#6346](https://github.com/matrix-org/matrix-react-sdk/pull/6346)
+ * Extract MXCs from _matrix/media/r0/ URLs for inline images in messages
+   [\#6335](https://github.com/matrix-org/matrix-react-sdk/pull/6335)
+ * Fix small visual regression with the site name on url previews
+   [\#6342](https://github.com/matrix-org/matrix-react-sdk/pull/6342)
+ * Make PIP CallView draggable/movable
+   [\#5952](https://github.com/matrix-org/matrix-react-sdk/pull/5952)
+ * Convert VoiceUserSettingsTab to TS
+   [\#6340](https://github.com/matrix-org/matrix-react-sdk/pull/6340)
+ * Simplify typescript definition for Modernizr
+   [\#6339](https://github.com/matrix-org/matrix-react-sdk/pull/6339)
+ * Remember the last used server for room directory searches
+   [\#6322](https://github.com/matrix-org/matrix-react-sdk/pull/6322)
+ * Focus composer after reacting
+   [\#6332](https://github.com/matrix-org/matrix-react-sdk/pull/6332)
+ * Fix bug which prevented more than one event getting pinned
+   [\#6336](https://github.com/matrix-org/matrix-react-sdk/pull/6336)
+ * Make DeviceListener also update on megolm key in SSSS
+   [\#6337](https://github.com/matrix-org/matrix-react-sdk/pull/6337)
+ * Improve URL previews
+   [\#6326](https://github.com/matrix-org/matrix-react-sdk/pull/6326)
+ * Don't close settings dialog when opening spaces feedback prompt
+   [\#6334](https://github.com/matrix-org/matrix-react-sdk/pull/6334)
+ * Update import location for types
+   [\#6330](https://github.com/matrix-org/matrix-react-sdk/pull/6330)
+ * Improve blurhash rendering performance
+   [\#6329](https://github.com/matrix-org/matrix-react-sdk/pull/6329)
+ * Use a proper color scheme for codeblocks
+   [\#6320](https://github.com/matrix-org/matrix-react-sdk/pull/6320)
+ * Burn `sdk.getComponent()` with 🔥
+   [\#6308](https://github.com/matrix-org/matrix-react-sdk/pull/6308)
+ * Fix instances of the Edit Message Composer's save button being wrongly
+   disabled
+   [\#6307](https://github.com/matrix-org/matrix-react-sdk/pull/6307)
+ * Do not generate a lockfile when running in CI
+   [\#6327](https://github.com/matrix-org/matrix-react-sdk/pull/6327)
+ * Update lockfile with correct dependencies
+   [\#6324](https://github.com/matrix-org/matrix-react-sdk/pull/6324)
+ * Clarify the keys we use when submitting rageshakes
+   [\#6321](https://github.com/matrix-org/matrix-react-sdk/pull/6321)
+ * Fix ImageView context menu
+   [\#6318](https://github.com/matrix-org/matrix-react-sdk/pull/6318)
+ * TypeScript migration
+   [\#6315](https://github.com/matrix-org/matrix-react-sdk/pull/6315)
+ * Move animation to compositor
+   [\#6310](https://github.com/matrix-org/matrix-react-sdk/pull/6310)
+ * Reorganize preferences
+   [\#5742](https://github.com/matrix-org/matrix-react-sdk/pull/5742)
+ * Fix being able to un-rotate images
+   [\#6313](https://github.com/matrix-org/matrix-react-sdk/pull/6313)
+ * Fix icon size in passphrase prompt
+   [\#6312](https://github.com/matrix-org/matrix-react-sdk/pull/6312)
+ * Use sleep & defer from js-sdk instead of duplicating it
+   [\#6305](https://github.com/matrix-org/matrix-react-sdk/pull/6305)
+ * Convert EventTimeline, EventTimelineSet and TimelineWindow to TS
+   [\#6295](https://github.com/matrix-org/matrix-react-sdk/pull/6295)
+ * Comply with new member-delimiter-style rule
+   [\#6306](https://github.com/matrix-org/matrix-react-sdk/pull/6306)
+ * Fix Test Linting
+   [\#6304](https://github.com/matrix-org/matrix-react-sdk/pull/6304)
+ * Convert Markdown to TypeScript
+   [\#6303](https://github.com/matrix-org/matrix-react-sdk/pull/6303)
+ * Convert RoomHeader to TS
+   [\#6302](https://github.com/matrix-org/matrix-react-sdk/pull/6302)
+ * Prevent RoomDirectory from exploding when filterString is wrongly nulled
+   [\#6296](https://github.com/matrix-org/matrix-react-sdk/pull/6296)
+ * Add support for blurhash (MSC2448)
+   [\#5099](https://github.com/matrix-org/matrix-react-sdk/pull/5099)
+ * Remove rateLimitedFunc
+   [\#6300](https://github.com/matrix-org/matrix-react-sdk/pull/6300)
+ * Convert some Key Verification classes to TypeScript
+   [\#6299](https://github.com/matrix-org/matrix-react-sdk/pull/6299)
+ * Typescript conversion of Composer components and more
+   [\#6292](https://github.com/matrix-org/matrix-react-sdk/pull/6292)
+ * Upgrade browserlist target versions
+   [\#6298](https://github.com/matrix-org/matrix-react-sdk/pull/6298)
+ * Fix browser crashing when searching for a malformed HTML tag
+   [\#6297](https://github.com/matrix-org/matrix-react-sdk/pull/6297)
+ * Add custom audio player
+   [\#6264](https://github.com/matrix-org/matrix-react-sdk/pull/6264)
+ * Lint MXC APIs to centralise access
+   [\#6293](https://github.com/matrix-org/matrix-react-sdk/pull/6293)
+ * Remove reminescent references to the tinter
+   [\#6290](https://github.com/matrix-org/matrix-react-sdk/pull/6290)
+ * More js-sdk type consolidation
+   [\#6263](https://github.com/matrix-org/matrix-react-sdk/pull/6263)
+ * Convert MessagePanel, TimelinePanel, ScrollPanel, and more to Typescript
+   [\#6243](https://github.com/matrix-org/matrix-react-sdk/pull/6243)
+ * Migrate to `eslint-plugin-matrix-org`
+   [\#6285](https://github.com/matrix-org/matrix-react-sdk/pull/6285)
+ * Avoid cyclic dependencies by moving watchers out of constructor
+   [\#6287](https://github.com/matrix-org/matrix-react-sdk/pull/6287)
+ * Add spacing between toast buttons with cross browser support in mind
+   [\#6284](https://github.com/matrix-org/matrix-react-sdk/pull/6284)
+ * Deprecate Tinter and TintableSVG
+   [\#6279](https://github.com/matrix-org/matrix-react-sdk/pull/6279)
+ * Migrate FilePanel to TypeScript
+   [\#6283](https://github.com/matrix-org/matrix-react-sdk/pull/6283)
+
 Changes in [3.25.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.25.0) (2021-07-05)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.25.0-rc.1...v3.25.0)
