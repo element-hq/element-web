@@ -110,10 +110,10 @@ class SeshatIndexManager extends BaseEventIndexManager {
     constructor() {
         super();
 
-        electron.on('seshatReply', this._onIpcReply);
+        electron.on('seshatReply', this.onIpcReply);
     }
 
-    async _ipcCall(name: string, ...args: any[]): Promise<any> {
+    private async ipcCall(name: string, ...args: any[]): Promise<any> {
         // TODO this should be moved into the preload.js file.
         const ipcCallId = ++this.nextIpcCallId;
         return new Promise((resolve, reject) => {
@@ -122,7 +122,7 @@ class SeshatIndexManager extends BaseEventIndexManager {
         });
     }
 
-    _onIpcReply = (ev: {}, payload: IPCPayload) => {
+    private onIpcReply = (ev: {}, payload: IPCPayload) => {
         if (payload.id === undefined) {
             console.warn("Ignoring IPC reply with no ID");
             return;
@@ -143,35 +143,35 @@ class SeshatIndexManager extends BaseEventIndexManager {
     };
 
     async supportsEventIndexing(): Promise<boolean> {
-        return this._ipcCall('supportsEventIndexing');
+        return this.ipcCall('supportsEventIndexing');
     }
 
     async initEventIndex(userId: string, deviceId: string): Promise<void> {
-        return this._ipcCall('initEventIndex', userId, deviceId);
+        return this.ipcCall('initEventIndex', userId, deviceId);
     }
 
     async addEventToIndex(ev: IMatrixEvent, profile: IMatrixProfile): Promise<void> {
-        return this._ipcCall('addEventToIndex', ev, profile);
+        return this.ipcCall('addEventToIndex', ev, profile);
     }
 
     async deleteEvent(eventId: string): Promise<boolean> {
-        return this._ipcCall('deleteEvent', eventId);
+        return this.ipcCall('deleteEvent', eventId);
     }
 
     async isEventIndexEmpty(): Promise<boolean> {
-        return this._ipcCall('isEventIndexEmpty');
+        return this.ipcCall('isEventIndexEmpty');
     }
 
     async isRoomIndexed(roomId: string): Promise<boolean> {
-        return this._ipcCall('isRoomIndexed', roomId);
+        return this.ipcCall('isRoomIndexed', roomId);
     }
 
     async commitLiveEvents(): Promise<void> {
-        return this._ipcCall('commitLiveEvents');
+        return this.ipcCall('commitLiveEvents');
     }
 
     async searchEventIndex(searchConfig: ISearchArgs): Promise<IResultRoomEvents> {
-        return this._ipcCall('searchEventIndex', searchConfig);
+        return this.ipcCall('searchEventIndex', searchConfig);
     }
 
     async addHistoricEvents(
@@ -179,43 +179,43 @@ class SeshatIndexManager extends BaseEventIndexManager {
         checkpoint: ICrawlerCheckpoint | null,
         oldCheckpoint: ICrawlerCheckpoint | null,
     ): Promise<boolean> {
-        return this._ipcCall('addHistoricEvents', events, checkpoint, oldCheckpoint);
+        return this.ipcCall('addHistoricEvents', events, checkpoint, oldCheckpoint);
     }
 
     async addCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
-        return this._ipcCall('addCrawlerCheckpoint', checkpoint);
+        return this.ipcCall('addCrawlerCheckpoint', checkpoint);
     }
 
     async removeCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
-        return this._ipcCall('removeCrawlerCheckpoint', checkpoint);
+        return this.ipcCall('removeCrawlerCheckpoint', checkpoint);
     }
 
     async loadFileEvents(args): Promise<IEventAndProfile[]> {
-        return this._ipcCall('loadFileEvents', args);
+        return this.ipcCall('loadFileEvents', args);
     }
 
     async loadCheckpoints(): Promise<ICrawlerCheckpoint[]> {
-        return this._ipcCall('loadCheckpoints');
+        return this.ipcCall('loadCheckpoints');
     }
 
     async closeEventIndex(): Promise<void> {
-        return this._ipcCall('closeEventIndex');
+        return this.ipcCall('closeEventIndex');
     }
 
     async getStats(): Promise<IIndexStats> {
-        return this._ipcCall('getStats');
+        return this.ipcCall('getStats');
     }
 
     async getUserVersion(): Promise<number> {
-        return this._ipcCall('getUserVersion');
+        return this.ipcCall('getUserVersion');
     }
 
     async setUserVersion(version: number): Promise<void> {
-        return this._ipcCall('setUserVersion', version);
+        return this.ipcCall('setUserVersion', version);
     }
 
     async deleteEventIndex(): Promise<void> {
-        return this._ipcCall('deleteEventIndex');
+        return this.ipcCall('deleteEventIndex');
     }
 }
 
@@ -249,7 +249,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
             rageshake.flush();
         });
 
-        electron.on('ipcReply', this._onIpcReply);
+        electron.on('ipcReply', this.onIpcReply);
         electron.on('update-downloaded', this.onUpdateDownloaded);
 
         electron.on('preferences', () => {
@@ -317,11 +317,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
             });
         }
 
-        this._ipcCall("startSSOFlow", this.ssoID);
+        this.ipcCall("startSSOFlow", this.ssoID);
     }
 
     async getConfig(): Promise<{}> {
-        return this._ipcCall('getConfig');
+        return this.ipcCall('getConfig');
     }
 
     onUpdateDownloaded = async (ev, { releaseNotes, releaseName }) => {
@@ -388,7 +388,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
                 room_id: room.roomId,
             });
             window.focus();
-            this._ipcCall('focusWindow');
+            this.ipcCall('focusWindow');
         };
 
         return notification;
@@ -399,7 +399,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     async getAppVersion(): Promise<string> {
-        return this._ipcCall('getAppVersion');
+        return this.ipcCall('getAppVersion');
     }
 
     supportsAutoLaunch(): boolean {
@@ -407,11 +407,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     async getAutoLaunchEnabled(): Promise<boolean> {
-        return this._ipcCall('getAutoLaunchEnabled');
+        return this.ipcCall('getAutoLaunchEnabled');
     }
 
     async setAutoLaunchEnabled(enabled: boolean): Promise<void> {
-        return this._ipcCall('setAutoLaunchEnabled', enabled);
+        return this.ipcCall('setAutoLaunchEnabled', enabled);
     }
 
     supportsWarnBeforeExit(): boolean {
@@ -419,11 +419,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     async shouldWarnBeforeExit(): Promise<boolean> {
-        return this._ipcCall('shouldWarnBeforeExit');
+        return this.ipcCall('shouldWarnBeforeExit');
     }
 
     async setWarnBeforeExit(enabled: boolean): Promise<void> {
-        return this._ipcCall('setWarnBeforeExit', enabled);
+        return this.ipcCall('setWarnBeforeExit', enabled);
     }
 
     supportsAutoHideMenuBar(): boolean {
@@ -432,11 +432,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     async getAutoHideMenuBarEnabled(): Promise<boolean> {
-        return this._ipcCall('getAutoHideMenuBarEnabled');
+        return this.ipcCall('getAutoHideMenuBarEnabled');
     }
 
     async setAutoHideMenuBarEnabled(enabled: boolean): Promise<void> {
-        return this._ipcCall('setAutoHideMenuBarEnabled', enabled);
+        return this.ipcCall('setAutoHideMenuBarEnabled', enabled);
     }
 
     supportsMinimizeToTray(): boolean {
@@ -445,15 +445,15 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     async getMinimizeToTrayEnabled(): Promise<boolean> {
-        return this._ipcCall('getMinimizeToTrayEnabled');
+        return this.ipcCall('getMinimizeToTrayEnabled');
     }
 
     async setMinimizeToTrayEnabled(enabled: boolean): Promise<void> {
-        return this._ipcCall('setMinimizeToTrayEnabled', enabled);
+        return this.ipcCall('setMinimizeToTrayEnabled', enabled);
     }
 
     async canSelfUpdate(): Promise<boolean> {
-        const feedUrl = await this._ipcCall('getUpdateFeedUrl');
+        const feedUrl = await this.ipcCall('getUpdateFeedUrl');
         return Boolean(feedUrl);
     }
 
@@ -492,7 +492,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         window.location.reload(false);
     }
 
-    async _ipcCall(name: string, ...args: any[]): Promise<any> {
+    private async ipcCall(name: string, ...args: any[]): Promise<any> {
         const ipcCallId = ++this.nextIpcCallId;
         return new Promise((resolve, reject) => {
             this.pendingIpcCalls[ipcCallId] = { resolve, reject };
@@ -501,7 +501,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
     }
 
-    _onIpcReply = (ev, payload) => {
+    private onIpcReply = (ev, payload) => {
         if (payload.id === undefined) {
             console.warn("Ignoring IPC reply with no ID");
             return;
@@ -526,22 +526,22 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     async setLanguage(preferredLangs: string[]) {
-        return this._ipcCall('setLanguage', preferredLangs);
+        return this.ipcCall('setLanguage', preferredLangs);
     }
 
     setSpellCheckLanguages(preferredLangs: string[]) {
-        this._ipcCall('setSpellCheckLanguages', preferredLangs).catch(error => {
+        this.ipcCall('setSpellCheckLanguages', preferredLangs).catch(error => {
             console.log("Failed to send setSpellCheckLanguages IPC to Electron");
             console.error(error);
         });
     }
 
     async getSpellCheckLanguages(): Promise<string[]> {
-        return this._ipcCall('getSpellCheckLanguages');
+        return this.ipcCall('getSpellCheckLanguages');
     }
 
     async getAvailableSpellCheckLanguages(): Promise<string[]> {
-        return this._ipcCall('getAvailableSpellCheckLanguages');
+        return this.ipcCall('getAvailableSpellCheckLanguages');
     }
 
     getSSOCallbackUrl(fragmentAfterLogin: string): URL {
@@ -561,7 +561,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     private navigateForwardBack(back: boolean) {
-        this._ipcCall(back ? "navigateBack" : "navigateForward");
+        this.ipcCall(back ? "navigateBack" : "navigateForward");
     }
     private navigateToSpace(num: number) {
         dis.dispatch<SwitchSpacePayload>({
@@ -608,7 +608,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
         try {
-            return await this._ipcCall('getPickleKey', userId, deviceId);
+            return await this.ipcCall('getPickleKey', userId, deviceId);
         } catch (e) {
             // if we can't connect to the password storage, assume there's no
             // pickle key
@@ -618,7 +618,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     async createPickleKey(userId: string, deviceId: string): Promise<string | null> {
         try {
-            return await this._ipcCall('createPickleKey', userId, deviceId);
+            return await this.ipcCall('createPickleKey', userId, deviceId);
         } catch (e) {
             // if we can't connect to the password storage, assume there's no
             // pickle key
@@ -628,7 +628,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
         try {
-            await this._ipcCall('destroyPickleKey', userId, deviceId);
+            await this.ipcCall('destroyPickleKey', userId, deviceId);
         } catch (e) {}
     }
 }
