@@ -1,3 +1,9 @@
+Changes in [1.7.33](https://github.com/vector-im/element-web/releases/tag/v1.7.33) (2021-07-19)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.33-rc.1...v1.7.33)
+
+ * No changes from rc.1
+
 Changes in [1.7.33-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.33-rc.1) (2021-07-14)
 =========================================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.32...v1.7.33-rc.1)
