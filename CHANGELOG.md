@@ -1,3 +1,48 @@
+Changes in [1.7.33](https://github.com/vector-im/element-web/releases/tag/v1.7.33) (2021-07-19)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.33-rc.1...v1.7.33)
+
+ * No changes from rc.1
+
+Changes in [1.7.33-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.33-rc.1) (2021-07-14)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.32...v1.7.33-rc.1)
+
+ * Translations update from Weblate
+   [\#17991](https://github.com/vector-im/element-web/pull/17991)
+ * Revert "Don't run nginx as root in docker"
+   [\#17990](https://github.com/vector-im/element-web/pull/17990)
+ * Don't run nginx as root in docker
+   [\#17927](https://github.com/vector-im/element-web/pull/17927)
+ * Add VS Code to gitignore
+   [\#17982](https://github.com/vector-im/element-web/pull/17982)
+ * Remove canvas native dependencies from Dockerfile
+   [\#17973](https://github.com/vector-im/element-web/pull/17973)
+ * Remove node-canvas devDependency
+   [\#17967](https://github.com/vector-im/element-web/pull/17967)
+ * Add `reskindex` to development steps
+   [\#17926](https://github.com/vector-im/element-web/pull/17926)
+ * Update Modernizr and stop it from polluting classes on the html tag
+   [\#17921](https://github.com/vector-im/element-web/pull/17921)
+ * Convert a few files to TS
+   [\#17895](https://github.com/vector-im/element-web/pull/17895)
+ * Do not generate a lockfile when running in CI
+   [\#17902](https://github.com/vector-im/element-web/pull/17902)
+ * Fix lockfile to match listed dependencies
+   [\#17888](https://github.com/vector-im/element-web/pull/17888)
+ * Remove PostCSS calc() processing
+   [\#17856](https://github.com/vector-im/element-web/pull/17856)
+ * Make issue template styling more consistent and improve PR template
+   [\#17691](https://github.com/vector-im/element-web/pull/17691)
+ * Update jsrsasign to ^10.2.0 (Includes fix for CVE-2021-30246)
+   [\#17170](https://github.com/vector-im/element-web/pull/17170)
+ * Migrate to `eslint-plugin-matrix-org`
+   [\#17847](https://github.com/vector-im/element-web/pull/17847)
+ * Remove spurious overflow: auto on #matrixchat element
+   [\#17647](https://github.com/vector-im/element-web/pull/17647)
+ * Enhance security by disallowing CSP object-src rule
+   [\#17818](https://github.com/vector-im/element-web/pull/17818)
+
 Changes in [1.7.32](https://github.com/vector-im/element-web/releases/tag/v1.7.32) (2021-07-05)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.32-rc.1...v1.7.32)
