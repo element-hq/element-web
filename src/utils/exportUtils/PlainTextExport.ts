@@ -66,12 +66,16 @@ export default class PlainTextExporter extends Exporter {
             if (this.exportOptions.attachmentsIncluded) {
                 try {
                     const blob = await this.getMediaBlob(mxEv);
-                    this.totalSize += blob.size;
-                    const filePath = this.getFilePath(mxEv);
-                    mediaText = " (" + _t("File Attached") + ")";
-                    this.addFile(filePath, blob);
-                    if (this.totalSize > this.exportOptions.maxSize - 1024 * 1024) {
-                        this.exportOptions.attachmentsIncluded = false;
+                    if (this.totalSize + blob.size > this.exportOptions.maxSize) {
+                        mediaText = ` (${this.mediaOmitText})`;
+                    } else {
+                        this.totalSize += blob.size;
+                        const filePath = this.getFilePath(mxEv);
+                        mediaText = " (" + _t("File Attached") + ")";
+                        this.addFile(filePath, blob);
+                        if (this.totalSize == this.exportOptions.maxSize) {
+                            this.exportOptions.attachmentsIncluded = false;
+                        }
                     }
                 } catch (error) {
                     mediaText = " (" + _t("Error fetching file") + ")";

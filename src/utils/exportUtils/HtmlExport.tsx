@@ -306,13 +306,17 @@ export default class HTMLExporter extends Exporter {
             if (this.exportOptions.attachmentsIncluded) {
                 try {
                     const blob = await this.getMediaBlob(mxEv);
-                    this.totalSize += blob.size;
-                    const filePath = this.getFilePath(mxEv);
-                    eventTile = await this.getEventTile(mxEv, joined, filePath);
-                    if (this.totalSize > this.exportOptions.maxSize - 1024 * 512) {
-                        this.exportOptions.attachmentsIncluded = false;
+                    if (this.totalSize + blob.size > this.exportOptions.maxSize) {
+                        eventTile = await this.getEventTile(this.createModifiedEvent(this.mediaOmitText, mxEv), joined);
+                    } else {
+                        this.totalSize += blob.size;
+                        const filePath = this.getFilePath(mxEv);
+                        eventTile = await this.getEventTile(mxEv, joined, filePath);
+                        if (this.totalSize == this.exportOptions.maxSize) {
+                            this.exportOptions.attachmentsIncluded = false;
+                        }
+                        this.addFile(filePath, blob);
                     }
-                    this.addFile(filePath, blob);
                 } catch (e) {
                     console.log("Error while fetching file" + e);
                     eventTile = await this.getEventTile(
@@ -339,7 +343,7 @@ export default class HTMLExporter extends Exporter {
 
             content += this._wantsDateSeparator(event, prevEvent) ? this.getDateSeparator(event) : "";
             const shouldBeJoined = !this._wantsDateSeparator(event, prevEvent)
-                                       && shouldFormContinuation(prevEvent, event);
+                                       && shouldFormContinuation(prevEvent, event, false);
             const body = await this.createMessageBody(event, shouldBeJoined);
             this.totalSize += Buffer.byteLength(body);
             content += body;

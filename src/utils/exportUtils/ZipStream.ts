@@ -223,8 +223,8 @@ export default function streamToZIP(underlyingSource: UnderlyingSource) {
     function closeZip() {
         let length = 0;
         let index = 0;
-        let indexFilename;
-        let file;
+        let indexFilename: number;
+        let file: any;
 
         for (indexFilename = 0; indexFilename < filenames.length; indexFilename++) {
             file = files[filenames[indexFilename]];

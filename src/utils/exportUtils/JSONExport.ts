@@ -45,11 +45,13 @@ export default class JSONExporter extends Exporter {
         if (this.exportOptions.attachmentsIncluded && this.isAttachment(mxEv)) {
             try {
                 const blob = await this.getMediaBlob(mxEv);
-                this.totalSize += blob.size;
-                const filePath = this.getFilePath(mxEv);
-                this.addFile(filePath, blob);
-                if (this.totalSize > this.exportOptions.maxSize - 1024 * 1024) {
-                    this.exportOptions.attachmentsIncluded = false;
+                if (this.totalSize + blob.size < this.exportOptions.maxSize) {
+                    this.totalSize += blob.size;
+                    const filePath = this.getFilePath(mxEv);
+                    if (this.totalSize == this.exportOptions.maxSize) {
+                        this.exportOptions.attachmentsIncluded = false;
+                    }
+                    this.addFile(filePath, blob);
                 }
             } catch (err) {
                 console.log("Error fetching file: " + err);
