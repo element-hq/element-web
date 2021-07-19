@@ -129,7 +129,7 @@ export function getInitialLetter(name: string): string {
     }
 
     // rely on the grapheme cluster splitter in lodash so that we don't break apart compound emojis
-    return split(name, "", 1)[0];
+    return split(name, "", 1)[0].toUpperCase();
 }
 
 export function avatarUrlForRoom(room: Room, width: number, height: number, resizeMethod?: ResizeMethod) {
