@@ -197,7 +197,7 @@ declare global {
                   options: {
                       sitekey: string;
                       callback: (response: string) => void;
-                  }
+                  },
               ) => string;
               isReady: () => boolean;
           };
