@@ -90,6 +90,7 @@ declare global {
         mxUIStore: UIStore;
         mxSetupEncryptionStore?: SetupEncryptionStore;
         mxRoomScrollStateStore?: RoomScrollStateStore;
+        mxOnRecaptchaLoaded?: () => void;
     }
 
     interface Document {
@@ -114,7 +115,7 @@ declare global {
     }
 
     interface StorageEstimate {
-        usageDetails?: {[key: string]: number};
+        usageDetails?: { [key: string]: number };
     }
 
     interface HTMLAudioElement {
@@ -185,4 +186,19 @@ declare global {
             parameterDescriptors?: AudioParamDescriptor[];
         }
     );
+
+    // eslint-disable-next-line no-var
+    var grecaptcha:
+        | undefined
+        | {
+              reset: (id: string) => void;
+              render: (
+                  divId: string,
+                  options: {
+                      sitekey: string;
+                      callback: () => void;
+                  }
+              ) => string;
+              isReady: () => boolean;
+          };
 }
