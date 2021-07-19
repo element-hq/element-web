@@ -2368,5 +2368,15 @@
     "Some suggestions may be hidden for privacy.": "Niektóre propozycje mogą być ukryte z uwagi na prywatność.",
     "If you can't see who you’re looking for, send them your invite link below.": "Jeżeli nie możesz zobaczyć osób, których szukasz, wyślij im poniższy odnośnik z zaproszeniem.",
     "Or send invite link": "Lub wyślij odnośnik z zaproszeniem",
-    "We're working on this as part of the beta, but just want to let you know.": "Pracujemy nad tym w ramach bety, ale chcemy, żebyś wiedział(a)."
+    "We're working on this as part of the beta, but just want to let you know.": "Pracujemy nad tym w ramach bety, ale chcemy, żebyś wiedział(a).",
+    "Integration manager": "Menedżer Integracji",
+    "Identity server is": "Serwer tożsamości to",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Zarządcy integracji otrzymują dane konfiguracji, mogą modyfikować widżety, wysyłać zaproszenia do pokoi i ustawiać poziom uprawnień w Twoim imieniu.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Użyj Zarządcy Integracji aby zarządzać botami, widżetami i pakietami naklejek.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Użyj Zarządcy Integracji <b>%(serverName)s</b> aby zarządzać botami, widżetami i pakietami naklejek.",
+    "Identity server": "Serwer toższamości",
+    "Identity server (%(server)s)": "Serwer tożsamości (%(server)s)",
+    "Could not connect to identity server": "Nie można połączyć z serwerem tożsamości",
+    "Not a valid identity server (status code %(code)s)": "Nieprawidłowy serwer tożsamości (kod statusu %(code)s)",
+    "Identity server URL must be HTTPS": "URL serwera tożsamości musi być HTTPS"
 }
