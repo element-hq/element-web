@@ -38,9 +38,9 @@ class Preview extends React.PureComponent<IProps> {
                     <div className="mx_EmojiPicker_name mx_EmojiPicker_preview_name">
                         {annotation}
                     </div>
-                    { shortcode ?
-                        <div className="mx_EmojiPicker_shortcode">{shortcode}</div> :
-                        null }
+                    <div className="mx_EmojiPicker_shortcode">
+                        {shortcode}
+                    </div>
                 </div>
             </div>
         );

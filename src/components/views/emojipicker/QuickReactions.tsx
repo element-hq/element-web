@@ -62,7 +62,6 @@ class QuickReactions extends React.Component<IProps, IState> {
     };
 
     render() {
-        const shortcode = this.state.hover?.shortcodes?.[0];
         return (
             <section className="mx_EmojiPicker_footer mx_EmojiPicker_quick mx_EmojiPicker_category">
                 <h2 className="mx_EmojiPicker_quick_header mx_EmojiPicker_category_label">
@@ -70,9 +69,7 @@ class QuickReactions extends React.Component<IProps, IState> {
                         ? _t("Quick Reactions")
                         : <React.Fragment>
                             <span className="mx_EmojiPicker_name">{this.state.hover.annotation}</span>
-                            { shortcode ?
-                                <span className="mx_EmojiPicker_shortcode">{shortcode}</span> :
-                                null }
+                            <span className="mx_EmojiPicker_shortcode">{this.state.hover.shortcodes[0]}</span>
                         </React.Fragment>
                     }
                 </h2>

@@ -25,8 +25,8 @@ export interface IEmoji {
     shortcodes: string[];
     tags?: string[];
     unicode: string;
+    skins?: any[]; // Currently unused
     emoticon?: string;
-    filterString: string;
 }
 
 // The unicode is stored without the variant selector
@@ -59,20 +59,17 @@ export const DATA_BY_CATEGORY = {
     "flags": [],
 };
 
-const ZERO_WIDTH_JOINER = "\u200D";
-
 // Store various mappings from unicode/emoticon/shortcode to the Emoji objects
-export const EMOJI: IEmoji[] = EMOJIBASE.map(emojiData => {
+export const EMOJI: IEmoji[] = EMOJIBASE.map((emojiData: Omit<IEmoji, "shortcodes">) => {
     const shortcodeData = SHORTCODES[emojiData.hexcode];
-    // Homogenize shortcodes by ensuring that everything is an array
-    const shortcodes = typeof shortcodeData === "string" ? [shortcodeData] : (shortcodeData ?? []);
-
     const emoji: IEmoji = {
         ...emojiData,
-        shortcodes,
-        // This is used as the string to match the query against when filtering emojis
-        filterString: (`${emojiData.annotation}\n${shortcodes.join('\n')}}\n${emojiData.emoticon || ''}\n` +
-            `${emojiData.unicode.split(ZERO_WIDTH_JOINER).join("\n")}`).toLowerCase(),
+        // Homogenize shortcodes by ensuring that everything is an array
+        shortcodes: typeof shortcodeData === "string" ?
+            [shortcodeData] :
+            // If there's ever a gap in shortcode coverage, we fudge it by
+            // filling it in with the emoji's CLDR annotation
+            (shortcodeData ?? [emojiData.annotation.toLowerCase().replace(/ /g, "_")]),
     };
 
     const categoryId = EMOJIBASE_GROUP_ID_TO_CATEGORY[emoji.group];

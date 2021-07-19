@@ -49,7 +49,7 @@ const EMOJI_SHORTCODES: IEmojiShort[] = EMOJI.sort((a, b) => {
     emoji,
     // Include the index so that we can preserve the original order
     _orderBy: index,
-})).filter(o => o.emoji.shortcodes[0]);
+}));
 
 function score(query, space) {
     const index = space.indexOf(query);
@@ -68,7 +68,7 @@ export default class EmojiProvider extends AutocompleteProvider {
         super(EMOJI_REGEX);
         this.matcher = new QueryMatcher<IEmojiShort>(EMOJI_SHORTCODES, {
             keys: ['emoji.emoticon'],
-            funcs: [o => o.emoji.shortcodes.map(s => `:${s}:`).join(" ")],
+            funcs: [o => o.emoji.shortcodes.map(s => `:${s}:`)],
             // For matching against ascii equivalents
             shouldMatchWordsOnly: false,
         });
