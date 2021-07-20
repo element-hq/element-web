@@ -91,6 +91,7 @@ declare global {
         mxSetupEncryptionStore?: SetupEncryptionStore;
         mxRoomScrollStateStore?: RoomScrollStateStore;
         grecaptcha: any;
+        // eslint-disable-next-line
         mx_on_recaptcha_loaded: () => void;
     }
 

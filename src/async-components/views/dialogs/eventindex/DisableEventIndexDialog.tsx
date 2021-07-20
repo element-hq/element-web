@@ -15,7 +15,10 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../../index';
+
+import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
+import Spinner from "../../../../components/views/elements/Spinner";
+import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import dis from "../../../../dispatcher/dispatcher";
 import { _t } from '../../../../languageHandler';
 
@@ -23,7 +26,6 @@ import SettingsStore from "../../../../settings/SettingsStore";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
 import { Action } from "../../../../dispatcher/actions";
 import { SettingLevel } from "../../../../settings/SettingLevel";
-
 interface IProps {
     onFinished: (success: boolean) => void;
 }
@@ -55,10 +57,6 @@ export default class DisableEventIndexDialog extends React.Component<IProps, ISt
     };
 
     public render(): React.ReactNode {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const Spinner = sdk.getComponent('elements.Spinner');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
         return (
             <BaseDialog onFinished={this.props.onFinished} title={_t("Are you sure?")}>
                 {_t("If disabled, messages from encrypted rooms won't appear in search results.")}
