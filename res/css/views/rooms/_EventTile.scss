@@ -204,14 +204,6 @@ $hover-select-border: 4px;
         margin-right: 10px;
     }
 
-    &:hover {
-        .mx_EventTile_line {
-            // To avoid bubble events being highlighted
-            background-color: inherit !important;
-        }
-    }
-
-
     .mx_EventTile_msgOption a {
         text-decoration: none;
     }
@@ -340,6 +332,13 @@ $hover-select-border: 4px;
 
     .mx_EventTile_msgOption {
         grid-column: 2;
+    }
+
+    &:hover {
+        .mx_EventTile_line {
+            // To avoid bubble events being highlighted
+            background-color: inherit !important;
+        }
     }
 }
 
