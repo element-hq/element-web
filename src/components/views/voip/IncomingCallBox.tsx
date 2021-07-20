@@ -133,8 +133,8 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
                     width={32}
                 />
                 <div>
-                    <h1>{caller}</h1>
-                    <p>{incomingCallText}</p>
+                    <h1>{ caller }</h1>
+                    <p>{ incomingCallText }</p>
                 </div>
                 <AccessibleTooltipButton
                     className={silenceClass}
@@ -144,7 +144,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
             </div>
             <div className="mx_IncomingCallBox_buttons">
                 <AccessibleButton
-                    className={"mx_IncomingCallBox_decline"}
+                    className="mx_IncomingCallBox_decline"
                     onClick={this.onRejectClick}
                     kind="danger"
                 >
@@ -152,7 +152,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
                 </AccessibleButton>
                 <div className="mx_IncomingCallBox_spacer" />
                 <AccessibleButton
-                    className={"mx_IncomingCallBox_accept"}
+                    className="mx_IncomingCallBox_accept"
                     onClick={this.onAnswerClick}
                     kind="primary"
                 >

@@ -3242,7 +3242,7 @@ eslint-config-google@^0.14.0:
 
 "eslint-plugin-matrix-org@github:matrix-org/eslint-plugin-matrix-org#main":
   version "0.3.2"
-  resolved "https://codeload.github.com/matrix-org/eslint-plugin-matrix-org/tar.gz/383a1e4a9ef7944c921efda0de2ac9635d45cb5c"
+  resolved "https://codeload.github.com/matrix-org/eslint-plugin-matrix-org/tar.gz/8529f1d77863db6327cf1a1a4fa65d06cc26f91b"
 
 eslint-plugin-react-hooks@^4.2.0:
   version "4.2.0"

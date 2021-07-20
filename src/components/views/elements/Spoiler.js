@@ -37,7 +37,7 @@ export default class Spoiler extends React.Component {
 
     render() {
         const reason = this.props.reason ? (
-            <span className="mx_EventTile_spoiler_reason">{"(" + this.props.reason + ")"}</span>
+            <span className="mx_EventTile_spoiler_reason">{ "(" + this.props.reason + ")" }</span>
         ) : null;
         // react doesn't allow appending a DOM node as child.
         // as such, we pass the this.props.contentHtml instead and then set the raw

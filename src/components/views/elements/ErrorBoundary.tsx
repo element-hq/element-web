@@ -81,33 +81,33 @@ export default class ErrorBoundary extends React.PureComponent<{}, IState> {
             let bugReportSection;
             if (SdkConfig.get().bug_report_endpoint_url) {
                 bugReportSection = <React.Fragment>
-                    <p>{_t(
+                    <p>{ _t(
                         "Please <newIssueLink>create a new issue</newIssueLink> " +
                         "on GitHub so that we can investigate this bug.", {}, {
                             newIssueLink: (sub) => {
                                 return <a target="_blank" rel="noreferrer noopener" href={newIssueUrl}>{ sub }</a>;
                             },
                         },
-                    )}</p>
-                    <p>{_t(
+                    ) }</p>
+                    <p>{ _t(
                         "If you've submitted a bug via GitHub, debug logs can help " +
                         "us track down the problem. Debug logs contain application " +
                         "usage data including your username, the IDs or aliases of " +
                         "the rooms or groups you have visited and the usernames of " +
                         "other users. They do not contain messages.",
-                    )}</p>
+                    ) }</p>
                     <AccessibleButton onClick={this.onBugReport} kind='primary'>
-                        {_t("Submit debug logs")}
+                        { _t("Submit debug logs") }
                     </AccessibleButton>
                 </React.Fragment>;
             }
 
             return <div className="mx_ErrorBoundary">
                 <div className="mx_ErrorBoundary_body">
-                    <h1>{_t("Something went wrong!")}</h1>
+                    <h1>{ _t("Something went wrong!") }</h1>
                     { bugReportSection }
                     <AccessibleButton onClick={this.onClearCacheAndReload} kind='danger'>
-                        {_t("Clear cache and reload")}
+                        { _t("Clear cache and reload") }
                     </AccessibleButton>
                 </div>
             </div>;

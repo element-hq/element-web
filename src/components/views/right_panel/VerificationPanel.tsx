@@ -85,12 +85,12 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         const brand = SdkConfig.get().brand;
 
         const noCommonMethodError: JSX.Element = !showSAS && !showQR ?
-            <p>{_t(
+            <p>{ _t(
                 "The session you are trying to verify doesn't support scanning a " +
                 "QR code or emoji verification, which is what %(brand)s supports. Try " +
                 "with a different client.",
                 { brand },
-            )}</p> :
+            ) }</p> :
             null;
 
         if (this.props.layout === 'dialog') {
@@ -100,31 +100,31 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             if (showQR) {
                 qrBlockDialog =
                     <div className='mx_VerificationPanel_QRPhase_startOption'>
-                        <p>{_t("Scan this unique code")}</p>
+                        <p>{ _t("Scan this unique code") }</p>
                         <VerificationQRCode qrCodeData={request.qrCodeData} />
                     </div>;
             }
             if (showSAS) {
                 sasBlockDialog = <div className='mx_VerificationPanel_QRPhase_startOption'>
-                    <p>{_t("Compare unique emoji")}</p>
+                    <p>{ _t("Compare unique emoji") }</p>
                     <span className='mx_VerificationPanel_QRPhase_helpText'>
-                        {_t("Compare a unique set of emoji if you don't have a camera on either device")}
+                        { _t("Compare a unique set of emoji if you don't have a camera on either device") }
                     </span>
                     <AccessibleButton disabled={this.state.emojiButtonClicked} onClick={this.startSAS} kind='primary'>
-                        {_t("Start")}
+                        { _t("Start") }
                     </AccessibleButton>
                 </div>;
             }
             const or = qrBlockDialog && sasBlockDialog ?
-                <div className='mx_VerificationPanel_QRPhase_betweenText'>{_t("or")}</div> : null;
+                <div className='mx_VerificationPanel_QRPhase_betweenText'>{ _t("or") }</div> : null;
             return (
                 <div>
-                    {_t("Verify this session by completing one of the following:")}
+                    { _t("Verify this session by completing one of the following:") }
                     <div className='mx_VerificationPanel_QRPhase_startOptions'>
-                        {qrBlockDialog}
-                        {or}
-                        {sasBlockDialog}
-                        {noCommonMethodError}
+                        { qrBlockDialog }
+                        { or }
+                        { sasBlockDialog }
+                        { noCommonMethodError }
                     </div>
                 </div>
             );
@@ -133,10 +133,10 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         let qrBlock: JSX.Element;
         if (showQR) {
             qrBlock = <div className="mx_UserInfo_container">
-                <h3>{_t("Verify by scanning")}</h3>
-                <p>{_t("Ask %(displayName)s to scan your code:", {
+                <h3>{ _t("Verify by scanning") }</h3>
+                <p>{ _t("Ask %(displayName)s to scan your code:", {
                     displayName: (member as User).displayName || (member as RoomMember).name || member.userId,
-                })}</p>
+                }) }</p>
 
                 <div className="mx_VerificationPanel_qrCode">
                     <VerificationQRCode qrCodeData={request.qrCodeData} />
@@ -153,28 +153,28 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
             // Note: mx_VerificationPanel_verifyByEmojiButton is for the end-to-end tests
             sasBlock = <div className="mx_UserInfo_container">
-                <h3>{_t("Verify by emoji")}</h3>
-                <p>{sasLabel}</p>
+                <h3>{ _t("Verify by emoji") }</h3>
+                <p>{ sasLabel }</p>
                 <AccessibleButton
                     disabled={disabled}
                     kind="primary"
                     className="mx_UserInfo_wideButton mx_VerificationPanel_verifyByEmojiButton"
                     onClick={this.startSAS}
                 >
-                    {_t("Verify by emoji")}
+                    { _t("Verify by emoji") }
                 </AccessibleButton>
             </div>;
         }
 
         const noCommonMethodBlock = noCommonMethodError ?
-            <div className="mx_UserInfo_container">{noCommonMethodError}</div> :
+            <div className="mx_UserInfo_container">{ noCommonMethodError }</div> :
             null;
 
         // TODO: add way to open camera to scan a QR code
         return <React.Fragment>
-            {qrBlock}
-            {sasBlock}
-            {noCommonMethodBlock}
+            { qrBlock }
+            { sasBlock }
+            { noCommonMethodBlock }
         </React.Fragment>;
     }
 
@@ -204,7 +204,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         if (this.state.reciprocateQREvent) {
             // Element Web doesn't support scanning yet, so assume here we're the client being scanned.
             body = <React.Fragment>
-                <p>{description}</p>
+                <p>{ description }</p>
                 <E2EIcon isUser={true} status="verified" size={128} hideTooltip={true} />
                 <div className="mx_VerificationPanel_reciprocateButtons">
                     <AccessibleButton
@@ -227,7 +227,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             body = <p><Spinner /></p>;
         }
         return <div className="mx_UserInfo_container mx_VerificationPanel_reciprocate_section">
-            <h3>{_t("Verify by scanning")}</h3>
+            <h3>{ _t("Verify by scanning") }</h3>
             { body }
         </div>;
     }
@@ -266,12 +266,12 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
         return (
             <div className="mx_UserInfo_container mx_VerificationPanel_verified_section">
-                <h3>{_t("Verified")}</h3>
-                <p>{description}</p>
+                <h3>{ _t("Verified") }</h3>
+                <p>{ description }</p>
                 <E2EIcon isUser={true} status="verified" size={128} hideTooltip={true} />
                 { text ? <p>{ text }</p> : null }
                 <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>
-                    {_t("Got it")}
+                    { _t("Got it") }
                 </AccessibleButton>
             </div>
         );
@@ -305,11 +305,11 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
         return (
             <div className="mx_UserInfo_container">
-                <h3>{_t("Verification cancelled")}</h3>
+                <h3>{ _t("Verification cancelled") }</h3>
                 <p>{ text }</p>
 
                 <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>
-                    {_t("Got it")}
+                    { _t("Got it") }
                 </AccessibleButton>
             </div>
         );
@@ -339,7 +339,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                                 isSelf={request.isSelfVerification}
                             /> : <Spinner />;
                         return <div className="mx_UserInfo_container">
-                            <h3>{_t("Compare emoji")}</h3>
+                            <h3>{ _t("Compare emoji") }</h3>
                             { emojis }
                         </div>;
                     }

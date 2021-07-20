@@ -101,7 +101,7 @@ export default class DialpadModal extends React.PureComponent<IProps, IState> {
             </div>
             <div className="mx_DialPadModal_header">
                 <form onSubmit={this.onFormSubmit}>
-                    {dialPadField}
+                    { dialPadField }
                 </form>
             </div>
             <div className="mx_DialPadModal_dialPad">

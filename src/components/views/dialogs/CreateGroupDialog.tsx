@@ -102,7 +102,7 @@ export default class CreateGroupDialog extends React.Component<IProps, IState> {
         });
     };
 
-    _onCancel = () => {
+    private onCancel = () => {
         this.props.onFinished(false);
     };
 
@@ -167,7 +167,7 @@ export default class CreateGroupDialog extends React.Component<IProps, IState> {
                     </div>
                     <div className="mx_Dialog_buttons">
                         <input type="submit" value={_t('Create')} className="mx_Dialog_primary" />
-                        <button onClick={this._onCancel}>
+                        <button onClick={this.onCancel}>
                             { _t("Cancel") }
                         </button>
                     </div>
