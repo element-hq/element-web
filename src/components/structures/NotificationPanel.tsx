@@ -22,6 +22,7 @@ import BaseCard from "../views/right_panel/BaseCard";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import TimelinePanel from "./TimelinePanel";
 import Spinner from "../views/elements/Spinner";
+import { TileShape } from "../views/rooms/EventTile";
 
 interface IProps {
     onClose(): void;
@@ -34,8 +35,8 @@ interface IProps {
 export default class NotificationPanel extends React.PureComponent<IProps> {
     render() {
         const emptyState = (<div className="mx_RightPanel_empty mx_NotificationPanel_empty">
-            <h2>{_t('You’re all caught up')}</h2>
-            <p>{_t('You have no visible notifications.')}</p>
+            <h2>{ _t('You’re all caught up') }</h2>
+            <p>{ _t('You have no visible notifications.') }</p>
         </div>);
 
         let content;
@@ -48,7 +49,7 @@ export default class NotificationPanel extends React.PureComponent<IProps> {
                     manageReadMarkers={false}
                     timelineSet={timelineSet}
                     showUrlPreview={false}
-                    tileShape="notif"
+                    tileShape={TileShape.Notif}
                     empty={emptyState}
                     alwaysShowTimestamps={true}
                 />

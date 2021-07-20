@@ -26,9 +26,9 @@ limitations under the License.
  */
 
 import React from 'react';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import BaseDialog from "./BaseDialog";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -57,7 +57,6 @@ export default class ErrorDialog extends React.Component<IProps, IState> {
     };
 
     public render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog
                 className="mx_ErrorDialog"

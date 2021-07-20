@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import EditorModel from "./model";
-import {IDiff} from "./diff";
-import {SerializedPart} from "./parts";
-import {Caret} from "./caret";
+import { IDiff } from "./diff";
+import { SerializedPart } from "./parts";
+import { Caret } from "./caret";
 
 interface IHistory {
     parts: SerializedPart[];
@@ -92,7 +92,7 @@ export default class HistoryManager {
             this.stack.pop();
         }
         const parts = model.serializeParts();
-        this.stack.push({parts, caret});
+        this.stack.push({ parts, caret });
         this.currentIndex = this.stack.length - 1;
         this.lastCaret = null;
         this.changedSinceLastPush = false;

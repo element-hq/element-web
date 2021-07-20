@@ -14,11 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import url from 'url';
-import qs from 'qs';
-
 import SdkConfig from '../SdkConfig';
-import {MatrixClientPeg} from '../MatrixClientPeg';
+import { MatrixClientPeg } from '../MatrixClientPeg';
 
 export function getHostingLink(campaign) {
     const hostingLink = SdkConfig.get().hosting_signup_link;
@@ -28,11 +25,8 @@ export function getHostingLink(campaign) {
     if (MatrixClientPeg.get().getDomain() !== 'matrix.org') return null;
 
     try {
-        const hostingUrl = url.parse(hostingLink);
-        const params = qs.parse(hostingUrl.query);
-        params.utm_campaign = campaign;
-        hostingUrl.search = undefined;
-        hostingUrl.query = params;
+        const hostingUrl = new URL(hostingLink);
+        hostingUrl.searchParams.set("utm_campaign", campaign);
         return hostingUrl.format();
     } catch (e) {
         return hostingLink;

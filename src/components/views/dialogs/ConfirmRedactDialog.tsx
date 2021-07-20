@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import TextInputDialog from "./TextInputDialog";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -29,7 +29,6 @@ interface IProps {
 @replaceableComponent("views.dialogs.ConfirmRedactDialog")
 export default class ConfirmRedactDialog extends React.Component<IProps> {
     render() {
-        const TextInputDialog = sdk.getComponent('views.dialogs.TextInputDialog');
         return (
             <TextInputDialog onFinished={this.props.onFinished}
                 title={_t("Confirm Removal")}

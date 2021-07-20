@@ -16,16 +16,16 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import Pill from "../elements/Pill";
-import {makeUserPermalink} from "../../../utils/permalinks/Permalinks";
+import { makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import BaseAvatar from "../avatars/BaseAvatar";
 import SettingsStore from "../../../settings/SettingsStore";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { isUrlPermitted } from '../../../HtmlUtils';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 interface IProps {
     ev: MatrixEvent;
@@ -69,7 +69,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
     static propTypes = {
         ev: PropTypes.object.isRequired,
         room: PropTypes.object.isRequired,
-    }
+    };
 
     render() {
         const content: IBridgeStateEvent = this.props.ev.getContent();
@@ -91,24 +91,24 @@ export default class BridgeTile extends React.PureComponent<IProps> {
 
         let creator = null;
         if (content.creator) {
-            creator = <li>{_t("This bridge was provisioned by <user />.", {}, {
+            creator = <li>{ _t("This bridge was provisioned by <user />.", {}, {
                 user: () => <Pill
                     type={Pill.TYPE_USER_MENTION}
                     room={this.props.room}
                     url={makeUserPermalink(content.creator)}
                     shouldShowPillAvatar={SettingsStore.getValue("Pill.shouldShowPillAvatar")}
                 />,
-            })}</li>;
+            }) }</li>;
         }
 
-        const bot = <li>{_t("This bridge is managed by <user />.", {}, {
+        const bot = <li>{ _t("This bridge is managed by <user />.", {}, {
             user: () => <Pill
                 type={Pill.TYPE_USER_MENTION}
                 room={this.props.room}
                 url={makeUserPermalink(content.bridgebot)}
                 shouldShowPillAvatar={SettingsStore.getValue("Pill.shouldShowPillAvatar")}
             />,
-        })}</li>;
+        }) }</li>;
 
         let networkIcon;
 
@@ -119,9 +119,9 @@ export default class BridgeTile extends React.PureComponent<IProps> {
                 width={48}
                 height={48}
                 resizeMethod='crop'
-                name={ protocolName }
-                idName={ protocolName }
-                url={ avatarUrl }
+                name={protocolName}
+                idName={protocolName}
+                url={avatarUrl}
             />;
         } else {
             networkIcon = <div className="noProtocolIcon"></div>;
@@ -129,35 +129,37 @@ export default class BridgeTile extends React.PureComponent<IProps> {
         let networkItem = null;
         if (network) {
             const networkName = network.displayname || network.id;
-            let networkLink = <span>{networkName}</span>;
+            let networkLink = <span>{ networkName }</span>;
             if (typeof network.external_url === "string" && isUrlPermitted(network.external_url)) {
-                networkLink = <a href={network.external_url} target="_blank" rel="noreferrer noopener">{networkName}</a>
+                networkLink = (
+                    <a href={network.external_url} target="_blank" rel="noreferrer noopener">{ networkName }</a>
+                );
             }
             networkItem = _t("Workspace: <networkLink/>", {}, {
                 networkLink: () => networkLink,
             });
         }
 
-        let channelLink = <span>{channelName}</span>;
+        let channelLink = <span>{ channelName }</span>;
         if (typeof channel.external_url === "string" && isUrlPermitted(channel.external_url)) {
-            channelLink = <a href={channel.external_url} target="_blank" rel="noreferrer noopener">{channelName}</a>
+            channelLink = <a href={channel.external_url} target="_blank" rel="noreferrer noopener">{ channelName }</a>;
         }
 
         const id = this.props.ev.getId();
         return (<li key={id}>
             <div className="column-icon">
-                {networkIcon}
+                { networkIcon }
             </div>
             <div className="column-data">
-                <h3>{protocolName}</h3>
+                <h3>{ protocolName }</h3>
                 <p className="workspace-channel-details">
-                    {networkItem}
-                    <span className="channel">{_t("Channel: <channelLink/>", {}, {
+                    { networkItem }
+                    <span className="channel">{ _t("Channel: <channelLink/>", {}, {
                         channelLink: () => channelLink,
-                    })}</span>
+                    }) }</span>
                 </p>
                 <ul className="metadata">
-                    {creator} {bot}
+                    { creator } { bot }
                 </ul>
             </div>
         </li>);

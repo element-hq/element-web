@@ -15,14 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {InteractiveAuth} from "matrix-js-sdk/src/interactive-auth";
-import React, {createRef} from 'react';
+import { InteractiveAuth } from "matrix-js-sdk/src/interactive-auth";
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 
 import getEntryComponentForLoginType from '../views/auth/InteractiveAuthEntryComponents';
 
 import * as sdk from '../../index';
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 
 export const ERROR_USER_CANCELLED = new Error("User cancelled auth session");
 
@@ -54,7 +54,7 @@ export default class InteractiveAuthComponent extends React.Component {
         //      * emailSid {string} If email auth was performed, the sid of
         //            the auth session.
         //      * clientSecret {string} The client secret used in auth
-        //            sessions with the ID server.
+        //            sessions with the identity server.
         onAuthFinished: PropTypes.func.isRequired,
 
         // Inputs provided by the user to the auth process

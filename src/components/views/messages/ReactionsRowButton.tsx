@@ -68,7 +68,7 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
                     "key": content,
                 },
             });
-            dis.dispatch({action: "message_sent"});
+            dis.dispatch({ action: "message_sent" });
         }
     };
 
@@ -79,13 +79,13 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
             tooltipRendered: true,
             tooltipVisible: true,
         });
-    }
+    };
 
     onMouseLeave = () => {
         this.setState({
             tooltipVisible: false,
         });
-    }
+    };
 
     render() {
         const { mxEvent, content, count, reactionEvents, myReactionEvent } = this.props;
@@ -142,12 +142,12 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
             onMouseLeave={this.onMouseLeave}
         >
             <span className="mx_ReactionsRowButton_content" aria-hidden="true">
-                {content}
+                { content }
             </span>
             <span className="mx_ReactionsRowButton_count" aria-hidden="true">
-                {count}
+                { count }
             </span>
-            {tooltip}
+            { tooltip }
         </AccessibleButton>;
     }
 }

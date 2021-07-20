@@ -16,10 +16,10 @@ limitations under the License.
 
 import React from 'react';
 import { _t } from '../../../languageHandler';
-import BaseDialog from "..//dialogs/BaseDialog"
+import BaseDialog from "..//dialogs/BaseDialog";
 import AccessibleButton from './AccessibleButton';
-import {getDesktopCapturerSources} from "matrix-js-sdk/src/webrtc/call";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { getDesktopCapturerSources } from "matrix-js-sdk/src/webrtc/call";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 export interface DesktopCapturerSource {
     id: string;
@@ -44,7 +44,7 @@ export class ExistingSource extends React.Component<DesktopCapturerSourceIProps>
 
     onClick = (ev) => {
         this.props.onSelect(this.props.source);
-    }
+    };
 
     render() {
         return (
@@ -56,7 +56,7 @@ export class ExistingSource extends React.Component<DesktopCapturerSourceIProps>
                     className="mx_desktopCapturerSourcePicker_stream_thumbnail"
                     src={this.props.source.thumbnailURL}
                 />
-                <span className="mx_desktopCapturerSourcePicker_stream_name">{this.props.source.name}</span>
+                <span className="mx_desktopCapturerSourcePicker_stream_name">{ this.props.source.name }</span>
             </AccessibleButton>
         );
     }
@@ -108,19 +108,19 @@ export default class DesktopCapturerSourcePicker extends React.Component<
 
     onSelect = (source) => {
         this.props.onFinished(source);
-    }
+    };
 
     onScreensClick = (ev) => {
-        this.setState({selectedTab: Tabs.Screens});
-    }
+        this.setState({ selectedTab: Tabs.Screens });
+    };
 
     onWindowsClick = (ev) => {
-        this.setState({selectedTab: Tabs.Windows});
-    }
+        this.setState({ selectedTab: Tabs.Windows });
+    };
 
     onCloseClick = (ev) => {
         this.props.onFinished(null);
-    }
+    };
 
     render() {
         let sources;
@@ -157,13 +157,13 @@ export default class DesktopCapturerSourcePicker extends React.Component<
                         className={screensButtonStyle}
                         onClick={this.onScreensClick}
                     >
-                        {_t("Screens")}
+                        { _t("Screens") }
                     </AccessibleButton>
                     <AccessibleButton
                         className={windowsButtonStyle}
                         onClick={this.onWindowsClick}
                     >
-                        {_t("Windows")}
+                        { _t("Windows") }
                     </AccessibleButton>
                 </div>
                 <div className="mx_desktopCapturerSourcePicker_panel">

@@ -22,28 +22,34 @@ limitations under the License.
     max-height: 50vh;
     overflow: auto;
     box-shadow: 0px -16px 32px $composer-shadow-color;
+
+    .mx_ReplyPreview_section {
+        border-bottom: 1px solid $primary-hairline-color;
+
+        .mx_ReplyPreview_header {
+            margin: 8px;
+            color: $primary-fg-color;
+            font-weight: 400;
+            opacity: 0.4;
+        }
+
+        .mx_ReplyPreview_tile {
+            margin: 0 8px;
+        }
+
+        .mx_ReplyPreview_title {
+            float: left;
+        }
+
+        .mx_ReplyPreview_cancel {
+            float: right;
+            cursor: pointer;
+            display: flex;
+        }
+
+        .mx_ReplyPreview_clear {
+            clear: both;
+        }
+    }
 }
 
-.mx_ReplyPreview_section {
-    border-bottom: 1px solid $primary-hairline-color;
-}
-
-.mx_ReplyPreview_header {
-    margin: 12px;
-    color: $primary-fg-color;
-    font-weight: 400;
-    opacity: 0.4;
-}
-
-.mx_ReplyPreview_title {
-    float: left;
-}
-
-.mx_ReplyPreview_cancel {
-    float: right;
-    cursor: pointer;
-}
-
-.mx_ReplyPreview_clear {
-    clear: both;
-}

@@ -15,13 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {RefObject} from 'react';
+import React, { RefObject } from 'react';
 
 import { CATEGORY_HEADER_HEIGHT, EMOJI_HEIGHT, EMOJIS_PER_ROW } from "./EmojiPicker";
 import LazyRenderList from "../elements/LazyRenderList";
-import {DATA_BY_CATEGORY, IEmoji} from "../../../emoji";
+import { DATA_BY_CATEGORY, IEmoji } from "../../../emoji";
 import Emoji from './Emoji';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const OVERFLOW_ROWS = 3;
 
@@ -98,7 +98,7 @@ class Category extends React.PureComponent<IProps> {
                 aria-label={name}
             >
                 <h2 className="mx_EmojiPicker_category_label">
-                    {name}
+                    { name }
                 </h2>
                 <LazyRenderList
                     element="ul" className="mx_EmojiPicker_list"

@@ -22,7 +22,7 @@ import * as sdk from '../../../index';
 import * as languageHandler from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 function languageMatchesSearchQuery(query, language) {
     if (language.label.toUpperCase().includes(query.toUpperCase())) return true;
@@ -49,9 +49,9 @@ export default class LanguageDropdown extends React.Component {
                 if (a.label > b.label) return 1;
                 return 0;
             });
-            this.setState({langs});
+            this.setState({ langs });
         }).catch(() => {
-            this.setState({langs: ['en']});
+            this.setState({ langs: ['en'] });
         });
 
         if (!this.props.value) {

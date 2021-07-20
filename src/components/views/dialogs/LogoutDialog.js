@@ -22,7 +22,7 @@ import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import RestoreKeyBackupDialog from './security/RestoreKeyBackupDialog';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.dialogs.LogoutDialog")
 export default class LogoutDialog extends React.Component {
@@ -85,7 +85,7 @@ export default class LogoutDialog extends React.Component {
 
     _onFinished(confirmed) {
         if (confirmed) {
-            dis.dispatch({action: 'logout'});
+            dis.dispatch({ action: 'logout' });
         }
         // close dialog
         this.props.onFinished();
@@ -112,7 +112,7 @@ export default class LogoutDialog extends React.Component {
     }
 
     _onLogoutConfirm() {
-        dis.dispatch({action: 'logout'});
+        dis.dispatch({ action: 'logout' });
 
         // close dialog
         this.props.onFinished();
@@ -123,11 +123,11 @@ export default class LogoutDialog extends React.Component {
             const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
             const description = <div>
-                <p>{_t(
+                <p>{ _t(
                     "Encrypted messages are secured with end-to-end encryption. " +
                     "Only you and the recipient(s) have the keys to read these messages.",
-                )}</p>
-                <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
+                ) }</p>
+                <p>{ _t("Back up your keys before signing out to avoid losing them.") }</p>
             </div>;
 
             let dialogContent;
@@ -156,13 +156,13 @@ export default class LogoutDialog extends React.Component {
                         focus={true}
                     >
                         <button onClick={this._onLogoutConfirm}>
-                            {_t("I don't want my encrypted messages")}
+                            { _t("I don't want my encrypted messages") }
                         </button>
                     </DialogButtons>
                     <details>
-                        <summary>{_t("Advanced")}</summary>
+                        <summary>{ _t("Advanced") }</summary>
                         <p><button onClick={this._onExportE2eKeysClicked}>
-                            {_t("Manually export keys")}
+                            { _t("Manually export keys") }
                         </button></p>
                     </details>
                 </div>;
@@ -176,7 +176,7 @@ export default class LogoutDialog extends React.Component {
                 hasCancel={true}
                 onFinished={this._onFinished}
             >
-                {dialogContent}
+                { dialogContent }
             </BaseDialog>);
         } else {
             const QuestionDialog = sdk.getComponent('views.dialogs.QuestionDialog');

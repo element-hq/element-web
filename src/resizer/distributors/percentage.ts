@@ -16,7 +16,7 @@ limitations under the License.
 
 import Sizer from "../sizer";
 import FixedDistributor from "./fixed";
-import {IConfig} from "../resizer";
+import { IConfig } from "../resizer";
 
 class PercentageSizer extends Sizer {
     public start(item: HTMLElement) {

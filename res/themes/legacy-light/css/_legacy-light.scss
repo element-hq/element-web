@@ -28,6 +28,9 @@ $tertiary-fg-color: $primary-fg-color;
 $primary-bg-color: #ffffff;
 $muted-fg-color: #61708b; // Commonly used in headings and relevant alt text
 
+// Legacy theme backports
+$quaternary-fg-color: #C1C6CD;
+
 // used for dialog box text
 $light-fg-color: #747474;
 
@@ -181,6 +184,8 @@ $voipcall-plinth-color: #F4F6FA;
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
+$dialpad-button-bg-color: #e3e8f0;
+
 
 $roomlist-button-bg-color: #fff; // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-filter-active-bg-color: $roomlist-button-bg-color;
@@ -332,8 +337,6 @@ $message-body-panel-icon-bg-color: $primary-bg-color;
 $voice-record-stop-symbol-color: #ff4b55;
 $voice-record-live-circle-color: #ff4b55;
 $voice-record-stop-border-color: #E3E8F0;
-$voice-record-waveform-bg-color: $message-body-panel-bg-color;
-$voice-record-waveform-fg-color: $message-body-panel-fg-color;
 $voice-record-waveform-incomplete-fg-color: #C1C6CD;
 $voice-record-icon-color: $tertiary-fg-color;
 $voice-playback-button-bg-color: $message-body-panel-icon-bg-color;
@@ -343,6 +346,13 @@ $voice-playback-button-fg-color: $message-body-panel-icon-fg-color;
 $appearance-tab-border-color: $input-darker-bg-color;
 
 $composer-shadow-color: tranparent;
+
+// Bubble tiles
+$eventbubble-self-bg: #F8FDFC;
+$eventbubble-others-bg: #F7F8F9;
+$eventbubble-bg-hover: rgb(242, 242, 242);
+$eventbubble-avatar-outline: #fff;
+$eventbubble-reply-color: #C1C6CD;
 
 // ***** Mixins! *****
 

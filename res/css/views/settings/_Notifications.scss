@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,82 +14,79 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_UserNotifSettings_tableRow {
-    display: table-row;
-}
+.mx_UserNotifSettings {
+    color: $primary-fg-color; // override from default settings page styles
 
-.mx_UserNotifSettings_inputCell {
-    display: table-cell;
-    padding-bottom: 8px;
-    padding-right: 8px;
-    width: 16px;
-}
+    .mx_UserNotifSettings_pushRulesTable {
+        width: calc(100% + 12px); // +12px to line up center of 'Noisy' column with toggle switches
+        table-layout: fixed;
+        border-collapse: collapse;
+        border-spacing: 0;
+        margin-top: 40px;
 
-.mx_UserNotifSettings_labelCell {
-    padding-bottom: 8px;
-    width: 400px;
-    display: table-cell;
-}
+        tr > th {
+            font-weight: $font-semi-bold;
+        }
 
-.mx_UserNotifSettings_pushRulesTableWrapper {
-    padding-bottom: 8px;
-}
+        tr > th:first-child {
+            text-align: left;
+            font-size: $font-18px;
+        }
 
-.mx_UserNotifSettings_pushRulesTable {
-    width: 100%;
-    table-layout: fixed;
-}
+        tr > th:nth-child(n + 2) {
+            color: $secondary-fg-color;
+            font-size: $font-12px;
+            vertical-align: middle;
+            width: 66px;
+        }
 
-.mx_UserNotifSettings_pushRulesTable thead {
-    font-weight: bold;
-}
+        tr > td:nth-child(n + 2) {
+            text-align: center;
+        }
 
-.mx_UserNotifSettings_pushRulesTable tbody th {
-    font-weight: 400;
-}
+        tr > td {
+            padding-top: 8px;
+        }
 
-.mx_UserNotifSettings_pushRulesTable tbody th:first-child {
-    text-align: left;
-}
+        // Override StyledRadioButton default styles
+        .mx_RadioButton {
+            justify-content: center;
 
-.mx_UserNotifSettings_keywords {
-    cursor: pointer;
-    color: $accent-color;
-}
+            .mx_RadioButton_content {
+                display: none;
+            }
 
-.mx_UserNotifSettings_devicesTable td {
-    padding-left: 20px;
-    padding-right: 20px;
-}
+            .mx_RadioButton_spacer {
+                display: none;
+            }
+        }
+    }
 
-.mx_UserNotifSettings_notifTable {
-    display: table;
-    position: relative;
-}
+    .mx_UserNotifSettings_floatingSection {
+        margin-top: 40px;
 
-.mx_UserNotifSettings_notifTable .mx_Spinner {
-    position: absolute;
-}
+        & > div:first-child { // section header
+            font-size: $font-18px;
+            font-weight: $font-semi-bold;
+        }
 
-.mx_NotificationSound_soundUpload {
-    display: none;
-}
+        > table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin-top: 8px;
 
-.mx_NotificationSound_browse {
-    color: $accent-color;
-    border: 1px solid $accent-color;
-    background-color: transparent;
-}
+            tr > td:first-child {
+                // Just for a bit of spacing
+                padding-right: 8px;
+            }
+        }
+    }
 
-.mx_NotificationSound_save {
-    margin-left: 5px;
-    color: white;
-    background-color: $accent-color;
-}
+    .mx_UserNotifSettings_clearNotifsButton {
+        margin-top: 8px;
+    }
 
-.mx_NotificationSound_resetSound {
-    margin-top: 5px;
-    color: white;
-    border: $warning-color;
-    background-color: $warning-color;
+    .mx_TagComposer {
+        margin-top: 35px; // lots of distance from the last line of the table
+    }
 }

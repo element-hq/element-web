@@ -15,8 +15,6 @@ limitations under the License.
 */
 
 .mx_VideoFeed_voice {
-    // We don't want to collide with the call controls that have 52px of height
-    padding-bottom: 52px;
     background-color: $inverted-bg-color;
 }
 

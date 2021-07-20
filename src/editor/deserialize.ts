@@ -42,7 +42,7 @@ function parseAtRoomMentions(text: string, partCreator: PartCreator) {
 }
 
 function parseLink(a: HTMLAnchorElement, partCreator: PartCreator) {
-    const {href} = a;
+    const { href } = a;
     const resourceId = getPrimaryPermalinkEntity(href); // The room/user ID
     const prefix = resourceId ? resourceId[0] : undefined; // First character of ID
     switch (prefix) {
@@ -297,7 +297,7 @@ export function parsePlainTextMessage(body: string, partCreator: PartCreator, is
     }, []);
 }
 
-export function parseEvent(event: MatrixEvent, partCreator: PartCreator, {isQuotedMessage = false} = {}) {
+export function parseEvent(event: MatrixEvent, partCreator: PartCreator, { isQuotedMessage = false } = {}) {
     const content = event.getContent();
     let parts;
     if (content.format === "org.matrix.custom.html") {

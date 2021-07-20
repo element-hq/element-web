@@ -18,14 +18,15 @@ import React, { ChangeEvent, createRef, FormEvent, MouseEvent } from 'react';
 import classNames from 'classnames';
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import Spinner from "../elements/Spinner";
 import CountlyAnalytics from "../../../CountlyAnalytics";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { LocalisedPolicy, Policies } from '../../../Terms';
+import Field from '../elements/Field';
+import CaptchaForm from "./CaptchaForm";
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -40,7 +41,7 @@ import { LocalisedPolicy, Policies } from '../../../Terms';
  *                         one HS whilst beign a guest on another).
  * loginType:              the login type of the auth stage being attempted
  * authSessionId:          session id from the server
- * clientSecret:           The client secret in use for ID server auth sessions
+ * clientSecret:           The client secret in use for identity server auth sessions
  * stageParams:            params from the server for the stage being attempted
  * errorText:              error message from a previous attempt to authenticate
  * submitAuthDict:         a function which will be called with the new auth dict
@@ -53,8 +54,8 @@ import { LocalisedPolicy, Policies } from '../../../Terms';
  *                         Defined keys for stages are:
  *                             m.login.email.identity:
  *                              * emailSid: string representing the sid of the active
- *                                          verification session from the ID server, or
- *                                          null if no session is active.
+ *                                          verification session from the identity server,
+ *                                          or null if no session is active.
  * fail:                   a function which should be called with an error object if an
  *                         error occurred during the auth stage. This will cause the auth
  *                         session to be failed and the process to go back to the start.
@@ -164,8 +165,7 @@ export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswor
 
         let submitButtonOrSpinner;
         if (this.props.busy) {
-            const Loader = sdk.getComponent("elements.Spinner");
-            submitButtonOrSpinner = <Loader />;
+            submitButtonOrSpinner = <Spinner />;
         } else {
             submitButtonOrSpinner = (
                 <input type="submit"
@@ -184,8 +184,6 @@ export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswor
                 </div>
             );
         }
-
-        const Field = sdk.getComponent('elements.Field');
 
         return (
             <div>
@@ -236,13 +234,11 @@ export class RecaptchaAuthEntry extends React.Component<IRecaptchaAuthEntryProps
 
     render() {
         if (this.props.busy) {
-            const Loader = sdk.getComponent("elements.Spinner");
-            return <Loader />;
+            return <Spinner />;
         }
 
         let errorText = this.props.errorText;
 
-        const CaptchaForm = sdk.getComponent("views.auth.CaptchaForm");
         let sitePublicKey;
         if (!this.props.stageParams || !this.props.stageParams.public_key) {
             errorText = _t(
@@ -354,7 +350,6 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
         CountlyAnalytics.instance.track("onboarding_terms_begin");
     }
 
-
     componentDidMount() {
         this.props.onPhaseChange(DEFAULT_PHASE);
     }
@@ -371,7 +366,7 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
 
             newToggles[policy.id] = checked;
         }
-        this.setState({"toggledPolicies": newToggles});
+        this.setState({ "toggledPolicies": newToggles });
     }
 
     private trySubmit = () => {
@@ -382,17 +377,16 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
         }
 
         if (allChecked) {
-            this.props.submitAuthDict({type: AuthType.Terms});
+            this.props.submitAuthDict({ type: AuthType.Terms });
             CountlyAnalytics.instance.track("onboarding_terms_complete");
         } else {
-            this.setState({errorText: _t("Please review and accept all of the homeserver's policies")});
+            this.setState({ errorText: _t("Please review and accept all of the homeserver's policies") });
         }
     };
 
     render() {
         if (this.props.busy) {
-            const Loader = sdk.getComponent("elements.Spinner");
-            return <Loader />;
+            return <Spinner />;
         }
 
         const checkboxes = [];
@@ -423,12 +417,12 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
         if (this.props.showContinue !== false) {
             // XXX: button classes
             submitButton = <button className="mx_InteractiveAuthEntryComponents_termsSubmit mx_GeneralButton"
-                onClick={this.trySubmit} disabled={!allChecked}>{_t("Accept")}</button>;
+                onClick={this.trySubmit} disabled={!allChecked}>{ _t("Accept") }</button>;
         }
 
         return (
             <div>
-                <p>{_t("Please review and accept the policies of this homeserver:")}</p>
+                <p>{ _t("Please review and accept the policies of this homeserver:") }</p>
                 { checkboxes }
                 { errorSection }
                 { submitButton }
@@ -518,11 +512,11 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
     componentDidMount() {
         this.props.onPhaseChange(DEFAULT_PHASE);
 
-        this.setState({requestingToken: true});
+        this.setState({ requestingToken: true });
         this.requestMsisdnToken().catch((e) => {
             this.props.fail(e);
         }).finally(() => {
-            this.setState({requestingToken: false});
+            this.setState({ requestingToken: false });
         });
     }
 
@@ -591,8 +585,7 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
 
     render() {
         if (this.state.requestingToken) {
-            const Loader = sdk.getComponent("elements.Spinner");
-            return <Loader />;
+            return <Spinner />;
         } else {
             const enableSubmit = Boolean(this.state.token);
             const submitClasses = classNames({
@@ -620,7 +613,7 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
                                 className="mx_InteractiveAuthEntryComponents_msisdnEntry"
                                 value={this.state.token}
                                 onChange={this.onTokenChange}
-                                aria-label={ _t("Code")}
+                                aria-label={_t("Code")}
                             />
                             <br />
                             <input type="submit" value={_t("Submit")}
@@ -628,7 +621,7 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
                                 disabled={!enableSubmit}
                             />
                         </form>
-                        {errorSection}
+                        { errorSection }
                     </div>
                 </div>
             );
@@ -710,7 +703,7 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
         // context.
 
         this.popupWindow = window.open(this.ssoUrl, "_blank");
-        this.setState({phase: SSOAuthEntry.PHASE_POSTAUTH});
+        this.setState({ phase: SSOAuthEntry.PHASE_POSTAUTH });
         this.props.onPhaseChange(SSOAuthEntry.PHASE_POSTAUTH);
     };
 
@@ -724,21 +717,21 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
             <AccessibleButton
                 onClick={this.props.onCancel}
                 kind={this.props.continueKind ? (this.props.continueKind + '_outline') : 'primary_outline'}
-            >{_t("Cancel")}</AccessibleButton>
+            >{ _t("Cancel") }</AccessibleButton>
         );
         if (this.state.phase === SSOAuthEntry.PHASE_PREAUTH) {
             continueButton = (
                 <AccessibleButton
                     onClick={this.onStartAuthClick}
                     kind={this.props.continueKind || 'primary'}
-                >{this.props.continueText || _t("Single Sign On")}</AccessibleButton>
+                >{ this.props.continueText || _t("Single Sign On") }</AccessibleButton>
             );
         } else {
             continueButton = (
                 <AccessibleButton
                     onClick={this.onConfirmClick}
                     kind={this.props.continueKind || 'primary'}
-                >{this.props.continueText || _t("Confirm")}</AccessibleButton>
+                >{ this.props.continueText || _t("Confirm") }</AccessibleButton>
             );
         }
 
@@ -760,8 +753,8 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
         return <React.Fragment>
             { errorSection }
             <div className="mx_InteractiveAuthEntryComponents_sso_buttons">
-                {cancelButton}
-                {continueButton}
+                { cancelButton }
+                { continueButton }
             </div>
         </React.Fragment>;
     }
@@ -832,7 +825,7 @@ export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
                 <a href="" ref={this.fallbackButton} onClick={this.onShowFallbackClick}>{
                     _t("Start authentication")
                 }</a>
-                {errorSection}
+                { errorSection }
             </div>
         );
     }

@@ -17,10 +17,10 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import AccessibleButton from '../elements/AccessibleButton';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.context_menus.StatusMessageContextMenu")
 export default class StatusMessageContextMenu extends React.Component {
@@ -99,20 +99,20 @@ export default class StatusMessageContextMenu extends React.Component {
                 actionButton = <AccessibleButton className="mx_StatusMessageContextMenu_clear"
                     onClick={this._onClearClick}
                 >
-                    <span>{_t("Clear status")}</span>
+                    <span>{ _t("Clear status") }</span>
                 </AccessibleButton>;
             } else {
                 actionButton = <AccessibleButton className="mx_StatusMessageContextMenu_submit"
                     onClick={this._onSubmit}
                 >
-                    <span>{_t("Update status")}</span>
+                    <span>{ _t("Update status") }</span>
                 </AccessibleButton>;
             }
         } else {
             actionButton = <AccessibleButton className="mx_StatusMessageContextMenu_submit"
                 disabled={!this.state.message} onClick={this._onSubmit}
             >
-                <span>{_t("Set status")}</span>
+                <span>{ _t("Set status") }</span>
             </AccessibleButton>;
         }
 
@@ -130,8 +130,8 @@ export default class StatusMessageContextMenu extends React.Component {
                 onChange={this._onStatusChange}
             />
             <div className="mx_StatusMessageContextMenu_actionContainer">
-                {actionButton}
-                {spinner}
+                { actionButton }
+                { spinner }
             </div>
         </form>;
 
