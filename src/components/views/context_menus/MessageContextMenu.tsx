@@ -43,9 +43,13 @@ export function canCancel(eventStatus: EventStatus): boolean {
     return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;
 }
 
-interface IEventTileOps {
+export interface IEventTileOps {
     isWidgetHidden(): boolean;
     unhideWidget(): void;
+}
+
+export interface IOperableEventTile {
+    getEventTileOps(): IEventTileOps;
 }
 
 interface IProps {
