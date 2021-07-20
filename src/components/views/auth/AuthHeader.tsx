@@ -16,8 +16,9 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../index';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import AuthHeaderLogo from "./AuthHeaderLogo";
+import LanguageSelector from "./LanguageSelector";
 
 interface IProps {
     disableLanguageSelector?: boolean;
@@ -26,9 +27,6 @@ interface IProps {
 @replaceableComponent("views.auth.AuthHeader")
 export default class AuthHeader extends React.Component<IProps> {
     public render(): React.ReactNode {
-        const AuthHeaderLogo = sdk.getComponent('auth.AuthHeaderLogo');
-        const LanguageSelector = sdk.getComponent('views.auth.LanguageSelector');
-
         return (
             <div className="mx_AuthHeader">
                 <AuthHeaderLogo />

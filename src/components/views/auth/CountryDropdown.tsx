@@ -16,12 +16,11 @@ limitations under the License.
 
 import React from 'react';
 
-import * as sdk from '../../../index';
-
 import { COUNTRIES, getEmojiFlag, PhoneNumberCountryDefinition } from '../../../phonenumber';
 import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import Dropdown from "../elements/Dropdown";
 
 const COUNTRIES_BY_ISO2 = {};
 for (const c of COUNTRIES) {
@@ -110,8 +109,6 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
     };
 
     public render(): React.ReactNode {
-        const Dropdown = sdk.getComponent('elements.Dropdown');
-
         let displayedCountries;
         if (this.state.searchQuery) {
             displayedCountries = COUNTRIES.filter(
