@@ -19,7 +19,7 @@ import React from 'react';
 import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
 
 export default class VectorAuthHeaderLogo extends React.PureComponent {
-    static replaces = 'AuthHeaderLogo'
+    static replaces = 'AuthHeaderLogo';
 
     render() {
         const brandingConfig = SdkConfig.get().branding;

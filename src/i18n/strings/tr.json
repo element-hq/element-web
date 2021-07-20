@@ -33,5 +33,6 @@
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Masaüstü (%(platformName)s)",
     "Open": "Aç",
     "Missing indexeddb worker script!": "Indexeddb worker kodu eksik!",
-    "Use %(brand)s on mobile": "Mobilde %(brand)s kullan"
+    "Use %(brand)s on mobile": "Mobilde %(brand)s kullan",
+    "Switch to space by number": "Sayı ile belirtilen alana geç"
 }

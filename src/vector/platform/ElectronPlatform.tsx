@@ -22,10 +22,7 @@ import BaseEventIndexManager, {
     ICrawlerCheckpoint,
     IEventAndProfile,
     IIndexStats,
-    IMatrixEvent,
-    IMatrixProfile,
     ISearchArgs,
-    ISearchResult,
 } from 'matrix-react-sdk/src/indexing/BaseEventIndexManager';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import { _t, _td } from 'matrix-react-sdk/src/languageHandler';
@@ -48,12 +45,13 @@ import React from "react";
 import { randomString } from "matrix-js-sdk/src/randomstring";
 import { Action } from "matrix-react-sdk/src/dispatcher/actions";
 import { ActionPayload } from "matrix-react-sdk/src/dispatcher/payloads";
-import { SwitchSpacePayload} from "matrix-react-sdk/src/dispatcher/payloads/SwitchSpacePayload";
+import { SwitchSpacePayload } from "matrix-react-sdk/src/dispatcher/payloads/SwitchSpacePayload";
 import { showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/UpdateToast";
 import { CheckUpdatesPayload } from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
 import ToastStore from "matrix-react-sdk/src/stores/ToastStore";
 import GenericExpiringToast from "matrix-react-sdk/src/components/views/toasts/GenericExpiringToast";
 import SettingsStore from 'matrix-react-sdk/src/settings/SettingsStore';
+import { IMatrixProfile, IEventWithRoomId as IMatrixEvent, IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
 
 import VectorBasePlatform from './VectorBasePlatform';
 
@@ -119,8 +117,8 @@ class SeshatIndexManager extends BaseEventIndexManager {
         // TODO this should be moved into the preload.js file.
         const ipcCallId = ++this.nextIpcCallId;
         return new Promise((resolve, reject) => {
-            this.pendingIpcCalls[ipcCallId] = {resolve, reject};
-            window.electron.send('seshat', {id: ipcCallId, name, args});
+            this.pendingIpcCalls[ipcCallId] = { resolve, reject };
+            window.electron.send('seshat', { id: ipcCallId, name, args });
         });
     }
 
@@ -172,7 +170,7 @@ class SeshatIndexManager extends BaseEventIndexManager {
         return this._ipcCall('commitLiveEvents');
     }
 
-    async searchEventIndex(searchConfig: ISearchArgs): Promise<ISearchResult> {
+    async searchEventIndex(searchConfig: ISearchArgs): Promise<IResultRoomEvents> {
         return this._ipcCall('searchEventIndex', searchConfig);
     }
 
@@ -258,9 +256,9 @@ export default class ElectronPlatform extends VectorBasePlatform {
             dis.fire(Action.ViewUserSettings);
         });
 
-        electron.on('userDownloadCompleted', (ev, {path, name}) => {
+        electron.on('userDownloadCompleted', (ev, { path, name }) => {
             const onAccept = () => {
-                electron.send('userDownloadOpen', {path});
+                electron.send('userDownloadOpen', { path });
             };
 
             ToastStore.sharedInstance().addOrReplaceToast({
@@ -326,7 +324,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this._ipcCall('getConfig');
     }
 
-    onUpdateDownloaded = async (ev, {releaseNotes, releaseName}) => {
+    onUpdateDownloaded = async (ev, { releaseNotes, releaseName }) => {
         dis.dispatch<CheckUpdatesPayload>({
             action: Action.CheckUpdates,
             status: UpdateCheckStatus.Ready,
@@ -501,8 +499,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
     async _ipcCall(name: string, ...args: any[]): Promise<any> {
         const ipcCallId = ++this.nextIpcCallId;
         return new Promise((resolve, reject) => {
-            this.pendingIpcCalls[ipcCallId] = {resolve, reject};
-            window.electron.send('ipcCall', {id: ipcCallId, name, args});
+            this.pendingIpcCalls[ipcCallId] = { resolve, reject };
+            window.electron.send('ipcCall', { id: ipcCallId, name, args });
             // Maybe add a timeout to these? Probably not necessary.
         });
     }
@@ -595,22 +593,18 @@ export default class ElectronPlatform extends VectorBasePlatform {
                     handled = true;
                 }
                 break;
+        }
 
-            case "1":
-            case "2":
-            case "3":
-            case "4":
-            case "5":
-            case "6":
-            case "7":
-            case "8":
-            case "9":
-            case "0":
-                if (SettingsStore.getValue("feature_spaces") && isOnlyCtrlOrCmdKeyEvent(ev)) {
-                    this.navigateToSpace(parseInt(ev.key, 10));
-                    handled = true;
-                }
-                break;
+        if (!handled &&
+            // ideally we would use SpaceStore.spacesEnabled here but importing SpaceStore in this platform
+            // breaks skinning as the platform is instantiated prior to the skin being loaded
+            SettingsStore.getValue("feature_spaces") &&
+            ev.code.startsWith("Digit") &&
+            isOnlyCtrlOrCmdKeyEvent(ev)
+        ) {
+            const spaceNumber = ev.code.slice(5); // Cut off the first 5 characters - "Digit"
+            this.navigateToSpace(parseInt(spaceNumber, 10));
+            handled = true;
         }
 
         return handled;

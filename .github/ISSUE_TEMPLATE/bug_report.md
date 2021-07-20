@@ -21,11 +21,11 @@ that aren't relevant to your particular case.
 Text between <!-- and --​> marks will be invisible in the report.
 -->
 
-### Description
+#### Description
 
 Describe here the problem that you are experiencing, or the feature you are requesting.
 
-### Steps to reproduce
+#### Steps to reproduce
 
 - For bugs, list the steps
 - that reproduce the bug
@@ -40,7 +40,7 @@ Logs being sent: yes/no
 
 <!-- Include screenshots if possible: you can drag and drop images below. -->
 
-### Version information
+#### Version information
 
 <!-- IMPORTANT: please answer the following questions, to help us narrow down the problem -->
 
