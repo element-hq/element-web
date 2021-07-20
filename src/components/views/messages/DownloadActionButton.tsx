@@ -98,7 +98,7 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
         >
             { spinner }
             { this.state.blob && <iframe
-                src={"usercontent/" /* XXX: Like MFileBody, this should come from the skin */}
+                src="usercontent/" // XXX: Like MFileBody, this should come from the skin
                 ref={this.iframe}
                 onLoad={this.onFrameLoad}
                 sandbox="allow-scripts allow-downloads allow-downloads-without-user-activation"

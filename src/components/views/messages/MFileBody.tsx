@@ -310,7 +310,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
                         </a>
                         { this.props.tileShape === TileShape.FileGrid && <div className="mx_MImageBody_size">
                             { content.info && content.info.size ? filesize(content.info.size) : "" }
-                        </div>}
+                        </div> }
                     </div> }
                 </span>
             );
