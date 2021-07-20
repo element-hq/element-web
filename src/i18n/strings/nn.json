@@ -1376,5 +1376,12 @@
     "Identity Server": "Identitetstenar",
     "Email Address": "E-postadresse",
     "Go Back": "Gå attende",
-    "Notification settings": "Varslingsinnstillingar"
+    "Notification settings": "Varslingsinnstillingar",
+    "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Du bør <b>fjerne dine personlege data</b> frå identitetstenaren <idserver /> før du koplar frå. Dessverre er identitetstenaren <idserver /> utilgjengeleg og kan ikkje nåast akkurat no.",
+    "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Vi tilrår at du slettar personleg informasjon, som e-postadresser og telefonnummer frå identitetstenaren før du koplar frå.",
+    "Privacy": "Personvern",
+    "Versions": "Versjonar",
+    "Legal": "Juridisk",
+    "Identity server is": "Identitetstenaren er",
+    "Identity server": "Identitetstenar"
 }
