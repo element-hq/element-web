@@ -49,6 +49,7 @@ export default class AddressTile extends React.Component<IProps> {
         if (isMatrixAddress && address.avatarMxc) {
             imgUrls.push(mediaFromMxc(address.avatarMxc).getSquareThumbnailHttp(25));
         } else if (address.addressType === 'email') {
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
             imgUrls.push(require("../../../../res/img/icon-email-user.svg"));
         }
 
