@@ -122,14 +122,14 @@ export class ModalManager {
     }
 
     public createDialog<T extends any[]>(
-        Element: React.ComponentType, // eslint-disable-line @typescript-eslint/naming-convention
+        Element: React.ComponentType,
         ...rest: ParametersWithoutFirst<ModalManager["createDialogAsync"]>
     ) {
         return this.createDialogAsync<T>(Promise.resolve(Element), ...rest);
     }
 
     public appendDialog<T extends any[]>(
-        Element: React.ComponentType, // eslint-disable-line @typescript-eslint/naming-convention
+        Element: React.ComponentType,
         ...rest: ParametersWithoutFirst<ModalManager["appendDialogAsync"]>
     ) {
         return this.appendDialogAsync<T>(Promise.resolve(Element), ...rest);

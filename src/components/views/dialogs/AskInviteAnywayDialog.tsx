@@ -60,8 +60,8 @@ export default class AskInviteAnywayDialog extends React.Component<IProps> {
                 contentId='mx_Dialog_content'
             >
                 <div id='mx_Dialog_content'>
-                    { /* eslint-disable-next-line */ }
-                    <p>{_t("Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?")}</p>
+                    <p>{ _t("Unable to find profiles for the Matrix IDs listed below - " +
+                        "would you like to invite them anyway?") }</p>
                     <ul>
                         { errorList }
                     </ul>
