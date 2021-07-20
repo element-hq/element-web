@@ -33,7 +33,7 @@ export default class MImageReplyBody extends MImageBody {
 
     // Don't show "Download this_file.png ..."
     public getFileBody(): JSX.Element {
-        return presentableTextForFile(this.props.mxEvent.getContent());
+        return <>{ presentableTextForFile(this.props.mxEvent.getContent()) }</>;
     }
 
     render() {

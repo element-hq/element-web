@@ -404,7 +404,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
     const [saving, setSaving] = useState(false);
 
     if (summaryError) {
-        return <p>{_t("Your server does not support showing space hierarchies.")}</p>;
+        return <p>{ _t("Your server does not support showing space hierarchies.") }</p>;
     }
 
     let content;
@@ -569,7 +569,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
     return <>
         <SearchBox
             className="mx_textinput_icon mx_textinput_search"
-            placeholder={ _t("Search names and descriptions") }
+            placeholder={_t("Search names and descriptions")}
             onSearch={setQuery}
             autoFocus={true}
             initialValue={initialText}
@@ -608,7 +608,7 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, onFinished, initialText }
                 { _t("If you can't find the room you're looking for, ask for an invite or <a>create a new room</a>.",
                     null,
                     { a: sub => {
-                        return <AccessibleButton kind="link" onClick={onCreateRoomClick}>{sub}</AccessibleButton>;
+                        return <AccessibleButton kind="link" onClick={onCreateRoomClick}>{ sub }</AccessibleButton>;
                     } },
                 ) }
 

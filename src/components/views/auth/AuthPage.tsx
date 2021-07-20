@@ -26,7 +26,7 @@ export default class AuthPage extends React.PureComponent {
         return (
             <div className="mx_AuthPage">
                 <div className="mx_AuthPage_modal">
-                    {this.props.children}
+                    { this.props.children }
                 </div>
                 <AuthFooter />
             </div>
