@@ -894,6 +894,7 @@
     "You held the call <a>Resume</a>": "You held the call <a>Resume</a>",
     "%(peerName)s held the call": "%(peerName)s held the call",
     "Connecting": "Connecting",
+    "You are presenting": "You are presenting",
     "%(sharerName)s is presenting": "%(sharerName)s is presenting",
     "Video Call": "Video Call",
     "Voice Call": "Voice Call",
