@@ -22,6 +22,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { IUserAddress } from '../../../UserAddress';
 import BaseAvatar from '../avatars/BaseAvatar';
+import EmailUserIcon from "../../../../res/img/icon-email-user.svg";
 
 interface IProps {
     address: IUserAddress;
@@ -49,8 +50,7 @@ export default class AddressTile extends React.Component<IProps> {
         if (isMatrixAddress && address.avatarMxc) {
             imgUrls.push(mediaFromMxc(address.avatarMxc).getSquareThumbnailHttp(25));
         } else if (address.addressType === 'email') {
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
-            imgUrls.push(require("../../../../res/img/icon-email-user.svg"));
+            imgUrls.push(EmailUserIcon);
         }
 
         const nameClasses = classNames({
