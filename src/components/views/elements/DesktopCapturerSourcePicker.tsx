@@ -66,7 +66,7 @@ export class ExistingSource extends React.Component<ExistingSourceIProps> {
                     className={thumbnailClasses}
                     src={this.props.source.thumbnailURL}
                 />
-                <span className="mx_desktopCapturerSourcePicker_source_name">{this.props.source.name}</span>
+                <span className="mx_desktopCapturerSourcePicker_source_name">{ this.props.source.name }</span>
             </AccessibleButton>
         );
     }

@@ -620,7 +620,7 @@ export default class AddressPickerDialog extends React.Component {
         let inputLabel;
         if (this.props.description) {
             inputLabel = <div className="mx_AddressPickerDialog_label">
-                <label htmlFor="textinput">{this.props.description}</label>
+                <label htmlFor="textinput">{ this.props.description }</label>
             </div>;
         }
 
@@ -690,7 +690,7 @@ export default class AddressPickerDialog extends React.Component {
             && this.props.validAddressTypes.includes('email')) {
             const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
             if (defaultIdentityServerUrl) {
-                identityServer = <div className="mx_AddressPickerDialog_identityServer">{_t(
+                identityServer = <div className="mx_AddressPickerDialog_identityServer">{ _t(
                     "Use an identity server to invite by email. " +
                     "<default>Use the default (%(defaultIdentityServerName)s)</default> " +
                     "or manage in <settings>Settings</settings>.",
@@ -698,25 +698,25 @@ export default class AddressPickerDialog extends React.Component {
                         defaultIdentityServerName: abbreviateUrl(defaultIdentityServerUrl),
                     },
                     {
-                        default: sub => <a href="#" onClick={this.onUseDefaultIdentityServerClick}>{sub}</a>,
-                        settings: sub => <a href="#" onClick={this.onManageSettingsClick}>{sub}</a>,
+                        default: sub => <a href="#" onClick={this.onUseDefaultIdentityServerClick}>{ sub }</a>,
+                        settings: sub => <a href="#" onClick={this.onManageSettingsClick}>{ sub }</a>,
                     },
-                )}</div>;
+                ) }</div>;
             } else {
-                identityServer = <div className="mx_AddressPickerDialog_identityServer">{_t(
+                identityServer = <div className="mx_AddressPickerDialog_identityServer">{ _t(
                     "Use an identity server to invite by email. " +
                     "Manage in <settings>Settings</settings>.",
                     {}, {
-                        settings: sub => <a href="#" onClick={this.onManageSettingsClick}>{sub}</a>,
+                        settings: sub => <a href="#" onClick={this.onManageSettingsClick}>{ sub }</a>,
                     },
-                )}</div>;
+                ) }</div>;
             }
         }
 
         return (
             <BaseDialog className="mx_AddressPickerDialog" onKeyDown={this.onKeyDown}
                 onFinished={this.props.onFinished} title={this.props.title}>
-                {inputLabel}
+                { inputLabel }
                 <div className="mx_Dialog_content">
                     <div className="mx_AddressPickerDialog_inputContainer">{ query }</div>
                     { error }

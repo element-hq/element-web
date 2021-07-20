@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,20 +16,15 @@ limitations under the License.
 
 import React from 'react';
 import { _t } from "../../../../../languageHandler";
-import * as sdk from "../../../../../index";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import Notifications from "../../Notifications";
 
 @replaceableComponent("views.settings.tabs.user.NotificationUserSettingsTab")
 export default class NotificationUserSettingsTab extends React.Component {
-    constructor() {
-        super();
-    }
-
     render() {
-        const Notifications = sdk.getComponent("views.settings.Notifications");
         return (
             <div className="mx_SettingsTab mx_NotificationUserSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Notifications")}</div>
+                <div className="mx_SettingsTab_heading">{ _t("Notifications") }</div>
                 <div className="mx_SettingsTab_section mx_SettingsTab_subsectionText">
                     <Notifications />
                 </div>

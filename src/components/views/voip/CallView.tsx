@@ -598,16 +598,18 @@ export default class CallView extends React.Component<IProps, IState> {
             const transfereeName = transfereeRoom ? transfereeRoom.name : _t("unknown person");
 
             holdTransferContent = <div className="mx_CallView_holdTransferContent">
-                {_t(
+                { _t(
                     "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>",
                     {
                         transferTarget: transferTargetName,
                         transferee: transfereeName,
                     },
                     {
-                        a: sub => <AccessibleButton kind="link" onClick={this.onTransferClick}>{sub}</AccessibleButton>,
+                        a: sub => <AccessibleButton kind="link" onClick={this.onTransferClick}>
+                            { sub }
+                        </AccessibleButton>,
                     },
-                )}
+                ) }
             </div>;
         } else if (isOnHold) {
             let onHoldText = null;
@@ -616,7 +618,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     _td("You held the call <a>Switch</a>") : _td("You held the call <a>Resume</a>");
                 onHoldText = _t(holdString, {}, {
                     a: sub => <AccessibleButton kind="link" onClick={this.onCallResumeClick}>
-                        {sub}
+                        { sub }
                     </AccessibleButton>,
                 });
             } else if (this.state.isLocalOnHold) {
@@ -625,7 +627,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 });
             }
             holdTransferContent = <div className="mx_CallView_holdTransferContent">
-                {onHoldText}
+                { onHoldText }
             </div>;
         }
 
@@ -720,7 +722,7 @@ export default class CallView extends React.Component<IProps, IState> {
                             />
                         </div>
                     </div>
-                    <div className="mx_CallView_holdTransferContent">{_t("Connecting")}</div>
+                    <div className="mx_CallView_holdTransferContent">{ _t("Connecting") }</div>
                     { this.renderCallControls() }
                 </div>
             );
@@ -783,16 +785,16 @@ export default class CallView extends React.Component<IProps, IState> {
         }
 
         const headerControls = <div className="mx_CallView_header_controls">
-            {fullScreenButton}
-            {expandButton}
+            { fullScreenButton }
+            { expandButton }
         </div>;
 
         let header: React.ReactNode;
         if (!this.props.pipMode) {
             header = <div className="mx_CallView_header">
                 <div className="mx_CallView_header_phoneIcon"></div>
-                <span className="mx_CallView_header_callType">{callTypeText}</span>
-                {headerControls}
+                <span className="mx_CallView_header_callType">{ callTypeText }</span>
+                { headerControls }
             </div>;
             myClassName = 'mx_CallView_large';
         } else {
@@ -802,7 +804,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     <AccessibleButton element='span' onClick={this.onSecondaryRoomAvatarClick}>
                         <RoomAvatar room={secCallRoom} height={16} width={16} />
                         <span className="mx_CallView_secondaryCall_roomName">
-                            {_t("%(name)s on hold", { name: secCallRoom.name })}
+                            { _t("%(name)s on hold", { name: secCallRoom.name }) }
                         </span>
                     </AccessibleButton>
                 </span>;
@@ -817,13 +819,13 @@ export default class CallView extends React.Component<IProps, IState> {
                         <RoomAvatar room={callRoom} height={32} width={32} />
                     </AccessibleButton>
                     <div className="mx_CallView_header_callInfo">
-                        <div className="mx_CallView_header_roomName">{callRoom.name}</div>
+                        <div className="mx_CallView_header_roomName">{ callRoom.name }</div>
                         <div className="mx_CallView_header_callTypeSmall">
-                            {callTypeText}
-                            {secondaryCallInfo}
+                            { callTypeText }
+                            { secondaryCallInfo }
                         </div>
                     </div>
-                    {headerControls}
+                    { headerControls }
                 </div>
             );
             myClassName = 'mx_CallView_pip';

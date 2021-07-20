@@ -66,8 +66,8 @@ export default class InfoTooltip extends React.PureComponent<ITooltipProps, ISta
         return (
             <div onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} className="mx_InfoTooltip">
                 <span className="mx_InfoTooltip_icon" aria-label={title} />
-                {children}
-                {tip}
+                { children }
+                { tip }
             </div>
         );
     }

@@ -457,7 +457,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_rotateCCW"
                             title={_t("Rotate Left")}
-                            onClick={ this.onRotateCounterClockwiseClick }>
+                            onClick={this.onRotateCounterClockwiseClick}>
                         </AccessibleTooltipButton>
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_rotateCW"
@@ -467,13 +467,13 @@ export default class ImageView extends React.Component<IProps, IState> {
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_download"
                             title={_t("Download")}
-                            onClick={ this.onDownloadClick }>
+                            onClick={this.onDownloadClick}>
                         </AccessibleTooltipButton>
                         { contextMenuButton }
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_close"
                             title={_t("Close")}
-                            onClick={ this.props.onFinished }>
+                            onClick={this.props.onFinished}>
                         </AccessibleTooltipButton>
                         { this.renderContextMenu() }
                     </div>
@@ -488,8 +488,8 @@ export default class ImageView extends React.Component<IProps, IState> {
                 >
                     <img
                         src={this.props.src}
-                        title={this.props.name}
                         style={style}
+                        alt={this.props.name}
                         ref={this.image}
                         className="mx_ImageView_image"
                         draggable={true}

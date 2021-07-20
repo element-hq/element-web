@@ -347,6 +347,13 @@ $appearance-tab-border-color: $input-darker-bg-color;
 
 $composer-shadow-color: tranparent;
 
+// Bubble tiles
+$eventbubble-self-bg: #F8FDFC;
+$eventbubble-others-bg: #F7F8F9;
+$eventbubble-bg-hover: rgb(242, 242, 242);
+$eventbubble-avatar-outline: #fff;
+$eventbubble-reply-color: #C1C6CD;
+
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {

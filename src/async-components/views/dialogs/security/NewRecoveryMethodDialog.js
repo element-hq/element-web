@@ -54,28 +54,28 @@ export default class NewRecoveryMethodDialog extends React.PureComponent {
         const DialogButtons = sdk.getComponent("views.elements.DialogButtons");
 
         const title = <span className="mx_KeyBackupFailedDialog_title">
-            {_t("New Recovery Method")}
+            { _t("New Recovery Method") }
         </span>;
 
-        const newMethodDetected = <p>{_t(
+        const newMethodDetected = <p>{ _t(
             "A new Security Phrase and key for Secure Messages have been detected.",
-        )}</p>;
+        ) }</p>;
 
-        const hackWarning = <p className="warning">{_t(
+        const hackWarning = <p className="warning">{ _t(
             "If you didn't set the new recovery method, an " +
             "attacker may be trying to access your account. " +
             "Change your account password and set a new recovery " +
             "method immediately in Settings.",
-        )}</p>;
+        ) }</p>;
 
         let content;
         if (MatrixClientPeg.get().getKeyBackupEnabled()) {
             content = <div>
-                {newMethodDetected}
-                <p>{_t(
+                { newMethodDetected }
+                <p>{ _t(
                     "This session is encrypting history using the new recovery method.",
-                )}</p>
-                {hackWarning}
+                ) }</p>
+                { hackWarning }
                 <DialogButtons
                     primaryButton={_t("OK")}
                     onPrimaryButtonClick={this.onOkClick}
@@ -85,8 +85,8 @@ export default class NewRecoveryMethodDialog extends React.PureComponent {
             </div>;
         } else {
             content = <div>
-                {newMethodDetected}
-                {hackWarning}
+                { newMethodDetected }
+                { hackWarning }
                 <DialogButtons
                     primaryButton={_t("Set up Secure Messages")}
                     onPrimaryButtonClick={this.onSetupClick}
@@ -101,7 +101,7 @@ export default class NewRecoveryMethodDialog extends React.PureComponent {
                 onFinished={this.props.onFinished}
                 title={title}
             >
-                {content}
+                { content }
             </BaseDialog>
         );
     }

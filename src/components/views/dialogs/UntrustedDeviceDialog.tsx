@@ -48,13 +48,13 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) =
         className="mx_UntrustedDeviceDialog"
         title={<>
             <E2EIcon status="warning" size={24} hideTooltip={true} />
-            { _t("Not Trusted")}
+            { _t("Not Trusted") }
         </>}
     >
         <div className="mx_Dialog_content" id='mx_Dialog_content'>
-            <p>{newSessionText}</p>
-            <p>{device.getDisplayName()} ({device.deviceId})</p>
-            <p>{askToVerifyText}</p>
+            <p>{ newSessionText }</p>
+            <p>{ device.getDisplayName() } ({ device.deviceId })</p>
+            <p>{ askToVerifyText }</p>
         </div>
         <div className='mx_Dialog_buttons'>
             <AccessibleButton element="button" kind="secondary" onClick={() => onFinished("legacy")}>

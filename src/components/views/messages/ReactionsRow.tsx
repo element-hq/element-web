@@ -199,7 +199,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
                 href="#"
                 onClick={this.onShowAllClick}
             >
-                {_t("Show all")}
+                { _t("Show all") }
             </a>;
         }
 

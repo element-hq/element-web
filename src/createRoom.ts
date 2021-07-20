@@ -17,6 +17,7 @@ limitations under the License.
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
@@ -247,11 +248,11 @@ export function findDMForUser(client: MatrixClient, userId: string): Room {
  * NOTE: this assumes you've just created the room and there's not been an opportunity
  * for other code to run, so we shouldn't miss RoomState.newMember when it comes by.
  */
-export async function _waitForMember(client: MatrixClient, roomId: string, userId: string, opts = { timeout: 1500 }) {
+export async function waitForMember(client: MatrixClient, roomId: string, userId: string, opts = { timeout: 1500 }) {
     const { timeout } = opts;
     let handler;
     return new Promise((resolve) => {
-        handler = function(_event, _roomstate, member) {
+        handler = function(_, __, member: RoomMember) { // eslint-disable-line @typescript-eslint/naming-convention
             if (member.userId !== userId) return;
             if (member.roomId !== roomId) return;
             resolve(true);
@@ -324,7 +325,7 @@ export async function ensureDMExists(client: MatrixClient, userId: string): Prom
         }
 
         roomId = await createRoom({ encryption, dmUserId: userId, spinner: false, andView: false });
-        await _waitForMember(client, roomId, userId);
+        await waitForMember(client, roomId, userId);
     }
     return roomId;
 }

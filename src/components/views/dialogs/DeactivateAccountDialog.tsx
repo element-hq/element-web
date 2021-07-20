@@ -172,11 +172,11 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
             </div>;
         }
 
-        let auth = <div>{_t("Loading...")}</div>;
+        let auth = <div>{ _t("Loading...") }</div>;
         if (this.state.authData && this.state.authEnabled) {
             auth = (
                 <div>
-                    {this.state.bodyText}
+                    { this.state.bodyText }
                     <InteractiveAuth
                         matrixClient={MatrixClientPeg.get()}
                         authData={this.state.authData}
@@ -230,18 +230,18 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
                                 checked={this.state.shouldErase}
                                 onChange={this.onEraseFieldChange}
                             >
-                                {_t(
+                                { _t(
                                     "Please forget all messages I have sent when my account is deactivated " +
                                     "(<b>Warning:</b> this will cause future users to see an incomplete view " +
                                     "of conversations)",
                                     {},
                                     { b: (sub) => <b>{ sub }</b> },
-                                )}
+                                ) }
                             </StyledCheckbox>
                         </p>
 
-                        {error}
-                        {auth}
+                        { error }
+                        { auth }
                     </div>
 
                 </div>

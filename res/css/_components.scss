@@ -149,6 +149,7 @@
 @import "./views/elements/_StyledCheckbox.scss";
 @import "./views/elements/_StyledRadioButton.scss";
 @import "./views/elements/_SyntaxHighlight.scss";
+@import "./views/elements/_TagComposer.scss";
 @import "./views/elements/_TextWithTooltip.scss";
 @import "./views/elements/_ToggleSwitch.scss";
 @import "./views/elements/_Tooltip.scss";
@@ -200,6 +201,7 @@
 @import "./views/rooms/_EditMessageComposer.scss";
 @import "./views/rooms/_EntityTile.scss";
 @import "./views/rooms/_EventTile.scss";
+@import "./views/rooms/_EventBubbleTile.scss";
 @import "./views/rooms/_GroupLayout.scss";
 @import "./views/rooms/_IRCLayout.scss";
 @import "./views/rooms/_JumpToBottomButton.scss";
@@ -263,9 +265,9 @@
 @import "./views/toasts/_NonUrgentEchoFailureToast.scss";
 @import "./views/verification/_VerificationShowSas.scss";
 @import "./views/voip/_CallContainer.scss";
+@import "./views/voip/_CallPreview.scss";
 @import "./views/voip/_CallView.scss";
 @import "./views/voip/_CallViewForRoom.scss";
-@import "./views/voip/_CallPreview.scss";
 @import "./views/voip/_DialPad.scss";
 @import "./views/voip/_DialPadContextMenu.scss";
 @import "./views/voip/_DialPadModal.scss";

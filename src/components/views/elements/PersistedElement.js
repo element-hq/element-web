@@ -83,7 +83,7 @@ export default class PersistedElement extends React.Component {
         // for this, so we bodge it by listening for document resize and
         // the timeline_resize action.
         window.addEventListener('resize', this._repositionChild);
-        this._dispatcherRef = dis.register(this._onAction);
+        this.dispatcherRef = dis.register(this._onAction);
     }
 
     /**
@@ -156,7 +156,7 @@ export default class PersistedElement extends React.Component {
     renderApp() {
         const content = <MatrixClientContext.Provider value={MatrixClientPeg.get()}>
             <div ref={this.collectChild} style={this.props.style}>
-                {this.props.children}
+                { this.props.children }
             </div>
         </MatrixClientContext.Provider>;
 
