@@ -3027,15 +3027,15 @@ emoji-regex@^8.0.0:
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
   integrity sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==
 
-emojibase-data@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/emojibase-data/-/emojibase-data-5.1.1.tgz#0a0d63dd07ce1376b3d27642f28cafa46f651de6"
-  integrity sha512-za/ma5SfogHjwUmGFnDbTvSfm8GGFvFaPS27GPti16YZSp5EPgz+UDsZCATXvJGit+oRNBbG/FtybXHKi2UQgQ==
+emojibase-data@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/emojibase-data/-/emojibase-data-6.2.0.tgz#db6c75c36905284fa623f4aa5f468d2be6ed364a"
+  integrity sha512-SWKaXD2QeQs06IE7qfJftsI5924Dqzp+V9xaa5RzZIEWhmlrG6Jt2iKwfgOPHu+5S8MEtOI7GdpKsXj46chXOw==
 
-emojibase-regex@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/emojibase-regex/-/emojibase-regex-4.1.1.tgz#6e781aca520281600fe7a177f1582c33cf1fc545"
-  integrity sha512-KSigB1zQkNKFygLZ5bAfHs87LJa1ni8QTQtq8lc53Y74NF3Dk2r7kfa8MpooTO8JBb5Xz660X4tSjDB+I+7elA==
+emojibase-regex@^5.1.3:
+  version "5.1.3"
+  resolved "https://registry.yarnpkg.com/emojibase-regex/-/emojibase-regex-5.1.3.tgz#f0ef621ed6ec624becd2326f999fd4ea01b94554"
+  integrity sha512-gT8T9LxLA8VJdI+8KQtyykB9qKzd7WuUL3M2yw6y9tplFeufOUANg3UKVaKUvkMcRNvZsSElWhxcJrx8WPE12g==
 
 encoding@^0.1.11:
   version "0.1.13"

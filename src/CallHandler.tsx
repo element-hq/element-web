@@ -97,7 +97,7 @@ const CHECK_PROTOCOLS_ATTEMPTS = 3;
 // (and store the ID of their native room)
 export const VIRTUAL_ROOM_EVENT_TYPE = 'im.vector.is_virtual_room';
 
-export enum AudioID {
+enum AudioID {
     Ring = 'ringAudio',
     Ringback = 'ringbackAudio',
     CallEnd = 'callendAudio',
@@ -135,6 +135,7 @@ export enum PlaceCallType {
 export enum CallHandlerEvent {
     CallsChanged = "calls_changed",
     CallChangeRoom = "call_change_room",
+    SilencedCallsChanged = "silenced_calls_changed",
 }
 
 export default class CallHandler extends EventEmitter {
@@ -156,6 +157,8 @@ export default class CallHandler extends EventEmitter {
     // We need to be be able to determine the mapped room synchronously, so we
     // do the async lookup when we get new information and then store these mappings here
     private assertedIdentityNativeUsers = new Map<string, string>();
+
+    private silencedCalls = new Set<string>(); // callIds
 
     static sharedInstance() {
         if (!window.mxCallHandler) {
@@ -215,6 +218,33 @@ export default class CallHandler extends EventEmitter {
             dis.unregister(this.dispatcherRef);
             this.dispatcherRef = null;
         }
+    }
+
+    public silenceCall(callId: string) {
+        this.silencedCalls.add(callId);
+        this.emit(CallHandlerEvent.SilencedCallsChanged, this.silencedCalls);
+
+        // Don't pause audio if we have calls which are still ringing
+        if (this.areAnyCallsUnsilenced()) return;
+        this.pause(AudioID.Ring);
+    }
+
+    public unSilenceCall(callId: string) {
+        this.silencedCalls.delete(callId);
+        this.emit(CallHandlerEvent.SilencedCallsChanged, this.silencedCalls);
+        this.play(AudioID.Ring);
+    }
+
+    public isCallSilenced(callId: string): boolean {
+        return this.silencedCalls.has(callId);
+    }
+
+    /**
+     * Returns true if there is at least one unsilenced call
+     * @returns {boolean}
+     */
+    private areAnyCallsUnsilenced(): boolean {
+        return this.calls.size > this.silencedCalls.size;
     }
 
     private async checkProtocols(maxTries) {
@@ -293,6 +323,13 @@ export default class CallHandler extends EventEmitter {
             call: call,
         }, true);
     };
+
+    public getCallById(callId: string): MatrixCall {
+        for (const call of this.calls.values()) {
+            if (call.callId === callId) return call;
+        }
+        return null;
+    }
 
     getCallForRoom(roomId: string): MatrixCall {
         return this.calls.get(roomId) || null;
@@ -432,6 +469,10 @@ export default class CallHandler extends EventEmitter {
                 case CallState.InviteSent:
                     this.pause(AudioID.Ringback);
                     break;
+            }
+
+            if (newState !== CallState.Ringing) {
+                this.silencedCalls.delete(call.callId);
             }
 
             switch (newState) {
