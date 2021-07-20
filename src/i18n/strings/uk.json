@@ -1639,5 +1639,7 @@
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Використовувати менеджер інтеграцій <b>%(serverName)s</b> для керування ботами, знадобами та паками наліпок.",
     "Identity server": "Сервер ідентифікації",
     "Identity server (%(server)s)": "Сервер ідентифікації (%(server)s)",
-    "Could not connect to identity server": "Не вдалося під'єднатись до сервера ідентифікації"
+    "Could not connect to identity server": "Не вдалося під'єднатись до сервера ідентифікації",
+    "There was an error looking up the phone number": "Сталася помилка під час пошуку номеру телефону",
+    "Unable to look up phone number": "Неможливо знайти номер телефону"
 }
