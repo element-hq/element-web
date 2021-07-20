@@ -27,7 +27,11 @@ interface IProps {
 
 export default class CallViewSidebar extends React.Component<IProps> {
     render() {
-        const feeds = this.props.feeds.map((feed) => {
+        const feeds = this.props.feeds.sort((a, b) => {
+            if (!a.isLocal() && b.isLocal()) return -1;
+            else if (a.isLocal() && !b.isLocal()) return 1;
+            return 0;
+        }).map((feed) => {
             // Hide local video feed if video is off
             if (
                 this.props.call.isLocalVideoMuted()
