@@ -3447,7 +3447,7 @@
     "Show all rooms in Home": "Shfaq krejt dhomat te Home",
     "Report to moderators prototype. In rooms that support moderation, the `report` button will let you report abuse to room moderators": "Prototip “Njoftojuani moderatorëve”. Në dhoma që mbulojnë moderim, butoni `raportojeni` do t’ju lejojë t’u njoftoni abuzim moderatorëve të dhomës",
     "%(senderName)s changed the <a>pinned messages</a> for the room.": "%(senderName)s ndryshoi <a>mesazhin e fiksuar</a> për këtë dhomë.",
-    "%(senderName)s kicked %(targetName)s": "%(senderName)s përzuri %(targetName)s.",
+    "%(senderName)s kicked %(targetName)s": "%(senderName)s përzuri %(targetName)s",
     "%(senderName)s kicked %(targetName)s: %(reason)s": "%(senderName)s përzuri %(targetName)s: %(reason)s",
     "%(senderName)s withdrew %(targetName)s's invitation": "%(senderName)s tërhoqi mbrapsht ftesën për %(targetName)s",
     "%(senderName)s withdrew %(targetName)s's invitation: %(reason)s": "%(senderName)s tërhoqi mbrapsht ftesën për %(targetName)s: %(reason)s",
@@ -3460,10 +3460,10 @@
     "%(senderName)s set a profile picture": "%(senderName)s caktoi një foto profili",
     "%(senderName)s changed their profile picture": "%(senderName)s ndryshoi foton e vet të profilit",
     "%(senderName)s removed their profile picture": "%(senderName)s hoqi foton e vet të profilit",
-    "%(senderName)s removed their display name (%(oldDisplayName)s)": "%(senderName)s hoqi emrin e vet në ekran (%(oldDisplayName)s).",
+    "%(senderName)s removed their display name (%(oldDisplayName)s)": "%(senderName)s hoqi emrin e vet në ekran (%(oldDisplayName)s)",
     "%(senderName)s set their display name to %(displayName)s": "%(senderName)s caktoi për veten emër ekrani %(displayName)s",
     "%(oldDisplayName)s changed their display name to %(displayName)s": "%(oldDisplayName)s ndryshoi emrin e vet në ekran si %(displayName)s",
-    "%(senderName)s banned %(targetName)s": "%(senderName)s dëboi %(targetName)s.",
+    "%(senderName)s banned %(targetName)s": "%(senderName)s dëboi %(targetName)s",
     "%(senderName)s banned %(targetName)s: %(reason)s": "%(senderName)s dëboi %(targetName)s: %(reason)s",
     "%(targetName)s accepted an invitation": "%(targetName)s pranoi një ftesë",
     "%(targetName)s accepted the invitation for %(displayName)s": "%(targetName)s pranoi ftesën për %(displayName)s",
@@ -3510,5 +3510,9 @@
     "An error occurred whilst saving your notification preferences.": "Ndodhi një gabim teksa ruheshin parapëlqimet tuaja për njoftimet.",
     "Error saving notification preferences": "Gabim në ruajtje parapëlqimesh për njoftimet",
     "Messages containing keywords": "Mesazhe që përmbajnë fjalëkyçe",
-    "Transfer Failed": "Shpërngulja Dështoi"
+    "Transfer Failed": "Shpërngulja Dështoi",
+    "Copy Room Link": "Kopjo Lidhje Dhome",
+    "Message bubbles": "Flluska mesazhesh",
+    "IRC": "IRC",
+    "New layout switcher (with message bubbles)": "Këmbyes i ri skemash (me flluska mesazhesh)"
 }
