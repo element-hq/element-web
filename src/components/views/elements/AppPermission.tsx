@@ -18,13 +18,16 @@ limitations under the License.
 
 import React from 'react';
 import url from 'url';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import WidgetUtils from "../../../utils/WidgetUtils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
+import MemberAvatar from '../avatars/MemberAvatar';
+import BaseAvatar from '../avatars/BaseAvatar';
+import AccessibleButton from './AccessibleButton';
+import TextWithTooltip from "./TextWithTooltip";
 
 interface IProps {
     url: string;
@@ -88,10 +91,6 @@ export default class AppPermission extends React.Component<IProps, IState> {
 
     render() {
         const brand = SdkConfig.get().brand;
-        const AccessibleButton = sdk.getComponent("views.elements.AccessibleButton");
-        const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
-        const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
-        const TextWithTooltip = sdk.getComponent("views.elements.TextWithTooltip");
 
         const displayName = this.state.roomMember ? this.state.roomMember.name : this.props.creatorUserId;
         const userId = displayName === this.props.creatorUserId ? null : this.props.creatorUserId;

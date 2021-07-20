@@ -17,11 +17,11 @@ limitations under the License.
 
 import React from 'react';
 import classNames from 'classnames';
-import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { IUserAddress } from '../../../UserAddress';
+import BaseAvatar from '../avatars/BaseAvatar';
 
 interface IProps {
     address: IUserAddress;
@@ -52,8 +52,6 @@ export default class AddressTile extends React.Component<IProps> {
             // eslint-disable-next-line @typescript-eslint/no-var-requires
             imgUrls.push(require("../../../../res/img/icon-email-user.svg"));
         }
-
-        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
 
         const nameClasses = classNames({
             "mx_AddressTile_name": true,

@@ -16,10 +16,10 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-import * as sdk from '../../../index';
 import classNames from 'classnames';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { IUserAddress } from '../../../UserAddress';
+import AddressTile from './AddressTile';
 
 interface IProps {
     onSelected: (index: number) => void;
@@ -128,7 +128,6 @@ export default class AddressSelector extends React.Component<IProps, IState> {
     };
 
     private createAddressListTiles(): JSX.Element[] {
-        const AddressTile = sdk.getComponent("elements.AddressTile");
         const maxSelected = this.maxSelected(this.props.addressList);
         const addressList = [];
 
@@ -156,8 +155,6 @@ export default class AddressSelector extends React.Component<IProps, IState> {
                             address={this.props.addressList[i]}
                             showAddress={this.props.showAddress}
                             justified={true}
-                            networkName="vector"
-                            networkUrl={require("../../../../res/img/search-icon-vector.svg")}
                         />
                     </div>,
                 );

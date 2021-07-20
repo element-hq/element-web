@@ -21,7 +21,6 @@ import React, { createRef } from 'react';
 import { sleep } from "matrix-js-sdk/src/utils";
 
 import { _t, _td } from '../../../languageHandler';
-import * as sdk from '../../../index';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
 import { AddressType, addressTypes, getAddressType, IUserAddress } from '../../../UserAddress';
@@ -34,6 +33,9 @@ import { Key } from "../../../Keyboard";
 import { Action } from "../../../dispatcher/actions";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AddressSelector from '../elements/AddressSelector';
+import AddressTile from '../elements/AddressTile';
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -621,10 +623,6 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
     };
 
     render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const AddressSelector = sdk.getComponent("elements.AddressSelector");
-
         let inputLabel;
         if (this.props.description) {
             inputLabel = <div className="mx_AddressPickerDialog_label">
@@ -635,7 +633,6 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
         const query = [];
         // create the invite list
         if (this.state.selectedList.length > 0) {
-            const AddressTile = sdk.getComponent("elements.AddressTile");
             for (let i = 0; i < this.state.selectedList.length; i++) {
                 query.push(
                     <AddressTile

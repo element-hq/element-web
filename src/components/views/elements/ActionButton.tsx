@@ -17,9 +17,9 @@ limitations under the License.
 import React from 'react';
 import AccessibleButton from './AccessibleButton';
 import dis from '../../../dispatcher/dispatcher';
-import * as sdk from '../../../index';
 import Analytics from '../../../Analytics';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import Tooltip from './Tooltip';
 
 interface IProps {
     size?: string;
@@ -71,7 +71,6 @@ export default class ActionButton extends React.Component<IProps, IState> {
     render() {
         let tooltip;
         if (this.state.showTooltip) {
-            const Tooltip = sdk.getComponent("elements.Tooltip");
             tooltip = <Tooltip className="mx_RoleButton_tooltip" label={this.props.label} />;
         }
 
