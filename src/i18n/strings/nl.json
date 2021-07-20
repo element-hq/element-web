@@ -1039,7 +1039,7 @@
     "Bug reporting": "Bug meldingen",
     "FAQ": "FAQ",
     "Versions": "Versies",
-    "Preferences": "Instellingen",
+    "Preferences": "Voorkeuren",
     "Composer": "Opsteller",
     "Timeline": "Tijdslijn",
     "Room list": "Gesprekslijst",
@@ -3409,5 +3409,9 @@
     "Transfer Failed": "Doorverbinden is mislukt",
     "Unable to transfer call": "Doorverbinden is mislukt",
     "Unable to copy a link to the room to the clipboard.": "Kopiëren van gesprekslink naar het klembord is mislukt.",
-    "Unable to copy room link": "Kopiëren van gesprekslink is mislukt"
+    "Unable to copy room link": "Kopiëren van gesprekslink is mislukt",
+    "Copy Room Link": "Kopieer gesprekslink",
+    "Message bubbles": "Berichtenbubbels",
+    "IRC": "IRC",
+    "New layout switcher (with message bubbles)": "Nieuwe layout schakelaar (met berichtenbubbels)"
 }
