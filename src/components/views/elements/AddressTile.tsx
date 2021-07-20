@@ -21,9 +21,10 @@ import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
+import { IUserAddress } from '../../../UserAddress';
 
 interface IProps {
-    address; // FIXME: UserAddressType should be an interface
+    address: IUserAddress;
     canDismiss?: boolean;
     onDismissed?: () => void;
     justified?: boolean;

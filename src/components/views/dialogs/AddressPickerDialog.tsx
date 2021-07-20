@@ -24,7 +24,7 @@ import { _t, _td } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
-import { addressTypes, getAddressType } from '../../../UserAddress';
+import { AddressType, addressTypes, getAddressType, IUserAddress } from '../../../UserAddress';
 import GroupStore from '../../../stores/GroupStore';
 import * as Email from '../../../email';
 import IdentityAuthClient from '../../../IdentityAuthClient';
@@ -54,8 +54,8 @@ interface IProps {
     roomId?: string;
     button?: string;
     focus?: boolean;
-    validAddressTypes?; // FIXME: UserAddressType should be an interface
-    onFinished: (success: boolean, list?) => void; // FIXME: UserAddressType should be an interface
+    validAddressTypes?: AddressType[];
+    onFinished: (success: boolean, list?: IUserAddress[]) => void;
     groupId?: string;
     // The type of entity to search for. Default: 'user'.
     pickerType?: 'user' | 'room';
@@ -69,7 +69,7 @@ interface IState {
     invalidAddressError: boolean;
     // List of UserAddressType objects representing
     // the list of addresses we're going to invite
-    selectedList; // FIXME: UserAddressType should be an interface
+    selectedList: IUserAddress[];
     // Whether a search is ongoing
     busy: boolean;
     // An error message generated during the user directory search
@@ -80,10 +80,10 @@ interface IState {
     query: string;
     // List of UserAddressType objects representing the set of
     // auto-completion results for the current search query.
-    suggestedList; // FIXME: UserAddressType should be an interface
+    suggestedList: IUserAddress[];
     // List of address types initialised from props, but may change while the
     // dialog is open and represents the supported list of address types at this time.
-    validAddressTypes;
+    validAddressTypes: AddressType[];
 }
 
 @replaceableComponent("views.dialogs.AddressPickerDialog")
@@ -106,8 +106,8 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
 
         let validAddressTypes = this.props.validAddressTypes;
         // Remove email from validAddressTypes if no IS is configured. It may be added at a later stage by the user
-        if (!MatrixClientPeg.get().getIdentityServerUrl() && validAddressTypes.includes("email")) {
-            validAddressTypes = validAddressTypes.filter(type => type !== "email");
+        if (!MatrixClientPeg.get().getIdentityServerUrl() && validAddressTypes.includes(AddressType.Email)) {
+            validAddressTypes = validAddressTypes.filter(type => type !== AddressType.Email);
         }
 
         this.state = {
@@ -488,14 +488,14 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
         });
     }
 
-    private addAddressesToList(addressTexts): void {
+    private addAddressesToList(addressTexts): IUserAddress[] {
         const selectedList = this.state.selectedList.slice();
 
         let hasError = false;
         addressTexts.forEach((addressText) => {
             addressText = addressText.trim();
             const addrType = getAddressType(addressText);
-            const addrObj = {
+            const addrObj: IUserAddress = {
                 addressType: addrType,
                 address: addressText,
                 isKnown: false,
@@ -514,7 +514,6 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
                 const room = MatrixClientPeg.get().getRoom(addrObj.address);
                 if (room) {
                     addrObj.displayName = room.name;
-                    addrObj.avatarMxc = room.avatarUrl;
                     addrObj.isKnown = true;
                 }
             }
@@ -580,7 +579,7 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
         }
     }
 
-    private getFilteredSuggestions() { // FIXME: UserAddressType should be an interface
+    private getFilteredSuggestions(): IUserAddress[] {
         // map addressType => set of addresses to avoid O(n*m) operation
         const selectedAddresses = {};
         this.state.selectedList.forEach(({ address, addressType }) => {
@@ -611,7 +610,7 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
 
         // Add email as a valid address type.
         const { validAddressTypes } = this.state;
-        validAddressTypes.push('email');
+        validAddressTypes.push(AddressType.Email);
         this.setState({ validAddressTypes });
     };
 
@@ -695,8 +694,8 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
 
         let identityServer;
         // If picker cannot currently accept e-mail but should be able to
-        if (this.props.pickerType === 'user' && !this.state.validAddressTypes.includes('email')
-            && this.props.validAddressTypes.includes('email')) {
+        if (this.props.pickerType === 'user' && !this.state.validAddressTypes.includes(AddressType.Email)
+            && this.props.validAddressTypes.includes(AddressType.Email)) {
             const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
             if (defaultIdentityServerUrl) {
                 identityServer = <div className="mx_AddressPickerDialog_identityServer">{ _t(

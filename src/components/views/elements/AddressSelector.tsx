@@ -19,12 +19,13 @@ import React, { createRef } from 'react';
 import * as sdk from '../../../index';
 import classNames from 'classnames';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { IUserAddress } from '../../../UserAddress';
 
 interface IProps {
     onSelected: (index: number) => void;
 
     // List of the addresses to display
-    addressList; // FIXME: UserAddressType should be an interface
+    addressList: IUserAddress[];
     // Whether to show the address on the address tiles
     showAddress?: boolean;
     truncateAt: number;
