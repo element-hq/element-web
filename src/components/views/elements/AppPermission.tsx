@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import url from 'url';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -25,22 +24,29 @@ import SdkConfig from '../../../SdkConfig';
 import WidgetUtils from "../../../utils/WidgetUtils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
+
+interface IProps {
+    url: string;
+    creatorUserId: string;
+    roomId: string;
+    onPermissionGranted: () => void;
+    isRoomEncrypted?: boolean;
+}
+
+interface IState {
+    roomMember: RoomMember;
+    isWrapped: boolean;
+    widgetDomain: string;
+}
 
 @replaceableComponent("views.elements.AppPermission")
-export default class AppPermission extends React.Component {
-    static propTypes = {
-        url: PropTypes.string.isRequired,
-        creatorUserId: PropTypes.string.isRequired,
-        roomId: PropTypes.string.isRequired,
-        onPermissionGranted: PropTypes.func.isRequired,
-        isRoomEncrypted: PropTypes.bool,
-    };
-
-    static defaultProps = {
+export default class AppPermission extends React.Component<IProps, IState> {
+    static defaultProps: Partial<IProps> = {
         onPermissionGranted: () => {},
     };
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
 
         // The first step is to pick apart the widget so we can render information about it
@@ -55,16 +61,18 @@ export default class AppPermission extends React.Component {
         this.state = {
             ...urlInfo,
             roomMember,
+            isWrapped: null,
+            widgetDomain: null,
         };
     }
 
-    parseWidgetUrl() {
+    private parseWidgetUrl(): { isWrapped: boolean, widgetDomain: string } {
         const widgetUrl = url.parse(this.props.url);
         const params = new URLSearchParams(widgetUrl.search);
 
         // HACK: We're relying on the query params when we should be relying on the widget's `data`.
         // This is a workaround for Scalar.
-        if (WidgetUtils.isScalarUrl(widgetUrl) && params && params.get('url')) {
+        if (WidgetUtils.isScalarUrl(this.props.url) && params && params.get('url')) {
             const unwrappedUrl = url.parse(params.get('url'));
             return {
                 widgetDomain: unwrappedUrl.host || unwrappedUrl.hostname,
@@ -94,15 +102,15 @@ export default class AppPermission extends React.Component {
 
         const warningTooltipText = (
             <div>
-                {_t("Any of the following data may be shared:")}
+                { _t("Any of the following data may be shared:") }
                 <ul>
-                    <li>{_t("Your display name")}</li>
-                    <li>{_t("Your avatar URL")}</li>
-                    <li>{_t("Your user ID")}</li>
-                    <li>{_t("Your theme")}</li>
-                    <li>{_t("%(brand)s URL", { brand })}</li>
-                    <li>{_t("Room ID")}</li>
-                    <li>{_t("Widget ID")}</li>
+                    <li>{ _t("Your display name") }</li>
+                    <li>{ _t("Your avatar URL") }</li>
+                    <li>{ _t("Your user ID") }</li>
+                    <li>{ _t("Your theme") }</li>
+                    <li>{ _t("%(brand)s URL", { brand }) }</li>
+                    <li>{ _t("Room ID") }</li>
+                    <li>{ _t("Widget ID") }</li>
                 </ul>
             </div>
         );
@@ -124,22 +132,22 @@ export default class AppPermission extends React.Component {
         return (
             <div className='mx_AppPermissionWarning'>
                 <div className='mx_AppPermissionWarning_row mx_AppPermissionWarning_bolder mx_AppPermissionWarning_smallText'>
-                    {_t("Widget added by")}
+                    { _t("Widget added by") }
                 </div>
                 <div className='mx_AppPermissionWarning_row'>
-                    {avatar}
-                    <h4 className='mx_AppPermissionWarning_bolder'>{displayName}</h4>
-                    <div className='mx_AppPermissionWarning_smallText'>{userId}</div>
+                    { avatar }
+                    <h4 className='mx_AppPermissionWarning_bolder'>{ displayName }</h4>
+                    <div className='mx_AppPermissionWarning_smallText'>{ userId }</div>
                 </div>
                 <div className='mx_AppPermissionWarning_row mx_AppPermissionWarning_smallText'>
-                    {warning}
+                    { warning }
                 </div>
                 <div className='mx_AppPermissionWarning_row mx_AppPermissionWarning_smallText'>
-                    {_t("This widget may use cookies.")}&nbsp;{encryptionWarning}
+                    { _t("This widget may use cookies.") }&nbsp;{ encryptionWarning }
                 </div>
                 <div className='mx_AppPermissionWarning_row'>
                     <AccessibleButton kind='primary_sm' onClick={this.props.onPermissionGranted}>
-                        {_t("Continue")}
+                        { _t("Continue") }
                     </AccessibleButton>
                 </div>
             </div>
