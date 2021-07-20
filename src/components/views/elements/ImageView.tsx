@@ -24,15 +24,16 @@ import FocusLock from "react-focus-lock";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
-import { aboveLeftOf, ContextMenu } from '../../structures/ContextMenu';
+import { aboveLeftOf } from '../../structures/ContextMenu';
 import MessageTimestamp from "../messages/MessageTimestamp";
 import SettingsStore from "../../../settings/SettingsStore";
 import { formatFullDate } from "../../../DateUtils";
 import dis from '../../../dispatcher/dispatcher';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks"
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { normalizeWheelEvent } from "../../../utils/Mouse";
+import { IDialogProps } from '../dialogs/IDialogProps';
 
 // Max scale to keep gaps around the image
 const MAX_SCALE = 0.95;
@@ -43,32 +44,31 @@ const ZOOM_COEFFICIENT = 0.0025;
 // If we have moved only this much we can zoom
 const ZOOM_DISTANCE = 10;
 
-interface IProps {
-    src: string, // the source of the image being displayed
-    name?: string, // the main title ('name') for the image
-    link?: string, // the link (if any) applied to the name of the image
-    width?: number, // width of the image src in pixels
-    height?: number, // height of the image src in pixels
-    fileSize?: number, // size of the image src in bytes
-    onFinished(): void, // callback when the lightbox is dismissed
+interface IProps extends IDialogProps {
+    src: string; // the source of the image being displayed
+    name?: string; // the main title ('name') for the image
+    link?: string; // the link (if any) applied to the name of the image
+    width?: number; // width of the image src in pixels
+    height?: number; // height of the image src in pixels
+    fileSize?: number; // size of the image src in bytes
 
     // the event (if any) that the Image is displaying. Used for event-specific stuff like
     // redactions, senders, timestamps etc.  Other descriptors are taken from the explicit
     // properties above, which let us use lightboxes to display images which aren't associated
     // with events.
-    mxEvent: MatrixEvent,
-    permalinkCreator: RoomPermalinkCreator,
+    mxEvent: MatrixEvent;
+    permalinkCreator: RoomPermalinkCreator;
 }
 
 interface IState {
-    zoom: number,
-    minZoom: number,
-    maxZoom: number,
-    rotation: number,
-    translationX: number,
-    translationY: number,
-    moving: boolean,
-    contextMenuDisplayed: boolean,
+    zoom: number;
+    minZoom: number;
+    maxZoom: number;
+    rotation: number;
+    translationX: number;
+    translationY: number;
+    moving: boolean;
+    contextMenuDisplayed: boolean;
 }
 
 @replaceableComponent("views.elements.ImageView")
@@ -116,13 +116,13 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     private recalculateZoom = () => {
         this.setZoomAndRotation();
-    }
+    };
 
     private setZoomAndRotation = (inputRotation?: number) => {
         const image = this.image.current;
         const imageWrapper = this.imageWrapper.current;
 
-        const rotation = inputRotation || this.state.rotation;
+        const rotation = inputRotation ?? this.state.rotation;
 
         const imageIsNotFlipped = rotation % 180 === 0;
 
@@ -158,7 +158,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             rotation: rotation,
             zoom: zoom,
         });
-    }
+    };
 
     private zoom(delta: number) {
         const newZoom = this.state.zoom + delta;
@@ -304,17 +304,13 @@ export default class ImageView extends React.Component<IProps, IState> {
         let contextMenu = null;
         if (this.state.contextMenuDisplayed) {
             contextMenu = (
-                <ContextMenu
+                <MessageContextMenu
                     {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect())}
+                    mxEvent={this.props.mxEvent}
+                    permalinkCreator={this.props.permalinkCreator}
                     onFinished={this.onCloseContextMenu}
-                >
-                    <MessageContextMenu
-                        mxEvent={this.props.mxEvent}
-                        permalinkCreator={this.props.permalinkCreator}
-                        onFinished={this.onCloseContextMenu}
-                        onCloseDialog={this.props.onFinished}
-                    />
-                </ContextMenu>
+                    onCloseDialog={this.props.onFinished}
+                />
             );
         }
 
@@ -456,28 +452,28 @@ export default class ImageView extends React.Component<IProps, IState> {
                 <div className="mx_ImageView_panel">
                     { info }
                     <div className="mx_ImageView_toolbar">
+                        { zoomOutButton }
+                        { zoomInButton }
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_rotateCCW"
                             title={_t("Rotate Left")}
-                            onClick={ this.onRotateCounterClockwiseClick }>
+                            onClick={this.onRotateCounterClockwiseClick}>
                         </AccessibleTooltipButton>
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_rotateCW"
                             title={_t("Rotate Right")}
                             onClick={this.onRotateClockwiseClick}>
                         </AccessibleTooltipButton>
-                        { zoomOutButton }
-                        { zoomInButton }
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_download"
                             title={_t("Download")}
-                            onClick={ this.onDownloadClick }>
+                            onClick={this.onDownloadClick}>
                         </AccessibleTooltipButton>
                         { contextMenuButton }
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_close"
                             title={_t("Close")}
-                            onClick={ this.props.onFinished }>
+                            onClick={this.props.onFinished}>
                         </AccessibleTooltipButton>
                         { this.renderContextMenu() }
                     </div>
@@ -492,8 +488,8 @@ export default class ImageView extends React.Component<IProps, IState> {
                 >
                     <img
                         src={this.props.src}
-                        title={this.props.name}
                         style={style}
+                        alt={this.props.name}
                         ref={this.image}
                         className="mx_ImageView_image"
                         draggable={true}

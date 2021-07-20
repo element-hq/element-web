@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { randomString } from "matrix-js-sdk/src/randomstring";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
@@ -44,7 +44,7 @@ export default class StyledCheckbox extends React.PureComponent<IProps, IState> 
         return <span className={"mx_Checkbox " + className}>
             <input id={this.id} {...otherProps} type="checkbox" />
             <label htmlFor={this.id}>
-                {/* Using the div to center the image */}
+                { /* Using the div to center the image */ }
                 <div className="mx_Checkbox_background">
                     <img src={require("../../../../res/img/feather-customised/check.svg")} />
                 </div>

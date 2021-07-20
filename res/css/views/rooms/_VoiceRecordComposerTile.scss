@@ -36,10 +36,10 @@ limitations under the License.
 }
 
 .mx_VoiceRecordComposerTile_delete {
-    width: 14px; // w&h are size of icon
-    height: 18px;
+    width: 24px;
+    height: 24px;
     vertical-align: middle;
-    margin-right: 11px; // distance from left edge of waveform container (container has some margin too)
+    margin-right: 8px; // distance from left edge of waveform container (container has some margin too)
     background-color: $voice-record-icon-color;
     mask-repeat: no-repeat;
     mask-size: contain;

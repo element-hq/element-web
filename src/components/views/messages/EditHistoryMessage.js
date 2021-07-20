@@ -14,20 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import * as HtmlUtils from '../../../HtmlUtils';
 import { editBodyDiffToHtml } from '../../../utils/MessageDiffUtils';
-import {formatTime} from '../../../DateUtils';
-import {MatrixEvent} from 'matrix-js-sdk/src/models/event';
-import {pillifyLinks, unmountPills} from '../../../utils/pillify';
+import { formatTime } from '../../../DateUtils';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { pillifyLinks, unmountPills } from '../../../utils/pillify';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import classNames from 'classnames';
 import RedactedBody from "./RedactedBody";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 function getReplacedContent(event) {
     const originalContent = event.getOriginalContent();
@@ -46,21 +46,21 @@ export default class EditHistoryMessage extends React.PureComponent {
     constructor(props) {
         super(props);
         const cli = MatrixClientPeg.get();
-        const {userId} = cli.credentials;
+        const { userId } = cli.credentials;
         const event = this.props.mxEvent;
         const room = cli.getRoom(event.getRoomId());
         if (event.localRedactionEvent()) {
             event.localRedactionEvent().on("status", this._onAssociatedStatusChanged);
         }
         const canRedact = room.currentState.maySendRedactionForEvent(event, userId);
-        this.state = {canRedact, sendStatus: event.getAssociatedStatus()};
+        this.state = { canRedact, sendStatus: event.getAssociatedStatus() };
 
         this._content = createRef();
         this._pills = [];
     }
 
     _onAssociatedStatusChanged = () => {
-        this.setState({sendStatus: this.props.mxEvent.getAssociatedStatus()});
+        this.setState({ sendStatus: this.props.mxEvent.getAssociatedStatus() });
     };
 
     _onRedactClick = async () => {
@@ -110,26 +110,26 @@ export default class EditHistoryMessage extends React.PureComponent {
         if (!this.props.mxEvent.isRedacted() && !this.props.isBaseEvent && this.state.canRedact) {
             redactButton = (
                 <AccessibleButton onClick={this._onRedactClick}>
-                    {_t("Remove")}
+                    { _t("Remove") }
                 </AccessibleButton>
             );
         }
         const viewSourceButton = (
             <AccessibleButton onClick={this._onViewSourceClick}>
-                {_t("View Source")}
+                { _t("View Source") }
             </AccessibleButton>
         );
         // disabled remove button when not allowed
         return (
             <div className="mx_MessageActionBar">
-                {redactButton}
-                {viewSourceButton}
+                { redactButton }
+                { viewSourceButton }
             </div>
         );
     }
 
     render() {
-        const {mxEvent} = this.props;
+        const { mxEvent } = this.props;
         const content = getReplacedContent(mxEvent);
         let contentContainer;
         if (mxEvent.isRedacted()) {
@@ -139,18 +139,18 @@ export default class EditHistoryMessage extends React.PureComponent {
             if (this.props.previousEdit) {
                 contentElements = editBodyDiffToHtml(getReplacedContent(this.props.previousEdit), content);
             } else {
-                contentElements = HtmlUtils.bodyToHtml(content, null, {stripReplyFallback: true});
+                contentElements = HtmlUtils.bodyToHtml(content, null, { stripReplyFallback: true });
             }
             if (mxEvent.getContent().msgtype === "m.emote") {
                 const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
                 contentContainer = (
                     <div className="mx_EventTile_content" ref={this._content}>*&nbsp;
                         <span className="mx_MEmoteBody_sender">{ name }</span>
-                        &nbsp;{contentElements}
+                        &nbsp;{ contentElements }
                     </div>
                 );
             } else {
-                contentContainer = <div className="mx_EventTile_content" ref={this._content}>{contentElements}</div>;
+                contentContainer = <div className="mx_EventTile_content" ref={this._content}>{ contentElements }</div>;
             }
         }
 
@@ -165,7 +165,7 @@ export default class EditHistoryMessage extends React.PureComponent {
             <li>
                 <div className={classes}>
                     <div className="mx_EventTile_line">
-                        <span className="mx_MessageTimestamp">{timestamp}</span>
+                        <span className="mx_MessageTimestamp">{ timestamp }</span>
                         { contentContainer }
                         { this._renderActionBar() }
                     </div>

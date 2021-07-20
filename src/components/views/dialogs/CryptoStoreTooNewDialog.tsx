@@ -16,21 +16,22 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
+import QuestionDialog from "./QuestionDialog";
 
 interface IProps {
     onFinished: (success: boolean) => void;
 }
 
-export default (props: IProps) => {
+const CryptoStoreTooNewDialog: React.FC<IProps> = (props: IProps) => {
     const brand = SdkConfig.get().brand;
 
     const _onLogoutClicked = () => {
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createTrackedDialog('Logout e2e db too new', '', QuestionDialog, {
             title: _t("Sign out"),
             description: _t(
@@ -43,7 +44,7 @@ export default (props: IProps) => {
             focus: false,
             onFinished: (doLogout) => {
                 if (doLogout) {
-                    dis.dispatch({action: 'logout'});
+                    dis.dispatch({ action: 'logout' });
                     props.onFinished(true);
                 }
             },
@@ -58,8 +59,6 @@ export default (props: IProps) => {
             { brand },
         );
 
-    const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-    const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
     return (<BaseDialog className="mx_CryptoStoreTooNewDialog"
         contentId='mx_Dialog_content'
         title={_t("Incompatible Database")}
@@ -79,3 +78,5 @@ export default (props: IProps) => {
         </DialogButtons>
     </BaseDialog>);
 };
+
+export default CryptoStoreTooNewDialog;

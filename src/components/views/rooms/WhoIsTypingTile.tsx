@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import Room from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
@@ -64,8 +64,8 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
     }
 
     componentDidUpdate(_, prevState) {
-        const wasVisible = this._isVisible(prevState);
-        const isVisible = this._isVisible(this.state);
+        const wasVisible = WhoIsTypingTile.isVisible(prevState);
+        const isVisible = WhoIsTypingTile.isVisible(this.state);
         if (this.props.onShown && !wasVisible && isVisible) {
             this.props.onShown();
         } else if (this.props.onHidden && wasVisible && !isVisible) {
@@ -83,12 +83,12 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
         Object.values(this.state.delayedStopTypingTimers).forEach((t) => (t as Timer).abort());
     }
 
-    private _isVisible(state: IState): boolean {
+    private static isVisible(state: IState): boolean {
         return state.usersTyping.length !== 0 || Object.keys(state.delayedStopTypingTimers).length !== 0;
     }
 
     public isVisible = (): boolean => {
-        return this._isVisible(this.state);
+        return WhoIsTypingTile.isVisible(this.state);
     };
 
     private onRoomTimeline = (event: MatrixEvent, room: Room): void => {
@@ -97,7 +97,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
             // remove user from usersTyping
             const usersTyping = this.state.usersTyping.filter((m) => m.userId !== userId);
             if (usersTyping.length !== this.state.usersTyping.length) {
-                this.setState({usersTyping});
+                this.setState({ usersTyping });
             }
             // abort timer if any
             this.abortUserTimer(userId);
@@ -163,7 +163,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
         if (timer) {
             const delayedStopTypingTimers = Object.assign({}, this.state.delayedStopTypingTimers);
             delete delayedStopTypingTimers[userId];
-            this.setState({delayedStopTypingTimers});
+            this.setState({ delayedStopTypingTimers });
         }
     }
 

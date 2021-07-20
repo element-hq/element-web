@@ -24,8 +24,8 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import WidgetEchoStore from "../stores/WidgetEchoStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import WidgetUtils from "../utils/WidgetUtils";
-import {WidgetType} from "../widgets/WidgetType";
-import {UPDATE_EVENT} from "./AsyncStore";
+import { WidgetType } from "../widgets/WidgetType";
+import { UPDATE_EVENT } from "./AsyncStore";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 
 interface IState {}

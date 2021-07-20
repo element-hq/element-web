@@ -15,17 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
-const {delay} = require('../util');
+const { delay } = require('../util');
 const join = require('../usecases/join');
 const sendMessage = require('../usecases/send-message');
 const {
     checkTimelineContains,
     scrollToTimelineTop,
 } = require('../usecases/timeline');
-const {createRoom} = require('../usecases/create-room');
-const {getMembersInMemberlist} = require('../usecases/memberlist');
-const {changeRoomSettings} = require('../usecases/room-settings');
+const { createRoom } = require('../usecases/create-room');
+const { getMembersInMemberlist } = require('../usecases/memberlist');
+const { changeRoomSettings } = require('../usecases/room-settings');
 const assert = require('assert');
 
 module.exports = async function lazyLoadingScenarios(alice, bob, charlies) {
@@ -52,7 +51,7 @@ const charlyMsg2 = "how's it going??";
 
 async function setupRoomWithBobAliceAndCharlies(alice, bob, charlies) {
     await createRoom(bob, room);
-    await changeRoomSettings(bob, {directory: true, visibility: "public_no_guests", alias});
+    await changeRoomSettings(bob, { directory: true, visibility: "public_no_guests", alias });
     // wait for alias to be set by server after clicking "save"
     // so the charlies can join it.
     await bob.delay(500);

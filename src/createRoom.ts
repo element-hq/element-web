@@ -17,11 +17,11 @@ limitations under the License.
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
-import * as sdk from './index';
 import { _t } from './languageHandler';
 import dis from "./dispatcher/dispatcher";
 import * as Rooms from "./Rooms";
@@ -34,9 +34,11 @@ import { isJoinedOrNearlyJoined } from "./utils/membership";
 import { VIRTUAL_ROOM_EVENT_TYPE } from "./CallHandler";
 import SpaceStore from "./stores/SpaceStore";
 import { makeSpaceParentEvent } from "./utils/space";
-import { Action } from "./dispatcher/actions"
+import { Action } from "./dispatcher/actions";
 import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
 import { Preset, Visibility } from "matrix-js-sdk/src/@types/partials";
+import ErrorDialog from "./components/views/dialogs/ErrorDialog";
+import Spinner from "./components/views/elements/Spinner";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -80,12 +82,9 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
 
     const startTime = CountlyAnalytics.getTimestamp();
 
-    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-    const Loader = sdk.getComponent("elements.Spinner");
-
     const client = MatrixClientPeg.get();
     if (client.isGuest()) {
-        dis.dispatch({action: 'require_registration'});
+        dis.dispatch({ action: 'require_registration' });
         return Promise.resolve(null);
     }
 
@@ -153,7 +152,7 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
     }
 
     let modal;
-    if (opts.spinner) modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
+    if (opts.spinner) modal = Modal.createDialog(Spinner, null, 'mx_Dialog_spinner');
 
     let roomId;
     return client.createRoom(createOpts).finally(function() {
@@ -249,11 +248,11 @@ export function findDMForUser(client: MatrixClient, userId: string): Room {
  * NOTE: this assumes you've just created the room and there's not been an opportunity
  * for other code to run, so we shouldn't miss RoomState.newMember when it comes by.
  */
-export async function _waitForMember(client: MatrixClient, roomId: string, userId: string, opts = { timeout: 1500 }) {
+export async function waitForMember(client: MatrixClient, roomId: string, userId: string, opts = { timeout: 1500 }) {
     const { timeout } = opts;
     let handler;
     return new Promise((resolve) => {
-        handler = function(_event, _roomstate, member) {
+        handler = function(_, __, member: RoomMember) { // eslint-disable-line @typescript-eslint/naming-convention
             if (member.userId !== userId) return;
             if (member.roomId !== roomId) return;
             resolve(true);
@@ -325,8 +324,8 @@ export async function ensureDMExists(client: MatrixClient, userId: string): Prom
             encryption = await canEncryptToAllUsers(client, [userId]);
         }
 
-        roomId = await createRoom({encryption, dmUserId: userId, spinner: false, andView: false});
-        await _waitForMember(client, roomId, userId);
+        roomId = await createRoom({ encryption, dmUserId: userId, spinner: false, andView: false });
+        await waitForMember(client, roomId, userId);
     }
     return roomId;
 }

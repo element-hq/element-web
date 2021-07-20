@@ -20,10 +20,10 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
-import {Group} from 'matrix-js-sdk/src/models/group';
+import { Group } from 'matrix-js-sdk/src/models/group';
 import GroupStore from "../../../stores/GroupStore";
-import {MenuItem} from "../../structures/ContextMenu";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { MenuItem } from "../../structures/ContextMenu";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.context_menus.GroupInviteTileContextMenu")
 export default class GroupInviteTileContextMenu extends React.Component {

@@ -17,8 +17,8 @@ limitations under the License.
 */
 
 import SettingsHandler from "./SettingsHandler";
-import {MatrixClientPeg} from "../../MatrixClientPeg";
-import {SettingLevel} from "../SettingLevel";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { SettingLevel } from "../SettingLevel";
 import { CallbackFn, WatchManager } from "../WatchManager";
 import { Layout } from "../Layout";
 
@@ -109,7 +109,7 @@ export default class DeviceSettingsHandler extends SettingsHandler {
             "lastRightPanelPhaseForRoom",
             "lastRightPanelPhaseForGroup",
         ].includes(settingName)) {
-            localStorage.setItem(`mx_${settingName}`, JSON.stringify({value: newValue}));
+            localStorage.setItem(`mx_${settingName}`, JSON.stringify({ value: newValue }));
             this.watchers.notifyUpdate(settingName, null, SettingLevel.DEVICE, newValue);
             return Promise.resolve();
         }

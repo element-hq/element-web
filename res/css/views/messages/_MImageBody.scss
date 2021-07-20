@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+$timelineImageBorderRadius: 4px;
+
 .mx_MImageBody {
     display: block;
-    margin-right: 34px;
 }
 
 .mx_MImageBody_thumbnail {
@@ -25,7 +26,15 @@ limitations under the License.
     height: 100%;
     left: 0;
     top: 0;
-    border-radius: 4px;
+    border-radius: $timelineImageBorderRadius;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    > canvas {
+        border-radius: $timelineImageBorderRadius;
+    }
 }
 
 .mx_MImageBody_thumbnail_container {
@@ -35,17 +44,6 @@ limitations under the License.
 
     // Make sure the _thumbnail is positioned relative to the _container
     position: relative;
-}
-
-.mx_MImageBody_thumbnail_spinner {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-}
-
-// Inner img and TintableSvg should be centered around 0, 0
-.mx_MImageBody_thumbnail_spinner > * {
-    transform: translate(-50%, -50%);
 }
 
 .mx_MImageBody_gifLabel {

@@ -173,6 +173,8 @@ $voipcall-plinth-color: #F4F6FA;
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
+$dialpad-button-bg-color: #e3e8f0;
+
 
 $roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-filter-active-bg-color: #ffffff;
@@ -333,8 +335,6 @@ $voice-record-stop-symbol-color: #ff4b55;
 $voice-record-live-circle-color: #ff4b55;
 
 $voice-record-stop-border-color: #E3E8F0; // "Separator"
-$voice-record-waveform-bg-color: $message-body-panel-bg-color;
-$voice-record-waveform-fg-color: $message-body-panel-fg-color;
 $voice-record-waveform-incomplete-fg-color: $quaternary-fg-color;
 $voice-record-icon-color: $tertiary-fg-color;
 $voice-playback-button-bg-color: $message-body-panel-icon-bg-color;
@@ -348,6 +348,13 @@ $roomlist-background-blur-amount: 40px;
 $groupFilterPanel-background-blur-amount: 20px;
 
 $composer-shadow-color: rgba(0, 0, 0, 0.04);
+
+// Bubble tiles
+$eventbubble-self-bg: #F8FDFC;
+$eventbubble-others-bg: #F7F8F9;
+$eventbubble-bg-hover: #FEFCF5;
+$eventbubble-avatar-outline: $primary-bg-color;
+$eventbubble-reply-color: #C1C6CD;
 
 // ***** Mixins! *****
 

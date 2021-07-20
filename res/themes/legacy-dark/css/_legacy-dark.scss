@@ -20,6 +20,9 @@ $tertiary-fg-color: $primary-fg-color;
 $primary-bg-color: $bg-color;
 $muted-fg-color: $header-panel-text-primary-color;
 
+// Legacy theme backports
+$quaternary-fg-color: #6F7882;
+
 // used for dialog box text
 $light-fg-color: $header-panel-text-secondary-color;
 
@@ -114,6 +117,8 @@ $voipcall-plinth-color: #394049;
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
+$dialpad-button-bg-color: #6F7882;
+
 
 $roomlist-button-bg-color: #1A1D23; // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-filter-active-bg-color: $roomlist-button-bg-color;
@@ -207,8 +212,6 @@ $message-body-panel-icon-bg-color: $secondary-fg-color;
 
 // See non-legacy dark for variable information
 $voice-record-stop-border-color: #6F7882;
-$voice-record-waveform-bg-color: $message-body-panel-bg-color;
-$voice-record-waveform-fg-color: $message-body-panel-fg-color;
 $voice-record-waveform-incomplete-fg-color: #6F7882;
 $voice-record-icon-color: #6F7882;
 $voice-playback-button-bg-color: $tertiary-fg-color;
@@ -246,7 +249,7 @@ $composer-shadow-color: tranparent;
 @define-mixin mx_DialogButton_secondary {
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color ! important;
+    border: 1px solid $accent-color !important;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
 }
@@ -264,18 +267,7 @@ $composer-shadow-color: tranparent;
 }
 
 // markdown overrides:
-.mx_EventTile_content .markdown-body pre:hover {
-    border-color: #808080 !important; // inverted due to rules below
-}
 .mx_EventTile_content .markdown-body {
-    pre, code {
-        filter: invert(1);
-    }
-
-    pre code {
-        filter: none;
-    }
-
     table {
         tr {
             background-color: #000000;
@@ -287,12 +279,7 @@ $composer-shadow-color: tranparent;
     }
 }
 
-// diff highlight colors
-// intentionally swapped to avoid inversion
-.hljs-addition {
-    background: #fdd;
-}
-
-.hljs-deletion {
-    background: #dfd;
+// highlight.js overrides:
+.hljs-tag {
+    color: inherit; // Without this they'd be weirdly blue which doesn't match the theme
 }

@@ -16,8 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 /*
  * A stripped-down room header used for things like the user settings
@@ -28,15 +27,14 @@ export default class SimpleRoomHeader extends React.Component {
     static propTypes = {
         title: PropTypes.string,
 
-        // `src` to a TintableSvg. Optional.
+        // `src` to an image. Optional.
         icon: PropTypes.string,
     };
 
     render() {
         let icon;
         if (this.props.icon) {
-            const TintableSvg = sdk.getComponent('elements.TintableSvg');
-            icon = <TintableSvg
+            icon = <img
                 className="mx_RoomHeader_icon" src={this.props.icon}
                 width="25" height="25"
             />;

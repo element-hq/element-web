@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import CountlyAnalytics from "../../../CountlyAnalytics";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const DIV_ID = 'mx_recaptcha';
 
@@ -129,9 +129,9 @@ export default class CaptchaForm extends React.Component {
 
         return (
             <div ref={this._recaptchaContainer}>
-                <p>{_t(
+                <p>{ _t(
                     "This homeserver would like to make sure you are not a robot.",
-                )}</p>
+                ) }</p>
                 <div id={DIV_ID} />
                 { error }
             </div>

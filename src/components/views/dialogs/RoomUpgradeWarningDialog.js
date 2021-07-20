@@ -16,13 +16,13 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import * as sdk from "../../../index";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from "../../../Modal";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.dialogs.RoomUpgradeWarningDialog")
 export default class RoomUpgradeWarningDialog extends React.Component {
@@ -46,15 +46,15 @@ export default class RoomUpgradeWarningDialog extends React.Component {
     }
 
     _onContinue = () => {
-        this.props.onFinished({continue: true, invite: this.state.isPrivate && this.state.inviteUsersToNewRoom});
+        this.props.onFinished({ continue: true, invite: this.state.isPrivate && this.state.inviteUsersToNewRoom });
     };
 
     _onCancel = () => {
-        this.props.onFinished({continue: false, invite: false});
+        this.props.onFinished({ continue: false, invite: false });
     };
 
     _onInviteUsersToggle = (newVal) => {
-        this.setState({inviteUsersToNewRoom: newVal});
+        this.setState({ inviteUsersToNewRoom: newVal });
     };
 
     _openBugReportDialog = (e) => {
@@ -84,16 +84,16 @@ export default class RoomUpgradeWarningDialog extends React.Component {
 
         let bugReports = (
             <p>
-                {_t(
+                { _t(
                     "This usually only affects how the room is processed on the server. If you're " +
-                    "having problems with your %(brand)s, please report a bug.", {brand},
-                )}
+                    "having problems with your %(brand)s, please report a bug.", { brand },
+                ) }
             </p>
         );
         if (SdkConfig.get().bug_report_endpoint_url) {
             bugReports = (
                 <p>
-                    {_t(
+                    { _t(
                         "This usually only affects how the room is processed on the server. If you're " +
                         "having problems with your %(brand)s, please <a>report a bug</a>.",
                         {
@@ -101,10 +101,10 @@ export default class RoomUpgradeWarningDialog extends React.Component {
                         },
                         {
                             "a": (sub) => {
-                                return <a href='#' onClick={this._openBugReportDialog}>{sub}</a>;
+                                return <a href='#' onClick={this._openBugReportDialog}>{ sub }</a>;
                             },
                         },
-                    )}
+                    ) }
                 </p>
             );
         }
@@ -119,23 +119,23 @@ export default class RoomUpgradeWarningDialog extends React.Component {
             >
                 <div>
                     <p>
-                        {_t(
+                        { _t(
                             "Upgrading a room is an advanced action and is usually recommended when a room " +
                             "is unstable due to bugs, missing features or security vulnerabilities.",
-                        )}
+                        ) }
                     </p>
-                    {bugReports}
+                    { bugReports }
                     <p>
-                        {_t(
+                        { _t(
                             "You'll upgrade this room from <oldVersion /> to <newVersion />.",
                             {},
                             {
-                                oldVersion: () => <code>{this.state.currentVersion}</code>,
-                                newVersion: () => <code>{this.props.targetVersion}</code>,
+                                oldVersion: () => <code>{ this.state.currentVersion }</code>,
+                                newVersion: () => <code>{ this.props.targetVersion }</code>,
                             },
-                        )}
+                        ) }
                     </p>
-                    {inviteToggle}
+                    { inviteToggle }
                 </div>
                 <DialogButtons
                     primaryButton={_t("Upgrade")}

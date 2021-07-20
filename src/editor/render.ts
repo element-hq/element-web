@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {Part} from "./parts";
+import { Part } from "./parts";
 import EditorModel from "./model";
 
 export function needsCaretNodeBefore(part: Part, prevPart: Part) {

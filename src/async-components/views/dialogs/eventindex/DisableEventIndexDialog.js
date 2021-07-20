@@ -22,8 +22,8 @@ import { _t } from '../../../../languageHandler';
 
 import SettingsStore from "../../../../settings/SettingsStore";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
-import {Action} from "../../../../dispatcher/actions";
-import {SettingLevel} from "../../../../settings/SettingLevel";
+import { Action } from "../../../../dispatcher/actions";
+import { SettingLevel } from "../../../../settings/SettingLevel";
 
 /*
  * Allows the user to disable the Event Index.
@@ -59,8 +59,8 @@ export default class DisableEventIndexDialog extends React.Component {
 
         return (
             <BaseDialog onFinished={this.props.onFinished} title={_t("Are you sure?")}>
-                {_t("If disabled, messages from encrypted rooms won't appear in search results.")}
-                {this.state.disabling ? <Spinner /> : <div />}
+                { _t("If disabled, messages from encrypted rooms won't appear in search results.") }
+                { this.state.disabling ? <Spinner /> : <div /> }
                 <DialogButtons
                     primaryButton={_t('Disable')}
                     onPrimaryButtonClick={this._onDisable}

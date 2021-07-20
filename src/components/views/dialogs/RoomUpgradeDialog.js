@@ -17,10 +17,10 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.dialogs.RoomUpgradeDialog")
 export default class RoomUpgradeDialog extends React.Component {
@@ -36,7 +36,7 @@ export default class RoomUpgradeDialog extends React.Component {
     async componentDidMount() {
         const recommended = await this.props.room.getRecommendedVersion();
         this._targetVersion = recommended.version;
-        this.setState({busy: false});
+        this.setState({ busy: false });
     }
 
     _onCancelClick = () => {
@@ -44,7 +44,7 @@ export default class RoomUpgradeDialog extends React.Component {
     };
 
     _onUpgradeClick = () => {
-        this.setState({busy: true});
+        this.setState({ busy: true });
         MatrixClientPeg.get().upgradeRoom(this.props.room.roomId, this._targetVersion).then(() => {
             this.props.onFinished(true);
         }).catch((err) => {
@@ -54,7 +54,7 @@ export default class RoomUpgradeDialog extends React.Component {
                 description: ((err && err.message) ? err.message : _t("The room upgrade could not be completed")),
             });
         }).finally(() => {
-            this.setState({busy: false});
+            this.setState({ busy: false });
         });
     };
 
@@ -70,7 +70,7 @@ export default class RoomUpgradeDialog extends React.Component {
             buttons = <DialogButtons
                 primaryButton={_t(
                     'Upgrade this room to version %(version)s',
-                    {version: this._targetVersion},
+                    { version: this._targetVersion },
                 )}
                 primaryButtonClass="danger"
                 hasCancel={true}
@@ -88,19 +88,19 @@ export default class RoomUpgradeDialog extends React.Component {
                 hasCancel={true}
             >
                 <p>
-                    {_t(
+                    { _t(
                         "Upgrading this room requires closing down the current " +
                         "instance of the room and creating a new room in its place. " +
                         "To give room members the best possible experience, we will:",
-                    )}
+                    ) }
                 </p>
                 <ol>
-                    <li>{_t("Create a new room with the same name, description and avatar")}</li>
-                    <li>{_t("Update any local room aliases to point to the new room")}</li>
-                    <li>{_t("Stop users from speaking in the old version of the room, and post a message advising users to move to the new room")}</li>
-                    <li>{_t("Put a link back to the old room at the start of the new room so people can see old messages")}</li>
+                    <li>{ _t("Create a new room with the same name, description and avatar") }</li>
+                    <li>{ _t("Update any local room aliases to point to the new room") }</li>
+                    <li>{ _t("Stop users from speaking in the old version of the room, and post a message advising users to move to the new room") }</li>
+                    <li>{ _t("Put a link back to the old room at the start of the new room so people can see old messages") }</li>
                 </ol>
-                {buttons}
+                { buttons }
             </BaseDialog>
         );
     }
