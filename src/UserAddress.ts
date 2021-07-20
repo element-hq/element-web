@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import PropTypes from "prop-types";
-
 const emailRegex = /^\S+@\S+\.\S+$/;
 const mxUserIdRegex = /^@\S+:\S+$/;
 const mxRoomIdRegex = /^!\S+:\S+$/;
@@ -33,16 +31,16 @@ export enum AddressType {
 // could be a third party identifier or a matrix ID)
 // along with some additional information about the
 // address / target.
-export const UserAddressType = PropTypes.shape({
-    addressType: PropTypes.oneOf(addressTypes).isRequired,
-    address: PropTypes.string.isRequired,
-    displayName: PropTypes.string,
-    avatarMxc: PropTypes.string,
+export interface IUserAddress {
+    addressType: AddressType;
+    address: string;
+    displayName?: string;
+    avatarMxc?: string;
     // true if the address is known to be a valid address (eg. is a real
     // user we've seen) or false otherwise (eg. is just an address the
     // user has entered)
-    isKnown: PropTypes.bool,
-});
+    isKnown?: boolean;
+}
 
 export function getAddressType(inputText: string): AddressType | null {
     if (emailRegex.test(inputText)) {
