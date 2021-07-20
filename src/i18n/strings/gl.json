@@ -3521,5 +3521,6 @@
     "Please pick a nature and describe what makes this message abusive.": "Escolle unha opción e describe a razón pola que esta é unha mensaxe abusiva.",
     "Any other reason. Please describe the problem.\nThis will be reported to the room moderators.": "Outra razón. Por favor, describe o problema.\nInformaremos disto á moderación da sala.",
     "This room is dedicated to illegal or toxic content or the moderators fail to moderate illegal or toxic content.\n This will be reported to the administrators of %(homeserver)s.": "Esta sala está dedicada a contido tóxico ou ilegal ou a moderación non é quen de moderar contido ilegal ou tóxico.\nImos informar disto á administración de %(homeserver)s.",
-    "Report to moderators prototype. In rooms that support moderation, the `report` button will let you report abuse to room moderators": "Modelo de denuncia ante a moderación. Nas salas que teñen moderación, o botón `denuncia`permíteche denunciar un abuso á moderación da sala"
+    "Report to moderators prototype. In rooms that support moderation, the `report` button will let you report abuse to room moderators": "Modelo de denuncia ante a moderación. Nas salas que teñen moderación, o botón `denuncia`permíteche denunciar un abuso á moderación da sala",
+    "Copy Room Link": "Copiar Ligazón da sala"
 }
