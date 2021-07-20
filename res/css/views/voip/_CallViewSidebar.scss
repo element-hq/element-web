@@ -17,7 +17,7 @@ limitations under the License.
 .mx_CallViewSidebar {
     position: absolute;
     right: 16px;
-    top: 16px;
+    bottom: 16px;
     z-index: 100; // To be above the primary feed
     max-width: 20%;
     min-width: 160px; // To match .mx_VideoFeed_voice
