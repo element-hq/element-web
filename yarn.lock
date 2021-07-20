@@ -1709,10 +1709,10 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.0.tgz#7036640b4e21cc2f259ae826ce843d277dad8cff"
   integrity sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==
 
-"@types/streamsaver@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@types/streamsaver/-/streamsaver-2.0.0.tgz#2a6bdec0389f41a74c60091d37e84f8840d27ac9"
-  integrity sha512-TzUEZk30QmNaS6GAhcOnH/Cl2mO7HCFhQUr6GpzvuoFziFCxmvuyLftHW79agJpZvIrqti9jSiDHMgflUwbejg==
+"@types/streamsaver@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@types/streamsaver/-/streamsaver-2.0.1.tgz#fa5e5b891d1b282be3078c232a30ee004b8e0be0"
+  integrity sha512-I49NtT8w6syBI3Zg3ixCyygTHoTVMY0z2TMRcTgccdIsVd2MwlKk7ITLHLsJtgchUHcOd7QEARG9h0ifcA6l2Q==
 
 "@types/unist@*", "@types/unist@^2.0.0", "@types/unist@^2.0.2":
   version "2.0.3"
