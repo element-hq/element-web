@@ -429,7 +429,7 @@ class RoomViewStore extends Store<ActionPayload> {
     }
 }
 
-let singletonRoomViewStore = null;
+let singletonRoomViewStore: RoomViewStore = null;
 if (!singletonRoomViewStore) {
     singletonRoomViewStore = new RoomViewStore();
 }

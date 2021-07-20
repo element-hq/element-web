@@ -17,7 +17,6 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomUpdateCause, TagID } from "../../models";
 import { SortAlgorithm } from "../models";
-import AwaitLock from "await-lock";
 
 /**
  * Represents a list ordering algorithm. Subclasses should populate the
@@ -26,7 +25,6 @@ import AwaitLock from "await-lock";
 export abstract class OrderingAlgorithm {
     protected cachedOrderedRooms: Room[];
     protected sortingAlgorithm: SortAlgorithm;
-    protected readonly updateLock = new AwaitLock();
 
     protected constructor(protected tagId: TagID, initialSortingAlgorithm: SortAlgorithm) {
         // noinspection JSIgnoredPromiseFromCall
@@ -45,21 +43,20 @@ export abstract class OrderingAlgorithm {
      * @param newAlgorithm The new algorithm. Must be defined.
      * @returns Resolves when complete.
      */
-    public async setSortAlgorithm(newAlgorithm: SortAlgorithm) {
+    public setSortAlgorithm(newAlgorithm: SortAlgorithm) {
         if (!newAlgorithm) throw new Error("A sorting algorithm must be defined");
         this.sortingAlgorithm = newAlgorithm;
 
         // Force regeneration of the rooms
-        await this.setRooms(this.orderedRooms);
+        this.setRooms(this.orderedRooms);
     }
 
     /**
      * Sets the rooms the algorithm should be handling, implying a reconstruction
      * of the ordering.
      * @param rooms The rooms to use going forward.
-     * @returns Resolves when complete.
      */
-    public abstract setRooms(rooms: Room[]): Promise<any>;
+    public abstract setRooms(rooms: Room[]): void;
 
     /**
      * Handle a room update. The Algorithm will only call this for causes which
@@ -69,7 +66,7 @@ export abstract class OrderingAlgorithm {
      * @param cause The cause of the update.
      * @returns True if the update requires the Algorithm to update the presentation layers.
      */
-    public abstract handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean>;
+    public abstract handleRoomUpdate(room: Room, cause: RoomUpdateCause): boolean;
 
     protected getRoomIndex(room: Room): number {
         let roomIdx = this.cachedOrderedRooms.indexOf(room);

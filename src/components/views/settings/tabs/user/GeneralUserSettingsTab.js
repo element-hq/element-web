@@ -364,7 +364,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                         onFinished={this.state.requiredPolicyInfo.resolve}
                         introElement={intro}
                     />
-                    { /* has its own heading as it includes the current ID server */ }
+                    { /* has its own heading as it includes the current identity server */ }
                     <SetIdServer missingTerms={true} />
                 </div>
             );
@@ -387,7 +387,7 @@ export default class GeneralUserSettingsTab extends React.Component {
         return (
             <div className="mx_SettingsTab_section">
                 {threepidSection}
-                { /* has its own heading as it includes the current ID server */ }
+                { /* has its own heading as it includes the current identity server */ }
                 <SetIdServer />
             </div>
         );

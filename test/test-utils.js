@@ -96,6 +96,7 @@ export function createTestClient() {
             },
         },
         decryptEventIfNeeded: () => Promise.resolve(),
+        isUserIgnored: jest.fn().mockReturnValue(false),
     };
 }
 

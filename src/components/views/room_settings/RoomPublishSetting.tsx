@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
+import { Visibility } from "matrix-js-sdk/src/@types/partials";
 
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { _t } from "../../../languageHandler";
@@ -50,7 +51,7 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
 
         client.setRoomDirectoryVisibility(
             this.props.roomId,
-            newValue ? 'public' : 'private',
+            newValue ? Visibility.Public : Visibility.Private,
         ).catch(() => {
             // Roll back the local echo on the change
             this.setState({ isRoomPublished: valueBefore });

@@ -16,15 +16,13 @@ limitations under the License.
 
 import React from 'react';
 import dis from '../../../dispatcher/dispatcher';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import RoomViewStore from '../../../stores/RoomViewStore';
-import SettingsStore from "../../../settings/SettingsStore";
-import PropTypes from "prop-types";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { UIFeature } from "../../../settings/UIFeature";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { TileShape } from "./EventTile";
+import ReplyTile from './ReplyTile';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { EventSubscription } from 'fbemitter';
 
 function cancelQuoting() {
     dis.dispatch({
@@ -33,46 +31,49 @@ function cancelQuoting() {
     });
 }
 
+interface IProps {
+    permalinkCreator: RoomPermalinkCreator;
+}
+
+interface IState {
+    event: MatrixEvent;
+}
+
 @replaceableComponent("views.rooms.ReplyPreview")
-export default class ReplyPreview extends React.Component {
-    static propTypes = {
-        permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
-    };
+export default class ReplyPreview extends React.Component<IProps, IState> {
+    private unmounted = false;
+    private readonly roomStoreToken: EventSubscription;
 
     constructor(props) {
         super(props);
-        this.unmounted = false;
 
         this.state = {
             event: RoomViewStore.getQuotingEvent(),
         };
 
-        this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
-        this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
+        this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
     }
 
     componentWillUnmount() {
         this.unmounted = true;
 
         // Remove RoomStore listener
-        if (this._roomStoreToken) {
-            this._roomStoreToken.remove();
+        if (this.roomStoreToken) {
+            this.roomStoreToken.remove();
         }
     }
 
-    _onRoomViewStoreUpdate() {
+    private onRoomViewStoreUpdate = (): void => {
         if (this.unmounted) return;
 
         const event = RoomViewStore.getQuotingEvent();
         if (this.state.event !== event) {
             this.setState({ event });
         }
-    }
+    };
 
     render() {
         if (!this.state.event) return null;
-
-        const EventTile = sdk.getComponent('rooms.EventTile');
 
         return <div className="mx_ReplyPreview">
             <div className="mx_ReplyPreview_section">
@@ -89,15 +90,12 @@ export default class ReplyPreview extends React.Component {
                     />
                 </div>
                 <div className="mx_ReplyPreview_clear" />
-                <EventTile
-                    alwaysShowTimestamps={true}
-                    tileShape={TileShape.ReplyPreview}
-                    mxEvent={this.state.event}
-                    permalinkCreator={this.props.permalinkCreator}
-                    isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
-                    enableFlair={SettingsStore.getValue(UIFeature.Flair)}
-                    as="div"
-                />
+                <div className="mx_ReplyPreview_tile">
+                    <ReplyTile
+                        mxEvent={this.state.event}
+                        permalinkCreator={this.props.permalinkCreator}
+                    />
+                </div>
             </div>
         </div>;
     }
