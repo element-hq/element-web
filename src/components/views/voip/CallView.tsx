@@ -543,14 +543,14 @@ export default class CallView extends React.Component<IProps, IState> {
             inputRef={this.dialpadButton}
             onClick={this.onDialpadClick}
             isExpanded={this.state.showDialpad}
-        /> : <div className="mx_CallView_callControls_button mx_CallView_callControls_button_dialpad_hidden" />;
+        /> : <div className="mx_CallView_callControls_button" />;
 
         const contextMenuButton = this.state.callState === CallState.Connected ? <ContextMenuButton
             className="mx_CallView_callControls_button mx_CallView_callControls_button_more"
             onClick={this.onMoreClick}
             inputRef={this.contextMenuButton}
             isExpanded={this.state.showMoreMenu}
-        /> : <div className="mx_CallView_callControls_button mx_CallView_callControls_button_more_hidden" />;
+        /> : <div className="mx_CallView_callControls_button" />;
 
         return (
             <div className={callControlsClasses}>

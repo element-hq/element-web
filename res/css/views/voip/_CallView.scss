@@ -338,15 +338,9 @@ limitations under the License.
 }
 
 .mx_CallView_callControls_dialpad {
-    margin-right: auto;
     &::before {
         background-image: url('$(res)/img/voip/dialpad.svg');
     }
-}
-
-.mx_CallView_callControls_button_dialpad_hidden {
-    margin-right: auto;
-    cursor: initial;
 }
 
 .mx_CallView_callControls_button_micOn {
@@ -404,15 +398,9 @@ limitations under the License.
 }
 
 .mx_CallView_callControls_button_more {
-    margin-left: auto;
     &::before {
         background-image: url('$(res)/img/voip/more.svg');
     }
-}
-
-.mx_CallView_callControls_button_more_hidden {
-    margin-left: auto;
-    cursor: initial;
 }
 
 .mx_CallView_callControls_button_invisible {
