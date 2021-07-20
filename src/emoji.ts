@@ -61,15 +61,15 @@ export const DATA_BY_CATEGORY = {
 
 // Store various mappings from unicode/emoticon/shortcode to the Emoji objects
 export const EMOJI: IEmoji[] = EMOJIBASE.map((emojiData: Omit<IEmoji, "shortcodes">) => {
-    const shortcodeData = SHORTCODES[emojiData.hexcode];
+    // If there's ever a gap in shortcode coverage, we fudge it by
+    // filling it in with the emoji's CLDR annotation
+    const shortcodeData = SHORTCODES[emojiData.hexcode] ??
+        [emojiData.annotation.toLowerCase().replace(/ /g, "_")];
+
     const emoji: IEmoji = {
         ...emojiData,
         // Homogenize shortcodes by ensuring that everything is an array
-        shortcodes: typeof shortcodeData === "string" ?
-            [shortcodeData] :
-            // If there's ever a gap in shortcode coverage, we fudge it by
-            // filling it in with the emoji's CLDR annotation
-            (shortcodeData ?? [emojiData.annotation.toLowerCase().replace(/ /g, "_")]),
+        shortcodes: typeof shortcodeData === "string" ? [shortcodeData] : shortcodeData,
     };
 
     const categoryId = EMOJIBASE_GROUP_ID_TO_CATEGORY[emoji.group];
