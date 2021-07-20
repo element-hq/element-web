@@ -2754,5 +2754,17 @@
     "(an error occurred)": "(tella-d tuccḍa)",
     "(connection failed)": "(tuqqna ur teddi ara)",
     "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Iqeddcen akk ttwagedlen seg uttekki! Taxxamt-a dayen ur tettuseqdac ara.",
-    "Try again": "Ɛreḍ tikkelt-nniḍen"
+    "Try again": "Ɛreḍ tikkelt-nniḍen",
+    "Integration manager": "Amsefrak n umsidef",
+    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s-ik·im ur ak·am yefki ara tisirag i useqdec n umsefrak n umsidef i wakken ad tgeḍ aya. Ttxil-k·m nermes anedbal.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Aseqdec n uwiǧit-a yezmer ad yebḍu isefka <helpIcon/> d %(widgetDomain)s & amsefrak-inek·inem n umsidef.",
+    "Identity server is": "Aqeddac n timagit d",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Imsefrak n yimsidaf remmsen-d isefka n uswel, syen ad uɣalen zemren ad beddlen iwiǧiten, ad aznen tinubgiwin ɣer texxamin, ad yesbadu daɣen tazmert n yiswiren s yiswiren deg ubdil-ik·im.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Seqdec amsefrak n umsidef i usefrek n yibuten, n yiwiǧiten d tɣawsiwin n usenteḍ.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Seqdec amsefrak n umsidef <b>(%(serverName)s)</b> i usefrek n yibuten, n yiwiǧiten d tɣawsiwin n usenteḍ.",
+    "Identity server": "Aqeddac n timagit",
+    "Identity server (%(server)s)": "Aqeddac n timagit (%(server)s)",
+    "Could not connect to identity server": "Ur izmir ara ad yeqqen ɣer uqeddac n timagit",
+    "Not a valid identity server (status code %(code)s)": "Aqeddac n timagit mačči d ameɣtu (status code %(code)s)",
+    "Identity server URL must be HTTPS": "URL n uqeddac n timagit ilaq ad yili d HTTPS"
 }
