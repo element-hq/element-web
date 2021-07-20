@@ -277,7 +277,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Move into constructor
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillMount() {
         if (this.props.manageReadReceipts) {
             this.updateReadReceiptOnUserActivity();
@@ -290,7 +290,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.timelineSet !== this.props.timelineSet) {
             // throw new Error("changing timelineSet on a TimelinePanel is not supported");
@@ -1337,7 +1337,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
             const shouldIgnore = !!ev.status || // local echo
                 (ignoreOwn && ev.getSender() === myUserId); // own message
-            const isWithoutTile = !haveTileForEvent(ev) || shouldHideEvent(ev, this.context);
+            const isWithoutTile = !haveTileForEvent(ev, this.context?.showHiddenEventsInTimeline) ||
+                shouldHideEvent(ev, this.context);
 
             if (isWithoutTile || !node) {
                 // don't start counting if the event should be ignored,
@@ -1447,7 +1448,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (this.state.events.length == 0 && !this.state.canBackPaginate && this.props.empty) {
             return (
                 <div className={this.props.className + " mx_RoomView_messageListWrapper"}>
-                    <div className="mx_RoomView_empty">{this.props.empty}</div>
+                    <div className="mx_RoomView_empty">{ this.props.empty }</div>
                 </div>
             );
         }

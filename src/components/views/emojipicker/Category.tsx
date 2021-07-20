@@ -98,7 +98,7 @@ class Category extends React.PureComponent<IProps> {
                 aria-label={name}
             >
                 <h2 className="mx_EmojiPicker_category_label">
-                    {name}
+                    { name }
                 </h2>
                 <LazyRenderList
                     element="ul" className="mx_EmojiPicker_list"

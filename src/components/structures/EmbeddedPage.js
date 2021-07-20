@@ -125,11 +125,11 @@ export default class EmbeddedPage extends React.PureComponent {
 
         if (this.props.scrollbar) {
             return <AutoHideScrollbar className={classes}>
-                {content}
+                { content }
             </AutoHideScrollbar>;
         } else {
             return <div className={classes}>
-                {content}
+                { content }
             </div>;
         }
     }

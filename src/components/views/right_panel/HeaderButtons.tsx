@@ -99,7 +99,7 @@ export default abstract class HeaderButtons<P = {}> extends React.Component<IPro
 
     public render() {
         return <div className="mx_HeaderButtons">
-            {this.renderButtons()}
+            { this.renderButtons() }
         </div>;
     }
 }

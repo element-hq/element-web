@@ -221,7 +221,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     return <div className="mx_AddExistingToSpace">
         <SearchBox
             className="mx_textinput_icon mx_textinput_search"
-            placeholder={ _t("Filter your rooms and spaces") }
+            placeholder={_t("Filter your rooms and spaces")}
             onSearch={setQuery}
             autoComplete={true}
             autoFocus={true}

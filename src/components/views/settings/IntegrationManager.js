@@ -85,7 +85,7 @@ export default class IntegrationManager extends React.Component {
             const Spinner = sdk.getComponent("elements.Spinner");
             return (
                 <div className='mx_IntegrationManager_loading'>
-                    <h3>{_t("Connecting to integration manager...")}</h3>
+                    <h3>{ _t("Connecting to integration manager...") }</h3>
                     <Spinner />
                 </div>
             );
@@ -94,8 +94,8 @@ export default class IntegrationManager extends React.Component {
         if (!this.props.connected || this.state.errored) {
             return (
                 <div className='mx_IntegrationManager_error'>
-                    <h3>{_t("Cannot connect to integration manager")}</h3>
-                    <p>{_t("The integration manager is offline or it cannot reach your homeserver.")}</p>
+                    <h3>{ _t("Cannot connect to integration manager") }</h3>
+                    <p>{ _t("The integration manager is offline or it cannot reach your homeserver.") }</p>
                 </div>
             );
         }

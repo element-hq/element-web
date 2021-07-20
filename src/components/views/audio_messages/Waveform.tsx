@@ -47,7 +47,7 @@ export default class Waveform extends React.PureComponent<IProps, IState> {
 
     public render() {
         return <div className='mx_Waveform'>
-            {this.props.relHeights.map((h, i) => {
+            { this.props.relHeights.map((h, i) => {
                 const progress = this.props.progress;
                 const isCompleteBar = (i / this.props.relHeights.length) <= progress && progress > 0;
                 const classes = classNames({
@@ -57,7 +57,7 @@ export default class Waveform extends React.PureComponent<IProps, IState> {
                 return <span key={i} style={{
                     "--barHeight": h,
                 } as WaveformCSSProperties} className={classes} />;
-            })}
+            }) }
         </div>;
     }
 }

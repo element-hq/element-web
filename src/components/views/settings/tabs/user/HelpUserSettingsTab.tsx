@@ -112,15 +112,15 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         const legalLinks = [];
         for (const tocEntry of SdkConfig.get().terms_and_conditions_links) {
             legalLinks.push(<div key={tocEntry.url}>
-                <a href={tocEntry.url} rel="noreferrer noopener" target="_blank">{tocEntry.text}</a>
+                <a href={tocEntry.url} rel="noreferrer noopener" target="_blank">{ tocEntry.text }</a>
             </div>);
         }
 
         return (
             <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
-                <span className='mx_SettingsTab_subheading'>{_t("Legal")}</span>
+                <span className='mx_SettingsTab_subheading'>{ _t("Legal") }</span>
                 <div className='mx_SettingsTab_subsectionText'>
-                    {legalLinks}
+                    { legalLinks }
                 </div>
             </div>
         );
@@ -131,7 +131,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         // Also, &nbsp; is ugly but necessary.
         return (
             <div className='mx_SettingsTab_section'>
-                <span className='mx_SettingsTab_subheading'>{_t("Credits")}</span>
+                <span className='mx_SettingsTab_subheading'>{ _t("Credits") }</span>
                 <ul>
                     <li>
                         The <a href="themes/element/img/backgrounds/lake.jpg" rel="noreferrer noopener"
@@ -189,14 +189,14 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                     rel="noreferrer noopener"
                     target="_blank"
                 >
-                    {sub}
+                    { sub }
                 </a>,
             },
         );
         if (SdkConfig.get().welcomeUserId && getCurrentLanguage().startsWith('en')) {
             faqText = (
                 <div>
-                    {_t(
+                    { _t(
                         'For help with using %(brand)s, click <a>here</a> or start a chat with our ' +
                         'bot using the button below.',
                         {
@@ -208,13 +208,13 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                                 rel='noreferrer noopener'
                                 target='_blank'
                             >
-                                {sub}
+                                { sub }
                             </a>,
                         },
-                    )}
+                    ) }
                     <div>
                         <AccessibleButton onClick={this.onStartBotChat} kind='primary'>
-                            {_t("Chat with %(brand)s Bot", { brand })}
+                            { _t("Chat with %(brand)s Bot", { brand }) }
                         </AccessibleButton>
                     </div>
                 </div>
@@ -235,29 +235,29 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         if (SdkConfig.get().bug_report_endpoint_url) {
             bugReportingSection = (
                 <div className="mx_SettingsTab_section">
-                    <span className='mx_SettingsTab_subheading'>{_t('Bug reporting')}</span>
+                    <span className='mx_SettingsTab_subheading'>{ _t('Bug reporting') }</span>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {_t(
+                        { _t(
                             "If you've submitted a bug via GitHub, debug logs can help " +
                             "us track down the problem. Debug logs contain application " +
                             "usage data including your username, the IDs or aliases of " +
                             "the rooms or groups you have visited and the usernames of " +
                             "other users. They do not contain messages.",
-                        )}
+                        ) }
                         <div className='mx_HelpUserSettingsTab_debugButton'>
                             <AccessibleButton onClick={this.onBugReport} kind='primary'>
-                                {_t("Submit debug logs")}
+                                { _t("Submit debug logs") }
                             </AccessibleButton>
                         </div>
-                        {_t(
+                        { _t(
                             "To report a Matrix-related security issue, please read the Matrix.org " +
                             "<a>Security Disclosure Policy</a>.", {},
                             {
                                 a: sub => <a href="https://matrix.org/security-disclosure-policy/"
                                     rel="noreferrer noopener" target="_blank"
-                                >{sub}</a>,
+                                >{ sub }</a>,
                             },
-                        )}
+                        ) }
                     </div>
                 </div>
             );
@@ -265,39 +265,39 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
 
         return (
             <div className="mx_SettingsTab mx_HelpUserSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Help & About")}</div>
+                <div className="mx_SettingsTab_heading">{ _t("Help & About") }</div>
                 { bugReportingSection }
                 <div className='mx_SettingsTab_section'>
-                    <span className='mx_SettingsTab_subheading'>{_t("FAQ")}</span>
+                    <span className='mx_SettingsTab_subheading'>{ _t("FAQ") }</span>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {faqText}
+                        { faqText }
                     </div>
                     <AccessibleButton kind="primary" onClick={KeyboardShortcuts.toggleDialog}>
                         { _t("Keyboard Shortcuts") }
                     </AccessibleButton>
                 </div>
                 <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
-                    <span className='mx_SettingsTab_subheading'>{_t("Versions")}</span>
+                    <span className='mx_SettingsTab_subheading'>{ _t("Versions") }</span>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {_t("%(brand)s version:", { brand })} {appVersion}<br />
-                        {_t("olm version:")} {olmVersion}<br />
-                        {updateButton}
+                        { _t("%(brand)s version:", { brand }) } { appVersion }<br />
+                        { _t("olm version:") } { olmVersion }<br />
+                        { updateButton }
                     </div>
                 </div>
-                {this.renderLegal()}
-                {this.renderCredits()}
+                { this.renderLegal() }
+                { this.renderCredits() }
                 <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
-                    <span className='mx_SettingsTab_subheading'>{_t("Advanced")}</span>
+                    <span className='mx_SettingsTab_subheading'>{ _t("Advanced") }</span>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {_t("Homeserver is")} <code>{MatrixClientPeg.get().getHomeserverUrl()}</code><br />
-                        {_t("Identity server is")} <code>{MatrixClientPeg.get().getIdentityServerUrl()}</code><br />
+                        { _t("Homeserver is") } <code>{ MatrixClientPeg.get().getHomeserverUrl() }</code><br />
+                        { _t("Identity server is") } <code>{ MatrixClientPeg.get().getIdentityServerUrl() }</code><br />
                         <br />
                         <details>
-                            <summary>{_t("Access Token")}</summary><br />
-                            <b>{_t("Your access token gives full access to your account."
-                               + " Do not share it with anyone." )}</b>
+                            <summary>{ _t("Access Token") }</summary><br />
+                            <b>{ _t("Your access token gives full access to your account."
+                               + " Do not share it with anyone." ) }</b>
                             <div className="mx_HelpUserSettingsTab_accessToken">
-                                <code>{MatrixClientPeg.get().getAccessToken()}</code>
+                                <code>{ MatrixClientPeg.get().getAccessToken() }</code>
                                 <AccessibleTooltipButton
                                     title={_t("Copy")}
                                     onClick={this.onAccessTokenCopyClick}
@@ -307,7 +307,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         </details><br />
                         <div className='mx_HelpUserSettingsTab_debugButton'>
                             <AccessibleButton onClick={this.onClearCacheAndReload} kind='danger'>
-                                {_t("Clear cache and reload")}
+                                { _t("Clear cache and reload") }
                             </AccessibleButton>
                         </div>
                     </div>

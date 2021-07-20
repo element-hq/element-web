@@ -18,10 +18,11 @@ import React from 'react';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import RoomViewStore from '../../../stores/RoomViewStore';
-import PropTypes from "prop-types";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import ReplyTile from './ReplyTile';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { EventSubscription } from 'fbemitter';
 
 function cancelQuoting() {
     dis.dispatch({
@@ -30,41 +31,46 @@ function cancelQuoting() {
     });
 }
 
+interface IProps {
+    permalinkCreator: RoomPermalinkCreator;
+}
+
+interface IState {
+    event: MatrixEvent;
+}
+
 @replaceableComponent("views.rooms.ReplyPreview")
-export default class ReplyPreview extends React.Component {
-    static propTypes = {
-        permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
-    };
+export default class ReplyPreview extends React.Component<IProps, IState> {
+    private unmounted = false;
+    private readonly roomStoreToken: EventSubscription;
 
     constructor(props) {
         super(props);
-        this.unmounted = false;
 
         this.state = {
             event: RoomViewStore.getQuotingEvent(),
         };
 
-        this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
-        this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
+        this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
     }
 
     componentWillUnmount() {
         this.unmounted = true;
 
         // Remove RoomStore listener
-        if (this._roomStoreToken) {
-            this._roomStoreToken.remove();
+        if (this.roomStoreToken) {
+            this.roomStoreToken.remove();
         }
     }
 
-    _onRoomViewStoreUpdate() {
+    private onRoomViewStoreUpdate = (): void => {
         if (this.unmounted) return;
 
         const event = RoomViewStore.getQuotingEvent();
         if (this.state.event !== event) {
             this.setState({ event });
         }
-    }
+    };
 
     render() {
         if (!this.state.event) return null;

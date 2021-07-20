@@ -52,7 +52,7 @@ function StyledRadioGroup<T extends string>({
     };
 
     return <React.Fragment>
-        {definitions.map(d => <React.Fragment key={d.value}>
+        { definitions.map(d => <React.Fragment key={d.value}>
             <StyledRadioButton
                 className={classNames(className, d.className)}
                 onChange={_onChange}
@@ -65,7 +65,7 @@ function StyledRadioGroup<T extends string>({
                 { d.label }
             </StyledRadioButton>
             { d.description ? <span>{ d.description }</span> : null }
-        </React.Fragment>)}
+        </React.Fragment>) }
     </React.Fragment>;
 }
 

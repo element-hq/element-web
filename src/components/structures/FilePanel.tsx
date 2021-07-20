@@ -241,8 +241,8 @@ class FilePanel extends React.Component<IProps, IState> {
         // wrap a TimelinePanel with the jump-to-event bits turned off.
 
         const emptyState = (<div className="mx_RightPanel_empty mx_FilePanel_empty">
-            <h2>{_t('No files visible in this room')}</h2>
-            <p>{_t('Attach files from chat or just drag and drop them anywhere in a room.')}</p>
+            <h2>{ _t('No files visible in this room') }</h2>
+            <p>{ _t('Attach files from chat or just drag and drop them anywhere in a room.') }</p>
         </div>);
 
         const isRoomEncrypted = this.noRoom ? false : MatrixClientPeg.get().isRoomEncrypted(this.props.roomId);
@@ -262,7 +262,7 @@ class FilePanel extends React.Component<IProps, IState> {
                         manageReadReceipts={false}
                         manageReadMarkers={false}
                         timelineSet={this.state.timelineSet}
-                        showUrlPreview = {false}
+                        showUrlPreview={false}
                         onPaginationRequest={this.onPaginationRequest}
                         tileShape={TileShape.FileGrid}
                         resizeNotifier={this.props.resizeNotifier}
