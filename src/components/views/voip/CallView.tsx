@@ -538,19 +538,26 @@ export default class CallView extends React.Component<IProps, IState> {
 
         // The dial pad & 'more' button actions are only relevant in a connected call
         // When not connected, we have to put something there to make the flexbox alignment correct
-        const dialpadButton = this.state.callState === CallState.Connected ? <ContextMenuButton
-            className="mx_CallView_callControls_button mx_CallView_callControls_dialpad"
-            inputRef={this.dialpadButton}
-            onClick={this.onDialpadClick}
-            isExpanded={this.state.showDialpad}
-        /> : <div className="mx_CallView_callControls_button" />;
-
-        const contextMenuButton = this.state.callState === CallState.Connected ? <ContextMenuButton
-            className="mx_CallView_callControls_button mx_CallView_callControls_button_more"
-            onClick={this.onMoreClick}
-            inputRef={this.contextMenuButton}
-            isExpanded={this.state.showMoreMenu}
-        /> : <div className="mx_CallView_callControls_button" />;
+        let dialpadButton;
+        let contextMenuButton;
+        if (this.state.callState === CallState.Connected) {
+            contextMenuButton = (
+                <ContextMenuButton
+                    className="mx_CallView_callControls_button mx_CallView_callControls_button_more"
+                    onClick={this.onMoreClick}
+                    inputRef={this.contextMenuButton}
+                    isExpanded={this.state.showMoreMenu}
+                />
+            );
+            dialpadButton = (
+                <ContextMenuButton
+                    className="mx_CallView_callControls_button mx_CallView_callControls_dialpad"
+                    inputRef={this.dialpadButton}
+                    onClick={this.onDialpadClick}
+                    isExpanded={this.state.showDialpad}
+                />
+            );
+        }
 
         return (
             <div className={callControlsClasses}>
@@ -560,15 +567,15 @@ export default class CallView extends React.Component<IProps, IState> {
                     onClick={this.onMicMuteClick}
                 />
                 { vidMuteButton }
+                <div className={micCacheClasses} />
+                <div className={vidCacheClasses} />
+                { screensharingButton }
+                { sidebarButton }
+                { contextMenuButton }
                 <AccessibleButton
                     className="mx_CallView_callControls_button mx_CallView_callControls_button_hangup"
                     onClick={this.onHangupClick}
                 />
-                { screensharingButton }
-                { sidebarButton }
-                <div className={micCacheClasses} />
-                <div className={vidCacheClasses} />
-                { contextMenuButton }
             </div>
         );
     }
