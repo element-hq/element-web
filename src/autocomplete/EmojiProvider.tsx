@@ -35,12 +35,12 @@ const LIMIT = 20;
 // anchored to only match from the start of parts otherwise it'll show emoji suggestions whilst typing matrix IDs
 const EMOJI_REGEX = new RegExp('(' + EMOTICON_REGEX.source + '|(?:^|\\s):[+-\\w]*:?)$', 'g');
 
-interface IEmojiShort {
+interface ISortedEmoji {
     emoji: IEmoji;
     _orderBy: number;
 }
 
-const EMOJI_SHORTCODES: IEmojiShort[] = EMOJI.sort((a, b) => {
+const SORTED_EMOJI: ISortedEmoji[] = EMOJI.sort((a, b) => {
     if (a.group === b.group) {
         return a.order - b.order;
     }
@@ -61,18 +61,18 @@ function score(query, space) {
 }
 
 export default class EmojiProvider extends AutocompleteProvider {
-    matcher: QueryMatcher<IEmojiShort>;
-    nameMatcher: QueryMatcher<IEmojiShort>;
+    matcher: QueryMatcher<ISortedEmoji>;
+    nameMatcher: QueryMatcher<ISortedEmoji>;
 
     constructor() {
         super(EMOJI_REGEX);
-        this.matcher = new QueryMatcher<IEmojiShort>(EMOJI_SHORTCODES, {
+        this.matcher = new QueryMatcher<ISortedEmoji>(SORTED_EMOJI, {
             keys: ['emoji.emoticon'],
             funcs: [o => o.emoji.shortcodes.map(s => `:${s}:`)],
             // For matching against ascii equivalents
             shouldMatchWordsOnly: false,
         });
-        this.nameMatcher = new QueryMatcher(EMOJI_SHORTCODES, {
+        this.nameMatcher = new QueryMatcher(SORTED_EMOJI, {
             keys: ['emoji.annotation'],
             // For removing punctuation
             shouldMatchWordsOnly: true,
