@@ -25,7 +25,7 @@ export interface IEmoji {
     shortcodes: string[];
     tags?: string[];
     unicode: string;
-    skins?: Omit<IEmoji, "shortcodes">[]; // Currently unused
+    skins?: Omit<IEmoji, "shortcodes" | "tags">[]; // Currently unused
     emoticon?: string;
 }
 
