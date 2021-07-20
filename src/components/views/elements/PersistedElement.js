@@ -83,7 +83,7 @@ export default class PersistedElement extends React.Component {
         // for this, so we bodge it by listening for document resize and
         // the timeline_resize action.
         window.addEventListener('resize', this._repositionChild);
-        this.dispatcherRef = dis.register(this._onAction);
+        this._dispatcherRef = dis.register(this._onAction);
     }
 
     /**
