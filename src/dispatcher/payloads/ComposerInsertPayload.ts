@@ -20,7 +20,7 @@ import { ActionPayload } from "../payloads";
 import { Action } from "../actions";
 
 interface IBaseComposerInsertPayload extends ActionPayload {
-    action: Action.ComposerInsert,
+    action: Action.ComposerInsert;
 }
 
 interface IComposerInsertMentionPayload extends IBaseComposerInsertPayload {

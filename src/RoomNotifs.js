@@ -15,8 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from './MatrixClientPeg';
-import {PushProcessor} from 'matrix-js-sdk/src/pushprocessor';
+import { MatrixClientPeg } from './MatrixClientPeg';
+import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
 
 export const ALL_MESSAGES_LOUD = 'all_messages_loud';
 export const ALL_MESSAGES = 'all_messages';
@@ -52,7 +52,7 @@ export function aggregateNotificationCount(rooms) {
             }
         }
         return result;
-    }, {count: 0, highlight: false});
+    }, { count: 0, highlight: false });
 }
 
 export function getRoomHasBadge(room) {

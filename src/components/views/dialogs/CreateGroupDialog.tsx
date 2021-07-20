@@ -15,11 +15,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import BaseDialog from "./BaseDialog";
+import Spinner from "../elements/Spinner";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -83,7 +84,7 @@ export default class CreateGroupDialog extends React.Component<IProps, IState> {
         if (this.state.groupName !== '') {
             profile.name = this.state.groupName;
         }
-        this.setState({creating: true});
+        this.setState({ creating: true });
         MatrixClientPeg.get().createGroup({
             localpart: this.state.groupId,
             profile: profile,
@@ -95,20 +96,17 @@ export default class CreateGroupDialog extends React.Component<IProps, IState> {
             });
             this.props.onFinished(true);
         }).catch((e) => {
-            this.setState({createError: e});
+            this.setState({ createError: e });
         }).finally(() => {
-            this.setState({creating: false});
+            this.setState({ creating: false });
         });
     };
 
-    _onCancel = () => {
+    private onCancel = () => {
         this.props.onFinished(false);
     };
 
     render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const Spinner = sdk.getComponent('elements.Spinner');
-
         if (this.state.creating) {
             return <Spinner />;
         }
@@ -169,7 +167,7 @@ export default class CreateGroupDialog extends React.Component<IProps, IState> {
                     </div>
                     <div className="mx_Dialog_buttons">
                         <input type="submit" value={_t('Create')} className="mx_Dialog_primary" />
-                        <button onClick={this._onCancel}>
+                        <button onClick={this.onCancel}>
                             { _t("Cancel") }
                         </button>
                     </div>

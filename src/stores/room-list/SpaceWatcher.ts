@@ -28,6 +28,11 @@ export class SpaceWatcher {
     private activeSpace: Room = SpaceStore.instance.activeSpace;
 
     constructor(private store: RoomListStoreClass) {
+        if (!SpaceStore.spacesTweakAllRoomsEnabled) {
+            this.filter = new SpaceFilterCondition();
+            this.updateFilter();
+            store.addFilter(this.filter);
+        }
         SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdated);
     }
 
@@ -35,7 +40,7 @@ export class SpaceWatcher {
         this.activeSpace = activeSpace;
 
         if (this.filter) {
-            if (activeSpace) {
+            if (activeSpace || !SpaceStore.spacesTweakAllRoomsEnabled) {
                 this.updateFilter();
             } else {
                 this.store.removeFilter(this.filter);
@@ -49,9 +54,11 @@ export class SpaceWatcher {
     };
 
     private updateFilter = () => {
-        SpaceStore.instance.traverseSpace(this.activeSpace.roomId, roomId => {
-            this.store.matrixClient?.getRoom(roomId)?.loadMembersIfNeeded();
-        });
+        if (this.activeSpace) {
+            SpaceStore.instance.traverseSpace(this.activeSpace.roomId, roomId => {
+                this.store.matrixClient?.getRoom(roomId)?.loadMembersIfNeeded();
+            });
+        }
         this.filter.updateSpace(this.activeSpace);
     };
 }

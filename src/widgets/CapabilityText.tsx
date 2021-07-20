@@ -20,7 +20,7 @@ import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { ElementWidgetCapabilities } from "../stores/widgets/ElementWidgetCapabilities";
 import React from "react";
 
-type GENERIC_WIDGET_KIND = "generic";
+type GENERIC_WIDGET_KIND = "generic"; // eslint-disable-line @typescript-eslint/naming-convention
 const GENERIC_WIDGET_KIND: GENERIC_WIDGET_KIND = "generic";
 
 interface ISendRecvStaticCapText {
@@ -125,7 +125,7 @@ export class CapabilityText {
         if (eventCap.isState) {
             return !eventCap.keyStr
                 ? _t("with an empty state key")
-                : _t("with state key %(stateKey)s", {stateKey: eventCap.keyStr});
+                : _t("with state key %(stateKey)s", { stateKey: eventCap.keyStr });
         }
         return null; // room messages are handled specially
     }
@@ -134,8 +134,8 @@ export class CapabilityText {
         // First see if we have a super simple line of text to provide back
         if (CapabilityText.simpleCaps[capability]) {
             const textForKind = CapabilityText.simpleCaps[capability];
-            if (textForKind[kind]) return {primary: _t(textForKind[kind])};
-            if (textForKind[GENERIC_WIDGET_KIND]) return {primary: _t(textForKind[GENERIC_WIDGET_KIND])};
+            if (textForKind[kind]) return { primary: _t(textForKind[kind]) };
+            if (textForKind[GENERIC_WIDGET_KIND]) return { primary: _t(textForKind[GENERIC_WIDGET_KIND]) };
 
             // ... we'll fall through to the generic capability processing at the end of this
             // function if we fail to locate a simple string and the capability isn't for an
@@ -176,7 +176,7 @@ export class CapabilityText {
                         primary: _t("Send <b>%(eventType)s</b> events as you in this room", {
                             eventType: eventCap.eventType,
                         }, {
-                            b: sub => <b>{sub}</b>,
+                            b: sub => <b>{ sub }</b>,
                         }),
                         byline: CapabilityText.bylineFor(eventCap),
                     };
@@ -185,7 +185,7 @@ export class CapabilityText {
                         primary: _t("See <b>%(eventType)s</b> events posted to this room", {
                             eventType: eventCap.eventType,
                         }, {
-                            b: sub => <b>{sub}</b>,
+                            b: sub => <b>{ sub }</b>,
                         }),
                         byline: CapabilityText.bylineFor(eventCap),
                     };
@@ -196,7 +196,7 @@ export class CapabilityText {
                         primary: _t("Send <b>%(eventType)s</b> events as you in your active room", {
                             eventType: eventCap.eventType,
                         }, {
-                            b: sub => <b>{sub}</b>,
+                            b: sub => <b>{ sub }</b>,
                         }),
                         byline: CapabilityText.bylineFor(eventCap),
                     };
@@ -205,7 +205,7 @@ export class CapabilityText {
                         primary: _t("See <b>%(eventType)s</b> events posted to your active room", {
                             eventType: eventCap.eventType,
                         }, {
-                            b: sub => <b>{sub}</b>,
+                            b: sub => <b>{ sub }</b>,
                         }),
                         byline: CapabilityText.bylineFor(eventCap),
                     };
@@ -215,8 +215,8 @@ export class CapabilityText {
 
         // We don't have enough context to render this capability specially, so we'll present it as-is
         return {
-            primary: _t("The <b>%(capability)s</b> capability", {capability}, {
-                b: sub => <b>{sub}</b>,
+            primary: _t("The <b>%(capability)s</b> capability", { capability }, {
+                b: sub => <b>{ sub }</b>,
             }),
         };
     }
@@ -324,13 +324,13 @@ export class CapabilityText {
                         primary = _t("Send <b>%(msgtype)s</b> messages as you in this room", {
                             msgtype: eventCap.keyStr,
                         }, {
-                            b: sub => <b>{sub}</b>,
+                            b: sub => <b>{ sub }</b>,
                         });
                     } else {
                         primary = _t("Send <b>%(msgtype)s</b> messages as you in your active room", {
                             msgtype: eventCap.keyStr,
                         }, {
-                            b: sub => <b>{sub}</b>,
+                            b: sub => <b>{ sub }</b>,
                         });
                     }
                 } else {
@@ -338,17 +338,17 @@ export class CapabilityText {
                         primary = _t("See <b>%(msgtype)s</b> messages posted to this room", {
                             msgtype: eventCap.keyStr,
                         }, {
-                            b: sub => <b>{sub}</b>,
+                            b: sub => <b>{ sub }</b>,
                         });
                     } else {
                         primary = _t("See <b>%(msgtype)s</b> messages posted to your active room", {
                             msgtype: eventCap.keyStr,
                         }, {
-                            b: sub => <b>{sub}</b>,
+                            b: sub => <b>{ sub }</b>,
                         });
                     }
                 }
-                return {primary};
+                return { primary };
             }
         }
     }

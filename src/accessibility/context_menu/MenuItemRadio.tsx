@@ -26,7 +26,7 @@ interface IProps extends React.ComponentProps<typeof AccessibleButton> {
 }
 
 // Semantic component for representing a role=menuitemradio
-export const MenuItemRadio: React.FC<IProps> = ({children, label, active, disabled, ...props}) => {
+export const MenuItemRadio: React.FC<IProps> = ({ children, label, active, disabled, ...props }) => {
     return (
         <AccessibleButton
             {...props}

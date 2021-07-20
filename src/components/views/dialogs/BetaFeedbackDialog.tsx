@@ -14,28 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 import QuestionDialog from './QuestionDialog';
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
 import SdkConfig from "../../../SdkConfig";
-import {IDialogProps} from "./IDialogProps";
+import { IDialogProps } from "./IDialogProps";
 import SettingsStore from "../../../settings/SettingsStore";
-import {submitFeedback} from "../../../rageshake/submit-rageshake";
+import { submitFeedback } from "../../../rageshake/submit-rageshake";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import Modal from "../../../Modal";
 import InfoDialog from "./InfoDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {Action} from "../../../dispatcher/actions";
+import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "./UserSettingsDialog";
 
 interface IProps extends IDialogProps {
     featureId: string;
 }
 
-const BetaFeedbackDialog: React.FC<IProps> = ({featureId, onFinished}) => {
+const BetaFeedbackDialog: React.FC<IProps> = ({ featureId, onFinished }) => {
     const info = SettingsStore.getBetaInfo(featureId);
 
     const [comment, setComment] = useState("");
@@ -44,7 +44,12 @@ const BetaFeedbackDialog: React.FC<IProps> = ({featureId, onFinished}) => {
     const sendFeedback = async (ok: boolean) => {
         if (!ok) return onFinished(false);
 
-        submitFeedback(SdkConfig.get().bug_report_endpoint_url, info.feedbackLabel, comment, canContact);
+        const extraData = SettingsStore.getBetaInfo(featureId)?.extraSettings.reduce((o, k) => {
+            o[k] = SettingsStore.getValue(k);
+            return o;
+        }, {});
+
+        submitFeedback(SdkConfig.get().bug_report_endpoint_url, info.feedbackLabel, comment, canContact, extraData);
         onFinished(true);
 
         Modal.createTrackedDialog("Beta Dialog Sent", featureId, InfoDialog, {
@@ -64,7 +69,7 @@ const BetaFeedbackDialog: React.FC<IProps> = ({featureId, onFinished}) => {
             <div className="mx_BetaFeedbackDialog_subheading">
                 { _t(info.feedbackSubheading) }
                 &nbsp;
-                { _t("Your platform and username will be noted to help us use your feedback as much as we can.")}
+                { _t("Your platform and username will be noted to help us use your feedback as much as we can.") }
 
                 <AccessibleButton kind="link" onClick={() => {
                     onFinished(false);

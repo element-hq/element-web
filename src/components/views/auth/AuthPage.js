@@ -18,7 +18,7 @@ limitations under the License.
 
 import React from 'react';
 import * as sdk from '../../../index';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.auth.AuthPage")
 export default class AuthPage extends React.PureComponent {
@@ -28,7 +28,7 @@ export default class AuthPage extends React.PureComponent {
         return (
             <div className="mx_AuthPage">
                 <div className="mx_AuthPage_modal">
-                    {this.props.children}
+                    { this.props.children }
                 </div>
                 <AuthFooter />
             </div>

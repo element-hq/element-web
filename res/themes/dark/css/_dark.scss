@@ -118,6 +118,7 @@ $voipcall-plinth-color: #394049;
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
+$dialpad-button-bg-color: #394049;
 
 $roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-filter-active-bg-color: $bg-color;
@@ -212,8 +213,6 @@ $message-body-panel-icon-fg-color: #21262C; // "Separator"
 $message-body-panel-icon-bg-color: $tertiary-fg-color;
 
 $voice-record-stop-border-color: $quaternary-fg-color;
-$voice-record-waveform-bg-color: $message-body-panel-bg-color;
-$voice-record-waveform-fg-color: $message-body-panel-fg-color;
 $voice-record-waveform-incomplete-fg-color: $quaternary-fg-color;
 $voice-record-icon-color: $quaternary-fg-color;
 $voice-playback-button-bg-color: $message-body-panel-icon-bg-color;
@@ -227,6 +226,13 @@ $roomlist-background-blur-amount: 60px;
 $groupFilterPanel-background-blur-amount: 30px;
 
 $composer-shadow-color: rgba(0, 0, 0, 0.28);
+
+// Bubble tiles
+$eventbubble-self-bg: #143A34;
+$eventbubble-others-bg: #394049;
+$eventbubble-bg-hover: #433C23;
+$eventbubble-avatar-outline: $bg-color;
+$eventbubble-reply-color: #C1C6CD;
 
 // ***** Mixins! *****
 
@@ -273,24 +279,7 @@ $composer-shadow-color: rgba(0, 0, 0, 0.28);
 }
 
 // markdown overrides:
-.mx_EventTile_content .markdown-body pre:hover {
-    border-color: #808080 !important; // inverted due to rules below
-    scrollbar-color: rgba(0, 0, 0, 0.2) transparent; // copied from light theme due to inversion below
-    // the code above works only in Firefox, this is for other browsers
-    // see https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-color
-    &::-webkit-scrollbar-thumb {
-        background-color: rgba(0, 0, 0, 0.2); // copied from light theme due to inversion below
-    }
-}
 .mx_EventTile_content .markdown-body {
-    pre, code {
-        filter: invert(1);
-    }
-
-    pre code {
-        filter: none;
-    }
-
     table {
         tr {
             background-color: #000000;
@@ -300,18 +289,9 @@ $composer-shadow-color: rgba(0, 0, 0, 0.28);
             background-color: #080808;
         }
     }
-
-    blockquote {
-        color: #919191;
-    }
 }
 
-// diff highlight colors
-// intentionally swapped to avoid inversion
-.hljs-addition {
-    background: #fdd;
-}
-
-.hljs-deletion {
-    background: #dfd;
+// highlight.js overrides
+.hljs-tag {
+    color: inherit; // Without this they'd be weirdly blue which doesn't match the theme
 }

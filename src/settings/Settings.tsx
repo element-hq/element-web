@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
-Copyright 2018, 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2018 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ import { Layout } from "./Layout";
 import ReducedMotionController from './controllers/ReducedMotionController';
 import IncompatibleController from "./controllers/IncompatibleController";
 import SdkConfig from "../SdkConfig";
+import NewLayoutSwitcherController from './controllers/NewLayoutSwitcherController';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = [
@@ -94,6 +95,9 @@ export interface ISetting {
         [level: SettingLevel]: string;
     };
 
+    // Optional description which will be shown as microCopy under SettingsFlags
+    description?: string;
+
     // The supported levels are required. Preferably, use the preset arrays
     // at the top of this file to define this rather than a custom array.
     supportedLevels?: SettingLevel[];
@@ -127,6 +131,7 @@ export interface ISetting {
         image: string; // require(...)
         feedbackSubheading?: string;
         feedbackLabel?: string;
+        extraSettings?: string[];
     };
 }
 
@@ -174,7 +179,32 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             feedbackSubheading: _td("Your feedback will help make spaces better. " +
                 "The more detail you can go into, the better."),
             feedbackLabel: "spaces-feedback",
+            extraSettings: [
+                "feature_spaces.all_rooms",
+                "feature_spaces.space_member_dms",
+                "feature_spaces.space_dm_badges",
+            ],
         },
+    },
+    "feature_spaces.all_rooms": {
+        displayName: _td("Show all rooms in Home"),
+        supportedLevels: LEVELS_FEATURE,
+        default: true,
+        controller: new ReloadOnChangeController(),
+    },
+    "feature_spaces.space_member_dms": {
+        displayName: _td("Show people in spaces"),
+        description: _td("If disabled, you can still add Direct Messages to Personal Spaces. " +
+            "If enabled, you'll automatically see everyone who is a member of the Space."),
+        supportedLevels: LEVELS_FEATURE,
+        default: true,
+        controller: new ReloadOnChangeController(),
+    },
+    "feature_spaces.space_dm_badges": {
+        displayName: _td("Show notification badges for People in Spaces"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+        controller: new ReloadOnChangeController(),
     },
     "feature_dnd": {
         isFeature: true,
@@ -291,6 +321,13 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         displayName: _td("Show info about bridges in room settings"),
         default: false,
+    },
+    "feature_new_layout_switcher": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("New layout switcher (with message bubbles)"),
+        default: false,
+        controller: new NewLayoutSwitcherController(),
     },
     "RoomList.backgroundImage": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -426,7 +463,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "ctrlFForSearch": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: isMac ? _td("Use Command + F to search") : _td("Use Ctrl + F to search"),
+        displayName: isMac ? _td("Use Command + F to search timeline") : _td("Use Ctrl + F to search timeline"),
         default: false,
     },
     "MessageComposerInput.ctrlEnterToSend": {
@@ -581,14 +618,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         },
         default: false,
         controller: new UIFeatureController(UIFeature.URLPreviews),
-    },
-    "roomColor": {
-        supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
-        displayName: _td("Room Colour"),
-        default: {
-            primary_color: null, // Hex string, eg: #000000
-            secondary_color: null, // Hex string, eg: #000000
-        },
     },
     "notificationsEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
@@ -796,7 +825,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     [UIFeature.IdentityServer]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
-        // Identity Server (Discovery) Settings make no sense if 3PIDs in general are hidden
+        // Identity server (discovery) settings make no sense if 3PIDs in general are hidden
         controller: new UIFeatureController(UIFeature.ThirdPartyID),
     },
     [UIFeature.ThirdPartyID]: {

@@ -425,7 +425,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         const allWidgets = this.getAllWidgets(room);
         if (!allWidgets.some(([w])=> w.id === widget.id)) return; // invalid
         this.updateUserLayout(room, {
-            [widget.id]: {container: toContainer},
+            [widget.id]: { container: toContainer },
         });
     }
 
@@ -436,9 +436,9 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
 
     public copyLayoutToRoom(room: Room) {
         const allWidgets = this.getAllWidgets(room);
-        const evContent: ILayoutStateEvent = {widgets: {}};
+        const evContent: ILayoutStateEvent = { widgets: {} };
         for (const [widget, container] of allWidgets) {
-            evContent.widgets[widget.id] = {container};
+            evContent.widgets[widget.id] = { container };
             if (container === Container.Top) {
                 const containerWidgets = this.getContainerWidgets(room, container);
                 const idx = containerWidgets.findIndex(w => w.id === widget.id);

@@ -32,11 +32,16 @@ export interface IEncryptedFile {
 }
 
 export interface IMediaEventContent {
+    body?: string;
     url?: string; // required on unencrypted media
     file?: IEncryptedFile; // required for *encrypted* media
     info?: {
         thumbnail_url?: string; // eslint-disable-line camelcase
         thumbnail_file?: IEncryptedFile; // eslint-disable-line camelcase
+        mimetype: string;
+        w?: number;
+        h?: number;
+        size?: number;
     };
 }
 

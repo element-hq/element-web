@@ -259,16 +259,6 @@ limitations under the License.
 
     .mx_AccessibleButton.mx_AccessibleButton_hasKind {
         padding: 8px 18px;
-
-        &.mx_AccessibleButton_kind_primary {
-            color: $accent-color;
-            background-color: $accent-bg-color;
-        }
-
-        &.mx_AccessibleButton_kind_danger {
-            color: $notice-primary-color;
-            background-color: $notice-primary-bg-color;
-        }
     }
 
     .mx_VerificationShowSas .mx_AccessibleButton,

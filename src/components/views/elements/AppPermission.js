@@ -23,8 +23,8 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import WidgetUtils from "../../../utils/WidgetUtils";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.elements.AppPermission")
 export default class AppPermission extends React.Component {
@@ -94,15 +94,15 @@ export default class AppPermission extends React.Component {
 
         const warningTooltipText = (
             <div>
-                {_t("Any of the following data may be shared:")}
+                { _t("Any of the following data may be shared:") }
                 <ul>
-                    <li>{_t("Your display name")}</li>
-                    <li>{_t("Your avatar URL")}</li>
-                    <li>{_t("Your user ID")}</li>
-                    <li>{_t("Your theme")}</li>
-                    <li>{_t("%(brand)s URL", { brand })}</li>
-                    <li>{_t("Room ID")}</li>
-                    <li>{_t("Widget ID")}</li>
+                    <li>{ _t("Your display name") }</li>
+                    <li>{ _t("Your avatar URL") }</li>
+                    <li>{ _t("Your user ID") }</li>
+                    <li>{ _t("Your theme") }</li>
+                    <li>{ _t("%(brand)s URL", { brand }) }</li>
+                    <li>{ _t("Room ID") }</li>
+                    <li>{ _t("Widget ID") }</li>
                 </ul>
             </div>
         );
@@ -114,32 +114,32 @@ export default class AppPermission extends React.Component {
 
         // Due to i18n limitations, we can't dedupe the code for variables in these two messages.
         const warning = this.state.isWrapped
-            ? _t("Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.",
-                {widgetDomain: this.state.widgetDomain}, {helpIcon: () => warningTooltip})
+            ? _t("Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.",
+                { widgetDomain: this.state.widgetDomain }, { helpIcon: () => warningTooltip })
             : _t("Using this widget may share data <helpIcon /> with %(widgetDomain)s.",
-                {widgetDomain: this.state.widgetDomain}, {helpIcon: () => warningTooltip});
+                { widgetDomain: this.state.widgetDomain }, { helpIcon: () => warningTooltip });
 
         const encryptionWarning = this.props.isRoomEncrypted ? _t("Widgets do not use message encryption.") : null;
 
         return (
             <div className='mx_AppPermissionWarning'>
                 <div className='mx_AppPermissionWarning_row mx_AppPermissionWarning_bolder mx_AppPermissionWarning_smallText'>
-                    {_t("Widget added by")}
+                    { _t("Widget added by") }
                 </div>
                 <div className='mx_AppPermissionWarning_row'>
-                    {avatar}
-                    <h4 className='mx_AppPermissionWarning_bolder'>{displayName}</h4>
-                    <div className='mx_AppPermissionWarning_smallText'>{userId}</div>
+                    { avatar }
+                    <h4 className='mx_AppPermissionWarning_bolder'>{ displayName }</h4>
+                    <div className='mx_AppPermissionWarning_smallText'>{ userId }</div>
                 </div>
                 <div className='mx_AppPermissionWarning_row mx_AppPermissionWarning_smallText'>
-                    {warning}
+                    { warning }
                 </div>
                 <div className='mx_AppPermissionWarning_row mx_AppPermissionWarning_smallText'>
-                    {_t("This widget may use cookies.")}&nbsp;{encryptionWarning}
+                    { _t("This widget may use cookies.") }&nbsp;{ encryptionWarning }
                 </div>
                 <div className='mx_AppPermissionWarning_row'>
                     <AccessibleButton kind='primary_sm' onClick={this.props.onPermissionGranted}>
-                        {_t("Continue")}
+                        { _t("Continue") }
                     </AccessibleButton>
                 </div>
             </div>

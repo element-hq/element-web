@@ -18,18 +18,19 @@ import '../../../skinned-sdk'; // Must be first for skinning to work
 import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import { configure, mount } from "enzyme";
 import React from "react";
-import {act} from "react-dom/test-utils";
+import { act } from "react-dom/test-utils";
+import { sleep } from "matrix-js-sdk/src/utils";
+
 import SendMessageComposer, {
     createMessageContent,
     isQuickReaction,
 } from "../../../../src/components/views/rooms/SendMessageComposer";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import EditorModel from "../../../../src/editor/model";
-import {createPartCreator, createRenderer} from "../../../editor/mock";
-import {createTestClient, mkEvent, mkStubRoom} from "../../../test-utils";
+import { createPartCreator, createRenderer } from "../../../editor/mock";
+import { createTestClient, mkEvent, mkStubRoom } from "../../../test-utils";
 import BasicMessageComposer from "../../../../src/components/views/rooms/BasicMessageComposer";
-import {MatrixClientPeg} from "../../../../src/MatrixClientPeg";
-import {sleep} from "../../../../src/utils/promise";
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import SpecPermalinkConstructor from "../../../../src/utils/permalinks/SpecPermalinkConstructor";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 
@@ -43,7 +44,7 @@ describe('<SendMessageComposer/>', () => {
 
         it("sends plaintext messages correctly", () => {
             const model = new EditorModel([], createPartCreator(), createRenderer());
-            model.update("hello world", "insertText", {offset: 11, atNodeEnd: true});
+            model.update("hello world", "insertText", { offset: 11, atNodeEnd: true });
 
             const content = createMessageContent(model, permalinkCreator);
 
@@ -55,7 +56,7 @@ describe('<SendMessageComposer/>', () => {
 
         it("sends markdown messages correctly", () => {
             const model = new EditorModel([], createPartCreator(), createRenderer());
-            model.update("hello *world*", "insertText", {offset: 13, atNodeEnd: true});
+            model.update("hello *world*", "insertText", { offset: 13, atNodeEnd: true });
 
             const content = createMessageContent(model, permalinkCreator);
 
@@ -69,7 +70,7 @@ describe('<SendMessageComposer/>', () => {
 
         it("strips /me from messages and marks them as m.emote accordingly", () => {
             const model = new EditorModel([], createPartCreator(), createRenderer());
-            model.update("/me blinks __quickly__", "insertText", {offset: 22, atNodeEnd: true});
+            model.update("/me blinks __quickly__", "insertText", { offset: 22, atNodeEnd: true });
 
             const content = createMessageContent(model, permalinkCreator);
 
@@ -83,7 +84,7 @@ describe('<SendMessageComposer/>', () => {
 
         it("allows sending double-slash escaped slash commands correctly", () => {
             const model = new EditorModel([], createPartCreator(), createRenderer());
-            model.update("//dev/null is my favourite place", "insertText", {offset: 32, atNodeEnd: true});
+            model.update("//dev/null is my favourite place", "insertText", { offset: 32, atNodeEnd: true });
 
             const content = createMessageContent(model, permalinkCreator);
 
@@ -147,7 +148,7 @@ describe('<SendMessageComposer/>', () => {
                 wrapper.update();
             });
 
-            const key = wrapper.find(SendMessageComposer).instance()._editorStateKey;
+            const key = wrapper.find(SendMessageComposer).instance().editorStateKey;
 
             expect(wrapper.text()).toBe("Test Text");
             expect(localStorage.getItem(key)).toBeNull();
@@ -155,7 +156,7 @@ describe('<SendMessageComposer/>', () => {
             // ensure the right state was persisted to localStorage
             wrapper.unmount();
             expect(JSON.parse(localStorage.getItem(key))).toStrictEqual({
-                parts: [{"type": "plain", "text": "Test Text"}],
+                parts: [{ "type": "plain", "text": "Test Text" }],
                 replyEventId: mockEvent.getId(),
             });
 
@@ -188,7 +189,7 @@ describe('<SendMessageComposer/>', () => {
                 wrapper.update();
             });
 
-            const key = wrapper.find(SendMessageComposer).instance()._editorStateKey;
+            const key = wrapper.find(SendMessageComposer).instance().editorStateKey;
 
             expect(wrapper.text()).toBe("Hello World");
             expect(localStorage.getItem(key)).toBeNull();
@@ -196,7 +197,7 @@ describe('<SendMessageComposer/>', () => {
             // ensure the right state was persisted to localStorage
             window.dispatchEvent(new Event('beforeunload'));
             expect(JSON.parse(localStorage.getItem(key))).toStrictEqual({
-                parts: [{"type": "plain", "text": "Hello World"}],
+                parts: [{ "type": "plain", "text": "Hello World" }],
             });
         });
 
@@ -225,7 +226,7 @@ describe('<SendMessageComposer/>', () => {
             expect(wrapper.text()).toBe("");
             const str = sessionStorage.getItem(`mx_cider_history_${mockRoom.roomId}[0]`);
             expect(JSON.parse(str)).toStrictEqual({
-                parts: [{"type": "plain", "text": "This is a message"}],
+                parts: [{ "type": "plain", "text": "This is a message" }],
                 replyEventId: mockEvent.getId(),
             });
         });
@@ -234,7 +235,7 @@ describe('<SendMessageComposer/>', () => {
     describe("isQuickReaction", () => {
         it("correctly detects quick reaction", () => {
             const model = new EditorModel([], createPartCreator(), createRenderer());
-            model.update("+😊", "insertText", {offset: 3, atNodeEnd: true});
+            model.update("+😊", "insertText", { offset: 3, atNodeEnd: true });
 
             const isReaction = isQuickReaction(model);
 
@@ -243,7 +244,7 @@ describe('<SendMessageComposer/>', () => {
 
         it("correctly detects quick reaction with space", () => {
             const model = new EditorModel([], createPartCreator(), createRenderer());
-            model.update("+ 😊", "insertText", {offset: 4, atNodeEnd: true});
+            model.update("+ 😊", "insertText", { offset: 4, atNodeEnd: true });
 
             const isReaction = isQuickReaction(model);
 
@@ -255,10 +256,10 @@ describe('<SendMessageComposer/>', () => {
             const model2 = new EditorModel([], createPartCreator(), createRenderer());
             const model3 = new EditorModel([], createPartCreator(), createRenderer());
             const model4 = new EditorModel([], createPartCreator(), createRenderer());
-            model.update("+😊hello", "insertText", {offset: 8, atNodeEnd: true});
-            model2.update(" +😊", "insertText", {offset: 4, atNodeEnd: true});
-            model3.update("+ 😊😊", "insertText", {offset: 6, atNodeEnd: true});
-            model4.update("+smiley", "insertText", {offset: 7, atNodeEnd: true});
+            model.update("+😊hello", "insertText", { offset: 8, atNodeEnd: true });
+            model2.update(" +😊", "insertText", { offset: 4, atNodeEnd: true });
+            model3.update("+ 😊😊", "insertText", { offset: 6, atNodeEnd: true });
+            model4.update("+smiley", "insertText", { offset: 7, atNodeEnd: true });
 
             expect(isQuickReaction(model)).toBeFalsy();
             expect(isQuickReaction(model2)).toBeFalsy();
@@ -267,5 +268,4 @@ describe('<SendMessageComposer/>', () => {
         });
     });
 });
-
 

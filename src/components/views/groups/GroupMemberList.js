@@ -23,10 +23,10 @@ import GroupStore from '../../../stores/GroupStore';
 import PropTypes from 'prop-types';
 import { showGroupInviteDialog } from '../../../GroupAddressPicker';
 import AccessibleButton from '../elements/AccessibleButton';
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import {Action} from "../../../dispatcher/actions";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { Action } from "../../../dispatcher/actions";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 
@@ -201,7 +201,7 @@ export default class GroupMemberList extends React.Component {
 
         const invited = (this.state.invitedMembers && this.state.invitedMembers.length > 0) ?
             <div className="mx_MemberList_invited">
-                <h2>{_t("Invited")}</h2>
+                <h2>{ _t("Invited") }</h2>
                 {
                     this.makeGroupMemberTiles(
                         this.state.searchQuery,

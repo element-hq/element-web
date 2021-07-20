@@ -17,9 +17,9 @@ limitations under the License.
 
 import React from 'react';
 
-import {MenuItem} from "../../structures/ContextMenu";
-import {IEmoji} from "../../../emoji";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { MenuItem } from "../../structures/ContextMenu";
+import { IEmoji } from "../../../emoji";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     emoji: IEmoji;
@@ -44,7 +44,7 @@ class Emoji extends React.PureComponent<IProps> {
                 label={emoji.unicode}
             >
                 <div className={`mx_EmojiPicker_item ${isSelected ? 'mx_EmojiPicker_item_selected' : ''}`}>
-                    {emoji.unicode}
+                    { emoji.unicode }
                 </div>
             </MenuItem>
         );

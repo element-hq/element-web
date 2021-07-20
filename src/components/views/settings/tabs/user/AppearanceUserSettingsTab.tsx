@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../../../languageHandler";
+import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
 import { MatrixClientPeg } from '../../../../../MatrixClientPeg';
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -37,6 +37,8 @@ import StyledRadioGroup from "../../../elements/StyledRadioGroup";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { Layout } from "../../../../../settings/Layout";
+import classNames from 'classnames';
+import StyledRadioButton from '../../../elements/StyledRadioButton';
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import { compare } from "../../../../../utils/strings";
 
@@ -75,7 +77,8 @@ interface IState extends IThemeState {
 export default class AppearanceUserSettingsTab extends React.Component<IProps, IState> {
     private readonly MESSAGE_PREVIEW_TEXT = _t("Hey you. You're the best!");
 
-    private themeTimer: NodeJS.Timeout;
+    private themeTimer: number;
+    private unmounted = false;
 
     constructor(props: IProps) {
         super(props);
@@ -84,7 +87,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             fontSize: (SettingsStore.getValue("baseFontSize", null) + FontWatcher.SIZE_DIFF).toString(),
             ...this.calculateThemeState(),
             customThemeUrl: "",
-            customThemeMessage: {isError: false, text: ""},
+            customThemeMessage: { isError: false, text: "" },
             useCustomFontSize: SettingsStore.getValue("useCustomFontSize"),
             useSystemFont: SettingsStore.getValue("useSystemFont"),
             systemFont: SettingsStore.getValue("systemFont"),
@@ -101,12 +104,17 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         const client = MatrixClientPeg.get();
         const userId = client.getUserId();
         const profileInfo = await client.getProfileInfo(userId);
+        if (this.unmounted) return;
 
         this.setState({
             userId,
             displayName: profileInfo.displayname,
             avatarUrl: profileInfo.avatar_url,
         });
+    }
+
+    componentWillUnmount() {
+        this.unmounted = true;
     }
 
     private calculateThemeState(): IThemeState {
@@ -149,43 +157,43 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         // so remember what the value was before we tried to set it so we can revert
         const oldTheme: string = SettingsStore.getValue('theme');
         SettingsStore.setValue("theme", null, SettingLevel.DEVICE, newTheme).catch(() => {
-            dis.dispatch<RecheckThemePayload>({action: Action.RecheckTheme});
-            this.setState({theme: oldTheme});
+            dis.dispatch<RecheckThemePayload>({ action: Action.RecheckTheme });
+            this.setState({ theme: oldTheme });
         });
-        this.setState({theme: newTheme});
+        this.setState({ theme: newTheme });
         // The settings watcher doesn't fire until the echo comes back from the
         // server, so to make the theme change immediately we need to manually
         // do the dispatch now
         // XXX: The local echoed value appears to be unreliable, in particular
         // when settings custom themes(!) so adding forceTheme to override
         // the value from settings.
-        dis.dispatch<RecheckThemePayload>({action: Action.RecheckTheme, forceTheme: newTheme});
+        dis.dispatch<RecheckThemePayload>({ action: Action.RecheckTheme, forceTheme: newTheme });
     };
 
     private onUseSystemThemeChanged = (checked: boolean): void => {
-        this.setState({useSystemTheme: checked});
+        this.setState({ useSystemTheme: checked });
         SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, checked);
-        dis.dispatch<RecheckThemePayload>({action: Action.RecheckTheme});
+        dis.dispatch<RecheckThemePayload>({ action: Action.RecheckTheme });
     };
 
     private onFontSizeChanged = (size: number): void => {
-        this.setState({fontSize: size.toString()});
+        this.setState({ fontSize: size.toString() });
         SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, size - FontWatcher.SIZE_DIFF);
     };
 
-    private onValidateFontSize = async ({value}: Pick<IFieldState, "value">): Promise<IValidationResult> => {
+    private onValidateFontSize = async ({ value }: Pick<IFieldState, "value">): Promise<IValidationResult> => {
         const parsedSize = parseFloat(value);
         const min = FontWatcher.MIN_SIZE + FontWatcher.SIZE_DIFF;
         const max = FontWatcher.MAX_SIZE + FontWatcher.SIZE_DIFF;
 
         if (isNaN(parsedSize)) {
-            return {valid: false, feedback: _t("Size must be a number")};
+            return { valid: false, feedback: _t("Size must be a number") };
         }
 
         if (!(min <= parsedSize && parsedSize <= max)) {
             return {
                 valid: false,
-                feedback: _t('Custom font size can only be between %(min)s pt and %(max)s pt', {min, max}),
+                feedback: _t('Custom font size can only be between %(min)s pt and %(max)s pt', { min, max }),
             };
         }
 
@@ -196,7 +204,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             parseInt(value, 10) - FontWatcher.SIZE_DIFF,
         );
 
-        return {valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', {min, max})};
+        return { valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', { min, max }) };
     };
 
     private onAddCustomTheme = async (): Promise<void> => {
@@ -213,37 +221,50 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             // XXX: need some schema for this
             const themeInfo = await r.json();
             if (!themeInfo || typeof(themeInfo['name']) !== 'string' || typeof(themeInfo['colors']) !== 'object') {
-                this.setState({customThemeMessage: {text: _t("Invalid theme schema."), isError: true}});
+                this.setState({ customThemeMessage: { text: _t("Invalid theme schema."), isError: true } });
                 return;
             }
             currentThemes.push(themeInfo);
         } catch (e) {
             console.error(e);
-            this.setState({customThemeMessage: {text: _t("Error downloading theme information."), isError: true}});
+            this.setState({ customThemeMessage: { text: _t("Error downloading theme information."), isError: true } });
             return; // Don't continue on error
         }
 
         await SettingsStore.setValue("custom_themes", null, SettingLevel.ACCOUNT, currentThemes);
-        this.setState({customThemeUrl: "", customThemeMessage: {text: _t("Theme added!"), isError: false}});
+        this.setState({ customThemeUrl: "", customThemeMessage: { text: _t("Theme added!"), isError: false } });
 
         this.themeTimer = setTimeout(() => {
-            this.setState({customThemeMessage: {text: "", isError: false}});
+            this.setState({ customThemeMessage: { text: "", isError: false } });
         }, 3000);
     };
 
     private onCustomThemeChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>): void => {
-        this.setState({customThemeUrl: e.target.value});
+        this.setState({ customThemeUrl: e.target.value });
+    };
+
+    private onLayoutChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        let layout;
+        switch (e.target.value) {
+            case "irc": layout = Layout.IRC; break;
+            case "group": layout = Layout.Group; break;
+            case "bubble": layout = Layout.Bubble; break;
+        }
+
+        this.setState({ layout: layout });
+
+        SettingsStore.setValue("layout", null, SettingLevel.DEVICE, layout);
     };
 
     private onIRCLayoutChange = (enabled: boolean) => {
         if (enabled) {
-            this.setState({layout: Layout.IRC});
+            this.setState({ layout: Layout.IRC });
             SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
         } else {
-            this.setState({layout: Layout.Group});
+            this.setState({ layout: Layout.Group });
             SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
         }
-    }
+    };
 
     private renderThemeSection() {
         const themeWatcher = new ThemeWatcher();
@@ -254,7 +275,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     checked={this.state.useSystemTheme}
                     onChange={(e) => this.onUseSystemThemeChanged(e.target.checked)}
                 >
-                    {SettingsStore.getDisplayName("use_system_theme")}
+                    { SettingsStore.getDisplayName("use_system_theme") }
                 </StyledCheckbox>
             </div>;
         }
@@ -264,9 +285,9 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             let messageElement = null;
             if (this.state.customThemeMessage.text) {
                 if (this.state.customThemeMessage.isError) {
-                    messageElement = <div className='text-error'>{this.state.customThemeMessage.text}</div>;
+                    messageElement = <div className='text-error'>{ this.state.customThemeMessage.text }</div>;
                 } else {
-                    messageElement = <div className='text-success'>{this.state.customThemeMessage.text}</div>;
+                    messageElement = <div className='text-success'>{ this.state.customThemeMessage.text }</div>;
                 }
             }
             customThemeForm = (
@@ -284,8 +305,8 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                             onClick={this.onAddCustomTheme}
                             type="submit" kind="primary_sm"
                             disabled={!this.state.customThemeUrl.trim()}
-                        >{_t("Add theme")}</AccessibleButton>
-                        {messageElement}
+                        >{ _t("Add theme") }</AccessibleButton>
+                        { messageElement }
                     </form>
                 </div>
             );
@@ -293,15 +314,15 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
         // XXX: replace any type here
         const themes = Object.entries<any>(enumerateThemes())
-            .map(p => ({id: p[0], name: p[1]})); // convert pairs to objects for code readability
+            .map(p => ({ id: p[0], name: p[1] })); // convert pairs to objects for code readability
         const builtInThemes = themes.filter(p => !p.id.startsWith("custom-"));
         const customThemes = themes.filter(p => !builtInThemes.includes(p))
             .sort((a, b) => compare(a.name, b.name));
         const orderedThemes = [...builtInThemes, ...customThemes];
         return (
             <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_themeSection">
-                <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
-                {systemThemeSection}
+                <span className="mx_SettingsTab_subheading">{ _t("Theme") }</span>
+                { systemThemeSection }
                 <div className="mx_ThemeSelectors">
                     <StyledRadioGroup
                         name="theme"
@@ -316,7 +337,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                         outlined
                     />
                 </div>
-                {customThemeForm}
+                { customThemeForm }
             </div>
         );
     }
@@ -324,7 +345,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     private renderFontSection() {
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
 
-            <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
+            <span className="mx_SettingsTab_subheading">{ _t("Font size") }</span>
             <EventTilePreview
                 className="mx_AppearanceUserSettingsTab_fontSlider_preview"
                 message={this.MESSAGE_PREVIEW_TEXT}
@@ -348,7 +369,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             <SettingsFlag
                 name="useCustomFontSize"
                 level={SettingLevel.ACCOUNT}
-                onChange={(checked) => this.setState({useCustomFontSize: checked})}
+                onChange={(checked) => this.setState({ useCustomFontSize: checked })}
                 useCheckbox={true}
             />
 
@@ -360,12 +381,83 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 value={this.state.fontSize.toString()}
                 id="font_size_field"
                 onValidate={this.onValidateFontSize}
-                onChange={(value) => this.setState({fontSize: value.target.value})}
+                onChange={(value) => this.setState({ fontSize: value.target.value })}
                 disabled={!this.state.useCustomFontSize}
                 className="mx_SettingsTab_customFontSizeField"
             />
         </div>;
     }
+
+    private renderLayoutSection = () => {
+        return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_Layout">
+            <span className="mx_SettingsTab_subheading">{ _t("Message layout") }</span>
+
+            <div className="mx_AppearanceUserSettingsTab_Layout_RadioButtons">
+                <div className={classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
+                    mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: this.state.layout == Layout.IRC,
+                })}>
+                    <EventTilePreview
+                        className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
+                        message={this.MESSAGE_PREVIEW_TEXT}
+                        layout={Layout.IRC}
+                        userId={this.state.userId}
+                        displayName={this.state.displayName}
+                        avatarUrl={this.state.avatarUrl}
+                    />
+                    <StyledRadioButton
+                        name="layout"
+                        value="irc"
+                        checked={this.state.layout === Layout.IRC}
+                        onChange={this.onLayoutChange}
+                    >
+                        { _t("IRC") }
+                    </StyledRadioButton>
+                </div>
+                <div className="mx_AppearanceUserSettingsTab_spacer" />
+                <div className={classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
+                    mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: this.state.layout == Layout.Group,
+                })}>
+                    <EventTilePreview
+                        className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
+                        message={this.MESSAGE_PREVIEW_TEXT}
+                        layout={Layout.Group}
+                        userId={this.state.userId}
+                        displayName={this.state.displayName}
+                        avatarUrl={this.state.avatarUrl}
+                    />
+                    <StyledRadioButton
+                        name="layout"
+                        value="group"
+                        checked={this.state.layout == Layout.Group}
+                        onChange={this.onLayoutChange}
+                    >
+                        { _t("Modern") }
+                    </StyledRadioButton>
+                </div>
+                <div className="mx_AppearanceUserSettingsTab_spacer" />
+                <div className={classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
+                    mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: this.state.layout === Layout.Bubble,
+                })}>
+                    <EventTilePreview
+                        className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
+                        message={this.MESSAGE_PREVIEW_TEXT}
+                        layout={Layout.Bubble}
+                        userId={this.state.userId}
+                        displayName={this.state.displayName}
+                        avatarUrl={this.state.avatarUrl}
+                    />
+                    <StyledRadioButton
+                        name="layout"
+                        value="bubble"
+                        checked={this.state.layout == Layout.Bubble}
+                        onChange={this.onLayoutChange}
+                    >
+                        { _t("Message bubbles") }
+                    </StyledRadioButton>
+                </div>
+            </div>
+        </div>;
+    };
 
     private renderAdvancedSection() {
         if (!SettingsStore.getValue(UIFeature.AdvancedSettings)) return null;
@@ -373,9 +465,9 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         const brand = SdkConfig.get().brand;
         const toggle = <div
             className="mx_AppearanceUserSettingsTab_AdvancedToggle"
-            onClick={() => this.setState({showAdvanced: !this.state.showAdvanced})}
+            onClick={() => this.setState({ showAdvanced: !this.state.showAdvanced })}
         >
-            {this.state.showAdvanced ? _t("Hide advanced") : _t("Show advanced")}
+            { this.state.showAdvanced ? _t("Hide advanced") : _t("Show advanced") }
         </div>;
 
         let advanced: React.ReactNode;
@@ -390,20 +482,23 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     name="useCompactLayout"
                     level={SettingLevel.DEVICE}
                     useCheckbox={true}
-                    disabled={this.state.layout == Layout.IRC}
+                    disabled={this.state.layout !== Layout.Group}
                 />
-                <StyledCheckbox
-                    checked={this.state.layout == Layout.IRC}
-                    onChange={(ev) => this.onIRCLayoutChange(ev.target.checked)}
-                >
-                    {_t("Enable experimental, compact IRC style layout")}
-                </StyledCheckbox>
+
+                { !SettingsStore.getValue("feature_new_layout_switcher") ?
+                    <StyledCheckbox
+                        checked={this.state.layout == Layout.IRC}
+                        onChange={(ev) => this.onIRCLayoutChange(ev.target.checked)}
+                    >
+                        { _t("Enable experimental, compact IRC style layout") }
+                    </StyledCheckbox> : null
+                }
 
                 <SettingsFlag
                     name="useSystemFont"
                     level={SettingLevel.DEVICE}
                     useCheckbox={true}
-                    onChange={(checked) => this.setState({useSystemFont: checked})}
+                    onChange={(checked) => this.setState({ useSystemFont: checked })}
                 />
                 <Field
                     className="mx_AppearanceUserSettingsTab_systemFont"
@@ -423,8 +518,8 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             </>;
         }
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_Advanced">
-            {toggle}
-            {advanced}
+            { toggle }
+            { advanced }
         </div>;
     }
 
@@ -433,13 +528,14 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
         return (
             <div className="mx_SettingsTab mx_AppearanceUserSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Customise your appearance")}</div>
+                <div className="mx_SettingsTab_heading">{ _t("Customise your appearance") }</div>
                 <div className="mx_SettingsTab_SubHeading">
-                    {_t("Appearance Settings only affect this %(brand)s session.", { brand })}
+                    { _t("Appearance Settings only affect this %(brand)s session.", { brand }) }
                 </div>
-                {this.renderThemeSection()}
-                {this.renderFontSection()}
-                {this.renderAdvancedSection()}
+                { this.renderThemeSection() }
+                { SettingsStore.getValue("feature_new_layout_switcher") ? this.renderLayoutSection() : null }
+                { this.renderFontSection() }
+                { this.renderAdvancedSection() }
             </div>
         );
     }

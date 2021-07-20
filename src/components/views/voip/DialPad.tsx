@@ -16,37 +16,37 @@ limitations under the License.
 
 import * as React from "react";
 import AccessibleButton from "../elements/AccessibleButton";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const BUTTONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'];
+const BUTTON_LETTERS = ['', 'ABC', 'DEF', 'GHI', 'JKL', 'MNO', 'PQRS', 'TUV', 'WXYZ', '', '+', ''];
 
 enum DialPadButtonKind {
     Digit,
-    Delete,
     Dial,
 }
 
 interface IButtonProps {
     kind: DialPadButtonKind;
     digit?: string;
+    digitSubtext?: string;
     onButtonPress: (string) => void;
 }
 
 class DialPadButton extends React.PureComponent<IButtonProps> {
     onClick = () => {
         this.props.onButtonPress(this.props.digit);
-    }
+    };
 
     render() {
         switch (this.props.kind) {
             case DialPadButtonKind.Digit:
                 return <AccessibleButton className="mx_DialPad_button" onClick={this.onClick}>
-                    {this.props.digit}
+                    { this.props.digit }
+                    <div className="mx_DialPad_buttonSubText">
+                        { this.props.digitSubtext }
+                    </div>
                 </AccessibleButton>;
-            case DialPadButtonKind.Delete:
-                return <AccessibleButton className="mx_DialPad_button mx_DialPad_deleteButton"
-                    onClick={this.onClick}
-                />;
             case DialPadButtonKind.Dial:
                 return <AccessibleButton className="mx_DialPad_button mx_DialPad_dialButton" onClick={this.onClick} />;
         }
@@ -55,7 +55,7 @@ class DialPadButton extends React.PureComponent<IButtonProps> {
 
 interface IProps {
     onDigitPress: (string) => void;
-    hasDialAndDelete: boolean;
+    hasDial: boolean;
     onDeletePress?: (string) => void;
     onDialPress?: (string) => void;
 }
@@ -65,23 +65,22 @@ export default class Dialpad extends React.PureComponent<IProps> {
     render() {
         const buttonNodes = [];
 
-        for (const button of BUTTONS) {
+        for (let i = 0; i < BUTTONS.length; i++) {
+            const button = BUTTONS[i];
+            const digitSubtext = BUTTON_LETTERS[i];
             buttonNodes.push(<DialPadButton key={button} kind={DialPadButtonKind.Digit}
-                digit={button} onButtonPress={this.props.onDigitPress}
+                digit={button} digitSubtext={digitSubtext} onButtonPress={this.props.onDigitPress}
             />);
         }
 
-        if (this.props.hasDialAndDelete) {
-            buttonNodes.push(<DialPadButton key="del" kind={DialPadButtonKind.Delete}
-                onButtonPress={this.props.onDeletePress}
-            />);
+        if (this.props.hasDial) {
             buttonNodes.push(<DialPadButton key="dial" kind={DialPadButtonKind.Dial}
                 onButtonPress={this.props.onDialPress}
             />);
         }
 
         return <div className="mx_DialPad">
-            {buttonNodes}
+            { buttonNodes }
         </div>;
     }
 }

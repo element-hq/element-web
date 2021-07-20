@@ -14,19 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useContext} from "react";
-import {MatrixClient} from "matrix-js-sdk/src/client";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import React, { useContext } from "react";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {formatFullDate} from "../../../DateUtils";
+import { formatFullDate } from "../../../DateUtils";
 import SettingsStore from "../../../settings/SettingsStore";
 
 interface IProps {
     mxEvent: MatrixEvent;
 }
 
-const RedactedBody = React.forwardRef<any, IProps>(({mxEvent}, ref) => {
+const RedactedBody = React.forwardRef<any, IProps>(({ mxEvent }, ref) => {
     const cli: MatrixClient = useContext(MatrixClientContext);
 
     let text = _t("Message deleted");

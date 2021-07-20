@@ -18,27 +18,27 @@ limitations under the License.
 import React, { createRef, CSSProperties } from 'react';
 import dis from '../../../dispatcher/dispatcher';
 import CallHandler from '../../../CallHandler';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t, _td } from '../../../languageHandler';
 import VideoFeed from './VideoFeed';
 import RoomAvatar from "../avatars/RoomAvatar";
 import { CallState, CallType, MatrixCall, CallEvent } from 'matrix-js-sdk/src/webrtc/call';
 import classNames from 'classnames';
 import AccessibleButton from '../elements/AccessibleButton';
-import {isOnlyCtrlOrCmdKeyEvent, Key} from '../../../Keyboard';
-import {alwaysAboveLeftOf, alwaysAboveRightOf, ChevronFace, ContextMenuButton} from '../../structures/ContextMenu';
+import { isOnlyCtrlOrCmdKeyEvent, Key } from '../../../Keyboard';
+import { alwaysAboveLeftOf, alwaysAboveRightOf, ChevronFace, ContextMenuButton } from '../../structures/ContextMenu';
 import CallContextMenu from '../context_menus/CallContextMenu';
 import { avatarUrlForMember } from '../../../Avatar';
 import DialpadContextMenu from '../context_menus/DialpadContextMenu';
 import { CallFeed } from 'matrix-js-sdk/src/webrtc/callFeed';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
         // The call for us to display
-        call: MatrixCall,
+        call: MatrixCall;
 
         // Another ongoing call to display information about
-        secondaryCall?: MatrixCall,
+        secondaryCall?: MatrixCall;
 
         // a callback which is called when the content in the CallView changes
         // in a way that is likely to cause a resize.
@@ -49,18 +49,21 @@ interface IProps {
         // This is sort of a proxy for a number of things but we currently have no
         // need to control those things separately, so this is simpler.
         pipMode?: boolean;
+
+        // Used for dragging the PiP CallView
+        onMouseDownOnHeader?: (event: React.MouseEvent) => void;
 }
 
 interface IState {
-    isLocalOnHold: boolean,
-    isRemoteOnHold: boolean,
-    micMuted: boolean,
-    vidMuted: boolean,
-    callState: CallState,
-    controlsVisible: boolean,
-    showMoreMenu: boolean,
-    showDialpad: boolean,
-    feeds: CallFeed[],
+    isLocalOnHold: boolean;
+    isRemoteOnHold: boolean;
+    micMuted: boolean;
+    vidMuted: boolean;
+    callState: CallState;
+    controlsVisible: boolean;
+    showMoreMenu: boolean;
+    showDialpad: boolean;
+    feeds: CallFeed[];
 }
 
 function getFullScreenElement() {
@@ -117,7 +120,7 @@ export default class CallView extends React.Component<IProps, IState> {
             showMoreMenu: false,
             showDialpad: false,
             feeds: this.props.call.getFeeds(),
-        }
+        };
 
         this.updateCallListeners(null, this.props.call);
     }
@@ -191,7 +194,7 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onFeedsChanged = (newFeeds: Array<CallFeed>) => {
-        this.setState({feeds: newFeeds});
+        this.setState({ feeds: newFeeds });
     };
 
     private onCallLocalHoldUnhold = () => {
@@ -228,11 +231,11 @@ export default class CallView extends React.Component<IProps, IState> {
         this.setState({
             controlsVisible: false,
         });
-    }
+    };
 
     private onMouseMove = () => {
         this.showControls();
-    }
+    };
 
     private showControls() {
         if (this.state.showMoreMenu || this.state.showDialpad) return;
@@ -269,21 +272,21 @@ export default class CallView extends React.Component<IProps, IState> {
                 showDialpad: false,
             });
         }
-    }
+    };
 
     private onMicMuteClick = () => {
         const newVal = !this.state.micMuted;
 
         this.props.call.setMicrophoneMuted(newVal);
-        this.setState({micMuted: newVal});
-    }
+        this.setState({ micMuted: newVal });
+    };
 
     private onVidMuteClick = () => {
         const newVal = !this.state.vidMuted;
 
         this.props.call.setLocalVideoMuted(newVal);
-        this.setState({vidMuted: newVal});
-    }
+        this.setState({ vidMuted: newVal });
+    };
 
     private onMoreClick = () => {
         if (this.controlsHideTimer) {
@@ -295,21 +298,21 @@ export default class CallView extends React.Component<IProps, IState> {
             showMoreMenu: true,
             controlsVisible: true,
         });
-    }
+    };
 
     private closeDialpad = () => {
         this.setState({
             showDialpad: false,
         });
         this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
-    }
+    };
 
     private closeContextMenu = () => {
         this.setState({
             showMoreMenu: false,
         });
         this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
-    }
+    };
 
     // we register global shortcuts here, they *must not conflict* with local shortcuts elsewhere or both will fire
     // Note that this assumes we always have a CallView on screen at any given time
@@ -350,7 +353,7 @@ export default class CallView extends React.Component<IProps, IState> {
             action: 'view_room',
             room_id: userFacingRoomId,
         });
-    }
+    };
 
     private onSecondaryRoomAvatarClick = () => {
         const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.secondaryCall);
@@ -359,17 +362,17 @@ export default class CallView extends React.Component<IProps, IState> {
             action: 'view_room',
             room_id: userFacingRoomId,
         });
-    }
+    };
 
     private onCallResumeClick = () => {
         const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
         CallHandler.sharedInstance().setActiveCallRoomId(userFacingRoomId);
-    }
+    };
 
     private onTransferClick = () => {
         const transfereeCall = CallHandler.sharedInstance().getTransfereeForCallId(this.props.call.callId);
         this.props.call.transferToCall(transfereeCall);
-    }
+    };
 
     public render() {
         const client = MatrixClientPeg.get();
@@ -462,7 +465,7 @@ export default class CallView extends React.Component<IProps, IState> {
         // in the near future, the dial pad button will go on the left. For now, it's the nothing button
         // because something needs to have margin-right: auto to make the alignment correct.
         const callControls = <div className={callControlsClasses}>
-            {dialpadButton}
+            { dialpadButton }
             <AccessibleButton
                 className={micClasses}
                 onClick={this.onMicMuteClick}
@@ -476,10 +479,10 @@ export default class CallView extends React.Component<IProps, IState> {
                     });
                 }}
             />
-            {vidMuteButton}
+            { vidMuteButton }
             <div className={micCacheClasses} />
             <div className={vidCacheClasses} />
-            {contextMenuButton}
+            { contextMenuButton }
         </div>;
 
         const avatarSize = this.props.pipMode ? 76 : 160;
@@ -503,16 +506,18 @@ export default class CallView extends React.Component<IProps, IState> {
             const transfereeName = transfereeRoom ? transfereeRoom.name : _t("unknown person");
 
             holdTransferContent = <div className="mx_CallView_holdTransferContent">
-                {_t(
+                { _t(
                     "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>",
                     {
                         transferTarget: transferTargetName,
                         transferee: transfereeName,
                     },
                     {
-                        a: sub => <AccessibleButton kind="link" onClick={this.onTransferClick}>{sub}</AccessibleButton>,
+                        a: sub => <AccessibleButton kind="link" onClick={this.onTransferClick}>
+                            { sub }
+                        </AccessibleButton>,
                     },
-                )}
+                ) }
             </div>;
         } else if (isOnHold) {
             let onHoldText = null;
@@ -521,7 +526,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     _td("You held the call <a>Switch</a>") : _td("You held the call <a>Resume</a>");
                 onHoldText = _t(holdString, {}, {
                     a: sub => <AccessibleButton kind="link" onClick={this.onCallResumeClick}>
-                        {sub}
+                        { sub }
                     </AccessibleButton>,
                 });
             } else if (this.state.isLocalOnHold) {
@@ -530,7 +535,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 });
             }
             holdTransferContent = <div className="mx_CallView_holdTransferContent">
-                {onHoldText}
+                { onHoldText }
             </div>;
         }
 
@@ -553,9 +558,9 @@ export default class CallView extends React.Component<IProps, IState> {
 
                 contentView = (
                     <div className={containerClasses} ref={this.contentRef} onMouseMove={this.onMouseMove}>
-                        {onHoldBackground}
-                        {holdTransferContent}
-                        {callControls}
+                        { onHoldBackground }
+                        { holdTransferContent }
+                        { callControls }
                     </div>
                 );
             } else {
@@ -570,7 +575,7 @@ export default class CallView extends React.Component<IProps, IState> {
                         <div className="mx_CallView_voice_avatarsContainer">
                             <div
                                 className="mx_CallView_voice_avatarContainer"
-                                style={{width: avatarSize, height: avatarSize}}
+                                style={{ width: avatarSize, height: avatarSize }}
                             >
                                 <RoomAvatar
                                     room={callRoom}
@@ -579,8 +584,8 @@ export default class CallView extends React.Component<IProps, IState> {
                                 />
                             </div>
                         </div>
-                        {holdTransferContent}
-                        {callControls}
+                        { holdTransferContent }
+                        { callControls }
                     </div>
                 );
             }
@@ -612,9 +617,9 @@ export default class CallView extends React.Component<IProps, IState> {
             // Saying "Connecting" here isn't really true, but the best thing
             // I can come up with, but this might be subject to change as well
             contentView = <div className={classes} onMouseMove={this.onMouseMove}>
-                {feeds}
+                { feeds }
                 <div className="mx_CallView_voice_avatarsContainer">
-                    <div className="mx_CallView_voice_avatarContainer" style={{width: avatarSize, height: avatarSize}}>
+                    <div className="mx_CallView_voice_avatarContainer" style={{ width: avatarSize, height: avatarSize }}>
                         <RoomAvatar
                             room={callRoom}
                             height={avatarSize}
@@ -622,8 +627,8 @@ export default class CallView extends React.Component<IProps, IState> {
                         />
                     </div>
                 </div>
-                <div className="mx_CallView_holdTransferContent">{_t("Connecting")}</div>
-                {callControls}
+                <div className="mx_CallView_holdTransferContent">{ _t("Connecting") }</div>
+                { callControls }
             </div>;
         } else {
             const containerClasses = classNames({
@@ -650,8 +655,8 @@ export default class CallView extends React.Component<IProps, IState> {
             });
 
             contentView = <div className={containerClasses} ref={this.contentRef} onMouseMove={this.onMouseMove}>
-                {feeds}
-                {callControls}
+                { feeds }
+                { callControls }
             </div>;
         }
 
@@ -673,16 +678,16 @@ export default class CallView extends React.Component<IProps, IState> {
         }
 
         const headerControls = <div className="mx_CallView_header_controls">
-            {fullScreenButton}
-            {expandButton}
+            { fullScreenButton }
+            { expandButton }
         </div>;
 
         let header: React.ReactNode;
         if (!this.props.pipMode) {
             header = <div className="mx_CallView_header">
                 <div className="mx_CallView_header_phoneIcon"></div>
-                <span className="mx_CallView_header_callType">{callTypeText}</span>
-                {headerControls}
+                <span className="mx_CallView_header_callType">{ callTypeText }</span>
+                { headerControls }
             </div>;
             myClassName = 'mx_CallView_large';
         } else {
@@ -692,33 +697,38 @@ export default class CallView extends React.Component<IProps, IState> {
                     <AccessibleButton element='span' onClick={this.onSecondaryRoomAvatarClick}>
                         <RoomAvatar room={secCallRoom} height={16} width={16} />
                         <span className="mx_CallView_secondaryCall_roomName">
-                            {_t("%(name)s on hold", { name: secCallRoom.name })}
+                            { _t("%(name)s on hold", { name: secCallRoom.name }) }
                         </span>
                     </AccessibleButton>
                 </span>;
             }
 
-            header = <div className="mx_CallView_header">
-                <AccessibleButton onClick={this.onRoomAvatarClick}>
-                    <RoomAvatar room={callRoom} height={32} width={32} />
-                </AccessibleButton>
-                <div className="mx_CallView_header_callInfo">
-                    <div className="mx_CallView_header_roomName">{callRoom.name}</div>
-                    <div className="mx_CallView_header_callTypeSmall">
-                        {callTypeText}
-                        {secondaryCallInfo}
+            header = (
+                <div
+                    className="mx_CallView_header"
+                    onMouseDown={this.props.onMouseDownOnHeader}
+                >
+                    <AccessibleButton onClick={this.onRoomAvatarClick}>
+                        <RoomAvatar room={callRoom} height={32} width={32} />
+                    </AccessibleButton>
+                    <div className="mx_CallView_header_callInfo">
+                        <div className="mx_CallView_header_roomName">{ callRoom.name }</div>
+                        <div className="mx_CallView_header_callTypeSmall">
+                            { callTypeText }
+                            { secondaryCallInfo }
+                        </div>
                     </div>
+                    { headerControls }
                 </div>
-                {headerControls}
-            </div>;
+            );
             myClassName = 'mx_CallView_pip';
         }
 
         return <div className={"mx_CallView " + myClassName}>
-            {header}
-            {contentView}
-            {dialPad}
-            {contextMenu}
+            { header }
+            { contentView }
+            { dialPad }
+            { contextMenu }
         </div>;
     }
 }

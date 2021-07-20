@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactChildren } from 'react';
+import React, { ComponentProps } from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
@@ -26,21 +26,11 @@ import { isValid3pidInvite } from "../../../RoomInvite";
 import EventListSummary from "./EventListSummary";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-interface IProps {
-    // An array of member events to summarise
-    events: MatrixEvent[];
+interface IProps extends Omit<ComponentProps<typeof EventListSummary>, "summaryText" | "summaryMembers"> {
     // The maximum number of names to show in either each summary e.g. 2 would result "A, B and 234 others left"
     summaryLength?: number;
     // The maximum number of avatars to display in the summary
     avatarsMaxLength?: number;
-    // The minimum number of events needed to trigger summarisation
-    threshold?: number,
-    // Whether or not to begin with state.expanded=true
-    startExpanded?: boolean,
-    // An array of EventTiles to render when expanded
-    children: ReactChildren;
-    // Called when the MELS expansion is toggled
-    onToggle?(): void,
 }
 
 interface IUserEvents {
@@ -66,6 +56,7 @@ enum TransitionType {
     ChangedName = "changed_name",
     ChangedAvatar = "changed_avatar",
     NoChange = "no_change",
+    ServerAcl = "server_acl",
 }
 
 const SEP = ",";
@@ -298,6 +289,12 @@ export default class MemberEventListSummary extends React.Component<IProps> {
                     ? _t("%(severalUsers)smade no changes %(count)s times", { severalUsers: "", count: repeats })
                     : _t("%(oneUser)smade no changes %(count)s times", { oneUser: "", count: repeats });
                 break;
+            case "server_acl":
+                res = (userCount > 1)
+                    ? _t("%(severalUsers)schanged the server ACLs %(count)s times",
+                        { severalUsers: "", count: repeats })
+                    : _t("%(oneUser)schanged the server ACLs %(count)s times", { oneUser: "", count: repeats });
+                break;
         }
 
         return res;
@@ -322,6 +319,10 @@ export default class MemberEventListSummary extends React.Component<IProps> {
                 return TransitionType.InviteWithdrawal;
             }
             return TransitionType.Invited;
+        }
+
+        if (e.mxEvent.getType() === 'm.room.server_acl') {
+            return TransitionType.ServerAcl;
         }
 
         switch (e.mxEvent.getContent().membership) {
@@ -410,19 +411,23 @@ export default class MemberEventListSummary extends React.Component<IProps> {
         // Object mapping user IDs to an array of IUserEvents
         const userEvents: Record<string, IUserEvents[]> = {};
         eventsToRender.forEach((e, index) => {
-            const userId = e.getStateKey();
+            const userId = e.getType() === 'm.room.server_acl' ? e.getSender() : e.getStateKey();
             // Initialise a user's events
             if (!userEvents[userId]) {
                 userEvents[userId] = [];
             }
 
-            if (e.target) {
+            if (e.getType() === 'm.room.server_acl') {
+                latestUserAvatarMember.set(userId, e.sender);
+            } else if (e.target) {
                 latestUserAvatarMember.set(userId, e.target);
             }
 
             let displayName = userId;
             if (e.getType() === 'm.room.third_party_invite') {
                 displayName = e.getContent().display_name;
+            } else if (e.getType() === 'm.room.server_acl') {
+                displayName = e.sender.name;
             } else if (e.target) {
                 displayName = e.target.name;
             }

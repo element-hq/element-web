@@ -15,14 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import { Key } from '../../Keyboard';
 import dis from '../../dispatcher/dispatcher';
-import {throttle} from 'lodash';
+import { throttle } from 'lodash';
 import AccessibleButton from '../../components/views/elements/AccessibleButton';
 import classNames from 'classnames';
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 
 @replaceableComponent("structures.SearchBox")
 export default class SearchBox extends React.Component {
@@ -89,7 +89,7 @@ export default class SearchBox extends React.Component {
 
     onSearch = throttle(() => {
         this.props.onSearch(this._search.current.value);
-    }, 200, {trailing: true, leading: true});
+    }, 200, { trailing: true, leading: true });
 
     _onKeyDown = ev => {
         switch (ev.key) {
@@ -101,7 +101,7 @@ export default class SearchBox extends React.Component {
     };
 
     _onFocus = ev => {
-        this.setState({blurred: false});
+        this.setState({ blurred: false });
         ev.target.select();
         if (this.props.onFocus) {
             this.props.onFocus(ev);
@@ -109,7 +109,7 @@ export default class SearchBox extends React.Component {
     };
 
     _onBlur = ev => {
-        this.setState({blurred: true});
+        this.setState({ blurred: true });
         if (this.props.onBlur) {
             this.props.onBlur(ev);
         }
@@ -136,7 +136,7 @@ export default class SearchBox extends React.Component {
                 key="button"
                 tabIndex={-1}
                 className="mx_SearchBox_closeButton"
-                onClick={ () => {this._clearSearch("button"); } }>
+                onClick={() => {this._clearSearch("button"); }}>
             </AccessibleButton>) : undefined;
 
         // show a shorter placeholder when blurred, if requested
@@ -147,18 +147,18 @@ export default class SearchBox extends React.Component {
             this.props.placeholder;
         const className = this.props.className || "";
         return (
-            <div className={classNames("mx_SearchBox", "mx_textinput", {"mx_SearchBox_blurred": this.state.blurred})}>
+            <div className={classNames("mx_SearchBox", "mx_textinput", { "mx_SearchBox_blurred": this.state.blurred })}>
                 <input
                     key="searchfield"
                     type="text"
                     ref={this._search}
                     className={"mx_textinput_icon mx_textinput_search " + className}
-                    value={ this.state.searchTerm }
-                    onFocus={ this._onFocus }
-                    onChange={ this.onChange }
-                    onKeyDown={ this._onKeyDown }
+                    value={this.state.searchTerm}
+                    onFocus={this._onFocus}
+                    onChange={this.onChange}
+                    onKeyDown={this._onKeyDown}
                     onBlur={this._onBlur}
-                    placeholder={ placeholder }
+                    placeholder={placeholder}
                     autoComplete="off"
                     autoFocus={this.props.autoFocus}
                 />

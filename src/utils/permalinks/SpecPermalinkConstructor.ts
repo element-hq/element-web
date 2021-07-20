@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import PermalinkConstructor, {PermalinkParts} from "./PermalinkConstructor";
+import PermalinkConstructor, { PermalinkParts } from "./PermalinkConstructor";
 
 export const host = "matrix.to";
 export const baseUrl = `https://${host}`;
