@@ -22,7 +22,6 @@ import Spinner from "../elements/Spinner";
 import classNames from "classnames";
 import { _t } from "../../../languageHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { DOWNLOAD_ICON_URL } from "./MFileBody";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -69,7 +68,7 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
 
         // we aren't showing the iframe, so we can send over the bare minimum styles and such.
         this.iframe.current.contentWindow.postMessage({
-            imgSrc: DOWNLOAD_ICON_URL,
+            imgSrc: "", // no image
             imgStyle: null,
             style: "",
             blob: this.state.blob,
