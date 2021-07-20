@@ -1864,13 +1864,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         dis.dispatch({ action: 'timeline_resize' });
     }
 
-    onRoomCreated(roomId: string) {
-        dis.dispatch({
-            action: "view_room",
-            room_id: roomId,
-        });
-    }
-
     onRegisterClick = () => {
         this.showScreen("register");
     };
@@ -2043,7 +2036,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         {...this.state}
                         ref={this.loggedInView}
                         matrixClient={MatrixClientPeg.get()}
-                        onRoomCreated={this.onRoomCreated}
                         onRegistered={this.onRegistered}
                         currentRoomId={this.state.currentRoomId}
                     />
