@@ -1157,10 +1157,10 @@ export default class EventTile extends React.Component<IProps, IState> {
                             />
                             { keyRequestInfo }
                             { actionBar }
-                        </div>,
-                        { reactionsRow },
-                        { msgOption },
-                        { avatar },
+                        </div>
+                        { reactionsRow }
+                        { msgOption }
+                        { avatar }
                     </>)
                 );
             }
