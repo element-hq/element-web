@@ -524,9 +524,11 @@ export default class CallView extends React.Component<IProps, IState> {
         // we can hide the button too
         let sidebarButton;
         if (
-            (this.props.call.type === CallType.Video ||
-            this.state.primaryFeed?.purpose === SDPStreamMetadataPurpose.Screenshare) &&
-            !this.props.pipMode
+            !this.props.pipMode &&
+            (
+                this.state.primaryFeed?.purpose === SDPStreamMetadataPurpose.Screenshare ||
+                this.props.call.isScreensharing()
+            )
         ) {
             sidebarButton = (
                 <AccessibleButton
