@@ -92,7 +92,7 @@ interface IState {
 export default class AddressPickerDialog extends React.Component<IProps, IState> {
     private textinput = createRef<HTMLTextAreaElement>();
     private addressSelector = createRef<AddressSelector>();
-    private queryChangedDebouncer: NodeJS.Timeout;
+    private queryChangedDebouncer: number;
     private cancelThreepidLookup: () => void;
 
     static defaultProps: Partial<IProps> = {
