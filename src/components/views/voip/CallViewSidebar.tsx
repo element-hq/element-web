@@ -18,17 +18,22 @@ import React from "react";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
 import VideoFeed from "./VideoFeed";
+import { SDPStreamMetadataPurpose } from "matrix-js-sdk/src/webrtc/callEventTypes";
 
 interface IProps {
     feeds: Array<CallFeed>;
     call: MatrixCall;
-    hideFeedsWithMutedVideo: boolean;
 }
 
 export default class CallViewSidebar extends React.Component<IProps> {
     render() {
         const feeds = this.props.feeds.map((feed) => {
-            if (feed.isVideoMuted() && this.props.hideFeedsWithMutedVideo) return;
+            // Hide local video feed if video is off
+            if (
+                this.props.call.isLocalVideoMuted()
+                && feed.isLocal()
+                && feed.purpose === SDPStreamMetadataPurpose.Usermedia
+            ) return;
 
             return (
                 <VideoFeed

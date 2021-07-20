@@ -644,7 +644,6 @@ export default class CallView extends React.Component<IProps, IState> {
                 <CallViewSidebar
                     feeds={this.state.secondaryFeeds}
                     call={this.props.call}
-                    hideFeedsWithMutedVideo={!this.state.primaryFeed || this.state.primaryFeed?.isVideoMuted()}
                 />
             );
         }
