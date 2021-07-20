@@ -407,10 +407,10 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     <StyledRadioButton
                         name="layout"
                         value="irc"
-                        checked={this.state.layout == Layout.IRC}
+                        checked={this.state.layout === Layout.IRC}
                         onChange={this.onLayoutChange}
                     >
-                        { "IRC" }
+                        { _t("IRC") }
                     </StyledRadioButton>
                 </div>
                 <div className="mx_AppearanceUserSettingsTab_spacer" />
@@ -431,12 +431,12 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                         checked={this.state.layout == Layout.Group}
                         onChange={this.onLayoutChange}
                     >
-                        {_t("Modern")}
+                        { _t("Modern") }
                     </StyledRadioButton>
                 </div>
                 <div className="mx_AppearanceUserSettingsTab_spacer" />
                 <div className={classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
-                    mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: this.state.layout == Layout.Bubble,
+                    mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: this.state.layout === Layout.Bubble,
                 })}>
                     <EventTilePreview
                         className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
@@ -452,7 +452,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                         checked={this.state.layout == Layout.Bubble}
                         onChange={this.onLayoutChange}
                     >
-                        {_t("Message bubbles")}
+                        { _t("Message bubbles") }
                     </StyledRadioButton>
                 </div>
             </div>
