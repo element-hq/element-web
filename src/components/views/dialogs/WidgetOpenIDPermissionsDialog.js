@@ -78,11 +78,11 @@ export default class WidgetOpenIDPermissionsDialog extends React.Component {
             >
                 <div className='mx_WidgetOpenIDPermissionsDialog_content'>
                     <p>
-                        {_t("The widget will verify your user ID, but won't be able to perform actions for you:")}
+                        { _t("The widget will verify your user ID, but won't be able to perform actions for you:") }
                     </p>
                     <p className="text-muted">
-                        {/* cheap trim to just get the path */}
-                        {this.props.widget.templateUrl.split("?")[0].split("#")[0]}
+                        { /* cheap trim to just get the path */ }
+                        { this.props.widget.templateUrl.split("?")[0].split("#")[0] }
                     </p>
                 </div>
                 <DialogButtons

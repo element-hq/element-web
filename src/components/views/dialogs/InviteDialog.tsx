@@ -224,8 +224,8 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
         return (
             <span className='mx_InviteDialog_userTile'>
                 <span className='mx_InviteDialog_userTile_pill'>
-                    {avatar}
-                    <span className='mx_InviteDialog_userTile_name'>{this.props.member.name}</span>
+                    { avatar }
+                    <span className='mx_InviteDialog_userTile_name'>{ this.props.member.name }</span>
                 </span>
                 { closeButton }
             </span>
@@ -267,20 +267,20 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             // Push any text we missed (first bit/middle of text)
             if (ii > i) {
                 // Push any text we aren't highlighting (middle of text match, or beginning of text)
-                result.push(<span key={i + 'begin'}>{str.substring(i, ii)}</span>);
+                result.push(<span key={i + 'begin'}>{ str.substring(i, ii) }</span>);
             }
 
             i = ii; // copy over ii only if we have a match (to preserve i for end-of-text matching)
 
             // Highlight the word the user entered
             const substr = str.substring(i, filterStr.length + i);
-            result.push(<span className='mx_InviteDialog_roomTile_highlight' key={i + 'bold'}>{substr}</span>);
+            result.push(<span className='mx_InviteDialog_roomTile_highlight' key={i + 'bold'}>{ substr }</span>);
             i += substr.length;
         }
 
         // Push any text we missed (end of text)
         if (i < str.length) {
-            result.push(<span key={i + 'end'}>{str.substring(i)}</span>);
+            result.push(<span key={i + 'end'}>{ str.substring(i) }</span>);
         }
 
         return result;
@@ -290,7 +290,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         let timestamp = null;
         if (this.props.lastActiveTs) {
             const humanTs = humanizeTime(this.props.lastActiveTs);
-            timestamp = <span className='mx_InviteDialog_roomTile_time'>{humanTs}</span>;
+            timestamp = <span className='mx_InviteDialog_roomTile_time'>{ humanTs }</span>;
         }
 
         const avatarSize = 36;
@@ -317,8 +317,8 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         // the browser from reloading the image source when the avatar remounts).
         const stackedAvatar = (
             <span className='mx_InviteDialog_roomTile_avatarStack'>
-                {avatar}
-                {checkmark}
+                { avatar }
+                { checkmark }
             </span>
         );
 
@@ -328,12 +328,12 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
 
         return (
             <div className='mx_InviteDialog_roomTile' onClick={this.onClick}>
-                {stackedAvatar}
+                { stackedAvatar }
                 <span className="mx_InviteDialog_roomTile_nameStack">
-                    <div className='mx_InviteDialog_roomTile_name'>{this.highlightName(this.props.member.name)}</div>
-                    <div className='mx_InviteDialog_roomTile_userId'>{caption}</div>
+                    <div className='mx_InviteDialog_roomTile_name'>{ this.highlightName(this.props.member.name) }</div>
+                    <div className='mx_InviteDialog_roomTile_userId'>{ caption }</div>
                 </span>
-                {timestamp}
+                { timestamp }
             </div>
         );
     }
@@ -1152,8 +1152,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             if (sourceMembers.length === 0 && !hasAdditionalMembers) {
                 return (
                     <div className='mx_InviteDialog_section'>
-                        <h3>{sectionName}</h3>
-                        <p>{_t("No results")}</p>
+                        <h3>{ sectionName }</h3>
+                        <p>{ _t("No results") }</p>
                     </div>
                 );
             }
@@ -1175,7 +1175,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         if (hasMore) {
             showMore = (
                 <AccessibleButton onClick={showMoreFn} kind="link">
-                    {_t("Show more")}
+                    { _t("Show more") }
                 </AccessibleButton>
             );
         }
@@ -1192,10 +1192,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         ));
         return (
             <div className='mx_InviteDialog_section'>
-                <h3>{sectionName}</h3>
-                {sectionSubname ? <p className="mx_InviteDialog_subname">{sectionSubname}</p> : null}
-                {tiles}
-                {showMore}
+                <h3>{ sectionName }</h3>
+                { sectionSubname ? <p className="mx_InviteDialog_subname">{ sectionSubname }</p> : null }
+                { tiles }
+                { showMore }
             </div>
         );
     }
@@ -1225,8 +1225,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         );
         return (
             <div className='mx_InviteDialog_editor' onClick={this.onClickInputArea}>
-                {targets}
-                {input}
+                { targets }
+                { input }
             </div>
         );
     }
@@ -1241,7 +1241,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
         if (defaultIdentityServerUrl) {
             return (
-                <div className="mx_AddressPickerDialog_identityServer">{_t(
+                <div className="mx_AddressPickerDialog_identityServer">{ _t(
                     "Use an identity server to invite by email. " +
                     "<default>Use the default (%(defaultIdentityServerName)s)</default> " +
                     "or manage in <settings>Settings</settings>.",
@@ -1249,20 +1249,20 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         defaultIdentityServerName: abbreviateUrl(defaultIdentityServerUrl),
                     },
                     {
-                        default: sub => <a href="#" onClick={this.onUseDefaultIdentityServerClick}>{sub}</a>,
-                        settings: sub => <a href="#" onClick={this.onManageSettingsClick}>{sub}</a>,
+                        default: sub => <a href="#" onClick={this.onUseDefaultIdentityServerClick}>{ sub }</a>,
+                        settings: sub => <a href="#" onClick={this.onManageSettingsClick}>{ sub }</a>,
                     },
-                )}</div>
+                ) }</div>
             );
         } else {
             return (
-                <div className="mx_AddressPickerDialog_identityServer">{_t(
+                <div className="mx_AddressPickerDialog_identityServer">{ _t(
                     "Use an identity server to invite by email. " +
                     "Manage in <settings>Settings</settings>.",
                     {}, {
-                        settings: sub => <a href="#" onClick={this.onManageSettingsClick}>{sub}</a>,
+                        settings: sub => <a href="#" onClick={this.onManageSettingsClick}>{ sub }</a>,
                     },
-                )}</div>
+                ) }</div>
             );
         }
     }
@@ -1339,7 +1339,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     {},
                     { userId: () => {
                         return (
-                            <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>
+                            <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{ userId }</a>
                         );
                     } },
                 );
@@ -1349,7 +1349,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     {},
                     { userId: () => {
                         return (
-                            <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>
+                            <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{ userId }</a>
                         );
                     } },
                 );
@@ -1367,7 +1367,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                                     href={makeUserPermalink(userId)}
                                     rel="noreferrer noopener"
                                     target="_blank"
-                                >{userId}</a>
+                                >{ userId }</a>
                             );
                         },
                         a: (sub) => {
@@ -1375,13 +1375,13 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                                 <AccessibleButton
                                     kind="link"
                                     onClick={this.onCommunityInviteClick}
-                                >{sub}</AccessibleButton>
+                                >{ sub }</AccessibleButton>
                             );
                         },
                     },
                 );
                 helpText = <React.Fragment>
-                    { helpText } {inviteText}
+                    { helpText } { inviteText }
                 </React.Fragment>;
             }
             buttonText = _t("Go");
@@ -1438,9 +1438,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
             helpText = _t(helpTextUntranslated, {}, {
                 userId: () =>
-                    <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>,
+                    <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{ userId }</a>,
                 a: (sub) =>
-                    <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">{sub}</a>,
+                    <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">{ sub }</a>,
             });
 
             buttonText = _t("Invite");
@@ -1459,7 +1459,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                             <img
                                 src={require("../../../../res/img/element-icons/info.svg")}
                                 width={14} height={14} />
-                            {" " + _t("Invited people will be able to read old messages.")}
+                            { " " + _t("Invited people will be able to read old messages.") }
                         </p>;
                 }
             }
@@ -1469,14 +1469,14 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             consultConnectSection = <div className="mx_InviteDialog_transferConsultConnect">
                 <label>
                     <input type="checkbox" checked={this.state.consultFirst} onChange={this.onConsultFirstChange} />
-                    {_t("Consult first")}
+                    { _t("Consult first") }
                 </label>
                 <AccessibleButton
                     kind="secondary"
                     onClick={this.onCancel}
                     className='mx_InviteDialog_transferConsultConnect_pushRight'
                 >
-                    {_t("Cancel")}
+                    { _t("Cancel") }
                 </AccessibleButton>
                 <AccessibleButton
                     kind="primary"
@@ -1484,7 +1484,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     className='mx_InviteDialog_transferButton'
                     disabled={!hasSelection && this.state.dialPadValue === ''}
                 >
-                    {_t("Transfer")}
+                    { _t("Transfer") }
                 </AccessibleButton>
             </div>;
         } else {
@@ -1497,27 +1497,27 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             className='mx_InviteDialog_goButton'
             disabled={this.state.busy || !hasSelection}
         >
-            {buttonText}
+            { buttonText }
         </AccessibleButton>;
 
         const usersSection = <React.Fragment>
-            <p className='mx_InviteDialog_helpText'>{helpText}</p>
+            <p className='mx_InviteDialog_helpText'>{ helpText }</p>
             <div className='mx_InviteDialog_addressBar'>
-                {this.renderEditor()}
+                { this.renderEditor() }
                 <div className='mx_InviteDialog_buttonAndSpinner'>
-                    {goButton}
-                    {spinner}
+                    { goButton }
+                    { spinner }
                 </div>
             </div>
-            {keySharingWarning}
-            {this.renderIdentityServerWarning()}
-            <div className='error'>{this.state.errorText}</div>
+            { keySharingWarning }
+            { this.renderIdentityServerWarning() }
+            <div className='error'>{ this.state.errorText }</div>
             <div className='mx_InviteDialog_userSections'>
-                {this.renderSection('recents')}
-                {this.renderSection('suggestions')}
-                {extraSection}
+                { this.renderSection('recents') }
+                { this.renderSection('suggestions') }
+                { extraSection }
             </div>
-            {footer}
+            { footer }
         </React.Fragment>;
 
         let dialogContent;
@@ -1550,7 +1550,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
             const dialPadSection = <div className="mx_InviteDialog_dialPad">
                 <form onSubmit={this.onDialFormSubmit}>
-                    {dialPadField}
+                    { dialPadField }
                 </form>
                 <Dialpad hasDial={false}
                     onDigitPress={this.onDigitPress} onDeletePress={this.onDeletePress}
@@ -1561,12 +1561,12 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 <TabbedView tabs={tabs} initialTabId={this.state.currentTabId}
                     tabLocation={TabLocation.TOP} onChange={this.onTabChange}
                 />
-                {consultConnectSection}
+                { consultConnectSection }
             </React.Fragment>;
         } else {
             dialogContent = <React.Fragment>
-                {usersSection}
-                {consultConnectSection}
+                { usersSection }
+                { consultConnectSection }
             </React.Fragment>;
         }
 
@@ -1582,7 +1582,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 title={title}
             >
                 <div className='mx_InviteDialog_content'>
-                    {dialogContent}
+                    { dialogContent }
                 </div>
             </BaseDialog>
         );

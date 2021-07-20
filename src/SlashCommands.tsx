@@ -480,14 +480,14 @@ export const Commands = [
                                 'Identity server',
                                 QuestionDialog, {
                                     title: _t("Use an identity server"),
-                                    description: <p>{_t(
+                                    description: <p>{ _t(
                                         "Use an identity server to invite by email. " +
                                         "Click continue to use the default identity server " +
                                         "(%(defaultIdentityServerName)s) or manage in Settings.",
                                         {
                                             defaultIdentityServerName: abbreviateUrl(defaultIdentityServerUrl),
                                         },
-                                    )}</p>,
+                                    ) }</p>,
                                     button: _t("Continue"),
                                 },
                             );
@@ -522,7 +522,7 @@ export const Commands = [
         aliases: ['j', 'goto'],
         args: '<room-address>',
         description: _td('Joins room with given address'),
-        runFn: function(_, args) {
+        runFn: function(roomId, args) {
             if (args) {
                 // Note: we support 2 versions of this command. The first is
                 // the public-facing one for most users and the other is a
@@ -1069,7 +1069,7 @@ export const Commands = [
         command: "msg",
         description: _td("Sends a message to the given user"),
         args: "<user-id> <message>",
-        runFn: function(_, args) {
+        runFn: function(roomId, args) {
             if (args) {
                 // matches the first whitespace delimited group and then the rest of the string
                 const matches = args.match(/^(\S+?)(?: +(.*))?$/s);

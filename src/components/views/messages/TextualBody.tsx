@@ -475,10 +475,10 @@ export default class TextualBody extends React.Component<IProps, IState> {
 
         const tooltip = <div>
             <div className="mx_Tooltip_title">
-                {_t("Edited at %(date)s", { date: dateString })}
+                { _t("Edited at %(date)s", { date: dateString }) }
             </div>
             <div className="mx_Tooltip_sub">
-                {_t("Click to view edits")}
+                { _t("Click to view edits") }
             </div>
         </div>;
 
@@ -489,7 +489,7 @@ export default class TextualBody extends React.Component<IProps, IState> {
                 title={_t("Edited at %(date)s. Click to view edits.", { date: dateString })}
                 tooltip={tooltip}
             >
-                <span>{`(${_t("edited")})`}</span>
+                <span>{ `(${_t("edited")})` }</span>
             </AccessibleTooltipButton>
         );
     }
@@ -513,8 +513,8 @@ export default class TextualBody extends React.Component<IProps, IState> {
         });
         if (this.props.replacingEventId) {
             body = <>
-                {body}
-                {this.renderEditedMarker()}
+                { body }
+                { this.renderEditedMarker() }
             </>;
         }
 

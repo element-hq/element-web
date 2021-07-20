@@ -170,8 +170,6 @@ export function getHandlerTile(ev) {
     return eventTileTypes[type];
 }
 
-const MAX_READ_AVATARS = 5;
-
 // Our component structure for EventTiles on the timeline is:
 //
 // .-EventTile------------------------------------------------.
@@ -297,6 +295,9 @@ interface IProps {
 
     // whether or not to always show timestamps
     alwaysShowTimestamps?: boolean;
+
+    // whether or not to display the sender
+    hideSender?: boolean;
 }
 
 interface IState {
@@ -430,7 +431,7 @@ export default class EventTile extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Move into constructor
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillMount() {
         this.verifyEvent(this.props.mxEvent);
     }
@@ -452,7 +453,7 @@ export default class EventTile extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillReceiveProps(nextProps) {
         // re-check the sender verification as outgoing events progress through
         // the send process.
@@ -655,6 +656,10 @@ export default class EventTile extends React.Component<IProps, IState> {
         if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
             return <SentReceipt messageState={this.props.mxEvent.getAssociatedStatus()} />;
         }
+
+        const MAX_READ_AVATARS = this.props.layout == Layout.Bubble
+            ? 2
+            : 5;
 
         // return early if there are no read receipts
         if (!this.props.readReceipts || this.props.readReceipts.length === 0) {
@@ -951,7 +956,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             );
         }
 
-        if (needsSenderProfile) {
+        if (needsSenderProfile && this.props.hideSender !== true) {
             if (!this.props.tileShape) {
                 sender = <SenderProfile onClick={this.onSenderProfileClick}
                     mxEvent={this.props.mxEvent}
@@ -971,8 +976,12 @@ export default class EventTile extends React.Component<IProps, IState> {
             onFocusChange={this.onActionBarFocusChange}
         /> : undefined;
 
-        const showTimestamp = this.props.mxEvent.getTs() &&
-            (this.props.alwaysShowTimestamps || this.props.last || this.state.hover || this.state.actionBarFocused);
+        const showTimestamp = this.props.mxEvent.getTs()
+            && (this.props.alwaysShowTimestamps
+            || this.props.last
+            || this.state.hover
+            || this.state.actionBarFocused);
+
         const timestamp = showTimestamp ?
             <MessageTimestamp showTwelveHour={this.props.isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
 
@@ -1112,6 +1121,8 @@ export default class EventTile extends React.Component<IProps, IState> {
                     this.props.alwaysShowTimestamps || this.state.hover,
                 );
 
+                const isOwnEvent = this.props.mxEvent?.sender?.userId === MatrixClientPeg.get().getUserId();
+
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return (
                     React.createElement(this.props.as || "li", {
@@ -1121,6 +1132,9 @@ export default class EventTile extends React.Component<IProps, IState> {
                         "aria-live": ariaLive,
                         "aria-atomic": "true",
                         "data-scroll-tokens": scrollToken,
+                        "data-layout": this.props.layout,
+                        "data-self": isOwnEvent,
+                        "data-has-reply": !!thread,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
                     }, <>
@@ -1142,9 +1156,9 @@ export default class EventTile extends React.Component<IProps, IState> {
                                 onHeightChanged={this.props.onHeightChanged}
                             />
                             { keyRequestInfo }
-                            { reactionsRow }
                             { actionBar }
                         </div>
+                        { reactionsRow }
                         { msgOption }
                         { avatar }
                     </>)
@@ -1250,7 +1264,7 @@ class E2ePadlock extends React.Component<IE2ePadlockProps, IE2ePadlockState> {
                 className={classes}
                 onMouseEnter={this.onHoverStart}
                 onMouseLeave={this.onHoverEnd}
-            >{tooltip}</div>
+            >{ tooltip }</div>
         );
     }
 }
@@ -1314,8 +1328,8 @@ class SentReceipt extends React.PureComponent<ISentReceiptProps, ISentReceiptSta
             <div className="mx_EventTile_msgOption">
                 <span className="mx_EventTile_readAvatars">
                     <span className={receiptClasses} onMouseEnter={this.onHoverStart} onMouseLeave={this.onHoverEnd}>
-                        {nonCssBadge}
-                        {tooltip}
+                        { nonCssBadge }
+                        { tooltip }
                     </span>
                 </span>
             </div>

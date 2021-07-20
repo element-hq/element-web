@@ -45,7 +45,7 @@ export default class MessageTimestamp extends React.Component<IProps> {
                 title={formatFullDate(date, this.props.showTwelveHour)}
                 aria-hidden={true}
             >
-                {timestamp}
+                { timestamp }
             </span>
         );
     }
