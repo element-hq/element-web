@@ -42,7 +42,7 @@ function countryMatchesSearchQuery(query: string, country: PhoneNumberCountryDef
 interface IProps {
     value?: string;
     onOptionChange: (country: PhoneNumberCountryDefinition) => void;
-    isSmall: boolean;
+    isSmall: boolean; // if isSmall, show +44 in the selected value
     showPrefix: boolean;
     className?: string;
     disabled?: boolean;
