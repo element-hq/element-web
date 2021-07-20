@@ -431,7 +431,7 @@ export default class GroupView extends React.Component {
 
         this._initGroupStore(this.props.groupId, true);
 
-        this.dispatcherRef = dis.register(this._onAction);
+        this._dispatcherRef = dis.register(this._onAction);
         this._rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this._onRightPanelStoreUpdate);
     }
 

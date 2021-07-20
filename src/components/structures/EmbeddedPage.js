@@ -44,7 +44,7 @@ export default class EmbeddedPage extends React.PureComponent {
     constructor(props, context) {
         super(props, context);
 
-        this.dispatcherRef = null;
+        this._dispatcherRef = null;
 
         this.state = {
             page: '',
