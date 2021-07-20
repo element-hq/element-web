@@ -207,8 +207,8 @@ function DeviceItem({ userId, device }: {userId: string, device: IDevice}) {
         return (
             <div className={classes} title={device.deviceId} >
                 <div className={iconClasses} />
-                <div className="mx_UserInfo_device_name">{deviceName}</div>
-                <div className="mx_UserInfo_device_trusted">{trustedLabel}</div>
+                <div className="mx_UserInfo_device_name">{ deviceName }</div>
+                <div className="mx_UserInfo_device_trusted">{ trustedLabel }</div>
             </div>
         );
     } else {
@@ -219,8 +219,8 @@ function DeviceItem({ userId, device }: {userId: string, device: IDevice}) {
                 onClick={onDeviceClick}
             >
                 <div className={iconClasses} />
-                <div className="mx_UserInfo_device_name">{deviceName}</div>
-                <div className="mx_UserInfo_device_trusted">{trustedLabel}</div>
+                <div className="mx_UserInfo_device_name">{ deviceName }</div>
+                <div className="mx_UserInfo_device_trusted">{ trustedLabel }</div>
             </AccessibleButton>
         );
     }
@@ -237,7 +237,7 @@ function DevicesSection({ devices, userId, loading }: {devices: IDevice[], userI
         return <Spinner />;
     }
     if (devices === null) {
-        return <>{_t("Unable to load session list")}</>;
+        return <>{ _t("Unable to load session list") }</>;
     }
     const isMe = userId === cli.getUserId();
     const deviceTrusts = devices.map(d => cli.checkDeviceTrust(userId, d.deviceId));
@@ -282,14 +282,14 @@ function DevicesSection({ devices, userId, loading }: {devices: IDevice[], userI
             expandButton = (<AccessibleButton className="mx_UserInfo_expand mx_linkButton"
                 onClick={() => setExpanded(false)}
             >
-                <div>{expandHideCaption}</div>
+                <div>{ expandHideCaption }</div>
             </AccessibleButton>);
         } else {
             expandButton = (<AccessibleButton className="mx_UserInfo_expand mx_linkButton"
                 onClick={() => setExpanded(true)}
             >
                 <div className={expandIconClasses} />
-                <div>{expandCountCaption}</div>
+                <div>{ expandCountCaption }</div>
             </AccessibleButton>);
         }
     }
@@ -306,8 +306,8 @@ function DevicesSection({ devices, userId, loading }: {devices: IDevice[], userI
 
     return (
         <div className="mx_UserInfo_devices">
-            <div>{deviceList}</div>
-            <div>{expandButton}</div>
+            <div>{ deviceList }</div>
+            <div>{ expandButton }</div>
         </div>
     );
 }
@@ -385,7 +385,7 @@ const UserOptionsSection: React.FC<{
             }
 
             insertPillButton = (
-                <AccessibleButton onClick={onInsertPillButton} className={"mx_UserInfo_field"}>
+                <AccessibleButton onClick={onInsertPillButton} className="mx_UserInfo_field">
                     { _t('Mention') }
                 </AccessibleButton>
             );
@@ -1038,7 +1038,7 @@ const PowerLevelSection: React.FC<{
         const role = textualPowerLevel(powerLevel, powerLevelUsersDefault);
         return (
             <div className="mx_UserInfo_profileField">
-                <div className="mx_UserInfo_roleDescription">{role}</div>
+                <div className="mx_UserInfo_roleDescription">{ role }</div>
             </div>
         );
     }
@@ -1267,7 +1267,7 @@ const BasicUserInfo: React.FC<{
     if (isSynapseAdmin && member.userId.endsWith(`:${MatrixClientPeg.getHomeserverName()}`)) {
         synapseDeactivateButton = (
             <AccessibleButton onClick={onSynapseDeactivate} className="mx_UserInfo_field mx_UserInfo_destructive">
-                {_t("Deactivate user")}
+                { _t("Deactivate user") }
             </AccessibleButton>
         );
     }
@@ -1360,7 +1360,7 @@ const BasicUserInfo: React.FC<{
                         legacyVerifyUser(member as User);
                     }
                 }}>
-                    {_t("Verify")}
+                    { _t("Verify") }
                 </AccessibleButton>
             );
         } else if (!showDeviceListSpinner) {
@@ -1518,8 +1518,8 @@ const UserInfoHeader: React.FC<{
                 </div>
                 <div>{ member.userId }</div>
                 <div className="mx_UserInfo_profileStatus">
-                    {presenceLabel}
-                    {statusLabel}
+                    { presenceLabel }
+                    { statusLabel }
                 </div>
             </div>
         </div>

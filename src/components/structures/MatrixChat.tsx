@@ -431,7 +431,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle stage
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillUpdate(props, state) {
         if (this.shouldTrackPageChange(this.state, state)) {
             this.startPageChangeTimer();
@@ -1112,7 +1112,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (memberCount === 1) {
             warnings.push((
                 <span className="warning" key="only_member_warning">
-                    {' '/* Whitespace, otherwise the sentences get smashed together */ }
+                    { ' '/* Whitespace, otherwise the sentences get smashed together */ }
                     { _t("You are the only person here. " +
                         "If you leave, no one will be able to join in the future, including you.") }
                 </span>
@@ -1127,7 +1127,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             if (rule !== "public") {
                 warnings.push((
                     <span className="warning" key="non_public_warning">
-                        {' '/* Whitespace, otherwise the sentences get smashed together */ }
+                        { ' '/* Whitespace, otherwise the sentences get smashed together */ }
                         { isSpace
                             ? _t("This space is not public. You will not be able to rejoin without an invite.")
                             : _t("This room is not public. You will not be able to rejoin without an invite.") }
@@ -1155,7 +1155,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         : _t(
                             "Are you sure you want to leave the room '%(roomName)s'?",
                             { roomName: roomToLeave.name },
-                        )}
+                        ) }
                     { warnings }
                 </span>
             ),
@@ -1864,13 +1864,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         dis.dispatch({ action: 'timeline_resize' });
     }
 
-    onRoomCreated(roomId: string) {
-        dis.dispatch({
-            action: "view_room",
-            room_id: roomId,
-        });
-    }
-
     onRegisterClick = () => {
         this.showScreen("register");
     };
@@ -2043,7 +2036,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         {...this.state}
                         ref={this.loggedInView}
                         matrixClient={MatrixClientPeg.get()}
-                        onRoomCreated={this.onRoomCreated}
                         onRegistered={this.onRegistered}
                         currentRoomId={this.state.currentRoomId}
                     />
@@ -2053,15 +2045,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 let errorBox;
                 if (this.state.syncError && !isStoreError) {
                     errorBox = <div className="mx_MatrixChat_syncError">
-                        {messageForSyncError(this.state.syncError)}
+                        { messageForSyncError(this.state.syncError) }
                     </div>;
                 }
                 view = (
                     <div className="mx_MatrixChat_splash">
-                        {errorBox}
+                        { errorBox }
                         <Spinner />
                         <a href="#" className="mx_MatrixChat_splashButtons" onClick={this.onLogoutClick}>
-                            {_t('Logout')}
+                            { _t('Logout') }
                         </a>
                     </div>
                 );
@@ -2124,7 +2116,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         return <ErrorBoundary>
-            {view}
+            { view }
         </ErrorBoundary>;
     }
 }

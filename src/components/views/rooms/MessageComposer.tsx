@@ -411,7 +411,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                     className="mx_MessageComposer_roomReplaced_link"
                     onClick={this.onTombstoneClick}
                 >
-                    {_t("The conversation continues here.")}
+                    { _t("The conversation continues here.") }
                 </a>
             ) : '';
 
@@ -421,7 +421,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                         src={require("../../../../res/img/room_replaced.svg")}
                     />
                     <span className="mx_MessageComposer_roomReplaced_header">
-                        {_t("This room has been replaced and is no longer active.")}
+                        { _t("This room has been replaced and is no longer active.") }
                     </span><br />
                     { continuesLink }
                 </div>
@@ -445,7 +445,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
         return (
             <div className="mx_MessageComposer mx_GroupLayout">
-                {recordingTooltip}
+                { recordingTooltip }
                 <div className="mx_MessageComposer_wrapper">
                     <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
                     <div className="mx_MessageComposer_row">
