@@ -277,7 +277,7 @@ export default class CallView extends React.Component<IProps, IState> {
         return { primary, secondary };
     }
 
-    private showControls() {
+    private showControls(): void {
         if (this.state.showMoreMenu || this.state.showDialpad) return;
 
         if (!this.state.controlsVisible) {
@@ -291,7 +291,7 @@ export default class CallView extends React.Component<IProps, IState> {
         this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
     }
 
-    private onDialpadClick = () => {
+    private onDialpadClick = (): void => {
         if (!this.state.showDialpad) {
             if (this.controlsHideTimer) {
                 clearTimeout(this.controlsHideTimer);
@@ -314,21 +314,21 @@ export default class CallView extends React.Component<IProps, IState> {
         }
     };
 
-    private onMicMuteClick = () => {
+    private onMicMuteClick = (): void => {
         const newVal = !this.state.micMuted;
 
         this.props.call.setMicrophoneMuted(newVal);
         this.setState({ micMuted: newVal });
     };
 
-    private onVidMuteClick = () => {
+    private onVidMuteClick = (): void => {
         const newVal = !this.state.vidMuted;
 
         this.props.call.setLocalVideoMuted(newVal);
         this.setState({ vidMuted: newVal });
     };
 
-    private onScreenshareClick = async () => {
+    private onScreenshareClick = async (): Promise<void> => {
         const isScreensharing = await this.props.call.setScreensharingEnabled(
             !this.state.screensharing,
             async (): Promise<DesktopCapturerSource> => {
@@ -340,7 +340,7 @@ export default class CallView extends React.Component<IProps, IState> {
         this.setState({ screensharing: isScreensharing });
     };
 
-    private onMoreClick = () => {
+    private onMoreClick = (): void => {
         if (this.controlsHideTimer) {
             clearTimeout(this.controlsHideTimer);
             this.controlsHideTimer = null;
@@ -352,14 +352,14 @@ export default class CallView extends React.Component<IProps, IState> {
         });
     };
 
-    private closeDialpad = () => {
+    private closeDialpad = (): void => {
         this.setState({
             showDialpad: false,
         });
         this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
     };
 
-    private closeContextMenu = () => {
+    private closeContextMenu = (): void => {
         this.setState({
             showMoreMenu: false,
         });
@@ -369,7 +369,7 @@ export default class CallView extends React.Component<IProps, IState> {
     // we register global shortcuts here, they *must not conflict* with local shortcuts elsewhere or both will fire
     // Note that this assumes we always have a CallView on screen at any given time
     // CallHandler would probably be a better place for this
-    private onNativeKeyDown = ev => {
+    private onNativeKeyDown = (ev): void => {
         let handled = false;
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
 
@@ -399,7 +399,7 @@ export default class CallView extends React.Component<IProps, IState> {
         }
     };
 
-    private onRoomAvatarClick = () => {
+    private onRoomAvatarClick = (): void => {
         const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
         dis.dispatch({
             action: 'view_room',
@@ -407,7 +407,7 @@ export default class CallView extends React.Component<IProps, IState> {
         });
     };
 
-    private onSecondaryRoomAvatarClick = () => {
+    private onSecondaryRoomAvatarClick = (): void => {
         const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.secondaryCall);
 
         dis.dispatch({
@@ -416,24 +416,24 @@ export default class CallView extends React.Component<IProps, IState> {
         });
     };
 
-    private onCallResumeClick = () => {
+    private onCallResumeClick = (): void => {
         const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
         CallHandler.sharedInstance().setActiveCallRoomId(userFacingRoomId);
     };
 
-    private onTransferClick = () => {
+    private onTransferClick = (): void => {
         const transfereeCall = CallHandler.sharedInstance().getTransfereeForCallId(this.props.call.callId);
         this.props.call.transferToCall(transfereeCall);
     };
 
-    private onHangupClick = () => {
+    private onHangupClick = (): void => {
         dis.dispatch({
             action: 'hangup',
             room_id: CallHandler.sharedInstance().roomIdForCall(this.props.call),
         });
     };
 
-    private onToggleSidebar = () => {
+    private onToggleSidebar = (): void => {
         let vidMuted = this.state.vidMuted;
         if (this.state.screensharing) {
             vidMuted = this.state.sidebarShown;
