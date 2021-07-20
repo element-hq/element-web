@@ -3524,5 +3524,6 @@
     "Error saving notification preferences": "儲存通知偏好設定時發生問題",
     "Messages containing keywords": "包含關鍵字的訊息",
     "Transfer Failed": "轉接失敗",
-    "Unable to transfer call": "無法轉接通話"
+    "Unable to transfer call": "無法轉接通話",
+    "Copy Room Link": "複製聊天室連結"
 }
