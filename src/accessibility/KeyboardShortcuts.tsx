@@ -370,8 +370,8 @@ export const toggleDialog = () => {
     const sections = categoryOrder.map(category => {
         const list = shortcuts[category];
         return <div className="mx_KeyboardShortcutsDialog_category" key={category}>
-            <h3>{_t(category)}</h3>
-            <div>{list.map(shortcut => <Shortcut key={shortcut.description} shortcut={shortcut} />)}</div>
+            <h3>{ _t(category) }</h3>
+            <div>{ list.map(shortcut => <Shortcut key={shortcut.description} shortcut={shortcut} />) }</div>
         </div>;
     });
 

@@ -166,7 +166,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
         let error = null;
         if (this.state.err) {
             error = <div className="error">
-                {this.state.err}
+                { this.state.err }
             </div>;
         }
 
@@ -175,7 +175,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
             progress = (
                 <div className="progress">
                     <Spinner />
-                    {this.state.progress} ...
+                    { this.state.progress } ...
                 </div>
             );
         }
@@ -221,7 +221,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                         <AccessibleButton onClick={this.onDownload} kind="link" disabled={this.state.downloadBusy}>
                             { _t("Download logs") }
                         </AccessibleButton>
-                        {this.state.downloadProgress && <span>{this.state.downloadProgress} ...</span>}
+                        { this.state.downloadProgress && <span>{ this.state.downloadProgress } ...</span> }
                     </div>
 
                     <Field
@@ -246,8 +246,8 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                             "please include those things here.",
                         )}
                     />
-                    {progress}
-                    {error}
+                    { progress }
+                    { error }
                 </div>
                 <DialogButtons primaryButton={_t("Send logs")}
                     onPrimaryButtonClick={this.onSubmit}

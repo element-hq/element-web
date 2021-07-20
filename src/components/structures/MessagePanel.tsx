@@ -671,8 +671,10 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         }
 
         let willWantDateSeparator = false;
+        let lastInSection = true;
         if (nextEvent) {
             willWantDateSeparator = this.wantsDateSeparator(mxEv, nextEvent.getDate() || new Date());
+            lastInSection = willWantDateSeparator || mxEv.getSender() !== nextEvent.getSender();
         }
 
         // is this a continuation of the previous message?
@@ -732,7 +734,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     isTwelveHour={this.props.isTwelveHour}
                     permalinkCreator={this.props.permalinkCreator}
                     last={last}
-                    lastInSection={willWantDateSeparator}
+                    lastInSection={lastInSection}
                     lastSuccessful={isLastSuccessful}
                     isSelectedEvent={highlight}
                     getRelationsForEvent={this.props.getRelationsForEvent}
@@ -741,6 +743,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     enableFlair={this.props.enableFlair}
                     showReadReceipts={this.props.showReadReceipts}
                     callEventGrouper={callEventGrouper}
+                    hideSender={this.props.room.getMembers().length <= 2 && this.props.layout === Layout.Bubble}
                 />
             </TileErrorBoundary>,
         );

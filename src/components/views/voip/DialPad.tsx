@@ -42,9 +42,9 @@ class DialPadButton extends React.PureComponent<IButtonProps> {
         switch (this.props.kind) {
             case DialPadButtonKind.Digit:
                 return <AccessibleButton className="mx_DialPad_button" onClick={this.onClick}>
-                    {this.props.digit}
+                    { this.props.digit }
                     <div className="mx_DialPad_buttonSubText">
-                        {this.props.digitSubtext}
+                        { this.props.digitSubtext }
                     </div>
                 </AccessibleButton>;
             case DialPadButtonKind.Dial:
@@ -80,7 +80,7 @@ export default class Dialpad extends React.PureComponent<IProps> {
         }
 
         return <div className="mx_DialPad">
-            {buttonNodes}
+            { buttonNodes }
         </div>;
     }
 }

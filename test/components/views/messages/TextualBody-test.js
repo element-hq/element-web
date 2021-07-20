@@ -23,6 +23,7 @@ import { mkEvent, mkStubRoom } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import * as languageHandler from "../../../../src/languageHandler";
 import * as TestUtils from "../../../test-utils";
+import DMRoomMap from "../../../../src/utils/DMRoomMap";
 
 const _TextualBody = sdk.getComponent("views.messages.TextualBody");
 const TextualBody = TestUtils.wrapInMatrixClientContext(_TextualBody);
@@ -41,6 +42,7 @@ describe("<TextualBody />", () => {
             isGuest: () => false,
             mxcUrlToHttp: (s) => s,
         };
+        DMRoomMap.makeShared();
 
         const ev = mkEvent({
             type: "m.room.message",
@@ -66,6 +68,7 @@ describe("<TextualBody />", () => {
             isGuest: () => false,
             mxcUrlToHttp: (s) => s,
         };
+        DMRoomMap.makeShared();
 
         const ev = mkEvent({
             type: "m.room.message",
@@ -92,6 +95,7 @@ describe("<TextualBody />", () => {
                 isGuest: () => false,
                 mxcUrlToHttp: (s) => s,
             };
+            DMRoomMap.makeShared();
         });
 
         it("simple message renders as expected", () => {
@@ -146,6 +150,7 @@ describe("<TextualBody />", () => {
                 isGuest: () => false,
                 mxcUrlToHttp: (s) => s,
             };
+            DMRoomMap.makeShared();
         });
 
         it("italics, bold, underline and strikethrough render as expected", () => {
@@ -292,6 +297,7 @@ describe("<TextualBody />", () => {
             isGuest: () => false,
             mxcUrlToHttp: (s) => s,
         };
+        DMRoomMap.makeShared();
 
         const ev = mkEvent({
             type: "m.room.message",

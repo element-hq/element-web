@@ -81,8 +81,8 @@ export default class InfoTooltip extends React.PureComponent<ITooltipProps, ISta
                 className={classNames("mx_InfoTooltip", className)}
             >
                 <span className={classNames("mx_InfoTooltip_icon", iconClassName)} aria-label={title} />
-                {children}
-                {tip}
+                { children }
+                { tip }
             </div>
         );
     }

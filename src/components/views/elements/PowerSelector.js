@@ -161,7 +161,7 @@ export default class PowerSelector extends React.Component {
                     label={label} onChange={this.onSelectChange}
                     value={String(this.state.selectValue)} disabled={this.props.disabled}
                 >
-                    {options}
+                    { options }
                 </Field>
             );
         }

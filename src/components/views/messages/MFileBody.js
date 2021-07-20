@@ -211,7 +211,7 @@ export default class MFileBody extends React.Component {
                 // but it is not guaranteed between various browsers' settings.
                 return (
                     <span className="mx_MFileBody">
-                        {placeholder}
+                        { placeholder }
                         <div className="mx_MFileBody_download">
                             <AccessibleButton onClick={decrypt}>
                                 { _t("Decrypt %(text)s", { text: text }) }
@@ -243,7 +243,7 @@ export default class MFileBody extends React.Component {
             // If the attachment is encrypted then put the link inside an iframe.
             return (
                 <span className="mx_MFileBody">
-                    {placeholder}
+                    { placeholder }
                     <div className="mx_MFileBody_download">
                         <div style={{ display: "none" }}>
                             { /*
@@ -312,7 +312,7 @@ export default class MFileBody extends React.Component {
             if (this.props.tileShape === TileShape.FileGrid) {
                 return (
                     <span className="mx_MFileBody">
-                        {placeholder}
+                        { placeholder }
                         <div className="mx_MFileBody_download">
                             <a className="mx_MFileBody_downloadLink" {...downloadProps}>
                                 { fileName }
@@ -326,7 +326,7 @@ export default class MFileBody extends React.Component {
             } else {
                 return (
                     <span className="mx_MFileBody">
-                        {placeholder}
+                        { placeholder }
                         <div className="mx_MFileBody_download">
                             <a {...downloadProps}>
                                 <span className="mx_MFileBody_download_icon" />
@@ -339,7 +339,7 @@ export default class MFileBody extends React.Component {
         } else {
             const extra = text ? (': ' + text) : '';
             return <span className="mx_MFileBody">
-                {placeholder}
+                { placeholder }
                 { _t("Invalid file%(extra)s", { extra: extra }) }
             </span>;
         }

@@ -124,7 +124,11 @@ export class Algorithm extends EventEmitter {
      * @param val The new room to sticky.
      */
     public setStickyRoom(val: Room) {
-        this.updateStickyRoom(val);
+        try {
+            this.updateStickyRoom(val);
+        } catch (e) {
+            console.warn("Failed to update sticky room", e);
+        }
     }
 
     public getTagSorting(tagId: TagID): SortAlgorithm {

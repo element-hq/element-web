@@ -304,13 +304,6 @@ export default class MImageBody extends React.Component<IProps, IState> {
             this.downloadImage();
             this.setState({ showImage: true });
         }
-
-        this._afterComponentDidMount();
-    }
-
-    // To be overridden by subclasses (e.g. MStickerBody) for further
-    // initialisation after componentDidMount
-    _afterComponentDidMount() {
     }
 
     componentWillUnmount() {
@@ -432,7 +425,7 @@ export default class MImageBody extends React.Component<IProps, IState> {
     // Overidden by MStickerBody
     protected wrapImage(contentUrl: string, children: JSX.Element): JSX.Element {
         return <a href={contentUrl} onClick={this.onClick}>
-            {children}
+            { children }
         </a>;
     }
 
@@ -440,9 +433,9 @@ export default class MImageBody extends React.Component<IProps, IState> {
     protected getPlaceholder(width: number, height: number): JSX.Element {
         const blurhash = this.props.mxEvent.getContent().info[BLURHASH_FIELD];
         if (blurhash) return <Blurhash hash={blurhash} width={width} height={height} />;
-        return <div className="mx_MImageBody_thumbnail_spinner">
+        return (
             <InlineSpinner w={32} h={32} />
-        </div>;
+        );
     }
 
     // Overidden by MStickerBody
@@ -499,7 +492,7 @@ export class HiddenImagePlaceholder extends React.PureComponent<PlaceholderIProp
             <div className={className} style={{ maxWidth: maxWidth }}>
                 <div className='mx_HiddenImagePlaceholder_button'>
                     <span className='mx_HiddenImagePlaceholder_eye' />
-                    <span>{_t("Show image")}</span>
+                    <span>{ _t("Show image") }</span>
                 </div>
             </div>
         );
