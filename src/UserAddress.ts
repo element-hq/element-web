@@ -18,13 +18,13 @@ const emailRegex = /^\S+@\S+\.\S+$/;
 const mxUserIdRegex = /^@\S+:\S+$/;
 const mxRoomIdRegex = /^!\S+:\S+$/;
 
-export const addressTypes = ['mx-user-id', 'mx-room-id', 'email'];
-
 export enum AddressType {
     Email = "email",
     MatrixUserId = "mx-user-id",
     MatrixRoomId = "mx-room-id",
 }
+
+export const addressTypes = [AddressType.Email, AddressType.MatrixRoomId, AddressType.MatrixUserId];
 
 // PropType definition for an object describing
 // an address that can be invited to a room (which

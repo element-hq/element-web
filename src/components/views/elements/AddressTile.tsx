@@ -33,7 +33,7 @@ interface IProps {
 
 @replaceableComponent("views.elements.AddressTile")
 export default class AddressTile extends React.Component<IProps> {
-    static defaultProps = {
+    static defaultProps: Partial<IProps> = {
         canDismiss: false,
         onDismissed: function() {}, // NOP
         justified: false,

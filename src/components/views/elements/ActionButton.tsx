@@ -38,7 +38,7 @@ interface IState {
 
 @replaceableComponent("views.elements.ActionButton")
 export default class ActionButton extends React.Component<IProps, IState> {
-    static defaultProps = {
+    static defaultProps: Partial<IProps> = {
         size: "25",
         tooltip: false,
     };

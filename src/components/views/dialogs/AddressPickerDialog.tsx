@@ -93,7 +93,7 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
     private queryChangedDebouncer: NodeJS.Timeout;
     private cancelThreepidLookup: () => void;
 
-    static defaultProps = {
+    static defaultProps: Partial<IProps> = {
         value: "",
         focus: true,
         validAddressTypes: addressTypes,
