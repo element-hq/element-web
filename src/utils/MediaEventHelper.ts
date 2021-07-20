@@ -25,10 +25,14 @@ import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 // TODO: We should consider caching the blobs. https://github.com/vector-im/element-web/issues/17192
 
 export class MediaEventHelper implements IDestroyable {
+    // Either an HTTP or Object URL (when encrypted) to the media.
     public readonly sourceUrl: LazyValue<string>;
     public readonly thumbnailUrl: LazyValue<string>;
+
+    // Either the raw or decrypted (when encrypted) contents of the file.
     public readonly sourceBlob: LazyValue<Blob>;
     public readonly thumbnailBlob: LazyValue<Blob>;
+
     public readonly media: Media;
 
     public constructor(private event: MatrixEvent) {
