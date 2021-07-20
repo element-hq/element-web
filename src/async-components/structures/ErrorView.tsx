@@ -40,9 +40,9 @@ const ErrorView: React.FC<IProps> = ({ title, messages }) => {
                 <div className="mx_HomePage_row">
                     <div>
                         <h2 id="step1_heading">{ title }</h2>
-                        {messages && messages.map(msg => <p key={msg}>
+                        { messages && messages.map(msg => <p key={msg}>
                             { msg }
-                        </p>)}
+                        </p>) }
                     </div>
                 </div>
             </div>
