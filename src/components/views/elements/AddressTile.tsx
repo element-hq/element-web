@@ -16,23 +16,22 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
-import { UserAddressType } from '../../../UserAddress';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 
-@replaceableComponent("views.elements.AddressTile")
-export default class AddressTile extends React.Component {
-    static propTypes = {
-        address: UserAddressType.isRequired,
-        canDismiss: PropTypes.bool,
-        onDismissed: PropTypes.func,
-        justified: PropTypes.bool,
-    };
+interface IProps {
+    address; // FIXME: UserAddressType should be an interface
+    canDismiss?: boolean;
+    onDismissed?: () => void;
+    justified?: boolean;
+    showAddress?: boolean;
+}
 
+@replaceableComponent("views.elements.AddressTile")
+export default class AddressTile extends React.Component<IProps> {
     static defaultProps = {
         canDismiss: false,
         onDismissed: function() {}, // NOP
@@ -70,9 +69,10 @@ export default class AddressTile extends React.Component {
             info = (
                 <div className="mx_AddressTile_mx">
                     <div className={nameClasses}>{ name }</div>
-                    { this.props.showAddress ?
-                        <div className={idClasses}>{ address.address }</div> :
-                        <div />
+                    {
+                        this.props.showAddress
+                            ? <div className={idClasses}>{ address.address }</div>
+                            : <div />
                     }
                 </div>
             );
