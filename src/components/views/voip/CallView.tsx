@@ -337,7 +337,11 @@ export default class CallView extends React.Component<IProps, IState> {
                 return source;
             },
         );
-        this.setState({ screensharing: isScreensharing });
+
+        this.setState({
+            sidebarShown: true,
+            screensharing: isScreensharing,
+        });
     };
 
     private onMoreClick = (): void => {
@@ -434,13 +438,7 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onToggleSidebar = (): void => {
-        let vidMuted = this.state.vidMuted;
-        if (this.state.screensharing) {
-            vidMuted = this.state.sidebarShown;
-            this.props.call.setLocalVideoMuted(vidMuted);
-        }
         this.setState({
-            vidMuted: vidMuted,
             sidebarShown: !this.state.sidebarShown,
         });
     };
