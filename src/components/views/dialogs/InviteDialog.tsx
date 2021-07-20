@@ -32,7 +32,6 @@ import Modal from "../../../Modal";
 import { humanizeTime } from "../../../utils/humanize";
 import createRoom, {
     canEncryptToAllUsers,
-    ensureDMExists,
     findDMForUser,
     privateShouldBeEncrypted,
 } from "../../../createRoom";
@@ -64,9 +63,15 @@ import { copyPlaintext, selectText } from "../../../utils/strings";
 import * as ContextMenu from "../../structures/ContextMenu";
 import { toRightOf } from "../../structures/ContextMenu";
 import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
+import { TransferCallPayload } from '../../../dispatcher/payloads/TransferCallPayload';
+import Field from '../elements/Field';
+import TabbedView, { Tab, TabLocation } from '../../structures/TabbedView';
+import Dialpad from '../voip/DialPad';
 import QuestionDialog from "./QuestionDialog";
 import Spinner from "../elements/Spinner";
 import BaseDialog from "./BaseDialog";
+import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
+import SpaceStore from "../../../stores/SpaceStore";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -79,10 +84,18 @@ interface IRecentUser {
 
 export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";
+// NB. This dialog needs the 'mx_InviteDialog_transferWrapper' wrapper class to have the correct
+// padding on the bottom (because all modals have 24px padding on all sides), so this needs to
+// be passed when creating the modal
 export const KIND_CALL_TRANSFER = "call_transfer";
 
 const INITIAL_ROOMS_SHOWN = 3; // Number of rooms to show at first
 const INCREMENT_ROOMS_SHOWN = 5; // Number of rooms to add when 'show more' is clicked
+
+enum TabId {
+    UserDirectory = 'users',
+    DialPad = 'dialpad',
+}
 
 // This is the interface that is expected by various components in the Invite Dialog and RoomInvite.
 // It is a bit awkward because it also matches the RoomMember class from the js-sdk with some extra support
@@ -109,11 +122,11 @@ export abstract class Member {
 
 class DirectoryMember extends Member {
     private readonly _userId: string;
-    private readonly displayName: string;
-    private readonly avatarUrl: string;
+    private readonly displayName?: string;
+    private readonly avatarUrl?: string;
 
     // eslint-disable-next-line camelcase
-    constructor(userDirResult: { user_id: string, display_name: string, avatar_url: string }) {
+    constructor(userDirResult: { user_id: string, display_name?: string, avatar_url?: string }) {
         super();
         this._userId = userDirResult.user_id;
         this.displayName = userDirResult.display_name;
@@ -356,6 +369,8 @@ interface IInviteDialogState {
     canUseIdentityServer: boolean;
     tryingIdentityServer: boolean;
     consultFirst: boolean;
+    dialPadValue: string;
+    currentTabId: TabId;
 
     // These two flags are used for the 'Go' button to communicate what is going on.
     busy: boolean;
@@ -370,7 +385,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     };
 
     private closeCopiedTooltip: () => void;
-    private debounceTimer: NodeJS.Timeout = null; // actually number because we're in the browser
+    private debounceTimer: number = null; // actually number because we're in the browser
     private editorRef = createRef<HTMLInputElement>();
     private unmounted = false;
 
@@ -407,6 +422,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             canUseIdentityServer: !!MatrixClientPeg.get().getIdentityServerUrl(),
             tryingIdentityServer: false,
             consultFirst: false,
+            dialPadValue: '',
+            currentTabId: TabId.UserDirectory,
 
             // These two flags are used for the 'Go' button to communicate what is going on.
             busy: false,
@@ -768,44 +785,32 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     };
 
     private transferCall = async () => {
-        this.convertFilter();
-        const targets = this.convertFilter();
-        const targetIds = targets.map(t => t.userId);
-        if (targetIds.length > 1) {
-            this.setState({
-                errorText: _t("A call can only be transferred to a single user."),
-            });
-        }
-
-        if (this.state.consultFirst) {
-            const dmRoomId = await ensureDMExists(MatrixClientPeg.get(), targetIds[0]);
-
-            dis.dispatch({
-                action: 'place_call',
-                type: this.props.call.type,
-                room_id: dmRoomId,
-                transferee: this.props.call,
-            });
-            dis.dispatch({
-                action: 'view_room',
-                room_id: dmRoomId,
-                should_peek: false,
-                joining: false,
-            });
-            this.props.onFinished();
-        } else {
-            this.setState({ busy: true });
-            try {
-                await this.props.call.transfer(targetIds[0]);
-                this.setState({ busy: false });
-                this.props.onFinished();
-            } catch (e) {
+        if (this.state.currentTabId == TabId.UserDirectory) {
+            this.convertFilter();
+            const targets = this.convertFilter();
+            const targetIds = targets.map(t => t.userId);
+            if (targetIds.length > 1) {
                 this.setState({
-                    busy: false,
-                    errorText: _t("Failed to transfer call"),
+                    errorText: _t("A call can only be transferred to a single user."),
                 });
+                return;
             }
+
+            dis.dispatch({
+                action: Action.TransferCallToMatrixID,
+                call: this.props.call,
+                destination: targetIds[0],
+                consultFirst: this.state.consultFirst,
+            } as TransferCallPayload);
+        } else {
+            dis.dispatch({
+                action: Action.TransferCallToPhoneNumber,
+                call: this.props.call,
+                destination: this.state.dialPadValue,
+                consultFirst: this.state.consultFirst,
+            } as TransferCallPayload);
         }
+        this.props.onFinished();
     };
 
     private onKeyDown = (e) => {
@@ -825,6 +830,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             e.preventDefault();
             this.convertFilter();
         }
+    };
+
+    private onCancel = () => {
+        this.props.onFinished([]);
     };
 
     private updateSuggestions = async (term) => {
@@ -962,11 +971,14 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     private toggleMember = (member: Member) => {
         if (!this.state.busy) {
             let filterText = this.state.filterText;
-            const targets = this.state.targets.map(t => t); // cheap clone for mutation
+            let targets = this.state.targets.map(t => t); // cheap clone for mutation
             const idx = targets.indexOf(member);
             if (idx >= 0) {
                 targets.splice(idx, 1);
             } else {
+                if (this.props.kind === KIND_CALL_TRANSFER && targets.length > 0) {
+                    targets = [];
+                }
                 targets.push(member);
                 filterText = ""; // clear the filter when the user accepts a suggestion
             }
@@ -1189,6 +1201,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     }
 
     private renderEditor() {
+        const hasPlaceholder = (
+            this.props.kind == KIND_CALL_TRANSFER &&
+            this.state.targets.length === 0 &&
+            this.state.filterText.length === 0
+        );
         const targets = this.state.targets.map(t => (
             <DMUserTile member={t} onRemove={!this.state.busy && this.removeMember} key={t.userId} />
         ));
@@ -1201,8 +1218,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 ref={this.editorRef}
                 onPaste={this.onPaste}
                 autoFocus={true}
-                disabled={this.state.busy}
+                disabled={this.state.busy || (this.props.kind == KIND_CALL_TRANSFER && this.state.targets.length > 0)}
                 autoComplete="off"
+                placeholder={hasPlaceholder ? _t("Search") : null}
             />
         );
         return (
@@ -1249,6 +1267,28 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         }
     }
 
+    private onDialFormSubmit = ev => {
+        ev.preventDefault();
+        this.transferCall();
+    };
+
+    private onDialChange = ev => {
+        this.setState({ dialPadValue: ev.currentTarget.value });
+    };
+
+    private onDigitPress = digit => {
+        this.setState({ dialPadValue: this.state.dialPadValue + digit });
+    };
+
+    private onDeletePress = () => {
+        if (this.state.dialPadValue.length === 0) return;
+        this.setState({ dialPadValue: this.state.dialPadValue.slice(0, -1) });
+    };
+
+    private onTabChange = (tabId: TabId) => {
+        this.setState({ currentTabId: tabId });
+    };
+
     private async onLinkClick(e) {
         e.preventDefault();
         selectText(e.target);
@@ -1278,11 +1318,15 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         let helpText;
         let buttonText;
         let goButtonFn;
+        let consultConnectSection;
         let extraSection;
         let footer;
         let keySharingWarning = <span />;
 
         const identityServersEnabled = SettingsStore.getValue(UIFeature.IdentityServer);
+
+        const hasSelection = this.state.targets.length > 0
+            || (this.state.filterText && this.state.filterText.includes('@'));
 
         const cli = MatrixClientPeg.get();
         const userId = cli.getUserId();
@@ -1364,7 +1408,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             </div>;
         } else if (this.props.kind === KIND_INVITE) {
             const room = MatrixClientPeg.get()?.getRoom(this.props.roomId);
-            const isSpace = SettingsStore.getValue("feature_spaces") && room?.isSpaceRoom();
+            const isSpace = SpaceStore.spacesEnabled && room?.isSpaceRoom();
             title = isSpace
                 ? _t("Invite to %(spaceName)s", {
                     spaceName: room.name || _t("Unnamed Space"),
@@ -1421,23 +1465,116 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             }
         } else if (this.props.kind === KIND_CALL_TRANSFER) {
             title = _t("Transfer");
-            buttonText = _t("Transfer");
-            goButtonFn = this.transferCall;
-            footer = <div>
+
+            consultConnectSection = <div className="mx_InviteDialog_transferConsultConnect">
                 <label>
                     <input type="checkbox" checked={this.state.consultFirst} onChange={this.onConsultFirstChange} />
                     {_t("Consult first")}
                 </label>
+                <AccessibleButton
+                    kind="secondary"
+                    onClick={this.onCancel}
+                    className='mx_InviteDialog_transferConsultConnect_pushRight'
+                >
+                    {_t("Cancel")}
+                </AccessibleButton>
+                <AccessibleButton
+                    kind="primary"
+                    onClick={this.transferCall}
+                    className='mx_InviteDialog_transferButton'
+                    disabled={!hasSelection && this.state.dialPadValue === ''}
+                >
+                    {_t("Transfer")}
+                </AccessibleButton>
             </div>;
         } else {
             console.error("Unknown kind of InviteDialog: " + this.props.kind);
         }
 
-        const hasSelection = this.state.targets.length > 0
-            || (this.state.filterText && this.state.filterText.includes('@'));
+        const goButton = this.props.kind == KIND_CALL_TRANSFER ? null : <AccessibleButton
+            kind="primary"
+            onClick={goButtonFn}
+            className='mx_InviteDialog_goButton'
+            disabled={this.state.busy || !hasSelection}
+        >
+            {buttonText}
+        </AccessibleButton>;
+
+        const usersSection = <React.Fragment>
+            <p className='mx_InviteDialog_helpText'>{helpText}</p>
+            <div className='mx_InviteDialog_addressBar'>
+                {this.renderEditor()}
+                <div className='mx_InviteDialog_buttonAndSpinner'>
+                    {goButton}
+                    {spinner}
+                </div>
+            </div>
+            {keySharingWarning}
+            {this.renderIdentityServerWarning()}
+            <div className='error'>{this.state.errorText}</div>
+            <div className='mx_InviteDialog_userSections'>
+                {this.renderSection('recents')}
+                {this.renderSection('suggestions')}
+                {extraSection}
+            </div>
+            {footer}
+        </React.Fragment>;
+
+        let dialogContent;
+        if (this.props.kind === KIND_CALL_TRANSFER) {
+            const tabs = [];
+            tabs.push(new Tab(
+                TabId.UserDirectory, _td("User Directory"), 'mx_InviteDialog_userDirectoryIcon', usersSection,
+            ));
+
+            const backspaceButton = (
+                <DialPadBackspaceButton onBackspacePress={this.onDeletePress} />
+            );
+
+            // Only show the backspace button if the field has content
+            let dialPadField;
+            if (this.state.dialPadValue.length !== 0) {
+                dialPadField = <Field className="mx_InviteDialog_dialPadField" id="dialpad_number"
+                    value={this.state.dialPadValue}
+                    autoFocus={true}
+                    onChange={this.onDialChange}
+                    postfixComponent={backspaceButton}
+                />;
+            } else {
+                dialPadField = <Field className="mx_InviteDialog_dialPadField" id="dialpad_number"
+                    value={this.state.dialPadValue}
+                    autoFocus={true}
+                    onChange={this.onDialChange}
+                />;
+            }
+
+            const dialPadSection = <div className="mx_InviteDialog_dialPad">
+                <form onSubmit={this.onDialFormSubmit}>
+                    {dialPadField}
+                </form>
+                <Dialpad hasDial={false}
+                    onDigitPress={this.onDigitPress} onDeletePress={this.onDeletePress}
+                />
+            </div>;
+            tabs.push(new Tab(TabId.DialPad, _td("Dial pad"), 'mx_InviteDialog_dialPadIcon', dialPadSection));
+            dialogContent = <React.Fragment>
+                <TabbedView tabs={tabs} initialTabId={this.state.currentTabId}
+                    tabLocation={TabLocation.TOP} onChange={this.onTabChange}
+                />
+                {consultConnectSection}
+            </React.Fragment>;
+        } else {
+            dialogContent = <React.Fragment>
+                {usersSection}
+                {consultConnectSection}
+            </React.Fragment>;
+        }
+
         return (
             <BaseDialog
-                className={classNames("mx_InviteDialog", {
+                className={classNames({
+                    mx_InviteDialog_transfer: this.props.kind === KIND_CALL_TRANSFER,
+                    mx_InviteDialog_other: this.props.kind !== KIND_CALL_TRANSFER,
                     mx_InviteDialog_hasFooter: !!footer,
                 })}
                 hasCancel={true}
@@ -1445,30 +1582,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 title={title}
             >
                 <div className='mx_InviteDialog_content'>
-                    <p className='mx_InviteDialog_helpText'>{helpText}</p>
-                    <div className='mx_InviteDialog_addressBar'>
-                        {this.renderEditor()}
-                        <div className='mx_InviteDialog_buttonAndSpinner'>
-                            <AccessibleButton
-                                kind="primary"
-                                onClick={goButtonFn}
-                                className='mx_InviteDialog_goButton'
-                                disabled={this.state.busy || !hasSelection}
-                            >
-                                {buttonText}
-                            </AccessibleButton>
-                            {spinner}
-                        </div>
-                    </div>
-                    {keySharingWarning}
-                    {this.renderIdentityServerWarning()}
-                    <div className='error'>{this.state.errorText}</div>
-                    <div className='mx_InviteDialog_userSections'>
-                        {this.renderSection('recents')}
-                        {this.renderSection('suggestions')}
-                        {extraSection}
-                    </div>
-                    {footer}
+                    {dialogContent}
                 </div>
             </BaseDialog>
         );

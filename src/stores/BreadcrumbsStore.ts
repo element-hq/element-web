@@ -22,6 +22,7 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { arrayHasDiff } from "../utils/arrays";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { SettingLevel } from "../settings/SettingLevel";
+import SpaceStore from "./SpaceStore";
 
 const MAX_ROOMS = 20; // arbitrary
 const AUTOJOIN_WAIT_THRESHOLD_MS = 90000; // 90s, the time we wait for an autojoined room to show up
@@ -122,7 +123,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     }
 
     private async appendRoom(room: Room) {
-        if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) return; // hide space rooms
+        if (SpaceStore.spacesEnabled && room.isSpaceRoom()) return; // hide space rooms
         let updated = false;
         const rooms = (this.state.rooms || []).slice(); // cheap clone
 

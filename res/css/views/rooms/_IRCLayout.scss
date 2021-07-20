@@ -198,8 +198,9 @@ $irc-line-height: $font-18px;
     .mx_ReplyThread {
         margin: 0;
         .mx_SenderProfile {
+            order: unset;
+            max-width: unset;
             width: unset;
-            max-width: var(--name-width);
             background: transparent;
         }
 

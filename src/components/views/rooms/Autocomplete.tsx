@@ -55,7 +55,7 @@ interface IState {
 export default class Autocomplete extends React.PureComponent<IProps, IState> {
     autocompleter: Autocompleter;
     queryRequested: string;
-    debounceCompletionsRequest: NodeJS.Timeout;
+    debounceCompletionsRequest: number;
     private containerRef = createRef<HTMLDivElement>();
 
     constructor(props) {

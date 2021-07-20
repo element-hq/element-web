@@ -205,13 +205,14 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                     className="mx_ServerPickerDialog_otherHomeserverRadio"
                     checked={!this.state.defaultChosen}
                     onChange={this.onOtherChosen}
+                    childrenInLabel={false}
                 >
                     <Field
                         type="text"
                         className="mx_ServerPickerDialog_otherHomeserver"
                         label={_t("Other homeserver")}
                         onChange={this.onHomeserverChange}
-                        onClick={this.onOtherChosen}
+                        onFocus={this.onOtherChosen}
                         ref={this.fieldRef}
                         onValidate={this.onHomeserverValidate}
                         value={this.state.otherHomeserver}
