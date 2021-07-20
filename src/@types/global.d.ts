@@ -92,7 +92,6 @@ declare global {
         mxUIStore: UIStore;
         mxSetupEncryptionStore?: SetupEncryptionStore;
         mxRoomScrollStateStore?: RoomScrollStateStore;
-        grecaptcha: any;
         mxOnRecaptchaLoaded?: () => void;
     }
 
