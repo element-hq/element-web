@@ -141,7 +141,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
         let placeholder = null;
         if (this.props.showGenericPlaceholder) {
             placeholder = (
-                <div className="mx_MFileBody_info">
+                <div className="mx_MediaBody mx_MFileBody_info">
                     <span className="mx_MFileBody_info_icon" />
                     <span className="mx_MFileBody_info_filename">
                         { presentableTextForFile(content, _t("Attachment"), false) }
