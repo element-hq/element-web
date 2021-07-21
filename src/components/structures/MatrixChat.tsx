@@ -107,6 +107,7 @@ import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 import SoftLogout from './auth/SoftLogout';
 import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../utils/strings";
+import { Anonymity, getAnalytics } from '../../PosthogAnalytics';
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -387,6 +388,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (SettingsStore.getValue("analyticsOptIn")) {
             Analytics.enable();
         }
+        getAnalytics().init(SettingsStore.getValue("analyticsOptIn") ? Anonymity.Pseudonymous : Anonymity.Anonymous);
         CountlyAnalytics.instance.enable(/* anonymous = */ true);
     }
 
@@ -498,6 +500,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             } else if (SettingsStore.getValue("analyticsOptIn")) {
                 CountlyAnalytics.instance.enable(/* anonymous = */ false);
             }
+            getAnalytics().setAnonymity(SettingsStore.getValue("analyticsOptIn") ?
+                Anonymity.Pseudonymous: Anonymity.Anonymous);
         });
         // Note we don't catch errors from this: we catch everything within
         // loadSession as there's logic there to ask the user if they want
@@ -822,6 +826,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 if (CountlyAnalytics.instance.canEnable()) {
                     CountlyAnalytics.instance.enable(/* anonymous = */ false);
                 }
+                getAnalytics().setAnonymity(Anonymity.Pseudonymous);
                 break;
             case 'reject_cookies':
                 SettingsStore.setValue("analyticsOptIn", null, SettingLevel.DEVICE, false);
