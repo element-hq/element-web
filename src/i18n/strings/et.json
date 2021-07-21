@@ -3489,5 +3489,12 @@
     "Global": "Üldised",
     "There was an error loading your notification settings.": "Sinu teavituste seadistuste laadimisel tekkis viga.",
     "Transfer Failed": "Edasisuunamine ei õnnestunud",
-    "Unable to transfer call": "Kõne edasisuunamine ei õnnestunud"
+    "Unable to transfer call": "Kõne edasisuunamine ei õnnestunud",
+    "Downloading": "Laadin alla",
+    "The call is in an unknown state!": "Selle kõne oleks on teadmata!",
+    "Call back": "Helista tagasi",
+    "This call has failed": "Kõne ühendamine ei õnnestunud",
+    "You missed this call": "Sa ei võtnud kõnet vastu",
+    "Unknown failure: %(reason)s)": "Tundmatu viga: %(reason)s",
+    "No answer": "Keegi ei vasta kõnele"
 }
