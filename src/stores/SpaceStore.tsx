@@ -234,7 +234,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
                                 <p>{ _t("This makes it easy for rooms to stay private to a space, " +
                                     "while letting people in the space find and join them. " +
-                                    "All new rooms in a space will have this option available.")}</p>
+                                    "All new rooms in a space will have this option available.") }</p>
                             </>,
                             button: _t("OK"),
                             hasCloseButton: false,

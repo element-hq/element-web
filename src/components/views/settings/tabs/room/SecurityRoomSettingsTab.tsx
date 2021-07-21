@@ -392,7 +392,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                                 <RoomAvatar room={room} height={32} width={32} />
                                 { room.name }
                             </span>;
-                        })}
+                        }) }
                         { moreText && <span>{ moreText }</span> }
                     </div>
                 </div>;

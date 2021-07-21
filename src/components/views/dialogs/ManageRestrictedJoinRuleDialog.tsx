@@ -119,12 +119,12 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
             { _t("Decide which spaces can access this room. " +
                 "If a space is selected, its members can find and join <RoomName/>.", {}, {
                 RoomName: () => <b>{ room.name }</b>,
-            })}
+            }) }
         </p>
         <MatrixClientContext.Provider value={cli}>
             <SearchBox
                 className="mx_textinput_icon mx_textinput_search"
-                placeholder={ _t("Search spaces") }
+                placeholder={_t("Search spaces")}
                 onSearch={setQuery}
                 autoComplete={true}
                 autoFocus={true}

@@ -140,7 +140,7 @@ export default class Dropdown extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
+    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line
         if (!nextProps.children || nextProps.children.length === 0) {
             return;
         }
