@@ -32,7 +32,7 @@ export enum PlaybackState {
 
 export const PLAYBACK_WAVEFORM_SAMPLES = 39;
 const THUMBNAIL_WAVEFORM_SAMPLES = 100; // arbitrary: [30,120]
-const DEFAULT_WAVEFORM = arraySeed(0, PLAYBACK_WAVEFORM_SAMPLES);
+export const DEFAULT_WAVEFORM = arraySeed(0, PLAYBACK_WAVEFORM_SAMPLES);
 
 function makePlaybackWaveform(input: number[]): number[] {
     // First, convert negative amplitudes to positive so we don't detect zero as "noisy".

@@ -23,6 +23,7 @@ import AudioPlayer from "../audio_messages/AudioPlayer";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 import MFileBody from "./MFileBody";
 import { IBodyProps } from "./IBodyProps";
+import { PlaybackManager } from "../../../voice/PlaybackManager";
 
 interface IState {
     error?: Error;
@@ -62,7 +63,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         const waveform = content?.["org.matrix.msc1767.audio"]?.waveform?.map(p => p / 1024);
 
         // We should have a buffer to work with now: let's set it up
-        const playback = new Playback(buffer, waveform);
+        const playback = PlaybackManager.instance.createInstance(buffer, waveform);
         playback.clockInfo.populatePlaceholdersFrom(this.props.mxEvent);
         this.setState({ playback });
 
