@@ -249,7 +249,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             publicPrivateLabel = <p>
                 { _t(
                     "Everyone in <SpaceName/> will be able to find and join this room.", {}, {
-                        SpaceName: () => this.props.parentSpace.name,
+                        SpaceName: () => <b>{ this.props.parentSpace.name }</b>,
                     },
                 ) }
                 &nbsp;
@@ -259,7 +259,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             publicPrivateLabel = <p>
                 { _t(
                     "Anyone will be able to find and join this room, not just members of <SpaceName/>.", {}, {
-                        SpaceName: () => this.props.parentSpace.name,
+                        SpaceName: () => <b>{ this.props.parentSpace.name }</b>,
                     },
                 ) }
                 &nbsp;

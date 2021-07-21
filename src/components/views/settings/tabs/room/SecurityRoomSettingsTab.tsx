@@ -337,7 +337,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 || (this.state.joinRule === JoinRule.Restricted && !this.state.restrictedAllowRoomIds?.length),
         }, {
             value: JoinRule.Public,
-            label: _t("Public (anyone)"),
+            label: _t("Public"),
             description: _t("Anyone can find and join."),
         }];
 
