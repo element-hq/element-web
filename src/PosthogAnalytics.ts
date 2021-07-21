@@ -41,7 +41,7 @@ export class PosthogAnalytics {
     private static _instance = null;
 
     public static instance(): PosthogAnalytics {
-        if (!this.instance) {
+        if (!this._instance) {
             this._instance = new PosthogAnalytics(posthog);
         }
         return this._instance;
