@@ -25,7 +25,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { getAnalytics } from "../../../PosthogAnalytics";
+import { getAnalytics, IWelcomeScreenLoad } from "../../../PosthogAnalytics";
 
 // translatable strings for Welcome pages
 _td("Sign in with SSO");
@@ -71,6 +71,6 @@ export default class Welcome extends React.PureComponent {
     }
 
     componentDidMount() {
-        getAnalytics().trackAnonymousEvent("welcome_screen_load", {});
+        getAnalytics().trackAnonymousEvent<IWelcomeScreenLoad>("welcome_screen_load", { foo: "bar" });
     }
 }
