@@ -23,7 +23,7 @@ export interface IRoomEvent extends IPseudonymousEvent {
     hashedRoomId: string
 }
 
-export interface IOnboardingLoginBegin extends IEvent {
+export interface IOnboardingLoginBegin extends IAnonymousEvent {
     key: "onboarding_login_begin",
 }
 
