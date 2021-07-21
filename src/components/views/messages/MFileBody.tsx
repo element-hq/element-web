@@ -125,7 +125,6 @@ export function presentableTextForFile(content: IContent, withSize = true): stri
 interface IProps extends IBodyProps {
     /* whether or not to show the default placeholder for the file. Defaults to true. */
     showGenericPlaceholder: boolean;
-    forExport?: boolean;
 }
 
 interface IState {
@@ -174,9 +173,9 @@ export default class MFileBody extends React.Component<IProps, IState> {
             placeholder = (
                 <div className="mx_MFileBody_info">
                     <span className="mx_MFileBody_info_icon">
-                        {this.props.forExport ?
+                        { this.props.forExport ?
                             <img alt="Attachment" className="mx_export_attach_icon" src="icons/attach.svg" />
-                            : null}
+                            : null }
                     </span>
                     <span className="mx_MFileBody_info_filename">
                         { presentableTextForFile(content, false) }

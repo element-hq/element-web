@@ -59,7 +59,7 @@ export default class PlainTextExporter extends Exporter {
         return `<${rplName}${rplSource}> ${rplText}`;
     };
 
-    protected _textForEvent = async (mxEv: MatrixEvent) => {
+    protected plainTextForEvent = async (mxEv: MatrixEvent) => {
         const senderDisplayName = mxEv.sender && mxEv.sender.name ? mxEv.sender.name : mxEv.getSender();
         let mediaText = "";
         if (this.isAttachment(mxEv)) {
@@ -94,7 +94,7 @@ export default class PlainTextExporter extends Exporter {
             this.updateProgress(`Processing event ${i + 1} out of ${events.length}`, false, true);
             if (this.cancelled) return this.cleanUp();
             if (!haveTileForEvent(event)) continue;
-            const textForEvent = await this._textForEvent(event);
+            const textForEvent = await this.plainTextForEvent(event);
             content += textForEvent && `${new Date(event.getTs()).toLocaleString()} - ${textForEvent}\n`;
         }
         return content;

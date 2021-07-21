@@ -63,7 +63,7 @@ export default class HTMLExporter extends Exporter {
                 name={this.room.name}
                 title={this.room.name}
                 url={blob ? avatarPath : null}
-                resizeMethod={"crop"}
+                resizeMethod="crop"
             />
         );
         return renderToStaticMarkup(avatar);
@@ -83,31 +83,31 @@ export default class HTMLExporter extends Exporter {
 
         const exportedText = renderToStaticMarkup(
             <p>
-                {_t(
+                { _t(
                     "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.",
                     {
                         exportDate,
                     },
                     {
-                        roomName: () => <b>{this.room.name}</b>,
+                        roomName: () => <b>{ this.room.name }</b>,
                         exporterDetails: () => (
                             <a
                                 href={`https://matrix.to/#/${exporter}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                {exporterName ? (
+                                { exporterName ? (
                                     <>
-                                        <b>{exporterName}</b>
-                                        {exporter}
+                                        <b>{ exporterName }</b>
+                                        { exporter }
                                     </>
                                 ) : (
-                                    <b>{exporter}</b>
-                                )}
+                                    <b>{ exporter }</b>
+                                ) }
                             </a>
                         ),
                     },
-                )}
+                ) }
             </p>,
         );
 
@@ -232,7 +232,7 @@ export default class HTMLExporter extends Exporter {
         return renderToStaticMarkup(dateSeparator);
     }
 
-    protected _wantsDateSeparator(event: MatrixEvent, prevEvent: MatrixEvent) {
+    protected needsDateSeparator(event: MatrixEvent, prevEvent: MatrixEvent) {
         if (prevEvent == null) return true;
         return wantsDateSeparator(prevEvent.getDate(), event.getDate());
     }
@@ -341,8 +341,8 @@ export default class HTMLExporter extends Exporter {
             if (this.cancelled) return this.cleanUp();
             if (!haveTileForEvent(event)) continue;
 
-            content += this._wantsDateSeparator(event, prevEvent) ? this.getDateSeparator(event) : "";
-            const shouldBeJoined = !this._wantsDateSeparator(event, prevEvent)
+            content += this.needsDateSeparator(event, prevEvent) ? this.getDateSeparator(event) : "";
+            const shouldBeJoined = !this.needsDateSeparator(event, prevEvent)
                                        && shouldFormContinuation(prevEvent, event, false);
             const body = await this.createMessageBody(event, shouldBeJoined);
             this.totalSize += Buffer.byteLength(body);

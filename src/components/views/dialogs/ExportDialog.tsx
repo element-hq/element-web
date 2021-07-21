@@ -193,7 +193,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     const exportTypeOptions = Object.keys(exportTypes).map((type) => {
         return (
             <option key={type} value={type}>
-                {textForType(type)}
+                { textForType(type) }
             </option>
         );
     });
@@ -229,7 +229,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 <p>{ _t("The export was cancelled successfully") }</p>
 
                 <DialogButtons
-                    primaryButton={ _t("Okay") }
+                    primaryButton={_t("Okay")}
                     hasCancel={false}
                     onPrimaryButtonClick={onFinished}
                 />
@@ -331,9 +331,9 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 fixedWidth={true}
             >
                 <p>
-                    {_t(
+                    { _t(
                         "Are you sure you want to stop exporting your data? If you do, you'll need to start over.",
-                    )}
+                    ) }
                 </p>
                 <DialogButtons
                     primaryButton={_t("Stop")}
