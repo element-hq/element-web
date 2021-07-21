@@ -85,6 +85,7 @@ export class PosthogAnalytics {
     }
 
     public init(anonymity: Anonymity) {
+        this.anonymity = anonymity;
         const posthogConfig = SdkConfig.get()["posthog"];
         if (posthogConfig) {
             this.posthog.init(posthogConfig.projectApiKey, {
