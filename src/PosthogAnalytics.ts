@@ -107,6 +107,6 @@ export class PosthogAnalytics {
     }
 }
 
-export default function getAnalytics() {
+export function getAnalytics(): PosthogAnalytics {
     return PosthogAnalytics.instance();
 }
