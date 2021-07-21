@@ -256,10 +256,9 @@ export default class CallView extends React.Component<IProps, IState> {
     private getOrderedFeeds(feeds: Array<CallFeed>): { primary: CallFeed, secondary: Array<CallFeed> } {
         let primary;
 
-        // First try to find remote screen-sharing stream
-        primary = feeds.find((feed) => {
-            return feed.purpose === SDPStreamMetadataPurpose.Screenshare && !feed.isLocal();
-        });
+        // Try to use a screensharing as primary, a remote one if possible
+        const screensharingFeeds = feeds.filter((feed) => feed.purpose === SDPStreamMetadataPurpose.Screenshare);
+        primary = screensharingFeeds.find((feed) => !feed.isLocal()) || screensharingFeeds[0];
         // If we didn't find remote screen-sharing stream, try to find any remote stream
         if (!primary) {
             primary = feeds.find((feed) => !feed.isLocal());
