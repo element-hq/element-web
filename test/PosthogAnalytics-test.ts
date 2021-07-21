@@ -81,4 +81,12 @@ describe("PosthogAnalytics", () => {
             });
         });
     });
+
+    it("Should silently not send messages if not inititalised", () => {
+        analytics.track<ITestEvent>("jest_test_event", {
+            foo: "bar",
+        });
+
+        expect(fakePosthog.capture.mock.calls.length).toBe(0);
+    });
 });
