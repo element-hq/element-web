@@ -15,26 +15,29 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-import PropTypes from 'prop-types';
 import filesize from 'filesize';
 import { _t } from '../../../languageHandler';
-import { decryptFile } from '../../../utils/DecryptFile';
 import Modal from '../../../Modal';
 import AccessibleButton from "../elements/AccessibleButton";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromContent } from "../../../customisations/Media";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { TileShape } from "../rooms/EventTile";
+import { presentableTextForFile } from "../../../utils/FileUtils";
+import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
+import { IBodyProps } from "./IBodyProps";
 
-let downloadIconUrl; // cached copy of the download.svg asset for the sandboxed iframe later on
+export let DOWNLOAD_ICON_URL; // cached copy of the download.svg asset for the sandboxed iframe later on
 
 async function cacheDownloadIcon() {
-    if (downloadIconUrl) return; // cached already
+    if (DOWNLOAD_ICON_URL) return; // cached already
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const svg = await fetch(require("../../../../res/img/download.svg")).then(r => r.text());
-    downloadIconUrl = "data:image/svg+xml;base64," + window.btoa(svg);
+    DOWNLOAD_ICON_URL = "data:image/svg+xml;base64," + window.btoa(svg);
 }
 
 // Cache the asset immediately
+// noinspection JSIgnoredPromiseFromCall
 cacheDownloadIcon();
 
 // User supplied content can contain scripts, we have to be careful that
@@ -72,7 +75,7 @@ cacheDownloadIcon();
  * @param {HTMLElement} element The element to get the current style of.
  * @return {string} The CSS style encoded as a string.
  */
-function computedStyle(element) {
+export function computedStyle(element: HTMLElement) {
     if (!element) {
         return "";
     }
@@ -90,82 +93,48 @@ function computedStyle(element) {
     return cssText;
 }
 
-/**
- * Extracts a human readable label for the file attachment to use as
- * link text.
- *
- * @param {Object} content The "content" key of the matrix event.
- * @param {boolean} withSize Whether to include size information. Default true.
- * @return {string} the human readable link text for the attachment.
- */
-export function presentableTextForFile(content, withSize = true) {
-    let linkText = _t("Attachment");
-    if (content.body && content.body.length > 0) {
-        // The content body should be the name of the file including a
-        // file extension.
-        linkText = content.body;
-    }
+interface IProps extends IBodyProps {
+    /* whether or not to show the default placeholder for the file. Defaults to true. */
+    showGenericPlaceholder: boolean;
+}
 
-    if (content.info && content.info.size && withSize) {
-        // If we know the size of the file then add it as human readable
-        // string to the end of the link text so that the user knows how
-        // big a file they are downloading.
-        // The content.info also contains a MIME-type but we don't display
-        // it since it is "ugly", users generally aren't aware what it
-        // means and the type of the attachment can usually be inferrered
-        // from the file extension.
-        linkText += ' (' + filesize(content.info.size) + ')';
-    }
-    return linkText;
+interface IState {
+    decryptedBlob?: Blob;
 }
 
 @replaceableComponent("views.messages.MFileBody")
-export default class MFileBody extends React.Component {
-    static propTypes = {
-        /* the MatrixEvent to show */
-        mxEvent: PropTypes.object.isRequired,
-        /* already decrypted blob */
-        decryptedBlob: PropTypes.object,
-        /* called when the download link iframe is shown */
-        onHeightChanged: PropTypes.func,
-        /* the shape of the tile, used */
-        tileShape: PropTypes.string,
-        /* whether or not to show the default placeholder for the file. Defaults to true. */
-        showGenericPlaceholder: PropTypes.bool,
-    };
-
+export default class MFileBody extends React.Component<IProps, IState> {
     static defaultProps = {
         showGenericPlaceholder: true,
     };
 
-    constructor(props) {
+    private iframe: React.RefObject<HTMLIFrameElement> = createRef();
+    private dummyLink: React.RefObject<HTMLAnchorElement> = createRef();
+    private userDidClick = false;
+
+    public constructor(props: IProps) {
         super(props);
 
-        this.state = {
-            decryptedBlob: (this.props.decryptedBlob ? this.props.decryptedBlob : null),
-        };
-
-        this._iframe = createRef();
-        this._dummyLink = createRef();
+        this.state = {};
     }
 
-    _getContentUrl() {
+    private getContentUrl(): string {
         const media = mediaFromContent(this.props.mxEvent.getContent());
         return media.srcHttp;
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    public componentDidUpdate(prevProps, prevState) {
         if (this.props.onHeightChanged && !prevState.decryptedBlob && this.state.decryptedBlob) {
             this.props.onHeightChanged();
         }
     }
 
-    render() {
-        const content = this.props.mxEvent.getContent();
+    public render() {
+        const content = this.props.mxEvent.getContent<IMediaEventContent>();
         const text = presentableTextForFile(content);
-        const isEncrypted = content.file !== undefined;
+        const isEncrypted = this.props.mediaEventHelper.media.isEncrypted;
         const fileName = content.body && content.body.length > 0 ? content.body : _t("Attachment");
-        const contentUrl = this._getContentUrl();
+        const contentUrl = this.getContentUrl();
         const fileSize = content.info ? content.info.size : null;
         const fileType = content.info ? content.info.mimetype : "application/octet-stream";
 
@@ -175,36 +144,32 @@ export default class MFileBody extends React.Component {
                 <div className="mx_MFileBody_info">
                     <span className="mx_MFileBody_info_icon" />
                     <span className="mx_MFileBody_info_filename">
-                        { presentableTextForFile(content, false) }
+                        { presentableTextForFile(content, _t("Attachment"), false) }
                     </span>
                 </div>
             );
         }
 
+        const showDownloadLink = this.props.tileShape || !this.props.showGenericPlaceholder;
+
         if (isEncrypted) {
-            if (this.state.decryptedBlob === null) {
+            if (!this.state.decryptedBlob) {
                 // Need to decrypt the attachment
                 // Wait for the user to click on the link before downloading
                 // and decrypting the attachment.
-                let decrypting = false;
-                const decrypt = (e) => {
-                    if (decrypting) {
-                        return false;
-                    }
-                    decrypting = true;
-                    decryptFile(content.file).then((blob) => {
+                const decrypt = async () => {
+                    try {
+                        this.userDidClick = true;
                         this.setState({
-                            decryptedBlob: blob,
+                            decryptedBlob: await this.props.mediaEventHelper.sourceBlob.value,
                         });
-                    }).catch((err) => {
+                    } catch (err) {
                         console.warn("Unable to decrypt attachment: ", err);
                         Modal.createTrackedDialog('Error decrypting attachment', '', ErrorDialog, {
                             title: _t("Error"),
                             description: _t("Error decrypting attachment"),
                         });
-                    }).finally(() => {
-                        decrypting = false;
-                    });
+                    }
                 };
 
                 // This button should actually Download because usercontent/ will try to click itself
@@ -212,11 +177,11 @@ export default class MFileBody extends React.Component {
                 return (
                     <span className="mx_MFileBody">
                         { placeholder }
-                        <div className="mx_MFileBody_download">
+                        { showDownloadLink && <div className="mx_MFileBody_download">
                             <AccessibleButton onClick={decrypt}>
                                 { _t("Decrypt %(text)s", { text: text }) }
                             </AccessibleButton>
-                        </div>
+                        </div> }
                     </span>
                 );
             }
@@ -224,9 +189,9 @@ export default class MFileBody extends React.Component {
             // When the iframe loads we tell it to render a download link
             const onIframeLoad = (ev) => {
                 ev.target.contentWindow.postMessage({
-                    imgSrc: downloadIconUrl,
+                    imgSrc: DOWNLOAD_ICON_URL,
                     imgStyle: null, // it handles this internally for us. Useful if a downstream changes the icon.
-                    style: computedStyle(this._dummyLink.current),
+                    style: computedStyle(this.dummyLink.current),
                     blob: this.state.decryptedBlob,
                     // Set a download attribute for encrypted files so that the file
                     // will have the correct name when the user tries to download it.
@@ -234,7 +199,7 @@ export default class MFileBody extends React.Component {
                     download: fileName,
                     textContent: _t("Download %(text)s", { text: text }),
                     // only auto-download if a user triggered this iframe explicitly
-                    auto: !this.props.decryptedBlob,
+                    auto: this.userDidClick,
                 }, "*");
             };
 
@@ -244,21 +209,21 @@ export default class MFileBody extends React.Component {
             return (
                 <span className="mx_MFileBody">
                     { placeholder }
-                    <div className="mx_MFileBody_download">
+                    { showDownloadLink && <div className="mx_MFileBody_download">
                         <div style={{ display: "none" }}>
                             { /*
                               * Add dummy copy of the "a" tag
                               * We'll use it to learn how the download link
                               * would have been styled if it was rendered inline.
                               */ }
-                            <a ref={this._dummyLink} />
+                            <a ref={this.dummyLink} />
                         </div>
                         <iframe
                             src={url}
                             onLoad={onIframeLoad}
-                            ref={this._iframe}
+                            ref={this.iframe}
                             sandbox="allow-scripts allow-downloads allow-downloads-without-user-activation" />
-                    </div>
+                    </div> }
                 </span>
             );
         } else if (contentUrl) {
@@ -289,7 +254,7 @@ export default class MFileBody extends React.Component {
 
                     // Start a fetch for the download
                     // Based upon https://stackoverflow.com/a/49500465
-                    fetch(contentUrl).then((response) => response.blob()).then((blob) => {
+                    this.props.mediaEventHelper.sourceBlob.value.then((blob) => {
                         const blobUrl = URL.createObjectURL(blob);
 
                         // We have to create an anchor to download the file
@@ -306,36 +271,20 @@ export default class MFileBody extends React.Component {
                 downloadProps["download"] = fileName;
             }
 
-            // If the attachment is not encrypted then we check whether we
-            // are being displayed in the room timeline or in a list of
-            // files in the right hand side of the screen.
-            if (this.props.tileShape === TileShape.FileGrid) {
-                return (
-                    <span className="mx_MFileBody">
-                        { placeholder }
-                        <div className="mx_MFileBody_download">
-                            <a className="mx_MFileBody_downloadLink" {...downloadProps}>
-                                { fileName }
-                            </a>
-                            <div className="mx_MImageBody_size">
-                                { content.info && content.info.size ? filesize(content.info.size) : "" }
-                            </div>
-                        </div>
-                    </span>
-                );
-            } else {
-                return (
-                    <span className="mx_MFileBody">
-                        { placeholder }
-                        <div className="mx_MFileBody_download">
-                            <a {...downloadProps}>
-                                <span className="mx_MFileBody_download_icon" />
-                                { _t("Download %(text)s", { text: text }) }
-                            </a>
-                        </div>
-                    </span>
-                );
-            }
+            return (
+                <span className="mx_MFileBody">
+                    { placeholder }
+                    { showDownloadLink && <div className="mx_MFileBody_download">
+                        <a {...downloadProps}>
+                            <span className="mx_MFileBody_download_icon" />
+                            { _t("Download %(text)s", { text: text }) }
+                        </a>
+                        { this.props.tileShape === TileShape.FileGrid && <div className="mx_MImageBody_size">
+                            { content.info && content.info.size ? filesize(content.info.size) : "" }
+                        </div> }
+                    </div> }
+                </span>
+            );
         } else {
             const extra = text ? (': ' + text) : '';
             return <span className="mx_MFileBody">

@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,10 +17,10 @@ limitations under the License.
 import React from 'react';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-@replaceableComponent("views.auth.AuthBody")
-export default class AuthBody extends React.PureComponent {
-    render() {
-        return <div className="mx_AuthBody">
+@replaceableComponent("views.auth.CompleteSecurityBody")
+export default class CompleteSecurityBody extends React.PureComponent {
+    public render(): React.ReactNode {
+        return <div className="mx_CompleteSecurityBody">
             { this.props.children }
         </div>;
     }

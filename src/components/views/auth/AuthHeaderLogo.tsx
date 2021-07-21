@@ -1,7 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,17 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { _t } from '../../../languageHandler';
 import React from 'react';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-@replaceableComponent("views.auth.AuthFooter")
-export default class AuthFooter extends React.Component {
-    render() {
-        return (
-            <div className="mx_AuthFooter">
-                <a href="https://matrix.org" target="_blank" rel="noreferrer noopener">{ _t("powered by Matrix") }</a>
-            </div>
-        );
+@replaceableComponent("views.auth.AuthHeaderLogo")
+export default class AuthHeaderLogo extends React.PureComponent {
+    public render(): React.ReactNode {
+        return <div className="mx_AuthHeaderLogo">
+            Matrix
+        </div>;
     }
 }
