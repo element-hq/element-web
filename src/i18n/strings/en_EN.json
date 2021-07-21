@@ -1678,6 +1678,7 @@
     "Invited by %(sender)s": "Invited by %(sender)s",
     "Jump to first unread message.": "Jump to first unread message.",
     "Mark all as read": "Mark all as read",
+    "The voice message failed to upload.": "The voice message failed to upload.",
     "Unable to access your microphone": "Unable to access your microphone",
     "We were unable to access your microphone. Please check your browser settings and try again.": "We were unable to access your microphone. Please check your browser settings and try again.",
     "No microphone found": "No microphone found",
