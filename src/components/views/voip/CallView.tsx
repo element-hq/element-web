@@ -588,6 +588,8 @@ export default class CallView extends React.Component<IProps, IState> {
         const avatarSize = this.props.pipMode ? 76 : 160;
         const transfereeCall = CallHandler.sharedInstance().getTransfereeForCallId(this.props.call.callId);
         const isOnHold = this.state.isLocalOnHold || this.state.isRemoteOnHold;
+        const isScreensharing = this.props.call.isScreensharing();
+        const sidebarShown = this.state.sidebarShown;
 
         let contentView: React.ReactNode;
         let holdTransferContent;
@@ -638,11 +640,15 @@ export default class CallView extends React.Component<IProps, IState> {
         }
 
         let sidebar;
-        if (!isOnHold && !transfereeCall && !this.props.pipMode && this.state.sidebarShown) {
+        if (
+            (!isOnHold && !transfereeCall && !this.props.pipMode) &&
+            (sidebarShown || isScreensharing)
+        ) {
             sidebar = (
                 <CallViewSidebar
                     feeds={this.state.secondaryFeeds}
                     call={this.props.call}
+                    hideLocalFeeds={isScreensharing && !sidebarShown}
                 />
             );
         }
@@ -744,7 +750,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     mx_CallView_presenting_hidden: !this.state.controlsVisible,
                 });
                 const sharerName = this.state.primaryFeed.getMember().name;
-                let text = this.props.call.isScreensharing()
+                let text = isScreensharing
                     ? _t("You are presenting")
                     : _t('%(sharerName)s is presenting', { sharerName });
                 if (!this.state.sidebarShown) {
