@@ -42,7 +42,6 @@ describe("PosthogAnalytics", () => {
     });
 
     afterEach(() => {
-        navigator.doNotTrack = null;
         window.crypto = null;
     });
 
