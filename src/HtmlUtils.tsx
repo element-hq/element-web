@@ -80,7 +80,7 @@ function mightContainEmoji(str: string): boolean {
  */
 export function unicodeToShortcode(char: string): string {
     const shortcodes = getEmojiFromUnicode(char)?.shortcodes;
-    return shortcodes && shortcodes.length > 0 ? `:${shortcodes[0]}:` : '';
+    return shortcodes?.length ? `:${shortcodes[0]}:` : '';
 }
 
 export function processHtmlForSending(html: string): string {
