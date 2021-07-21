@@ -230,11 +230,11 @@ export default class ImageView extends React.Component<IProps, IState> {
         }
     };
 
-    private onZoomInClick = (ev: MouseEvent) => {
+    private onZoomInClick = () => {
         this.zoomDelta(ZOOM_STEP);
     };
 
-    private onZoomOutClick = (ev: MouseEvent) => {
+    private onZoomOutClick = () => {
         this.zoomDelta(-ZOOM_STEP);
     };
 
