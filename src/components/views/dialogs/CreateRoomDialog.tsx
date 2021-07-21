@@ -322,16 +322,16 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         }
 
         const options = [
-            <div key={JoinRule.Invite} className="">
+            <div key={JoinRule.Invite} className="mx_CreateRoomDialog_dropdown_invite">
                 { _t("Private room (invite only)") }
             </div>,
-            <div key={JoinRule.Public} className="">
+            <div key={JoinRule.Public} className="mx_CreateRoomDialog_dropdown_public">
                 { _t("Public room") }
             </div>,
         ];
 
         if (this.supportsRestricted) {
-            options.unshift(<div key={JoinRule.Restricted} className="">
+            options.unshift(<div key={JoinRule.Restricted} className="mx_CreateRoomDialog_dropdown_restricted">
                 { _t("Visible to space members") }
             </div>);
         }

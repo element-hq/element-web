@@ -232,7 +232,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                                     </div>
                                 </div>
 
-                                <p>{ _t("This make it easy for rooms to stay private to a space, " +
+                                <p>{ _t("This makes it easy for rooms to stay private to a space, " +
                                     "while letting people in the space find and join them. " +
                                     "All new rooms in a space will have this option available.")}</p>
                             </>,

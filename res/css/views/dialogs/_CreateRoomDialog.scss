@@ -120,6 +120,44 @@ limitations under the License.
         .mx_Dropdown_input {
             border: 1px solid $input-border-color;
         }
+
+        .mx_Dropdown_option {
+            font-size: $font-14px;
+            line-height: $font-32px;
+            height: 32px;
+
+            > div {
+                padding-left: 30px;
+                position: relative;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    height: 16px;
+                    width: 16px;
+                    left: 6px;
+                    top: 8px;
+                    mask-repeat: no-repeat;
+                    mask-position: center;
+                    background-color: $secondary-fg-color;
+                }
+            }
+        }
+
+        .mx_CreateRoomDialog_dropdown_invite::before {
+            mask-image: url('$(res)/img/element-icons/lock.svg');
+            mask-size: contain;
+        }
+
+        .mx_CreateRoomDialog_dropdown_public::before {
+            mask-image: url('$(res)/img/globe.svg');
+            mask-size: 12px;
+        }
+
+        .mx_CreateRoomDialog_dropdown_restricted::before {
+            mask-image: url('$(res)/img/element-icons/community-members.svg');
+            mask-size: contain;
+        }
     }
 }
 

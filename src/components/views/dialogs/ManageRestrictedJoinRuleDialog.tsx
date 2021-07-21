@@ -117,7 +117,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
     >
         <p>
             { _t("Decide which spaces can access this room. " +
-                "If a space is selected its members will be able to find and join <RoomName/>.", {}, {
+                "If a space is selected, its members can find and join <RoomName/>.", {}, {
                 RoomName: () => <b>{ room.name }</b>,
             })}
         </p>

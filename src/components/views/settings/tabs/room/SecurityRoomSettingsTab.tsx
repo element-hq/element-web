@@ -419,7 +419,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         return (
             <div className="mx_SecurityRoomSettingsTab_joinRule">
                 <div className="mx_SettingsTab_subsectionText">
-                    <span>{ _t("Decide who can view and join %(roomName)s.", {
+                    <span>{ _t("Decide who can join %(roomName)s.", {
                         roomName: client.getRoom(this.props.roomId)?.name,
                     }) }</span>
                 </div>
