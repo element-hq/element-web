@@ -73,14 +73,14 @@ limitations under the License.
     > .mx_VideoFeed {
         width: 100%;
         height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
 
         &.mx_VideoFeed_voice {
             // We don't want to collide with the call controls that have 52px of height
             padding-bottom: 52px;
             background-color: $inverted-bg-color;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         &.mx_VideoFeed_video {
