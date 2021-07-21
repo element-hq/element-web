@@ -712,7 +712,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         const callEventGrouper = this.callEventGroupers.get(mxEv.getContent().call_id);
 
-        const isDirectMessage = this.props.room?.getJoinedMemberCount() <= 2;
+        const isDirectMessage = this.props.room?.getMembersCount() <= 2;
 
         // use txnId as key if available so that we don't remount during sending
         ret.push(
