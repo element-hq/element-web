@@ -69,7 +69,7 @@ const BetaFeedbackDialog: React.FC<IProps> = ({ featureId, onFinished }) => {
             <div className="mx_BetaFeedbackDialog_subheading">
                 { _t(info.feedbackSubheading) }
                 &nbsp;
-                { _t("Your platform and username will be noted to help us use your feedback as much as we can.")}
+                { _t("Your platform and username will be noted to help us use your feedback as much as we can.") }
 
                 <AccessibleButton kind="link" onClick={() => {
                     onFinished(false);

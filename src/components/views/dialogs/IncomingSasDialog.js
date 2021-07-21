@@ -138,7 +138,7 @@ export default class IncomingSasDialog extends React.Component {
                     url={url}
                     width={48} height={48} resizeMethod='crop'
                 />
-                <h2>{oppProfile.displayname}</h2>
+                <h2>{ oppProfile.displayname }</h2>
             </div>;
         } else if (this.state.opponentProfileError) {
             profile = <div>
@@ -146,42 +146,42 @@ export default class IncomingSasDialog extends React.Component {
                     idName={this.props.verifier.userId}
                     width={48} height={48}
                 />
-                <h2>{this.props.verifier.userId}</h2>
+                <h2>{ this.props.verifier.userId }</h2>
             </div>;
         } else {
             profile = <Spinner />;
         }
 
         const userDetailText = [
-            <p key="p1">{_t(
+            <p key="p1">{ _t(
                 "Verify this user to mark them as trusted. " +
                 "Trusting users gives you extra peace of mind when using " +
                 "end-to-end encrypted messages.",
-            )}</p>,
-            <p key="p2">{_t(
+            ) }</p>,
+            <p key="p2">{ _t(
                 // NB. Below wording adjusted to singular 'session' until we have
                 // cross-signing
                 "Verifying this user will mark their session as trusted, and " +
                 "also mark your session as trusted to them.",
-            )}</p>,
+            ) }</p>,
         ];
 
         const selfDetailText = [
-            <p key="p1">{_t(
+            <p key="p1">{ _t(
                 "Verify this device to mark it as trusted. " +
                 "Trusting this device gives you and other users extra peace of mind when using " +
                 "end-to-end encrypted messages.",
-            )}</p>,
-            <p key="p2">{_t(
+            ) }</p>,
+            <p key="p2">{ _t(
                 "Verifying this device will mark it as trusted, and users who have verified with " +
                 "you will trust this device.",
-            )}</p>,
+            ) }</p>,
         ];
 
         return (
             <div>
-                {profile}
-                {isSelf ? selfDetailText : userDetailText}
+                { profile }
+                { isSelf ? selfDetailText : userDetailText }
                 <DialogButtons
                     primaryButton={_t('Continue')}
                     hasCancel={true}
@@ -209,7 +209,7 @@ export default class IncomingSasDialog extends React.Component {
         return (
             <div>
                 <Spinner />
-                <p>{_t("Waiting for partner to confirm...")}</p>
+                <p>{ _t("Waiting for partner to confirm...") }</p>
             </div>
         );
     }
@@ -251,7 +251,7 @@ export default class IncomingSasDialog extends React.Component {
                 onFinished={this._onFinished}
                 fixedWidth={false}
             >
-                {body}
+                { body }
             </BaseDialog>
         );
     }

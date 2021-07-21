@@ -70,7 +70,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     }
 
     // TODO: [REACT-WARNING] Move this to constructor
-    UNSAFE_componentWillMount() { // eslint-disable-line camelcase
+    UNSAFE_componentWillMount() { // eslint-disable-line
         const cli = MatrixClientPeg.get();
         cli.on("RoomState.events", this.onStateEvent);
 
@@ -140,7 +140,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 {
                     a: sub => <a href="https://element.io/help#encryption"
                         rel="noreferrer noopener" target="_blank"
-                    >{sub}</a>,
+                    >{ sub }</a>,
                 },
             ),
             onFinished: (confirm) => {
@@ -323,7 +323,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 <div className='mx_SecurityRoomSettingsTab_warning'>
                     <img src={require("../../../../../../res/img/warning.svg")} width={15} height={15} />
                     <span>
-                        {_t("To link to this room, please add an address.")}
+                        { _t("To link to this room, please add an address.") }
                     </span>
                 </div>
             );
@@ -467,8 +467,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         return (
             <div>
                 <div>
-                    {_t('Changes to who can read history will only apply to future messages in this room. ' +
-                        'The visibility of existing history will be unchanged.')}
+                    { _t('Changes to who can read history will only apply to future messages in this room. ' +
+                        'The visibility of existing history will be unchanged.') }
                 </div>
                 <StyledRadioGroup
                     name="historyVis"
@@ -523,9 +523,9 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         }
 
         let historySection = (<>
-            <span className='mx_SettingsTab_subheading'>{_t("Who can read history?")}</span>
+            <span className='mx_SettingsTab_subheading'>{ _t("Who can read history?") }</span>
             <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                {this.renderHistory()}
+                { this.renderHistory() }
             </div>
         </>);
         if (!SettingsStore.getValue(UIFeature.RoomHistorySettings)) {
@@ -552,7 +552,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     { encryptionSettings }
                 </div>
 
-                <span className='mx_SettingsTab_subheading'>{_t("Access")}</span>
+                <span className='mx_SettingsTab_subheading'>{ _t("Access") }</span>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                     { this.renderJoinRule() }
                 </div>

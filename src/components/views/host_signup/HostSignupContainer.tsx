@@ -27,7 +27,7 @@ const HostSignupContainer = () => {
     });
 
     return <div className="mx_HostSignupContainer">
-        {isActive &&
+        { isActive &&
             <HostSignupDialog />
         }
     </div>;

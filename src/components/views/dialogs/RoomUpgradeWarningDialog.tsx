@@ -110,7 +110,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
                         },
                         {
                             "a": (sub) => {
-                                return <a href='#' onClick={this.openBugReportDialog}>{sub}</a>;
+                                return <a href='#' onClick={this.openBugReportDialog}>{ sub }</a>;
                             },
                         },
                     ) }
@@ -143,14 +143,14 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
                     </p>
                     { bugReports }
                     <p>
-                        {_t(
+                        { _t(
                             "You'll upgrade this room from <oldVersion /> to <newVersion />.",
                             {},
                             {
                                 oldVersion: () => <code>{ this.currentVersion }</code>,
                                 newVersion: () => <code>{ this.props.targetVersion }</code>,
                             },
-                        )}
+                        ) }
                     </p>
                     { inviteToggle }
                 </div>

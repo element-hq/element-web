@@ -537,15 +537,15 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             <div>
                 <form onSubmit={this.onSubmit}>
                     <div className="mx_AuthBody_fieldRow">
-                        {this.renderUsername()}
+                        { this.renderUsername() }
                     </div>
                     <div className="mx_AuthBody_fieldRow">
-                        {this.renderPassword()}
-                        {this.renderPasswordConfirm()}
+                        { this.renderPassword() }
+                        { this.renderPasswordConfirm() }
                     </div>
                     <div className="mx_AuthBody_fieldRow">
-                        {this.renderEmail()}
-                        {this.renderPhoneNumber()}
+                        { this.renderEmail() }
+                        { this.renderPhoneNumber() }
                     </div>
                     { emailHelperText }
                     { registerButton }

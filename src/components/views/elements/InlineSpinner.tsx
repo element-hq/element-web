@@ -39,7 +39,7 @@ export default class InlineSpinner extends React.PureComponent<IProps> {
                     style={{ width: this.props.w, height: this.props.h }}
                     aria-label={_t("Loading...")}
                 >
-                    {this.props.children}
+                    { this.props.children }
                 </div>
             </div>
         );

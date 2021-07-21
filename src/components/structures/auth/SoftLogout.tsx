@@ -219,7 +219,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         if (this.state.loginView === LOGIN_VIEW.PASSWORD) {
             let error = null;
             if (this.state.errorText) {
-                error = <span className='mx_Login_error'>{this.state.errorText}</span>;
+                error = <span className='mx_Login_error'>{ this.state.errorText }</span>;
             }
 
             if (!introText) {
@@ -228,8 +228,8 @@ export default class SoftLogout extends React.Component<IProps, IState> {
 
             return (
                 <form onSubmit={this.onPasswordLogin}>
-                    <p>{introText}</p>
-                    {error}
+                    <p>{ introText }</p>
+                    { error }
                     <Field
                         type="password"
                         label={_t("Password")}
@@ -243,10 +243,10 @@ export default class SoftLogout extends React.Component<IProps, IState> {
                         type="submit"
                         disabled={this.state.busy}
                     >
-                        {_t("Sign In")}
+                        { _t("Sign In") }
                     </AccessibleButton>
                     <AccessibleButton onClick={this.onForgotPassword} kind="link">
-                        {_t("Forgotten your password?")}
+                        { _t("Forgotten your password?") }
                     </AccessibleButton>
                 </form>
             );
@@ -262,7 +262,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
 
             return (
                 <div>
-                    <p>{introText}</p>
+                    <p>{ introText }</p>
                     <SSOButtons
                         matrixClient={MatrixClientPeg.get()}
                         flow={flow}
@@ -277,10 +277,10 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         // Default: assume unsupported/error
         return (
             <p>
-                {_t(
+                { _t(
                     "You cannot sign in to your account. Please contact your " +
                     "homeserver admin for more information.",
-                )}
+                ) }
             </p>
         );
     }
@@ -291,25 +291,25 @@ export default class SoftLogout extends React.Component<IProps, IState> {
                 <AuthHeader />
                 <AuthBody>
                     <h2>
-                        {_t("You're signed out")}
+                        { _t("You're signed out") }
                     </h2>
 
-                    <h3>{_t("Sign in")}</h3>
+                    <h3>{ _t("Sign in") }</h3>
                     <div>
-                        {this.renderSignInSection()}
+                        { this.renderSignInSection() }
                     </div>
 
-                    <h3>{_t("Clear personal data")}</h3>
+                    <h3>{ _t("Clear personal data") }</h3>
                     <p>
-                        {_t(
+                        { _t(
                             "Warning: Your personal data (including encryption keys) is still stored " +
                             "in this session. Clear it if you're finished using this session, or want to sign " +
                             "in to another account.",
-                        )}
+                        ) }
                     </p>
                     <div>
                         <AccessibleButton onClick={this.onClearAll} kind="danger">
-                            {_t("Clear all data")}
+                            { _t("Clear all data") }
                         </AccessibleButton>
                     </div>
                 </AuthBody>

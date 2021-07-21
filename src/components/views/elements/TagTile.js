@@ -152,7 +152,7 @@ export default class TagTile extends React.Component {
                 "mx_TagTile_badge": true,
                 "mx_TagTile_badgeHighlight": badge.highlight,
             });
-            badgeElement = (<div className={badgeClasses}>{FormattingUtils.formatCount(badge.count)}</div>);
+            badgeElement = (<div className={badgeClasses}>{ FormattingUtils.formatCount(badge.count) }</div>);
         }
 
         const contextButton = this.state.hover || this.props.menuDisplayed ?
@@ -161,7 +161,7 @@ export default class TagTile extends React.Component {
                 onClick={this.openMenu}
                 inputRef={this.props.contextMenuButtonRef}
             >
-                {"\u00B7\u00B7\u00B7"}
+                { "\u00B7\u00B7\u00B7" }
             </AccessibleButton> : <div ref={this.props.contextMenuButtonRef} />;
 
         const AccessibleTooltipButton = sdk.getComponent("elements.AccessibleTooltipButton");
@@ -184,8 +184,8 @@ export default class TagTile extends React.Component {
                     width={avatarSize}
                     height={avatarSize}
                 />
-                {contextButton}
-                {badgeElement}
+                { contextButton }
+                { badgeElement }
             </div>
         </AccessibleTooltipButton>;
     }

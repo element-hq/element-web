@@ -290,7 +290,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             }
             e2eeSection = <React.Fragment>
                 <LabelledToggleSwitch
-                    label={ _t("Enable end-to-end encryption")}
+                    label={_t("Enable end-to-end encryption")}
                     onChange={this.onEncryptedChange}
                     value={this.state.isEncrypted}
                     className='mx_CreateRoomDialog_e2eSwitch' // for end-to-end tests
@@ -381,7 +381,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                                 onChange={this.onNoFederateChange}
                                 value={this.state.noFederate}
                             />
-                            <p>{federateLabel}</p>
+                            <p>{ federateLabel }</p>
                         </details>
                     </div>
                 </form>

@@ -50,22 +50,22 @@ export default class StyledRadioButton extends React.PureComponent<IProps, IStat
 
         const radioButton = <React.Fragment>
             <input type='radio' disabled={disabled} {...otherProps} />
-            {/* Used to render the radio button circle */}
+            { /* Used to render the radio button circle */ }
             <div><div /></div>
         </React.Fragment>;
 
         if (childrenInLabel) {
             return <label className={_className}>
-                {radioButton}
-                <div className="mx_RadioButton_content">{children}</div>
+                { radioButton }
+                <div className="mx_RadioButton_content">{ children }</div>
                 <div className="mx_RadioButton_spacer" />
             </label>;
         } else {
             return <div className={_className}>
                 <label className="mx_RadioButton_innerLabel">
-                    {radioButton}
+                    { radioButton }
                 </label>
-                <div className="mx_RadioButton_content">{children}</div>
+                <div className="mx_RadioButton_content">{ children }</div>
                 <div className="mx_RadioButton_spacer" />
             </div>;
         }

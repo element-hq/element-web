@@ -32,6 +32,8 @@ export const CATEGORY_HEADER_HEIGHT = 22;
 export const EMOJI_HEIGHT = 37;
 export const EMOJIS_PER_ROW = 8;
 
+const ZERO_WIDTH_JOINER = "\u200D";
+
 interface IProps {
     selectedEmojis?: Set<string>;
     showQuickReactions?: boolean;
@@ -180,7 +182,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
             } else {
                 emojis = cat.id === "recent" ? this.recentlyUsed : DATA_BY_CATEGORY[cat.id];
             }
-            emojis = emojis.filter(emoji => emoji.filterString.includes(filter));
+            emojis = emojis.filter(emoji => this.emojiMatchesFilter(emoji, filter));
             this.memoizedDataByCategory[cat.id] = emojis;
             cat.enabled = emojis.length > 0;
             // The setState below doesn't re-render the header and we already have the refs for updateVisibility, so...
@@ -191,6 +193,10 @@ class EmojiPicker extends React.Component<IProps, IState> {
         // where the categories are, so we wait for a tick.
         setTimeout(this.updateVisibility, 0);
     };
+
+    private emojiMatchesFilter = (emoji: IEmoji, filter: string): boolean =>
+        [emoji.annotation, ...emoji.shortcodes, emoji.emoticon, ...emoji.unicode.split(ZERO_WIDTH_JOINER)]
+            .some(x => x?.includes(filter));
 
     private onEnterFilter = () => {
         const btn = this.bodyRef.current.querySelector<HTMLButtonElement>(".mx_EmojiPicker_item");
@@ -238,7 +244,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                     }}
                     onScroll={this.onScroll}
                 >
-                    {this.categories.map(category => {
+                    { this.categories.map(category => {
                         const emojis = this.memoizedDataByCategory[category.id];
                         const categoryElement = ((
                             <Category
@@ -258,9 +264,9 @@ class EmojiPicker extends React.Component<IProps, IState> {
                         const height = EmojiPicker.categoryHeightForEmojiCount(emojis.length);
                         heightBefore += height;
                         return categoryElement;
-                    })}
+                    }) }
                 </AutoHideScrollbar>
-                {this.state.previewEmoji || !this.props.showQuickReactions
+                { this.state.previewEmoji || !this.props.showQuickReactions
                     ? <Preview emoji={this.state.previewEmoji} />
                     : <QuickReactions onClick={this.onClickEmoji} selectedEmojis={this.props.selectedEmojis} /> }
             </div>
