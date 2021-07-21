@@ -93,9 +93,11 @@ export class PosthogAnalytics {
                 autocapture: false,
                 mask_all_text: true,
                 mask_all_element_attributes: true,
-                // this is disabled for now as its tricky to sanitize properties of the pageview
-                // event because sanitization requires async crypto calls and the sanitize_properties
-                // callback is synchronous.
+                // This only triggers on page load, which for our SPA isn't particularly useful.
+                // Plus, the .capture call originating from somewhere in posthog makes it hard
+                // to redact URLs, which requires async code.
+                //
+                // To raise this manually, just call .capture("$pageview") or posthog.capture_pageview.
                 capture_pageview: false,
                 sanitize_properties: this.sanitizeProperties.bind(this),
                 respect_dnt: true,
