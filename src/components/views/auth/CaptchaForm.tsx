@@ -15,39 +15,40 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const DIV_ID = 'mx_recaptcha';
 
+interface ICaptchaFormProps {
+    sitePublicKey: string;
+    onCaptchaResponse: (response: string) => void;
+}
+
+interface ICaptchaFormState {
+    errorText?: string;
+
+}
+
 /**
  * A pure UI component which displays a captcha form.
  */
 @replaceableComponent("views.auth.CaptchaForm")
-export default class CaptchaForm extends React.Component {
-    static propTypes = {
-        sitePublicKey: PropTypes.string,
-
-        // called with the captcha response
-        onCaptchaResponse: PropTypes.func,
-    };
-
+export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICaptchaFormState> {
     static defaultProps = {
         onCaptchaResponse: () => {},
     };
 
-    constructor(props) {
+    private captchaWidgetId?: string;
+    private recaptchaContainer = createRef<HTMLDivElement>();
+
+    constructor(props: ICaptchaFormProps) {
         super(props);
 
         this.state = {
-            errorText: null,
+            errorText: undefined,
         };
-
-        this._captchaWidgetId = null;
-
-        this._recaptchaContainer = createRef();
 
         CountlyAnalytics.instance.track("onboarding_grecaptcha_begin");
     }
@@ -55,26 +56,33 @@ export default class CaptchaForm extends React.Component {
     componentDidMount() {
         // Just putting a script tag into the returned jsx doesn't work, annoyingly,
         // so we do this instead.
-        if (global.grecaptcha) {
+        if (this.isRecaptchaReady()) {
             // already loaded
-            this._onCaptchaLoaded();
+            this.onCaptchaLoaded();
         } else {
             console.log("Loading recaptcha script...");
-            window.mx_on_recaptcha_loaded = () => {this._onCaptchaLoaded();};
+            window.mxOnRecaptchaLoaded = () => { this.onCaptchaLoaded(); };
             const scriptTag = document.createElement('script');
             scriptTag.setAttribute(
-                'src', `https://www.recaptcha.net/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit`,
+                'src', `https://www.recaptcha.net/recaptcha/api.js?onload=mxOnRecaptchaLoaded&render=explicit`,
             );
-            this._recaptchaContainer.current.appendChild(scriptTag);
+            this.recaptchaContainer.current.appendChild(scriptTag);
         }
     }
 
     componentWillUnmount() {
-        this._resetRecaptcha();
+        this.resetRecaptcha();
     }
 
-    _renderRecaptcha(divId) {
-        if (!global.grecaptcha) {
+    // Borrowed directly from: https://github.com/codeep/react-recaptcha-google/commit/e118fa5670fa268426969323b2e7fe77698376ba
+    private isRecaptchaReady(): boolean {
+        return typeof window !== "undefined" &&
+            typeof global.grecaptcha !== "undefined" &&
+            typeof global.grecaptcha.render === 'function';
+    }
+
+    private renderRecaptcha(divId: string) {
+        if (!this.isRecaptchaReady()) {
             console.error("grecaptcha not loaded!");
             throw new Error("Recaptcha did not load successfully");
         }
@@ -84,26 +92,26 @@ export default class CaptchaForm extends React.Component {
             console.error("No public key for recaptcha!");
             throw new Error(
                 "This server has not supplied enough information for Recaptcha "
-                    + "authentication");
+                + "authentication");
         }
 
         console.info("Rendering to %s", divId);
-        this._captchaWidgetId = global.grecaptcha.render(divId, {
+        this.captchaWidgetId = global.grecaptcha.render(divId, {
             sitekey: publicKey,
             callback: this.props.onCaptchaResponse,
         });
     }
 
-    _resetRecaptcha() {
-        if (this._captchaWidgetId !== null) {
-            global.grecaptcha.reset(this._captchaWidgetId);
+    private resetRecaptcha() {
+        if (this.captchaWidgetId !== null) {
+            global.grecaptcha.reset(this.captchaWidgetId);
         }
     }
 
-    _onCaptchaLoaded() {
+    private onCaptchaLoaded() {
         console.log("Loaded recaptcha script.");
         try {
-            this._renderRecaptcha(DIV_ID);
+            this.renderRecaptcha(DIV_ID);
             // clear error if re-rendered
             this.setState({
                 errorText: null,
@@ -128,10 +136,10 @@ export default class CaptchaForm extends React.Component {
         }
 
         return (
-            <div ref={this._recaptchaContainer}>
-                <p>{_t(
+            <div ref={this.recaptchaContainer}>
+                <p>{ _t(
                     "This homeserver would like to make sure you are not a robot.",
-                )}</p>
+                ) }</p>
                 <div id={DIV_ID} />
                 { error }
             </div>

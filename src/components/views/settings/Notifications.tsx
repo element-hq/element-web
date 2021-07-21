@@ -569,8 +569,8 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
 
         const rows = this.state.vectorPushRules[category].map(r => <tr key={category + r.ruleId}>
             <td>{ r.description }</td>
-            <td>{ makeRadio(r, VectorState.On) }</td>
             <td>{ makeRadio(r, VectorState.Off) }</td>
+            <td>{ makeRadio(r, VectorState.On) }</td>
             <td>{ makeRadio(r, VectorState.Loud) }</td>
         </tr>);
 
@@ -594,8 +594,8 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
                 <thead>
                     <tr>
                         <th>{ sectionName }</th>
-                        <th>{ _t("On") }</th>
                         <th>{ _t("Off") }</th>
+                        <th>{ _t("On") }</th>
                         <th>{ _t("Noisy") }</th>
                     </tr>
                 </thead>

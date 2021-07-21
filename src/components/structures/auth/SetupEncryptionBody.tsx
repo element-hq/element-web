@@ -152,7 +152,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             let useRecoveryKeyButton;
             if (recoveryKeyPrompt) {
                 useRecoveryKeyButton = <AccessibleButton kind="link" onClick={this.onUsePassphraseClick}>
-                    {recoveryKeyPrompt}
+                    { recoveryKeyPrompt }
                 </AccessibleButton>;
             }
 
@@ -165,15 +165,15 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
 
             return (
                 <div>
-                    <p>{_t(
+                    <p>{ _t(
                         "Verify your identity to access encrypted messages and prove your identity to others.",
-                    )}</p>
+                    ) }</p>
 
                     <div className="mx_CompleteSecurity_actionRow">
-                        {verifyButton}
-                        {useRecoveryKeyButton}
+                        { verifyButton }
+                        { useRecoveryKeyButton }
                         <AccessibleButton kind="danger" onClick={this.onSkipClick}>
-                            {_t("Skip")}
+                            { _t("Skip") }
                         </AccessibleButton>
                     </div>
                 </div>
@@ -181,25 +181,25 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         } else if (phase === Phase.Done) {
             let message;
             if (this.state.backupInfo) {
-                message = <p>{_t(
+                message = <p>{ _t(
                     "Your new session is now verified. It has access to your " +
                     "encrypted messages, and other users will see it as trusted.",
-                )}</p>;
+                ) }</p>;
             } else {
-                message = <p>{_t(
+                message = <p>{ _t(
                     "Your new session is now verified. Other users will see it as trusted.",
-                )}</p>;
+                ) }</p>;
             }
             return (
                 <div>
                     <div className="mx_CompleteSecurity_heroIcon mx_E2EIcon_verified" />
-                    {message}
+                    { message }
                     <div className="mx_CompleteSecurity_actionRow">
                         <AccessibleButton
                             kind="primary"
                             onClick={this.onDoneClick}
                         >
-                            {_t("Done")}
+                            { _t("Done") }
                         </AccessibleButton>
                     </div>
                 </div>
@@ -207,23 +207,23 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         } else if (phase === Phase.ConfirmSkip) {
             return (
                 <div>
-                    <p>{_t(
+                    <p>{ _t(
                         "Without verifying, you won’t have access to all your messages " +
                         "and may appear as untrusted to others.",
-                    )}</p>
+                    ) }</p>
                     <div className="mx_CompleteSecurity_actionRow">
                         <AccessibleButton
                             className="warning"
                             kind="secondary"
                             onClick={this.onSkipConfirmClick}
                         >
-                            {_t("Skip")}
+                            { _t("Skip") }
                         </AccessibleButton>
                         <AccessibleButton
                             kind="danger"
                             onClick={this.onSkipBackClick}
                         >
-                            {_t("Go Back")}
+                            { _t("Go Back") }
                         </AccessibleButton>
                     </div>
                 </div>

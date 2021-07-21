@@ -58,10 +58,10 @@ export default (props) => {
         countlyFeedbackSection = <React.Fragment>
             <hr />
             <div className="mx_FeedbackDialog_section mx_FeedbackDialog_rateApp">
-                <h3>{_t("Rate %(brand)s", { brand })}</h3>
+                <h3>{ _t("Rate %(brand)s", { brand }) }</h3>
 
-                <p>{_t("Tell us below how you feel about %(brand)s so far.", { brand })}</p>
-                <p>{_t("Please go into as much detail as you like, so we can track down the problem.")}</p>
+                <p>{ _t("Tell us below how you feel about %(brand)s so far.", { brand }) }</p>
+                <p>{ _t("Please go into as much detail as you like, so we can track down the problem.") }</p>
 
                 <StyledRadioGroup
                     name="feedbackRating"
@@ -95,7 +95,7 @@ export default (props) => {
     let subheading;
     if (hasFeedback) {
         subheading = (
-            <h2>{_t("There are two ways you can provide feedback and help us improve %(brand)s.", { brand })}</h2>
+            <h2>{ _t("There are two ways you can provide feedback and help us improve %(brand)s.", { brand }) }</h2>
         );
     }
 
@@ -106,7 +106,7 @@ export default (props) => {
                 _t("PRO TIP: If you start a bug, please submit <debugLogsLink>debug logs</debugLogsLink> " +
                     "to help us track down the problem.", {}, {
                     debugLogsLink: sub => (
-                        <AccessibleButton kind="link" onClick={onDebugLogsLinkClick}>{sub}</AccessibleButton>
+                        <AccessibleButton kind="link" onClick={onDebugLogsLinkClick}>{ sub }</AccessibleButton>
                     ),
                 })
             }</p>
@@ -121,7 +121,7 @@ export default (props) => {
             { subheading }
 
             <div className="mx_FeedbackDialog_section mx_FeedbackDialog_reportBug">
-                <h3>{_t("Report a bug")}</h3>
+                <h3>{ _t("Report a bug") }</h3>
                 <p>{
                     _t("Please view <existingIssuesLink>existing bugs on Github</existingIssuesLink> first. " +
                         "No match? <newIssueLink>Start a new one</newIssueLink>.", {}, {
@@ -133,7 +133,7 @@ export default (props) => {
                         },
                     })
                 }</p>
-                {bugReports}
+                { bugReports }
             </div>
             { countlyFeedbackSection }
         </React.Fragment>}

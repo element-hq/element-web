@@ -209,9 +209,9 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
 
         return (
             <div className={classes}>
-                {icon}
-                {input}
-                {clearButton}
+                { icon }
+                { input }
+                { clearButton }
             </div>
         );
     }

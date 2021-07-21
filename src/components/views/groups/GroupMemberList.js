@@ -201,7 +201,7 @@ export default class GroupMemberList extends React.Component {
 
         const invited = (this.state.invitedMembers && this.state.invitedMembers.length > 0) ?
             <div className="mx_MemberList_invited">
-                <h2>{_t("Invited")}</h2>
+                <h2>{ _t("Invited") }</h2>
                 {
                     this.makeGroupMemberTiles(
                         this.state.searchQuery,

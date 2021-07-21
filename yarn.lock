@@ -3032,15 +3032,15 @@ emoji-regex@^8.0.0:
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
   integrity sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==
 
-emojibase-data@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/emojibase-data/-/emojibase-data-5.1.1.tgz#0a0d63dd07ce1376b3d27642f28cafa46f651de6"
-  integrity sha512-za/ma5SfogHjwUmGFnDbTvSfm8GGFvFaPS27GPti16YZSp5EPgz+UDsZCATXvJGit+oRNBbG/FtybXHKi2UQgQ==
+emojibase-data@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/emojibase-data/-/emojibase-data-6.2.0.tgz#db6c75c36905284fa623f4aa5f468d2be6ed364a"
+  integrity sha512-SWKaXD2QeQs06IE7qfJftsI5924Dqzp+V9xaa5RzZIEWhmlrG6Jt2iKwfgOPHu+5S8MEtOI7GdpKsXj46chXOw==
 
-emojibase-regex@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/emojibase-regex/-/emojibase-regex-4.1.1.tgz#6e781aca520281600fe7a177f1582c33cf1fc545"
-  integrity sha512-KSigB1zQkNKFygLZ5bAfHs87LJa1ni8QTQtq8lc53Y74NF3Dk2r7kfa8MpooTO8JBb5Xz660X4tSjDB+I+7elA==
+emojibase-regex@^5.1.3:
+  version "5.1.3"
+  resolved "https://registry.yarnpkg.com/emojibase-regex/-/emojibase-regex-5.1.3.tgz#f0ef621ed6ec624becd2326f999fd4ea01b94554"
+  integrity sha512-gT8T9LxLA8VJdI+8KQtyykB9qKzd7WuUL3M2yw6y9tplFeufOUANg3UKVaKUvkMcRNvZsSElWhxcJrx8WPE12g==
 
 encoding@^0.1.11:
   version "0.1.13"
@@ -3247,7 +3247,7 @@ eslint-config-google@^0.14.0:
 
 "eslint-plugin-matrix-org@github:matrix-org/eslint-plugin-matrix-org#main":
   version "0.3.2"
-  resolved "https://codeload.github.com/matrix-org/eslint-plugin-matrix-org/tar.gz/e8197938dca66849ffdac4baca7c05275df12835"
+  resolved "https://codeload.github.com/matrix-org/eslint-plugin-matrix-org/tar.gz/8529f1d77863db6327cf1a1a4fa65d06cc26f91b"
 
 eslint-plugin-react-hooks@^4.2.0:
   version "4.2.0"
@@ -5460,10 +5460,10 @@ mathml-tag-names@^2.1.3:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-matrix-js-sdk@12.0.1:
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-12.0.1.tgz#3a63881f743420a4d39474daa39bd0fb90930d43"
-  integrity sha512-HkOWv8QHojceo3kPbC+vAIFUjsRAig6MBvEY35UygS3g2dL0UcJ5Qx09/2wcXtu6dowlDnWsz2HHk62tS2cklA==
+matrix-js-sdk@12.1.0:
+  version "12.1.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-12.1.0.tgz#7d159dd9bc03701e45a6b2777f1fa582a7e8b970"
+  integrity sha512-/fSqOjD+mTlMD+/B3s3Ja6BfI46FnTDl43ojzGDUOsHRRmSYUmoONb83qkH5Fjm8cI2q5ZBJMsBfjuZwLVeiZw==
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"

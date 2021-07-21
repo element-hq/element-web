@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import { Room } from "matrix-js-sdk/src/models/room";
+import { RoomState } from "matrix-js-sdk/src/models/room-state";
 import { User } from "matrix-js-sdk/src/models/user";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -152,7 +153,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(newProps) { // eslint-disable-line camelcase
+    UNSAFE_componentWillReceiveProps(newProps) { // eslint-disable-line
         if (newProps.groupId !== this.props.groupId) {
             this.unregisterGroupStore();
             this.initGroupStore(newProps.groupId);
@@ -174,7 +175,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
         });
     };
 
-    private onRoomStateMember = (ev: MatrixEvent, _, member: RoomMember) => {
+    private onRoomStateMember = (ev: MatrixEvent, state: RoomState, member: RoomMember) => {
         if (!this.props.room || member.roomId !== this.props.room.roomId) {
             return;
         }

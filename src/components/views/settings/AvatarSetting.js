@@ -59,7 +59,7 @@ const AvatarSetting = ({ avatarUrl, avatarAltText, avatarName, uploadAvatar, rem
     let removeAvatarBtn;
     if (avatarUrl && removeAvatar) {
         removeAvatarBtn = <AccessibleButton onClick={removeAvatar} kind="link_sm">
-            {_t("Remove")}
+            { _t("Remove") }
         </AccessibleButton>;
     }
 
@@ -68,13 +68,13 @@ const AvatarSetting = ({ avatarUrl, avatarAltText, avatarName, uploadAvatar, rem
         "mx_AvatarSetting_avatar_hovering": isHovering && uploadAvatar,
     });
     return <div className={avatarClasses}>
-        {avatarElement}
+        { avatarElement }
         <div className="mx_AvatarSetting_hover">
             <div className="mx_AvatarSetting_hoverBg" />
-            <span>{_t("Upload")}</span>
+            <span>{ _t("Upload") }</span>
         </div>
-        {uploadAvatarBtn}
-        {removeAvatarBtn}
+        { uploadAvatarBtn }
+        { removeAvatarBtn }
     </div>;
 };
 
