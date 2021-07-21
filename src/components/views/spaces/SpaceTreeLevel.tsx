@@ -31,6 +31,7 @@ import { _t } from "../../../languageHandler";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import { toRightOf } from "../../structures/ContextMenu";
 import {
+    leaveSpace,
     shouldShowSpaceSettings,
     showAddExistingRooms,
     showCreateNewRoom,
@@ -211,10 +212,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        defaultDispatcher.dispatch({
-            action: "leave_room",
-            room_id: this.props.space.roomId,
-        });
+        leaveSpace(this.props.space);
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
 

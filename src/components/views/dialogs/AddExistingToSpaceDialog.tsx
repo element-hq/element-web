@@ -49,7 +49,7 @@ interface IProps extends IDialogProps {
     onCreateRoomClick(cli: MatrixClient, space: Room): void;
 }
 
-const Entry = ({ room, checked, onChange }) => {
+export const Entry = ({ room, checked, onChange }) => {
     return <label className="mx_AddExistingToSpace_entry">
         { room?.isSpaceRoom()
             ? <RoomAvatar room={room} height={32} width={32} />

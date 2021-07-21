@@ -29,6 +29,10 @@ import { _t } from "../languageHandler";
 import SpacePublicShare from "../components/views/spaces/SpacePublicShare";
 import InfoDialog from "../components/views/dialogs/InfoDialog";
 import { showRoomInviteDialog } from "../RoomInvite";
+import { leaveRoomBehaviour } from "./membership";
+import Spinner from "../components/views/elements/Spinner";
+import dis from "../dispatcher/dispatcher";
+import LeaveSpaceDialog from "../components/views/dialogs/LeaveSpaceDialog";
 
 export const shouldShowSpaceSettings = (cli: MatrixClient, space: Room) => {
     const userId = cli.getUserId();
@@ -102,4 +106,25 @@ export const showSpaceInvite = (space: Room, initialText = "") => {
     } else {
         showRoomInviteDialog(space.roomId, initialText);
     }
+};
+
+export const leaveSpace = (space: Room) => {
+    Modal.createTrackedDialog("Leave Space", "", LeaveSpaceDialog, {
+        space,
+        onFinished: async (leave: boolean, rooms: Room[]) => {
+            if (!leave) return;
+            const modal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
+            try {
+                await Promise.all(rooms.map(r => leaveRoomBehaviour(r.roomId)));
+                await leaveRoomBehaviour(space.roomId);
+            } finally {
+                modal.close();
+            }
+
+            dis.dispatch({
+                action: "after_leave_room",
+                room_id: space.roomId,
+            });
+        },
+    }, "mx_LeaveSpaceDialog_wrapper");
 };

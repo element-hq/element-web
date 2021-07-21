@@ -26,7 +26,7 @@ import SpaceBasicSettings from "./SpaceBasicSettings";
 import { avatarUrlForRoom } from "../../../Avatar";
 import { IDialogProps } from "../dialogs/IDialogProps";
 import { getTopic } from "../elements/RoomTopic";
-import { defaultDispatcher } from "../../../dispatcher/dispatcher";
+import { leaveSpace } from "../../../utils/space";
 
 interface IProps extends IDialogProps {
     matrixClient: MatrixClient;
@@ -128,10 +128,7 @@ const SpaceSettingsGeneralTab = ({ matrixClient: cli, space, onFinished }: IProp
             <AccessibleButton
                 kind="danger"
                 onClick={() => {
-                    defaultDispatcher.dispatch({
-                        action: "leave_room",
-                        room_id: space.roomId,
-                    });
+                    leaveSpace(space);
                 }}
             >
                 { _t("Leave Space") }

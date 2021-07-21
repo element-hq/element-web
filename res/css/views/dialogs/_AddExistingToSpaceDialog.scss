@@ -49,30 +49,6 @@ limitations under the License.
             font-weight: $font-semi-bold;
             line-height: $font-15px;
         }
-
-        .mx_AddExistingToSpace_entry {
-            display: flex;
-            margin-top: 12px;
-
-            // we can't target .mx_BaseAvatar here as it'll break the decorated avatar styling
-            .mx_DecoratedRoomAvatar {
-                margin-right: 12px;
-            }
-
-            .mx_AddExistingToSpace_entry_name {
-                font-size: $font-15px;
-                line-height: 30px;
-                flex-grow: 1;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                margin-right: 12px;
-            }
-
-            .mx_Checkbox {
-                align-items: center;
-            }
-        }
     }
 
     .mx_AddExistingToSpace_section_spaces {
@@ -277,5 +253,29 @@ limitations under the License.
 
     .mx_AddExistingToSpace {
         display: contents;
+    }
+}
+
+.mx_AddExistingToSpace_entry {
+    display: flex;
+    margin-top: 12px;
+
+    // we can't target .mx_BaseAvatar here as it'll break the decorated avatar styling
+    .mx_DecoratedRoomAvatar {
+        margin-right: 12px;
+    }
+
+    .mx_AddExistingToSpace_entry_name {
+        font-size: $font-15px;
+        line-height: 30px;
+        flex-grow: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        margin-right: 12px;
+    }
+
+    .mx_Checkbox {
+        align-items: center;
     }
 }
