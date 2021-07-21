@@ -3413,5 +3413,18 @@
     "Copy Room Link": "Kopieer gesprekslink",
     "Message bubbles": "Berichtenbubbels",
     "IRC": "IRC",
-    "New layout switcher (with message bubbles)": "Nieuwe layout schakelaar (met berichtenbubbels)"
+    "New layout switcher (with message bubbles)": "Nieuwe layout schakelaar (met berichtenbubbels)",
+    "Downloading": "Downloading",
+    "The call is in an unknown state!": "Deze oproep heeft een onbekende status!",
+    "Call back": "Terugbellen",
+    "You missed this call": "U heeft deze oproep gemist",
+    "This call has failed": "Deze oproep is mislukt",
+    "Unknown failure: %(reason)s)": "Onbekende fout: %(reason)s",
+    "No answer": "Geen antwoord",
+    "An unknown error occurred": "Er is een onbekende fout opgetreden",
+    "Their device couldn't start the camera or microphone": "Het andere apparaat kon de camera of microfoon niet starten",
+    "Connection failed": "Verbinding mislukt",
+    "Could not connect media": "Mediaverbinding mislukt",
+    "This call has ended": "Deze oproep is beëindigd",
+    "Connected": "Verbonden"
 }
