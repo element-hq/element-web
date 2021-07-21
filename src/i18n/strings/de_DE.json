@@ -3490,5 +3490,6 @@
     "Enable for this account": "Für dieses Konto aktivieren",
     "An error occurred whilst saving your notification preferences.": "Beim Speichern der Benachrichtigungseinstellungen ist ein Fehler aufgetreten.",
     "Error saving notification preferences": "Fehler beim Speichern der Benachrichtigungseinstellungen",
-    "Messages containing keywords": "Nachrichten mit Schlüsselwörtern"
+    "Messages containing keywords": "Nachrichten mit Schlüsselwörtern",
+    "Show notification badges for People in Spaces": "Zeige Benachrichtigungssymbol für Personen in Spaces"
 }
