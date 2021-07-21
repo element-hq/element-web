@@ -138,7 +138,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
             } else if (hangupReason === CallErrorCode.UserBusy) {
                 reason = _t("The user you called is busy.");
             } else {
-                reason = _t('Unknown failure: %(reason)s)', { reason: hangupReason });
+                reason = _t('Unknown failure: %(reason)s', { reason: hangupReason });
             }
 
             return (

@@ -1849,7 +1849,7 @@
     "Their device couldn't start the camera or microphone": "Their device couldn't start the camera or microphone",
     "An unknown error occurred": "An unknown error occurred",
     "No answer": "No answer",
-    "Unknown failure: %(reason)s)": "Unknown failure: %(reason)s)",
+    "Unknown failure: %(reason)s": "Unknown failure: %(reason)s",
     "This call has failed": "This call has failed",
     "You missed this call": "You missed this call",
     "Call back": "Call back",
