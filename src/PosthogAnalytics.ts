@@ -40,6 +40,8 @@ export interface IWelcomeScreenLoad extends IAnonymousEvent {
 }
 
 const hashHex = async (input: string): Promise<string> => {
+    // on os x (e.g. if you want to know the sha-256 of your own matrix ID so you can look it up):
+    // echo -n <input> | shasum -a 256
     const buf = new TextEncoder().encode(input);
     const digestBuf = await window.crypto.subtle.digest("sha-256", buf);
     return [...new Uint8Array(digestBuf)].map((b: number) => b.toString(16).padStart(2, "0")).join("");
