@@ -136,6 +136,10 @@ $hover-select-border: 4px;
         padding-left: calc($left-gutter + 18px);
     }
 
+    & ~ .mx_EventListSummary .mx_EventTile_line {
+        padding-left: calc($left-gutter);
+    }
+
     &.mx_EventTile_selected.mx_EventTile_info .mx_EventTile_line {
         padding-left: calc($left-gutter + 18px - $hover-select-border);
     }
