@@ -3522,5 +3522,21 @@
     "Any other reason. Please describe the problem.\nThis will be reported to the room moderators.": "Outra razón. Por favor, describe o problema.\nInformaremos disto á moderación da sala.",
     "This room is dedicated to illegal or toxic content or the moderators fail to moderate illegal or toxic content.\n This will be reported to the administrators of %(homeserver)s.": "Esta sala está dedicada a contido tóxico ou ilegal ou a moderación non é quen de moderar contido ilegal ou tóxico.\nImos informar disto á administración de %(homeserver)s.",
     "Report to moderators prototype. In rooms that support moderation, the `report` button will let you report abuse to room moderators": "Modelo de denuncia ante a moderación. Nas salas que teñen moderación, o botón `denuncia`permíteche denunciar un abuso á moderación da sala",
-    "Copy Room Link": "Copiar Ligazón da sala"
+    "Copy Room Link": "Copiar Ligazón da sala",
+    "Downloading": "Descargando",
+    "The call is in an unknown state!": "Esta chamada ten un estado descoñecido!",
+    "Call back": "Devolver a chamada",
+    "You missed this call": "Perdeches esta chamada",
+    "This call has failed": "A chamada fallou",
+    "Unknown failure: %(reason)s)": "Fallo descoñecido: %(reason)s",
+    "No answer": "Sen resposta",
+    "An unknown error occurred": "Aconteceu un fallo descoñecido",
+    "Their device couldn't start the camera or microphone": "O seu dispositivo non puido acender a cámara ou micrófono",
+    "Connection failed": "Fallou a conexión",
+    "Could not connect media": "Non se puido conectar o multimedia",
+    "This call has ended": "A chamada rematou",
+    "Connected": "Conectado",
+    "Message bubbles": "Burbullas con mensaxes",
+    "IRC": "IRC",
+    "New layout switcher (with message bubbles)": "Nova disposición do control (con burbullas con mensaxes)"
 }
