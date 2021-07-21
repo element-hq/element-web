@@ -3383,5 +3383,17 @@
     "%(targetName)s accepted an invitation": "%(targetName)s 已接受邀请",
     "%(targetName)s accepted the invitation for %(displayName)s": "%(targetName)s 已接受 %(displayName)s 的邀请",
     "Some invites couldn't be sent": "部分邀请无法送达",
-    "We sent the others, but the below people couldn't be invited to <RoomName/>": "我们已向其他人发送邀请，除了以下无法邀请至 <RoomName/> 的人"
+    "We sent the others, but the below people couldn't be invited to <RoomName/>": "我们已向其他人发送邀请，除了以下无法邀请至 <RoomName/> 的人",
+    "Integration manager": "集成管理器",
+    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "你的 %(brand)s 不允许你使用集成管理器来完成此操作。请联系管理员。",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "使用此挂件可能会和 %(widgetDomain)s 及您的集成管理器共享数据 <helpIcon />。",
+    "Identity server is": "身份认证服务器是",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "集成管理器接收配置数据，并可以以你的名义修改挂件、发送聊天室邀请及设置权限级别。",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "使用集成管理器以管理机器人、挂件和贴纸包。",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "使用集成管理器 <b>（%(serverName)s）</b> 以管理机器人、挂件和贴纸包。",
+    "Identity server": "身份服务器",
+    "Identity server (%(server)s)": "身份服务器（%(server)s）",
+    "Could not connect to identity server": "无法连接到身份服务器",
+    "Not a valid identity server (status code %(code)s)": "不是有效的身份服务器（状态码 %(code)s）",
+    "Identity server URL must be HTTPS": "身份服务器连接必须是 HTTPS"
 }
