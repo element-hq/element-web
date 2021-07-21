@@ -42,7 +42,6 @@ export class PosthogAnalytics {
         this.onlyTrackAnonymousEvents = onlyTrackAnonymousEvents;
         const posthogConfig = SdkConfig.get()["posthog"];
         if (posthogConfig) {
-            console.log(`Initialising Posthog for ${posthogConfig.apiHost}`);
             this.posthog.init(posthogConfig.projectApiKey, { api_host: posthogConfig.apiHost });
             this.initialised = true;
         }
