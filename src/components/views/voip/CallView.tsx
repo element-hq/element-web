@@ -739,18 +739,18 @@ export default class CallView extends React.Component<IProps, IState> {
             });
 
             let presenting;
-            if (
-                this.state.primaryFeed?.purpose === SDPStreamMetadataPurpose.Screenshare ||
-                this.props.call.isScreensharing()
-            ) {
+            if (this.props.call.getFeeds().some((feed) => feed.purpose === SDPStreamMetadataPurpose.Screenshare)) {
                 const presentingClasses = classNames({
                     mx_CallView_presenting: true,
                     mx_CallView_presenting_hidden: !this.state.controlsVisible,
                 });
                 const sharerName = this.state.primaryFeed.getMember().name;
-                const text = this.props.call.isScreensharing()
+                let text = this.props.call.isScreensharing()
                     ? _t("You are presenting")
                     : _t('%(sharerName)s is presenting', { sharerName });
+                if (!this.state.sidebarShown) {
+                    text += " • " + _t("Your camera is still enabled");
+                }
 
                 presenting = (
                     <div className={presentingClasses}>
