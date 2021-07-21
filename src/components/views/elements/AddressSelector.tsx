@@ -163,7 +163,7 @@ export default class AddressSelector extends React.Component<IProps, IState> {
         return addressList;
     }
 
-    private maxSelected(list): number {
+    private maxSelected(list: IUserAddress[]): number {
         const listSize = list.length === 0 ? 0 : list.length - 1;
         const maxSelected = listSize > (this.props.truncateAt - 1) ? (this.props.truncateAt - 1) : listSize;
         return maxSelected;

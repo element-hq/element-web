@@ -46,6 +46,14 @@ const addressTypeName = {
     'email': _td("email address"),
 };
 
+interface IResult {
+    user_id: string; // eslint-disable-line camelcase
+    room_id?: string; // eslint-disable-line camelcase
+    name?: string;
+    display_name?: string; // eslint-disable-line camelcase
+    avatar_url?: string;// eslint-disable-line camelcase
+}
+
 interface IProps {
     title: string;
     description?: JSX.Element;
@@ -422,7 +430,7 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
         this.processResults(results, query);
     }
 
-    private processResults(results, query: string): void {
+    private processResults(results: IResult[], query: string): void {
         const suggestedList = [];
         results.forEach((result) => {
             if (result.room_id) {
@@ -490,7 +498,7 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
         });
     }
 
-    private addAddressesToList(addressTexts): IUserAddress[] {
+    private addAddressesToList(addressTexts: string[]): IUserAddress[] {
         const selectedList = this.state.selectedList.slice();
 
         let hasError = false;
@@ -533,7 +541,7 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
         return hasError ? null : selectedList;
     }
 
-    private async lookupThreepid(medium, address): Promise<string> {
+    private async lookupThreepid(medium: AddressType, address: string): Promise<string> {
         let cancelled = false;
         // Note that we can't safely remove this after we're done
         // because we don't know that it's the same one, so we just
