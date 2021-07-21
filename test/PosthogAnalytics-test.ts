@@ -5,10 +5,12 @@ const crypto = require('crypto');
 class FakePosthog {
     public capture;
     public init;
+    public identify;
 
     constructor() {
         this.capture = jest.fn();
         this.init = jest.fn();
+        this.identify = jest.fn();
     }
 }
 
@@ -75,7 +77,7 @@ describe("PosthogAnalytics", () => {
         expect(fakePosthog.capture.mock.calls[0][1]).toEqual({ foo: "bar" });
     });
 
-    it("Should pass trackRoomEvent to posthog", () => {
+    it("Should pass trackRoomEvent to posthog", async () => {
         analytics.init(false);
         const roomId = "42";
         return analytics.trackRoomEvent<IRoomEvent>("jest_test_event", roomId, {
@@ -100,6 +102,20 @@ describe("PosthogAnalytics", () => {
     it("Should not track non-anonymous messages if onlyTrackAnonymousEvents is true", () => {
         analytics.trackAnonymousEvent<ITestEvent>("jest_test_event", {
             foo: "bar",
+        });
+    });
+
+    it("Should identify the user to posthog if onlyTrackAnonymousEvents is false", async () => {
+        analytics.init(false);
+        await analytics.identifyUser("foo");
+        expect(fakePosthog.identify.mock.calls[0][0])
+            .toBe("2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae");
+    });
+
+    it("Should not identify the user to posthog if onlyTrackAnonymousEvents is true", async () => {
+        analytics.init(true);
+        return analytics.identifyUser("foo").then(() => {
+            expect(fakePosthog.identify.mock.calls.length).toBe(0);
         });
     });
 });

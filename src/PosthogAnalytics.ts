@@ -64,6 +64,11 @@ export class PosthogAnalytics {
         }
     }
 
+    public async identifyUser(userId: string) {
+        if (this.onlyTrackAnonymousEvents) return;
+        this.posthog.identify(await hashHex(userId));
+    }
+
     public isInitialised(): boolean {
         return this.initialised;
     }
