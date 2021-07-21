@@ -1,9 +1,26 @@
 import posthog from 'posthog-js';
 import SdkConfig from './SdkConfig';
 
-export interface IEvent {
-    key: string;
+interface IEvent {
+    // The event name that will be used by PostHog.
+    // TODO: standard format (camel case? snake? UpperCase?)
+    eventName: string;
+
+    // The properties of the event that will be stored in PostHog.
     properties: {}
+}
+
+// If an event extends IPseudonymousEvent, the event contains pseudonymous data
+// that won't be sent unless the user has explicitly consented to pseudonymous tracking.
+// For example, hashed user IDs or room IDs.
+export interface IPseudonymousEvent extends IEvent {}
+
+// If an event extends IAnonymousEvent, the event strictly contains *only* anonymous data which
+// may be sent without explicit user consent.
+export interface IAnonymousEvent extends IEvent {}
+
+export interface IRoomEvent extends IPseudonymousEvent {
+    hashedRoomId: string
 }
 
 export interface IOnboardingLoginBegin extends IEvent {
@@ -55,27 +72,32 @@ export class PosthogAnalytics {
         this.onlyTrackAnonymousEvents = enabled;
     }
 
-    public track<E extends IEvent>(
-        key: E["key"],
+    public trackPseudonymousEvent<E extends IPseudonymousEvent>(
+        eventName: E["eventName"],
         properties: E["properties"],
-        anonymous = false,
     ) {
         if (!this.initialised) return;
-        if (this.onlyTrackAnonymousEvents && !anonymous) return;
-
-        this.posthog.capture(key, properties);
+        if (this.onlyTrackAnonymousEvents) return;
+        this.posthog.capture(eventName, properties);
     }
 
-    public async trackRoomEvent<E extends IEvent>(
-        key: E["key"],
-        roomId: string,
+    public trackAnonymousEvent<E extends IAnonymousEvent>(
+        eventName: E["eventName"],
         properties: E["properties"],
-        ...args
+    ) {
+        if (!this.initialised) return;
+        this.posthog.capture(eventName, properties);
+    }
+
+    public async trackRoomEvent<E extends IRoomEvent>(
+        eventName: E["eventName"],
+        roomId: string,
+        properties: Omit<E["properties"], "roomId">,
     ) {
         const updatedProperties = {
             ...properties,
             hashedRoomId: roomId ? await hashHex(roomId) : null,
         };
-        this.track(key, updatedProperties, ...args);
+        this.trackPseudonymousEvent(eventName, updatedProperties);
     }
 }

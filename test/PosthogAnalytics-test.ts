@@ -1,4 +1,4 @@
-import { IEvent, PosthogAnalytics } from '../src/PosthogAnalytics';
+import { IAnonymousEvent, IRoomEvent, PosthogAnalytics } from '../src/PosthogAnalytics';
 import SdkConfig from '../src/SdkConfig';
 const crypto = require('crypto');
 
@@ -12,8 +12,15 @@ class FakePosthog {
     }
 }
 
-export interface ITestEvent extends IEvent {
+export interface ITestEvent extends IAnonymousEvent {
     key: "jest_test_event",
+    properties: {
+        foo: string
+    }
+}
+
+export interface ITestRoomEvent extends IRoomEvent {
+    key: "jest_test_room_event",
     properties: {
         foo: string
     }
@@ -61,7 +68,7 @@ describe("PosthogAnalytics", () => {
 
     it("Should pass track() to posthog", () => {
         analytics.init(false);
-        analytics.track<ITestEvent>("jest_test_event", {
+        analytics.trackAnonymousEvent<ITestEvent>("jest_test_event", {
             foo: "bar",
         });
         expect(fakePosthog.capture.mock.calls[0][0]).toBe("jest_test_event");
@@ -71,7 +78,7 @@ describe("PosthogAnalytics", () => {
     it("Should pass trackRoomEvent to posthog", () => {
         analytics.init(false);
         const roomId = "42";
-        return analytics.trackRoomEvent<ITestEvent>("jest_test_event", roomId, {
+        return analytics.trackRoomEvent<IRoomEvent>("jest_test_event", roomId, {
             foo: "bar",
         }).then(() => {
             expect(fakePosthog.capture.mock.calls[0][0]).toBe("jest_test_event");
@@ -82,11 +89,17 @@ describe("PosthogAnalytics", () => {
         });
     });
 
-    it("Should silently not send messages if not inititalised", () => {
-        analytics.track<ITestEvent>("jest_test_event", {
+    it("Should silently not track if not inititalised", () => {
+        analytics.trackAnonymousEvent<ITestEvent>("jest_test_event", {
             foo: "bar",
         });
 
         expect(fakePosthog.capture.mock.calls.length).toBe(0);
+    });
+
+    it("Should not track non-anonymous messages if onlyTrackAnonymousEvents is true", () => {
+        analytics.trackAnonymousEvent<ITestEvent>("jest_test_event", {
+            foo: "bar",
+        });
     });
 });
