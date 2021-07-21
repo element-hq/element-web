@@ -23,4 +23,9 @@ limitations under the License.
     min-width: 160px; // To match .mx_VideoFeed_voice
     display: flex;
     flex-direction: column-reverse;
+
+    &.mx_CallViewSidebar_pipMode {
+        top: 16px;
+        bottom: unset;
+    }
 }
