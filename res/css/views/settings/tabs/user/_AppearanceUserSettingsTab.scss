@@ -45,6 +45,11 @@ limitations under the License.
     border-radius: 10px;
     padding: 0 16px 9px 16px;
     pointer-events: none;
+    display: flow-root;
+
+    .mx_EventTile[data-layout=bubble] {
+        margin-top: 30px;
+    }
 
     .mx_EventTile_msgOption {
         display: none;
