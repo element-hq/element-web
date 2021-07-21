@@ -1,7 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,21 +15,13 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../index';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-@replaceableComponent("views.auth.AuthPage")
-export default class AuthPage extends React.PureComponent {
-    render() {
-        const AuthFooter = sdk.getComponent('auth.AuthFooter');
-
-        return (
-            <div className="mx_AuthPage">
-                <div className="mx_AuthPage_modal">
-                    { this.props.children }
-                </div>
-                <AuthFooter />
-            </div>
-        );
+@replaceableComponent("views.auth.AuthBody")
+export default class AuthBody extends React.PureComponent {
+    public render(): React.ReactNode {
+        return <div className="mx_AuthBody">
+            { this.props.children }
+        </div>;
     }
 }
