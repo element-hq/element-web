@@ -3525,5 +3525,21 @@
     "Messages containing keywords": "包含關鍵字的訊息",
     "Transfer Failed": "轉接失敗",
     "Unable to transfer call": "無法轉接通話",
-    "Copy Room Link": "複製聊天室連結"
+    "Copy Room Link": "複製聊天室連結",
+    "Downloading": "正在下載",
+    "The call is in an unknown state!": "通話處於未知狀態！",
+    "Call back": "回撥",
+    "You missed this call": "您錯過了此通話",
+    "This call has failed": "此通話失敗",
+    "Unknown failure: %(reason)s)": "未知的錯誤：%(reason)s",
+    "No answer": "無回應",
+    "An unknown error occurred": "出現未知錯誤",
+    "Their device couldn't start the camera or microphone": "他們的裝置無法啟動攝影機或麥克風",
+    "Connection failed": "連線失敗",
+    "Could not connect media": "無法連結媒體",
+    "This call has ended": "此通話已結束",
+    "Connected": "已連線",
+    "Message bubbles": "訊息泡泡",
+    "IRC": "IRC",
+    "New layout switcher (with message bubbles)": "新的佈局切換器（帶有訊息泡泡）"
 }
