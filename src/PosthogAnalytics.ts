@@ -106,3 +106,7 @@ export class PosthogAnalytics {
         this.trackPseudonymousEvent(eventName, updatedProperties);
     }
 }
+
+export default function getAnalytics() {
+    return PosthogAnalytics.instance();
+}
