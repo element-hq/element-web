@@ -3601,6 +3601,11 @@ fbjs@^0.8.4:
     setimmediate "^1.0.5"
     ua-parser-js "^0.7.18"
 
+fflate@^0.4.1:
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/fflate/-/fflate-0.4.8.tgz#f90b82aefbd8ac174213abb338bd7ef848f0f5ae"
+  integrity sha512-FJqqoDBR00Mdj9ppamLa/Y7vxm+PRmNWA67N846RvsoYVMKB4q3y/de5PA7gUmRMYK/8CMz2GDZQmCRN1wBcWA==
+
 file-entry-cache@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/file-entry-cache/-/file-entry-cache-6.0.0.tgz#7921a89c391c6d93efec2169ac6bf300c527ea0a"
@@ -6286,6 +6291,13 @@ postcss@^8.0.2:
     colorette "^1.2.1"
     nanoid "^3.1.20"
     source-map "^0.6.1"
+
+posthog-js@^1.12.1:
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.12.1.tgz#97834ee2574f34ffb5db2f5b07452c847e3c4d27"
+  integrity sha512-Y3lzcWkS8xFY6Ryj3I4ees7qWP2WGkLw0Arcbk5xaT0+5YlA6UC2jlL/+fN9bz/Bl62EoN3BML901Cuot/QNjg==
+  dependencies:
+    fflate "^0.4.1"
 
 prelude-ls@^1.2.1:
   version "1.2.1"
