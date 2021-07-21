@@ -28,8 +28,8 @@ export interface IRoomEvent extends IPseudonymousEvent {
     hashedRoomId: string
 }
 
-export interface IOnboardingLoginBegin extends IAnonymousEvent {
-    key: "onboarding_login_begin",
+export interface IWelcomeScreenLoad extends IAnonymousEvent {
+    key: "welcome_screen_load",
 }
 
 const hashHex = async (input: string): Promise<string> => {
