@@ -3502,5 +3502,6 @@
     "Connection failed": "Verbindung fehlgeschlagen",
     "This call has ended": "Anruf beendet",
     "Connected": "Verbunden",
-    "IRC": "IRC"
+    "IRC": "IRC",
+    "Silence call": "Anruf stummschalten"
 }
