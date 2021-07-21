@@ -107,7 +107,7 @@ import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 import SoftLogout from './auth/SoftLogout';
 import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../utils/strings";
-import { Anonymity, getAnalytics, IPageChange } from '../../PosthogAnalytics';
+import { Anonymity, getAnalytics, getPlatformProperties } from '../../PosthogAnalytics';
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -388,7 +388,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (SettingsStore.getValue("analyticsOptIn")) {
             Analytics.enable();
         }
-        getAnalytics().init(SettingsStore.getValue("analyticsOptIn") ? Anonymity.Pseudonymous : Anonymity.Anonymous);
+
+        const analytics = getAnalytics();
+        analytics.init(SettingsStore.getValue("analyticsOptIn") ? Anonymity.Pseudonymous : Anonymity.Anonymous);
+        getPlatformProperties().then((properties) => analytics.registerSuperProperties(properties));
+
         CountlyAnalytics.instance.enable(/* anonymous = */ true);
     }
 
@@ -501,8 +505,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             } else if (SettingsStore.getValue("analyticsOptIn")) {
                 CountlyAnalytics.instance.enable(/* anonymous = */ false);
             }
-            getAnalytics().setAnonymity(SettingsStore.getValue("analyticsOptIn") ?
-                Anonymity.Pseudonymous: Anonymity.Anonymous);
         });
         // Note we don't catch errors from this: we catch everything within
         // loadSession as there's logic there to ask the user if they want
@@ -828,6 +830,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     CountlyAnalytics.instance.enable(/* anonymous = */ false);
                 }
                 getAnalytics().setAnonymity(Anonymity.Pseudonymous);
+                // TODO: this is an async call and we're not waiting for it to complete -
+                // so potentially an event could be fired prior to it completing and would be
+                // missing the user identification.
+                getAnalytics().identifyUser(MatrixClientPeg.get().getUserId());
                 break;
             case 'reject_cookies':
                 SettingsStore.setValue("analyticsOptIn", null, SettingLevel.DEVICE, false);

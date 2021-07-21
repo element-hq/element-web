@@ -1,4 +1,5 @@
 import posthog, { PostHog } from 'posthog-js';
+import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 
 interface IEvent {
@@ -224,6 +225,22 @@ export class PosthogAnalytics {
             durationMs,
         });
     }
+}
+
+export async function getPlatformProperties() {
+    const platform = PlatformPeg.get();
+    let appVersion;
+    try {
+        appVersion = await platform.getAppVersion();
+    } catch (e) {
+        // this happens if no version is set i.e. in dev
+        appVersion = "unknown";
+    }
+
+    return {
+        appVersion,
+        appPlatform: platform.getHumanReadableName(),
+    };
 }
 
 export function getAnalytics(): PosthogAnalytics {

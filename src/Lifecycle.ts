@@ -48,7 +48,7 @@ import { Jitsi } from "./widgets/Jitsi";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY, SSO_IDP_ID_KEY } from "./BasePlatform";
 import ThreepidInviteStore from "./stores/ThreepidInviteStore";
 import CountlyAnalytics from "./CountlyAnalytics";
-import { getAnalytics } from "./PosthogAnalytics";
+import { Anonymity, getAnalytics, getPlatformProperties } from "./PosthogAnalytics";
 import CallHandler from './CallHandler';
 import LifecycleCustomisations from "./customisations/Lifecycle";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
@@ -572,6 +572,14 @@ async function doSetLoggedIn(
     // Show a modal recommending a full reset of storage.
     if (results.dataInLocalStorage && results.cryptoInited && !results.dataInCryptoStore) {
         await abortLogin();
+    }
+
+    if (SettingsStore.getValue("analyticsOptIn")) {
+        const analytics = getAnalytics();
+        analytics.setAnonymity(Anonymity.Pseudonymous);
+        await analytics.identifyUser(credentials.userId);
+    } else {
+        getAnalytics().setAnonymity(Anonymity.Anonymous);
     }
 
     Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl);
