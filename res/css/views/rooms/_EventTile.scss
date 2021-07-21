@@ -230,25 +230,6 @@ $hover-select-border: 4px;
         overflow-y: hidden;
     }
 
-    /* Spoiler stuff */
-    .mx_EventTile_spoiler {
-        cursor: pointer;
-    }
-
-    .mx_EventTile_spoiler_reason {
-        color: $event-timestamp-color;
-        font-size: $font-11px;
-    }
-
-    .mx_EventTile_spoiler_content {
-        filter: blur(5px) saturate(0.1) sepia(1);
-        transition-duration: 0.5s;
-    }
-
-    .mx_EventTile_spoiler.visible > .mx_EventTile_spoiler_content {
-        filter: none;
-    }
-
     &:hover.mx_EventTile_verified .mx_EventTile_line,
     &:hover.mx_EventTile_unverified .mx_EventTile_line,
     &:hover.mx_EventTile_unknown .mx_EventTile_line {
@@ -309,6 +290,25 @@ $hover-select-border: 4px;
         margin: 0;
         padding: 6px 60px;
     }
+}
+
+/* Spoiler stuff */
+.mx_EventTile_spoiler {
+    cursor: pointer;
+}
+
+.mx_EventTile_spoiler_reason {
+    color: $event-timestamp-color;
+    font-size: $font-11px;
+}
+
+.mx_EventTile_spoiler_content {
+    filter: blur(5px) saturate(0.1) sepia(1);
+    transition-duration: 0.5s;
+}
+
+.mx_EventTile_spoiler.visible > .mx_EventTile_spoiler_content {
+    filter: none;
 }
 
 .mx_RoomView_timeline_rr_enabled {
