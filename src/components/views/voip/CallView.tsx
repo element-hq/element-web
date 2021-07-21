@@ -747,7 +747,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 mx_CallView_video: true,
             });
 
-            let presenting;
+            let toast;
             if (someoneIsScreensharing) {
                 const presentingClasses = classNames({
                     mx_CallView_presenting: true,
@@ -763,7 +763,7 @@ export default class CallView extends React.Component<IProps, IState> {
                         : _t("Your camera is still enabled"));
                 }
 
-                presenting = (
+                toast = (
                     <div className={presentingClasses}>
                         { text }
                     </div>
@@ -776,7 +776,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     ref={this.contentRef}
                     onMouseMove={this.onMouseMove}
                 >
-                    { presenting }
+                    { toast }
                     { sidebar }
                     <VideoFeed
                         feed={this.state.primaryFeed}
