@@ -3514,5 +3514,18 @@
     "Copy Room Link": "Kopjo Lidhje Dhome",
     "Message bubbles": "Flluska mesazhesh",
     "IRC": "IRC",
-    "New layout switcher (with message bubbles)": "Këmbyes i ri skemash (me flluska mesazhesh)"
+    "New layout switcher (with message bubbles)": "Këmbyes i ri skemash (me flluska mesazhesh)",
+    "Connected": "E lidhur",
+    "Downloading": "Po shkarkohet",
+    "The call is in an unknown state!": "Thirrja gjendet në një gjendje të panjohur!",
+    "Call back": "Thirreni ju",
+    "You missed this call": "E humbët këtë thirrje",
+    "This call has failed": "Kjo thirrje ka dështuar",
+    "Unknown failure: %(reason)s)": "Dështim i panjohur: %(reason)s)",
+    "No answer": "S’ka përgjigje",
+    "An unknown error occurred": "Ndodhi një gabim i panjohur",
+    "Their device couldn't start the camera or microphone": "Pajisja e tyre s’nisi dot kamerën ose mikrofonin",
+    "Connection failed": "Lidhja dështoi",
+    "Could not connect media": "S’u lidh dot me median",
+    "This call has ended": "Kjo thirrje ka përfunduar"
 }
