@@ -93,7 +93,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         this.showPresence = enablePresenceByHsUrl?.[hsUrl] ?? true;
     }
 
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillMount() {
         const cli = MatrixClientPeg.get();
         this.mounted = true;
@@ -543,8 +543,8 @@ export default class MemberList extends React.Component<IProps, IState> {
         const footer = (
             <SearchBox
                 className="mx_MemberList_query mx_textinput_icon mx_textinput_search"
-                placeholder={ _t('Filter room members') }
-                onSearch={ this.onSearchQueryChanged } />
+                placeholder={_t('Filter room members')}
+                onSearch={this.onSearchQueryChanged} />
         );
 
         let previousPhase = RightPanelPhases.RoomSummary;

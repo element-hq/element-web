@@ -42,7 +42,7 @@ function getStatusText(status: UpdateCheckStatus, errorDetail?: string) {
             return _t('Downloading update...');
         case UpdateCheckStatus.Ready:
             return _t("New version available. <a>Update now.</a>", {}, {
-                a: sub => <AccessibleButton kind="link" onClick={installUpdate}>{sub}</AccessibleButton>,
+                a: sub => <AccessibleButton kind="link" onClick={installUpdate}>{ sub }</AccessibleButton>,
             });
     }
 }
@@ -72,14 +72,14 @@ const UpdateCheckButton = () => {
     let suffix;
     if (state) {
         suffix = <span className="mx_UpdateCheckButton_summary">
-            {getStatusText(state.status, state.detail)}
-            {busy && <InlineSpinner />}
+            { getStatusText(state.status, state.detail) }
+            { busy && <InlineSpinner /> }
         </span>;
     }
 
     return <React.Fragment>
         <AccessibleButton onClick={onCheckForUpdateClick} kind="primary" disabled={busy}>
-            {_t("Check for update")}
+            { _t("Check for update") }
         </AccessibleButton>
         { suffix }
     </React.Fragment>;

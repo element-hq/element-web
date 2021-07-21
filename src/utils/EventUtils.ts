@@ -111,14 +111,19 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent): {
     let tileHandler = getHandlerTile(mxEvent);
 
     // Info messages are basically information about commands processed on a room
-    let isBubbleMessage = eventType.startsWith("m.key.verification") ||
-            (eventType === EventType.RoomMessage && msgtype && msgtype.startsWith("m.key.verification")) ||
-            (eventType === EventType.RoomCreate) ||
-            (eventType === EventType.RoomEncryption) ||
-            (tileHandler === "messages.MJitsiWidgetEvent");
+    let isBubbleMessage = (
+        eventType.startsWith("m.key.verification") ||
+        (eventType === EventType.RoomMessage && msgtype && msgtype.startsWith("m.key.verification")) ||
+        (eventType === EventType.RoomCreate) ||
+        (eventType === EventType.RoomEncryption) ||
+        (eventType === EventType.CallInvite) ||
+        (tileHandler === "messages.MJitsiWidgetEvent")
+    );
     let isInfoMessage = (
-        !isBubbleMessage && eventType !== EventType.RoomMessage &&
-            eventType !== EventType.Sticker && eventType !== EventType.RoomCreate
+        !isBubbleMessage &&
+        eventType !== EventType.RoomMessage &&
+        eventType !== EventType.Sticker &&
+        eventType !== EventType.RoomCreate
     );
 
     // If we're showing hidden events in the timeline, we should use the

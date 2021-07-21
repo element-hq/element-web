@@ -146,7 +146,7 @@ const SpaceInfo = ({ space }) => {
     return <div className="mx_SpaceRoomView_info">
         { visibilitySection }
         { joinRule === "public" && <RoomMemberCount room={space}>
-            {(count) => count > 0 ? (
+            { (count) => count > 0 ? (
                 <AccessibleButton
                     kind="link"
                     onClick={() => {
@@ -159,7 +159,7 @@ const SpaceInfo = ({ space }) => {
                 >
                     { _t("%(count)s members", { count }) }
                 </AccessibleButton>
-            ) : null}
+            ) : null }
         </RoomMemberCount> }
     </div>;
 };
@@ -292,7 +292,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         </h1>
         <SpaceInfo space={space} />
         <RoomTopic room={space}>
-            {(topic, ref) =>
+            { (topic, ref) =>
                 <div className="mx_SpaceRoomView_preview_topic" ref={ref}>
                     { topic }
                 </div>
@@ -419,12 +419,12 @@ const SpaceLanding = ({ space }) => {
         <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
         <div className="mx_SpaceRoomView_landing_name">
             <RoomName room={space}>
-                {(name) => {
+                { (name) => {
                     const tags = { name: () => <div className="mx_SpaceRoomView_landing_nameRow">
                         <h1>{ name }</h1>
                     </div> };
                     return _t("Welcome to <name/>", {}, tags) as JSX.Element;
-                }}
+                } }
             </RoomName>
         </div>
         <div className="mx_SpaceRoomView_landing_info">
@@ -434,11 +434,11 @@ const SpaceLanding = ({ space }) => {
             { settingsButton }
         </div>
         <RoomTopic room={space}>
-            {(topic, ref) => (
+            { (topic, ref) => (
                 <div className="mx_SpaceRoomView_landing_topic" ref={ref}>
                     { topic }
                 </div>
-            )}
+            ) }
         </RoomTopic>
         <SpaceFeedbackPrompt />
         <hr />
@@ -458,7 +458,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
     const numFields = 3;
     const placeholders = [_t("General"), _t("Random"), _t("Support")];
     const [roomNames, setRoomName] = useStateArray(numFields, [_t("General"), _t("Random"), ""]);
-    const fields = new Array(numFields).fill(0).map((_, i) => {
+    const fields = new Array(numFields).fill(0).map((x, i) => {
         const name = "roomName" + i;
         return <Field
             key={name}
@@ -625,7 +625,7 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
     const numFields = 3;
     const fieldRefs: RefObject<Field>[] = [useRef(), useRef(), useRef()];
     const [emailAddresses, setEmailAddress] = useStateArray(numFields, "");
-    const fields = new Array(numFields).fill(0).map((_, i) => {
+    const fields = new Array(numFields).fill(0).map((x, i) => {
         const name = "emailAddress" + i;
         return <Field
             key={name}

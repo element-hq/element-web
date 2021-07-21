@@ -121,18 +121,18 @@ export default class RoomHeader extends React.Component<IProps> {
         const name =
             <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
                 <RoomName room={this.props.room}>
-                    {(name) => {
+                    { (name) => {
                         const roomName = name || oobName;
                         return <div dir="auto" className={textClasses} title={roomName}>{ roomName }</div>;
-                    }}
+                    } }
                 </RoomName>
                 { searchStatus }
             </div>;
 
         const topicElement = <RoomTopic room={this.props.room}>
-            {(topic, ref) => <div className="mx_RoomHeader_topic" ref={ref} title={topic} dir="auto">
+            { (topic, ref) => <div className="mx_RoomHeader_topic" ref={ref} title={topic} dir="auto">
                 { topic }
-            </div>}
+            </div> }
         </RoomTopic>;
 
         let roomAvatar;

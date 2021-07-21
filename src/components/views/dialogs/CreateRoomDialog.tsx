@@ -224,15 +224,15 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             );
         }
 
-        let publicPrivateLabel = <p>{_t(
+        let publicPrivateLabel = <p>{ _t(
             "Private rooms can be found and joined by invitation only. Public rooms can be " +
             "found and joined by anyone.",
-        )}</p>;
+        ) }</p>;
         if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
-            publicPrivateLabel = <p>{_t(
+            publicPrivateLabel = <p>{ _t(
                 "Private rooms can be found and joined by invitation only. Public rooms can be " +
                 "found and joined by anyone in this community.",
-            )}</p>;
+            ) }</p>;
         }
 
         let e2eeSection;
@@ -250,7 +250,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             }
             e2eeSection = <React.Fragment>
                 <LabelledToggleSwitch
-                    label={ _t("Enable end-to-end encryption")}
+                    label={_t("Enable end-to-end encryption")}
                     onChange={this.onEncryptedChange}
                     value={this.state.isEncrypted}
                     className='mx_CreateRoomDialog_e2eSwitch' // for end-to-end tests
@@ -318,7 +318,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                                 onChange={this.onNoFederateChange}
                                 value={this.state.noFederate}
                             />
-                            <p>{federateLabel}</p>
+                            <p>{ federateLabel }</p>
                         </details>
                     </div>
                 </form>

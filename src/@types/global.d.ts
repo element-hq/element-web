@@ -50,6 +50,8 @@ import UIStore from "../stores/UIStore";
 import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 import { RoomScrollStateStore } from "../stores/RoomScrollStateStore";
 
+/* eslint-disable @typescript-eslint/naming-convention */
+
 declare global {
     interface Window {
         matrixChat: ReturnType<Renderer>;
@@ -90,6 +92,7 @@ declare global {
         mxUIStore: UIStore;
         mxSetupEncryptionStore?: SetupEncryptionStore;
         mxRoomScrollStateStore?: RoomScrollStateStore;
+        mxOnRecaptchaLoaded?: () => void;
     }
 
     interface Document {
@@ -114,7 +117,7 @@ declare global {
     }
 
     interface StorageEstimate {
-        usageDetails?: {[key: string]: number};
+        usageDetails?: { [key: string]: number };
     }
 
     interface HTMLAudioElement {
@@ -185,4 +188,21 @@ declare global {
             parameterDescriptors?: AudioParamDescriptor[];
         }
     );
+
+    // eslint-disable-next-line no-var
+    var grecaptcha:
+        | undefined
+        | {
+              reset: (id: string) => void;
+              render: (
+                  divId: string,
+                  options: {
+                      sitekey: string;
+                      callback: (response: string) => void;
+                  },
+              ) => string;
+              isReady: () => boolean;
+          };
 }
+
+/* eslint-enable @typescript-eslint/naming-convention */

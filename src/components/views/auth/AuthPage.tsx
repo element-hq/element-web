@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,24 +17,18 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import AuthFooter from "./AuthFooter";
 
-@replaceableComponent("views.auth.AuthHeader")
-export default class AuthHeader extends React.Component {
-    static propTypes = {
-        disableLanguageSelector: PropTypes.bool,
-    };
-
-    render() {
-        const AuthHeaderLogo = sdk.getComponent('auth.AuthHeaderLogo');
-        const LanguageSelector = sdk.getComponent('views.auth.LanguageSelector');
-
+@replaceableComponent("views.auth.AuthPage")
+export default class AuthPage extends React.PureComponent {
+    public render(): React.ReactNode {
         return (
-            <div className="mx_AuthHeader">
-                <AuthHeaderLogo />
-                <LanguageSelector disabled={this.props.disableLanguageSelector} />
+            <div className="mx_AuthPage">
+                <div className="mx_AuthPage_modal">
+                    { this.props.children }
+                </div>
+                <AuthFooter />
             </div>
         );
     }

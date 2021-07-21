@@ -1892,10 +1892,10 @@ export default class RoomView extends React.Component<IProps, IState> {
                     className="mx_RoomView_auxPanel_hiddenHighlights"
                     onClick={this.onHiddenHighlightsClick}
                 >
-                    {_t(
+                    { _t(
                         "You have %(count)s unread notifications in a prior version of this room.",
                         { count: hiddenHighlightCount },
-                    )}
+                    ) }
                 </AccessibleButton>
             );
         }
@@ -2007,7 +2007,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 onScroll={this.onMessageListScroll}
                 onUserScroll={this.onUserScroll}
                 onReadMarkerUpdated={this.updateTopUnreadMessagesBar}
-                showUrlPreview = {this.state.showUrlPreview}
+                showUrlPreview={this.state.showUrlPreview}
                 className={messagePanelClassNames}
                 membersLoaded={this.state.membersLoaded}
                 permalinkCreator={this.getPermalinkCreatorForRoom(this.state.room)}
@@ -2057,7 +2057,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         return (
             <RoomContext.Provider value={this.state}>
                 <main className={mainClasses} ref={this.roomView} onKeyDown={this.onReactKeyDown}>
-                    {showChatEffects && this.roomView.current &&
+                    { showChatEffects && this.roomView.current &&
                         <EffectsOverlay roomWidth={this.roomView.current.offsetWidth} />
                     }
                     <ErrorBoundary>
@@ -2076,22 +2076,22 @@ export default class RoomView extends React.Component<IProps, IState> {
                         />
                         <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier}>
                             <div className="mx_RoomView_body">
-                                {auxPanel}
+                                { auxPanel }
                                 <div className={timelineClasses}>
-                                    {fileDropTarget}
-                                    {topUnreadMessagesBar}
-                                    {jumpToBottom}
-                                    {messagePanel}
-                                    {searchResultsPanel}
+                                    { fileDropTarget }
+                                    { topUnreadMessagesBar }
+                                    { jumpToBottom }
+                                    { messagePanel }
+                                    { searchResultsPanel }
                                 </div>
                                 <div className={statusBarAreaClass}>
                                     <div className="mx_RoomView_statusAreaBox">
                                         <div className="mx_RoomView_statusAreaBox_line" />
-                                        {statusBar}
+                                        { statusBar }
                                     </div>
                                 </div>
-                                {previewBar}
-                                {messageComposer}
+                                { previewBar }
+                                { messageComposer }
                             </div>
                         </MainSplit>
                     </ErrorBoundary>

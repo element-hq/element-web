@@ -121,7 +121,7 @@ export default class MyGroups extends React.Component {
                         ) }
                     </div>
                 </div>
-                {/*<div className="mx_MyGroups_joinBox mx_MyGroups_headerCard">
+                { /*<div className="mx_MyGroups_joinBox mx_MyGroups_headerCard">
                     <AccessibleButton className='mx_MyGroups_headerCard_button' onClick={this._onJoinGroupClick}>
                         <img src={require("../../../res/img/icons-create-room.svg")} width="50" height="50" />
                     </AccessibleButton>
@@ -137,7 +137,7 @@ export default class MyGroups extends React.Component {
                             { 'i': (sub) => <i>{ sub }</i> })
                         }
                     </div>
-                </div>*/}
+                </div>*/ }
             </div>
             <BetaCard featureId="feature_spaces" title={_t("Communities are changing to Spaces")} />
             <div className="mx_MyGroups_content">

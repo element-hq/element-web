@@ -18,21 +18,23 @@ import SdkConfig from "../../../SdkConfig";
 import { getCurrentLanguage } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 import PlatformPeg from "../../../PlatformPeg";
-import * as sdk from '../../../index';
 import React from 'react';
 import { SettingLevel } from "../../../settings/SettingLevel";
+import LanguageDropdown from "../elements/LanguageDropdown";
 
-function onChange(newLang) {
+function onChange(newLang: string): void {
     if (getCurrentLanguage() !== newLang) {
         SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLang);
         PlatformPeg.get().reload();
     }
 }
 
-export default function LanguageSelector({ disabled }) {
-    if (SdkConfig.get()['disable_login_language_selector']) return <div />;
+interface IProps {
+    disabled?: boolean;
+}
 
-    const LanguageDropdown = sdk.getComponent('views.elements.LanguageDropdown');
+export default function LanguageSelector({ disabled }: IProps): JSX.Element {
+    if (SdkConfig.get()['disable_login_language_selector']) return <div />;
     return <LanguageDropdown
         className="mx_AuthBody_language"
         onOptionChange={onChange}
