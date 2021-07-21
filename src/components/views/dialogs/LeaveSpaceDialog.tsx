@@ -27,6 +27,7 @@ import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { Entry } from "./AddExistingToSpaceDialog";
 import SearchBox from "../../structures/SearchBox";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
+import classNames from "classnames";
 
 enum RoomsToLeave {
     All = "All",
@@ -78,9 +79,8 @@ const SpaceChildPicker = ({ filterPlaceholder, rooms, selected, onChange }) => {
     </div>;
 };
 
-const LeaveRoomsPicker = ({ space, roomsToLeave, setRoomsToLeave }) => {
+const LeaveRoomsPicker = ({ space, spaceChildren, roomsToLeave, setRoomsToLeave }) => {
     const selected = useMemo(() => new Set(roomsToLeave), [roomsToLeave]);
-    const spaceChildren = useMemo(() => SpaceStore.instance.getChildren(space.roomId), [space.roomId]);
     const [state, setState] = useState<RoomsToLeave>(RoomsToLeave.All);
 
     useEffect(() => {
@@ -106,10 +106,6 @@ const LeaveRoomsPicker = ({ space, roomsToLeave, setRoomsToLeave }) => {
         case RoomsToLeave.Specific:
             captionSpan = <span>{ _t("Pick which rooms and subspaces you want to leave.") }</span>;
             break;
-    }
-
-    if (spaceChildren.length < 1) {
-        return null;
     }
 
     return <div className="mx_LeaveSpaceDialog_section">
@@ -160,6 +156,7 @@ const isOnlyAdmin = (room: Room): boolean => {
 };
 
 const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
+    const spaceChildren = useMemo(() => SpaceStore.instance.getChildren(space.roomId), [space.roomId]);
     const [roomsToLeave, setRoomsToLeave] = useState<Room[]>([]);
 
     let rejoinWarning;
@@ -181,7 +178,9 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
 
     return <BaseDialog
         title={_t("Leave %(spaceName)s", { spaceName: space.name })}
-        className="mx_LeaveSpaceDialog"
+        className={classNames("mx_LeaveSpaceDialog", {
+            mx_LeaveSpaceDialog_hasChildren: spaceChildren.length > 0,
+        })}
         contentId="mx_LeaveSpaceDialog"
         onFinished={() => onFinished(false)}
         fixedWidth={false}
@@ -195,7 +194,12 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
                 { rejoinWarning }
             </p>
 
-            <LeaveRoomsPicker space={space} roomsToLeave={roomsToLeave} setRoomsToLeave={setRoomsToLeave} />
+            { spaceChildren.length > 0 && <LeaveRoomsPicker
+                space={space}
+                spaceChildren={spaceChildren}
+                roomsToLeave={roomsToLeave}
+                setRoomsToLeave={setRoomsToLeave}
+            /> }
 
             { onlyAdminWarning && <div className="mx_LeaveSpaceDialog_section_warning">
                 { onlyAdminWarning }

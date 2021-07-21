@@ -24,10 +24,13 @@ limitations under the License.
 
 .mx_LeaveSpaceDialog {
     width: 440px;
-    height: 500px;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+
+    &.mx_LeaveSpaceDialog_hasChildren {
+        height: 500px;
+    }
 
     .mx_Dialog_content {
         flex-grow: 1;
