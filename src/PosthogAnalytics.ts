@@ -69,7 +69,6 @@ export class PosthogAnalytics {
     private anonymity = Anonymity.Anonymous;
     private initialised = false;
     private posthog?: PostHog = null;
-    private redactedCurrentLocation = null;
     private enabled = false;
 
     private static _instance = null;
@@ -85,21 +84,20 @@ export class PosthogAnalytics {
         this.posthog = posthog;
     }
 
-    public async init(anonymity: Anonymity) {
-        this.anonymity = Boolean(navigator.doNotTrack === "1") ? Anonymity.Anonymous : anonymity;
-
+    public init(anonymity: Anonymity) {
         const posthogConfig = SdkConfig.get()["posthog"];
         if (posthogConfig) {
-            // Update the redacted current location before initialising posthog, as posthog.init triggers
-            // an immediate pageview event which calls the sanitize_properties callback
-            await this.updateRedactedCurrentLocation();
-
             this.posthog.init(posthogConfig.projectApiKey, {
                 api_host: posthogConfig.apiHost,
                 autocapture: false,
                 mask_all_text: true,
                 mask_all_element_attributes: true,
+                // this is disabled for now as its tricky to sanitize properties of the pageview
+                // event because sanitization requires async crypto calls and the sanitize_properties
+                // callback is synchronous.
+                capture_pageview: false,
                 sanitize_properties: this.sanitizeProperties.bind(this),
+                respect_dnt: true,
             });
             this.initialised = true;
             this.enabled = true;
@@ -108,20 +106,20 @@ export class PosthogAnalytics {
         }
     }
 
-    private async updateRedactedCurrentLocation() {
-        // TODO only calculate this when the location changes as its expensive
-        const { origin, hash, pathname } = window.location;
-        this.redactedCurrentLocation = await getRedactedCurrentLocation(
-            origin, hash, pathname, this.anonymity);
-    }
-
     private sanitizeProperties(properties: posthog.Properties, _: string): posthog.Properties {
-        // Sanitize posthog's built in properties which leak PII e.g. url reporting
-        // see utils.js _.info.properties in posthog-js
+        // Callback from posthog to sanitize properties before sending them to the server.
+        //
+        // Here we sanitize posthog's built in properties which leak PII e.g. url reporting.
+        // See utils.js _.info.properties in posthog-js.
 
-        // this.redactedCurrentLocation needs to have been updated prior to reaching this point as
-        // updating it involves async, which this callback is not
-        properties['$current_url'] = this.redactedCurrentLocation;
+        // Replace the $current_url with a redacted version.
+        // $redacted_current_url is injected by this class earlier in capture(), as its generation
+        // is async and can't be done in this non-async callback.
+        if (!properties['$redacted_current_url']) {
+            console.log("$redacted_current_url not set in sanitizeProperties, will drop $current_url entirely");
+        }
+        properties['$current_url'] = properties['$redacted_current_url'];
+        delete properties['$redacted_current_url'];
 
         if (this.anonymity == Anonymity.Anonymous) {
             // drop referrer information for anonymous users
@@ -172,7 +170,9 @@ export class PosthogAnalytics {
         if (!this.initialised) {
             throw Error("Tried to track event before PoshogAnalytics.init has completed");
         }
-        await this.updateRedactedCurrentLocation();
+        const { origin, hash, pathname } = window.location;
+        properties['$redacted_current_url'] = await getRedactedCurrentLocation(
+            origin, hash, pathname, this.anonymity);
         this.posthog.capture(eventName, properties);
     }
 

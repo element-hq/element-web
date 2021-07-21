@@ -49,7 +49,7 @@ describe("PosthogAnalytics", () => {
     describe("Initialisation", () => {
         it("Should not initialise if config is not set", async () => {
             jest.spyOn(SdkConfig, "get").mockReturnValue({});
-            await analytics.init(Anonymity.Pseudonymous);
+            analytics.init(Anonymity.Pseudonymous);
             expect(analytics.isEnabled()).toBe(false);
         });
 
@@ -60,21 +60,14 @@ describe("PosthogAnalytics", () => {
                     apiHost: "bar",
                 },
             });
-            await analytics.init(Anonymity.Pseudonymous);
+            analytics.init(Anonymity.Pseudonymous);
             expect(analytics.isInitialised()).toBe(true);
             expect(analytics.isEnabled()).toBe(true);
-        });
-
-        it("Should force anonymous if DNT is enabled", async () => {
-            navigator.doNotTrack = "1";
-            await analytics.init(Anonymity.Pseudonymous);
-            expect(analytics.getAnonymity()).toBe(Anonymity.Anonymous);
         });
     });
 
     describe("Tracking", () => {
         beforeEach(() => {
-            navigator.doNotTrack = null;
             jest.spyOn(SdkConfig, "get").mockReturnValue({
                 posthog: {
                     projectApiKey: "foo",
@@ -84,25 +77,24 @@ describe("PosthogAnalytics", () => {
         });
 
         it("Should pass track() to posthog", async () => {
-            await analytics.init(Anonymity.Pseudonymous);
+            analytics.init(Anonymity.Pseudonymous);
             await analytics.trackAnonymousEvent<ITestEvent>("jest_test_event", {
                 foo: "bar",
             });
             expect(fakePosthog.capture.mock.calls[0][0]).toBe("jest_test_event");
-            expect(fakePosthog.capture.mock.calls[0][1]).toEqual({ foo: "bar" });
+            expect(fakePosthog.capture.mock.calls[0][1]["foo"]).toEqual("bar");
         });
 
         it("Should pass trackRoomEvent to posthog", async () => {
-            await analytics.init(Anonymity.Pseudonymous);
+            analytics.init(Anonymity.Pseudonymous);
             const roomId = "42";
             await analytics.trackRoomEvent<IRoomEvent>("jest_test_event", roomId, {
                 foo: "bar",
             });
             expect(fakePosthog.capture.mock.calls[0][0]).toBe("jest_test_event");
-            expect(fakePosthog.capture.mock.calls[0][1]).toEqual({
-                foo: "bar",
-                hashedRoomId: "73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
-            });
+            expect(fakePosthog.capture.mock.calls[0][1]["foo"]).toEqual("bar");
+            expect(fakePosthog.capture.mock.calls[0][1]["hashedRoomId"])
+                .toEqual("73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049");
         });
 
         it("Should silently not track if not inititalised", async () => {
@@ -113,7 +105,7 @@ describe("PosthogAnalytics", () => {
         });
 
         it("Should not track non-anonymous messages if anonymous", async () => {
-            await analytics.init(Anonymity.Anonymous);
+            analytics.init(Anonymity.Anonymous);
             await analytics.trackPseudonymousEvent<ITestEvent>("jest_test_event", {
                 foo: "bar",
             });
@@ -151,14 +143,14 @@ bd75b3e080945674c0351f75e0db33d1e90986fa07b318ea7edf776f5eef38d4`);
         });
 
         it("Should identify the user to posthog if pseudonymous", async () => {
-            await analytics.init(Anonymity.Pseudonymous);
+            analytics.init(Anonymity.Pseudonymous);
             await analytics.identifyUser("foo");
             expect(fakePosthog.identify.mock.calls[0][0])
                 .toBe("2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae");
         });
 
         it("Should not identify the user to posthog if anonymous", async () => {
-            await analytics.init(Anonymity.Anonymous);
+            analytics.init(Anonymity.Anonymous);
             await analytics.identifyUser("foo");
             expect(fakePosthog.identify.mock.calls.length).toBe(0);
         });
