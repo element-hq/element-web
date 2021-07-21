@@ -19,13 +19,40 @@ limitations under the License.
     right: 16px;
     bottom: 16px;
     z-index: 100; // To be above the primary feed
-    max-width: 20%;
-    min-width: 160px; // To match .mx_VideoFeed_voice
+    width: 20%;
+    min-width: 160px;
     display: flex;
     flex-direction: column-reverse;
+
+    .mx_VideoFeed {
+        border-radius: 4px;
+        width: 100%;
+        margin-bottom: 12px;
+
+        &.mx_VideoFeed_voice {
+            background-color: $inverted-bg-color;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            min-width: 160px;
+            min-height: 90px;
+        }
+
+        &.mx_VideoFeed_video {
+            background-color: transparent;
+        }
+    }
 
     &.mx_CallViewSidebar_pipMode {
         top: 16px;
         bottom: unset;
+        min-width: unset;
+
+        .mx_VideoFeed_voice {
+            min-width: 64px;
+            min-height: 36px;
+        }
     }
 }

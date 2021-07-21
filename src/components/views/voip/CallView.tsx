@@ -590,6 +590,9 @@ export default class CallView extends React.Component<IProps, IState> {
         const isOnHold = this.state.isLocalOnHold || this.state.isRemoteOnHold;
         const isScreensharing = this.props.call.isScreensharing();
         const sidebarShown = this.state.sidebarShown;
+        const someoneIsScreensharing = this.props.call.getFeeds().some((feed) => {
+            return feed.purpose === SDPStreamMetadataPurpose.Screenshare;
+        });
 
         let contentView: React.ReactNode;
         let holdTransferContent;
@@ -642,7 +645,7 @@ export default class CallView extends React.Component<IProps, IState> {
         let sidebar;
         if (
             (!isOnHold && !transfereeCall) &&
-            ((sidebarShown && this.props.call.type === CallType.Video) || isScreensharing)
+            ((sidebarShown && this.props.call.type === CallType.Video) || someoneIsScreensharing)
         ) {
             sidebar = (
                 <CallViewSidebar
@@ -745,7 +748,7 @@ export default class CallView extends React.Component<IProps, IState> {
             });
 
             let presenting;
-            if (this.props.call.getFeeds().some((feed) => feed.purpose === SDPStreamMetadataPurpose.Screenshare)) {
+            if (someoneIsScreensharing) {
                 const presentingClasses = classNames({
                     mx_CallView_presenting: true,
                     mx_CallView_presenting_hidden: !this.state.controlsVisible,
