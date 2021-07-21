@@ -160,41 +160,82 @@ export default class ImageView extends React.Component<IProps, IState> {
         });
     };
 
-    private zoom(delta: number) {
-        const newZoom = this.state.zoom + delta;
+    private zoomDelta(delta: number, zoomX?: number, zoomY?: number) {
+        this.zoom(this.state.zoom + delta, zoomX, zoomY);
+    }
+
+    private zoom(zoomLevel: number, zoomX?: number, zoomY?: number) {
+        const oldZoom = this.state.zoom;
+        const newZoom = Math.min(zoomLevel, this.state.maxZoom);
 
         if (newZoom <= this.state.minZoom) {
+            // Zoom out fully
             this.setState({
                 zoom: this.state.minZoom,
                 translationX: 0,
                 translationY: 0,
             });
-            return;
-        }
-        if (newZoom >= this.state.maxZoom) {
-            this.setState({ zoom: this.state.maxZoom });
-            return;
-        }
+        } else if (zoomX === undefined && zoomY === undefined) {
+            // Zoom relative to the center of the view
+            this.setState({
+                zoom: newZoom,
+                translationX: this.state.translationX * newZoom / oldZoom,
+                translationY: this.state.translationY * newZoom / oldZoom,
+            });
+        } else {
+            // Zoom relative to the given point on the image.
+            // First we need to figure out the offset of the anchor point
+            // relative to the center of the image, accounting for rotation.
+            let offsetX;
+            let offsetY;
+            switch (((this.state.rotation % 360) + 360) % 360) {
+                case 0:
+                    offsetX = this.image.current.clientWidth / 2 - zoomX;
+                    offsetY = this.image.current.clientHeight / 2 - zoomY;
+                    break;
+                case 90:
+                    offsetX = zoomY - this.image.current.clientHeight / 2;
+                    offsetY = this.image.current.clientWidth / 2 - zoomX;
+                    break;
+                case 180:
+                    offsetX = zoomX - this.image.current.clientWidth / 2;
+                    offsetY = zoomY - this.image.current.clientHeight / 2;
+                    break;
+                case 270:
+                    offsetX = this.image.current.clientHeight / 2 - zoomY;
+                    offsetY = zoomX - this.image.current.clientWidth / 2;
+            }
 
-        this.setState({
-            zoom: newZoom,
-        });
+            // Apply the zoom and offset
+            this.setState({
+                zoom: newZoom,
+                translationX: this.state.translationX + (newZoom - oldZoom) * offsetX,
+                translationY: this.state.translationY + (newZoom - oldZoom) * offsetY,
+            });
+        }
     }
 
     private onWheel = (ev: WheelEvent) => {
         ev.stopPropagation();
         ev.preventDefault();
-
         const { deltaY } = normalizeWheelEvent(ev);
-        this.zoom(-(deltaY * ZOOM_COEFFICIENT));
+
+        if (ev.target === this.image.current) {
+            // Zoom in on the point on the image targeted by the cursor
+            this.zoomDelta(-deltaY * ZOOM_COEFFICIENT, ev.offsetX, ev.offsetY);
+        } else {
+            // The user is scrolling outside of the image, so we can't really
+            // get a targeted point. Instead, we'll just zoom in on the center.
+            this.zoomDelta(-deltaY * ZOOM_COEFFICIENT);
+        }
     };
 
-    private onZoomInClick = () => {
-        this.zoom(ZOOM_STEP);
+    private onZoomInClick = (ev: MouseEvent) => {
+        this.zoomDelta(ZOOM_STEP);
     };
 
-    private onZoomOutClick = () => {
-        this.zoom(-ZOOM_STEP);
+    private onZoomOutClick = (ev: MouseEvent) => {
+        this.zoomDelta(-ZOOM_STEP);
     };
 
     private onKeyDown = (ev: KeyboardEvent) => {
@@ -259,7 +300,7 @@ export default class ImageView extends React.Component<IProps, IState> {
 
         // Zoom in if we are completely zoomed out
         if (this.state.zoom === this.state.minZoom) {
-            this.setState({ zoom: this.state.maxZoom });
+            this.zoom(this.state.maxZoom, ev.nativeEvent.offsetX, ev.nativeEvent.offsetY);
             return;
         }
 
@@ -289,11 +330,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             Math.abs(this.state.translationX - this.previousX) < ZOOM_DISTANCE &&
             Math.abs(this.state.translationY - this.previousY) < ZOOM_DISTANCE
         ) {
-            this.setState({
-                zoom: this.state.minZoom,
-                translationX: 0,
-                translationY: 0,
-            });
+            this.zoom(this.state.minZoom);
             this.initX = 0;
             this.initY = 0;
         }
