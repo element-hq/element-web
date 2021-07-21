@@ -150,6 +150,10 @@ export class PosthogAnalytics {
         this.posthog.identify(await hashHex(userId));
     }
 
+    public registerSuperProperties(properties) {
+        this.posthog.register(properties);
+    }
+
     public isInitialised() {
         return this.initialised;
     }
