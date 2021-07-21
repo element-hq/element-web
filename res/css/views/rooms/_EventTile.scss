@@ -304,7 +304,6 @@ $hover-select-border: 4px;
    horizontal scrollbars occasionally appearing, like in
    https://github.com/vector-im/vector-web/issues/1154 */
 .mx_EventTile_content {
-    // display: block;
     overflow-y: hidden;
     overflow-x: hidden;
     margin-right: 34px;
