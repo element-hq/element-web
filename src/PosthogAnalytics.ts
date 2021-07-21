@@ -36,7 +36,7 @@ interface IPageView extends IAnonymousEvent {
 }
 
 export interface IWelcomeScreenLoad extends IAnonymousEvent {
-    key: "welcome_screen_load",
+    eventName: "welcome_screen_load",
 }
 
 const hashHex = async (input: string): Promise<string> => {
