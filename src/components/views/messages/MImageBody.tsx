@@ -362,7 +362,6 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         const thumbnail = (
             <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight: maxHeight + "px", maxWidth: maxWidth + "px" }} >
                 { /* Calculate aspect ratio, using %padding will size _container correctly */ }
-                <div style={{ paddingBottom: forcedHeight ? (forcedHeight + "px") : ((100 * infoHeight / infoWidth) + '%') }} />
                 { showPlaceholder &&
                     <div className="mx_MImageBody_thumbnail" style={{
                         // Constrain width here so that spinner appears central to the loaded thumbnail
