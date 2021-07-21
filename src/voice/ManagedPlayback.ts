@@ -31,7 +31,7 @@ export class ManagedPlayback extends Playback {
     }
 
     public destroy() {
-        this.manager.destroyInstance(this);
+        this.manager.destroyPlaybackInstance(this);
         super.destroy();
     }
 }

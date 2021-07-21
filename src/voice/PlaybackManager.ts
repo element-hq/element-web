@@ -42,11 +42,11 @@ export class PlaybackManager {
         this.instances.filter(p => p !== playback).forEach(p => p.stop());
     }
 
-    public destroyInstance(playback: ManagedPlayback) {
+    public destroyPlaybackInstance(playback: ManagedPlayback) {
         this.instances = this.instances.filter(p => p !== playback);
     }
 
-    public createInstance(buf: ArrayBuffer, waveform = DEFAULT_WAVEFORM): Playback {
+    public createPlaybackInstance(buf: ArrayBuffer, waveform = DEFAULT_WAVEFORM): Playback {
         const instance = new ManagedPlayback(this, buf, waveform);
         this.instances.push(instance);
         return instance;

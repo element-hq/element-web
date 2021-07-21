@@ -63,7 +63,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         const waveform = content?.["org.matrix.msc1767.audio"]?.waveform?.map(p => p / 1024);
 
         // We should have a buffer to work with now: let's set it up
-        const playback = PlaybackManager.instance.createInstance(buffer, waveform);
+        const playback = PlaybackManager.instance.createPlaybackInstance(buffer, waveform);
         playback.clockInfo.populatePlaceholdersFrom(this.props.mxEvent);
         this.setState({ playback });
 
