@@ -79,8 +79,8 @@ function mightContainEmoji(str: string): boolean {
  * @return {String} The shortcode (such as :thumbup:)
  */
 export function unicodeToShortcode(char: string): string {
-    const shortcodes = getEmojiFromUnicode(char).shortcodes;
-    return shortcodes.length > 0 ? `:${shortcodes[0]}:` : '';
+    const shortcodes = getEmojiFromUnicode(char)?.shortcodes;
+    return shortcodes?.length ? `:${shortcodes[0]}:` : '';
 }
 
 export function processHtmlForSending(html: string): string {
