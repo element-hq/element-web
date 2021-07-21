@@ -38,6 +38,7 @@ export default class CallViewSidebar extends React.Component<IProps> {
                     feed={feed}
                     call={this.props.call}
                     primary={false}
+                    pipMode={this.props.pipMode}
                 />
             );
         });
