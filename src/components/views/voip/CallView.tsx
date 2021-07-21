@@ -757,8 +757,10 @@ export default class CallView extends React.Component<IProps, IState> {
                 let text = isScreensharing
                     ? _t("You are presenting")
                     : _t('%(sharerName)s is presenting', { sharerName });
-                if (!this.state.sidebarShown) {
-                    text += " • " + _t("Your camera is still enabled");
+                if (!this.state.sidebarShown && isScreensharing) {
+                    text += " • " + (this.props.call.isLocalVideoMuted()
+                        ? _t("Your camera is turned off")
+                        : _t("Your camera is still enabled"));
                 }
 
                 presenting = (

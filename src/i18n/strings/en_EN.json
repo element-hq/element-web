@@ -897,6 +897,7 @@
     "Connecting": "Connecting",
     "You are presenting": "You are presenting",
     "%(sharerName)s is presenting": "%(sharerName)s is presenting",
+    "Your camera is turned off": "Your camera is turned off",
     "Your camera is still enabled": "Your camera is still enabled",
     "Video Call": "Video Call",
     "Voice Call": "Voice Call",
