@@ -2334,7 +2334,6 @@
     "You will leave all subspaces and rooms in <spaceName/>.": "You will leave all subspaces and rooms in <spaceName/>.",
     "You'll still be a part of all rooms and subspaces in <spaceName/> you've joined.": "You'll still be a part of all rooms and subspaces in <spaceName/> you've joined.",
     "Pick which rooms and subspaces you want to leave.": "Pick which rooms and subspaces you want to leave.",
-    "Are you sure you want to leave %(spaceName)s? You won't be able to rejoin unless you are re-invited": "Are you sure you want to leave %(spaceName)s? You won't be able to rejoin unless you are re-invited",
     "Choose which rooms you wish to leave": "Choose which rooms you wish to leave",
     "Leave all subspaces and rooms": "Leave all subspaces and rooms",
     "Don't leave any": "Don't leave any",

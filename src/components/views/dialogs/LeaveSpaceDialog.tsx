@@ -109,11 +109,7 @@ const LeaveRoomsPicker = ({ space, roomsToLeave, setRoomsToLeave }) => {
     }
 
     if (spaceChildren.length < 1) {
-        return <div>
-            BOLD:
-            { _t("Are you sure you want to leave %(spaceName)s? " +
-                "You won't be able to rejoin unless you are re-invited", { spaceName: space.name }) }
-        </div>;
+        return null;
     }
 
     return <div className="mx_LeaveSpaceDialog_section">
