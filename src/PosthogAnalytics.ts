@@ -28,6 +28,13 @@ export interface IRoomEvent extends IPseudonymousEvent {
     hashedRoomId: string
 }
 
+interface IPageView extends IAnonymousEvent {
+    eventName: "$pageview",
+    properties: {
+        durationMs?: number
+    }
+}
+
 export interface IWelcomeScreenLoad extends IAnonymousEvent {
     key: "welcome_screen_load",
 }
@@ -204,6 +211,12 @@ export class PosthogAnalytics {
             hashedRoomId: roomId ? await hashHex(roomId) : null,
         };
         await this.trackPseudonymousEvent(eventName, updatedProperties);
+    }
+
+    public async trackPageView(durationMs: number) {
+        await this.trackAnonymousEvent<IPageView>("$pageview", {
+            durationMs,
+        });
     }
 }
 

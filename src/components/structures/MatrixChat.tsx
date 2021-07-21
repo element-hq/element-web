@@ -107,7 +107,7 @@ import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 import SoftLogout from './auth/SoftLogout';
 import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../utils/strings";
-import { Anonymity, getAnalytics } from '../../PosthogAnalytics';
+import { Anonymity, getAnalytics, IPageChange } from '../../PosthogAnalytics';
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -445,6 +445,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             const durationMs = this.stopPageChangeTimer();
             Analytics.trackPageChange(durationMs);
             CountlyAnalytics.instance.trackPageChange(durationMs);
+            getAnalytics().trackPageView(durationMs);
         }
         if (this.focusComposer) {
             dis.fire(Action.FocusSendMessageComposer);
