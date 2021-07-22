@@ -34,6 +34,7 @@ import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { normalizeWheelEvent } from "../../../utils/Mouse";
 import { IDialogProps } from '../dialogs/IDialogProps';
+import UIStore from '../../../stores/UIStore';
 
 // Max scale to keep gaps around the image
 const MAX_SCALE = 0.95;
@@ -56,8 +57,15 @@ interface IProps extends IDialogProps {
     // redactions, senders, timestamps etc.  Other descriptors are taken from the explicit
     // properties above, which let us use lightboxes to display images which aren't associated
     // with events.
-    mxEvent: MatrixEvent;
-    permalinkCreator: RoomPermalinkCreator;
+    mxEvent?: MatrixEvent;
+    permalinkCreator?: RoomPermalinkCreator;
+
+    thumbnailInfo?: {
+        positionX: number;
+        positionY: number;
+        width: number;
+        height: number;
+    };
 }
 
 interface IState {
@@ -75,13 +83,16 @@ interface IState {
 export default class ImageView extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
+
+        const { thumbnailInfo, width } = this.props;
+
         this.state = {
-            zoom: 0,
+            zoom: thumbnailInfo?.width / width ?? 0,
             minZoom: MAX_SCALE,
             maxZoom: MAX_SCALE,
             rotation: 0,
-            translationX: 0,
-            translationY: 0,
+            translationX: thumbnailInfo?.positionX + (thumbnailInfo?.width / 2) - (UIStore.instance.windowWidth / 2),
+            translationY: thumbnailInfo?.positionY + (thumbnailInfo?.height / 2) - (UIStore.instance.windowHeight / 2),
             moving: false,
             contextMenuDisplayed: false,
         };
@@ -105,14 +116,22 @@ export default class ImageView extends React.Component<IProps, IState> {
         // We want to recalculate zoom whenever the window's size changes
         window.addEventListener("resize", this.recalculateZoom);
         // After the image loads for the first time we want to calculate the zoom
-        this.image.current.addEventListener("load", this.recalculateZoom);
+        this.image.current.addEventListener("load", this.imageLoaded);
     }
 
     componentWillUnmount() {
         this.focusLock.current.removeEventListener('wheel', this.onWheel);
         window.removeEventListener("resize", this.recalculateZoom);
-        this.image.current.removeEventListener("load", this.recalculateZoom);
+        this.image.current.removeEventListener("load", this.imageLoaded);
     }
+
+    private imageLoaded =() => {
+        this.setZoomAndRotation();
+        this.setState({
+            translationX: 0,
+            translationY: 0,
+        });
+    };
 
     private recalculateZoom = () => {
         this.setZoomAndRotation();
@@ -380,7 +399,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         // image causing it translate in the wrong direction.
         const style = {
             cursor: cursor,
-            transition: this.state.moving ? null : "transform 200ms ease 0s",
+            transition: this.state.moving ? null : "transform 250ms ease 0s",
             transform: `translateX(${translatePixelsX})
                         translateY(${translatePixelsY})
                         scale(${zoom})
