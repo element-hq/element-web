@@ -188,6 +188,8 @@ export default class ImageView extends React.Component<IProps, IState> {
             // relative to the center of the image, accounting for rotation.
             let offsetX;
             let offsetY;
+            // The modulo operator can return negative values for some
+            // rotations, so we have to do some extra work to normalize it
             switch (((this.state.rotation % 360) + 360) % 360) {
                 case 0:
                     offsetX = this.image.current.clientWidth / 2 - anchorX;
