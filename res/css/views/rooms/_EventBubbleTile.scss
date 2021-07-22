@@ -97,6 +97,11 @@ limitations under the License.
         .mx_SenderProfile {
             display: none;
         }
+
+        .mx_ReplyTile .mx_SenderProfile {
+            display: block;
+        }
+
         .mx_ReactionsRow {
             float: right;
             clear: right;
