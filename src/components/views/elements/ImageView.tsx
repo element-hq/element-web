@@ -175,7 +175,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                 translationX: 0,
                 translationY: 0,
             });
-        } else if (zoomX === undefined && zoomY === undefined) {
+        } else if (typeof zoomX !== "number" && typeof zoomY !== "number") {
             // Zoom relative to the center of the view
             this.setState({
                 zoom: newZoom,
