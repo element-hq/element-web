@@ -230,7 +230,7 @@ $composer-shadow-color: rgba(0, 0, 0, 0.28);
 // Bubble tiles
 $eventbubble-self-bg: #143A34;
 $eventbubble-others-bg: #394049;
-$eventbubble-bg-hover: #433C23;
+$eventbubble-bg-hover: $header-panel-bg-color;
 $eventbubble-avatar-outline: $bg-color;
 $eventbubble-reply-color: #C1C6CD;
 
