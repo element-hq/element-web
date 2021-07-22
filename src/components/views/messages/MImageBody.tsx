@@ -404,7 +404,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     }
 
     // Overidden by MStickerBody
-    protected getFileBody(): JSX.Element {
+    protected getFileBody(): string | JSX.Element {
         // We only ever need the download bar if we're appearing outside of the timeline
         if (this.props.tileShape) {
             return <MFileBody {...this.props} showGenericPlaceholder={false} />;

@@ -401,7 +401,11 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         let notifBadge;
         if (notificationState) {
             notifBadge = <div className="mx_SpacePanel_badgeContainer">
-                <NotificationBadge forceCount={false} notification={notificationState} />
+                <NotificationBadge
+                    onClick={() => SpaceStore.instance.setActiveRoomInSpace(space)}
+                    forceCount={false}
+                    notification={notificationState}
+                />
             </div>;
         }
 

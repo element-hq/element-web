@@ -41,6 +41,7 @@ import { arrayHasDiff } from "../utils/arrays";
 import { objectDiff } from "../utils/objects";
 import { arrayHasOrderChange } from "../utils/arrays";
 import { reorderLexicographically } from "../utils/stringOrderField";
+import { TAG_ORDER } from "../components/views/rooms/RoomList";
 import { shouldShowSpaceSettings } from "../utils/space";
 import ToastStore from "./ToastStore";
 import { _t } from "../languageHandler";
@@ -140,6 +141,41 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         return this._suggestedRooms;
     }
 
+    public async setActiveRoomInSpace(space: Room | null): Promise<void> {
+        if (space && !space.isSpaceRoom()) return;
+        if (space !== this.activeSpace) await this.setActiveSpace(space);
+
+        if (space) {
+            const notificationState = this.getNotificationState(space.roomId);
+            const roomId = notificationState.getFirstRoomWithNotifications();
+            defaultDispatcher.dispatch({
+                action: "view_room",
+                room_id: roomId,
+                context_switch: true,
+            });
+        } else {
+            const lists = RoomListStore.instance.unfilteredLists;
+            for (let i = 0; i < TAG_ORDER.length; i++) {
+                const t = TAG_ORDER[i];
+                const listRooms = lists[t];
+                const unreadRoom = listRooms.find((r: Room) => {
+                    if (this.showInHomeSpace(r)) {
+                        const state = RoomNotificationStateStore.instance.getRoomState(r);
+                        return state.isUnread;
+                    }
+                });
+                if (unreadRoom) {
+                    defaultDispatcher.dispatch({
+                        action: "view_room",
+                        room_id: unreadRoom.roomId,
+                        context_switch: true,
+                    });
+                    break;
+                }
+            }
+        }
+    }
+
     public get restrictedJoinRuleSupport(): IRoomCapability {
         return this._restrictedJoinRuleSupport;
     }
@@ -152,7 +188,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
      * should not be done when the space switch is done implicitly due to another event like switching room.
      */
     public async setActiveSpace(space: Room | null, contextSwitch = true) {
-        if (space === this.activeSpace || (space && !space?.isSpaceRoom())) return;
+        if (space === this.activeSpace || (space && !space.isSpaceRoom())) return;
 
         this._activeSpace = space;
         this.emit(UPDATE_SELECTED_SPACE, this.activeSpace);

@@ -20,7 +20,8 @@ limitations under the License.
     margin-right: 0;
     margin-bottom: 8px;
     padding-left: 10px;
-    border-left: 4px solid $button-bg-color;
+    border-left: 2px solid $button-bg-color;
+    border-radius: 2px;
 
     .mx_ReplyThread_show {
         cursor: pointer;

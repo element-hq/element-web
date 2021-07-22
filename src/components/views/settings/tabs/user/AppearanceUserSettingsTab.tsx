@@ -393,7 +393,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             <span className="mx_SettingsTab_subheading">{ _t("Message layout") }</span>
 
             <div className="mx_AppearanceUserSettingsTab_Layout_RadioButtons">
-                <div className={classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
+                <label className={classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
                     mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: this.state.layout == Layout.IRC,
                 })}>
                     <EventTilePreview
@@ -412,9 +412,8 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     >
                         { _t("IRC") }
                     </StyledRadioButton>
-                </div>
-                <div className="mx_AppearanceUserSettingsTab_spacer" />
-                <div className={classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
+                </label>
+                <label className={classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
                     mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: this.state.layout == Layout.Group,
                 })}>
                     <EventTilePreview
@@ -433,9 +432,8 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     >
                         { _t("Modern") }
                     </StyledRadioButton>
-                </div>
-                <div className="mx_AppearanceUserSettingsTab_spacer" />
-                <div className={classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
+                </label>
+                <label className={classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
                     mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: this.state.layout === Layout.Bubble,
                 })}>
                     <EventTilePreview
@@ -454,7 +452,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     >
                         { _t("Message bubbles") }
                     </StyledRadioButton>
-                </div>
+                </label>
             </div>
         </div>;
     };

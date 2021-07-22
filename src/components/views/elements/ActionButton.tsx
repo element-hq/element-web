@@ -15,56 +15,62 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import AccessibleButton from './AccessibleButton';
 import dis from '../../../dispatcher/dispatcher';
-import * as sdk from '../../../index';
 import Analytics from '../../../Analytics';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import Tooltip from './Tooltip';
+
+interface IProps {
+    size?: string;
+    tooltip?: boolean;
+    action: string;
+    mouseOverAction?: string;
+    label: string;
+    iconPath?: string;
+    className?: string;
+    children?: JSX.Element;
+}
+
+interface IState {
+    showTooltip: boolean;
+}
 
 @replaceableComponent("views.elements.ActionButton")
-export default class ActionButton extends React.Component {
-    static propTypes = {
-        size: PropTypes.string,
-        tooltip: PropTypes.bool,
-        action: PropTypes.string.isRequired,
-        mouseOverAction: PropTypes.string,
-        label: PropTypes.string.isRequired,
-        iconPath: PropTypes.string,
-        className: PropTypes.string,
-        children: PropTypes.node,
-    };
-
-    static defaultProps = {
+export default class ActionButton extends React.Component<IProps, IState> {
+    static defaultProps: Partial<IProps> = {
         size: "25",
         tooltip: false,
     };
 
-    state = {
-        showTooltip: false,
-    };
+    constructor(props: IProps) {
+        super(props);
 
-    _onClick = (ev) => {
+        this.state = {
+            showTooltip: false,
+        };
+    }
+
+    private onClick = (ev: React.MouseEvent): void => {
         ev.stopPropagation();
         Analytics.trackEvent('Action Button', 'click', this.props.action);
         dis.dispatch({ action: this.props.action });
     };
 
-    _onMouseEnter = () => {
+    private onMouseEnter = (): void => {
         if (this.props.tooltip) this.setState({ showTooltip: true });
         if (this.props.mouseOverAction) {
             dis.dispatch({ action: this.props.mouseOverAction });
         }
     };
 
-    _onMouseLeave = () => {
+    private onMouseLeave = (): void => {
         this.setState({ showTooltip: false });
     };
 
     render() {
         let tooltip;
         if (this.state.showTooltip) {
-            const Tooltip = sdk.getComponent("elements.Tooltip");
             tooltip = <Tooltip className="mx_RoleButton_tooltip" label={this.props.label} />;
         }
 
@@ -80,9 +86,9 @@ export default class ActionButton extends React.Component {
         return (
             <AccessibleButton
                 className={classNames.join(" ")}
-                onClick={this._onClick}
-                onMouseEnter={this._onMouseEnter}
-                onMouseLeave={this._onMouseLeave}
+                onClick={this.onClick}
+                onMouseEnter={this.onMouseEnter}
+                onMouseLeave={this.onMouseLeave}
                 aria-label={this.props.label}
             >
                 { icon }
