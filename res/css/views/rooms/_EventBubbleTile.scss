@@ -80,7 +80,7 @@ limitations under the License.
 
         .mx_MessageActionBar {
             right: 0;
-            transform: translate3d(50%, 50%, 0);
+            transform: translate3d(90%, 50%, 0);
         }
 
         --backgroundColor: $eventbubble-others-bg;
@@ -256,7 +256,7 @@ limitations under the License.
         }
 
         .mx_MessageActionBar {
-            transform: translate3d(50%, 0, 0);
+            transform: translate3d(90%, 0, 0);
         }
     }
 
