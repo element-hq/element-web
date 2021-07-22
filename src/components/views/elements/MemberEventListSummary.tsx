@@ -73,7 +73,7 @@ enum TransitionType {
     ChangedAvatar = "changed_avatar",
     NoChange = "no_change",
     ServerAcl = "server_acl",
-    PinnedMessages = "pinned_messages"
+    ChangedPins = "pinned_messages"
 }
 
 const SEP = ",";
@@ -357,7 +357,7 @@ export default class MemberEventListSummary extends React.Component<IProps> {
         } else if (type === EventType.RoomServerAcl) {
             return TransitionType.ServerAcl;
         } else if (type === EventType.RoomPinnedEvents) {
-            return TransitionType.PinnedMessages;
+            return TransitionType.ChangedPins;
         }
 
         switch (e.mxEvent.getContent().membership) {
