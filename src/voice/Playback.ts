@@ -135,18 +135,23 @@ export class Playback extends EventEmitter implements IDestroyable {
         // Safari compat: promise API not supported on this function
         this.audioBuf = await new Promise((resolve, reject) => {
             this.context.decodeAudioData(this.buf, b => resolve(b), async e => {
-                // This error handler is largely for Safari as well, which doesn't support Opus/Ogg
-                // very well.
-                console.error("Error decoding recording: ", e);
-                console.warn("Trying to re-encode to WAV instead...");
+                try {
+                    // This error handler is largely for Safari as well, which doesn't support Opus/Ogg
+                    // very well.
+                    console.error("Error decoding recording: ", e);
+                    console.warn("Trying to re-encode to WAV instead...");
 
-                const wav = await decodeOgg(this.buf);
+                    const wav = await decodeOgg(this.buf);
 
-                // noinspection ES6MissingAwait - not needed when using callbacks
-                this.context.decodeAudioData(wav, b => resolve(b), e => {
-                    console.error("Still failed to decode recording: ", e);
+                    // noinspection ES6MissingAwait - not needed when using callbacks
+                    this.context.decodeAudioData(wav, b => resolve(b), e => {
+                        console.error("Still failed to decode recording: ", e);
+                        reject(e);
+                    });
+                } catch (e) {
+                    console.error("Caught decoding error:", e);
                     reject(e);
-                });
+                }
             });
         });
 
