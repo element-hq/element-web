@@ -15,6 +15,6 @@ limitations under the License.
 */
 
 declare module "*.svg" {
-    const content: string;
-    export default content;
+    const path: string;
+    export default path;
 }
