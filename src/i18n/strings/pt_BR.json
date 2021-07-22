@@ -3110,5 +3110,17 @@
     "Inviting...": "Convidando...",
     "Invite by username": "Convidar por nome de usuário",
     "Support": "Suporte",
-    "Original event source": "Fonte do evento original"
+    "Original event source": "Fonte do evento original",
+    "Integration manager": "Gerenciador de integrações",
+    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Seu %(brand)s não permite que você use o gerenciador de integrações para fazer isso. Entre em contato com o administrador.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Se você usar esse widget, os dados poderão ser compartilhados <helpIcon /> com %(widgetDomain)s & seu gerenciador de integrações.",
+    "Identity server is": "O servidor de identificação é",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "O gerenciador de integrações recebe dados de configuração e pode modificar widgets, enviar convites para salas e definir níveis de permissão em seu nome.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Use o gerenciador de integrações para gerenciar bots, widgets e pacotes de figurinhas.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Use o gerenciador de integrações em <b>(%(serverName)s)</b> para gerenciar bots, widgets e pacotes de figurinhas.",
+    "Identity server": "Servidor de identidade",
+    "Identity server (%(server)s)": "Servidor de identidade (%(server)s)",
+    "Could not connect to identity server": "Não foi possível conectar-se ao servidor de identidade",
+    "Not a valid identity server (status code %(code)s)": "Servidor de identidade inválido (código de status %(code)s)",
+    "Identity server URL must be HTTPS": "O link do servidor de identidade deve começar com HTTPS"
 }
