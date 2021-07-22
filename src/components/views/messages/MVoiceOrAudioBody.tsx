@@ -17,7 +17,6 @@ limitations under the License.
 import React from "react";
 import MAudioBody from "./MAudioBody";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import SettingsStore from "../../../settings/SettingsStore";
 import MVoiceMessageBody from "./MVoiceMessageBody";
 import { IBodyProps } from "./IBodyProps";
 
