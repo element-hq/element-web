@@ -14,6 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_VideoFeed {
+    border-radius: 4px;
+
+
+    &.mx_VideoFeed_voice {
+        background-color: $inverted-bg-color;
+    }
+
+    &.mx_VideoFeed_video {
+        background-color: transparent;
+    }
+}
+
 .mx_VideoFeed_mirror {
     transform: scale(-1, 1);
 }
