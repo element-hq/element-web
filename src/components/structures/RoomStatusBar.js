@@ -118,12 +118,12 @@ export default class RoomStatusBar extends React.PureComponent {
             this.setState({ isResending: false });
         });
         this.setState({ isResending: true });
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
     };
 
     _onCancelAllClick = () => {
         Resend.cancelUnsentEvents(this.props.room);
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
     };
 
     _onRoomLocalEchoUpdated = (event, room, oldEventId, oldStatus) => {
@@ -222,17 +222,17 @@ export default class RoomStatusBar extends React.PureComponent {
 
         let buttonRow = <>
             <AccessibleButton onClick={this._onCancelAllClick} className="mx_RoomStatusBar_unsentCancelAllBtn">
-                {_t("Delete all")}
+                { _t("Delete all") }
             </AccessibleButton>
             <AccessibleButton onClick={this._onResendAllClick} className="mx_RoomStatusBar_unsentResendAllBtn">
-                {_t("Retry all")}
+                { _t("Retry all") }
             </AccessibleButton>
         </>;
         if (this.state.isResending) {
             buttonRow = <>
                 <InlineSpinner w={20} h={20} />
-                {/* span for css */}
-                <span>{_t("Sending")}</span>
+                { /* span for css */ }
+                <span>{ _t("Sending") }</span>
             </>;
         }
 
@@ -253,7 +253,7 @@ export default class RoomStatusBar extends React.PureComponent {
                         </div>
                     </div>
                     <div className="mx_RoomStatusBar_unsentButtonBar">
-                        {buttonRow}
+                        { buttonRow }
                     </div>
                 </div>
             </div>
@@ -270,10 +270,10 @@ export default class RoomStatusBar extends React.PureComponent {
                                 height="24" title="/!\ " alt="/!\ " />
                             <div>
                                 <div className="mx_RoomStatusBar_connectionLostBar_title">
-                                    {_t('Connectivity to the server has been lost.')}
+                                    { _t('Connectivity to the server has been lost.') }
                                 </div>
                                 <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                                    {_t('Sent messages will be stored until your connection has returned.')}
+                                    { _t('Sent messages will be stored until your connection has returned.') }
                                 </div>
                             </div>
                         </div>

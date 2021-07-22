@@ -51,7 +51,7 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
         onAccept = () => {
             Modal.createTrackedDialog('Display release notes', '', QuestionDialog, {
                 title: _t("What's New"),
-                description: <pre>{releaseNotes}</pre>,
+                description: <pre>{ releaseNotes }</pre>,
                 button: _t("Update"),
                 onFinished: (update) => {
                     if (update && PlatformPeg.get()) {

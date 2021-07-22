@@ -17,10 +17,10 @@ limitations under the License.
 import * as React from "react";
 import classNames from "classnames";
 
-import * as sdk from "../index";
 import Modal from "../Modal";
 import { _t, _td } from "../languageHandler";
 import { isMac, Key } from "../Keyboard";
+import InfoDialog from "../components/views/dialogs/InfoDialog";
 
 // TS: once languageHandler is TS we can probably inline this into the enum
 _td("Navigation");
@@ -370,12 +370,11 @@ export const toggleDialog = () => {
     const sections = categoryOrder.map(category => {
         const list = shortcuts[category];
         return <div className="mx_KeyboardShortcutsDialog_category" key={category}>
-            <h3>{_t(category)}</h3>
-            <div>{list.map(shortcut => <Shortcut key={shortcut.description} shortcut={shortcut} />)}</div>
+            <h3>{ _t(category) }</h3>
+            <div>{ list.map(shortcut => <Shortcut key={shortcut.description} shortcut={shortcut} />) }</div>
         </div>;
     });
 
-    const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
     activeModal = Modal.createTrackedDialog("Keyboard Shortcuts", "", InfoDialog, {
         className: "mx_KeyboardShortcutsDialog",
         title: _t("Keyboard Shortcuts"),

@@ -1,6 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,11 +26,11 @@ import { EventEmitter } from "events";
 import sdk from '../../skinned-sdk';
 
 const MessagePanel = sdk.getComponent('structures.MessagePanel');
-import {MatrixClientPeg} from '../../../src/MatrixClientPeg';
+import { MatrixClientPeg } from '../../../src/MatrixClientPeg';
 import Matrix from 'matrix-js-sdk';
 
-const test_utils = require('../../test-utils');
-const mockclock = require('../../mock-clock');
+const TestUtilsMatrix = require('../../test-utils');
+import FakeTimers from '@sinonjs/fake-timers';
 
 import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import { configure, mount } from "enzyme";
@@ -72,14 +72,14 @@ class WrappedMessagePanel extends React.Component {
 }
 
 describe('MessagePanel', function() {
-    const clock = mockclock.clock();
+    let clock = null;
     const realSetTimeout = window.setTimeout;
     const events = mkEvents();
 
     beforeEach(function() {
-        test_utils.stubClient();
+        TestUtilsMatrix.stubClient();
         client = MatrixClientPeg.get();
-        client.credentials = {userId: '@me:here'};
+        client.credentials = { userId: '@me:here' };
 
         // HACK: We assume all settings want to be disabled
         SettingsStore.getValue = jest.fn((arg) => {
@@ -90,14 +90,17 @@ describe('MessagePanel', function() {
     });
 
     afterEach(function() {
-        clock.uninstall();
+        if (clock) {
+            clock.uninstall();
+            clock = null;
+        }
     });
 
     function mkEvents() {
         const events = [];
         const ts0 = Date.now();
         for (let i = 0; i < 10; i++) {
-            events.push(test_utils.mkMessage(
+            events.push(TestUtilsMatrix.mkMessage(
                 {
                     event: true, room: "!room:id", user: "@user:id",
                     ts: ts0 + i * 1000,
@@ -111,7 +114,7 @@ describe('MessagePanel', function() {
         const events = [];
         const ts0 = Date.parse('09 May 2004 00:12:00 GMT');
         for (let i = 0; i < 10; i++) {
-            events.push(test_utils.mkMessage(
+            events.push(TestUtilsMatrix.mkMessage(
                 {
                     event: true, room: "!room:id", user: "@user:id",
                     ts: ts0 + i * 1000,
@@ -120,7 +123,6 @@ describe('MessagePanel', function() {
         return events;
     }
 
-
     // make a collection of events with some member events that should be collapsed
     // with a MemberEventListSummary
     function mkMelsEvents() {
@@ -128,13 +130,13 @@ describe('MessagePanel', function() {
         const ts0 = Date.now();
 
         let i = 0;
-        events.push(test_utils.mkMessage({
+        events.push(TestUtilsMatrix.mkMessage({
             event: true, room: "!room:id", user: "@user:id",
             ts: ts0 + ++i * 1000,
         }));
 
         for (i = 0; i < 10; i++) {
-            events.push(test_utils.mkMembership({
+            events.push(TestUtilsMatrix.mkMembership({
                 event: true, room: "!room:id", user: "@user:id",
                 target: {
                     userId: "@user:id",
@@ -151,7 +153,7 @@ describe('MessagePanel', function() {
             }));
         }
 
-        events.push(test_utils.mkMessage({
+        events.push(TestUtilsMatrix.mkMessage({
             event: true, room: "!room:id", user: "@user:id",
             ts: ts0 + ++i*1000,
         }));
@@ -167,7 +169,7 @@ describe('MessagePanel', function() {
         let i = 0;
 
         for (i = 0; i < 10; i++) {
-            events.push(test_utils.mkMembership({
+            events.push(TestUtilsMatrix.mkMembership({
                 event: true, room: "!room:id", user: "@user:id",
                 target: {
                     userId: "@user:id",
@@ -189,8 +191,8 @@ describe('MessagePanel', function() {
 
     // A list of room creation, encryption, and invite events.
     function mkCreationEvents() {
-        const mkEvent = test_utils.mkEvent;
-        const mkMembership = test_utils.mkMembership;
+        const mkEvent = TestUtilsMatrix.mkEvent;
+        const mkMembership = TestUtilsMatrix.mkMembership;
         const roomId = "!someroom";
         const alice = "@alice:example.org";
         const ts0 = Date.now();
@@ -363,8 +365,7 @@ describe('MessagePanel', function() {
 
     it('shows a ghost read-marker when the read-marker moves', function(done) {
         // fake the clock so that we can test the velocity animation.
-        clock.install();
-        clock.mockDate();
+        clock = FakeTimers.install();
 
         const parentDiv = document.createElement('div');
 

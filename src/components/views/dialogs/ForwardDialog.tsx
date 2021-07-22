@@ -43,6 +43,7 @@ import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import TruncatedList from "../elements/TruncatedList";
 import EntityTile from "../rooms/EntityTile";
 import BaseAvatar from "../avatars/BaseAvatar";
+import SpaceStore from "../../../stores/SpaceStore";
 
 const AVATAR_SIZE = 30;
 
@@ -180,7 +181,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
     const [query, setQuery] = useState("");
     const lcQuery = query.toLowerCase();
 
-    const spacesEnabled = useFeatureEnabled("feature_spaces");
+    const spacesEnabled = SpaceStore.spacesEnabled;
     const flairEnabled = useFeatureEnabled(UIFeature.Flair);
     const previewLayout = useSettingValue<Layout>("layout");
 

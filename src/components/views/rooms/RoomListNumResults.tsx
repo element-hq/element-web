@@ -22,7 +22,7 @@ import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import SpaceStore from "../../../stores/SpaceStore";
 
 interface IProps {
-    onVisibilityChange?: () => void
+    onVisibilityChange?: () => void;
 }
 
 const RoomListNumResults: React.FC<IProps> = ({ onVisibilityChange }) => {

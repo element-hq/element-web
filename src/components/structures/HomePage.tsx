@@ -96,6 +96,7 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     const pageUrl = getHomePageUrl(config);
 
     if (pageUrl) {
+        // FIXME: Using an import will result in wrench-element-tests failures
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         return <EmbeddedPage className="mx_HomePage" url={pageUrl} scrollbar={true} />;
     }

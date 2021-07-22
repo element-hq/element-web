@@ -51,7 +51,7 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<IProp
                 senders.push(name);
             }
             const shortName = unicodeToShortcode(content);
-            tooltipLabel = <div>{_t(
+            tooltipLabel = <div>{ _t(
                 "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>",
                 {
                     shortName,
@@ -59,7 +59,7 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<IProp
                 {
                     reactors: () => {
                         return <div className="mx_Tooltip_title">
-                            {formatCommaSeparatedList(senders, 6)}
+                            { formatCommaSeparatedList(senders, 6) }
                         </div>;
                     },
                     reactedWith: (sub) => {
@@ -67,11 +67,11 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<IProp
                             return null;
                         }
                         return <div className="mx_Tooltip_sub">
-                            {sub}
+                            { sub }
                         </div>;
                     },
                 },
-            )}</div>;
+            ) }</div>;
         }
 
         let tooltip;

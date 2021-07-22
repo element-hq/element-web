@@ -125,15 +125,15 @@ const LeftPanelWidget: React.FC = () => {
                     <span>{ WidgetUtils.getWidgetName(app) }</span>
                 </AccessibleButton>
 
-                {/* Code for the maximise button for once we have full screen widgets */}
-                {/*<AccessibleTooltipButton
+                { /* Code for the maximise button for once we have full screen widgets */ }
+                { /*<AccessibleTooltipButton
                     tabIndex={tabIndex}
                     onClick={() => {
                     }}
                     className="mx_LeftPanelWidget_maximizeButton"
                     tooltipClassName="mx_LeftPanelWidget_maximizeButtonTooltip"
                     title={_t("Maximize")}
-                />*/}
+                />*/ }
             </div>
         </div>
 

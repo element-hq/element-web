@@ -37,6 +37,11 @@
 @import "./structures/_ViewSource.scss";
 @import "./structures/auth/_CompleteSecurity.scss";
 @import "./structures/auth/_Login.scss";
+@import "./views/audio_messages/_AudioPlayer.scss";
+@import "./views/audio_messages/_PlayPauseButton.scss";
+@import "./views/audio_messages/_PlaybackContainer.scss";
+@import "./views/audio_messages/_SeekBar.scss";
+@import "./views/audio_messages/_Waveform.scss";
 @import "./views/auth/_AuthBody.scss";
 @import "./views/auth/_AuthButtons.scss";
 @import "./views/auth/_AuthFooter.scss";
@@ -52,7 +57,6 @@
 @import "./views/avatars/_BaseAvatar.scss";
 @import "./views/avatars/_DecoratedRoomAvatar.scss";
 @import "./views/avatars/_MemberStatusMessageAvatar.scss";
-@import "./views/avatars/_PulsedAvatar.scss";
 @import "./views/avatars/_WidgetAvatar.scss";
 @import "./views/beta/_BetaCard.scss";
 @import "./views/context_menus/_CallContextMenu.scss";
@@ -116,6 +120,7 @@
 @import "./views/elements/_AddressTile.scss";
 @import "./views/elements/_DesktopBuildsNotice.scss";
 @import "./views/elements/_DesktopCapturerSourcePicker.scss";
+@import "./views/elements/_DialPadBackspaceButton.scss";
 @import "./views/elements/_DirectorySearchBox.scss";
 @import "./views/elements/_Dropdown.scss";
 @import "./views/elements/_EditableItemList.scss";
@@ -144,6 +149,7 @@
 @import "./views/elements/_StyledCheckbox.scss";
 @import "./views/elements/_StyledRadioButton.scss";
 @import "./views/elements/_SyntaxHighlight.scss";
+@import "./views/elements/_TagComposer.scss";
 @import "./views/elements/_TextWithTooltip.scss";
 @import "./views/elements/_ToggleSwitch.scss";
 @import "./views/elements/_Tooltip.scss";
@@ -156,15 +162,18 @@
 @import "./views/messages/_CreateEvent.scss";
 @import "./views/messages/_DateSeparator.scss";
 @import "./views/messages/_EventTileBubble.scss";
+@import "./views/messages/_CallEvent.scss";
 @import "./views/messages/_MEmoteBody.scss";
 @import "./views/messages/_MFileBody.scss";
 @import "./views/messages/_MImageBody.scss";
+@import "./views/messages/_MImageReplyBody.scss";
 @import "./views/messages/_MJitsiWidgetEvent.scss";
 @import "./views/messages/_MNoticeBody.scss";
 @import "./views/messages/_MStickerBody.scss";
 @import "./views/messages/_MTextBody.scss";
 @import "./views/messages/_MVideoBody.scss";
 @import "./views/messages/_MVoiceMessageBody.scss";
+@import "./views/messages/_MediaBody.scss";
 @import "./views/messages/_MessageActionBar.scss";
 @import "./views/messages/_MessageTimestamp.scss";
 @import "./views/messages/_MjolnirBody.scss";
@@ -193,9 +202,11 @@
 @import "./views/rooms/_EditMessageComposer.scss";
 @import "./views/rooms/_EntityTile.scss";
 @import "./views/rooms/_EventTile.scss";
+@import "./views/rooms/_EventBubbleTile.scss";
 @import "./views/rooms/_GroupLayout.scss";
 @import "./views/rooms/_IRCLayout.scss";
 @import "./views/rooms/_JumpToBottomButton.scss";
+@import "./views/rooms/_LinkPreviewGroup.scss";
 @import "./views/rooms/_LinkPreviewWidget.scss";
 @import "./views/rooms/_MemberInfo.scss";
 @import "./views/rooms/_MemberList.scss";
@@ -206,6 +217,7 @@
 @import "./views/rooms/_PinnedEventTile.scss";
 @import "./views/rooms/_PresenceLabel.scss";
 @import "./views/rooms/_ReplyPreview.scss";
+@import "./views/rooms/_ReplyTile.scss";
 @import "./views/rooms/_RoomBreadcrumbs.scss";
 @import "./views/rooms/_RoomHeader.scss";
 @import "./views/rooms/_RoomList.scss";
@@ -253,10 +265,8 @@
 @import "./views/toasts/_AnalyticsToast.scss";
 @import "./views/toasts/_NonUrgentEchoFailureToast.scss";
 @import "./views/verification/_VerificationShowSas.scss";
-@import "./views/voice_messages/_PlayPauseButton.scss";
-@import "./views/voice_messages/_PlaybackContainer.scss";
-@import "./views/voice_messages/_Waveform.scss";
 @import "./views/voip/_CallContainer.scss";
+@import "./views/voip/_CallPreview.scss";
 @import "./views/voip/_CallView.scss";
 @import "./views/voip/_CallViewForRoom.scss";
 @import "./views/voip/_DialPad.scss";

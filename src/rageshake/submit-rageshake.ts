@@ -93,15 +93,15 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
             body.append("cross_signing_supported_by_hs",
                 String(await client.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")));
             body.append("cross_signing_key", crossSigning.getId());
-            body.append("cross_signing_pk_in_secret_storage",
+            body.append("cross_signing_privkey_in_secret_storage",
                 String(!!(await crossSigning.isStoredInSecretStorage(secretStorage))));
 
             const pkCache = client.getCrossSigningCacheCallbacks();
-            body.append("cross_signing_master_pk_cached",
+            body.append("cross_signing_master_privkey_cached",
                 String(!!(pkCache && await pkCache.getCrossSigningKeyCache("master"))));
-            body.append("cross_signing_self_signing_pk_cached",
+            body.append("cross_signing_self_signing_privkey_cached",
                 String(!!(pkCache && await pkCache.getCrossSigningKeyCache("self_signing"))));
-            body.append("cross_signing_user_signing_pk_cached",
+            body.append("cross_signing_user_signing_privkey_cached",
                 String(!!(pkCache && await pkCache.getCrossSigningKeyCache("user_signing"))));
 
             body.append("secret_storage_ready", String(await client.isSecretStorageReady()));
@@ -203,7 +203,7 @@ export default async function sendBugReport(bugReportEndpoint: string, opts: IOp
     const body = await collectBugReport(opts);
 
     progressCallback(_t("Uploading logs"));
-    await _submitReport(bugReportEndpoint, body, progressCallback);
+    await submitReport(bugReportEndpoint, body, progressCallback);
 }
 
 /**
@@ -289,10 +289,10 @@ export async function submitFeedback(
         body.append(k, extraData[k]);
     }
 
-    await _submitReport(SdkConfig.get().bug_report_endpoint_url, body, () => {});
+    await submitReport(SdkConfig.get().bug_report_endpoint_url, body, () => {});
 }
 
-function _submitReport(endpoint: string, body: FormData, progressCallback: (string) => void) {
+function submitReport(endpoint: string, body: FormData, progressCallback: (str: string) => void) {
     return new Promise<void>((resolve, reject) => {
         const req = new XMLHttpRequest();
         req.open("POST", endpoint);

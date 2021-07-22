@@ -17,11 +17,14 @@ limitations under the License.
 import React from 'react';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { GroupMemberType } from '../../../groups';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
+import MemberAvatar from '../avatars/MemberAvatar';
+import BaseAvatar from '../avatars/BaseAvatar';
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
 
 interface IProps {
     // matrix-js-sdk (room) member object. Supply either this or 'groupMember'
@@ -29,7 +32,7 @@ interface IProps {
     // group member object. Supply either this or 'member'
     groupMember: GroupMemberType;
     // needed if a group member is specified
-    matrixClient?: MatrixClient,
+    matrixClient?: MatrixClient;
     action: string; // eg. 'Ban'
     title: string; // eg. 'Ban this user?'
 
@@ -67,11 +70,6 @@ export default class ConfirmUserActionDialog extends React.Component<IProps> {
     };
 
     public render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
-        const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
-
         const confirmButtonClass = this.props.danger ? 'danger' : '';
 
         let reasonBox;

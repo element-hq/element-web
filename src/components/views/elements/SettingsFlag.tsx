@@ -88,12 +88,12 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
                 onChange={this.checkBoxOnChange}
                 disabled={this.props.disabled || !canChange}
             >
-                {label}
+                { label }
             </StyledCheckbox>;
         } else {
             return (
                 <div className="mx_SettingsFlag">
-                    <span className="mx_SettingsFlag_label">{label}</span>
+                    <span className="mx_SettingsFlag_label">{ label }</span>
                     <ToggleSwitch
                         checked={this.state.value}
                         onChange={this.onChange}

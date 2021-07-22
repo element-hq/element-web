@@ -56,9 +56,21 @@ export enum Action {
     CheckUpdates = "check_updates",
 
     /**
-     * Focuses the user's cursor to the composer. No additional payload information required.
+     * Focuses the user's cursor to the send message composer. No additional payload information required.
      */
-    FocusComposer = "focus_composer",
+    FocusSendMessageComposer = "focus_send_message_composer",
+
+    /**
+     * Focuses the user's cursor to the edit message composer. No additional payload information required.
+     */
+    FocusEditMessageComposer = "focus_edit_message_composer",
+
+    /**
+     * Focuses the user's cursor to the edit message composer or send message
+     * composer based on the current edit state. No additional payload
+     * information required.
+     */
+    FocusAComposer = "focus_a_composer",
 
     /**
      * Opens the user menu (previously known as the top left menu). No additional payload information required.
@@ -105,6 +117,18 @@ export enum Action {
      * payload: DialNumberPayload
      */
     DialNumber = "dial_number",
+
+    /**
+     * Start a call transfer to a Matrix ID
+     * payload: TransferCallPayload
+     */
+    TransferCallToMatrixID = "transfer_call_to_matrix_id",
+
+    /**
+     * Start a call transfer to a phone number
+     * payload: TransferCallPayload
+     */
+     TransferCallToPhoneNumber = "transfer_call_to_phone_number",
 
     /**
      * Fired when CallHandler has checked for PSTN protocol support

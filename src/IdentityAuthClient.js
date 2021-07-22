@@ -127,7 +127,7 @@ export default class IdentityAuthClient {
             await this._matrixClient.getIdentityAccount(token);
         } catch (e) {
             if (e.errcode === "M_TERMS_NOT_SIGNED") {
-                console.log("Identity Server requires new terms to be agreed to");
+                console.log("Identity server requires new terms to be agreed to");
                 await startTermsFlow([new Service(
                     SERVICE_TYPES.IS,
                     identityServerUrl,
@@ -149,17 +149,17 @@ export default class IdentityAuthClient {
                 title: _t("Identity server has no terms of service"),
                 description: (
                     <div>
-                        <p>{_t(
+                        <p>{ _t(
                             "This action requires accessing the default identity server " +
                             "<server /> to validate an email address or phone number, " +
                             "but the server does not have any terms of service.", {},
                             {
-                                server: () => <b>{abbreviateUrl(identityServerUrl)}</b>,
+                                server: () => <b>{ abbreviateUrl(identityServerUrl) }</b>,
                             },
-                        )}</p>
-                        <p>{_t(
+                        ) }</p>
+                        <p>{ _t(
                             "Only continue if you trust the owner of the server.",
-                        )}</p>
+                        ) }</p>
                     </div>
                 ),
                 button: _t("Trust"),

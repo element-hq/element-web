@@ -19,6 +19,8 @@ import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import { configure, mount } from "enzyme";
 import React from "react";
 import { act } from "react-dom/test-utils";
+import { sleep } from "matrix-js-sdk/src/utils";
+
 import SendMessageComposer, {
     createMessageContent,
     isQuickReaction,
@@ -29,7 +31,6 @@ import { createPartCreator, createRenderer } from "../../../editor/mock";
 import { createTestClient, mkEvent, mkStubRoom } from "../../../test-utils";
 import BasicMessageComposer from "../../../../src/components/views/rooms/BasicMessageComposer";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { sleep } from "../../../../src/utils/promise";
 import SpecPermalinkConstructor from "../../../../src/utils/permalinks/SpecPermalinkConstructor";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 
@@ -147,7 +148,7 @@ describe('<SendMessageComposer/>', () => {
                 wrapper.update();
             });
 
-            const key = wrapper.find(SendMessageComposer).instance()._editorStateKey;
+            const key = wrapper.find(SendMessageComposer).instance().editorStateKey;
 
             expect(wrapper.text()).toBe("Test Text");
             expect(localStorage.getItem(key)).toBeNull();
@@ -188,7 +189,7 @@ describe('<SendMessageComposer/>', () => {
                 wrapper.update();
             });
 
-            const key = wrapper.find(SendMessageComposer).instance()._editorStateKey;
+            const key = wrapper.find(SendMessageComposer).instance().editorStateKey;
 
             expect(wrapper.text()).toBe("Hello World");
             expect(localStorage.getItem(key)).toBeNull();

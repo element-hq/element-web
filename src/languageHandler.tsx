@@ -67,7 +67,7 @@ export function getUserLanguage(): string {
 
 // Function which only purpose is to mark that a string is translatable
 // Does not actually do anything. It's helpful for automatic extraction of translatable strings
-export function _td(s: string): string {
+export function _td(s: string): string { // eslint-disable-line @typescript-eslint/naming-convention
     return s;
 }
 
@@ -132,6 +132,8 @@ export type TranslatedString = string | React.ReactNode;
  *
  * @return a React <span> component if any non-strings were used in substitutions, otherwise a string
  */
+// eslint-next-line @typescript-eslint/naming-convention
+// eslint-nexline @typescript-eslint/naming-convention
 export function _t(text: string, variables?: IVariables): string;
 export function _t(text: string, variables: IVariables, tags: Tags): React.ReactNode;
 export function _t(text: string, variables?: IVariables, tags?: Tags): TranslatedString {
@@ -151,7 +153,7 @@ export function _t(text: string, variables?: IVariables, tags?: Tags): Translate
         if (typeof substituted === 'string') {
             return `@@${text}##${substituted}@@`;
         } else {
-            return <span className='translated-string' data-orig-string={text}>{substituted}</span>;
+            return <span className='translated-string' data-orig-string={text}>{ substituted }</span>;
         }
     } else {
         return substituted;

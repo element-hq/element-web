@@ -22,13 +22,13 @@ import { User } from "matrix-js-sdk/src/models/user";
 import { MatrixClientPeg } from './MatrixClientPeg';
 import MultiInviter, { CompletionStates } from './utils/MultiInviter';
 import Modal from './Modal';
-import * as sdk from './';
 import { _t } from './languageHandler';
 import InviteDialog, { KIND_DM, KIND_INVITE, Member } from "./components/views/dialogs/InviteDialog";
 import CommunityPrototypeInviteDialog from "./components/views/dialogs/CommunityPrototypeInviteDialog";
 import { CommunityPrototypeStore } from "./stores/CommunityPrototypeStore";
 import BaseAvatar from "./components/views/avatars/BaseAvatar";
 import { mediaFromMxc } from "./customisations/Media";
+import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 
 export interface IInviteResult {
     states: CompletionStates;
@@ -51,7 +51,6 @@ export function inviteMultipleToRoom(roomId: string, addresses: string[]): Promi
 
 export function showStartChatInviteDialog(initialText = ""): void {
     // This dialog handles the room creation internally - we don't need to worry about it.
-    const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
     Modal.createTrackedDialog(
         'Start DM', '', InviteDialog, { kind: KIND_DM, initialText },
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
@@ -111,7 +110,6 @@ export function inviteUsersToRoom(roomId: string, userIds: string[]): Promise<vo
         showAnyInviteErrors(result.states, room, result.inviter);
     }).catch((err) => {
         console.error(err.stack);
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Failed to invite', '', ErrorDialog, {
             title: _t("Failed to invite"),
             description: ((err && err.message) ? err.message : _t("Operation failed")),
@@ -131,7 +129,6 @@ export function showAnyInviteErrors(
         // Just get the first message because there was a fatal problem on the first
         // user. This usually means that no other users were attempted, making it
         // pointless for us to list who failed exactly.
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Failed to invite users to the room', '', ErrorDialog, {
             title: _t("Failed to invite users to the room:", { roomName: room.name }),
             description: inviter.getErrorText(failedUsers[0]),
@@ -178,7 +175,6 @@ export function showAnyInviteErrors(
                 </div>
             </div>;
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog("Some invites could not be sent", "", ErrorDialog, {
                 title: _t("Some invites couldn't be sent"),
                 description,

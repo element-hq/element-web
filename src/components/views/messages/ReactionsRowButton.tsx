@@ -142,12 +142,12 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
             onMouseLeave={this.onMouseLeave}
         >
             <span className="mx_ReactionsRowButton_content" aria-hidden="true">
-                {content}
+                { content }
             </span>
             <span className="mx_ReactionsRowButton_count" aria-hidden="true">
-                {count}
+                { count }
             </span>
-            {tooltip}
+            { tooltip }
         </AccessibleButton>;
     }
 }

@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import { _t, _td } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
-import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
@@ -26,6 +25,8 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomState } from "matrix-js-sdk/src/models/room-state";
 import { compare } from "../../../../../utils/strings";
+import ErrorDialog from '../../../dialogs/ErrorDialog';
+import PowerSelector from "../../../elements/PowerSelector";
 
 const plEventsToLabels = {
     // These will be translated for us later.
@@ -76,7 +77,6 @@ interface IBannedUserProps {
 export class BannedUser extends React.Component<IBannedUserProps> {
     private onUnbanClick = (e) => {
         MatrixClientPeg.get().unban(this.props.member.roomId, this.props.member.userId).catch((err) => {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to unban: " + err);
             Modal.createTrackedDialog('Failed to unban', '', ErrorDialog, {
                 title: _t('Error'),
@@ -102,10 +102,10 @@ export class BannedUser extends React.Component<IBannedUserProps> {
         const userId = this.props.member.name === this.props.member.userId ? null : this.props.member.userId;
         return (
             <li>
-                {unbanButton}
+                { unbanButton }
                 <span title={_t("Banned by %(displayName)s", { displayName: this.props.by })}>
-                    <strong>{ this.props.member.name }</strong> {userId}
-                    {this.props.reason ? " " + _t('Reason') + ": " + this.props.reason : ""}
+                    <strong>{ this.props.member.name }</strong> { userId }
+                    { this.props.reason ? " " + _t('Reason') + ": " + this.props.reason : "" }
                 </span>
             </li>
         );
@@ -176,7 +176,6 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         client.sendStateEvent(this.props.roomId, "m.room.power_levels", plContent).catch(e => {
             console.error(e);
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Power level requirement change failed', '', ErrorDialog, {
                 title: _t('Error changing power level requirement'),
                 description: _t(
@@ -203,7 +202,6 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         client.sendStateEvent(this.props.roomId, "m.room.power_levels", plContent).catch(e => {
             console.error(e);
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Power level change failed', '', ErrorDialog, {
                 title: _t('Error changing power level'),
                 description: _t(
@@ -215,8 +213,6 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
     };
 
     render() {
-        const PowerSelector = sdk.getComponent('elements.PowerSelector');
-
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');
@@ -277,13 +273,14 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             parseIntWithDefault(plContent.events_default, powerLevelDescriptors.events_default.defaultValue),
         );
 
-        let privilegedUsersSection = <div>{_t('No users have specific privileges in this room')}</div>;
+        let privilegedUsersSection = <div>{ _t('No users have specific privileges in this room') }</div>;
         let mutedUsersSection;
         if (Object.keys(userLevels).length) {
             const privilegedUsers = [];
             const mutedUsers = [];
 
             Object.keys(userLevels).forEach((user) => {
+                if (!Number.isInteger(userLevels[user])) { return; }
                 const canChange = userLevels[user] < currentUserLevel && canChangeLevels;
                 if (userLevels[user] > defaultUserLevel) { // privileged
                     privilegedUsers.push(
@@ -323,14 +320,14 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                 privilegedUsersSection =
                     <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                         <div className='mx_SettingsTab_subheading'>{ _t('Privileged Users') }</div>
-                        {privilegedUsers}
+                        { privilegedUsers }
                     </div>;
             }
             if (mutedUsers.length) {
                 mutedUsersSection =
                     <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                         <div className='mx_SettingsTab_subheading'>{ _t('Muted Users') }</div>
-                        {mutedUsers}
+                        { mutedUsers }
                     </div>;
             }
         }
@@ -343,7 +340,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                     <div className='mx_SettingsTab_subheading'>{ _t('Banned users') }</div>
                     <ul>
-                        {banned.map((member) => {
+                        { banned.map((member) => {
                             const banEvent = member.events.member.getContent();
                             const sender = room.getMember(member.events.member.getSender());
                             let bannedBy = member.events.member.getSender(); // start by falling back to mxid
@@ -354,7 +351,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                                     by={bannedBy}
                                 />
                             );
-                        })}
+                        }) }
                     </ul>
                 </div>;
         }
@@ -412,15 +409,15 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
 
         return (
             <div className="mx_SettingsTab mx_RolesRoomSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Roles & Permissions")}</div>
-                {privilegedUsersSection}
-                {mutedUsersSection}
-                {bannedUsersSection}
+                <div className="mx_SettingsTab_heading">{ _t("Roles & Permissions") }</div>
+                { privilegedUsersSection }
+                { mutedUsersSection }
+                { bannedUsersSection }
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    <span className='mx_SettingsTab_subheading'>{_t("Permissions")}</span>
-                    <p>{_t('Select the roles required to change various parts of the room')}</p>
-                    {powerSelectors}
-                    {eventPowerSelectors}
+                    <span className='mx_SettingsTab_subheading'>{ _t("Permissions") }</span>
+                    <p>{ _t('Select the roles required to change various parts of the room') }</p>
+                    { powerSelectors }
+                    { eventPowerSelectors }
                 </div>
             </div>
         );

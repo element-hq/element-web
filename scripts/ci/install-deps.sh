@@ -6,8 +6,8 @@ scripts/fetchdep.sh matrix-org matrix-js-sdk
 
 pushd matrix-js-sdk
 yarn link
-yarn install $@
+yarn install --pure-lockfile $@
 popd
 
 yarn link matrix-js-sdk
-yarn install $@
+yarn install --pure-lockfile $@

@@ -29,7 +29,7 @@ interface IProps {
     // The minimum number of events needed to trigger summarisation
     threshold?: number;
     // Whether or not to begin with state.expanded=true
-    startExpanded?: boolean,
+    startExpanded?: boolean;
     // The list of room members for which to show avatars next to the summary
     summaryMembers?: RoomMember[];
     // The text to show as the summary of this event list
@@ -63,7 +63,7 @@ const EventListSummary: React.FC<IProps> = ({
     // If we are only given few events then just pass them through
     if (events.length < threshold) {
         return (
-            <li className="mx_EventListSummary" data-scroll-tokens={eventIds}>
+            <li className="mx_EventListSummary" data-scroll-tokens={eventIds} data-expanded={true}>
                 { children }
             </li>
         );
@@ -92,13 +92,17 @@ const EventListSummary: React.FC<IProps> = ({
     }
 
     return (
-        <li className="mx_EventListSummary" data-scroll-tokens={eventIds}>
+        <li className="mx_EventListSummary" data-scroll-tokens={eventIds} data-expanded={expanded + ""}>
             <AccessibleButton className="mx_EventListSummary_toggle" onClick={toggleExpanded} aria-expanded={expanded}>
                 { expanded ? _t('collapse') : _t('expand') }
             </AccessibleButton>
             { body }
         </li>
     );
+};
+
+EventListSummary.defaultProps = {
+    startExpanded: false,
 };
 
 export default EventListSummary;

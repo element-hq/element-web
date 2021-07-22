@@ -18,7 +18,6 @@ import React from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
-import * as sdk from "../../../../..";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import Modal from "../../../../../Modal";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
@@ -27,6 +26,7 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import SettingsFlag from '../../../elements/SettingsFlag';
 
 // Knock and private are reserved keywords which are not yet implemented.
 export enum JoinRule {
@@ -78,7 +78,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     }
 
     // TODO: [REACT-WARNING] Move this to constructor
-    async UNSAFE_componentWillMount() { // eslint-disable-line camelcase
+    async UNSAFE_componentWillMount() { // eslint-disable-line
         MatrixClientPeg.get().on("RoomState.events", this.onStateEvent);
 
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
@@ -135,7 +135,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 {
                     a: sub => <a href="https://element.io/help#encryption"
                         rel="noreferrer noopener" target="_blank"
-                    >{sub}</a>,
+                    >{ sub }</a>,
                 },
             ),
             onFinished: (confirm) => {
@@ -289,8 +289,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 <div className='mx_SecurityRoomSettingsTab_warning'>
                     <img src={require("../../../../../../res/img/warning.svg")} width={15} height={15} />
                     <span>
-                        {_t("Guests cannot join this room even if explicitly invited.")}&nbsp;
-                        <a href="" onClick={this.fixGuestAccess}>{_t("Click here to fix")}</a>
+                        { _t("Guests cannot join this room even if explicitly invited.") }&nbsp;
+                        <a href="" onClick={this.fixGuestAccess}>{ _t("Click here to fix") }</a>
                     </span>
                 </div>
             );
@@ -302,7 +302,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 <div className='mx_SecurityRoomSettingsTab_warning'>
                     <img src={require("../../../../../../res/img/warning.svg")} width={15} height={15} />
                     <span>
-                        {_t("To link to this room, please add an address.")}
+                        { _t("To link to this room, please add an address.") }
                     </span>
                 </div>
             );
@@ -310,8 +310,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
         return (
             <div>
-                {guestWarning}
-                {aliasWarning}
+                { guestWarning }
+                { aliasWarning }
                 <StyledRadioGroup
                     name="roomVis"
                     value={joinRule}
@@ -347,46 +347,47 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         const state = client.getRoom(this.props.roomId).currentState;
         const canChangeHistory = state.mayClientSendStateEvent('m.room.history_visibility', client);
 
+        const options = [
+            {
+                value: HistoryVisibility.Shared,
+                label: _t('Members only (since the point in time of selecting this option)'),
+            },
+            {
+                value: HistoryVisibility.Invited,
+                label: _t('Members only (since they were invited)'),
+            },
+            {
+                value: HistoryVisibility.Joined,
+                label: _t('Members only (since they joined)'),
+            },
+        ];
+
+        // World readable doesn't make sense for encrypted rooms
+        if (!this.state.encrypted || history === HistoryVisibility.WorldReadable) {
+            options.unshift({
+                value: HistoryVisibility.WorldReadable,
+                label: _t("Anyone"),
+            });
+        }
+
         return (
             <div>
                 <div>
-                    {_t('Changes to who can read history will only apply to future messages in this room. ' +
-                        'The visibility of existing history will be unchanged.')}
+                    { _t('Changes to who can read history will only apply to future messages in this room. ' +
+                        'The visibility of existing history will be unchanged.') }
                 </div>
                 <StyledRadioGroup
                     name="historyVis"
                     value={history}
                     onChange={this.onHistoryRadioToggle}
-                    definitions={[
-                        {
-                            value: HistoryVisibility.WorldReadable,
-                            disabled: !canChangeHistory,
-                            label: _t("Anyone"),
-                        },
-                        {
-                            value: HistoryVisibility.Shared,
-                            disabled: !canChangeHistory,
-                            label: _t('Members only (since the point in time of selecting this option)'),
-                        },
-                        {
-                            value: HistoryVisibility.Invited,
-                            disabled: !canChangeHistory,
-                            label: _t('Members only (since they were invited)'),
-                        },
-                        {
-                            value: HistoryVisibility.Joined,
-                            disabled: !canChangeHistory,
-                            label: _t('Members only (since they joined)'),
-                        },
-                    ]}
+                    disabled={!canChangeHistory}
+                    definitions={options}
                 />
             </div>
         );
     }
 
     render() {
-        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
-
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const isEncrypted = this.state.encrypted;
@@ -404,9 +405,9 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         }
 
         let historySection = (<>
-            <span className='mx_SettingsTab_subheading'>{_t("Who can read history?")}</span>
+            <span className='mx_SettingsTab_subheading'>{ _t("Who can read history?") }</span>
             <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                {this.renderHistory()}
+                { this.renderHistory() }
             </div>
         </>);
         if (!SettingsStore.getValue(UIFeature.RoomHistorySettings)) {
@@ -415,27 +416,27 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
         return (
             <div className="mx_SettingsTab mx_SecurityRoomSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Security & Privacy")}</div>
+                <div className="mx_SettingsTab_heading">{ _t("Security & Privacy") }</div>
 
-                <span className='mx_SettingsTab_subheading'>{_t("Encryption")}</span>
+                <span className='mx_SettingsTab_subheading'>{ _t("Encryption") }</span>
                 <div className='mx_SettingsTab_section mx_SecurityRoomSettingsTab_encryptionSection'>
                     <div>
                         <div className='mx_SettingsTab_subsectionText'>
-                            <span>{_t("Once enabled, encryption cannot be disabled.")}</span>
+                            <span>{ _t("Once enabled, encryption cannot be disabled.") }</span>
                         </div>
                         <LabelledToggleSwitch value={isEncrypted} onChange={this.onEncryptionChange}
                             label={_t("Encrypted")} disabled={!canEnableEncryption}
                         />
                     </div>
-                    {encryptionSettings}
+                    { encryptionSettings }
                 </div>
 
-                <span className='mx_SettingsTab_subheading'>{_t("Who can access this room?")}</span>
+                <span className='mx_SettingsTab_subheading'>{ _t("Who can access this room?") }</span>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    {this.renderRoomAccess()}
+                    { this.renderRoomAccess() }
                 </div>
 
-                {historySection}
+                { historySection }
             </div>
         );
     }

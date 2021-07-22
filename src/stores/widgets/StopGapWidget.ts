@@ -51,7 +51,7 @@ import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
 import { getCustomTheme } from "../../theme";
 import CountlyAnalytics from "../../CountlyAnalytics";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
-import { MatrixEvent, IEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { ELEMENT_CLIENT_ID } from "../../identifiers";
 import { getUserLanguage } from "../../languageHandler";
 
@@ -415,7 +415,7 @@ export class StopGapWidget extends EventEmitter {
     private feedEvent(ev: MatrixEvent) {
         if (!this.messaging) return;
 
-        const raw = ev.event as IEvent;
+        const raw = ev.getEffectiveEvent();
         this.messaging.feedEvent(raw).catch(e => {
             console.error("Error sending event to widget: ", e);
         });

@@ -24,6 +24,18 @@ module.exports = {
         // It's disabled here, but we should using it sparingly.
         "react/jsx-no-bind": "off",
         "react/jsx-key": ["error"],
+
+        "no-restricted-properties": [
+            "error",
+            ...buildRestrictedPropertiesOptions(
+                ["window.innerHeight", "window.innerWidth", "window.visualViewport"],
+                "Use UIStore to access window dimensions instead.",
+            ),
+            ...buildRestrictedPropertiesOptions(
+                ["*.mxcUrlToHttp", "*.getHttpUriForMxc"],
+                "Use Media helper instead to centralise access for customisation.",
+            ),
+        ],
     },
     overrides: [{
         files: [
@@ -49,21 +61,16 @@ module.exports = {
             "@typescript-eslint/no-explicit-any": "off",
             // We'd rather not do this but we do
             "@typescript-eslint/ban-ts-comment": "off",
-
-            "no-restricted-properties": [
-                "error",
-                ...buildRestrictedPropertiesOptions(
-                    ["window.innerHeight", "window.innerWidth", "window.visualViewport"],
-                    "Use UIStore to access window dimensions instead",
-                ),
-            ],
         },
     }],
 };
 
 function buildRestrictedPropertiesOptions(properties, message) {
     return properties.map(prop => {
-        const [object, property] = prop.split(".");
+        let [object, property] = prop.split(".");
+        if (object === "*") {
+            object = undefined;
+        }
         return {
             object,
             property,
