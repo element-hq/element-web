@@ -159,10 +159,10 @@
 @import "./views/groups/_GroupPublicityToggle.scss";
 @import "./views/groups/_GroupRoomList.scss";
 @import "./views/groups/_GroupUserSettings.scss";
+@import "./views/messages/_CallEvent.scss";
 @import "./views/messages/_CreateEvent.scss";
 @import "./views/messages/_DateSeparator.scss";
 @import "./views/messages/_EventTileBubble.scss";
-@import "./views/messages/_CallEvent.scss";
 @import "./views/messages/_MEmoteBody.scss";
 @import "./views/messages/_MFileBody.scss";
 @import "./views/messages/_MImageBody.scss";
@@ -201,8 +201,8 @@
 @import "./views/rooms/_E2EIcon.scss";
 @import "./views/rooms/_EditMessageComposer.scss";
 @import "./views/rooms/_EntityTile.scss";
-@import "./views/rooms/_EventTile.scss";
 @import "./views/rooms/_EventBubbleTile.scss";
+@import "./views/rooms/_EventTile.scss";
 @import "./views/rooms/_GroupLayout.scss";
 @import "./views/rooms/_IRCLayout.scss";
 @import "./views/rooms/_JumpToBottomButton.scss";
@@ -269,8 +269,8 @@
 @import "./views/voip/_CallPreview.scss";
 @import "./views/voip/_CallView.scss";
 @import "./views/voip/_CallViewForRoom.scss";
+@import "./views/voip/_CallViewSidebar.scss";
 @import "./views/voip/_DialPad.scss";
 @import "./views/voip/_DialPadContextMenu.scss";
 @import "./views/voip/_DialPadModal.scss";
 @import "./views/voip/_VideoFeed.scss";
-@import "./views/voip/_CallViewSidebar.scss";
