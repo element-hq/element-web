@@ -45,6 +45,8 @@ const ZOOM_COEFFICIENT = 0.0025;
 // If we have moved only this much we can zoom
 const ZOOM_DISTANCE = 10;
 
+const PANEL_HEIGHT = 68;
+
 interface IProps extends IDialogProps {
     src: string; // the source of the image being displayed
     name?: string; // the main title ('name') for the image
@@ -91,8 +93,17 @@ export default class ImageView extends React.Component<IProps, IState> {
             minZoom: MAX_SCALE,
             maxZoom: MAX_SCALE,
             rotation: 0,
-            translationX: thumbnailInfo?.positionX + (thumbnailInfo?.width / 2) - (UIStore.instance.windowWidth / 2),
-            translationY: thumbnailInfo?.positionY + (thumbnailInfo?.height / 2) - (UIStore.instance.windowHeight / 2),
+            translationX: (
+                thumbnailInfo?.positionX +
+                (thumbnailInfo?.width / 2) -
+                (UIStore.instance.windowWidth / 2)
+            ),
+            translationY: (
+                thumbnailInfo?.positionY +
+                (thumbnailInfo?.height / 2) -
+                (UIStore.instance.windowHeight / 2) -
+                (PANEL_HEIGHT / 2)
+            ),
             moving: false,
             contextMenuDisplayed: false,
         };
@@ -125,7 +136,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.image.current.removeEventListener("load", this.imageLoaded);
     }
 
-    private imageLoaded =() => {
+    private imageLoaded = () => {
         this.setZoomAndRotation();
         this.setState({
             translationX: 0,
