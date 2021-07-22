@@ -67,6 +67,7 @@ export class MediaEventHelper implements IDestroyable {
     private prepareThumbnailUrl = async () => {
         if (this.media.isEncrypted) {
             const blob = await this.thumbnailBlob.value;
+            if (blob === null) return null;
             return URL.createObjectURL(blob);
         } else {
             return this.media.thumbnailHttp;
