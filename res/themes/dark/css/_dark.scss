@@ -295,3 +295,11 @@ $eventbubble-reply-color: #C1C6CD;
 .hljs-tag {
     color: inherit; // Without this they'd be weirdly blue which doesn't match the theme
 }
+
+.hljs-addition {
+    background: #1a4b59;
+}
+
+.hljs-deletion {
+    background: #53232a;
+}
