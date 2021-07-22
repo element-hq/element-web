@@ -3503,5 +3503,11 @@
     "This call has ended": "Anruf beendet",
     "Connected": "Verbunden",
     "IRC": "IRC",
-    "Silence call": "Anruf stummschalten"
+    "Silence call": "Anruf stummschalten",
+    "Error downloading audio": "Fehler beim Herunterladen der Audiodatei",
+    "Image": "Bild",
+    "Sticker": "Sticker",
+    "An unknown error occurred": "Ein unbekannter Fehler ist aufgetreten",
+    "Message bubbles": "Nachrichtenblasen",
+    "New layout switcher (with message bubbles)": "Layout ändern erlauben (mit Nachrichtenblasen)"
 }
