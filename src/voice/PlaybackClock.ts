@@ -103,8 +103,8 @@ export class PlaybackClock implements IDestroyable {
      * @param {MatrixEvent} event The event to use for placeholders.
      */
     public populatePlaceholdersFrom(event: MatrixEvent) {
-        const durationSeconds = Number(event.getContent()['info']?.['duration']);
-        if (Number.isFinite(durationSeconds)) this.placeholderDuration = durationSeconds;
+        const durationMs = Number(event.getContent()['info']?.['duration']);
+        if (Number.isFinite(durationMs)) this.placeholderDuration = durationMs / 1000;
     }
 
     /**

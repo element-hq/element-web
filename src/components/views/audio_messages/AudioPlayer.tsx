@@ -36,6 +36,7 @@ interface IProps {
 
 interface IState {
     playbackPhase: PlaybackState;
+    error?: boolean;
 }
 
 @replaceableComponent("views.audio_messages.AudioPlayer")
@@ -55,8 +56,10 @@ export default class AudioPlayer extends React.PureComponent<IProps, IState> {
 
         // Don't wait for the promise to complete - it will emit a progress update when it
         // is done, and it's not meant to take long anyhow.
-        // noinspection JSIgnoredPromiseFromCall
-        this.props.playback.prepare();
+        this.props.playback.prepare().catch(e => {
+            console.error("Error processing audio file:", e);
+            this.setState({ error: true });
+        });
     }
 
     private onPlaybackUpdate = (ev: PlaybackState) => {
@@ -91,34 +94,37 @@ export default class AudioPlayer extends React.PureComponent<IProps, IState> {
     public render(): ReactNode {
         // tabIndex=0 to ensure that the whole component becomes a tab stop, where we handle keyboard
         // events for accessibility
-        return <div className='mx_MediaBody mx_AudioPlayer_container' tabIndex={0} onKeyDown={this.onKeyDown}>
-            <div className='mx_AudioPlayer_primaryContainer'>
-                <PlayPauseButton
-                    playback={this.props.playback}
-                    playbackPhase={this.state.playbackPhase}
-                    tabIndex={-1} // prevent tabbing into the button
-                    ref={this.playPauseRef}
-                />
-                <div className='mx_AudioPlayer_mediaInfo'>
-                    <span className='mx_AudioPlayer_mediaName'>
-                        { this.props.mediaName || _t("Unnamed audio") }
-                    </span>
-                    <div className='mx_AudioPlayer_byline'>
-                        <DurationClock playback={this.props.playback} />
-                        &nbsp; { /* easiest way to introduce a gap between the components */ }
-                        { this.renderFileSize() }
+        return <>
+            <div className='mx_MediaBody mx_AudioPlayer_container' tabIndex={0} onKeyDown={this.onKeyDown}>
+                <div className='mx_AudioPlayer_primaryContainer'>
+                    <PlayPauseButton
+                        playback={this.props.playback}
+                        playbackPhase={this.state.playbackPhase}
+                        tabIndex={-1} // prevent tabbing into the button
+                        ref={this.playPauseRef}
+                    />
+                    <div className='mx_AudioPlayer_mediaInfo'>
+                        <span className='mx_AudioPlayer_mediaName'>
+                            { this.props.mediaName || _t("Unnamed audio") }
+                        </span>
+                        <div className='mx_AudioPlayer_byline'>
+                            <DurationClock playback={this.props.playback} />
+                            &nbsp; { /* easiest way to introduce a gap between the components */ }
+                            { this.renderFileSize() }
+                        </div>
                     </div>
                 </div>
+                <div className='mx_AudioPlayer_seek'>
+                    <SeekBar
+                        playback={this.props.playback}
+                        tabIndex={-1} // prevent tabbing into the bar
+                        playbackPhase={this.state.playbackPhase}
+                        ref={this.seekRef}
+                    />
+                    <PlaybackClock playback={this.props.playback} defaultDisplaySeconds={0} />
+                </div>
             </div>
-            <div className='mx_AudioPlayer_seek'>
-                <SeekBar
-                    playback={this.props.playback}
-                    tabIndex={-1} // prevent tabbing into the bar
-                    playbackPhase={this.state.playbackPhase}
-                    ref={this.seekRef}
-                />
-                <PlaybackClock playback={this.props.playback} defaultDisplaySeconds={0} />
-            </div>
-        </div>;
+            { this.state.error && <div className="text-warning">{ _t("Error downloading audio") }</div> }
+        </>;
     }
 }

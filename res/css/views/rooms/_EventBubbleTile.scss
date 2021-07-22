@@ -91,7 +91,7 @@ limitations under the License.
             float: right;
             > a {
                 left: auto;
-                right: -48px;
+                right: -68px;
             }
         }
         .mx_SenderProfile {
@@ -126,7 +126,9 @@ limitations under the License.
         margin: 0 -12px 0 -9px;
         > a {
             position: absolute;
-            left: -48px;
+            padding: 10px 20px;
+            top: 0;
+            left: -68px;
         }
     }
 

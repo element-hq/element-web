@@ -17,30 +17,39 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import url from 'url';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import WidgetUtils from "../../../utils/WidgetUtils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
+import MemberAvatar from '../avatars/MemberAvatar';
+import BaseAvatar from '../avatars/BaseAvatar';
+import AccessibleButton from './AccessibleButton';
+import TextWithTooltip from "./TextWithTooltip";
+
+interface IProps {
+    url: string;
+    creatorUserId: string;
+    roomId: string;
+    onPermissionGranted: () => void;
+    isRoomEncrypted?: boolean;
+}
+
+interface IState {
+    roomMember: RoomMember;
+    isWrapped: boolean;
+    widgetDomain: string;
+}
 
 @replaceableComponent("views.elements.AppPermission")
-export default class AppPermission extends React.Component {
-    static propTypes = {
-        url: PropTypes.string.isRequired,
-        creatorUserId: PropTypes.string.isRequired,
-        roomId: PropTypes.string.isRequired,
-        onPermissionGranted: PropTypes.func.isRequired,
-        isRoomEncrypted: PropTypes.bool,
-    };
-
-    static defaultProps = {
+export default class AppPermission extends React.Component<IProps, IState> {
+    static defaultProps: Partial<IProps> = {
         onPermissionGranted: () => {},
     };
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
 
         // The first step is to pick apart the widget so we can render information about it
@@ -55,16 +64,18 @@ export default class AppPermission extends React.Component {
         this.state = {
             ...urlInfo,
             roomMember,
+            isWrapped: null,
+            widgetDomain: null,
         };
     }
 
-    parseWidgetUrl() {
+    private parseWidgetUrl(): { isWrapped: boolean, widgetDomain: string } {
         const widgetUrl = url.parse(this.props.url);
         const params = new URLSearchParams(widgetUrl.search);
 
         // HACK: We're relying on the query params when we should be relying on the widget's `data`.
         // This is a workaround for Scalar.
-        if (WidgetUtils.isScalarUrl(widgetUrl) && params && params.get('url')) {
+        if (WidgetUtils.isScalarUrl(this.props.url) && params && params.get('url')) {
             const unwrappedUrl = url.parse(params.get('url'));
             return {
                 widgetDomain: unwrappedUrl.host || unwrappedUrl.hostname,
@@ -80,10 +91,6 @@ export default class AppPermission extends React.Component {
 
     render() {
         const brand = SdkConfig.get().brand;
-        const AccessibleButton = sdk.getComponent("views.elements.AccessibleButton");
-        const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
-        const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
-        const TextWithTooltip = sdk.getComponent("views.elements.TextWithTooltip");
 
         const displayName = this.state.roomMember ? this.state.roomMember.name : this.props.creatorUserId;
         const userId = displayName === this.props.creatorUserId ? null : this.props.creatorUserId;
