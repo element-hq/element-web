@@ -361,8 +361,6 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
         const thumbnail = (
             <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight: maxHeight + "px", maxWidth: maxWidth + "px" }} >
-                { /* Calculate aspect ratio, using %padding will size _container correctly */ }
-                <div style={{ paddingBottom: forcedHeight ? (forcedHeight + "px") : ((100 * infoHeight / infoWidth) + '%') }} />
                 { showPlaceholder &&
                     <div className="mx_MImageBody_thumbnail" style={{
                         // Constrain width here so that spinner appears central to the loaded thumbnail
@@ -406,7 +404,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     }
 
     // Overidden by MStickerBody
-    protected getFileBody(): JSX.Element {
+    protected getFileBody(): string | JSX.Element {
         // We only ever need the download bar if we're appearing outside of the timeline
         if (this.props.tileShape) {
             return <MFileBody {...this.props} showGenericPlaceholder={false} />;

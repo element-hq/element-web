@@ -103,8 +103,8 @@ export class PlaybackClock implements IDestroyable {
      * @param {MatrixEvent} event The event to use for placeholders.
      */
     public populatePlaceholdersFrom(event: MatrixEvent) {
-        const durationSeconds = Number(event.getContent()['info']?.['duration']);
-        if (Number.isFinite(durationSeconds)) this.placeholderDuration = durationSeconds;
+        const durationMs = Number(event.getContent()['info']?.['duration']);
+        if (Number.isFinite(durationMs)) this.placeholderDuration = durationMs / 1000;
     }
 
     /**
@@ -132,6 +132,10 @@ export class PlaybackClock implements IDestroyable {
 
     public flagStop() {
         this.stopped = true;
+
+        // Reset the clock time now so that the update going out will trigger components
+        // to check their seek/position information (alongside the clock).
+        this.clipStart = this.context.currentTime;
     }
 
     public syncTo(contextTime: number, clipTime: number) {

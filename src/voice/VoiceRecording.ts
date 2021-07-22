@@ -333,12 +333,17 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
 
         if (this.lastUpload) return this.lastUpload;
 
-        this.emit(RecordingState.Uploading);
-        const { url: mxc, file: encrypted } = await uploadFile(this.client, inRoomId, new Blob([this.audioBuffer], {
-            type: this.contentType,
-        }));
-        this.lastUpload = { mxc, encrypted };
-        this.emit(RecordingState.Uploaded);
+        try {
+            this.emit(RecordingState.Uploading);
+            const { url: mxc, file: encrypted } = await uploadFile(this.client, inRoomId, new Blob([this.audioBuffer], {
+                type: this.contentType,
+            }));
+            this.lastUpload = { mxc, encrypted };
+            this.emit(RecordingState.Uploaded);
+        } catch (e) {
+            this.emit(RecordingState.Ended);
+            throw e;
+        }
         return this.lastUpload;
     }
 }

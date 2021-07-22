@@ -15,30 +15,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
+import React, { createRef } from 'react';
 import classNames from 'classnames';
-import { UserAddressType } from '../../../UserAddress';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { IUserAddress } from '../../../UserAddress';
+import AddressTile from './AddressTile';
+
+interface IProps {
+    onSelected: (index: number) => void;
+
+    // List of the addresses to display
+    addressList: IUserAddress[];
+    // Whether to show the address on the address tiles
+    showAddress?: boolean;
+    truncateAt: number;
+    selected?: number;
+
+    // Element to put as a header on top of the list
+    header?: JSX.Element;
+}
+
+interface IState {
+    selected: number;
+    hover: boolean;
+}
 
 @replaceableComponent("views.elements.AddressSelector")
-export default class AddressSelector extends React.Component {
-    static propTypes = {
-        onSelected: PropTypes.func.isRequired,
+export default class AddressSelector extends React.Component<IProps, IState> {
+    private scrollElement = createRef<HTMLDivElement>();
+    private addressListElement = createRef<HTMLDivElement>();
 
-        // List of the addresses to display
-        addressList: PropTypes.arrayOf(UserAddressType).isRequired,
-        // Whether to show the address on the address tiles
-        showAddress: PropTypes.bool,
-        truncateAt: PropTypes.number.isRequired,
-        selected: PropTypes.number,
-
-        // Element to put as a header on top of the list
-        header: PropTypes.node,
-    };
-
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -48,10 +55,10 @@ export default class AddressSelector extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(props) { // eslint-disable-line camelcase
+    UNSAFE_componentWillReceiveProps(props: IProps) { // eslint-disable-line
         // Make sure the selected item isn't outside the list bounds
         const selected = this.state.selected;
-        const maxSelected = this._maxSelected(props.addressList);
+        const maxSelected = this.maxSelected(props.addressList);
         if (selected > maxSelected) {
             this.setState({ selected: maxSelected });
         }
@@ -60,13 +67,13 @@ export default class AddressSelector extends React.Component {
     componentDidUpdate() {
         // As the user scrolls with the arrow keys keep the selected item
         // at the top of the window.
-        if (this.scrollElement && this.props.addressList.length > 0 && !this.state.hover) {
-            const elementHeight = this.addressListElement.getBoundingClientRect().height;
-            this.scrollElement.scrollTop = (this.state.selected * elementHeight) - elementHeight;
+        if (this.scrollElement.current && this.props.addressList.length > 0 && !this.state.hover) {
+            const elementHeight = this.addressListElement.current.getBoundingClientRect().height;
+            this.scrollElement.current.scrollTop = (this.state.selected * elementHeight) - elementHeight;
         }
     }
 
-    moveSelectionTop = () => {
+    public moveSelectionTop = (): void => {
         if (this.state.selected > 0) {
             this.setState({
                 selected: 0,
@@ -75,7 +82,7 @@ export default class AddressSelector extends React.Component {
         }
     };
 
-    moveSelectionUp = () => {
+    public moveSelectionUp = (): void => {
         if (this.state.selected > 0) {
             this.setState({
                 selected: this.state.selected - 1,
@@ -84,8 +91,8 @@ export default class AddressSelector extends React.Component {
         }
     };
 
-    moveSelectionDown = () => {
-        if (this.state.selected < this._maxSelected(this.props.addressList)) {
+    public moveSelectionDown = (): void => {
+        if (this.state.selected < this.maxSelected(this.props.addressList)) {
             this.setState({
                 selected: this.state.selected + 1,
                 hover: false,
@@ -93,26 +100,26 @@ export default class AddressSelector extends React.Component {
         }
     };
 
-    chooseSelection = () => {
+    public chooseSelection = (): void => {
         this.selectAddress(this.state.selected);
     };
 
-    onClick = index => {
+    private onClick = (index: number): void => {
         this.selectAddress(index);
     };
 
-    onMouseEnter = index => {
+    private onMouseEnter = (index: number): void => {
         this.setState({
             selected: index,
             hover: true,
         });
     };
 
-    onMouseLeave = () => {
+    private onMouseLeave = (): void => {
         this.setState({ hover: false });
     };
 
-    selectAddress = index => {
+    private selectAddress = (index: number): void => {
         // Only try to select an address if one exists
         if (this.props.addressList.length !== 0) {
             this.props.onSelected(index);
@@ -120,9 +127,8 @@ export default class AddressSelector extends React.Component {
         }
     };
 
-    createAddressListTiles() {
-        const AddressTile = sdk.getComponent("elements.AddressTile");
-        const maxSelected = this._maxSelected(this.props.addressList);
+    private createAddressListTiles(): JSX.Element[] {
+        const maxSelected = this.maxSelected(this.props.addressList);
         const addressList = [];
 
         // Only create the address elements if there are address
@@ -143,14 +149,12 @@ export default class AddressSelector extends React.Component {
                         onMouseEnter={this.onMouseEnter.bind(this, i)}
                         onMouseLeave={this.onMouseLeave}
                         key={this.props.addressList[i].addressType + "/" + this.props.addressList[i].address}
-                        ref={(ref) => { this.addressListElement = ref; }}
+                        ref={this.addressListElement}
                     >
                         <AddressTile
                             address={this.props.addressList[i]}
                             showAddress={this.props.showAddress}
                             justified={true}
-                            networkName="vector"
-                            networkUrl={require("../../../../res/img/search-icon-vector.svg")}
                         />
                     </div>,
                 );
@@ -159,7 +163,7 @@ export default class AddressSelector extends React.Component {
         return addressList;
     }
 
-    _maxSelected(list) {
+    private maxSelected(list: IUserAddress[]): number {
         const listSize = list.length === 0 ? 0 : list.length - 1;
         const maxSelected = listSize > (this.props.truncateAt - 1) ? (this.props.truncateAt - 1) : listSize;
         return maxSelected;
@@ -172,7 +176,7 @@ export default class AddressSelector extends React.Component {
         });
 
         return (
-            <div className={classes} ref={(ref) => {this.scrollElement = ref;}}>
+            <div className={classes} ref={this.scrollElement}>
                 { this.props.header }
                 { this.createAddressListTiles() }
             </div>
