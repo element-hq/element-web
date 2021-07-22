@@ -593,7 +593,7 @@ export default class CallView extends React.Component<IProps, IState> {
         const someoneIsScreensharing = this.props.call.getFeeds().some((feed) => {
             return feed.purpose === SDPStreamMetadataPurpose.Screenshare;
         });
-        const isVideoCall = this.props.call.type = CallType.Video;
+        const isVideoCall = this.props.call.type === CallType.Video;
 
         let contentView: React.ReactNode;
         let holdTransferContent;
