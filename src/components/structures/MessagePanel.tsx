@@ -50,7 +50,7 @@ import EditorStateTransfer from "../../utils/EditorStateTransfer";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
-const membershipTypes = [
+const groupedEvents = [
     EventType.RoomMember,
     EventType.RoomThirdPartyInvite,
     EventType.RoomServerAcl,
@@ -1185,7 +1185,7 @@ class RedactionGrouper extends BaseGrouper {
 // Wrap consecutive member events in a ListSummary, ignore if redacted
 class MemberGrouper extends BaseGrouper {
     static canStartGroup = function(panel: MessagePanel, ev: MatrixEvent): boolean {
-        return panel.shouldShowEvent(ev) && membershipTypes.includes(ev.getType() as EventType);
+        return panel.shouldShowEvent(ev) && groupedEvents.includes(ev.getType() as EventType);
     };
 
     constructor(
@@ -1202,7 +1202,7 @@ class MemberGrouper extends BaseGrouper {
         if (this.panel.wantsDateSeparator(this.events[0], ev.getDate())) {
             return false;
         }
-        return membershipTypes.includes(ev.getType() as EventType);
+        return groupedEvents.includes(ev.getType() as EventType);
     }
 
     public add(ev: MatrixEvent): void {
