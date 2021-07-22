@@ -16,7 +16,6 @@ limitations under the License.
 
 import { NotificationColor } from "./NotificationColor";
 import { NotificationState } from "./NotificationState";
-import { RoomNotificationState } from "./RoomNotificationState";
 
 /**
  * Summarizes a number of states into a unique snapshot. To populate, call
@@ -26,7 +25,6 @@ import { RoomNotificationState } from "./RoomNotificationState";
  */
 export class SummarizedNotificationState extends NotificationState {
     private totalStatesWithUnread = 0;
-    private unreadRoomId: string;
 
     constructor() {
         super();
@@ -47,7 +45,7 @@ export class SummarizedNotificationState extends NotificationState {
      * @param includeSymbol If true, the notification state's symbol will be taken if one
      * is present.
      */
-    public add(other: RoomNotificationState, includeSymbol = false) {
+    public add(other: NotificationState, includeSymbol = false) {
         if (other.symbol && includeSymbol) {
             this._symbol = other.symbol;
         }

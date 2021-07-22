@@ -145,7 +145,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             });
         } else {
             const lists = RoomListStore.instance.unfilteredLists;
-            TAG_ORDER.every(t => {
+            for (let i = 0; i < TAG_ORDER.length; i++) {
+                const t = TAG_ORDER[i];
                 const listRooms = lists[t];
                 const unreadRoom = listRooms.find((r: Room) => {
                     if (this.showInHomeSpace(r)) {
@@ -159,10 +160,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                         room_id: unreadRoom.roomId,
                         context_switch: true,
                     });
-                    return false;
+                    break;
                 }
-                return true;
-            });
+            }
         }
     }
 
