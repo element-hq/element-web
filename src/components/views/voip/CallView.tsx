@@ -593,6 +593,7 @@ export default class CallView extends React.Component<IProps, IState> {
         const someoneIsScreensharing = this.props.call.getFeeds().some((feed) => {
             return feed.purpose === SDPStreamMetadataPurpose.Screenshare;
         });
+        const isVideoCall = this.props.call.type = CallType.Video;
 
         let contentView: React.ReactNode;
         let holdTransferContent;
@@ -646,7 +647,7 @@ export default class CallView extends React.Component<IProps, IState> {
         if (
             (!isOnHold && !transfereeCall) &&
             (
-                (sidebarShown && this.props.call.type === CallType.Video) ||
+                (sidebarShown && isVideoCall) ||
                 (someoneIsScreensharing && sidebarShown) ||
                 isScreensharing
             )
@@ -663,7 +664,7 @@ export default class CallView extends React.Component<IProps, IState> {
 
         // This is a bit messy. I can't see a reason to have two onHold/transfer screens
         if (isOnHold || transfereeCall) {
-            if (this.props.call.type === CallType.Video) {
+            if (isVideoCall) {
                 const containerClasses = classNames({
                     mx_CallView_content: true,
                     mx_CallView_video: true,
@@ -761,7 +762,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 let text = isScreensharing
                     ? _t("You are presenting")
                     : _t('%(sharerName)s is presenting', { sharerName });
-                if (!this.state.sidebarShown) {
+                if (!this.state.sidebarShown && isVideoCall) {
                     text += " • " + (this.props.call.isLocalVideoMuted()
                         ? _t("Your camera is turned off")
                         : _t("Your camera is still enabled"));
@@ -794,7 +795,7 @@ export default class CallView extends React.Component<IProps, IState> {
             );
         }
 
-        const callTypeText = this.props.call.type === CallType.Video ? _t("Video Call") : _t("Voice Call");
+        const callTypeText = isVideoCall ? _t("Video Call") : _t("Voice Call");
         let myClassName;
 
         let fullScreenButton;
