@@ -38,7 +38,8 @@ limitations under the License.
         padding-top: 0;
     }
 
-    &:hover {
+    &:hover,
+    &.mx_EventTile_selected {
         &::before {
             content: '';
             position: absolute;
