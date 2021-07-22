@@ -20,7 +20,9 @@ limitations under the License.
     bottom: 16px;
     z-index: 100; // To be above the primary feed
 
-    height: 100%;
+    overflow: auto;
+
+    height: calc(100% - 32px); // Subtract the top and bottom padding
     width: 20%;
 
     display: flex;
