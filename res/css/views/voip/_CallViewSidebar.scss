@@ -37,8 +37,7 @@ limitations under the License.
             align-items: center;
             justify-content: center;
 
-            min-width: 160px;
-            min-height: 90px;
+            aspect-ratio: 16 / 9;
         }
     }
 
@@ -47,10 +46,5 @@ limitations under the License.
         bottom: unset;
         justify-content: flex-end;
         gap: 4px;
-
-        .mx_VideoFeed_voice {
-            min-width: 64px;
-            min-height: 36px;
-        }
     }
 }
