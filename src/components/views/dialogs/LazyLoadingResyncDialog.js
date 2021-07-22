@@ -33,7 +33,7 @@ export default (props) => {
     return (<QuestionDialog
         hasCancelButton={false}
         title={_t("Updating %(brand)s", { brand })}
-        description={<div>{description}</div>}
+        description={<div>{ description }</div>}
         button={_t("OK")}
         onFinished={props.onFinished}
     />);

@@ -21,7 +21,7 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import { ActionPayload } from '../../../dispatcher/payloads';
-import CallHandler, { AudioID } from '../../../CallHandler';
+import CallHandler, { CallHandlerEvent } from '../../../CallHandler';
 import RoomAvatar from '../avatars/RoomAvatar';
 import AccessibleButton from '../elements/AccessibleButton';
 import { CallState } from 'matrix-js-sdk/src/webrtc/call';
@@ -51,8 +51,13 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
         };
     }
 
+    componentDidMount = () => {
+        CallHandler.sharedInstance().addListener(CallHandlerEvent.SilencedCallsChanged, this.onSilencedCallsChanged);
+    };
+
     public componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
+        CallHandler.sharedInstance().removeListener(CallHandlerEvent.SilencedCallsChanged, this.onSilencedCallsChanged);
     }
 
     private onAction = (payload: ActionPayload) => {
@@ -73,6 +78,12 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
         }
     };
 
+    private onSilencedCallsChanged = () => {
+        const callId = this.state.incomingCall?.callId;
+        if (!callId) return;
+        this.setState({ silenced: CallHandler.sharedInstance().isCallSilenced(callId) });
+    };
+
     private onAnswerClick: React.MouseEventHandler = (e) => {
         e.stopPropagation();
         dis.dispatch({
@@ -91,9 +102,10 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
 
     private onSilenceClick: React.MouseEventHandler = (e) => {
         e.stopPropagation();
-        const newState = !this.state.silenced;
-        this.setState({ silenced: newState });
-        newState ? CallHandler.sharedInstance().pause(AudioID.Ring) : CallHandler.sharedInstance().play(AudioID.Ring);
+        const callId = this.state.incomingCall.callId;
+        this.state.silenced ?
+            CallHandler.sharedInstance().unSilenceCall(callId):
+            CallHandler.sharedInstance().silenceCall(callId);
     };
 
     public render() {
@@ -133,8 +145,8 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
                     width={32}
                 />
                 <div>
-                    <h1>{caller}</h1>
-                    <p>{incomingCallText}</p>
+                    <h1>{ caller }</h1>
+                    <p>{ incomingCallText }</p>
                 </div>
                 <AccessibleTooltipButton
                     className={silenceClass}
@@ -144,7 +156,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
             </div>
             <div className="mx_IncomingCallBox_buttons">
                 <AccessibleButton
-                    className={"mx_IncomingCallBox_decline"}
+                    className="mx_IncomingCallBox_decline"
                     onClick={this.onRejectClick}
                     kind="danger"
                 >
@@ -152,7 +164,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
                 </AccessibleButton>
                 <div className="mx_IncomingCallBox_spacer" />
                 <AccessibleButton
-                    className={"mx_IncomingCallBox_accept"}
+                    className="mx_IncomingCallBox_accept"
                     onClick={this.onAnswerClick}
                     kind="primary"
                 >

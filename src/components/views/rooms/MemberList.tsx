@@ -43,6 +43,7 @@ import EntityTile from "./EntityTile";
 import MemberTile from "./MemberTile";
 import BaseAvatar from '../avatars/BaseAvatar';
 import { throttle } from 'lodash';
+import SpaceStore from "../../../stores/SpaceStore";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -92,7 +93,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         this.showPresence = enablePresenceByHsUrl?.[hsUrl] ?? true;
     }
 
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillMount() {
         const cli = MatrixClientPeg.get();
         this.mounted = true;
@@ -509,7 +510,7 @@ export default class MemberList extends React.Component<IProps, IState> {
             const chat = CommunityPrototypeStore.instance.getSelectedCommunityGeneralChat();
             if (chat && chat.roomId === this.props.roomId) {
                 inviteButtonText = _t("Invite to this community");
-            } else if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) {
+            } else if (SpaceStore.spacesEnabled && room.isSpaceRoom()) {
                 inviteButtonText = _t("Invite to this space");
             }
 
@@ -542,14 +543,14 @@ export default class MemberList extends React.Component<IProps, IState> {
         const footer = (
             <SearchBox
                 className="mx_MemberList_query mx_textinput_icon mx_textinput_search"
-                placeholder={ _t('Filter room members') }
-                onSearch={ this.onSearchQueryChanged } />
+                placeholder={_t('Filter room members')}
+                onSearch={this.onSearchQueryChanged} />
         );
 
         let previousPhase = RightPanelPhases.RoomSummary;
         // We have no previousPhase for when viewing a MemberList from a Space
         let scopeHeader;
-        if (SettingsStore.getValue("feature_spaces") && room?.isSpaceRoom()) {
+        if (SpaceStore.spacesEnabled && room?.isSpaceRoom()) {
             previousPhase = undefined;
             scopeHeader = <div className="mx_RightPanel_scopeHeader">
                 <RoomAvatar room={room} height={32} width={32} />

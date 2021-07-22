@@ -92,7 +92,7 @@ export default class DialogButtons extends React.Component {
 
         let additive = null;
         if (this.props.additive) {
-            additive = <div className="mx_Dialog_buttons_additive">{this.props.additive}</div>;
+            additive = <div className="mx_Dialog_buttons_additive">{ this.props.additive }</div>;
         }
 
         return (

@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "3.25.0",
+  "version": "3.26.0",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -46,6 +46,7 @@
     "start:build": "babel src -w -s -d lib --verbose --extensions \".ts,.js\"",
     "lint": "yarn lint:types && yarn lint:js && yarn lint:style",
     "lint:js": "eslint --max-warnings 0 src test",
+    "lint:js-fix": "eslint --fix src test",
     "lint:types": "tsc --noEmit --jsx react",
     "lint:style": "stylelint 'res/css/**/*.scss'",
     "test": "jest",
@@ -64,8 +65,8 @@
     "counterpart": "^0.18.6",
     "diff-dom": "^4.2.2",
     "diff-match-patch": "^1.0.5",
-    "emojibase-data": "^5.1.1",
-    "emojibase-regex": "^4.1.1",
+    "emojibase-data": "^6.2.0",
+    "emojibase-regex": "^5.1.3",
     "escape-html": "^1.0.3",
     "file-saver": "^2.0.5",
     "filesize": "6.1.0",
@@ -79,7 +80,7 @@
     "katex": "^0.12.0",
     "linkifyjs": "^2.1.9",
     "lodash": "^4.17.20",
-    "matrix-js-sdk": "12.0.1",
+    "matrix-js-sdk": "12.1.0",
     "matrix-widget-api": "^0.1.0-beta.15",
     "minimist": "^1.2.5",
     "opus-recorder": "^8.0.3",
@@ -126,6 +127,7 @@
     "@types/classnames": "^2.2.11",
     "@types/commonmark": "^0.27.4",
     "@types/counterpart": "^0.18.1",
+    "@types/css-font-loading-module": "^0.0.6",
     "@types/diff-match-patch": "^1.0.32",
     "@types/flux": "^3.1.9",
     "@types/jest": "^26.0.20",
@@ -186,7 +188,8 @@
       "\\$webapp/i18n/languages.json": "<rootDir>/__mocks__/languages.json",
       "decoderWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
       "decoderWorker\\.min\\.wasm": "<rootDir>/__mocks__/empty.js",
-      "waveWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js"
+      "waveWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
+      "workers/(.+)\\.worker\\.ts": "<rootDir>/__mocks__/workerMock.js"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$"

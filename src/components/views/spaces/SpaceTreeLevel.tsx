@@ -401,7 +401,11 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         let notifBadge;
         if (notificationState) {
             notifBadge = <div className="mx_SpacePanel_badgeContainer">
-                <NotificationBadge forceCount={false} notification={notificationState} />
+                <NotificationBadge
+                    onClick={() => SpaceStore.instance.setActiveRoomInSpace(space)}
+                    forceCount={false}
+                    notification={notificationState}
+                />
             </div>;
         }
 
@@ -457,7 +461,7 @@ const SpaceTreeLevel: React.FC<ITreeLevelProps> = ({
     parents,
 }) => {
     return <ul className="mx_SpaceTreeLevel">
-        {spaces.map(s => {
+        { spaces.map(s => {
             return (<SpaceItem
                 key={s.roomId}
                 activeSpaces={activeSpaces}
@@ -465,7 +469,7 @@ const SpaceTreeLevel: React.FC<ITreeLevelProps> = ({
                 isNested={isNested}
                 parents={parents}
             />);
-        })}
+        }) }
     </ul>;
 };
 

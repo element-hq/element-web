@@ -14,6 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+$button-size: 32px;
+$icon-size: 22px;
+$button-gap: 24px;
+
 .mx_ImageView {
     display: flex;
     width: 100%;
@@ -66,16 +70,17 @@ limitations under the License.
     pointer-events: initial;
     display: flex;
     align-items: center;
+    gap: calc($button-gap - ($button-size - $icon-size));
 }
 
 .mx_ImageView_button {
-    margin-left: 24px;
+    padding: calc(($button-size - $icon-size) / 2);
     display: block;
 
     &::before {
         content: '';
-        height: 22px;
-        width: 22px;
+        height: $icon-size;
+        width: $icon-size;
         mask-repeat: no-repeat;
         mask-size: contain;
         mask-position: center;
@@ -109,11 +114,12 @@ limitations under the License.
 }
 
 .mx_ImageView_button_close {
+    padding: calc($button-size - $button-size);
     border-radius: 100%;
     background: #21262c; // same on all themes
     &::before {
-        width: 32px;
-        height: 32px;
+        width: $button-size;
+        height: $button-size;
         mask-image: url('$(res)/img/image-view/close.svg');
         mask-size: 40%;
     }

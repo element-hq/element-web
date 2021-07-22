@@ -95,7 +95,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 duration: Math.round(this.state.recorder.durationSeconds * 1000),
 
                 // https://github.com/matrix-org/matrix-doc/pull/3246
-                waveform: this.state.recorder.getPlayback().waveform.map(v => Math.round(v * 1024)),
+                waveform: this.state.recorder.getPlayback().thumbnailWaveform.map(v => Math.round(v * 1024)),
             },
             "org.matrix.msc3245.voice": {}, // No content, this is a rendering hint
         });
@@ -124,9 +124,9 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             Modal.createTrackedDialog('Microphone Access Error', '', ErrorDialog, {
                 title: _t("Unable to access your microphone"),
                 description: <>
-                    <p>{_t(
+                    <p>{ _t(
                         "We were unable to access your microphone. Please check your browser settings and try again.",
-                    )}</p>
+                    ) }</p>
                 </>,
             });
         };
@@ -139,9 +139,9 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 Modal.createTrackedDialog('No Microphone Error', '', ErrorDialog, {
                     title: _t("No microphone found"),
                     description: <>
-                        <p>{_t(
+                        <p>{ _t(
                             "We didn't find a microphone on your device. Please check your settings and try again.",
-                        )}</p>
+                        ) }</p>
                     </>,
                 });
                 return;
@@ -224,9 +224,9 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         }
 
         return (<>
-            {deleteButton}
-            {this.renderWaveformArea()}
-            {recordingInfo}
+            { deleteButton }
+            { this.renderWaveformArea() }
+            { recordingInfo }
         </>);
     }
 }

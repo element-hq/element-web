@@ -132,6 +132,10 @@ export class PlaybackClock implements IDestroyable {
 
     public flagStop() {
         this.stopped = true;
+
+        // Reset the clock time now so that the update going out will trigger components
+        // to check their seek/position information (alongside the clock).
+        this.clipStart = this.context.currentTime;
     }
 
     public syncTo(contextTime: number, clipTime: number) {

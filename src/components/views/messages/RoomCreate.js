@@ -56,7 +56,7 @@ export default class RoomCreate extends React.Component {
         const predecessorPermalink = permalinkCreator.forEvent(predecessor['event_id']);
         const link = (
             <a href={predecessorPermalink} onClick={this._onLinkClicked}>
-                {_t("Click here to see older messages.")}
+                { _t("Click here to see older messages.") }
             </a>
         );
 

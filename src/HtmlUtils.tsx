@@ -25,7 +25,6 @@ import _linkifyElement from 'linkifyjs/element';
 import _linkifyString from 'linkifyjs/string';
 import classNames from 'classnames';
 import EMOJIBASE_REGEX from 'emojibase-regex';
-import url from 'url';
 import katex from 'katex';
 import { AllHtmlEntities } from 'html-entities';
 import { IContent } from 'matrix-js-sdk/src/models/event';
@@ -34,7 +33,7 @@ import { IExtendedSanitizeOptions } from './@types/sanitize-html';
 import linkifyMatrix from './linkify-matrix';
 import SettingsStore from './settings/SettingsStore';
 import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";
-import { SHORTCODE_TO_EMOJI, getEmojiFromUnicode } from "./emoji";
+import { getEmojiFromUnicode } from "./emoji";
 import ReplyThread from "./components/views/elements/ReplyThread";
 import { mediaFromMxc } from "./customisations/Media";
 
@@ -58,7 +57,9 @@ const BIGEMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})+$`, 'i');
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
-export const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet'];
+export const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet', 'matrix'];
+
+const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)\/(.+?)(?:[?/]|$)/;
 
 /*
  * Return true if the given string contains emoji
@@ -78,20 +79,8 @@ function mightContainEmoji(str: string): boolean {
  * @return {String} The shortcode (such as :thumbup:)
  */
 export function unicodeToShortcode(char: string): string {
-    const data = getEmojiFromUnicode(char);
-    return (data && data.shortcodes ? `:${data.shortcodes[0]}:` : '');
-}
-
-/**
- * Returns the unicode character for an emoji shortcode
- *
- * @param {String} shortcode The shortcode (such as :thumbup:)
- * @return {String} The emoji character; null if none exists
- */
-export function shortcodeToUnicode(shortcode: string): string {
-    shortcode = shortcode.slice(1, shortcode.length - 1);
-    const data = SHORTCODE_TO_EMOJI.get(shortcode);
-    return data ? data.unicode : null;
+    const shortcodes = getEmojiFromUnicode(char)?.shortcodes;
+    return shortcodes?.length ? `:${shortcodes[0]}:` : '';
 }
 
 export function processHtmlForSending(html: string): string {
@@ -151,10 +140,8 @@ export function getHtmlText(insaneHtml: string): string {
  */
 export function isUrlPermitted(inputUrl: string): boolean {
     try {
-        const parsed = url.parse(inputUrl);
-        if (!parsed.protocol) return false;
         // URL parser protocol includes the trailing colon
-        return PERMITTED_URL_SCHEMES.includes(parsed.protocol.slice(0, -1));
+        return PERMITTED_URL_SCHEMES.includes(new URL(inputUrl).protocol.slice(0, -1));
     } catch (e) {
         return false;
     }
@@ -176,18 +163,31 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
         return { tagName, attribs };
     },
     'img': function(tagName: string, attribs: sanitizeHtml.Attributes) {
+        let src = attribs.src;
         // Strip out imgs that aren't `mxc` here instead of using allowedSchemesByTag
         // because transformTags is used _before_ we filter by allowedSchemesByTag and
         // we don't want to allow images with `https?` `src`s.
         // We also drop inline images (as if they were not present at all) when the "show
         // images" preference is disabled. Future work might expose some UI to reveal them
         // like standalone image events have.
-        if (!attribs.src || !attribs.src.startsWith('mxc://') || !SettingsStore.getValue("showImages")) {
+        if (!src || !SettingsStore.getValue("showImages")) {
             return { tagName, attribs: {} };
         }
+
+        if (!src.startsWith("mxc://")) {
+            const match = MEDIA_API_MXC_REGEX.exec(src);
+            if (match) {
+                src = `mxc://${match[1]}/${match[2]}`;
+            }
+        }
+
+        if (!src.startsWith("mxc://")) {
+            return { tagName, attribs: {} };
+        }
+
         const width = Number(attribs.width) || 800;
         const height = Number(attribs.height) || 600;
-        attribs.src = mediaFromMxc(attribs.src).getThumbnailOfSourceHttp(width, height);
+        attribs.src = mediaFromMxc(src).getThumbnailOfSourceHttp(width, height);
         return { tagName, attribs };
     },
     'code': function(tagName: string, attribs: sanitizeHtml.Attributes) {

@@ -19,7 +19,7 @@ import { createClient } from "matrix-js-sdk/src/matrix";
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { sleep, defer, IDeferred } from "matrix-js-sdk/src/utils";
+import { sleep, defer, IDeferred, QueryDict } from "matrix-js-sdk/src/utils";
 
 // focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
 import 'focus-visible';
@@ -105,6 +105,8 @@ import VerificationRequestToast from '../views/toasts/VerificationRequestToast';
 import PerformanceMonitor, { PerformanceEntryNames } from "../../performance";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 import SoftLogout from './auth/SoftLogout';
+import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
+import { copyPlaintext } from "../../utils/strings";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -153,7 +155,7 @@ const ONBOARDING_FLOW_STARTERS = [
 
 interface IScreen {
     screen: string;
-    params?: object;
+    params?: QueryDict;
 }
 
 /* eslint-disable camelcase */
@@ -183,9 +185,9 @@ interface IProps { // TODO type things better
     onNewScreen: (screen: string, replaceLast: boolean) => void;
     enableGuest?: boolean;
     // the queryParams extracted from the [real] query-string of the URI
-    realQueryParams?: Record<string, string>;
+    realQueryParams?: QueryDict;
     // the initial queryParams extracted from the hash-fragment of the URI
-    startingFragmentQueryParams?: Record<string, string>;
+    startingFragmentQueryParams?: QueryDict;
     // called when we have completed a token login
     onTokenLoginCompleted?: () => void;
     // Represents the screen to display as a result of parsing the initial window.location
@@ -193,7 +195,7 @@ interface IProps { // TODO type things better
     // displayname, if any, to set on the device when logging in/registering.
     defaultDeviceDisplayName?: string;
     // A function that makes a registration URL
-    makeRegistrationUrl: (object) => string;
+    makeRegistrationUrl: (params: QueryDict) => string;
 }
 
 interface IState {
@@ -251,7 +253,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private pageChanging: boolean;
     private tokenLogin?: boolean;
     private accountPassword?: string;
-    private accountPasswordTimer?: NodeJS.Timeout;
+    private accountPasswordTimer?: number;
     private focusComposer: boolean;
     private subTitleStatus: string;
     private prevWindowWidth: number;
@@ -296,7 +298,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             if (this.screenAfterLogin.screen.startsWith("room/") && params['signurl'] && params['email']) {
                 // probably a threepid invite - try to store it
                 const roomId = this.screenAfterLogin.screen.substring("room/".length);
-                ThreepidInviteStore.instance.storeInvite(roomId, params as IThreepidInviteWireFormat);
+                ThreepidInviteStore.instance.storeInvite(roomId, params as unknown as IThreepidInviteWireFormat);
             }
         }
 
@@ -429,7 +431,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle stage
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillUpdate(props, state) {
         if (this.shouldTrackPageChange(this.state, state)) {
             this.startPageChangeTimer();
@@ -561,7 +563,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         switch (payload.action) {
             case 'MatrixActions.accountData':
                 // XXX: This is a collection of several hacks to solve a minor problem. We want to
-                // update our local state when the ID server changes, but don't want to put that in
+                // update our local state when the identity server changes, but don't want to put that in
                 // the js-sdk as we'd be then dictating how all consumers need to behave. However,
                 // this component is already bloated and we probably don't want this tiny logic in
                 // here, but there's no better place in the react-sdk for it. Additionally, we're
@@ -626,6 +628,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case 'forget_room':
                 this.forgetRoom(payload.room_id);
+                break;
+            case 'copy_room':
+                this.copyRoom(payload.room_id);
                 break;
             case 'reject_invite':
                 Modal.createTrackedDialog('Reject invitation', '', QuestionDialog, {
@@ -1099,7 +1104,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private leaveRoomWarnings(roomId: string) {
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
-        const isSpace = SettingsStore.getValue("feature_spaces") && roomToLeave?.isSpaceRoom();
+        const isSpace = SpaceStore.spacesEnabled && roomToLeave?.isSpaceRoom();
         // Show a warning if there are additional complications.
         const warnings = [];
 
@@ -1107,7 +1112,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (memberCount === 1) {
             warnings.push((
                 <span className="warning" key="only_member_warning">
-                    {' '/* Whitespace, otherwise the sentences get smashed together */ }
+                    { ' '/* Whitespace, otherwise the sentences get smashed together */ }
                     { _t("You are the only person here. " +
                         "If you leave, no one will be able to join in the future, including you.") }
                 </span>
@@ -1122,7 +1127,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             if (rule !== "public") {
                 warnings.push((
                     <span className="warning" key="non_public_warning">
-                        {' '/* Whitespace, otherwise the sentences get smashed together */ }
+                        { ' '/* Whitespace, otherwise the sentences get smashed together */ }
                         { isSpace
                             ? _t("This space is not public. You will not be able to rejoin without an invite.")
                             : _t("This room is not public. You will not be able to rejoin without an invite.") }
@@ -1137,7 +1142,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
         const warnings = this.leaveRoomWarnings(roomId);
 
-        const isSpace = SettingsStore.getValue("feature_spaces") && roomToLeave?.isSpaceRoom();
+        const isSpace = SpaceStore.spacesEnabled && roomToLeave?.isSpaceRoom();
         Modal.createTrackedDialog(isSpace ? "Leave space" : "Leave room", '', QuestionDialog, {
             title: isSpace ? _t("Leave space") : _t("Leave room"),
             description: (
@@ -1150,7 +1155,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         : _t(
                             "Are you sure you want to leave the room '%(roomName)s'?",
                             { roomName: roomToLeave.name },
-                        )}
+                        ) }
                     { warnings }
                 </span>
             ),
@@ -1191,6 +1196,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
         });
+    }
+
+    private async copyRoom(roomId: string) {
+        const roomLink = makeRoomPermalink(roomId);
+        const success = await copyPlaintext(roomLink);
+        if (!success) {
+            Modal.createTrackedDialog("Unable to copy room link", "", ErrorDialog, {
+                title: _t("Unable to copy room link"),
+                description: _t("Unable to copy a link to the room to the clipboard."),
+            });
+        }
     }
 
     /**
@@ -1687,7 +1703,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             const type = screen === "start_sso" ? "sso" : "cas";
             PlatformPeg.get().startSingleSignOn(cli, type, this.getFragmentAfterLogin());
         } else if (screen === 'groups') {
-            if (SettingsStore.getValue("feature_spaces")) {
+            if (SpaceStore.spacesEnabled) {
                 dis.dispatch({ action: "view_home_page" });
                 return;
             }
@@ -1774,7 +1790,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 subAction: params.action,
             });
         } else if (screen.indexOf('group/') === 0) {
-            if (SettingsStore.getValue("feature_spaces")) {
+            if (SpaceStore.spacesEnabled) {
                 dis.dispatch({ action: "view_home_page" });
                 return;
             }
@@ -1846,13 +1862,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private dispatchTimelineResize() {
         dis.dispatch({ action: 'timeline_resize' });
-    }
-
-    onRoomCreated(roomId: string) {
-        dis.dispatch({
-            action: "view_room",
-            room_id: roomId,
-        });
     }
 
     onRegisterClick = () => {
@@ -1936,7 +1945,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setState({ serverConfig });
     };
 
-    private makeRegistrationUrl = (params: {[key: string]: string}) => {
+    private makeRegistrationUrl = (params: QueryDict) => {
         if (this.props.startingFragmentQueryParams.referrer) {
             params.referrer = this.props.startingFragmentQueryParams.referrer;
         }
@@ -2027,7 +2036,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         {...this.state}
                         ref={this.loggedInView}
                         matrixClient={MatrixClientPeg.get()}
-                        onRoomCreated={this.onRoomCreated}
                         onRegistered={this.onRegistered}
                         currentRoomId={this.state.currentRoomId}
                     />
@@ -2037,15 +2045,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 let errorBox;
                 if (this.state.syncError && !isStoreError) {
                     errorBox = <div className="mx_MatrixChat_syncError">
-                        {messageForSyncError(this.state.syncError)}
+                        { messageForSyncError(this.state.syncError) }
                     </div>;
                 }
                 view = (
                     <div className="mx_MatrixChat_splash">
-                        {errorBox}
+                        { errorBox }
                         <Spinner />
                         <a href="#" className="mx_MatrixChat_splashButtons" onClick={this.onLogoutClick}>
-                            {_t('Logout')}
+                            { _t('Logout') }
                         </a>
                     </div>
                 );
@@ -2091,7 +2099,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     onForgotPasswordClick={showPasswordReset ? this.onForgotPasswordClick : undefined}
                     onServerConfigChange={this.onServerConfigChange}
                     fragmentAfterLogin={fragmentAfterLogin}
-                    defaultUsername={this.props.startingFragmentQueryParams.defaultUsername}
+                    defaultUsername={this.props.startingFragmentQueryParams.defaultUsername as string}
                     {...this.getServerProperties()}
                 />
             );
@@ -2108,7 +2116,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         return <ErrorBoundary>
-            {view}
+            { view }
         </ErrorBoundary>;
     }
 }

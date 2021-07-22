@@ -37,7 +37,7 @@ export const showToast = (limitType: string, onHideToast: () => void, adminConta
         key: TOAST_KEY,
         title: _t("Warning"),
         props: {
-            description: <React.Fragment>{errorText} {contactText}</React.Fragment>,
+            description: <React.Fragment>{ errorText } { contactText }</React.Fragment>,
             acceptLabel: _t("Ok"),
             onAccept: () => {
                 hideToast();

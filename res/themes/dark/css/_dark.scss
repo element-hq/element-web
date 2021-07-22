@@ -118,7 +118,7 @@ $voipcall-plinth-color: #394049;
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
-$dialpad-button-bg-color: #6F7882;
+$dialpad-button-bg-color: #394049;
 
 $roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-filter-active-bg-color: $bg-color;
@@ -227,6 +227,13 @@ $groupFilterPanel-background-blur-amount: 30px;
 
 $composer-shadow-color: rgba(0, 0, 0, 0.28);
 
+// Bubble tiles
+$eventbubble-self-bg: #143A34;
+$eventbubble-others-bg: #394049;
+$eventbubble-bg-hover: #433C23;
+$eventbubble-avatar-outline: $bg-color;
+$eventbubble-reply-color: #C1C6CD;
+
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {
@@ -287,4 +294,12 @@ $composer-shadow-color: rgba(0, 0, 0, 0.28);
 // highlight.js overrides
 .hljs-tag {
     color: inherit; // Without this they'd be weirdly blue which doesn't match the theme
+}
+
+.hljs-addition {
+    background: #1a4b59;
+}
+
+.hljs-deletion {
+    background: #53232a;
 }

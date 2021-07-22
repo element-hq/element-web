@@ -86,7 +86,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
             preview = <div className="mx_UploadConfirmDialog_previewOuter">
                 <div className="mx_UploadConfirmDialog_previewInner">
                     <div><img className="mx_UploadConfirmDialog_imagePreview" src={this.objectUrl} /></div>
-                    <div>{this.props.file.name} ({filesize(this.props.file.size)})</div>
+                    <div>{ this.props.file.name } ({ filesize(this.props.file.size) })</div>
                 </div>
             </div>;
         } else {
@@ -95,7 +95,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
                     <img className="mx_UploadConfirmDialog_fileIcon"
                         src={require("../../../../res/img/feather-customised/files.svg")}
                     />
-                    {this.props.file.name} ({filesize(this.props.file.size)})
+                    { this.props.file.name } ({ filesize(this.props.file.size) })
                 </div>
             </div>;
         }
@@ -103,7 +103,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
         let uploadAllButton;
         if (this.props.currentIndex + 1 < this.props.totalFiles) {
             uploadAllButton = <button onClick={this.onUploadAllClick}>
-                {_t("Upload all")}
+                { _t("Upload all") }
             </button>;
         }
 
@@ -115,7 +115,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
                 contentId='mx_Dialog_content'
             >
                 <div id='mx_Dialog_content'>
-                    {preview}
+                    { preview }
                 </div>
 
                 <DialogButtons primaryButton={_t('Upload')}
@@ -123,7 +123,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
                     onPrimaryButtonClick={this.onUploadClick}
                     focus={true}
                 >
-                    {uploadAllButton}
+                    { uploadAllButton }
                 </DialogButtons>
             </BaseDialog>
         );
