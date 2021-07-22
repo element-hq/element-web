@@ -38,6 +38,10 @@ export interface IMediaEventContent {
     info?: {
         thumbnail_url?: string; // eslint-disable-line camelcase
         thumbnail_file?: IEncryptedFile; // eslint-disable-line camelcase
+        thumbnail_info?: { // eslint-disable-line camelcase
+            w: number;
+            h: number;
+        };
         mimetype: string;
         w?: number;
         h?: number;
