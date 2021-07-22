@@ -645,8 +645,10 @@ export default class CallView extends React.Component<IProps, IState> {
 
         let sidebar;
         if (
-            (!isOnHold && !transfereeCall) &&
-            sidebarShown && (isVideoCall || someoneIsScreensharing)
+            !isOnHold &&
+            !transfereeCall &&
+            sidebarShown &&
+            (isVideoCall || someoneIsScreensharing)
         ) {
             sidebar = (
                 <CallViewSidebar
