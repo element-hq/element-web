@@ -1,23 +1,30 @@
 module.exports = {
-    "extends": ["matrix-org", "matrix-org/react"],
-    "env": {
-        "browser": true,
-        "node": true,
+    plugins: ["matrix-org"],
+    extends: [
+        "plugin:matrix-org/babel",
+        "plugin:matrix-org/react",
+    ],
+    env: {
+        browser: true,
+        node: true,
     },
-    "rules": {
+    rules: {
+        // Things we do that break the ideal style
         "quotes": "off",
     },
-    "overrides": [{
-        "files": ["src/**/*.{ts,tsx}"],
-        "extends": ["matrix-org/ts", "matrix-org/react"],
-        "env": {
-            "browser": true,
-        },
-        "rules": {
-            "quotes": "off",
-            // While converting to ts we allow this
-            "@typescript-eslint/no-explicit-any": "off",
+    overrides: [{
+        files: ["src/**/*.{ts,tsx}"],
+        extends: [
+            "plugin:matrix-org/typescript",
+            "plugin:matrix-org/react",
+        ],
+        rules: {
+            // Things we do that break the ideal style
             "prefer-promise-reject-errors": "off",
+            "quotes": "off",
+
+            // We disable this while we're transitioning
+            "@typescript-eslint/no-explicit-any": "off",
         },
     }],
 };

@@ -18,8 +18,8 @@ limitations under the License.
 */
 
 import BasePlatform from 'matrix-react-sdk/src/BasePlatform';
-import {_t} from 'matrix-react-sdk/src/languageHandler';
-import {getVectorConfig} from "../getconfig";
+import { _t } from 'matrix-react-sdk/src/languageHandler';
+import { getVectorConfig } from "../getconfig";
 
 import Favicon from "../../favicon";
 
@@ -49,7 +49,7 @@ export default abstract class VectorBasePlatform extends BasePlatform {
         return this._favicon = new Favicon();
     }
 
-    _updateFavicon() {
+    private updateFavicon() {
         let bgColor = "#d00";
         let notif: string | number = this.notificationCount;
 
@@ -64,13 +64,13 @@ export default abstract class VectorBasePlatform extends BasePlatform {
     setNotificationCount(count: number) {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
-        this._updateFavicon();
+        this.updateFavicon();
     }
 
     setErrorStatus(errorDidOccur: boolean) {
         if (this.errorDidOccur === errorDidOccur) return;
         super.setErrorStatus(errorDidOccur);
-        this._updateFavicon();
+        this.updateFavicon();
     }
 
     /**
