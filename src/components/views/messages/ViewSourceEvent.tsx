@@ -15,18 +15,21 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
+import { MatrixEvent } from 'matrix-js-sdk/src';
 import classNames from 'classnames';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
-@replaceableComponent("views.messages.ViewSourceEvent")
-export default class ViewSourceEvent extends React.PureComponent {
-    static propTypes = {
-        /* the MatrixEvent to show */
-        mxEvent: PropTypes.object.isRequired,
-    };
+interface IProps {
+    mxEvent: MatrixEvent;
+}
 
+interface IState {
+    expanded: boolean;
+}
+
+@replaceableComponent("views.messages.ViewSourceEvent")
+export default class ViewSourceEvent extends React.PureComponent<IProps, IState> {
     constructor(props) {
         super(props);
 
@@ -35,7 +38,7 @@ export default class ViewSourceEvent extends React.PureComponent {
         };
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         const { mxEvent } = this.props;
 
         const client = MatrixClientPeg.get();
@@ -46,15 +49,15 @@ export default class ViewSourceEvent extends React.PureComponent {
         }
     }
 
-    onToggle = (ev) => {
+    private onToggle = (ev: React.MouseEvent) => {
         ev.preventDefault();
         const { expanded } = this.state;
         this.setState({
             expanded: !expanded,
         });
-    }
+    };
 
-    render() {
+    public render(): React.ReactNode {
         const { mxEvent } = this.props;
         const { expanded } = this.state;
 

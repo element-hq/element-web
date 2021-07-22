@@ -219,12 +219,15 @@ limitations under the License.
 
         display: flex;
         align-items: center;
-        justify-content: center;
 
         .mx_EventTile_avatar {
             position: static;
             order: -1;
             margin-right: 5px;
+        }
+
+        .mx_EventTile_e2eIcon {
+            margin-left: 9px;
         }
     }
 
