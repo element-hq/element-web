@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import { _t } from '../languageHandler';
-import { join } from './ReactUtils';
+import { jsxJoin } from './ReactUtils';
 
 /**
  * formats numbers to fit into ~3 characters, suitable for badge counts
@@ -114,9 +114,9 @@ export function formatCommaSeparatedList(items: Array<string | JSX.Element>, ite
         return items[0];
     } else if (remaining > 0) {
         items = items.slice(0, itemLimit);
-        return _t("%(items)s and %(count)s others", { items: join(items, ', '), count: remaining } );
+        return _t("%(items)s and %(count)s others", { items: jsxJoin(items, ', '), count: remaining } );
     } else {
         const lastItem = items.pop();
-        return _t("%(items)s and %(lastItem)s", { items: join(items, ', '), lastItem: lastItem });
+        return _t("%(items)s and %(lastItem)s", { items: jsxJoin(items, ', '), lastItem: lastItem });
     }
 }

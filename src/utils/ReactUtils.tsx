@@ -22,7 +22,7 @@ import React from "react";
  * @param joiner the string/JSX.Element to join with
  * @returns the joined array
  */
-export function join(array: Array<string | JSX.Element>, joiner?: string | JSX.Element): JSX.Element {
+export function jsxJoin(array: Array<string | JSX.Element>, joiner?: string | JSX.Element): JSX.Element {
     const newArray = [];
     array.forEach((element, index) => {
         newArray.push(element, (index === array.length - 1) ? null : joiner);

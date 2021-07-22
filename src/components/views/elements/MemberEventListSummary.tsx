@@ -29,7 +29,7 @@ import defaultDispatcher from '../../../dispatcher/dispatcher';
 import { RightPanelPhases } from '../../../stores/RightPanelStorePhases';
 import { Action } from '../../../dispatcher/actions';
 import { SetRightPanelPhasePayload } from '../../../dispatcher/payloads/SetRightPanelPhasePayload';
-import { join } from '../../../utils/ReactUtils';
+import { jsxJoin } from '../../../utils/ReactUtils';
 import { EventType } from 'matrix-js-sdk/src/@types/event';
 
 const onPinnedMessagesClick = (): void => {
@@ -138,7 +138,7 @@ export default class MemberEventListSummary extends React.Component<IProps> {
             return null;
         }
 
-        return join(summaries, ", ");
+        return jsxJoin(summaries, ", ");
     }
 
     /**
