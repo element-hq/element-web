@@ -646,17 +646,12 @@ export default class CallView extends React.Component<IProps, IState> {
         let sidebar;
         if (
             (!isOnHold && !transfereeCall) &&
-            (
-                (sidebarShown && isVideoCall) ||
-                (someoneIsScreensharing && sidebarShown) ||
-                isScreensharing
-            )
+            sidebarShown && (isVideoCall || someoneIsScreensharing)
         ) {
             sidebar = (
                 <CallViewSidebar
                     feeds={this.state.secondaryFeeds}
                     call={this.props.call}
-                    hideLocalFeeds={isScreensharing && !sidebarShown}
                     pipMode={this.props.pipMode}
                 />
             );

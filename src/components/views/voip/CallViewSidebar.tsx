@@ -23,15 +23,12 @@ import classNames from "classnames";
 interface IProps {
     feeds: Array<CallFeed>;
     call: MatrixCall;
-    hideLocalFeeds: boolean;
     pipMode: boolean;
 }
 
 export default class CallViewSidebar extends React.Component<IProps> {
     render() {
         const feeds = this.props.feeds.map((feed) => {
-            if (feed.isLocal() && this.props.hideLocalFeeds) return;
-
             return (
                 <VideoFeed
                     key={feed.stream.id}
