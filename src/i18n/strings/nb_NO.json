@@ -1981,5 +1981,13 @@
     "Costa Rica": "Costa Rica",
     "Cook Islands": "Cook-øyene",
     "All keys backed up": "Alle nøkler er sikkerhetskopiert",
-    "Secret storage:": "Hemmelig lagring:"
+    "Secret storage:": "Hemmelig lagring:",
+    "Integration manager": "Integreringsbehandler",
+    "Identity server is": "Identitetstjeneren er",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Integreringsbehandlere mottar oppsettsdata, og kan endre på moduler, sende rominvitasjoner, og bestemme styrkenivåer på dine vegne.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Bruk en integreringsbehandler til å behandle botter, moduler, og klistremerkepakker.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Bruk en integreringsbehandler <b>(%(serverName)s)</b> til å behandle botter, moduler, og klistremerkepakker.",
+    "Identity server": "Identitetstjener",
+    "Identity server (%(server)s)": "Identitetstjener (%(server)s)",
+    "Could not connect to identity server": "Kunne ikke koble til identitetsserveren"
 }
