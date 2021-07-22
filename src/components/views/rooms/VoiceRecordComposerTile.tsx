@@ -189,7 +189,6 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         if (!this.state.recorder) return null; // no recorder means we're not recording: no waveform
 
         if (this.state.recordingPhase !== RecordingState.Started) {
-            // TODO: @@ TR: Should we disable this during upload? What does a failed upload look like?
             return <RecordingPlayback playback={this.state.recorder.getPlayback()} />;
         }
 

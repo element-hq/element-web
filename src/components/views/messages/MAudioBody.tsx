@@ -76,7 +76,6 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
 
     public render() {
         if (this.state.error) {
-            // TODO: @@TR: Verify error state
             return (
                 <span className="mx_MAudioBody">
                     <img src={require("../../../../res/img/warning.svg")} width="16" height="16" />
@@ -86,7 +85,6 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         }
 
         if (!this.state.playback) {
-            // TODO: @@TR: Verify loading/decrypting state
             return (
                 <span className="mx_MAudioBody">
                     <InlineSpinner />
