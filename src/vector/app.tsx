@@ -210,6 +210,7 @@ async function verifyServerConfig(fragParams) {
         let serverName = null;
         if (fragParams.serverName) {
             serverName = fragParams.serverName;
+            console.log("Using server_name from fragParams, ignoring config options.");
         } else {
             serverName = config['default_server_name'];
             const hsUrl = config['default_hs_url'];
