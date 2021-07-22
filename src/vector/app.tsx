@@ -230,8 +230,9 @@ async function verifyServerConfig(fragParams) {
             }
 
             if (hsUrl) {
-                console.log("Config uses a default_hs_url - constructing a default_server_config using this " +
-                            "information");
+                console.log(
+                    "Config uses a default_hs_url - constructing a default_server_config using this information",
+                );
                 console.warn(
                     "DEPRECATED CONFIG OPTION: In the future, default_hs_url will not be accepted. Please use " +
                     "default_server_config instead.",
