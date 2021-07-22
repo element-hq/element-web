@@ -1142,6 +1142,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                         { ircTimestamp }
                         { sender }
                         { ircPadlock }
+                        { avatar }
                         <div className="mx_EventTile_line" key="mx_EventTile_line">
                             { groupTimestamp }
                             { groupPadlock }
@@ -1162,7 +1163,6 @@ export default class EventTile extends React.Component<IProps, IState> {
                         </div>
                         { reactionsRow }
                         { msgOption }
-                        { avatar }
                     </>)
                 );
             }
