@@ -795,7 +795,6 @@
     "If disabled, you can still add Direct Messages to Personal Spaces. If enabled, you'll automatically see everyone who is a member of the Space.": "If disabled, you can still add Direct Messages to Personal Spaces. If enabled, you'll automatically see everyone who is a member of the Space.",
     "Show notification badges for People in Spaces": "Show notification badges for People in Spaces",
     "Show options to enable 'Do not disturb' mode": "Show options to enable 'Do not disturb' mode",
-    "Send and receive voice messages": "Send and receive voice messages",
     "Render LaTeX maths in messages": "Render LaTeX maths in messages",
     "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.": "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.",
     "Message Pinning": "Message Pinning",
