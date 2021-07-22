@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Playback, PlaybackState } from "../../../voice/Playback";
+import { Playback, PlaybackState } from "../../../audio/Playback";
 import React, { createRef, ReactNode, RefObject } from "react";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import PlayPauseButton from "./PlayPauseButton";

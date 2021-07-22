@@ -16,14 +16,14 @@ limitations under the License.
 
 import React from "react";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { Playback } from "../../../voice/Playback";
+import { Playback } from "../../../audio/Playback";
 import InlineSpinner from '../elements/InlineSpinner';
 import { _t } from "../../../languageHandler";
 import AudioPlayer from "../audio_messages/AudioPlayer";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 import MFileBody from "./MFileBody";
 import { IBodyProps } from "./IBodyProps";
-import { PlaybackManager } from "../../../voice/PlaybackManager";
+import { PlaybackManager } from "../../../audio/PlaybackManager";
 
 interface IState {
     error?: Error;

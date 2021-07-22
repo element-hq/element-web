@@ -20,7 +20,7 @@ import React, { ReactNode } from "react";
 import {
     RecordingState,
     VoiceRecording,
-} from "../../../voice/VoiceRecording";
+} from "../../../audio/VoiceRecording";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import classNames from "classnames";

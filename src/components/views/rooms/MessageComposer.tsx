@@ -35,7 +35,7 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import VoiceRecordComposerTile from "./VoiceRecordComposerTile";
 import { VoiceRecordingStore } from "../../../stores/VoiceRecordingStore";
-import { RecordingState } from "../../../voice/VoiceRecording";
+import { RecordingState } from "../../../audio/VoiceRecording";
 import Tooltip, { Alignment } from "../elements/Tooltip";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 import { E2EStatus } from '../../../utils/ShieldUtils';
