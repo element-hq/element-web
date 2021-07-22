@@ -216,17 +216,13 @@ export default class ImageView extends React.Component<IProps, IState> {
     }
 
     private onWheel = (ev: WheelEvent) => {
-        ev.stopPropagation();
-        ev.preventDefault();
-        const { deltaY } = normalizeWheelEvent(ev);
-
         if (ev.target === this.image.current) {
+            ev.stopPropagation();
+            ev.preventDefault();
+
+            const { deltaY } = normalizeWheelEvent(ev);
             // Zoom in on the point on the image targeted by the cursor
             this.zoomDelta(-deltaY * ZOOM_COEFFICIENT, ev.offsetX, ev.offsetY);
-        } else {
-            // The user is scrolling outside of the image, so we can't really
-            // get a targeted point. Instead, we'll just zoom in on the center.
-            this.zoomDelta(-deltaY * ZOOM_COEFFICIENT);
         }
     };
 
