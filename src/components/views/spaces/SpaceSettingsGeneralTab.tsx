@@ -21,7 +21,6 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
-import { SpaceFeedbackPrompt } from "../../structures/SpaceRoomView";
 import SpaceBasicSettings from "./SpaceBasicSettings";
 import { avatarUrlForRoom } from "../../../Avatar";
 import { IDialogProps } from "../dialogs/IDialogProps";
@@ -95,8 +94,6 @@ const SpaceSettingsGeneralTab = ({ matrixClient: cli, space, onFinished }: IProp
         <div>{ _t("Edit settings relating to your space.") }</div>
 
         { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
-
-        <SpaceFeedbackPrompt />
 
         <div className="mx_SettingsTab_section">
             <SpaceBasicSettings

@@ -35,7 +35,6 @@ import StyledCheckbox from "../elements/StyledCheckbox";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { sortRooms } from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 import ProgressBar from "../elements/ProgressBar";
-import { SpaceFeedbackPrompt } from "../../structures/SpaceRoomView";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import TruncatedList from "../elements/TruncatedList";
@@ -354,8 +353,6 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ space, onCreateRoomClick, 
                 </>}
             />
         </MatrixClientContext.Provider>
-
-        <SpaceFeedbackPrompt onClick={() => onFinished(false)} />
     </BaseDialog>;
 };
 

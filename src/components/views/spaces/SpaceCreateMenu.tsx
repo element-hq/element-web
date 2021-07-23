@@ -26,16 +26,14 @@ import createRoom from "../../../createRoom";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { SpaceAvatar } from "./SpaceBasicSettings";
 import AccessibleButton from "../elements/AccessibleButton";
-import { BetaPill } from "../beta/BetaCard";
-import defaultDispatcher from "../../../dispatcher/dispatcher";
-import { Action } from "../../../dispatcher/actions";
-import { UserTab } from "../dialogs/UserSettingsDialog";
 import Field from "../elements/Field";
 import withValidation from "../elements/Validation";
-import { SpaceFeedbackPrompt } from "../../structures/SpaceRoomView";
 import { Preset } from "matrix-js-sdk/src/@types/partials";
 import { ICreateRoomStateEvent } from "matrix-js-sdk/src/@types/requests";
 import RoomAliasField from "../elements/RoomAliasField";
+import SdkConfig from "../../../SdkConfig";
+import Modal from "../../../Modal";
+import BetaFeedbackDialog from "../dialogs/BetaFeedbackDialog";
 
 const SpaceCreateMenuType = ({ title, description, className, onClick }) => {
     return (
@@ -64,6 +62,26 @@ const spaceNameValidator = withValidation({
 const nameToAlias = (name: string, domain: string): string => {
     const localpart = name.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9_-]+/gi, "");
     return `#${localpart}:${domain}`;
+};
+
+// XXX: Temporary for the Spaces release only
+const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
+    if (!SdkConfig.get().bug_report_endpoint_url) return null;
+
+    return <div className="mx_SpaceFeedbackPrompt">
+        <hr />
+        <div>
+            <span className="mx_SpaceFeedbackPrompt_text">{ _t("Spaces are a new feature.") }</span>
+            <AccessibleButton kind="link" onClick={() => {
+                if (onClick) onClick();
+                Modal.createTrackedDialog("Beta Feedback", "feature_spaces", BetaFeedbackDialog, {
+                    featureId: "feature_spaces",
+                });
+            }}>
+                { _t("Give feedback.") }
+            </AccessibleButton>
+        </div>
+    </div>;
 };
 
 const SpaceCreateMenu = ({ onFinished }) => {
@@ -252,13 +270,6 @@ const SpaceCreateMenu = ({ onFinished }) => {
         managed={false}
     >
         <FocusLock returnFocus={true}>
-            <BetaPill onClick={() => {
-                onFinished();
-                defaultDispatcher.dispatch({
-                    action: Action.ViewUserSettings,
-                    initialTabId: UserTab.Labs,
-                });
-            }} />
             { body }
         </FocusLock>
     </ContextMenu>;

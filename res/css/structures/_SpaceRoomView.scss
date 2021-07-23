@@ -342,12 +342,17 @@ $SpaceRoomViewInnerWidth: 428px;
             margin: 0 0 20px;
         }
 
-        .mx_SpaceFeedbackPrompt {
-            margin-bottom: 16px;
+        .mx_SpaceFeedbackPrompt_topRight {
+            padding: 7px; // 8px - 1px border
+            border: 1px solid $menu-border-color;
+            border-radius: 8px;
+            color: $secondary-fg-color;
+            font-size: $font-15px;
+            line-height: $font-24px;
+            float: right;
 
-            // hide the HR as we have our own
-            & + hr {
-                display: none;
+            & + .mx_BaseAvatar {
+                clear: both;
             }
         }
     }

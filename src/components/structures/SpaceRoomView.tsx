@@ -92,26 +92,6 @@ enum Phase {
     PrivateExistingRooms,
 }
 
-// XXX: Temporary for the Spaces Beta only
-export const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
-    if (!SdkConfig.get().bug_report_endpoint_url) return null;
-
-    return <div className="mx_SpaceFeedbackPrompt">
-        <hr />
-        <div>
-            <span className="mx_SpaceFeedbackPrompt_text">{ _t("Spaces are a beta feature.") }</span>
-            <AccessibleButton kind="link" onClick={() => {
-                if (onClick) onClick();
-                Modal.createTrackedDialog("Beta Feedback", "feature_spaces", BetaFeedbackDialog, {
-                    featureId: "feature_spaces",
-                });
-            }}>
-                { _t("Feedback") }
-            </AccessibleButton>
-        </div>
-    </div>;
-};
-
 const RoomMemberCount = ({ room, children }) => {
     const members = useRoomMembers(room);
     const count = members.length;
@@ -414,6 +394,16 @@ const SpaceLanding = ({ space }) => {
     };
 
     return <div className="mx_SpaceRoomView_landing">
+        <div className="mx_SpaceFeedbackPrompt_topRight">
+            { _t("Spaces are a new feature.") }&nbsp;
+            <AccessibleButton kind="link" onClick={() => {
+                Modal.createTrackedDialog("Beta Feedback", "feature_spaces", BetaFeedbackDialog, {
+                    featureId: "feature_spaces",
+                });
+            }}>
+                { _t("Give feedback.") }
+            </AccessibleButton>
+        </div>
         <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
         <div className="mx_SpaceRoomView_landing_name">
             <RoomName room={space}>
@@ -438,7 +428,6 @@ const SpaceLanding = ({ space }) => {
                 </div>
             ) }
         </RoomTopic>
-        <SpaceFeedbackPrompt />
         <hr />
 
         <SpaceHierarchy
@@ -529,7 +518,6 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
                 value={buttonLabel}
             />
         </div>
-        <SpaceFeedbackPrompt />
     </div>;
 };
 
@@ -550,11 +538,6 @@ const SpaceAddExistingRooms = ({ space, onFinished }) => {
             }
             onFinished={onFinished}
         />
-
-        <div className="mx_SpaceRoomView_buttons">
-
-        </div>
-        <SpaceFeedbackPrompt />
     </div>;
 };
 
@@ -574,7 +557,6 @@ const SpaceSetupPublicShare = ({ justCreatedOpts, space, onFinished, createdRoom
                 { createdRooms ? _t("Go to my first room") : _t("Go to my space") }
             </AccessibleButton>
         </div>
-        <SpaceFeedbackPrompt />
     </div>;
 };
 
@@ -603,9 +585,8 @@ const SpaceSetupPrivateScope = ({ space, justCreatedOpts, onFinished }) => {
         </AccessibleButton>
         <div className="mx_SpaceRoomView_betaWarning">
             <h3>{ _t("Teammates might not be able to view or join any private rooms you make.") }</h3>
-            <p>{ _t("We're working on this as part of the beta, but just want to let you know.") }</p>
+            <p>{ _t("We're working on this, but just want to let you know.") }</p>
         </div>
-        <SpaceFeedbackPrompt />
     </div>;
 };
 
@@ -728,7 +709,6 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
                 value={buttonLabel}
             />
         </div>
-        <SpaceFeedbackPrompt />
     </div>;
 };
 
