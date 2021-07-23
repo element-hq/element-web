@@ -220,3 +220,13 @@ Currently, the following UI feature flags are supported:
   user.
 * `UIFeature.roomHistorySettings` - Whether or not the room history settings are shown to the user.
   This should only be used if the room history visibility options are managed by the server.
+
+URL Parameters
+==============
+
+* `serverName` - Provide the default server used on the login and registration pages. Examples:
+    * https://app.element.io/#/login?serverName=kde.org
+    * https://app.element.io/#/register?serverName=kde.org
+* `defaultUsername` - Provide the default username used on the login page. Example:
+    * https://app.element.io/#/login?defaultUsername=alice
+
