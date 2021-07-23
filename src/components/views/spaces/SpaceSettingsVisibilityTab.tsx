@@ -18,13 +18,13 @@ import React, { useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { GuestAccess, HistoryVisibility, JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import AliasSettings from "../room_settings/AliasSettings";
 import { useStateToggle } from "../../../hooks/useStateToggle";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
-import { GuestAccess, HistoryVisibility, JoinRule } from "../settings/tabs/room/SecurityRoomSettingsTab";
 import StyledRadioGroup from "../elements/StyledRadioGroup";
 
 interface IProps {
