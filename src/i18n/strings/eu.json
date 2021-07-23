@@ -2293,5 +2293,17 @@
     "Wrong file type": "Okerreko fitxategi-mota",
     "Looks good!": "Itxura ona du!",
     "Search rooms": "Bilatu gelak",
-    "User menu": "Erabiltzailea-menua"
+    "User menu": "Erabiltzailea-menua",
+    "Integration manager": "Integrazio-kudeatzailea",
+    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Zure %(brand)s aplikazioak ez dizu hau egiteko integrazio kudeatzaile bat erabiltzen uzten. Kontaktatu administratzaileren batekin.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Trepeta hau erabiltzean <helpIcon />  %(widgetDomain)s domeinuarekin eta zure integrazio kudeatzailearekin datuak partekatu daitezke.",
+    "Identity server is": "Identitate zerbitzaria",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Integrazio kudeatzaileek konfigurazio datuak jasotzen dituzte, eta trepetak aldatu ditzakete, gelara gonbidapenak bidali, eta botere mailak zure izenean ezarri.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Erabili integrazio kudeatzaile bat botak, trepetak eta eranskailu multzoak kudeatzeko.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Erabili <b>(%(serverName)s)</b> integrazio kudeatzailea botak, trepetak eta eranskailu multzoak kudeatzeko.",
+    "Identity server": "Identitate zerbitzaria",
+    "Identity server (%(server)s)": "Identitate-zerbitzaria (%(server)s)",
+    "Could not connect to identity server": "Ezin izan da identitate-zerbitzarira konektatu",
+    "Not a valid identity server (status code %(code)s)": "Ez da identitate zerbitzari baliogarria (egoera-mezua %(code)s)",
+    "Identity server URL must be HTTPS": "Identitate zerbitzariaren URL-a HTTPS motakoa izan behar du"
 }
