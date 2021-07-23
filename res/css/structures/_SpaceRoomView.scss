@@ -234,6 +234,9 @@ $SpaceRoomViewInnerWidth: 428px;
     }
 
     .mx_SpaceRoomView_landing {
+        display: flex;
+        flex-direction: column;
+
         > .mx_BaseAvatar_image,
         > .mx_BaseAvatar > .mx_BaseAvatar_image {
             border-radius: 12px;
@@ -340,6 +343,7 @@ $SpaceRoomViewInnerWidth: 428px;
 
         .mx_SearchBox {
             margin: 0 0 20px;
+            flex: 0;
         }
 
         .mx_SpaceFeedbackPrompt {
