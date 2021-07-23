@@ -28,6 +28,8 @@ import { _t } from "../languageHandler";
 import SpacePublicShare from "../components/views/spaces/SpacePublicShare";
 import InfoDialog from "../components/views/dialogs/InfoDialog";
 import { showRoomInviteDialog } from "../RoomInvite";
+import CreateSubspaceDialog from "../components/views/dialogs/CreateSubspaceDialog";
+import AddExistingSubspaceDialog from "../components/views/dialogs/AddExistingSubspaceDialog";
 
 export const shouldShowSpaceSettings = (space: Room) => {
     const userId = space.client.getUserId();
@@ -54,18 +56,18 @@ export const showSpaceSettings = (space: Room) => {
     }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
 };
 
-export const showAddExistingRooms = async (space: Room) => {
+export const showAddExistingRooms = async (space: Room): Promise<[boolean]> => {
     return Modal.createTrackedDialog(
         "Space Landing",
         "Add Existing",
         AddExistingToSpaceDialog,
         {
-            matrixClient: space.client,
-            onCreateRoomClick: showCreateNewRoom,
+            onCreateRoomClick: () => showCreateNewRoom(space),
+            onAddSubspaceClick: () => showAddExistingSubspace(space),
             space,
         },
         "mx_AddExistingToSpaceDialog_wrapper",
-    ).finished;
+    ).finished as Promise<[boolean]>;
 };
 
 export const showCreateNewRoom = async (space: Room) => {
@@ -101,4 +103,30 @@ export const showSpaceInvite = (space: Room, initialText = "") => {
     } else {
         showRoomInviteDialog(space.roomId, initialText);
     }
+};
+
+export const showAddExistingSubspace = async (space: Room): Promise<[boolean]> => {
+    return Modal.createTrackedDialog(
+        "Space Landing",
+        "Create Subspace",
+        AddExistingSubspaceDialog,
+        {
+            space,
+            onCreateSubspaceClick: () => showCreateNewSubspace(space),
+        },
+        "mx_AddExistingToSpaceDialog_wrapper",
+    ).finished as Promise<[boolean]>;
+};
+
+export const showCreateNewSubspace = async (space: Room): Promise<[boolean]> => {
+    return Modal.createTrackedDialog(
+        "Space Landing",
+        "Create Subspace",
+        CreateSubspaceDialog,
+        {
+            space,
+            onAddExistingSpaceClick: () => showAddExistingSubspace(space),
+        },
+        "mx_CreateSubspaceDialog_wrapper",
+    ).finished as Promise<[boolean]>;
 };

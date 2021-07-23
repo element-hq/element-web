@@ -47,13 +47,24 @@ import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import { SetRightPanelPhasePayload } from "../../dispatcher/payloads/SetRightPanelPhasePayload";
 import { useStateArray } from "../../hooks/useStateArray";
 import SpacePublicShare from "../views/spaces/SpacePublicShare";
-import { shouldShowSpaceSettings, showAddExistingRooms, showCreateNewRoom, showSpaceSettings } from "../../utils/space";
+import {
+    shouldShowSpaceSettings,
+    showAddExistingRooms,
+    showCreateNewRoom,
+    showCreateNewSubspace,
+    showSpaceSettings,
+} from "../../utils/space";
 import { showRoom, SpaceHierarchy } from "./SpaceRoomDirectory";
 import MemberAvatar from "../views/avatars/MemberAvatar";
 import { useStateToggle } from "../../hooks/useStateToggle";
 import SpaceStore from "../../stores/SpaceStore";
 import FacePile from "../views/elements/FacePile";
-import { AddExistingToSpace } from "../views/dialogs/AddExistingToSpaceDialog";
+import {
+    AddExistingToSpace,
+    defaultDmsRenderer,
+    defaultRoomsRenderer,
+    defaultSpacesRenderer,
+} from "../views/dialogs/AddExistingToSpaceDialog";
 import { ChevronFace, ContextMenuButton, useContextMenu } from "./ContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
@@ -347,6 +358,22 @@ const SpaceLandingAddButton = ({ space, onNewRoomAdded }) => {
                         }
                     }}
                 />
+                <IconizedContextMenuOption
+                    label={_t("Add subspace")}
+                    iconClassName="mx_RoomList_iconPlus"
+                    onClick={async (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        closeMenu();
+
+                        const [added] = await showCreateNewSubspace(space);
+                        if (added) {
+                            onNewRoomAdded();
+                        }
+                    }}
+                >
+                    <BetaPill />
+                </IconizedContextMenuOption>
             </IconizedContextMenuOptionList>
         </IconizedContextMenu>;
     }
@@ -548,12 +575,13 @@ const SpaceAddExistingRooms = ({ space, onFinished }) => {
                     { _t("Skip for now") }
                 </AccessibleButton>
             }
+            filterPlaceholder={_t("Search for rooms or spaces")}
             onFinished={onFinished}
+            roomsRenderer={defaultRoomsRenderer}
+            spacesRenderer={defaultSpacesRenderer}
+            dmsRenderer={defaultDmsRenderer}
         />
 
-        <div className="mx_SpaceRoomView_buttons">
-
-        </div>
         <SpaceFeedbackPrompt />
     </div>;
 };
