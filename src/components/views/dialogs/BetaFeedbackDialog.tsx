@@ -34,17 +34,14 @@ interface IProps extends IDialogProps {
 const BetaFeedbackDialog: React.FC<IProps> = ({ featureId, onFinished }) => {
     const info = SettingsStore.getBetaInfo(featureId);
 
-    const extraData = SettingsStore.getBetaInfo(featureId)?.extraSettings.reduce((o, k) => {
-        o[k] = SettingsStore.getValue(k);
-        return o;
-    }, {});
-
     return <GenericFeatureFeedbackDialog
         title={_t("%(featureName)s beta feedback", { featureName: info.title })}
         subheading={_t(info.feedbackSubheading)}
         onFinished={onFinished}
         rageshakeLabel={info.feedbackLabel}
-        rageshakeData={extraData}
+        rageshakeData={Object.fromEntries((SettingsStore.getBetaInfo(featureId)?.extraSettings || []).map(k => {
+            return SettingsStore.getValue(k);
+        }))}
     >
         <AccessibleButton kind="link" onClick={() => {
             onFinished(false);
