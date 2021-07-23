@@ -156,6 +156,7 @@ limitations under the License.
         position: absolute;
         top: 0;
         line-height: 1;
+        z-index: 9;
         img {
             box-shadow: 0 0 0 3px $eventbubble-avatar-outline;
             border-radius: 50%;
