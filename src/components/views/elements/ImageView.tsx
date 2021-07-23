@@ -86,10 +86,10 @@ export default class ImageView extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
 
-        const { thumbnailInfo, width } = this.props;
+        const { thumbnailInfo } = this.props;
 
         this.state = {
-            zoom: thumbnailInfo?.width / width ?? 0,
+            zoom: 0, // We default to 0 and override this in imageLoaded once we have naturalSize
             minZoom: MAX_SCALE,
             maxZoom: MAX_SCALE,
             rotation: 0,
@@ -120,7 +120,8 @@ export default class ImageView extends React.Component<IProps, IState> {
     private previousX = 0;
     private previousY = 0;
 
-    private loaded = false;
+    private animatingLoading = false;
+    private imageIsLoaded = false;
 
     componentDidMount() {
         // We have to use addEventListener() because the listener
@@ -139,12 +140,25 @@ export default class ImageView extends React.Component<IProps, IState> {
     }
 
     private imageLoaded = async () => {
+        // First, we calculate the zoom, so that the image has the same size as
+        // the thumbnail
+        const { thumbnailInfo } = this.props;
+        if (thumbnailInfo?.width) {
+            await this.setState({ zoom: thumbnailInfo.width / this.image.current.naturalWidth });
+        }
+
+        // Once the zoom is set, we the image is considered loaded and we can
+        // start animating it into the center of the screen
+        this.imageIsLoaded = true;
+        this.animatingLoading = true;
         this.setZoomAndRotation();
         await this.setState({
             translationX: 0,
             translationY: 0,
         });
-        this.loaded = true;
+
+        // Once the position is set, there is no need to animate anymore
+        this.animatingLoading = false;
     };
 
     private recalculateZoom = () => {
@@ -394,8 +408,8 @@ export default class ImageView extends React.Component<IProps, IState> {
         const zoomingDisabled = this.state.maxZoom === this.state.minZoom;
 
         let transition;
-        if (!this.loaded) transition = "transform 300ms ease 0s";
-        else if (this.state.moving) transition = null;
+        if (this.animatingLoading) transition = "transform 300ms ease 0s";
+        else if (this.state.moving || !this.imageIsLoaded) transition = null;
         else transition = "transform 200ms ease 0s";
 
         let cursor;
