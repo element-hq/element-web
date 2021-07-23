@@ -107,7 +107,7 @@ import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 import SoftLogout from './auth/SoftLogout';
 import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../utils/strings";
-import { Anonymity, getAnalytics, getPlatformProperties } from '../../PosthogAnalytics';
+import { Anonymity, getAnalytics, getAnonymityFromSettings, getPlatformProperties } from '../../PosthogAnalytics';
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -390,7 +390,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         const analytics = getAnalytics();
-        analytics.init(SettingsStore.getValue("analyticsOptIn") ? Anonymity.Pseudonymous : Anonymity.Anonymous);
+        analytics.init(getAnonymityFromSettings());
+        // note this requires a network request in the browser, so some events can potentially
+        // before before registerSuperProperties has been called
         getPlatformProperties().then((properties) => analytics.registerSuperProperties(properties));
 
         CountlyAnalytics.instance.enable(/* anonymous = */ true);

@@ -1,6 +1,7 @@
 import posthog, { PostHog } from 'posthog-js';
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
+import SettingsStore from './settings/SettingsStore';
 
 interface IEvent {
     // The event name that will be used by PostHog.
@@ -78,9 +79,13 @@ export async function getRedactedCurrentLocation(origin: string, hash: string, p
 
 export class PosthogAnalytics {
     private anonymity = Anonymity.Anonymous;
-    private initialised = false;
     private posthog?: PostHog = null;
+
+    // set true during init() if posthog config is present
     private enabled = false;
+
+    // set to true after init() has been called
+    private initialised = false;
 
     private static _instance = null;
 
@@ -155,7 +160,9 @@ export class PosthogAnalytics {
     }
 
     public registerSuperProperties(properties) {
-        this.posthog.register(properties);
+        if (this.enabled) {
+            this.posthog.register(properties);
+        }
     }
 
     public isInitialised() {
@@ -247,4 +254,25 @@ export async function getPlatformProperties() {
 
 export function getAnalytics(): PosthogAnalytics {
     return PosthogAnalytics.instance();
+}
+
+export function getAnonymityFromSettings(): Anonymity {
+    // determine the current anonymity level based on curernt user settings
+
+    // "Send anonymous usage data which helps us improve Element. This will use a cookie."
+    const analyticsOptIn = SettingsStore.getValue("analyticsOptIn");
+
+    // "Send pseudonymous usage data which helps us improve Element. This will use a cookie."
+    const pseudonumousOptIn = SettingsStore.getValue("pseudonymousAnalyticsOptIn");
+
+    let anonymity;
+    if (pseudonumousOptIn) {
+        anonymity = Anonymity.Pseudonymous;
+    } else if (analyticsOptIn) {
+        anonymity = Anonymity.Anonymous;
+    } else {
+        anonymity = Anonymity.Disabled;
+    }
+
+    return anonymity;
 }
