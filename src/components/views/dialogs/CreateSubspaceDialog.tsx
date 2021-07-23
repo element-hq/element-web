@@ -158,7 +158,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
             </div>
 
             <div className="mx_CreateSubspaceDialog_footer">
-                <span>
+                <div className="mx_CreateSubspaceDialog_footer_prompt">
                     <div>{ _t("Want to add an existing space instead?") }</div>
                     <AccessibleButton kind="link" onClick={() => {
                         onAddExistingSpaceClick();
@@ -166,7 +166,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
                     }}>
                         { _t("Add existing space") }
                     </AccessibleButton>
-                </span>
+                </div>
 
                 <AccessibleButton kind="primary_outline" disabled={busy} onClick={() => onFinished(false)}>
                     { _t("Cancel") }

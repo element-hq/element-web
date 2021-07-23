@@ -47,7 +47,7 @@ limitations under the License.
         display: flex;
         margin-top: 20px;
 
-        > span {
+        .mx_CreateSubspaceDialog_footer_prompt {
             flex-grow: 1;
             font-size: $font-12px;
             line-height: $font-15px;
