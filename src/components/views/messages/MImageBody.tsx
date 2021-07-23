@@ -341,7 +341,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             // mx_MImageBody_thumbnail resizes img to exactly container size
             img = (
                 <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref={this.image}
-                    style={{ maxWidth: maxWidth + "px" }}
+                    style={{ maxWidth: `min(100%, ${maxWidth}px)` }}
                     alt={content.body}
                     onError={this.onImageError}
                     onLoad={this.onImageLoad}
@@ -364,7 +364,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 { showPlaceholder &&
                     <div className="mx_MImageBody_thumbnail" style={{
                         // Constrain width here so that spinner appears central to the loaded thumbnail
-                        maxWidth: infoWidth + "px",
+                        maxWidth: `min(100%, ${infoWidth}px)`,
                     }}>
                         { placeholder }
                     </div>
@@ -452,7 +452,7 @@ export class HiddenImagePlaceholder extends React.PureComponent<PlaceholderIProp
         let className = 'mx_HiddenImagePlaceholder';
         if (this.props.hover) className += ' mx_HiddenImagePlaceholder_hover';
         return (
-            <div className={className} style={{ maxWidth: maxWidth }}>
+            <div className={className} style={{ maxWidth: `min(100%, ${maxWidth}px)` }}>
                 <div className='mx_HiddenImagePlaceholder_button'>
                     <span className='mx_HiddenImagePlaceholder_eye' />
                     <span>{ _t("Show image") }</span>
