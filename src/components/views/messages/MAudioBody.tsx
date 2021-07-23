@@ -16,14 +16,14 @@ limitations under the License.
 
 import React from "react";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { Playback } from "../../../voice/Playback";
+import { Playback } from "../../../audio/Playback";
 import InlineSpinner from '../elements/InlineSpinner';
 import { _t } from "../../../languageHandler";
 import AudioPlayer from "../audio_messages/AudioPlayer";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 import MFileBody from "./MFileBody";
 import { IBodyProps } from "./IBodyProps";
-import { PlaybackManager } from "../../../voice/PlaybackManager";
+import { PlaybackManager } from "../../../audio/PlaybackManager";
 
 interface IState {
     error?: Error;
@@ -76,7 +76,6 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
 
     public render() {
         if (this.state.error) {
-            // TODO: @@TR: Verify error state
             return (
                 <span className="mx_MAudioBody">
                     <img src={require("../../../../res/img/warning.svg")} width="16" height="16" />
@@ -86,7 +85,6 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         }
 
         if (!this.state.playback) {
-            // TODO: @@TR: Verify loading/decrypting state
             return (
                 <span className="mx_MAudioBody">
                     <InlineSpinner />
