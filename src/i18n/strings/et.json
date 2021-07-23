@@ -3496,5 +3496,13 @@
     "This call has failed": "Kõne ühendamine ei õnnestunud",
     "You missed this call": "Sa ei võtnud kõnet vastu",
     "Unknown failure: %(reason)s)": "Tundmatu viga: %(reason)s",
-    "No answer": "Keegi ei vasta kõnele"
+    "No answer": "Keegi ei vasta kõnele",
+    "You're removing all spaces. Access will default to invite only": "Sa oled eemaldamas kõiki kogukonnakeskuseid. Edaspidine ligipääs eeldab kutse olemasolu",
+    "Select spaces": "Vali kogukonnakeskused",
+    "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.": "Vali missugustel kogukonnakeskustel on sellele jututoale ligipääs. Kui kogukonnakeskus on valitud, siis selle liikmed saavad <RoomName/> jututuba leida ja temaga liituda.",
+    "Search spaces": "Otsi kogukonnakeskusi",
+    "Spaces you know that contain this room": "Sulle teadaolevad kogukonnakeskused, millesse kuulub see jututuba",
+    "Other spaces or rooms you might not know": "Sellised muud jututoad ja kogukonnakeskused, mida sa ei pruugi teada",
+    "Automatically invite members from this room to the new one": "Kutsu jututoa senised liikmed automaatselt uude jututuppa",
+    "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Palun arvesta, et uuendusega tehakse jututoast uus variant</b>. Kõik senised sõnumid jäävad sellesse jututuppa arhiveeritud olekus."
 }
