@@ -28,7 +28,7 @@ $timelineImageBorderRadius: 4px;
     justify-content: center;
     align-items: center;
 
-    > canvas {
+    > div > canvas {
         border-radius: $timelineImageBorderRadius;
     }
 }
