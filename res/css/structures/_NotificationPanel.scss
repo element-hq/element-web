@@ -84,7 +84,7 @@ limitations under the License.
     display: inline;
 }
 
-.mx_NotificationPanel .mx_EventTile_senderDetails {
+.mx_NotificationPanel .mx_EventTile:not([data-layout=bubble]) .mx_EventTile_senderDetails {
     padding-left: 36px; // align with the room name
     position: relative;
 
@@ -105,7 +105,7 @@ limitations under the License.
     padding-left: 5px;
 }
 
-.mx_NotificationPanel .mx_EventTile_line {
+.mx_NotificationPanel .mx_EventTile:not([data-layout=bubble]) .mx_EventTile_line {
     margin-right: 0px;
     padding-left: 36px; // align with the room name
     padding-top: 0px;

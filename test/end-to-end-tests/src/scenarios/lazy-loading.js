@@ -51,7 +51,7 @@ const charlyMsg2 = "how's it going??";
 
 async function setupRoomWithBobAliceAndCharlies(alice, bob, charlies) {
     await createRoom(bob, room);
-    await changeRoomSettings(bob, { directory: true, visibility: "public_no_guests", alias });
+    await changeRoomSettings(bob, { directory: true, visibility: "public", alias });
     // wait for alias to be set by server after clicking "save"
     // so the charlies can join it.
     await bob.delay(500);
