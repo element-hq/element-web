@@ -425,10 +425,10 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
         if (this.state.error !== null) {
             return (
-                <span className="mx_MImageBody">
+                <div className="mx_MImageBody">
                     <img src={require("../../../../res/img/warning.svg")} width="16" height="16" />
                     { _t("Error decrypting image") }
-                </span>
+                </div>
             );
         }
 
@@ -443,10 +443,10 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         const thumbnail = this.messageContent(contentUrl, thumbUrl, content);
         const fileBody = this.getFileBody();
 
-        return <span className="mx_MImageBody">
+        return <div className="mx_MImageBody">
             { thumbnail }
             { fileBody }
-        </span>;
+        </div>;
     }
 }
 
