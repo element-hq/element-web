@@ -33,7 +33,8 @@ import { ICreateRoomStateEvent } from "matrix-js-sdk/src/@types/requests";
 import RoomAliasField from "../elements/RoomAliasField";
 import SdkConfig from "../../../SdkConfig";
 import Modal from "../../../Modal";
-import BetaFeedbackDialog from "../dialogs/BetaFeedbackDialog";
+import GenericFeatureFeedbackDialog from "../dialogs/GenericFeatureFeedbackDialog";
+import SettingsStore from "../../../settings/SettingsStore";
 
 const SpaceCreateMenuType = ({ title, description, className, onClick }) => {
     return (
@@ -74,8 +75,15 @@ const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
             <span className="mx_SpaceFeedbackPrompt_text">{ _t("Spaces are a new feature.") }</span>
             <AccessibleButton kind="link" onClick={() => {
                 if (onClick) onClick();
-                Modal.createTrackedDialog("Beta Feedback", "feature_spaces", BetaFeedbackDialog, {
-                    featureId: "feature_spaces",
+                Modal.createTrackedDialog("Spaces Feedback", "", GenericFeatureFeedbackDialog, {
+                    title: _t("Spaces feedback"),
+                    subheading: _t("Thank you for trying Spaces. Your feedback will help inform the next versions."),
+                    rageshakeLabel: "spaces-feedback",
+                    rageshakeData: {
+                        "feature_spaces.all_rooms": SettingsStore.getValue("feature_spaces.all_rooms"),
+                        "feature_spaces.space_member_dms": SettingsStore.getValue("feature_spaces.space_member_dms"),
+                        "feature_spaces.space_dm_badges": SettingsStore.getValue("feature_spaces.space_dm_badges"),
+                    },
                 });
             }}>
                 { _t("Give feedback.") }
