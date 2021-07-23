@@ -120,6 +120,8 @@ export default class ImageView extends React.Component<IProps, IState> {
     private previousX = 0;
     private previousY = 0;
 
+    private loaded = false;
+
     componentDidMount() {
         // We have to use addEventListener() because the listener
         // needs to be passive in order to work with Chromium
@@ -136,12 +138,13 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.image.current.removeEventListener("load", this.imageLoaded);
     }
 
-    private imageLoaded = () => {
+    private imageLoaded = async () => {
         this.setZoomAndRotation();
-        this.setState({
+        await this.setState({
             translationX: 0,
             translationY: 0,
         });
+        this.loaded = true;
     };
 
     private recalculateZoom = () => {
@@ -390,16 +393,17 @@ export default class ImageView extends React.Component<IProps, IState> {
         const showEventMeta = !!this.props.mxEvent;
         const zoomingDisabled = this.state.maxZoom === this.state.minZoom;
 
+        let transition;
+        if (!this.loaded) transition = "transform 300ms ease 0s";
+        else if (this.state.moving) transition = null;
+        else transition = "transform 200ms ease 0s";
+
         let cursor;
-        if (this.state.moving) {
-            cursor= "grabbing";
-        } else if (zoomingDisabled) {
-            cursor = "default";
-        } else if (this.state.zoom === this.state.minZoom) {
-            cursor = "zoom-in";
-        } else {
-            cursor = "zoom-out";
-        }
+        if (this.state.moving) cursor = "grabbing";
+        else if (zoomingDisabled) cursor = "default";
+        else if (this.state.zoom === this.state.minZoom) cursor = "zoom-in";
+        else cursor = "zoom-out";
+
         const rotationDegrees = this.state.rotation + "deg";
         const zoom = this.state.zoom;
         const translatePixelsX = this.state.translationX + "px";
@@ -410,7 +414,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         // image causing it translate in the wrong direction.
         const style = {
             cursor: cursor,
-            transition: this.state.moving ? null : "transform 250ms ease 0s",
+            transition: transition,
             transform: `translateX(${translatePixelsX})
                         translateY(${translatePixelsY})
                         scale(${zoom})
