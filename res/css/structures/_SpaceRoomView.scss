@@ -354,6 +354,11 @@ $SpaceRoomViewInnerWidth: 428px;
                 display: none;
             }
         }
+
+        .mx_SpaceRoomDirectory_list {
+            // we don't want this container to get forced into the flexbox layout
+            display: contents;
+        }
     }
 
     .mx_SpaceRoomView_privateScope {
