@@ -230,6 +230,12 @@ limitations under the License.
         }
     }
 
+    &.mx_EventTile_bubbleContainer {
+        .mx_EventTile_info {
+            min-width: 100%;
+        }
+    }
+
     & ~ .mx_EventListSummary {
         --maxWidth: 80%;
         margin-left: calc(var(--avatarSize) + var(--gutterSize));
