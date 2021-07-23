@@ -93,28 +93,23 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         const opts: IOpts = {};
         const createOpts: IOpts["createOpts"] = opts.createOpts = {};
         createOpts.name = this.state.name;
+
         if (this.state.joinRule === JoinRule.Public) {
             createOpts.visibility = Visibility.Public;
             createOpts.preset = Preset.PublicChat;
             opts.guestAccess = false;
             const { alias } = this.state;
             createOpts.room_alias_name = alias.substr(1, alias.indexOf(":") - 1);
+        } else {
+            // If we cannot change encryption we pass `true` for safety, the server should automatically do this for us.
+            opts.encryption = this.state.canChangeEncryption ? this.state.isEncrypted : true;
         }
+
         if (this.state.topic) {
             createOpts.topic = this.state.topic;
         }
         if (this.state.noFederate) {
             createOpts.creation_content = { 'm.federate': false };
-        }
-
-        if (this.state.joinRule !== JoinRule.Public) {
-            if (this.state.canChangeEncryption) {
-                opts.encryption = this.state.isEncrypted;
-            } else {
-                // the server should automatically do this for us, but for safety
-                // we'll demand it too.
-                opts.encryption = true;
-            }
         }
 
         if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
