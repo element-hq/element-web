@@ -573,6 +573,12 @@ $hover-select-border: 4px;
     color: $accent-color-alt;
 }
 
+.mx_EventTile_content .markdown-body blockquote {
+    border-left: 2px solid $blockquote-bar-color;
+    border-radius: 2px;
+    padding: 0 10px;
+}
+
 .mx_EventTile_content .markdown-body .hljs {
     display: inline !important;
 }
