@@ -346,8 +346,11 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                             let bannedBy = member.events.member.getSender(); // start by falling back to mxid
                             if (sender) bannedBy = sender.name;
                             return (
-                                <BannedUser key={member.userId} canUnban={canBanUsers}
-                                    member={member} reason={banEvent.reason}
+                                <BannedUser
+                                    key={member.userId}
+                                    canUnban={canBanUsers}
+                                    member={member}
+                                    reason={banEvent.reason}
                                     by={bannedBy}
                                 />
                             );

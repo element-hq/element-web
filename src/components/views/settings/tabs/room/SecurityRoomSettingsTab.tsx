@@ -138,8 +138,10 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 "may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>",
                 {},
                 {
-                    a: sub => <a href="https://element.io/help#encryption"
-                        rel="noreferrer noopener" target="_blank"
+                    a: sub => <a
+                        href="https://element.io/help#encryption"
+                        rel="noreferrer noopener"
+                        target="_blank"
                     >{ sub }</a>,
                 },
             ),

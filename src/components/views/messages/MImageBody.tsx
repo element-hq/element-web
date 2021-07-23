@@ -306,7 +306,10 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                     imageElement = <HiddenImagePlaceholder />;
                 } else {
                     imageElement = (
-                        <img style={{ display: 'none' }} src={thumbUrl} ref={this.image}
+                        <img
+                            style={{ display: 'none' }}
+                            src={thumbUrl}
+                            ref={this.image}
                             alt={content.body}
                             onError={this.onImageError}
                             onLoad={this.onImageLoad}
@@ -340,7 +343,10 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             // which has the same width as the timeline
             // mx_MImageBody_thumbnail resizes img to exactly container size
             img = (
-                <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref={this.image}
+                <img
+                    className="mx_MImageBody_thumbnail"
+                    src={thumbUrl}
+                    ref={this.image}
                     style={{ maxWidth: `min(100%, ${maxWidth}px)` }}
                     alt={content.body}
                     onError={this.onImageError}
@@ -360,12 +366,15 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
 
         const thumbnail = (
-            <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight: maxHeight + "px", maxWidth: maxWidth + "px" }} >
+            <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight: maxHeight + "px", maxWidth: maxWidth + "px" }}>
                 { showPlaceholder &&
-                    <div className="mx_MImageBody_thumbnail" style={{
-                        // Constrain width here so that spinner appears central to the loaded thumbnail
-                        maxWidth: `min(100%, ${infoWidth}px)`,
-                    }}>
+                    <div
+                        className="mx_MImageBody_thumbnail"
+                        style={{
+                            // Constrain width here so that spinner appears central to the loaded thumbnail
+                            maxWidth: `min(100%, ${infoWidth}px)`,
+                        }}
+                    >
                         { placeholder }
                     </div>
                 }

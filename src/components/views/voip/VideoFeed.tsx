@@ -136,7 +136,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
             const avatarSize = this.props.pipMode ? 76 : 160;
 
             return (
-                <div className={classnames(videoClasses)} >
+                <div className={classnames(videoClasses)}>
                     <MemberAvatar
                         member={member}
                         height={avatarSize}

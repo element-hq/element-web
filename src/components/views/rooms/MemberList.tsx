@@ -306,10 +306,16 @@ export default class MemberList extends React.Component<IProps, IState> {
         // For now we'll pretend this is any entity. It should probably be a separate tile.
         const text = _t("and %(count)s others...", { count: overflowCount });
         return (
-            <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
-                <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
-            } name={text} presenceState="online" suppressOnHover={true}
-            onClick={onClick} />
+            <EntityTile
+                className="mx_EntityTile_ellipsis"
+                avatarJsx={
+                    <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
+                }
+                name={text}
+                presenceState="online"
+                suppressOnHover={true}
+                onClick={onClick}
+            />
         );
     };
 
@@ -465,8 +471,12 @@ export default class MemberList extends React.Component<IProps, IState> {
                 return <MemberTile key={m.userId} member={m} ref={m.userId} showPresence={this.showPresence} />;
             } else {
                 // Is a 3pid invite
-                return <EntityTile key={m.getStateKey()} name={m.getContent().display_name} suppressOnHover={true}
-                    onClick={() => this.onPending3pidInviteClick(m)} />;
+                return <EntityTile
+                    key={m.getStateKey()}
+                    name={m.getContent().display_name}
+                    suppressOnHover={true}
+                    onClick={() => this.onPending3pidInviteClick(m)}
+                />;
             }
         });
     }

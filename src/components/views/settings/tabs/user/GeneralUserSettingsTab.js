@@ -426,9 +426,13 @@ export default class GeneralUserSettingsTab extends React.Component {
         const supportsMultiLanguageSpellCheck = plaf.supportsMultiLanguageSpellCheck();
 
         const discoWarning = this.state.requiredPolicyInfo.hasTerms
-            ? <img className='mx_GeneralUserSettingsTab_warningIcon'
+            ? <img
+                className='mx_GeneralUserSettingsTab_warningIcon'
                 src={require("../../../../../../res/img/feather-customised/warning-triangle.svg")}
-                width="18" height="18" alt={_t("Warning")} />
+                width="18"
+                height="18"
+                alt={_t("Warning")}
+            />
             : null;
 
         let accountManagementSection;

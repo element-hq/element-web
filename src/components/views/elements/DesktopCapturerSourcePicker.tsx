@@ -51,7 +51,8 @@ export class ExistingSource extends React.Component<DesktopCapturerSourceIProps>
             <AccessibleButton
                 className="mx_desktopCapturerSourcePicker_stream_button"
                 title={this.props.source.name}
-                onClick={this.onClick} >
+                onClick={this.onClick}
+            >
                 <img
                     className="mx_desktopCapturerSourcePicker_stream_thumbnail"
                     src={this.props.source.thumbnailURL}
