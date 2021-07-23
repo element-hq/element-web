@@ -64,7 +64,6 @@ import { BetaPill } from "../views/beta/BetaCard";
 import { UserTab } from "../views/dialogs/UserSettingsDialog";
 import Modal from "../../Modal";
 import BetaFeedbackDialog from "../views/dialogs/BetaFeedbackDialog";
-import SdkConfig from "../../SdkConfig";
 import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
 
 interface IProps {
