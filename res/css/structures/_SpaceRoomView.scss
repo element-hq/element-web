@@ -332,12 +332,6 @@ $SpaceRoomViewInnerWidth: 428px;
             word-wrap: break-word;
         }
 
-        > hr {
-            border: none;
-            height: 1px;
-            background-color: $groupFilterPanel-bg-color;
-        }
-
         .mx_SearchBox {
             margin: 0 0 20px;
         }
@@ -513,12 +507,6 @@ $SpaceRoomViewInnerWidth: 428px;
 .mx_SpaceFeedbackPrompt {
     margin-top: 18px;
     margin-bottom: 12px;
-
-    > hr {
-        border: none;
-        border-top: 1px solid $input-border-color;
-        margin-bottom: 12px;
-    }
 
     > div {
         display: flex;

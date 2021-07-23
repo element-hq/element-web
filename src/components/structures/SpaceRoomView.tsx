@@ -428,7 +428,6 @@ const SpaceLanding = ({ space }) => {
                 </div>
             ) }
         </RoomTopic>
-        <hr />
 
         <SpaceHierarchy
             space={space}
