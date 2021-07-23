@@ -1,4 +1,4 @@
-import { Anonymity, getRedactedCurrentLocation, IAnonymousEvent, IRoomEvent,
+import { Anonymity, getRedactedCurrentLocation, IAnonymousEvent, IPseudonymousEvent, IRoomEvent,
     PosthogAnalytics } from '../src/PosthogAnalytics';
 import SdkConfig from '../src/SdkConfig';
 const crypto = require('crypto');
@@ -17,6 +17,13 @@ class FakePosthog {
 
 export interface ITestEvent extends IAnonymousEvent {
     key: "jest_test_event",
+    properties: {
+        foo: string
+    }
+}
+
+export interface ITestPseudonymousEvent extends IPseudonymousEvent {
+    key: "jest_test_pseudo_event",
     properties: {
         foo: string
     }
@@ -75,7 +82,7 @@ describe("PosthogAnalytics", () => {
             });
         });
 
-        it("Should pass track() to posthog", async () => {
+        it("Should pass trackAnonymousEvent() to posthog", async () => {
             analytics.init(Anonymity.Pseudonymous);
             await analytics.trackAnonymousEvent<ITestEvent>("jest_test_event", {
                 foo: "bar",
@@ -96,18 +103,44 @@ describe("PosthogAnalytics", () => {
                 .toEqual("73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049");
         });
 
-        it("Should silently not track if not inititalised", async () => {
-            await analytics.trackAnonymousEvent<ITestEvent>("jest_test_event", {
+        it("Should pass trackPseudonymousEvent() to posthog", async () => {
+            analytics.init(Anonymity.Pseudonymous);
+            await analytics.trackPseudonymousEvent<ITestEvent>("jest_test_pseudo_event", {
+                foo: "bar",
+            });
+            expect(fakePosthog.capture.mock.calls[0][0]).toBe("jest_test_pseudo_event");
+            expect(fakePosthog.capture.mock.calls[0][1]["foo"]).toEqual("bar");
+        });
+
+        it("Should blow up if not inititalised prior to tracking", async () => {
+            const fn = () => {
+                return analytics.trackAnonymousEvent<ITestEvent>("jest_test_event", {
+                   foo: "bar",
+                });
+            };
+            await expect(fn()).rejects.toThrow();
+        });
+
+        it("Should not track pseudonymous messages if anonymous", async () => {
+            analytics.init(Anonymity.Anonymous);
+            await analytics.trackPseudonymousEvent<ITestEvent>("jest_test_event", {
                 foo: "bar",
             });
             expect(fakePosthog.capture.mock.calls.length).toBe(0);
         });
 
-        it("Should not track non-anonymous messages if anonymous", async () => {
-            analytics.init(Anonymity.Anonymous);
+        it("Should not track any events if disabled", async () => {
+            analytics.init(Anonymity.Disabled);
             await analytics.trackPseudonymousEvent<ITestEvent>("jest_test_event", {
                 foo: "bar",
             });
+            await analytics.trackAnonymousEvent<ITestEvent>("jest_test_event", {
+                foo: "bar",
+            });
+            await analytics.trackRoomEvent<ITestRoomEvent>("room id", "jest_test_room_event", {
+                foo: "bar",
+            });
+            await analytics.trackPageView(200);
             expect(fakePosthog.capture.mock.calls.length).toBe(0);
         });
 

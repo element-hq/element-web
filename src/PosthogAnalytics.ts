@@ -12,6 +12,7 @@ interface IEvent {
 }
 
 export enum Anonymity {
+    Disabled,
     Anonymous,
     Pseudonymous
 }
@@ -181,11 +182,11 @@ export class PosthogAnalytics {
     }
 
     private async capture(eventName: string, properties: posthog.Properties) {
-        if (!this.enabled) {
-            return;
-        }
         if (!this.initialised) {
             throw Error("Tried to track event before PoshogAnalytics.init has completed");
+        }
+        if (!this.enabled) {
+            return;
         }
         const { origin, hash, pathname } = window.location;
         properties['$redacted_current_url'] = await getRedactedCurrentLocation(
@@ -197,7 +198,7 @@ export class PosthogAnalytics {
         eventName: E["eventName"],
         properties: E["properties"],
     ) {
-        if (this.anonymity == Anonymity.Anonymous) return;
+        if (this.anonymity == Anonymity.Anonymous || this.anonymity == Anonymity.Disabled) return;
         await this.capture(eventName, properties);
     }
 
@@ -205,6 +206,7 @@ export class PosthogAnalytics {
         eventName: E["eventName"],
         properties: E["properties"],
     ) {
+        if (this.anonymity == Anonymity.Disabled) return;
         await this.capture(eventName, properties);
     }
 
