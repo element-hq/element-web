@@ -301,33 +301,41 @@ export default class HTMLExporter extends Exporter {
 
     protected async createMessageBody(mxEv: MatrixEvent, joined = false) {
         let eventTile: string;
-
-        if (this.isAttachment(mxEv)) {
-            if (this.exportOptions.attachmentsIncluded) {
-                try {
-                    const blob = await this.getMediaBlob(mxEv);
-                    if (this.totalSize + blob.size > this.exportOptions.maxSize) {
-                        eventTile = await this.getEventTile(this.createModifiedEvent(this.mediaOmitText, mxEv), joined);
-                    } else {
-                        this.totalSize += blob.size;
-                        const filePath = this.getFilePath(mxEv);
-                        eventTile = await this.getEventTile(mxEv, joined, filePath);
-                        if (this.totalSize == this.exportOptions.maxSize) {
-                            this.exportOptions.attachmentsIncluded = false;
+        try {
+            if (this.isAttachment(mxEv)) {
+                if (this.exportOptions.attachmentsIncluded) {
+                    try {
+                        const blob = await this.getMediaBlob(mxEv);
+                        if (this.totalSize + blob.size > this.exportOptions.maxSize) {
+                            eventTile = await this.getEventTile(
+                                this.createModifiedEvent(this.mediaOmitText, mxEv),
+                                joined,
+                            );
+                        } else {
+                            this.totalSize += blob.size;
+                            const filePath = this.getFilePath(mxEv);
+                            eventTile = await this.getEventTile(mxEv, joined, filePath);
+                            if (this.totalSize == this.exportOptions.maxSize) {
+                                this.exportOptions.attachmentsIncluded = false;
+                            }
+                            this.addFile(filePath, blob);
                         }
-                        this.addFile(filePath, blob);
+                    } catch (e) {
+                        console.log("Error while fetching file" + e);
+                        eventTile = await this.getEventTile(
+                            this.createModifiedEvent(_t("Error fetching file"), mxEv),
+                            joined,
+                        );
                     }
-                } catch (e) {
-                    console.log("Error while fetching file" + e);
-                    eventTile = await this.getEventTile(
-                        this.createModifiedEvent(_t("Error fetching file"), mxEv),
-                        joined,
-                    );
+                } else {
+                    eventTile = await this.getEventTile(this.createModifiedEvent(this.mediaOmitText, mxEv), joined);
                 }
-            } else {
-                eventTile = await this.getEventTile(this.createModifiedEvent(this.mediaOmitText, mxEv), joined);
-            }
-        } else eventTile = await this.getEventTile(mxEv, joined);
+            } else eventTile = await this.getEventTile(mxEv, joined);
+        } catch (e) {
+            // TODO: Handle callEvent errors
+            console.error(e);
+            eventTile = await this.getEventTile(this.createModifiedEvent("Error parsing HTML", mxEv), joined);
+        }
 
         return eventTile;
     }

@@ -46,7 +46,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            callState: this.props.callEventGrouper.state,
+            callState: this.props.callEventGrouper?.state,
             silenced: false,
         };
     }
@@ -184,7 +184,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
     render() {
         const event = this.props.mxEvent;
         const sender = event.sender ? event.sender.name : event.getSender();
-        const isVoice = this.props.callEventGrouper.isVoice;
+        const isVoice = this.props.callEventGrouper?.isVoice;
         const callType = isVoice ? _t("Voice call") : _t("Video call");
         const content = this.renderContent(this.state.callState);
         const className = classNames({
