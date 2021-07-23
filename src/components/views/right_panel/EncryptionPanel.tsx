@@ -81,17 +81,18 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
     const changeHandler = useCallback(() => {
         // handle transitions -> cancelled for mismatches which fire a modal instead of showing a card
         if (request && request.cancelled && MISMATCHES.includes(request.cancellationCode)) {
+            // FIXME: Using an import will result in test failures
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog("Verification failed", "insecure", ErrorDialog, {
                 headerImage: require("../../../../res/img/e2e/warning.svg"),
                 title: _t("Your messages are not secure"),
                 description: <div>
-                    {_t("One of the following may be compromised:")}
+                    { _t("One of the following may be compromised:") }
                     <ul>
-                        <li>{_t("Your homeserver")}</li>
-                        <li>{_t("The homeserver the user you’re verifying is connected to")}</li>
-                        <li>{_t("Yours, or the other users’ internet connection")}</li>
-                        <li>{_t("Yours, or the other users’ session")}</li>
+                        <li>{ _t("Your homeserver") }</li>
+                        <li>{ _t("The homeserver the user you’re verifying is connected to") }</li>
+                        <li>{ _t("Yours, or the other users’ internet connection") }</li>
+                        <li>{ _t("Yours, or the other users’ session") }</li>
                     </ul>
                 </div>,
                 onFinished: onClose,

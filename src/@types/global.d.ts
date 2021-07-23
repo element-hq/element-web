@@ -15,7 +15,9 @@ limitations under the License.
 */
 
 import "matrix-js-sdk/src/@types/global"; // load matrix-js-sdk's type extensions first
-import * as ModernizrStatic from "modernizr";
+// Load types for the WG CSS Font Loading APIs https://github.com/Microsoft/TypeScript/issues/13569
+import "@types/css-font-loading-module";
+import "@types/modernizr";
 
 import ContentMessages from "../ContentMessages";
 import { IMatrixClientPeg } from "../MatrixClientPeg";
@@ -48,9 +50,10 @@ import UIStore from "../stores/UIStore";
 import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 import { RoomScrollStateStore } from "../stores/RoomScrollStateStore";
 
+/* eslint-disable @typescript-eslint/naming-convention */
+
 declare global {
     interface Window {
-        Modernizr: ModernizrStatic;
         matrixChat: ReturnType<Renderer>;
         mxMatrixClientPeg: IMatrixClientPeg;
         Olm: {
@@ -89,6 +92,7 @@ declare global {
         mxUIStore: UIStore;
         mxSetupEncryptionStore?: SetupEncryptionStore;
         mxRoomScrollStateStore?: RoomScrollStateStore;
+        mxOnRecaptchaLoaded?: () => void;
     }
 
     interface Document {
@@ -113,7 +117,7 @@ declare global {
     }
 
     interface StorageEstimate {
-        usageDetails?: {[key: string]: number};
+        usageDetails?: { [key: string]: number };
     }
 
     interface HTMLAudioElement {
@@ -184,4 +188,21 @@ declare global {
             parameterDescriptors?: AudioParamDescriptor[];
         }
     );
+
+    // eslint-disable-next-line no-var
+    var grecaptcha:
+        | undefined
+        | {
+              reset: (id: string) => void;
+              render: (
+                  divId: string,
+                  options: {
+                      sitekey: string;
+                      callback: (response: string) => void;
+                  },
+              ) => string;
+              isReady: () => boolean;
+          };
 }
+
+/* eslint-enable @typescript-eslint/naming-convention */

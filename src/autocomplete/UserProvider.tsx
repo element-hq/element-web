@@ -21,7 +21,6 @@ import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import { PillCompletion } from './Components';
-import * as sdk from '../index';
 import QueryMatcher from './QueryMatcher';
 import { sortBy } from 'lodash';
 import { MatrixClientPeg } from '../MatrixClientPeg';
@@ -33,6 +32,7 @@ import { RoomState } from "matrix-js-sdk/src/models/room-state";
 import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
 import { makeUserPermalink } from "../utils/permalinks/Permalinks";
 import { ICompletion, ISelectionRange } from "./Autocompleter";
+import MemberAvatar from '../components/views/avatars/MemberAvatar';
 
 const USER_REGEX = /\B@\S*/g;
 
@@ -108,10 +108,8 @@ export default class UserProvider extends AutocompleteProvider {
         force = false,
         limit = -1,
     ): Promise<ICompletion[]> {
-        const MemberAvatar = sdk.getComponent('views.avatars.MemberAvatar');
-
         // lazy-load user list into matcher
-        if (!this.users) this._makeUsers();
+        if (!this.users) this.makeUsers();
 
         let completions = [];
         const { command, range } = this.getCurrentCommand(rawQuery, selection, force);
@@ -149,7 +147,7 @@ export default class UserProvider extends AutocompleteProvider {
         return _t('Users');
     }
 
-    _makeUsers() {
+    private makeUsers() {
         const events = this.room.getLiveTimeline().getEvents();
         const lastSpoken = {};
 

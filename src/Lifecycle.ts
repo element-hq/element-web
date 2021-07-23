@@ -21,6 +21,7 @@ import { createClient } from 'matrix-js-sdk/src/matrix';
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { decryptAES, encryptAES, IEncryptedPayload } from "matrix-js-sdk/src/crypto/aes";
+import { QueryDict } from 'matrix-js-sdk/src/utils';
 
 import { IMatrixClientCreds, MatrixClientPeg } from './MatrixClientPeg';
 import SecurityCustomisations from "./customisations/Security";
@@ -33,7 +34,6 @@ import Presence from './Presence';
 import dis from './dispatcher/dispatcher';
 import DMRoomMap from './utils/DMRoomMap';
 import Modal from './Modal';
-import * as sdk from './index';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
 import PlatformPeg from "./PlatformPeg";
 import { sendLoginRequest } from "./Login";
@@ -52,6 +52,10 @@ import CallHandler from './CallHandler';
 import LifecycleCustomisations from "./customisations/Lifecycle";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import { _t } from "./languageHandler";
+import LazyLoadingResyncDialog from "./components/views/dialogs/LazyLoadingResyncDialog";
+import LazyLoadingDisabledDialog from "./components/views/dialogs/LazyLoadingDisabledDialog";
+import SessionRestoreErrorDialog from "./components/views/dialogs/SessionRestoreErrorDialog";
+import StorageEvictedDialog from "./components/views/dialogs/StorageEvictedDialog";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -62,7 +66,7 @@ interface ILoadSessionOpts {
     guestIsUrl?: string;
     ignoreGuest?: boolean;
     defaultDeviceDisplayName?: string;
-    fragmentQueryParams?: Record<string, string>;
+    fragmentQueryParams?: QueryDict;
 }
 
 /**
@@ -115,8 +119,8 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
         ) {
             console.log("Using guest access credentials");
             return doSetLoggedIn({
-                userId: fragmentQueryParams.guest_user_id,
-                accessToken: fragmentQueryParams.guest_access_token,
+                userId: fragmentQueryParams.guest_user_id as string,
+                accessToken: fragmentQueryParams.guest_access_token as string,
                 homeserverUrl: guestHsUrl,
                 identityServerUrl: guestIsUrl,
                 guest: true,
@@ -170,7 +174,7 @@ export async function getStoredSessionOwner(): Promise<[string, boolean]> {
  *    login, else false
  */
 export function attemptTokenLogin(
-    queryParams: Record<string, string>,
+    queryParams: QueryDict,
     defaultDeviceDisplayName?: string,
     fragmentAfterLogin?: string,
 ): Promise<boolean> {
@@ -195,7 +199,7 @@ export function attemptTokenLogin(
         homeserver,
         identityServer,
         "m.login.token", {
-            token: queryParams.loginToken,
+            token: queryParams.loginToken as string,
             initial_device_display_name: defaultDeviceDisplayName,
         },
     ).then(function(creds) {
@@ -238,8 +242,6 @@ export function handleInvalidStoreError(e: InvalidStoreError): Promise<void> {
         return Promise.resolve().then(() => {
             const lazyLoadEnabled = e.value;
             if (lazyLoadEnabled) {
-                const LazyLoadingResyncDialog =
-                    sdk.getComponent("views.dialogs.LazyLoadingResyncDialog");
                 return new Promise((resolve) => {
                     Modal.createDialog(LazyLoadingResyncDialog, {
                         onFinished: resolve,
@@ -250,8 +252,6 @@ export function handleInvalidStoreError(e: InvalidStoreError): Promise<void> {
                 // between LL/non-LL version on same host.
                 // as disabling LL when previously enabled
                 // is a strong indicator of this (/develop & /app)
-                const LazyLoadingDisabledDialog =
-                    sdk.getComponent("views.dialogs.LazyLoadingDisabledDialog");
                 return new Promise((resolve) => {
                     Modal.createDialog(LazyLoadingDisabledDialog, {
                         onFinished: resolve,
@@ -451,9 +451,6 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
 async function handleLoadSessionFailure(e: Error): Promise<boolean> {
     console.error("Unable to load session", e);
 
-    const SessionRestoreErrorDialog =
-          sdk.getComponent('views.dialogs.SessionRestoreErrorDialog');
-
     const modal = Modal.createTrackedDialog('Session Restore Error', '', SessionRestoreErrorDialog, {
         error: e.message,
     });
@@ -612,7 +609,6 @@ async function doSetLoggedIn(
 }
 
 function showStorageEvictedDialog(): Promise<boolean> {
-    const StorageEvictedDialog = sdk.getComponent('views.dialogs.StorageEvictedDialog');
     return new Promise(resolve => {
         Modal.createTrackedDialog('Storage evicted', '', StorageEvictedDialog, {
             onFinished: resolve,

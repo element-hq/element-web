@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from "react";
-import { encode } from "blurhash";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import dis from './dispatcher/dispatcher';
@@ -28,7 +27,6 @@ import RoomViewStore from './stores/RoomViewStore';
 import encrypt from "browser-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
 import Spinner from "./components/views/elements/Spinner";
-
 import { Action } from "./dispatcher/actions";
 import CountlyAnalytics from "./CountlyAnalytics";
 import {
@@ -39,7 +37,8 @@ import {
     UploadStartedPayload,
 } from "./dispatcher/payloads/UploadPayload";
 import { IUpload } from "./models/IUpload";
-import { IImageInfo } from "matrix-js-sdk/src/@types/partials";
+import { IAbortablePromise, IImageInfo } from "matrix-js-sdk/src/@types/partials";
+import { BlurhashEncoder } from "./BlurhashEncoder";
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
@@ -49,8 +48,6 @@ const MAX_HEIGHT = 600;
 const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
 
 export const BLURHASH_FIELD = "xyz.amorgan.blurhash"; // MSC2448
-const BLURHASH_X_COMPONENTS = 6;
-const BLURHASH_Y_COMPONENTS = 6;
 
 export class UploadCanceledError extends Error {}
 
@@ -87,10 +84,6 @@ interface IThumbnail {
     thumbnail: Blob;
 }
 
-interface IAbortablePromise<T> extends Promise<T> {
-    abort(): void;
-}
-
 /**
  * Create a thumbnail for a image DOM element.
  * The image will be smaller than MAX_WIDTH and MAX_HEIGHT.
@@ -109,54 +102,62 @@ interface IAbortablePromise<T> extends Promise<T> {
  * @return {Promise} A promise that resolves with an object with an info key
  *  and a thumbnail key.
  */
-function createThumbnail(
+async function createThumbnail(
     element: ThumbnailableElement,
     inputWidth: number,
     inputHeight: number,
     mimeType: string,
 ): Promise<IThumbnail> {
-    return new Promise((resolve) => {
-        let targetWidth = inputWidth;
-        let targetHeight = inputHeight;
-        if (targetHeight > MAX_HEIGHT) {
-            targetWidth = Math.floor(targetWidth * (MAX_HEIGHT / targetHeight));
-            targetHeight = MAX_HEIGHT;
-        }
-        if (targetWidth > MAX_WIDTH) {
-            targetHeight = Math.floor(targetHeight * (MAX_WIDTH / targetWidth));
-            targetWidth = MAX_WIDTH;
-        }
+    let targetWidth = inputWidth;
+    let targetHeight = inputHeight;
+    if (targetHeight > MAX_HEIGHT) {
+        targetWidth = Math.floor(targetWidth * (MAX_HEIGHT / targetHeight));
+        targetHeight = MAX_HEIGHT;
+    }
+    if (targetWidth > MAX_WIDTH) {
+        targetHeight = Math.floor(targetHeight * (MAX_WIDTH / targetWidth));
+        targetWidth = MAX_WIDTH;
+    }
 
-        const canvas = document.createElement("canvas");
+    let canvas: HTMLCanvasElement | OffscreenCanvas;
+    if (window.OffscreenCanvas) {
+        canvas = new window.OffscreenCanvas(targetWidth, targetHeight);
+    } else {
+        canvas = document.createElement("canvas");
         canvas.width = targetWidth;
         canvas.height = targetHeight;
-        const context = canvas.getContext("2d");
-        context.drawImage(element, 0, 0, targetWidth, targetHeight);
-        const imageData = context.getImageData(0, 0, targetWidth, targetHeight);
-        const blurhash = encode(
-            imageData.data,
-            imageData.width,
-            imageData.height,
-            BLURHASH_X_COMPONENTS,
-            BLURHASH_Y_COMPONENTS,
-        );
-        canvas.toBlob(function(thumbnail) {
-            resolve({
-                info: {
-                    thumbnail_info: {
-                        w: targetWidth,
-                        h: targetHeight,
-                        mimetype: thumbnail.type,
-                        size: thumbnail.size,
-                    },
-                    w: inputWidth,
-                    h: inputHeight,
-                    [BLURHASH_FIELD]: blurhash,
-                },
-                thumbnail,
-            });
-        }, mimeType);
-    });
+    }
+
+    const context = canvas.getContext("2d");
+    context.drawImage(element, 0, 0, targetWidth, targetHeight);
+
+    let thumbnailPromise: Promise<Blob>;
+
+    if (window.OffscreenCanvas) {
+        thumbnailPromise = (canvas as OffscreenCanvas).convertToBlob({ type: mimeType });
+    } else {
+        thumbnailPromise = new Promise<Blob>(resolve => (canvas as HTMLCanvasElement).toBlob(resolve, mimeType));
+    }
+
+    const imageData = context.getImageData(0, 0, targetWidth, targetHeight);
+    // thumbnailPromise and blurhash promise are being awaited concurrently
+    const blurhash = await BlurhashEncoder.instance.getBlurhash(imageData);
+    const thumbnail = await thumbnailPromise;
+
+    return {
+        info: {
+            thumbnail_info: {
+                w: targetWidth,
+                h: targetHeight,
+                mimetype: thumbnail.type,
+                size: thumbnail.size,
+            },
+            w: inputWidth,
+            h: inputHeight,
+            [BLURHASH_FIELD]: blurhash,
+        },
+        thumbnail,
+    };
 }
 
 /**
@@ -334,7 +335,7 @@ export function uploadFile(
     roomId: string,
     file: File | Blob,
     progressHandler?: any, // TODO: Types
-): Promise<{url?: string, file?: any}> { // TODO: Types
+): IAbortablePromise<{url?: string, file?: any}> { // TODO: Types
     let canceled = false;
     if (matrixClient.isRoomEncrypted(roomId)) {
         // If the room is encrypted then encrypt the file before uploading it.
@@ -366,8 +367,8 @@ export function uploadFile(
                 encryptInfo.mimetype = file.type;
             }
             return { "file": encryptInfo };
-        });
-        (prom as IAbortablePromise<any>).abort = () => {
+        }) as IAbortablePromise<{ file: any }>;
+        prom.abort = () => {
             canceled = true;
             if (uploadPromise) matrixClient.cancelUpload(uploadPromise);
         };
@@ -380,8 +381,8 @@ export function uploadFile(
             if (canceled) throw new UploadCanceledError();
             // If the attachment isn't encrypted then include the URL directly.
             return { url };
-        });
-        (promise1 as any).abort = () => {
+        }) as IAbortablePromise<{ url: string }>;
+        promise1.abort = () => {
             canceled = true;
             matrixClient.cancelUpload(basePromise);
         };
@@ -419,14 +420,15 @@ export default class ContentMessages {
 
         const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
         if (isQuoting) {
+            // FIXME: Using an import will result in Element crashing
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             const { finished } = Modal.createTrackedDialog<[boolean]>('Upload Reply Warning', '', QuestionDialog, {
                 title: _t('Replying With Files'),
                 description: (
-                    <div>{_t(
+                    <div>{ _t(
                         'At this time it is not possible to reply with a file. ' +
                         'Would you like to upload this file without replying?',
-                    )}</div>
+                    ) }</div>
                 ),
                 hasCancelButton: true,
                 button: _t("Continue"),
@@ -453,6 +455,7 @@ export default class ContentMessages {
         }
 
         if (tooBigFiles.length > 0) {
+            // FIXME: Using an import will result in Element crashing
             const UploadFailureDialog = sdk.getComponent("dialogs.UploadFailureDialog");
             const { finished } = Modal.createTrackedDialog<[boolean]>('Upload Failure', '', UploadFailureDialog, {
                 badFiles: tooBigFiles,
@@ -463,7 +466,6 @@ export default class ContentMessages {
             if (!shouldContinue) return;
         }
 
-        const UploadConfirmDialog = sdk.getComponent("dialogs.UploadConfirmDialog");
         let uploadAll = false;
         // Promise to complete before sending next file into room, used for synchronisation of file-sending
         // to match the order the files were specified in
@@ -471,6 +473,8 @@ export default class ContentMessages {
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             if (!uploadAll) {
+                // FIXME: Using an import will result in Element crashing
+                const UploadConfirmDialog = sdk.getComponent("dialogs.UploadConfirmDialog");
                 const { finished } = Modal.createTrackedDialog<[boolean, boolean]>('Upload Files confirmation',
                     '', UploadConfirmDialog, {
                         file,
@@ -549,10 +553,10 @@ export default class ContentMessages {
                 content.msgtype = 'm.file';
                 resolve();
             }
-        });
+        }) as IAbortablePromise<void>;
 
         // create temporary abort handler for before the actual upload gets passed off to js-sdk
-        (prom as IAbortablePromise<any>).abort = () => {
+        prom.abort = () => {
             upload.canceled = true;
         };
 
@@ -567,7 +571,7 @@ export default class ContentMessages {
         dis.dispatch<UploadStartedPayload>({ action: Action.UploadStarted, upload });
 
         // Focus the composer view
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
 
         function onProgress(ev) {
             upload.total = ev.total;
@@ -581,9 +585,7 @@ export default class ContentMessages {
             // XXX: upload.promise must be the promise that
             // is returned by uploadFile as it has an abort()
             // method hacked onto it.
-            upload.promise = uploadFile(
-                matrixClient, roomId, file, onProgress,
-            );
+            upload.promise = uploadFile(matrixClient, roomId, file, onProgress);
             return upload.promise.then(function(result) {
                 content.file = result.file;
                 content.url = result.url;
@@ -606,6 +608,7 @@ export default class ContentMessages {
                         { fileName: upload.fileName },
                     );
                 }
+                // FIXME: Using an import will result in Element crashing
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createTrackedDialog('Upload failed', '', ErrorDialog, {
                     title: _t('Upload Failed'),

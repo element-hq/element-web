@@ -99,7 +99,7 @@ const CHECK_PROTOCOLS_ATTEMPTS = 3;
 // (and store the ID of their native room)
 export const VIRTUAL_ROOM_EVENT_TYPE = 'im.vector.is_virtual_room';
 
-export enum AudioID {
+enum AudioID {
     Ring = 'ringAudio',
     Ringback = 'ringbackAudio',
     CallEnd = 'callendAudio',
@@ -142,6 +142,7 @@ export enum PlaceCallType {
 export enum CallHandlerEvent {
     CallsChanged = "calls_changed",
     CallChangeRoom = "call_change_room",
+    SilencedCallsChanged = "silenced_calls_changed",
 }
 
 export default class CallHandler extends EventEmitter {
@@ -154,7 +155,7 @@ export default class CallHandler extends EventEmitter {
     private supportsPstnProtocol = null;
     private pstnSupportPrefixed = null; // True if the server only support the prefixed pstn protocol
     private supportsSipNativeVirtual = null; // im.vector.protocol.sip_virtual and im.vector.protocol.sip_native
-    private pstnSupportCheckTimer: NodeJS.Timeout; // number actually because we're in the browser
+    private pstnSupportCheckTimer: number;
     // For rooms we've been invited to, true if they're from virtual user, false if we've checked and they aren't.
     private invitedRoomsAreVirtual = new Map<string, boolean>();
     private invitedRoomCheckInProgress = false;
@@ -163,6 +164,8 @@ export default class CallHandler extends EventEmitter {
     // We need to be be able to determine the mapped room synchronously, so we
     // do the async lookup when we get new information and then store these mappings here
     private assertedIdentityNativeUsers = new Map<string, string>();
+
+    private silencedCalls = new Set<string>(); // callIds
 
     static sharedInstance() {
         if (!window.mxCallHandler) {
@@ -222,6 +225,33 @@ export default class CallHandler extends EventEmitter {
             dis.unregister(this.dispatcherRef);
             this.dispatcherRef = null;
         }
+    }
+
+    public silenceCall(callId: string) {
+        this.silencedCalls.add(callId);
+        this.emit(CallHandlerEvent.SilencedCallsChanged, this.silencedCalls);
+
+        // Don't pause audio if we have calls which are still ringing
+        if (this.areAnyCallsUnsilenced()) return;
+        this.pause(AudioID.Ring);
+    }
+
+    public unSilenceCall(callId: string) {
+        this.silencedCalls.delete(callId);
+        this.emit(CallHandlerEvent.SilencedCallsChanged, this.silencedCalls);
+        this.play(AudioID.Ring);
+    }
+
+    public isCallSilenced(callId: string): boolean {
+        return this.silencedCalls.has(callId);
+    }
+
+    /**
+     * Returns true if there is at least one unsilenced call
+     * @returns {boolean}
+     */
+    private areAnyCallsUnsilenced(): boolean {
+        return this.calls.size > this.silencedCalls.size;
     }
 
     private async checkProtocols(maxTries) {
@@ -300,6 +330,13 @@ export default class CallHandler extends EventEmitter {
             call: call,
         }, true);
     };
+
+    public getCallById(callId: string): MatrixCall {
+        for (const call of this.calls.values()) {
+            if (call.callId === callId) return call;
+        }
+        return null;
+    }
 
     getCallForRoom(roomId: string): MatrixCall {
         return this.calls.get(roomId) || null;
@@ -394,7 +431,7 @@ export default class CallHandler extends EventEmitter {
     }
 
     private setCallListeners(call: MatrixCall) {
-        let mappedRoomId = CallHandler.sharedInstance().roomIdForCall(call);
+        let mappedRoomId = this.roomIdForCall(call);
 
         call.on(CallEvent.Error, (err: CallError) => {
             if (!this.matchesCallForThisRoom(call)) return;
@@ -439,6 +476,10 @@ export default class CallHandler extends EventEmitter {
                 case CallState.InviteSent:
                     this.pause(AudioID.Ringback);
                     break;
+            }
+
+            if (newState !== CallState.Ringing) {
+                this.silencedCalls.delete(call.callId);
             }
 
             switch (newState) {
@@ -615,23 +656,23 @@ export default class CallHandler extends EventEmitter {
 
     private showICEFallbackPrompt() {
         const cli = MatrixClientPeg.get();
-        const code = sub => <code>{sub}</code>;
+        const code = sub => <code>{ sub }</code>;
         Modal.createTrackedDialog('No TURN servers', '', QuestionDialog, {
             title: _t("Call failed due to misconfigured server"),
             description: <div>
-                <p>{_t(
+                <p>{ _t(
                     "Please ask the administrator of your homeserver " +
                     "(<code>%(homeserverDomain)s</code>) to configure a TURN server in " +
                     "order for calls to work reliably.",
                     { homeserverDomain: cli.getDomain() }, { code },
-                )}</p>
-                <p>{_t(
+                ) }</p>
+                <p>{ _t(
                     "Alternatively, you can try to use the public server at " +
                     "<code>turn.matrix.org</code>, but this will not be as reliable, and " +
                     "it will share your IP address with that server. You can also manage " +
                     "this in Settings.",
                     null, { code },
-                )}</p>
+                ) }</p>
             </div>,
             button: _t('Try using turn.matrix.org'),
             cancelButton: _t('OK'),
@@ -649,19 +690,19 @@ export default class CallHandler extends EventEmitter {
         if (call.type === CallType.Voice) {
             title = _t("Unable to access microphone");
             description = <div>
-                {_t(
+                { _t(
                     "Call failed because microphone could not be accessed. " +
                     "Check that a microphone is plugged in and set up correctly.",
-                )}
+                ) }
             </div>;
         } else if (call.type === CallType.Video) {
             title = _t("Unable to access webcam / microphone");
             description = <div>
-                {_t("Call failed because webcam or microphone could not be accessed. Check that:")}
+                { _t("Call failed because webcam or microphone could not be accessed. Check that:") }
                 <ul>
-                    <li>{_t("A microphone and webcam are plugged in and set up correctly")}</li>
-                    <li>{_t("Permission is granted to use the webcam")}</li>
-                    <li>{_t("No other application is using the webcam")}</li>
+                    <li>{ _t("A microphone and webcam are plugged in and set up correctly") }</li>
+                    <li>{ _t("Permission is granted to use the webcam") }</li>
+                    <li>{ _t("No other application is using the webcam") }</li>
                 </ul>
             </div>;
         }
@@ -871,6 +912,12 @@ export default class CallHandler extends EventEmitter {
             case Action.DialNumber:
                 this.dialNumber(payload.number);
                 break;
+            case Action.TransferCallToMatrixID:
+                this.startTransferToMatrixID(payload.call, payload.destination, payload.consultFirst);
+                break;
+            case Action.TransferCallToPhoneNumber:
+                this.startTransferToPhoneNumber(payload.call, payload.destination, payload.consultFirst);
+                break;
         }
     };
 
@@ -903,6 +950,48 @@ export default class CallHandler extends EventEmitter {
             action: 'view_room',
             room_id: roomId,
         });
+    }
+
+    private async startTransferToPhoneNumber(call: MatrixCall, destination: string, consultFirst: boolean) {
+        const results = await this.pstnLookup(destination);
+        if (!results || results.length === 0 || !results[0].userid) {
+            Modal.createTrackedDialog('', '', ErrorDialog, {
+                title: _t("Unable to transfer call"),
+                description: _t("There was an error looking up the phone number"),
+            });
+            return;
+        }
+
+        await this.startTransferToMatrixID(call, results[0].userid, consultFirst);
+    }
+
+    private async startTransferToMatrixID(call: MatrixCall, destination: string, consultFirst: boolean) {
+        if (consultFirst) {
+            const dmRoomId = await ensureDMExists(MatrixClientPeg.get(), destination);
+
+            dis.dispatch({
+                action: 'place_call',
+                type: call.type,
+                room_id: dmRoomId,
+                transferee: call,
+            });
+            dis.dispatch({
+                action: 'view_room',
+                room_id: dmRoomId,
+                should_peek: false,
+                joining: false,
+            });
+        } else {
+            try {
+                await call.transfer(destination);
+            } catch (e) {
+                console.log("Failed to transfer call", e);
+                Modal.createTrackedDialog('Failed to transfer call', '', ErrorDialog, {
+                    title: _t('Transfer Failed'),
+                    description: _t('Failed to transfer call'),
+                });
+            }
+        }
     }
 
     setActiveCallRoomId(activeCallRoomId: string) {

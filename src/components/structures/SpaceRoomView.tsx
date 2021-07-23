@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { RefObject, useContext, useRef, useState } from "react";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { Preset } from "matrix-js-sdk/src/@types/partials";
+import { Preset, JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventSubscription } from "fbemitter";
 
@@ -62,12 +62,10 @@ import IconizedContextMenu, {
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { BetaPill } from "../views/beta/BetaCard";
 import { UserTab } from "../views/dialogs/UserSettingsDialog";
-import SettingsStore from "../../settings/SettingsStore";
 import Modal from "../../Modal";
 import BetaFeedbackDialog from "../views/dialogs/BetaFeedbackDialog";
 import SdkConfig from "../../SdkConfig";
 import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
-import { JoinRule } from "../views/settings/tabs/room/SecurityRoomSettingsTab";
 
 interface IProps {
     space: Room;
@@ -102,12 +100,14 @@ export const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
         <hr />
         <div>
             <span className="mx_SpaceFeedbackPrompt_text">{ _t("Spaces are a beta feature.") }</span>
-            <AccessibleButton kind="link" onClick={() => {
-                if (onClick) onClick();
-                Modal.createTrackedDialog("Beta Feedback", "feature_spaces", BetaFeedbackDialog, {
+            <AccessibleButton
+                kind="link"
+                onClick={() => {
+                    if (onClick) onClick();
+                    Modal.createTrackedDialog("Beta Feedback", "feature_spaces", BetaFeedbackDialog, {
                     featureId: "feature_spaces",
-                });
-            }}>
+                    });
+                }}>
                 { _t("Feedback") }
             </AccessibleButton>
         </div>
@@ -147,7 +147,7 @@ const SpaceInfo = ({ space }) => {
     return <div className="mx_SpaceRoomView_info">
         { visibilitySection }
         { joinRule === "public" && <RoomMemberCount room={space}>
-            {(count) => count > 0 ? (
+            { (count) => count > 0 ? (
                 <AccessibleButton
                     kind="link"
                     onClick={() => {
@@ -160,7 +160,7 @@ const SpaceInfo = ({ space }) => {
                 >
                     { _t("%(count)s members", { count }) }
                 </AccessibleButton>
-            ) : null}
+            ) : null }
         </RoomMemberCount> }
     </div>;
 };
@@ -178,7 +178,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
 
     const [busy, setBusy] = useState(false);
 
-    const spacesEnabled = SettingsStore.getValue("feature_spaces");
+    const spacesEnabled = SpaceStore.spacesEnabled;
 
     const cannotJoin = getEffectiveMembership(myMembership) === EffectiveMembership.Leave
         && space.getJoinRule() !== JoinRule.Public;
@@ -293,7 +293,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         </h1>
         <SpaceInfo space={space} />
         <RoomTopic room={space}>
-            {(topic, ref) =>
+            { (topic, ref) =>
                 <div className="mx_SpaceRoomView_preview_topic" ref={ref}>
                     { topic }
                 </div>
@@ -308,7 +308,6 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
 };
 
 const SpaceLandingAddButton = ({ space, onNewRoomAdded }) => {
-    const cli = useContext(MatrixClientContext);
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
 
     let contextMenu;
@@ -331,7 +330,7 @@ const SpaceLandingAddButton = ({ space, onNewRoomAdded }) => {
                         e.stopPropagation();
                         closeMenu();
 
-                        if (await showCreateNewRoom(cli, space)) {
+                        if (await showCreateNewRoom(space)) {
                             onNewRoomAdded();
                         }
                     }}
@@ -344,7 +343,7 @@ const SpaceLandingAddButton = ({ space, onNewRoomAdded }) => {
                         e.stopPropagation();
                         closeMenu();
 
-                        const [added] = await showAddExistingRooms(cli, space);
+                        const [added] = await showAddExistingRooms(space);
                         if (added) {
                             onNewRoomAdded();
                         }
@@ -398,11 +397,11 @@ const SpaceLanding = ({ space }) => {
     }
 
     let settingsButton;
-    if (shouldShowSpaceSettings(cli, space)) {
+    if (shouldShowSpaceSettings(space)) {
         settingsButton = <AccessibleTooltipButton
             className="mx_SpaceRoomView_landing_settingsButton"
             onClick={() => {
-                showSpaceSettings(cli, space);
+                showSpaceSettings(space);
             }}
             title={_t("Settings")}
         />;
@@ -420,12 +419,12 @@ const SpaceLanding = ({ space }) => {
         <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
         <div className="mx_SpaceRoomView_landing_name">
             <RoomName room={space}>
-                {(name) => {
+                { (name) => {
                     const tags = { name: () => <div className="mx_SpaceRoomView_landing_nameRow">
                         <h1>{ name }</h1>
                     </div> };
                     return _t("Welcome to <name/>", {}, tags) as JSX.Element;
-                }}
+                } }
             </RoomName>
         </div>
         <div className="mx_SpaceRoomView_landing_info">
@@ -435,11 +434,11 @@ const SpaceLanding = ({ space }) => {
             { settingsButton }
         </div>
         <RoomTopic room={space}>
-            {(topic, ref) => (
+            { (topic, ref) => (
                 <div className="mx_SpaceRoomView_landing_topic" ref={ref}>
                     { topic }
                 </div>
-            )}
+            ) }
         </RoomTopic>
         <SpaceFeedbackPrompt />
         <hr />
@@ -459,7 +458,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
     const numFields = 3;
     const placeholders = [_t("General"), _t("Random"), _t("Support")];
     const [roomNames, setRoomName] = useStateArray(numFields, [_t("General"), _t("Random"), ""]);
-    const fields = new Array(numFields).fill(0).map((_, i) => {
+    const fields = new Array(numFields).fill(0).map((x, i) => {
         const name = "roomName" + i;
         return <Field
             key={name}
@@ -554,9 +553,7 @@ const SpaceAddExistingRooms = ({ space, onFinished }) => {
             onFinished={onFinished}
         />
 
-        <div className="mx_SpaceRoomView_buttons">
-
-        </div>
+        <div className="mx_SpaceRoomView_buttons" />
         <SpaceFeedbackPrompt />
     </div>;
 };
@@ -626,7 +623,7 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
     const numFields = 3;
     const fieldRefs: RefObject<Field>[] = [useRef(), useRef(), useRef()];
     const [emailAddresses, setEmailAddress] = useStateArray(numFields, "");
-    const fields = new Array(numFields).fill(0).map((_, i) => {
+    const fields = new Array(numFields).fill(0).map((x, i) => {
         const name = "emailAddress" + i;
         return <Field
             key={name}
@@ -854,7 +851,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     private renderBody() {
         switch (this.state.phase) {
             case Phase.Landing:
-                if (this.state.myMembership === "join" && SettingsStore.getValue("feature_spaces")) {
+                if (this.state.myMembership === "join" && SpaceStore.spacesEnabled) {
                     return <SpaceLanding space={this.props.space} />;
                 } else {
                     return <SpacePreview

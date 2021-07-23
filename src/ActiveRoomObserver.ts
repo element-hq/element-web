@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import RoomViewStore from './stores/RoomViewStore';
+import { EventSubscription } from 'fbemitter';
 
 type Listener = (isActive: boolean) => void;
 
@@ -30,7 +31,7 @@ type Listener = (isActive: boolean) => void;
 export class ActiveRoomObserver {
     private listeners: {[key: string]: Listener[]} = {};
     private _activeRoomId = RoomViewStore.getRoomId();
-    private readonly roomStoreToken: string;
+    private readonly roomStoreToken: EventSubscription;
 
     constructor() {
         // TODO: We could self-destruct when the last listener goes away, or at least stop listening.

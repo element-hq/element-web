@@ -189,6 +189,7 @@ export function dialogTermsInteractionCallback(
 ): Promise<string[]> {
     return new Promise((resolve, reject) => {
         console.log("Terms that need agreement", policiesAndServicePairs);
+        // FIXME: Using an import will result in test failures
         const TermsDialog = sdk.getComponent("views.dialogs.TermsDialog");
 
         Modal.createTrackedDialog('Terms of Service', '', TermsDialog, {

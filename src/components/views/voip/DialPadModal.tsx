@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 import DialPad from './DialPad';
@@ -23,6 +22,7 @@ import dis from '../../../dispatcher/dispatcher';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { DialNumberPayload } from "../../../dispatcher/payloads/DialNumberPayload";
 import { Action } from "../../../dispatcher/actions";
+import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
 
 interface IProps {
     onFinished: (boolean) => void;
@@ -74,22 +74,42 @@ export default class DialpadModal extends React.PureComponent<IProps, IState> {
     };
 
     render() {
+        const backspaceButton = (
+            <DialPadBackspaceButton onBackspacePress={this.onDeletePress} />
+        );
+
+        // Only show the backspace button if the field has content
+        let dialPadField;
+        if (this.state.value.length !== 0) {
+            dialPadField = <Field
+                className="mx_DialPadModal_field"
+                id="dialpad_number"
+                value={this.state.value}
+                autoFocus={true}
+                onChange={this.onChange}
+                postfixComponent={backspaceButton}
+            />;
+        } else {
+            dialPadField = <Field
+                className="mx_DialPadModal_field"
+                id="dialpad_number"
+                value={this.state.value}
+                autoFocus={true}
+                onChange={this.onChange}
+            />;
+        }
+
         return <div className="mx_DialPadModal">
+            <div>
+                <AccessibleButton className="mx_DialPadModal_cancel" onClick={this.onCancelClick} />
+            </div>
             <div className="mx_DialPadModal_header">
-                <div>
-                    <span className="mx_DialPadModal_title">{_t("Dial pad")}</span>
-                    <AccessibleButton className="mx_DialPadModal_cancel" onClick={this.onCancelClick} />
-                </div>
                 <form onSubmit={this.onFormSubmit}>
-                    <Field className="mx_DialPadModal_field" id="dialpad_number"
-                        value={this.state.value} autoFocus={true}
-                        onChange={this.onChange}
-                    />
+                    { dialPadField }
                 </form>
             </div>
-            <div className="mx_DialPadModal_horizSep" />
             <div className="mx_DialPadModal_dialPad">
-                <DialPad hasDialAndDelete={true}
+                <DialPad hasDial={true}
                     onDigitPress={this.onDigitPress}
                     onDeletePress={this.onDeletePress}
                     onDialPress={this.onDialPress}

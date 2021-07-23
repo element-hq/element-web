@@ -49,7 +49,7 @@ class GroupFilterOrderStore extends Store {
         this.__emitChange();
     }
 
-    __onDispatch(payload) {
+    __onDispatch(payload) { // eslint-disable-line @typescript-eslint/naming-convention
         switch (payload.action) {
             // Initialise state after initial sync
             case 'view_room': {

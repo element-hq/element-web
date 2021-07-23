@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import { MatrixEvent } from 'matrix-js-sdk/src';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { getNameForEventRoom, userLabelForEventRoom }
     from '../../../utils/KeyVerificationStateObserver';
@@ -26,6 +25,7 @@ import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 import { Action } from "../../../dispatcher/actions";
 import EventTileBubble from "./EventTileBubble";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import AccessibleButton from '../elements/AccessibleButton';
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -115,8 +115,6 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
     }
 
     public render() {
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-
         const { mxEvent } = this.props;
         const request = mxEvent.verificationRequest;
 
@@ -133,7 +131,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             const accepted = request.ready || request.started || request.done;
             if (accepted) {
                 stateLabel = (<AccessibleButton onClick={this.openRequest}>
-                    {this.acceptedLabel(request.receivingUserId)}
+                    { this.acceptedLabel(request.receivingUserId) }
                 </AccessibleButton>);
             } else if (request.cancelled) {
                 stateLabel = this.cancelledLabel(request.cancellingUserId);
@@ -142,7 +140,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             } else if (request.declining) {
                 stateLabel = _t("Declining …");
             }
-            stateNode = (<div className="mx_cryptoEvent_state">{stateLabel}</div>);
+            stateNode = (<div className="mx_cryptoEvent_state">{ stateLabel }</div>);
         }
 
         if (!request.initiatedByMe) {
@@ -152,10 +150,10 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             if (request.canAccept) {
                 stateNode = (<div className="mx_cryptoEvent_buttons">
                     <AccessibleButton kind="danger" onClick={this.onRejectClicked}>
-                        {_t("Decline")}
+                        { _t("Decline") }
                     </AccessibleButton>
                     <AccessibleButton kind="primary" onClick={this.onAcceptClicked}>
-                        {_t("Accept")}
+                        { _t("Accept") }
                     </AccessibleButton>
                 </div>);
             }
