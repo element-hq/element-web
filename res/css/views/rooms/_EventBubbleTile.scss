@@ -221,6 +221,7 @@ limitations under the License.
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 5px 0;
 
         .mx_EventTile_avatar {
             position: static;
@@ -287,7 +288,7 @@ limitations under the License.
     & + .mx_EventListSummary {
         .mx_EventTile {
             margin-top: 0;
-            padding: 0;
+            padding: 2px 0;
         }
     }
 
