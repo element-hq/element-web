@@ -97,13 +97,13 @@ export default class ImageView extends React.Component<IProps, IState> {
                 thumbnailInfo?.positionX +
                 (thumbnailInfo?.width / 2) -
                 (UIStore.instance.windowWidth / 2)
-            ),
+            ) ?? 0,
             translationY: (
                 thumbnailInfo?.positionY +
                 (thumbnailInfo?.height / 2) -
                 (UIStore.instance.windowHeight / 2) -
                 (PANEL_HEIGHT / 2)
-            ),
+            ) ?? 0,
             moving: false,
             contextMenuDisplayed: false,
         };
