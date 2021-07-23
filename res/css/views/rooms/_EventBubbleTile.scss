@@ -162,6 +162,12 @@ limitations under the License.
         }
     }
 
+    &.mx_EventTile_noSender {
+        .mx_EventTile_avatar {
+            top: -19px;
+        }
+    }
+
     &[data-has-reply=true] {
         > .mx_EventTile_line {
             flex-direction: column;
