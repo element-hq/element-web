@@ -98,9 +98,7 @@ const EmojiButton = ({ addEmoji }) => {
             isExpanded={menuDisplayed}
             title={_t('Emoji picker')}
             inputRef={button}
-        >
-
-        </ContextMenuTooltipButton>
+        />
 
         { contextMenu }
     </React.Fragment>;
@@ -439,7 +437,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         if (secondsLeft) {
             recordingTooltip = <Tooltip
                 label={_t("%(seconds)ss left", { seconds: secondsLeft })}
-                alignment={Alignment.Top} yOffset={-50}
+                alignment={Alignment.Top}
+                yOffset={-50}
             />;
         }
 

@@ -136,8 +136,8 @@ export default class SearchBox extends React.Component {
                 key="button"
                 tabIndex={-1}
                 className="mx_SearchBox_closeButton"
-                onClick={() => {this._clearSearch("button"); }}>
-            </AccessibleButton>) : undefined;
+                onClick={() => {this._clearSearch("button"); }}
+            />) : undefined;
 
         // show a shorter placeholder when blurred, if requested
         // this is used for the room filter field that has

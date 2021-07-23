@@ -101,12 +101,14 @@ export const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
         <hr />
         <div>
             <span className="mx_SpaceFeedbackPrompt_text">{ _t("Spaces are a beta feature.") }</span>
-            <AccessibleButton kind="link" onClick={() => {
-                if (onClick) onClick();
-                Modal.createTrackedDialog("Beta Feedback", "feature_spaces", BetaFeedbackDialog, {
+            <AccessibleButton
+                kind="link"
+                onClick={() => {
+                    if (onClick) onClick();
+                    Modal.createTrackedDialog("Beta Feedback", "feature_spaces", BetaFeedbackDialog, {
                     featureId: "feature_spaces",
-                });
-            }}>
+                    });
+                }}>
                 { _t("Feedback") }
             </AccessibleButton>
         </div>
@@ -553,9 +555,7 @@ const SpaceAddExistingRooms = ({ space, onFinished }) => {
             onFinished={onFinished}
         />
 
-        <div className="mx_SpaceRoomView_buttons">
-
-        </div>
+        <div className="mx_SpaceRoomView_buttons" />
         <SpaceFeedbackPrompt />
     </div>;
 };

@@ -133,8 +133,10 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 "may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>",
                 {},
                 {
-                    a: sub => <a href="https://element.io/help#encryption"
-                        rel="noreferrer noopener" target="_blank"
+                    a: sub => <a
+                        href="https://element.io/help#encryption"
+                        rel="noreferrer noopener"
+                        target="_blank"
                     >{ sub }</a>,
                 },
             ),
@@ -424,8 +426,11 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                         <div className='mx_SettingsTab_subsectionText'>
                             <span>{ _t("Once enabled, encryption cannot be disabled.") }</span>
                         </div>
-                        <LabelledToggleSwitch value={isEncrypted} onChange={this.onEncryptionChange}
-                            label={_t("Encrypted")} disabled={!canEnableEncryption}
+                        <LabelledToggleSwitch
+                            value={isEncrypted}
+                            onChange={this.onEncryptionChange}
+                            label={_t("Encrypted")}
+                            disabled={!canEnableEncryption}
                         />
                     </div>
                     { encryptionSettings }

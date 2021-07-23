@@ -188,7 +188,9 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
         }
 
         return (
-            <BaseDialog className="mx_BugReportDialog" onFinished={this.onCancel}
+            <BaseDialog
+                className="mx_BugReportDialog"
+                onFinished={this.onCancel}
                 title={_t('Submit debug logs')}
                 contentId='mx_Dialog_content'
             >

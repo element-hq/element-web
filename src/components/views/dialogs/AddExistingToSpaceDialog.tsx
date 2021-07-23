@@ -211,10 +211,16 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     function overflowTile(overflowCount, totalCount) {
         const text = _t("and %(count)s others...", { count: overflowCount });
         return (
-            <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
-                <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
-            } name={text} presenceState="online" suppressOnHover={true}
-            onClick={() => setTruncateAt(totalCount)} />
+            <EntityTile
+                className="mx_EntityTile_ellipsis"
+                avatarJsx={
+                    <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
+                }
+                name={text}
+                presenceState="online"
+                suppressOnHover={true}
+                onClick={() => setTruncateAt(totalCount)}
+            />
         );
     }
 

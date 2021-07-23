@@ -60,8 +60,10 @@ export default class DialpadContextMenu extends React.Component<IProps, IState> 
                     <AccessibleButton className="mx_DialPadContextMenu_cancel" onClick={this.onCancelClick} />
                 </div>
                 <div className="mx_DialPadContextMenu_header">
-                    <Field className="mx_DialPadContextMenu_dialled"
-                        value={this.state.value} autoFocus={true}
+                    <Field
+                        className="mx_DialPadContextMenu_dialled"
+                        value={this.state.value}
+                        autoFocus={true}
                         onChange={this.onChange}
                     />
                 </div>
