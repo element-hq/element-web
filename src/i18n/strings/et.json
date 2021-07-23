@@ -1489,7 +1489,7 @@
     "Update any local room aliases to point to the new room": "uuendame kõik jututoa aliased nii, et nad viitaks uuele jututoale",
     "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "ei võimalda kasutajatel enam vanas jututoas suhelda ning avaldame seal teate, mis soovitab kõigil kolida uude jututuppa",
     "Put a link back to the old room at the start of the new room so people can see old messages": "selleks et saaks vanu sõnumeid lugeda, paneme uue jututoa algusesse viite vanale jututoale",
-    "Automatically invite users": "Kutsu kasutajad automaatselt",
+    "Automatically invite users": "Kutsu automaatselt kasutajaid",
     "Upgrade private room": "Uuenda omavaheline jututuba",
     "Upgrade public room": "Uuenda avalik jututuba",
     "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "Jututoa uuendamine on keerukas toiming ning tavaliselt soovitatakse seda teha vaid siis, kui jututuba on vigade tõttu halvasti kasutatav, sealt on puudu vajalikke funktsionaalsusi või seal ilmneb turvavigu.",
