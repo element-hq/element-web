@@ -3504,5 +3504,11 @@
     "Spaces you know that contain this room": "Sulle teadaolevad kogukonnakeskused, millesse kuulub see jututuba",
     "Other spaces or rooms you might not know": "Sellised muud jututoad ja kogukonnakeskused, mida sa ei pruugi teada",
     "Automatically invite members from this room to the new one": "Kutsu jututoa senised liikmed automaatselt uude jututuppa",
-    "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Palun arvesta, et uuendusega tehakse jututoast uus variant</b>. Kõik senised sõnumid jäävad sellesse jututuppa arhiveeritud olekus."
+    "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Palun arvesta, et uuendusega tehakse jututoast uus variant</b>. Kõik senised sõnumid jäävad sellesse jututuppa arhiveeritud olekus.",
+    "Only people invited will be able to find and join this room.": "See jututuba on leitav vaid kutse olemasolul ning liitumine on võimalik vaid kutse alusel.",
+    "Create a room": "Loo jututuba",
+    "Private room (invite only)": "Privaatne jututuba (kutse alusel)",
+    "Public room": "Avalik jututuba",
+    "Visible to space members": "Nähtav kogukonnakeskuse liikmetele",
+    "Room visibility": "Jututoa nähtavus"
 }
