@@ -1,5 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2018 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,19 +15,29 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import { Room } from "matrix-js-sdk/src/models/room";
+
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { upgradeRoom } from "../../../utils/RoomUpgrade";
+import { IDialogProps } from "./IDialogProps";
+import BaseDialog from "./BaseDialog";
+import ErrorDialog from './ErrorDialog';
+import DialogButtons from '../elements/DialogButtons';
+import Spinner from "../elements/Spinner";
+
+interface IProps extends IDialogProps {
+    room: Room;
+}
+
+interface IState {
+    busy: boolean;
+}
 
 @replaceableComponent("views.dialogs.RoomUpgradeDialog")
-export default class RoomUpgradeDialog extends React.Component {
-    static propTypes = {
-        room: PropTypes.object.isRequired,
-        onFinished: PropTypes.func.isRequired,
-    };
+export default class RoomUpgradeDialog extends React.Component<IProps, IState> {
+    private targetVersion: string;
 
     state = {
         busy: true,
@@ -35,20 +45,19 @@ export default class RoomUpgradeDialog extends React.Component {
 
     async componentDidMount() {
         const recommended = await this.props.room.getRecommendedVersion();
-        this._targetVersion = recommended.version;
+        this.targetVersion = recommended.version;
         this.setState({ busy: false });
     }
 
-    _onCancelClick = () => {
+    private onCancelClick = (): void => {
         this.props.onFinished(false);
     };
 
-    _onUpgradeClick = () => {
+    private onUpgradeClick = (): void => {
         this.setState({ busy: true });
-        MatrixClientPeg.get().upgradeRoom(this.props.room.roomId, this._targetVersion).then(() => {
+        upgradeRoom(this.props.room, this.targetVersion, false, false).then(() => {
             this.props.onFinished(true);
         }).catch((err) => {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to upgrade room', '', ErrorDialog, {
                 title: _t("Failed to upgrade room"),
                 description: ((err && err.message) ? err.message : _t("The room upgrade could not be completed")),
@@ -59,29 +68,22 @@ export default class RoomUpgradeDialog extends React.Component {
     };
 
     render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const Spinner = sdk.getComponent('views.elements.Spinner');
-
         let buttons;
         if (this.state.busy) {
             buttons = <Spinner />;
         } else {
             buttons = <DialogButtons
-                primaryButton={_t(
-                    'Upgrade this room to version %(version)s',
-                    { version: this._targetVersion },
-                )}
+                primaryButton={_t('Upgrade this room to version %(version)s', { version: this.targetVersion })}
                 primaryButtonClass="danger"
                 hasCancel={true}
-                onPrimaryButtonClick={this._onUpgradeClick}
-                focus={this.props.focus}
-                onCancel={this._onCancelClick}
+                onPrimaryButtonClick={this.onUpgradeClick}
+                onCancel={this.onCancelClick}
             />;
         }
 
         return (
-            <BaseDialog className="mx_RoomUpgradeDialog"
+            <BaseDialog
+                className="mx_RoomUpgradeDialog"
                 onFinished={this.props.onFinished}
                 title={_t("Upgrade Room Version")}
                 contentId='mx_Dialog_content'
@@ -97,8 +99,10 @@ export default class RoomUpgradeDialog extends React.Component {
                 <ol>
                     <li>{ _t("Create a new room with the same name, description and avatar") }</li>
                     <li>{ _t("Update any local room aliases to point to the new room") }</li>
-                    <li>{ _t("Stop users from speaking in the old version of the room, and post a message advising users to move to the new room") }</li>
-                    <li>{ _t("Put a link back to the old room at the start of the new room so people can see old messages") }</li>
+                    <li>{ _t("Stop users from speaking in the old version of the room, " +
+                        "and post a message advising users to move to the new room") }</li>
+                    <li>{ _t("Put a link back to the old room at the start of the new room " +
+                        "so people can see old messages") }</li>
                 </ol>
                 { buttons }
             </BaseDialog>

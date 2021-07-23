@@ -205,7 +205,7 @@ function DeviceItem({ userId, device }: {userId: string, device: IDevice}) {
 
     if (isVerified) {
         return (
-            <div className={classes} title={device.deviceId} >
+            <div className={classes} title={device.deviceId}>
                 <div className={iconClasses} />
                 <div className="mx_UserInfo_device_name">{ deviceName }</div>
                 <div className="mx_UserInfo_device_trusted">{ trustedLabel }</div>
@@ -1353,13 +1353,16 @@ const BasicUserInfo: React.FC<{
         if (hasCrossSigningKeys !== undefined) {
             // Note: mx_UserInfo_verifyButton is for the end-to-end tests
             verifyButton = (
-                <AccessibleButton className="mx_UserInfo_field mx_UserInfo_verifyButton" onClick={() => {
-                    if (hasCrossSigningKeys) {
-                        verifyUser(member as User);
-                    } else {
-                        legacyVerifyUser(member as User);
-                    }
-                }}>
+                <AccessibleButton
+                    className="mx_UserInfo_field mx_UserInfo_verifyButton"
+                    onClick={() => {
+                        if (hasCrossSigningKeys) {
+                            verifyUser(member as User);
+                        } else {
+                            legacyVerifyUser(member as User);
+                        }
+                    }}
+                >
                     { _t("Verify") }
                 </AccessibleButton>
             );
@@ -1374,12 +1377,15 @@ const BasicUserInfo: React.FC<{
     let editDevices;
     if (member.userId == cli.getUserId()) {
         editDevices = (<p>
-            <AccessibleButton className="mx_UserInfo_field" onClick={() => {
-                dis.dispatch({
+            <AccessibleButton
+                className="mx_UserInfo_field"
+                onClick={() => {
+                    dis.dispatch({
                     action: Action.ViewUserSettings,
                     initialTabId: UserTab.Security,
-                });
-            }}>
+                    });
+                }}
+            >
                 { _t("Edit devices") }
             </AccessibleButton>
         </p>);

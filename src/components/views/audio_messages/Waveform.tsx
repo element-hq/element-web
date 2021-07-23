@@ -54,9 +54,13 @@ export default class Waveform extends React.PureComponent<IProps, IState> {
                     'mx_Waveform_bar': true,
                     'mx_Waveform_bar_100pct': isCompleteBar,
                 });
-                return <span key={i} style={{
-                    "--barHeight": h,
-                } as WaveformCSSProperties} className={classes} />;
+                return <span
+                    key={i}
+                    style={{
+                        "--barHeight": h,
+                    } as WaveformCSSProperties}
+                    className={classes}
+                />;
             }) }
         </div>;
     }
