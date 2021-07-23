@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import React, { ReactNode } from 'react';
-import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
-import {_t, _td, newTranslatableError} from "../languageHandler";
-import {makeType} from "./TypeUtils";
+import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
+import { _t, _td, newTranslatableError } from "../languageHandler";
+import { makeType } from "./TypeUtils";
 import SdkConfig from '../SdkConfig';
 
 const LIVELINESS_DISCOVERY_ERRORS: string[] = [
@@ -90,7 +90,7 @@ export default class AutoDiscoveryUtils {
                             href="https://github.com/vector-im/element-web/blob/master/docs/config.md"
                             target="_blank"
                             rel="noreferrer noopener"
-                        >{sub}</a>;
+                        >{ sub }</a>;
                     },
                 },
             );
@@ -130,8 +130,8 @@ export default class AutoDiscoveryUtils {
             serverErrorIsFatal: isFatalError,
             serverDeadError: (
                 <div>
-                    <strong>{title}</strong>
-                    <div>{body}</div>
+                    <strong>{ title }</strong>
+                    <div>{ body }</div>
                 </div>
             ),
         };

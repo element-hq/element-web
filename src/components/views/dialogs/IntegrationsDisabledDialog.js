@@ -16,11 +16,11 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';
-import {Action} from "../../../dispatcher/actions";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { Action } from "../../../dispatcher/actions";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.dialogs.IntegrationsDisabledDialog")
 export default class IntegrationsDisabledDialog extends React.Component {
@@ -49,7 +49,7 @@ export default class IntegrationsDisabledDialog extends React.Component {
                 title={_t("Integrations are disabled")}
             >
                 <div className='mx_IntegrationsDisabledDialog_content'>
-                    <p>{_t("Enable 'Manage Integrations' in Settings to do this.")}</p>
+                    <p>{ _t("Enable 'Manage Integrations' in Settings to do this.") }</p>
                 </div>
                 <DialogButtons
                     primaryButton={_t("Settings")}

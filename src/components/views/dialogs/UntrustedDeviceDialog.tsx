@@ -30,7 +30,7 @@ interface IProps extends IDialogProps {
     device: IDevice;
 }
 
-const UntrustedDeviceDialog: React.FC<IProps> = ({device, user, onFinished}) => {
+const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) => {
     let askToVerifyText;
     let newSessionText;
 
@@ -39,7 +39,7 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({device, user, onFinished}) => 
         askToVerifyText = _t("Verify your other session using one of the options below.");
     } else {
         newSessionText = _t("%(name)s (%(userId)s) signed in to a new session without verifying it:",
-            {name: user.displayName, userId: user.userId});
+            { name: user.displayName, userId: user.userId });
         askToVerifyText = _t("Ask this user to verify their session, or manually verify it below.");
     }
 
@@ -48,13 +48,13 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({device, user, onFinished}) => 
         className="mx_UntrustedDeviceDialog"
         title={<>
             <E2EIcon status="warning" size={24} hideTooltip={true} />
-            { _t("Not Trusted")}
+            { _t("Not Trusted") }
         </>}
     >
         <div className="mx_Dialog_content" id='mx_Dialog_content'>
-            <p>{newSessionText}</p>
-            <p>{device.getDisplayName()} ({device.deviceId})</p>
-            <p>{askToVerifyText}</p>
+            <p>{ newSessionText }</p>
+            <p>{ device.getDisplayName() } ({ device.deviceId })</p>
+            <p>{ askToVerifyText }</p>
         </div>
         <div className='mx_Dialog_buttons'>
             <AccessibleButton element="button" kind="secondary" onClick={() => onFinished("legacy")}>

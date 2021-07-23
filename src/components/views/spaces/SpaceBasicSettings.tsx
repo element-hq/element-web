@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useRef, useState} from "react";
+import React, { useRef, useState } from "react";
 
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 
 interface IProps {
     avatarUrl?: string;
     avatarDisabled?: boolean;
-    name?: string,
+    name?: string;
     nameDisabled?: boolean;
     topic?: string;
     topicDisabled?: boolean;

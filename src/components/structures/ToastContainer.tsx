@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import * as React from "react";
-import ToastStore, {IToast} from "../../stores/ToastStore";
+import ToastStore, { IToast } from "../../stores/ToastStore";
 import classNames from "classnames";
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 
 interface IState {
     toasts: IToast<any>[];
@@ -37,14 +37,14 @@ export default class ToastContainer extends React.Component<{}, IState> {
         // toasts may dismiss themselves in their didMount if they find
         // they're already irrelevant by the time they're mounted, and
         // our own componentDidMount is too late.
-        ToastStore.sharedInstance().on('update', this._onToastStoreUpdate);
+        ToastStore.sharedInstance().on('update', this.onToastStoreUpdate);
     }
 
     componentWillUnmount() {
-        ToastStore.sharedInstance().removeListener('update', this._onToastStoreUpdate);
+        ToastStore.sharedInstance().removeListener('update', this.onToastStoreUpdate);
     }
 
-    _onToastStoreUpdate = () => {
+    private onToastStoreUpdate = () => {
         this.setState({
             toasts: ToastStore.sharedInstance().getToasts(),
             countSeen: ToastStore.sharedInstance().getCountSeen(),
@@ -58,7 +58,7 @@ export default class ToastContainer extends React.Component<{}, IState> {
         let containerClasses;
         if (totalCount !== 0) {
             const topToast = this.state.toasts[0];
-            const {title, icon, key, component, className, props} = topToast;
+            const { title, icon, key, component, className, props } = topToast;
             const toastClasses = classNames("mx_Toast_toast", {
                 "mx_Toast_hasIcon": icon,
                 [`mx_Toast_icon_${icon}`]: icon,
@@ -75,10 +75,10 @@ export default class ToastContainer extends React.Component<{}, IState> {
             });
             toast = (<div className={toastClasses}>
                 <div className="mx_Toast_title">
-                    <h2>{title}</h2>
-                    <span>{countIndicator}</span>
+                    <h2>{ title }</h2>
+                    <span>{ countIndicator }</span>
                 </div>
-                <div className="mx_Toast_body">{React.createElement(component, toastProps)}</div>
+                <div className="mx_Toast_body">{ React.createElement(component, toastProps) }</div>
             </div>);
 
             containerClasses = classNames("mx_ToastContainer", {
@@ -88,7 +88,7 @@ export default class ToastContainer extends React.Component<{}, IState> {
         return toast
             ? (
                 <div className={containerClasses} role="alert">
-                    {toast}
+                    { toast }
                 </div>
             )
             : null;

@@ -17,13 +17,14 @@ limitations under the License.
 import React from 'react';
 import classnames from 'classnames';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 
 import * as Avatar from '../../../Avatar';
 import EventTile from '../rooms/EventTile';
 import SettingsStore from "../../../settings/SettingsStore";
-import {Layout} from "../../../settings/Layout";
-import {UIFeature} from "../../../settings/UIFeature";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { Layout } from "../../../settings/Layout";
+import { UIFeature } from "../../../settings/UIFeature";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     /**
@@ -72,7 +73,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         };
     }
 
-    private fakeEvent({message}: IState) {
+    private fakeEvent({ message }: IState) {
         // Fake it till we make it
         /* eslint-disable quote-props */
         const rawEvent = {
@@ -101,7 +102,8 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
 
         // Fake it more
         event.sender = {
-            name: this.props.displayName,
+            name: this.props.displayName || this.props.userId,
+            rawDisplayName: this.props.displayName,
             userId: this.props.userId,
             getAvatarUrl: (..._) => {
                 return Avatar.avatarUrlForUser(
@@ -110,7 +112,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
                 );
             },
             getMxcAvatarUrl: () => this.props.avatarUrl,
-        };
+        } as RoomMember;
 
         return event;
     }
@@ -128,6 +130,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
                 mxEvent={event}
                 layout={this.props.layout}
                 enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+                as="div"
             />
         </div>;
     }

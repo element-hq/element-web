@@ -25,7 +25,6 @@ import DMRoomMap from '../src/utils/DMRoomMap';
 import EventEmitter from 'events';
 import SdkConfig from '../src/SdkConfig';
 import { ActionPayload } from '../src/dispatcher/payloads';
-import { Actions } from '../src/notifications/types';
 import { Action } from '../src/dispatcher/actions';
 
 const REAL_ROOM_ID = '$room1:example.org';

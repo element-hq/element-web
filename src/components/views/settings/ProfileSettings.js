@@ -14,17 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
-import {_t} from "../../../languageHandler";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import React, { createRef } from 'react';
+import { _t } from "../../../languageHandler";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
 import { getHostingLink } from '../../../utils/HostingLink';
 import * as sdk from "../../../index";
-import {OwnProfileStore} from "../../../stores/OwnProfileStore";
+import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 @replaceableComponent("views.settings.ProfileSettings")
 export default class ProfileSettings extends React.Component {
@@ -79,7 +79,7 @@ export default class ProfileSettings extends React.Component {
         e.preventDefault();
 
         if (!this.state.enableProfileSave) return;
-        this.setState({enableProfileSave: false});
+        this.setState({ enableProfileSave: false });
 
         const client = MatrixClientPeg.get();
         const newState = {};
@@ -149,12 +149,12 @@ export default class ProfileSettings extends React.Component {
         let hostingSignup = null;
         if (hostingSignupLink) {
             hostingSignup = <span className="mx_ProfileSettings_hostingSignup">
-                {_t(
+                { _t(
                     "<a>Upgrade</a> to your own domain", {},
                     {
-                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">{sub}</a>,
+                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">{ sub }</a>,
                     },
-                )}
+                ) }
                 <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">
                     <img src={require("../../../../res/img/external-link.svg")} width="11" height="10" alt='' />
                 </a>
@@ -178,7 +178,7 @@ export default class ProfileSettings extends React.Component {
                 />
                 <div className="mx_ProfileSettings_profile">
                     <div className="mx_ProfileSettings_controls">
-                        <span className="mx_SettingsTab_subheading">{_t("Profile")}</span>
+                        <span className="mx_SettingsTab_subheading">{ _t("Profile") }</span>
                         <Field
                             label={_t("Display Name")}
                             type="text" value={this.state.displayName}
@@ -186,8 +186,8 @@ export default class ProfileSettings extends React.Component {
                             onChange={this._onDisplayNameChanged}
                         />
                         <p>
-                            {this.state.userId}
-                            {hostingSignup}
+                            { this.state.userId }
+                            { hostingSignup }
                         </p>
                     </div>
                     <AvatarSetting
@@ -203,14 +203,14 @@ export default class ProfileSettings extends React.Component {
                         kind="link"
                         disabled={!this.state.enableProfileSave}
                     >
-                        {_t("Cancel")}
+                        { _t("Cancel") }
                     </AccessibleButton>
                     <AccessibleButton
                         onClick={this._saveProfile}
                         kind="primary"
                         disabled={!this.state.enableProfileSave}
                     >
-                        {_t("Save")}
+                        { _t("Save") }
                     </AccessibleButton>
                 </div>
             </form>

@@ -111,6 +111,29 @@ $roomListCollapsedWidth: 68px;
                 }
             }
 
+            .mx_LeftPanel_dialPadButton {
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+                background-color: $roomlist-button-bg-color;
+                position: relative;
+                margin-left: 8px;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 8px;
+                    left: 8px;
+                    width: 16px;
+                    height: 16px;
+                    mask-image: url('$(res)/img/element-icons/call/dialpad.svg');
+                    mask-position: center;
+                    mask-size: contain;
+                    mask-repeat: no-repeat;
+                    background: $secondary-fg-color;
+                }
+            }
+
             .mx_LeftPanel_exploreButton {
                 width: 32px;
                 height: 32px;
@@ -184,6 +207,12 @@ $roomListCollapsedWidth: 68px;
                 // Organize the flexbox into a centered column layout
                 flex-direction: column;
                 justify-content: center;
+
+                .mx_LeftPanel_dialPadButton {
+                    margin-left: 0;
+                    margin-top: 8px;
+                    background-color: transparent;
+                }
 
                 .mx_LeftPanel_exploreButton {
                     margin-left: 0;

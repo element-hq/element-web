@@ -18,9 +18,9 @@ limitations under the License.
 */
 
 import url from 'url';
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import AccessibleButton from './AccessibleButton';
 import { _t } from '../../../languageHandler';
 import AppPermission from './AppPermission';
@@ -30,15 +30,15 @@ import dis from '../../../dispatcher/dispatcher';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import classNames from 'classnames';
 import SettingsStore from "../../../settings/SettingsStore";
-import {aboveLeftOf, ContextMenuButton} from "../../structures/ContextMenu";
-import PersistedElement, {getPersistKey} from "./PersistedElement";
-import {WidgetType} from "../../../widgets/WidgetType";
-import {StopGapWidget} from "../../../stores/widgets/StopGapWidget";
-import {ElementWidgetActions} from "../../../stores/widgets/ElementWidgetActions";
-import {MatrixCapabilities} from "matrix-widget-api";
+import { aboveLeftOf, ContextMenuButton } from "../../structures/ContextMenu";
+import PersistedElement, { getPersistKey } from "./PersistedElement";
+import { WidgetType } from "../../../widgets/WidgetType";
+import { StopGapWidget } from "../../../stores/widgets/StopGapWidget";
+import { ElementWidgetActions } from "../../../stores/widgets/ElementWidgetActions";
+import { MatrixCapabilities } from "matrix-widget-api";
 import RoomWidgetContextMenu from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.elements.AppTile")
 export default class AppTile extends React.Component {
@@ -47,9 +47,14 @@ export default class AppTile extends React.Component {
 
         // The key used for PersistedElement
         this._persistKey = getPersistKey(this.props.app.id);
-        this._sgWidget = new StopGapWidget(this.props);
-        this._sgWidget.on("preparing", this._onWidgetPrepared);
-        this._sgWidget.on("ready", this._onWidgetReady);
+        try {
+            this._sgWidget = new StopGapWidget(this.props);
+            this._sgWidget.on("preparing", this._onWidgetPrepared);
+            this._sgWidget.on("ready", this._onWidgetReady);
+        } catch (e) {
+            console.log("Failed to construct widget", e);
+            this._sgWidget = null;
+        }
         this.iframe = null; // ref to the iframe (callback style)
 
         this.state = this._getNewState(props);
@@ -97,7 +102,7 @@ export default class AppTile extends React.Component {
             // Force the widget to be non-persistent (able to be deleted/forgotten)
             ActiveWidgetStore.destroyPersistentWidget(this.props.app.id);
             PersistedElement.destroyElement(this._persistKey);
-            this._sgWidget.stop();
+            if (this._sgWidget) this._sgWidget.stop();
         }
 
         this.setState({ hasPermissionToLoad });
@@ -117,7 +122,7 @@ export default class AppTile extends React.Component {
 
     componentDidMount() {
         // Only fetch IM token on mount if we're showing and have permission to load
-        if (this.state.hasPermissionToLoad) {
+        if (this._sgWidget && this.state.hasPermissionToLoad) {
             this._startWidget();
         }
 
@@ -146,22 +151,27 @@ export default class AppTile extends React.Component {
         if (this._sgWidget) {
             this._sgWidget.stop();
         }
-        this._sgWidget = new StopGapWidget(newProps);
-        this._sgWidget.on("preparing", this._onWidgetPrepared);
-        this._sgWidget.on("ready", this._onWidgetReady);
-        this._startWidget();
+        try {
+            this._sgWidget = new StopGapWidget(newProps);
+            this._sgWidget.on("preparing", this._onWidgetPrepared);
+            this._sgWidget.on("ready", this._onWidgetReady);
+            this._startWidget();
+        } catch (e) {
+            console.log("Failed to construct widget", e);
+            this._sgWidget = null;
+        }
     }
 
     _startWidget() {
         this._sgWidget.prepare().then(() => {
-            this.setState({initialising: false});
+            this.setState({ initialising: false });
         });
     }
 
     _iframeRefChange = (ref) => {
         this.iframe = ref;
         if (ref) {
-            this._sgWidget.start(ref);
+            if (this._sgWidget) this._sgWidget.start(ref);
         } else {
             this._resetWidget(this.props);
         }
@@ -203,17 +213,17 @@ export default class AppTile extends React.Component {
         }
 
         if (WidgetType.JITSI.matches(this.props.app.type)) {
-            dis.dispatch({action: 'hangup_conference'});
+            dis.dispatch({ action: 'hangup_conference' });
         }
 
         // Delete the widget from the persisted store for good measure.
         PersistedElement.destroyElement(this._persistKey);
 
-        this._sgWidget.stop({forceDestroy: true});
+        if (this._sgWidget) this._sgWidget.stop({ forceDestroy: true });
     }
 
     _onWidgetPrepared = () => {
-        this.setState({loading: false});
+        this.setState({ loading: false });
     };
 
     _onWidgetReady = () => {
@@ -227,7 +237,8 @@ export default class AppTile extends React.Component {
             switch (payload.action) {
                 case 'm.sticker':
                     if (this._sgWidget.widgetApi.hasCapability(MatrixCapabilities.StickerSending)) {
-                        dis.dispatch({action: 'post_sticker_message', data: payload.data});
+                        dis.dispatch({ action: 'post_sticker_message', data: payload.data });
+                        dis.dispatch({ action: 'stickerpicker_close' });
                     } else {
                         console.warn('Ignoring sticker message. Invalid capability');
                     }
@@ -243,7 +254,7 @@ export default class AppTile extends React.Component {
         current[this.props.app.eventId] = true;
         const level = SettingsStore.firstSupportedLevel("allowedWidgets");
         SettingsStore.setValue("allowedWidgets", roomId, level, current).then(() => {
-            this.setState({hasPermissionToLoad: true});
+            this.setState({ hasPermissionToLoad: true });
 
             // Fetch a token for the integration manager, now that we're allowed to
             this._startWidget();
@@ -303,7 +314,7 @@ export default class AppTile extends React.Component {
         // Using Object.assign workaround as the following opens in a new window instead of a new tab.
         // window.open(this._getPopoutUrl(), '_blank', 'noopener=yes');
         Object.assign(document.createElement('a'),
-            { target: '_blank', href: this._sgWidget.popoutUrl, rel: 'noreferrer noopener'}).click();
+            { target: '_blank', href: this._sgWidget.popoutUrl, rel: 'noreferrer noopener' }).click();
     };
 
     _onContextMenuClick = () => {
@@ -340,7 +351,13 @@ export default class AppTile extends React.Component {
                 <Spinner message={_t("Loading...")} />
             </div>
         );
-        if (!this.state.hasPermissionToLoad) {
+        if (this._sgWidget === null) {
+            appTileBody = (
+                <div className={appTileBodyClass} style={appTileBodyStyles}>
+                    <AppWarning errorMsg={_t("Error loading Widget")} />
+                </div>
+            );
+        } else if (!this.state.hasPermissionToLoad) {
             // only possible for room widgets, can assert this.props.room here
             const isEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
             appTileBody = (
@@ -364,7 +381,7 @@ export default class AppTile extends React.Component {
             if (this.isMixedContent()) {
                 appTileBody = (
                     <div className={appTileBodyClass} style={appTileBodyStyles}>
-                        <AppWarning errorMsg="Error - Mixed content" />
+                        <AppWarning errorMsg={_t("Error - Mixed content")} />
                     </div>
                 );
             } else {
@@ -391,7 +408,7 @@ export default class AppTile extends React.Component {
                     // AppTile's border is in the wrong place
                     appTileBody = <div className="mx_AppTile_persistedWrapper">
                         <PersistedElement persistKey={this._persistKey}>
-                            {appTileBody}
+                            { appTileBody }
                         </PersistedElement>
                     </div>;
                 }
@@ -400,11 +417,11 @@ export default class AppTile extends React.Component {
 
         let appTileClasses;
         if (this.props.miniMode) {
-            appTileClasses = {mx_AppTile_mini: true};
+            appTileClasses = { mx_AppTile_mini: true };
         } else if (this.props.fullWidth) {
-            appTileClasses = {mx_AppTileFullWidth: true};
+            appTileClasses = { mx_AppTileFullWidth: true };
         } else {
-            appTileClasses = {mx_AppTile: true};
+            appTileClasses = { mx_AppTile: true };
         }
         appTileClasses = classNames(appTileClasses);
 
@@ -417,6 +434,8 @@ export default class AppTile extends React.Component {
                     onFinished={this._closeContextMenu}
                     showUnpin={!this.props.userWidget}
                     userWidget={this.props.userWidget}
+                    onEditClick={this.props.onEditClick}
+                    onDeleteClick={this.props.onDeleteClick}
                 />
             );
         }
@@ -425,7 +444,7 @@ export default class AppTile extends React.Component {
             <div className={appTileClasses} id={this.props.app.id}>
                 { this.props.showMenubar &&
                 <div className="mx_AppTileMenuBar">
-                    <span className="mx_AppTileMenuBarTitle" style={{pointerEvents: (this.props.handleMinimisePointerEvents ? 'all' : false)}}>
+                    <span className="mx_AppTileMenuBarTitle" style={{ pointerEvents: (this.props.handleMinimisePointerEvents ? 'all' : false) }}>
                         { this.props.showTitle && this._getTileTitle() }
                     </span>
                     <span className="mx_AppTileMenuBarWidgets">
@@ -434,13 +453,13 @@ export default class AppTile extends React.Component {
                             title={_t('Popout widget')}
                             onClick={this._onPopoutWidgetClick}
                         /> }
-                        { <ContextMenuButton
+                        <ContextMenuButton
                             className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_menu"
                             label={_t("Options")}
                             isExpanded={this.state.menuDisplayed}
                             inputRef={this._contextMenuButton}
                             onClick={this._onContextMenuClick}
-                        /> }
+                        />
                     </span>
                 </div> }
                 { appTileBody }

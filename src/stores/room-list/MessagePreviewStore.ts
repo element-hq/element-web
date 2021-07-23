@@ -63,7 +63,7 @@ const PREVIEWS = {
 const MAX_EVENTS_BACKWARDS = 50;
 
 // type merging ftw
-type TAG_ANY = "im.vector.any";
+type TAG_ANY = "im.vector.any"; // eslint-disable-line @typescript-eslint/naming-convention
 const TAG_ANY: TAG_ANY = "im.vector.any";
 
 interface IState {
@@ -176,7 +176,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
 
         if (payload.action === 'MatrixActions.Room.timeline' || payload.action === 'MatrixActions.Event.decrypted') {
             const event = payload.event; // TODO: Type out the dispatcher
-            const isHistoricalEvent = payload.hasOwnProperty("isLiveEvent") && !payload.isLiveEvent
+            const isHistoricalEvent = payload.hasOwnProperty("isLiveEvent") && !payload.isLiveEvent;
             if (!this.previews.has(event.getRoomId()) || isHistoricalEvent) return; // not important
             await this.generatePreview(this.matrixClient.getRoom(event.getRoomId()), TAG_ANY);
         }

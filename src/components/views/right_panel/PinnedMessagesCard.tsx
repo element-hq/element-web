@@ -14,9 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useCallback, useContext, useEffect, useState} from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { RoomState } from "matrix-js-sdk/src/models/room-state";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from 'matrix-js-sdk/src/@types/event';
 
@@ -28,6 +27,7 @@ import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import PinningUtils from "../../../utils/PinningUtils";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 import PinnedEventTile from "../rooms/PinnedEventTile";
+import { useRoomState } from "../../../hooks/useRoomState";
 
 interface IProps {
     room: Room;
@@ -73,24 +73,6 @@ export const useReadPinnedEvents = (room: Room): Set<string> => {
         };
     }, [update]);
     return readPinnedEvents;
-};
-
-const useRoomState = <T extends any>(room: Room, mapper: (state: RoomState) => T): T => {
-    const [value, setValue] = useState<T>(room ? mapper(room.currentState) : undefined);
-
-    const update = useCallback(() => {
-        if (!room) return;
-        setValue(mapper(room.currentState));
-    }, [room, mapper]);
-
-    useEventEmitter(room?.currentState, "RoomState.events", update);
-    useEffect(() => {
-        update();
-        return () => {
-            setValue(undefined);
-        };
-    }, [update]);
-    return value;
 };
 
 const PinnedMessagesCard = ({ room, onClose }: IProps) => {
@@ -155,12 +137,24 @@ const PinnedMessagesCard = ({ room, onClose }: IProps) => {
 
         // show them in reverse, with latest pinned at the top
         content = pinnedEvents.filter(Boolean).reverse().map(ev => (
-            <PinnedEventTile key={ev.getId()} room={room} event={ev} onUnpinClicked={onUnpinClicked} />
+            <PinnedEventTile key={ev.getId()} room={room} event={ev} onUnpinClicked={() => onUnpinClicked(ev)} />
         ));
     } else {
-        content = <div className="mx_RightPanel_empty mx_PinnedMessagesCard_empty">
-            <h2>{_t("You’re all caught up")}</h2>
-            <p>{_t("You have no visible notifications.")}</p>
+        content = <div className="mx_PinnedMessagesCard_empty">
+            <div>
+                { /* XXX: We reuse the classes for simplicity, but deliberately not the components for non-interactivity. */ }
+                <div className="mx_PinnedMessagesCard_MessageActionBar">
+                    <div className="mx_MessageActionBar_maskButton mx_MessageActionBar_reactButton" />
+                    <div className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton" />
+                    <div className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton" />
+                </div>
+
+                <h2>{ _t("Nothing pinned, yet") }</h2>
+                { _t("If you have permissions, open the menu on any message and select " +
+                    "<b>Pin</b> to stick them here.", {}, {
+                        b: sub => <b>{ sub }</b>,
+                }) }
+            </div>
         </div>;
     }
 

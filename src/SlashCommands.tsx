@@ -17,25 +17,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 import * as React from 'react';
+import { User } from "matrix-js-sdk/src/models/user";
 
 import * as ContentHelpers from 'matrix-js-sdk/src/content-helpers';
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';
-import * as sdk from './index';
-import {_t, _td} from './languageHandler';
+import { _t, _td } from './languageHandler';
 import Modal from './Modal';
 import MultiInviter from './utils/MultiInviter';
 import { linkifyAndSanitizeHtml } from './HtmlUtils';
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import WidgetUtils from "./utils/WidgetUtils";
-import {textToHtmlRainbow} from "./utils/colour";
+import { textToHtmlRainbow } from "./utils/colour";
 import { getAddressType } from './UserAddress';
 import { abbreviateUrl } from './utils/UrlUtils';
 import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from './utils/IdentityServerUtils';
-import {isPermalinkHost, parsePermalink} from "./utils/permalinks/Permalinks";
-import {inviteUsersToRoom} from "./RoomInvite";
+import { isPermalinkHost, parsePermalink } from "./utils/permalinks/Permalinks";
+import { inviteUsersToRoom } from "./RoomInvite";
 import { WidgetType } from "./widgets/WidgetType";
 import { Jitsi } from "./widgets/Jitsi";
 import { parseFragment as parseHtml, Element as ChildElement } from "parse5";
@@ -46,10 +45,16 @@ import { Action } from "./dispatcher/actions";
 import { EffectiveMembership, getEffectiveMembership, leaveRoomBehaviour } from "./utils/membership";
 import SdkConfig from "./SdkConfig";
 import SettingsStore from "./settings/SettingsStore";
-import {UIFeature} from "./settings/UIFeature";
-import {CHAT_EFFECTS} from "./effects"
+import { UIFeature } from "./settings/UIFeature";
+import { CHAT_EFFECTS } from "./effects";
 import CallHandler from "./CallHandler";
-import {guessAndSetDMRoom} from "./Rooms";
+import { guessAndSetDMRoom } from "./Rooms";
+import UploadConfirmDialog from './components/views/dialogs/UploadConfirmDialog';
+import ErrorDialog from './components/views/dialogs/ErrorDialog';
+import DevtoolsDialog from './components/views/dialogs/DevtoolsDialog';
+import RoomUpgradeWarningDialog from "./components/views/dialogs/RoomUpgradeWarningDialog";
+import InfoDialog from "./components/views/dialogs/InfoDialog";
+import SlashCommandHelpDialog from "./components/views/dialogs/SlashCommandHelpDialog";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -63,7 +68,6 @@ const singleMxcUpload = async (): Promise<any> => {
         fileSelector.onchange = (ev: HTMLInputEvent) => {
             const file = ev.target.files[0];
 
-            const UploadConfirmDialog = sdk.getComponent("dialogs.UploadConfirmDialog");
             Modal.createTrackedDialog('Upload Files confirmation', '', UploadConfirmDialog, {
                 file,
                 onFinished: (shouldContinue) => {
@@ -143,11 +147,15 @@ export class Command {
 }
 
 function reject(error) {
-    return {error};
+    return { error };
 }
 
 function success(promise?: Promise<any>) {
-    return {promise};
+    return { promise };
+}
+
+function successSync(value: any) {
+    return success(Promise.resolve(value));
 }
 
 /* Disable the "unexpected this" error for these commands - all of the run
@@ -160,7 +168,7 @@ export const Commands = [
         args: '<message>',
         description: _td('Sends the given message as a spoiler'),
         runFn: function(roomId, message) {
-            return success(ContentHelpers.makeHtmlMessage(
+            return successSync(ContentHelpers.makeHtmlMessage(
                 message,
                 `<span data-mx-spoiler>${message}</span>`,
             ));
@@ -176,7 +184,7 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(ContentHelpers.makeTextMessage(message));
+            return successSync(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -189,7 +197,7 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(ContentHelpers.makeTextMessage(message));
+            return successSync(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -202,7 +210,7 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(ContentHelpers.makeTextMessage(message));
+            return successSync(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -215,7 +223,7 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(ContentHelpers.makeTextMessage(message));
+            return successSync(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -224,7 +232,7 @@ export const Commands = [
         args: '<message>',
         description: _td('Sends a message as plain text, without interpreting it as markdown'),
         runFn: function(roomId, messages) {
-            return success(ContentHelpers.makeTextMessage(messages));
+            return successSync(ContentHelpers.makeTextMessage(messages));
         },
         category: CommandCategories.messages,
     }),
@@ -233,7 +241,7 @@ export const Commands = [
         args: '<message>',
         description: _td('Sends a message as html, without interpreting it as markdown'),
         runFn: function(roomId, messages) {
-            return success(ContentHelpers.makeHtmlMessage(messages, messages));
+            return successSync(ContentHelpers.makeHtmlMessage(messages, messages));
         },
         category: CommandCategories.messages,
     }),
@@ -242,7 +250,6 @@ export const Commands = [
         args: '<query>',
         description: _td('Searches DuckDuckGo for results'),
         runFn: function() {
-            const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
             // TODO Don't explain this away, actually show a search UI here.
             Modal.createTrackedDialog('Slash Commands', '/ddg is not a command', ErrorDialog, {
                 title: _t('/ddg is not a command'),
@@ -265,10 +272,8 @@ export const Commands = [
                     return reject(_t("You do not have the required permissions to use this command."));
                 }
 
-                const RoomUpgradeWarningDialog = sdk.getComponent("dialogs.RoomUpgradeWarningDialog");
-
-                const {finished} = Modal.createTrackedDialog('Slash Commands', 'upgrade room confirmation',
-                    RoomUpgradeWarningDialog, {roomId: roomId, targetVersion: args}, /*className=*/null,
+                const { finished } = Modal.createTrackedDialog('Slash Commands', 'upgrade room confirmation',
+                    RoomUpgradeWarningDialog, { roomId: roomId, targetVersion: args }, /*className=*/null,
                     /*isPriority=*/false, /*isStatic=*/true);
 
                 return success(finished.then(async ([resp]) => {
@@ -284,7 +289,7 @@ export const Commands = [
                         if (resp.invite) {
                             checkForUpgradeFn = async (newRoom) => {
                                 // The upgradePromise should be done by the time we await it here.
-                                const {replacement_room: newRoomId} = await upgradePromise;
+                                const { replacement_room: newRoomId } = await upgradePromise;
                                 if (newRoom.roomId !== newRoomId) return;
 
                                 const toInvite = [
@@ -310,7 +315,6 @@ export const Commands = [
 
                         if (checkForUpgradeFn) cli.removeListener('Room', checkForUpgradeFn);
 
-                        const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
                         Modal.createTrackedDialog('Slash Commands', 'room upgrade error', ErrorDialog, {
                             title: _t('Error upgrading room'),
                             description: _t(
@@ -366,7 +370,7 @@ export const Commands = [
 
             return success(promise.then((url) => {
                 if (!url) return;
-                return MatrixClientPeg.get().sendStateEvent(roomId, 'm.room.avatar', {url}, '');
+                return MatrixClientPeg.get().sendStateEvent(roomId, 'm.room.avatar', { url }, '');
             }));
         },
         category: CommandCategories.actions,
@@ -430,7 +434,6 @@ export const Commands = [
             const topic = topicEvents && topicEvents.getContent().topic;
             const topicHtml = topic ? linkifyAndSanitizeHtml(topic) : _t('This room has no topic.');
 
-            const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
             Modal.createTrackedDialog('Slash Commands', 'Topic', InfoDialog, {
                 title: room.name,
                 description: <div dangerouslySetInnerHTML={{ __html: topicHtml }} />,
@@ -477,14 +480,14 @@ export const Commands = [
                                 'Identity server',
                                 QuestionDialog, {
                                     title: _t("Use an identity server"),
-                                    description: <p>{_t(
+                                    description: <p>{ _t(
                                         "Use an identity server to invite by email. " +
                                         "Click continue to use the default identity server " +
                                         "(%(defaultIdentityServerName)s) or manage in Settings.",
                                         {
                                             defaultIdentityServerName: abbreviateUrl(defaultIdentityServerUrl),
                                         },
-                                    )}</p>,
+                                    ) }</p>,
                                     button: _t("Continue"),
                                 },
                             );
@@ -519,7 +522,7 @@ export const Commands = [
         aliases: ['j', 'goto'],
         args: '<room-address>',
         description: _td('Joins room with given address'),
-        runFn: function(_, args) {
+        runFn: function(roomId, args) {
             if (args) {
                 // Note: we support 2 versions of this command. The first is
                 // the public-facing one for most users and the other is a
@@ -733,11 +736,10 @@ export const Commands = [
                     ignoredUsers.push(userId); // de-duped internally in the js-sdk
                     return success(
                         cli.setIgnoredUsers(ignoredUsers).then(() => {
-                            const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
                             Modal.createTrackedDialog('Slash Commands', 'User ignored', InfoDialog, {
                                 title: _t('Ignored user'),
                                 description: <div>
-                                    <p>{ _t('You are now ignoring %(userId)s', {userId}) }</p>
+                                    <p>{ _t('You are now ignoring %(userId)s', { userId }) }</p>
                                 </div>,
                             });
                         }),
@@ -764,11 +766,10 @@ export const Commands = [
                     if (index !== -1) ignoredUsers.splice(index, 1);
                     return success(
                         cli.setIgnoredUsers(ignoredUsers).then(() => {
-                            const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
                             Modal.createTrackedDialog('Slash Commands', 'User unignored', InfoDialog, {
                                 title: _t('Unignored user'),
                                 description: <div>
-                                    <p>{ _t('You are no longer ignoring %(userId)s', {userId}) }</p>
+                                    <p>{ _t('You are no longer ignoring %(userId)s', { userId }) }</p>
                                 </div>,
                             });
                         }),
@@ -834,8 +835,7 @@ export const Commands = [
         command: 'devtools',
         description: _td('Opens the Developer Tools dialog'),
         runFn: function(roomId) {
-            const DevtoolsDialog = sdk.getComponent('dialogs.DevtoolsDialog');
-            Modal.createDialog(DevtoolsDialog, {roomId});
+            Modal.createDialog(DevtoolsDialog, { roomId });
             return success();
         },
         category: CommandCategories.advanced,
@@ -939,7 +939,6 @@ export const Commands = [
                         await cli.setDeviceVerified(userId, deviceId, true);
 
                         // Tell the user we verified everything
-                        const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
                         Modal.createTrackedDialog('Slash Commands', 'Verified key', InfoDialog, {
                             title: _t('Verified key'),
                             description: <div>
@@ -947,7 +946,7 @@ export const Commands = [
                                     {
                                         _t('The signing key you provided matches the signing key you received ' +
                                             'from %(userId)s\'s session %(deviceId)s. Session marked as verified.',
-                                        {userId, deviceId})
+                                        { userId, deviceId })
                                     }
                                 </p>
                             </div>,
@@ -978,7 +977,7 @@ export const Commands = [
         args: '<message>',
         runFn: function(roomId, args) {
             if (!args) return reject(this.getUserId());
-            return success(ContentHelpers.makeHtmlMessage(args, textToHtmlRainbow(args)));
+            return successSync(ContentHelpers.makeHtmlMessage(args, textToHtmlRainbow(args)));
         },
         category: CommandCategories.messages,
     }),
@@ -988,7 +987,7 @@ export const Commands = [
         args: '<message>',
         runFn: function(roomId, args) {
             if (!args) return reject(this.getUserId());
-            return success(ContentHelpers.makeHtmlEmote(args, textToHtmlRainbow(args)));
+            return successSync(ContentHelpers.makeHtmlEmote(args, textToHtmlRainbow(args)));
         },
         category: CommandCategories.messages,
     }),
@@ -996,8 +995,6 @@ export const Commands = [
         command: "help",
         description: _td("Displays list of commands with usages and descriptions"),
         runFn: function() {
-            const SlashCommandHelpDialog = sdk.getComponent('dialogs.SlashCommandHelpDialog');
-
             Modal.createTrackedDialog('Slash Commands', 'Help', SlashCommandHelpDialog);
             return success();
         },
@@ -1015,9 +1012,8 @@ export const Commands = [
             const member = MatrixClientPeg.get().getRoom(roomId).getMember(userId);
             dis.dispatch<ViewUserPayload>({
                 action: Action.ViewUser,
-                // XXX: We should be using a real member object and not assuming what the
-                // receiver wants.
-                member: member || {userId},
+                // XXX: We should be using a real member object and not assuming what the receiver wants.
+                member: member || { userId } as User,
             });
             return success();
         },
@@ -1073,7 +1069,7 @@ export const Commands = [
         command: "msg",
         description: _td("Sends a message to the given user"),
         args: "<user-id> <message>",
-        runFn: function(_, args) {
+        runFn: function(roomId, args) {
             if (args) {
                 // matches the first whitespace delimited group and then the rest of the string
                 const matches = args.match(/^(\S+?)(?: +(.*))?$/s);
@@ -1169,16 +1165,16 @@ export const Commands = [
                         };
                         MatrixClientPeg.get().sendMessage(roomId, content);
                     }
-                    dis.dispatch({action: `effects.${effect.command}`});
+                    dis.dispatch({ action: `effects.${effect.command}` });
                 })());
             },
             category: CommandCategories.effects,
-        })
+        });
     }),
 ];
 
 // build a map from names and aliases to the Command objects.
-export const CommandMap = new Map();
+export const CommandMap = new Map<string, Command>();
 Commands.forEach(cmd => {
     CommandMap.set(cmd.command, cmd);
     cmd.aliases.forEach(alias => {
@@ -1186,15 +1182,15 @@ Commands.forEach(cmd => {
     });
 });
 
-export function parseCommandString(input: string) {
+export function parseCommandString(input: string): { cmd?: string, args?: string } {
     // trim any trailing whitespace, as it can confuse the parser for
     // IRC-style commands
     input = input.replace(/\s+$/, '');
     if (input[0] !== '/') return {}; // not a command
 
     const bits = input.match(/^(\S+?)(?:[ \n]+((.|\n)*))?$/);
-    let cmd;
-    let args;
+    let cmd: string;
+    let args: string;
     if (bits) {
         cmd = bits[1].substring(1).toLowerCase();
         args = bits[2];
@@ -1202,7 +1198,12 @@ export function parseCommandString(input: string) {
         cmd = input;
     }
 
-    return {cmd, args};
+    return { cmd, args };
+}
+
+interface ICmd {
+    cmd?: Command;
+    args?: string;
 }
 
 /**
@@ -1213,8 +1214,8 @@ export function parseCommandString(input: string) {
  * processing the command, or 'promise' if a request was sent out.
  * Returns null if the input didn't match a command.
  */
-export function getCommand(input: string) {
-    const {cmd, args} = parseCommandString(input);
+export function getCommand(input: string): ICmd {
+    const { cmd, args } = parseCommandString(input);
 
     if (CommandMap.has(cmd) && CommandMap.get(cmd).isEnabled()) {
         return {

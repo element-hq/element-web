@@ -16,22 +16,21 @@ limitations under the License.
 
 import { EventEmitter } from "events";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
+import "./SpaceStore-setup"; // enable space lab
 import "../skinned-sdk"; // Must be first for skinning to work
 import SpaceStore, {
     UPDATE_INVITED_SPACES,
     UPDATE_SELECTED_SPACE,
-    UPDATE_TOP_LEVEL_SPACES
+    UPDATE_TOP_LEVEL_SPACES,
 } from "../../src/stores/SpaceStore";
 import { resetAsyncStoreWithClient, setupAsyncStoreWithClient } from "../utils/test-utils";
 import { mkEvent, mkStubRoom, stubClient } from "../test-utils";
 import { EnhancedMap } from "../../src/utils/maps";
-import SettingsStore from "../../src/settings/SettingsStore";
 import DMRoomMap from "../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import defaultDispatcher from "../../src/dispatcher/dispatcher";
-
-type MatrixEvent = any; // importing from js-sdk upsets things
 
 jest.useFakeTimers();
 
@@ -79,9 +78,6 @@ const mkSpace = (spaceId: string, children: string[] = []) => {
     return space;
 };
 
-const getValue = jest.fn();
-SettingsStore.getValue = getValue;
-
 const getUserIdForRoomId = jest.fn();
 // @ts-ignore
 DMRoomMap.sharedInstance = { getUserIdForRoomId };
@@ -122,11 +118,6 @@ describe("SpaceStore", () => {
     beforeEach(() => {
         jest.runAllTimers();
         client.getVisibleRooms.mockReturnValue(rooms = []);
-        getValue.mockImplementation(settingName => {
-            if (settingName === "feature_spaces") {
-                return true;
-            }
-        });
     });
     afterEach(async () => {
         await resetAsyncStoreWithClient(store);
