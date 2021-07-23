@@ -3543,5 +3543,6 @@
     "IRC": "IRC",
     "New layout switcher (with message bubbles)": "新的佈局切換器（帶有訊息泡泡）",
     "Image": "圖片",
-    "Sticker": "貼紙"
+    "Sticker": "貼紙",
+    "Error downloading audio": "下載音訊時發生錯誤"
 }
