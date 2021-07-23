@@ -395,11 +395,14 @@ const SpaceLanding = ({ space }) => {
     return <div className="mx_SpaceRoomView_landing">
         <div className="mx_SpaceFeedbackPrompt_topRight">
             { _t("Spaces are a new feature.") }&nbsp;
-            <AccessibleButton kind="link" onClick={() => {
-                Modal.createTrackedDialog("Beta Feedback", "feature_spaces", BetaFeedbackDialog, {
-                    featureId: "feature_spaces",
-                });
-            }}>
+            <AccessibleButton
+                kind="link"
+                onClick={() => {
+                    Modal.createTrackedDialog("Beta Feedback", "feature_spaces", BetaFeedbackDialog, {
+                        featureId: "feature_spaces",
+                    });
+                }}
+            >
                 { _t("Give feedback.") }
             </AccessibleButton>
         </div>

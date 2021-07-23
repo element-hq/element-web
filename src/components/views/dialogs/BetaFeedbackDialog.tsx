@@ -43,13 +43,16 @@ const BetaFeedbackDialog: React.FC<IProps> = ({ featureId, onFinished }) => {
             return SettingsStore.getValue(k);
         }))}
     >
-        <AccessibleButton kind="link" onClick={() => {
-            onFinished(false);
-            defaultDispatcher.dispatch({
-                action: Action.ViewUserSettings,
-                initialTabId: UserTab.Labs,
-            });
-        }}>
+        <AccessibleButton
+            kind="link"
+            onClick={() => {
+                onFinished(false);
+                defaultDispatcher.dispatch({
+                    action: Action.ViewUserSettings,
+                    initialTabId: UserTab.Labs,
+                });
+            }}
+        >
             { _t("To leave the beta, visit your settings.") }
         </AccessibleButton>
     </GenericFeatureFeedbackDialog>;
