@@ -120,8 +120,7 @@ export default class EmbeddedPage extends React.PureComponent {
 
         const content = <div className={`${className}_body`}
             dangerouslySetInnerHTML={{ __html: this.state.page }}
-        >
-        </div>;
+        />;
 
         if (this.props.scrollbar) {
             return <AutoHideScrollbar className={classes}>

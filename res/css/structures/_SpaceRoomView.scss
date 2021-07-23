@@ -234,6 +234,9 @@ $SpaceRoomViewInnerWidth: 428px;
     }
 
     .mx_SpaceRoomView_landing {
+        display: flex;
+        flex-direction: column;
+
         > .mx_BaseAvatar_image,
         > .mx_BaseAvatar > .mx_BaseAvatar_image {
             border-radius: 12px;
@@ -334,6 +337,7 @@ $SpaceRoomViewInnerWidth: 428px;
 
         .mx_SearchBox {
             margin: 0 0 20px;
+            flex: 0;
         }
 
         .mx_SpaceFeedbackPrompt_topRight {
@@ -348,6 +352,11 @@ $SpaceRoomViewInnerWidth: 428px;
             & + .mx_BaseAvatar {
                 clear: both;
             }
+        }
+
+        .mx_SpaceRoomDirectory_list {
+            // we don't want this container to get forced into the flexbox layout
+            display: contents;
         }
     }
 
