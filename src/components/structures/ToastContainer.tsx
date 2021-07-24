@@ -58,7 +58,7 @@ export default class ToastContainer extends React.Component<{}, IState> {
         let containerClasses;
         if (totalCount !== 0) {
             const topToast = this.state.toasts[0];
-            const { title, icon, key, component, className, props } = topToast;
+            const { title, icon, key, component, className, props, supplyWholeBody } = topToast;
             const toastClasses = classNames("mx_Toast_toast", {
                 "mx_Toast_hasIcon": icon,
                 [`mx_Toast_icon_${icon}`]: icon,
@@ -73,16 +73,22 @@ export default class ToastContainer extends React.Component<{}, IState> {
                 key,
                 toastKey: key,
             });
-            toast = (<div className={toastClasses}>
-                <div className="mx_Toast_title">
-                    <h2>{ title }</h2>
-                    <span>{ countIndicator }</span>
-                </div>
-                <div className="mx_Toast_body">{ React.createElement(component, toastProps) }</div>
-            </div>);
+
+            const content = React.createElement(component, toastProps);
+
+            toast = supplyWholeBody
+                ? content
+                : <div className={toastClasses}>
+                    <div className="mx_Toast_title">
+                        <h2>{ title }</h2>
+                        <span>{ countIndicator }</span>
+                    </div>
+                    <div className="mx_Toast_body">{ content }</div>
+                </div>;
 
             containerClasses = classNames("mx_ToastContainer", {
                 "mx_ToastContainer_stacked": isStacked,
+                [className]: supplyWholeBody,
             });
         }
         return toast
