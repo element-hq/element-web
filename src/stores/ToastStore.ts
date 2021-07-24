@@ -28,7 +28,6 @@ export interface IToast<C extends ComponentClass> {
     className?: string;
     props?: Omit<React.ComponentProps<C>, "toastKey">; // toastKey is injected by ToastContainer
     supplyWholeBody?: boolean;
-    content?: JSX.Element;
 }
 
 /**
