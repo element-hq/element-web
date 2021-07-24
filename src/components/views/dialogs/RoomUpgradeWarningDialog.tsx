@@ -1,5 +1,5 @@
 /*
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,73 +14,82 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
+import { EventType } from 'matrix-js-sdk/src/@types/event';
+import { JoinRule } from 'matrix-js-sdk/src/@types/partials';
+
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
-import * as sdk from "../../../index";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from "../../../Modal";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { IDialogProps } from "./IDialogProps";
+import BugReportDialog from './BugReportDialog';
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
+
+interface IProps extends IDialogProps {
+    roomId: string;
+    targetVersion: string;
+    description?: ReactNode;
+}
+
+interface IState {
+    inviteUsersToNewRoom: boolean;
+}
 
 @replaceableComponent("views.dialogs.RoomUpgradeWarningDialog")
-export default class RoomUpgradeWarningDialog extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-        roomId: PropTypes.string.isRequired,
-        targetVersion: PropTypes.string.isRequired,
-    };
+export default class RoomUpgradeWarningDialog extends React.Component<IProps, IState> {
+    private readonly isPrivate: boolean;
+    private readonly currentVersion: string;
 
     constructor(props) {
         super(props);
 
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
-        const joinRules = room ? room.currentState.getStateEvents("m.room.join_rules", "") : null;
-        const isPrivate = joinRules ? joinRules.getContent()['join_rule'] !== 'public' : true;
+        const joinRules = room?.currentState.getStateEvents(EventType.RoomJoinRules, "");
+        this.isPrivate = joinRules?.getContent()['join_rule'] !== JoinRule.Public ?? true;
+        this.currentVersion = room?.getVersion() || "1";
+
         this.state = {
-            currentVersion: room ? room.getVersion() : "1",
-            isPrivate,
             inviteUsersToNewRoom: true,
         };
     }
 
-    _onContinue = () => {
-        this.props.onFinished({ continue: true, invite: this.state.isPrivate && this.state.inviteUsersToNewRoom });
+    private onContinue = () => {
+        this.props.onFinished({ continue: true, invite: this.isPrivate && this.state.inviteUsersToNewRoom });
     };
 
-    _onCancel = () => {
+    private onCancel = () => {
         this.props.onFinished({ continue: false, invite: false });
     };
 
-    _onInviteUsersToggle = (newVal) => {
-        this.setState({ inviteUsersToNewRoom: newVal });
+    private onInviteUsersToggle = (inviteUsersToNewRoom: boolean) => {
+        this.setState({ inviteUsersToNewRoom });
     };
 
-    _openBugReportDialog = (e) => {
+    private openBugReportDialog = (e) => {
         e.preventDefault();
         e.stopPropagation();
 
-        const BugReportDialog = sdk.getComponent("dialogs.BugReportDialog");
         Modal.createTrackedDialog('Bug Report Dialog', '', BugReportDialog, {});
     };
 
     render() {
         const brand = SdkConfig.get().brand;
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         let inviteToggle = null;
-        if (this.state.isPrivate) {
+        if (this.isPrivate) {
             inviteToggle = (
                 <LabelledToggleSwitch
                     value={this.state.inviteUsersToNewRoom}
-                    onChange={this._onInviteUsersToggle}
-                    label={_t("Automatically invite users")} />
+                    onChange={this.onInviteUsersToggle}
+                    label={_t("Automatically invite members from this room to the new one")} />
             );
         }
 
-        const title = this.state.isPrivate ? _t("Upgrade private room") : _t("Upgrade public room");
+        const title = this.isPrivate ? _t("Upgrade private room") : _t("Upgrade public room");
 
         let bugReports = (
             <p>
@@ -101,7 +110,7 @@ export default class RoomUpgradeWarningDialog extends React.Component {
                         },
                         {
                             "a": (sub) => {
-                                return <a href='#' onClick={this._openBugReportDialog}>{ sub }</a>;
+                                return <a href='#' onClick={this.openBugReportDialog}>{ sub }</a>;
                             },
                         },
                     ) }
@@ -119,9 +128,17 @@ export default class RoomUpgradeWarningDialog extends React.Component {
             >
                 <div>
                     <p>
-                        { _t(
+                        { this.props.description || _t(
                             "Upgrading a room is an advanced action and is usually recommended when a room " +
                             "is unstable due to bugs, missing features or security vulnerabilities.",
+                        ) }
+                    </p>
+                    <p>
+                        { _t(
+                            "<b>Please note upgrading will make a new version of the room</b>. " +
+                            "All current messages will stay in this archived room.", {}, {
+                                b: sub => <b>{ sub }</b>,
+                            },
                         ) }
                     </p>
                     { bugReports }
@@ -130,7 +147,7 @@ export default class RoomUpgradeWarningDialog extends React.Component {
                             "You'll upgrade this room from <oldVersion /> to <newVersion />.",
                             {},
                             {
-                                oldVersion: () => <code>{ this.state.currentVersion }</code>,
+                                oldVersion: () => <code>{ this.currentVersion }</code>,
                                 newVersion: () => <code>{ this.props.targetVersion }</code>,
                             },
                         ) }
@@ -139,9 +156,9 @@ export default class RoomUpgradeWarningDialog extends React.Component {
                 </div>
                 <DialogButtons
                     primaryButton={_t("Upgrade")}
-                    onPrimaryButtonClick={this._onContinue}
+                    onPrimaryButtonClick={this.onContinue}
                     cancelButton={_t("Cancel")}
-                    onCancel={this._onCancel}
+                    onCancel={this.onCancel}
                 />
             </BaseDialog>
         );

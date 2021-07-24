@@ -68,13 +68,19 @@ export default class Dialpad extends React.PureComponent<IProps> {
         for (let i = 0; i < BUTTONS.length; i++) {
             const button = BUTTONS[i];
             const digitSubtext = BUTTON_LETTERS[i];
-            buttonNodes.push(<DialPadButton key={button} kind={DialPadButtonKind.Digit}
-                digit={button} digitSubtext={digitSubtext} onButtonPress={this.props.onDigitPress}
+            buttonNodes.push(<DialPadButton
+                key={button}
+                kind={DialPadButtonKind.Digit}
+                digit={button}
+                digitSubtext={digitSubtext}
+                onButtonPress={this.props.onDigitPress}
             />);
         }
 
         if (this.props.hasDial) {
-            buttonNodes.push(<DialPadButton key="dial" kind={DialPadButtonKind.Dial}
+            buttonNodes.push(<DialPadButton
+                key="dial"
+                kind={DialPadButtonKind.Dial}
                 onButtonPress={this.props.onDialPress}
             />);
         }

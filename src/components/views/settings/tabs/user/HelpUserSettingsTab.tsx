@@ -134,28 +134,39 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                 <span className='mx_SettingsTab_subheading'>{ _t("Credits") }</span>
                 <ul>
                     <li>
-                        The <a href="themes/element/img/backgrounds/lake.jpg" rel="noreferrer noopener"
-                            target="_blank">default cover photo</a> is ©&nbsp;
-                        <a href="https://www.flickr.com/golan" rel="noreferrer noopener"
-                            target="_blank">Jesús Roncero</a> used under the terms of&nbsp;
-                        <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noreferrer noopener"
-                            target="_blank">CC-BY-SA 4.0</a>.
+                        The <a href="themes/element/img/backgrounds/lake.jpg" rel="noreferrer noopener" target="_blank">
+                            default cover photo
+                        </a> is ©&nbsp;
+                        <a href="https://www.flickr.com/golan" rel="noreferrer noopener" target="_blank">
+                            Jesús Roncero
+                        </a> used under the terms of&nbsp;
+                        <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noreferrer noopener" target="_blank">
+                            CC-BY-SA 4.0
+                        </a>.
                     </li>
                     <li>
-                        The <a href="https://github.com/matrix-org/twemoji-colr" rel="noreferrer noopener"
-                            target="_blank">twemoji-colr</a> font is ©&nbsp;
-                        <a href="https://mozilla.org" rel="noreferrer noopener"
-                            target="_blank">Mozilla Foundation</a> used under the terms of&nbsp;
-                        <a href="http://www.apache.org/licenses/LICENSE-2.0" rel="noreferrer noopener"
-                            target="_blank">Apache 2.0</a>.
+                        The <a
+                            href="https://github.com/matrix-org/twemoji-colr"
+                            rel="noreferrer noopener"
+                            target="_blank"
+                        >
+                            twemoji-colr
+                        </a> font is ©&nbsp;
+                        <a href="https://mozilla.org" rel="noreferrer noopener" target="_blank">
+                            Mozilla Foundation
+                        </a> used under the terms of&nbsp;
+                        <a href="http://www.apache.org/licenses/LICENSE-2.0" rel="noreferrer noopener" target="_blank">Apache 2.0</a>.
                     </li>
                     <li>
-                        The <a href="https://twemoji.twitter.com/" rel="noreferrer noopener"
-                            target="_blank">Twemoji</a> emoji art is ©&nbsp;
-                        <a href="https://twemoji.twitter.com/" rel="noreferrer noopener"
-                            target="_blank">Twitter, Inc and other contributors</a> used under the terms of&nbsp;
-                        <a href="https://creativecommons.org/licenses/by/4.0/" rel="noreferrer noopener"
-                            target="_blank">CC-BY 4.0</a>.
+                        The <a href="https://twemoji.twitter.com/" rel="noreferrer noopener" target="_blank">
+                            Twemoji
+                        </a> emoji art is ©&nbsp;
+                        <a href="https://twemoji.twitter.com/" rel="noreferrer noopener" target="_blank">
+                            Twitter, Inc and other contributors
+                        </a> used under the terms of&nbsp;
+                        <a href="https://creativecommons.org/licenses/by/4.0/" rel="noreferrer noopener" target="_blank">
+                            CC-BY 4.0
+                        </a>.
                     </li>
                 </ul>
             </div>
@@ -254,7 +265,8 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                             "<a>Security Disclosure Policy</a>.", {},
                             {
                                 a: sub => <a href="https://matrix.org/security-disclosure-policy/"
-                                    rel="noreferrer noopener" target="_blank"
+                                    rel="noreferrer noopener"
+                                    target="_blank"
                                 >{ sub }</a>,
                             },
                         ) }
