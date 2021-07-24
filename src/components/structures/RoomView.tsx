@@ -1856,8 +1856,8 @@ export default class RoomView extends React.Component<IProps, IState> {
                 <div className="mx_RoomView_statusAreaBox_line" />
                 {statusBar}
             </div>
-        </div>
-              
+        </div>;
+
         const roomVersionRecommendation = this.state.upgradeRecommendation;
         const showRoomUpgradeBar = (
             roomVersionRecommendation &&
