@@ -45,47 +45,47 @@ limitations under the License.
         h1 {
             font-weight: bold;
         }
-    }
 
-    .mx_IncomingCallToast_buttons {
-        margin-top: 8px;
-        display: flex;
-        flex-direction: row;
-        gap: 12px;
+        .mx_IncomingCallToast_buttons {
+            margin-top: 8px;
+            display: flex;
+            flex-direction: row;
+            gap: 12px;
 
-        > * {
-            height: 24px;
-            padding: 0px 12px;
-            flex-shrink: 0;
-            flex-grow: 1;
-            margin-right: 0;
-            font-size: $font-15px;
-            line-height: $font-24px;
+            > * {
+                height: 24px;
+                padding: 0px 12px;
+                flex-shrink: 0;
+                flex-grow: 1;
+                margin-right: 0;
+                font-size: $font-15px;
+                line-height: $font-24px;
+            }
         }
-    }
 
-    .mx_IncomingCallToast_iconButton {
-        display: flex;
-        position: absolute;
-        right: 8px;
+        .mx_IncomingCallToast_iconButton {
+            display: flex;
+            position: absolute;
+            right: 8px;
 
-        &::before {
-            content: '';
+            &::before {
+                content: '';
 
-            height: 20px;
-            width: 20px;
-            background-color: $secondary-fg-color;
-            mask-repeat: no-repeat;
-            mask-size: contain;
-            mask-position: center;
+                height: 20px;
+                width: 20px;
+                background-color: $secondary-fg-color;
+                mask-repeat: no-repeat;
+                mask-size: contain;
+                mask-position: center;
+            }
         }
-    }
 
-    .mx_IncomingCallToast_silence::before {
-        mask-image: url('$(res)/img/voip/silence.svg');
-    }
+        .mx_IncomingCallToast_silence::before {
+            mask-image: url('$(res)/img/voip/silence.svg');
+        }
 
-    .mx_IncomingCallToast_unSilence::before {
-        mask-image: url('$(res)/img/voip/un-silence.svg');
+        .mx_IncomingCallToast_unSilence::before {
+            mask-image: url('$(res)/img/voip/un-silence.svg');
+        }
     }
 }
