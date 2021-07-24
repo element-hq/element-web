@@ -109,9 +109,10 @@ export default class IncomingCallToast extends React.Component<IProps, IState> {
                 <h1>
                     { room ? room.name : _t("Unknown caller") }
                 </h1>
-                <p>
-                    { isVoice ? _t("Incoming voice call") : _t("Incoming video call") }
-                </p>
+                <div className="mx_CallEvent_type">
+                    <div className="mx_CallEvent_type_icon" />
+                    { isVoice ? _t("Voice call") : _t("Video call") }
+                </div>
                 <AccessibleTooltipButton
                     className={silenceClass}
                     onClick={this.onSilenceClick}

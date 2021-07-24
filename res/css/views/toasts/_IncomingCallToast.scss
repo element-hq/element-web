@@ -35,7 +35,7 @@ limitations under the License.
         display: flex;
         flex-direction: column;
 
-        h1, p {
+        h1, .mx_CallEvent_type {
             margin: 0px;
             padding: 0px;
             font-size: $font-14px;
@@ -46,13 +46,36 @@ limitations under the License.
             font-weight: bold;
         }
 
+        .mx_CallEvent_type {
+            display: flex;
+            flex-direction: row;
+
+            .mx_CallEvent_type_icon {
+                height: 16px;
+                width: 16px;
+                margin-right: 6px;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    height: inherit;
+                    width: inherit;
+                    background-color: $tertiary-fg-color;
+                    mask-repeat: no-repeat;
+                    mask-size: contain;
+                }
+            }
+        }
+
         &.mx_IncomingCallToast_content_voice {
+            .mx_CallEvent_type .mx_CallEvent_type_icon::before,
             .mx_IncomingCallToast_buttons .mx_IncomingCallToast_button_accept span::before {
                 mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
             }
         }
 
         &.mx_IncomingCallToast_content_video {
+            .mx_CallEvent_type .mx_CallEvent_type_icon::before,
             .mx_IncomingCallToast_buttons .mx_IncomingCallToast_button_accept span::before {
                 mask-image: url('$(res)/img/element-icons/call/video-call.svg');
             }
@@ -107,7 +130,7 @@ limitations under the License.
 
                 height: 20px;
                 width: 20px;
-                background-color: $secondary-fg-color;
+                background-color: $tertiary-fg-color;
                 mask-repeat: no-repeat;
                 mask-size: contain;
                 mask-position: center;
