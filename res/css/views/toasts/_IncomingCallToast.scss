@@ -18,10 +18,12 @@ limitations under the License.
 .mx_IncomingCallToast {
     // mx_Toast overrides
     padding: 8px !important;
-    display: unset !important;
+    display: flex !important;
     top: 8px !important;
     border-radius: 8px;
 
+    flex-direction: row;
+    gap: 8px;
     min-width: 250px;
     box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.08);
     background-color: $voipcall-plinth-color; // To match mx_Toast
@@ -29,20 +31,9 @@ limitations under the License.
     pointer-events: initial; // restore pointer events so the user can accept/decline
     cursor: pointer;
 
-    .mx_IncomingCallToast_CallerInfo {
+    .mx_IncomingCallToast_content {
         display: flex;
-        direction: row;
-
-        img, .mx_BaseAvatar_initial {
-            margin: 8px;
-        }
-
-        > div {
-            display: flex;
-            flex-direction: column;
-
-            justify-content: center;
-        }
+        flex-direction: column;
 
         h1, p {
             margin: 0px;
@@ -57,7 +48,7 @@ limitations under the License.
     }
 
     .mx_IncomingCallToast_buttons {
-        padding: 8px;
+        margin-top: 8px;
         display: flex;
         flex-direction: row;
         gap: 12px;
@@ -74,6 +65,7 @@ limitations under the License.
     }
 
     .mx_IncomingCallToast_iconButton {
+        display: flex;
         position: absolute;
         right: 8px;
 

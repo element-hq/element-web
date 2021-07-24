@@ -87,12 +87,7 @@ export default class IncomingCallToast extends React.Component<IProps, IState> {
 
     public render() {
         const call = this.props.call;
-        let room = null;
-        room = MatrixClientPeg.get().getRoom(CallHandler.sharedInstance().roomIdForCall(call));
-
-        const caller = room ? room.name : _t("Unknown caller");
-
-        const incomingCallText = call.type === CallType.Voice ? _t("Incoming voice call") : _t("Incoming video call");
+        const room = MatrixClientPeg.get().getRoom(CallHandler.sharedInstance().roomIdForCall(call));
 
         const silenceClass = classNames({
             "mx_IncomingCallToast_iconButton": true,
@@ -101,37 +96,39 @@ export default class IncomingCallToast extends React.Component<IProps, IState> {
         });
 
         return <React.Fragment>
-            <div className="mx_IncomingCallToast_CallerInfo">
-                <RoomAvatar
-                    room={room}
-                    height={32}
-                    width={32}
-                />
-                <div>
-                    <h1>{ caller }</h1>
-                    <p>{ incomingCallText }</p>
-                </div>
+            <RoomAvatar
+                room={room}
+                height={32}
+                width={32}
+            />
+            <div className="mx_IncomingCallToast_content">
+                <h1>
+                    { room ? room.name : _t("Unknown caller") }
+                </h1>
+                <p>
+                    { call.type === CallType.Voice ? _t("Incoming voice call") : _t("Incoming video call") }
+                </p>
                 <AccessibleTooltipButton
                     className={silenceClass}
                     onClick={this.onSilenceClick}
                     title={this.state.silenced ? _t("Sound on") : _t("Silence call")}
                 />
-            </div>
-            <div className="mx_IncomingCallToast_buttons">
-                <AccessibleButton
-                    className="mx_IncomingCallToast_decline"
-                    onClick={this.onRejectClick}
-                    kind="danger"
-                >
-                    { _t("Decline") }
-                </AccessibleButton>
-                <AccessibleButton
-                    className="mx_IncomingCallToast_accept"
-                    onClick={this.onAnswerClick}
-                    kind="primary"
-                >
-                    { _t("Accept") }
-                </AccessibleButton>
+                <div className="mx_IncomingCallToast_buttons">
+                    <AccessibleButton
+                        className="mx_IncomingCallToast_decline"
+                        onClick={this.onRejectClick}
+                        kind="danger"
+                    >
+                        { _t("Decline") }
+                    </AccessibleButton>
+                    <AccessibleButton
+                        className="mx_IncomingCallToast_accept"
+                        onClick={this.onAnswerClick}
+                        kind="primary"
+                    >
+                        { _t("Accept") }
+                    </AccessibleButton>
+                </div>
             </div>
         </React.Fragment>;
     }
