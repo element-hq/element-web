@@ -20,12 +20,12 @@ limitations under the License.
     padding: 8px !important;
     display: flex !important;
     top: 8px !important;
-    border-radius: 8px;
 
+    border-radius: 8px;
     flex-direction: row;
     min-width: 250px;
     box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.08);
-    background-color: $voipcall-plinth-color; // To match mx_Toast
+    background-color: $voipcall-plinth-color;
 
     pointer-events: initial; // restore pointer events so the user can accept/decline
 
