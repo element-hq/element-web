@@ -1854,7 +1854,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         const statusBarArea = statusBar && <div className={statusBarAreaClass}>
             <div className="mx_RoomView_statusAreaBox">
                 <div className="mx_RoomView_statusAreaBox_line" />
-                {statusBar}
+                { statusBar }
             </div>
         </div>;
 
@@ -2101,9 +2101,9 @@ export default class RoomView extends React.Component<IProps, IState> {
                                     { messagePanel }
                                     { searchResultsPanel }
                                 </div>
-                                {statusBarArea}
-                                {previewBar}
-                                {messageComposer}
+                                { statusBarArea }
+                                { previewBar }
+                                { messageComposer }
                             </div>
                         </MainSplit>
                     </ErrorBoundary>
