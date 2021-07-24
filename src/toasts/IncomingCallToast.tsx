@@ -106,9 +106,9 @@ export default class IncomingCallToast extends React.Component<IProps, IState> {
                 width={32}
             />
             <div className={contentClass}>
-                <h1>
+                <span className="mx_CallEvent_caller">
                     { room ? room.name : _t("Unknown caller") }
-                </h1>
+                </span>
                 <div className="mx_CallEvent_type">
                     <div className="mx_CallEvent_type_icon" />
                     { isVoice ? _t("Voice call") : _t("Video call") }

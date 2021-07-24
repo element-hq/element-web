@@ -23,7 +23,6 @@ limitations under the License.
     border-radius: 8px;
 
     flex-direction: row;
-    gap: 8px;
     min-width: 250px;
     box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.08);
     background-color: $voipcall-plinth-color; // To match mx_Toast
@@ -33,21 +32,27 @@ limitations under the License.
     .mx_IncomingCallToast_content {
         display: flex;
         flex-direction: column;
+        margin-left: 8px;
 
-        h1, .mx_CallEvent_type {
-            margin: 0px;
-            padding: 0px;
-            font-size: $font-14px;
-            line-height: $font-16px;
-        }
-
-        h1 {
+        .mx_CallEvent_caller {
             font-weight: bold;
+            font-size: $font-15px;
+            line-height: $font-18px;
+
+            margin-top: 2px;
         }
 
         .mx_CallEvent_type {
+            font-size: $font-12px;
+            line-height: $font-15px;
+            color: $tertiary-fg-color;
+
+            margin-top: 4px;
+            margin-bottom: 6px;
+
             display: flex;
             flex-direction: row;
+            align-items: center;
 
             .mx_CallEvent_type_icon {
                 height: 16px;
@@ -88,7 +93,7 @@ limitations under the License.
 
             .mx_IncomingCallToast_button {
                 height: 24px;
-                padding: 0px 12px;
+                padding: 0px 8px;
                 flex-shrink: 0;
                 flex-grow: 1;
                 margin-right: 0;
@@ -106,15 +111,21 @@ limitations under the License.
                         background-color: $button-fg-color;
                         mask-position: center;
                         mask-repeat: no-repeat;
-                        mask-size: 16px;
-                        width: 16px;
-                        height: 16px;
                         margin-right: 8px;
                     }
                 }
 
+                &.mx_IncomingCallToast_button_accept span::before {
+                    mask-size: 13px;
+                    width: 13px;
+                    height: 13px;
+                }
+
                 &.mx_IncomingCallToast_button_decline span::before {
                     mask-image: url('$(res)/img/element-icons/call/hangup.svg');
+                    mask-size: 16px;
+                    width: 16px;
+                    height: 16px;
                 }
             }
         }
