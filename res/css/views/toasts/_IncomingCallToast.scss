@@ -60,10 +60,7 @@ limitations under the License.
         padding: 8px;
         display: flex;
         flex-direction: row;
-
-        > .mx_IncomingCallToast_spacer {
-            width: 8px;
-        }
+        gap: 12px;
 
         > * {
             flex-shrink: 0;

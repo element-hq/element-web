@@ -125,7 +125,6 @@ export default class IncomingCallToast extends React.Component<IProps, IState> {
                 >
                     { _t("Decline") }
                 </AccessibleButton>
-                <div className="mx_IncomingCallToast_spacer" />
                 <AccessibleButton
                     className="mx_IncomingCallToast_accept"
                     onClick={this.onAnswerClick}
