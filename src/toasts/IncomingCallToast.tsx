@@ -88,9 +88,13 @@ export default class IncomingCallToast extends React.Component<IProps, IState> {
     public render() {
         const call = this.props.call;
         const room = MatrixClientPeg.get().getRoom(CallHandler.sharedInstance().roomIdForCall(call));
+        const isVoice = call.type === CallType.Voice;
 
-        const silenceClass = classNames({
-            "mx_IncomingCallToast_iconButton": true,
+        const contentClass = classNames("mx_IncomingCallToast_content", {
+            "mx_IncomingCallToast_content_voice": isVoice,
+            "mx_IncomingCallToast_content_video": !isVoice,
+        });
+        const silenceClass = classNames("mx_IncomingCallToast_iconButton", {
             "mx_IncomingCallToast_unSilence": this.state.silenced,
             "mx_IncomingCallToast_silence": !this.state.silenced,
         });
@@ -101,12 +105,12 @@ export default class IncomingCallToast extends React.Component<IProps, IState> {
                 height={32}
                 width={32}
             />
-            <div className="mx_IncomingCallToast_content">
+            <div className={contentClass}>
                 <h1>
                     { room ? room.name : _t("Unknown caller") }
                 </h1>
                 <p>
-                    { call.type === CallType.Voice ? _t("Incoming voice call") : _t("Incoming video call") }
+                    { isVoice ? _t("Incoming voice call") : _t("Incoming video call") }
                 </p>
                 <AccessibleTooltipButton
                     className={silenceClass}
@@ -115,18 +119,18 @@ export default class IncomingCallToast extends React.Component<IProps, IState> {
                 />
                 <div className="mx_IncomingCallToast_buttons">
                     <AccessibleButton
-                        className="mx_IncomingCallToast_decline"
+                        className="mx_IncomingCallToast_button mx_IncomingCallToast_button_decline"
                         onClick={this.onRejectClick}
                         kind="danger"
                     >
-                        { _t("Decline") }
+                        <span> { _t("Decline") } </span>
                     </AccessibleButton>
                     <AccessibleButton
-                        className="mx_IncomingCallToast_accept"
+                        className="mx_IncomingCallToast_button mx_IncomingCallToast_button_accept"
                         onClick={this.onAnswerClick}
                         kind="primary"
                     >
-                        { _t("Accept") }
+                        <span> { _t("Accept") } </span>
                     </AccessibleButton>
                 </div>
             </div>

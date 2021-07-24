@@ -46,13 +46,25 @@ limitations under the License.
             font-weight: bold;
         }
 
+        &.mx_IncomingCallToast_content_voice {
+            .mx_IncomingCallToast_buttons .mx_IncomingCallToast_button_accept span::before {
+                mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
+            }
+        }
+
+        &.mx_IncomingCallToast_content_video {
+            .mx_IncomingCallToast_buttons .mx_IncomingCallToast_button_accept span::before {
+                mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+            }
+        }
+
         .mx_IncomingCallToast_buttons {
             margin-top: 8px;
             display: flex;
             flex-direction: row;
             gap: 12px;
 
-            > * {
+            .mx_IncomingCallToast_button {
                 height: 24px;
                 padding: 0px 12px;
                 flex-shrink: 0;
@@ -60,6 +72,28 @@ limitations under the License.
                 margin-right: 0;
                 font-size: $font-15px;
                 line-height: $font-24px;
+
+                span {
+                    padding: 8px 0;
+                    display: flex;
+                    align-items: center;
+
+                    &::before {
+                        content: '';
+                        display: inline-block;
+                        background-color: $button-fg-color;
+                        mask-position: center;
+                        mask-repeat: no-repeat;
+                        mask-size: 16px;
+                        width: 16px;
+                        height: 16px;
+                        margin-right: 8px;
+                    }
+                }
+
+                &.mx_IncomingCallToast_button_decline span::before {
+                    mask-image: url('$(res)/img/element-icons/call/hangup.svg');
+                }
             }
         }
 
