@@ -113,11 +113,6 @@ export default class IncomingCallToast extends React.Component<IProps, IState> {
                     <div className="mx_CallEvent_type_icon" />
                     { isVoice ? _t("Voice call") : _t("Video call") }
                 </div>
-                <AccessibleTooltipButton
-                    className={silenceClass}
-                    onClick={this.onSilenceClick}
-                    title={this.state.silenced ? _t("Sound on") : _t("Silence call")}
-                />
                 <div className="mx_IncomingCallToast_buttons">
                     <AccessibleButton
                         className="mx_IncomingCallToast_button mx_IncomingCallToast_button_decline"
@@ -135,6 +130,11 @@ export default class IncomingCallToast extends React.Component<IProps, IState> {
                     </AccessibleButton>
                 </div>
             </div>
+            <AccessibleTooltipButton
+                className={silenceClass}
+                onClick={this.onSilenceClick}
+                title={this.state.silenced ? _t("Sound on") : _t("Silence call")}
+            />
         </React.Fragment>;
     }
 }

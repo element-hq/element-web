@@ -29,7 +29,6 @@ limitations under the License.
     background-color: $voipcall-plinth-color; // To match mx_Toast
 
     pointer-events: initial; // restore pointer events so the user can accept/decline
-    cursor: pointer;
 
     .mx_IncomingCallToast_content {
         display: flex;
@@ -119,30 +118,30 @@ limitations under the License.
                 }
             }
         }
+    }
 
-        .mx_IncomingCallToast_iconButton {
-            display: flex;
-            position: absolute;
-            right: 8px;
+    .mx_IncomingCallToast_iconButton {
+        display: flex;
+        height: 20px;
+        width: 20px;
 
-            &::before {
-                content: '';
+        &::before {
+            content: '';
 
-                height: 20px;
-                width: 20px;
-                background-color: $tertiary-fg-color;
-                mask-repeat: no-repeat;
-                mask-size: contain;
-                mask-position: center;
-            }
+            height: inherit;
+            width: inherit;
+            background-color: $tertiary-fg-color;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            mask-position: center;
         }
+    }
 
-        .mx_IncomingCallToast_silence::before {
-            mask-image: url('$(res)/img/voip/silence.svg');
-        }
+    .mx_IncomingCallToast_silence::before {
+        mask-image: url('$(res)/img/voip/silence.svg');
+    }
 
-        .mx_IncomingCallToast_unSilence::before {
-            mask-image: url('$(res)/img/voip/un-silence.svg');
-        }
+    .mx_IncomingCallToast_unSilence::before {
+        mask-image: url('$(res)/img/voip/un-silence.svg');
     }
 }
