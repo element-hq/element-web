@@ -537,8 +537,6 @@ export default class CallView extends React.Component<IProps, IState> {
         }
 
         // The dial pad & 'more' button actions are only relevant in a connected call
-        // When not connected, we have to put something there to make the flexbox alignment correct
-        let dialpadButton;
         let contextMenuButton;
         if (this.state.callState === CallState.Connected) {
             contextMenuButton = (
@@ -549,6 +547,9 @@ export default class CallView extends React.Component<IProps, IState> {
                     isExpanded={this.state.showMoreMenu}
                 />
             );
+        }
+        let dialpadButton;
+        if (this.state.callState === CallState.Connected && CallHandler.sharedInstance().getSupportsPstnProtocol()) {
             dialpadButton = (
                 <ContextMenuButton
                     className="mx_CallView_callControls_button mx_CallView_callControls_dialpad"
