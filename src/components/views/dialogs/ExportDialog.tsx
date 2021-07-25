@@ -351,7 +351,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                     </StyledCheckbox>
                 </div>
                 { isExporting ? (
-                    <div className = "mx_ExportDialog_progress">
+                    <div className="mx_ExportDialog_progress">
                         <svg className="mx_ExportDialog_spinner" viewBox="0 0 50 50">
                             <circle
                                 className="mx_ExportDialog_spinner_path"
