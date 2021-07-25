@@ -191,6 +191,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
             mx_CallEvent: true,
             mx_CallEvent_voice: isVoice,
             mx_CallEvent_video: !isVoice,
+            mx_CallEvent_missed: this.state.callState === CustomCallState.Missed,
         });
 
         return (
