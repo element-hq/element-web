@@ -58,13 +58,18 @@ const NewRoomIntro = () => {
         const member = room?.getMember(dmPartner);
         const displayName = member?.rawDisplayName || dmPartner;
         body = <React.Fragment>
-            <RoomAvatar room={room} width={AVATAR_SIZE} height={AVATAR_SIZE} onClick={() => {
-                defaultDispatcher.dispatch<ViewUserPayload>({
+            <RoomAvatar
+                room={room}
+                width={AVATAR_SIZE}
+                height={AVATAR_SIZE}
+                onClick={() => {
+                    defaultDispatcher.dispatch<ViewUserPayload>({
                     action: Action.ViewUser,
                     // XXX: We should be using a real member object and not assuming what the receiver wants.
                     member: member || { userId: dmPartner } as User,
-                });
-            }} />
+                    });
+                }}
+            />
 
             <h2>{ room.name }</h2>
 

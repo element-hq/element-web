@@ -23,6 +23,7 @@ import { replaceableComponent } from "../../utils/replaceableComponent";
 import TimelinePanel from "./TimelinePanel";
 import Spinner from "../views/elements/Spinner";
 import { TileShape } from "../views/rooms/EventTile";
+import { Layout } from "../../settings/Layout";
 
 interface IProps {
     onClose(): void;
@@ -52,6 +53,7 @@ export default class NotificationPanel extends React.PureComponent<IProps> {
                     tileShape={TileShape.Notif}
                     empty={emptyState}
                     alwaysShowTimestamps={true}
+                    layout={Layout.Group}
                 />
             );
         } else {

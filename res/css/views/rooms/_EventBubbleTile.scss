@@ -38,7 +38,8 @@ limitations under the License.
         padding-top: 0;
     }
 
-    &:hover {
+    &:hover,
+    &.mx_EventTile_selected {
         &::before {
             content: '';
             position: absolute;
@@ -80,7 +81,7 @@ limitations under the License.
 
         .mx_MessageActionBar {
             right: 0;
-            transform: translate3d(50%, 50%, 0);
+            transform: translate3d(90%, 50%, 0);
         }
 
         --backgroundColor: $eventbubble-others-bg;
@@ -91,12 +92,17 @@ limitations under the License.
             float: right;
             > a {
                 left: auto;
-                right: -48px;
+                right: -68px;
             }
         }
         .mx_SenderProfile {
             display: none;
         }
+
+        .mx_ReplyTile .mx_SenderProfile {
+            display: block;
+        }
+
         .mx_ReactionsRow {
             float: right;
             clear: right;
@@ -126,7 +132,9 @@ limitations under the License.
         margin: 0 -12px 0 -9px;
         > a {
             position: absolute;
-            left: -48px;
+            padding: 10px 20px;
+            top: 0;
+            left: -68px;
         }
     }
 
@@ -147,11 +155,15 @@ limitations under the License.
     .mx_EventTile_avatar {
         position: absolute;
         top: 0;
-        line-height: 1;
         img {
             box-shadow: 0 0 0 3px $eventbubble-avatar-outline;
             border-radius: 50%;
         }
+    }
+
+    .mx_BaseAvatar,
+    .mx_EventTile_avatar {
+        line-height: 1;
     }
 
     &[data-has-reply=true] {
@@ -213,6 +225,7 @@ limitations under the License.
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 5px 0;
 
         .mx_EventTile_avatar {
             position: static;
@@ -254,7 +267,7 @@ limitations under the License.
         }
 
         .mx_MessageActionBar {
-            transform: translate3d(50%, 0, 0);
+            transform: translate3d(90%, 0, 0);
         }
     }
 
@@ -279,7 +292,7 @@ limitations under the License.
     & + .mx_EventListSummary {
         .mx_EventTile {
             margin-top: 0;
-            padding: 0;
+            padding: 2px 0;
         }
     }
 

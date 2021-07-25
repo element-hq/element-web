@@ -204,8 +204,10 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
                         </div>
                         <div className="mx_CreateCommunityPrototypeDialog_colAvatar">
                             <input
-                                type="file" style={{ display: "none" }}
-                                ref={this.avatarUploadRef} accept="image/*"
+                                type="file"
+                                style={{ display: "none" }}
+                                ref={this.avatarUploadRef}
+                                accept="image/*"
                                 onChange={this.onAvatarChanged}
                             />
                             <AccessibleButton

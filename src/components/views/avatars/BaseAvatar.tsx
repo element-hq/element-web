@@ -187,7 +187,8 @@ const BaseAvatar = (props: IProps) => {
                     width: toPx(width),
                     height: toPx(height),
                 }}
-                title={title} alt={_t("Avatar")}
+                title={title}
+                alt={_t("Avatar")}
                 inputRef={inputRef}
                 {...otherProps} />
         );
@@ -201,7 +202,8 @@ const BaseAvatar = (props: IProps) => {
                     width: toPx(width),
                     height: toPx(height),
                 }}
-                title={title} alt=""
+                title={title}
+                alt=""
                 ref={inputRef}
                 {...otherProps} />
         );

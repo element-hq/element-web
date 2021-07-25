@@ -206,7 +206,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
                             { sender }
                         </div>
                         <div className="mx_CallEvent_type">
-                            <div className="mx_CallEvent_type_icon"></div>
+                            <div className="mx_CallEvent_type_icon" />
                             { callType }
                         </div>
                     </div>

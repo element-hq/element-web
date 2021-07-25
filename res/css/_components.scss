@@ -87,6 +87,7 @@
 @import "./views/dialogs/_IncomingSasDialog.scss";
 @import "./views/dialogs/_InviteDialog.scss";
 @import "./views/dialogs/_KeyboardShortcutsDialog.scss";
+@import "./views/dialogs/_ManageRestrictedJoinRuleDialog.scss";
 @import "./views/dialogs/_MessageEditHistoryDialog.scss";
 @import "./views/dialogs/_ModalWidgetDialog.scss";
 @import "./views/dialogs/_NewSessionReviewDialog.scss";
@@ -160,10 +161,10 @@
 @import "./views/groups/_GroupPublicityToggle.scss";
 @import "./views/groups/_GroupRoomList.scss";
 @import "./views/groups/_GroupUserSettings.scss";
+@import "./views/messages/_CallEvent.scss";
 @import "./views/messages/_CreateEvent.scss";
 @import "./views/messages/_DateSeparator.scss";
 @import "./views/messages/_EventTileBubble.scss";
-@import "./views/messages/_CallEvent.scss";
 @import "./views/messages/_MEmoteBody.scss";
 @import "./views/messages/_MFileBody.scss";
 @import "./views/messages/_MImageBody.scss";
@@ -173,7 +174,6 @@
 @import "./views/messages/_MStickerBody.scss";
 @import "./views/messages/_MTextBody.scss";
 @import "./views/messages/_MVideoBody.scss";
-@import "./views/messages/_MVoiceMessageBody.scss";
 @import "./views/messages/_MediaBody.scss";
 @import "./views/messages/_MessageActionBar.scss";
 @import "./views/messages/_MessageTimestamp.scss";
@@ -202,8 +202,8 @@
 @import "./views/rooms/_E2EIcon.scss";
 @import "./views/rooms/_EditMessageComposer.scss";
 @import "./views/rooms/_EntityTile.scss";
-@import "./views/rooms/_EventTile.scss";
 @import "./views/rooms/_EventBubbleTile.scss";
+@import "./views/rooms/_EventTile.scss";
 @import "./views/rooms/_GroupLayout.scss";
 @import "./views/rooms/_IRCLayout.scss";
 @import "./views/rooms/_JumpToBottomButton.scss";

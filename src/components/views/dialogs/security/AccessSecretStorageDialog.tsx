@@ -287,7 +287,8 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
             <div className="mx_AccessSecretStorageDialog_reset">
                 { _t("Forgotten or lost all recovery methods? <a>Reset all</a>", null, {
                     a: (sub) => <a
-                        href="" onClick={this.onResetAllClick}
+                        href=""
+                        onClick={this.onResetAllClick}
                         className="mx_AccessSecretStorageDialog_reset_link">{ sub }</a>,
                 }) }
             </div>

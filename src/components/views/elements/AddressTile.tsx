@@ -16,24 +16,25 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
-import { UserAddressType } from '../../../UserAddress';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
+import { IUserAddress } from '../../../UserAddress';
+import BaseAvatar from '../avatars/BaseAvatar';
+import EmailUserIcon from "../../../../res/img/icon-email-user.svg";
+
+interface IProps {
+    address: IUserAddress;
+    canDismiss?: boolean;
+    onDismissed?: () => void;
+    justified?: boolean;
+    showAddress?: boolean;
+}
 
 @replaceableComponent("views.elements.AddressTile")
-export default class AddressTile extends React.Component {
-    static propTypes = {
-        address: UserAddressType.isRequired,
-        canDismiss: PropTypes.bool,
-        onDismissed: PropTypes.func,
-        justified: PropTypes.bool,
-    };
-
-    static defaultProps = {
+export default class AddressTile extends React.Component<IProps> {
+    static defaultProps: Partial<IProps> = {
         canDismiss: false,
         onDismissed: function() {}, // NOP
         justified: false,
@@ -49,10 +50,8 @@ export default class AddressTile extends React.Component {
         if (isMatrixAddress && address.avatarMxc) {
             imgUrls.push(mediaFromMxc(address.avatarMxc).getSquareThumbnailHttp(25));
         } else if (address.addressType === 'email') {
-            imgUrls.push(require("../../../../res/img/icon-email-user.svg"));
+            imgUrls.push(EmailUserIcon);
         }
-
-        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
 
         const nameClasses = classNames({
             "mx_AddressTile_name": true,
@@ -70,9 +69,10 @@ export default class AddressTile extends React.Component {
             info = (
                 <div className="mx_AddressTile_mx">
                     <div className={nameClasses}>{ name }</div>
-                    { this.props.showAddress ?
-                        <div className={idClasses}>{ address.address }</div> :
-                        <div />
+                    {
+                        this.props.showAddress
+                            ? <div className={idClasses}>{ address.address }</div>
+                            : <div />
                     }
                 </div>
             );
@@ -122,7 +122,7 @@ export default class AddressTile extends React.Component {
         let dismiss;
         if (this.props.canDismiss) {
             dismiss = (
-                <div className="mx_AddressTile_dismiss" onClick={this.props.onDismissed} >
+                <div className="mx_AddressTile_dismiss" onClick={this.props.onDismissed}>
                     <img src={require("../../../../res/img/icon-address-delete.svg")} width="9" height="9" />
                 </div>
             );

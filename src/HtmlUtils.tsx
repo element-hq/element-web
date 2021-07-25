@@ -57,7 +57,7 @@ const BIGEMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})+$`, 'i');
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
-export const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet'];
+export const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet', 'matrix'];
 
 const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)\/(.+?)(?:[?/]|$)/;
 
@@ -79,8 +79,8 @@ function mightContainEmoji(str: string): boolean {
  * @return {String} The shortcode (such as :thumbup:)
  */
 export function unicodeToShortcode(char: string): string {
-    const shortcodes = getEmojiFromUnicode(char).shortcodes;
-    return shortcodes.length > 0 ? `:${shortcodes[0]}:` : '';
+    const shortcodes = getEmojiFromUnicode(char)?.shortcodes;
+    return shortcodes?.length ? `:${shortcodes[0]}:` : '';
 }
 
 export function processHtmlForSending(html: string): string {
