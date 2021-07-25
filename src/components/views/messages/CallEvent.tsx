@@ -25,6 +25,7 @@ import { CallErrorCode, CallState } from 'matrix-js-sdk/src/webrtc/call';
 import InfoTooltip, { InfoTooltipKind } from '../elements/InfoTooltip';
 import classNames from 'classnames';
 import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -69,6 +70,18 @@ export default class CallEvent extends React.Component<IProps, IState> {
         this.setState({ callState: newState });
     };
 
+    private renderCallBackButton(text: string): JSX.Element {
+        return (
+            <AccessibleButton
+                className="mx_CallEvent_content_button mx_CallEvent_content_button_callBack"
+                onClick={this.props.callEventGrouper.callBack}
+                kind="primary"
+            >
+                <span> { text } </span>
+            </AccessibleButton>
+        );
+    }
+
     private renderContent(state: CallState | CustomCallState): JSX.Element {
         if (state === CallState.Ringing) {
             const silenceClass = classNames({
@@ -103,8 +116,18 @@ export default class CallEvent extends React.Component<IProps, IState> {
         }
         if (state === CallState.Ended) {
             const hangupReason = this.props.callEventGrouper.hangupReason;
+            const gotRejected = this.props.callEventGrouper.gotRejected;
+            const rejectParty = this.props.callEventGrouper.rejectParty;
 
-            if ([CallErrorCode.UserHangup, "user hangup"].includes(hangupReason) || !hangupReason) {
+            if (gotRejected) {
+                const weDeclinedCall = MatrixClientPeg.get().getUserId() === rejectParty;
+                return (
+                    <div className="mx_CallEvent_content">
+                        { weDeclinedCall ? _t("You declined this call") : _t("The other party declined this call") }
+                        { this.renderCallBackButton(weDeclinedCall ? _t("Call back") : _t("Call again")) }
+                    </div>
+                );
+            } else if (([CallErrorCode.UserHangup, "user hangup"].includes(hangupReason) || !hangupReason)) {
                 // workaround for https://github.com/vector-im/element-web/issues/5178
                 // it seems Android randomly sets a reason of "user hangup" which is
                 // interpreted as an error code :(
@@ -120,13 +143,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
                 return (
                     <div className="mx_CallEvent_content">
                         { _t("The remote side didn't pick up") }
-                        <AccessibleButton
-                            className="mx_CallEvent_content_button mx_CallEvent_content_button_callBack"
-                            onClick={this.props.callEventGrouper.callBack}
-                            kind="primary"
-                        >
-                            <span> { _t("Call again") } </span>
-                        </AccessibleButton>
+                        { this.renderCallBackButton(_t("Call again")) }
                     </div>
                 );
             }
@@ -174,13 +191,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
             return (
                 <div className="mx_CallEvent_content">
                     { _t("You missed this call") }
-                    <AccessibleButton
-                        className="mx_CallEvent_content_button mx_CallEvent_content_button_callBack"
-                        onClick={this.props.callEventGrouper.callBack}
-                        kind="primary"
-                    >
-                        <span> { _t("Call back") } </span>
-                    </AccessibleButton>
+                    { this.renderCallBackButton(_t("Call back")) }
                 </div>
             );
         }
