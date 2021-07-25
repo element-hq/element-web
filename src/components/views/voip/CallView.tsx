@@ -67,6 +67,7 @@ interface IState {
     screensharing: boolean;
     callState: CallState;
     controlsVisible: boolean;
+    hoveringControls: boolean;
     showMoreMenu: boolean;
     showDialpad: boolean;
     primaryFeed: CallFeed;
@@ -128,6 +129,7 @@ export default class CallView extends React.Component<IProps, IState> {
             screensharing: this.props.call.isScreensharing(),
             callState: this.props.call.state,
             controlsVisible: true,
+            hoveringControls: false,
             showMoreMenu: false,
             showDialpad: false,
             primaryFeed: primary,
@@ -244,6 +246,7 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onControlsHideTimer = () => {
+        if (this.state.hoveringControls || this.state.showDialpad || this.state.showMoreMenu) return;
         this.controlsHideTimer = null;
         this.setState({
             controlsVisible: false,
@@ -293,24 +296,10 @@ export default class CallView extends React.Component<IProps, IState> {
 
     private onDialpadClick = (): void => {
         if (!this.state.showDialpad) {
-            if (this.controlsHideTimer) {
-                clearTimeout(this.controlsHideTimer);
-                this.controlsHideTimer = null;
-            }
-
-            this.setState({
-                showDialpad: true,
-                controlsVisible: true,
-            });
+            this.setState({ showDialpad: true });
+            this.showControls();
         } else {
-            if (this.controlsHideTimer !== null) {
-                clearTimeout(this.controlsHideTimer);
-            }
-            this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
-
-            this.setState({
-                showDialpad: false,
-            });
+            this.setState({ showDialpad: false });
         }
     };
 
@@ -345,29 +334,16 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onMoreClick = (): void => {
-        if (this.controlsHideTimer) {
-            clearTimeout(this.controlsHideTimer);
-            this.controlsHideTimer = null;
-        }
-
-        this.setState({
-            showMoreMenu: true,
-            controlsVisible: true,
-        });
+        this.setState({ showMoreMenu: true });
+        this.showControls();
     };
 
     private closeDialpad = (): void => {
-        this.setState({
-            showDialpad: false,
-        });
-        this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
+        this.setState({ showDialpad: false });
     };
 
     private closeContextMenu = (): void => {
-        this.setState({
-            showMoreMenu: false,
-        });
-        this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
+        this.setState({ showMoreMenu: false });
     };
 
     // we register global shortcuts here, they *must not conflict* with local shortcuts elsewhere or both will fire
@@ -401,6 +377,15 @@ export default class CallView extends React.Component<IProps, IState> {
             ev.stopPropagation();
             ev.preventDefault();
         }
+    };
+
+    private onCallControlsMouseEnter = (): void => {
+        this.setState({ hoveringControls: true });
+        this.showControls();
+    };
+
+    private onCallControlsMouseLeave = (): void => {
+        this.setState({ hoveringControls: false });
     };
 
     private onRoomAvatarClick = (): void => {
@@ -561,7 +546,11 @@ export default class CallView extends React.Component<IProps, IState> {
         }
 
         return (
-            <div className={callControlsClasses}>
+            <div
+                className={callControlsClasses}
+                onMouseEnter={this.onCallControlsMouseEnter}
+                onMouseLeave={this.onCallControlsMouseLeave}
+            >
                 { dialpadButton }
                 <AccessibleButton
                     className={micClasses}
