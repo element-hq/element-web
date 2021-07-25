@@ -822,10 +822,15 @@ export default class CallView extends React.Component<IProps, IState> {
             { expandButton }
         </div>;
 
+        const callTypeIconClassName = classNames("mx_CallView_header_callTypeIcon", {
+            "mx_CallView_header_callTypeIcon_voice": !isVideoCall,
+            "mx_CallView_header_callTypeIcon_video": isVideoCall,
+        });
+
         let header: React.ReactNode;
         if (!this.props.pipMode) {
             header = <div className="mx_CallView_header">
-                <div className="mx_CallView_header_phoneIcon" />
+                <div className={callTypeIconClassName} />
                 <span className="mx_CallView_header_callType">{ callTypeText }</span>
                 { headerControls }
             </div>;
