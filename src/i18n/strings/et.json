@@ -3510,5 +3510,16 @@
     "Private room (invite only)": "Privaatne jututuba (kutse alusel)",
     "Public room": "Avalik jututuba",
     "Visible to space members": "Nähtav kogukonnakeskuse liikmetele",
-    "Room visibility": "Jututoa nähtavus"
+    "Room visibility": "Jututoa nähtavus",
+    "Spaces with access": "Ligipääsuga kogukonnakeskused",
+    "Anyone in %(spaceName)s can find and join. You can select other spaces too.": "Kõik %(spaceName)s kogukonnakeskuse liikmed saavad leida ja liituda. Sa võid valida muid kogukonnakeskuseid.",
+    "Anyone in a space can find and join. You can select multiple spaces.": "Kõik kogukonnakeskuse liikmed saavad leida ja liituda. Sa võid valida ka mitu kogukonnakeskust.",
+    "Space members": "Kogukonnakeskuse liikmed",
+    "Decide who can join %(roomName)s.": "Vali, kes saavad liituda %(roomName)s jututoaga.",
+    "People with supported clients will be able to join the room without having a registered account.": "Kõik kes kasutavad sobilikke klientrakendusi, saavad jututoaga liituda ilma kasutajakonto registreerimiseta.",
+    "Access": "Ligipääs",
+    "The voice message failed to upload.": "Häälsõnumi üleslaadimine ei õnnestunud.",
+    "Everyone in <SpaceName/> will be able to find and join this room.": "Kõik <SpaceName/> kogukonna liikmed saavad seda jututuba leida ning võivad temaga liituda.",
+    "You can change this at any time from room settings.": "Sa saad seda alati jututoa seadistustest muuta.",
+    "Anyone will be able to find and join this room, not just members of <SpaceName/>.": "Mitte ainult <SpaceName/> kogukonna liikmed, vaid kõik saavad seda jututuba leida ja võivad temaga liituda."
 }
