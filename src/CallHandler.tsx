@@ -498,6 +498,7 @@ export default class CallHandler extends EventEmitter {
                         this.play(AudioID.Busy);
                         let title;
                         let description;
+                        // TODO: We should either do away with these or figure out a copy for each code (expect user_hangup...)
                         if (call.hangupReason === CallErrorCode.UserBusy) {
                             title = _t("User Busy");
                             description = _t("The user you called is busy.");
