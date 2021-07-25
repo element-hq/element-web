@@ -360,7 +360,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                                 r="20"
                                 fill="none"
                                 stroke-width="5"
-                            ></circle>
+                            />
                         </svg>
                         <p ref={exportProgressRef}>
                             { _t("Processing...") }
