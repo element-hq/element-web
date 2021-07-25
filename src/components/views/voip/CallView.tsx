@@ -102,7 +102,7 @@ function exitFullscreen() {
     if (exitMethod) exitMethod.call(document);
 }
 
-const CONTROLS_HIDE_DELAY = 1000;
+const CONTROLS_HIDE_DELAY = 2000;
 // Height of the header duplicated from CSS because we need to subtract it from our max
 // height to get the max height of the video
 const CONTEXT_MENU_VPADDING = 8; // How far the context menu sits above the button (px)
