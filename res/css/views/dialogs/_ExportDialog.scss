@@ -9,6 +9,34 @@
         margin-bottom: 12px;
     }
 
+    &.mx_ExportDialog_Exporting .mx_ExportDialog_options {
+        pointer-events: none;
+    }
+
+    .mx_ExportDialog_progress {
+        .mx_Dialog_buttons {
+            margin-top: unset;
+            margin-left: 18px;
+        }
+        .mx_ExportDialog_spinner {
+            animation: mx_rotate 2s linear infinite;
+            z-index: 2;
+            position: relative;
+            margin-right: 10px;
+            width: 24px;
+            height: 24px;
+            & .mx_ExportDialog_spinner_path {
+                stroke: #0dbd8b;
+                stroke-linecap: round;
+                animation: mx_dash 1.5s ease-in-out infinite;
+            }
+        }
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
     .mx_RadioButton > .mx_RadioButton_content {
         margin-top: 5px;
         margin-bottom: 5px;
@@ -20,5 +48,26 @@
 
     .mx_Field_postfix {
         padding: 9px 10px;
+    }
+}
+
+@keyframes mx_rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes mx_dash {
+    0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35;
+    }
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124;
     }
 }

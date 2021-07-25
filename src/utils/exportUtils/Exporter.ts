@@ -44,7 +44,7 @@ export default abstract class Exporter {
 
     protected updateProgress(progress: string, log = true, show = true): void {
         if (log) console.log(progress);
-        if (show) this.exportProgressRef.current.innerText = progress;
+        if (show && this.exportProgressRef.current) this.exportProgressRef.current.innerText = progress;
     }
 
     protected addFile(filePath: string, blob: Blob): void {
@@ -64,7 +64,7 @@ export default abstract class Exporter {
         // Create a writable stream to the directory
         this.fileStream = streamSaver.createWriteStream(filename);
 
-        if (!this.cancelled) this.updateProgress("Generating a ZIP...");
+        if (!this.cancelled) this.updateProgress("Generating a ZIP");
         else return this.cleanUp();
 
         this.writer = this.fileStream.getWriter();
@@ -79,7 +79,7 @@ export default abstract class Exporter {
 
         if (this.cancelled) return this.cleanUp();
 
-        this.updateProgress("Writing to the file system...");
+        this.updateProgress("Writing to the file system");
 
         const reader = readableZipStream.getReader();
         await this.pumpToFileStream(reader);
@@ -186,8 +186,8 @@ export default abstract class Exporter {
             }
             this.updateProgress(
                 ("Fetched " + events.length + " events ") + (this.exportType === exportTypes.LAST_N_MESSAGES
-                    ? `out of ${this.exportOptions.numberOfMessages}...`
-                    : "so far..."),
+                    ? `out of ${this.exportOptions.numberOfMessages}`
+                    : "so far"),
             );
             prevToken = res.end;
         }

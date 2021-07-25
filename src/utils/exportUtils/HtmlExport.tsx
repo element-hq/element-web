@@ -361,8 +361,8 @@ export default class HTMLExporter extends Exporter {
     }
 
     public async export() {
-        this.updateProgress("Starting export process...", true, false);
-        this.updateProgress("Fetching events...");
+        this.updateProgress("Starting export process", true, false);
+        this.updateProgress("Fetching events");
 
         const fetchStart = performance.now();
         const res = await this.getRequiredEvents();

@@ -29,7 +29,7 @@ export const textForType = (type: string): string => {
         case exportTypes.BEGINNING:
             return _t("From the beginning");
         case exportTypes.LAST_N_MESSAGES:
-            return _t("For a number of messages");
+            return _t("Specify a number of messages");
         case exportTypes.TIMELINE:
             return _t("Current Timeline");
         // case exportTypes.START_DATE:
