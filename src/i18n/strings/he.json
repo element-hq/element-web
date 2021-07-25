@@ -2797,5 +2797,8 @@
     "Identity server (%(server)s)": "שרת הזדהות (%(server)s)",
     "Could not connect to identity server": "לא ניתן להתחבר אל שרת הזיהוי",
     "Not a valid identity server (status code %(code)s)": "שרת זיהוי לא מאושר(קוד סטטוס %(code)s)",
-    "Identity server URL must be HTTPS": "הזיהוי של כתובת השרת חייבת להיות מאובטחת ב- HTTPS"
+    "Identity server URL must be HTTPS": "הזיהוי של כתובת השרת חייבת להיות מאובטחת ב- HTTPS",
+    "Enter Security Phrase": "הזן ביטוי אבטחה",
+    "Backup could not be decrypted with this Security Phrase: please verify that you entered the correct Security Phrase.": "לא ניתן לפענח גיבוי עם ביטוי אבטחה זה: אנא ודא שהזנת את ביטוי האבטחה הנכון.",
+    "Incorrect Security Phrase": "ביטוי אבטחה שגוי"
 }
