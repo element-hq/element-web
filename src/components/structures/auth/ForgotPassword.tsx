@@ -315,7 +315,10 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
             { _t("An email has been sent to %(emailAddress)s. Once you've followed the " +
                 "link it contains, click below.", { emailAddress: this.state.email }) }
             <br />
-            <input className="mx_Login_submit" type="button" onClick={this.onVerify}
+            <input
+                className="mx_Login_submit"
+                type="button"
+                onClick={this.onVerify}
                 value={_t('I have verified my email address')} />
         </div>;
     }
@@ -328,7 +331,10 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
                 "push notifications. To re-enable notifications, sign in again on each " +
                 "device.",
             ) }</p>
-            <input className="mx_Login_submit" type="button" onClick={this.props.onComplete}
+            <input
+                className="mx_Login_submit"
+                type="button"
+                onClick={this.props.onComplete}
                 value={_t('Return to login screen')} />
         </div>;
     }

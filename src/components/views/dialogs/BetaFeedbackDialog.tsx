@@ -71,13 +71,16 @@ const BetaFeedbackDialog: React.FC<IProps> = ({ featureId, onFinished }) => {
                 &nbsp;
                 { _t("Your platform and username will be noted to help us use your feedback as much as we can.") }
 
-                <AccessibleButton kind="link" onClick={() => {
-                    onFinished(false);
-                    defaultDispatcher.dispatch({
+                <AccessibleButton
+                    kind="link"
+                    onClick={() => {
+                        onFinished(false);
+                        defaultDispatcher.dispatch({
                         action: Action.ViewUserSettings,
                         initialTabId: UserTab.Labs,
-                    });
-                }}>
+                        });
+                    }}
+                >
                     { _t("To leave the beta, visit your settings.") }
                 </AccessibleButton>
             </div>

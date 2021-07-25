@@ -797,15 +797,21 @@ export default class CallView extends React.Component<IProps, IState> {
 
         let fullScreenButton;
         if (!this.props.pipMode) {
-            fullScreenButton = <div className="mx_CallView_header_button mx_CallView_header_button_fullscreen"
-                onClick={this.onFullscreenClick} title={_t("Fill Screen")}
-            />;
+            fullScreenButton = (
+                <div
+                    className="mx_CallView_header_button mx_CallView_header_button_fullscreen"
+                    onClick={this.onFullscreenClick}
+                    title={_t("Fill Screen")}
+                />
+            );
         }
 
         let expandButton;
         if (this.props.pipMode) {
-            expandButton = <div className="mx_CallView_header_button mx_CallView_header_button_expand"
-                onClick={this.onExpandClick} title={_t("Return to call")}
+            expandButton = <div
+                className="mx_CallView_header_button mx_CallView_header_button_expand"
+                onClick={this.onExpandClick}
+                title={_t("Return to call")}
             />;
         }
 
@@ -817,7 +823,7 @@ export default class CallView extends React.Component<IProps, IState> {
         let header: React.ReactNode;
         if (!this.props.pipMode) {
             header = <div className="mx_CallView_header">
-                <div className="mx_CallView_header_phoneIcon"></div>
+                <div className="mx_CallView_header_phoneIcon" />
                 <span className="mx_CallView_header_callType">{ callTypeText }</span>
                 { headerControls }
             </div>;

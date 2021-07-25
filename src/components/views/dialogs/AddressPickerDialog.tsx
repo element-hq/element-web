@@ -18,14 +18,12 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-import PropTypes from 'prop-types';
 import { sleep } from "matrix-js-sdk/src/utils";
 
 import { _t, _td } from '../../../languageHandler';
-import * as sdk from '../../../index';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
-import { addressTypes, getAddressType } from '../../../UserAddress';
+import { AddressType, addressTypes, getAddressType, IUserAddress } from '../../../UserAddress';
 import GroupStore from '../../../stores/GroupStore';
 import * as Email from '../../../email';
 import IdentityAuthClient from '../../../IdentityAuthClient';
@@ -34,6 +32,10 @@ import { abbreviateUrl } from '../../../utils/UrlUtils';
 import { Key } from "../../../Keyboard";
 import { Action } from "../../../dispatcher/actions";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import AddressSelector from '../elements/AddressSelector';
+import AddressTile from '../elements/AddressTile';
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -44,29 +46,64 @@ const addressTypeName = {
     'email': _td("email address"),
 };
 
-@replaceableComponent("views.dialogs.AddressPickerDialog")
-export default class AddressPickerDialog extends React.Component {
-    static propTypes = {
-        title: PropTypes.string.isRequired,
-        description: PropTypes.node,
-        // Extra node inserted after picker input, dropdown and errors
-        extraNode: PropTypes.node,
-        value: PropTypes.string,
-        placeholder: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-        roomId: PropTypes.string,
-        button: PropTypes.string,
-        focus: PropTypes.bool,
-        validAddressTypes: PropTypes.arrayOf(PropTypes.oneOf(addressTypes)),
-        onFinished: PropTypes.func.isRequired,
-        groupId: PropTypes.string,
-        // The type of entity to search for. Default: 'user'.
-        pickerType: PropTypes.oneOf(['user', 'room']),
-        // Whether the current user should be included in the addresses returned. Only
-        // applicable when pickerType is `user`. Default: false.
-        includeSelf: PropTypes.bool,
-    };
+interface IResult {
+    user_id: string; // eslint-disable-line camelcase
+    room_id?: string; // eslint-disable-line camelcase
+    name?: string;
+    display_name?: string; // eslint-disable-line camelcase
+    avatar_url?: string;// eslint-disable-line camelcase
+}
 
-    static defaultProps = {
+interface IProps {
+    title: string;
+    description?: JSX.Element;
+    // Extra node inserted after picker input, dropdown and errors
+    extraNode?: JSX.Element;
+    value?: string;
+    placeholder?: ((validAddressTypes: any) => string) | string;
+    roomId?: string;
+    button?: string;
+    focus?: boolean;
+    validAddressTypes?: AddressType[];
+    onFinished: (success: boolean, list?: IUserAddress[]) => void;
+    groupId?: string;
+    // The type of entity to search for. Default: 'user'.
+    pickerType?: 'user' | 'room';
+    // Whether the current user should be included in the addresses returned. Only
+    // applicable when pickerType is `user`. Default: false.
+    includeSelf?: boolean;
+}
+
+interface IState {
+    // Whether to show an error message because of an invalid address
+    invalidAddressError: boolean;
+    // List of UserAddressType objects representing
+    // the list of addresses we're going to invite
+    selectedList: IUserAddress[];
+    // Whether a search is ongoing
+    busy: boolean;
+    // An error message generated during the user directory search
+    searchError: string;
+    // Whether the server supports the user_directory API
+    serverSupportsUserDirectory: boolean;
+    // The query being searched for
+    query: string;
+    // List of UserAddressType objects representing the set of
+    // auto-completion results for the current search query.
+    suggestedList: IUserAddress[];
+    // List of address types initialised from props, but may change while the
+    // dialog is open and represents the supported list of address types at this time.
+    validAddressTypes: AddressType[];
+}
+
+@replaceableComponent("views.dialogs.AddressPickerDialog")
+export default class AddressPickerDialog extends React.Component<IProps, IState> {
+    private textinput = createRef<HTMLTextAreaElement>();
+    private addressSelector = createRef<AddressSelector>();
+    private queryChangedDebouncer: number;
+    private cancelThreepidLookup: () => void;
+
+    static defaultProps: Partial<IProps> = {
         value: "",
         focus: true,
         validAddressTypes: addressTypes,
@@ -74,36 +111,23 @@ export default class AddressPickerDialog extends React.Component {
         includeSelf: false,
     };
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
-
-        this._textinput = createRef();
 
         let validAddressTypes = this.props.validAddressTypes;
         // Remove email from validAddressTypes if no IS is configured. It may be added at a later stage by the user
-        if (!MatrixClientPeg.get().getIdentityServerUrl() && validAddressTypes.includes("email")) {
-            validAddressTypes = validAddressTypes.filter(type => type !== "email");
+        if (!MatrixClientPeg.get().getIdentityServerUrl() && validAddressTypes.includes(AddressType.Email)) {
+            validAddressTypes = validAddressTypes.filter(type => type !== AddressType.Email);
         }
 
         this.state = {
-            // Whether to show an error message because of an invalid address
             invalidAddressError: false,
-            // List of UserAddressType objects representing
-            // the list of addresses we're going to invite
             selectedList: [],
-            // Whether a search is ongoing
             busy: false,
-            // An error message generated during the user directory search
             searchError: null,
-            // Whether the server supports the user_directory API
             serverSupportsUserDirectory: true,
-            // The query being searched for
             query: "",
-            // List of UserAddressType objects representing the set of
-            // auto-completion results for the current search query.
             suggestedList: [],
-            // List of address types initialised from props, but may change while the
-            // dialog is open and represents the supported list of address types at this time.
             validAddressTypes,
         };
     }
@@ -111,11 +135,11 @@ export default class AddressPickerDialog extends React.Component {
     componentDidMount() {
         if (this.props.focus) {
             // Set the cursor at the end of the text input
-            this._textinput.current.value = this.props.value;
+            this.textinput.current.value = this.props.value;
         }
     }
 
-    getPlaceholder() {
+    private getPlaceholder(): string {
         const { placeholder } = this.props;
         if (typeof placeholder === "string") {
             return placeholder;
@@ -124,23 +148,23 @@ export default class AddressPickerDialog extends React.Component {
         return placeholder(this.state.validAddressTypes);
     }
 
-    onButtonClick = () => {
+    private onButtonClick = (): void => {
         let selectedList = this.state.selectedList.slice();
         // Check the text input field to see if user has an unconverted address
         // If there is and it's valid add it to the local selectedList
-        if (this._textinput.current.value !== '') {
-            selectedList = this._addAddressesToList([this._textinput.current.value]);
+        if (this.textinput.current.value !== '') {
+            selectedList = this.addAddressesToList([this.textinput.current.value]);
             if (selectedList === null) return;
         }
         this.props.onFinished(true, selectedList);
     };
 
-    onCancel = () => {
+    private onCancel = (): void => {
         this.props.onFinished(false);
     };
 
-    onKeyDown = e => {
-        const textInput = this._textinput.current ? this._textinput.current.value : undefined;
+    private onKeyDown = (e: React.KeyboardEvent): void => {
+        const textInput = this.textinput.current ? this.textinput.current.value : undefined;
 
         if (e.key === Key.ESCAPE) {
             e.stopPropagation();
@@ -149,15 +173,15 @@ export default class AddressPickerDialog extends React.Component {
         } else if (e.key === Key.ARROW_UP) {
             e.stopPropagation();
             e.preventDefault();
-            if (this.addressSelector) this.addressSelector.moveSelectionUp();
+            if (this.addressSelector.current) this.addressSelector.current.moveSelectionUp();
         } else if (e.key === Key.ARROW_DOWN) {
             e.stopPropagation();
             e.preventDefault();
-            if (this.addressSelector) this.addressSelector.moveSelectionDown();
+            if (this.addressSelector.current) this.addressSelector.current.moveSelectionDown();
         } else if (this.state.suggestedList.length > 0 && [Key.COMMA, Key.ENTER, Key.TAB].includes(e.key)) {
             e.stopPropagation();
             e.preventDefault();
-            if (this.addressSelector) this.addressSelector.chooseSelection();
+            if (this.addressSelector.current) this.addressSelector.current.chooseSelection();
         } else if (textInput.length === 0 && this.state.selectedList.length && e.key === Key.BACKSPACE) {
             e.stopPropagation();
             e.preventDefault();
@@ -169,17 +193,17 @@ export default class AddressPickerDialog extends React.Component {
                 // if there's nothing in the input box, submit the form
                 this.onButtonClick();
             } else {
-                this._addAddressesToList([textInput]);
+                this.addAddressesToList([textInput]);
             }
         } else if (textInput && (e.key === Key.COMMA || e.key === Key.TAB)) {
             e.stopPropagation();
             e.preventDefault();
-            this._addAddressesToList([textInput]);
+            this.addAddressesToList([textInput]);
         }
     };
 
-    onQueryChanged = ev => {
-        const query = ev.target.value;
+    private onQueryChanged = (ev: React.ChangeEvent): void => {
+        const query = (ev.target as HTMLTextAreaElement).value;
         if (this.queryChangedDebouncer) {
             clearTimeout(this.queryChangedDebouncer);
         }
@@ -188,17 +212,17 @@ export default class AddressPickerDialog extends React.Component {
             this.queryChangedDebouncer = setTimeout(() => {
                 if (this.props.pickerType === 'user') {
                     if (this.props.groupId) {
-                        this._doNaiveGroupSearch(query);
+                        this.doNaiveGroupSearch(query);
                     } else if (this.state.serverSupportsUserDirectory) {
-                        this._doUserDirectorySearch(query);
+                        this.doUserDirectorySearch(query);
                     } else {
-                        this._doLocalSearch(query);
+                        this.doLocalSearch(query);
                     }
                 } else if (this.props.pickerType === 'room') {
                     if (this.props.groupId) {
-                        this._doNaiveGroupRoomSearch(query);
+                        this.doNaiveGroupRoomSearch(query);
                     } else {
-                        this._doRoomSearch(query);
+                        this.doRoomSearch(query);
                     }
                 } else {
                     console.error('Unknown pickerType', this.props.pickerType);
@@ -213,7 +237,7 @@ export default class AddressPickerDialog extends React.Component {
         }
     };
 
-    onDismissed = index => () => {
+    private onDismissed = (index: number) => () => {
         const selectedList = this.state.selectedList.slice();
         selectedList.splice(index, 1);
         this.setState({
@@ -221,25 +245,21 @@ export default class AddressPickerDialog extends React.Component {
             suggestedList: [],
             query: "",
         });
-        if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+        if (this.cancelThreepidLookup) this.cancelThreepidLookup();
     };
 
-    onClick = index => () => {
-        this.onSelected(index);
-    };
-
-    onSelected = index => {
+    private onSelected = (index: number): void => {
         const selectedList = this.state.selectedList.slice();
-        selectedList.push(this._getFilteredSuggestions()[index]);
+        selectedList.push(this.getFilteredSuggestions()[index]);
         this.setState({
             selectedList,
             suggestedList: [],
             query: "",
         });
-        if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+        if (this.cancelThreepidLookup) this.cancelThreepidLookup();
     };
 
-    _doNaiveGroupSearch(query) {
+    private doNaiveGroupSearch(query: string): void {
         const lowerCaseQuery = query.toLowerCase();
         this.setState({
             busy: true,
@@ -260,7 +280,7 @@ export default class AddressPickerDialog extends React.Component {
                     display_name: u.displayname,
                 });
             });
-            this._processResults(results, query);
+            this.processResults(results, query);
         }).catch((err) => {
             console.error('Error whilst searching group rooms: ', err);
             this.setState({
@@ -273,7 +293,7 @@ export default class AddressPickerDialog extends React.Component {
         });
     }
 
-    _doNaiveGroupRoomSearch(query) {
+    private doNaiveGroupRoomSearch(query: string): void {
         const lowerCaseQuery = query.toLowerCase();
         const results = [];
         GroupStore.getGroupRooms(this.props.groupId).forEach((r) => {
@@ -289,13 +309,13 @@ export default class AddressPickerDialog extends React.Component {
                 name: r.name || r.canonical_alias,
             });
         });
-        this._processResults(results, query);
+        this.processResults(results, query);
         this.setState({
             busy: false,
         });
     }
 
-    _doRoomSearch(query) {
+    private doRoomSearch(query: string): void {
         const lowerCaseQuery = query.toLowerCase();
         const rooms = MatrixClientPeg.get().getRooms();
         const results = [];
@@ -346,13 +366,13 @@ export default class AddressPickerDialog extends React.Component {
             return a.rank - b.rank;
         });
 
-        this._processResults(sortedResults, query);
+        this.processResults(sortedResults, query);
         this.setState({
             busy: false,
         });
     }
 
-    _doUserDirectorySearch(query) {
+    private doUserDirectorySearch(query: string): void {
         this.setState({
             busy: true,
             query,
@@ -366,7 +386,7 @@ export default class AddressPickerDialog extends React.Component {
             if (this.state.query !== query) {
                 return;
             }
-            this._processResults(resp.results, query);
+            this.processResults(resp.results, query);
         }).catch((err) => {
             console.error('Error whilst searching user directory: ', err);
             this.setState({
@@ -377,7 +397,7 @@ export default class AddressPickerDialog extends React.Component {
                     serverSupportsUserDirectory: false,
                 });
                 // Do a local search immediately
-                this._doLocalSearch(query);
+                this.doLocalSearch(query);
             }
         }).then(() => {
             this.setState({
@@ -386,7 +406,7 @@ export default class AddressPickerDialog extends React.Component {
         });
     }
 
-    _doLocalSearch(query) {
+    private doLocalSearch(query: string): void {
         this.setState({
             query,
             searchError: null,
@@ -407,10 +427,10 @@ export default class AddressPickerDialog extends React.Component {
                 avatar_url: user.avatarUrl,
             });
         });
-        this._processResults(results, query);
+        this.processResults(results, query);
     }
 
-    _processResults(results, query) {
+    private processResults(results: IResult[], query: string): void {
         const suggestedList = [];
         results.forEach((result) => {
             if (result.room_id) {
@@ -465,27 +485,27 @@ export default class AddressPickerDialog extends React.Component {
                 address: query,
                 isKnown: false,
             });
-            if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+            if (this.cancelThreepidLookup) this.cancelThreepidLookup();
             if (addrType === 'email') {
-                this._lookupThreepid(addrType, query);
+                this.lookupThreepid(addrType, query);
             }
         }
         this.setState({
             suggestedList,
             invalidAddressError: false,
         }, () => {
-            if (this.addressSelector) this.addressSelector.moveSelectionTop();
+            if (this.addressSelector.current) this.addressSelector.current.moveSelectionTop();
         });
     }
 
-    _addAddressesToList(addressTexts) {
+    private addAddressesToList(addressTexts: string[]): IUserAddress[] {
         const selectedList = this.state.selectedList.slice();
 
         let hasError = false;
         addressTexts.forEach((addressText) => {
             addressText = addressText.trim();
             const addrType = getAddressType(addressText);
-            const addrObj = {
+            const addrObj: IUserAddress = {
                 addressType: addrType,
                 address: addressText,
                 isKnown: false,
@@ -504,7 +524,6 @@ export default class AddressPickerDialog extends React.Component {
                 const room = MatrixClientPeg.get().getRoom(addrObj.address);
                 if (room) {
                     addrObj.displayName = room.name;
-                    addrObj.avatarMxc = room.avatarUrl;
                     addrObj.isKnown = true;
                 }
             }
@@ -518,17 +537,17 @@ export default class AddressPickerDialog extends React.Component {
             query: "",
             invalidAddressError: hasError ? true : this.state.invalidAddressError,
         });
-        if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+        if (this.cancelThreepidLookup) this.cancelThreepidLookup();
         return hasError ? null : selectedList;
     }
 
-    async _lookupThreepid(medium, address) {
+    private async lookupThreepid(medium: AddressType, address: string): Promise<string> {
         let cancelled = false;
         // Note that we can't safely remove this after we're done
         // because we don't know that it's the same one, so we just
         // leave it: it's replacing the old one each time so it's
         // not like they leak.
-        this._cancelThreepidLookup = function() {
+        this.cancelThreepidLookup = function() {
             cancelled = true;
         };
 
@@ -570,7 +589,7 @@ export default class AddressPickerDialog extends React.Component {
         }
     }
 
-    _getFilteredSuggestions() {
+    private getFilteredSuggestions(): IUserAddress[] {
         // map addressType => set of addresses to avoid O(n*m) operation
         const selectedAddresses = {};
         this.state.selectedList.forEach(({ address, addressType }) => {
@@ -584,15 +603,15 @@ export default class AddressPickerDialog extends React.Component {
         });
     }
 
-    _onPaste = e => {
+    private onPaste = (e: React.ClipboardEvent): void => {
         // Prevent the text being pasted into the textarea
         e.preventDefault();
         const text = e.clipboardData.getData("text");
         // Process it as a list of addresses to add instead
-        this._addAddressesToList(text.split(/[\s,]+/));
+        this.addAddressesToList(text.split(/[\s,]+/));
     };
 
-    onUseDefaultIdentityServerClick = e => {
+    private onUseDefaultIdentityServerClick = (e: React.MouseEvent): void => {
         e.preventDefault();
 
         // Update the IS in account data. Actually using it may trigger terms.
@@ -601,22 +620,17 @@ export default class AddressPickerDialog extends React.Component {
 
         // Add email as a valid address type.
         const { validAddressTypes } = this.state;
-        validAddressTypes.push('email');
+        validAddressTypes.push(AddressType.Email);
         this.setState({ validAddressTypes });
     };
 
-    onManageSettingsClick = e => {
+    private onManageSettingsClick = (e: React.MouseEvent): void => {
         e.preventDefault();
         dis.fire(Action.ViewUserSettings);
         this.onCancel();
     };
 
     render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const AddressSelector = sdk.getComponent("elements.AddressSelector");
-        this.scrollElement = null;
-
         let inputLabel;
         if (this.props.description) {
             inputLabel = <div className="mx_AddressPickerDialog_label">
@@ -627,7 +641,6 @@ export default class AddressPickerDialog extends React.Component {
         const query = [];
         // create the invite list
         if (this.state.selectedList.length > 0) {
-            const AddressTile = sdk.getComponent("elements.AddressTile");
             for (let i = 0; i < this.state.selectedList.length; i++) {
                 query.push(
                     <AddressTile
@@ -644,19 +657,19 @@ export default class AddressPickerDialog extends React.Component {
         query.push(
             <textarea
                 key={this.state.selectedList.length}
-                onPaste={this._onPaste}
-                rows="1"
+                onPaste={this.onPaste}
+                rows={1}
                 id="textinput"
-                ref={this._textinput}
+                ref={this.textinput}
                 className="mx_AddressPickerDialog_input"
                 onChange={this.onQueryChanged}
                 placeholder={this.getPlaceholder()}
                 defaultValue={this.props.value}
-                autoFocus={this.props.focus}>
-            </textarea>,
+                autoFocus={this.props.focus}
+            />,
         );
 
-        const filteredSuggestedList = this._getFilteredSuggestions();
+        const filteredSuggestedList = this.getFilteredSuggestions();
 
         let error;
         let addressSelector;
@@ -675,7 +688,7 @@ export default class AddressPickerDialog extends React.Component {
             error = <div className="mx_AddressPickerDialog_error">{ _t("No results") }</div>;
         } else {
             addressSelector = (
-                <AddressSelector ref={(ref) => {this.addressSelector = ref;}}
+                <AddressSelector ref={this.addressSelector}
                     addressList={filteredSuggestedList}
                     showAddress={this.props.pickerType === 'user'}
                     onSelected={this.onSelected}
@@ -686,8 +699,8 @@ export default class AddressPickerDialog extends React.Component {
 
         let identityServer;
         // If picker cannot currently accept e-mail but should be able to
-        if (this.props.pickerType === 'user' && !this.state.validAddressTypes.includes('email')
-            && this.props.validAddressTypes.includes('email')) {
+        if (this.props.pickerType === 'user' && !this.state.validAddressTypes.includes(AddressType.Email)
+            && this.props.validAddressTypes.includes(AddressType.Email)) {
             const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
             if (defaultIdentityServerUrl) {
                 identityServer = <div className="mx_AddressPickerDialog_identityServer">{ _t(
@@ -714,8 +727,12 @@ export default class AddressPickerDialog extends React.Component {
         }
 
         return (
-            <BaseDialog className="mx_AddressPickerDialog" onKeyDown={this.onKeyDown}
-                onFinished={this.props.onFinished} title={this.props.title}>
+            <BaseDialog
+                className="mx_AddressPickerDialog"
+                onKeyDown={this.onKeyDown}
+                onFinished={this.props.onFinished}
+                title={this.props.title}
+            >
                 { inputLabel }
                 <div className="mx_Dialog_content">
                     <div className="mx_AddressPickerDialog_inputContainer">{ query }</div>

@@ -32,7 +32,7 @@ export enum PlaybackState {
 
 export const PLAYBACK_WAVEFORM_SAMPLES = 39;
 const THUMBNAIL_WAVEFORM_SAMPLES = 100; // arbitrary: [30,120]
-const DEFAULT_WAVEFORM = arraySeed(0, PLAYBACK_WAVEFORM_SAMPLES);
+export const DEFAULT_WAVEFORM = arraySeed(0, PLAYBACK_WAVEFORM_SAMPLES);
 
 function makePlaybackWaveform(input: number[]): number[] {
     // First, convert negative amplitudes to positive so we don't detect zero as "noisy".
@@ -59,9 +59,10 @@ export class Playback extends EventEmitter implements IDestroyable {
     public readonly thumbnailWaveform: number[];
 
     private readonly context: AudioContext;
-    private source: AudioBufferSourceNode;
+    private source: AudioBufferSourceNode | MediaElementAudioSourceNode;
     private state = PlaybackState.Decoding;
     private audioBuf: AudioBuffer;
+    private element: HTMLAudioElement;
     private resampledWaveform: number[];
     private waveformObservable = new SimpleObservable<number[]>();
     private readonly clock: PlaybackClock;
@@ -129,36 +130,64 @@ export class Playback extends EventEmitter implements IDestroyable {
         this.removeAllListeners();
         this.clock.destroy();
         this.waveformObservable.close();
+        if (this.element) {
+            URL.revokeObjectURL(this.element.src);
+            this.element.remove();
+        }
     }
 
     public async prepare() {
-        // Safari compat: promise API not supported on this function
-        this.audioBuf = await new Promise((resolve, reject) => {
-            this.context.decodeAudioData(this.buf, b => resolve(b), async e => {
-                // This error handler is largely for Safari as well, which doesn't support Opus/Ogg
-                // very well.
-                console.error("Error decoding recording: ", e);
-                console.warn("Trying to re-encode to WAV instead...");
+        // The point where we use an audio element is fairly arbitrary, though we don't want
+        // it to be too low. As of writing, voice messages want to show a waveform but audio
+        // messages do not. Using an audio element means we can't show a waveform preview, so
+        // we try to target the difference between a voice message file and large audio file.
+        // Overall, the point of this is to avoid memory-related issues due to storing a massive
+        // audio buffer in memory, as that can balloon to far greater than the input buffer's
+        // byte length.
+        if (this.buf.byteLength > 5 * 1024 * 1024) { // 5mb
+            console.log("Audio file too large: processing through <audio /> element");
+            this.element = document.createElement("AUDIO") as HTMLAudioElement;
+            const prom = new Promise((resolve, reject) => {
+                this.element.onloadeddata = () => resolve(null);
+                this.element.onerror = (e) => reject(e);
+            });
+            this.element.src = URL.createObjectURL(new Blob([this.buf]));
+            await prom; // make sure the audio element is ready for us
+        } else {
+            // Safari compat: promise API not supported on this function
+            this.audioBuf = await new Promise((resolve, reject) => {
+                this.context.decodeAudioData(this.buf, b => resolve(b), async e => {
+                    try {
+                        // This error handler is largely for Safari as well, which doesn't support Opus/Ogg
+                        // very well.
+                        console.error("Error decoding recording: ", e);
+                        console.warn("Trying to re-encode to WAV instead...");
 
-                const wav = await decodeOgg(this.buf);
+                        const wav = await decodeOgg(this.buf);
 
-                // noinspection ES6MissingAwait - not needed when using callbacks
-                this.context.decodeAudioData(wav, b => resolve(b), e => {
-                    console.error("Still failed to decode recording: ", e);
-                    reject(e);
+                        // noinspection ES6MissingAwait - not needed when using callbacks
+                        this.context.decodeAudioData(wav, b => resolve(b), e => {
+                            console.error("Still failed to decode recording: ", e);
+                            reject(e);
+                        });
+                    } catch (e) {
+                        console.error("Caught decoding error:", e);
+                        reject(e);
+                    }
                 });
             });
-        });
 
-        // Update the waveform to the real waveform once we have channel data to use. We don't
-        // exactly trust the user-provided waveform to be accurate...
-        const waveform = Array.from(this.audioBuf.getChannelData(0));
-        this.resampledWaveform = makePlaybackWaveform(waveform);
+            // Update the waveform to the real waveform once we have channel data to use. We don't
+            // exactly trust the user-provided waveform to be accurate...
+            const waveform = Array.from(this.audioBuf.getChannelData(0));
+            this.resampledWaveform = makePlaybackWaveform(waveform);
+        }
+
         this.waveformObservable.update(this.resampledWaveform);
 
         this.emit(PlaybackState.Stopped); // signal that we're not decoding anymore
         this.clock.flagLoadTime(); // must happen first because setting the duration fires a clock update
-        this.clock.durationSeconds = this.audioBuf.duration;
+        this.clock.durationSeconds = this.element ? this.element.duration : this.audioBuf.duration;
     }
 
     private onPlaybackEnd = async () => {
@@ -171,7 +200,11 @@ export class Playback extends EventEmitter implements IDestroyable {
         if (this.state === PlaybackState.Stopped) {
             this.disconnectSource();
             this.makeNewSourceBuffer();
-            this.source.start();
+            if (this.element) {
+                await this.element.play();
+            } else {
+                (this.source as AudioBufferSourceNode).start();
+            }
         }
 
         // We use the context suspend/resume functions because it allows us to pause a source
@@ -182,13 +215,21 @@ export class Playback extends EventEmitter implements IDestroyable {
     }
 
     private disconnectSource() {
+        if (this.element) return; // leave connected, we can (and must) re-use it
         this.source?.disconnect();
         this.source?.removeEventListener("ended", this.onPlaybackEnd);
     }
 
     private makeNewSourceBuffer() {
-        this.source = this.context.createBufferSource();
-        this.source.buffer = this.audioBuf;
+        if (this.element && this.source) return; // leave connected, we can (and must) re-use it
+
+        if (this.element) {
+            this.source = this.context.createMediaElementSource(this.element);
+        } else {
+            this.source = this.context.createBufferSource();
+            this.source.buffer = this.audioBuf;
+        }
+
         this.source.addEventListener("ended", this.onPlaybackEnd);
         this.source.connect(this.context.destination);
     }
@@ -241,7 +282,11 @@ export class Playback extends EventEmitter implements IDestroyable {
         // when it comes time to the user hitting play. After a couple jumps, the user
         // will have desynced the clock enough to be about 10-15 seconds off, while this
         // keeps it as close to perfect as humans can perceive.
-        this.source.start(now, timeSeconds);
+        if (this.element) {
+            this.element.currentTime = timeSeconds;
+        } else {
+            (this.source as AudioBufferSourceNode).start(now, timeSeconds);
+        }
 
         // Dev note: it's critical that the code gap between `this.source.start()` and
         // `this.pause()` is as small as possible: we do not want to delay *anything*

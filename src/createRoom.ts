@@ -19,6 +19,8 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
+import { JoinRule, Preset, RestrictedAllowType, Visibility } from "matrix-js-sdk/src/@types/partials";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
@@ -35,8 +37,6 @@ import { VIRTUAL_ROOM_EVENT_TYPE } from "./CallHandler";
 import SpaceStore from "./stores/SpaceStore";
 import { makeSpaceParentEvent } from "./utils/space";
 import { Action } from "./dispatcher/actions";
-import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
-import { Preset, Visibility } from "matrix-js-sdk/src/@types/partials";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import Spinner from "./components/views/elements/Spinner";
 
@@ -53,6 +53,7 @@ export interface IOpts {
     andView?: boolean;
     associatedWithCommunity?: string;
     parentSpace?: Room;
+    joinRule?: JoinRule;
 }
 
 /**
@@ -74,7 +75,7 @@ export interface IOpts {
  * @returns {Promise} which resolves to the room id, or null if the
  * action was aborted or failed.
  */
-export default function createRoom(opts: IOpts): Promise<string | null> {
+export default async function createRoom(opts: IOpts): Promise<string | null> {
     opts = opts || {};
     if (opts.spinner === undefined) opts.spinner = true;
     if (opts.guestAccess === undefined) opts.guestAccess = true;
@@ -85,7 +86,7 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
     const client = MatrixClientPeg.get();
     if (client.isGuest()) {
         dis.dispatch({ action: 'require_registration' });
-        return Promise.resolve(null);
+        return null;
     }
 
     const defaultPreset = opts.dmUserId ? Preset.TrustedPrivateChat : Preset.PrivateChat;
@@ -142,12 +143,36 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
     }
 
     if (opts.parentSpace) {
-        opts.createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
-        opts.createOpts.initial_state.push({
+        createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
+        createOpts.initial_state.push({
             type: EventType.RoomHistoryVisibility,
             content: {
-                "history_visibility": opts.createOpts.preset === Preset.PublicChat ? "world_readable" : "invited",
+                "history_visibility": createOpts.preset === Preset.PublicChat ? "world_readable" : "invited",
             },
+        });
+
+        if (opts.joinRule === JoinRule.Restricted) {
+            if (SpaceStore.instance.restrictedJoinRuleSupport?.preferred) {
+                createOpts.room_version = SpaceStore.instance.restrictedJoinRuleSupport.preferred;
+
+                createOpts.initial_state.push({
+                    type: EventType.RoomJoinRules,
+                    content: {
+                        "join_rule": JoinRule.Restricted,
+                        "allow": [{
+                            "type": RestrictedAllowType.RoomMembership,
+                            "room_id": opts.parentSpace.roomId,
+                        }],
+                    },
+                });
+            }
+        }
+    }
+
+    if (opts.joinRule !== JoinRule.Restricted) {
+        createOpts.initial_state.push({
+            type: EventType.RoomJoinRules,
+            content: { join_rule: opts.joinRule },
         });
     }
 

@@ -165,7 +165,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
             else; // TBD
 
             return (
-                <div className={classnames(videoClasses)} >
+                <div className={classnames(videoClasses)}>
                     <MemberAvatar
                         member={member}
                         height={avatarSize}

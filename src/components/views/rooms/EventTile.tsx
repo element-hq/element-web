@@ -711,9 +711,12 @@ export default class EventTile extends React.Component<IProps, IState> {
 
             // add to the start so the most recent is on the end (ie. ends up rightmost)
             avatars.unshift(
-                <ReadReceiptMarker key={userId} member={receipt.roomMember}
+                <ReadReceiptMarker
+                    key={userId}
+                    member={receipt.roomMember}
                     fallbackUserId={userId}
-                    leftOffset={left} hidden={hidden}
+                    leftOffset={left}
+                    hidden={hidden}
                     readReceiptInfo={readReceiptInfo}
                     checkUnmounting={this.props.checkUnmounting}
                     suppressAnimation={this.suppressReadReceiptAnimation}
@@ -949,8 +952,10 @@ export default class EventTile extends React.Component<IProps, IState> {
             }
             avatar = (
                 <div className="mx_EventTile_avatar">
-                    <MemberAvatar member={member}
-                        width={avatarSize} height={avatarSize}
+                    <MemberAvatar
+                        member={member}
+                        width={avatarSize}
+                        height={avatarSize}
                         viewUserOnClick={true}
                     />
                 </div>
@@ -1142,6 +1147,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                         { ircTimestamp }
                         { sender }
                         { ircPadlock }
+                        { avatar }
                         <div className="mx_EventTile_line" key="mx_EventTile_line">
                             { groupTimestamp }
                             { groupPadlock }
@@ -1162,7 +1168,6 @@ export default class EventTile extends React.Component<IProps, IState> {
                         </div>
                         { reactionsRow }
                         { msgOption }
-                        { avatar }
                     </>)
                 );
             }
