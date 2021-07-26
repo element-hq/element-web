@@ -18,7 +18,6 @@ limitations under the License.
 import React from 'react';
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
-import { omit } from "lodash";
 
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
@@ -91,10 +90,9 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
     }
 
     render() {
-        let { member, fallbackUserId, onClick, viewUserOnClick, ...otherProps } = this.props;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        let { member, fallbackUserId, onClick, viewUserOnClick, forExport, ...otherProps } = this.props;
         const userId = member ? member.userId : fallbackUserId;
-
-        otherProps = omit(otherProps, "forExport");
 
         if (viewUserOnClick) {
             onClick = () => {

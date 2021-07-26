@@ -1,7 +1,23 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { exportOptions, exportTypes } from "./exportUtils";
+import { IExportOptions, exportTypes } from "./exportUtils";
 import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay } from "../../DateUtils";
@@ -23,7 +39,7 @@ export default abstract class Exporter {
     protected constructor(
         protected room: Room,
         protected exportType: exportTypes,
-        protected exportOptions: exportOptions,
+        protected exportOptions: IExportOptions,
         protected exportProgressRef: MutableRefObject<HTMLParagraphElement>,
     ) {
         this.cancelled = false;
@@ -53,6 +69,8 @@ export default abstract class Exporter {
     protected async downloadZIP(): Promise<any> {
         const filename = `matrix-export-${formatFullDateNoDay(new Date())}.zip`;
 
+        console.log(this.files, this.files.length);
+
         const zip = new JSZip();
         // Create a writable stream to the directory
         if (!this.cancelled) this.updateProgress("Generating a ZIP");
@@ -62,7 +80,7 @@ export default abstract class Exporter {
 
         const content = await zip.generateAsync({ type: "blob" });
 
-        await saveAs(content, filename);
+        saveAs(content, filename);
     }
 
     protected cleanUp(): string {

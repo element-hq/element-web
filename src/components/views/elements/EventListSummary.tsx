@@ -76,8 +76,8 @@ const EventListSummary: React.FC<IProps> = ({
             { children }
         </React.Fragment>;
     } else {
-        const avatars = summaryMembers.map((m, idx) =>
-            <MemberAvatar key={m.userId} member={m} width={14} height={14} />);
+        const avatars = summaryMembers.map((m) => <MemberAvatar key={m.userId} member={m} width={14} height={14} />);
+
         body = (
             <div className="mx_EventTile_line">
                 <div className="mx_EventTile_info">

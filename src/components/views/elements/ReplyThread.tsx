@@ -354,8 +354,14 @@ export default class ReplyThread extends React.Component<IProps, IState> {
             </blockquote>;
         } else if (this.props.forExport) {
             const eventId = ReplyThread.getParentEventId(this.props.parentEv);
-            header = <p style={{ marginTop: -5, marginBottom: 5 }}>
-                In reply to <a className="mx_reply_anchor" href={`#${eventId}`} scroll-to={eventId}>this message</a>
+            header = <p className="mx_ReplyThread_Export">
+                { _t("In reply to <messageLink/>",
+                    {},
+                    { messageLink: () => (
+                        <a className="mx_reply_anchor" href={`#${eventId}`} scroll-to={eventId}> { _t("this message") } </a>
+                    ),
+                    })
+                }
             </p>;
         } else if (this.state.loading) {
             header = <Spinner w={16} h={16} />;
