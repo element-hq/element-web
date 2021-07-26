@@ -417,10 +417,13 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ space, onCreateRoomClick, 
                 onFinished={onFinished}
                 footerPrompt={<>
                     <div>{ _t("Want to add a new room instead?") }</div>
-                    <AccessibleButton kind="link" onClick={() => {
-                        onCreateRoomClick();
-                        onFinished();
-                    }}>
+                    <AccessibleButton
+                        kind="link"
+                        onClick={() => {
+                            onCreateRoomClick();
+                            onFinished();
+                        }}
+                    >
                         { _t("Create a new room") }
                     </AccessibleButton>
                 </>}
@@ -429,10 +432,13 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ space, onCreateRoomClick, 
                 spacesRenderer={() => (
                     <div className="mx_AddExistingToSpace_section">
                         <h3>{ _t("Spaces") }</h3>
-                        <AccessibleButton kind="link" onClick={() => {
-                            onAddSubspaceClick();
-                            onFinished();
-                        }}>
+                        <AccessibleButton
+                            kind="link"
+                            onClick={() => {
+                                onAddSubspaceClick();
+                                onFinished();
+                            }}
+                        >
                             { _t("Adding spaces has moved.") }
                         </AccessibleButton>
                     </div>
