@@ -38,7 +38,8 @@ limitations under the License.
         padding-top: 0;
     }
 
-    &:hover {
+    &:hover,
+    &.mx_EventTile_selected {
         &::before {
             content: '';
             position: absolute;
@@ -97,6 +98,11 @@ limitations under the License.
         .mx_SenderProfile {
             display: none;
         }
+
+        .mx_ReplyTile .mx_SenderProfile {
+            display: block;
+        }
+
         .mx_ReactionsRow {
             float: right;
             clear: right;
@@ -150,10 +156,22 @@ limitations under the License.
         position: absolute;
         top: 0;
         line-height: 1;
+        z-index: 9;
         img {
             box-shadow: 0 0 0 3px $eventbubble-avatar-outline;
             border-radius: 50%;
         }
+    }
+
+    &.mx_EventTile_noSender {
+        .mx_EventTile_avatar {
+            top: -19px;
+        }
+    }
+
+    .mx_BaseAvatar,
+    .mx_EventTile_avatar {
+        line-height: 1;
     }
 
     &[data-has-reply=true] {
@@ -215,6 +233,7 @@ limitations under the License.
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 5px 0;
 
         .mx_EventTile_avatar {
             position: static;
@@ -281,7 +300,7 @@ limitations under the License.
     & + .mx_EventListSummary {
         .mx_EventTile {
             margin-top: 0;
-            padding: 0;
+            padding: 2px 0;
         }
     }
 
