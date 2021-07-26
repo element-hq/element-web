@@ -474,7 +474,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 outlined
             >
                 <div className="mx_CreateSecretStorageDialog_optionTitle">
-                    <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_secureBackup"></span>
+                    <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_secureBackup" />
                     { _t("Generate a Security Key") }
                 </div>
                 <div>{ _t("We’ll generate a Security Key for you to store somewhere safe, like a password manager or a safe.") }</div>
@@ -493,7 +493,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 outlined
             >
                 <div className="mx_CreateSecretStorageDialog_optionTitle">
-                    <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_securePhrase"></span>
+                    <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_securePhrase" />
                     { _t("Enter a Security Phrase") }
                 </div>
                 <div>{ _t("Use a secret phrase only you know, and optionally save a Security Key to use for backup.") }</div>
@@ -701,7 +701,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                         <code ref={this._collectRecoveryKeyNode}>{ this._recoveryKey.encodedPrivateKey }</code>
                     </div>
                     <div className="mx_CreateSecretStorageDialog_recoveryKeyButtons">
-                        <AccessibleButton kind='primary' className="mx_Dialog_primary"
+                        <AccessibleButton kind='primary'
+                            className="mx_Dialog_primary"
                             onClick={this._onDownloadClick}
                             disabled={this.state.phase === PHASE_STORING}
                         >

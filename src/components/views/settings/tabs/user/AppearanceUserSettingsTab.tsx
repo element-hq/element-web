@@ -303,9 +303,12 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                         />
                         <AccessibleButton
                             onClick={this.onAddCustomTheme}
-                            type="submit" kind="primary_sm"
+                            type="submit"
+                            kind="primary_sm"
                             disabled={!this.state.customThemeUrl.trim()}
-                        >{ _t("Add theme") }</AccessibleButton>
+                        >
+                            { _t("Add theme") }
+                        </AccessibleButton>
                         { messageElement }
                     </form>
                 </div>

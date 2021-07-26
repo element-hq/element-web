@@ -27,7 +27,6 @@ export default class MVoiceMessageBody extends MAudioBody {
     // A voice message is an audio file but rendered in a special way.
     public render() {
         if (this.state.error) {
-            // TODO: @@TR: Verify error state
             return (
                 <span className="mx_MVoiceMessageBody">
                     <img src={require("../../../../res/img/warning.svg")} width="16" height="16" />
@@ -37,7 +36,6 @@ export default class MVoiceMessageBody extends MAudioBody {
         }
 
         if (!this.state.playback) {
-            // TODO: @@TR: Verify loading/decrypting state
             return (
                 <span className="mx_MVoiceMessageBody">
                     <InlineSpinner />

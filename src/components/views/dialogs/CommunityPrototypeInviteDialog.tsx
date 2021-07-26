@@ -205,9 +205,12 @@ export default class CommunityPrototypeInviteDialog extends React.PureComponent<
                 people.push((
                     <AccessibleButton
                         onClick={this.onShowMorePeople}
-                        kind="link" key="more"
+                        kind="link"
+                        key="more"
                         className="mx_CommunityPrototypeInviteDialog_morePeople"
-                    >{ _t("Show more") }</AccessibleButton>
+                    >
+                        { _t("Show more") }
+                    </AccessibleButton>
                 ));
             }
         }
@@ -240,10 +243,13 @@ export default class CommunityPrototypeInviteDialog extends React.PureComponent<
                         { peopleIntro }
                         { people }
                         <AccessibleButton
-                            kind="primary" onClick={this.onSubmit}
+                            kind="primary"
+                            onClick={this.onSubmit}
                             disabled={this.state.busy}
                             className="mx_CommunityPrototypeInviteDialog_primaryButton"
-                        >{ buttonText }</AccessibleButton>
+                        >
+                            { buttonText }
+                        </AccessibleButton>
                     </div>
                 </form>
             </BaseDialog>
