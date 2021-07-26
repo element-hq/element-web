@@ -49,7 +49,7 @@ export default class IncomingCallToast extends React.Component<IProps, IState> {
         };
     }
 
-    componentDidMount = () => {
+    public componentDidMount = (): void => {
         CallHandler.sharedInstance().addListener(CallHandlerEvent.SilencedCallsChanged, this.onSilencedCallsChanged);
     };
 
