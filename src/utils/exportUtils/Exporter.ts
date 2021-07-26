@@ -17,7 +17,7 @@ limitations under the License.
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { IExportOptions, exportTypes } from "./exportUtils";
+import { IExportOptions, ExportTypes } from "./exportUtils";
 import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay } from "../../DateUtils";
@@ -38,7 +38,7 @@ export default abstract class Exporter {
 
     protected constructor(
         protected room: Room,
-        protected exportType: exportTypes,
+        protected exportType: ExportTypes,
         protected exportOptions: IExportOptions,
         protected exportProgressRef: MutableRefObject<HTMLParagraphElement>,
     ) {
@@ -114,10 +114,10 @@ export default abstract class Exporter {
     protected getLimit(): number {
         let limit: number;
         switch (this.exportType) {
-            case exportTypes.LAST_N_MESSAGES:
+            case ExportTypes.LAST_N_MESSAGES:
                 limit = this.exportOptions.numberOfMessages;
                 break;
-            case exportTypes.TIMELINE:
+            case ExportTypes.TIMELINE:
                 limit = 40;
                 break;
             default:
@@ -162,7 +162,7 @@ export default abstract class Exporter {
                 events.push(mxEv);
             }
             this.updateProgress(
-                ("Fetched " + events.length + " events ") + (this.exportType === exportTypes.LAST_N_MESSAGES
+                ("Fetched " + events.length + " events ") + (this.exportType === ExportTypes.LAST_N_MESSAGES
                     ? `out of ${this.exportOptions.numberOfMessages}`
                     : "so far"),
             );
