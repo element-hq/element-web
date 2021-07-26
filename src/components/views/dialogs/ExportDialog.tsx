@@ -284,18 +284,18 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         // Display export settings
         return (
             <BaseDialog
-                title={_t("Export Chat")}
+                title={isExporting ? _t("Exporting your data") : _t("Export Chat")}
                 className={`mx_ExportDialog ${isExporting && "mx_ExportDialog_Exporting"}`}
                 contentId="mx_Dialog_content"
                 hasCancel={true}
                 onFinished={onFinished}
                 fixedWidth={true}
             >
-                <p>
+                { !isExporting ? <p>
                     { _t(
                         "Select from the options below to export chats from your timeline",
                     ) }
-                </p>
+                </p> : null}
 
                 <span className="mx_ExportDialog_subheading">
                     { _t("Format") }

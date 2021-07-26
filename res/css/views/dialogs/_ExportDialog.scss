@@ -9,8 +9,32 @@
         margin-bottom: 12px;
     }
 
-    &.mx_ExportDialog_Exporting .mx_ExportDialog_options {
-        pointer-events: none;
+    &.mx_ExportDialog_Exporting {
+        .mx_ExportDialog_options {
+            pointer-events: none;
+        }
+
+        .mx_RadioButton input[type="radio"]:checked + div > div {
+            background: gray;
+        }
+
+        .mx_Field_valid.mx_Field label,
+        .mx_Field_valid.mx_Field:focus-within label {
+            color: unset;
+        }
+
+        .mx_Field_valid.mx_Field,
+        .mx_Field_valid.mx_Field:focus-within {
+            border-color: unset;
+        }
+
+        .mx_Checkbox
+            input[type="checkbox"]:checked
+            + label
+            > .mx_Checkbox_background {
+            background: gray;
+            border-color: gray;
+        }
     }
 
     .mx_ExportDialog_progress {
@@ -26,7 +50,7 @@
             width: 24px;
             height: 24px;
             & .mx_ExportDialog_spinner_path {
-                stroke: #0dbd8b;
+                stroke: $accent-color;
                 stroke-linecap: round;
                 animation: mx_dash 1.5s ease-in-out infinite;
             }
