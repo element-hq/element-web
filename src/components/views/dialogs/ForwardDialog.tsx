@@ -106,12 +106,12 @@ const Entry: React.FC<IEntryProps> = ({ room, event, matrixClient: cli, onFinish
         className = "mx_ForwardList_sending";
         disabled = true;
         title = _t("Sending");
-        icon = <div className="mx_ForwardList_sendIcon" aria-label={title}></div>;
+        icon = <div className="mx_ForwardList_sendIcon" aria-label={title} />;
     } else if (sendState === SendState.Sent) {
         className = "mx_ForwardList_sent";
         disabled = true;
         title = _t("Sent");
-        icon = <div className="mx_ForwardList_sendIcon" aria-label={title}></div>;
+        icon = <div className="mx_ForwardList_sendIcon" aria-label={title} />;
     } else {
         className = "mx_ForwardList_sendFailed";
         disabled = true;
@@ -204,10 +204,16 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
     function overflowTile(overflowCount, totalCount) {
         const text = _t("and %(count)s others...", { count: overflowCount });
         return (
-            <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
-                <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
-            } name={text} presenceState="online" suppressOnHover={true}
-            onClick={() => setTruncateAt(totalCount)} />
+            <EntityTile
+                className="mx_EntityTile_ellipsis"
+                avatarJsx={
+                    <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
+                }
+                name={text}
+                presenceState="online"
+                suppressOnHover={true}
+                onClick={() => setTruncateAt(totalCount)}
+            />
         );
     }
 

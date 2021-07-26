@@ -16,10 +16,6 @@ limitations under the License.
 
 $timelineImageBorderRadius: 4px;
 
-.mx_MImageBody {
-    display: block;
-}
-
 .mx_MImageBody_thumbnail {
     object-fit: contain;
     border-radius: $timelineImageBorderRadius;
@@ -28,7 +24,7 @@ $timelineImageBorderRadius: 4px;
     justify-content: center;
     align-items: center;
 
-    > canvas {
+    > div > canvas {
         border-radius: $timelineImageBorderRadius;
     }
 }
