@@ -123,7 +123,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
                 const weDeclinedCall = MatrixClientPeg.get().getUserId() === rejectParty;
                 return (
                     <div className="mx_CallEvent_content">
-                        { weDeclinedCall ? _t("You declined this call") : _t("The remote side declined this call") }
+                        { weDeclinedCall ? _t("You declined this call") : _t("They declined this call") }
                         { this.renderCallBackButton(weDeclinedCall ? _t("Call back") : _t("Call again")) }
                     </div>
                 );
@@ -142,7 +142,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
             } else if (hangupReason === CallErrorCode.InviteTimeout) {
                 return (
                     <div className="mx_CallEvent_content">
-                        { _t("The remote side didn't pick up") }
+                        { _t("They didn't pick up") }
                         { this.renderCallBackButton(_t("Call again")) }
                     </div>
                 );
