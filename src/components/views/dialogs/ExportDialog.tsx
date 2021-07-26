@@ -295,7 +295,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                     { _t(
                         "Select from the options below to export chats from your timeline",
                     ) }
-                </p> : null}
+                </p> : null }
 
                 <span className="mx_ExportDialog_subheading">
                     { _t("Format") }
