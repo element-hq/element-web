@@ -16,17 +16,8 @@ limitations under the License.
 */
 
 .mx_IncomingCallToast {
-    // mx_Toast overrides
-    padding: 8px !important;
-    display: flex !important;
-    top: 8px !important;
-
-    border-radius: 8px;
+    display: flex;
     flex-direction: row;
-    min-width: 250px;
-    box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.08);
-    background-color: $voipcall-plinth-color;
-
     pointer-events: initial; // restore pointer events so the user can accept/decline
 
     .mx_IncomingCallToast_content {

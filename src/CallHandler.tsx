@@ -648,10 +648,9 @@ export default class CallHandler extends EventEmitter {
         if (status === CallState.Ringing) {
             ToastStore.sharedInstance().addOrReplaceToast({
                 key: toastKey,
-                supplyWholeBody: true,
                 priority: 100,
                 component: IncomingCallToast,
-                className: "mx_IncomingCallToast",
+                bodyClassName: "mx_IncomingCallToast",
                 props: { call },
             });
         } else {

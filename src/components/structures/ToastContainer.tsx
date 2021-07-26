@@ -58,37 +58,42 @@ export default class ToastContainer extends React.Component<{}, IState> {
         let containerClasses;
         if (totalCount !== 0) {
             const topToast = this.state.toasts[0];
-            const { title, icon, key, component, className, props, supplyWholeBody } = topToast;
-            const toastClasses = classNames("mx_Toast_toast", {
+            const { title, icon, key, component, className, bodyClassName, props } = topToast;
+            const bodyClasses = classNames("mx_Toast_body", bodyClassName);
+            const toastClasses = classNames("mx_Toast_toast", className, {
                 "mx_Toast_hasIcon": icon,
                 [`mx_Toast_icon_${icon}`]: icon,
-            }, className);
-
-            let countIndicator;
-            if (isStacked || this.state.countSeen > 0) {
-                countIndicator = ` (${this.state.countSeen + 1}/${this.state.countSeen + totalCount})`;
-            }
-
+            });
             const toastProps = Object.assign({}, props, {
                 key,
                 toastKey: key,
             });
-
             const content = React.createElement(component, toastProps);
 
-            toast = supplyWholeBody
-                ? content
-                : <div className={toastClasses}>
+            let countIndicator;
+            if (title && isStacked || this.state.countSeen > 0) {
+                countIndicator = ` (${this.state.countSeen + 1}/${this.state.countSeen + totalCount})`;
+            }
+
+            let titleElement;
+            if (title) {
+                titleElement = (
                     <div className="mx_Toast_title">
                         <h2>{ title }</h2>
                         <span>{ countIndicator }</span>
                     </div>
-                    <div className="mx_Toast_body">{ content }</div>
-                </div>;
+                );
+            }
+
+            toast = (
+                <div className={toastClasses}>
+                    { titleElement }
+                    <div className={bodyClasses}>{ content }</div>
+                </div>
+            );
 
             containerClasses = classNames("mx_ToastContainer", {
                 "mx_ToastContainer_stacked": isStacked,
-                [className]: supplyWholeBody,
             });
         }
         return toast
