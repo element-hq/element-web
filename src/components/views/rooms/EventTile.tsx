@@ -711,9 +711,12 @@ export default class EventTile extends React.Component<IProps, IState> {
 
             // add to the start so the most recent is on the end (ie. ends up rightmost)
             avatars.unshift(
-                <ReadReceiptMarker key={userId} member={receipt.roomMember}
+                <ReadReceiptMarker
+                    key={userId}
+                    member={receipt.roomMember}
                     fallbackUserId={userId}
-                    leftOffset={left} hidden={hidden}
+                    leftOffset={left}
+                    hidden={hidden}
                     readReceiptInfo={readReceiptInfo}
                     checkUnmounting={this.props.checkUnmounting}
                     suppressAnimation={this.suppressReadReceiptAnimation}
@@ -893,6 +896,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             mx_EventTile_unknown: !isBubbleMessage && this.state.verified === E2E_STATE.UNKNOWN,
             mx_EventTile_bad: isEncryptionFailure,
             mx_EventTile_emote: msgtype === 'm.emote',
+            mx_EventTile_noSender: this.props.hideSender,
         });
 
         // If the tile is in the Sending state, don't speak the message.
@@ -949,8 +953,10 @@ export default class EventTile extends React.Component<IProps, IState> {
             }
             avatar = (
                 <div className="mx_EventTile_avatar">
-                    <MemberAvatar member={member}
-                        width={avatarSize} height={avatarSize}
+                    <MemberAvatar
+                        member={member}
+                        width={avatarSize}
+                        height={avatarSize}
                         viewUserOnClick={true}
                     />
                 </div>
@@ -1142,6 +1148,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                         { ircTimestamp }
                         { sender }
                         { ircPadlock }
+                        { avatar }
                         <div className="mx_EventTile_line" key="mx_EventTile_line">
                             { groupTimestamp }
                             { groupPadlock }
@@ -1159,10 +1166,10 @@ export default class EventTile extends React.Component<IProps, IState> {
                             />
                             { keyRequestInfo }
                             { actionBar }
+                            { this.props.layout === Layout.IRC && (reactionsRow) }
                         </div>
-                        { reactionsRow }
+                        { this.props.layout !== Layout.IRC && (reactionsRow) }
                         { msgOption }
-                        { avatar }
                     </>)
                 );
             }

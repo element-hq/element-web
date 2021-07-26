@@ -267,8 +267,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
                     width={width}
                     poster={poster}
                     onPlay={this.videoOnPlay}
-                >
-                </video>
+                />
                 { this.props.tileShape && <MFileBody {...this.props} showGenericPlaceholder={false} /> }
             </span>
         );

@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { RefObject, useContext, useRef, useState } from "react";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { Preset } from "matrix-js-sdk/src/@types/partials";
+import { Preset, JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventSubscription } from "fbemitter";
 
@@ -66,7 +66,6 @@ import Modal from "../../Modal";
 import BetaFeedbackDialog from "../views/dialogs/BetaFeedbackDialog";
 import SdkConfig from "../../SdkConfig";
 import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
-import { JoinRule } from "../views/settings/tabs/room/SecurityRoomSettingsTab";
 
 interface IProps {
     space: Room;
@@ -101,12 +100,14 @@ export const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
         <hr />
         <div>
             <span className="mx_SpaceFeedbackPrompt_text">{ _t("Spaces are a beta feature.") }</span>
-            <AccessibleButton kind="link" onClick={() => {
-                if (onClick) onClick();
-                Modal.createTrackedDialog("Beta Feedback", "feature_spaces", BetaFeedbackDialog, {
+            <AccessibleButton
+                kind="link"
+                onClick={() => {
+                    if (onClick) onClick();
+                    Modal.createTrackedDialog("Beta Feedback", "feature_spaces", BetaFeedbackDialog, {
                     featureId: "feature_spaces",
-                });
-            }}>
+                    });
+                }}>
                 { _t("Feedback") }
             </AccessibleButton>
         </div>
@@ -307,7 +308,6 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
 };
 
 const SpaceLandingAddButton = ({ space, onNewRoomAdded }) => {
-    const cli = useContext(MatrixClientContext);
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
 
     let contextMenu;
@@ -330,7 +330,7 @@ const SpaceLandingAddButton = ({ space, onNewRoomAdded }) => {
                         e.stopPropagation();
                         closeMenu();
 
-                        if (await showCreateNewRoom(cli, space)) {
+                        if (await showCreateNewRoom(space)) {
                             onNewRoomAdded();
                         }
                     }}
@@ -343,7 +343,7 @@ const SpaceLandingAddButton = ({ space, onNewRoomAdded }) => {
                         e.stopPropagation();
                         closeMenu();
 
-                        const [added] = await showAddExistingRooms(cli, space);
+                        const [added] = await showAddExistingRooms(space);
                         if (added) {
                             onNewRoomAdded();
                         }
@@ -397,11 +397,11 @@ const SpaceLanding = ({ space }) => {
     }
 
     let settingsButton;
-    if (shouldShowSpaceSettings(cli, space)) {
+    if (shouldShowSpaceSettings(space)) {
         settingsButton = <AccessibleTooltipButton
             className="mx_SpaceRoomView_landing_settingsButton"
             onClick={() => {
-                showSpaceSettings(cli, space);
+                showSpaceSettings(space);
             }}
             title={_t("Settings")}
         />;
@@ -553,9 +553,7 @@ const SpaceAddExistingRooms = ({ space, onFinished }) => {
             onFinished={onFinished}
         />
 
-        <div className="mx_SpaceRoomView_buttons">
-
-        </div>
+        <div className="mx_SpaceRoomView_buttons" />
         <SpaceFeedbackPrompt />
     </div>;
 };

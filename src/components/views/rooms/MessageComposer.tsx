@@ -35,7 +35,7 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import VoiceRecordComposerTile from "./VoiceRecordComposerTile";
 import { VoiceRecordingStore } from "../../../stores/VoiceRecordingStore";
-import { RecordingState } from "../../../voice/VoiceRecording";
+import { RecordingState } from "../../../audio/VoiceRecording";
 import Tooltip, { Alignment } from "../elements/Tooltip";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 import { E2EStatus } from '../../../utils/ShieldUtils';
@@ -98,9 +98,7 @@ const EmojiButton = ({ addEmoji }) => {
             isExpanded={menuDisplayed}
             title={_t('Emoji picker')}
             inputRef={button}
-        >
-
-        </ContextMenuTooltipButton>
+        />
 
         { contextMenu }
     </React.Fragment>;
@@ -439,7 +437,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         if (secondsLeft) {
             recordingTooltip = <Tooltip
                 label={_t("%(seconds)ss left", { seconds: secondsLeft })}
-                alignment={Alignment.Top} yOffset={-50}
+                alignment={Alignment.Top}
+                yOffset={-50}
             />;
         }
 
