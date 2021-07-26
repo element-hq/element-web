@@ -383,5 +383,7 @@
     "%(senderDisplayName)s enabled flair for %(newGroups)s and disabled flair for %(oldGroups)s in this room.": "Bu otaqda %(newGroups)s üçün aktiv və %(oldGroups)s üçün %(senderDisplayName)s deaktiv oldu.",
     "Create Account": "Hesab Aç",
     "Explore rooms": "Otaqları kəşf edin",
-    "Sign In": "Daxil ol"
+    "Sign In": "Daxil ol",
+    "Identity server is": "Eyniləşdirmənin serveri bu",
+    "Identity server": "Eyniləşdirmənin serveri"
 }
