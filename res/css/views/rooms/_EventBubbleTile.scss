@@ -232,7 +232,7 @@ limitations under the License.
 
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: start;
         padding: 5px 0;
 
         .mx_EventTile_avatar {
@@ -243,6 +243,12 @@ limitations under the License.
 
         .mx_EventTile_e2eIcon {
             margin-left: 9px;
+        }
+
+        .mx_EventTile_line > a {
+            right: auto;
+            top: -15px;
+            left: -68px;
         }
     }
 
