@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TextForPinnedEvent (JSX) should mention sender 1`] = `
+<span>
+  <span>
+    @foo:example.com changed the 
+    <a
+      onClick={[Function]}
+    >
+       
+      pinned messages
+       
+    </a>
+     for the room.
+  </span>
+</span>
+`;
