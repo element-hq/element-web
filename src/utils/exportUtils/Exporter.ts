@@ -1,4 +1,3 @@
-import streamSaver from "streamsaver";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -7,21 +6,18 @@ import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay } from "../../DateUtils";
 import { Direction, MatrixClient } from "matrix-js-sdk";
-import streamToZIP from "./ZipStream";
-import * as ponyfill from "web-streams-polyfill/ponyfill";
-import "web-streams-polyfill/ponyfill"; // to support streams API for older browsers
 import { MutableRefObject } from "react";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 
-type FileStream = {
+type BlobFile = {
     name: string;
-    stream(): ReadableStream;
+    blob: Blob;
 };
 
 export default abstract class Exporter {
-    protected files: FileStream[];
+    protected files: BlobFile[];
     protected client: MatrixClient;
-    protected writer: WritableStreamDefaultWriter<any>;
-    protected fileStream: WritableStream<any>;
     protected cancelled: boolean;
 
     protected constructor(
@@ -34,7 +30,6 @@ export default abstract class Exporter {
         this.files = [];
         this.client = MatrixClientPeg.get();
         window.addEventListener("beforeunload", this.onBeforeUnload);
-        window.addEventListener("onunload", this.abortWriter);
     }
 
     protected onBeforeUnload(e: BeforeUnloadEvent): string {
@@ -50,7 +45,7 @@ export default abstract class Exporter {
     protected addFile(filePath: string, blob: Blob): void {
         const file = {
             name: filePath,
-            stream: () => blob.stream(),
+            blob,
         };
         this.files.push(file);
     }
@@ -58,67 +53,31 @@ export default abstract class Exporter {
     protected async downloadZIP(): Promise<any> {
         const filename = `matrix-export-${formatFullDateNoDay(new Date())}.zip`;
 
-        // Support for older browsers
-        streamSaver.WritableStream = ponyfill.WritableStream;
-
+        const zip = new JSZip();
         // Create a writable stream to the directory
-        this.fileStream = streamSaver.createWriteStream(filename);
-
         if (!this.cancelled) this.updateProgress("Generating a ZIP");
         else return this.cleanUp();
 
-        this.writer = this.fileStream.getWriter();
-        const files = this.files;
+        for (const file of this.files) zip.file(file.name, file.blob);
 
-        const readableZipStream = streamToZIP({
-            start(ctrl) {
-                for (const file of files) ctrl.enqueue(file);
-                ctrl.close();
-            },
-        });
+        const content = await zip.generateAsync({ type: "blob" });
 
-        if (this.cancelled) return this.cleanUp();
-
-        this.updateProgress("Writing to the file system");
-
-        const reader = readableZipStream.getReader();
-        await this.pumpToFileStream(reader);
+        await saveAs(content, filename);
     }
 
     protected cleanUp(): string {
         console.log("Cleaning up...");
         window.removeEventListener("beforeunload", this.onBeforeUnload);
-        window.removeEventListener("onunload", this.abortWriter);
         return "";
     }
 
     public async cancelExport(): Promise<void> {
         console.log("Cancelling export...");
         this.cancelled = true;
-        await this.abortWriter();
     }
 
     protected async downloadPlainText(fileName: string, text: string): Promise<any> {
-        this.fileStream = streamSaver.createWriteStream(fileName);
-        this.writer = this.fileStream.getWriter();
-        const data = new TextEncoder().encode(text);
-        if (this.cancelled) return this.cleanUp();
-        await this.writer.write(data);
-        await this.writer.close();
-    }
-
-    protected async abortWriter(): Promise<void> {
-        await this.fileStream?.abort();
-        await this.writer?.abort();
-    }
-
-    protected async pumpToFileStream(reader: ReadableStreamDefaultReader): Promise<void> {
-        const res = await reader.read();
-        if (res.done) await this.writer.close();
-        else {
-            await this.writer.write(res.value);
-            await this.pumpToFileStream(reader);
-        }
+        await saveAs(new Blob[text], fileName);
     }
 
     protected setEventMetadata(event: MatrixEvent): MatrixEvent {
