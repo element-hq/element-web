@@ -711,6 +711,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         }
         let promise = Promise.resolve();
         let idx = this.filterConditions.indexOf(filter);
+        let removed = false;
         if (idx >= 0) {
             this.filterConditions.splice(idx, 1);
 
@@ -721,14 +722,20 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
             if (SpaceStore.spacesEnabled) {
                 promise = this.recalculatePrefiltering();
             }
+            removed = true;
         }
+
         idx = this.prefilterConditions.indexOf(filter);
         if (idx >= 0) {
             filter.off(FILTER_CHANGED, this.onPrefilterUpdated);
             this.prefilterConditions.splice(idx, 1);
             promise = this.recalculatePrefiltering();
+            removed = true;
         }
-        promise.then(() => this.updateFn.trigger());
+
+        if (removed) {
+            promise.then(() => this.updateFn.trigger());
+        }
     }
 
     /**
