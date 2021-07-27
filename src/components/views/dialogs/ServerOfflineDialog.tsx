@@ -54,7 +54,7 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
             const header = (
                 <div className="mx_ServerOfflineDialog_content_context_timeline_header">
                     <RoomAvatar width={24} height={24} room={c.room} />
-                    <span>{c.room.name}</span>
+                    <span>{ c.room.name }</span>
                 </div>
             );
             const entries = c.transactions
@@ -63,26 +63,26 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
                     let button = <Spinner w={19} h={19} />;
                     if (t.status === TransactionStatus.Error) {
                         button = (
-                            <AccessibleButton kind="link" onClick={() => t.run()}>{_t("Resend")}</AccessibleButton>
+                            <AccessibleButton kind="link" onClick={() => t.run()}>{ _t("Resend") }</AccessibleButton>
                         );
                     }
                     return (
                         <div className="mx_ServerOfflineDialog_content_context_txn" key={`txn-${j}`}>
                             <span className="mx_ServerOfflineDialog_content_context_txn_desc">
-                                {t.auditName}
+                                { t.auditName }
                             </span>
-                            {button}
+                            { button }
                         </div>
                     );
                 });
             return (
                 <div className="mx_ServerOfflineDialog_content_context" key={`context-${i}`}>
                     <div className="mx_ServerOfflineDialog_content_context_timestamp">
-                        {formatTime(c.firstFailedTime, SettingsStore.getValue("showTwelveHourTimestamps"))}
+                        { formatTime(c.firstFailedTime, SettingsStore.getValue("showTwelveHourTimestamps")) }
                     </div>
                     <div className="mx_ServerOfflineDialog_content_context_timeline">
-                        {header}
-                        {entries}
+                        { header }
+                        { entries }
                     </div>
                 </div>
             );
@@ -92,7 +92,7 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
     public render() {
         let timeline = this.renderTimeline().filter(c => !!c); // remove nulls for next check
         if (timeline.length === 0) {
-            timeline = [<div key={1}>{_t("You're all caught up.")}</div>];
+            timeline = [<div key={1}>{ _t("You're all caught up.") }</div>];
         }
 
         const serverName = MatrixClientPeg.getHomeserverName();
@@ -103,23 +103,23 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
             hasCancel={true}
         >
             <div className="mx_ServerOfflineDialog_content">
-                <p>{_t(
+                <p>{ _t(
                     "Your server isn't responding to some of your requests. " +
                     "Below are some of the most likely reasons.",
-                )}</p>
+                ) }</p>
                 <ul>
-                    <li>{_t("The server (%(serverName)s) took too long to respond.", { serverName })}</li>
-                    <li>{_t("Your firewall or anti-virus is blocking the request.")}</li>
-                    <li>{_t("A browser extension is preventing the request.")}</li>
-                    <li>{_t("The server is offline.")}</li>
-                    <li>{_t("The server has denied your request.")}</li>
-                    <li>{_t("Your area is experiencing difficulties connecting to the internet.")}</li>
-                    <li>{_t("A connection error occurred while trying to contact the server.")}</li>
-                    <li>{_t("The server is not configured to indicate what the problem is (CORS).")}</li>
+                    <li>{ _t("The server (%(serverName)s) took too long to respond.", { serverName }) }</li>
+                    <li>{ _t("Your firewall or anti-virus is blocking the request.") }</li>
+                    <li>{ _t("A browser extension is preventing the request.") }</li>
+                    <li>{ _t("The server is offline.") }</li>
+                    <li>{ _t("The server has denied your request.") }</li>
+                    <li>{ _t("Your area is experiencing difficulties connecting to the internet.") }</li>
+                    <li>{ _t("A connection error occurred while trying to contact the server.") }</li>
+                    <li>{ _t("The server is not configured to indicate what the problem is (CORS).") }</li>
                 </ul>
                 <hr />
-                <h2>{_t("Recent changes that have not yet been received")}</h2>
-                {timeline}
+                <h2>{ _t("Recent changes that have not yet been received") }</h2>
+                { timeline }
             </div>
         </BaseDialog>;
     }

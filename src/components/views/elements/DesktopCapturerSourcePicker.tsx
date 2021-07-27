@@ -51,12 +51,13 @@ export class ExistingSource extends React.Component<DesktopCapturerSourceIProps>
             <AccessibleButton
                 className="mx_desktopCapturerSourcePicker_stream_button"
                 title={this.props.source.name}
-                onClick={this.onClick} >
+                onClick={this.onClick}
+            >
                 <img
                     className="mx_desktopCapturerSourcePicker_stream_thumbnail"
                     src={this.props.source.thumbnailURL}
                 />
-                <span className="mx_desktopCapturerSourcePicker_stream_name">{this.props.source.name}</span>
+                <span className="mx_desktopCapturerSourcePicker_stream_name">{ this.props.source.name }</span>
             </AccessibleButton>
         );
     }
@@ -157,13 +158,13 @@ export default class DesktopCapturerSourcePicker extends React.Component<
                         className={screensButtonStyle}
                         onClick={this.onScreensClick}
                     >
-                        {_t("Screens")}
+                        { _t("Screens") }
                     </AccessibleButton>
                     <AccessibleButton
                         className={windowsButtonStyle}
                         onClick={this.onWindowsClick}
                     >
-                        {_t("Windows")}
+                        { _t("Windows") }
                     </AccessibleButton>
                 </div>
                 <div className="mx_desktopCapturerSourcePicker_panel">

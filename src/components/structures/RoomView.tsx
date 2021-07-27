@@ -166,6 +166,10 @@ export interface IState {
     canReply: boolean;
     layout: Layout;
     lowBandwidth: boolean;
+    alwaysShowTimestamps: boolean;
+    showTwelveHourTimestamps: boolean;
+    readMarkerInViewThresholdMs: number;
+    readMarkerOutOfViewThresholdMs: number;
     showHiddenEventsInTimeline: boolean;
     showReadReceipts: boolean;
     showRedactions: boolean;
@@ -231,6 +235,10 @@ export default class RoomView extends React.Component<IProps, IState> {
             canReply: false,
             layout: SettingsStore.getValue("layout"),
             lowBandwidth: SettingsStore.getValue("lowBandwidth"),
+            alwaysShowTimestamps: SettingsStore.getValue("alwaysShowTimestamps"),
+            showTwelveHourTimestamps: SettingsStore.getValue("showTwelveHourTimestamps"),
+            readMarkerInViewThresholdMs: SettingsStore.getValue("readMarkerInViewThresholdMs"),
+            readMarkerOutOfViewThresholdMs: SettingsStore.getValue("readMarkerOutOfViewThresholdMs"),
             showHiddenEventsInTimeline: SettingsStore.getValue("showHiddenEventsInTimeline"),
             showReadReceipts: true,
             showRedactions: true,
@@ -263,14 +271,26 @@ export default class RoomView extends React.Component<IProps, IState> {
         WidgetStore.instance.on(UPDATE_EVENT, this.onWidgetStoreUpdate);
 
         this.settingWatchers = [
-            SettingsStore.watchSetting("layout", null, () =>
-                this.setState({ layout: SettingsStore.getValue("layout") }),
+            SettingsStore.watchSetting("layout", null, (...[,,, value]) =>
+                this.setState({ layout: value as Layout }),
             ),
-            SettingsStore.watchSetting("lowBandwidth", null, () =>
-                this.setState({ lowBandwidth: SettingsStore.getValue("lowBandwidth") }),
+            SettingsStore.watchSetting("lowBandwidth", null, (...[,,, value]) =>
+                this.setState({ lowBandwidth: value as boolean }),
             ),
-            SettingsStore.watchSetting("showHiddenEventsInTimeline", null, () =>
-                this.setState({ showHiddenEventsInTimeline: SettingsStore.getValue("showHiddenEventsInTimeline") }),
+            SettingsStore.watchSetting("alwaysShowTimestamps", null, (...[,,, value]) =>
+                this.setState({ alwaysShowTimestamps: value as boolean }),
+            ),
+            SettingsStore.watchSetting("showTwelveHourTimestamps", null, (...[,,, value]) =>
+                this.setState({ showTwelveHourTimestamps: value as boolean }),
+            ),
+            SettingsStore.watchSetting("readMarkerInViewThresholdMs", null, (...[,,, value]) =>
+                this.setState({ readMarkerInViewThresholdMs: value as number }),
+            ),
+            SettingsStore.watchSetting("readMarkerOutOfViewThresholdMs", null, (...[,,, value]) =>
+                this.setState({ readMarkerOutOfViewThresholdMs: value as number }),
+            ),
+            SettingsStore.watchSetting("showHiddenEventsInTimeline", null, (...[,,, value]) =>
+                this.setState({ showHiddenEventsInTimeline: value as boolean }),
             ),
         ];
     }
@@ -337,30 +357,20 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         // Add watchers for each of the settings we just looked up
         this.settingWatchers = this.settingWatchers.concat([
-            SettingsStore.watchSetting("showReadReceipts", null, () =>
-                this.setState({
-                    showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
-                }),
+            SettingsStore.watchSetting("showReadReceipts", roomId, (...[,,, value]) =>
+                this.setState({ showReadReceipts: value as boolean }),
             ),
-            SettingsStore.watchSetting("showRedactions", null, () =>
-                this.setState({
-                    showRedactions: SettingsStore.getValue("showRedactions", roomId),
-                }),
+            SettingsStore.watchSetting("showRedactions", roomId, (...[,,, value]) =>
+                this.setState({ showRedactions: value as boolean }),
             ),
-            SettingsStore.watchSetting("showJoinLeaves", null, () =>
-                this.setState({
-                    showJoinLeaves: SettingsStore.getValue("showJoinLeaves", roomId),
-                }),
+            SettingsStore.watchSetting("showJoinLeaves", roomId, (...[,,, value]) =>
+                this.setState({ showJoinLeaves: value as boolean }),
             ),
-            SettingsStore.watchSetting("showAvatarChanges", null, () =>
-                this.setState({
-                    showAvatarChanges: SettingsStore.getValue("showAvatarChanges", roomId),
-                }),
+            SettingsStore.watchSetting("showAvatarChanges", roomId, (...[,,, value]) =>
+                this.setState({ showAvatarChanges: value as boolean }),
             ),
-            SettingsStore.watchSetting("showDisplaynameChanges", null, () =>
-                this.setState({
-                    showDisplaynameChanges: SettingsStore.getValue("showDisplaynameChanges", roomId),
-                }),
+            SettingsStore.watchSetting("showDisplaynameChanges", roomId, (...[,,, value]) =>
+                this.setState({ showDisplaynameChanges: value as boolean }),
             ),
         ]);
 
@@ -1730,7 +1740,8 @@ export default class RoomView extends React.Component<IProps, IState> {
                                 onJoinClick={this.onJoinButtonClicked}
                                 onForgetClick={this.onForgetClick}
                                 onRejectClick={this.onRejectThreepidInviteButtonClicked}
-                                canPreview={false} error={this.state.roomLoadError}
+                                canPreview={false}
+                                error={this.state.roomLoadError}
                                 roomAlias={roomAlias}
                                 joining={this.state.joining}
                                 inviterName={inviterName}
@@ -1892,10 +1903,10 @@ export default class RoomView extends React.Component<IProps, IState> {
                     className="mx_RoomView_auxPanel_hiddenHighlights"
                     onClick={this.onHiddenHighlightsClick}
                 >
-                    {_t(
+                    { _t(
                         "You have %(count)s unread notifications in a prior version of this room.",
                         { count: hiddenHighlightCount },
-                    )}
+                    ) }
                 </AccessibleButton>
             );
         }
@@ -2007,7 +2018,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 onScroll={this.onMessageListScroll}
                 onUserScroll={this.onUserScroll}
                 onReadMarkerUpdated={this.updateTopUnreadMessagesBar}
-                showUrlPreview = {this.state.showUrlPreview}
+                showUrlPreview={this.state.showUrlPreview}
                 className={messagePanelClassNames}
                 membersLoaded={this.state.membersLoaded}
                 permalinkCreator={this.getPermalinkCreatorForRoom(this.state.room)}
@@ -2057,7 +2068,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         return (
             <RoomContext.Provider value={this.state}>
                 <main className={mainClasses} ref={this.roomView} onKeyDown={this.onReactKeyDown}>
-                    {showChatEffects && this.roomView.current &&
+                    { showChatEffects && this.roomView.current &&
                         <EffectsOverlay roomWidth={this.roomView.current.offsetWidth} />
                     }
                     <ErrorBoundary>
@@ -2076,22 +2087,22 @@ export default class RoomView extends React.Component<IProps, IState> {
                         />
                         <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier}>
                             <div className="mx_RoomView_body">
-                                {auxPanel}
+                                { auxPanel }
                                 <div className={timelineClasses}>
-                                    {fileDropTarget}
-                                    {topUnreadMessagesBar}
-                                    {jumpToBottom}
-                                    {messagePanel}
-                                    {searchResultsPanel}
+                                    { fileDropTarget }
+                                    { topUnreadMessagesBar }
+                                    { jumpToBottom }
+                                    { messagePanel }
+                                    { searchResultsPanel }
                                 </div>
                                 <div className={statusBarAreaClass}>
                                     <div className="mx_RoomView_statusAreaBox">
                                         <div className="mx_RoomView_statusAreaBox_line" />
-                                        {statusBar}
+                                        { statusBar }
                                     </div>
                                 </div>
-                                {previewBar}
-                                {messageComposer}
+                                { previewBar }
+                                { messageComposer }
                             </div>
                         </MainSplit>
                     </ErrorBoundary>

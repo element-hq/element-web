@@ -16,10 +16,9 @@ limitations under the License.
 
 import React from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixClient } from "matrix-js-sdk/src/client";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
-import { calculateRoomVia } from "../utils/permalinks/Permalinks";
+import { calculateRoomVia } from "./permalinks/Permalinks";
 import Modal from "../Modal";
 import SpaceSettingsDialog from "../components/views/dialogs/SpaceSettingsDialog";
 import AddExistingToSpaceDialog from "../components/views/dialogs/AddExistingToSpaceDialog";
@@ -34,8 +33,8 @@ import Spinner from "../components/views/elements/Spinner";
 import dis from "../dispatcher/dispatcher";
 import LeaveSpaceDialog from "../components/views/dialogs/LeaveSpaceDialog";
 
-export const shouldShowSpaceSettings = (cli: MatrixClient, space: Room) => {
-    const userId = cli.getUserId();
+export const shouldShowSpaceSettings = (space: Room) => {
+    const userId = space.client.getUserId();
     return space.getMyMembership() === "join"
         && (space.currentState.maySendStateEvent(EventType.RoomAvatar, userId)
             || space.currentState.maySendStateEvent(EventType.RoomName, userId)
@@ -52,20 +51,20 @@ export const makeSpaceParentEvent = (room: Room, canonical = false) => ({
     state_key: room.roomId,
 });
 
-export const showSpaceSettings = (cli: MatrixClient, space: Room) => {
+export const showSpaceSettings = (space: Room) => {
     Modal.createTrackedDialog("Space Settings", "", SpaceSettingsDialog, {
-        matrixClient: cli,
+        matrixClient: space.client,
         space,
     }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
 };
 
-export const showAddExistingRooms = async (cli: MatrixClient, space: Room) => {
+export const showAddExistingRooms = async (space: Room) => {
     return Modal.createTrackedDialog(
         "Space Landing",
         "Add Existing",
         AddExistingToSpaceDialog,
         {
-            matrixClient: cli,
+            matrixClient: space.client,
             onCreateRoomClick: showCreateNewRoom,
             space,
         },
@@ -73,7 +72,7 @@ export const showAddExistingRooms = async (cli: MatrixClient, space: Room) => {
     ).finished;
 };
 
-export const showCreateNewRoom = async (cli: MatrixClient, space: Room) => {
+export const showCreateNewRoom = async (space: Room) => {
     const modal = Modal.createTrackedDialog<[boolean, IOpts]>(
         "Space Landing",
         "Create Room",

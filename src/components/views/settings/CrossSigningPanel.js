@@ -163,29 +163,29 @@ export default class CrossSigningPanel extends React.PureComponent {
 
         let errorSection;
         if (error) {
-            errorSection = <div className="error">{error.toString()}</div>;
+            errorSection = <div className="error">{ error.toString() }</div>;
         }
 
         let summarisedStatus;
         if (homeserverSupportsCrossSigning === undefined) {
             summarisedStatus = <Spinner />;
         } else if (!homeserverSupportsCrossSigning) {
-            summarisedStatus = <p>{_t(
+            summarisedStatus = <p>{ _t(
                 "Your homeserver does not support cross-signing.",
-            )}</p>;
+            ) }</p>;
         } else if (crossSigningReady) {
-            summarisedStatus = <p>✅ {_t(
+            summarisedStatus = <p>✅ { _t(
                 "Cross-signing is ready for use.",
-            )}</p>;
+            ) }</p>;
         } else if (crossSigningPrivateKeysInStorage) {
-            summarisedStatus = <p>{_t(
+            summarisedStatus = <p>{ _t(
                 "Your account has a cross-signing identity in secret storage, " +
                 "but it is not yet trusted by this session.",
-            )}</p>;
+            ) }</p>;
         } else {
-            summarisedStatus = <p>{_t(
+            summarisedStatus = <p>{ _t(
                 "Cross-signing is not set up.",
-            )}</p>;
+            ) }</p>;
         }
 
         const keysExistAnywhere = (
@@ -209,7 +209,7 @@ export default class CrossSigningPanel extends React.PureComponent {
         if (!keysExistEverywhere && homeserverSupportsCrossSigning) {
             actions.push(
                 <AccessibleButton key="setup" kind="primary" onClick={this._onBootstrapClick}>
-                    {_t("Set up")}
+                    { _t("Set up") }
                 </AccessibleButton>,
             );
         }
@@ -217,7 +217,7 @@ export default class CrossSigningPanel extends React.PureComponent {
         if (keysExistAnywhere) {
             actions.push(
                 <AccessibleButton key="reset" kind="danger" onClick={this._resetCrossSigning}>
-                    {_t("Reset")}
+                    { _t("Reset") }
                 </AccessibleButton>,
             );
         }
@@ -225,44 +225,44 @@ export default class CrossSigningPanel extends React.PureComponent {
         let actionRow;
         if (actions.length) {
             actionRow = <div className="mx_CrossSigningPanel_buttonRow">
-                {actions}
+                { actions }
             </div>;
         }
 
         return (
             <div>
-                {summarisedStatus}
+                { summarisedStatus }
                 <details>
-                    <summary>{_t("Advanced")}</summary>
+                    <summary>{ _t("Advanced") }</summary>
                     <table className="mx_CrossSigningPanel_statusList"><tbody>
                         <tr>
-                            <td>{_t("Cross-signing public keys:")}</td>
-                            <td>{crossSigningPublicKeysOnDevice ? _t("in memory") : _t("not found")}</td>
+                            <td>{ _t("Cross-signing public keys:") }</td>
+                            <td>{ crossSigningPublicKeysOnDevice ? _t("in memory") : _t("not found") }</td>
                         </tr>
                         <tr>
-                            <td>{_t("Cross-signing private keys:")}</td>
-                            <td>{crossSigningPrivateKeysInStorage ? _t("in secret storage") : _t("not found in storage")}</td>
+                            <td>{ _t("Cross-signing private keys:") }</td>
+                            <td>{ crossSigningPrivateKeysInStorage ? _t("in secret storage") : _t("not found in storage") }</td>
                         </tr>
                         <tr>
-                            <td>{_t("Master private key:")}</td>
-                            <td>{masterPrivateKeyCached ? _t("cached locally") : _t("not found locally")}</td>
+                            <td>{ _t("Master private key:") }</td>
+                            <td>{ masterPrivateKeyCached ? _t("cached locally") : _t("not found locally") }</td>
                         </tr>
                         <tr>
-                            <td>{_t("Self signing private key:")}</td>
-                            <td>{selfSigningPrivateKeyCached ? _t("cached locally") : _t("not found locally")}</td>
+                            <td>{ _t("Self signing private key:") }</td>
+                            <td>{ selfSigningPrivateKeyCached ? _t("cached locally") : _t("not found locally") }</td>
                         </tr>
                         <tr>
-                            <td>{_t("User signing private key:")}</td>
-                            <td>{userSigningPrivateKeyCached ? _t("cached locally") : _t("not found locally")}</td>
+                            <td>{ _t("User signing private key:") }</td>
+                            <td>{ userSigningPrivateKeyCached ? _t("cached locally") : _t("not found locally") }</td>
                         </tr>
                         <tr>
-                            <td>{_t("Homeserver feature support:")}</td>
-                            <td>{homeserverSupportsCrossSigning ? _t("exists") : _t("not found")}</td>
+                            <td>{ _t("Homeserver feature support:") }</td>
+                            <td>{ homeserverSupportsCrossSigning ? _t("exists") : _t("not found") }</td>
                         </tr>
                     </tbody></table>
                 </details>
-                {errorSection}
-                {actionRow}
+                { errorSection }
+                { actionRow }
             </div>
         );
     }

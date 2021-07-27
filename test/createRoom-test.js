@@ -1,5 +1,5 @@
 import './skinned-sdk'; // Must be first for skinning to work
-import { _waitForMember, canEncryptToAllUsers } from '../src/createRoom';
+import { waitForMember, canEncryptToAllUsers } from '../src/createRoom';
 import { EventEmitter } from 'events';
 
 /* Shorter timeout, we've got tests to run */
@@ -13,7 +13,7 @@ describe("waitForMember", () => {
     });
 
     it("resolves with false if the timeout is reached", (done) => {
-        _waitForMember(client, "", "", { timeout: 0 }).then((r) => {
+        waitForMember(client, "", "", { timeout: 0 }).then((r) => {
             expect(r).toBe(false);
             done();
         });
@@ -22,7 +22,7 @@ describe("waitForMember", () => {
     it("resolves with false if the timeout is reached, even if other RoomState.newMember events fire", (done) => {
         const roomId = "!roomId:domain";
         const userId = "@clientId:domain";
-        _waitForMember(client, roomId, userId, { timeout }).then((r) => {
+        waitForMember(client, roomId, userId, { timeout }).then((r) => {
             expect(r).toBe(false);
             done();
         });
@@ -32,7 +32,7 @@ describe("waitForMember", () => {
     it("resolves with true if RoomState.newMember fires", (done) => {
         const roomId = "!roomId:domain";
         const userId = "@clientId:domain";
-        _waitForMember(client, roomId, userId, { timeout }).then((r) => {
+        waitForMember(client, roomId, userId, { timeout }).then((r) => {
             expect(r).toBe(true);
             expect(client.listeners("RoomState.newMember").length).toBe(0);
             done();

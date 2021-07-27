@@ -123,7 +123,7 @@ const SpaceSettingsGeneralTab = ({ matrixClient: cli, space, onFinished }: IProp
             </AccessibleButton>
         </div>
 
-        <span className="mx_SettingsTab_subheading">{_t("Leave Space")}</span>
+        <span className="mx_SettingsTab_subheading">{ _t("Leave Space") }</span>
         <div className="mx_SettingsTab_section mx_SettingsTab_subsectionText">
             <AccessibleButton
                 kind="danger"

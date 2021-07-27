@@ -32,6 +32,8 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { canCancel } from "../context_menus/MessageContextMenu";
 import Resend from "../../../Resend";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { MediaEventHelper } from "../../../utils/MediaEventHelper";
+import DownloadActionButton from "./DownloadActionButton";
 
 const OptionsButton = ({ mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
@@ -267,6 +269,15 @@ export default class MessageActionBar extends React.PureComponent {
                         key="react"
                     />);
                 }
+
+                // XXX: Assuming that the underlying tile will be a media event if it is eligible media.
+                if (MediaEventHelper.isEligible(this.props.mxEvent)) {
+                    toolbarOpts.splice(0, 0, <DownloadActionButton
+                        mxEvent={this.props.mxEvent}
+                        mediaEventHelperGet={() => this.props.getTile?.().getMediaHelper?.()}
+                        key="download"
+                    />);
+                }
             }
 
             if (allowCancel) {
@@ -286,7 +297,7 @@ export default class MessageActionBar extends React.PureComponent {
 
         // aria-live=off to not have this read out automatically as navigating around timeline, gets repetitive.
         return <Toolbar className="mx_MessageActionBar" aria-label={_t("Message Actions")} aria-live="off">
-            {toolbarOpts}
+            { toolbarOpts }
         </Toolbar>;
     }
 }

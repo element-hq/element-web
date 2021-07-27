@@ -16,12 +16,12 @@ limitations under the License.
 
 import React, { useEffect, useMemo, useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 import { _t } from '../../../languageHandler';
 import Dropdown from "../elements/Dropdown";
 import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "../dialogs/BaseDialog";
-import { JoinRule } from "../settings/tabs/room/SecurityRoomSettingsTab";
 import SpaceStore from "../../../stores/SpaceStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { Entry } from "./AddExistingToSpaceDialog";
@@ -81,7 +81,7 @@ const SpaceChildPicker = ({ filterPlaceholder, rooms, selected, onChange }) => {
 
 const LeaveRoomsPicker = ({ space, spaceChildren, roomsToLeave, setRoomsToLeave }) => {
     const selected = useMemo(() => new Set(roomsToLeave), [roomsToLeave]);
-    const [state, setState] = useState<RoomsToLeave>(RoomsToLeave.All);
+    const [state, setState] = useState<string>(RoomsToLeave.All);
 
     useEffect(() => {
         if (state === RoomsToLeave.All) {

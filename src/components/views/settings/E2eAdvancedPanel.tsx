@@ -25,14 +25,14 @@ const SETTING_MANUALLY_VERIFY_ALL_SESSIONS = "e2ee.manuallyVerifyAllSessions";
 
 const E2eAdvancedPanel = props => {
     return <div className="mx_SettingsTab_section">
-        <span className="mx_SettingsTab_subheading">{_t("Encryption")}</span>
+        <span className="mx_SettingsTab_subheading">{ _t("Encryption") }</span>
 
         <SettingsFlag name={SETTING_MANUALLY_VERIFY_ALL_SESSIONS}
             level={SettingLevel.DEVICE}
         />
-        <div className="mx_E2eAdvancedPanel_settingLongDescription">{_t(
+        <div className="mx_E2eAdvancedPanel_settingLongDescription">{ _t(
             "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.",
-        )}</div>
+        ) }</div>
     </div>;
 };
 

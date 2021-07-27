@@ -425,10 +425,10 @@ export default class ContentMessages {
             const { finished } = Modal.createTrackedDialog<[boolean]>('Upload Reply Warning', '', QuestionDialog, {
                 title: _t('Replying With Files'),
                 description: (
-                    <div>{_t(
+                    <div>{ _t(
                         'At this time it is not possible to reply with a file. ' +
                         'Would you like to upload this file without replying?',
-                    )}</div>
+                    ) }</div>
                 ),
                 hasCancelButton: true,
                 button: _t("Continue"),

@@ -277,7 +277,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Move into constructor
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillMount() {
         if (this.props.manageReadReceipts) {
             this.updateReadReceiptOnUserActivity();
@@ -290,7 +290,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.timelineSet !== this.props.timelineSet) {
             // throw new Error("changing timelineSet on a TimelinePanel is not supported");
@@ -665,8 +665,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     private readMarkerTimeout(readMarkerPosition: number): number {
         return readMarkerPosition === 0 ?
-            this.state.readMarkerInViewThresholdMs :
-            this.state.readMarkerOutOfViewThresholdMs;
+            this.context?.readMarkerInViewThresholdMs ?? this.state.readMarkerInViewThresholdMs :
+            this.context?.readMarkerOutOfViewThresholdMs ?? this.state.readMarkerOutOfViewThresholdMs;
     }
 
     private async updateReadMarkerOnUserActivity(): Promise<void> {
@@ -1448,7 +1448,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (this.state.events.length == 0 && !this.state.canBackPaginate && this.props.empty) {
             return (
                 <div className={this.props.className + " mx_RoomView_messageListWrapper"}>
-                    <div className="mx_RoomView_empty">{this.props.empty}</div>
+                    <div className="mx_RoomView_empty">{ this.props.empty }</div>
                 </div>
             );
         }
@@ -1493,8 +1493,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 onUserScroll={this.props.onUserScroll}
                 onFillRequest={this.onMessageListFillRequest}
                 onUnfillRequest={this.onMessageListUnfillRequest}
-                isTwelveHour={this.state.isTwelveHour}
-                alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.alwaysShowTimestamps}
+                isTwelveHour={this.context?.showTwelveHourTimestamps ?? this.state.isTwelveHour}
+                alwaysShowTimestamps={
+                    this.props.alwaysShowTimestamps ??
+                    this.context?.alwaysShowTimestamps ??
+                    this.state.alwaysShowTimestamps
+                }
                 className={this.props.className}
                 tileShape={this.props.tileShape}
                 resizeNotifier={this.props.resizeNotifier}

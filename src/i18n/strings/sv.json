@@ -3356,5 +3356,16 @@
     "We sent the others, but the below people couldn't be invited to <RoomName/>": "Vi skickade de andra, men personerna nedan kunde inte bjudas in till <RoomName/>",
     "What this user is writing is wrong.\nThis will be reported to the room moderators.": "Vad användaren skriver är fel.\nDet här kommer att anmälas till rumsmoderatorerna.",
     "Report to moderators prototype. In rooms that support moderation, the `report` button will let you report abuse to room moderators": "Prototyp av anmälan till moderatorer. I rum som söder moderering så kommer `anmäl`-knappen att låta dig anmäla olämpligt beteende till rummets moderatorer",
-    "Report": "Rapportera"
+    "Report": "Rapportera",
+    "Integration manager": "Integrationshanterare",
+    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Din %(brand)s tillåter dig inte att använda en integrationshanterare för att göra detta. Vänligen kontakta en administratör.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Att använda denna widget kan dela data <helpIcon /> med %(widgetDomain)s och din integrationshanterare.",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Integrationshanterare får konfigurationsdata och kan ändra widgetar, skicka rumsinbjudningar och ställa in behörighetsnivåer å dina vägnar.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Använd en integrationshanterare för att hantera bottar, widgets och dekalpaket.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Använd en integrationshanterare <b>(%(serverName)s)</b> för att hantera bottar, widgets och dekalpaket.",
+    "Identity server": "Identitetsserver",
+    "Identity server (%(server)s)": "Identitetsserver (%(server)s)",
+    "Could not connect to identity server": "Kunde inte ansluta till identitetsservern",
+    "Not a valid identity server (status code %(code)s)": "Inte en giltig identitetsserver (statuskod %(code)s)",
+    "Identity server URL must be HTTPS": "URL för identitetsserver måste vara HTTPS"
 }

@@ -123,10 +123,10 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
         if (this.state.canKick && this.state.invited) {
             adminTools = (
                 <div className="mx_MemberInfo_container">
-                    <h3>{_t("Admin Tools")}</h3>
+                    <h3>{ _t("Admin Tools") }</h3>
                     <div className="mx_MemberInfo_buttons">
                         <AccessibleButton className="mx_MemberInfo_field" onClick={this.onKickClick}>
-                            {_t("Revoke invite")}
+                            { _t("Revoke invite") }
                         </AccessibleButton>
                     </div>
                 </div>
@@ -150,16 +150,16 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
                         onClick={this.onCancel}
                         title={_t('Close')}
                     />
-                    <h2>{this.state.displayName}</h2>
+                    <h2>{ this.state.displayName }</h2>
                 </div>
                 <div className="mx_MemberInfo_container">
                     <div className="mx_MemberInfo_profile">
                         <div className="mx_MemberInfo_profileField">
-                            {_t("Invited by %(sender)s", { sender: this.state.senderName })}
+                            { _t("Invited by %(sender)s", { sender: this.state.senderName }) }
                         </div>
                     </div>
                 </div>
-                {adminTools}
+                { adminTools }
             </div>
         );
     }
