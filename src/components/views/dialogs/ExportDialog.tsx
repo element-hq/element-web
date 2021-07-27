@@ -131,7 +131,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     }: Pick<IFieldState, "value">): Promise<IValidationResult> => {
         const parsedSize = parseFloat(value);
         const min = 1;
-        const max = 4000;
+        const max = 2000;
 
         if (isNaN(parsedSize)) {
             return { valid: false, feedback: _t("Size must be a number") };
