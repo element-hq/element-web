@@ -193,4 +193,11 @@ export enum Action {
      * Switches space. Should be used with SwitchSpacePayload.
      */
     SwitchSpace = "switch_space",
+
+    /**
+     * Fires when a monitored setting is updated,
+     * see SettingsStore::monitorSetting for more details.
+     * Should be used with SettingUpdatedPayload.
+     */
+    SettingUpdated = "setting_updated",
 }

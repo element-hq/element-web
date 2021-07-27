@@ -36,6 +36,8 @@ import { RoomNotificationStateStore } from "../notifications/RoomNotificationSta
 import { VisibilityProvider } from "./filters/VisibilityProvider";
 import { SpaceWatcher } from "./SpaceWatcher";
 import SpaceStore from "../SpaceStore";
+import { Action } from "../../dispatcher/actions";
+import { SettingUpdatedPayload } from "../../dispatcher/payloads/SettingUpdatedPayload";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -213,10 +215,11 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         const logicallyReady = this.matrixClient && this.initialListsGenerated;
         if (!logicallyReady) return;
 
-        if (payload.action === 'setting_updated') {
-            if (this.watchedSettings.includes(payload.settingName)) {
+        if (payload.action === Action.SettingUpdated) {
+            const settingUpdatedPayload = payload as SettingUpdatedPayload;
+            if (this.watchedSettings.includes(settingUpdatedPayload.settingName)) {
                 // TODO: Remove with https://github.com/vector-im/element-web/issues/14602
-                if (payload.settingName === "advancedRoomListLogging") {
+                if (settingUpdatedPayload.settingName === "advancedRoomListLogging") {
                     // Log when the setting changes so we know when it was turned on in the rageshake
                     const enabled = SettingsStore.getValue("advancedRoomListLogging");
                     console.warn("Advanced room list logging is enabled? " + enabled);
