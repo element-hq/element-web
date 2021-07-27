@@ -363,7 +363,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         // so we can trigger a new chain of calls once done.
         // However, we make an exception for when we're already filling due to a
         // props (or children) update, because very often the children include
-        // spinners to say whether we're pagainating or not, so this would cause
+        // spinners to say whether we're paginating or not, so this would cause
         // infinite paginating.
         if (isFirstCall) {
             if (this.isFilling && !this.isFillingDueToPropsUpdate) {
