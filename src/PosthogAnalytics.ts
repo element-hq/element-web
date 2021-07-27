@@ -63,17 +63,22 @@ export async function getRedactedCurrentLocation(origin: string, hash: string, p
         pathname = "/<redacted_file_scheme_url>/";
     }
 
-    let [_, screen, ...parts] = hash.split("/");
+    let hashStr;
+    if (hash == "") {
+        hashStr = "";
+    } else {
+        let [_, screen, ...parts] = hash.split("/");
 
-    if (!knownScreens.has(screen)) {
-        screen = "<redacted_screen_name>";
+        if (!knownScreens.has(screen)) {
+            screen = "<redacted_screen_name>";
+        }
+
+        for (let i = 0; i < parts.length; i++) {
+            parts[i] = anonymity === Anonymity.Anonymous ? `<redacted>` : await hashHex(parts[i]);
+        }
+
+        hashStr = `${_}/${screen}/${parts.join("/")}`;
     }
-
-    for (let i = 0; i < parts.length; i++) {
-        parts[i] = anonymity === Anonymity.Anonymous ? `<redacted>` : await hashHex(parts[i]);
-    }
-
-    const hashStr = `${_}/${screen}/${parts.join("/")}`;
     return origin + pathname + hashStr;
 }
 
