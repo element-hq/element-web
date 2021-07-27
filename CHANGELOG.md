@@ -1,3 +1,47 @@
+Changes in [1.7.34-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.34-rc.1) (2021-07-27)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.33...v1.7.34-rc.1)
+
+ * Translations update from Weblate
+   [\#18260](https://github.com/vector-im/element-web/pull/18260)
+ * Update ESLint config
+   [\#18236](https://github.com/vector-im/element-web/pull/18236)
+ * Update matrix-org-eslint-plugin and tighten max warning limit
+   [\#18207](https://github.com/vector-im/element-web/pull/18207)
+ * Update webpack path for new voice message worker location
+   [\#18187](https://github.com/vector-im/element-web/pull/18187)
+ * yarn upgrade
+   [\#18150](https://github.com/vector-im/element-web/pull/18150)
+ * Conform to new typescript eslint rules
+   [\#18065](https://github.com/vector-im/element-web/pull/18065)
+ * Add the Matrix Space to the translations guide
+   [\#18102](https://github.com/vector-im/element-web/pull/18102)
+ * Update eslint-plugin-matrix-org
+   [\#18058](https://github.com/vector-im/element-web/pull/18058)
+ * Fix browser history getting stuck looping back to the same room
+   [\#18053](https://github.com/vector-im/element-web/pull/18053)
+ * Use URLSearchParams instead of transitive dependency `querystring`
+   [\#13138](https://github.com/vector-im/element-web/pull/13138)
+ * Update PR template for new changelog generation
+   [\#18003](https://github.com/vector-im/element-web/pull/18003)
+ * Fix space shortcuts on layouts with non-English keys in the places of
+   numbers
+   [\#17780](https://github.com/vector-im/element-web/pull/17780)
+ * Add comment around feature_spaces flag usage
+   [\#18006](https://github.com/vector-im/element-web/pull/18006)
+ * Standardise casing of identity server
+   [\#17980](https://github.com/vector-im/element-web/pull/17980)
+ * Convert CONTRIBUTING to markdown
+   [\#18002](https://github.com/vector-im/element-web/pull/18002)
+ * Ignore workers for jest tests because it disagrees with worker-loader
+   [\#17999](https://github.com/vector-im/element-web/pull/17999)
+ * Use webpack worker-loader instead of homegrown hack
+   [\#17963](https://github.com/vector-im/element-web/pull/17963)
+ * Fix types to match Typescripted IndexedDB store
+   [\#17962](https://github.com/vector-im/element-web/pull/17962)
+ * Improve and consolidate typing
+   [\#17931](https://github.com/vector-im/element-web/pull/17931)
+
 Changes in [1.7.33](https://github.com/vector-im/element-web/releases/tag/v1.7.33) (2021-07-19)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.33-rc.1...v1.7.33)
