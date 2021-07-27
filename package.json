@@ -116,6 +116,7 @@
     "html-webpack-plugin": "^4.5.2",
     "jest": "^26.6.3",
     "jest-environment-jsdom-sixteen": "^1.0.3",
+    "jest-raw-loader": "^1.0.1",
     "json-loader": "^0.5.7",
     "loader-utils": "^1.4.0",
     "matrix-mock-request": "^1.2.3",
@@ -138,6 +139,7 @@
     "postcss-scss": "^2.1.1",
     "postcss-simple-vars": "^5.0.2",
     "postcss-strip-inline-comments": "^0.1.5",
+    "raw-loader": "^4.0.2",
     "rimraf": "^3.0.2",
     "shell-escape": "^0.2.0",
     "simple-proxy-agent": "^1.1.0",
@@ -173,7 +175,8 @@
       "waveWorker\\.min\\.js": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js",
       "context-filter-polyfill": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js",
       "FontManager.ts": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/FontManager.js",
-      "workers/(.+)\\.worker\\.ts": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/workerMock.js"
+      "workers/(.+)\\.worker\\.ts": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/workerMock.js",
+      "^!!raw-loader!.*": "jest-raw-loader"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$",
