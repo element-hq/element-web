@@ -17,7 +17,6 @@ limitations under the License.
 import React, { ReactNode, useContext, useMemo, useState } from "react";
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixClient } from "matrix-js-sdk/src/client";
 import { sleep } from "matrix-js-sdk/src/utils";
 
 import { _t } from '../../../languageHandler';
@@ -44,9 +43,8 @@ import EntityTile from "../rooms/EntityTile";
 import BaseAvatar from "../avatars/BaseAvatar";
 
 interface IProps extends IDialogProps {
-    matrixClient: MatrixClient;
     space: Room;
-    onCreateRoomClick(cli: MatrixClient, space: Room): void;
+    onCreateRoomClick(space: Room): void;
 }
 
 const Entry = ({ room, checked, onChange }) => {
@@ -211,17 +209,23 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     function overflowTile(overflowCount, totalCount) {
         const text = _t("and %(count)s others...", { count: overflowCount });
         return (
-            <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
-                <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
-            } name={text} presenceState="online" suppressOnHover={true}
-            onClick={() => setTruncateAt(totalCount)} />
+            <EntityTile
+                className="mx_EntityTile_ellipsis"
+                avatarJsx={
+                    <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
+                }
+                name={text}
+                presenceState="online"
+                suppressOnHover={true}
+                onClick={() => setTruncateAt(totalCount)}
+            />
         );
     }
 
     return <div className="mx_AddExistingToSpace">
         <SearchBox
             className="mx_textinput_icon mx_textinput_search"
-            placeholder={ _t("Filter your rooms and spaces") }
+            placeholder={_t("Filter your rooms and spaces")}
             onSearch={setQuery}
             autoComplete={true}
             autoFocus={true}
@@ -295,7 +299,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     </div>;
 };
 
-const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, onCreateRoomClick, onFinished }) => {
+const AddExistingToSpaceDialog: React.FC<IProps> = ({ space, onCreateRoomClick, onFinished }) => {
     const [selectedSpace, setSelectedSpace] = useState(space);
     const existingSubspaces = SpaceStore.instance.getChildSpaces(space.roomId);
 
@@ -344,13 +348,13 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
         onFinished={onFinished}
         fixedWidth={false}
     >
-        <MatrixClientContext.Provider value={cli}>
+        <MatrixClientContext.Provider value={space.client}>
             <AddExistingToSpace
                 space={space}
                 onFinished={onFinished}
                 footerPrompt={<>
                     <div>{ _t("Want to add a new room instead?") }</div>
-                    <AccessibleButton onClick={() => onCreateRoomClick(cli, space)} kind="link">
+                    <AccessibleButton onClick={() => onCreateRoomClick(space)} kind="link">
                         { _t("Create a new room") }
                     </AccessibleButton>
                 </>}

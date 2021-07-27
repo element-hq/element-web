@@ -41,7 +41,7 @@ import CaptchaForm from "./CaptchaForm";
  *                         one HS whilst beign a guest on another).
  * loginType:              the login type of the auth stage being attempted
  * authSessionId:          session id from the server
- * clientSecret:           The client secret in use for ID server auth sessions
+ * clientSecret:           The client secret in use for identity server auth sessions
  * stageParams:            params from the server for the stage being attempted
  * errorText:              error message from a previous attempt to authenticate
  * submitAuthDict:         a function which will be called with the new auth dict
@@ -54,8 +54,8 @@ import CaptchaForm from "./CaptchaForm";
  *                         Defined keys for stages are:
  *                             m.login.email.identity:
  *                              * emailSid: string representing the sid of the active
- *                                          verification session from the ID server, or
- *                                          null if no session is active.
+ *                                          verification session from the identity server,
+ *                                          or null if no session is active.
  * fail:                   a function which should be called with an error object if an
  *                         error occurred during the auth stage. This will cause the auth
  *                         session to be failed and the process to go back to the start.
@@ -416,13 +416,15 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
         let submitButton;
         if (this.props.showContinue !== false) {
             // XXX: button classes
-            submitButton = <button className="mx_InteractiveAuthEntryComponents_termsSubmit mx_GeneralButton"
-                onClick={this.trySubmit} disabled={!allChecked}>{_t("Accept")}</button>;
+            submitButton = <button
+                className="mx_InteractiveAuthEntryComponents_termsSubmit mx_GeneralButton"
+                onClick={this.trySubmit}
+                disabled={!allChecked}>{ _t("Accept") }</button>;
         }
 
         return (
             <div>
-                <p>{_t("Please review and accept the policies of this homeserver:")}</p>
+                <p>{ _t("Please review and accept the policies of this homeserver:") }</p>
                 { checkboxes }
                 { errorSection }
                 { submitButton }
@@ -613,15 +615,17 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
                                 className="mx_InteractiveAuthEntryComponents_msisdnEntry"
                                 value={this.state.token}
                                 onChange={this.onTokenChange}
-                                aria-label={ _t("Code")}
+                                aria-label={_t("Code")}
                             />
                             <br />
-                            <input type="submit" value={_t("Submit")}
+                            <input
+                                type="submit"
+                                value={_t("Submit")}
                                 className={submitClasses}
                                 disabled={!enableSubmit}
                             />
                         </form>
-                        {errorSection}
+                        { errorSection }
                     </div>
                 </div>
             );
@@ -717,21 +721,21 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
             <AccessibleButton
                 onClick={this.props.onCancel}
                 kind={this.props.continueKind ? (this.props.continueKind + '_outline') : 'primary_outline'}
-            >{_t("Cancel")}</AccessibleButton>
+            >{ _t("Cancel") }</AccessibleButton>
         );
         if (this.state.phase === SSOAuthEntry.PHASE_PREAUTH) {
             continueButton = (
                 <AccessibleButton
                     onClick={this.onStartAuthClick}
                     kind={this.props.continueKind || 'primary'}
-                >{this.props.continueText || _t("Single Sign On")}</AccessibleButton>
+                >{ this.props.continueText || _t("Single Sign On") }</AccessibleButton>
             );
         } else {
             continueButton = (
                 <AccessibleButton
                     onClick={this.onConfirmClick}
                     kind={this.props.continueKind || 'primary'}
-                >{this.props.continueText || _t("Confirm")}</AccessibleButton>
+                >{ this.props.continueText || _t("Confirm") }</AccessibleButton>
             );
         }
 
@@ -753,8 +757,8 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
         return <React.Fragment>
             { errorSection }
             <div className="mx_InteractiveAuthEntryComponents_sso_buttons">
-                {cancelButton}
-                {continueButton}
+                { cancelButton }
+                { continueButton }
             </div>
         </React.Fragment>;
     }
@@ -825,7 +829,7 @@ export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
                 <a href="" ref={this.fallbackButton} onClick={this.onShowFallbackClick}>{
                     _t("Start authentication")
                 }</a>
-                {errorSection}
+                { errorSection }
             </div>
         );
     }

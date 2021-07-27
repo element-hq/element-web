@@ -224,7 +224,7 @@ export default class Stickerpicker extends React.PureComponent {
     }
 
     _getStickerpickerContent() {
-        // Handle Integration Manager errors
+        // Handle integration manager errors
         if (this.state._imError) {
             return this._errorStickerpickerContent();
         }
@@ -403,8 +403,7 @@ export default class Stickerpicker extends React.PureComponent {
                     onClick={this._onHideStickersClick}
                     active={this.state.showStickers.toString()}
                     title={_t("Hide Stickers")}
-                >
-                </AccessibleButton>;
+                />;
 
             const GenericElementContextMenu = sdk.getComponent('context_menus.GenericElementContextMenu');
             stickerPicker = <ContextMenu
@@ -431,8 +430,7 @@ export default class Stickerpicker extends React.PureComponent {
                     className="mx_MessageComposer_button mx_MessageComposer_stickers"
                     onClick={this._onShowStickersClick}
                     title={_t("Show Stickers")}
-                >
-                </AccessibleTooltipButton>;
+                />;
         }
         return <React.Fragment>
             { stickersButton }

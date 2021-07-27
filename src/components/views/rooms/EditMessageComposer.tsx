@@ -181,7 +181,7 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
                 } else {
                     this.clearStoredEditorState();
                     dis.dispatch({ action: 'edit_event', event: null });
-                    dis.fire(Action.FocusComposer);
+                    dis.fire(Action.FocusSendMessageComposer);
                 }
                 event.preventDefault();
                 break;
@@ -200,7 +200,7 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
     private cancelEdit = (): void => {
         this.clearStoredEditorState();
         dis.dispatch({ action: "edit_event", event: null });
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
     };
 
     private get shouldSaveStoredEditorState(): boolean {
@@ -375,7 +375,7 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
 
         // close the event editing and focus composer
         dis.dispatch({ action: "edit_event", event: null });
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
     };
 
     private cancelPreviousPendingEdit(): void {
@@ -452,6 +452,8 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
             } else if (payload.text) {
                 this.editorRef.current?.insertPlaintext(payload.text);
             }
+        } else if (payload.action === Action.FocusEditMessageComposer && this.editorRef.current) {
+            this.editorRef.current.focus();
         }
     };
 

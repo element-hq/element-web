@@ -62,9 +62,9 @@ export default class ViewSourceEvent extends React.PureComponent<IProps, IState>
 
         let content;
         if (expanded) {
-            content = <pre>{JSON.stringify(mxEvent, null, 4)}</pre>;
+            content = <pre>{ JSON.stringify(mxEvent, null, 4) }</pre>;
         } else {
-            content = <code>{`{ "type": ${mxEvent.getType()} }`}</code>;
+            content = <code>{ `{ "type": ${mxEvent.getType()} }` }</code>;
         }
 
         const classes = classNames("mx_ViewSourceEvent mx_EventTile_content", {
@@ -72,7 +72,7 @@ export default class ViewSourceEvent extends React.PureComponent<IProps, IState>
         });
 
         return <span className={classes}>
-            {content}
+            { content }
             <a
                 className="mx_ViewSourceEvent_toggle"
                 href="#"

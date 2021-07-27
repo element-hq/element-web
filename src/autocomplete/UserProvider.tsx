@@ -109,7 +109,7 @@ export default class UserProvider extends AutocompleteProvider {
         limit = -1,
     ): Promise<ICompletion[]> {
         // lazy-load user list into matcher
-        if (!this.users) this._makeUsers();
+        if (!this.users) this.makeUsers();
 
         let completions = [];
         const { command, range } = this.getCurrentCommand(rawQuery, selection, force);
@@ -147,7 +147,7 @@ export default class UserProvider extends AutocompleteProvider {
         return _t('Users');
     }
 
-    _makeUsers() {
+    private makeUsers() {
         const events = this.room.getLiveTimeline().getEvents();
         const lastSpoken = {};
 

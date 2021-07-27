@@ -222,7 +222,7 @@ class FeaturedRoom extends React.Component {
 
         let roomNameNode = null;
         if (permalink) {
-            roomNameNode = <a href={permalink} onClick={this.onClick} >{ roomName }</a>;
+            roomNameNode = <a href={permalink} onClick={this.onClick}>{ roomName }</a>;
         } else {
             roomNameNode = <span>{ roomName }</span>;
         }
@@ -819,12 +819,12 @@ export default class GroupView extends React.Component {
         let hostingSignup = null;
         if (hostingSignupLink && this.state.isUserPrivileged) {
             hostingSignup = <div className="mx_GroupView_hostingSignup">
-                {_t(
+                { _t(
                     "Want more than a community? <a>Get your own server</a>", {},
                     {
-                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">{sub}</a>,
+                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">{ sub }</a>,
                     },
-                )}
+                ) }
                 <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">
                     <img src={require("../../../res/img/external-link.svg")} width="11" height="10" alt='' />
                 </a>
@@ -1185,10 +1185,13 @@ export default class GroupView extends React.Component {
                     avatarImage = <Spinner />;
                 } else {
                     const GroupAvatar = sdk.getComponent('avatars.GroupAvatar');
-                    avatarImage = <GroupAvatar groupId={this.props.groupId}
+                    avatarImage = <GroupAvatar
+                        groupId={this.props.groupId}
                         groupName={this.state.profileForm.name}
                         groupAvatarUrl={this.state.profileForm.avatar_url}
-                        width={28} height={28} resizeMethod='crop'
+                        width={28}
+                        height={28}
+                        resizeMethod='crop'
                     />;
                 }
 
@@ -1199,9 +1202,12 @@ export default class GroupView extends React.Component {
                         </label>
                         <div className="mx_GroupView_avatarPicker_edit">
                             <label htmlFor="avatarInput" className="mx_GroupView_avatarPicker_label">
-                                <img src={require("../../../res/img/camera.svg")}
-                                    alt={_t("Upload avatar")} title={_t("Upload avatar")}
-                                    width="17" height="15" />
+                                <img
+                                    src={require("../../../res/img/camera.svg")}
+                                    alt={_t("Upload avatar")}
+                                    title={_t("Upload avatar")}
+                                    width="17"
+                                    height="15" />
                             </label>
                             <input id="avatarInput" className="mx_GroupView_uploadInput" type="file" onChange={this._onAvatarSelected} />
                         </div>
@@ -1238,7 +1244,8 @@ export default class GroupView extends React.Component {
                     groupAvatarUrl={groupAvatarUrl}
                     groupName={groupName}
                     onClick={onGroupHeaderItemClick}
-                    width={28} height={28}
+                    width={28}
+                    height={28}
                 />;
                 if (summary.profile && summary.profile.name) {
                     nameNode = <div onClick={onGroupHeaderItemClick}>
@@ -1269,28 +1276,32 @@ export default class GroupView extends React.Component {
                         key="_cancelButton"
                         onClick={this._onCancelClick}
                     >
-                        <img src={require("../../../res/img/cancel.svg")} className="mx_filterFlipColor"
-                            width="18" height="18" alt={_t("Cancel")} />
+                        <img
+                            src={require("../../../res/img/cancel.svg")}
+                            className="mx_filterFlipColor"
+                            width="18"
+                            height="18"
+                            alt={_t("Cancel")} />
                     </AccessibleButton>,
                 );
             } else {
                 if (summary.user && summary.user.membership === 'join') {
                     rightButtons.push(
-                        <AccessibleButton className="mx_GroupHeader_button mx_GroupHeader_editButton"
+                        <AccessibleButton
+                            className="mx_GroupHeader_button mx_GroupHeader_editButton"
                             key="_editButton"
                             onClick={this._onEditClick}
                             title={_t("Community Settings")}
-                        >
-                        </AccessibleButton>,
+                        />,
                     );
                 }
                 rightButtons.push(
-                    <AccessibleButton className="mx_GroupHeader_button mx_GroupHeader_shareButton"
+                    <AccessibleButton
+                        className="mx_GroupHeader_button mx_GroupHeader_shareButton"
                         key="_shareButton"
                         onClick={this._onShareClick}
                         title={_t('Share Community')}
-                    >
-                    </AccessibleButton>,
+                    />,
                 );
             }
 

@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import { Room } from "matrix-js-sdk/src/models/room";
+import { RoomState } from "matrix-js-sdk/src/models/room-state";
 import { User } from "matrix-js-sdk/src/models/user";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -48,6 +49,7 @@ import NotificationPanel from "./NotificationPanel";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import PinnedMessagesCard from "../views/right_panel/PinnedMessagesCard";
 import { throttle } from 'lodash';
+import SpaceStore from "../../stores/SpaceStore";
 
 interface IProps {
     room?: Room; // if showing panels for a given room, this is set
@@ -107,7 +109,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
                 return RightPanelPhases.GroupMemberList;
             }
             return rps.groupPanelPhase;
-        } else if (SettingsStore.getValue("feature_spaces") && this.props.room?.isSpaceRoom()
+        } else if (SpaceStore.spacesEnabled && this.props.room?.isSpaceRoom()
             && !RIGHT_PANEL_SPACE_PHASES.includes(rps.roomPanelPhase)
         ) {
             return RightPanelPhases.SpaceMemberList;
@@ -151,7 +153,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(newProps) { // eslint-disable-line camelcase
+    UNSAFE_componentWillReceiveProps(newProps) { // eslint-disable-line
         if (newProps.groupId !== this.props.groupId) {
             this.unregisterGroupStore();
             this.initGroupStore(newProps.groupId);
@@ -173,7 +175,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
         });
     };
 
-    private onRoomStateMember = (ev: MatrixEvent, _, member: RoomMember) => {
+    private onRoomStateMember = (ev: MatrixEvent, state: RoomState, member: RoomMember) => {
         if (!this.props.room || member.roomId !== this.props.room.roomId) {
             return;
         }

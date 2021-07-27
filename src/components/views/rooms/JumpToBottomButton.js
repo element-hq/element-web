@@ -25,13 +25,14 @@ export default (props) => {
     });
     let badge;
     if (props.numUnreadMessages) {
-        badge = (<div className="mx_JumpToBottomButton_badge">{props.numUnreadMessages}</div>);
+        badge = (<div className="mx_JumpToBottomButton_badge">{ props.numUnreadMessages }</div>);
     }
     return (<div className={className}>
-        <AccessibleButton className="mx_JumpToBottomButton_scrollDown"
+        <AccessibleButton
+            className="mx_JumpToBottomButton_scrollDown"
             title={_t("Scroll to most recent messages")}
-            onClick={props.onScrollToBottomClick}>
-        </AccessibleButton>
+            onClick={props.onScrollToBottomClick}
+        />
         { badge }
     </div>);
 };

@@ -15,11 +15,11 @@ limitations under the License.
 */
 
 import React from 'react';
-import { _t } from '../../../languageHandler';
+import AccessibleButton from "../elements/AccessibleButton";
 import { ContextMenu, IProps as IContextMenuProps } from '../../structures/ContextMenu';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import Field from "../elements/Field";
-import Dialpad from '../voip/DialPad';
+import DialPad from '../voip/DialPad';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps extends IContextMenuProps {
@@ -45,24 +45,31 @@ export default class DialpadContextMenu extends React.Component<IProps, IState> 
         this.setState({ value: this.state.value + digit });
     };
 
+    onCancelClick = () => {
+        this.props.onFinished();
+    };
+
     onChange = (ev) => {
         this.setState({ value: ev.target.value });
     };
 
     render() {
         return <ContextMenu {...this.props}>
-            <div className="mx_DialPadContextMenu_header">
+            <div className="mx_DialPadContextMenuWrapper">
                 <div>
-                    <span className="mx_DialPadContextMenu_title">{_t("Dial pad")}</span>
+                    <AccessibleButton className="mx_DialPadContextMenu_cancel" onClick={this.onCancelClick} />
                 </div>
-                <Field className="mx_DialPadContextMenu_dialled"
-                    value={this.state.value} autoFocus={true}
-                    onChange={this.onChange}
-                />
-            </div>
-            <div className="mx_DialPadContextMenu_horizSep" />
-            <div className="mx_DialPadContextMenu_dialPad">
-                <Dialpad onDigitPress={this.onDigitPress} hasDialAndDelete={false} />
+                <div className="mx_DialPadContextMenu_header">
+                    <Field
+                        className="mx_DialPadContextMenu_dialled"
+                        value={this.state.value}
+                        autoFocus={true}
+                        onChange={this.onChange}
+                    />
+                </div>
+                <div className="mx_DialPadContextMenu_dialPad">
+                    <DialPad onDigitPress={this.onDigitPress} hasDial={false} />
+                </div>
             </div>
         </ContextMenu>;
     }
