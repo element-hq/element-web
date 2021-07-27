@@ -79,7 +79,7 @@ export default class LabsUserSettingsTab extends React.Component {
             let hiddenReadReceipts;
             if (this.state.showHiddenReadReceipts) {
                 hiddenReadReceipts = (
-                    <SettingsFlag name={"sendReadReceipts"} level={SettingLevel.ACCOUNT} />
+                    <SettingsFlag name="sendReadReceipts" level={SettingLevel.ACCOUNT} />
                 );
             }
 
