@@ -3579,5 +3579,9 @@
     "To help space members find and join a private room, go to that room's Security & Privacy settings.": "Per aiutare i membri dello spazio a trovare ed entrare in una stanza privata, vai nelle impostazioni \"Sicurezza e privacy\" di quella stanza.",
     "Help space members find private rooms": "Aiuta i membri dello spazio a trovare stanze private",
     "Help people in spaces to find and join private rooms": "Aiuta le persone negli spazi a trovare ed entrare nelle stanze private",
-    "New in the Spaces beta": "Novità nella beta degli spazi"
+    "New in the Spaces beta": "Novità nella beta degli spazi",
+    "They didn't pick up": "Non ha risposto",
+    "Call again": "Richiama",
+    "They declined this call": "Ha rifiutato questa chiamata",
+    "You declined this call": "Hai rifiutato questa chiamata"
 }
