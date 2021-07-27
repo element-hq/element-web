@@ -222,17 +222,17 @@ export default class RoomStatusBar extends React.PureComponent {
 
         let buttonRow = <>
             <AccessibleButton onClick={this._onCancelAllClick} className="mx_RoomStatusBar_unsentCancelAllBtn">
-                {_t("Delete all")}
+                { _t("Delete all") }
             </AccessibleButton>
             <AccessibleButton onClick={this._onResendAllClick} className="mx_RoomStatusBar_unsentResendAllBtn">
-                {_t("Retry all")}
+                { _t("Retry all") }
             </AccessibleButton>
         </>;
         if (this.state.isResending) {
             buttonRow = <>
                 <InlineSpinner w={20} h={20} />
-                {/* span for css */}
-                <span>{_t("Sending")}</span>
+                { /* span for css */ }
+                <span>{ _t("Sending") }</span>
             </>;
         }
 
@@ -253,7 +253,7 @@ export default class RoomStatusBar extends React.PureComponent {
                         </div>
                     </div>
                     <div className="mx_RoomStatusBar_unsentButtonBar">
-                        {buttonRow}
+                        { buttonRow }
                     </div>
                 </div>
             </div>
@@ -266,14 +266,18 @@ export default class RoomStatusBar extends React.PureComponent {
                 <div className="mx_RoomStatusBar">
                     <div role="alert">
                         <div className="mx_RoomStatusBar_connectionLostBar">
-                            <img src={require("../../../res/img/feather-customised/warning-triangle.svg")} width="24"
-                                height="24" title="/!\ " alt="/!\ " />
+                            <img
+                                src={require("../../../res/img/feather-customised/warning-triangle.svg")}
+                                width="24"
+                                height="24"
+                                title="/!\ "
+                                alt="/!\ " />
                             <div>
                                 <div className="mx_RoomStatusBar_connectionLostBar_title">
-                                    {_t('Connectivity to the server has been lost.')}
+                                    { _t('Connectivity to the server has been lost.') }
                                 </div>
                                 <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                                    {_t('Sent messages will be stored until your connection has returned.')}
+                                    { _t('Sent messages will be stored until your connection has returned.') }
                                 </div>
                             </div>
                         </div>

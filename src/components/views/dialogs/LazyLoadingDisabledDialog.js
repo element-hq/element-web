@@ -44,7 +44,7 @@ export default (props) => {
     return (<QuestionDialog
         hasCancelButton={false}
         title={_t("Incompatible local cache")}
-        description={<div><p>{description1}</p><p>{description2}</p></div>}
+        description={<div><p>{ description1 }</p><p>{ description2 }</p></div>}
         button={_t("Clear cache and resync")}
         onFinished={props.onFinished}
     />);

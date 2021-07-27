@@ -40,7 +40,7 @@ interface IState {
     busy: boolean;
     err?: string;
     // If we know it, the nature of the abuse, as specified by MSC3215.
-    nature?: EXTENDED_NATURE;
+    nature?: ExtendedNature;
 }
 
 const MODERATED_BY_STATE_EVENT_TYPE = [
@@ -55,22 +55,22 @@ const MODERATED_BY_STATE_EVENT_TYPE = [
 const ABUSE_EVENT_TYPE = "org.matrix.msc3215.abuse.report";
 
 // Standard abuse natures.
-enum NATURE {
-    DISAGREEMENT = "org.matrix.msc3215.abuse.nature.disagreement",
-    TOXIC = "org.matrix.msc3215.abuse.nature.toxic",
-    ILLEGAL = "org.matrix.msc3215.abuse.nature.illegal",
-    SPAM = "org.matrix.msc3215.abuse.nature.spam",
-    OTHER = "org.matrix.msc3215.abuse.nature.other",
+enum Nature {
+    Disagreement = "org.matrix.msc3215.abuse.nature.disagreement",
+    Toxic = "org.matrix.msc3215.abuse.nature.toxic",
+    Illegal = "org.matrix.msc3215.abuse.nature.illegal",
+    Spam = "org.matrix.msc3215.abuse.nature.spam",
+    Other = "org.matrix.msc3215.abuse.nature.other",
 }
 
-enum NON_STANDARD_NATURE {
+enum NonStandardValue {
     // Non-standard abuse nature.
     // It should never leave the client - we use it to fallback to
     // server-wide abuse reporting.
-    ADMIN = "non-standard.abuse.nature.admin"
+    Admin = "non-standard.abuse.nature.admin"
 }
 
-type EXTENDED_NATURE = NATURE | NON_STANDARD_NATURE;
+type ExtendedNature = Nature | NonStandardValue;
 
 type Moderation = {
     // The id of the moderation room.
@@ -170,7 +170,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
 
     // The user has clicked on a nature.
     private onNatureChosen = (e: React.FormEvent<HTMLInputElement>): void => {
-        this.setState({ nature: e.currentTarget.value as EXTENDED_NATURE });
+        this.setState({ nature: e.currentTarget.value as ExtendedNature });
     };
 
     // The user has clicked "cancel".
@@ -187,7 +187,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             // We need a nature.
             // If the nature is `NATURE.OTHER` or `NON_STANDARD_NATURE.ADMIN`, we also need a `reason`.
             if (!this.state.nature ||
-                    ((this.state.nature == NATURE.OTHER || this.state.nature == NON_STANDARD_NATURE.ADMIN)
+                    ((this.state.nature == Nature.Other || this.state.nature == NonStandardValue.Admin)
                         && !reason)
             ) {
                 this.setState({
@@ -214,8 +214,8 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
         try {
             const client = MatrixClientPeg.get();
             const ev = this.props.mxEvent;
-            if (this.moderation && this.state.nature != NON_STANDARD_NATURE.ADMIN) {
-                const nature: NATURE = this.state.nature;
+            if (this.moderation && this.state.nature != NonStandardValue.Admin) {
+                const nature: Nature = this.state.nature;
 
                 // Report to moderators through to the dedicated bot,
                 // as configured in the room's state events.
@@ -245,7 +245,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
         let error = null;
         if (this.state.err) {
             error = <div className="error">
-                {this.state.err}
+                { this.state.err }
             </div>;
         }
 
@@ -274,27 +274,27 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             const homeServerName = SdkConfig.get()["validated_server_config"].hsName;
             let subtitle;
             switch (this.state.nature) {
-                case NATURE.DISAGREEMENT:
+                case Nature.Disagreement:
                     subtitle = _t("What this user is writing is wrong.\n" +
                         "This will be reported to the room moderators.");
                     break;
-                case NATURE.TOXIC:
+                case Nature.Toxic:
                     subtitle = _t("This user is displaying toxic behaviour, " +
                         "for instance by insulting other users or sharing " +
                         " adult-only content in a family-friendly room " +
                         " or otherwise violating the rules of this room.\n" +
                         "This will be reported to the room moderators.");
                     break;
-                case NATURE.ILLEGAL:
+                case Nature.Illegal:
                     subtitle = _t("This user is displaying illegal behaviour, " +
                         "for instance by doxing people or threatening violence.\n" +
                         "This will be reported to the room moderators who may escalate this to legal authorities.");
                     break;
-                case NATURE.SPAM:
+                case Nature.Spam:
                     subtitle = _t("This user is spamming the room with ads, links to ads or to propaganda.\n" +
                         "This will be reported to the room moderators.");
                     break;
-                case NON_STANDARD_NATURE.ADMIN:
+                case NonStandardValue.Admin:
                     if (client.isRoomEncrypted(this.props.mxEvent.getRoomId())) {
                         subtitle = _t("This room is dedicated to illegal or toxic content " +
                             "or the moderators fail to moderate illegal or toxic content.\n" +
@@ -308,7 +308,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                         { homeserver: homeServerName });
                     }
                     break;
-                case NATURE.OTHER:
+                case Nature.Other:
                     subtitle = _t("Any other reason. Please describe the problem.\n" +
                         "This will be reported to the room moderators.");
                     break;
@@ -326,55 +326,55 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                 >
                     <div>
                         <StyledRadioButton
-                            name = "nature"
-                            value = { NATURE.DISAGREEMENT }
-                            checked = { this.state.nature == NATURE.DISAGREEMENT }
-                            onChange = { this.onNatureChosen }
+                            name="nature"
+                            value={Nature.Disagreement}
+                            checked={this.state.nature == Nature.Disagreement}
+                            onChange={this.onNatureChosen}
                         >
-                            {_t('Disagree')}
+                            { _t('Disagree') }
                         </StyledRadioButton>
                         <StyledRadioButton
-                            name = "nature"
-                            value = { NATURE.TOXIC }
-                            checked = { this.state.nature == NATURE.TOXIC }
-                            onChange = { this.onNatureChosen }
+                            name="nature"
+                            value={Nature.Toxic}
+                            checked={this.state.nature == Nature.Toxic}
+                            onChange={this.onNatureChosen}
                         >
-                            {_t('Toxic Behaviour')}
+                            { _t('Toxic Behaviour') }
                         </StyledRadioButton>
                         <StyledRadioButton
-                            name = "nature"
-                            value = { NATURE.ILLEGAL }
-                            checked = { this.state.nature == NATURE.ILLEGAL }
-                            onChange = { this.onNatureChosen }
+                            name="nature"
+                            value={Nature.Illegal}
+                            checked={this.state.nature == Nature.Illegal}
+                            onChange={this.onNatureChosen}
                         >
-                            {_t('Illegal Content')}
+                            { _t('Illegal Content') }
                         </StyledRadioButton>
                         <StyledRadioButton
-                            name = "nature"
-                            value = { NATURE.SPAM }
-                            checked = { this.state.nature == NATURE.SPAM }
-                            onChange = { this.onNatureChosen }
+                            name="nature"
+                            value={Nature.Spam}
+                            checked={this.state.nature == Nature.Spam}
+                            onChange={this.onNatureChosen}
                         >
-                            {_t('Spam or propaganda')}
+                            { _t('Spam or propaganda') }
                         </StyledRadioButton>
                         <StyledRadioButton
-                            name = "nature"
-                            value = { NON_STANDARD_NATURE.ADMIN }
-                            checked = { this.state.nature == NON_STANDARD_NATURE.ADMIN }
-                            onChange = { this.onNatureChosen }
+                            name="nature"
+                            value={NonStandardValue.Admin}
+                            checked={this.state.nature == NonStandardValue.Admin}
+                            onChange={this.onNatureChosen}
                         >
-                            {_t('Report the entire room')}
+                            { _t('Report the entire room') }
                         </StyledRadioButton>
                         <StyledRadioButton
-                            name = "nature"
-                            value = { NATURE.OTHER }
-                            checked = { this.state.nature == NATURE.OTHER }
-                            onChange = { this.onNatureChosen }
+                            name="nature"
+                            value={Nature.Other}
+                            checked={this.state.nature == Nature.Other}
+                            onChange={this.onNatureChosen}
                         >
-                            {_t('Other')}
+                            { _t('Other') }
                         </StyledRadioButton>
                         <p>
-                            {subtitle}
+                            { subtitle }
                         </p>
                         <Field
                             className="mx_ReportEventDialog_reason"
@@ -385,8 +385,8 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                             value={this.state.reason}
                             disabled={this.state.busy}
                         />
-                        {progress}
-                        {error}
+                        { progress }
+                        { error }
                     </div>
                     <DialogButtons
                         primaryButton={_t("Send report")}
@@ -416,7 +416,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                                 "or images.")
                         }
                     </p>
-                    {adminMessage}
+                    { adminMessage }
                     <Field
                         className="mx_ReportEventDialog_reason"
                         element="textarea"
@@ -426,8 +426,8 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                         value={this.state.reason}
                         disabled={this.state.busy}
                     />
-                    {progress}
-                    {error}
+                    { progress }
+                    { error }
                 </div>
                 <DialogButtons
                     primaryButton={_t("Send report")}

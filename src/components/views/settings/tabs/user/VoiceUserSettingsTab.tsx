@@ -130,7 +130,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
 
     private renderDeviceOptions(devices: Array<MediaDeviceInfo>, category: MediaDeviceKindEnum): Array<JSX.Element> {
         return devices.map((d) => {
-            return (<option key={`${category}-${d.deviceId}`} value={d.deviceId}>{d.label}</option>);
+            return (<option key={`${category}-${d.deviceId}`} value={d.deviceId}>{ d.label }</option>);
         });
     }
 
@@ -159,9 +159,9 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         if (!this.state.mediaDevices) {
             requestButton = (
                 <div className='mx_VoiceUserSettingsTab_missingMediaPermissions'>
-                    <p>{_t("Missing media permissions, click the button below to request.")}</p>
+                    <p>{ _t("Missing media permissions, click the button below to request.") }</p>
                     <AccessibleButton onClick={this.requestMediaPermissions} kind="primary">
-                        {_t("Request media permissions")}
+                        { _t("Request media permissions") }
                     </AccessibleButton>
                 </div>
             );
@@ -182,7 +182,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
 
         return (
             <div className="mx_SettingsTab mx_VoiceUserSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Voice & Video")}</div>
+                <div className="mx_SettingsTab_heading">{ _t("Voice & Video") }</div>
                 <div className="mx_SettingsTab_section">
                     { requestButton }
                     { speakerDropdown }

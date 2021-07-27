@@ -221,7 +221,7 @@ export default class SecureBackupPanel extends React.PureComponent {
         if (error) {
             statusDescription = (
                 <div className="error">
-                    {_t("Unable to load key backup status")}
+                    { _t("Unable to load key backup status") }
                 </div>
             );
         } else if (loading) {
@@ -230,19 +230,19 @@ export default class SecureBackupPanel extends React.PureComponent {
             let restoreButtonCaption = _t("Restore from Backup");
 
             if (MatrixClientPeg.get().getKeyBackupEnabled()) {
-                statusDescription = <p>✅ {_t("This session is backing up your keys. ")}</p>;
+                statusDescription = <p>✅ { _t("This session is backing up your keys. ") }</p>;
             } else {
                 statusDescription = <>
-                    <p>{_t(
+                    <p>{ _t(
                         "This session is <b>not backing up your keys</b>, " +
                         "but you do have an existing backup you can restore from " +
                         "and add to going forward.", {},
-                        { b: sub => <b>{sub}</b> },
-                    )}</p>
-                    <p>{_t(
+                        { b: sub => <b>{ sub }</b> },
+                    ) }</p>
+                    <p>{ _t(
                         "Connect this session to key backup before signing out to avoid " +
                         "losing any keys that may only be on this session.",
-                    )}</p>
+                    ) }</p>
                 </>;
                 restoreButtonCaption = _t("Connect this session to Key Backup");
             }
@@ -253,11 +253,11 @@ export default class SecureBackupPanel extends React.PureComponent {
                 uploadStatus = "";
             } else if (sessionsRemaining > 0) {
                 uploadStatus = <div>
-                    {_t("Backing up %(sessionsRemaining)s keys...", { sessionsRemaining })} <br />
+                    { _t("Backing up %(sessionsRemaining)s keys...", { sessionsRemaining }) } <br />
                 </div>;
             } else {
                 uploadStatus = <div>
-                    {_t("All keys backed up")} <br />
+                    { _t("All keys backed up") } <br />
                 </div>;
             }
 
@@ -265,13 +265,13 @@ export default class SecureBackupPanel extends React.PureComponent {
                 const deviceName = sig.device ? (sig.device.getDisplayName() || sig.device.deviceId) : null;
                 const validity = sub =>
                     <span className={sig.valid ? 'mx_SecureBackupPanel_sigValid' : 'mx_SecureBackupPanel_sigInvalid'}>
-                        {sub}
+                        { sub }
                     </span>;
                 const verify = sub =>
                     <span className={sig.device && sig.deviceTrust.isVerified() ? 'mx_SecureBackupPanel_deviceVerified' : 'mx_SecureBackupPanel_deviceNotVerified'}>
-                        {sub}
+                        { sub }
                     </span>;
-                const device = sub => <span className="mx_SecureBackupPanel_deviceName">{deviceName}</span>;
+                const device = sub => <span className="mx_SecureBackupPanel_deviceName">{ deviceName }</span>;
                 const fromThisDevice = (
                     sig.device &&
                     sig.device.getFingerprint() === MatrixClientPeg.get().getDeviceEd25519Key()
@@ -339,7 +339,7 @@ export default class SecureBackupPanel extends React.PureComponent {
                 }
 
                 return <div key={i}>
-                    {sigStatus}
+                    { sigStatus }
                 </div>;
             });
             if (backupSigStatus.sigs.length === 0) {
@@ -353,45 +353,45 @@ export default class SecureBackupPanel extends React.PureComponent {
 
             extraDetailsTableRows = <>
                 <tr>
-                    <td>{_t("Backup version:")}</td>
-                    <td>{backupInfo.version}</td>
+                    <td>{ _t("Backup version:") }</td>
+                    <td>{ backupInfo.version }</td>
                 </tr>
                 <tr>
-                    <td>{_t("Algorithm:")}</td>
-                    <td>{backupInfo.algorithm}</td>
+                    <td>{ _t("Algorithm:") }</td>
+                    <td>{ backupInfo.algorithm }</td>
                 </tr>
             </>;
 
             extraDetails = <>
-                {uploadStatus}
-                <div>{backupSigStatuses}</div>
-                <div>{trustedLocally}</div>
+                { uploadStatus }
+                <div>{ backupSigStatuses }</div>
+                <div>{ trustedLocally }</div>
             </>;
 
             actions.push(
                 <AccessibleButton key="restore" kind="primary" onClick={this._restoreBackup}>
-                    {restoreButtonCaption}
+                    { restoreButtonCaption }
                 </AccessibleButton>,
             );
 
             if (!isSecureBackupRequired()) {
                 actions.push(
                     <AccessibleButton key="delete" kind="danger" onClick={this._deleteBackup}>
-                        {_t("Delete Backup")}
+                        { _t("Delete Backup") }
                     </AccessibleButton>,
                 );
             }
         } else {
             statusDescription = <>
-                <p>{_t(
+                <p>{ _t(
                     "Your keys are <b>not being backed up from this session</b>.", {},
-                    { b: sub => <b>{sub}</b> },
-                )}</p>
-                <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
+                    { b: sub => <b>{ sub }</b> },
+                ) }</p>
+                <p>{ _t("Back up your keys before signing out to avoid losing them.") }</p>
             </>;
             actions.push(
                 <AccessibleButton key="setup" kind="primary" onClick={this._startNewBackup}>
-                    {_t("Set up")}
+                    { _t("Set up") }
                 </AccessibleButton>,
             );
         }
@@ -399,7 +399,7 @@ export default class SecureBackupPanel extends React.PureComponent {
         if (secretStorageKeyInAccount) {
             actions.push(
                 <AccessibleButton key="reset" kind="danger" onClick={this._resetSecretStorage}>
-                    {_t("Reset")}
+                    { _t("Reset") }
                 </AccessibleButton>,
             );
         }
@@ -417,47 +417,47 @@ export default class SecureBackupPanel extends React.PureComponent {
         let actionRow;
         if (actions.length) {
             actionRow = <div className="mx_SecureBackupPanel_buttonRow">
-                {actions}
+                { actions }
             </div>;
         }
 
         return (
             <div>
-                <p>{_t(
+                <p>{ _t(
                     "Back up your encryption keys with your account data in case you " +
                     "lose access to your sessions. Your keys will be secured with a " +
                     "unique Security Key.",
-                )}</p>
-                {statusDescription}
+                ) }</p>
+                { statusDescription }
                 <details>
-                    <summary>{_t("Advanced")}</summary>
+                    <summary>{ _t("Advanced") }</summary>
                     <table className="mx_SecureBackupPanel_statusList"><tbody>
                         <tr>
-                            <td>{_t("Backup key stored:")}</td>
+                            <td>{ _t("Backup key stored:") }</td>
                             <td>{
                                 backupKeyStored === true ? _t("in secret storage") : _t("not stored")
                             }</td>
                         </tr>
                         <tr>
-                            <td>{_t("Backup key cached:")}</td>
+                            <td>{ _t("Backup key cached:") }</td>
                             <td>
-                                {backupKeyCached ? _t("cached locally") : _t("not found locally")}
-                                {backupKeyWellFormedText}
+                                { backupKeyCached ? _t("cached locally") : _t("not found locally") }
+                                { backupKeyWellFormedText }
                             </td>
                         </tr>
                         <tr>
-                            <td>{_t("Secret storage public key:")}</td>
-                            <td>{secretStorageKeyInAccount ? _t("in account data") : _t("not found")}</td>
+                            <td>{ _t("Secret storage public key:") }</td>
+                            <td>{ secretStorageKeyInAccount ? _t("in account data") : _t("not found") }</td>
                         </tr>
                         <tr>
-                            <td>{_t("Secret storage:")}</td>
-                            <td>{secretStorageReady ? _t("ready") : _t("not ready")}</td>
+                            <td>{ _t("Secret storage:") }</td>
+                            <td>{ secretStorageReady ? _t("ready") : _t("not ready") }</td>
                         </tr>
-                        {extraDetailsTableRows}
+                        { extraDetailsTableRows }
                     </tbody></table>
-                    {extraDetails}
+                    { extraDetails }
                 </details>
-                {actionRow}
+                { actionRow }
             </div>
         );
     }

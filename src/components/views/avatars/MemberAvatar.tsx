@@ -102,8 +102,12 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
         }
 
         return (
-            <BaseAvatar {...otherProps} name={this.state.name} title={this.state.title}
-                idName={userId} url={this.state.imageUrl} onClick={onClick} />
+            <BaseAvatar {...otherProps}
+                name={this.state.name}
+                title={this.state.title}
+                idName={userId}
+                url={this.state.imageUrl}
+                onClick={onClick} />
         );
     }
 }

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { IRecordingUpdate, RECORDING_PLAYBACK_SAMPLES, VoiceRecording } from "../../../voice/VoiceRecording";
+import { IRecordingUpdate, RECORDING_PLAYBACK_SAMPLES, VoiceRecording } from "../../../audio/VoiceRecording";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { arrayFastResample } from "../../../utils/arrays";
 import { percentageOf } from "../../../utils/numbers";

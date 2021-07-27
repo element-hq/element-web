@@ -134,18 +134,18 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
             const { error } = this.state;
             if (error.errcode === "M_UNRECOGNIZED") {
                 content = (<p className="mx_MessageEditHistoryDialog_error">
-                    {_t("Your homeserver doesn't seem to support this feature.")}
+                    { _t("Your homeserver doesn't seem to support this feature.") }
                 </p>);
             } else if (error.errcode) {
                 // some kind of error from the homeserver
                 content = (<p className="mx_MessageEditHistoryDialog_error">
-                    {_t("Something went wrong!")}
+                    { _t("Something went wrong!") }
                 </p>);
             } else {
                 content = (<p className="mx_MessageEditHistoryDialog_error">
-                    {_t("Cannot reach homeserver")}
+                    { _t("Cannot reach homeserver") }
                     <br />
-                    {_t("Ensure you have a stable internet connection, or get in touch with the server admin")}
+                    { _t("Ensure you have a stable internet connection, or get in touch with the server admin") }
                 </p>);
             }
         } else if (this.state.isLoading) {
@@ -155,11 +155,11 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
             const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
             content = (<ScrollPanel
                 className="mx_MessageEditHistoryDialog_scrollPanel"
-                onFillRequest={ this.loadMoreEdits }
+                onFillRequest={this.loadMoreEdits}
                 stickyBottom={false}
                 startAtBottom={false}
             >
-                <ul className="mx_MessageEditHistoryDialog_edits">{this._renderEdits()}</ul>
+                <ul className="mx_MessageEditHistoryDialog_edits">{ this._renderEdits() }</ul>
             </ScrollPanel>);
         }
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
@@ -170,7 +170,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
                 onFinished={this.props.onFinished}
                 title={_t("Message edits")}
             >
-                {content}
+                { content }
             </BaseDialog>
         );
     }

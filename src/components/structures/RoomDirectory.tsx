@@ -589,7 +589,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         // We use onMouseDown instead of onClick, so that we can avoid text getting selected
         return [
             <div
-                key={ `${room.room_id}_avatar` }
+                key={`${room.room_id}_avatar`}
                 onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_roomAvatar"
             >
@@ -603,7 +603,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 />
             </div>,
             <div
-                key={ `${room.room_id}_description` }
+                key={`${room.room_id}_description`}
                 onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_roomDescription"
             >
@@ -626,14 +626,14 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 </div>
             </div>,
             <div
-                key={ `${room.room_id}_memberCount` }
+                key={`${room.room_id}_memberCount`}
                 onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_roomMemberCount"
             >
                 { room.num_joined_members }
             </div>,
             <div
-                key={ `${room.room_id}_preview` }
+                key={`${room.room_id}_preview`}
                 onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 // cancel onMouseDown otherwise shift-clicking highlights text
                 className="mx_RoomDirectory_preview"
@@ -641,7 +641,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 { previewButton }
             </div>,
             <div
-                key={ `${room.room_id}_join` }
+                key={`${room.room_id}_join`}
                 onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_join"
             >
@@ -796,7 +796,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                     showJoinButton={showJoinButton}
                     initialText={this.props.initialText}
                 />
-                {dropdown}
+                { dropdown }
             </div>;
         }
         const explanation =
@@ -814,16 +814,16 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             }) : _t("Explore rooms");
         return (
             <BaseDialog
-                className={'mx_RoomDirectory_dialog'}
+                className="mx_RoomDirectory_dialog"
                 hasCancel={true}
                 onFinished={this.onFinished}
                 title={title}
             >
                 <div className="mx_RoomDirectory">
-                    {explanation}
+                    { explanation }
                     <div className="mx_RoomDirectory_list">
-                        {listHeader}
-                        {content}
+                        { listHeader }
+                        { content }
                     </div>
                 </div>
             </BaseDialog>

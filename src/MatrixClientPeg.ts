@@ -105,7 +105,7 @@ export interface IMatrixClientPeg {
  * This module provides a singleton instance of this class so the 'current'
  * Matrix Client object is available easily.
  */
-class _MatrixClientPeg implements IMatrixClientPeg {
+class MatrixClientPegClass implements IMatrixClientPeg {
     // These are the default options used when when the
     // client is started in 'start'. These can be altered
     // at any time up to after the 'will_start_client'
@@ -300,7 +300,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
 }
 
 if (!window.mxMatrixClientPeg) {
-    window.mxMatrixClientPeg = new _MatrixClientPeg();
+    window.mxMatrixClientPeg = new MatrixClientPegClass();
 }
 
 export const MatrixClientPeg = window.mxMatrixClientPeg;

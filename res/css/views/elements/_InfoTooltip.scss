@@ -30,5 +30,12 @@ limitations under the License.
     mask-position: center;
     content: '';
     vertical-align: middle;
+}
+
+.mx_InfoTooltip_icon_info::before {
     mask-image: url('$(res)/img/element-icons/info.svg');
+}
+
+.mx_InfoTooltip_icon_warning::before {
+    mask-image: url('$(res)/img/element-icons/warning.svg');
 }
