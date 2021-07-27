@@ -618,7 +618,15 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
             for (const Grouper of groupers) {
                 if (Grouper.canStartGroup(this, mxEv)) {
-                    grouper = new Grouper(this, mxEv, prevEvent, lastShownEvent, nextEvent, nextTile);
+                    grouper = new Grouper(
+                        this,
+                        mxEv,
+                        prevEvent,
+                        lastShownEvent,
+                        this.props.layout,
+                        nextEvent,
+                        nextTile,
+                    );
                 }
             }
             if (!grouper) {
@@ -981,6 +989,7 @@ abstract class BaseGrouper {
         public readonly event: MatrixEvent,
         public readonly prevEvent: MatrixEvent,
         public readonly lastShownEvent: MatrixEvent,
+        protected readonly layout: Layout,
         public readonly nextEvent?: MatrixEvent,
         public readonly nextEventTile?: MatrixEvent,
     ) {
@@ -1107,6 +1116,7 @@ class CreationGrouper extends BaseGrouper {
                 onToggle={panel.onHeightChanged} // Update scroll state
                 summaryMembers={[ev.sender]}
                 summaryText={summaryText}
+                layout={this.layout}
             >
                 { eventTiles }
             </EventListSummary>,
@@ -1134,10 +1144,11 @@ class RedactionGrouper extends BaseGrouper {
         ev: MatrixEvent,
         prevEvent: MatrixEvent,
         lastShownEvent: MatrixEvent,
+        layout: Layout,
         nextEvent: MatrixEvent,
         nextEventTile: MatrixEvent,
     ) {
-        super(panel, ev, prevEvent, lastShownEvent, nextEvent, nextEventTile);
+        super(panel, ev, prevEvent, lastShownEvent, layout, nextEvent, nextEventTile);
         this.events = [ev];
     }
 
@@ -1202,6 +1213,7 @@ class RedactionGrouper extends BaseGrouper {
                 onToggle={panel.onHeightChanged} // Update scroll state
                 summaryMembers={Array.from(senders)}
                 summaryText={_t("%(count)s messages deleted.", { count: eventTiles.length })}
+                layout={this.layout}
             >
                 { eventTiles }
             </EventListSummary>,
@@ -1230,8 +1242,9 @@ class MemberGrouper extends BaseGrouper {
         public readonly event: MatrixEvent,
         public readonly prevEvent: MatrixEvent,
         public readonly lastShownEvent: MatrixEvent,
+        protected readonly layout: Layout,
     ) {
-        super(panel, event, prevEvent, lastShownEvent);
+        super(panel, event, prevEvent, lastShownEvent, layout);
         this.events = [event];
     }
 
@@ -1306,6 +1319,7 @@ class MemberGrouper extends BaseGrouper {
                 events={this.events}
                 onToggle={panel.onHeightChanged} // Update scroll state
                 startExpanded={highlightInMels}
+                layout={this.layout}
             >
                 { eventTiles }
             </MemberEventListSummary>,

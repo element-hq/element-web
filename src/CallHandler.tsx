@@ -484,28 +484,18 @@ export default class CallHandler extends EventEmitter {
                     break;
                 case CallState.Ended:
                 {
-                    Analytics.trackEvent('voip', 'callEnded', 'hangupReason', call.hangupReason);
+                    const hangupReason = call.hangupReason;
+                    Analytics.trackEvent('voip', 'callEnded', 'hangupReason', hangupReason);
                     this.removeCallForRoom(mappedRoomId);
-                    if (oldState === CallState.InviteSent && (
-                        call.hangupParty === CallParty.Remote ||
-                        (call.hangupParty === CallParty.Local && call.hangupReason === CallErrorCode.InviteTimeout)
-                    )) {
+                    if (oldState === CallState.InviteSent && call.hangupParty === CallParty.Remote) {
                         this.play(AudioID.Busy);
                         let title;
                         let description;
-                        if (call.hangupReason === CallErrorCode.UserHangup) {
-                            title = _t("Call Declined");
-                            description = _t("The other party declined the call.");
-                        } else if (call.hangupReason === CallErrorCode.UserBusy) {
+                        // TODO: We should either do away with these or figure out a copy for each code (expect user_hangup...)
+                        if (call.hangupReason === CallErrorCode.UserBusy) {
                             title = _t("User Busy");
                             description = _t("The user you called is busy.");
-                        } else if (call.hangupReason === CallErrorCode.InviteTimeout) {
-                            title = _t("Call Failed");
-                            // XXX: full stop appended as some relic here, but these
-                            // strings need proper input from design anyway, so let's
-                            // not change this string until we have a proper one.
-                            description = _t('The remote side failed to pick up') + '.';
-                        } else {
+                        } else if (hangupReason && ![CallErrorCode.UserHangup, "user hangup"].includes(hangupReason)) {
                             title = _t("Call Failed");
                             description = _t("The call could not be established");
                         }
@@ -514,7 +504,7 @@ export default class CallHandler extends EventEmitter {
                             title, description,
                         });
                     } else if (
-                        call.hangupReason === CallErrorCode.AnsweredElsewhere && oldState === CallState.Connecting
+                        hangupReason === CallErrorCode.AnsweredElsewhere && oldState === CallState.Connecting
                     ) {
                         Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
                             title: _t("Answered Elsewhere"),
