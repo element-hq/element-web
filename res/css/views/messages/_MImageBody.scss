@@ -16,20 +16,15 @@ limitations under the License.
 
 $timelineImageBorderRadius: 4px;
 
-.mx_MImageBody {
-    display: block;
-    margin-right: 34px;
-}
-
 .mx_MImageBody_thumbnail {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
+    object-fit: contain;
     border-radius: $timelineImageBorderRadius;
 
-    > canvas {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    > div > canvas {
         border-radius: $timelineImageBorderRadius;
     }
 }
@@ -41,17 +36,6 @@ $timelineImageBorderRadius: 4px;
 
     // Make sure the _thumbnail is positioned relative to the _container
     position: relative;
-}
-
-.mx_MImageBody_thumbnail_spinner {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-}
-
-// Inner img should be centered around 0, 0
-.mx_MImageBody_thumbnail_spinner > * {
-    transform: translate(-50%, -50%);
 }
 
 .mx_MImageBody_gifLabel {

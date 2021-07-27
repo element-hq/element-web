@@ -15,10 +15,9 @@ limitations under the License.
 */
 
 .mx_ReplyTile {
-    padding-top: 2px;
-    padding-bottom: 2px;
-    font-size: $font-14px;
     position: relative;
+    padding: 2px 0;
+    font-size: $font-14px;
     line-height: $font-16px;
 
     &.mx_ReplyTile_audio .mx_MFileBody_info_icon::before {
@@ -38,86 +37,81 @@ limitations under the License.
             display: none;
         }
     }
-}
 
-.mx_ReplyTile > a {
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    color: $primary-fg-color;
-}
-
-.mx_ReplyTile .mx_RedactedBody {
-    padding: 4px 0 2px 20px;
-
-    &::before {
-        height: 13px;
-        width: 13px;
-        top: 5px;
-    }
-}
-
-// We do reply size limiting with CSS to avoid duplicating the TextualBody component.
-.mx_ReplyTile .mx_EventTile_content {
-    $reply-lines: 2;
-    $line-height: $font-22px;
-
-    pointer-events: none;
-
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: $reply-lines;
-    line-height: $line-height;
-
-    .mx_EventTile_body.mx_EventTile_bigEmoji {
-        line-height: $line-height !important;
-        // Override the big emoji override
-        font-size: $font-14px !important;
+    > a {
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: $primary-fg-color;
     }
 
-    // Hide line numbers
-    .mx_EventTile_lineNumbers {
-        display: none;
+    .mx_RedactedBody {
+        padding: 4px 0 2px 20px;
+
+        &::before {
+            height: 13px;
+            width: 13px;
+            top: 5px;
+        }
     }
 
-    // Hack to cut content in <pre> tags too
-    .mx_EventTile_pre_container > pre {
-        overflow: hidden;
+    // We do reply size limiting with CSS to avoid duplicating the TextualBody component.
+    .mx_EventTile_content {
+        $reply-lines: 2;
+        $line-height: $font-22px;
+
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: $reply-lines;
-        padding: 4px;
+        line-height: $line-height;
+
+        .mx_EventTile_body.mx_EventTile_bigEmoji {
+            line-height: $line-height !important;
+            font-size: $font-14px !important; // Override the big emoji override
+        }
+
+        // Hide line numbers
+        .mx_EventTile_lineNumbers {
+            display: none;
+        }
+
+        // Hack to cut content in <pre> tags too
+        .mx_EventTile_pre_container > pre {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: $reply-lines;
+            padding: 4px;
+        }
+
+        .markdown-body blockquote,
+        .markdown-body dl,
+        .markdown-body ol,
+        .markdown-body p,
+        .markdown-body pre,
+        .markdown-body table,
+        .markdown-body ul {
+            margin-bottom: 4px;
+        }
     }
 
-    .markdown-body blockquote,
-    .markdown-body dl,
-    .markdown-body ol,
-    .markdown-body p,
-    .markdown-body pre,
-    .markdown-body table,
-    .markdown-body ul {
-        margin-bottom: 4px;
+    &.mx_ReplyTile_info {
+        padding-top: 0;
     }
-}
 
-.mx_ReplyTile.mx_ReplyTile_info {
-    padding-top: 0;
-}
+    .mx_SenderProfile {
+        font-size: $font-14px;
+        line-height: $font-17px;
 
-.mx_ReplyTile .mx_SenderProfile {
-    color: $primary-fg-color;
-    font-size: $font-14px;
-    display: inline-block; /* anti-zalgo, with overflow hidden */
-    overflow: hidden;
-    cursor: pointer;
-    padding-left: 0; /* left gutter */
-    padding-bottom: 0;
-    padding-top: 0;
-    margin: 0;
-    line-height: $font-17px;
-    /* the next three lines, along with overflow hidden, truncate long display names */
-    white-space: nowrap;
-    text-overflow: ellipsis;
+        display: inline-block; // anti-zalgo, with overflow hidden
+        padding: 0;
+        margin: 0;
+
+        // truncate long display names
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 }

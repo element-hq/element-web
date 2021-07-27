@@ -312,8 +312,12 @@ describe('MessagePanel', function() {
 
     it('should insert the read-marker in the right place', function() {
         const res = TestUtils.renderIntoDocument(
-            <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
-                readMarkerVisible={true} />,
+            <WrappedMessagePanel
+                className="cls"
+                events={events}
+                readMarkerEventId={events[4].getId()}
+                readMarkerVisible={true}
+            />,
         );
 
         const tiles = TestUtils.scryRenderedComponentsWithType(
@@ -330,8 +334,12 @@ describe('MessagePanel', function() {
     it('should show the read-marker that fall in summarised events after the summary', function() {
         const melsEvents = mkMelsEvents();
         const res = TestUtils.renderIntoDocument(
-            <WrappedMessagePanel className="cls" events={melsEvents} readMarkerEventId={melsEvents[4].getId()}
-                readMarkerVisible={true} />,
+            <WrappedMessagePanel
+                className="cls"
+                events={melsEvents}
+                readMarkerEventId={melsEvents[4].getId()}
+                readMarkerVisible={true}
+            />,
         );
 
         const summary = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_EventListSummary');
@@ -348,8 +356,12 @@ describe('MessagePanel', function() {
     it('should hide the read-marker at the end of summarised events', function() {
         const melsEvents = mkMelsEventsOnly();
         const res = TestUtils.renderIntoDocument(
-            <WrappedMessagePanel className="cls" events={melsEvents} readMarkerEventId={melsEvents[9].getId()}
-                readMarkerVisible={true} />,
+            <WrappedMessagePanel
+                className="cls"
+                events={melsEvents}
+                readMarkerEventId={melsEvents[9].getId()}
+                readMarkerVisible={true}
+            />,
         );
 
         const summary = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_EventListSummary');
@@ -371,7 +383,10 @@ describe('MessagePanel', function() {
 
         // first render with the RM in one place
         let mp = ReactDOM.render(
-            <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
+            <WrappedMessagePanel
+                className="cls"
+                events={events}
+                readMarkerEventId={events[4].getId()}
                 readMarkerVisible={true}
             />, parentDiv);
 
@@ -387,7 +402,10 @@ describe('MessagePanel', function() {
 
         // now move the RM
         mp = ReactDOM.render(
-            <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[6].getId()}
+            <WrappedMessagePanel
+                className="cls"
+                events={events}
+                readMarkerEventId={events[6].getId()}
                 readMarkerVisible={true}
             />, parentDiv);
 

@@ -1,0 +1,162 @@
+/*
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_CallEvent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: $dark-panel-bg-color;
+    border-radius: 8px;
+    margin: 10px auto;
+    max-width: 75%;
+    box-sizing: border-box;
+    height: 60px;
+
+    &.mx_CallEvent_voice {
+        .mx_CallEvent_type_icon::before,
+        .mx_CallEvent_content_button_callBack span::before,
+        .mx_CallEvent_content_button_answer span::before {
+            mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
+        }
+    }
+
+    &.mx_CallEvent_video {
+        .mx_CallEvent_type_icon::before,
+        .mx_CallEvent_content_button_callBack span::before,
+        .mx_CallEvent_content_button_answer span::before {
+            mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+        }
+    }
+
+    &.mx_CallEvent_voice.mx_CallEvent_missed .mx_CallEvent_type_icon::before {
+        mask-image: url('$(res)/img/voip/missed-voice.svg');
+    }
+
+    &.mx_CallEvent_video.mx_CallEvent_missed .mx_CallEvent_type_icon::before {
+        mask-image: url('$(res)/img/voip/missed-video.svg');
+    }
+
+    .mx_CallEvent_info {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-left: 12px;
+
+        .mx_CallEvent_info_basic {
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px; // To match mx_CallEvent
+
+            .mx_CallEvent_sender {
+                font-weight: 600;
+                font-size: 1.5rem;
+                line-height: 1.8rem;
+                margin-bottom: 3px;
+            }
+
+            .mx_CallEvent_type {
+                font-weight: 400;
+                color: $secondary-fg-color;
+                font-size: 1.2rem;
+                line-height: $font-13px;
+                display: flex;
+                align-items: center;
+
+                .mx_CallEvent_type_icon {
+                    height: 13px;
+                    width: 13px;
+                    margin-right: 5px;
+
+                    &::before {
+                        content: '';
+                        position: absolute;
+                        height: 13px;
+                        width: 13px;
+                        background-color: $tertiary-fg-color;
+                        mask-repeat: no-repeat;
+                        mask-size: contain;
+                    }
+                }
+            }
+        }
+    }
+
+    .mx_CallEvent_content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        color: $secondary-fg-color;
+        margin-right: 16px;
+
+        .mx_CallEvent_content_button {
+            height: 24px;
+            padding: 0px 12px;
+            margin-left: 8px;
+
+            span {
+                padding: 8px 0;
+                display: flex;
+                align-items: center;
+
+                &::before {
+                    content: '';
+                    display: inline-block;
+                    background-color: $button-fg-color;
+                    mask-position: center;
+                    mask-repeat: no-repeat;
+                    mask-size: 16px;
+                    width: 16px;
+                    height: 16px;
+                    margin-right: 8px;
+                }
+            }
+        }
+
+        .mx_CallEvent_content_button_reject span::before {
+            mask-image: url('$(res)/img/element-icons/call/hangup.svg');
+        }
+
+        .mx_CallEvent_content_tooltip {
+            margin-right: 5px;
+        }
+
+        .mx_CallEvent_iconButton {
+            display: inline-flex;
+            margin-right: 8px;
+
+            &::before {
+                content: '';
+
+                height: 16px;
+                width: 16px;
+                background-color: $tertiary-fg-color;
+                mask-repeat: no-repeat;
+                mask-size: contain;
+                mask-position: center;
+            }
+        }
+
+        .mx_CallEvent_silence::before {
+            mask-image: url('$(res)/img/voip/silence.svg');
+        }
+
+        .mx_CallEvent_unSilence::before {
+            mask-image: url('$(res)/img/voip/un-silence.svg');
+        }
+    }
+}

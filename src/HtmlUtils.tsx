@@ -25,7 +25,6 @@ import _linkifyElement from 'linkifyjs/element';
 import _linkifyString from 'linkifyjs/string';
 import classNames from 'classnames';
 import EMOJIBASE_REGEX from 'emojibase-regex';
-import url from 'url';
 import katex from 'katex';
 import { AllHtmlEntities } from 'html-entities';
 import { IContent } from 'matrix-js-sdk/src/models/event';
@@ -34,7 +33,7 @@ import { IExtendedSanitizeOptions } from './@types/sanitize-html';
 import linkifyMatrix from './linkify-matrix';
 import SettingsStore from './settings/SettingsStore';
 import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";
-import { SHORTCODE_TO_EMOJI, getEmojiFromUnicode } from "./emoji";
+import { getEmojiFromUnicode } from "./emoji";
 import ReplyThread from "./components/views/elements/ReplyThread";
 import { mediaFromMxc } from "./customisations/Media";
 
@@ -58,7 +57,7 @@ const BIGEMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})+$`, 'i');
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
-export const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet'];
+export const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet', 'matrix'];
 
 const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)\/(.+?)(?:[?/]|$)/;
 
@@ -80,20 +79,8 @@ function mightContainEmoji(str: string): boolean {
  * @return {String} The shortcode (such as :thumbup:)
  */
 export function unicodeToShortcode(char: string): string {
-    const data = getEmojiFromUnicode(char);
-    return (data && data.shortcodes ? `:${data.shortcodes[0]}:` : '');
-}
-
-/**
- * Returns the unicode character for an emoji shortcode
- *
- * @param {String} shortcode The shortcode (such as :thumbup:)
- * @return {String} The emoji character; null if none exists
- */
-export function shortcodeToUnicode(shortcode: string): string {
-    shortcode = shortcode.slice(1, shortcode.length - 1);
-    const data = SHORTCODE_TO_EMOJI.get(shortcode);
-    return data ? data.unicode : null;
+    const shortcodes = getEmojiFromUnicode(char)?.shortcodes;
+    return shortcodes?.length ? `:${shortcodes[0]}:` : '';
 }
 
 export function processHtmlForSending(html: string): string {
@@ -153,10 +140,8 @@ export function getHtmlText(insaneHtml: string): string {
  */
 export function isUrlPermitted(inputUrl: string): boolean {
     try {
-        const parsed = url.parse(inputUrl);
-        if (!parsed.protocol) return false;
         // URL parser protocol includes the trailing colon
-        return PERMITTED_URL_SCHEMES.includes(parsed.protocol.slice(0, -1));
+        return PERMITTED_URL_SCHEMES.includes(new URL(inputUrl).protocol.slice(0, -1));
     } catch (e) {
         return false;
     }

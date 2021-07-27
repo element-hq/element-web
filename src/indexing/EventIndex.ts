@@ -67,7 +67,6 @@ export default class EventIndex extends EventEmitter {
 
         client.on('sync', this.onSync);
         client.on('Room.timeline', this.onRoomTimeline);
-        client.on('Event.decrypted', this.onEventDecrypted);
         client.on('Room.timelineReset', this.onTimelineReset);
         client.on('Room.redaction', this.onRedaction);
         client.on('RoomState.events', this.onRoomStateEvent);
@@ -82,7 +81,6 @@ export default class EventIndex extends EventEmitter {
 
         client.removeListener('sync', this.onSync);
         client.removeListener('Room.timeline', this.onRoomTimeline);
-        client.removeListener('Event.decrypted', this.onEventDecrypted);
         client.removeListener('Room.timelineReset', this.onTimelineReset);
         client.removeListener('Room.redaction', this.onRedaction);
         client.removeListener('RoomState.events', this.onRoomStateEvent);
@@ -219,18 +217,6 @@ export default class EventIndex extends EventEmitter {
             console.log("EventIndex: Adding a checkpoint for a newly encrypted room", state.roomId);
             this.addRoomCheckpoint(state.roomId, true);
         }
-    };
-
-    /*
-     * The Event.decrypted listener.
-     *
-     * Checks if the event was marked for addition in the Room.timeline
-     * listener, if so queues it up to be added to the index.
-     */
-    private onEventDecrypted = async (ev: MatrixEvent, err: Error) => {
-        // If the event isn't in our live event set, ignore it.
-        if (err) return;
-        await this.addLiveEventToIndex(ev);
     };
 
     /*

@@ -126,14 +126,14 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
         if (onClick) {
             return (
                 <AccessibleButton {...props} className={classes} onClick={onClick}>
-                    <span className="mx_NotificationBadge_count">{symbol}</span>
+                    <span className="mx_NotificationBadge_count">{ symbol }</span>
                 </AccessibleButton>
             );
         }
 
         return (
             <div className={classes}>
-                <span className="mx_NotificationBadge_count">{symbol}</span>
+                <span className="mx_NotificationBadge_count">{ symbol }</span>
             </div>
         );
     }

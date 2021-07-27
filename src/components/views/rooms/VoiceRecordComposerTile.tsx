@@ -20,7 +20,7 @@ import React, { ReactNode } from "react";
 import {
     RecordingState,
     VoiceRecording,
-} from "../../../voice/VoiceRecording";
+} from "../../../audio/VoiceRecording";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import classNames from "classnames";
@@ -68,37 +68,49 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         }
 
         await this.state.recorder.stop();
-        const upload = await this.state.recorder.upload(this.props.room.roomId);
-        MatrixClientPeg.get().sendMessage(this.props.room.roomId, {
-            "body": "Voice message",
-            //"msgtype": "org.matrix.msc2516.voice",
-            "msgtype": MsgType.Audio,
-            "url": upload.mxc,
-            "file": upload.encrypted,
-            "info": {
-                duration: Math.round(this.state.recorder.durationSeconds * 1000),
-                mimetype: this.state.recorder.contentType,
-                size: this.state.recorder.contentLength,
-            },
 
-            // MSC1767 + Ideals of MSC2516 as MSC3245
-            // https://github.com/matrix-org/matrix-doc/pull/3245
-            "org.matrix.msc1767.text": "Voice message",
-            "org.matrix.msc1767.file": {
-                url: upload.mxc,
-                file: upload.encrypted,
-                name: "Voice message.ogg",
-                mimetype: this.state.recorder.contentType,
-                size: this.state.recorder.contentLength,
-            },
-            "org.matrix.msc1767.audio": {
-                duration: Math.round(this.state.recorder.durationSeconds * 1000),
+        try {
+            const upload = await this.state.recorder.upload(this.props.room.roomId);
 
-                // https://github.com/matrix-org/matrix-doc/pull/3246
-                waveform: this.state.recorder.getPlayback().thumbnailWaveform.map(v => Math.round(v * 1024)),
-            },
-            "org.matrix.msc3245.voice": {}, // No content, this is a rendering hint
-        });
+            // noinspection ES6MissingAwait - we don't care if it fails, it'll get queued.
+            MatrixClientPeg.get().sendMessage(this.props.room.roomId, {
+                "body": "Voice message",
+                //"msgtype": "org.matrix.msc2516.voice",
+                "msgtype": MsgType.Audio,
+                "url": upload.mxc,
+                "file": upload.encrypted,
+                "info": {
+                    duration: Math.round(this.state.recorder.durationSeconds * 1000),
+                    mimetype: this.state.recorder.contentType,
+                    size: this.state.recorder.contentLength,
+                },
+
+                // MSC1767 + Ideals of MSC2516 as MSC3245
+                // https://github.com/matrix-org/matrix-doc/pull/3245
+                "org.matrix.msc1767.text": "Voice message",
+                "org.matrix.msc1767.file": {
+                    url: upload.mxc,
+                    file: upload.encrypted,
+                    name: "Voice message.ogg",
+                    mimetype: this.state.recorder.contentType,
+                    size: this.state.recorder.contentLength,
+                },
+                "org.matrix.msc1767.audio": {
+                    duration: Math.round(this.state.recorder.durationSeconds * 1000),
+
+                    // https://github.com/matrix-org/matrix-doc/pull/3246
+                    waveform: this.state.recorder.getPlayback().thumbnailWaveform.map(v => Math.round(v * 1024)),
+                },
+                "org.matrix.msc3245.voice": {}, // No content, this is a rendering hint
+            });
+        } catch (e) {
+            console.error("Error sending/uploading voice message:", e);
+            Modal.createTrackedDialog('Upload failed', '', ErrorDialog, {
+                title: _t('Upload Failed'),
+                description: _t("The voice message failed to upload."),
+            });
+            return; // don't dispose the recording so the user can retry, maybe
+        }
         await this.disposeRecording();
     }
 
@@ -124,9 +136,9 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             Modal.createTrackedDialog('Microphone Access Error', '', ErrorDialog, {
                 title: _t("Unable to access your microphone"),
                 description: <>
-                    <p>{_t(
+                    <p>{ _t(
                         "We were unable to access your microphone. Please check your browser settings and try again.",
-                    )}</p>
+                    ) }</p>
                 </>,
             });
         };
@@ -139,9 +151,9 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 Modal.createTrackedDialog('No Microphone Error', '', ErrorDialog, {
                     title: _t("No microphone found"),
                     description: <>
-                        <p>{_t(
+                        <p>{ _t(
                             "We didn't find a microphone on your device. Please check your settings and try again.",
-                        )}</p>
+                        ) }</p>
                     </>,
                 });
                 return;
@@ -177,7 +189,6 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         if (!this.state.recorder) return null; // no recorder means we're not recording: no waveform
 
         if (this.state.recordingPhase !== RecordingState.Started) {
-            // TODO: @@ TR: Should we disable this during upload? What does a failed upload look like?
             return <RecordingPlayback playback={this.state.recorder.getPlayback()} />;
         }
 
@@ -224,9 +235,9 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         }
 
         return (<>
-            {deleteButton}
-            {this.renderWaveformArea()}
-            {recordingInfo}
+            { deleteButton }
+            { this.renderWaveformArea() }
+            { recordingInfo }
         </>);
     }
 }

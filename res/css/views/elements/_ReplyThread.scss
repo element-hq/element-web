@@ -16,18 +16,16 @@ limitations under the License.
 
 .mx_ReplyThread {
     margin-top: 0;
-}
-
-.mx_ReplyThread_show {
-    cursor: pointer;
-}
-
-blockquote.mx_ReplyThread {
     margin-left: 0;
     margin-right: 0;
     margin-bottom: 8px;
-    padding-left: 10px;
-    border-left: 4px solid $button-bg-color;
+    padding: 0 10px;
+    border-left: 2px solid $button-bg-color;
+    border-radius: 2px;
+
+    .mx_ReplyThread_show {
+        cursor: pointer;
+    }
 
     &.mx_ReplyThread_color1 {
         border-left-color: $username-variant1-color;

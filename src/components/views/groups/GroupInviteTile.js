@@ -165,7 +165,7 @@ export default class GroupInviteTile extends React.Component {
 
         return <React.Fragment>
             <RovingTabIndexWrapper>
-                {({ onFocus, isActive, ref }) =>
+                { ({ onFocus, isActive, ref }) =>
                     <AccessibleButton
                         onFocus={onFocus}
                         tabIndex={isActive ? 0 : -1}

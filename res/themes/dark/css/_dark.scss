@@ -209,8 +209,8 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 
 $message-body-panel-fg-color: $secondary-fg-color;
 $message-body-panel-bg-color: #394049; // "Dark Tile"
-$message-body-panel-icon-fg-color: #21262C; // "Separator"
-$message-body-panel-icon-bg-color: $tertiary-fg-color;
+$message-body-panel-icon-fg-color: $secondary-fg-color;
+$message-body-panel-icon-bg-color: #21262C; // "System Dark"
 
 $voice-record-stop-border-color: $quaternary-fg-color;
 $voice-record-waveform-incomplete-fg-color: $quaternary-fg-color;
@@ -226,6 +226,13 @@ $roomlist-background-blur-amount: 60px;
 $groupFilterPanel-background-blur-amount: 30px;
 
 $composer-shadow-color: rgba(0, 0, 0, 0.28);
+
+// Bubble tiles
+$eventbubble-self-bg: #143A34;
+$eventbubble-others-bg: #394049;
+$eventbubble-bg-hover: #433C23;
+$eventbubble-avatar-outline: $bg-color;
+$eventbubble-reply-color: #C1C6CD;
 
 // ***** Mixins! *****
 
@@ -287,4 +294,12 @@ $composer-shadow-color: rgba(0, 0, 0, 0.28);
 // highlight.js overrides
 .hljs-tag {
     color: inherit; // Without this they'd be weirdly blue which doesn't match the theme
+}
+
+.hljs-addition {
+    background: #1a4b59;
+}
+
+.hljs-deletion {
+    background: #53232a;
 }

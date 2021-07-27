@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import zxcvbn from 'zxcvbn';
+import zxcvbn, { ZXCVBNFeedbackWarning } from 'zxcvbn';
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import { _t, _td } from '../languageHandler';
@@ -84,7 +84,7 @@ export function scorePassword(password: string) {
     }
     // and warning, if any
     if (zxcvbnResult.feedback.warning) {
-        zxcvbnResult.feedback.warning = _t(zxcvbnResult.feedback.warning);
+        zxcvbnResult.feedback.warning = _t(zxcvbnResult.feedback.warning) as ZXCVBNFeedbackWarning;
     }
 
     return zxcvbnResult;

@@ -149,12 +149,12 @@ export default class ProfileSettings extends React.Component {
         let hostingSignup = null;
         if (hostingSignupLink) {
             hostingSignup = <span className="mx_ProfileSettings_hostingSignup">
-                {_t(
+                { _t(
                     "<a>Upgrade</a> to your own domain", {},
                     {
-                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">{sub}</a>,
+                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">{ sub }</a>,
                     },
-                )}
+                ) }
                 <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">
                     <img src={require("../../../../res/img/external-link.svg")} width="11" height="10" alt='' />
                 </a>
@@ -172,22 +172,24 @@ export default class ProfileSettings extends React.Component {
             >
                 <input
                     type="file"
-                    ref={this._avatarUpload} className="mx_ProfileSettings_avatarUpload"
+                    ref={this._avatarUpload}
+                    className="mx_ProfileSettings_avatarUpload"
                     onChange={this._onAvatarChanged}
                     accept="image/*"
                 />
                 <div className="mx_ProfileSettings_profile">
                     <div className="mx_ProfileSettings_controls">
-                        <span className="mx_SettingsTab_subheading">{_t("Profile")}</span>
+                        <span className="mx_SettingsTab_subheading">{ _t("Profile") }</span>
                         <Field
                             label={_t("Display Name")}
-                            type="text" value={this.state.displayName}
+                            type="text"
+                            value={this.state.displayName}
                             autoComplete="off"
                             onChange={this._onDisplayNameChanged}
                         />
                         <p>
-                            {this.state.userId}
-                            {hostingSignup}
+                            { this.state.userId }
+                            { hostingSignup }
                         </p>
                     </div>
                     <AvatarSetting
@@ -203,14 +205,14 @@ export default class ProfileSettings extends React.Component {
                         kind="link"
                         disabled={!this.state.enableProfileSave}
                     >
-                        {_t("Cancel")}
+                        { _t("Cancel") }
                     </AccessibleButton>
                     <AccessibleButton
                         onClick={this._saveProfile}
                         kind="primary"
                         disabled={!this.state.enableProfileSave}
                     >
-                        {_t("Save")}
+                        { _t("Save") }
                     </AccessibleButton>
                 </div>
             </form>

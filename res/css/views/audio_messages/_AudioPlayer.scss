@@ -14,9 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_AudioPlayer_container {
+.mx_MediaBody.mx_AudioPlayer_container {
     padding: 16px 12px 12px 12px;
-    max-width: 267px; // use max to make the control fit in the files/pinned panels
 
     .mx_AudioPlayer_primaryContainer {
         display: flex;
