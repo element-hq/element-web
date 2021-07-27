@@ -69,12 +69,16 @@ describe("TextForPinnedEvent - newly unpinned message(s)", () => {
 
     it("mentions message when a single message was unpinned, with a single message previously pinned", () => {
         const event = mockPinnedEvent([], ['message-1']);
-        expect(textForEvent(event)).toBe("@foo:example.com unpinned a message from this room. See all pinned messages.");
+        expect(textForEvent(event)).toBe(
+            "@foo:example.com unpinned a message from this room. See all pinned messages.",
+        );
     });
 
     it("mentions message when a single message was unpinned, with multiple previously pinned messages", () => {
         const event = mockPinnedEvent(['message-2'], ['message-1', 'message-2']);
-        expect(textForEvent(event)).toBe("@foo:example.com unpinned a message from this room. See all pinned messages.");
+        expect(textForEvent(event)).toBe(
+            "@foo:example.com unpinned a message from this room. See all pinned messages.",
+        );
     });
 
     it("shows generic text when multiple messages were unpinned", () => {
