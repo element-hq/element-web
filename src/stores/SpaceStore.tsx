@@ -117,12 +117,12 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     private _invitedSpaces = new Set<Room>();
     private spaceOrderLocalEchoMap = new Map<string, string>();
     private _restrictedJoinRuleSupport?: IRoomCapability;
-    private _allRoomsInHome: boolean = SettingsStore.getValue("feature_spaces.all_rooms");
+    private _allRoomsInHome: boolean = SettingsStore.getValue("Spaces.all_rooms_in_home");
 
     constructor() {
         super(defaultDispatcher, {});
 
-        SettingsStore.monitorSetting("feature_spaces.all_rooms", null);
+        SettingsStore.monitorSetting("Spaces.all_rooms_in_home", null);
     }
 
     public get invitedSpaces(): Room[] {
@@ -812,8 +812,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
             case Action.SettingUpdated: {
                 const settingUpdatedPayload = payload as SettingUpdatedPayload;
-                if (settingUpdatedPayload.settingName === "feature_spaces.all_rooms") {
-                    const newValue = SettingsStore.getValue("feature_spaces.all_rooms");
+                if (settingUpdatedPayload.settingName === "Spaces.all_rooms_in_home") {
+                    const newValue = SettingsStore.getValue("Spaces.all_rooms_in_home");
                     if (this.allRoomsInHome !== newValue) {
                         this._allRoomsInHome = newValue;
                         this.emit(UPDATE_HOME_BEHAVIOUR, this.allRoomsInHome);

@@ -180,14 +180,9 @@ export const SETTINGS: {[setting: string]: ISetting} = {
                 "The more detail you can go into, the better."),
             feedbackLabel: "spaces-feedback",
             extraSettings: [
-                "feature_spaces.all_rooms",
+                "Spaces.all_rooms_in_home",
             ],
         },
-    },
-    "feature_spaces.all_rooms": {
-        displayName: _td("Show all rooms in Home"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
     },
     "feature_dnd": {
         isFeature: true,
@@ -755,6 +750,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "Widgets.leftPanel": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: null,
+    },
+    "Spaces.all_rooms_in_home": {
+        displayName: _td("Show all rooms in Home"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
     },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,
