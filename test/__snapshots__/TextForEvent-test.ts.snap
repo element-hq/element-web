@@ -55,3 +55,59 @@ exports[`TextForPinnedEvent - newly pinned message(s) (JSX) shows generic text w
   </span>
 </span>
 `;
+
+exports[`TextForPinnedEvent - newly unpinned message(s) (JSX) mentions message when a single message was unpinned, with a single message previously pinned 1`] = `
+<span>
+  <span>
+    @foo:example.com unpinned 
+    <a
+      onClick={[Function]}
+    >
+      a message
+    </a>
+     from this room. See all 
+    <a
+      onClick={[Function]}
+    >
+      pinned messages
+    </a>
+    .
+  </span>
+</span>
+`;
+
+exports[`TextForPinnedEvent - newly unpinned message(s) (JSX) mentions message when a single message was unpinned, with multiple previously pinned messages 1`] = `
+<span>
+  <span>
+    @foo:example.com unpinned 
+    <a
+      onClick={[Function]}
+    >
+      a message
+    </a>
+     from this room. See all 
+    <a
+      onClick={[Function]}
+    >
+      pinned messages
+    </a>
+    .
+  </span>
+</span>
+`;
+
+exports[`TextForPinnedEvent - newly unpinned message(s) (JSX) shows generic text when multiple messages were unpinned 1`] = `
+<span>
+  <span>
+    @foo:example.com changed the 
+    <a
+      onClick={[Function]}
+    >
+       
+      pinned messages
+       
+    </a>
+     for the room.
+  </span>
+</span>
+`;
