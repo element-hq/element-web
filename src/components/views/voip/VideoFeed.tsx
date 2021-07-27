@@ -85,10 +85,12 @@ export default class VideoFeed extends React.Component<IProps, IState> {
 
         if (oldFeed) {
             this.props.feed.removeListener(CallFeedEvent.NewStream, this.onNewStream);
+            this.props.feed.removeListener(CallFeedEvent.MuteStateChanged, this.onMuteStateChanged);
             this.stopMedia();
         }
         if (newFeed) {
             this.props.feed.addListener(CallFeedEvent.NewStream, this.onNewStream);
+            this.props.feed.addListener(CallFeedEvent.MuteStateChanged, this.onMuteStateChanged);
             this.playMedia();
         }
     }
@@ -130,6 +132,14 @@ export default class VideoFeed extends React.Component<IProps, IState> {
     }
 
     private onNewStream = () => {
+        this.setState({
+            audioMuted: this.props.feed.isAudioMuted(),
+            videoMuted: this.props.feed.isVideoMuted(),
+        });
+        this.playMedia();
+    };
+
+    private onMuteStateChanged = () => {
         this.setState({
             audioMuted: this.props.feed.isAudioMuted(),
             videoMuted: this.props.feed.isVideoMuted(),
