@@ -80,7 +80,10 @@ export default class VideoFeed extends React.Component<IProps, IState> {
     }
 
     private setElementRef = (element: HTMLVideoElement): void => {
-        if (!element) element.removeEventListener('resize', this.onResize);
+        if (!element) {
+            this.element?.removeEventListener('resize', this.onResize);
+            return;
+        }
 
         this.element = element;
         element.addEventListener('resize', this.onResize);
