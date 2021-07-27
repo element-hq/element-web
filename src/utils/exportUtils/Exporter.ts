@@ -69,8 +69,6 @@ export default abstract class Exporter {
     protected async downloadZIP(): Promise<any> {
         const filename = `matrix-export-${formatFullDateNoDay(new Date())}.zip`;
 
-        console.log(this.files, this.files.length);
-
         const zip = new JSZip();
         // Create a writable stream to the directory
         if (!this.cancelled) this.updateProgress("Generating a ZIP");

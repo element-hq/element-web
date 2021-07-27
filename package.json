@@ -164,6 +164,7 @@
     "jest-canvas-mock": "^2.3.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "jest-fetch-mock": "^3.0.3",
+    "jest-raw-loader": "^1.0.1",
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.3",
     "matrix-web-i18n": "github:matrix-org/matrix-web-i18n",
@@ -193,7 +194,8 @@
       "decoderWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
       "decoderWorker\\.min\\.wasm": "<rootDir>/__mocks__/empty.js",
       "waveWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
-      "workers/(.+)\\.worker\\.ts": "<rootDir>/__mocks__/workerMock.js"
+      "workers/(.+)\\.worker\\.ts": "<rootDir>/__mocks__/workerMock.js",
+      "^!!raw-loader!.*": "jest-raw-loader"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$"
