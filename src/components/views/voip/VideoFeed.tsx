@@ -59,6 +59,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
 
     componentDidMount() {
         this.props.feed.addListener(CallFeedEvent.NewStream, this.onNewStream);
+        this.element.current?.addEventListener('resize', this.onResize);
         this.playMedia();
     }
 
