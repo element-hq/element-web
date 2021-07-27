@@ -16,7 +16,6 @@ limitations under the License.
 
 import { EventEmitter } from "events";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import "./SpaceStore-setup"; // enable space lab
@@ -26,30 +25,13 @@ import SpaceStore, {
     UPDATE_SELECTED_SPACE,
     UPDATE_TOP_LEVEL_SPACES,
 } from "../../src/stores/SpaceStore";
-import { resetAsyncStoreWithClient, setupAsyncStoreWithClient } from "../utils/test-utils";
-import { mkEvent, mkStubRoom, stubClient } from "../test-utils";
-import { EnhancedMap } from "../../src/utils/maps";
+import * as testUtils from "../utils/test-utils";
+import { mkEvent, stubClient } from "../test-utils";
 import DMRoomMap from "../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import defaultDispatcher from "../../src/dispatcher/dispatcher";
 
 jest.useFakeTimers();
-
-const mockStateEventImplementation = (events: MatrixEvent[]) => {
-    const stateMap = new EnhancedMap<string, Map<string, MatrixEvent>>();
-    events.forEach(event => {
-        stateMap.getOrCreate(event.getType(), new Map()).set(event.getStateKey(), event);
-    });
-
-    return (eventType: string, stateKey?: string) => {
-        if (stateKey || stateKey === "") {
-            return stateMap.get(eventType)?.get(stateKey) || null;
-        }
-        return Array.from(stateMap.get(eventType)?.values() || []);
-    };
-};
-
-const emitPromise = (e: EventEmitter, k: string | symbol) => new Promise(r => e.once(k, r));
 
 const testUserId = "@test:user";
 
@@ -87,36 +69,13 @@ describe("SpaceStore", () => {
     const client = MatrixClientPeg.get();
 
     let rooms = [];
-
-    const mkRoom = (roomId: string) => {
-        const room = mkStubRoom(roomId, roomId, client);
-        room.currentState.getStateEvents.mockImplementation(mockStateEventImplementation([]));
-        rooms.push(room);
-        return room;
-    };
-
-    const mkSpace = (spaceId: string, children: string[] = []) => {
-        const space = mkRoom(spaceId);
-        space.isSpaceRoom.mockReturnValue(true);
-        space.currentState.getStateEvents.mockImplementation(mockStateEventImplementation(children.map(roomId =>
-            mkEvent({
-                event: true,
-                type: EventType.SpaceChild,
-                room: spaceId,
-                user: testUserId,
-                skey: roomId,
-                content: { via: [] },
-                ts: Date.now(),
-            }),
-        )));
-        return space;
-    };
-
+    const mkRoom = (roomId: string) => testUtils.mkRoom(client, roomId, rooms);
+    const mkSpace = (spaceId: string, children: string[] = []) => testUtils.mkSpace(client, spaceId, rooms, children);
     const viewRoom = roomId => defaultDispatcher.dispatch({ action: "view_room", room_id: roomId }, true);
 
     const run = async () => {
         client.getRoom.mockImplementation(roomId => rooms.find(room => room.roomId === roomId));
-        await setupAsyncStoreWithClient(store, client);
+        await testUtils.setupAsyncStoreWithClient(store, client);
         jest.runAllTimers();
     };
 
@@ -125,7 +84,7 @@ describe("SpaceStore", () => {
         client.getVisibleRooms.mockReturnValue(rooms = []);
     });
     afterEach(async () => {
-        await resetAsyncStoreWithClient(store);
+        await testUtils.resetAsyncStoreWithClient(store);
     });
 
     describe("static hierarchy resolution tests", () => {
@@ -488,7 +447,7 @@ describe("SpaceStore", () => {
             await run();
             expect(store.spacePanelSpaces).toStrictEqual([]);
             const space = mkSpace(space1);
-            const prom = emitPromise(store, UPDATE_TOP_LEVEL_SPACES);
+            const prom = testUtils.emitPromise(store, UPDATE_TOP_LEVEL_SPACES);
             emitter.emit("Room", space);
             await prom;
             expect(store.spacePanelSpaces).toStrictEqual([space]);
@@ -501,7 +460,7 @@ describe("SpaceStore", () => {
 
             expect(store.spacePanelSpaces).toStrictEqual([space]);
             space.getMyMembership.mockReturnValue("leave");
-            const prom = emitPromise(store, UPDATE_TOP_LEVEL_SPACES);
+            const prom = testUtils.emitPromise(store, UPDATE_TOP_LEVEL_SPACES);
             emitter.emit("Room.myMembership", space, "leave", "join");
             await prom;
             expect(store.spacePanelSpaces).toStrictEqual([]);
@@ -513,7 +472,7 @@ describe("SpaceStore", () => {
             expect(store.invitedSpaces).toStrictEqual([]);
             const space = mkSpace(space1);
             space.getMyMembership.mockReturnValue("invite");
-            const prom = emitPromise(store, UPDATE_INVITED_SPACES);
+            const prom = testUtils.emitPromise(store, UPDATE_INVITED_SPACES);
             emitter.emit("Room", space);
             await prom;
             expect(store.spacePanelSpaces).toStrictEqual([]);
@@ -528,7 +487,7 @@ describe("SpaceStore", () => {
             expect(store.spacePanelSpaces).toStrictEqual([]);
             expect(store.invitedSpaces).toStrictEqual([space]);
             space.getMyMembership.mockReturnValue("join");
-            const prom = emitPromise(store, UPDATE_TOP_LEVEL_SPACES);
+            const prom = testUtils.emitPromise(store, UPDATE_TOP_LEVEL_SPACES);
             emitter.emit("Room.myMembership", space, "join", "invite");
             await prom;
             expect(store.spacePanelSpaces).toStrictEqual([space]);
@@ -543,7 +502,7 @@ describe("SpaceStore", () => {
             expect(store.spacePanelSpaces).toStrictEqual([]);
             expect(store.invitedSpaces).toStrictEqual([space]);
             space.getMyMembership.mockReturnValue("leave");
-            const prom = emitPromise(store, UPDATE_INVITED_SPACES);
+            const prom = testUtils.emitPromise(store, UPDATE_INVITED_SPACES);
             emitter.emit("Room.myMembership", space, "leave", "invite");
             await prom;
             expect(store.spacePanelSpaces).toStrictEqual([]);
@@ -563,7 +522,7 @@ describe("SpaceStore", () => {
 
             const invite = mkRoom(invite1);
             invite.getMyMembership.mockReturnValue("invite");
-            const prom = emitPromise(store, space1);
+            const prom = testUtils.emitPromise(store, space1);
             emitter.emit("Room", space);
             await prom;
 
@@ -704,7 +663,8 @@ describe("SpaceStore", () => {
             mkSpace(space1, [room1, room2, room3]);
             mkSpace(space2, [room1, room2]);
 
-            client.getRoom(room2).currentState.getStateEvents.mockImplementation(mockStateEventImplementation([
+            const cliRoom2 = client.getRoom(room2);
+            cliRoom2.currentState.getStateEvents.mockImplementation(testUtils.mockStateEventImplementation([
                 mkEvent({
                     event: true,
                     type: EventType.SpaceParent,
