@@ -35,7 +35,7 @@ export const EMOTICON_TO_EMOJI = new Map<string, IEmoji>();
 
 export const getEmojiFromUnicode = unicode => UNICODE_TO_EMOJI.get(stripVariation(unicode));
 
-const isRegionalIndicator = (x: string) =>
+const isRegionalIndicator = (x: string): boolean =>
     Array.from(x).length === 1 && x >= '\u{1f1e6}' && x <= '\u{1f1ff}';
 
 const EMOJIBASE_GROUP_ID_TO_CATEGORY = [
