@@ -16,7 +16,7 @@ limitations under the License.
 
 import classnames from 'classnames';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
-import React, { createRef } from 'react';
+import React from 'react';
 import SettingsStore from "../../../settings/SettingsStore";
 import { CallFeed, CallFeedEvent } from 'matrix-js-sdk/src/webrtc/callFeed';
 import { logger } from 'matrix-js-sdk/src/logger';
@@ -48,7 +48,7 @@ interface IState {
 
 @replaceableComponent("views.voip.VideoFeed")
 export default class VideoFeed extends React.Component<IProps, IState> {
-    private element = createRef<HTMLVideoElement>();
+    private element: HTMLVideoElement;
 
     constructor(props: IProps) {
         super(props);
@@ -66,7 +66,6 @@ export default class VideoFeed extends React.Component<IProps, IState> {
 
     componentWillUnmount() {
         this.updateFeed(this.props.feed, null);
-        this.element.current?.removeEventListener('resize', this.onResize);
     }
 
     componentDidUpdate(prevProps: IProps) {
@@ -79,6 +78,13 @@ export default class VideoFeed extends React.Component<IProps, IState> {
             videoMuted: props.feed.isVideoMuted(),
         };
     }
+
+    private setElementRef = (element: HTMLVideoElement): void => {
+        if (!element) element.removeEventListener('resize', this.onResize);
+
+        this.element = element;
+        element.addEventListener('resize', this.onResize);
+    };
 
     private updateFeed(oldFeed: CallFeed, newFeed: CallFeed) {
         if (oldFeed === newFeed) return;
@@ -94,7 +100,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
     }
 
     private playMedia() {
-        const element = this.element.current;
+        const element = this.element;
         if (!element) return;
         // We play audio in AudioFeed, not here
         element.muted = true;
@@ -117,7 +123,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
     }
 
     private stopMedia() {
-        const element = this.element.current;
+        const element = this.element;
         if (!element) return;
 
         element.pause();
@@ -175,7 +181,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
             );
         } else {
             return (
-                <video className={classnames(videoClasses)} ref={this.element} />
+                <video className={classnames(videoClasses)} ref={this.setElementRef} />
             );
         }
     }

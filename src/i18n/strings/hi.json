@@ -588,5 +588,6 @@
     "The user must be unbanned before they can be invited.": "उपयोगकर्ता को आमंत्रित करने से पहले उन्हें प्रतिबंधित किया जाना चाहिए।",
     "Explore rooms": "रूम का अन्वेषण करें",
     "Sign In": "साइन करना",
-    "Create Account": "खाता बनाएं"
+    "Create Account": "खाता बनाएं",
+    "Identity server is": "आइडेंटिटी सर्वर हैं"
 }
