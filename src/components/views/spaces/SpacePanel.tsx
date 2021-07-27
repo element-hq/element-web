@@ -137,15 +137,22 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({ children, isPanelCo
     const [invites, spaces, activeSpace] = useSpaces();
     const activeSpaces = activeSpace ? [activeSpace] : [];
 
-    const homeNotificationState = SpaceStore.spacesTweakAllRoomsEnabled
-        ? RoomNotificationStateStore.instance.globalState : SpaceStore.instance.getNotificationState(HOME_SPACE);
+    let homeTooltip: string;
+    let homeNotificationState: NotificationState;
+    if (SpaceStore.instance.allRoomsInHome) {
+        homeTooltip = _t("All rooms");
+        homeNotificationState = RoomNotificationStateStore.instance.globalState;
+    } else {
+        homeTooltip = _t("Home");
+        homeNotificationState = SpaceStore.instance.getNotificationState(HOME_SPACE);
+    }
 
     return <div className="mx_SpaceTreeLevel">
         <SpaceButton
             className="mx_SpaceButton_home"
             onClick={() => SpaceStore.instance.setActiveSpace(null)}
             selected={!activeSpace}
-            tooltip={SpaceStore.spacesTweakAllRoomsEnabled ? _t("All rooms") : _t("Home")}
+            tooltip={homeTooltip}
             notificationState={homeNotificationState}
             isNarrow={isPanelCollapsed}
         />

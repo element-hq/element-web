@@ -21,6 +21,7 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import "./SpaceStore-setup"; // enable space lab
 import "../skinned-sdk"; // Must be first for skinning to work
 import SpaceStore, {
+    UPDATE_HOME_BEHAVIOUR,
     UPDATE_INVITED_SPACES,
     UPDATE_SELECTED_SPACE,
     UPDATE_TOP_LEVEL_SPACES,
@@ -30,6 +31,8 @@ import { mkEvent, stubClient } from "../test-utils";
 import DMRoomMap from "../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import defaultDispatcher from "../../src/dispatcher/dispatcher";
+import SettingsStore from "../../src/settings/SettingsStore";
+import { SettingLevel } from "../../src/settings/SettingLevel";
 
 jest.useFakeTimers();
 
@@ -79,8 +82,16 @@ describe("SpaceStore", () => {
         jest.runAllTimers();
     };
 
+    const setShowAllRooms = async (value: boolean) => {
+        if (store.allRoomsInHome === value) return;
+        const emitProm = testUtils.emitPromise(store, UPDATE_HOME_BEHAVIOUR);
+        await SettingsStore.setValue("feature_spaces.all_rooms", null, SettingLevel.DEVICE, value);
+        jest.runAllTimers(); // run async dispatch
+        await emitProm;
+    };
+
     beforeEach(() => {
-        jest.runAllTimers();
+        jest.runAllTimers(); // run async dispatch
         client.getVisibleRooms.mockReturnValue(rooms = []);
     });
     afterEach(async () => {
@@ -346,8 +357,14 @@ describe("SpaceStore", () => {
                 expect(store.getSpaceFilteredRoomIds(null).has(invite2)).toBeTruthy();
             });
 
-            it("home space does contain rooms/low priority even if they are also shown in a space", () => {
+            it("all rooms space does contain rooms/low priority even if they are also shown in a space", async () => {
+                await setShowAllRooms(true);
                 expect(store.getSpaceFilteredRoomIds(null).has(room1)).toBeTruthy();
+            });
+
+            it("home space doesn't contain rooms/low priority if they are also shown in a space", async () => {
+                await setShowAllRooms(false);
+                expect(store.getSpaceFilteredRoomIds(null).has(room1)).toBeFalsy();
             });
 
             it("space contains child rooms", () => {
@@ -592,20 +609,30 @@ describe("SpaceStore", () => {
     });
 
     describe("context switching tests", () => {
-        const fn = jest.spyOn(defaultDispatcher, "dispatch");
+        let dispatcherRef;
+        let currentRoom = null;
 
         beforeEach(async () => {
             [room1, room2, orphan1].forEach(mkRoom);
             mkSpace(space1, [room1, room2]);
             mkSpace(space2, [room2]);
             await run();
+
+            dispatcherRef = defaultDispatcher.register(payload => {
+                if (payload.action === "view_room" || payload.action === "view_home_page") {
+                    currentRoom = payload.room_id || null;
+                }
+            });
         });
         afterEach(() => {
-            fn.mockClear();
             localStorage.clear();
+            defaultDispatcher.unregister(dispatcherRef);
         });
 
-        const getCurrentRoom = () => fn.mock.calls.reverse().find(([p]) => p.action === "view_room")?.[0].room_id;
+        const getCurrentRoom = () => {
+            jest.runAllTimers();
+            return currentRoom;
+        };
 
         it("last viewed room in target space is the current viewed and in both spaces", async () => {
             await store.setActiveSpace(client.getRoom(space1));
@@ -642,6 +669,14 @@ describe("SpaceStore", () => {
             expect(getCurrentRoom()).toBe(space2);
         });
 
+        it("last viewed room is target space is no longer in that space", async () => {
+            await store.setActiveSpace(client.getRoom(space1));
+            viewRoom(room1);
+            localStorage.setItem(`mx_space_context_${space2}`, room1);
+            await store.setActiveSpace(client.getRoom(space2));
+            expect(getCurrentRoom()).toBe(space2); // Space home instead of room1
+        });
+
         it("no last viewed room in target space", async () => {
             await store.setActiveSpace(client.getRoom(space1));
             viewRoom(room1);
@@ -653,7 +688,7 @@ describe("SpaceStore", () => {
             await store.setActiveSpace(client.getRoom(space1));
             viewRoom(room1);
             await store.setActiveSpace(null);
-            expect(fn.mock.calls[fn.mock.calls.length - 1][0]).toStrictEqual({ action: "view_home_page" });
+            expect(getCurrentRoom()).toBeNull(); // Home
         });
     });
 
@@ -707,6 +742,7 @@ describe("SpaceStore", () => {
         });
 
         it("when switching rooms in the all rooms home space don't switch to related space", async () => {
+            await setShowAllRooms(true);
             viewRoom(room2);
             await store.setActiveSpace(null, false);
             viewRoom(room1);

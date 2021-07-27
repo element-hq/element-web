@@ -187,8 +187,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "feature_spaces.all_rooms": {
         displayName: _td("Show all rooms in Home"),
         supportedLevels: LEVELS_FEATURE,
-        default: true,
-        controller: new ReloadOnChangeController(),
+        default: false,
     },
     "feature_dnd": {
         isFeature: true,
