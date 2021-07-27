@@ -69,7 +69,6 @@ export default class VideoFeed extends React.Component<IProps, IState> {
     }
 
     componentDidUpdate(prevProps: IProps) {
-        this.element?.addEventListener('resize', this.onResize);
         this.updateFeed(prevProps.feed, this.props.feed);
     }
 
