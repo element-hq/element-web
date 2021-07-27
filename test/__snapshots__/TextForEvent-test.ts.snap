@@ -1,6 +1,46 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TextForPinnedEvent (JSX) should mention sender 1`] = `
+exports[`TextForPinnedEvent - newly pinned message(s) (JSX) mentions message when a single message was pinned, with multiple previously pinned messages 1`] = `
+<span>
+  <span>
+    @foo:example.com pinned 
+    <a
+      onClick={[Function]}
+    >
+      a message
+    </a>
+     to this room. See all 
+    <a
+      onClick={[Function]}
+    >
+      pinned messages
+    </a>
+    .
+  </span>
+</span>
+`;
+
+exports[`TextForPinnedEvent - newly pinned message(s) (JSX) mentions message when a single message was pinned, with no previously pinned messages 1`] = `
+<span>
+  <span>
+    @foo:example.com pinned 
+    <a
+      onClick={[Function]}
+    >
+      a message
+    </a>
+     to this room. See all 
+    <a
+      onClick={[Function]}
+    >
+      pinned messages
+    </a>
+    .
+  </span>
+</span>
+`;
+
+exports[`TextForPinnedEvent - newly pinned message(s) (JSX) shows generic text when multiple messages were pinned 1`] = `
 <span>
   <span>
     @foo:example.com changed the 

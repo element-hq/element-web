@@ -408,6 +408,15 @@ function textForPowerEvent(event: MatrixEvent): () => string | null {
     });
 }
 
+const onPinnedOrUnpinnedMessageClick = (messageId: string, roomId: string): void => {
+    defaultDispatcher.dispatch({
+        action: 'view_room',
+        event_id: messageId,
+        highlighted: true,
+        room_id: roomId,
+    });
+};
+
 const onPinnedMessagesClick = (): void => {
     defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
         action: Action.SetRightPanelPhase,
@@ -419,6 +428,41 @@ const onPinnedMessagesClick = (): void => {
 function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string | JSX.Element | null {
     if (!SettingsStore.getValue("feature_pinning")) return null;
     const senderName = event.sender ? event.sender.name : event.getSender();
+
+    const pinned = event.getContent().pinned ?? [];
+    const previouslyPinned = event.getPrevContent().pinned ?? [];
+    const newlyPinned = pinned.filter(item => previouslyPinned.indexOf(item) < 0);
+
+    if (newlyPinned.length === 1) {
+        // A single message was pinned, include a link to that message.
+        if (allowJSX) {
+            const messageId = newlyPinned.pop();
+            const roomId = event.getRoomId();
+
+            return () => (
+                <span>
+                    {
+                        _t(
+                            "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.",
+                            { senderName },
+                            {
+                                "a": (sub) =>
+                                    <a onClick={(e) => onPinnedOrUnpinnedMessageClick(messageId, roomId)}>
+                                        { sub }
+                                    </a>,
+                                "b": (sub) =>
+                                    <a onClick={onPinnedMessagesClick}>
+                                        { sub }
+                                    </a>,
+                            },
+                        )
+                    }
+                </span>
+            );
+        }
+
+        return () => _t("%(senderName)s pinned a message to this room. See all pinned messages.", { senderName });
+    }
 
     if (allowJSX) {
         return () => (
