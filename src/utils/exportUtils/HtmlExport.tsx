@@ -31,7 +31,7 @@ import EventTile, { haveTileForEvent } from "../../components/views/rooms/EventT
 import DateSeparator from "../../components/views/messages/DateSeparator";
 import BaseAvatar from "../../components/views/avatars/BaseAvatar";
 import exportCSS from "./exportCSS";
-import exportJS from "./exportJS";
+import exportJS from "!!raw-loader!./exportJS";
 import exportIcons from "./exportIcons";
 import { ExportTypes } from "./exportUtils";
 import { IExportOptions } from "./exportUtils";

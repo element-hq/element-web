@@ -167,6 +167,7 @@
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.3",
     "matrix-web-i18n": "github:matrix-org/matrix-web-i18n",
+    "raw-loader": "^4.0.2",
     "react-test-renderer": "^17.0.2",
     "rimraf": "^3.0.2",
     "stylelint": "^13.9.0",
