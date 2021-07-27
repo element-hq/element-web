@@ -17,6 +17,7 @@ limitations under the License.
 import { EventEmitter } from "events";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import "./SpaceStore-setup"; // enable space lab
 import "../skinned-sdk"; // Must be first for skinning to work
@@ -53,18 +54,22 @@ const emitPromise = (e: EventEmitter, k: string | symbol) => new Promise(r => e.
 const testUserId = "@test:user";
 
 const getUserIdForRoomId = jest.fn();
+const getDMRoomsForUserId = jest.fn();
 // @ts-ignore
-DMRoomMap.sharedInstance = { getUserIdForRoomId };
+DMRoomMap.sharedInstance = { getUserIdForRoomId, getDMRoomsForUserId };
 
 const fav1 = "!fav1:server";
 const fav2 = "!fav2:server";
 const fav3 = "!fav3:server";
 const dm1 = "!dm1:server";
-const dm1Partner = "@dm1Partner:server";
+const dm1Partner = new RoomMember(dm1, "@dm1Partner:server");
+dm1Partner.membership = "join";
 const dm2 = "!dm2:server";
-const dm2Partner = "@dm2Partner:server";
+const dm2Partner = new RoomMember(dm2, "@dm2Partner:server");
+dm2Partner.membership = "join";
 const dm3 = "!dm3:server";
-const dm3Partner = "@dm3Partner:server";
+const dm3Partner = new RoomMember(dm3, "@dm3Partner:server");
+dm3Partner.membership = "join";
 const orphan1 = "!orphan1:server";
 const orphan2 = "!orphan2:server";
 const invite1 = "!invite1:server";
@@ -320,11 +325,40 @@ describe("SpaceStore", () => {
 
                 getUserIdForRoomId.mockImplementation(roomId => {
                     return {
-                        [dm1]: dm1Partner,
-                        [dm2]: dm2Partner,
-                        [dm3]: dm3Partner,
+                        [dm1]: dm1Partner.userId,
+                        [dm2]: dm2Partner.userId,
+                        [dm3]: dm3Partner.userId,
                     }[roomId];
                 });
+                getDMRoomsForUserId.mockImplementation(userId => {
+                    switch (userId) {
+                        case dm1Partner.userId:
+                            return [dm1];
+                        case dm2Partner.userId:
+                            return [dm2];
+                        case dm3Partner.userId:
+                            return [dm3];
+                        default:
+                            return [];
+                    }
+                });
+
+                // have dmPartner1 be in space1 with you
+                const mySpace1Member = new RoomMember(space1, testUserId);
+                mySpace1Member.membership = "join";
+                (rooms.find(r => r.roomId === space1).getMembers as jest.Mock).mockReturnValue([
+                    mySpace1Member,
+                    dm1Partner,
+                ]);
+                // have dmPartner2 be in space2 with you
+                const mySpace2Member = new RoomMember(space2, testUserId);
+                mySpace2Member.membership = "join";
+                (rooms.find(r => r.roomId === space2).getMembers as jest.Mock).mockReturnValue([
+                    mySpace2Member,
+                    dm2Partner,
+                ]);
+                // dmPartner3 is not in any common spaces with you
+
                 await run();
             });
 
@@ -374,6 +408,66 @@ describe("SpaceStore", () => {
             it("space contains child invites", () => {
                 const space = client.getRoom(space3);
                 expect(store.getSpaceFilteredRoomIds(space).has(invite2)).toBeTruthy();
+            });
+
+            it("spaces contain dms which you have with members of that space", () => {
+                expect(store.getSpaceFilteredRoomIds(client.getRoom(space1)).has(dm1)).toBeTruthy();
+                expect(store.getSpaceFilteredRoomIds(client.getRoom(space2)).has(dm1)).toBeFalsy();
+                expect(store.getSpaceFilteredRoomIds(client.getRoom(space3)).has(dm1)).toBeFalsy();
+                expect(store.getSpaceFilteredRoomIds(client.getRoom(space1)).has(dm2)).toBeFalsy();
+                expect(store.getSpaceFilteredRoomIds(client.getRoom(space2)).has(dm2)).toBeTruthy();
+                expect(store.getSpaceFilteredRoomIds(client.getRoom(space3)).has(dm2)).toBeFalsy();
+                expect(store.getSpaceFilteredRoomIds(client.getRoom(space1)).has(dm3)).toBeFalsy();
+                expect(store.getSpaceFilteredRoomIds(client.getRoom(space2)).has(dm3)).toBeFalsy();
+                expect(store.getSpaceFilteredRoomIds(client.getRoom(space3)).has(dm3)).toBeFalsy();
+            });
+
+            it("dms are only added to Notification States for only the Home Space", () => {
+                // XXX: All rooms space is forcibly enabled, as part of a future PR test Home space better
+                // [dm1, dm2, dm3].forEach(d => {
+                //     expect(store.getNotificationState(HOME_SPACE).rooms.map(r => r.roomId).includes(d)).toBeTruthy();
+                // });
+                [space1, space2, space3].forEach(s => {
+                    [dm1, dm2, dm3].forEach(d => {
+                        expect(store.getNotificationState(s).rooms.map(r => r.roomId).includes(d)).toBeFalsy();
+                    });
+                });
+            });
+
+            it("orphan rooms are added to Notification States for only the Home Space", () => {
+                // XXX: All rooms space is forcibly enabled, as part of a future PR test Home space better
+                // [orphan1, orphan2].forEach(d => {
+                //     expect(store.getNotificationState(HOME_SPACE).rooms.map(r => r.roomId).includes(d)).toBeTruthy();
+                // });
+                [space1, space2, space3].forEach(s => {
+                    [orphan1, orphan2].forEach(d => {
+                        expect(store.getNotificationState(s).rooms.map(r => r.roomId).includes(d)).toBeFalsy();
+                    });
+                });
+            });
+
+            it("favourites are added to Notification States for all spaces containing the room inc Home", () => {
+                // XXX: All rooms space is forcibly enabled, as part of a future PR test Home space better
+                // [fav1, fav2, fav3].forEach(d => {
+                //     expect(store.getNotificationState(HOME_SPACE).rooms.map(r => r.roomId).includes(d)).toBeTruthy();
+                // });
+                expect(store.getNotificationState(space1).rooms.map(r => r.roomId).includes(fav1)).toBeTruthy();
+                expect(store.getNotificationState(space1).rooms.map(r => r.roomId).includes(fav2)).toBeFalsy();
+                expect(store.getNotificationState(space1).rooms.map(r => r.roomId).includes(fav3)).toBeFalsy();
+                expect(store.getNotificationState(space2).rooms.map(r => r.roomId).includes(fav1)).toBeTruthy();
+                expect(store.getNotificationState(space2).rooms.map(r => r.roomId).includes(fav2)).toBeTruthy();
+                expect(store.getNotificationState(space2).rooms.map(r => r.roomId).includes(fav3)).toBeTruthy();
+                expect(store.getNotificationState(space3).rooms.map(r => r.roomId).includes(fav1)).toBeFalsy();
+                expect(store.getNotificationState(space3).rooms.map(r => r.roomId).includes(fav2)).toBeFalsy();
+                expect(store.getNotificationState(space3).rooms.map(r => r.roomId).includes(fav3)).toBeFalsy();
+            });
+
+            it("other rooms are added to Notification States for all spaces containing the room exc Home", () => {
+                // XXX: All rooms space is forcibly enabled, as part of a future PR test Home space better
+                // expect(store.getNotificationState(HOME_SPACE).rooms.map(r => r.roomId).includes(room1)).toBeFalsy();
+                expect(store.getNotificationState(space1).rooms.map(r => r.roomId).includes(room1)).toBeTruthy();
+                expect(store.getNotificationState(space2).rooms.map(r => r.roomId).includes(room1)).toBeTruthy();
+                expect(store.getNotificationState(space3).rooms.map(r => r.roomId).includes(room1)).toBeFalsy();
             });
         });
     });

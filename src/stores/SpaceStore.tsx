@@ -72,8 +72,6 @@ const MAX_SUGGESTED_ROOMS = 20;
 // All of these settings cause the page to reload and can be costly if read frequently, so read them here only
 const spacesEnabled = SettingsStore.getValue("feature_spaces");
 const spacesTweakAllRoomsEnabled = SettingsStore.getValue("feature_spaces.all_rooms");
-const spacesTweakSpaceMemberDMsEnabled = SettingsStore.getValue("feature_spaces.space_member_dms");
-const spacesTweakSpaceDMBadgesEnabled = SettingsStore.getValue("feature_spaces.space_dm_badges");
 
 const homeSpaceKey = spacesTweakAllRoomsEnabled ? "ALL_ROOMS" : "HOME_SPACE";
 const getSpaceContextKey = (space?: Room) => `mx_space_context_${space?.roomId || homeSpaceKey}`;
@@ -535,15 +533,13 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 const roomIds = new Set(childRooms.map(r => r.roomId));
                 const space = this.matrixClient?.getRoom(spaceId);
 
-                if (spacesTweakSpaceMemberDMsEnabled) {
-                    // Add relevant DMs
-                    space?.getMembers().forEach(member => {
-                        if (member.membership !== "join" && member.membership !== "invite") return;
-                        DMRoomMap.shared().getDMRoomsForUserId(member.userId).forEach(roomId => {
-                            roomIds.add(roomId);
-                        });
+                // Add relevant DMs
+                space?.getMembers().forEach(member => {
+                    if (member.membership !== "join" && member.membership !== "invite") return;
+                    DMRoomMap.shared().getDMRoomsForUserId(member.userId).forEach(roomId => {
+                        roomIds.add(roomId);
                     });
-                }
+                });
 
                 const newPath = new Set(parentPath).add(spaceId);
                 childSpaces.forEach(childSpace => {
@@ -568,14 +564,13 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         this.spaceFilteredRooms.forEach((roomIds, s) => {
             // Update NotificationStates
             this.getNotificationState(s)?.setRooms(visibleRooms.filter(room => {
-                if (roomIds.has(room.roomId)) {
-                    if (s !== HOME_SPACE && spacesTweakSpaceDMBadgesEnabled) return true;
+                if (!roomIds.has(room.roomId)) return false;
 
-                    return !DMRoomMap.shared().getUserIdForRoomId(room.roomId)
-                        || RoomListStore.instance.getTagsForRoom(room).includes(DefaultTagID.Favourite);
+                if (DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
+                    return s === HOME_SPACE;
                 }
 
-                return false;
+                return true;
             }));
         });
     }, 100, { trailing: true, leading: true });
@@ -878,8 +873,6 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 export default class SpaceStore {
     public static spacesEnabled = spacesEnabled;
     public static spacesTweakAllRoomsEnabled = spacesTweakAllRoomsEnabled;
-    public static spacesTweakSpaceMemberDMsEnabled = spacesTweakSpaceMemberDMsEnabled;
-    public static spacesTweakSpaceDMBadgesEnabled = spacesTweakSpaceDMBadgesEnabled;
 
     private static internalInstance = new SpaceStoreClass();
 
