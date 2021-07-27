@@ -3454,5 +3454,12 @@
     "Decide who can join %(roomName)s.": "Kies wie kan deelnemen aan %(roomName)s.",
     "Space members": "Space leden",
     "Anyone in a space can find and join. You can select multiple spaces.": "Iedereen in een space kan zoeken en deelnemen. U kunt meerdere spaces selecteren.",
-    "Anyone in %(spaceName)s can find and join. You can select other spaces too.": "Iedereen in %(spaceName)s kan zoeken en deelnemen. U kunt ook andere spaces selecteren."
+    "Anyone in %(spaceName)s can find and join. You can select other spaces too.": "Iedereen in %(spaceName)s kan zoeken en deelnemen. U kunt ook andere spaces selecteren.",
+    "Visible to space members": "Zichtbaar voor space leden",
+    "Public room": "Openbaar gesprek",
+    "Private room (invite only)": "Privégesprek (alleen op uitnodiging)",
+    "Create a room": "Gesprek aanmaken",
+    "Only people invited will be able to find and join this room.": "Alleen uitgenodigde personen kunnen dit gesprek vinden en aan deelnemen.",
+    "Anyone will be able to find and join this room, not just members of <SpaceName/>.": "Iedereen kan dit gesprek vinden en aan deelnemen, niet alleen leden van <SpaceName/>.",
+    "You can change this at any time from room settings.": "U kan dit op elk moment wijzigen vanuit de gespreksinstellingen."
 }
