@@ -3498,5 +3498,9 @@
     "New in the Spaces beta": "Nové v betaverzi Spaces",
     "User %(userId)s is already invited to the room": "Uživatel %(userId)s je již pozván do místnosti",
     "Transfer Failed": "Přepojení se nezdařilo",
-    "Unable to transfer call": "Nelze přepojit hovor"
+    "Unable to transfer call": "Nelze přepojit hovor",
+    "They didn't pick up": "Nezvedli to",
+    "Call again": "Volat znova",
+    "They declined this call": "Odmítli tento hovor",
+    "You declined this call": "Odmítli jste tento hovor"
 }
