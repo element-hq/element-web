@@ -170,7 +170,7 @@ export class PosthogAnalytics {
                 //
                 // To raise this manually, just call .capture("$pageview") or posthog.capture_pageview.
                 capture_pageview: false,
-                sanitize_properties: this.sanitizeProperties.bind(this),
+                sanitize_properties: this.sanitizeProperties,
                 respect_dnt: true,
             });
             this.enabled = true;
@@ -179,7 +179,7 @@ export class PosthogAnalytics {
         }
     }
 
-    private sanitizeProperties(properties: posthog.Properties): posthog.Properties {
+    private sanitizeProperties = (properties: posthog.Properties): posthog.Properties => {
         // Callback from posthog to sanitize properties before sending them to the server.
         //
         // Here we sanitize posthog's built in properties which leak PII e.g. url reporting.
@@ -206,7 +206,7 @@ export class PosthogAnalytics {
         }
 
         return properties;
-    }
+    };
 
     private static getAnonymityFromSettings(): Anonymity {
         // determine the current anonymity level based on curernt user settings
