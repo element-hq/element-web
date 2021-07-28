@@ -1,7 +1,6 @@
 import { Anonymity, getRedactedCurrentLocation, IAnonymousEvent, IPseudonymousEvent, IRoomEvent,
     PosthogAnalytics } from '../src/PosthogAnalytics';
 import SdkConfig from '../src/SdkConfig';
-import crypto from 'crypto';
 
 class FakePosthog {
     public capture;
@@ -42,12 +41,37 @@ export interface ITestRoomEvent extends IRoomEvent {
 
 describe("PosthogAnalytics", () => {
     let fakePosthog: FakePosthog;
+    const shaHashes = {
+        "42": "73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+        "some": "a6b46dd0d1ae5e86cbc8f37e75ceeb6760230c1ca4ffbcb0c97b96dd7d9c464b",
+        "pii": "bd75b3e080945674c0351f75e0db33d1e90986fa07b318ea7edf776f5eef38d4",
+        "foo": "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
+    };
 
     beforeEach(() => {
         fakePosthog = new FakePosthog();
 
         window.crypto = {
-            subtle: crypto.webcrypto.subtle,
+            subtle: {
+                digest: async (_, encodedMessage) => {
+                    const message = new TextDecoder().decode(encodedMessage);
+                    const hexHash = shaHashes[message];
+                    const bytes = [];
+                    for (let c = 0; c < hexHash.length; c += 2) {
+                        bytes.push(parseInt(hexHash.substr(c, 2), 16));
+                    }
+                    return bytes;
+                },
+                /*console.log(message);
+                    const digest = sha256(new WordArray(message));
+                    const digestBuf = new ArrayBuffer(digest.words.length * 4);
+                    console.log(digest);
+                    const view = new Uint32Array(digestBuf);
+                    for (let i = 0; i < digest.words.length; i++) {
+                        view[i] = digest.words[i];
+                    }
+                    return digestBuf*/
+            },
         };
     });
 
@@ -135,7 +159,7 @@ describe("PosthogAnalytics", () => {
             await analytics.trackAnonymousEvent<ITestEvent>("jest_test_event", {
                 foo: "bar",
             });
-            await analytics.trackRoomEvent<ITestRoomEvent>("room id", "jest_test_room_event", {
+            await analytics.trackRoomEvent<ITestRoomEvent>("room id", "foo", {
                 foo: "bar",
             });
             await analytics.trackPageView(200);
