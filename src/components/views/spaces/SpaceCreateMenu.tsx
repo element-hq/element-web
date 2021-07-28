@@ -66,33 +66,30 @@ const nameToAlias = (name: string, domain: string): string => {
 };
 
 // XXX: Temporary for the Spaces release only
-const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
+export const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
     if (!SdkConfig.get().bug_report_endpoint_url) return null;
 
     return <div className="mx_SpaceFeedbackPrompt">
-        <hr />
-        <div>
-            <span className="mx_SpaceFeedbackPrompt_text">{ _t("Spaces are a new feature.") }</span>
-            <AccessibleButton
-                kind="link"
-                onClick={() => {
-                    if (onClick) onClick();
-                    Modal.createTrackedDialog("Spaces Feedback", "", GenericFeatureFeedbackDialog, {
-                        title: _t("Spaces feedback"),
-                        subheading: _t("Thank you for trying Spaces. " +
-                            "Your feedback will help inform the next versions."),
-                        rageshakeLabel: "spaces-feedback",
-                        rageshakeData: Object.fromEntries([
-                            "feature_spaces.all_rooms",
-                            "feature_spaces.space_member_dms",
-                            "feature_spaces.space_dm_badges",
-                        ].map(k => [k, SettingsStore.getValue(k)])),
-                    });
-                }}
-            >
-                { _t("Give feedback.") }
-            </AccessibleButton>
-        </div>
+        <span className="mx_SpaceFeedbackPrompt_text">{ _t("Spaces are a new feature.") }</span>
+        <AccessibleButton
+            kind="link"
+            onClick={() => {
+                if (onClick) onClick();
+                Modal.createTrackedDialog("Spaces Feedback", "", GenericFeatureFeedbackDialog, {
+                    title: _t("Spaces feedback"),
+                    subheading: _t("Thank you for trying Spaces. " +
+                        "Your feedback will help inform the next versions."),
+                    rageshakeLabel: "spaces-feedback",
+                    rageshakeData: Object.fromEntries([
+                        "feature_spaces.all_rooms",
+                        "feature_spaces.space_member_dms",
+                        "feature_spaces.space_dm_badges",
+                    ].map(k => [k, SettingsStore.getValue(k)])),
+                });
+            }}
+        >
+            { _t("Give feedback.") }
+        </AccessibleButton>
     </div>;
 };
 

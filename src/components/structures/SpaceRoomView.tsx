@@ -62,9 +62,8 @@ import IconizedContextMenu, {
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { BetaPill } from "../views/beta/BetaCard";
 import { UserTab } from "../views/dialogs/UserSettingsDialog";
-import Modal from "../../Modal";
-import BetaFeedbackDialog from "../views/dialogs/BetaFeedbackDialog";
 import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
+import { SpaceFeedbackPrompt } from "../views/spaces/SpaceCreateMenu";
 
 interface IProps {
     space: Room;
@@ -393,19 +392,7 @@ const SpaceLanding = ({ space }) => {
     };
 
     return <div className="mx_SpaceRoomView_landing">
-        <div className="mx_SpaceFeedbackPrompt_topRight">
-            { _t("Spaces are a new feature.") }&nbsp;
-            <AccessibleButton
-                kind="link"
-                onClick={() => {
-                    Modal.createTrackedDialog("Beta Feedback", "feature_spaces", BetaFeedbackDialog, {
-                        featureId: "feature_spaces",
-                    });
-                }}
-            >
-                { _t("Give feedback.") }
-            </AccessibleButton>
-        </div>
+        <SpaceFeedbackPrompt />
         <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
         <div className="mx_SpaceRoomView_landing_name">
             <RoomName room={space}>
