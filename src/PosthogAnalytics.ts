@@ -100,7 +100,7 @@ export async function getRedactedCurrentLocation(origin: string, hash: string, p
     if (hash == "") {
         hashStr = "";
     } else {
-        let [_, screen, ...parts] = hash.split("/");
+        let [beforeFirstSlash, screen, ...parts] = hash.split("/");
 
         if (!whitelistedScreens.has(screen)) {
             screen = "<redacted_screen_name>";
@@ -110,7 +110,7 @@ export async function getRedactedCurrentLocation(origin: string, hash: string, p
             parts[i] = anonymity === Anonymity.Anonymous ? `<redacted>` : await hashHex(parts[i]);
         }
 
-        hashStr = `${_}/${screen}/${parts.join("/")}`;
+        hashStr = `${beforeFirstSlash}/${screen}/${parts.join("/")}`;
     }
     return origin + pathname + hashStr;
 }
