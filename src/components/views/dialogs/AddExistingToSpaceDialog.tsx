@@ -249,7 +249,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     let noResults = true;
     if ((roomsRenderer && rooms.length > 0) ||
         (dmsRenderer && dms.length > 0) ||
-        (!roomsRenderer && !dmsRenderer && spacesRenderer && dms.length > 0) // only count spaces when alone
+        (!roomsRenderer && !dmsRenderer && spacesRenderer && spaces.length > 0) // only count spaces when alone
     ) {
         noResults = false;
     }

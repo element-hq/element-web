@@ -56,7 +56,6 @@ import {
 } from "../../utils/space";
 import { showRoom, SpaceHierarchy } from "./SpaceRoomDirectory";
 import MemberAvatar from "../views/avatars/MemberAvatar";
-import { useStateToggle } from "../../hooks/useStateToggle";
 import SpaceStore from "../../stores/SpaceStore";
 import FacePile from "../views/elements/FacePile";
 import {
@@ -318,7 +317,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
     </div>;
 };
 
-const SpaceLandingAddButton = ({ space, onNewRoomAdded }) => {
+const SpaceLandingAddButton = ({ space }) => {
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
 
     let contextMenu;
@@ -342,36 +341,28 @@ const SpaceLandingAddButton = ({ space, onNewRoomAdded }) => {
                         closeMenu();
 
                         if (await showCreateNewRoom(space)) {
-                            onNewRoomAdded();
+                            defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
                         }
                     }}
                 />
                 <IconizedContextMenuOption
                     label={_t("Add existing room")}
                     iconClassName="mx_RoomList_iconHash"
-                    onClick={async (e) => {
+                    onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         closeMenu();
-
-                        const [added] = await showAddExistingRooms(space);
-                        if (added) {
-                            onNewRoomAdded();
-                        }
+                        showAddExistingRooms(space);
                     }}
                 />
                 <IconizedContextMenuOption
                     label={_t("Add subspace")}
                     iconClassName="mx_RoomList_iconPlus"
-                    onClick={async (e) => {
+                    onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         closeMenu();
-
-                        const [added] = await showCreateNewSubspace(space);
-                        if (added) {
-                            onNewRoomAdded();
-                        }
+                        showCreateNewSubspace(space);
                     }}
                 >
                     <BetaPill />
@@ -416,11 +407,9 @@ const SpaceLanding = ({ space }) => {
 
     const canAddRooms = myMembership === "join" && space.currentState.maySendStateEvent(EventType.SpaceChild, userId);
 
-    const [refreshToken, forceUpdate] = useStateToggle(false);
-
     let addRoomButton;
     if (canAddRooms) {
-        addRoomButton = <SpaceLandingAddButton space={space} onNewRoomAdded={forceUpdate} />;
+        addRoomButton = <SpaceLandingAddButton space={space} />;
     }
 
     let settingsButton;
@@ -470,12 +459,7 @@ const SpaceLanding = ({ space }) => {
         <SpaceFeedbackPrompt />
         <hr />
 
-        <SpaceHierarchy
-            space={space}
-            showRoom={showRoom}
-            refreshToken={refreshToken}
-            additionalButtons={addRoomButton}
-        />
+        <SpaceHierarchy space={space} showRoom={showRoom} additionalButtons={addRoomButton} />
     </div>;
 };
 
