@@ -3540,5 +3540,9 @@
     "IRC": "IRC",
     "New layout switcher (with message bubbles)": "Nova disposición do control (con burbullas con mensaxes)",
     "Image": "Imaxe",
-    "Sticker": "Adhesivo"
+    "Sticker": "Adhesivo",
+    "To help space members find and join a private room, go to that room's Security & Privacy settings.": "Axudarlle aos membros do espazo a que atopen e se unan a salas privadas, vaite aos axustes de Seguridade e Privacidade desa sala.",
+    "Help space members find private rooms": "Axudarlle aos membros do espazo a que atopen salas privadas",
+    "Help people in spaces to find and join private rooms": "Axudarlle ás persoas en espazos que atopen e se unan a salas privadas",
+    "New in the Spaces beta": "Novo na beta de Espazos"
 }
