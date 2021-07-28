@@ -172,7 +172,7 @@ bd75b3e080945674c0351f75e0db33d1e90986fa07b318ea7edf776f5eef38d4`);
             expect(location).toBe("https://foo.bar/#/<redacted_screen_name>/<redacted>/<redacted>");
         });
 
-        it("Should currently handle an empty hash", async () => {
+        it("Should handle an empty hash", async () => {
             const location = await getRedactedCurrentLocation(
                 "https://foo.bar", "", "/", Anonymity.Anonymous);
             expect(location).toBe("https://foo.bar/");

@@ -20,11 +20,12 @@ export enum Anonymity {
 
 // If an event extends IPseudonymousEvent, the event contains pseudonymous data
 // that won't be sent unless the user has explicitly consented to pseudonymous tracking.
-// For example, hashed user IDs or room IDs.
+// For example, it might contain hashed user IDs or room IDs.
+// Such events will be automatically dropped if PosthogAnalytics.anonymity isn't set to Pseudonymous.
 export interface IPseudonymousEvent extends IEvent {}
 
-// If an event extends IAnonymousEvent, the event strictly contains *only* anonymous data which
-// may be sent without explicit user consent.
+// If an event extends IAnonymousEvent, the event strictly contains *only* anonymous data;
+// i.e. no identifiers that can be associated with the user.
 export interface IAnonymousEvent extends IEvent {}
 
 export interface IRoomEvent extends IPseudonymousEvent {
@@ -83,6 +84,23 @@ export async function getRedactedCurrentLocation(origin: string, hash: string, p
 }
 
 export class PosthogAnalytics {
+    /* Wrapper for Posthog analytics.
+     *
+     * 3 modes of anonymity are supported, governed by this.anonymity
+     * - Anonymity.Disabled means *no data* is passed to posthog
+     * - Anonymity.Anonymous means all identifers will be redacted before being passed to posthog
+     * - Anonymity.Pseudonymous means all identifiers will be hashed via SHA-256 before being passed
+     *   to Posthog
+     *
+     * To update anonymity, call updateAnonymityFromSettings() or you can set it directly via setAnonymity().
+     *
+     * To pass an event to Posthog:
+     *
+     * 1. Declare a type for the event, extending IAnonymousEvent, IPseudonymousEvent or IRoomEvent.
+     * 2. Call the appropriate track*() method. Pseudonymous events will be dropped when anonymity is
+     *    Anonymous or Disabled; Anonymous events will be dropped when anonymity is Disabled.
+     */
+
     private anonymity = Anonymity.Anonymous;
     private posthog?: PostHog = null;
     // set true during the constructor if posthog config is present, otherwise false
@@ -156,9 +174,9 @@ export class PosthogAnalytics {
         // "Send anonymous usage data which helps us improve Element. This will use a cookie."
         const analyticsOptIn = SettingsStore.getValue("analyticsOptIn");
 
-        // "Send pseudonymous usage data which helps us improve Element. This will use a cookie."
+        // (proposed wording) "Send pseudonymous usage data which helps us improve Element. This will use a cookie."
         //
-        // Currently, this is only a labs flag, for testing purposes.
+        // TODO: Currently, this is only a labs flag, for testing purposes.
         const pseudonumousOptIn = SettingsStore.getValue("feature_pseudonymousAnalyticsOptIn");
 
         let anonymity;
@@ -173,16 +191,36 @@ export class PosthogAnalytics {
         return anonymity;
     }
 
-    public async identifyUser(userId: string) {
-        if (this.anonymity == Anonymity.Pseudonymous) {
-            this.posthog.identify(await hashHex(userId));
-        }
-    }
-
     private registerSuperProperties(properties) {
         if (this.enabled) {
             this.posthog.register(properties);
         }
+    }
+
+    private static async getPlatformProperties() {
+        const platform = PlatformPeg.get();
+        let appVersion;
+        try {
+            appVersion = await platform.getAppVersion();
+        } catch (e) {
+            // this happens if no version is set i.e. in dev
+            appVersion = "unknown";
+        }
+
+        return {
+            appVersion,
+            appPlatform: platform.getHumanReadableName(),
+        };
+    }
+
+    private async capture(eventName: string, properties: posthog.Properties) {
+        if (!this.enabled) {
+            return;
+        }
+        const { origin, hash, pathname } = window.location;
+        properties['$redacted_current_url'] = await getRedactedCurrentLocation(
+            origin, hash, pathname, this.anonymity);
+        this.posthog.capture(eventName, properties);
     }
 
     public isEnabled() {
@@ -190,6 +228,9 @@ export class PosthogAnalytics {
     }
 
     public setAnonymity(anonymity: Anonymity) {
+        // Update this.anonymity.
+        // This is public for testing purposes, typically you want to call updateAnonymityFromSettings
+        // to ensure this value is in step with the user's settings.
         if (this.enabled && (anonymity == Anonymity.Disabled || anonymity == Anonymity.Anonymous)) {
             // when transitioning to Disabled or Anonymous ensure we clear out any prior state
             // set in posthog e.g. distinct ID
@@ -198,6 +239,12 @@ export class PosthogAnalytics {
             this.registerSuperProperties(this.platformSuperProperties);
         }
         this.anonymity = anonymity;
+    }
+
+    public async identifyUser(userId: string) {
+        if (this.anonymity == Anonymity.Pseudonymous) {
+            this.posthog.identify(await hashHex(userId));
+        }
     }
 
     public getAnonymity() {
@@ -209,16 +256,6 @@ export class PosthogAnalytics {
             this.posthog.reset();
         }
         this.setAnonymity(Anonymity.Anonymous);
-    }
-
-    private async capture(eventName: string, properties: posthog.Properties) {
-        if (!this.enabled) {
-            return;
-        }
-        const { origin, hash, pathname } = window.location;
-        properties['$redacted_current_url'] = await getRedactedCurrentLocation(
-            origin, hash, pathname, this.anonymity);
-        this.posthog.capture(eventName, properties);
     }
 
     public async trackPseudonymousEvent<E extends IPseudonymousEvent>(
@@ -256,27 +293,18 @@ export class PosthogAnalytics {
     }
 
     public async updatePlatformSuperProperties() {
+        // Update super properties in posthog with our platform (app version, platform).
+        // These properties will be subsequently passed in every event.
+        //
+        // This only needs to be done once per page lifetime. Note that getPlatformProperties
+        // is async and can involve a network request if we are running in a browser.
         this.platformSuperProperties = await PosthogAnalytics.getPlatformProperties();
         this.registerSuperProperties(this.platformSuperProperties);
     }
 
-    private static async getPlatformProperties() {
-        const platform = PlatformPeg.get();
-        let appVersion;
-        try {
-            appVersion = await platform.getAppVersion();
-        } catch (e) {
-            // this happens if no version is set i.e. in dev
-            appVersion = "unknown";
-        }
-
-        return {
-            appVersion,
-            appPlatform: platform.getHumanReadableName(),
-        };
-    }
-
     public async updateAnonymityFromSettings(userId?: string) {
+        // Update this.anonymity based on the user's analytics opt-in settings
+        // Identify the user (via hashed user ID) to posthog if anonymity is pseudonmyous
         this.setAnonymity(PosthogAnalytics.getAnonymityFromSettings());
         if (userId && this.getAnonymity() == Anonymity.Pseudonymous) {
             await this.identifyUser(userId);
