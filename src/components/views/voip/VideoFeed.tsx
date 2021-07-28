@@ -46,6 +46,7 @@ interface IState {
     videoMuted: boolean;
 }
 
+// TODO: We shouldn't be calling playMedia() all the time
 @replaceableComponent("views.voip.VideoFeed")
 export default class VideoFeed extends React.PureComponent<IProps, IState> {
     private element: HTMLVideoElement;
