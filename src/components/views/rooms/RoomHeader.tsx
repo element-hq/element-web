@@ -29,6 +29,8 @@ import RoomTopic from "../elements/RoomTopic";
 import RoomName from "../elements/RoomName";
 import { PlaceCallType } from "../../../CallHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import Modal from '../../../Modal';
+import InfoDialog from "../dialogs/InfoDialog";
 import { throttle } from 'lodash';
 import { MatrixEvent, Room, RoomState } from 'matrix-js-sdk/src';
 import { E2EStatus } from '../../../utils/ShieldUtils';
@@ -87,6 +89,14 @@ export default class RoomHeader extends React.Component<IProps> {
         this.forceUpdate();
     }, 500, { leading: true, trailing: true });
 
+    private displayInfoDialogAboutScreensharing() {
+        Modal.createDialog(InfoDialog, {
+            title: _t("Screen sharing is here!"),
+            description: _t("You can now share your screen by pressing the \"screen share\" " +
+            "button during a call. You can even do this in audio calls if both sides support it!"),
+        });
+    }
+
     public render() {
         let searchStatus = null;
 
@@ -121,18 +131,18 @@ export default class RoomHeader extends React.Component<IProps> {
         const name =
             <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
                 <RoomName room={this.props.room}>
-                    {(name) => {
+                    { (name) => {
                         const roomName = name || oobName;
                         return <div dir="auto" className={textClasses} title={roomName}>{ roomName }</div>;
-                    }}
+                    } }
                 </RoomName>
                 { searchStatus }
             </div>;
 
         const topicElement = <RoomTopic room={this.props.room}>
-            {(topic, ref) => <div className="mx_RoomHeader_topic" ref={ref} title={topic} dir="auto">
+            { (topic, ref) => <div className="mx_RoomHeader_topic" ref={ref} title={topic} dir="auto">
                 { topic }
-            </div>}
+            </div> }
         </RoomTopic>;
 
         let roomAvatar;
@@ -185,8 +195,8 @@ export default class RoomHeader extends React.Component<IProps> {
             videoCallButton =
                 <AccessibleTooltipButton
                     className="mx_RoomHeader_button mx_RoomHeader_videoCallButton"
-                    onClick={(ev) => this.props.onCallPlaced(
-                        ev.shiftKey ? PlaceCallType.ScreenSharing : PlaceCallType.Video)}
+                    onClick={(ev) => ev.shiftKey ?
+                        this.displayInfoDialogAboutScreensharing() : this.props.onCallPlaced(PlaceCallType.Video)}
                     title={_t("Video call")} />;
         }
 

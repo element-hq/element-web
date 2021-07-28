@@ -22,6 +22,7 @@ import MemberAvatar from '../avatars/MemberAvatar';
 import { _t } from '../../../languageHandler';
 import { useStateToggle } from "../../../hooks/useStateToggle";
 import AccessibleButton from "./AccessibleButton";
+import { Layout } from '../../../settings/Layout';
 
 interface IProps {
     // An array of member events to summarise
@@ -38,6 +39,8 @@ interface IProps {
     children: ReactNode[];
     // Called when the event list expansion is toggled
     onToggle?(): void;
+    // The layout currently used
+    layout?: Layout;
 }
 
 const EventListSummary: React.FC<IProps> = ({
@@ -48,6 +51,7 @@ const EventListSummary: React.FC<IProps> = ({
     startExpanded,
     summaryMembers = [],
     summaryText,
+    layout,
 }) => {
     const [expanded, toggleExpanded] = useStateToggle(startExpanded);
 
@@ -63,7 +67,7 @@ const EventListSummary: React.FC<IProps> = ({
     // If we are only given few events then just pass them through
     if (events.length < threshold) {
         return (
-            <li className="mx_EventListSummary" data-scroll-tokens={eventIds}>
+            <li className="mx_EventListSummary" data-scroll-tokens={eventIds} data-expanded={true} data-layout={layout}>
                 { children }
             </li>
         );
@@ -92,13 +96,18 @@ const EventListSummary: React.FC<IProps> = ({
     }
 
     return (
-        <li className="mx_EventListSummary" data-scroll-tokens={eventIds}>
+        <li className="mx_EventListSummary" data-scroll-tokens={eventIds} data-expanded={expanded + ""} data-layout={layout}>
             <AccessibleButton className="mx_EventListSummary_toggle" onClick={toggleExpanded} aria-expanded={expanded}>
                 { expanded ? _t('collapse') : _t('expand') }
             </AccessibleButton>
             { body }
         </li>
     );
+};
+
+EventListSummary.defaultProps = {
+    startExpanded: false,
+    layout: Layout.Group,
 };
 
 export default EventListSummary;

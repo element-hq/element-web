@@ -274,7 +274,7 @@ abstract class PillPart extends BasePart implements IPillPart {
     }
 
     // helper method for subclasses
-    _setAvatarVars(node: HTMLElement, avatarUrl: string, initialLetter: string) {
+    protected setAvatarVars(node: HTMLElement, avatarUrl: string, initialLetter: string) {
         const avatarBackground = `url('${avatarUrl}')`;
         const avatarLetter = `'${initialLetter}'`;
         // check if the value is changing,
@@ -354,7 +354,7 @@ class RoomPillPart extends PillPart {
             initialLetter = Avatar.getInitialLetter(this.room ? this.room.name : this.resourceId);
             avatarUrl = Avatar.defaultAvatarUrlForString(this.room ? this.room.roomId : this.resourceId);
         }
-        this._setAvatarVars(node, avatarUrl, initialLetter);
+        this.setAvatarVars(node, avatarUrl, initialLetter);
     }
 
     get type(): IPillPart["type"] {
@@ -399,7 +399,7 @@ class UserPillPart extends PillPart {
         if (avatarUrl === defaultAvatarUrl) {
             initialLetter = Avatar.getInitialLetter(name);
         }
-        this._setAvatarVars(node, avatarUrl, initialLetter);
+        this.setAvatarVars(node, avatarUrl, initialLetter);
     }
 
     get type(): IPillPart["type"] {

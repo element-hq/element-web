@@ -136,8 +136,8 @@ export default class SearchBox extends React.Component {
                 key="button"
                 tabIndex={-1}
                 className="mx_SearchBox_closeButton"
-                onClick={ () => {this._clearSearch("button"); } }>
-            </AccessibleButton>) : undefined;
+                onClick={() => {this._clearSearch("button"); }}
+            />) : undefined;
 
         // show a shorter placeholder when blurred, if requested
         // this is used for the room filter field that has
@@ -153,12 +153,12 @@ export default class SearchBox extends React.Component {
                     type="text"
                     ref={this._search}
                     className={"mx_textinput_icon mx_textinput_search " + className}
-                    value={ this.state.searchTerm }
-                    onFocus={ this._onFocus }
-                    onChange={ this.onChange }
-                    onKeyDown={ this._onKeyDown }
+                    value={this.state.searchTerm}
+                    onFocus={this._onFocus}
+                    onChange={this.onChange}
+                    onKeyDown={this._onKeyDown}
                     onBlur={this._onBlur}
-                    placeholder={ placeholder }
+                    placeholder={placeholder}
                     autoComplete="off"
                     autoFocus={this.props.autoFocus}
                 />

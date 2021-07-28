@@ -148,7 +148,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
             yOffset={-48}
         >
             <WidgetAvatar app={app} />
-            <span>{name}</span>
+            <span>{ name }</span>
             { subtitle }
         </AccessibleTooltipButton>
 
@@ -256,7 +256,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
                 <h2 title={name}>
                     { name }
                 </h2>
-            )}
+            ) }
         </RoomName>
         <div className="mx_RoomSummaryCard_alias" title={alias}>
             { alias }
@@ -268,16 +268,16 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
     return <BaseCard header={header} className="mx_RoomSummaryCard" onClose={onClose}>
         <Group title={_t("About")} className="mx_RoomSummaryCard_aboutGroup">
             <Button className="mx_RoomSummaryCard_icon_people" onClick={onRoomMembersClick}>
-                {_t("%(count)s people", { count: memberCount })}
+                { _t("%(count)s people", { count: memberCount }) }
             </Button>
             <Button className="mx_RoomSummaryCard_icon_files" onClick={onRoomFilesClick}>
-                {_t("Show files")}
+                { _t("Show files") }
             </Button>
             <Button className="mx_RoomSummaryCard_icon_share" onClick={onShareRoomClick}>
-                {_t("Share room")}
+                { _t("Share room") }
             </Button>
             <Button className="mx_RoomSummaryCard_icon_settings" onClick={onRoomSettingsClick}>
-                {_t("Room settings")}
+                { _t("Room settings") }
             </Button>
         </Group>
 

@@ -57,8 +57,8 @@ export default class LabelledToggleSwitch extends React.PureComponent<IProps> {
         const classes = `mx_SettingsFlag ${this.props.className || ""}`;
         return (
             <div className={classes}>
-                {firstPart}
-                {secondPart}
+                { firstPart }
+                { secondPart }
             </div>
         );
     }

@@ -419,7 +419,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             >
                 <IconizedContextMenuOptionList first>
                     <IconizedContextMenuRadio
-                        label={_t("Global")}
+                        label={_t("Use default")}
                         active={state === ALL_MESSAGES}
                         iconClassName="mx_RoomTile_iconBell"
                         onClick={this.onClickAllNotifs}
@@ -467,7 +467,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                     isExpanded={!!this.state.notificationsMenuPosition}
                     tabIndex={isActive ? 0 : -1}
                 />
-                {contextMenu}
+                { contextMenu }
             </React.Fragment>
         );
     }
@@ -521,16 +521,16 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                         label={lowPriorityLabel}
                         iconClassName="mx_RoomTile_iconArrowDown"
                     />
-                    {canInvite ? (
+                    { canInvite ? (
                         <IconizedContextMenuOption
                             onClick={this.onInviteClick}
                             label={_t("Invite People")}
                             iconClassName="mx_RoomTile_iconInvite"
                         />
-                    ) : null}
+                    ) : null }
                     <IconizedContextMenuOption
                         onClick={this.onCopyRoomClick}
-                        label={_t("Copy Link")}
+                        label={_t("Copy Room Link")}
                         iconClassName="mx_RoomTile_iconCopyLink"
                     />
                     <IconizedContextMenuOption
@@ -557,7 +557,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                     title={_t("Room options")}
                     isExpanded={!!this.state.generalMenuPosition}
                 />
-                {contextMenu}
+                { contextMenu }
             </React.Fragment>
         );
     }
@@ -621,7 +621,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                     id={messagePreviewId(this.props.room.roomId)}
                     title={this.state.messagePreview}
                 >
-                    {this.state.messagePreview}
+                    { this.state.messagePreview }
                 </div>
             );
         }
@@ -635,9 +635,9 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         let nameContainer = (
             <div className="mx_RoomTile_nameContainer">
                 <div title={name} className={nameClasses} tabIndex={-1} dir="auto">
-                    {name}
+                    { name }
                 </div>
-                {messagePreview}
+                { messagePreview }
             </div>
         );
         if (this.props.isMinimized) nameContainer = null;
@@ -675,7 +675,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         return (
             <React.Fragment>
                 <RovingTabIndexWrapper inputRef={this.roomTileRef}>
-                    {({ onFocus, isActive, ref }) =>
+                    { ({ onFocus, isActive, ref }) =>
                         <Button
                             {...props}
                             onFocus={onFocus}
@@ -689,11 +689,11 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                             aria-selected={this.state.selected}
                             aria-describedby={ariaDescribedBy}
                         >
-                            {roomAvatar}
-                            {nameContainer}
-                            {badge}
-                            {this.renderGeneralMenu()}
-                            {this.renderNotificationsMenu(isActive)}
+                            { roomAvatar }
+                            { nameContainer }
+                            { badge }
+                            { this.renderGeneralMenu() }
+                            { this.renderNotificationsMenu(isActive) }
                         </Button>
                     }
                 </RovingTabIndexWrapper>

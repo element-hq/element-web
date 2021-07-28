@@ -342,5 +342,19 @@
     "Confirm adding email": "Xác nhận việc thêm email",
     "Add Phone Number": "Thêm Số Điện Thoại",
     "Click the button below to confirm adding this phone number.": "Nhấn vào nút dưới đây để xác nhận việc thêm số điện thoại này.",
-    "Confirm": "Xác nhận"
+    "Confirm": "Xác nhận",
+    "No other application is using the webcam": "Không có ứng dụng nào khác đang sử dụng webcam",
+    "Permission is granted to use the webcam": "Quyền được cấp để sử dụng webcam",
+    "A microphone and webcam are plugged in and set up correctly": "Micro và webcam đã được cắm và thiết lập đúng cách",
+    "Call failed because webcam or microphone could not be accessed. Check that:": "Cuộc gọi không thành công vì không thể truy cập webcam hoặc micrô. Kiểm tra xem:",
+    "Unable to access webcam / microphone": "Không thể truy cập webcam / micro",
+    "The call could not be established": "Không thể thiết lập cuộc gọi",
+    "The user you called is busy.": "Người dùng mà bạn gọi đang bận",
+    "User Busy": "Người dùng đang bận",
+    "The other party declined the call.": "Bên kia đã từ chối cuộc gọi.",
+    "Call Declined": "Cuộc gọi bị từ chối",
+    "Your user agent": "Hành động của bạn",
+    "Single Sign On": "Single Sign On",
+    "Confirm adding this email address by using Single Sign On to prove your identity.": "Xác nhận việc thêm địa chỉ email này bằng cách sử dụng Single Sign On để chứng minh danh tính của bạn.",
+    "Use Single Sign On to continue": "Sử dụng Signle Sign On để tiếp tục"
 }

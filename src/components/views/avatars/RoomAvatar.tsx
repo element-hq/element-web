@@ -13,9 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 import React, { ComponentProps } from 'react';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
+import classNames from "classnames";
 
 import BaseAvatar from './BaseAvatar';
 import ImageView from '../elements/ImageView';
@@ -32,11 +34,14 @@ interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idNam
     // oobData.avatarUrl should be set (else there
     // would be nowhere to get the avatar from)
     room?: Room;
-    oobData?: IOOBData;
+    oobData?: IOOBData & {
+        roomId?: string;
+    };
     width?: number;
     height?: number;
     resizeMethod?: ResizeMethod;
     viewAvatarOnClick?: boolean;
+    className?: string;
     onClick?(): void;
 }
 
@@ -129,15 +134,19 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
     };
 
     public render() {
-        const { room, oobData, viewAvatarOnClick, onClick, ...otherProps } = this.props;
+        const { room, oobData, viewAvatarOnClick, onClick, className, ...otherProps } = this.props;
 
         const roomName = room ? room.name : oobData.name;
         // If the room is a DM, we use the other user's ID for the color hash
         // in order to match the room avatar with their avatar
-        const idName = room ? (DMRoomMap.shared().getUserIdForRoomId(room.roomId) ?? room.roomId) : null;
+        const idName = room ? (DMRoomMap.shared().getUserIdForRoomId(room.roomId) ?? room.roomId) : oobData.roomId;
 
         return (
-            <BaseAvatar {...otherProps}
+            <BaseAvatar
+                {...otherProps}
+                className={classNames(className, {
+                    mx_RoomAvatar_isSpaceRoom: room?.isSpaceRoom(),
+                })}
                 name={roomName}
                 idName={idName}
                 urls={this.state.urls}

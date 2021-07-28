@@ -86,10 +86,16 @@ export default class GroupMemberList extends React.Component {
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
         const text = _t("and %(count)s others...", { count: overflowCount });
         return (
-            <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
-                <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
-            } name={text} presenceState="online" suppressOnHover={true}
-            onClick={this._showFullMemberList} />
+            <EntityTile
+                className="mx_EntityTile_ellipsis"
+                avatarJsx={
+                    <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
+                }
+                name={text}
+                presenceState="online"
+                suppressOnHover={true}
+                onClick={this._showFullMemberList}
+            />
         );
     };
 
@@ -152,7 +158,9 @@ export default class GroupMemberList extends React.Component {
             );
         });
 
-        return <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
+        return <TruncatedList
+            className="mx_MemberList_wrapper"
+            truncateAt={this.state.truncateAt}
             createOverflowElement={this._createOverflowTile}
         >
             { memberTiles }
@@ -201,7 +209,7 @@ export default class GroupMemberList extends React.Component {
 
         const invited = (this.state.invitedMembers && this.state.invitedMembers.length > 0) ?
             <div className="mx_MemberList_invited">
-                <h2>{_t("Invited")}</h2>
+                <h2>{ _t("Invited") }</h2>
                 {
                     this.makeGroupMemberTiles(
                         this.state.searchQuery,

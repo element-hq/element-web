@@ -416,13 +416,15 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
         let submitButton;
         if (this.props.showContinue !== false) {
             // XXX: button classes
-            submitButton = <button className="mx_InteractiveAuthEntryComponents_termsSubmit mx_GeneralButton"
-                onClick={this.trySubmit} disabled={!allChecked}>{_t("Accept")}</button>;
+            submitButton = <button
+                className="mx_InteractiveAuthEntryComponents_termsSubmit mx_GeneralButton"
+                onClick={this.trySubmit}
+                disabled={!allChecked}>{ _t("Accept") }</button>;
         }
 
         return (
             <div>
-                <p>{_t("Please review and accept the policies of this homeserver:")}</p>
+                <p>{ _t("Please review and accept the policies of this homeserver:") }</p>
                 { checkboxes }
                 { errorSection }
                 { submitButton }
@@ -613,15 +615,17 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
                                 className="mx_InteractiveAuthEntryComponents_msisdnEntry"
                                 value={this.state.token}
                                 onChange={this.onTokenChange}
-                                aria-label={ _t("Code")}
+                                aria-label={_t("Code")}
                             />
                             <br />
-                            <input type="submit" value={_t("Submit")}
+                            <input
+                                type="submit"
+                                value={_t("Submit")}
                                 className={submitClasses}
                                 disabled={!enableSubmit}
                             />
                         </form>
-                        {errorSection}
+                        { errorSection }
                     </div>
                 </div>
             );
@@ -717,21 +721,21 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
             <AccessibleButton
                 onClick={this.props.onCancel}
                 kind={this.props.continueKind ? (this.props.continueKind + '_outline') : 'primary_outline'}
-            >{_t("Cancel")}</AccessibleButton>
+            >{ _t("Cancel") }</AccessibleButton>
         );
         if (this.state.phase === SSOAuthEntry.PHASE_PREAUTH) {
             continueButton = (
                 <AccessibleButton
                     onClick={this.onStartAuthClick}
                     kind={this.props.continueKind || 'primary'}
-                >{this.props.continueText || _t("Single Sign On")}</AccessibleButton>
+                >{ this.props.continueText || _t("Single Sign On") }</AccessibleButton>
             );
         } else {
             continueButton = (
                 <AccessibleButton
                     onClick={this.onConfirmClick}
                     kind={this.props.continueKind || 'primary'}
-                >{this.props.continueText || _t("Confirm")}</AccessibleButton>
+                >{ this.props.continueText || _t("Confirm") }</AccessibleButton>
             );
         }
 
@@ -753,8 +757,8 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
         return <React.Fragment>
             { errorSection }
             <div className="mx_InteractiveAuthEntryComponents_sso_buttons">
-                {cancelButton}
-                {continueButton}
+                { cancelButton }
+                { continueButton }
             </div>
         </React.Fragment>;
     }
@@ -825,7 +829,7 @@ export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
                 <a href="" ref={this.fallbackButton} onClick={this.onShowFallbackClick}>{
                     _t("Start authentication")
                 }</a>
-                {errorSection}
+                { errorSection }
             </div>
         );
     }
