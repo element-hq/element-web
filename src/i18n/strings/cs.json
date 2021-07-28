@@ -3511,5 +3511,6 @@
     "Your camera is still enabled": "Vaše kamera je stále zapnutá",
     "Your camera is turned off": "Vaše kamera je vypnutá",
     "%(sharerName)s is presenting": "%(sharerName)s prezentuje",
-    "You are presenting": "Prezentujete"
+    "You are presenting": "Prezentujete",
+    "Anyone will be able to find and join this room.": "Kdokoliv může najít tuto místnost a připojit se k ní."
 }
