@@ -105,7 +105,7 @@
     "what-input": "^5.2.10",
     "zxcvbn": "^4.4.2"
   },
-  "devDependencies": {    
+  "devDependencies": {
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
     "@babel/eslint-parser": "^7.12.10",
