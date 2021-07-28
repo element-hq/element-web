@@ -138,7 +138,6 @@ export class PosthogAnalytics {
      */
 
     private anonymity = Anonymity.Anonymous;
-    private posthog?: PostHog = null;
     // set true during the constructor if posthog config is present, otherwise false
     private enabled = false;
     private static _instance = null;
@@ -151,8 +150,7 @@ export class PosthogAnalytics {
         return this._instance;
     }
 
-    constructor(posthog: PostHog) {
-        this.posthog = posthog;
+    constructor(private readonly posthog: PostHog) {
         const posthogConfig = SdkConfig.get()["posthog"];
         if (posthogConfig) {
             this.posthog.init(posthogConfig.projectApiKey, {
