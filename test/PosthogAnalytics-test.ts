@@ -7,11 +7,15 @@ class FakePosthog {
     public capture;
     public init;
     public identify;
+    public reset;
+    public register;
 
     constructor() {
         this.capture = jest.fn();
         this.init = jest.fn();
         this.identify = jest.fn();
+        this.reset = jest.fn();
+        this.register = jest.fn();
     }
 }
 
@@ -37,12 +41,11 @@ export interface ITestRoomEvent extends IRoomEvent {
 }
 
 describe("PosthogAnalytics", () => {
-    let analytics: PosthogAnalytics;
     let fakePosthog: FakePosthog;
 
     beforeEach(() => {
         fakePosthog = new FakePosthog();
-        analytics = new PosthogAnalytics(fakePosthog);
+
         window.crypto = {
             subtle: crypto.webcrypto.subtle,
         };
@@ -53,26 +56,28 @@ describe("PosthogAnalytics", () => {
     });
 
     describe("Initialisation", () => {
-        it("Should not initialise if config is not set", async () => {
+        it("Should not be enabled without config being set", () => {
             jest.spyOn(SdkConfig, "get").mockReturnValue({});
-            analytics.init(Anonymity.Pseudonymous);
+            const analytics = new PosthogAnalytics(fakePosthog);
             expect(analytics.isEnabled()).toBe(false);
         });
 
-        it("Should initialise if config is set", async () => {
+        it("Should be enabled if config is set", () => {
             jest.spyOn(SdkConfig, "get").mockReturnValue({
                 posthog: {
                     projectApiKey: "foo",
                     apiHost: "bar",
                 },
             });
-            analytics.init(Anonymity.Pseudonymous);
-            expect(analytics.isInitialised()).toBe(true);
+            const analytics = new PosthogAnalytics(fakePosthog);
+            analytics.setAnonymity(Anonymity.Pseudonymous);
             expect(analytics.isEnabled()).toBe(true);
         });
     });
 
     describe("Tracking", () => {
+        let analytics: PosthogAnalytics;
+
         beforeEach(() => {
             jest.spyOn(SdkConfig, "get").mockReturnValue({
                 posthog: {
@@ -80,10 +85,12 @@ describe("PosthogAnalytics", () => {
                     apiHost: "bar",
                 },
             });
+
+            analytics = new PosthogAnalytics(fakePosthog);
         });
 
         it("Should pass trackAnonymousEvent() to posthog", async () => {
-            analytics.init(Anonymity.Pseudonymous);
+            analytics.setAnonymity(Anonymity.Pseudonymous);
             await analytics.trackAnonymousEvent<ITestEvent>("jest_test_event", {
                 foo: "bar",
             });
@@ -92,7 +99,7 @@ describe("PosthogAnalytics", () => {
         });
 
         it("Should pass trackRoomEvent to posthog", async () => {
-            analytics.init(Anonymity.Pseudonymous);
+            analytics.setAnonymity(Anonymity.Pseudonymous);
             const roomId = "42";
             await analytics.trackRoomEvent<IRoomEvent>("jest_test_event", roomId, {
                 foo: "bar",
@@ -104,7 +111,7 @@ describe("PosthogAnalytics", () => {
         });
 
         it("Should pass trackPseudonymousEvent() to posthog", async () => {
-            analytics.init(Anonymity.Pseudonymous);
+            analytics.setAnonymity(Anonymity.Pseudonymous);
             await analytics.trackPseudonymousEvent<ITestEvent>("jest_test_pseudo_event", {
                 foo: "bar",
             });
@@ -112,17 +119,8 @@ describe("PosthogAnalytics", () => {
             expect(fakePosthog.capture.mock.calls[0][1]["foo"]).toEqual("bar");
         });
 
-        it("Should blow up if not inititalised prior to tracking", async () => {
-            const fn = () => {
-                return analytics.trackAnonymousEvent<ITestEvent>("jest_test_event", {
-                   foo: "bar",
-                });
-            };
-            await expect(fn()).rejects.toThrow();
-        });
-
         it("Should not track pseudonymous messages if anonymous", async () => {
-            analytics.init(Anonymity.Anonymous);
+            analytics.setAnonymity(Anonymity.Anonymous);
             await analytics.trackPseudonymousEvent<ITestEvent>("jest_test_event", {
                 foo: "bar",
             });
@@ -130,7 +128,7 @@ describe("PosthogAnalytics", () => {
         });
 
         it("Should not track any events if disabled", async () => {
-            analytics.init(Anonymity.Disabled);
+            analytics.setAnonymity(Anonymity.Disabled);
             await analytics.trackPseudonymousEvent<ITestEvent>("jest_test_event", {
                 foo: "bar",
             });
@@ -181,14 +179,14 @@ bd75b3e080945674c0351f75e0db33d1e90986fa07b318ea7edf776f5eef38d4`);
         });
 
         it("Should identify the user to posthog if pseudonymous", async () => {
-            analytics.init(Anonymity.Pseudonymous);
+            analytics.setAnonymity(Anonymity.Pseudonymous);
             await analytics.identifyUser("foo");
             expect(fakePosthog.identify.mock.calls[0][0])
                 .toBe("2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae");
         });
 
         it("Should not identify the user to posthog if anonymous", async () => {
-            analytics.init(Anonymity.Anonymous);
+            analytics.setAnonymity(Anonymity.Anonymous);
             await analytics.identifyUser("foo");
             expect(fakePosthog.identify.mock.calls.length).toBe(0);
         });

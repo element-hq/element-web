@@ -48,7 +48,7 @@ import { Jitsi } from "./widgets/Jitsi";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY, SSO_IDP_ID_KEY } from "./BasePlatform";
 import ThreepidInviteStore from "./stores/ThreepidInviteStore";
 import CountlyAnalytics from "./CountlyAnalytics";
-import { Anonymity, getAnalytics, getPlatformProperties } from "./PosthogAnalytics";
+import { getAnalytics } from "./PosthogAnalytics";
 import CallHandler from './CallHandler';
 import LifecycleCustomisations from "./customisations/Lifecycle";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
@@ -574,13 +574,7 @@ async function doSetLoggedIn(
         await abortLogin();
     }
 
-    if (SettingsStore.getValue("analyticsOptIn")) {
-        const analytics = getAnalytics();
-        analytics.setAnonymity(Anonymity.Pseudonymous);
-        await analytics.identifyUser(credentials.userId);
-    } else {
-        getAnalytics().setAnonymity(Anonymity.Anonymous);
-    }
+    getAnalytics().updateAnonymityFromSettings(credentials.userId);
 
     Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl);
 

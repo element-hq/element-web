@@ -85,14 +85,10 @@ export async function getRedactedCurrentLocation(origin: string, hash: string, p
 export class PosthogAnalytics {
     private anonymity = Anonymity.Anonymous;
     private posthog?: PostHog = null;
-
-    // set true during init() if posthog config is present
+    // set true during the constructor if posthog config is present, otherwise false
     private enabled = false;
-
-    // set to true after init() has been called
-    private initialised = false;
-
     private static _instance = null;
+    private platformSuperProperties = {};
 
     public static instance(): PosthogAnalytics {
         if (!this._instance) {
@@ -103,10 +99,6 @@ export class PosthogAnalytics {
 
     constructor(posthog: PostHog) {
         this.posthog = posthog;
-    }
-
-    public init(anonymity: Anonymity) {
-        this.anonymity = anonymity;
         const posthogConfig = SdkConfig.get()["posthog"];
         if (posthogConfig) {
             this.posthog.init(posthogConfig.projectApiKey, {
@@ -123,7 +115,6 @@ export class PosthogAnalytics {
                 sanitize_properties: this.sanitizeProperties.bind(this),
                 respect_dnt: true,
             });
-            this.initialised = true;
             this.enabled = true;
         } else {
             this.enabled = false;
@@ -159,19 +150,39 @@ export class PosthogAnalytics {
         return properties;
     }
 
-    public async identifyUser(userId: string) {
-        if (this.anonymity == Anonymity.Anonymous) return;
-        this.posthog.identify(await hashHex(userId));
+    private static getAnonymityFromSettings(): Anonymity {
+        // determine the current anonymity level based on curernt user settings
+
+        // "Send anonymous usage data which helps us improve Element. This will use a cookie."
+        const analyticsOptIn = SettingsStore.getValue("analyticsOptIn");
+
+        // "Send pseudonymous usage data which helps us improve Element. This will use a cookie."
+        //
+        // Currently, this is only a labs flag, for testing purposes.
+        const pseudonumousOptIn = SettingsStore.getValue("feature_pseudonymousAnalyticsOptIn");
+
+        let anonymity;
+        if (pseudonumousOptIn) {
+            anonymity = Anonymity.Pseudonymous;
+        } else if (analyticsOptIn) {
+            anonymity = Anonymity.Anonymous;
+        } else {
+            anonymity = Anonymity.Disabled;
+        }
+
+        return anonymity;
     }
 
-    public registerSuperProperties(properties) {
-        if (this.enabled) {
-            this.posthog.register(properties);
+    public async identifyUser(userId: string) {
+        if (this.anonymity == Anonymity.Pseudonymous) {
+            this.posthog.identify(await hashHex(userId));
         }
     }
 
-    public isInitialised() {
-        return this.initialised;
+    private registerSuperProperties(properties) {
+        if (this.enabled) {
+            this.posthog.register(properties);
+        }
     }
 
     public isEnabled() {
@@ -179,6 +190,13 @@ export class PosthogAnalytics {
     }
 
     public setAnonymity(anonymity: Anonymity) {
+        if (this.enabled && (anonymity == Anonymity.Disabled || anonymity == Anonymity.Anonymous)) {
+            // when transitioning to Disabled or Anonymous ensure we clear out any prior state
+            // set in posthog e.g. distinct ID
+            this.posthog.reset();
+            // Restore any previously set platform super properties
+            this.registerSuperProperties(this.platformSuperProperties);
+        }
         this.anonymity = anonymity;
     }
 
@@ -194,9 +212,6 @@ export class PosthogAnalytics {
     }
 
     private async capture(eventName: string, properties: posthog.Properties) {
-        if (!this.initialised) {
-            throw Error("Tried to track event before PoshogAnalytics.init has completed");
-        }
         if (!this.enabled) {
             return;
         }
@@ -239,45 +254,36 @@ export class PosthogAnalytics {
             durationMs,
         });
     }
-}
 
-export async function getPlatformProperties() {
-    const platform = PlatformPeg.get();
-    let appVersion;
-    try {
-        appVersion = await platform.getAppVersion();
-    } catch (e) {
-        // this happens if no version is set i.e. in dev
-        appVersion = "unknown";
+    public async updatePlatformSuperProperties() {
+        this.platformSuperProperties = await PosthogAnalytics.getPlatformProperties();
+        this.registerSuperProperties(this.platformSuperProperties);
     }
 
-    return {
-        appVersion,
-        appPlatform: platform.getHumanReadableName(),
-    };
+    private static async getPlatformProperties() {
+        const platform = PlatformPeg.get();
+        let appVersion;
+        try {
+            appVersion = await platform.getAppVersion();
+        } catch (e) {
+            // this happens if no version is set i.e. in dev
+            appVersion = "unknown";
+        }
+
+        return {
+            appVersion,
+            appPlatform: platform.getHumanReadableName(),
+        };
+    }
+
+    public async updateAnonymityFromSettings(userId?: string) {
+        this.setAnonymity(PosthogAnalytics.getAnonymityFromSettings());
+        if (userId && this.getAnonymity() == Anonymity.Pseudonymous) {
+            await this.identifyUser(userId);
+        }
+    }
 }
 
 export function getAnalytics(): PosthogAnalytics {
     return PosthogAnalytics.instance();
-}
-
-export function getAnonymityFromSettings(): Anonymity {
-    // determine the current anonymity level based on curernt user settings
-
-    // "Send anonymous usage data which helps us improve Element. This will use a cookie."
-    const analyticsOptIn = SettingsStore.getValue("analyticsOptIn");
-
-    // "Send pseudonymous usage data which helps us improve Element. This will use a cookie."
-    const pseudonumousOptIn = SettingsStore.getValue("pseudonymousAnalyticsOptIn");
-
-    let anonymity;
-    if (pseudonumousOptIn) {
-        anonymity = Anonymity.Pseudonymous;
-    } else if (analyticsOptIn) {
-        anonymity = Anonymity.Anonymous;
-    } else {
-        anonymity = Anonymity.Disabled;
-    }
-
-    return anonymity;
 }

@@ -107,7 +107,7 @@ import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 import SoftLogout from './auth/SoftLogout';
 import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../utils/strings";
-import { Anonymity, getAnalytics, getAnonymityFromSettings, getPlatformProperties } from '../../PosthogAnalytics';
+import { getAnalytics } from '../../PosthogAnalytics';
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -390,10 +390,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         const analytics = getAnalytics();
-        analytics.init(getAnonymityFromSettings());
-        // note this requires a network request in the browser, so some events can potentially
-        // before before registerSuperProperties has been called
-        getPlatformProperties().then((properties) => analytics.registerSuperProperties(properties));
+        analytics.updateAnonymityFromSettings();
+        analytics.updatePlatformSuperProperties();
 
         CountlyAnalytics.instance.enable(/* anonymous = */ true);
     }
@@ -831,11 +829,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 if (CountlyAnalytics.instance.canEnable()) {
                     CountlyAnalytics.instance.enable(/* anonymous = */ false);
                 }
-                getAnalytics().setAnonymity(Anonymity.Pseudonymous);
-                // TODO: this is an async call and we're not waiting for it to complete -
-                // so potentially an event could be fired prior to it completing and would be
-                // missing the user identification.
-                getAnalytics().identifyUser(MatrixClientPeg.get().getUserId());
                 break;
             case 'reject_cookies':
                 SettingsStore.setValue("analyticsOptIn", null, SettingLevel.DEVICE, false);
