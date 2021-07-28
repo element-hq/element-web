@@ -40,7 +40,7 @@ interface IEvent {
 
     // The properties of the event that will be stored in PostHog. This is just a placeholder,
     // extending interfaces must override this with a concrete definition to do type validation.
-    properties: {}
+    properties: {};
 }
 
 export enum Anonymity {
@@ -122,8 +122,8 @@ export async function getRedactedCurrentLocation(
 }
 
 interface PlatformProperties {
-    appVersion: string,
-    appPlatform: string
+    appVersion: string;
+    appPlatform: string;
 }
 
 export class PosthogAnalytics {
