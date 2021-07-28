@@ -3581,5 +3581,10 @@
     "New layout switcher (with message bubbles)": "Új kinézet váltó (üzenet buborékokkal)",
     "New in the Spaces beta": "Újdonság a béta Terekben",
     "Transfer Failed": "Átadás sikertelen",
-    "Unable to transfer call": "A hívás átadása nem lehetséges"
+    "Unable to transfer call": "A hívás átadása nem lehetséges",
+    "Anyone will be able to find and join this room.": "Bárki megtalálhatja és beléphet ebbe a szobába.",
+    "This makes it easy for rooms to stay private to a space, while letting people in the space find and join them. All new rooms in a space will have this option available.": "A szobák egyszerűbben maradhatnak privátok a téren kívül, amíg a tér tagsága megtalálhatja és beléphet oda. Minden új szoba a téren rendelkezik ezzel a beállítási lehetőséggel.",
+    "To help space members find and join a private room, go to that room's Security & Privacy settings.": "Ahhoz hogy segíthessen a tér tagságának privát szobák megtalálásában és a belépésben, lépjen be a szoba Biztonság és adatvédelem beállításaiba.",
+    "Help space members find private rooms": "Segítsen a tér tagságának privát szobák megtalálásában",
+    "Help people in spaces to find and join private rooms": "Segítsen a téren az embereknek privát szobák megtalálásába és a belépésben"
 }
