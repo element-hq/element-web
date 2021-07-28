@@ -172,17 +172,19 @@ export class PosthogAnalytics {
         // determine the current anonymity level based on curernt user settings
 
         // "Send anonymous usage data which helps us improve Element. This will use a cookie."
-        const analyticsOptIn = SettingsStore.getValue("analyticsOptIn");
+        const analyticsOptIn = SettingsStore.getValue("analyticsOptIn", null, true);
 
         // (proposed wording) "Send pseudonymous usage data which helps us improve Element. This will use a cookie."
         //
         // TODO: Currently, this is only a labs flag, for testing purposes.
-        const pseudonumousOptIn = SettingsStore.getValue("feature_pseudonymousAnalyticsOptIn");
+        const pseudonumousOptIn = SettingsStore.getValue("feature_pseudonymousAnalyticsOptIn", null, true);
 
         let anonymity;
         if (pseudonumousOptIn) {
             anonymity = Anonymity.Pseudonymous;
-        } else if (analyticsOptIn) {
+        } else if (analyticsOptIn || analyticsOptIn === null) {
+            // If no analyticsOptIn has been set (i.e. before the user has logged in, or if they haven't answered the
+            // opt-in question, assume Anonymous)
             anonymity = Anonymity.Anonymous;
         } else {
             anonymity = Anonymity.Disabled;
