@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 .mx_EventTile[data-layout=bubble],
-.mx_EventTile[data-layout=bubble] ~ .mx_EventListSummary {
+.mx_EventListSummary[data-layout=bubble] {
     --avatarSize: 32px;
     --gutterSize: 11px;
     --cornerRadius: 12px;
@@ -155,9 +155,17 @@ limitations under the License.
     .mx_EventTile_avatar {
         position: absolute;
         top: 0;
+        line-height: 1;
+        z-index: 9;
         img {
             box-shadow: 0 0 0 3px $eventbubble-avatar-outline;
             border-radius: 50%;
+        }
+    }
+
+    &.mx_EventTile_noSender {
+        .mx_EventTile_avatar {
+            top: -19px;
         }
     }
 
@@ -216,90 +224,6 @@ limitations under the License.
         border-left-color: $eventbubble-reply-color;
     }
 
-    &.mx_EventTile_bubbleContainer,
-    &.mx_EventTile_info,
-    & ~ .mx_EventListSummary[data-expanded=false] {
-        --backgroundColor: transparent;
-        --gutterSize: 0;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 5px 0;
-
-        .mx_EventTile_avatar {
-            position: static;
-            order: -1;
-            margin-right: 5px;
-        }
-    }
-
-    & ~ .mx_EventListSummary {
-        --maxWidth: 80%;
-        margin-left: calc(var(--avatarSize) + var(--gutterSize));
-        margin-right: calc(var(--gutterSize) + var(--avatarSize));
-        .mx_EventListSummary_toggle {
-            float: none;
-            margin: 0;
-            order: 9;
-            margin-left: 5px;
-        }
-        .mx_EventListSummary_avatars {
-            padding-top: 0;
-        }
-
-        &::after {
-            content: "";
-            clear: both;
-        }
-
-        .mx_EventTile {
-            margin: 0 6px;
-        }
-
-        .mx_EventTile_line {
-            margin: 0 5px;
-            > a {
-                left: auto;
-                right: 0;
-                transform: translateX(calc(100% + 5px));
-            }
-        }
-
-        .mx_MessageActionBar {
-            transform: translate3d(90%, 0, 0);
-        }
-    }
-
-    & ~ .mx_EventListSummary[data-expanded=false] {
-        padding: 0 34px;
-    }
-
-    /* events that do not require bubble layout */
-    & ~ .mx_EventListSummary,
-    &.mx_EventTile_bad {
-        .mx_EventTile_line {
-            background: transparent;
-        }
-
-        &:hover {
-            &::before {
-                background: transparent;
-            }
-        }
-    }
-
-    & + .mx_EventListSummary {
-        .mx_EventTile {
-            margin-top: 0;
-            padding: 2px 0;
-        }
-    }
-
-    .mx_EventListSummary_toggle {
-        margin-right: 55px;
-    }
-
     /* Special layout scenario for "Unable To Decrypt (UTD)" events */
     &.mx_EventTile_bad > .mx_EventTile_line {
         display: grid;
@@ -332,5 +256,80 @@ limitations under the License.
 
     .mx_MTextBody {
         max-width: 100%;
+    }
+}
+
+.mx_EventTile.mx_EventTile_bubbleContainer[data-layout=bubble],
+.mx_EventTile.mx_EventTile_info[data-layout=bubble],
+.mx_EventListSummary[data-layout=bubble][data-expanded=false] {
+    --backgroundColor: transparent;
+    --gutterSize: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 0;
+
+    .mx_EventTile_avatar {
+        position: static;
+        order: -1;
+        margin-right: 5px;
+    }
+}
+
+.mx_EventListSummary[data-layout=bubble] {
+    --maxWidth: 80%;
+    margin-left: calc(var(--avatarSize) + var(--gutterSize));
+    margin-right: calc(var(--gutterSize) + var(--avatarSize));
+    .mx_EventListSummary_toggle {
+        float: none;
+        margin: 0;
+        order: 9;
+        margin-left: 5px;
+        margin-right: 55px;
+    }
+    .mx_EventListSummary_avatars {
+        padding-top: 0;
+    }
+
+    &::after {
+        content: "";
+        clear: both;
+    }
+
+    .mx_EventTile {
+        margin: 0 6px;
+        padding: 2px 0;
+    }
+
+    .mx_EventTile_line {
+        margin: 0 5px;
+        > a {
+            left: auto;
+            right: 0;
+            transform: translateX(calc(100% + 5px));
+        }
+    }
+
+    .mx_MessageActionBar {
+        transform: translate3d(90%, 0, 0);
+    }
+}
+
+.mx_EventListSummary[data-expanded=false][data-layout=bubble] {
+    padding: 0 34px;
+}
+
+/* events that do not require bubble layout */
+.mx_EventListSummary[data-layout=bubble],
+.mx_EventTile.mx_EventTile_bad[data-layout=bubble] {
+    .mx_EventTile_line {
+        background: transparent;
+    }
+
+    &:hover {
+        &::before {
+            background: transparent;
+        }
     }
 }

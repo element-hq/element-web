@@ -74,6 +74,14 @@ export default class CallEventGrouper extends EventEmitter {
         return this.hangup?.getContent()?.reason;
     }
 
+    public get rejectParty(): string {
+        return this.reject?.getSender();
+    }
+
+    public get gotRejected(): boolean {
+        return Boolean(this.reject);
+    }
+
     /**
      * Returns true if there are only events from the other side - we missed the call
      */

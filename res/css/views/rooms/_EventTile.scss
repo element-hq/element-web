@@ -132,15 +132,6 @@ $hover-select-border: 4px;
         }
     }
 
-    &.mx_EventTile_info .mx_EventTile_line,
-    & ~ .mx_EventListSummary .mx_EventTile_avatar ~ .mx_EventTile_line {
-        padding-left: calc($left-gutter + 18px);
-    }
-
-    & ~ .mx_EventListSummary .mx_EventTile_line {
-        padding-left: calc($left-gutter);
-    }
-
     &.mx_EventTile_selected.mx_EventTile_info .mx_EventTile_line {
         padding-left: calc($left-gutter + 18px - $hover-select-border);
     }
@@ -276,8 +267,17 @@ $hover-select-border: 4px;
 
     .mx_ReactionsRow {
         margin: 0;
-        padding: 6px 60px;
+        padding: 4px 64px;
     }
+}
+
+.mx_EventTile:not([data-layout=bubble]).mx_EventTile_info .mx_EventTile_line,
+.mx_EventListSummary:not([data-layout=bubble]) > :not(.mx_EventTile) .mx_EventTile_avatar ~ .mx_EventTile_line {
+    padding-left: calc($left-gutter + 18px);
+}
+
+.mx_EventListSummary:not([data-layout=bubble]) .mx_EventTile_line {
+    padding-left: calc($left-gutter);
 }
 
 /* all the overflow-y: hidden; are to trap Zalgos -
@@ -571,6 +571,12 @@ $hover-select-border: 4px;
 
 .mx_EventTile_content .markdown-body a {
     color: $accent-color-alt;
+}
+
+.mx_EventTile_content .markdown-body blockquote {
+    border-left: 2px solid $blockquote-bar-color;
+    border-radius: 2px;
+    padding: 0 10px;
 }
 
 .mx_EventTile_content .markdown-body .hljs {
