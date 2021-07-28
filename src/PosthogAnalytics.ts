@@ -120,6 +120,11 @@ export async function getRedactedCurrentLocation(
     return origin + pathname + hashStr;
 }
 
+interface PlatformProperties {
+    appVersion: string,
+    appPlatform: string
+}
+
 export class PosthogAnalytics {
     /* Wrapper for Posthog analytics.
      * 3 modes of anonymity are supported, governed by this.anonymity
@@ -227,13 +232,13 @@ export class PosthogAnalytics {
         return anonymity;
     }
 
-    private registerSuperProperties(properties) {
+    private registerSuperProperties(properties: posthog.Properties) {
         if (this.enabled) {
             this.posthog.register(properties);
         }
     }
 
-    private static async getPlatformProperties() {
+    private static async getPlatformProperties(): Promise<PlatformProperties> {
         const platform = PlatformPeg.get();
         let appVersion;
         try {
