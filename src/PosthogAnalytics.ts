@@ -302,7 +302,7 @@ export class PosthogAnalytics {
 
     public async trackPseudonymousEvent<E extends IPseudonymousEvent>(
         eventName: E["eventName"],
-        properties: E["properties"],
+        properties: E["properties"] = {},
     ) {
         if (this.anonymity == Anonymity.Anonymous || this.anonymity == Anonymity.Disabled) return;
         await this.capture(eventName, properties);
@@ -310,7 +310,7 @@ export class PosthogAnalytics {
 
     public async trackAnonymousEvent<E extends IAnonymousEvent>(
         eventName: E["eventName"],
-        properties: E["properties"],
+        properties: E["properties"] = {},
     ): Promise<void> {
         if (this.anonymity == Anonymity.Disabled) return;
         await this.capture(eventName, properties);
