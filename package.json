@@ -105,7 +105,7 @@
     "what-input": "^5.2.10",
     "zxcvbn": "^4.4.2"
   },
-  "devDependencies": {
+  "devDependencies": {    
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
     "@babel/eslint-parser": "^7.12.10",
@@ -125,6 +125,7 @@
     "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.3.tgz",
     "@peculiar/webcrypto": "^1.1.4",
     "@sinonjs/fake-timers": "^7.0.2",
+    "@sentry/types": "^6.2.2",
     "@types/classnames": "^2.2.11",
     "@types/commonmark": "^0.27.4",
     "@types/counterpart": "^0.18.1",
@@ -167,6 +168,7 @@
     "matrix-web-i18n": "github:matrix-org/matrix-web-i18n",
     "react-test-renderer": "^17.0.2",
     "rimraf": "^3.0.2",
+    "rrweb": "^0.9.9",
     "stylelint": "^13.9.0",
     "stylelint-config-standard": "^20.0.0",
     "stylelint-scss": "^3.18.0",
