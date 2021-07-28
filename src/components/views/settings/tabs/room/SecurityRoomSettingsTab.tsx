@@ -137,11 +137,11 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 title: _t('Are you sure you want to add encryption to this public room?'),
                 description: <div>
                     <p> { _t(
-                        "<b> It’s not recommended to turn on encryption on for public rooms. </b>" +
-                        "Anyone can find and join public rooms, so anyone can read messages. You’ll " +
-                        "get none of the benefits of encryption, and you won't be able to turn it " +
-                        "off later. Encrypting messages in a public room will also likely make " +
-                        "receiving and sending messages slower than necessary.",
+                        "<b> It’s not recommended to add encryption to public rooms. </b>" +
+                        "Anyone can find and join public rooms, so anyone can read messages in them. " +
+                        "You’ll get none of the benefits of encryption, and you won’t be able to turn it " +
+                        "off later. Encrypting messages in a public room will make receiving and sending " +
+                        "messages slower.",
                         null,
                         { "b": (sub) => <b> { sub } </b> },
                     ) } </p>
@@ -236,10 +236,10 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 title: _t("Are you sure you want to make this encrypted room public?"),
                 description: <div>
                     <p> { _t(
-                        "<b> It’s not recommended to make end-to-end encrypted rooms public. </b> It " +
-                        "means anyone can find and join this room, so anyone can read messages. You’ll " +
-                        "get none of the benefits of encryption. Encrypting messages in a public room " +
-                        "will also likely make receiving and sending messages slower than necessary.",
+                        "<b> It’s not recommended to make encrypted rooms public. </b> It " +
+                        "It will mean anyone can find and join the room, so anyone can read messages. " +
+                        "You’ll get none of the benefits of encryption. Encrypting messages in a public " +
+                        "room will make receiving and sending messages slower.",
                         null,
                         { "b": (sub) => <b> { sub } </b> },
                     ) } </p>
