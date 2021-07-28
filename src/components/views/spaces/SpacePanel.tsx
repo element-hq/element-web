@@ -117,12 +117,15 @@ const SpaceButton: React.FC<IButtonProps> = ({
 };
 
 const useSpaces = (): [Room[], Room[], Room | null] => {
-    const [invites, setInvites] = useState<Room[]>(SpaceStore.instance.invitedSpaces);
-    useEventEmitter(SpaceStore.instance, UPDATE_INVITED_SPACES, setInvites);
-    const [spaces, setSpaces] = useState<Room[]>(SpaceStore.instance.spacePanelSpaces);
-    useEventEmitter(SpaceStore.instance, UPDATE_TOP_LEVEL_SPACES, setSpaces);
-    const [activeSpace, setActiveSpace] = useState<Room>(SpaceStore.instance.activeSpace);
-    useEventEmitter(SpaceStore.instance, UPDATE_SELECTED_SPACE, setActiveSpace);
+    const invites = useEventEmitterState<Room[]>(SpaceStore.instance, UPDATE_INVITED_SPACES, () => {
+        return SpaceStore.instance.invitedSpaces;
+    });
+    const spaces = useEventEmitterState<Room[]>(SpaceStore.instance, UPDATE_TOP_LEVEL_SPACES, () => {
+        return SpaceStore.instance.spacePanelSpaces;
+    });
+    const activeSpace = useEventEmitterState<Room>(SpaceStore.instance, UPDATE_SELECTED_SPACE, () => {
+        return SpaceStore.instance.activeSpace;
+    });
     return [invites, spaces, activeSpace];
 };
 
