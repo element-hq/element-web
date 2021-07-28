@@ -20,24 +20,24 @@ class FakePosthog {
 }
 
 export interface ITestEvent extends IAnonymousEvent {
-    key: "jest_test_event",
+    key: "jest_test_event";
     properties: {
-        foo: string
-    }
+        foo: string;
+    };
 }
 
 export interface ITestPseudonymousEvent extends IPseudonymousEvent {
-    key: "jest_test_pseudo_event",
+    key: "jest_test_pseudo_event";
     properties: {
-        foo: string
-    }
+        foo: string;
+    };
 }
 
 export interface ITestRoomEvent extends IRoomEvent {
-    key: "jest_test_room_event",
+    key: "jest_test_room_event";
     properties: {
-        foo: string
-    }
+        foo: string;
+    };
 }
 
 describe("PosthogAnalytics", () => {

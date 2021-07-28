@@ -24,7 +24,7 @@ interface IEvent {
     eventName: string;
 
     // The properties of the event that will be stored in PostHog.
-    properties: {}
+    properties: {};
 }
 
 export enum Anonymity {
@@ -44,19 +44,19 @@ export interface IPseudonymousEvent extends IEvent {}
 export interface IAnonymousEvent extends IEvent {}
 
 export interface IRoomEvent extends IPseudonymousEvent {
-    hashedRoomId: string
+    hashedRoomId: string;
 }
 
 interface IPageView extends IAnonymousEvent {
-    eventName: "$pageview",
+    eventName: "$pageview";
     properties: {
-        durationMs?: number
-        screen?: string
-    }
+        durationMs?: number;
+        screen?: string;
+    };
 }
 
 export interface IWelcomeScreenLoad extends IAnonymousEvent {
-    eventName: "welcome_screen_load",
+    eventName: "welcome_screen_load";
 }
 
 const hashHex = async (input: string): Promise<string> => {
