@@ -3502,5 +3502,14 @@
     "They didn't pick up": "Nezvedli to",
     "Call again": "Volat znova",
     "They declined this call": "Odmítli tento hovor",
-    "You declined this call": "Odmítli jste tento hovor"
+    "You declined this call": "Odmítli jste tento hovor",
+    "Share content": "Sdílet obsah",
+    "Application window": "Okno aplikace",
+    "Share entire screen": "Sdílet celou obrazovku",
+    "You can now share your screen by pressing the \"screen share\" button during a call. You can even do this in audio calls if both sides support it!": "Nyní můžete sdílet obrazovku stisknutím tlačítka \"sdílení obrazovky\" během hovoru. Můžete tak učinit i při zvukových hovorech, pokud to obě strany podporují!",
+    "Screen sharing is here!": "Sdílení obrazovky je tu!",
+    "Your camera is still enabled": "Vaše kamera je stále zapnutá",
+    "Your camera is turned off": "Vaše kamera je vypnutá",
+    "%(sharerName)s is presenting": "%(sharerName)s prezentuje",
+    "You are presenting": "Prezentujete"
 }
