@@ -79,8 +79,8 @@ const HomeButtonContextMenu = ({ onFinished, ...props }: ComponentProps<typeof S
         </div>
         <IconizedContextMenuOptionList first>
             <IconizedContextMenuCheckbox
-                iconClassName="mx_SpacePanel_iconSettings"
-                label={_t("Show all rooms in home")}
+                iconClassName="mx_SpacePanel_noIcon"
+                label={_t("Show all rooms")}
                 active={allRoomsInHome}
                 onClick={() => {
                     SettingsStore.setValue("Spaces.all_rooms_in_home", null, SettingLevel.ACCOUNT, !allRoomsInHome);
