@@ -140,16 +140,16 @@ export default class VideoFeed extends React.Component<IProps, IState> {
         // seem to be necessary - Šimon
     }
 
-    private onNewStream = () => {
-        this.setState({
+    private onNewStream = async () => {
+        await this.setState({
             audioMuted: this.props.feed.isAudioMuted(),
             videoMuted: this.props.feed.isVideoMuted(),
         });
         this.playMedia();
     };
 
-    private onMuteStateChanged = () => {
-        this.setState({
+    private onMuteStateChanged = async () => {
+        await this.setState({
             audioMuted: this.props.feed.isAudioMuted(),
             videoMuted: this.props.feed.isVideoMuted(),
         });
