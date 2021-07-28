@@ -3,6 +3,21 @@ import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 import SettingsStore from './settings/SettingsStore';
 
+/* Posthog analytics tracking.
+ *
+ * Anonymity behaviour is as follows:
+ *
+ * - If Posthog isn't configured in `config.json`, events are not sent.
+ * - If [Do Not Track](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack) is
+ *   enabled, events are not sent (this detection is built into posthog and turned on via the
+ *   `respect_dnt` flag being passed to `posthog.init`).
+ * - If the `feature_pseudonymousAnalyticsOptIn` labs flag is `true`, track pseudonomously, i.e.
+ *   hash all matrix identifiers in tracking events (user IDs, room IDs etc) using SHA-256.
+ * - Otherwise, if the existing `analyticsOptIn` flag is `true`, or not present (i.e. prior to
+ *   logging in), track anonymously, i.e. redact all matrix identifiers in tracking events.
+ * - If both flags are false, events are not sent.
+*/
+
 interface IEvent {
     // The event name that will be used by PostHog.
     // TODO: standard format (camel case? snake? UpperCase?)
@@ -86,7 +101,6 @@ export async function getRedactedCurrentLocation(origin: string, hash: string, p
 
 export class PosthogAnalytics {
     /* Wrapper for Posthog analytics.
-     *
      * 3 modes of anonymity are supported, governed by this.anonymity
      * - Anonymity.Disabled means *no data* is passed to posthog
      * - Anonymity.Anonymous means all identifers will be redacted before being passed to posthog
