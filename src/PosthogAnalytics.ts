@@ -269,7 +269,7 @@ export class PosthogAnalytics {
         return this.enabled;
     }
 
-    public setAnonymity(anonymity: Anonymity) {
+    public setAnonymity(anonymity: Anonymity): void {
         // Update this.anonymity.
         // This is public for testing purposes, typically you want to call updateAnonymityFromSettings
         // to ensure this value is in step with the user's settings.
@@ -283,17 +283,17 @@ export class PosthogAnalytics {
         this.anonymity = anonymity;
     }
 
-    public async identifyUser(userId: string) {
+    public async identifyUser(userId: string): Promise<void> {
         if (this.anonymity == Anonymity.Pseudonymous) {
             this.posthog.identify(await hashHex(userId));
         }
     }
 
-    public getAnonymity() {
+    public getAnonymity(): Anonymity {
         return this.anonymity;
     }
 
-    public logout() {
+    public logout(): void {
         if (this.enabled) {
             this.posthog.reset();
         }
@@ -311,7 +311,7 @@ export class PosthogAnalytics {
     public async trackAnonymousEvent<E extends IAnonymousEvent>(
         eventName: E["eventName"],
         properties: E["properties"],
-    ) {
+    ): Promise<void> {
         if (this.anonymity == Anonymity.Disabled) return;
         await this.capture(eventName, properties);
     }
@@ -320,7 +320,7 @@ export class PosthogAnalytics {
         eventName: E["eventName"],
         roomId: string,
         properties: Omit<E["properties"], "roomId">,
-    ) {
+    ): Promise<void> {
         const updatedProperties = {
             ...properties,
             hashedRoomId: roomId ? await hashHex(roomId) : null,
@@ -328,7 +328,7 @@ export class PosthogAnalytics {
         await this.trackPseudonymousEvent(eventName, updatedProperties);
     }
 
-    public async trackPageView(durationMs: number) {
+    public async trackPageView(durationMs: number): Promise<void> {
         const hash = window.location.hash;
 
         let screen = null;
@@ -343,7 +343,7 @@ export class PosthogAnalytics {
         });
     }
 
-    public async updatePlatformSuperProperties() {
+    public async updatePlatformSuperProperties(): Promise<void> {
         // Update super properties in posthog with our platform (app version, platform).
         // These properties will be subsequently passed in every event.
         //
@@ -353,7 +353,7 @@ export class PosthogAnalytics {
         this.registerSuperProperties(this.platformSuperProperties);
     }
 
-    public async updateAnonymityFromSettings(userId?: string) {
+    public async updateAnonymityFromSettings(userId?: string): Promise<void> {
         // Update this.anonymity based on the user's analytics opt-in settings
         // Identify the user (via hashed user ID) to posthog if anonymity is pseudonmyous
         this.setAnonymity(PosthogAnalytics.getAnonymityFromSettings());
