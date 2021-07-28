@@ -110,6 +110,29 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
         }
     };
 
+    let joinRuleMicrocopy: JSX.Element;
+    if (joinRule === JoinRule.Restricted) {
+        joinRuleMicrocopy = <p>
+            { _t(
+                "Anyone in <SpaceName/> will be able to find and join.", {}, {
+                    SpaceName: () => <b>{ parentSpace.name }</b>,
+                },
+            ) }
+        </p>;
+    } else if (joinRule === JoinRule.Public) {
+        joinRuleMicrocopy = <p>
+            { _t(
+                "Anyone will be able to find and join this space, not just members of <SpaceName/>.", {}, {
+                    SpaceName: () => <b>{ parentSpace.name }</b>,
+                },
+            ) }
+        </p>;
+    } else if (joinRule === JoinRule.Invite) {
+        joinRuleMicrocopy = <p>
+            { _t("Only people invited will be able to find and join this space.") }
+        </p>;
+    }
+
     return <BaseDialog
         title={(
             <SubspaceSelector
@@ -154,6 +177,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
                         value={joinRule}
                         onChange={setJoinRule}
                     />
+                    { joinRuleMicrocopy }
                 </SpaceCreateForm>
             </div>
 

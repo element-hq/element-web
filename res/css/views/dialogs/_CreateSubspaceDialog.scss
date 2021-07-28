@@ -39,7 +39,13 @@ limitations under the License.
 
             .mx_BetaCard_betaPill {
                 margin-right: 8px;
+                vertical-align: middle;
             }
+        }
+
+        .mx_JoinRuleDropdown + p {
+            color: $muted-fg-color;
+            font-size: $font-12px;
         }
     }
 
