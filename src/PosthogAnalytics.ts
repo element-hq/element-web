@@ -88,7 +88,12 @@ const whitelistedScreens = new Set([
     "start_sso", "start_cas", "groups", "complete_security", "post_registration", "room", "user", "group",
 ]);
 
-export async function getRedactedCurrentLocation(origin: string, hash: string, pathname: string, anonymity: Anonymity) {
+export async function getRedactedCurrentLocation(
+    origin: string,
+    hash: string,
+    pathname: string,
+    anonymity: Anonymity,
+): Promise<string> {
     // Redact PII from the current location.
     // If anonymous is true, redact entirely, if false, substitute it with a hash.
     // For known screens, assumes a URL structure of /<screen name>/might/be/pii
