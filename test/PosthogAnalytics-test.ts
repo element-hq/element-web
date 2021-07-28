@@ -1,5 +1,11 @@
-import { Anonymity, getRedactedCurrentLocation, IAnonymousEvent, IPseudonymousEvent, IRoomEvent,
-    PosthogAnalytics } from '../src/PosthogAnalytics';
+import {
+    Anonymity,
+    getRedactedCurrentLocation,
+    IAnonymousEvent,
+    IPseudonymousEvent,
+    IRoomEvent,
+    PosthogAnalytics,
+} from '../src/PosthogAnalytics';
 import SdkConfig from '../src/SdkConfig';
 
 class FakePosthog {
