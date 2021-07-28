@@ -27,7 +27,7 @@ import SettingsStore from './settings/SettingsStore';
  * - If [Do Not Track](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack) is
  *   enabled, events are not sent (this detection is built into posthog and turned on via the
  *   `respect_dnt` flag being passed to `posthog.init`).
- * - If the `feature_pseudonymousAnalyticsOptIn` labs flag is `true`, track pseudonomously, i.e.
+ * - If the `feature_pseudonymous_analytics_opt_in` labs flag is `true`, track pseudonomously, i.e.
  *   hash all matrix identifiers in tracking events (user IDs, room IDs etc) using SHA-256.
  * - Otherwise, if the existing `analyticsOptIn` flag is `true`, or not present (i.e. prior to
  *   logging in), track anonymously, i.e. redact all matrix identifiers in tracking events.
@@ -208,7 +208,7 @@ export class PosthogAnalytics {
         // (proposed wording) "Send pseudonymous usage data which helps us improve Element. This will use a cookie."
         //
         // TODO: Currently, this is only a labs flag, for testing purposes.
-        const pseudonumousOptIn = SettingsStore.getValue("feature_pseudonymousAnalyticsOptIn", null, true);
+        const pseudonumousOptIn = SettingsStore.getValue("feature_pseudonymous_analytics_opt_in", null, true);
 
         let anonymity;
         if (pseudonumousOptIn) {

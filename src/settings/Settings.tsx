@@ -299,7 +299,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_pseudonymousAnalyticsOptIn": {
+    "feature_pseudonymous_analytics_opt_in": {
         isFeature: true,
         supportedLevels: LEVELS_FEATURE,
         displayName: _td('Send pseudonymous analytics data'),
