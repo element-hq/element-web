@@ -178,7 +178,7 @@ export class PosthogAnalytics {
         }
     }
 
-    private sanitizeProperties(properties: posthog.Properties, _: string): posthog.Properties {
+    private sanitizeProperties(properties: posthog.Properties): posthog.Properties {
         // Callback from posthog to sanitize properties before sending them to the server.
         //
         // Here we sanitize posthog's built in properties which leak PII e.g. url reporting.
