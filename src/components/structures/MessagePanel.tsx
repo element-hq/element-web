@@ -36,6 +36,7 @@ import DMRoomMap from "../../utils/DMRoomMap";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import defaultDispatcher from '../../dispatcher/dispatcher';
+import CallEventGrouper from "./CallEventGrouper";
 import WhoIsTypingTile from '../views/rooms/WhoIsTypingTile';
 import ScrollPanel, { IScrollState } from "./ScrollPanel";
 import EventListSummary from '../views/elements/EventListSummary';
@@ -54,7 +55,11 @@ const membershipTypes = [EventType.RoomMember, EventType.RoomThirdPartyInvite, E
 
 // check if there is a previous event and it has the same sender as this event
 // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
-function shouldFormContinuation(prevEvent: MatrixEvent, mxEvent: MatrixEvent): boolean {
+function shouldFormContinuation(
+    prevEvent: MatrixEvent,
+    mxEvent: MatrixEvent,
+    showHiddenEvents: boolean,
+): boolean {
     // sanity check inputs
     if (!prevEvent || !prevEvent.sender || !mxEvent.sender) return false;
     // check if within the max continuation period
@@ -74,7 +79,7 @@ function shouldFormContinuation(prevEvent: MatrixEvent, mxEvent: MatrixEvent): b
         mxEvent.sender.getMxcAvatarUrl() !== prevEvent.sender.getMxcAvatarUrl()) return false;
 
     // if we don't have tile for previous event then it was shown by showHiddenEvents and has no SenderProfile
-    if (!haveTileForEvent(prevEvent)) return false;
+    if (!haveTileForEvent(prevEvent, showHiddenEvents)) return false;
 
     return true;
 }
@@ -228,6 +233,11 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     private readonly showTypingNotificationsWatcherRef: string;
     private eventNodes: Record<string, HTMLElement>;
 
+    // A map of <callId, CallEventGrouper>
+    private callEventGroupers = new Map<string, CallEventGrouper>();
+
+    private membersCount = 0;
+
     constructor(props, context) {
         super(props, context);
 
@@ -239,7 +249,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         };
 
         // Cache hidden events setting on mount since Settings is expensive to
-        // query, and we check this in a hot code path.
+        // query, and we check this in a hot code path. This is also cached in
+        // our RoomContext, however we still need a fallback for roomless MessagePanels.
         this.showHiddenEventsInTimeline = SettingsStore.getValue("showHiddenEventsInTimeline");
 
         this.showTypingNotificationsWatcherRef =
@@ -247,11 +258,14 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 
     componentDidMount() {
+        this.calculateRoomMembersCount();
+        this.props.room?.on("RoomState.members", this.calculateRoomMembersCount);
         this.isMounted = true;
     }
 
     componentWillUnmount() {
         this.isMounted = false;
+        this.props.room?.off("RoomState.members", this.calculateRoomMembersCount);
         SettingsStore.unwatchSetting(this.showTypingNotificationsWatcherRef);
     }
 
@@ -264,6 +278,10 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             });
         }
     }
+
+    private calculateRoomMembersCount = (): void => {
+        this.membersCount = this.props.room?.getMembers().length || 0;
+    };
 
     private onShowTypingNotificationsChange = (): void => {
         this.setState({
@@ -399,17 +417,21 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return !this.isMounted;
     };
 
+    private get showHiddenEvents(): boolean {
+        return this.context?.showHiddenEventsInTimeline ?? this.showHiddenEventsInTimeline;
+    }
+
     // TODO: Implement granular (per-room) hide options
     public shouldShowEvent(mxEv: MatrixEvent): boolean {
-        if (mxEv.sender && MatrixClientPeg.get().isUserIgnored(mxEv.sender.userId)) {
+        if (MatrixClientPeg.get().isUserIgnored(mxEv.getSender())) {
             return false; // ignored = no show (only happens if the ignore happens after an event was received)
         }
 
-        if (this.showHiddenEventsInTimeline) {
+        if (this.showHiddenEvents) {
             return true;
         }
 
-        if (!haveTileForEvent(mxEv)) {
+        if (!haveTileForEvent(mxEv, this.showHiddenEvents)) {
             return false; // no tile = no show
         }
 
@@ -567,9 +589,23 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             const last = (mxEv === lastShownEvent);
             const { nextEvent, nextTile } = this.getNextEventInfo(this.props.events, i);
 
+            if (
+                mxEv.getType().indexOf("m.call.") === 0 ||
+                mxEv.getType().indexOf("org.matrix.call.") === 0
+            ) {
+                const callId = mxEv.getContent().call_id;
+                if (this.callEventGroupers.has(callId)) {
+                    this.callEventGroupers.get(callId).add(mxEv);
+                } else {
+                    const callEventGrouper = new CallEventGrouper();
+                    callEventGrouper.add(mxEv);
+                    this.callEventGroupers.set(callId, callEventGrouper);
+                }
+            }
+
             if (grouper) {
                 if (grouper.shouldGroup(mxEv)) {
-                    grouper.add(mxEv);
+                    grouper.add(mxEv, this.showHiddenEvents);
                     continue;
                 } else {
                     // not part of group, so get the group tiles, close the
@@ -582,7 +618,15 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
             for (const Grouper of groupers) {
                 if (Grouper.canStartGroup(this, mxEv)) {
-                    grouper = new Grouper(this, mxEv, prevEvent, lastShownEvent, nextEvent, nextTile);
+                    grouper = new Grouper(
+                        this,
+                        mxEv,
+                        prevEvent,
+                        lastShownEvent,
+                        this.props.layout,
+                        nextEvent,
+                        nextTile,
+                    );
                 }
             }
             if (!grouper) {
@@ -644,12 +688,15 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         }
 
         let willWantDateSeparator = false;
+        let lastInSection = true;
         if (nextEvent) {
             willWantDateSeparator = this.wantsDateSeparator(mxEv, nextEvent.getDate() || new Date());
+            lastInSection = willWantDateSeparator || mxEv.getSender() !== nextEvent.getSender();
         }
 
         // is this a continuation of the previous message?
-        const continuation = !wantsDateSeparator && shouldFormContinuation(prevEvent, mxEv);
+        const continuation = !wantsDateSeparator &&
+            shouldFormContinuation(prevEvent, mxEv, this.showHiddenEvents);
 
         const eventId = mxEv.getId();
         const highlight = (eventId === this.props.highlightedEventId);
@@ -680,6 +727,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         // it's successful: we received it.
         isLastSuccessful = isLastSuccessful && mxEv.getSender() === MatrixClientPeg.get().getUserId();
 
+        const callEventGrouper = this.callEventGroupers.get(mxEv.getContent().call_id);
         // use txnId as key if available so that we don't remount during sending
         ret.push(
             <TileErrorBoundary key={mxEv.getTxnId() || eventId} mxEvent={mxEv}>
@@ -702,7 +750,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     isTwelveHour={this.props.isTwelveHour}
                     permalinkCreator={this.props.permalinkCreator}
                     last={last}
-                    lastInSection={willWantDateSeparator}
+                    lastInSection={lastInSection}
                     lastSuccessful={isLastSuccessful}
                     isSelectedEvent={highlight}
                     getRelationsForEvent={this.props.getRelationsForEvent}
@@ -710,6 +758,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     layout={this.props.layout}
                     enableFlair={this.props.enableFlair}
                     showReadReceipts={this.props.showReadReceipts}
+                    callEventGrouper={callEventGrouper}
+                    hideSender={this.membersCount <= 2 && this.props.layout === Layout.Bubble}
                 />
             </TileErrorBoundary>,
         );
@@ -939,6 +989,7 @@ abstract class BaseGrouper {
         public readonly event: MatrixEvent,
         public readonly prevEvent: MatrixEvent,
         public readonly lastShownEvent: MatrixEvent,
+        protected readonly layout: Layout,
         public readonly nextEvent?: MatrixEvent,
         public readonly nextEventTile?: MatrixEvent,
     ) {
@@ -946,7 +997,7 @@ abstract class BaseGrouper {
     }
 
     public abstract shouldGroup(ev: MatrixEvent): boolean;
-    public abstract add(ev: MatrixEvent): void;
+    public abstract add(ev: MatrixEvent, showHiddenEvents?: boolean): void;
     public abstract getTiles(): ReactNode[];
     public abstract getNewPrevEvent(): MatrixEvent;
 }
@@ -1065,6 +1116,7 @@ class CreationGrouper extends BaseGrouper {
                 onToggle={panel.onHeightChanged} // Update scroll state
                 summaryMembers={[ev.sender]}
                 summaryText={summaryText}
+                layout={this.layout}
             >
                 { eventTiles }
             </EventListSummary>,
@@ -1092,10 +1144,11 @@ class RedactionGrouper extends BaseGrouper {
         ev: MatrixEvent,
         prevEvent: MatrixEvent,
         lastShownEvent: MatrixEvent,
+        layout: Layout,
         nextEvent: MatrixEvent,
         nextEventTile: MatrixEvent,
     ) {
-        super(panel, ev, prevEvent, lastShownEvent, nextEvent, nextEventTile);
+        super(panel, ev, prevEvent, lastShownEvent, layout, nextEvent, nextEventTile);
         this.events = [ev];
     }
 
@@ -1160,6 +1213,7 @@ class RedactionGrouper extends BaseGrouper {
                 onToggle={panel.onHeightChanged} // Update scroll state
                 summaryMembers={Array.from(senders)}
                 summaryText={_t("%(count)s messages deleted.", { count: eventTiles.length })}
+                layout={this.layout}
             >
                 { eventTiles }
             </EventListSummary>,
@@ -1188,8 +1242,9 @@ class MemberGrouper extends BaseGrouper {
         public readonly event: MatrixEvent,
         public readonly prevEvent: MatrixEvent,
         public readonly lastShownEvent: MatrixEvent,
+        protected readonly layout: Layout,
     ) {
-        super(panel, event, prevEvent, lastShownEvent);
+        super(panel, event, prevEvent, lastShownEvent, layout);
         this.events = [event];
     }
 
@@ -1200,10 +1255,10 @@ class MemberGrouper extends BaseGrouper {
         return membershipTypes.includes(ev.getType() as EventType);
     }
 
-    public add(ev: MatrixEvent): void {
+    public add(ev: MatrixEvent, showHiddenEvents?: boolean): void {
         if (ev.getType() === EventType.RoomMember) {
             // We can ignore any events that don't actually have a message to display
-            if (!hasText(ev)) return;
+            if (!hasText(ev, showHiddenEvents)) return;
         }
         this.readMarker = this.readMarker || this.panel.readMarkerForEvent(
             ev.getId(),
@@ -1264,6 +1319,7 @@ class MemberGrouper extends BaseGrouper {
                 events={this.events}
                 onToggle={panel.onHeightChanged} // Update scroll state
                 startExpanded={highlightInMels}
+                layout={this.layout}
             >
                 { eventTiles }
             </MemberEventListSummary>,

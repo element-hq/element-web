@@ -163,7 +163,7 @@ export default class InteractiveAuthDialog extends React.Component {
         } else {
             content = (
                 <div id='mx_Dialog_content'>
-                    {body}
+                    { body }
                     <InteractiveAuth
                         ref={this._collectInteractiveAuth}
                         matrixClient={this.props.matrixClient}

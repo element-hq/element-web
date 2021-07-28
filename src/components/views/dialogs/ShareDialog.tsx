@@ -35,7 +35,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
-import GenericTextContextMenu from "../context_menus/GenericTextContextMenu.js";
+import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
 
 const socials = [
     {

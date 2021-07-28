@@ -15,26 +15,23 @@ limitations under the License.
 */
 
 import EMOJIBASE from 'emojibase-data/en/compact.json';
+import SHORTCODES from 'emojibase-data/en/shortcodes/iamcal.json';
 
 export interface IEmoji {
     annotation: string;
-    group: number;
+    group?: number;
     hexcode: string;
-    order: number;
+    order?: number;
     shortcodes: string[];
-    tags: string[];
+    tags?: string[];
     unicode: string;
+    skins?: Omit<IEmoji, "shortcodes" | "tags">[]; // Currently unused
     emoticon?: string;
 }
 
-interface IEmojiWithFilterString extends IEmoji {
-    filterString?: string;
-}
-
 // The unicode is stored without the variant selector
-const UNICODE_TO_EMOJI = new Map<string, IEmojiWithFilterString>(); // not exported as gets for it are handled by getEmojiFromUnicode
-export const EMOTICON_TO_EMOJI = new Map<string, IEmojiWithFilterString>();
-export const SHORTCODE_TO_EMOJI = new Map<string, IEmojiWithFilterString>();
+const UNICODE_TO_EMOJI = new Map<string, IEmoji>(); // not exported as gets for it are handled by getEmojiFromUnicode
+export const EMOTICON_TO_EMOJI = new Map<string, IEmoji>();
 
 export const getEmojiFromUnicode = unicode => UNICODE_TO_EMOJI.get(stripVariation(unicode));
 
@@ -62,17 +59,23 @@ export const DATA_BY_CATEGORY = {
     "flags": [],
 };
 
-const ZERO_WIDTH_JOINER = "\u200D";
-
 // Store various mappings from unicode/emoticon/shortcode to the Emoji objects
-EMOJIBASE.forEach((emoji: IEmojiWithFilterString) => {
+export const EMOJI: IEmoji[] = EMOJIBASE.map((emojiData: Omit<IEmoji, "shortcodes">) => {
+    // If there's ever a gap in shortcode coverage, we fudge it by
+    // filling it in with the emoji's CLDR annotation
+    const shortcodeData = SHORTCODES[emojiData.hexcode] ??
+        [emojiData.annotation.toLowerCase().replace(/ /g, "_")];
+
+    const emoji: IEmoji = {
+        ...emojiData,
+        // Homogenize shortcodes by ensuring that everything is an array
+        shortcodes: typeof shortcodeData === "string" ? [shortcodeData] : shortcodeData,
+    };
+
     const categoryId = EMOJIBASE_GROUP_ID_TO_CATEGORY[emoji.group];
     if (DATA_BY_CATEGORY.hasOwnProperty(categoryId)) {
         DATA_BY_CATEGORY[categoryId].push(emoji);
     }
-    // This is used as the string to match the query against when filtering emojis
-    emoji.filterString = (`${emoji.annotation}\n${emoji.shortcodes.join('\n')}}\n${emoji.emoticon || ''}\n` +
-        `${emoji.unicode.split(ZERO_WIDTH_JOINER).join("\n")}`).toLowerCase();
 
     // Add mapping from unicode to Emoji object
     // The 'unicode' field that we use in emojibase has either
@@ -88,12 +91,7 @@ EMOJIBASE.forEach((emoji: IEmojiWithFilterString) => {
         EMOTICON_TO_EMOJI.set(emoji.emoticon, emoji);
     }
 
-    if (emoji.shortcodes) {
-        // Add mapping from each shortcode to Emoji object
-        emoji.shortcodes.forEach(shortcode => {
-            SHORTCODE_TO_EMOJI.set(shortcode, emoji);
-        });
-    }
+    return emoji;
 });
 
 /**
@@ -107,5 +105,3 @@ EMOJIBASE.forEach((emoji: IEmojiWithFilterString) => {
 function stripVariation(str) {
     return str.replace(/[\uFE00-\uFE0F]$/, "");
 }
-
-export const EMOJI: IEmoji[] = EMOJIBASE;

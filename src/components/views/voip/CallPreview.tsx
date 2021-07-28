@@ -30,6 +30,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import UIStore from '../../../stores/UIStore';
 import { lerp } from '../../../utils/AnimationUtils';
 import { MarkedExecution } from '../../../utils/MarkedExecution';
+import { EventSubscription } from 'fbemitter';
 
 const PIP_VIEW_WIDTH = 336;
 const PIP_VIEW_HEIGHT = 232;
@@ -108,7 +109,7 @@ function getPrimarySecondaryCalls(calls: MatrixCall[]): [MatrixCall, MatrixCall[
  */
 @replaceableComponent("views.voip.CallPreview")
 export default class CallPreview extends React.Component<IProps, IState> {
-    private roomStoreToken: any;
+    private roomStoreToken: EventSubscription;
     private dispatcherRef: string;
     private settingsWatcherRef: string;
     private callViewWrapper = createRef<HTMLDivElement>();
@@ -145,7 +146,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         document.addEventListener("mousemove", this.onMoving);
         document.addEventListener("mouseup", this.onEndMoving);
-        window.addEventListener("resize", this.snap);
+        window.addEventListener("resize", this.onResize);
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
     }
@@ -155,13 +156,17 @@ export default class CallPreview extends React.Component<IProps, IState> {
         MatrixClientPeg.get().removeListener(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
         document.removeEventListener("mousemove", this.onMoving);
         document.removeEventListener("mouseup", this.onEndMoving);
-        window.removeEventListener("resize", this.snap);
+        window.removeEventListener("resize", this.onResize);
         if (this.roomStoreToken) {
             this.roomStoreToken.remove();
         }
         dis.unregister(this.dispatcherRef);
         SettingsStore.unwatchSetting(this.settingsWatcherRef);
     }
+
+    private onResize = (): void => {
+        this.snap(false);
+    };
 
     private animationCallback = () => {
         // If the PiP isn't being dragged and there is only a tiny difference in
@@ -206,7 +211,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
         }
     }
 
-    private snap = () => {
+    private snap(animate?: boolean): void {
         const translationX = this.desiredTranslationX;
         const translationY = this.desiredTranslationY;
         // We subtract the PiP size from the window size in order to calculate
@@ -235,12 +240,19 @@ export default class CallPreview extends React.Component<IProps, IState> {
             this.desiredTranslationY = PADDING.top;
         }
 
-        // We start animating here because we want the PiP to move when we're
-        // resizing the window
-        this.scheduledUpdate.mark();
-    };
+        if (animate) {
+            // We start animating here because we want the PiP to move when we're
+            // resizing the window
+            this.scheduledUpdate.mark();
+        } else {
+            this.setState({
+                translationX: this.desiredTranslationX,
+                translationY: this.desiredTranslationY,
+            });
+        }
+    }
 
-    private onRoomViewStoreUpdate = (payload) => {
+    private onRoomViewStoreUpdate = () => {
         if (RoomViewStore.getRoomId() === this.state.roomId) return;
 
         const roomId = RoomViewStore.getRoomId();
@@ -309,7 +321,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
 
     private onEndMoving = () => {
         this.moving = false;
-        this.snap();
+        this.snap(true);
     };
 
     public render() {
@@ -332,6 +344,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
                         secondaryCall={this.state.secondaryCall}
                         pipMode={true}
                         onMouseDownOnHeader={this.onStartMoving}
+                        onResize={this.onResize}
                     />
                 </div>
             );

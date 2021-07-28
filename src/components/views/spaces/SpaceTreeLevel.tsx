@@ -203,7 +203,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        showSpaceSettings(this.context, this.props.space);
+        showSpaceSettings(this.props.space);
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
@@ -222,7 +222,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        showCreateNewRoom(this.context, this.props.space);
+        showCreateNewRoom(this.props.space);
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
@@ -230,7 +230,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        showAddExistingRooms(this.context, this.props.space);
+        showAddExistingRooms(this.props.space);
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
@@ -285,7 +285,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
 
             let settingsOption;
             let leaveSection;
-            if (shouldShowSpaceSettings(this.context, this.props.space)) {
+            if (shouldShowSpaceSettings(this.props.space)) {
                 settingsOption = (
                     <IconizedContextMenuOption
                         iconClassName="mx_SpacePanel_iconSettings"
@@ -401,7 +401,11 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         let notifBadge;
         if (notificationState) {
             notifBadge = <div className="mx_SpacePanel_badgeContainer">
-                <NotificationBadge forceCount={false} notification={notificationState} />
+                <NotificationBadge
+                    onClick={() => SpaceStore.instance.setActiveRoomInSpace(space)}
+                    forceCount={false}
+                    notification={notificationState}
+                />
             </div>;
         }
 
@@ -457,7 +461,7 @@ const SpaceTreeLevel: React.FC<ITreeLevelProps> = ({
     parents,
 }) => {
     return <ul className="mx_SpaceTreeLevel">
-        {spaces.map(s => {
+        { spaces.map(s => {
             return (<SpaceItem
                 key={s.roomId}
                 activeSpaces={activeSpaces}
@@ -465,7 +469,7 @@ const SpaceTreeLevel: React.FC<ITreeLevelProps> = ({
                 isNested={isNested}
                 parents={parents}
             />);
-        })}
+        }) }
     </ul>;
 };
 

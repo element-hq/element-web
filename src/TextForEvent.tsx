@@ -13,9 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 import React from 'react';
-import { MatrixClientPeg } from './MatrixClientPeg';
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
 import { isValid3pidInvite } from "./RoomInvite";
@@ -32,7 +30,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 // any text to display at all. For this reason they return deferred values
 // to avoid the expense of looking up translations when they're not needed.
 
-function textForMemberEvent(ev): () => string | null {
+function textForMemberEvent(ev: MatrixEvent, allowJSX: boolean, showHiddenEvents?: boolean): () => string | null {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
     const senderName = ev.sender ? ev.sender.name : ev.getSender();
     const targetName = ev.target ? ev.target.name : ev.getStateKey();
@@ -84,7 +82,7 @@ function textForMemberEvent(ev): () => string | null {
                     return () => _t('%(senderName)s changed their profile picture', { senderName });
                 } else if (!prevContent.avatar_url && content.avatar_url) {
                     return () => _t('%(senderName)s set a profile picture', { senderName });
-                } else if (SettingsStore.getValue("showHiddenEventsInTimeline")) {
+                } else if (showHiddenEvents ?? SettingsStore.getValue("showHiddenEventsInTimeline")) {
                     // This is a null rejoin, it will only be visible if using 'show hidden events' (labs)
                     return () => _t("%(senderName)s made no change", { senderName });
                 } else {
@@ -127,7 +125,7 @@ function textForMemberEvent(ev): () => string | null {
     }
 }
 
-function textForTopicEvent(ev): () => string | null {
+function textForTopicEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     return () => _t('%(senderDisplayName)s changed the topic to "%(topic)s".', {
         senderDisplayName,
@@ -135,7 +133,7 @@ function textForTopicEvent(ev): () => string | null {
     });
 }
 
-function textForRoomNameEvent(ev): () => string | null {
+function textForRoomNameEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
 
     if (!ev.getContent().name || ev.getContent().name.trim().length === 0) {
@@ -154,12 +152,12 @@ function textForRoomNameEvent(ev): () => string | null {
     });
 }
 
-function textForTombstoneEvent(ev): () => string | null {
+function textForTombstoneEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     return () => _t('%(senderDisplayName)s upgraded this room.', { senderDisplayName });
 }
 
-function textForJoinRulesEvent(ev): () => string | null {
+function textForJoinRulesEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     switch (ev.getContent().join_rule) {
         case "public":
@@ -179,7 +177,7 @@ function textForJoinRulesEvent(ev): () => string | null {
     }
 }
 
-function textForGuestAccessEvent(ev): () => string | null {
+function textForGuestAccessEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     switch (ev.getContent().guest_access) {
         case "can_join":
@@ -195,7 +193,7 @@ function textForGuestAccessEvent(ev): () => string | null {
     }
 }
 
-function textForRelatedGroupsEvent(ev): () => string | null {
+function textForRelatedGroupsEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const groups = ev.getContent().groups || [];
     const prevGroups = ev.getPrevContent().groups || [];
@@ -225,7 +223,7 @@ function textForRelatedGroupsEvent(ev): () => string | null {
     }
 }
 
-function textForServerACLEvent(ev): () => string | null {
+function textForServerACLEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const prevContent = ev.getPrevContent();
     const current = ev.getContent();
@@ -255,7 +253,7 @@ function textForServerACLEvent(ev): () => string | null {
     return getText;
 }
 
-function textForMessageEvent(ev): () => string | null {
+function textForMessageEvent(ev: MatrixEvent): () => string | null {
     return () => {
         const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
         let message = senderDisplayName + ': ' + ev.getContent().body;
@@ -268,7 +266,7 @@ function textForMessageEvent(ev): () => string | null {
     };
 }
 
-function textForCanonicalAliasEvent(ev): () => string | null {
+function textForCanonicalAliasEvent(ev: MatrixEvent): () => string | null {
     const senderName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const oldAlias = ev.getPrevContent().alias;
     const oldAltAliases = ev.getPrevContent().alt_aliases || [];
@@ -319,91 +317,7 @@ function textForCanonicalAliasEvent(ev): () => string | null {
     });
 }
 
-function textForCallAnswerEvent(event): () => string | null {
-    return () => {
-        const senderName = event.sender ? event.sender.name : _t('Someone');
-        const supported = MatrixClientPeg.get().supportsVoip() ? '' : _t('(not supported by this browser)');
-        return _t('%(senderName)s answered the call.', { senderName }) + ' ' + supported;
-    };
-}
-
-function textForCallHangupEvent(event): () => string | null {
-    const getSenderName = () => event.sender ? event.sender.name : _t('Someone');
-    const eventContent = event.getContent();
-    let getReason = () => "";
-    if (!MatrixClientPeg.get().supportsVoip()) {
-        getReason = () => _t('(not supported by this browser)');
-    } else if (eventContent.reason) {
-        if (eventContent.reason === "ice_failed") {
-            // We couldn't establish a connection at all
-            getReason = () => _t('(could not connect media)');
-        } else if (eventContent.reason === "ice_timeout") {
-            // We established a connection but it died
-            getReason = () => _t('(connection failed)');
-        } else if (eventContent.reason === "user_media_failed") {
-            // The other side couldn't open capture devices
-            getReason = () => _t("(their device couldn't start the camera / microphone)");
-        } else if (eventContent.reason === "unknown_error") {
-            // An error code the other side doesn't have a way to express
-            // (as opposed to an error code they gave but we don't know about,
-            // in which case we show the error code)
-            getReason = () => _t("(an error occurred)");
-        } else if (eventContent.reason === "invite_timeout") {
-            getReason = () => _t('(no answer)');
-        } else if (eventContent.reason === "user hangup" || eventContent.reason === "user_hangup") {
-            // workaround for https://github.com/vector-im/element-web/issues/5178
-            // it seems Android randomly sets a reason of "user hangup" which is
-            // interpreted as an error code :(
-            // https://github.com/vector-im/riot-android/issues/2623
-            // Also the correct hangup code as of VoIP v1 (with underscore)
-            getReason = () => '';
-        } else {
-            getReason = () => _t('(unknown failure: %(reason)s)', { reason: eventContent.reason });
-        }
-    }
-    return () => _t('%(senderName)s ended the call.', { senderName: getSenderName() }) + ' ' + getReason();
-}
-
-function textForCallRejectEvent(event): () => string | null {
-    return () => {
-        const senderName = event.sender ? event.sender.name : _t('Someone');
-        return _t('%(senderName)s declined the call.', { senderName });
-    };
-}
-
-function textForCallInviteEvent(event): () => string | null {
-    const getSenderName = () => event.sender ? event.sender.name : _t('Someone');
-    // FIXME: Find a better way to determine this from the event?
-    let isVoice = true;
-    if (event.getContent().offer && event.getContent().offer.sdp &&
-            event.getContent().offer.sdp.indexOf('m=video') !== -1) {
-        isVoice = false;
-    }
-    const isSupported = MatrixClientPeg.get().supportsVoip();
-
-    // This ladder could be reduced down to a couple string variables, however other languages
-    // can have a hard time translating those strings. In an effort to make translations easier
-    // and more accurate, we break out the string-based variables to a couple booleans.
-    if (isVoice && isSupported) {
-        return () => _t("%(senderName)s placed a voice call.", {
-            senderName: getSenderName(),
-        });
-    } else if (isVoice && !isSupported) {
-        return () => _t("%(senderName)s placed a voice call. (not supported by this browser)", {
-            senderName: getSenderName(),
-        });
-    } else if (!isVoice && isSupported) {
-        return () => _t("%(senderName)s placed a video call.", {
-            senderName: getSenderName(),
-        });
-    } else if (!isVoice && !isSupported) {
-        return () => _t("%(senderName)s placed a video call. (not supported by this browser)", {
-            senderName: getSenderName(),
-        });
-    }
-}
-
-function textForThreePidInviteEvent(event): () => string | null {
+function textForThreePidInviteEvent(event: MatrixEvent): () => string | null {
     const senderName = event.sender ? event.sender.name : event.getSender();
 
     if (!isValid3pidInvite(event)) {
@@ -419,7 +333,7 @@ function textForThreePidInviteEvent(event): () => string | null {
     });
 }
 
-function textForHistoryVisibilityEvent(event): () => string | null {
+function textForHistoryVisibilityEvent(event: MatrixEvent): () => string | null {
     const senderName = event.sender ? event.sender.name : event.getSender();
     switch (event.getContent().history_visibility) {
         case 'invited':
@@ -441,7 +355,7 @@ function textForHistoryVisibilityEvent(event): () => string | null {
 }
 
 // Currently will only display a change if a user's power level is changed
-function textForPowerEvent(event): () => string | null {
+function textForPowerEvent(event: MatrixEvent): () => string | null {
     const senderName = event.sender ? event.sender.name : event.getSender();
     if (!event.getPrevContent() || !event.getPrevContent().users ||
         !event.getContent() || !event.getContent().users) {
@@ -523,7 +437,7 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string
     return () => _t("%(senderName)s changed the pinned messages for the room.", { senderName });
 }
 
-function textForWidgetEvent(event): () => string | null {
+function textForWidgetEvent(event: MatrixEvent): () => string | null {
     const senderName = event.getSender();
     const { name: prevName, type: prevType, url: prevUrl } = event.getPrevContent();
     const { name, type, url } = event.getContent() || {};
@@ -553,12 +467,12 @@ function textForWidgetEvent(event): () => string | null {
     }
 }
 
-function textForWidgetLayoutEvent(event): () => string | null {
+function textForWidgetLayoutEvent(event: MatrixEvent): () => string | null {
     const senderName = event.sender?.name || event.getSender();
     return () => _t("%(senderName)s has updated the widget layout", { senderName });
 }
 
-function textForMjolnirEvent(event): () => string | null {
+function textForMjolnirEvent(event: MatrixEvent): () => string | null {
     const senderName = event.getSender();
     const { entity: prevEntity } = event.getPrevContent();
     const { entity, recommendation, reason } = event.getContent();
@@ -646,15 +560,13 @@ function textForMjolnirEvent(event): () => string | null {
 }
 
 interface IHandlers {
-    [type: string]: (ev: MatrixEvent, allowJSX?: boolean) => (() => string | JSX.Element | null);
+    [type: string]:
+        (ev: MatrixEvent, allowJSX: boolean, showHiddenEvents?: boolean) =>
+            (() => string | JSX.Element | null);
 }
 
 const handlers: IHandlers = {
     'm.room.message': textForMessageEvent,
-    'm.call.invite': textForCallInviteEvent,
-    'm.call.answer': textForCallAnswerEvent,
-    'm.call.hangup': textForCallHangupEvent,
-    'm.call.reject': textForCallRejectEvent,
 };
 
 const stateHandlers: IHandlers = {
@@ -682,14 +594,27 @@ for (const evType of ALL_RULE_TYPES) {
     stateHandlers[evType] = textForMjolnirEvent;
 }
 
-export function hasText(ev): boolean {
+/**
+ * Determines whether the given event has text to display.
+ * @param ev The event
+ * @param showHiddenEvents An optional cached setting value for showHiddenEventsInTimeline
+ *     to avoid hitting the settings store
+ */
+export function hasText(ev: MatrixEvent, showHiddenEvents?: boolean): boolean {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
-    return Boolean(handler?.(ev));
+    return Boolean(handler?.(ev, false, showHiddenEvents));
 }
 
+/**
+ * Gets the textual content of the given event.
+ * @param ev The event
+ * @param allowJSX Whether to output rich JSX content
+ * @param showHiddenEvents An optional cached setting value for showHiddenEventsInTimeline
+ *     to avoid hitting the settings store
+ */
 export function textForEvent(ev: MatrixEvent): string;
-export function textForEvent(ev: MatrixEvent, allowJSX: true): string | JSX.Element;
-export function textForEvent(ev: MatrixEvent, allowJSX = false): string | JSX.Element {
+export function textForEvent(ev: MatrixEvent, allowJSX: true, showHiddenEvents?: boolean): string | JSX.Element;
+export function textForEvent(ev: MatrixEvent, allowJSX = false, showHiddenEvents?: boolean): string | JSX.Element {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
-    return handler?.(ev, allowJSX)?.() || '';
+    return handler?.(ev, allowJSX, showHiddenEvents)?.() || '';
 }

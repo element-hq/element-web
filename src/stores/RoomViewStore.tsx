@@ -96,7 +96,7 @@ class RoomViewStore extends Store<ActionPayload> {
         this.__emitChange();
     }
 
-    __onDispatch(payload) {
+    __onDispatch(payload) { // eslint-disable-line @typescript-eslint/naming-convention
         switch (payload.action) {
             // view_room:
             //      - room_alias:   '#somealias:matrix.org'
@@ -325,8 +325,8 @@ class RoomViewStore extends Store<ActionPayload> {
             msg = _t("There was an error joining the room");
         } else if (err.errcode === 'M_INCOMPATIBLE_ROOM_VERSION') {
             msg = <div>
-                {_t("Sorry, your homeserver is too old to participate in this room.")}<br />
-                {_t("Please contact your homeserver administrator.")}
+                { _t("Sorry, your homeserver is too old to participate in this room.") }<br />
+                { _t("Please contact your homeserver administrator.") }
             </div>;
         } else if (err.httpStatus === 404) {
             const invitingUserId = this.getInvitingUserId(this.state.roomId);
@@ -429,7 +429,7 @@ class RoomViewStore extends Store<ActionPayload> {
     }
 }
 
-let singletonRoomViewStore = null;
+let singletonRoomViewStore: RoomViewStore = null;
 if (!singletonRoomViewStore) {
     singletonRoomViewStore = new RoomViewStore();
 }

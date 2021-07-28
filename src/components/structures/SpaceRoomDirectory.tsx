@@ -18,6 +18,7 @@ import React, { ReactNode, useMemo, useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
+import { ISpaceSummaryRoom, ISpaceSummaryEvent } from "matrix-js-sdk/src/@types/spaces";
 import classNames from "classnames";
 import { sortBy } from "lodash";
 
@@ -51,36 +52,6 @@ interface IHierarchyProps {
     additionalButtons?: ReactNode;
     showRoom(room: ISpaceSummaryRoom, viaServers?: string[], autoJoin?: boolean): void;
 }
-
-/* eslint-disable camelcase */
-export interface ISpaceSummaryRoom {
-    canonical_alias?: string;
-    aliases: string[];
-    avatar_url?: string;
-    guest_can_join: boolean;
-    name?: string;
-    num_joined_members: number;
-    room_id: string;
-    topic?: string;
-    world_readable: boolean;
-    num_refs: number;
-    room_type: string;
-}
-
-export interface ISpaceSummaryEvent {
-    room_id: string;
-    event_id: string;
-    origin_server_ts: number;
-    type: string;
-    state_key: string;
-    content: {
-        order?: string;
-        suggested?: boolean;
-        auto_join?: boolean;
-        via?: string[];
-    };
-}
-/* eslint-enable camelcase */
 
 interface ITileProps {
     room: ISpaceSummaryRoom;
@@ -433,7 +404,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
     const [saving, setSaving] = useState(false);
 
     if (summaryError) {
-        return <p>{_t("Your server does not support showing space hierarchies.")}</p>;
+        return <p>{ _t("Your server does not support showing space hierarchies.") }</p>;
     }
 
     let content;
@@ -598,7 +569,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
     return <>
         <SearchBox
             className="mx_textinput_icon mx_textinput_search"
-            placeholder={ _t("Search names and descriptions") }
+            placeholder={_t("Search names and descriptions")}
             onSearch={setQuery}
             autoFocus={true}
             initialValue={initialText}
@@ -637,7 +608,7 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, onFinished, initialText }
                 { _t("If you can't find the room you're looking for, ask for an invite or <a>create a new room</a>.",
                     null,
                     { a: sub => {
-                        return <AccessibleButton kind="link" onClick={onCreateRoomClick}>{sub}</AccessibleButton>;
+                        return <AccessibleButton kind="link" onClick={onCreateRoomClick}>{ sub }</AccessibleButton>;
                     } },
                 ) }
 

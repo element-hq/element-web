@@ -327,7 +327,7 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 $message-body-panel-fg-color: $secondary-fg-color;
 $message-body-panel-bg-color: #E3E8F0; // "Separator"
 $message-body-panel-icon-fg-color: $secondary-fg-color;
-$message-body-panel-icon-bg-color: $primary-bg-color;
+$message-body-panel-icon-bg-color: #F4F6FA;
 
 // These two don't change between themes. They are the $warning-color, but we don't
 // want custom themes to affect them by accident.
@@ -348,6 +348,13 @@ $roomlist-background-blur-amount: 40px;
 $groupFilterPanel-background-blur-amount: 20px;
 
 $composer-shadow-color: rgba(0, 0, 0, 0.04);
+
+// Bubble tiles
+$eventbubble-self-bg: #F8FDFC;
+$eventbubble-others-bg: #F7F8F9;
+$eventbubble-bg-hover: #FEFCF5;
+$eventbubble-avatar-outline: $primary-bg-color;
+$eventbubble-reply-color: #C1C6CD;
 
 // ***** Mixins! *****
 

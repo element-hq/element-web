@@ -40,10 +40,12 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onH
 
     const ts = mxEvent.getTs();
     const previews = useAsyncMemo<[string, IPreviewUrlResponse][]>(async () => {
-        return Promise.all<[string, IPreviewUrlResponse] | void>(links.map(link => {
-            return cli.getUrlPreview(link, ts).then(preview => [link, preview], error => {
+        return Promise.all<[string, IPreviewUrlResponse] | void>(links.map(async link => {
+            try {
+                return [link, await cli.getUrlPreview(link, ts)];
+            } catch (error) {
                 console.error("Failed to get URL preview: " + error);
-            });
+            }
         })).then(a => a.filter(Boolean)) as Promise<[string, IPreviewUrlResponse][]>;
     }, [links, ts], []);
 

@@ -408,7 +408,7 @@ export default class AppTile extends React.Component {
                     // AppTile's border is in the wrong place
                     appTileBody = <div className="mx_AppTile_persistedWrapper">
                         <PersistedElement persistKey={this._persistKey}>
-                            {appTileBody}
+                            { appTileBody }
                         </PersistedElement>
                     </div>;
                 }
@@ -453,13 +453,13 @@ export default class AppTile extends React.Component {
                             title={_t('Popout widget')}
                             onClick={this._onPopoutWidgetClick}
                         /> }
-                        { <ContextMenuButton
+                        <ContextMenuButton
                             className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_menu"
                             label={_t("Options")}
                             isExpanded={this.state.menuDisplayed}
                             inputRef={this._contextMenuButton}
                             onClick={this._onContextMenuClick}
-                        /> }
+                        />
                     </span>
                 </div> }
                 { appTileBody }

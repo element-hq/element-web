@@ -63,7 +63,7 @@ const PREVIEWS = {
 const MAX_EVENTS_BACKWARDS = 50;
 
 // type merging ftw
-type TAG_ANY = "im.vector.any";
+type TAG_ANY = "im.vector.any"; // eslint-disable-line @typescript-eslint/naming-convention
 const TAG_ANY: TAG_ANY = "im.vector.any";
 
 interface IState {
