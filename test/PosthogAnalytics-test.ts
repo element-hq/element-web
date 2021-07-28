@@ -1,7 +1,7 @@
 import { Anonymity, getRedactedCurrentLocation, IAnonymousEvent, IPseudonymousEvent, IRoomEvent,
     PosthogAnalytics } from '../src/PosthogAnalytics';
 import SdkConfig from '../src/SdkConfig';
-import crypto = require('crypto');
+import crypto from 'crypto';
 
 class FakePosthog {
     public capture;
