@@ -16,7 +16,6 @@ limitations under the License.
 
 import React, { ReactNode, useMemo, useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixClient } from "matrix-js-sdk/src/client";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { ISpaceSummaryRoom, ISpaceSummaryEvent } from "matrix-js-sdk/src/@types/spaces";
 import classNames from "classnames";
