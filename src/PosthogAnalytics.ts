@@ -264,7 +264,7 @@ export class PosthogAnalytics {
         this.posthog.capture(eventName, properties);
     }
 
-    public isEnabled() {
+    public isEnabled(): boolean {
         return this.enabled;
     }
 
