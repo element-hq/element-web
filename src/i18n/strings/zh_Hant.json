@@ -3596,5 +3596,6 @@
     "Your camera is still enabled": "您的攝影機仍為啟用狀態",
     "Your camera is turned off": "您的攝影機已關閉",
     "You are presenting": "您正在出席",
-    "%(sharerName)s is presenting": "%(sharerName)s 正在出席"
+    "%(sharerName)s is presenting": "%(sharerName)s 正在出席",
+    "Anyone will be able to find and join this room.": "任何人都可以找到並加入此聊天室。"
 }
