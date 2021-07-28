@@ -146,7 +146,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                         { "b": (sub) => <b> { sub } </b> },
                     ) } </p>
                     <p> { _t(
-                        "To avoid these issues, create a <a> new private encrypted room </a> for " +
+                        "To avoid these issues, create a <a> new encrypted room </a> for " +
                         "the conversation you plan to have.",
                         null,
                         { "a": (sub) => <a onClick={() => {
