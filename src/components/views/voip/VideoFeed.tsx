@@ -47,7 +47,7 @@ interface IState {
 }
 
 @replaceableComponent("views.voip.VideoFeed")
-export default class VideoFeed extends React.Component<IProps, IState> {
+export default class VideoFeed extends React.PureComponent<IProps, IState> {
     private element: HTMLVideoElement;
 
     constructor(props: IProps) {
