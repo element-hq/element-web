@@ -1318,7 +1318,7 @@
     "Use an email address to recover your account": "A felhasználói fiók visszaszerzése e-mail címmel",
     "Enter email address (required on this homeserver)": "E-mail cím megadása (ezen a matrix szerveren kötelező)",
     "Doesn't look like a valid email address": "Az e-mail cím nem tűnik érvényesnek",
-    "Enter password": "Jelszó megadása",
+    "Enter password": "Adja meg a jelszót",
     "Password is allowed, but unsafe": "A jelszó engedélyezett, de nem biztonságos",
     "Nice, strong password!": "Szép, erős jelszó!",
     "Passwords don't match": "A jelszavak nem egyeznek meg",
