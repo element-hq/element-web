@@ -67,6 +67,7 @@ interface IState {
     screensharing: boolean;
     callState: CallState;
     controlsVisible: boolean;
+    hoveringControls: boolean;
     showMoreMenu: boolean;
     showDialpad: boolean;
     primaryFeed: CallFeed;
@@ -102,7 +103,7 @@ function exitFullscreen() {
     if (exitMethod) exitMethod.call(document);
 }
 
-const CONTROLS_HIDE_DELAY = 1000;
+const CONTROLS_HIDE_DELAY = 2000;
 // Height of the header duplicated from CSS because we need to subtract it from our max
 // height to get the max height of the video
 const CONTEXT_MENU_VPADDING = 8; // How far the context menu sits above the button (px)
@@ -128,6 +129,7 @@ export default class CallView extends React.Component<IProps, IState> {
             screensharing: this.props.call.isScreensharing(),
             callState: this.props.call.state,
             controlsVisible: true,
+            hoveringControls: false,
             showMoreMenu: false,
             showDialpad: false,
             primaryFeed: primary,
@@ -244,6 +246,7 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onControlsHideTimer = () => {
+        if (this.state.hoveringControls || this.state.showDialpad || this.state.showMoreMenu) return;
         this.controlsHideTimer = null;
         this.setState({
             controlsVisible: false,
@@ -293,24 +296,10 @@ export default class CallView extends React.Component<IProps, IState> {
 
     private onDialpadClick = (): void => {
         if (!this.state.showDialpad) {
-            if (this.controlsHideTimer) {
-                clearTimeout(this.controlsHideTimer);
-                this.controlsHideTimer = null;
-            }
-
-            this.setState({
-                showDialpad: true,
-                controlsVisible: true,
-            });
+            this.setState({ showDialpad: true });
+            this.showControls();
         } else {
-            if (this.controlsHideTimer !== null) {
-                clearTimeout(this.controlsHideTimer);
-            }
-            this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
-
-            this.setState({
-                showDialpad: false,
-            });
+            this.setState({ showDialpad: false });
         }
     };
 
@@ -345,29 +334,16 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onMoreClick = (): void => {
-        if (this.controlsHideTimer) {
-            clearTimeout(this.controlsHideTimer);
-            this.controlsHideTimer = null;
-        }
-
-        this.setState({
-            showMoreMenu: true,
-            controlsVisible: true,
-        });
+        this.setState({ showMoreMenu: true });
+        this.showControls();
     };
 
     private closeDialpad = (): void => {
-        this.setState({
-            showDialpad: false,
-        });
-        this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
+        this.setState({ showDialpad: false });
     };
 
     private closeContextMenu = (): void => {
-        this.setState({
-            showMoreMenu: false,
-        });
-        this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
+        this.setState({ showMoreMenu: false });
     };
 
     // we register global shortcuts here, they *must not conflict* with local shortcuts elsewhere or both will fire
@@ -401,6 +377,15 @@ export default class CallView extends React.Component<IProps, IState> {
             ev.stopPropagation();
             ev.preventDefault();
         }
+    };
+
+    private onCallControlsMouseEnter = (): void => {
+        this.setState({ hoveringControls: true });
+        this.showControls();
+    };
+
+    private onCallControlsMouseLeave = (): void => {
+        this.setState({ hoveringControls: false });
     };
 
     private onRoomAvatarClick = (): void => {
@@ -537,8 +522,6 @@ export default class CallView extends React.Component<IProps, IState> {
         }
 
         // The dial pad & 'more' button actions are only relevant in a connected call
-        // When not connected, we have to put something there to make the flexbox alignment correct
-        let dialpadButton;
         let contextMenuButton;
         if (this.state.callState === CallState.Connected) {
             contextMenuButton = (
@@ -549,6 +532,9 @@ export default class CallView extends React.Component<IProps, IState> {
                     isExpanded={this.state.showMoreMenu}
                 />
             );
+        }
+        let dialpadButton;
+        if (this.state.callState === CallState.Connected && this.props.call.opponentSupportsDTMF()) {
             dialpadButton = (
                 <ContextMenuButton
                     className="mx_CallView_callControls_button mx_CallView_callControls_dialpad"
@@ -560,7 +546,11 @@ export default class CallView extends React.Component<IProps, IState> {
         }
 
         return (
-            <div className={callControlsClasses}>
+            <div
+                className={callControlsClasses}
+                onMouseEnter={this.onCallControlsMouseEnter}
+                onMouseLeave={this.onCallControlsMouseLeave}
+            >
                 { dialpadButton }
                 <AccessibleButton
                     className={micClasses}
@@ -821,10 +811,15 @@ export default class CallView extends React.Component<IProps, IState> {
             { expandButton }
         </div>;
 
+        const callTypeIconClassName = classNames("mx_CallView_header_callTypeIcon", {
+            "mx_CallView_header_callTypeIcon_voice": !isVideoCall,
+            "mx_CallView_header_callTypeIcon_video": isVideoCall,
+        });
+
         let header: React.ReactNode;
         if (!this.props.pipMode) {
             header = <div className="mx_CallView_header">
-                <div className="mx_CallView_header_phoneIcon" />
+                <div className={callTypeIconClassName} />
                 <span className="mx_CallView_header_callType">{ callTypeText }</span>
                 { headerControls }
             </div>;
