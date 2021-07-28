@@ -83,7 +83,7 @@ const hashHex = async (input: string): Promise<string> => {
     return [...new Uint8Array(digestBuf)].map((b: number) => b.toString(16).padStart(2, "0")).join("");
 };
 
-const knownScreens = new Set([
+const whitelistedScreens = new Set([
     "register", "login", "forgot_password", "soft_logout", "new", "settings", "welcome", "home", "start", "directory",
     "start_sso", "start_cas", "groups", "complete_security", "post_registration", "room", "user", "group",
 ]);
@@ -102,7 +102,7 @@ export async function getRedactedCurrentLocation(origin: string, hash: string, p
     } else {
         let [_, screen, ...parts] = hash.split("/");
 
-        if (!knownScreens.has(screen)) {
+        if (!whitelistedScreens.has(screen)) {
             screen = "<redacted_screen_name>";
         }
 
