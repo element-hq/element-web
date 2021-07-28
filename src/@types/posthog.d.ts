@@ -1,3 +1,12 @@
+// A clone of the type definitions from posthog-js, stripped of references to transitive
+// dependencies which we don't actually use, so that we don't need to install them.
+//
+// Original file lives in node_modules/posthog/dist/module.d.ts
+
+/* eslint-disable @typescript-eslint/member-delimiter-style */
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable camelcase */
+
 // Type definitions for exported methods
 
 declare class posthog {
