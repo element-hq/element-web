@@ -62,15 +62,6 @@ describe("PosthogAnalytics", () => {
                     }
                     return bytes;
                 },
-                /*console.log(message);
-                    const digest = sha256(new WordArray(message));
-                    const digestBuf = new ArrayBuffer(digest.words.length * 4);
-                    console.log(digest);
-                    const view = new Uint32Array(digestBuf);
-                    for (let i = 0; i < digest.words.length; i++) {
-                        view[i] = digest.words[i];
-                    }
-                    return digestBuf*/
             },
         };
     });
