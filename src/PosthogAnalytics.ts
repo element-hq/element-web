@@ -36,6 +36,7 @@ interface IPageView extends IAnonymousEvent {
     eventName: "$pageview",
     properties: {
         durationMs?: number
+        screen?: string
     }
 }
 
@@ -289,8 +290,17 @@ export class PosthogAnalytics {
     }
 
     public async trackPageView(durationMs: number) {
+        const hash = window.location.hash;
+
+        let screen = null;
+        const split = hash.split("/");
+        if (split.length >= 2) {
+            screen = split[1];
+        }
+
         await this.trackAnonymousEvent<IPageView>("$pageview", {
             durationMs,
+            screen,
         });
     }
 
