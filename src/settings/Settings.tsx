@@ -179,9 +179,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             feedbackSubheading: _td("Your feedback will help make spaces better. " +
                 "The more detail you can go into, the better."),
             feedbackLabel: "spaces-feedback",
-            extraSettings: [
-                "Spaces.all_rooms_in_home",
-            ],
         },
     },
     "feature_dnd": {
@@ -753,7 +750,8 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "Spaces.all_rooms_in_home": {
         displayName: _td("Show all rooms in Home"),
-        supportedLevels: LEVELS_FEATURE,
+        description: _td("All rooms you're in will appear in Home."),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: false,
     },
     [UIFeature.RoomHistorySettings]: {
