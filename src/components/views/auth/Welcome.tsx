@@ -76,6 +76,6 @@ export default class Welcome extends React.PureComponent<IProps> {
     }
 
     componentDidMount() {
-        getAnalytics().trackAnonymousEvent<IWelcomeScreenLoad>("welcome_screen_load", { foo: "bar" });
+        getAnalytics().trackAnonymousEvent<IWelcomeScreenLoad>("welcome_screen_load", {});
     }
 }

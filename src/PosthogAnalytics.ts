@@ -32,15 +32,15 @@ import SettingsStore from './settings/SettingsStore';
  * - Otherwise, if the existing `analyticsOptIn` flag is `true`, or not present (i.e. prior to
  *   logging in), track anonymously, i.e. redact all matrix identifiers in tracking events.
  * - If both flags are false, events are not sent.
-*/
+ */
 
 interface IEvent {
-    // The event name that will be used by PostHog.
-    // TODO: standard format (camel case? snake? UpperCase?)
+    // The event name that will be used by PostHog. Event names should use snake_case.
     eventName: string;
 
-    // The properties of the event that will be stored in PostHog.
-    properties: {};
+    // The properties of the event that will be stored in PostHog. This is just a placeholder,
+    // extending interfaces must override this with a concrete definition to do type validation.
+    properties: {}
 }
 
 export enum Anonymity {
@@ -73,6 +73,7 @@ interface IPageView extends IAnonymousEvent {
 
 export interface IWelcomeScreenLoad extends IAnonymousEvent {
     eventName: "welcome_screen_load";
+    properties: Record<any, never>;
 }
 
 const hashHex = async (input: string): Promise<string> => {
