@@ -149,7 +149,7 @@ export class PosthogAnalytics {
     private static _instance = null;
     private platformSuperProperties = {};
 
-    public static instance(): PosthogAnalytics {
+    public static get instance(): PosthogAnalytics {
         if (!this._instance) {
             this._instance = new PosthogAnalytics(posthog);
         }
@@ -361,8 +361,4 @@ export class PosthogAnalytics {
             await this.identifyUser(userId);
         }
     }
-}
-
-export function getAnalytics(): PosthogAnalytics {
-    return PosthogAnalytics.instance();
 }

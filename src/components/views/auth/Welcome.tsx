@@ -25,7 +25,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { getAnalytics, IWelcomeScreenLoad } from "../../../PosthogAnalytics";
+import { PosthogAnalytics, IWelcomeScreenLoad } from "../../../PosthogAnalytics";
 import LanguageSelector from "./LanguageSelector";
 
 // translatable strings for Welcome pages
@@ -76,6 +76,6 @@ export default class Welcome extends React.PureComponent<IProps> {
     }
 
     componentDidMount() {
-        getAnalytics().trackAnonymousEvent<IWelcomeScreenLoad>("welcome_screen_load");
+        PosthogAnalytics.instance.trackAnonymousEvent<IWelcomeScreenLoad>("welcome_screen_load");
     }
 }

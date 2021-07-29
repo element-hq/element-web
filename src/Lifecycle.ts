@@ -48,7 +48,7 @@ import { Jitsi } from "./widgets/Jitsi";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY, SSO_IDP_ID_KEY } from "./BasePlatform";
 import ThreepidInviteStore from "./stores/ThreepidInviteStore";
 import CountlyAnalytics from "./CountlyAnalytics";
-import { getAnalytics } from "./PosthogAnalytics";
+import { PosthogAnalytics } from "./PosthogAnalytics";
 import CallHandler from './CallHandler';
 import LifecycleCustomisations from "./customisations/Lifecycle";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
@@ -574,7 +574,7 @@ async function doSetLoggedIn(
         await abortLogin();
     }
 
-    getAnalytics().updateAnonymityFromSettings(credentials.userId);
+    PosthogAnalytics.instance.updateAnonymityFromSettings(credentials.userId);
 
     Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl);
 
@@ -703,7 +703,7 @@ export function logout(): void {
         CountlyAnalytics.instance.enable(/* anonymous = */ true);
     }
 
-    getAnalytics().logout();
+    PosthogAnalytics.instance.logout();
 
     if (MatrixClientPeg.get().isGuest()) {
         // logout doesn't work for guest sessions

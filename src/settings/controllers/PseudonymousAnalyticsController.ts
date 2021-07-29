@@ -16,11 +16,11 @@ limitations under the License.
 
 import SettingController from "./SettingController";
 import { SettingLevel } from "../SettingLevel";
-import { getAnalytics } from "../../PosthogAnalytics";
+import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 
 export default class PseudonymousAnalyticsController extends SettingController {
     public onChange(level: SettingLevel, roomId: string, newValue: any) {
-        getAnalytics().updateAnonymityFromSettings(MatrixClientPeg.get().getUserId());
+        PosthogAnalytics.instance.updateAnonymityFromSettings(MatrixClientPeg.get().getUserId());
     }
 }
