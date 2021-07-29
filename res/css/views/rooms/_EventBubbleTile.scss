@@ -38,18 +38,22 @@ limitations under the License.
         padding-top: 0;
     }
 
+    &::before {
+        content: '';
+        position: absolute;
+        top: -1px;
+        bottom: -1px;
+        left: -60px;
+        right: -60px;
+        z-index: -1;
+        border-radius: 4px;
+    }
+
     &:hover,
     &.mx_EventTile_selected {
+
         &::before {
-            content: '';
-            position: absolute;
-            top: -1px;
-            bottom: -1px;
-            left: -60px;
-            right: -60px;
-            z-index: -1;
             background: $eventbubble-bg-hover;
-            border-radius: 4px;
         }
 
         .mx_EventTile_avatar {
