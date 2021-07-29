@@ -33,6 +33,10 @@ import AddExistingSubspaceDialog from "../components/views/dialogs/AddExistingSu
 import defaultDispatcher from "../dispatcher/dispatcher";
 import RoomViewStore from "../stores/RoomViewStore";
 import { Action } from "../dispatcher/actions";
+import { leaveRoomBehaviour } from "./membership";
+import Spinner from "../components/views/elements/Spinner";
+import dis from "../dispatcher/dispatcher";
+import LeaveSpaceDialog from "../components/views/dialogs/LeaveSpaceDialog";
 
 export const shouldShowSpaceSettings = (space: Room) => {
     const userId = space.client.getUserId();
@@ -147,4 +151,25 @@ export const showCreateNewSubspace = (space: Room): void => {
         },
         "mx_CreateSubspaceDialog_wrapper",
     );
+};
+
+export const leaveSpace = (space: Room) => {
+    Modal.createTrackedDialog("Leave Space", "", LeaveSpaceDialog, {
+        space,
+        onFinished: async (leave: boolean, rooms: Room[]) => {
+            if (!leave) return;
+            const modal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
+            try {
+                await Promise.all(rooms.map(r => leaveRoomBehaviour(r.roomId)));
+                await leaveRoomBehaviour(space.roomId);
+            } finally {
+                modal.close();
+            }
+
+            dis.dispatch({
+                action: "after_leave_room",
+                room_id: space.roomId,
+            });
+        },
+    }, "mx_LeaveSpaceDialog_wrapper");
 };
