@@ -144,7 +144,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
     }
 
     private onNewStream = async () => {
-        this.setState({
+        await this.setState({
             audioMuted: this.props.feed.isAudioMuted(),
             videoMuted: this.props.feed.isVideoMuted(),
         });
@@ -176,11 +176,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         });
 
         let micIcon;
-        if (
-            feed.purpose !== SDPStreamMetadataPurpose.Screenshare &&
-            !pipMode &&
-            !feed.isLocal()
-        ) {
+        if (feed.purpose !== SDPStreamMetadataPurpose.Screenshare && !pipMode) {
             micIcon = (
                 <div className={micIconClasses} />
             );
