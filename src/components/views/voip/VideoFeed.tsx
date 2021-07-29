@@ -22,7 +22,7 @@ import { CallFeed, CallFeedEvent } from 'matrix-js-sdk/src/webrtc/callFeed';
 import { logger } from 'matrix-js-sdk/src/logger';
 import MemberAvatar from "../avatars/MemberAvatar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { objectHasDiff } from '../../../utils/objects';
+import { SDPStreamMetadataPurpose } from 'matrix-js-sdk/src/webrtc/callEventTypes';
 
 interface IProps {
     call: MatrixCall;
@@ -165,39 +165,62 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
     };
 
     render() {
-        const videoClasses = {
-            mx_VideoFeed: true,
+        const { pipMode, primary, feed } = this.props;
+
+        const wrapperClasses = classnames("mx_VideoFeed", {
             mx_VideoFeed_voice: this.state.videoMuted,
-            mx_VideoFeed_video: !this.state.videoMuted,
-            mx_VideoFeed_mirror: (
-                this.props.feed.isLocal() &&
-                SettingsStore.getValue('VideoView.flipVideoHorizontally')
-            ),
-        };
+        });
+        const micIconClasses = classnames("mx_VideoFeed_mic", {
+            mx_VideoFeed_mic_muted: this.state.audioMuted,
+            mx_VideoFeed_mic_unmuted: !this.state.audioMuted,
+        });
 
-        const { pipMode, primary } = this.props;
+        let micIcon;
+        if (
+            feed.purpose !== SDPStreamMetadataPurpose.Screenshare &&
+            !pipMode &&
+            !feed.isLocal()
+        ) {
+            micIcon = (
+                <div className={micIconClasses} />
+            );
+        }
 
+        let content;
         if (this.state.videoMuted) {
             const member = this.props.feed.getMember();
+
             let avatarSize;
             if (pipMode && primary) avatarSize = 76;
             else if (pipMode && !primary) avatarSize = 16;
             else if (!pipMode && primary) avatarSize = 160;
             else; // TBD
 
-            return (
-                <div className={classnames(videoClasses)}>
-                    <MemberAvatar
-                        member={member}
-                        height={avatarSize}
-                        width={avatarSize}
-                    />
-                </div>
+            content =(
+                <MemberAvatar
+                    member={member}
+                    height={avatarSize}
+                    width={avatarSize}
+                />
             );
         } else {
-            return (
-                <video className={classnames(videoClasses)} ref={this.setElementRef} />
+            const videoClasses = classnames("mx_VideoFeed_video", {
+                mx_VideoFeed_video_mirror: (
+                    this.props.feed.isLocal() &&
+                    SettingsStore.getValue('VideoView.flipVideoHorizontally')
+                ),
+            });
+
+            content= (
+                <video className={videoClasses} ref={this.setElementRef} />
             );
         }
+
+        return (
+            <div className={wrapperClasses}>
+                { micIcon }
+                { content }
+            </div>
+        );
     }
 }
