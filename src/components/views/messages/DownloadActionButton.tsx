@@ -87,7 +87,7 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
 
         return <RovingAccessibleTooltipButton
             className={classes}
-            title={spinner ? _t("Downloading") : _t("Download")}
+            title={spinner ? _t("Decrypting") : _t("Download")}
             onClick={this.onDownloadClick}
             disabled={!!spinner}
         >
