@@ -24,9 +24,11 @@ import {
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from "./IconizedContextMenu";
 import { _t } from "../../../languageHandler";
 import {
+    leaveSpace,
     shouldShowSpaceSettings,
     showAddExistingRooms,
     showCreateNewRoom,
+    showCreateNewSubspace,
     showSpaceInvite,
     showSpaceSettings,
 } from "../../../utils/space";
@@ -37,6 +39,7 @@ import RoomViewStore from "../../../stores/RoomViewStore";
 import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import { Action } from "../../../dispatcher/actions";
 import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
+import { BetaPill } from "../beta/BetaCard";
 
 interface IProps extends IContextMenuProps {
     space: Room;
@@ -89,10 +92,7 @@ const SpaceContextMenu = ({ space, onFinished, ...props }: IProps) => {
             ev.preventDefault();
             ev.stopPropagation();
 
-            defaultDispatcher.dispatch({
-                action: "leave_room",
-                room_id: space.roomId,
-            });
+            leaveSpace(space);
             onFinished();
         };
 
@@ -125,6 +125,14 @@ const SpaceContextMenu = ({ space, onFinished, ...props }: IProps) => {
             onFinished();
         };
 
+        const onNewSubspaceClick = (ev: ButtonEvent) => {
+            ev.preventDefault();
+            ev.stopPropagation();
+
+            showCreateNewSubspace(space);
+            onFinished();
+        };
+
         newRoomSection = <IconizedContextMenuOptionList first>
             <IconizedContextMenuOption
                 iconClassName="mx_SpacePanel_iconPlus"
@@ -136,6 +144,13 @@ const SpaceContextMenu = ({ space, onFinished, ...props }: IProps) => {
                 label={_t("Add existing room")}
                 onClick={onAddExistingRoomClick}
             />
+            <IconizedContextMenuOption
+                iconClassName="mx_SpacePanel_iconPlus"
+                label={_t("Add space")}
+                onClick={onNewSubspaceClick}
+            >
+                <BetaPill />
+            </IconizedContextMenuOption>
         </IconizedContextMenuOptionList>;
     }
 

@@ -124,6 +124,7 @@ export interface ISetting {
     // not use this for new settings.
     invertedSettingName?: string;
 
+    // XXX: Keep this around for re-use in future Betas
     betaInfo?: {
         title: string; // _td
         caption: string; // _td
