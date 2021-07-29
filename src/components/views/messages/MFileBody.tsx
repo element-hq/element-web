@@ -192,20 +192,19 @@ export default class MFileBody extends React.Component<IProps, IState> {
     };
 
     public render() {
-        const content = this.props.mxEvent.getContent<IMediaEventContent>();
         const isEncrypted = this.props.mediaEventHelper.media.isEncrypted;
         const contentUrl = this.getContentUrl();
-        const fileSize = content.info ? content.info.size : null;
-        const fileType = content.info ? content.info.mimetype : "application/octet-stream";
+        const fileSize = this.content.info ? this.content.info.size : null;
+        const fileType = this.content.info ? this.content.info.mimetype : "application/octet-stream";
 
         let placeholder: React.ReactNode = null;
         if (this.props.showGenericPlaceholder) {
             placeholder = (
                 <AccessibleButton className="mx_MediaBody mx_MFileBody_info" onClick={this.onPlaceholderClick}>
                     <span className="mx_MFileBody_info_icon" />
-                    <TextWithTooltip tooltip={presentableTextForFile(content, _t("Attachment"), false)}>
+                    <TextWithTooltip tooltip={presentableTextForFile(this.content, _t("Attachment"), false)}>
                         <span className="mx_MFileBody_info_filename">
-                            { presentableTextForFile(content, _t("Attachment"), true, true) }
+                            { presentableTextForFile(this.content, _t("Attachment"), true, true) }
                         </span>
                     </TextWithTooltip>
                 </AccessibleButton>
@@ -318,7 +317,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
                             { _t("Download %(text)s", { text: this.linkText }) }
                         </a>
                         { this.props.tileShape === TileShape.FileGrid && <div className="mx_MImageBody_size">
-                            { content.info && content.info.size ? filesize(content.info.size) : "" }
+                            { this.content.info && this.content.info.size ? filesize(this.content.info.size) : "" }
                         </div> }
                     </div> }
                 </span>
