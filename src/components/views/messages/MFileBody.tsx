@@ -113,7 +113,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
     private iframe: React.RefObject<HTMLIFrameElement> = createRef();
     private dummyLink: React.RefObject<HTMLAnchorElement> = createRef();
     private userDidClick = false;
-    private fileDownloader: FileDownloader = new FileDownloader(() => this.iframe.current)
+    private fileDownloader: FileDownloader = new FileDownloader(() => this.iframe.current);
 
     public constructor(props: IProps) {
         super(props);
@@ -142,7 +142,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
                 imgSrc: DOWNLOAD_ICON_URL,
                 imgStyle: null,
                 style: computedStyle(this.dummyLink.current),
-                textContent: _t("Download %(text)s", { text })
+                textContent: _t("Download %(text)s", { text }),
             },
         });
     }
