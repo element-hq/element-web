@@ -16,7 +16,6 @@ limitations under the License.
 
 import React, { ReactNode, useMemo, useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixClient } from "matrix-js-sdk/src/client";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { IRoomChild, IRoomChildState } from "matrix-js-sdk/src/@types/spaces";
 import classNames from "classnames";
@@ -44,11 +43,13 @@ import { getChildOrder } from "../../stores/SpaceStore";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { linkifyElement } from "../../HtmlUtils";
 import { getDisplayAliasForAliasSet } from "../../Rooms";
+import { useDispatcher } from "../../hooks/useDispatcher";
+import defaultDispatcher from "../../dispatcher/dispatcher";
+import { Action } from "../../dispatcher/actions";
 
 interface IHierarchyProps {
     space: Room;
     initialText?: string;
-    refreshToken?: any;
     additionalButtons?: ReactNode;
     showRoom(room: IRoomChild, viaServers?: string[], autoJoin?: boolean): void;
 }
@@ -315,18 +316,25 @@ export const HierarchyLevel = ({
     </React.Fragment>;
 };
 
-// mutate argument refreshToken to force a reload
-export const useSpaceSummary = (cli: MatrixClient, space: Room, refreshToken?: any): [
+export const useSpaceSummary = (space: Room): [
     null,
     IRoomChild[],
     Map<string, Map<string, IRoomChildState>>?,
     Map<string, Set<string>>?,
     Map<string, Set<string>>?,
 ] | [Error] => {
+    // crude temporary refresh token approach until we have pagination and rework the data flow here
+    const [refreshToken, setRefreshToken] = useState(0);
+    useDispatcher(defaultDispatcher, (payload => {
+        if (payload.action === Action.UpdateSpaceHierarchy) {
+            setRefreshToken(t => t + 1);
+        }
+    }));
+
     // TODO pagination
     return useAsyncMemo(async () => {
         try {
-            const { rooms } = await cli.getRoomChildren(space.roomId);
+            const { rooms } = await space.client.getRoomChildren(space.roomId);
 
             const parentChildRelations = new EnhancedMap<string, Map<string, IRoomChildState>>();
             const childParentRelations = new EnhancedMap<string, Set<string>>();
@@ -357,7 +365,6 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
     space,
     initialText = "",
     showRoom,
-    refreshToken,
     additionalButtons,
     children,
 }) => {
@@ -367,7 +374,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
 
     const [selected, setSelected] = useState(new Map<string, Set<string>>()); // Map<parentId, Set<childId>>
 
-    const [summaryError, rooms, parentChildMap, viaMap, childParentMap] = useSpaceSummary(cli, space, refreshToken);
+    const [summaryError, rooms, parentChildMap, viaMap, childParentMap] = useSpaceSummary(space);
 
     const roomsMap = useMemo(() => {
         if (!rooms) return null;
