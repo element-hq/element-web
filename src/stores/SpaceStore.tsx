@@ -19,7 +19,7 @@ import { ListIteratee, Many, sortBy, throttle } from "lodash";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { IRoomChild } from "matrix-js-sdk/src/@types/spaces";
+import { IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { IRoomCapability } from "matrix-js-sdk/src/client";
 
@@ -63,7 +63,7 @@ export const UPDATE_INVITED_SPACES = Symbol("invited-spaces");
 export const UPDATE_SELECTED_SPACE = Symbol("selected-space");
 // Space Room ID/HOME_SPACE will be emitted when a Space's children change
 
-export interface ISuggestedRoom extends IRoomChild {
+export interface ISuggestedRoom extends IHierarchyRoom {
     viaServers: string[];
 }
 
@@ -297,7 +297,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
     public fetchSuggestedRooms = async (space: Room, limit = MAX_SUGGESTED_ROOMS): Promise<ISuggestedRoom[]> => {
         try {
-            const { rooms } = await this.matrixClient.getRoomChildren(space.roomId, limit, 1, true);
+            const { rooms } = await this.matrixClient.getRoomHierarchy(space.roomId, limit, 1, true);
 
             const viaMap = new EnhancedMap<string, Set<string>>();
             rooms.forEach(room => {

@@ -14,15 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode, useMemo, useState } from "react";
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
-import { IRoomChild, IRoomChildState } from "matrix-js-sdk/src/@types/spaces";
+import { IHierarchyRelation, IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
 import classNames from "classnames";
 import { sortBy } from "lodash";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import dis from "../../dispatcher/dispatcher";
+import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
 import BaseDialog from "../views/dialogs/BaseDialog";
@@ -30,8 +32,6 @@ import Spinner from "../views/elements/Spinner";
 import SearchBox from "./SearchBox";
 import RoomAvatar from "../views/avatars/RoomAvatar";
 import RoomName from "../views/elements/RoomName";
-import { useAsyncMemo } from "../../hooks/useAsyncMemo";
-import { EnhancedMap } from "../../utils/maps";
 import StyledCheckbox from "../views/elements/StyledCheckbox";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import BaseAvatar from "../views/avatars/BaseAvatar";
@@ -42,20 +42,19 @@ import { useStateToggle } from "../../hooks/useStateToggle";
 import { getChildOrder } from "../../stores/SpaceStore";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { linkifyElement } from "../../HtmlUtils";
-import { getDisplayAliasForAliasSet } from "../../Rooms";
 import { useDispatcher } from "../../hooks/useDispatcher";
-import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
+import { getDisplayAliasForRoom } from "./RoomDirectory";
 
 interface IHierarchyProps {
     space: Room;
     initialText?: string;
     additionalButtons?: ReactNode;
-    showRoom(room: IRoomChild, viaServers?: string[], autoJoin?: boolean): void;
+    showRoom(hierarchy: RoomHierarchy, roomId: string, autoJoin?: boolean): void;
 }
 
 interface ITileProps {
-    room: IRoomChild;
+    room: IHierarchyRoom;
     suggested?: boolean;
     selected?: boolean;
     numChildRooms?: number;
@@ -206,7 +205,9 @@ const Tile: React.FC<ITileProps> = ({
     </>;
 };
 
-export const showRoom = (room: IRoomChild, viaServers?: string[], autoJoin = false) => {
+export const showRoom = (hierarchy: RoomHierarchy, roomId: string, autoJoin = false) => {
+    const room = hierarchy.roomMap.get(roomId);
+
     // Don't let the user view a room they won't be able to either peek or join:
     // fail earlier so they don't have to click back to the directory.
     if (MatrixClientPeg.get().isGuest()) {
@@ -224,7 +225,7 @@ export const showRoom = (room: IRoomChild, viaServers?: string[], autoJoin = fal
         _type: "room_directory", // instrumentation
         room_alias: roomAlias,
         room_id: room.room_id,
-        via_servers: viaServers,
+        via_servers: Array.from(hierarchy.viaMap.get(roomId) || []),
         oob_data: {
             avatarUrl: room.avatar_url,
             // XXX: This logic is duplicated from the JS SDK which would normally decide what the name is.
@@ -234,9 +235,9 @@ export const showRoom = (room: IRoomChild, viaServers?: string[], autoJoin = fal
 };
 
 interface IHierarchyLevelProps {
-    spaceId: string;
-    rooms: Map<string, IRoomChild>;
-    relations: Map<string, Map<string, IRoomChildState>>;
+    root: IHierarchyRoom;
+    roomSet: Set<IHierarchyRoom>;
+    hierarchy: RoomHierarchy;
     parents: Set<string>;
     selectedMap?: Map<string, Set<string>>;
     onViewRoomClick(roomId: string, autoJoin: boolean): void;
@@ -244,67 +245,69 @@ interface IHierarchyLevelProps {
 }
 
 export const HierarchyLevel = ({
-    spaceId,
-    rooms,
-    relations,
+    root,
+    roomSet,
+    hierarchy,
     parents,
     selectedMap,
     onViewRoomClick,
     onToggleClick,
 }: IHierarchyLevelProps) => {
     const cli = MatrixClientPeg.get();
-    const space = cli.getRoom(spaceId);
+    const space = cli.getRoom(root.room_id);
     const hasPermissions = space?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
 
-    const children = Array.from(relations.get(spaceId)?.values() || []);
-    const sortedChildren = sortBy(children, ev => {
-        // XXX: Space Summary API doesn't give the child origin_server_ts but once it does we should use it for sorting
-        return getChildOrder(ev.content.order, null, ev.state_key);
+    const sortedChildren = sortBy(root.children_state, ev => {
+        return getChildOrder(ev.content.order, ev.origin_server_ts, ev.state_key);
     });
-    const [subspaces, childRooms] = sortedChildren.reduce((result, ev: IRoomChildState) => {
-        const roomId = ev.state_key;
-        if (!rooms.has(roomId)) return result;
-        result[rooms.get(roomId).room_type === RoomType.Space ? 0 : 1].push(roomId);
-        return result;
-    }, [[], []]) || [[], []];
 
-    const newParents = new Set(parents).add(spaceId);
+    const [subspaces, childRooms] = sortedChildren.reduce((result, ev: IHierarchyRelation) => {
+        const room = hierarchy.roomMap.get(ev.state_key);
+        if (room && roomSet.has(room)) {
+            result[room.room_type === RoomType.Space ? 0 : 1].push(room);
+        }
+        return result;
+    }, [[] as IHierarchyRoom[], [] as IHierarchyRoom[]]);
+
+    const newParents = new Set(parents).add(root.room_id);
     return <React.Fragment>
         {
-            childRooms.map(roomId => (
+            childRooms.map(room => (
                 <Tile
-                    key={roomId}
-                    room={rooms.get(roomId)}
-                    suggested={relations.get(spaceId)?.get(roomId)?.content.suggested}
-                    selected={selectedMap?.get(spaceId)?.has(roomId)}
+                    key={room.room_id}
+                    room={room}
+                    suggested={hierarchy.isSuggested(root.room_id, room.room_id)}
+                    selected={selectedMap?.get(root.room_id)?.has(room.room_id)}
                     onViewRoomClick={(autoJoin) => {
-                        onViewRoomClick(roomId, autoJoin);
+                        onViewRoomClick(room.room_id, autoJoin);
                     }}
                     hasPermissions={hasPermissions}
-                    onToggleClick={onToggleClick ? () => onToggleClick(spaceId, roomId) : undefined}
+                    onToggleClick={onToggleClick ? () => onToggleClick(root.room_id, room.room_id) : undefined}
                 />
             ))
         }
 
         {
-            subspaces.filter(roomId => !newParents.has(roomId)).map(roomId => (
+            subspaces.filter(room => !newParents.has(room.room_id)).map(space => (
                 <Tile
-                    key={roomId}
-                    room={rooms.get(roomId)}
-                    numChildRooms={Array.from(relations.get(roomId)?.values() || [])
-                        .filter(ev => rooms.has(ev.state_key) && !rooms.get(ev.state_key).room_type).length}
-                    suggested={relations.get(spaceId)?.get(roomId)?.content.suggested}
-                    selected={selectedMap?.get(spaceId)?.has(roomId)}
+                    key={space.room_id}
+                    room={space}
+                    numChildRooms={space.children_state.filter(ev => {
+                        const room = hierarchy.roomMap.get(ev.state_key);
+                        return room && roomSet.has(room) && !room.room_type;
+                    }).length}
+                    suggested={hierarchy.isSuggested(root.room_id, space.room_id)}
+                    selected={selectedMap?.get(root.room_id)?.has(space.room_id)}
                     onViewRoomClick={(autoJoin) => {
-                        onViewRoomClick(roomId, autoJoin);
+                        onViewRoomClick(space.room_id, autoJoin);
                     }}
                     hasPermissions={hasPermissions}
-                    onToggleClick={onToggleClick ? () => onToggleClick(spaceId, roomId) : undefined}
+                    onToggleClick={onToggleClick ? () => onToggleClick(root.room_id, space.room_id) : undefined}
                 >
                     <HierarchyLevel
-                        spaceId={roomId}
-                        rooms={rooms}
-                        relations={relations}
+                        root={space}
+                        roomSet={roomSet}
+                        hierarchy={hierarchy}
                         parents={newParents}
                         selectedMap={selectedMap}
                         onViewRoomClick={onViewRoomClick}
@@ -316,49 +319,53 @@ export const HierarchyLevel = ({
     </React.Fragment>;
 };
 
-export const useSpaceSummary = (space: Room): [
-    null,
-    IRoomChild[],
-    Map<string, Map<string, IRoomChildState>>?,
-    Map<string, Set<string>>?,
-    Map<string, Set<string>>?,
-] | [Error] => {
-    // crude temporary refresh token approach until we have pagination and rework the data flow here
-    const [refreshToken, setRefreshToken] = useState(0);
+export const useSpaceSummary = (space: Room): {
+    loading: boolean;
+    rooms: IHierarchyRoom[];
+    hierarchy: RoomHierarchy;
+    loadMore(pageSize?: number): Promise <void>;
+} => {
+    const [rooms, setRooms] = useState<IHierarchyRoom[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const INITIAL_PAGE_SIZE = 20;
+    const [hierarchy, setHierarchy] = useState<RoomHierarchy>();
+
+    const resetHierarchy = useCallback(() => {
+        const hierarchy = new RoomHierarchy(space, INITIAL_PAGE_SIZE);
+        setHierarchy(hierarchy);
+
+        let discard = false;
+        hierarchy.load().then(() => {
+            if (discard) return;
+            setRooms(hierarchy.rooms);
+            setLoading(false);
+        });
+
+        return () => {
+            discard = true;
+        };
+    }, [space]);
+    useEffect(resetHierarchy, [resetHierarchy]);
+
     useDispatcher(defaultDispatcher, (payload => {
         if (payload.action === Action.UpdateSpaceHierarchy) {
-            setRefreshToken(t => t + 1);
+            setLoading(true);
+            setRooms([]); // TODO
+            resetHierarchy();
         }
     }));
 
-    // TODO pagination
-    return useAsyncMemo(async () => {
-        try {
-            const { rooms } = await space.client.getRoomChildren(space.roomId);
+    const loadMore = useCallback(async (pageSize?: number) => {
+        if (!hierarchy.canLoadMore || hierarchy.noSupport) return;
 
-            const parentChildRelations = new EnhancedMap<string, Map<string, IRoomChildState>>();
-            const childParentRelations = new EnhancedMap<string, Set<string>>();
-            const viaMap = new EnhancedMap<string, Set<string>>();
+        setLoading(true);
+        await hierarchy.load(pageSize);
+        setRooms(hierarchy.rooms);
+        setLoading(false);
+    }, [hierarchy]);
 
-            rooms.forEach(room => {
-                room.children_state.forEach((ev: IRoomChildState) => {
-                    if (ev.type === EventType.SpaceChild) {
-                        parentChildRelations.getOrCreate(ev.room_id, new Map()).set(ev.state_key, ev);
-                        childParentRelations.getOrCreate(ev.state_key, new Set()).add(ev.room_id);
-                    }
-                    if (Array.isArray(ev.content.via)) {
-                        const set = viaMap.getOrCreate(ev.state_key, new Set());
-                        ev.content.via.forEach(via => set.add(via));
-                    }
-                });
-            });
-
-            return [null, rooms, parentChildRelations, viaMap, childParentRelations];
-        } catch (e) {
-            console.error(e); // TODO
-            return [e];
-        }
-    }, [space, refreshToken], [undefined]);
+    return { loading, rooms, hierarchy, loadMore };
 };
 
 export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
@@ -374,14 +381,12 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
 
     const [selected, setSelected] = useState(new Map<string, Set<string>>()); // Map<parentId, Set<childId>>
 
-    const [summaryError, rooms, parentChildMap, viaMap, childParentMap] = useSpaceSummary(space);
+    const { loading, rooms, hierarchy } = useSpaceSummary(space);
 
-    const roomsMap = useMemo(() => {
-        if (!rooms) return null;
+    const filteredRoomSet = useMemo<Set<IHierarchyRoom>>(() => {
+        if (!rooms.length) return new Set();
         const lcQuery = query.toLowerCase().trim();
-
-        const roomsMap = new Map<string, IRoomChild>(rooms.map(r => [r.room_id, r]));
-        if (!lcQuery) return roomsMap;
+        if (!lcQuery) return new Set(rooms);
 
         const directMatches = rooms.filter(r => {
             return r.name?.toLowerCase().includes(lcQuery) || r.topic?.toLowerCase().includes(lcQuery);
@@ -393,34 +398,30 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
         while (queue.length) {
             const roomId = queue.pop();
             visited.add(roomId);
-            childParentMap.get(roomId)?.forEach(parentId => {
+            hierarchy.backRefs.get(roomId)?.forEach(parentId => {
                 if (!visited.has(parentId)) {
                     queue.push(parentId);
                 }
             });
         }
 
-        // Remove any mappings for rooms which were not visited in the walk
-        Array.from(roomsMap.keys()).forEach(roomId => {
-            if (!visited.has(roomId)) {
-                roomsMap.delete(roomId);
-            }
-        });
-        return roomsMap;
-    }, [rooms, childParentMap, query]);
+        return new Set(rooms.filter(r => visited.has(r.room_id)));
+    }, [rooms, hierarchy, query]);
 
     const [error, setError] = useState("");
     const [removing, setRemoving] = useState(false);
     const [saving, setSaving] = useState(false);
 
-    if (summaryError) {
+    if (!loading && hierarchy.noSupport) {
         return <p>{ _t("Your server does not support showing space hierarchies.") }</p>;
     }
 
     let content;
-    if (roomsMap) {
-        const numRooms = Array.from(roomsMap.values()).filter(r => !r.room_type).length;
-        const numSpaces = roomsMap.size - numRooms - 1; // -1 at the end to exclude the space we are looking at
+    if (loading) {
+        content = <Spinner />;
+    } else {
+        const numRooms = Array.from(filteredRoomSet).filter(r => !r.room_type).length;
+        const numSpaces = filteredRoomSet.size - numRooms - 1; // -1 at the end to exclude the space we are looking at
 
         let countsStr;
         if (numSpaces > 1) {
@@ -438,7 +439,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
             });
 
             const selectionAllSuggested = selectedRelations.every(([parentId, childId]) => {
-                return parentChildMap.get(parentId)?.get(childId)?.content.suggested;
+                return hierarchy.isSuggested(parentId, childId);
             });
 
             const disabled = !selectedRelations.length || removing || saving;
@@ -461,17 +462,14 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
                         try {
                             for (const [parentId, childId] of selectedRelations) {
                                 await cli.sendStateEvent(parentId, EventType.SpaceChild, {}, childId);
-                                parentChildMap.get(parentId).delete(childId);
-                                if (parentChildMap.get(parentId).size > 0) {
-                                    parentChildMap.set(parentId, new Map(parentChildMap.get(parentId)));
-                                } else {
-                                    parentChildMap.delete(parentId);
-                                }
+
+                                hierarchy.removeRelation(parentId, childId);
                             }
                         } catch (e) {
                             setError(_t("Failed to remove some rooms. Try again later"));
                         }
                         setRemoving(false);
+                        setSelected(new Map());
                     }}
                     kind="danger_outline"
                     disabled={disabled}
@@ -485,7 +483,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
                         try {
                             for (const [parentId, childId] of selectedRelations) {
                                 const suggested = !selectionAllSuggested;
-                                const existingContent = parentChildMap.get(parentId)?.get(childId)?.content;
+                                const existingContent = hierarchy.getRelation(parentId, childId)?.content;
                                 if (!existingContent || existingContent.suggested === suggested) continue;
 
                                 const content = {
@@ -495,8 +493,8 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
 
                                 await cli.sendStateEvent(parentId, EventType.SpaceChild, content, childId);
 
-                                parentChildMap.get(parentId).get(childId).content = content;
-                                parentChildMap.set(parentId, new Map(parentChildMap.get(parentId)));
+                                // mutate the local state to save us having to refetch the world
+                                existingContent.suggested = content.suggested;
                             }
                         } catch (e) {
                             setError("Failed to update some suggestions. Try again later");
@@ -516,14 +514,14 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
         }
 
         let results;
-        if (roomsMap.size) {
+        if (filteredRoomSet.size) {
             const hasPermissions = space?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
 
             results = <>
                 <HierarchyLevel
-                    spaceId={space.roomId}
-                    rooms={roomsMap}
-                    relations={parentChildMap}
+                    root={hierarchy.roomMap.get(space.roomId)}
+                    roomSet={filteredRoomSet}
+                    hierarchy={hierarchy}
                     parents={new Set()}
                     selectedMap={selected}
                     onToggleClick={hasPermissions ? (parentId, childId) => {
@@ -543,7 +541,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
                         setSelected(new Map(selected.set(parentId, new Set(parentSet))));
                     } : undefined}
                     onViewRoomClick={(roomId, autoJoin) => {
-                        showRoom(roomsMap.get(roomId), Array.from(viaMap.get(roomId) || []), autoJoin);
+                        showRoom(hierarchy, roomId, autoJoin);
                     }}
                 />
                 { children && <hr /> }
@@ -571,8 +569,6 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
                 { children }
             </AutoHideScrollbar>
         </>;
-    } else {
-        content = <Spinner />;
     }
 
     // TODO loading state/error state
@@ -624,8 +620,8 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, onFinished, initialText }
 
                 <SpaceHierarchy
                     space={space}
-                    showRoom={(room: IRoomChild, viaServers?: string[], autoJoin = false) => {
-                        showRoom(room, viaServers, autoJoin);
+                    showRoom={(hierarchy: RoomHierarchy, roomId: string, autoJoin = false) => {
+                        showRoom(hierarchy, roomId, autoJoin);
                         onFinished();
                     }}
                     initialText={initialText}
@@ -644,9 +640,3 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, onFinished, initialText }
 };
 
 export default SpaceRoomDirectory;
-
-// Similar to matrix-react-sdk's MatrixTools.getDisplayAliasForRoom
-// but works with the objects we get from the public room list
-function getDisplayAliasForRoom(room: IRoomChild) {
-    return getDisplayAliasForAliasSet(room.canonical_alias, room.aliases);
-}

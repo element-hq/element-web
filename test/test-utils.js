@@ -87,7 +87,7 @@ export function createTestClient() {
         getSpaceSummary: jest.fn().mockReturnValue({
             rooms: [],
         }),
-        getRoomChildren: jest.fn().mockReturnValue({
+        getRoomHierarchy: jest.fn().mockReturnValue({
             rooms: [],
         }),
 
