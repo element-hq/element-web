@@ -250,13 +250,19 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                 &nbsp;
                 { _t("You can change this at any time from room settings.") }
             </p>;
-        } else if (this.state.joinRule === JoinRule.Public) {
+        } else if (this.state.joinRule === JoinRule.Public && this.props.parentSpace) {
             publicPrivateLabel = <p>
                 { _t(
                     "Anyone will be able to find and join this room, not just members of <SpaceName/>.", {}, {
                         SpaceName: () => <b>{ this.props.parentSpace.name }</b>,
                     },
                 ) }
+                &nbsp;
+                { _t("You can change this at any time from room settings.") }
+            </p>;
+        } else if (this.state.joinRule === JoinRule.Public) {
+            publicPrivateLabel = <p>
+                { _t("Anyone will be able to find and join this room.") }
                 &nbsp;
                 { _t("You can change this at any time from room settings.") }
             </p>;
