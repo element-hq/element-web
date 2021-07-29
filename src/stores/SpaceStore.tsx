@@ -19,7 +19,7 @@ import { ListIteratee, Many, sortBy, throttle } from "lodash";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { ISpaceSummaryRoom } from "matrix-js-sdk/src/@types/spaces";
+import { IRoomChild } from "matrix-js-sdk/src/@types/spaces";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { IRoomCapability } from "matrix-js-sdk/src/client";
 
@@ -63,7 +63,7 @@ export const UPDATE_INVITED_SPACES = Symbol("invited-spaces");
 export const UPDATE_SELECTED_SPACE = Symbol("selected-space");
 // Space Room ID/HOME_SPACE will be emitted when a Space's children change
 
-export interface ISuggestedRoom extends ISpaceSummaryRoom {
+export interface ISuggestedRoom extends IRoomChild {
     viaServers: string[];
 }
 
@@ -297,18 +297,20 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
     public fetchSuggestedRooms = async (space: Room, limit = MAX_SUGGESTED_ROOMS): Promise<ISuggestedRoom[]> => {
         try {
-            const data = await this.matrixClient.getSpaceSummary(space.roomId, 0, true, false, limit);
+            const { rooms } = await this.matrixClient.getRoomChildren(space.roomId, limit, 1, true);
 
             const viaMap = new EnhancedMap<string, Set<string>>();
-            data.events.forEach(ev => {
-                if (ev.type === EventType.SpaceChild && ev.content.via?.length) {
-                    ev.content.via.forEach(via => {
-                        viaMap.getOrCreate(ev.state_key, new Set()).add(via);
-                    });
-                }
+            rooms.forEach(room => {
+                room.children_state.forEach(ev => {
+                    if (ev.type === EventType.SpaceChild && ev.content.via?.length) {
+                        ev.content.via.forEach(via => {
+                            viaMap.getOrCreate(ev.state_key, new Set()).add(via);
+                        });
+                    }
+                });
             });
 
-            return data.rooms.filter(roomInfo => {
+            return rooms.filter(roomInfo => {
                 return roomInfo.room_type !== RoomType.Space
                     && this.matrixClient.getRoom(roomInfo.room_id)?.getMyMembership() !== "join";
             }).map(roomInfo => ({

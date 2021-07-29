@@ -18,7 +18,7 @@ import React, { ReactNode, useMemo, useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
-import { ISpaceSummaryRoom, ISpaceSummaryEvent } from "matrix-js-sdk/src/@types/spaces";
+import { IRoomChild, IRoomChildState } from "matrix-js-sdk/src/@types/spaces";
 import classNames from "classnames";
 import { sortBy } from "lodash";
 
@@ -50,11 +50,11 @@ interface IHierarchyProps {
     initialText?: string;
     refreshToken?: any;
     additionalButtons?: ReactNode;
-    showRoom(room: ISpaceSummaryRoom, viaServers?: string[], autoJoin?: boolean): void;
+    showRoom(room: IRoomChild, viaServers?: string[], autoJoin?: boolean): void;
 }
 
 interface ITileProps {
-    room: ISpaceSummaryRoom;
+    room: IRoomChild;
     suggested?: boolean;
     selected?: boolean;
     numChildRooms?: number;
@@ -205,7 +205,7 @@ const Tile: React.FC<ITileProps> = ({
     </>;
 };
 
-export const showRoom = (room: ISpaceSummaryRoom, viaServers?: string[], autoJoin = false) => {
+export const showRoom = (room: IRoomChild, viaServers?: string[], autoJoin = false) => {
     // Don't let the user view a room they won't be able to either peek or join:
     // fail earlier so they don't have to click back to the directory.
     if (MatrixClientPeg.get().isGuest()) {
@@ -234,8 +234,8 @@ export const showRoom = (room: ISpaceSummaryRoom, viaServers?: string[], autoJoi
 
 interface IHierarchyLevelProps {
     spaceId: string;
-    rooms: Map<string, ISpaceSummaryRoom>;
-    relations: Map<string, Map<string, ISpaceSummaryEvent>>;
+    rooms: Map<string, IRoomChild>;
+    relations: Map<string, Map<string, IRoomChildState>>;
     parents: Set<string>;
     selectedMap?: Map<string, Set<string>>;
     onViewRoomClick(roomId: string, autoJoin: boolean): void;
@@ -260,7 +260,7 @@ export const HierarchyLevel = ({
         // XXX: Space Summary API doesn't give the child origin_server_ts but once it does we should use it for sorting
         return getChildOrder(ev.content.order, null, ev.state_key);
     });
-    const [subspaces, childRooms] = sortedChildren.reduce((result, ev: ISpaceSummaryEvent) => {
+    const [subspaces, childRooms] = sortedChildren.reduce((result, ev: IRoomChildState) => {
         const roomId = ev.state_key;
         if (!rooms.has(roomId)) return result;
         result[rooms.get(roomId).room_type === RoomType.Space ? 0 : 1].push(roomId);
@@ -318,31 +318,34 @@ export const HierarchyLevel = ({
 // mutate argument refreshToken to force a reload
 export const useSpaceSummary = (cli: MatrixClient, space: Room, refreshToken?: any): [
     null,
-    ISpaceSummaryRoom[],
-    Map<string, Map<string, ISpaceSummaryEvent>>?,
+    IRoomChild[],
+    Map<string, Map<string, IRoomChildState>>?,
     Map<string, Set<string>>?,
     Map<string, Set<string>>?,
 ] | [Error] => {
     // TODO pagination
     return useAsyncMemo(async () => {
         try {
-            const data = await cli.getSpaceSummary(space.roomId);
+            const { rooms } = await cli.getRoomChildren(space.roomId);
 
-            const parentChildRelations = new EnhancedMap<string, Map<string, ISpaceSummaryEvent>>();
+            const parentChildRelations = new EnhancedMap<string, Map<string, IRoomChildState>>();
             const childParentRelations = new EnhancedMap<string, Set<string>>();
             const viaMap = new EnhancedMap<string, Set<string>>();
-            data.events.map((ev: ISpaceSummaryEvent) => {
-                if (ev.type === EventType.SpaceChild) {
-                    parentChildRelations.getOrCreate(ev.room_id, new Map()).set(ev.state_key, ev);
-                    childParentRelations.getOrCreate(ev.state_key, new Set()).add(ev.room_id);
-                }
-                if (Array.isArray(ev.content.via)) {
-                    const set = viaMap.getOrCreate(ev.state_key, new Set());
-                    ev.content.via.forEach(via => set.add(via));
-                }
+
+            rooms.forEach(room => {
+                room.children_state.forEach((ev: IRoomChildState) => {
+                    if (ev.type === EventType.SpaceChild) {
+                        parentChildRelations.getOrCreate(ev.room_id, new Map()).set(ev.state_key, ev);
+                        childParentRelations.getOrCreate(ev.state_key, new Set()).add(ev.room_id);
+                    }
+                    if (Array.isArray(ev.content.via)) {
+                        const set = viaMap.getOrCreate(ev.state_key, new Set());
+                        ev.content.via.forEach(via => set.add(via));
+                    }
+                });
             });
 
-            return [null, data.rooms as ISpaceSummaryRoom[], parentChildRelations, viaMap, childParentRelations];
+            return [null, rooms, parentChildRelations, viaMap, childParentRelations];
         } catch (e) {
             console.error(e); // TODO
             return [e];
@@ -370,7 +373,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
         if (!rooms) return null;
         const lcQuery = query.toLowerCase().trim();
 
-        const roomsMap = new Map<string, ISpaceSummaryRoom>(rooms.map(r => [r.room_id, r]));
+        const roomsMap = new Map<string, IRoomChild>(rooms.map(r => [r.room_id, r]));
         if (!lcQuery) return roomsMap;
 
         const directMatches = rooms.filter(r => {
@@ -614,7 +617,7 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, onFinished, initialText }
 
                 <SpaceHierarchy
                     space={space}
-                    showRoom={(room: ISpaceSummaryRoom, viaServers?: string[], autoJoin = false) => {
+                    showRoom={(room: IRoomChild, viaServers?: string[], autoJoin = false) => {
                         showRoom(room, viaServers, autoJoin);
                         onFinished();
                     }}
@@ -637,6 +640,6 @@ export default SpaceRoomDirectory;
 
 // Similar to matrix-react-sdk's MatrixTools.getDisplayAliasForRoom
 // but works with the objects we get from the public room list
-function getDisplayAliasForRoom(room: ISpaceSummaryRoom) {
+function getDisplayAliasForRoom(room: IRoomChild) {
     return getDisplayAliasForAliasSet(room.canonical_alias, room.aliases);
 }

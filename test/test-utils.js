@@ -86,7 +86,9 @@ export function createTestClient() {
         isCryptoEnabled: () => false,
         getSpaceSummary: jest.fn().mockReturnValue({
             rooms: [],
-            events: [],
+        }),
+        getRoomChildren: jest.fn().mockReturnValue({
+            rooms: [],
         }),
 
         // Used by various internal bits we aren't concerned with (yet)
