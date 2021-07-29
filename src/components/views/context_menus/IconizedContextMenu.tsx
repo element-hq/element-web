@@ -90,10 +90,11 @@ export const IconizedContextMenuCheckbox: React.FC<ICheckboxProps> = ({
     </MenuItemCheckbox>;
 };
 
-export const IconizedContextMenuOption: React.FC<IOptionProps> = ({ label, iconClassName, ...props }) => {
+export const IconizedContextMenuOption: React.FC<IOptionProps> = ({ label, iconClassName, children, ...props }) => {
     return <MenuItem {...props} label={label}>
         { iconClassName && <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} /> }
         <span className="mx_IconizedContextMenu_label">{ label }</span>
+        { children }
     </MenuItem>;
 };
 
