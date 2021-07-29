@@ -12,6 +12,7 @@
     "outDir": "./lib",
     "declaration": true,
     "jsx": "react",
+    "strictNullChecks": true,
     "types": [
       "node",
       "react",
