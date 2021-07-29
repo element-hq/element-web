@@ -43,6 +43,12 @@ $spacePanelWidth: 71px;
                 color: $secondary-fg-color;
                 margin: 0;
             }
+
+            .mx_SpaceFeedbackPrompt {
+                border-top: 1px solid $input-border-color;
+                padding-top: 12px;
+                margin-top: 16px;
+            }
         }
 
         // XXX remove this when spaces leaves Beta
@@ -101,9 +107,6 @@ $spacePanelWidth: 71px;
 }
 
 .mx_SpaceFeedbackPrompt {
-    margin-top: 18px;
-    margin-bottom: 12px;
-
     font-size: $font-15px;
     line-height: $font-24px;
 
