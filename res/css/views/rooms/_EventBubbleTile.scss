@@ -288,9 +288,9 @@ limitations under the License.
 }
 
 .mx_EventListSummary[data-layout=bubble] {
-    --maxWidth: 80%;
+    --maxWidth: 70%;
     margin-left: calc(var(--avatarSize) + var(--gutterSize));
-    margin-right: calc(var(--gutterSize) + var(--avatarSize));
+    margin-right: 94px;
     .mx_EventListSummary_toggle {
         float: none;
         margin: 0;
