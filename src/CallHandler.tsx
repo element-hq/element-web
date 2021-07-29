@@ -56,7 +56,6 @@ limitations under the License.
 import React from 'react';
 
 import { MatrixClientPeg } from './MatrixClientPeg';
-import PlatformPeg from './PlatformPeg';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 import dis from './dispatcher/dispatcher';
@@ -80,7 +79,6 @@ import CountlyAnalytics from "./CountlyAnalytics";
 import { UIFeature } from "./settings/UIFeature";
 import { CallError } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from 'matrix-js-sdk/src/logger';
-import DesktopCapturerSourcePicker from "./components/views/elements/DesktopCapturerSourcePicker";
 import { Action } from './dispatcher/actions';
 import VoipUserMapper from './VoipUserMapper';
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
@@ -129,14 +127,9 @@ interface ThirdpartyLookupResponse {
     fields: ThirdpartyLookupResponseFields;
 }
 
-// Unlike 'CallType' in js-sdk, this one includes screen sharing
-// (because a screen sharing call is only a screen sharing call to the caller,
-// to the callee it's just a video call, at least as far as the current impl
-// is concerned).
 export enum PlaceCallType {
     Voice = 'voice',
     Video = 'video',
-    ScreenSharing = 'screensharing',
 }
 
 export enum CallHandlerEvent {
@@ -728,25 +721,6 @@ export default class CallHandler extends EventEmitter {
             call.placeVoiceCall();
         } else if (type === 'video') {
             call.placeVideoCall();
-        } else if (type === PlaceCallType.ScreenSharing) {
-            const screenCapErrorString = PlatformPeg.get().screenCaptureErrorString();
-            if (screenCapErrorString) {
-                this.removeCallForRoom(roomId);
-                console.log("Can't capture screen: " + screenCapErrorString);
-                Modal.createTrackedDialog('Call Handler', 'Unable to capture screen', ErrorDialog, {
-                    title: _t('Unable to capture screen'),
-                    description: screenCapErrorString,
-                });
-                return;
-            }
-
-            call.placeScreenSharingCall(
-                async (): Promise<DesktopCapturerSource> => {
-                    const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
-                    const [source] = await finished;
-                    return source;
-                },
-            );
         } else {
             console.error("Unknown conf call type: " + type);
         }

@@ -16,7 +16,7 @@ limitations under the License.
 
 import classnames from 'classnames';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
-import React, { createRef } from 'react';
+import React from 'react';
 import SettingsStore from "../../../settings/SettingsStore";
 import { CallFeed, CallFeedEvent } from 'matrix-js-sdk/src/webrtc/callFeed';
 import { logger } from 'matrix-js-sdk/src/logger';
@@ -37,6 +37,8 @@ interface IProps {
     // a callback which is called when the video element is resized
     // due to a change in video metadata
     onResize?: (e: Event) => void;
+
+    primary: boolean;
 }
 
 interface IState {
@@ -46,7 +48,7 @@ interface IState {
 
 @replaceableComponent("views.voip.VideoFeed")
 export default class VideoFeed extends React.Component<IProps, IState> {
-    private element = createRef<HTMLVideoElement>();
+    private element: HTMLVideoElement;
 
     constructor(props: IProps) {
         super(props);
@@ -58,19 +60,50 @@ export default class VideoFeed extends React.Component<IProps, IState> {
     }
 
     componentDidMount() {
-        this.props.feed.addListener(CallFeedEvent.NewStream, this.onNewStream);
-        this.element.current?.addEventListener('resize', this.onResize);
+        this.updateFeed(null, this.props.feed);
         this.playMedia();
     }
 
     componentWillUnmount() {
-        this.props.feed.removeListener(CallFeedEvent.NewStream, this.onNewStream);
-        this.element.current?.removeEventListener('resize', this.onResize);
-        this.stopMedia();
+        this.updateFeed(this.props.feed, null);
+    }
+
+    componentDidUpdate(prevProps: IProps) {
+        this.updateFeed(prevProps.feed, this.props.feed);
+    }
+
+    static getDerivedStateFromProps(props: IProps) {
+        return {
+            audioMuted: props.feed.isAudioMuted(),
+            videoMuted: props.feed.isVideoMuted(),
+        };
+    }
+
+    private setElementRef = (element: HTMLVideoElement): void => {
+        if (!element) {
+            this.element?.removeEventListener('resize', this.onResize);
+            return;
+        }
+
+        this.element = element;
+        element.addEventListener('resize', this.onResize);
+    };
+
+    private updateFeed(oldFeed: CallFeed, newFeed: CallFeed) {
+        if (oldFeed === newFeed) return;
+
+        if (oldFeed) {
+            this.props.feed.removeListener(CallFeedEvent.NewStream, this.onNewStream);
+            this.stopMedia();
+        }
+        if (newFeed) {
+            this.props.feed.addListener(CallFeedEvent.NewStream, this.onNewStream);
+            this.playMedia();
+        }
     }
 
     private playMedia() {
-        const element = this.element.current;
+        const element = this.element;
         if (!element) return;
         // We play audio in AudioFeed, not here
         element.muted = true;
@@ -93,7 +126,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
     }
 
     private stopMedia() {
-        const element = this.element.current;
+        const element = this.element;
         if (!element) return;
 
         element.pause();
@@ -122,8 +155,6 @@ export default class VideoFeed extends React.Component<IProps, IState> {
     render() {
         const videoClasses = {
             mx_VideoFeed: true,
-            mx_VideoFeed_local: this.props.feed.isLocal(),
-            mx_VideoFeed_remote: !this.props.feed.isLocal(),
             mx_VideoFeed_voice: this.state.videoMuted,
             mx_VideoFeed_video: !this.state.videoMuted,
             mx_VideoFeed_mirror: (
@@ -132,9 +163,15 @@ export default class VideoFeed extends React.Component<IProps, IState> {
             ),
         };
 
+        const { pipMode, primary } = this.props;
+
         if (this.state.videoMuted) {
             const member = this.props.feed.getMember();
-            const avatarSize = this.props.pipMode ? 76 : 160;
+            let avatarSize;
+            if (pipMode && primary) avatarSize = 76;
+            else if (pipMode && !primary) avatarSize = 16;
+            else if (!pipMode && primary) avatarSize = 160;
+            else; // TBD
 
             return (
                 <div className={classnames(videoClasses)}>
@@ -147,7 +184,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
             );
         } else {
             return (
-                <video className={classnames(videoClasses)} ref={this.element} />
+                <video className={classnames(videoClasses)} ref={this.setElementRef} />
             );
         }
     }

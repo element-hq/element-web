@@ -28,6 +28,11 @@ import { _t } from "../languageHandler";
 import SpacePublicShare from "../components/views/spaces/SpacePublicShare";
 import InfoDialog from "../components/views/dialogs/InfoDialog";
 import { showRoomInviteDialog } from "../RoomInvite";
+import CreateSubspaceDialog from "../components/views/dialogs/CreateSubspaceDialog";
+import AddExistingSubspaceDialog from "../components/views/dialogs/AddExistingSubspaceDialog";
+import defaultDispatcher from "../dispatcher/dispatcher";
+import RoomViewStore from "../stores/RoomViewStore";
+import { Action } from "../dispatcher/actions";
 import { leaveRoomBehaviour } from "./membership";
 import Spinner from "../components/views/elements/Spinner";
 import dis from "../dispatcher/dispatcher";
@@ -58,21 +63,26 @@ export const showSpaceSettings = (space: Room) => {
     }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
 };
 
-export const showAddExistingRooms = async (space: Room) => {
-    return Modal.createTrackedDialog(
+export const showAddExistingRooms = (space: Room): void => {
+    Modal.createTrackedDialog(
         "Space Landing",
         "Add Existing",
         AddExistingToSpaceDialog,
         {
-            matrixClient: space.client,
-            onCreateRoomClick: showCreateNewRoom,
+            onCreateRoomClick: () => showCreateNewRoom(space),
+            onAddSubspaceClick: () => showAddExistingSubspace(space),
             space,
+            onFinished: (added: boolean) => {
+                if (added && RoomViewStore.getRoomId() === space.roomId) {
+                    defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
+                }
+            },
         },
         "mx_AddExistingToSpaceDialog_wrapper",
-    ).finished;
+    );
 };
 
-export const showCreateNewRoom = async (space: Room) => {
+export const showCreateNewRoom = async (space: Room): Promise<boolean> => {
     const modal = Modal.createTrackedDialog<[boolean, IOpts]>(
         "Space Landing",
         "Create Room",
@@ -89,7 +99,7 @@ export const showCreateNewRoom = async (space: Room) => {
     return shouldCreate;
 };
 
-export const showSpaceInvite = (space: Room, initialText = "") => {
+export const showSpaceInvite = (space: Room, initialText = ""): void => {
     if (space.getJoinRule() === "public") {
         const modal = Modal.createTrackedDialog("Space Invite", "User Menu", InfoDialog, {
             title: _t("Invite to %(spaceName)s", { spaceName: space.name }),
@@ -105,6 +115,42 @@ export const showSpaceInvite = (space: Room, initialText = "") => {
     } else {
         showRoomInviteDialog(space.roomId, initialText);
     }
+};
+
+export const showAddExistingSubspace = (space: Room): void => {
+    Modal.createTrackedDialog(
+        "Space Landing",
+        "Create Subspace",
+        AddExistingSubspaceDialog,
+        {
+            space,
+            onCreateSubspaceClick: () => showCreateNewSubspace(space),
+            onFinished: (added: boolean) => {
+                if (added && RoomViewStore.getRoomId() === space.roomId) {
+                    defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
+                }
+            },
+        },
+        "mx_AddExistingToSpaceDialog_wrapper",
+    );
+};
+
+export const showCreateNewSubspace = (space: Room): void => {
+    Modal.createTrackedDialog(
+        "Space Landing",
+        "Create Subspace",
+        CreateSubspaceDialog,
+        {
+            space,
+            onAddExistingSpaceClick: () => showAddExistingSubspace(space),
+            onFinished: (added: boolean) => {
+                if (added && RoomViewStore.getRoomId() === space.roomId) {
+                    defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
+                }
+            },
+        },
+        "mx_CreateSubspaceDialog_wrapper",
+    );
 };
 
 export const leaveSpace = (space: Room) => {
