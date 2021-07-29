@@ -356,7 +356,7 @@ const SpaceLandingAddButton = ({ space }) => {
                     }}
                 />
                 <IconizedContextMenuOption
-                    label={_t("Add subspace")}
+                    label={_t("Add space")}
                     iconClassName="mx_RoomList_iconPlus"
                     onClick={(e) => {
                         e.preventDefault();

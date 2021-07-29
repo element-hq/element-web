@@ -54,7 +54,7 @@ const AddExistingSubspaceDialog: React.FC<IProps> = ({ space, onCreateSubspaceCl
                 footerPrompt={<>
                     <div>{ _t("Want to add a new space instead?") }</div>
                     <AccessibleButton onClick={onCreateSubspaceClick} kind="link">
-                        { _t("Create a new subspace") }
+                        { _t("Create a new space") }
                     </AccessibleButton>
                 </>}
                 filterPlaceholder={_t("Search for spaces")}

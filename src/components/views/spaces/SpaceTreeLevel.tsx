@@ -330,7 +330,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                     />
                     <IconizedContextMenuOption
                         iconClassName="mx_SpacePanel_iconPlus"
-                        label={_t("Add subspace")}
+                        label={_t("Add space")}
                         onClick={this.onNewSubspaceClick}
                     >
                         <BetaPill />
