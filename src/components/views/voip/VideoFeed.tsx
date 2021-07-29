@@ -72,7 +72,12 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
     componentDidUpdate(prevProps: IProps, prevState: IState) {
         this.updateFeed(prevProps.feed, this.props.feed);
         // If the mutes state has changed, we try to playMedia()
-        if (prevState.videoMuted !== this.state.videoMuted) this.playMedia();
+        if (
+            prevState.videoMuted !== this.state.videoMuted ||
+            prevProps.feed.stream !== this.props.feed.stream
+        ) {
+            this.playMedia();
+        }
     }
 
     static getDerivedStateFromProps(props: IProps) {
@@ -143,15 +148,14 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         // seem to be necessary - Šimon
     }
 
-    private onNewStream = async () => {
-        await this.setState({
+    private onNewStream = () => {
+        this.setState({
             audioMuted: this.props.feed.isAudioMuted(),
             videoMuted: this.props.feed.isVideoMuted(),
         });
-        this.playMedia();
     };
 
-    private onMuteStateChanged = async () => {
+    private onMuteStateChanged = () => {
         this.setState({
             audioMuted: this.props.feed.isAudioMuted(),
             videoMuted: this.props.feed.isVideoMuted(),
