@@ -94,17 +94,17 @@ const LeaveRoomsPicker = ({ space, spaceChildren, roomsToLeave, setRoomsToLeave 
     let captionSpan;
     switch (state) {
         case RoomsToLeave.All:
-            captionSpan = _t("You will leave all subspaces and rooms in <spaceName/>.", {}, {
+            captionSpan = _t("You will leave all rooms and spaces in <spaceName/>.", {}, {
                 spaceName: () => <b>{ space.name }</b>,
             });
             break;
         case RoomsToLeave.None:
-            captionSpan = _t("You'll still be a part of all rooms and subspaces in <spaceName/> you've joined.", {}, {
+            captionSpan = _t("You'll still be a part of all rooms and spaces in <spaceName/> you've joined.", {}, {
                 spaceName: () => <b>{ space.name }</b>,
             });
             break;
         case RoomsToLeave.Specific:
-            captionSpan = <span>{ _t("Pick which rooms and subspaces you want to leave.") }</span>;
+            captionSpan = <span>{ _t("Pick which rooms and spaces you want to leave.") }</span>;
             break;
     }
 
@@ -113,16 +113,16 @@ const LeaveRoomsPicker = ({ space, spaceChildren, roomsToLeave, setRoomsToLeave 
             id="mx_LeaveSpaceDialog_leaveRoomPickerDropdown"
             onOptionChange={setState}
             value={state}
-            label={_t("Choose which rooms you wish to leave")}
+            label={_t("Choose which rooms and spaces you wish to leave")}
         >
             <div key={RoomsToLeave.All}>
-                { _t("Leave all subspaces and rooms") }
+                { _t("Leave all rooms and spaces") }
             </div>
             <div key={RoomsToLeave.None}>
                 { _t("Don't leave any") }
             </div>
             <div key={RoomsToLeave.Specific}>
-                { _t("Leave specific rooms and subspaces") }
+                { _t("Leave specific rooms and spaces") }
             </div>
         </Dropdown>
         { captionSpan }
@@ -171,7 +171,7 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
     } else {
         const numChildrenOnlyAdminIn = roomsToLeave.filter(isOnlyAdmin).length;
         if (numChildrenOnlyAdminIn > 0) {
-            onlyAdminWarning = _t("You're the only admin of some of the rooms or subspaces you wish to leave. " +
+            onlyAdminWarning = _t("You're the only admin of some of the rooms or spaces you wish to leave. " +
                 "Leaving them will leave them without any admins.");
         }
     }
