@@ -22,6 +22,7 @@ import { CallFeed, CallFeedEvent } from 'matrix-js-sdk/src/webrtc/callFeed';
 import { logger } from 'matrix-js-sdk/src/logger';
 import MemberAvatar from "../avatars/MemberAvatar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { objectHasDiff } from '../../../utils/objects';
 
 interface IProps {
     call: MatrixCall;
@@ -46,7 +47,6 @@ interface IState {
     videoMuted: boolean;
 }
 
-// TODO: We shouldn't be calling playMedia() all the time
 @replaceableComponent("views.voip.VideoFeed")
 export default class VideoFeed extends React.PureComponent<IProps, IState> {
     private element: HTMLVideoElement;
@@ -69,8 +69,10 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         this.updateFeed(this.props.feed, null);
     }
 
-    componentDidUpdate(prevProps: IProps) {
+    componentDidUpdate(prevProps: IProps, prevState: IState) {
         this.updateFeed(prevProps.feed, this.props.feed);
+        // If the mutes state has changed, we try to playMedia()
+        if (prevState.videoMuted !== this.state.videoMuted) this.playMedia();
     }
 
     static getDerivedStateFromProps(props: IProps) {
@@ -142,7 +144,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
     }
 
     private onNewStream = async () => {
-        await this.setState({
+        this.setState({
             audioMuted: this.props.feed.isAudioMuted(),
             videoMuted: this.props.feed.isVideoMuted(),
         });
@@ -150,11 +152,10 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
     };
 
     private onMuteStateChanged = async () => {
-        await this.setState({
+        this.setState({
             audioMuted: this.props.feed.isAudioMuted(),
             videoMuted: this.props.feed.isVideoMuted(),
         });
-        this.playMedia();
     };
 
     private onResize = (e) => {
