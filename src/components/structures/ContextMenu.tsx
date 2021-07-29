@@ -80,6 +80,10 @@ export interface IProps extends IPosition {
     managed?: boolean;
     wrapperClassName?: string;
 
+    // If true, this context menu will be mounted as a child to the parent container. Otherwise
+    // it will be mounted to a container at the root of the DOM.
+    mountAsChild?: boolean;
+
     // Function to be called on menu close
     onFinished();
     // on resize callback
@@ -390,7 +394,13 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
     }
 
     render(): React.ReactChild {
-        return ReactDOM.createPortal(this.renderMenu(), getOrCreateContainer());
+        if (this.props.mountAsChild) {
+            // Render as a child of the current parent
+            return this.renderMenu();
+        } else {
+            // Render as a child of a container at the root of the DOM
+            return ReactDOM.createPortal(this.renderMenu(), getOrCreateContainer());
+        }
     }
 }
 
