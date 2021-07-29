@@ -3583,5 +3583,19 @@
     "To help space members find and join a private room, go to that room's Security & Privacy settings.": "要協助空間成員尋找並加入私人聊天室，請到該聊天室的「安全與隱私」設定。",
     "Help space members find private rooms": "協助空間成員尋找私人聊天室",
     "Help people in spaces to find and join private rooms": "協助空間中的夥伴尋找並加入私人聊天室",
-    "New in the Spaces beta": "Spaces 測試版的新功能"
+    "New in the Spaces beta": "Spaces 測試版的新功能",
+    "Share content": "分享內容",
+    "Application window": "應用程式視窗",
+    "Share entire screen": "分享整個螢幕",
+    "They didn't pick up": "他們未接聽",
+    "Call again": "重撥",
+    "They declined this call": "他們回絕了此通話",
+    "You declined this call": "您回絕了此通話",
+    "You can now share your screen by pressing the \"screen share\" button during a call. You can even do this in audio calls if both sides support it!": "您現在可以透過在通話中按下「畫面分享」按鈕來分享您的畫面了。如果雙方都支援，您甚至可以在音訊通話中使用此功能！",
+    "Screen sharing is here!": "畫面分享在此！",
+    "Your camera is still enabled": "您的攝影機仍為啟用狀態",
+    "Your camera is turned off": "您的攝影機已關閉",
+    "You are presenting": "您正在出席",
+    "%(sharerName)s is presenting": "%(sharerName)s 正在出席",
+    "Anyone will be able to find and join this room.": "任何人都可以找到並加入此聊天室。"
 }
