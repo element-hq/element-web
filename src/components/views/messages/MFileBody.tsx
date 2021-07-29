@@ -27,6 +27,7 @@ import { presentableTextForFile } from "../../../utils/FileUtils";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 import { IBodyProps } from "./IBodyProps";
 import { FileDownloader } from "../../../utils/FileDownloader";
+import TextWithTooltip from "../elements/TextWithTooltip";
 
 export let DOWNLOAD_ICON_URL; // cached copy of the download.svg asset for the sandboxed iframe later on
 
@@ -202,9 +203,12 @@ export default class MFileBody extends React.Component<IProps, IState> {
             placeholder = (
                 <AccessibleButton className="mx_MediaBody mx_MFileBody_info" onClick={this.onPlaceholderClick}>
                     <span className="mx_MFileBody_info_icon" />
-                    <span className="mx_MFileBody_info_filename">
-                        { presentableTextForFile(content, _t("Attachment"), false) }
-                    </span>
+                    <TextWithTooltip
+                        className="mx_MFileBody_info_filename"
+                        tooltip={presentableTextForFile(content, _t("Attachment"), false)}
+                    >
+                        { presentableTextForFile(content, _t("Attachment"), true, true) }
+                    </TextWithTooltip>
                 </AccessibleButton>
             );
         }
