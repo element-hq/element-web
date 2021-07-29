@@ -27,24 +27,15 @@ limitations under the License.
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-
-    &.mx_LeaveSpaceDialog_hasChildren {
-        height: 500px;
-    }
+    max-height: 520px;
 
     .mx_Dialog_content {
         flex-grow: 1;
-        margin: 0 0 24px;
-        color: $tertiary-fg-color;
+        margin: 0;
         overflow-y: auto;
 
-        .mx_Dropdown_input {
-            border-radius: 8px;
-            border-color: $input-border-color;
-        }
-
-        .mx_Dropdown_option {
-            font-size: $font-15px;
+        .mx_RadioButton + .mx_RadioButton {
+            margin-top: 16px;
         }
 
         .mx_SearchBox {
@@ -61,17 +52,12 @@ limitations under the License.
 
         .mx_LeaveSpaceDialog_section {
             margin: 16px 0;
-
-            .mx_Dropdown + span {
-                display: inline-block;
-                margin-top: 8px;
-            }
         }
 
         .mx_LeaveSpaceDialog_section_warning {
             position: relative;
             border-radius: 8px;
-            margin: 12px 0;
+            margin: 12px 0 0;
             padding: 12px 8px 12px 42px;
             background-color: $header-panel-bg-color;
 

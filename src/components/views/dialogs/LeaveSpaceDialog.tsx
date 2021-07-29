@@ -19,7 +19,6 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 import { _t } from '../../../languageHandler';
-import Dropdown from "../elements/Dropdown";
 import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "../dialogs/BaseDialog";
 import SpaceStore from "../../../stores/SpaceStore";
@@ -27,7 +26,7 @@ import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { Entry } from "./AddExistingToSpaceDialog";
 import SearchBox from "../../structures/SearchBox";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
-import classNames from "classnames";
+import StyledRadioGroup from "../elements/StyledRadioGroup";
 
 enum RoomsToLeave {
     All = "All",
@@ -91,41 +90,24 @@ const LeaveRoomsPicker = ({ space, spaceChildren, roomsToLeave, setRoomsToLeave 
         }
     }, [setRoomsToLeave, state, spaceChildren]);
 
-    let captionSpan;
-    switch (state) {
-        case RoomsToLeave.All:
-            captionSpan = _t("You will leave all rooms and spaces in <spaceName/>.", {}, {
-                spaceName: () => <b>{ space.name }</b>,
-            });
-            break;
-        case RoomsToLeave.None:
-            captionSpan = _t("You'll still be a part of all rooms and spaces in <spaceName/> you've joined.", {}, {
-                spaceName: () => <b>{ space.name }</b>,
-            });
-            break;
-        case RoomsToLeave.Specific:
-            captionSpan = <span>{ _t("Pick which rooms and spaces you want to leave.") }</span>;
-            break;
-    }
-
     return <div className="mx_LeaveSpaceDialog_section">
-        <Dropdown
-            id="mx_LeaveSpaceDialog_leaveRoomPickerDropdown"
-            onOptionChange={setState}
+        <StyledRadioGroup
+            name="roomsToLeave"
             value={state}
-            label={_t("Choose which rooms and spaces you wish to leave")}
-        >
-            <div key={RoomsToLeave.All}>
-                { _t("Leave all rooms and spaces") }
-            </div>
-            <div key={RoomsToLeave.None}>
-                { _t("Don't leave any") }
-            </div>
-            <div key={RoomsToLeave.Specific}>
-                { _t("Leave specific rooms and spaces") }
-            </div>
-        </Dropdown>
-        { captionSpan }
+            onChange={setState}
+            definitions={[
+                {
+                    value: RoomsToLeave.All,
+                    label: _t("Leave all rooms and spaces"),
+                }, {
+                    value: RoomsToLeave.None,
+                    label: _t("Don't leave any"),
+                }, {
+                    value: RoomsToLeave.Specific,
+                    label: _t("Leave specific rooms and spaces"),
+                },
+            ]}
+        />
 
         { state === RoomsToLeave.Specific && (
             <SpaceChildPicker
@@ -178,9 +160,7 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
 
     return <BaseDialog
         title={_t("Leave %(spaceName)s", { spaceName: space.name })}
-        className={classNames("mx_LeaveSpaceDialog", {
-            mx_LeaveSpaceDialog_hasChildren: spaceChildren.length > 0,
-        })}
+        className="mx_LeaveSpaceDialog"
         contentId="mx_LeaveSpaceDialog"
         onFinished={() => onFinished(false)}
         fixedWidth={false}
