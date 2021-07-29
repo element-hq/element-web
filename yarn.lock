@@ -3234,8 +3234,8 @@ eslint-config-google@^0.14.0:
   integrity sha512-WsbX4WbjuMvTdeVL6+J3rK1RGhCTqjsFjX7UMSMgZiyxxaNLkoJENbrGExzERFeoTpGw3F3FypTiWAP9ZXzkEw==
 
 "eslint-plugin-matrix-org@github:matrix-org/eslint-plugin-matrix-org#main":
-  version "0.3.3"
-  resolved "https://codeload.github.com/matrix-org/eslint-plugin-matrix-org/tar.gz/50d6bdf6704dd95016d5f1f824f00cac6eaa64e1"
+  version "0.3.4"
+  resolved "https://codeload.github.com/matrix-org/eslint-plugin-matrix-org/tar.gz/45f6937539192e3820edcafc4d6d4d4187e85a6a"
 
 eslint-plugin-react-hooks@^4.2.0:
   version "4.2.0"

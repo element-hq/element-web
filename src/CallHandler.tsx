@@ -56,7 +56,6 @@ limitations under the License.
 import React from 'react';
 
 import { MatrixClientPeg } from './MatrixClientPeg';
-import PlatformPeg from './PlatformPeg';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 import dis from './dispatcher/dispatcher';
@@ -80,7 +79,6 @@ import CountlyAnalytics from "./CountlyAnalytics";
 import { UIFeature } from "./settings/UIFeature";
 import { CallError } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from 'matrix-js-sdk/src/logger';
-import DesktopCapturerSourcePicker from "./components/views/elements/DesktopCapturerSourcePicker";
 import { Action } from './dispatcher/actions';
 import VoipUserMapper from './VoipUserMapper';
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
@@ -129,14 +127,9 @@ interface ThirdpartyLookupResponse {
     fields: ThirdpartyLookupResponseFields;
 }
 
-// Unlike 'CallType' in js-sdk, this one includes screen sharing
-// (because a screen sharing call is only a screen sharing call to the caller,
-// to the callee it's just a video call, at least as far as the current impl
-// is concerned).
 export enum PlaceCallType {
     Voice = 'voice',
     Video = 'video',
-    ScreenSharing = 'screensharing',
 }
 
 export enum CallHandlerEvent {
@@ -491,28 +484,18 @@ export default class CallHandler extends EventEmitter {
                     break;
                 case CallState.Ended:
                 {
-                    Analytics.trackEvent('voip', 'callEnded', 'hangupReason', call.hangupReason);
+                    const hangupReason = call.hangupReason;
+                    Analytics.trackEvent('voip', 'callEnded', 'hangupReason', hangupReason);
                     this.removeCallForRoom(mappedRoomId);
-                    if (oldState === CallState.InviteSent && (
-                        call.hangupParty === CallParty.Remote ||
-                        (call.hangupParty === CallParty.Local && call.hangupReason === CallErrorCode.InviteTimeout)
-                    )) {
+                    if (oldState === CallState.InviteSent && call.hangupParty === CallParty.Remote) {
                         this.play(AudioID.Busy);
                         let title;
                         let description;
-                        if (call.hangupReason === CallErrorCode.UserHangup) {
-                            title = _t("Call Declined");
-                            description = _t("The other party declined the call.");
-                        } else if (call.hangupReason === CallErrorCode.UserBusy) {
+                        // TODO: We should either do away with these or figure out a copy for each code (expect user_hangup...)
+                        if (call.hangupReason === CallErrorCode.UserBusy) {
                             title = _t("User Busy");
                             description = _t("The user you called is busy.");
-                        } else if (call.hangupReason === CallErrorCode.InviteTimeout) {
-                            title = _t("Call Failed");
-                            // XXX: full stop appended as some relic here, but these
-                            // strings need proper input from design anyway, so let's
-                            // not change this string until we have a proper one.
-                            description = _t('The remote side failed to pick up') + '.';
-                        } else {
+                        } else if (hangupReason && ![CallErrorCode.UserHangup, "user hangup"].includes(hangupReason)) {
                             title = _t("Call Failed");
                             description = _t("The call could not be established");
                         }
@@ -521,7 +504,7 @@ export default class CallHandler extends EventEmitter {
                             title, description,
                         });
                     } else if (
-                        call.hangupReason === CallErrorCode.AnsweredElsewhere && oldState === CallState.Connecting
+                        hangupReason === CallErrorCode.AnsweredElsewhere && oldState === CallState.Connecting
                     ) {
                         Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
                             title: _t("Answered Elsewhere"),
@@ -738,25 +721,6 @@ export default class CallHandler extends EventEmitter {
             call.placeVoiceCall();
         } else if (type === 'video') {
             call.placeVideoCall();
-        } else if (type === PlaceCallType.ScreenSharing) {
-            const screenCapErrorString = PlatformPeg.get().screenCaptureErrorString();
-            if (screenCapErrorString) {
-                this.removeCallForRoom(roomId);
-                console.log("Can't capture screen: " + screenCapErrorString);
-                Modal.createTrackedDialog('Call Handler', 'Unable to capture screen', ErrorDialog, {
-                    title: _t('Unable to capture screen'),
-                    description: screenCapErrorString,
-                });
-                return;
-            }
-
-            call.placeScreenSharingCall(
-                async (): Promise<DesktopCapturerSource> => {
-                    const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
-                    const [source] = await finished;
-                    return source;
-                },
-            );
         } else {
             console.error("Unknown conf call type: " + type);
         }

@@ -104,8 +104,8 @@ a:visited {
 input[type=text],
 input[type=search],
 input[type=password] {
+    font-family: inherit;
     padding: 9px;
-    font-family: $font-family;
     font-size: $font-14px;
     font-weight: 600;
     min-width: 0;
@@ -146,7 +146,6 @@ input[type=text], input[type=password], textarea {
 
 /* Required by Firefox */
 textarea {
-    font-family: $font-family;
     color: $primary-fg-color;
 }
 
