@@ -27,6 +27,8 @@ import BetaFeedbackDialog from "../dialogs/BetaFeedbackDialog";
 import SdkConfig from "../../../SdkConfig";
 import SettingsFlag from "../elements/SettingsFlag";
 
+// XXX: Keep this around for re-use in future Betas
+
 interface IProps {
     title?: string;
     featureId: string;
