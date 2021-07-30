@@ -92,8 +92,8 @@ export default abstract class Exporter {
         this.cancelled = true;
     }
 
-    protected async downloadPlainText(fileName: string, text: string): Promise<any> {
-        await saveAs(new Blob[text], fileName);
+    protected downloadPlainText(fileName: string, text: string) {
+        saveAs(new Blob[text], fileName);
     }
 
     protected setEventMetadata(event: MatrixEvent): MatrixEvent {

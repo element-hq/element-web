@@ -134,7 +134,7 @@ export default class PlainTextExporter extends Exporter {
             await this.downloadZIP();
         } else {
             const fileName = `matrix-export-${formatFullDateNoDay(new Date())}.txt`;
-            await this.downloadPlainText(fileName, text);
+            this.downloadPlainText(fileName, text);
         }
 
         const exportEnd = performance.now();

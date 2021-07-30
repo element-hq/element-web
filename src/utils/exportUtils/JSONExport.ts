@@ -107,7 +107,7 @@ export default class JSONExporter extends Exporter {
             await this.downloadZIP();
         } else {
             const fileName = `matrix-export-${formatFullDateNoDay(new Date())}.json`;
-            await this.downloadPlainText(fileName, text);
+            this.downloadPlainText(fileName, text);
         }
 
         const exportEnd = performance.now();
