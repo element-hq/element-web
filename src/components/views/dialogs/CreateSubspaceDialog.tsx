@@ -136,7 +136,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
     return <BaseDialog
         title={(
             <SubspaceSelector
-                title={_t("Create a subspace")}
+                title={_t("Create a space")}
                 space={space}
                 value={parentSpace}
                 onChange={setParentSpace}
@@ -151,7 +151,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
             <div className="mx_CreateSubspaceDialog_content">
                 <div className="mx_CreateSubspaceDialog_betaNotice">
                     <BetaPill />
-                    { _t("Add a subspace to a space you manage.") }
+                    { _t("Add a space to a space you manage.") }
                 </div>
 
                 <SpaceCreateForm
@@ -169,9 +169,9 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
                     aliasFieldRef={spaceAliasField}
                 >
                     <JoinRuleDropdown
-                        label={_t("Subspace visibility")}
-                        labelInvite={_t("Private subspace (invite only)")}
-                        labelPublic={_t("Public subspace")}
+                        label={_t("Space visibility")}
+                        labelInvite={_t("Private space (invite only)")}
+                        labelPublic={_t("Public space")}
                         labelRestricted={supportsRestricted ? _t("Visible to space members") : undefined}
                         width={478}
                         value={joinRule}

@@ -115,6 +115,7 @@ export default class CallView extends React.Component<IProps, IState> {
     private controlsHideTimer: number = null;
     private dialpadButton = createRef<HTMLDivElement>();
     private contextMenuButton = createRef<HTMLDivElement>();
+    private contextMenu = createRef<HTMLDivElement>();
 
     constructor(props: IProps) {
         super(props);
@@ -545,12 +546,42 @@ export default class CallView extends React.Component<IProps, IState> {
             );
         }
 
+        let dialPad;
+        if (this.state.showDialpad) {
+            dialPad = <DialpadContextMenu
+                {...alwaysAboveRightOf(
+                    this.dialpadButton.current.getBoundingClientRect(),
+                    ChevronFace.None,
+                    CONTEXT_MENU_VPADDING,
+                )}
+                mountAsChild={true}
+                onFinished={this.closeDialpad}
+                call={this.props.call}
+            />;
+        }
+
+        let contextMenu;
+        if (this.state.showMoreMenu) {
+            contextMenu = <CallContextMenu
+                {...alwaysAboveLeftOf(
+                    this.contextMenuButton.current.getBoundingClientRect(),
+                    ChevronFace.None,
+                    CONTEXT_MENU_VPADDING,
+                )}
+                mountAsChild={true}
+                onFinished={this.closeContextMenu}
+                call={this.props.call}
+            />;
+        }
+
         return (
             <div
                 className={callControlsClasses}
                 onMouseEnter={this.onCallControlsMouseEnter}
                 onMouseLeave={this.onCallControlsMouseLeave}
             >
+                { dialPad }
+                { contextMenu }
                 { dialpadButton }
                 <AccessibleButton
                     className={micClasses}
@@ -858,37 +889,9 @@ export default class CallView extends React.Component<IProps, IState> {
             myClassName = 'mx_CallView_pip';
         }
 
-        let dialPad;
-        if (this.state.showDialpad) {
-            dialPad = <DialpadContextMenu
-                {...alwaysAboveRightOf(
-                    this.dialpadButton.current.getBoundingClientRect(),
-                    ChevronFace.None,
-                    CONTEXT_MENU_VPADDING,
-                )}
-                onFinished={this.closeDialpad}
-                call={this.props.call}
-            />;
-        }
-
-        let contextMenu;
-        if (this.state.showMoreMenu) {
-            contextMenu = <CallContextMenu
-                {...alwaysAboveLeftOf(
-                    this.contextMenuButton.current.getBoundingClientRect(),
-                    ChevronFace.None,
-                    CONTEXT_MENU_VPADDING,
-                )}
-                onFinished={this.closeContextMenu}
-                call={this.props.call}
-            />;
-        }
-
         return <div className={"mx_CallView " + myClassName}>
             { header }
             { contentView }
-            { dialPad }
-            { contextMenu }
         </div>;
     }
 }

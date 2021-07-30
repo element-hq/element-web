@@ -192,7 +192,8 @@ class Pill extends React.Component {
         });
     }
 
-    onUserPillClicked = () => {
+    onUserPillClicked = (e) => {
+        e.preventDefault();
         dis.dispatch({
             action: Action.ViewUser,
             member: this.state.member,

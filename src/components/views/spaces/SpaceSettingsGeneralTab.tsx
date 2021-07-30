@@ -21,12 +21,11 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
-import { SpaceFeedbackPrompt } from "../../structures/SpaceRoomView";
 import SpaceBasicSettings from "./SpaceBasicSettings";
 import { avatarUrlForRoom } from "../../../Avatar";
 import { IDialogProps } from "../dialogs/IDialogProps";
 import { getTopic } from "../elements/RoomTopic";
-import { defaultDispatcher } from "../../../dispatcher/dispatcher";
+import { leaveSpace } from "../../../utils/space";
 
 interface IProps extends IDialogProps {
     matrixClient: MatrixClient;
@@ -96,8 +95,6 @@ const SpaceSettingsGeneralTab = ({ matrixClient: cli, space, onFinished }: IProp
 
         { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
 
-        <SpaceFeedbackPrompt />
-
         <div className="mx_SettingsTab_section">
             <SpaceBasicSettings
                 avatarUrl={avatarUrlForRoom(space, 80, 80, "crop")}
@@ -128,10 +125,7 @@ const SpaceSettingsGeneralTab = ({ matrixClient: cli, space, onFinished }: IProp
             <AccessibleButton
                 kind="danger"
                 onClick={() => {
-                    defaultDispatcher.dispatch({
-                        action: "leave_room",
-                        room_id: space.roomId,
-                    });
+                    leaveSpace(space);
                 }}
             >
                 { _t("Leave Space") }

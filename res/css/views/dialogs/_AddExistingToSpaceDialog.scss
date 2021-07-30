@@ -50,35 +50,6 @@ limitations under the License.
             line-height: $font-15px;
         }
 
-        .mx_AddExistingToSpace_entry {
-            display: flex;
-            margin-top: 12px;
-
-            .mx_DecoratedRoomAvatar, // we can't target .mx_BaseAvatar here as it'll break the decorated avatar styling
-            .mx_BaseAvatar.mx_RoomAvatar_isSpaceRoom {
-                margin-right: 12px;
-            }
-
-            img.mx_RoomAvatar_isSpaceRoom,
-            .mx_RoomAvatar_isSpaceRoom img {
-                border-radius: 8px;
-            }
-
-            .mx_AddExistingToSpace_entry_name {
-                font-size: $font-15px;
-                line-height: 30px;
-                flex-grow: 1;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                margin-right: 12px;
-            }
-
-            .mx_Checkbox {
-                align-items: center;
-            }
-        }
-
         .mx_AccessibleButton_kind_link {
             font-size: $font-12px;
             line-height: $font-15px;
@@ -253,5 +224,34 @@ limitations under the License.
         color: $secondary-fg-color;
         font-size: $font-15px;
         line-height: $font-24px;
+    }
+}
+
+.mx_AddExistingToSpace_entry {
+    display: flex;
+    margin-top: 12px;
+
+    .mx_DecoratedRoomAvatar, // we can't target .mx_BaseAvatar here as it'll break the decorated avatar styling
+    .mx_BaseAvatar.mx_RoomAvatar_isSpaceRoom {
+        margin-right: 12px;
+    }
+
+    img.mx_RoomAvatar_isSpaceRoom,
+    .mx_RoomAvatar_isSpaceRoom img {
+        border-radius: 8px;
+    }
+
+    .mx_AddExistingToSpace_entry_name {
+        font-size: $font-15px;
+        line-height: 30px;
+        flex-grow: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        margin-right: 12px;
+    }
+
+    .mx_Checkbox {
+        align-items: center;
     }
 }

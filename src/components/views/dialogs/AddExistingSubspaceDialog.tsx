@@ -21,7 +21,6 @@ import { _t } from '../../../languageHandler';
 import BaseDialog from "./BaseDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { SpaceFeedbackPrompt } from "../../structures/SpaceRoomView";
 import { AddExistingToSpace, defaultSpacesRenderer, SubspaceSelector } from "./AddExistingToSpaceDialog";
 
 interface IProps {
@@ -54,15 +53,13 @@ const AddExistingSubspaceDialog: React.FC<IProps> = ({ space, onCreateSubspaceCl
                 footerPrompt={<>
                     <div>{ _t("Want to add a new space instead?") }</div>
                     <AccessibleButton onClick={onCreateSubspaceClick} kind="link">
-                        { _t("Create a new subspace") }
+                        { _t("Create a new space") }
                     </AccessibleButton>
                 </>}
                 filterPlaceholder={_t("Search for spaces")}
                 spacesRenderer={defaultSpacesRenderer}
             />
         </MatrixClientContext.Provider>
-
-        <SpaceFeedbackPrompt onClick={() => onFinished(false)} />
     </BaseDialog>;
 };
 
