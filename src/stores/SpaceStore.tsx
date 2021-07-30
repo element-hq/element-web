@@ -329,7 +329,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }, roomId);
     }
 
-    private getChildren(spaceId: string): Room[] {
+    public getChildren(spaceId: string): Room[] {
         const room = this.matrixClient?.getRoom(spaceId);
         const childEvents = room?.currentState.getStateEvents(EventType.SpaceChild).filter(ev => ev.getContent()?.via);
         return sortBy(childEvents, ev => {
