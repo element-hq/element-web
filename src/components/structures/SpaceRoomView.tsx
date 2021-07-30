@@ -54,7 +54,7 @@ import {
     showCreateNewSubspace,
     showSpaceSettings,
 } from "../../utils/space";
-import { showRoom, SpaceHierarchy } from "./SpaceRoomDirectory";
+import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
 import MemberAvatar from "../views/avatars/MemberAvatar";
 import SpaceStore from "../../stores/SpaceStore";
 import FacePile from "../views/elements/FacePile";

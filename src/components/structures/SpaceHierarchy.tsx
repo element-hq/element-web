@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import React, { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
@@ -27,13 +27,10 @@ import dis from "../../dispatcher/dispatcher";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
-import BaseDialog from "../views/dialogs/BaseDialog";
 import Spinner from "../views/elements/Spinner";
 import SearchBox from "./SearchBox";
 import RoomAvatar from "../views/avatars/RoomAvatar";
-import RoomName from "../views/elements/RoomName";
 import StyledCheckbox from "../views/elements/StyledCheckbox";
-import AutoHideScrollbar from "./AutoHideScrollbar";
 import BaseAvatar from "../views/avatars/BaseAvatar";
 import { mediaFromMxc } from "../../customisations/Media";
 import InfoTooltip from "../views/elements/InfoTooltip";
@@ -46,7 +43,7 @@ import { useDispatcher } from "../../hooks/useDispatcher";
 import { Action } from "../../dispatcher/actions";
 import { getDisplayAliasForRoom } from "./RoomDirectory";
 
-interface IHierarchyProps {
+interface IProps {
     space: Room;
     initialText?: string;
     additionalButtons?: ReactNode;
@@ -148,13 +145,13 @@ const Tile: React.FC<ITileProps> = ({
 
     const content = <React.Fragment>
         { avatar }
-        <div className="mx_SpaceRoomDirectory_roomTile_name">
+        <div className="mx_SpaceHierarchy_roomTile_name">
             { name }
             { suggestedSection }
         </div>
 
         <div
-            className="mx_SpaceRoomDirectory_roomTile_info"
+            className="mx_SpaceHierarchy_roomTile_info"
             ref={e => e && linkifyElement(e)}
             onClick={ev => {
                 // prevent clicks on links from bubbling up to the room tile
@@ -165,7 +162,7 @@ const Tile: React.FC<ITileProps> = ({
         >
             { description }
         </div>
-        <div className="mx_SpaceRoomDirectory_actions">
+        <div className="mx_SpaceHierarchy_actions">
             { button }
             { checkbox }
         </div>
@@ -176,8 +173,8 @@ const Tile: React.FC<ITileProps> = ({
     if (children) {
         // the chevron is purposefully a div rather than a button as it should be ignored for a11y
         childToggle = <div
-            className={classNames("mx_SpaceRoomDirectory_subspace_toggle", {
-                mx_SpaceRoomDirectory_subspace_toggle_shown: showChildren,
+            className={classNames("mx_SpaceHierarchy_subspace_toggle", {
+                mx_SpaceHierarchy_subspace_toggle_shown: showChildren,
             })}
             onClick={ev => {
                 ev.stopPropagation();
@@ -185,7 +182,7 @@ const Tile: React.FC<ITileProps> = ({
             }}
         />;
         if (showChildren) {
-            childSection = <div className="mx_SpaceRoomDirectory_subspace_children">
+            childSection = <div className="mx_SpaceHierarchy_subspace_children">
                 { children }
             </div>;
         }
@@ -193,8 +190,8 @@ const Tile: React.FC<ITileProps> = ({
 
     return <>
         <AccessibleButton
-            className={classNames("mx_SpaceRoomDirectory_roomTile", {
-                mx_SpaceRoomDirectory_subspace: room.room_type === RoomType.Space,
+            className={classNames("mx_SpaceHierarchy_roomTile", {
+                mx_SpaceHierarchy_subspace: room.room_type === RoomType.Space,
             })}
             onClick={(hasPermissions && onToggleClick) ? onToggleClick : onPreviewClick}
         >
@@ -319,6 +316,8 @@ export const HierarchyLevel = ({
     </React.Fragment>;
 };
 
+const INITIAL_PAGE_SIZE = 20;
+
 export const useSpaceSummary = (space: Room): {
     loading: boolean;
     rooms: IHierarchyRoom[];
@@ -327,8 +326,6 @@ export const useSpaceSummary = (space: Room): {
 } => {
     const [rooms, setRooms] = useState<IHierarchyRoom[]>([]);
     const [loading, setLoading] = useState(true);
-
-    const INITIAL_PAGE_SIZE = 20;
     const [hierarchy, setHierarchy] = useState<RoomHierarchy>();
 
     const resetHierarchy = useCallback(() => {
@@ -368,13 +365,12 @@ export const useSpaceSummary = (space: Room): {
     return { loading, rooms, hierarchy, loadMore };
 };
 
-export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
+const SpaceHierarchy = ({
     space,
     initialText = "",
     showRoom,
     additionalButtons,
-    children,
-}) => {
+}: IProps) => {
     const cli = MatrixClientPeg.get();
     const userId = cli.getUserId();
     const [query, setQuery] = useState(initialText);
@@ -416,7 +412,8 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
         return <p>{ _t("Your server does not support showing space hierarchies.") }</p>;
     }
 
-    let content;
+    let content: JSX.Element;
+    let loader: JSX.Element;
     if (loading) {
         content = <Spinner />;
     } else {
@@ -513,7 +510,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
             </>;
         }
 
-        let results;
+        let results: JSX.Element;
         if (filteredRoomSet.size) {
             const hasPermissions = space?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
 
@@ -544,34 +541,31 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
                         showRoom(hierarchy, roomId, autoJoin);
                     }}
                 />
-                { children && <hr /> }
             </>;
         } else {
-            results = <div className="mx_SpaceRoomDirectory_noResults">
+            results = <div className="mx_SpaceHierarchy_noResults">
                 <h3>{ _t("No results found") }</h3>
                 <div>{ _t("You may want to try a different search or check for typos.") }</div>
             </div>;
         }
 
         content = <>
-            <div className="mx_SpaceRoomDirectory_listHeader">
+            <div className="mx_SpaceHierarchy_listHeader">
                 { countsStr }
                 <span>
                     { additionalButtons }
                     { manageButtons }
                 </span>
             </div>
-            { error && <div className="mx_SpaceRoomDirectory_error">
+            { error && <div className="mx_SpaceHierarchy_error">
                 { error }
             </div> }
-            <AutoHideScrollbar className="mx_SpaceRoomDirectory_list">
-                { results }
-                { children }
-            </AutoHideScrollbar>
+
+            { results }
+            { loader }
         </>;
     }
 
-    // TODO loading state/error state
     return <>
         <SearchBox
             className="mx_textinput_icon mx_textinput_search"
@@ -585,58 +579,4 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
     </>;
 };
 
-interface IProps {
-    space: Room;
-    initialText?: string;
-    onFinished(): void;
-}
-
-const SpaceRoomDirectory: React.FC<IProps> = ({ space, onFinished, initialText }) => {
-    const onCreateRoomClick = () => {
-        dis.dispatch({
-            action: 'view_create_room',
-            public: true,
-        });
-        onFinished();
-    };
-
-    const title = <React.Fragment>
-        <RoomAvatar room={space} height={32} width={32} />
-        <div>
-            <h1>{ _t("Explore rooms") }</h1>
-            <div><RoomName room={space} /></div>
-        </div>
-    </React.Fragment>;
-
-    return (
-        <BaseDialog className="mx_SpaceRoomDirectory" hasCancel={true} onFinished={onFinished} title={title}>
-            <div className="mx_Dialog_content">
-                { _t("If you can't find the room you're looking for, ask for an invite or <a>create a new room</a>.",
-                    null,
-                    { a: sub => {
-                        return <AccessibleButton kind="link" onClick={onCreateRoomClick}>{ sub }</AccessibleButton>;
-                    } },
-                ) }
-
-                <SpaceHierarchy
-                    space={space}
-                    showRoom={(hierarchy: RoomHierarchy, roomId: string, autoJoin = false) => {
-                        showRoom(hierarchy, roomId, autoJoin);
-                        onFinished();
-                    }}
-                    initialText={initialText}
-                >
-                    <AccessibleButton
-                        onClick={onCreateRoomClick}
-                        kind="primary"
-                        className="mx_SpaceRoomDirectory_createRoom"
-                    >
-                        { _t("Create room") }
-                    </AccessibleButton>
-                </SpaceHierarchy>
-            </div>
-        </BaseDialog>
-    );
-};
-
-export default SpaceRoomDirectory;
+export default SpaceHierarchy;
