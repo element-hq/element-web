@@ -365,6 +365,31 @@ export const useSpaceSummary = (space: Room): {
     return { loading, rooms, hierarchy, loadMore };
 };
 
+const useIntersectionObserver = (callback: () => void) => {
+    const handleObserver = (entries: IntersectionObserverEntry[]) => {
+        const target = entries[0];
+        if (target.isIntersecting) {
+            callback();
+        }
+    };
+
+    const observerRef = useRef<IntersectionObserver>();
+    return (element: HTMLDivElement) => {
+        if (observerRef.current) {
+            observerRef.current.disconnect();
+        } else if (element) {
+            observerRef.current = new IntersectionObserver(handleObserver, {
+                root: element.parentElement,
+                rootMargin: "0px 0px 600px 0px",
+            });
+        }
+
+        if (observerRef.current && element) {
+            observerRef.current.observe(element);
+        }
+    };
+};
+
 const SpaceHierarchy = ({
     space,
     initialText = "",
@@ -408,28 +433,7 @@ const SpaceHierarchy = ({
     const [removing, setRemoving] = useState(false);
     const [saving, setSaving] = useState(false);
 
-    const handleObserver = (entries: IntersectionObserverEntry[]) => {
-        const target = entries[0];
-        if (target.isIntersecting) {
-            loadMore();
-        }
-    };
-
-    const observerRef = useRef<IntersectionObserver>();
-    const loaderRef = (element: HTMLDivElement) => {
-        if (observerRef.current) {
-            observerRef.current.disconnect();
-        } else if (element) {
-            observerRef.current = new IntersectionObserver(handleObserver, {
-                root: element.parentElement,
-                rootMargin: "0px 0px 600px 0px",
-            });
-        }
-
-        if (observerRef.current && element) {
-            observerRef.current.observe(element);
-        }
-    };
+    const loaderRef = useIntersectionObserver(loadMore);
 
     if (!loading && hierarchy.noSupport) {
         return <p>{ _t("Your server does not support showing space hierarchies.") }</p>;
