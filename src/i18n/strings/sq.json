@@ -3568,5 +3568,20 @@
     "To help space members find and join a private room, go to that room's Security & Privacy settings.": "Që të ndihmoni anëtarë hapësirash të gjejnë dhe hyjnë në një dhomë private, kaloni te rregullimet e Sigurisë & Privatësisë së dhomës.",
     "Help space members find private rooms": "Ndihmoni anëtarë hapësirash të gjejnë dhoma private",
     "Help people in spaces to find and join private rooms": "Ndihmoni persona në hapësira të gjejnë dhe hyjnë në dhoma private",
-    "New in the Spaces beta": "E re në Hapësira beta"
+    "New in the Spaces beta": "E re në Hapësira beta",
+    "You're removing all spaces. Access will default to invite only": "Po hiqni krejt hapësirat. Hyrja do të kthehet te parazgjedhja, pra vetëm me ftesa",
+    "Anyone will be able to find and join this room.": "Gjithkush do të jetë në gjendje të gjejë dhe hyjë në këtë dhomë.",
+    "Share content": "Ndani lëndë",
+    "Application window": "Dritare aplikacioni",
+    "Share entire screen": "Nda krejt ekranin",
+    "They didn't pick up": "S’iu përgjigjën",
+    "Call again": "Thirre prapë",
+    "They declined this call": "E hodhën poshtë këtë thirrje",
+    "You declined this call": "E hodhët poshtë këtë thirrje",
+    "You can now share your screen by pressing the \"screen share\" button during a call. You can even do this in audio calls if both sides support it!": "Tani mund t’u tregoni të tjerëve ekranin tuaj duke shtypur butonin “ndarje ekrani” gjatë thirrjes. Këtë mund ta bëni edhe në thirrje audio, nëse mbulohet nga të dy palët!",
+    "Screen sharing is here!": "Ndarja e ekranit me të tjerë erdhi!",
+    "Your camera is still enabled": "Kamera juaj është ende e aktivizuar",
+    "Your camera is turned off": "Kamera juaj është e fikur",
+    "%(sharerName)s is presenting": "%(sharerName)s përfaqëson",
+    "You are presenting": "Përfaqësoni"
 }
