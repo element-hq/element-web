@@ -17,9 +17,12 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import BaseDialog from "..//dialogs/BaseDialog";
+import DialogButtons from "./DialogButtons";
+import classNames from 'classnames';
 import AccessibleButton from './AccessibleButton';
 import { getDesktopCapturerSources } from "matrix-js-sdk/src/webrtc/call";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import TabbedView, { Tab, TabLocation } from '../../structures/TabbedView';
 
 export interface DesktopCapturerSource {
     id: string;
@@ -28,62 +31,70 @@ export interface DesktopCapturerSource {
 }
 
 export enum Tabs {
-    Screens = "screens",
-    Windows = "windows",
+    Screens = "screen",
+    Windows = "window",
 }
 
-export interface DesktopCapturerSourceIProps {
+export interface ExistingSourceIProps {
     source: DesktopCapturerSource;
     onSelect(source: DesktopCapturerSource): void;
+    selected: boolean;
 }
 
-export class ExistingSource extends React.Component<DesktopCapturerSourceIProps> {
-    constructor(props) {
+export class ExistingSource extends React.Component<ExistingSourceIProps> {
+    constructor(props: ExistingSourceIProps) {
         super(props);
     }
 
-    onClick = (ev) => {
+    private onClick = (): void => {
         this.props.onSelect(this.props.source);
     };
 
     render() {
+        const thumbnailClasses = classNames({
+            mx_desktopCapturerSourcePicker_source_thumbnail: true,
+            mx_desktopCapturerSourcePicker_source_thumbnail_selected: this.props.selected,
+        });
+
         return (
             <AccessibleButton
-                className="mx_desktopCapturerSourcePicker_stream_button"
+                className="mx_desktopCapturerSourcePicker_source"
                 title={this.props.source.name}
                 onClick={this.onClick}
             >
                 <img
-                    className="mx_desktopCapturerSourcePicker_stream_thumbnail"
+                    className={thumbnailClasses}
                     src={this.props.source.thumbnailURL}
                 />
-                <span className="mx_desktopCapturerSourcePicker_stream_name">{ this.props.source.name }</span>
+                <span className="mx_desktopCapturerSourcePicker_source_name">{ this.props.source.name }</span>
             </AccessibleButton>
         );
     }
 }
 
-export interface DesktopCapturerSourcePickerIState {
+export interface PickerIState {
     selectedTab: Tabs;
     sources: Array<DesktopCapturerSource>;
+    selectedSource: DesktopCapturerSource | null;
 }
-export interface DesktopCapturerSourcePickerIProps {
+export interface PickerIProps {
     onFinished(source: DesktopCapturerSource): void;
 }
 
 @replaceableComponent("views.elements.DesktopCapturerSourcePicker")
 export default class DesktopCapturerSourcePicker extends React.Component<
-    DesktopCapturerSourcePickerIProps,
-    DesktopCapturerSourcePickerIState
-    > {
-    interval;
+    PickerIProps,
+    PickerIState
+> {
+    interval: number;
 
-    constructor(props) {
+    constructor(props: PickerIProps) {
         super(props);
 
         this.state = {
             selectedTab: Tabs.Screens,
             sources: [],
+            selectedSource: null,
         };
     }
 
@@ -107,69 +118,61 @@ export default class DesktopCapturerSourcePicker extends React.Component<
         clearInterval(this.interval);
     }
 
-    onSelect = (source) => {
-        this.props.onFinished(source);
+    private onSelect = (source: DesktopCapturerSource): void => {
+        this.setState({ selectedSource: source });
     };
 
-    onScreensClick = (ev) => {
-        this.setState({ selectedTab: Tabs.Screens });
+    private onShare = (): void => {
+        this.props.onFinished(this.state.selectedSource);
     };
 
-    onWindowsClick = (ev) => {
-        this.setState({ selectedTab: Tabs.Windows });
+    private onTabChange = (): void => {
+        this.setState({ selectedSource: null });
     };
 
-    onCloseClick = (ev) => {
+    private onCloseClick = (): void => {
         this.props.onFinished(null);
     };
 
-    render() {
-        let sources;
-        if (this.state.selectedTab === Tabs.Screens) {
-            sources = this.state.sources
-                .filter((source) => {
-                    return source.id.startsWith("screen");
-                })
-                .map((source) => {
-                    return <ExistingSource source={source} onSelect={this.onSelect} key={source.id} />;
-                });
-        } else {
-            sources = this.state.sources
-                .filter((source) => {
-                    return source.id.startsWith("window");
-                })
-                .map((source) => {
-                    return <ExistingSource source={source} onSelect={this.onSelect} key={source.id} />;
-                });
-        }
+    private getTab(type: "screen" | "window", label: string): Tab {
+        const sources = this.state.sources.filter((source) => source.id.startsWith(type)).map((source) => {
+            return (
+                <ExistingSource
+                    selected={this.state.selectedSource?.id === source.id}
+                    source={source}
+                    onSelect={this.onSelect}
+                    key={source.id}
+                />
+            );
+        });
 
-        const buttonStyle = "mx_desktopCapturerSourcePicker_tabLabel";
-        const screensButtonStyle = buttonStyle + ((this.state.selectedTab === Tabs.Screens) ? "_selected" : "");
-        const windowsButtonStyle = buttonStyle + ((this.state.selectedTab === Tabs.Windows) ? "_selected" : "");
+        return new Tab(type, label, null, (
+            <div className="mx_desktopCapturerSourcePicker_tab">
+                { sources }
+            </div>
+        ));
+    }
+
+    render() {
+        const tabs = [
+            this.getTab("screen", _t("Share entire screen")),
+            this.getTab("window", _t("Application window")),
+        ];
 
         return (
             <BaseDialog
                 className="mx_desktopCapturerSourcePicker"
                 onFinished={this.onCloseClick}
-                title={_t("Share your screen")}
+                title={_t("Share content")}
             >
-                <div className="mx_desktopCapturerSourcePicker_tabLabels">
-                    <AccessibleButton
-                        className={screensButtonStyle}
-                        onClick={this.onScreensClick}
-                    >
-                        { _t("Screens") }
-                    </AccessibleButton>
-                    <AccessibleButton
-                        className={windowsButtonStyle}
-                        onClick={this.onWindowsClick}
-                    >
-                        { _t("Windows") }
-                    </AccessibleButton>
-                </div>
-                <div className="mx_desktopCapturerSourcePicker_panel">
-                    { sources }
-                </div>
+                <TabbedView tabs={tabs} tabLocation={TabLocation.TOP} onChange={this.onTabChange} />
+                <DialogButtons
+                    primaryButton={_t("Share")}
+                    hasCancel={true}
+                    onCancel={this.onCloseClick}
+                    onPrimaryButtonClick={this.onShare}
+                    primaryDisabled={!this.state.selectedSource}
+                />
             </BaseDialog>
         );
     }

@@ -124,6 +124,7 @@ export interface ISetting {
     // not use this for new settings.
     invertedSettingName?: string;
 
+    // XXX: Keep this around for re-use in future Betas
     betaInfo?: {
         title: string; // _td
         caption: string; // _td
@@ -181,8 +182,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             feedbackLabel: "spaces-feedback",
             extraSettings: [
                 "feature_spaces.all_rooms",
-                "feature_spaces.space_member_dms",
-                "feature_spaces.space_dm_badges",
             ],
         },
     },
@@ -190,20 +189,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Show all rooms in Home"),
         supportedLevels: LEVELS_FEATURE,
         default: true,
-        controller: new ReloadOnChangeController(),
-    },
-    "feature_spaces.space_member_dms": {
-        displayName: _td("Show people in spaces"),
-        description: _td("If disabled, you can still add Direct Messages to Personal Spaces. " +
-            "If enabled, you'll automatically see everyone who is a member of the Space."),
-        supportedLevels: LEVELS_FEATURE,
-        default: true,
-        controller: new ReloadOnChangeController(),
-    },
-    "feature_spaces.space_dm_badges": {
-        displayName: _td("Show notification badges for People in Spaces"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
         controller: new ReloadOnChangeController(),
     },
     "feature_dnd": {

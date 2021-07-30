@@ -32,8 +32,8 @@ import RoomAliasField from "../elements/RoomAliasField";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "../dialogs/BaseDialog";
-import Dropdown from "../elements/Dropdown";
 import SpaceStore from "../../../stores/SpaceStore";
+import JoinRuleDropdown from "../elements/JoinRuleDropdown";
 
 interface IProps {
     defaultPublic?: boolean;
@@ -250,13 +250,19 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                 &nbsp;
                 { _t("You can change this at any time from room settings.") }
             </p>;
-        } else if (this.state.joinRule === JoinRule.Public) {
+        } else if (this.state.joinRule === JoinRule.Public && this.props.parentSpace) {
             publicPrivateLabel = <p>
                 { _t(
                     "Anyone will be able to find and join this room, not just members of <SpaceName/>.", {}, {
                         SpaceName: () => <b>{ this.props.parentSpace.name }</b>,
                     },
                 ) }
+                &nbsp;
+                { _t("You can change this at any time from room settings.") }
+            </p>;
+        } else if (this.state.joinRule === JoinRule.Public) {
+            publicPrivateLabel = <p>
+                { _t("Anyone will be able to find and join this room.") }
                 &nbsp;
                 { _t("You can change this at any time from room settings.") }
             </p>;
@@ -316,21 +322,6 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             title = this.state.joinRule === JoinRule.Public ? _t('Create a public room') : _t('Create a private room');
         }
 
-        const options = [
-            <div key={JoinRule.Invite} className="mx_CreateRoomDialog_dropdown_invite">
-                { _t("Private room (invite only)") }
-            </div>,
-            <div key={JoinRule.Public} className="mx_CreateRoomDialog_dropdown_public">
-                { _t("Public room") }
-            </div>,
-        ];
-
-        if (this.supportsRestricted) {
-            options.unshift(<div key={JoinRule.Restricted} className="mx_CreateRoomDialog_dropdown_restricted">
-                { _t("Visible to space members") }
-            </div>);
-        }
-
         return (
             <BaseDialog className="mx_CreateRoomDialog" onFinished={this.props.onFinished} title={title}>
                 <form onSubmit={this.onOk} onKeyDown={this.onKeyDown}>
@@ -350,16 +341,14 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                             className="mx_CreateRoomDialog_topic"
                         />
 
-                        <Dropdown
-                            id="mx_CreateRoomDialog_typeDropdown"
-                            className="mx_CreateRoomDialog_typeDropdown"
-                            onOptionChange={this.onJoinRuleChange}
-                            menuWidth={448}
-                            value={this.state.joinRule}
+                        <JoinRuleDropdown
                             label={_t("Room visibility")}
-                        >
-                            { options }
-                        </Dropdown>
+                            labelInvite={_t("Private room (invite only)")}
+                            labelPublic={_t("Public room")}
+                            labelRestricted={this.supportsRestricted ? _t("Visible to space members") : undefined}
+                            value={this.state.joinRule}
+                            onChange={this.onJoinRuleChange}
+                        />
 
                         { publicPrivateLabel }
                         { e2eeSection }

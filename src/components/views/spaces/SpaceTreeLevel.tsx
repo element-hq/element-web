@@ -31,9 +31,11 @@ import { _t } from "../../../languageHandler";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import { toRightOf } from "../../structures/ContextMenu";
 import {
+    leaveSpace,
     shouldShowSpaceSettings,
     showAddExistingRooms,
     showCreateNewRoom,
+    showCreateNewSubspace,
     showSpaceInvite,
     showSpaceSettings,
 } from "../../../utils/space";
@@ -48,6 +50,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 import { getKeyBindingsManager, RoomListAction } from "../../../KeyBindingsManager";
+import { BetaPill } from "../beta/BetaCard";
 
 interface IItemProps extends InputHTMLAttributes<HTMLLIElement> {
     space?: Room;
@@ -211,10 +214,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        defaultDispatcher.dispatch({
-            action: "leave_room",
-            room_id: this.props.space.roomId,
-        });
+        leaveSpace(this.props.space);
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
@@ -231,6 +231,14 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         ev.stopPropagation();
 
         showAddExistingRooms(this.props.space);
+        this.setState({ contextMenuPosition: null }); // also close the menu
+    };
+
+    private onNewSubspaceClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        showCreateNewSubspace(this.props.space);
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
@@ -318,6 +326,13 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                         label={_t("Add existing room")}
                         onClick={this.onAddExistingRoomClick}
                     />
+                    <IconizedContextMenuOption
+                        iconClassName="mx_SpacePanel_iconPlus"
+                        label={_t("Add space")}
+                        onClick={this.onNewSubspaceClick}
+                    >
+                        <BetaPill />
+                    </IconizedContextMenuOption>
                 </IconizedContextMenuOptionList>;
             }
 

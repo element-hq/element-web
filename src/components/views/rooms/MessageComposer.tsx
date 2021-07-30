@@ -342,8 +342,11 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
     private onVoiceStoreUpdate = () => {
         const recording = VoiceRecordingStore.instance.activeRecording;
-        this.setState({ haveRecording: !!recording });
         if (recording) {
+            // Delay saying we have a recording until it is started, as we might not yet have A/V permissions
+            recording.on(RecordingState.Started, () => {
+                this.setState({ haveRecording: !!VoiceRecordingStore.instance.activeRecording });
+            });
             // We show a little heads up that the recording is about to automatically end soon. The 3s
             // display time is completely arbitrary. Note that we don't need to deregister the listener
             // because the recording instance will clean that up for us.
@@ -351,6 +354,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 this.setState({ recordingTimeLeftSeconds: secondsLeft });
                 setTimeout(() => this.setState({ recordingTimeLeftSeconds: null }), 3000);
             });
+        } else {
+            this.setState({ haveRecording: false });
         }
     };
 
