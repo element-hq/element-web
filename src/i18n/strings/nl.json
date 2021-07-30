@@ -3472,5 +3472,15 @@
     "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.": "Kies welke spaces toegang hebben tot dit gesprek. Als een space is geselecteerd kunnen deze leden <RoomName/> vinden en aan deelnemen.",
     "Select spaces": "Spaces selecteren",
     "You're removing all spaces. Access will default to invite only": "U verwijderd alle spaces. De toegang zal standaard alleen op uitnodiging zijn",
-    "Room visibility": "Gesprekszichtbaarheid"
+    "Room visibility": "Gesprekszichtbaarheid",
+    "Anyone will be able to find and join this room.": "Iedereen kan de kamer vinden en aan deelnemen.",
+    "Share content": "Deel inhoud",
+    "Application window": "Deel een app",
+    "Share entire screen": "Deel uw gehele scherm",
+    "You can now share your screen by pressing the \"screen share\" button during a call. You can even do this in audio calls if both sides support it!": "U kunt uw schermdelen door te klikken op schermdelen-knop tijdens een oproep. U kunt dit zelfs doen tijdens een audiogesprek als de ontvanger het ook ondersteund!",
+    "Screen sharing is here!": "Schermdelen is hier!",
+    "Your camera is still enabled": "Uw camera is nog ingeschakeld",
+    "Your camera is turned off": "Uw camera staat uit",
+    "%(sharerName)s is presenting": "%(sharerName)s is aan het presenteren",
+    "You are presenting": "U bent aan het presenteren"
 }
