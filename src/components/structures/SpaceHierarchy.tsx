@@ -377,7 +377,7 @@ const SpaceHierarchy = ({
 
     const [selected, setSelected] = useState(new Map<string, Set<string>>()); // Map<parentId, Set<childId>>
 
-    const { loading, rooms, hierarchy } = useSpaceSummary(space);
+    const { loading, rooms, hierarchy, loadMore } = useSpaceSummary(space);
 
     const filteredRoomSet = useMemo<Set<IHierarchyRoom>>(() => {
         if (!rooms.length) return new Set();
@@ -407,6 +407,29 @@ const SpaceHierarchy = ({
     const [error, setError] = useState("");
     const [removing, setRemoving] = useState(false);
     const [saving, setSaving] = useState(false);
+
+    const handleObserver = (entries: IntersectionObserverEntry[]) => {
+        const target = entries[0];
+        if (target.isIntersecting) {
+            loadMore();
+        }
+    };
+
+    const observerRef = useRef<IntersectionObserver>();
+    const loaderRef = (element: HTMLDivElement) => {
+        if (observerRef.current) {
+            observerRef.current.disconnect();
+        } else if (element) {
+            observerRef.current = new IntersectionObserver(handleObserver, {
+                root: element.parentElement,
+                rootMargin: "0px 0px 600px 0px",
+            });
+        }
+
+        if (observerRef.current && element) {
+            observerRef.current.observe(element);
+        }
+    };
 
     if (!loading && hierarchy.noSupport) {
         return <p>{ _t("Your server does not support showing space hierarchies.") }</p>;
@@ -542,6 +565,10 @@ const SpaceHierarchy = ({
                     }}
                 />
             </>;
+
+            loader = <div ref={loaderRef}>
+                <Spinner />
+            </div>;
         } else {
             results = <div className="mx_SpaceHierarchy_noResults">
                 <h3>{ _t("No results found") }</h3>
