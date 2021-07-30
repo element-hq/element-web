@@ -202,7 +202,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
             placeholder = (
                 <AccessibleButton className="mx_MediaBody mx_MFileBody_info" onClick={this.onPlaceholderClick}>
                     <span className="mx_MFileBody_info_icon" />
-                    <TextWithTooltip tooltip={presentableTextForFile(this.content, _t("Attachment"), false)}>
+                    <TextWithTooltip tooltip={presentableTextForFile(this.content, _t("Attachment"), true)}>
                         <span className="mx_MFileBody_info_filename">
                             { presentableTextForFile(this.content, _t("Attachment"), true, true) }
                         </span>
