@@ -85,7 +85,7 @@ describe("SpaceStore", () => {
     const setShowAllRooms = async (value: boolean) => {
         if (store.allRoomsInHome === value) return;
         const emitProm = testUtils.emitPromise(store, UPDATE_HOME_BEHAVIOUR);
-        await SettingsStore.setValue("Spaces.all_rooms_in_home", null, SettingLevel.DEVICE, value);
+        await SettingsStore.setValue("Spaces.allRoomsInHome", null, SettingLevel.DEVICE, value);
         jest.runAllTimers(); // run async dispatch
         await emitProm;
     };

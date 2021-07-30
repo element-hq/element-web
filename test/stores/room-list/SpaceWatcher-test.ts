@@ -47,7 +47,7 @@ describe("SpaceWatcher", () => {
 
     const setShowAllRooms = async (value: boolean) => {
         if (store.allRoomsInHome === value) return;
-        await SettingsStore.setValue("Spaces.all_rooms_in_home", null, SettingLevel.DEVICE, value);
+        await SettingsStore.setValue("Spaces.allRoomsInHome", null, SettingLevel.DEVICE, value);
         await testUtils.emitPromise(store, UPDATE_HOME_BEHAVIOUR);
     };
 

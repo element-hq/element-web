@@ -83,7 +83,7 @@ const HomeButtonContextMenu = ({ onFinished, ...props }: ComponentProps<typeof S
                 label={_t("Show all rooms")}
                 active={allRoomsInHome}
                 onClick={() => {
-                    SettingsStore.setValue("Spaces.all_rooms_in_home", null, SettingLevel.ACCOUNT, !allRoomsInHome);
+                    SettingsStore.setValue("Spaces.allRoomsInHome", null, SettingLevel.ACCOUNT, !allRoomsInHome);
                 }}
             />
         </IconizedContextMenuOptionList>

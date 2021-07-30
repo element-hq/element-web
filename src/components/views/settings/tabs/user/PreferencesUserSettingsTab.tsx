@@ -49,7 +49,7 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
     ];
 
     static SPACES_SETTINGS = [
-        "Spaces.all_rooms_in_home",
+        "Spaces.allRoomsInHome",
     ];
 
     static KEYBINDINGS_SETTINGS = [

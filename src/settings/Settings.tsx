@@ -749,7 +749,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: null,
     },
-    "Spaces.all_rooms_in_home": {
+    "Spaces.allRoomsInHome": {
         displayName: _td("Show all rooms in Home"),
         description: _td("All rooms you're in will appear in Home."),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
