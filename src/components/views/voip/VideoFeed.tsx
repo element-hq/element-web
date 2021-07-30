@@ -22,6 +22,7 @@ import { CallFeed, CallFeedEvent } from 'matrix-js-sdk/src/webrtc/callFeed';
 import { logger } from 'matrix-js-sdk/src/logger';
 import MemberAvatar from "../avatars/MemberAvatar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { SDPStreamMetadataPurpose } from '../../../../../matrix-js-sdk/src/webrtc/callEventTypes';
 
 interface IProps {
     call: MatrixCall;
@@ -159,6 +160,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
             mx_VideoFeed_video: !this.state.videoMuted,
             mx_VideoFeed_mirror: (
                 this.props.feed.isLocal() &&
+                this.props.feed.purpose === SDPStreamMetadataPurpose.Usermedia &&
                 SettingsStore.getValue('VideoView.flipVideoHorizontally')
             ),
         };
