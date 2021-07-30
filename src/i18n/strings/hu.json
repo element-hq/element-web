@@ -3611,5 +3611,12 @@
     "Don't leave any": "Sehonnan ne lépjen ki",
     "Leave all rooms and spaces": "Minden szoba és tér elhagyása",
     "Show all rooms": "Minden szoba megjelenítése",
-    "All rooms you're in will appear in Home.": "Minden szoba amibe belépett megjelenik a Kezdő téren."
+    "All rooms you're in will appear in Home.": "Minden szoba amibe belépett megjelenik a Kezdő téren.",
+    "Are you sure you want to leave <spaceName/>?": "Biztos, hogy kilép innen: <spaceName/>?",
+    "Leave %(spaceName)s": "Kilép innen: %(spaceName)s",
+    "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "Ön az adminisztrátora néhány szobának vagy térnek amiből ki szeretne lépni. Ha kilép belőlük akkor azok adminisztrátor nélkül maradnak.",
+    "You're the only admin of this space. Leaving it will mean no one has control over it.": "Ön az egyetlen adminisztrátora a térnek. Ha kilép, senki nem tudja irányítani.",
+    "You won't be able to rejoin unless you are re-invited.": "Nem fog tudni újra belépni amíg nem hívják meg újra.",
+    "Search %(spaceName)s": "Keresés: %(spaceName)s",
+    "Leave specific rooms and spaces": "Kilépés a megadott szobákból és terekből"
 }
