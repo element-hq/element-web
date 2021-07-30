@@ -3607,5 +3607,9 @@
     "Thank you for trying Spaces. Your feedback will help inform the next versions.": "Köszönet a Terek használatáért. A visszajelzése segít a következő verzió kialakításában.",
     "Spaces feedback": "Visszajelzés a Terekről",
     "Spaces are a new feature.": "Terek az új lehetőség.",
-    "These are likely ones other room admins are a part of.": "Ezek valószínűleg olyanok, amelyeknek más szoba adminok is tagjai."
+    "These are likely ones other room admins are a part of.": "Ezek valószínűleg olyanok, amelyeknek más szoba adminok is tagjai.",
+    "Don't leave any": "Sehonnan ne lépjen ki",
+    "Leave all rooms and spaces": "Minden szoba és tér elhagyása",
+    "Show all rooms": "Minden szoba megjelenítése",
+    "All rooms you're in will appear in Home.": "Minden szoba amibe belépett megjelenik a Kezdő téren."
 }
