@@ -3617,5 +3617,17 @@
     "Give feedback.": "給予回饋。",
     "Thank you for trying Spaces. Your feedback will help inform the next versions.": "感謝您試用空間。您的回饋有助於在隨後的版本中改善此功能。",
     "Spaces feedback": "空間回饋",
-    "Spaces are a new feature.": "空間為新功能。"
+    "Spaces are a new feature.": "空間為新功能。",
+    "Are you sure you want to leave <spaceName/>?": "您確定您想要離開 <spaceName/>？",
+    "Leave %(spaceName)s": "離開 %(spaceName)s",
+    "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "您是某些要離開的聊天室與空間的唯一管理員。離開會讓它們沒有任何管理員。",
+    "You're the only admin of this space. Leaving it will mean no one has control over it.": "您是此空間唯一的管理員。離開將代表沒有人可以控制它。",
+    "You won't be able to rejoin unless you are re-invited.": "您將無法重新加入，除非您再次被邀請。",
+    "Search %(spaceName)s": "搜尋 %(spaceName)s",
+    "Leave specific rooms and spaces": "離開特定的聊天室與空間",
+    "Don't leave any": "不要離開任何",
+    "Leave all rooms and spaces": "離開所有聊天室與空間",
+    "Decrypting": "正在解密",
+    "Show all rooms": "顯示所有聊天室",
+    "All rooms you're in will appear in Home.": "您所在的所有聊天室都會出現在「首頁」。"
 }
