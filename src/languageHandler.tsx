@@ -168,7 +168,7 @@ export function _t(text: string, variables?: IVariables, tags?: Tags): Translate
  */
 export function sanitizeForTranslation(text: string): string {
     // Add a non-breaking space so the regex doesn't trigger when translating.
-    return text.replace(/\$\(([^)]*)\)/g, '$\xa0($1)');
+    return text.replace(/%\(([^)]*)\)/g, '%\xa0($1)');
 }
 
 /*
