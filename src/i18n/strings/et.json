@@ -3534,5 +3534,8 @@
     "Share entire screen": "Jaga tervet ekraani",
     "Application window": "Rakenduse aken",
     "Share content": "Jaga sisu",
-    "Anyone will be able to find and join this room.": "Kõik saavad seda jututuba leida ja temaga liituda."
+    "Anyone will be able to find and join this room.": "Kõik saavad seda jututuba leida ja temaga liituda.",
+    "Leave %(spaceName)s": "Lahku %(spaceName)s kogukonnakeskusest",
+    "Are you sure you want to leave <spaceName/>?": "Kas oled kindel, et soovid lahkuda <spaceName/> kogukonnakeskusest?",
+    "Decrypting": "Dekrüptin sisu"
 }
