@@ -39,7 +39,7 @@ const MATRIX_THEMES = process.env.MATRIX_THEMES ?? dotenvConfig.MATRIX_THEMES;
 
 function getActiveThemes() {
     // We want to use `light` theme by default if it's not defined.
-    const theme = MATRIX_THEMES;
+    const theme = MATRIX_THEMES ?? 'light';
     const themes = theme.split(',').filter(x => x).map(x => x.trim()).filter(x => x);
     if (themes.length > 1) {
         throw new Error('Please see `.env.example` for proper hotreload&themes configuation.');
