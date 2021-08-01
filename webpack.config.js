@@ -1,5 +1,6 @@
 /* eslint-disable quote-props */
 
+const dotenv = require('dotenv');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -21,24 +22,29 @@ const cssThemes = {
     "theme-dark-custom": "./node_modules/matrix-react-sdk/res/themes/dark-custom/css/dark-custom.scss",
 };
 
-function getActiveThemes() {
-    const theme = process.env.MATRIX_THEMES ?? 'light,dark';
-    const themes = theme.split(',').filter(x => x).map(x => x.trim()).filter(x => x);
-    return themes;
+let dotenvConfig = { parsed: {} };
+try {
+    dotenvConfig = dotenv.config();
+} catch (err) {
+    dotenvConfig = {
+        parsed: {
+            CSS_HOT_RELOAD: 0,
+            MATRIX_THEMES: 'light',
+        },
+    };
 }
 
-const ACTIVE_THEMES = getActiveThemes();
-function getThemesImports() {
-    const imports = ACTIVE_THEMES.map((t, index) => {
-        const themeImportPath = cssThemes[`theme-${t}`].replace('./node_modules/', '');
-        return themeImportPath;
-    });
-    const s = JSON.stringify(ACTIVE_THEMES);
-    return `
-    window.MX_insertedThemeStylesCounter = 0
-    window.MX_DEV_ACTIVE_THEMES = (${s});
-    ${imports.map(i => `import("${i}")`).join('\n')};
-    `;
+const CSS_HOT_RELOAD = process.env.CSS_HOT_RELOAD ?? dotenvConfig.CSS_HOT_RELOAD;
+const MATRIX_THEMES = process.env.MATRIX_THEMES ?? dotenvConfig.MATRIX_THEMES;
+
+function getActiveThemes() {
+    // We want to use `light` theme by default if it's not defined.
+    const theme = MATRIX_THEMES;
+    const themes = theme.split(',').filter(x => x).map(x => x.trim()).filter(x => x);
+    if (themes.length > 1) {
+        throw new Error('Please see `.env.example` for proper hotreload&themes configuation.');
+    }
+    return themes;
 }
 
 module.exports = (env, argv) => {
@@ -57,6 +63,7 @@ module.exports = (env, argv) => {
         nodeEnv = "production";
     }
     const devMode = nodeEnv !== 'production';
+    const useCssHotReload = CSS_HOT_RELOAD === '1' && devMode;
 
     const development = {};
     if (argv.mode === "production") {
@@ -73,16 +80,22 @@ module.exports = (env, argv) => {
     const reactSdkSrcDir = path.resolve(require.resolve("matrix-react-sdk/package.json"), '..', 'src');
     const jsSdkSrcDir = path.resolve(require.resolve("matrix-js-sdk/package.json"), '..', 'src');
 
+    const ACTIVE_THEMES = getActiveThemes();
+    function getThemesImports() {
+        const imports = ACTIVE_THEMES.map((t, index) => {
+            const themeImportPath = cssThemes[`theme-${ t }`].replace('./node_modules/', '');
+            return themeImportPath;
+        });
+        const s = JSON.stringify(ACTIVE_THEMES);
+        return `
+    window.MX_insertedThemeStylesCounter = 0
+    window.MX_DEV_ACTIVE_THEMES = (${ s });
+    ${ imports.map(i => `import("${ i }")`).join('\n') };
+    `;
+    }
+
     return {
         ...development,
-
-        watch: true,
-        watchOptions: {
-            aggregateTimeout: 200,
-            poll: 1000,
-            ignored: [/node_modules([\\]+|\/)+(?!matrix-react-sdk|matrix-js-sdk)/],
-        },
-
         node: {
             // Mock out the NodeFS module: The opus decoder imports this wrongly.
             fs: 'empty',
@@ -94,7 +107,7 @@ module.exports = (env, argv) => {
             "jitsi": "./src/vector/jitsi/index.ts",
             "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.js",
             "recorder-worklet": "./node_modules/matrix-react-sdk/src/audio/RecorderWorklet.ts",
-            ...(devMode ? {} : cssThemes),
+            ...(useCssHotReload ? {} : cssThemes),
         },
 
         optimization: {
@@ -178,7 +191,7 @@ module.exports = (env, argv) => {
                 /olm[\\/](javascript[\\/])?olm\.js$/,
             ],
             rules: [
-                devMode && {
+                useCssHotReload && {
                     test: /devcss\.ts$/,
                     loader: 'string-replace-loader',
                     options: {
@@ -217,7 +230,7 @@ module.exports = (env, argv) => {
                 {
                     test: /\.css$/,
                     use: [
-                        devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+                        MiniCssExtractPlugin.loader,
                         {
                             loader: 'css-loader',
                             options: {
@@ -271,8 +284,14 @@ module.exports = (env, argv) => {
                          * of the JS/TS files.
                          * Should be MUCH better with webpack 5, but we're stuck to this solution for now.
                          */
-                        devMode ? {
+                        useCssHotReload ? {
                             loader: 'style-loader', options: {
+                                /**
+                                 * If we refactor the `theme.js` in `matrix-react-sdk` a little bit,
+                                 * we could try using `lazyStyleTag` here to add and remove styles on demand,
+                                 * that would nicely resolve issues of race conditions for themes,
+                                 * at least for development purposes.
+                                 */
                                 attributes: {
                                     'data-mx-theme': 'replace_me',
                                 },
@@ -430,7 +449,7 @@ module.exports = (env, argv) => {
                         },
                     ],
                 },
-            ],
+            ].filter(Boolean),
         },
 
         plugins: [
