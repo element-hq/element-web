@@ -1,6 +1,7 @@
 /* eslint-disable quote-props */
 
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -10,9 +11,35 @@ const HtmlWebpackInjectPreload = require('@principalstudio/html-webpack-inject-p
 let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
 if (!ogImageUrl) ogImageUrl = 'https://app.element.io/themes/element/img/logos/opengraph.png';
 
-const additionalPlugins = [
-    // This is where you can put your customisation replacements.
-];
+const cssThemes = {
+    // CSS themes
+    "theme-legacy": "./node_modules/matrix-react-sdk/res/themes/legacy-light/css/legacy-light.scss",
+    "theme-legacy-dark": "./node_modules/matrix-react-sdk/res/themes/legacy-dark/css/legacy-dark.scss",
+    "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
+    "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
+    "theme-light-custom": "./node_modules/matrix-react-sdk/res/themes/light-custom/css/light-custom.scss",
+    "theme-dark-custom": "./node_modules/matrix-react-sdk/res/themes/dark-custom/css/dark-custom.scss",
+};
+
+function getActiveThemes() {
+    const theme = process.env.MATRIX_THEMES ?? 'light,dark';
+    const themes = theme.split(',').filter(x => x).map(x => x.trim()).filter(x => x);
+    return themes;
+}
+
+const ACTIVE_THEMES = getActiveThemes();
+function getThemesImports() {
+    const imports = ACTIVE_THEMES.map((t, index) => {
+        const themeImportPath = cssThemes[`theme-${t}`].replace('./node_modules/', '');
+        return themeImportPath;
+    });
+    const s = JSON.stringify(ACTIVE_THEMES);
+    return `
+    window.MX_insertedThemeStylesCounter = 0
+    window.MX_DEV_ACTIVE_THEMES = (${s});
+    ${imports.map(i => `import("${i}")`).join('\n')};
+    `;
+}
 
 module.exports = (env, argv) => {
     let nodeEnv = argv.mode;
@@ -29,6 +56,7 @@ module.exports = (env, argv) => {
         // application to productions standards
         nodeEnv = "production";
     }
+    const devMode = nodeEnv !== 'production';
 
     const development = {};
     if (argv.mode === "production") {
@@ -48,6 +76,13 @@ module.exports = (env, argv) => {
     return {
         ...development,
 
+        watch: true,
+        watchOptions: {
+            aggregateTimeout: 200,
+            poll: 1000,
+            ignored: [/node_modules([\\]+|\/)+(?!matrix-react-sdk|matrix-js-sdk)/],
+        },
+
         node: {
             // Mock out the NodeFS module: The opus decoder imports this wrongly.
             fs: 'empty',
@@ -59,14 +94,7 @@ module.exports = (env, argv) => {
             "jitsi": "./src/vector/jitsi/index.ts",
             "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.js",
             "recorder-worklet": "./node_modules/matrix-react-sdk/src/audio/RecorderWorklet.ts",
-
-            // CSS themes
-            "theme-legacy": "./node_modules/matrix-react-sdk/res/themes/legacy-light/css/legacy-light.scss",
-            "theme-legacy-dark": "./node_modules/matrix-react-sdk/res/themes/legacy-dark/css/legacy-dark.scss",
-            "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
-            "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
-            "theme-light-custom": "./node_modules/matrix-react-sdk/res/themes/light-custom/css/light-custom.scss",
-            "theme-dark-custom": "./node_modules/matrix-react-sdk/res/themes/dark-custom/css/dark-custom.scss",
+            ...(devMode ? {} : cssThemes),
         },
 
         optimization: {
@@ -89,7 +117,7 @@ module.exports = (env, argv) => {
 
             // This fixes duplicate files showing up in chrome with sourcemaps enabled.
             // See https://github.com/webpack/webpack/issues/7128 for more info.
-            namedModules: false,
+            namedModules: true,
 
             // Minification is normally enabled by default for webpack in production mode, but
             // we use a CSS optimizer too and need to manage it ourselves.
@@ -150,6 +178,14 @@ module.exports = (env, argv) => {
                 /olm[\\/](javascript[\\/])?olm\.js$/,
             ],
             rules: [
+                devMode && {
+                    test: /devcss\.ts$/,
+                    loader: 'string-replace-loader',
+                    options: {
+                        search: '"use theming";',
+                        replace: getThemesImports(),
+                    },
+                },
                 {
                     test: /\.worker\.ts$/,
                     loader: "worker-loader",
@@ -181,7 +217,7 @@ module.exports = (env, argv) => {
                 {
                     test: /\.css$/,
                     use: [
-                        MiniCssExtractPlugin.loader,
+                        devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
                         {
                             loader: 'css-loader',
                             options: {
@@ -219,7 +255,7 @@ module.exports = (env, argv) => {
 
                                     // It's important that this plugin is last otherwise we end
                                     // up with broken CSS.
-                                    require('postcss-preset-env')({stage: 3, browsers: 'last 2 versions'}),
+                                    require('postcss-preset-env')({ stage: 3, browsers: 'last 2 versions' }),
                                 ],
                                 parser: "postcss-scss",
                                 "local-plugins": true,
@@ -230,7 +266,31 @@ module.exports = (env, argv) => {
                 {
                     test: /\.scss$/,
                     use: [
-                        MiniCssExtractPlugin.loader,
+                        /**
+                         * This code is hopeful that no .scss outside of our themes will be directly imported in any
+                         * of the JS/TS files.
+                         * Should be MUCH better with webpack 5, but we're stuck to this solution for now.
+                         */
+                        devMode ? {
+                            loader: 'style-loader', options: {
+                                attributes: {
+                                    'data-mx-theme': 'replace_me',
+                                },
+                                // Properly disable all other instances of themes
+                                insert: function insertBeforeAt(element) {
+                                    const isMatrixTheme = element.attributes['data-mx-theme'].value === 'replace_me';
+                                    const parent = document.querySelector('head');
+
+                                    element.disabled = true;
+                                    if (isMatrixTheme) {
+                                        element.attributes['data-mx-theme'].value = window.MX_DEV_ACTIVE_THEMES[window.MX_insertedThemeStylesCounter];
+                                        window.MX_insertedThemeStylesCounter++;
+                                    }
+
+                                    parent.appendChild(element);
+                                },
+                            },
+                        } : MiniCssExtractPlugin.loader,
                         {
                             loader: 'css-loader',
                             options: {
@@ -257,7 +317,7 @@ module.exports = (env, argv) => {
 
                                     // It's important that this plugin is last otherwise we end
                                     // up with broken CSS.
-                                    require('postcss-preset-env')({stage: 3, browsers: 'last 2 versions'}),
+                                    require('postcss-preset-env')({ stage: 3, browsers: 'last 2 versions' }),
                                 ],
                                 parser: "postcss-scss",
                                 "local-plugins": true,
@@ -374,9 +434,15 @@ module.exports = (env, argv) => {
         },
 
         plugins: [
+            new webpack.EnvironmentPlugin({
+                NODE_ENV: 'development', // use 'development' unless process.env.NODE_ENV is defined
+                DEBUG: false,
+            }),
+
             // This exports our CSS using the splitChunks and loaders above.
             new MiniCssExtractPlugin({
-                filename: 'bundles/[hash]/[name].css',
+                filename: "bundles/[hash]/[name].css",
+                chunkFilename: "bundles/[hash]/[name].css",
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }),
 
@@ -437,7 +503,6 @@ module.exports = (env, argv) => {
                 files: [{ match: /.*Inter.*\.woff2$/ }],
             }),
 
-            ...additionalPlugins,
         ],
 
         output: {
@@ -457,17 +522,21 @@ module.exports = (env, argv) => {
         // configuration for the webpack-dev-server
         devServer: {
             // serve unwebpacked assets from webapp.
-            contentBase: './webapp',
+            contentBase: [
+                './src/',
+                './webapp',
+                './bundles/**',
+                './node_modules/matrix-react-sdk/**',
+                './node_modules/matrix-js-sdk/**',
+            ],
 
             // Only output errors, warnings, or new compilations.
             // This hides the massive list of modules.
             stats: 'minimal',
-
-            // hot module replacement doesn't work (I think we'd need react-hot-reload?)
-            // so webpack-dev-server reloads the page on every update which is quite
-            // tedious in Riot since that can take a while.
-            hot: false,
-            inline: false,
+            hot: true,
+            injectHot: true,
+            hotOnly: true,
+            inline: true,
         },
     };
 };
