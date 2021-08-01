@@ -58,7 +58,7 @@ module.exports = (env, argv) => {
             "mobileguide": "./src/vector/mobile_guide/index.ts",
             "jitsi": "./src/vector/jitsi/index.ts",
             "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.js",
-            "recorder-worklet": "./node_modules/matrix-react-sdk/src/voice/RecorderWorklet.ts",
+            "recorder-worklet": "./node_modules/matrix-react-sdk/src/audio/RecorderWorklet.ts",
 
             // CSS themes
             "theme-legacy": "./node_modules/matrix-react-sdk/res/themes/legacy-light/css/legacy-light.scss",
