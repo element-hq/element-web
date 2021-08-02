@@ -13,7 +13,7 @@
     "Settings": "Nastavení",
     "This room": "Tato místnost",
     "Video call": "Videohovor",
-    "Voice call": "Telefonát",
+    "Voice call": "Hlasový hovor",
     "Sun": "Ne",
     "Mon": "Po",
     "Tue": "Út",
@@ -1080,7 +1080,7 @@
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Nepovedlo se najít profily následujících Matrix ID - chcete je stejně pozvat?",
     "Invite anyway and never warn me again": "Stejně je pozvat a nikdy mě nevarujte znovu",
     "Invite anyway": "Stejně je pozvat",
-    "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Pro odeslání záznamů je potřeba <a>vyrobit issue na GitHubu</a> s popisem problému.",
+    "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Pro odeslání záznamů je potřeba <a>vytvořit issue na GitHubu</a> s popisem problému.",
     "Unable to load commit detail: %(msg)s": "Nepovedlo se načíst detaily revize: %(msg)s",
     "Incompatible Database": "Nekompatibilní databáze",
     "Continue With Encryption Disabled": "Pokračovat bez šifrování",
@@ -3544,5 +3544,6 @@
     "Want to add a new space instead?": "Chcete místo toho přidat nový prostor?",
     "Decrypting": "Dešifrování",
     "Show all rooms": "Zobrazit všechny místnosti",
-    "All rooms you're in will appear in Home.": "Všechny místnosti, ve kterých se nacházíte, se zobrazí na domovské obrazovce."
+    "All rooms you're in will appear in Home.": "Všechny místnosti, ve kterých se nacházíte, se zobrazí na domovské obrazovce.",
+    "Send pseudonymous analytics data": "Odeslat pseudonymní analytická data"
 }
