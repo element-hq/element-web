@@ -29,9 +29,9 @@ import SettingsStore from './settings/SettingsStore';
  *   `respect_dnt` flag being passed to `posthog.init`).
  * - If the `feature_pseudonymous_analytics_opt_in` labs flag is `true`, track pseudonomously, i.e.
  *   hash all matrix identifiers in tracking events (user IDs, room IDs etc) using SHA-256.
- * - Otherwise, if the existing `analyticsOptIn` flag is `true`, or not present (i.e. prior to
- *   logging in), track anonymously, i.e. redact all matrix identifiers in tracking events.
- * - If both flags are false, events are not sent.
+ * - Otherwise, if the existing `analyticsOptIn` flag is `true`, track anonymously, i.e.
+ *   redact all matrix identifiers in tracking events.
+ * - If both flags are false or not set, events are not sent.
  */
 
 interface IEvent {
