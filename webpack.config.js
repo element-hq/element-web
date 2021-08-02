@@ -9,6 +9,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackInjectPreload = require('@principalstudio/html-webpack-inject-preload');
 
+dotenv.config();
 let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
 if (!ogImageUrl) ogImageUrl = 'https://app.element.io/themes/element/img/logos/opengraph.png';
 
@@ -22,28 +23,10 @@ const cssThemes = {
     "theme-dark-custom": "./node_modules/matrix-react-sdk/res/themes/dark-custom/css/dark-custom.scss",
 };
 
-let dotenvConfig = { parsed: {} };
-try {
-    dotenvConfig = dotenv.config();
-} catch (err) {
-    dotenvConfig = {
-        parsed: {
-            CSS_HOT_RELOAD: 0,
-            MATRIX_THEMES: 'light',
-        },
-    };
-}
-
-const CSS_HOT_RELOAD = process.env.CSS_HOT_RELOAD ?? dotenvConfig.CSS_HOT_RELOAD;
-const MATRIX_THEMES = process.env.MATRIX_THEMES ?? dotenvConfig.MATRIX_THEMES;
-
 function getActiveThemes() {
     // We want to use `light` theme by default if it's not defined.
-    const theme = MATRIX_THEMES ?? 'light';
+    const theme = process.env.MATRIX_THEMES ?? 'dark';
     const themes = theme.split(',').filter(x => x).map(x => x.trim()).filter(x => x);
-    if (themes.length > 1) {
-        throw new Error('Please see `.env.example` for proper hot reload & themes configuration.');
-    }
     return themes;
 }
 
@@ -63,7 +46,7 @@ module.exports = (env, argv) => {
         nodeEnv = "production";
     }
     const devMode = nodeEnv !== 'production';
-    const useCssHotReload = CSS_HOT_RELOAD === '1' && devMode;
+    const useCssHotReload = process.env.CSS_HOT_RELOAD === '1' && devMode;
 
     const development = {};
     if (argv.mode === "production") {
@@ -88,10 +71,10 @@ module.exports = (env, argv) => {
         });
         const s = JSON.stringify(ACTIVE_THEMES);
         return `
-    window.MX_insertedThemeStylesCounter = 0
-    window.MX_DEV_ACTIVE_THEMES = (${ s });
-    ${ imports.map(i => `import("${ i }")`).join('\n') };
-    `;
+            window.MX_insertedThemeStylesCounter = 0;
+            window.MX_DEV_ACTIVE_THEMES = (${ s });
+            ${ imports.map(i => `import("${ i }")`).join('\n') };
+        `;
     }
 
     return {
@@ -285,27 +268,30 @@ module.exports = (env, argv) => {
                          * Should be MUCH better with webpack 5, but we're stuck to this solution for now.
                          */
                         useCssHotReload ? {
-                            loader: 'style-loader', options: {
-                                /**
-                                 * If we refactor the `theme.js` in `matrix-react-sdk` a little bit,
-                                 * we could try using `lazyStyleTag` here to add and remove styles on demand,
-                                 * that would nicely resolve issues of race conditions for themes,
-                                 * at least for development purposes.
-                                 */
-                                attributes: {
-                                    'data-mx-theme': 'replace_me',
-                                },
-                                // Properly disable all other instances of themes
+                            loader: 'style-loader',
+                            /**
+                             * If we refactor the `theme.js` in `matrix-react-sdk` a little bit,
+                             * we could try using `lazyStyleTag` here to add and remove styles on demand,
+                             * that would nicely resolve issues of race conditions for themes,
+                             * at least for development purposes.
+                             */
+                            options: {
+
                                 insert: function insertBeforeAt(element) {
-                                    const isMatrixTheme = element.attributes['data-mx-theme'].value === 'replace_me';
                                     const parent = document.querySelector('head');
-
-                                    element.disabled = true;
-                                    if (isMatrixTheme) {
-                                        element.attributes['data-mx-theme'].value = window.MX_DEV_ACTIVE_THEMES[window.MX_insertedThemeStylesCounter];
-                                        window.MX_insertedThemeStylesCounter++;
+                                    // We're in iframe
+                                    if (!window.MX_DEV_ACTIVE_THEMES) {
+                                        parent.appendChild(element);
+                                        return;
                                     }
-
+                                    // Properly disable all other instances of themes
+                                    element.disabled = true;
+                                    element.onload = () => {
+                                        element.disabled = true;
+                                    };
+                                    const theme = window.MX_DEV_ACTIVE_THEMES[window.MX_insertedThemeStylesCounter];
+                                    element.setAttribute('data-mx-theme', theme);
+                                    window.MX_insertedThemeStylesCounter++;
                                     parent.appendChild(element);
                                 },
                             },
@@ -460,8 +446,8 @@ module.exports = (env, argv) => {
 
             // This exports our CSS using the splitChunks and loaders above.
             new MiniCssExtractPlugin({
-                filename: "bundles/[hash]/[name].css",
-                chunkFilename: "bundles/[hash]/[name].css",
+                filename: useCssHotReload ? "bundles/[name].css" : "bundles/[hash]/[name].css",
+                chunkFilename: useCssHotReload ? "bundles/[name].css" : "bundles/[hash]/[name].css",
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }),
 
