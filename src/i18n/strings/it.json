@@ -3624,5 +3624,7 @@
     "Your camera is turned off": "La tua fotocamera è spenta",
     "%(sharerName)s is presenting": "%(sharerName)s sta presentando",
     "You are presenting": "Stai presentando",
-    "All rooms you're in will appear in Home.": "Tutte le stanze in cui sei appariranno nella pagina principale."
+    "All rooms you're in will appear in Home.": "Tutte le stanze in cui sei appariranno nella pagina principale.",
+    "Decrypting": "Decifrazione",
+    "Send pseudonymous analytics data": "Invia dati analitici pseudo-anonimi"
 }
