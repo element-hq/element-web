@@ -32,6 +32,8 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { canCancel } from "../context_menus/MessageContextMenu";
 import Resend from "../../../Resend";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { MediaEventHelper } from "../../../utils/MediaEventHelper";
+import DownloadActionButton from "./DownloadActionButton";
 
 const OptionsButton = ({ mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
@@ -265,6 +267,15 @@ export default class MessageActionBar extends React.PureComponent {
                         reactions={this.props.reactions}
                         onFocusChange={this.onFocusChange}
                         key="react"
+                    />);
+                }
+
+                // XXX: Assuming that the underlying tile will be a media event if it is eligible media.
+                if (MediaEventHelper.isEligible(this.props.mxEvent)) {
+                    toolbarOpts.splice(0, 0, <DownloadActionButton
+                        mxEvent={this.props.mxEvent}
+                        mediaEventHelperGet={() => this.props.getTile?.().getMediaHelper?.()}
+                        key="download"
                     />);
                 }
             }

@@ -97,6 +97,7 @@ export function createTestClient() {
         },
         decryptEventIfNeeded: () => Promise.resolve(),
         isUserIgnored: jest.fn().mockReturnValue(false),
+        getCapabilities: jest.fn().mockResolvedValue({}),
     };
 }
 
@@ -220,7 +221,7 @@ export function mkMessage(opts) {
     return mkEvent(opts);
 }
 
-export function mkStubRoom(roomId = null, name) {
+export function mkStubRoom(roomId = null, name, client) {
     const stubTimeline = { getEvents: () => [] };
     return {
         roomId,
@@ -235,6 +236,7 @@ export function mkStubRoom(roomId = null, name) {
         }),
         getMembersWithMembership: jest.fn().mockReturnValue([]),
         getJoinedMembers: jest.fn().mockReturnValue([]),
+        getJoinedMemberCount: jest.fn().mockReturnValue(1),
         getMembers: jest.fn().mockReturnValue([]),
         getPendingEvents: () => [],
         getLiveTimeline: () => stubTimeline,
@@ -269,6 +271,8 @@ export function mkStubRoom(roomId = null, name) {
         getCanonicalAlias: jest.fn(),
         getAltAliases: jest.fn().mockReturnValue([]),
         timeline: [],
+        getJoinRule: jest.fn().mockReturnValue("invite"),
+        client,
     };
 }
 

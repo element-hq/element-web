@@ -99,6 +99,10 @@ limitations under the License.
             .mx_IconizedContextMenu_icon + .mx_IconizedContextMenu_label {
                 padding-left: 14px;
             }
+
+            .mx_BetaCard_betaPill {
+                margin-left: 16px;
+            }
         }
     }
 
@@ -145,12 +149,17 @@ limitations under the License.
         }
     }
 
-    .mx_IconizedContextMenu_checked {
+    .mx_IconizedContextMenu_checked,
+    .mx_IconizedContextMenu_unchecked {
         margin-left: 16px;
         margin-right: -5px;
+    }
 
-        &::before {
-            mask-image: url('$(res)/img/element-icons/roomlist/checkmark.svg');
-        }
+    .mx_IconizedContextMenu_checked::before {
+        mask-image: url('$(res)/img/element-icons/roomlist/checkmark.svg');
+    }
+
+    .mx_IconizedContextMenu_unchecked::before {
+        content: unset;
     }
 }

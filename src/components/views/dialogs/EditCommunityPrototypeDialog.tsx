@@ -144,8 +144,10 @@ export default class EditCommunityPrototypeDialog extends React.PureComponent<IP
                         </div>
                         <div className="mx_EditCommunityPrototypeDialog_rowAvatar">
                             <input
-                                type="file" style={{ display: "none" }}
-                                ref={this.avatarUploadRef} accept="image/*"
+                                type="file"
+                                style={{ display: "none" }}
+                                ref={this.avatarUploadRef}
+                                accept="image/*"
                                 onChange={this.onAvatarChanged}
                             />
                             <AccessibleButton

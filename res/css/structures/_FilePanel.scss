@@ -45,9 +45,14 @@ limitations under the License.
 
 /* Overrides for the attachment body tiles */
 
-.mx_FilePanel .mx_EventTile {
+.mx_FilePanel .mx_EventTile:not([data-layout=bubble]) {
     word-break: break-word;
-    margin-top: 32px;
+    margin-top: 10px;
+    padding-top: 0;
+
+    .mx_EventTile_line {
+        padding-left: 0;
+    }
 }
 
 .mx_FilePanel .mx_EventTile .mx_MImageBody {
@@ -116,10 +121,6 @@ limitations under the License.
 
 .mx_FilePanel .mx_EventTile_selected .mx_EventTile_line {
     padding-left: 0px;
-}
-
-.mx_FilePanel .mx_EventTile:hover .mx_EventTile_line {
-    background-color: $primary-bg-color;
 }
 
 .mx_FilePanel_empty::before {

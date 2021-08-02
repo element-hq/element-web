@@ -61,6 +61,7 @@ limitations under the License.
 
     .mx_AccessibleButton_kind_link {
         padding: 0;
+        font-size: inherit;
     }
 
     .mx_SearchBox {
@@ -190,7 +191,6 @@ limitations under the License.
         position: relative;
         padding: 8px 16px;
         border-radius: 8px;
-        min-height: 56px;
         box-sizing: border-box;
 
         display: grid;

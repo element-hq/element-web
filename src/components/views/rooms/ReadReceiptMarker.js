@@ -192,7 +192,9 @@ export default class ReadReceiptMarker extends React.PureComponent {
                     member={this.props.member}
                     fallbackUserId={this.props.fallbackUserId}
                     aria-hidden="true"
-                    width={14} height={14} resizeMethod="crop"
+                    width={14}
+                    height={14}
+                    resizeMethod="crop"
                     style={style}
                     title={title}
                     onClick={this.props.onClick}

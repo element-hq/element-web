@@ -44,6 +44,7 @@ import EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import NotificationBadge from "./NotificationBadge";
+import CallEventGrouper from "../../structures/CallEventGrouper";
 import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from '../../../dispatcher/actions';
 import MemberAvatar from '../avatars/MemberAvatar';
@@ -60,10 +61,7 @@ const eventTileTypes = {
     [EventType.Sticker]: 'messages.MessageEvent',
     [EventType.KeyVerificationCancel]: 'messages.MKeyVerificationConclusion',
     [EventType.KeyVerificationDone]: 'messages.MKeyVerificationConclusion',
-    [EventType.CallInvite]: 'messages.TextualEvent',
-    [EventType.CallAnswer]: 'messages.TextualEvent',
-    [EventType.CallHangup]: 'messages.TextualEvent',
-    [EventType.CallReject]: 'messages.TextualEvent',
+    [EventType.CallInvite]: 'messages.CallEvent',
 };
 
 const stateEventTileTypes = {
@@ -289,6 +287,9 @@ interface IProps {
 
     // Helper to build permalinks for the room
     permalinkCreator?: RoomPermalinkCreator;
+
+    // CallEventGrouper for this event
+    callEventGrouper?: CallEventGrouper;
 
     // Symbol of the root node
     as?: string;
@@ -710,9 +711,12 @@ export default class EventTile extends React.Component<IProps, IState> {
 
             // add to the start so the most recent is on the end (ie. ends up rightmost)
             avatars.unshift(
-                <ReadReceiptMarker key={userId} member={receipt.roomMember}
+                <ReadReceiptMarker
+                    key={userId}
+                    member={receipt.roomMember}
                     fallbackUserId={userId}
-                    leftOffset={left} hidden={hidden}
+                    leftOffset={left}
+                    hidden={hidden}
                     readReceiptInfo={readReceiptInfo}
                     checkUnmounting={this.props.checkUnmounting}
                     suppressAnimation={this.suppressReadReceiptAnimation}
@@ -892,6 +896,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             mx_EventTile_unknown: !isBubbleMessage && this.state.verified === E2E_STATE.UNKNOWN,
             mx_EventTile_bad: isEncryptionFailure,
             mx_EventTile_emote: msgtype === 'm.emote',
+            mx_EventTile_noSender: this.props.hideSender,
         });
 
         // If the tile is in the Sending state, don't speak the message.
@@ -948,8 +953,10 @@ export default class EventTile extends React.Component<IProps, IState> {
             }
             avatar = (
                 <div className="mx_EventTile_avatar">
-                    <MemberAvatar member={member}
-                        width={avatarSize} height={avatarSize}
+                    <MemberAvatar
+                        member={member}
+                        width={avatarSize}
+                        height={avatarSize}
                         viewUserOnClick={true}
                     />
                 </div>
@@ -1141,6 +1148,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                         { ircTimestamp }
                         { sender }
                         { ircPadlock }
+                        { avatar }
                         <div className="mx_EventTile_line" key="mx_EventTile_line">
                             { groupTimestamp }
                             { groupPadlock }
@@ -1154,13 +1162,14 @@ export default class EventTile extends React.Component<IProps, IState> {
                                 showUrlPreview={this.props.showUrlPreview}
                                 permalinkCreator={this.props.permalinkCreator}
                                 onHeightChanged={this.props.onHeightChanged}
+                                callEventGrouper={this.props.callEventGrouper}
                             />
                             { keyRequestInfo }
                             { actionBar }
+                            { this.props.layout === Layout.IRC && (reactionsRow) }
                         </div>
-                        { reactionsRow }
+                        { this.props.layout !== Layout.IRC && (reactionsRow) }
                         { msgOption }
-                        { avatar }
                     </>)
                 );
             }
