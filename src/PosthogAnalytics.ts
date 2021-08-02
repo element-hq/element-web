@@ -207,7 +207,7 @@ export class PosthogAnalytics {
     };
 
     private static getAnonymityFromSettings(): Anonymity {
-        // determine the current anonymity level based on curernt user settings
+        // determine the current anonymity level based on current user settings
 
         // "Send anonymous usage data which helps us improve Element. This will use a cookie."
         const analyticsOptIn = SettingsStore.getValue("analyticsOptIn", null, true);
