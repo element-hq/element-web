@@ -3482,5 +3482,10 @@
     "Your camera is still enabled": "Uw camera is nog ingeschakeld",
     "Your camera is turned off": "Uw camera staat uit",
     "%(sharerName)s is presenting": "%(sharerName)s is aan het presenteren",
-    "You are presenting": "U bent aan het presenteren"
+    "You are presenting": "U bent aan het presenteren",
+    "Thank you for trying Spaces. Your feedback will help inform the next versions.": "Dankuwel voor het gebruiken van Spaces. Uw feedback helpt ons volgende versies te maken.",
+    "Spaces feedback": "Spaces feedback",
+    "Spaces are a new feature.": "Spaces zijn een nieuwe functie.",
+    "All rooms you're in will appear in Home.": "Alle kamers waar u in bent zullen in Home verschijnen.",
+    "Send pseudonymous analytics data": "Pseudonieme analytische gegevens verzenden"
 }
