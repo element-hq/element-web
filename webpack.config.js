@@ -42,7 +42,7 @@ function getActiveThemes() {
     const theme = MATRIX_THEMES ?? 'light';
     const themes = theme.split(',').filter(x => x).map(x => x.trim()).filter(x => x);
     if (themes.length > 1) {
-        throw new Error('Please see `.env.example` for proper hotreload&themes configuation.');
+        throw new Error('Please see `.env.example` for proper hot reload & themes configuration.');
     }
     return themes;
 }
