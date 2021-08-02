@@ -25,7 +25,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { PosthogAnalytics, IWelcomeScreenLoad } from "../../../PosthogAnalytics";
 import LanguageSelector from "./LanguageSelector";
 
 // translatable strings for Welcome pages
