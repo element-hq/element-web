@@ -74,8 +74,4 @@ export default class Welcome extends React.PureComponent<IProps> {
             </AuthPage>
         );
     }
-
-    componentDidMount() {
-        PosthogAnalytics.instance.trackAnonymousEvent<IWelcomeScreenLoad>("welcome_screen_load");
-    }
 }

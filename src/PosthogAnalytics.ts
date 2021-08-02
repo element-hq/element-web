@@ -71,11 +71,6 @@ interface IPageView extends IAnonymousEvent {
     };
 }
 
-export interface IWelcomeScreenLoad extends IAnonymousEvent {
-    eventName: "welcome_screen_load";
-    properties: Record<any, never>;
-}
-
 const hashHex = async (input: string): Promise<string> => {
     const buf = new TextEncoder().encode(input);
     const digestBuf = await window.crypto.subtle.digest("sha-256", buf);
@@ -141,7 +136,7 @@ export class PosthogAnalytics {
      *    Anonymous or Disabled; Anonymous events will be dropped when anonymity is Disabled.
      */
 
-    private anonymity = Anonymity.Anonymous;
+    private anonymity = Anonymity.Disabled;
     // set true during the constructor if posthog config is present, otherwise false
     private enabled = false;
     private static _instance = null;
@@ -220,9 +215,7 @@ export class PosthogAnalytics {
         let anonymity;
         if (pseudonumousOptIn) {
             anonymity = Anonymity.Pseudonymous;
-        } else if (analyticsOptIn || analyticsOptIn === null) {
-            // If no analyticsOptIn has been set (i.e. before the user has logged in, or if they haven't answered the
-            // opt-in question, assume Anonymous)
+        } else if (analyticsOptIn) {
             anonymity = Anonymity.Anonymous;
         } else {
             anonymity = Anonymity.Disabled;
