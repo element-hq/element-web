@@ -1917,7 +1917,7 @@
     "Compare unique emoji": "Porovnejte jedinečnou kombinaci emoji",
     "Compare a unique set of emoji if you don't have a camera on either device": "Pokud na žádném zařízení nemáte kameru, porovnejte jedinečnou kombinaci emoji",
     "Not Trusted": "Nedůvěryhodné",
-    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) se přihlásil do nové relace bez ověření:",
+    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) se přihlásil(a) do nové relace bez ověření:",
     "Ask this user to verify their session, or manually verify it below.": "Požádejte tohoto uživatele, aby ověřil svou relaci, nebo jí níže můžete ověřit manuálně.",
     "The session you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.": "Relace, kterou se snažíte ověřit, neumožňuje ověření QR kódem ani pomocí emoji, což je to, co %(brand)s podporuje. Zkuste použít jiného klienta.",
     "Verify by scanning": "Ověřte naskenováním",
@@ -3541,5 +3541,8 @@
     "Search for rooms": "Hledat místnosti",
     "Search for spaces": "Hledat prostory",
     "Create a new space": "Vytvořit nový prostor",
-    "Want to add a new space instead?": "Chcete místo toho přidat nový prostor?"
+    "Want to add a new space instead?": "Chcete místo toho přidat nový prostor?",
+    "Decrypting": "Dešifrování",
+    "Show all rooms": "Zobrazit všechny místnosti",
+    "All rooms you're in will appear in Home.": "Všechny místnosti, ve kterých se nacházíte, se zobrazí na domovské obrazovce."
 }
