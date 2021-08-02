@@ -3493,5 +3493,10 @@
     "Use Command + F to search timeline": "Utilisez Commande + F pour rechercher dans le fil de discussion",
     "User %(userId)s is already invited to the room": "L’utilisateur %(userId)s est déjà invité dans le salon",
     "Transfer Failed": "Échec du transfert",
-    "Unable to transfer call": "Impossible de transférer l’appel"
+    "Unable to transfer call": "Impossible de transférer l’appel",
+    "Send pseudonymous analytics data": "Envoyer des données de télémétrie pseudonymisées",
+    "To help space members find and join a private room, go to that room's Security & Privacy settings.": "Pour aider les membres de l’espace à trouver et rejoindre un salon privé, allez dans les paramètres de confidentialité de ce salon.",
+    "Help space members find private rooms": "Aidez les membres de l’espace à trouver des salons privés",
+    "Help people in spaces to find and join private rooms": "Aidez les personnes dans les espaces à trouver et rejoindre des salons privés",
+    "New in the Spaces beta": "Nouveautés dans les espaces en bêta"
 }
