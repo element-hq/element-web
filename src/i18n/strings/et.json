@@ -3521,5 +3521,21 @@
     "The voice message failed to upload.": "Häälsõnumi üleslaadimine ei õnnestunud.",
     "Everyone in <SpaceName/> will be able to find and join this room.": "Kõik <SpaceName/> kogukonna liikmed saavad seda jututuba leida ning võivad temaga liituda.",
     "You can change this at any time from room settings.": "Sa saad seda alati jututoa seadistustest muuta.",
-    "Anyone will be able to find and join this room, not just members of <SpaceName/>.": "Mitte ainult <SpaceName/> kogukonna liikmed, vaid kõik saavad seda jututuba leida ja võivad temaga liituda."
+    "Anyone will be able to find and join this room, not just members of <SpaceName/>.": "Mitte ainult <SpaceName/> kogukonna liikmed, vaid kõik saavad seda jututuba leida ja võivad temaga liituda.",
+    "You declined this call": "Sina keeldusid kõnest",
+    "They declined this call": "Teine osapool keeldus kõnest",
+    "Call again": "Helista uuesti",
+    "They didn't pick up": "Teine osapool ei võtnud kõnet vastu",
+    "You are presenting": "Sina esitad",
+    "%(sharerName)s is presenting": "%(sharerName)s esitab",
+    "Your camera is turned off": "Sinu seadme kaamera on välja lülitatud",
+    "Your camera is still enabled": "Sinu seadme kaamera on jätkuvalt kasutusel",
+    "Screen sharing is here!": "Meil on nüüd olemas ekraanijagamine!",
+    "Share entire screen": "Jaga tervet ekraani",
+    "Application window": "Rakenduse aken",
+    "Share content": "Jaga sisu",
+    "Anyone will be able to find and join this room.": "Kõik saavad seda jututuba leida ja temaga liituda.",
+    "Leave %(spaceName)s": "Lahku %(spaceName)s kogukonnakeskusest",
+    "Are you sure you want to leave <spaceName/>?": "Kas oled kindel, et soovid lahkuda <spaceName/> kogukonnakeskusest?",
+    "Decrypting": "Dekrüptin sisu"
 }
