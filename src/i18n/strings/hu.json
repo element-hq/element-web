@@ -3619,5 +3619,6 @@
     "You won't be able to rejoin unless you are re-invited.": "Nem fog tudni újra belépni amíg nem hívják meg újra.",
     "Search %(spaceName)s": "Keresés: %(spaceName)s",
     "Leave specific rooms and spaces": "Kilépés a megadott szobákból és terekből",
-    "Decrypting": "Visszafejtés"
+    "Decrypting": "Visszafejtés",
+    "Send pseudonymous analytics data": "Pseudo-anonim felhasználási adatok küldése"
 }
