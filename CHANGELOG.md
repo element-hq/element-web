@@ -1,46 +1,128 @@
-Changes in [1.7.34-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.34-rc.1) (2021-07-27)
-=========================================================================================================
-[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.33...v1.7.34-rc.1)
+Changes in [1.7.34](https://github.com/vector-im/element-desktop/releases/tag/v1.7.34) (2021-07-02)
+===================================================================================================
 
- * Translations update from Weblate
-   [\#18260](https://github.com/vector-im/element-web/pull/18260)
- * Update ESLint config
-   [\#18236](https://github.com/vector-im/element-web/pull/18236)
- * Update matrix-org-eslint-plugin and tighten max warning limit
-   [\#18207](https://github.com/vector-im/element-web/pull/18207)
- * Update webpack path for new voice message worker location
-   [\#18187](https://github.com/vector-im/element-web/pull/18187)
- * yarn upgrade
-   [\#18150](https://github.com/vector-im/element-web/pull/18150)
- * Conform to new typescript eslint rules
-   [\#18065](https://github.com/vector-im/element-web/pull/18065)
- * Add the Matrix Space to the translations guide
-   [\#18102](https://github.com/vector-im/element-web/pull/18102)
- * Update eslint-plugin-matrix-org
-   [\#18058](https://github.com/vector-im/element-web/pull/18058)
+## 🔒 SECURITY FIXES
+ * Sanitize untrusted variables from message previews before translation
+   Fixes vector-im/element-web#18314
+
+## ✨ Features
+ * Fix editing of `<sub>` & `<sup`> & `<u>`
+   [\#6469](https://github.com/matrix-org/matrix-react-sdk/pull/6469)
+   Fixes #18211
+ * Zoom images in lightbox to where the cursor points
+   [\#6418](https://github.com/matrix-org/matrix-react-sdk/pull/6418)
+   Fixes #17870
+ * Avoid hitting the settings store from TextForEvent
+   [\#6205](https://github.com/matrix-org/matrix-react-sdk/pull/6205)
+   Fixes #17650
+ * Initial MSC3083 + MSC3244 support
+   [\#6212](https://github.com/matrix-org/matrix-react-sdk/pull/6212)
+   Fixes #17686 and #17661
+ * Navigate to the first room with notifications when clicked on space notification dot
+   [\#5974](https://github.com/matrix-org/matrix-react-sdk/pull/5974)
+ * Add matrix: to the list of permitted URL schemes
+   [\#6388](https://github.com/matrix-org/matrix-react-sdk/pull/6388)
+ * Add "Copy Link" to room context menu
+   [\#6374](https://github.com/matrix-org/matrix-react-sdk/pull/6374)
+ * 💭 Message bubble layout
+   [\#6291](https://github.com/matrix-org/matrix-react-sdk/pull/6291)
+   Fixes #4635, #17773 #16220 and #7687
+ * Play only one audio file at a time
+   [\#6417](https://github.com/matrix-org/matrix-react-sdk/pull/6417)
+   Fixes #17439
+ * Move download button for media to the action bar
+   [\#6386](https://github.com/matrix-org/matrix-react-sdk/pull/6386)
+   Fixes #17943
+ * Improved display of one-to-one call history with summary boxes for each call
+   [\#6121](https://github.com/matrix-org/matrix-react-sdk/pull/6121)
+   Fixes #16409
+ * Notification settings UI refresh
+   [\#6352](https://github.com/matrix-org/matrix-react-sdk/pull/6352)
+   Fixes #17782
+ * Fix EventIndex double handling events and erroring
+   [\#6385](https://github.com/matrix-org/matrix-react-sdk/pull/6385)
+   Fixes #18008
+ * Improve reply rendering
+   [\#3553](https://github.com/matrix-org/matrix-react-sdk/pull/3553)
+   Fixes vector-im/riot-web#9217, vector-im/riot-web#7633, vector-im/riot-web#7530, vector-im/riot-web#7169, vector-im/riot-web#7151, vector-im/riot-web#6692 vector-im/riot-web#6579 and #17440
+ * Improve performance of room name calculation
+   [\#1801](https://github.com/matrix-org/matrix-js-sdk/pull/1801)
+
+## 🐛 Bug Fixes
  * Fix browser history getting stuck looping back to the same room
    [\#18053](https://github.com/vector-im/element-web/pull/18053)
- * Use URLSearchParams instead of transitive dependency `querystring`
-   [\#13138](https://github.com/vector-im/element-web/pull/13138)
- * Update PR template for new changelog generation
-   [\#18003](https://github.com/vector-im/element-web/pull/18003)
- * Fix space shortcuts on layouts with non-English keys in the places of
-   numbers
+ * Fix space shortcuts on layouts with non-English keys in the places of numbers
    [\#17780](https://github.com/vector-im/element-web/pull/17780)
- * Add comment around feature_spaces flag usage
-   [\#18006](https://github.com/vector-im/element-web/pull/18006)
- * Standardise casing of identity server
-   [\#17980](https://github.com/vector-im/element-web/pull/17980)
- * Convert CONTRIBUTING to markdown
-   [\#18002](https://github.com/vector-im/element-web/pull/18002)
- * Ignore workers for jest tests because it disagrees with worker-loader
-   [\#17999](https://github.com/vector-im/element-web/pull/17999)
- * Use webpack worker-loader instead of homegrown hack
-   [\#17963](https://github.com/vector-im/element-web/pull/17963)
- * Fix types to match Typescripted IndexedDB store
-   [\#17962](https://github.com/vector-im/element-web/pull/17962)
- * Improve and consolidate typing
-   [\#17931](https://github.com/vector-im/element-web/pull/17931)
+   Fixes #17776
+ * Fix CreateRoomDialog exploding when making public room outside of a space
+   [\#6493](https://github.com/matrix-org/matrix-react-sdk/pull/6493)
+ * Fix regression where registration would soft-crash on captcha
+   [\#6505](https://github.com/matrix-org/matrix-react-sdk/pull/6505)
+   Fixes #18284
+ * only send join rule event if we have a join rule to put in it
+   [\#6517](https://github.com/matrix-org/matrix-react-sdk/pull/6517)
+ * Improve the new download button's discoverability and interactions.
+   [\#6510](https://github.com/matrix-org/matrix-react-sdk/pull/6510)
+ * Fix voice recording UI looking broken while microphone permissions are being requested.
+   [\#6479](https://github.com/matrix-org/matrix-react-sdk/pull/6479)
+   Fixes #18223
+ * Match colors of room and user avatars in DMs
+   [\#6393](https://github.com/matrix-org/matrix-react-sdk/pull/6393)
+   Fixes #2449
+ * Fix onPaste handler to work with copying files from Finder
+   [\#5389](https://github.com/matrix-org/matrix-react-sdk/pull/5389)
+   Fixes #15536 and #16255
+ * Fix infinite pagination loop when offline
+   [\#6478](https://github.com/matrix-org/matrix-react-sdk/pull/6478)
+   Fixes #18242
+ * Fix blurhash rounded corners missing regression
+   [\#6467](https://github.com/matrix-org/matrix-react-sdk/pull/6467)
+   Fixes #18110
+ * Fix position of the space hierarchy spinner
+   [\#6462](https://github.com/matrix-org/matrix-react-sdk/pull/6462)
+   Fixes #18182
+ * Fix display of image messages that lack thumbnails
+   [\#6456](https://github.com/matrix-org/matrix-react-sdk/pull/6456)
+   Fixes #18175
+ * Fix crash with large audio files.
+   [\#6436](https://github.com/matrix-org/matrix-react-sdk/pull/6436)
+   Fixes #18149
+ * Make diff colors in codeblocks more pleasant
+   [\#6355](https://github.com/matrix-org/matrix-react-sdk/pull/6355)
+   Fixes #17939
+ * Show the correct audio file duration while loading the file.
+   [\#6435](https://github.com/matrix-org/matrix-react-sdk/pull/6435)
+   Fixes #18160
+ * Fix various timeline settings not applying immediately.
+   [\#6261](https://github.com/matrix-org/matrix-react-sdk/pull/6261)
+   Fixes #17748
+ * Fix issues with room list duplication
+   [\#6391](https://github.com/matrix-org/matrix-react-sdk/pull/6391)
+   Fixes #14508
+ * Fix grecaptcha throwing useless error sometimes
+   [\#6401](https://github.com/matrix-org/matrix-react-sdk/pull/6401)
+   Fixes #15142
+ * Update Emojibase and Twemoji and switch to IamCal (Slack-style) shortcodes
+   [\#6347](https://github.com/matrix-org/matrix-react-sdk/pull/6347)
+   Fixes #13857 and #13334
+ * Respect compound emojis in default avatar initial generation
+   [\#6397](https://github.com/matrix-org/matrix-react-sdk/pull/6397)
+   Fixes #18040
+ * Fix bug where the 'other homeserver' field in the server selection dialog would become briefly focus and then unfocus when clicked.
+   [\#6394](https://github.com/matrix-org/matrix-react-sdk/pull/6394)
+   Fixes #18031
+ * Standardise spelling and casing of homeserver, identity server, and integration manager 
+   [\#6365](https://github.com/matrix-org/matrix-react-sdk/pull/6365)
+ * Fix widgets not receiving decrypted events when they have permission.
+   [\#6371](https://github.com/matrix-org/matrix-react-sdk/pull/6371)
+   Fixes #17615
+ * Prevent client hangs when calculating blurhashes
+   [\#6366](https://github.com/matrix-org/matrix-react-sdk/pull/6366)
+   Fixes #17945
+ * Exclude state events from widgets reading room events
+   [\#6378](https://github.com/matrix-org/matrix-react-sdk/pull/6378)
+ * Cache feature_spaces\* flags to improve performance
+   [\#6381](https://github.com/matrix-org/matrix-react-sdk/pull/6381)
 
 Changes in [1.7.33](https://github.com/vector-im/element-web/releases/tag/v1.7.33) (2021-07-19)
 ===============================================================================================
