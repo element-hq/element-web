@@ -21,6 +21,7 @@ import { _t } from '../../../../languageHandler';
 import RoomAvatar from '../../avatars/RoomAvatar';
 import AccessibleButton from '../../elements/AccessibleButton';
 import dis from '../../../../dispatcher/dispatcher';
+import classNames from 'classnames';
 
 const callTypeTranslationByType: Record<CallType, () => string> = {
     [CallType.Video]: () => _t("Video Call"),
@@ -58,7 +59,7 @@ const onExpandClick = (roomId: string) => {
 type CallControlsProps = Pick<CallViewHeaderProps, 'pipMode' | 'type'> & {
     roomId: string;
 };
-function CallViewHeaderControls({ pipMode = false, type, roomId }: CallControlsProps): JSX.Element {
+const CallViewHeaderControls: React.FC<CallControlsProps> = ({ pipMode = false, type, roomId }) => {
     return <div className="mx_CallView_header_controls">
         { (pipMode && type === CallType.Video) &&
       <div className="mx_CallView_header_button mx_CallView_header_button_fullscreen"
@@ -70,8 +71,8 @@ function CallViewHeaderControls({ pipMode = false, type, roomId }: CallControlsP
             title={_t("Return to call")}
         /> }
     </div>;
-}
-function SecondaryCallInfo({ callRoom }: {callRoom: Room}): JSX.Element {
+};
+const SecondaryCallInfo: React.FC<{ callRoom: Room }> = ({ callRoom }) => {
     return <span className="mx_CallView_header_secondaryCallInfo">
         <AccessibleButton element='span' onClick={() => onRoomAvatarClick(callRoom.roomId)}>
             <RoomAvatar room={callRoom} height={16} width={16} />
@@ -80,16 +81,16 @@ function SecondaryCallInfo({ callRoom }: {callRoom: Room}): JSX.Element {
             </span>
         </AccessibleButton>
     </span>;
-}
+};
 
-function CallTypeIcon({ type }: {type: CallType}) {
-    const classes = {
-        [CallType.Video]: 'mx_CallView_header_callTypeIcon_video',
-        [CallType.Voice]: 'mx_CallView_header_callTypeIcon_voice',
-    };
-    const iconClass = classes[type] ?? '';
-    return <div className={`mx_CallView_header_callTypeIcon ${iconClass}`} />;
-}
+const CallTypeIcon: React.FC<{ type: CallType }> = ({ type }) => {
+    const classes = classNames({
+        'mx_CallView_header_callTypeIcon': true,
+        'mx_CallView_header_callTypeIcon_video': type === CallType.Video,
+        'mx_CallView_header_callTypeIcon_voice': type === CallType.Voice,
+    });
+    return <div className={classes} />;
+};
 
 export const CallViewHeader: React.FC<CallViewHeaderProps> = ({
     type,
