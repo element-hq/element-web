@@ -46,6 +46,17 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/trashcan.svg');
 }
 
+.mx_VoiceRecordComposerTile_uploadState {
+    margin-right: 21px;
+    color: $secondary-fg-color;
+
+    .mx_VoiceRecordComposerTile_uploadState_badge {
+        display: inline-block;
+        margin-right: 4px;
+        vertical-align: middle;
+    }
+}
+
 .mx_MessageComposer_row .mx_VoiceMessagePrimaryContainer {
     // Note: remaining class properties are in the PlayerContainer CSS.
 
