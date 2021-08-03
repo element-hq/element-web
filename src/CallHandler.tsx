@@ -1,7 +1,8 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 New Vector Ltd
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -86,6 +87,8 @@ import { randomUppercaseString, randomLowercaseString } from "matrix-js-sdk/src/
 import EventEmitter from 'events';
 import SdkConfig from './SdkConfig';
 import { ensureDMExists, findDMForUser } from './createRoom';
+import { IPushRule, RuleId, TweakName, Tweaks } from "matrix-js-sdk/src/@types/PushRules";
+import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
 
 export const PROTOCOL_PSTN = 'm.protocol.pstn';
 export const PROTOCOL_PSTN_PREFIXED = 'im.vector.protocol.pstn';
@@ -475,9 +478,22 @@ export default class CallHandler extends EventEmitter {
                 this.silencedCalls.delete(call.callId);
             }
 
+            const incomingCallPushRule = (
+                new PushProcessor(MatrixClientPeg.get()).getPushRuleById(RuleId.IncomingCall) as IPushRule
+            );
             switch (newState) {
                 case CallState.Ringing:
-                    this.play(AudioID.Ring);
+                    if (
+                        incomingCallPushRule?.enabled &&
+                        incomingCallPushRule.actions.some((a: Tweaks) => (
+                            a.set_tweak === TweakName.Sound &&
+                            a.value === "ring"
+                        ))
+                    ) {
+                        this.play(AudioID.Ring);
+                    } else {
+                        this.silenceCall(call.callId);
+                    }
                     break;
                 case CallState.InviteSent:
                     this.play(AudioID.Ringback);
