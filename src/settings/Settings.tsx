@@ -180,26 +180,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             feedbackSubheading: _td("Your feedback will help make spaces better. " +
                 "The more detail you can go into, the better."),
             feedbackLabel: "spaces-feedback",
-            extraSettings: [
-                "feature_spaces.all_rooms",
-            ],
         },
-    },
-    "feature_spaces.all_rooms": {
-        displayName: _td("Show all rooms in Home"),
-        supportedLevels: LEVELS_FEATURE,
-        default: true,
-        controller: new ReloadOnChangeController(),
     },
     "feature_dnd": {
         isFeature: true,
         displayName: _td("Show options to enable 'Do not disturb' mode"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
-    "feature_voice_messages": {
-        isFeature: true,
-        displayName: _td("Send and receive voice messages"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -757,6 +742,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "Widgets.leftPanel": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: null,
+    },
+    "Spaces.allRoomsInHome": {
+        displayName: _td("Show all rooms in Home"),
+        description: _td("All rooms you're in will appear in Home."),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: false,
     },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,

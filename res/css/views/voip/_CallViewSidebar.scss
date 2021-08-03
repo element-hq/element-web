@@ -35,11 +35,22 @@ limitations under the License.
         width: 100%;
 
         &.mx_VideoFeed_voice {
+            border-radius: 4px;
+
             display: flex;
             align-items: center;
             justify-content: center;
 
             aspect-ratio: 16 / 9;
+        }
+
+        .mx_VideoFeed_video {
+            border-radius: 4px;
+        }
+
+        .mx_VideoFeed_mic {
+            left: 6px;
+            bottom: 6px;
         }
     }
 

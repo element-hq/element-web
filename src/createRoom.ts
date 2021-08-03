@@ -184,7 +184,8 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         }
     }
 
-    if (opts.joinRule !== JoinRule.Restricted) {
+    // we handle the restricted join rule in the parentSpace handling block above
+    if (opts.joinRule && opts.joinRule !== JoinRule.Restricted) {
         createOpts.initial_state.push({
             type: EventType.RoomJoinRules,
             content: { join_rule: opts.joinRule },
