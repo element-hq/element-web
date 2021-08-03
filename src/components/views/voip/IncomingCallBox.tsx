@@ -64,9 +64,11 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
         switch (payload.action) {
             case 'call_state': {
                 const incomingCall = CallHandler.sharedInstance().getCallForRoom(payload.room_id);
-                const silenced = CallHandler.sharedInstance().isCallSilenced(incomingCall.callId);
                 if (incomingCall && incomingCall.state === CallState.Ringing) {
-                    this.setState({ incomingCall, silenced });
+                    this.setState({
+                        incomingCall,
+                        silenced: CallHandler.sharedInstance().isCallSilenced(incomingCall.callId),
+                    });
                 } else {
                     this.setState({ incomingCall: null });
                 }
