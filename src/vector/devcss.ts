@@ -28,6 +28,19 @@ limitations under the License.
  * For more details, see webpack.config.js:184 (string-replace-loader)
  */
 if (process.env.NODE_ENV === 'development') {
-    "use theming";
+    ("use theming");
+    /**
+     * Clean up old hot-module script injections as they hog up memory
+     * and anything other than the newest one is really not needed at all.
+     * We don't need to do it more frequently than every half a minute or so,
+     * but it's done to delay full page reload due to app slowness.
+     */
+    setInterval(() => {
+        const elements = Array.from(document.querySelectorAll("script[src*=hot-update]"));
+        if (elements.length > 1) {
+            const oldInjects = elements.slice(0, elements.length - 1);
+            oldInjects.forEach(e => e.remove());
+        }
+    }, 1000);
 }
 
