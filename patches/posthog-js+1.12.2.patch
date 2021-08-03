@@ -1,0 +1,78 @@
+diff --git a/node_modules/posthog-js/dist/module.d.ts b/node_modules/posthog-js/dist/module.d.ts
+index d3cba02..8c87ef8 100644
+--- a/node_modules/posthog-js/dist/module.d.ts
++++ b/node_modules/posthog-js/dist/module.d.ts
+@@ -1,7 +1,5 @@
+ // Type definitions for exported methods
+-
+-import { EventProcessor, Integration } from '@sentry/types'
+-import { MaskInputOptions, SlimDOMOptions } from 'rrweb-snapshot'
++// Patched to remove references to sentry and rrweb-snapshot which aren't otherwise SDK dependencies
+ 
+ declare class posthog {
+     /**
+@@ -485,25 +483,6 @@ declare class posthog {
+      */
+     static reloadFeatureFlags(): void
+ 
+-    /**
+-     * Integrate Sentry with PostHog. This will add a direct link to the person in Sentry, and an $exception event in PostHog
+-     *
+-     * ### Usage
+-     *
+-     *     Sentry.init({
+-     *          dsn: 'https://example',
+-     *          integrations: [
+-     *              new posthog.SentryIntegration(posthog)
+-     *          ]
+-     *     })
+-     *
+-     * @param {Object} [posthog] The posthog object
+-     * @param {string} [organization] Optional: The Sentry organization, used to send a direct link from PostHog to Sentry
+-     * @param {Number} [projectId] Optional: The Sentry project id, used to send a direct link from PostHog to Sentry
+-     * @param {string} [prefix] Optional: Url of a self-hosted sentry instance (default: https://sentry.io/organizations/)
+-     */
+-    static SentryIntegration: typeof SentryIntegration
+-
+     static toString(): string
+ 
+     /* Will log all capture requests to the Javascript console, including event properties for easy debugging */
+@@ -585,7 +564,6 @@ declare namespace posthog {
+         request_batching?: boolean
+         sanitize_properties?: (properties: posthog.Properties, event_name: string) => posthog.Properties
+         properties_string_max_length?: number
+-        session_recording?: SessionRecordingOptions
+         mask_all_element_attributes?: boolean
+         mask_all_text?: boolean
+         advanced_disable_decide?: boolean
+@@ -618,17 +596,6 @@ declare namespace posthog {
+         send_event: boolean
+     }
+ 
+-    interface SessionRecordingOptions {
+-        blockClass?: string | RegExp
+-        blockSelector?: string
+-        ignoreClass?: string
+-        maskAllInputs?: boolean
+-        maskInputOptions?: MaskInputOptions
+-        maskInputFn?: (text: string) => string
+-        slimDOMOptions?: SlimDOMOptions | 'all' | true
+-        collectFonts?: boolean
+-    }
+-
+     export class persistence {
+         static properties(): posthog.Properties
+ 
+@@ -768,12 +735,6 @@ declare namespace posthog {
+     export class feature_flags extends featureFlags {}
+ }
+ 
+-export class SentryIntegration implements Integration {
+-    constructor(posthog: posthog, organization?: string, projectId?: number, prefix?: string)
+-    name: string
+-    setupOnce(addGlobalEventProcessor: (callback: EventProcessor) => void): void
+-}
+-
+ export type PostHog = typeof posthog
+ 
+ export default posthog

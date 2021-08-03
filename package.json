@@ -51,7 +51,8 @@
     "lint:style": "stylelint 'res/css/**/*.scss'",
     "test": "jest",
     "test:e2e": "./test/end-to-end-tests/run.sh --app-url http://localhost:8080",
-    "coverage": "yarn test --coverage"
+    "coverage": "yarn test --coverage",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
@@ -87,7 +88,7 @@
     "pako": "^2.0.3",
     "parse5": "^6.0.1",
     "png-chunks-extract": "^1.0.0",
-    "posthog-js": "1.12.1",
+    "posthog-js": "1.12.2",
     "prop-types": "^15.7.2",
     "qrcode": "^1.4.4",
     "re-resizable": "^6.9.0",
@@ -165,6 +166,8 @@
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.3",
     "matrix-web-i18n": "github:matrix-org/matrix-web-i18n",
+    "patch-package": "^6.4.7",
+    "postinstall-postinstall": "^2.1.0",
     "react-test-renderer": "^17.0.2",
     "rimraf": "^3.0.2",
     "stylelint": "^13.9.0",
