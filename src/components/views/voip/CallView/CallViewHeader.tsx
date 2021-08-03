@@ -96,13 +96,13 @@ function getAvatarBasedOnRoomType(roomOrWidget: Room | IApp) {
     return null;
 }
 
-export function CallViewHeader({
+export const CallViewHeader: React.FC<CallViewHeaderProps> = ({
   type,
   pipMode = false,
   callRooms = [],
   app,
   onPipMouseDown,
-}: CallViewHeaderProps) {
+}) {
     const [callRoom, onHoldCallRoom] = callRooms;
     const callTypeText = callTypeTranslationByType[type](app);
     const avatar = getAvatarBasedOnRoomType(callRoom ?? app);
