@@ -26,7 +26,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.dialogs.LogoutDialog")
 export default class LogoutDialog extends React.Component {
-    defaultProps = {
+    static defaultProps = {
         onFinished: function() {},
     };
 
