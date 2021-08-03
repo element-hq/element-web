@@ -419,12 +419,13 @@ We strive to completely cover all applicable issues with these core labels:
    * __[P-High](https://github.com/vector-im/element-web/labels/P-High):__ Affects most users regularly or impacts most users' first experience (e.g. registration) 
    * __[P-Medium](https://github.com/vector-im/element-web/labels/P-Medium):__ Affects some users regularly or most users rarely
    * __[P-Low](https://github.com/vector-im/element-web/labels/P-Low):__ Most users are unlikely to come across this or it is a corner case
+   This label may also be used for other types of issue.
 
 4. __Area__ — Most issues are assigned one or several "areas" using one of the
    many `A-` prefixed labels, e.g. `A-Composer` or `A-Spaces`. Each area label
    maps to a group of features or portion of the UI surface in the app.
 
-The Priority label is now deprecated. Defects will now be classed based on their severity and frequency
+The Priority label is now deprecated. Defects will now be classed based on their severity and prevalence:
 | Labels    | Equivalent priority | What it means |
 | ----------- | ----------- | ----------- |
 | S‑Critical&nbsp;and&nbsp;F‑High<br />S‑Critical&nbsp;and&nbsp;F‑Medium<br />S‑Major&nbsp;and&nbsp;F‑High | P1        | These issues should be worked on in this sprint or next sprint. If the backlog of issues is too long, we should reevaluate why the bugs are not caught earlier. |
