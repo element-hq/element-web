@@ -3614,5 +3614,18 @@
     "Give feedback.": "Dar opinión.",
     "Thank you for trying Spaces. Your feedback will help inform the next versions.": "Grazas por probar Espazos. A túa opinión vainos axudar as próximas versións.",
     "Spaces feedback": "Infórmanos sobre Espazos",
-    "Spaces are a new feature.": "Espazos é o futuro."
+    "Spaces are a new feature.": "Espazos é o futuro.",
+    "Are you sure you want to leave <spaceName/>?": "Tes a certeza de querer saír de <spaceName/>?",
+    "Leave %(spaceName)s": "Saír de %(spaceName)s",
+    "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "Es a única administradora dalgunhas salas ou espazos dos que queres sair. Ao sair deles deixaralos sen administración.",
+    "You're the only admin of this space. Leaving it will mean no one has control over it.": "Ti es a única administradora deste espazo. Ao sair farás que a ninguén teña control sobre el.",
+    "You won't be able to rejoin unless you are re-invited.": "Non poderás volver a unirte se non te volven a convidar.",
+    "Search %(spaceName)s": "Buscar %(spaceName)s",
+    "Leave specific rooms and spaces": "Saír de determinadas salas e espazos",
+    "Don't leave any": "Non saír de ningunha",
+    "Leave all rooms and spaces": "Saír de tódalas salas e espazos",
+    "Decrypting": "Descifrando",
+    "Show all rooms": "Mostar tódalas salas",
+    "All rooms you're in will appear in Home.": "Tódalas salas nas que estás aparecerán en Inicio.",
+    "Send pseudonymous analytics data": "Enviar datos anónimos de uso"
 }
