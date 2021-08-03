@@ -55,7 +55,7 @@ const onExpandClick = (roomId: string) => {
 };
 
 type CallControlsProps = Pick<CallViewHeaderProps, 'pipMode' | 'type'> & {
-  roomId: string;
+    roomId: string;
 };
 function CallViewHeaderControls({ pipMode = false, type, roomId }: CallControlsProps): JSX.Element {
     return <div className="mx_CallView_header_controls">

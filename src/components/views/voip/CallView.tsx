@@ -660,7 +660,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 let onHoldBackground = null;
                 const backgroundStyle: CSSProperties = {};
                 const backgroundAvatarUrl = avatarUrlForMember(
-                // is it worth getting the size of the div to pass here?
+                    // is it worth getting the size of the div to pass here?
                     this.props.call.getOpponentMember(), 1024, 1024, 'crop',
                 );
                 backgroundStyle.backgroundImage = 'url(' + backgroundAvatarUrl + ')';
@@ -680,7 +680,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     mx_CallView_voice_hold: isOnHold,
                 });
 
-                contentView =(
+                contentView = (
                     <div className={classes} onMouseMove={this.onMouseMove}>
                         <div className="mx_CallView_voice_avatarsContainer">
                             <div

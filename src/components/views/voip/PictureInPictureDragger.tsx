@@ -68,8 +68,8 @@ export class PictureInPictureDragger extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-          translationX: UIStore.instance.windowWidth - PADDING.right - PIP_VIEW_WIDTH,
-          translationY: UIStore.instance.windowHeight - PADDING.bottom - PIP_VIEW_WIDTH,
+            translationX: UIStore.instance.windowWidth - PADDING.right - PIP_VIEW_WIDTH,
+            translationY: UIStore.instance.windowHeight - PADDING.bottom - PIP_VIEW_WIDTH,
         };
     }
 
@@ -93,14 +93,14 @@ export class PictureInPictureDragger extends React.Component<IProps, IState> {
         // infinite loop
         if (
             !this.moving &&
-      Math.abs(this.state.translationX - this.desiredTranslationX) <= 1 &&
-      Math.abs(this.state.translationY - this.desiredTranslationY) <= 1
+            Math.abs(this.state.translationX - this.desiredTranslationX) <= 1 &&
+            Math.abs(this.state.translationY - this.desiredTranslationY) <= 1
         ) return;
 
         const amt = this.moving ? MOVING_AMT : SNAPPING_AMT;
         this.setState({
-          translationX: lerp(this.state.translationX, this.desiredTranslationX, amt),
-          translationY: lerp(this.state.translationY, this.desiredTranslationY, amt),
+            translationX: lerp(this.state.translationX, this.desiredTranslationX, amt),
+            translationY: lerp(this.state.translationY, this.desiredTranslationY, amt),
         });
         this.scheduledUpdate.mark();
     };
@@ -136,11 +136,11 @@ export class PictureInPictureDragger extends React.Component<IProps, IState> {
         // corner
         const windowWidth = (
             UIStore.instance.windowWidth -
-      (this.callViewWrapper.current?.clientWidth || PIP_VIEW_WIDTH)
+            (this.callViewWrapper.current?.clientWidth || PIP_VIEW_WIDTH)
         );
         const windowHeight = (
             UIStore.instance.windowHeight -
-      (this.callViewWrapper.current?.clientHeight || PIP_VIEW_HEIGHT)
+            (this.callViewWrapper.current?.clientHeight || PIP_VIEW_HEIGHT)
         );
 
         if (translationX >= windowWidth / 2 && translationY >= windowHeight / 2) {
@@ -190,7 +190,7 @@ export class PictureInPictureDragger extends React.Component<IProps, IState> {
         const translatePixelsX = this.state.translationX + "px";
         const translatePixelsY = this.state.translationY + "px";
         const style = {
-          transform: `translateX(${translatePixelsX})
+            transform: `translateX(${translatePixelsX})
                             translateY(${translatePixelsY})`,
         };
         return (
