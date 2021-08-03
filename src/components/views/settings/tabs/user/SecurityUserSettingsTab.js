@@ -36,7 +36,6 @@ import { UIFeature } from "../../../../../settings/UIFeature";
 import { isE2eAdvancedPanelPossible } from "../../E2eAdvancedPanel";
 import CountlyAnalytics from "../../../../../CountlyAnalytics";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
-import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
@@ -107,7 +106,6 @@ export default class SecurityUserSettingsTab extends React.Component {
     _updateAnalytics = (checked) => {
         checked ? Analytics.enable() : Analytics.disable();
         CountlyAnalytics.instance.enable(/* anonymous = */ !checked);
-        PosthogAnalytics.instance.updateAnonymityFromSettings(MatrixClientPeg.get().getUserId());
     };
 
     _onExportE2eKeysClicked = () => {
