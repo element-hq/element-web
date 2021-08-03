@@ -41,7 +41,6 @@ import { Layout } from "./Layout";
 import ReducedMotionController from './controllers/ReducedMotionController';
 import IncompatibleController from "./controllers/IncompatibleController";
 import SdkConfig from "../SdkConfig";
-import PseudonymousAnalyticsController from './controllers/PseudonymousAnalyticsController';
 import NewLayoutSwitcherController from './controllers/NewLayoutSwitcherController';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
@@ -268,13 +267,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Offline encrypted messaging using dehydrated devices"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
-    },
-    "feature_pseudonymous_analytics_opt_in": {
-        isFeature: true,
-        supportedLevels: LEVELS_FEATURE,
-        displayName: _td('Send pseudonymous analytics data'),
-        default: false,
-        controller: new PseudonymousAnalyticsController(),
     },
     "advancedRoomListLogging": {
         // TODO: Remove flag before launch: https://github.com/vector-im/element-web/issues/14231

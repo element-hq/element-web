@@ -22,15 +22,10 @@
       "es2019",
       "dom",
       "dom.iterable"
-    ],
-    "paths": {
-      "posthog-js": [
-        "./src/@types/posthog.d.ts"
-      ]
-    }
+    ]
   },
   "include": [
     "./src/**/*.ts",
     "./src/**/*.tsx"
-  ],  
+  ]
 }
