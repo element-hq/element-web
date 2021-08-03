@@ -26,37 +26,37 @@ import { IApp } from '../../../../stores/WidgetStore';
 import WidgetUtils from '../../../../utils/WidgetUtils';
 
 const callTypeTranslationByType: Record<CallType | 'widget', (app?: IApp) => string> = {
-  [CallType.Video]: () => _t("Video Call"),
-  [CallType.Voice]: () => _t("Voice Call"),
-  'widget': (app: IApp) => WidgetUtils.getWidgetName(app),
+    [CallType.Video]: () => _t("Video Call"),
+    [CallType.Voice]: () => _t("Voice Call"),
+    'widget': (app: IApp) => WidgetUtils.getWidgetName(app),
 };
 
 interface CallViewHeaderProps {
-  pipMode: boolean;
-  type: CallType | 'widget';
-  callRooms?: Room[];
-  app?: IApp;
-  onPipMouseDown: (event: React.MouseEvent<Element, MouseEvent>) => void;
+    pipMode: boolean;
+    type: CallType | 'widget';
+    callRooms?: Room[];
+    app?: IApp;
+    onPipMouseDown: (event: React.MouseEvent<Element, MouseEvent>) => void;
 }
 
 const onRoomAvatarClick = (roomId: string) => {
     dis.dispatch({
-    action: 'view_room',
-    room_id: roomId,
+        action: 'view_room',
+        room_id: roomId,
     });
 };
 
 const onFullscreenClick = () => {
     dis.dispatch({
-    action: 'video_fullscreen',
-    fullscreen: true,
+        action: 'video_fullscreen',
+        fullscreen: true,
     });
 };
 
 const onExpandClick = (roomId: string) => {
     dis.dispatch({
-    action: 'view_room',
-    room_id: roomId,
+        action: 'view_room',
+        room_id: roomId,
     });
 };
 
@@ -97,12 +97,12 @@ function getAvatarBasedOnRoomType(roomOrWidget: Room | IApp) {
 }
 
 export const CallViewHeader: React.FC<CallViewHeaderProps> = ({
-  type,
-  pipMode = false,
-  callRooms = [],
-  app,
-  onPipMouseDown,
-}) {
+    type,
+    pipMode = false,
+    callRooms = [],
+    app,
+    onPipMouseDown,
+}) => {
     const [callRoom, onHoldCallRoom] = callRooms;
     const callTypeText = callTypeTranslationByType[type](app);
     const avatar = getAvatarBasedOnRoomType(callRoom ?? app);
@@ -132,4 +132,4 @@ export const CallViewHeader: React.FC<CallViewHeaderProps> = ({
         <CallControls roomId={roomId} pipMode={pipMode} type={type} />
     </div>
     );
-}
+};

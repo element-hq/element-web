@@ -40,23 +40,23 @@ import CallViewSidebar from './CallViewSidebar';
 import { CallViewHeader } from './CallView/CallViewHeader';
 
 interface IProps {
-        // The call for us to display
-        call: MatrixCall;
+    // The call for us to display
+    call: MatrixCall;
 
-        // Another ongoing call to display information about
-        secondaryCall?: MatrixCall;
+    // Another ongoing call to display information about
+    secondaryCall?: MatrixCall;
 
-        // a callback which is called when the content in the CallView changes
-        // in a way that is likely to cause a resize.
-        onResize?: any;
+    // a callback which is called when the content in the CallView changes
+    // in a way that is likely to cause a resize.
+    onResize?: any;
 
-        // Whether this call view is for picture-in-picture mode
-        // otherwise, it's the larger call view when viewing the room the call is in.
-        // This is sort of a proxy for a number of things but we currently have no
-        // need to control those things separately, so this is simpler.
-        pipMode?: boolean;
+    // Whether this call view is for picture-in-picture mode
+    // otherwise, it's the larger call view when viewing the room the call is in.
+    // This is sort of a proxy for a number of things but we currently have no
+    // need to control those things separately, so this is simpler.
+    pipMode?: boolean;
 
-        // Used for dragging the PiP CallView
+    // Used for dragging the PiP CallView
     onMouseDownOnHeader?: (event: React.MouseEvent<Element, MouseEvent>) => void;
 }
 
