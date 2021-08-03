@@ -57,7 +57,7 @@ interface IProps {
         pipMode?: boolean;
 
         // Used for dragging the PiP CallView
-        onMouseDownOnHeader?: (event: React.MouseEvent<Element, MouseEvent>) => void;
+        onMouseDownOnHeader?: (event: MouseEvent) => void;
 }
 
 interface IState {

@@ -35,7 +35,7 @@ const PADDING = {
 
 interface IProps {
   className?: string;
-  children: (event: MouseEvent<Element, MouseEvent>) => React.ReactNode;
+  children: (startMovingEventHandler: (event: MouseEvent) => void) => React.ReactNode;
   draggable: boolean;
   app?: IApp;
 }
