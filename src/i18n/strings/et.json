@@ -3537,5 +3537,17 @@
     "Anyone will be able to find and join this room.": "Kõik saavad seda jututuba leida ja temaga liituda.",
     "Leave %(spaceName)s": "Lahku %(spaceName)s kogukonnakeskusest",
     "Are you sure you want to leave <spaceName/>?": "Kas oled kindel, et soovid lahkuda <spaceName/> kogukonnakeskusest?",
-    "Decrypting": "Dekrüptin sisu"
+    "Decrypting": "Dekrüptin sisu",
+    "Search for rooms or spaces": "Otsi jututubasid või kogukondi",
+    "Spaces are a new feature.": "Kogukonnakeskused on uus funktsionaalsus.",
+    "Spaces feedback": "Tagasiside kogukonnakeskuste kohta",
+    "Give feedback.": "Jaga tagasisidet.",
+    "We're working on this, but just want to let you know.": "Me küll alles arendame seda võimalust, kuid soovisime, et tead, mis tulemas on.",
+    "All rooms you're in will appear in Home.": "Kõik sinu jututoad on nähtavad kodulehel.",
+    "Show all rooms": "Näita kõiki jututubasid",
+    "Leave all rooms and spaces": "Lahku kõikidest jututubadest ja kogukondadest",
+    "Don't leave any": "Ära lahku ühestki",
+    "Leave specific rooms and spaces": "Lahku neist jututubadest ja kogukondadest",
+    "Search %(spaceName)s": "Otsi %(spaceName)s kogukonnast",
+    "You won't be able to rejoin unless you are re-invited.": "Ilma uue kutseta sa ei saa uuesti liituda."
 }
