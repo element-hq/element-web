@@ -38,7 +38,6 @@ interface IProps {
     className?: string;
     children: (startMovingEventHandler: (event: React.MouseEvent<Element, MouseEvent>) => void) => React.ReactNode;
     draggable: boolean;
-    app?: IApp;
 }
 
 interface IState {
@@ -206,4 +205,3 @@ export class PictureInPictureDragger extends React.Component<IProps, IState> {
         );
     }
 }
-
