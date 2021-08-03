@@ -27,7 +27,7 @@ import WidgetUtils from '../../../../utils/WidgetUtils';
 
 const callTypeTranslationByType: Record<CallType | 'widget', (app?: IApp) => string> = {
   [CallType.Video]: () => _t("Video Call"),
-  [CallType.Voice]: () => _t("Audio Call"),
+  [CallType.Voice]: () => _t("Voice Call"),
   'widget': (app: IApp) => WidgetUtils.getWidgetName(app),
 };
 
