@@ -113,7 +113,7 @@ module.exports = (env, argv) => {
 
             // This fixes duplicate files showing up in chrome with sourcemaps enabled.
             // See https://github.com/webpack/webpack/issues/7128 for more info.
-            namedModules: true,
+            namedModules: false,
 
             // Minification is normally enabled by default for webpack in production mode, but
             // we use a CSS optimizer too and need to manage it ourselves.
@@ -528,18 +528,14 @@ module.exports = (env, argv) => {
         devServer: {
             // serve unwebpacked assets from webapp.
             contentBase: [
-                './src/',
                 './webapp',
-                './bundles/**',
-                './node_modules/matrix-react-sdk/**',
-                './node_modules/matrix-js-sdk/**',
             ],
 
             // Only output errors, warnings, or new compilations.
             // This hides the massive list of modules.
             stats: 'minimal',
-            hot: true,
-            injectHot: true,
+            // hot: false,
+            // injectHot: false,
             hotOnly: true,
             inline: true,
         },
