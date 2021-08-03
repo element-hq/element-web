@@ -42,7 +42,9 @@ export default abstract class Exporter {
         protected exportOptions: IExportOptions,
         protected exportProgressRef: MutableRefObject<HTMLParagraphElement>,
     ) {
-        if (exportOptions.maxSize < 1 || exportOptions.maxSize > 2000 || exportOptions.numberOfMessages > 10**8) {
+        if (exportOptions.maxSize < 1 * 1024 * 1024||
+            exportOptions.maxSize > 2000 * 1024 * 1024||
+            exportOptions.numberOfMessages > 10**8) {
             throw new Error("Invalid export options");
         }
         this.cancelled = false;

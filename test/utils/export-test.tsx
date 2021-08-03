@@ -16,9 +16,9 @@ limitations under the License.
 
 import { MatrixClient, Room } from "matrix-js-sdk";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
-import { textForFormat } from "../../src/utils/exportUtils/exportUtils";
-// import HTMLExporter from "../../src/utils/exportUtils/HtmlExport";
-// import PlainTextExporter from "../../src/utils/exportUtils/PlainTextExport";
+import { textForFormat, IExportOptions, ExportTypes } from "../../src/utils/exportUtils/exportUtils";
+import '../skinned-sdk';
+import PlainTextExporter from "../../src/utils/exportUtils/PlainTextExport";
 import * as TestUtilsMatrix from '../test-utils';
 import { stubClient } from '../test-utils';
 
@@ -37,23 +37,23 @@ describe('export', function() {
         return MY_USER_ID;
     };
 
-    // const invalidExportOptions: IExportOptions[] = [
-    //     {
-    //         numberOfMessages: 10**9,
-    //         maxSize: 1024,
-    //         attachmentsIncluded: false,
-    //     },
-    //     {
-    //         numberOfMessages: -1,
-    //         maxSize: 4096,
-    //         attachmentsIncluded: false,
-    //     },
-    //     {
-    //         numberOfMessages: 0,
-    //         maxSize: 1024,
-    //         attachmentsIncluded: false,
-    //     },
-    // ];
+    const invalidExportOptions: IExportOptions[] = [
+        {
+            numberOfMessages: 10**9,
+            maxSize: 1024 * 1024 * 1024,
+            attachmentsIncluded: false,
+        },
+        {
+            numberOfMessages: -1,
+            maxSize: 4096 * 1024 * 1024,
+            attachmentsIncluded: false,
+        },
+        {
+            numberOfMessages: 0,
+            maxSize: 0,
+            attachmentsIncluded: false,
+        },
+    ];
 
     const events = mkEvents();
     const room = createRoom();
@@ -88,7 +88,14 @@ describe('export', function() {
     });
 
     it('checks if the export options are valid', function() {
-        // const html = new PlainTextExporter(room, ExportTypes.BEGINNING, invalidExportOptions[0], null);
+        for (const exportOption of invalidExportOptions) {
+            try {
+                new PlainTextExporter(room, ExportTypes.BEGINNING, exportOption, null);
+                throw new Error("Expected to throw an error");
+            } catch (e) {
+                expect(e.message).toBe("Invalid export options");
+            }
+        }
     });
 });
 
