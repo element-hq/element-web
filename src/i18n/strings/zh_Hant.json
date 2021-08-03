@@ -3629,5 +3629,6 @@
     "Leave all rooms and spaces": "離開所有聊天室與空間",
     "Decrypting": "正在解密",
     "Show all rooms": "顯示所有聊天室",
-    "All rooms you're in will appear in Home.": "您所在的所有聊天室都會出現在「首頁」。"
+    "All rooms you're in will appear in Home.": "您所在的所有聊天室都會出現在「首頁」。",
+    "Send pseudonymous analytics data": "傳送匿名分析資料"
 }
