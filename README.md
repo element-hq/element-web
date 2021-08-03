@@ -419,7 +419,8 @@ We strive to completely cover all applicable issues with these core labels:
    * __[P-High](https://github.com/vector-im/element-web/labels/P-High):__ Affects most users regularly or impacts most users' first experience (e.g. registration) 
    * __[P-Medium](https://github.com/vector-im/element-web/labels/P-Medium):__ Affects some users regularly or most users rarely
    * __[P-Low](https://github.com/vector-im/element-web/labels/P-Low):__ Most users are unlikely to come across this or it is a corner case
-   This label may also be used for other types of issue.
+ 
+   This label may also be used for other types of issues.
 
 4. __Area__ — Most issues are assigned one or several "areas" using one of the
    many `A-` prefixed labels, e.g. `A-Composer` or `A-Spaces`. Each area label
