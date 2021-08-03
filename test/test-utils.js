@@ -202,8 +202,9 @@ export function mkMembership(opts) {
  * @param {Object} opts Values for the message
  * @param {string} opts.room The room ID for the event.
  * @param {string} opts.user The user ID for the event.
- * @param {string} opts.msg Optional. The content.body for the event.
+ * @param {number} opts.ts The timestamp for the event.
  * @param {boolean} opts.event True to make a MatrixEvent.
+ * @param {string=} opts.msg Optional. The content.body for the event.
  * @return {Object|MatrixEvent} The event
  */
 export function mkMessage(opts) {

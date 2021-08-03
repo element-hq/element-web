@@ -37,6 +37,8 @@ export const textForFormat = (format: string): string => {
             return _t("JSON");
         case ExportFormats.PLAIN_TEXT:
             return _t("Plain Text");
+        default:
+            throw new Error("Unknown format");
     }
 };
 
@@ -48,13 +50,15 @@ export const textForType = (type: string): string => {
             return _t("Specify a number of messages");
         case ExportTypes.TIMELINE:
             return _t("Current Timeline");
+        default:
+            throw new Error("Unknown type: " + type);
         // case exportTypes.START_DATE:
         //     return _t("From a specific date");
     }
 };
 
 export interface IExportOptions {
-    startDate?: number;
+    // startDate?: number;
     numberOfMessages?: number;
     attachmentsIncluded: boolean;
     maxSize: number;

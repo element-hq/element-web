@@ -42,6 +42,9 @@ export default abstract class Exporter {
         protected exportOptions: IExportOptions,
         protected exportProgressRef: MutableRefObject<HTMLParagraphElement>,
     ) {
+        if (exportOptions.maxSize < 1 || exportOptions.maxSize > 2000 || exportOptions.numberOfMessages > 10**8) {
+            throw new Error("Invalid export options");
+        }
         this.cancelled = false;
         this.files = [];
         this.client = MatrixClientPeg.get();
@@ -109,7 +112,7 @@ export default abstract class Exporter {
         return event;
     }
 
-    protected getLimit(): number {
+    public getLimit(): number {
         let limit: number;
         switch (this.exportType) {
             case ExportTypes.LAST_N_MESSAGES:
@@ -152,11 +155,11 @@ export default abstract class Exporter {
             const matrixEvents: MatrixEvent[] = res.chunk.map(eventMapper);
 
             for (const mxEv of matrixEvents) {
-                if (this.exportOptions.startDate && mxEv.getTs() < this.exportOptions.startDate) {
-                    // Once the last message received is older than the start date, we break out of both the loops
-                    limit = 0;
-                    break;
-                }
+                // if (this.exportOptions.startDate && mxEv.getTs() < this.exportOptions.startDate) {
+                //     // Once the last message received is older than the start date, we break out of both the loops
+                //     limit = 0;
+                //     break;
+                // }
                 events.push(mxEv);
             }
             this.updateProgress(
@@ -208,7 +211,7 @@ export default abstract class Exporter {
         return blob;
     }
 
-    protected splitFileName(file: string): string[] {
+    public splitFileName(file: string): string[] {
         const lastDot = file.lastIndexOf('.');
         if (lastDot === -1) return [file, ""];
         const fileName = file.slice(0, lastDot);
@@ -216,7 +219,7 @@ export default abstract class Exporter {
         return [fileName, '.' + ext];
     }
 
-    protected getFilePath(event: MatrixEvent): string {
+    public getFilePath(event: MatrixEvent): string {
         const mediaType = event.getContent().msgtype;
         let fileDirectory: string;
         switch (mediaType) {
