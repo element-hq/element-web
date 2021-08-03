@@ -144,9 +144,10 @@ export default class CallPreview extends React.Component<IProps, IState> {
 
     private onAction = (payload: ActionPayload) => {
         switch (payload.action) {
-        // listen for call state changes to prod the render method, which
-        // may hide the global CallView if the call it is tracking is dead
             case 'call_state': {
+                // listen for call state changes to prod the render method, which
+                // may hide the global CallView if the call it is tracking is dead
+
                 this.updateCalls();
                 break;
             }
@@ -197,4 +198,3 @@ export default class CallPreview extends React.Component<IProps, IState> {
         return <PersistentApp />;
     }
 }
-
