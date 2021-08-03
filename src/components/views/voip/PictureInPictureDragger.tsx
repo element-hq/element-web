@@ -16,7 +16,6 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import UIStore from '../../../stores/UIStore';
-import { IApp } from '../../../stores/WidgetStore';
 import { lerp } from '../../../utils/AnimationUtils';
 import { MarkedExecution } from '../../../utils/MarkedExecution';
 import { replaceableComponent } from '../../../utils/replaceableComponent';
