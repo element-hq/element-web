@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { IRecordingUpdate, RECORDING_PLAYBACK_SAMPLES, VoiceRecording } from "../../../audio/VoiceRecording";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { arrayFastResample } from "../../../utils/arrays";
+import { arrayFastResample, arraySeed } from "../../../utils/arrays";
 import { percentageOf } from "../../../utils/numbers";
 import Waveform from "./Waveform";
 import { MarkedExecution } from "../../../utils/MarkedExecution";
@@ -48,7 +48,7 @@ export default class LiveRecordingWaveform extends React.PureComponent<IProps, I
     constructor(props) {
         super(props);
         this.state = {
-            waveform: [],
+            waveform: arraySeed(0, RECORDING_PLAYBACK_SAMPLES),
         };
     }
 
