@@ -246,20 +246,19 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         }
 
         let uploadIndicator;
-        if (this.state.recordingPhase === RecordingState.Uploading) {
-            uploadIndicator = <span className='mx_VoiceRecordComposerTile_uploadState'>
+        if (this.state.recordingPhase === RecordingState.Uploading || true) {
+            uploadIndicator = <span className='mx_VoiceRecordComposerTile_uploadingState'>
                 <InlineSpinner w={16} h={16} />
-                { _t("Uploading...") }
             </span>;
         } else if (this.state.didUploadFail && this.state.recordingPhase === RecordingState.Ended) {
-            uploadIndicator = <span className='mx_VoiceRecordComposerTile_uploadState'>
+            uploadIndicator = <span className='mx_VoiceRecordComposerTile_failedState'>
                 <span className='mx_VoiceRecordComposerTile_uploadState_badge'>
                     { /* Need to stick the badge in a span to ensure it doesn't create a block component */ }
                     <NotificationBadge
                         notification={StaticNotificationState.forSymbol("!", NotificationColor.Red)}
                     />
                 </span>
-                <span className='text-warning'>{ _t("Failed to upload voice message") }</span>
+                <span className='text-warning'>{ _t("Failed to send") }</span>
             </span>;
         }
 
