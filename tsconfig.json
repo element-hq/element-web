@@ -21,7 +21,12 @@
       "es2019",
       "dom",
       "dom.iterable"
-    ]
+    ],
+    "paths": {
+      "posthog-js": [
+        "../matrix-react-sdk/src/@types/posthog.d.ts"
+      ]
+    }
   },
   "include": [
     "./src/**/*.ts",
