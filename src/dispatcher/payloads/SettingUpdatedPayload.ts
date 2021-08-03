@@ -14,7 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// This needs to be executed before the SpaceStore gets imported but due to ES6 import hoisting we have to do this here.
-// SpaceStore reads the SettingsStore which needs the localStorage values set at init time.
+import { ActionPayload } from "../payloads";
+import { Action } from "../actions";
+import { SettingLevel } from "../../settings/SettingLevel";
 
-localStorage.setItem("mx_labs_feature_feature_spaces", "true");
+export interface SettingUpdatedPayload extends ActionPayload {
+    action: Action.SettingUpdated;
+
+    settingName: string;
+    roomId: string;
+    level: SettingLevel;
+    newValueAtLevel: SettingLevel;
+    newValue: any;
+}

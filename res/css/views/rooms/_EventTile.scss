@@ -459,8 +459,14 @@ $hover-select-border: 4px;
 
 /* Various markdown overrides */
 
-.mx_EventTile_body pre {
-    border: 1px solid transparent;
+.mx_EventTile_body {
+    a:hover {
+        text-decoration: underline;
+    }
+
+    pre {
+        border: 1px solid transparent;
+    }
 }
 
 .mx_EventTile_content .markdown-body {

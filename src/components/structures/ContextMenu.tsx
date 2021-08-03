@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { CSSProperties, RefObject, useRef, useState } from "react";
+import React, { CSSProperties, RefObject, SyntheticEvent, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 
@@ -471,10 +471,14 @@ type ContextMenuTuple<T> = [boolean, RefObject<T>, () => void, () => void, (val:
 export const useContextMenu = <T extends any = HTMLElement>(): ContextMenuTuple<T> => {
     const button = useRef<T>(null);
     const [isOpen, setIsOpen] = useState(false);
-    const open = () => {
+    const open = (ev?: SyntheticEvent) => {
+        ev?.preventDefault();
+        ev?.stopPropagation();
         setIsOpen(true);
     };
-    const close = () => {
+    const close = (ev?: SyntheticEvent) => {
+        ev?.preventDefault();
+        ev?.stopPropagation();
         setIsOpen(false);
     };
 

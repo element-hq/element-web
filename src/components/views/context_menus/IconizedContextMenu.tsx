@@ -86,7 +86,10 @@ export const IconizedContextMenuCheckbox: React.FC<ICheckboxProps> = ({
     >
         <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} />
         <span className="mx_IconizedContextMenu_label">{ label }</span>
-        { active && <span className="mx_IconizedContextMenu_icon mx_IconizedContextMenu_checked" /> }
+        <span className={classNames("mx_IconizedContextMenu_icon", {
+            mx_IconizedContextMenu_checked: active,
+            mx_IconizedContextMenu_unchecked: !active,
+        })} />
     </MenuItemCheckbox>;
 };
 
