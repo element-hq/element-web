@@ -3545,5 +3545,7 @@
     "Decrypting": "Dešifrování",
     "Show all rooms": "Zobrazit všechny místnosti",
     "All rooms you're in will appear in Home.": "Všechny místnosti, ve kterých se nacházíte, se zobrazí na domovské obrazovce.",
-    "Send pseudonymous analytics data": "Odeslat pseudonymní analytická data"
+    "Send pseudonymous analytics data": "Odeslat pseudonymní analytická data",
+    "Missed call": "Zmeškaný hovor",
+    "Call declined": "Hovor odmítnut"
 }
