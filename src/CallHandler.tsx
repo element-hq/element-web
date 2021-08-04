@@ -86,6 +86,9 @@ import { randomUppercaseString, randomLowercaseString } from "matrix-js-sdk/src/
 import EventEmitter from 'events';
 import SdkConfig from './SdkConfig';
 import { ensureDMExists, findDMForUser } from './createRoom';
+import { getIncomingCallToastKey } from './toasts/IncomingCallToast';
+import ToastStore from './stores/ToastStore';
+import IncomingCallToast from "./toasts/IncomingCallToast";
 
 export const PROTOCOL_PSTN = 'm.protocol.pstn';
 export const PROTOCOL_PSTN_PREFIXED = 'im.vector.protocol.pstn';
@@ -624,6 +627,19 @@ export default class CallHandler extends EventEmitter {
             `Call state in ${mappedRoomId} changed to ${status}`,
         );
 
+        const toastKey = getIncomingCallToastKey(call.callId);
+        if (status === CallState.Ringing) {
+            ToastStore.sharedInstance().addOrReplaceToast({
+                key: toastKey,
+                priority: 100,
+                component: IncomingCallToast,
+                bodyClassName: "mx_IncomingCallToast",
+                props: { call },
+            });
+        } else {
+            ToastStore.sharedInstance().dismissToast(toastKey);
+        }
+
         dis.dispatch({
             action: 'call_state',
             room_id: mappedRoomId,
@@ -914,6 +930,8 @@ export default class CallHandler extends EventEmitter {
             action: 'view_room',
             room_id: roomId,
         });
+
+        await this.placeCall(roomId, PlaceCallType.Voice, null);
     }
 
     private async startTransferToPhoneNumber(call: MatrixCall, destination: string, consultFirst: boolean) {

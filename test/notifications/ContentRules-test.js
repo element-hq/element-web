@@ -56,7 +56,7 @@ describe("ContentRules", function() {
     describe("parseContentRules", function() {
         it("should handle there being no keyword rules", function() {
             const rules = { 'global': { 'content': [
-                    USERNAME_RULE,
+                USERNAME_RULE,
             ] } };
             const parsed = ContentRules.parseContentRules(rules);
             expect(parsed.rules).toEqual([]);
