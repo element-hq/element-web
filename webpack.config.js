@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackInjectPreload = require('@principalstudio/html-webpack-inject-preload');
+const { ExtendedAPIPlugin } = require('webpack');
 
 let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
 if (!ogImageUrl) ogImageUrl = 'https://app.element.io/themes/element/img/logos/opengraph.png';
@@ -219,7 +220,7 @@ module.exports = (env, argv) => {
 
                                     // It's important that this plugin is last otherwise we end
                                     // up with broken CSS.
-                                    require('postcss-preset-env')({stage: 3, browsers: 'last 2 versions'}),
+                                    require('postcss-preset-env')({ stage: 3, browsers: 'last 2 versions' }),
                                 ],
                                 parser: "postcss-scss",
                                 "local-plugins": true,
@@ -257,7 +258,7 @@ module.exports = (env, argv) => {
 
                                     // It's important that this plugin is last otherwise we end
                                     // up with broken CSS.
-                                    require('postcss-preset-env')({stage: 3, browsers: 'last 2 versions'}),
+                                    require('postcss-preset-env')({ stage: 3, browsers: 'last 2 versions' }),
                                 ],
                                 parser: "postcss-scss",
                                 "local-plugins": true,
@@ -436,6 +437,8 @@ module.exports = (env, argv) => {
             new HtmlWebpackInjectPreload({
                 files: [{ match: /.*Inter.*\.woff2$/ }],
             }),
+
+            new ExtendedAPIPlugin(),
 
             ...additionalPlugins,
         ],
