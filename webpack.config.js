@@ -89,7 +89,6 @@ module.exports = (env, argv) => {
             "mobileguide": "./src/vector/mobile_guide/index.ts",
             "jitsi": "./src/vector/jitsi/index.ts",
             "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.js",
-            "recorder-worklet": "./node_modules/matrix-react-sdk/src/audio/RecorderWorklet.ts",
             ...(useCssHotReload ? {} : cssThemes),
         },
 
@@ -350,6 +349,26 @@ module.exports = (env, argv) => {
                         name: 'opus-encoderWorker.min.[hash:7].[ext]',
                         outputPath: '.',
                     },
+                },
+                {
+                    // Special case the recorder worklet as it can't end up HMR'd, but the worker-loader
+                    // isn't good enough for us. Note that the worklet-loader is listed as "do not use",
+                    // however it seems to work fine for our purposes.
+                    test: /RecorderWorklet\.ts$/,
+                    type: "javascript/auto",
+                    use: [ // executed last -> first, for some reason.
+                        {
+                            loader: "worklet-loader",
+                            options: {
+                                // Override name so we know what it is in the output.
+                                name: 'recorder-worklet.[hash:7].js',
+                            },
+                        },
+                        {
+                            // TS -> JS because the worklet-loader won't do this for us.
+                            loader: "babel-loader",
+                        },
+                    ],
                 },
                 {
                     // This is from the same place as the encoderWorker above, but only needed
