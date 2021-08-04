@@ -426,18 +426,25 @@ We strive to completely cover all applicable issues with these core labels:
    * __[S-Tolerable](https://github.com/vector-im/element-web/labels/S-Tolerable):__
      Purely cosmetic or low / no impact to users
 
-3. __Priority__ — All issues which are not `T-Other` are assigned a priority:
-   * __[P1](https://github.com/vector-im/element-web/labels/P1):__ Next
-   * __[P2](https://github.com/vector-im/element-web/labels/P2):__ Later
-   * __[P3](https://github.com/vector-im/element-web/labels/P3):__ Eventually
-   * __[P4](https://github.com/vector-im/element-web/labels/P4):__ Interesting —
-     Not yet scheduled, will accept patches
-   * __[P5](https://github.com/vector-im/element-web/labels/P5):__ Dubious —
-     Will not schedule, would consider patches
+3. __Prevalence__ — All issues labeled `T-Defect` are also assigned a prevalence:
+   * __[P-High](https://github.com/vector-im/element-web/labels/P-High):__ Affects most users regularly or impacts most users' first experience (e.g. registration) 
+   * __[P-Medium](https://github.com/vector-im/element-web/labels/P-Medium):__ Affects some users regularly or most users rarely
+   * __[P-Low](https://github.com/vector-im/element-web/labels/P-Low):__ Most users are unlikely to come across this or it is a corner case
+ 
+   This label may also be used for other types of issues.
 
 4. __Area__ — Most issues are assigned one or several "areas" using one of the
    many `A-` prefixed labels, e.g. `A-Composer` or `A-Spaces`. Each area label
    maps to a group of features or portion of the UI surface in the app.
+
+The Priority label is now deprecated. Defects will now be classed based on their severity and prevalence:
+| Labels    | Equivalent priority | What it means |
+| ----------- | ----------- | ----------- |
+| S‑Critical and P‑High<br />S‑Critical and P‑Medium<br />S‑Major and P‑High | P1        | These issues should be worked on in this sprint or next sprint. If the backlog of issues is too long, we should reevaluate why the bugs are not caught earlier. |
+| S‑Critical and P‑Low<br />S‑Major and P‑Medium<br />S‑Minor and P‑High     | P2        | When all the highest priority bugs are done, this is the next set to tackle. Ideally we should be fixing a few issues from this group every week. |
+| S‑Major and P‑Low<br />S‑Minor and P‑Medium<br />S‑Tolerable and P‑High    | P3        | These issues are wishful thinking for now. We hope to get to them one day, but they are low priority. There are likely to be some good new contributor issues in here. |
+| S‑Minor and P‑Low<br />S‑Tolerable&nbsp;and&nbsp;P‑Medium<br />S‑Minor and P‑Low     | P4 and P5 | These issues are unlikely to be actively looked at by the webapp team, but may be picked up by community. |
+
 
 ### Other common labels
 
