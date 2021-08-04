@@ -12,8 +12,25 @@ $font-family: 'Inter', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Arial'
 
 $monospace-font-family: 'Inconsolata', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Courier', 'monospace', 'Noto Color Emoji';
 
-// Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=557%3A0
+// Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A120
+$accent: #0DBD8B;
+$alert: #FF5B55;
+$links: #0086e6;
+$primary-content: #17191C;
+$secondary-content: #737D8C;
+$tertiary-content: #8D97A5;
+$quaternary-content: #c1c6cd;
+$quinary-content: #E3E8F0;
 $system-light: #F4F6FA;
+$background: #ffffff;
+$panels: rgba($system-light, 0.9);
+$panel-base: #8D97A5; // This color is not intended for use in the app
+$panel-selected: rgba($panel-base, 0.3);
+$panel-hover: rgba($panel-base, 0.1);
+$panel-actions: rgba($panel-base, 0.2);
+$space-nav: rgba($panel-base, 0.15);
+
+// TODO: Move userId colors here
 
 // unified palette
 // try to use these colors when possible
