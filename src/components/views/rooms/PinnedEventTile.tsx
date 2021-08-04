@@ -85,6 +85,7 @@ export default class PinnedEventTile extends React.Component<IProps> {
             <div className="mx_PinnedEventTile_message">
                 <MessageEvent
                     mxEvent={this.props.event}
+                    // @ts-ignore - complaining that className is invalid when it's not
                     className="mx_PinnedEventTile_body"
                     maxImageHeight={150}
                     onHeightChanged={() => {}} // we need to give this, apparently

@@ -269,7 +269,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
 
             <details>
                 <summary>{ _t("Advanced") }</summary>
-                <AccessibleButton kind='primary' onClick={this._onSkipPassPhraseClick} >
+                <AccessibleButton kind='primary' onClick={this._onSkipPassPhraseClick}>
                     { _t("Set up with a Security Key") }
                 </AccessibleButton>
             </details>

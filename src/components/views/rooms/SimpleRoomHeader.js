@@ -35,13 +35,15 @@ export default class SimpleRoomHeader extends React.Component {
         let icon;
         if (this.props.icon) {
             icon = <img
-                className="mx_RoomHeader_icon" src={this.props.icon}
-                width="25" height="25"
+                className="mx_RoomHeader_icon"
+                src={this.props.icon}
+                width="25"
+                height="25"
             />;
         }
 
         return (
-            <div className="mx_RoomHeader mx_RoomHeader_wrapper" >
+            <div className="mx_RoomHeader mx_RoomHeader_wrapper">
                 <div className="mx_RoomHeader_simpleHeader">
                     { icon }
                     { this.props.title }
