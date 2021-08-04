@@ -14,14 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* global __webpack_hash__ */
+/* eslint-disable max-len, camelcase */
+
+declare const __webpack_hash__: string;
 
 import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
 
 const getExportCSS = async (): Promise<string> => {
     const theme = new ThemeWatcher().getEffectiveTheme();
-    // eslint-disable-next-line camelcase
     const hash = __webpack_hash__;
+
     const bundle = await fetch(`bundles/${hash}/bundle.css`);
     const bundleCSS = await bundle.text();
     let themeCSS: string;
