@@ -51,8 +51,7 @@
     "lint:style": "stylelint 'res/css/**/*.scss'",
     "test": "jest",
     "test:e2e": "./test/end-to-end-tests/run.sh --app-url http://localhost:8080",
-    "coverage": "yarn test --coverage",
-    "postinstall": "patch-package"
+    "coverage": "yarn test --coverage"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
@@ -166,8 +165,6 @@
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.3",
     "matrix-web-i18n": "github:matrix-org/matrix-web-i18n",
-    "patch-package": "^6.4.7",
-    "postinstall-postinstall": "^2.1.0",
     "react-test-renderer": "^17.0.2",
     "rimraf": "^3.0.2",
     "stylelint": "^13.9.0",
