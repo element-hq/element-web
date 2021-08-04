@@ -1,5 +1,22 @@
-// Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=557%3A0
+// Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A741
+$accent: #0DBD8B;
+$alert: #FF5B55;
+$links: #0086e6;
+$primary-content: #ffffff;
+$secondary-content: #A9B2BC;
+$tertiary-content: #8E99A4;
+$quaternary-content: #6F7882;
+$quinary-content: #394049;
 $system-dark: #21262C;
+$background: #15191E;
+$panels: rgba($system-dark, 0.9);
+$panel-base: #8D97A5; // This color is not intended for use in the app
+$panel-selected: rgba($panel-base, 0.3);
+$panel-hover: rgba($panel-base, 0.1);
+$panel-actions: rgba($panel-base, 0.2);
+$space-nav: rgba($panel-base, 0.1);
+
+// TODO: Move userId colors here
 
 // unified palette
 // try to use these colors when possible
@@ -115,8 +132,7 @@ $eventtile-meta-color: $roomtopic-color;
 $header-divider-color: $header-panel-text-primary-color;
 $composer-e2e-icon-color: $header-panel-text-primary-color;
 
-$quinary-content-color: #394049;
-$toast-bg-color: $quinary-content-color;
+$toast-bg-color: $quinary-content;
 
 // ********************
 
