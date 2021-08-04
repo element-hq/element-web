@@ -930,6 +930,8 @@ export default class CallHandler extends EventEmitter {
             action: 'view_room',
             room_id: roomId,
         });
+
+        await this.placeCall(roomId, PlaceCallType.Voice, null);
     }
 
     private async startTransferToPhoneNumber(call: MatrixCall, destination: string, consultFirst: boolean) {

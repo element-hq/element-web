@@ -78,6 +78,7 @@ export function createTestClient() {
         },
         mxcUrlToHttp: (mxc) => 'http://this.is.a.url/',
         setAccountData: jest.fn(),
+        setRoomAccountData: jest.fn(),
         sendTyping: jest.fn().mockResolvedValue({}),
         sendMessage: () => jest.fn().mockResolvedValue({}),
         getSyncState: () => "SYNCING",
