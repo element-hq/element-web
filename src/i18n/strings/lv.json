@@ -1989,5 +1989,15 @@
     "User Busy": "Lietotājs aizņemts",
     "Your user agent": "Jūsu lietotāja-aģents",
     "Whether you're using %(brand)s as an installed Progressive Web App": "Vai izmantojiet %(brand)s kā instalētu progresīvo tīmekļa lietotni",
-    "Whether you're using %(brand)s on a device where touch is the primary input mechanism": "Vai izmantojat %(brand)s ierīcē, kurā skārnienjūtīgs ekrāns ir galvenais ievades mehānisms"
+    "Whether you're using %(brand)s on a device where touch is the primary input mechanism": "Vai izmantojat %(brand)s ierīcē, kurā skārnienjūtīgs ekrāns ir galvenais ievades mehānisms",
+    "This room is used for important messages from the Homeserver, so you cannot leave it.": "Šī telpa tiek izmantota svarīgiem ziņojumiem no bāzes servera, tāpēc jūs nevarat to atstāt.",
+    "Can't leave Server Notices room": "Nevar iziet no servera Paziņojumu telpas",
+    "Unexpected server error trying to leave the room": "Mēģinot atstāt telpu radās negaidīta servera kļūme",
+    "Unable to connect to Homeserver. Retrying...": "Nevar izveidot savienojumu ar bāzes/mājas serveri. Mēģinam vēlreiz ...",
+    "Please <a>contact your service administrator</a> to continue using the service.": "Lūdzu <a>sazinieties ar savu administratoru</a>, lai turpinātu izmantot pakalpojumu.",
+    "This homeserver has exceeded one of its resource limits.": "Šis bāzes/mājas serveris ir pārsniedzis vienu no tā resursu ierobežojumiem.",
+    "This homeserver has been blocked by its administrator.": "Šo bāzes/mājas serveri ir bloķējis tā administrators.",
+    "This homeserver has hit its Monthly Active User limit.": "Šis bāzes/mājas serveris ir sasniedzis ikmēneša aktīvo lietotāju ierobežojumu.",
+    "Unexpected error resolving identity server configuration": "Negaidīta kļūda identitātes servera konfigurācijā",
+    "Unexpected error resolving homeserver configuration": "Negaidīta kļūme mājas servera konfigurācijā"
 }
