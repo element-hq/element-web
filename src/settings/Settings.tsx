@@ -473,7 +473,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "MessageComposerInput.surroundWith": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Use surround with"),
+        displayName: _td("Surround selected text when typing special characters"),
         default: false,
     },
     "MessageComposerInput.autoReplaceEmoji": {
