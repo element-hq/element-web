@@ -391,7 +391,7 @@ $eventbubble-reply-color: #C1C6CD;
 @define-mixin mx_DialogButton_secondary {
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color ! important;
+    border: 1px solid $accent-color !important;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
 }
