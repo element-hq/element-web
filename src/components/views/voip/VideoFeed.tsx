@@ -207,6 +207,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
             const videoClasses = classnames("mx_VideoFeed_video", {
                 mx_VideoFeed_video_mirror: (
                     this.props.feed.isLocal() &&
+                    this.props.feed.purpose === SDPStreamMetadataPurpose.Usermedia &&
                     SettingsStore.getValue('VideoView.flipVideoHorizontally')
                 ),
             });
