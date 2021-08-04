@@ -394,12 +394,10 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 controls.push(<Stickerpicker key="stickerpicker_controls_button" room={this.props.room} />);
             }
 
-            if (SettingsStore.getValue("feature_voice_messages")) {
-                controls.push(<VoiceRecordComposerTile
-                    key="controls_voice_record"
-                    ref={c => this.voiceRecordingButton = c}
-                    room={this.props.room} />);
-            }
+            controls.push(<VoiceRecordComposerTile
+                key="controls_voice_record"
+                ref={c => this.voiceRecordingButton = c}
+                room={this.props.room} />);
 
             if (!this.state.isComposerEmpty || this.state.haveRecording) {
                 controls.push(

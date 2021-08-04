@@ -22,6 +22,7 @@ import { CallFeed, CallFeedEvent } from 'matrix-js-sdk/src/webrtc/callFeed';
 import { logger } from 'matrix-js-sdk/src/logger';
 import MemberAvatar from "../avatars/MemberAvatar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { SDPStreamMetadataPurpose } from 'matrix-js-sdk/src/webrtc/callEventTypes';
 
 interface IProps {
     call: MatrixCall;
@@ -47,7 +48,7 @@ interface IState {
 }
 
 @replaceableComponent("views.voip.VideoFeed")
-export default class VideoFeed extends React.Component<IProps, IState> {
+export default class VideoFeed extends React.PureComponent<IProps, IState> {
     private element: HTMLVideoElement;
 
     constructor(props: IProps) {
@@ -68,8 +69,15 @@ export default class VideoFeed extends React.Component<IProps, IState> {
         this.updateFeed(this.props.feed, null);
     }
 
-    componentDidUpdate(prevProps: IProps) {
+    componentDidUpdate(prevProps: IProps, prevState: IState) {
         this.updateFeed(prevProps.feed, this.props.feed);
+        // If the mutes state has changed, we try to playMedia()
+        if (
+            prevState.videoMuted !== this.state.videoMuted ||
+            prevProps.feed.stream !== this.props.feed.stream
+        ) {
+            this.playMedia();
+        }
     }
 
     static getDerivedStateFromProps(props: IProps) {
@@ -94,10 +102,12 @@ export default class VideoFeed extends React.Component<IProps, IState> {
 
         if (oldFeed) {
             this.props.feed.removeListener(CallFeedEvent.NewStream, this.onNewStream);
+            this.props.feed.removeListener(CallFeedEvent.MuteStateChanged, this.onMuteStateChanged);
             this.stopMedia();
         }
         if (newFeed) {
             this.props.feed.addListener(CallFeedEvent.NewStream, this.onNewStream);
+            this.props.feed.addListener(CallFeedEvent.MuteStateChanged, this.onMuteStateChanged);
             this.playMedia();
         }
     }
@@ -143,7 +153,13 @@ export default class VideoFeed extends React.Component<IProps, IState> {
             audioMuted: this.props.feed.isAudioMuted(),
             videoMuted: this.props.feed.isVideoMuted(),
         });
-        this.playMedia();
+    };
+
+    private onMuteStateChanged = () => {
+        this.setState({
+            audioMuted: this.props.feed.isAudioMuted(),
+            videoMuted: this.props.feed.isVideoMuted(),
+        });
     };
 
     private onResize = (e) => {
@@ -153,39 +169,59 @@ export default class VideoFeed extends React.Component<IProps, IState> {
     };
 
     render() {
-        const videoClasses = {
-            mx_VideoFeed: true,
+        const { pipMode, primary, feed } = this.props;
+
+        const wrapperClasses = classnames("mx_VideoFeed", {
             mx_VideoFeed_voice: this.state.videoMuted,
-            mx_VideoFeed_video: !this.state.videoMuted,
-            mx_VideoFeed_mirror: (
-                this.props.feed.isLocal() &&
-                SettingsStore.getValue('VideoView.flipVideoHorizontally')
-            ),
-        };
+        });
+        const micIconClasses = classnames("mx_VideoFeed_mic", {
+            mx_VideoFeed_mic_muted: this.state.audioMuted,
+            mx_VideoFeed_mic_unmuted: !this.state.audioMuted,
+        });
 
-        const { pipMode, primary } = this.props;
+        let micIcon;
+        if (feed.purpose !== SDPStreamMetadataPurpose.Screenshare && !pipMode) {
+            micIcon = (
+                <div className={micIconClasses} />
+            );
+        }
 
+        let content;
         if (this.state.videoMuted) {
             const member = this.props.feed.getMember();
+
             let avatarSize;
             if (pipMode && primary) avatarSize = 76;
             else if (pipMode && !primary) avatarSize = 16;
             else if (!pipMode && primary) avatarSize = 160;
             else; // TBD
 
-            return (
-                <div className={classnames(videoClasses)}>
-                    <MemberAvatar
-                        member={member}
-                        height={avatarSize}
-                        width={avatarSize}
-                    />
-                </div>
+            content =(
+                <MemberAvatar
+                    member={member}
+                    height={avatarSize}
+                    width={avatarSize}
+                />
             );
         } else {
-            return (
-                <video className={classnames(videoClasses)} ref={this.setElementRef} />
+            const videoClasses = classnames("mx_VideoFeed_video", {
+                mx_VideoFeed_video_mirror: (
+                    this.props.feed.isLocal() &&
+                    this.props.feed.purpose === SDPStreamMetadataPurpose.Usermedia &&
+                    SettingsStore.getValue('VideoView.flipVideoHorizontally')
+                ),
+            });
+
+            content= (
+                <video className={videoClasses} ref={this.setElementRef} />
             );
         }
+
+        return (
+            <div className={wrapperClasses}>
+                { micIcon }
+                { content }
+            </div>
+        );
     }
 }

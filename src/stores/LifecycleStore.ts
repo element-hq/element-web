@@ -56,7 +56,7 @@ class LifecycleStore extends Store<ActionPayload> {
                     deferredAction: null,
                 });
                 break;
-            case 'syncstate': {
+            case 'sync_state': {
                 if (payload.state !== 'PREPARED') {
                     break;
                 }

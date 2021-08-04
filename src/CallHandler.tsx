@@ -61,7 +61,6 @@ import Modal from './Modal';
 import { _t } from './languageHandler';
 import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
-import WidgetEchoStore from './stores/WidgetEchoStore';
 import SettingsStore from './settings/SettingsStore';
 import { Jitsi } from "./widgets/Jitsi";
 import { WidgetType } from "./widgets/WidgetType";
@@ -89,6 +88,10 @@ import SdkConfig from './SdkConfig';
 import { ensureDMExists, findDMForUser } from './createRoom';
 import { IPushRule, RuleId, TweakName, Tweaks } from "matrix-js-sdk/src/@types/PushRules";
 import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
+import { WidgetLayoutStore, Container } from './stores/widgets/WidgetLayoutStore';
+import { getIncomingCallToastKey } from './toasts/IncomingCallToast';
+import ToastStore from './stores/ToastStore';
+import IncomingCallToast from "./toasts/IncomingCallToast";
 
 export const PROTOCOL_PSTN = 'm.protocol.pstn';
 export const PROTOCOL_PSTN_PREFIXED = 'im.vector.protocol.pstn';
@@ -639,6 +642,19 @@ export default class CallHandler extends EventEmitter {
             `Call state in ${mappedRoomId} changed to ${status}`,
         );
 
+        const toastKey = getIncomingCallToastKey(call.callId);
+        if (status === CallState.Ringing) {
+            ToastStore.sharedInstance().addOrReplaceToast({
+                key: toastKey,
+                priority: 100,
+                component: IncomingCallToast,
+                bodyClassName: "mx_IncomingCallToast",
+                props: { call },
+            });
+        } else {
+            ToastStore.sharedInstance().dismissToast(toastKey);
+        }
+
         dis.dispatch({
             action: 'call_state',
             room_id: mappedRoomId,
@@ -929,6 +945,8 @@ export default class CallHandler extends EventEmitter {
             action: 'view_room',
             room_id: roomId,
         });
+
+        await this.placeCall(roomId, PlaceCallType.Voice, null);
     }
 
     private async startTransferToPhoneNumber(call: MatrixCall, destination: string, consultFirst: boolean) {
@@ -1008,14 +1026,10 @@ export default class CallHandler extends EventEmitter {
 
         // prevent double clicking the call button
         const room = MatrixClientPeg.get().getRoom(roomId);
-        const currentJitsiWidgets = WidgetUtils.getRoomWidgetsOfType(room, WidgetType.JITSI);
-        const hasJitsi = currentJitsiWidgets.length > 0
-            || WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentJitsiWidgets, WidgetType.JITSI);
-        if (hasJitsi) {
-            Modal.createTrackedDialog('Call already in progress', '', ErrorDialog, {
-                title: _t('Call in Progress'),
-                description: _t('A call is currently being placed!'),
-            });
+        const jitsiWidget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.JITSI.matches(app.type));
+        if (jitsiWidget) {
+            // If there already is a Jitsi widget pin it
+            WidgetLayoutStore.instance.moveToContainer(room, jitsiWidget, Container.Top);
             return;
         }
 

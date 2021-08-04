@@ -171,15 +171,10 @@ export async function setTheme(theme) {
     // look for the stylesheet elements.
     // styleElements is a map from style name to HTMLLinkElement.
     const styleElements = Object.create(null);
-    let a;
-    for (let i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
-        const href = a.getAttribute("href");
-        // shouldn't we be using the 'title' tag rather than the href?
-        const match = href && href.match(/^bundles\/.*\/theme-(.*)\.css$/);
-        if (match) {
-            styleElements[match[1]] = a;
-        }
-    }
+    const themes = Array.from(document.querySelectorAll('[data-mx-theme]'));
+    themes.forEach(theme => {
+        styleElements[theme.attributes['data-mx-theme'].value.toLowerCase()] = theme;
+    });
 
     if (!(stylesheetName in styleElements)) {
         throw new Error("Unknown theme " + stylesheetName);

@@ -26,18 +26,35 @@ import { _t } from '../languageHandler';
  * @param {IMediaEventContent} content The "content" key of the matrix event.
  * @param {string} fallbackText The fallback text
  * @param {boolean} withSize Whether to include size information. Default true.
+ * @param {boolean} shortened Ensure the extension of the file name is visible. Default false.
  * @return {string} the human readable link text for the attachment.
  */
 export function presentableTextForFile(
     content: IMediaEventContent,
     fallbackText = _t("Attachment"),
     withSize = true,
+    shortened = false,
 ): string {
     let text = fallbackText;
     if (content.body && content.body.length > 0) {
         // The content body should be the name of the file including a
         // file extension.
         text = content.body;
+    }
+
+    // We shorten to 15 characters somewhat arbitrarily, and assume most files
+    // will have a 3 character (plus full stop) extension. The goal is to knock
+    // the label down to 15-25 characters, not perfect accuracy.
+    if (shortened && text.length > 19) {
+        const parts = text.split('.');
+        let fileName = parts.slice(0, parts.length - 1).join('.').substring(0, 15);
+        const extension = parts[parts.length - 1];
+
+        // Trim off any full stops from the file name to avoid a case where we
+        // add an ellipsis that looks really funky.
+        fileName = fileName.replace(/\.*$/g, '');
+
+        text = `${fileName}...${extension}`;
     }
 
     if (content.info && content.info.size && withSize) {
