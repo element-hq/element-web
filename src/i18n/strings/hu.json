@@ -3620,5 +3620,7 @@
     "Search %(spaceName)s": "Keresés: %(spaceName)s",
     "Leave specific rooms and spaces": "Kilépés a megadott szobákból és terekből",
     "Decrypting": "Visszafejtés",
-    "Send pseudonymous analytics data": "Pseudo-anonim felhasználási adatok küldése"
+    "Send pseudonymous analytics data": "Pseudo-anonim felhasználási adatok küldése",
+    "Missed call": "Nem fogadott hívás",
+    "Call declined": "Hívás elutasítva"
 }
