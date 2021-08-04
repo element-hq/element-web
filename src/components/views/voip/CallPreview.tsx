@@ -36,7 +36,7 @@ const PIP_VIEW_WIDTH = 336;
 const PIP_VIEW_HEIGHT = 232;
 
 const MOVING_AMT = 0.2;
-const SNAPPING_AMT = 0.05;
+const SNAPPING_AMT = 0.1;
 
 const PADDING = {
     top: 58,
