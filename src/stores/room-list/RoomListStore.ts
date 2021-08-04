@@ -36,6 +36,8 @@ import { RoomNotificationStateStore } from "../notifications/RoomNotificationSta
 import { VisibilityProvider } from "./filters/VisibilityProvider";
 import { SpaceWatcher } from "./SpaceWatcher";
 import SpaceStore from "../SpaceStore";
+import { Action } from "../../dispatcher/actions";
+import { SettingUpdatedPayload } from "../../dispatcher/payloads/SettingUpdatedPayload";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -213,10 +215,11 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         const logicallyReady = this.matrixClient && this.initialListsGenerated;
         if (!logicallyReady) return;
 
-        if (payload.action === 'setting_updated') {
-            if (this.watchedSettings.includes(payload.settingName)) {
+        if (payload.action === Action.SettingUpdated) {
+            const settingUpdatedPayload = payload as SettingUpdatedPayload;
+            if (this.watchedSettings.includes(settingUpdatedPayload.settingName)) {
                 // TODO: Remove with https://github.com/vector-im/element-web/issues/14602
-                if (payload.settingName === "advancedRoomListLogging") {
+                if (settingUpdatedPayload.settingName === "advancedRoomListLogging") {
                     // Log when the setting changes so we know when it was turned on in the rageshake
                     const enabled = SettingsStore.getValue("advancedRoomListLogging");
                     console.warn("Advanced room list logging is enabled? " + enabled);
@@ -708,6 +711,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         }
         let promise = Promise.resolve();
         let idx = this.filterConditions.indexOf(filter);
+        let removed = false;
         if (idx >= 0) {
             this.filterConditions.splice(idx, 1);
 
@@ -718,14 +722,20 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
             if (SpaceStore.spacesEnabled) {
                 promise = this.recalculatePrefiltering();
             }
+            removed = true;
         }
+
         idx = this.prefilterConditions.indexOf(filter);
         if (idx >= 0) {
             filter.off(FILTER_CHANGED, this.onPrefilterUpdated);
             this.prefilterConditions.splice(idx, 1);
             promise = this.recalculatePrefiltering();
+            removed = true;
         }
-        promise.then(() => this.updateFn.trigger());
+
+        if (removed) {
+            promise.then(() => this.updateFn.trigger());
+        }
     }
 
     /**

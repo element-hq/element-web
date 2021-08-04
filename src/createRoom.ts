@@ -18,7 +18,15 @@ limitations under the License.
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { EventType, RoomCreateTypeField, RoomType } from "matrix-js-sdk/src/@types/event";
+import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
+import {
+    HistoryVisibility,
+    JoinRule,
+    Preset,
+    RestrictedAllowType,
+    Visibility,
+} from "matrix-js-sdk/src/@types/partials";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
@@ -35,8 +43,6 @@ import { VIRTUAL_ROOM_EVENT_TYPE } from "./CallHandler";
 import SpaceStore from "./stores/SpaceStore";
 import { makeSpaceParentEvent } from "./utils/space";
 import { Action } from "./dispatcher/actions";
-import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
-import { Preset, Visibility } from "matrix-js-sdk/src/@types/partials";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import Spinner from "./components/views/elements/Spinner";
 
@@ -52,7 +58,11 @@ export interface IOpts {
     inlineErrors?: boolean;
     andView?: boolean;
     associatedWithCommunity?: string;
+    avatar?: File | string; // will upload if given file, else mxcUrl is needed
+    roomType?: RoomType | string;
+    historyVisibility?: HistoryVisibility;
     parentSpace?: Room;
+    joinRule?: JoinRule;
 }
 
 /**
@@ -74,7 +84,7 @@ export interface IOpts {
  * @returns {Promise} which resolves to the room id, or null if the
  * action was aborted or failed.
  */
-export default function createRoom(opts: IOpts): Promise<string | null> {
+export default async function createRoom(opts: IOpts): Promise<string | null> {
     opts = opts || {};
     if (opts.spinner === undefined) opts.spinner = true;
     if (opts.guestAccess === undefined) opts.guestAccess = true;
@@ -85,7 +95,7 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
     const client = MatrixClientPeg.get();
     if (client.isGuest()) {
         dis.dispatch({ action: 'require_registration' });
-        return Promise.resolve(null);
+        return null;
     }
 
     const defaultPreset = opts.dmUserId ? Preset.TrustedPrivateChat : Preset.PrivateChat;
@@ -109,6 +119,13 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
     }
     if (opts.dmUserId && createOpts.is_direct === undefined) {
         createOpts.is_direct = true;
+    }
+
+    if (opts.roomType) {
+        createOpts.creation_content = {
+            ...createOpts.creation_content,
+            [RoomCreateTypeField]: opts.roomType,
+        };
     }
 
     // By default, view the room after creating it
@@ -142,11 +159,56 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
     }
 
     if (opts.parentSpace) {
-        opts.createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
-        opts.createOpts.initial_state.push({
+        createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
+        if (!opts.historyVisibility) {
+            opts.historyVisibility = createOpts.preset === Preset.PublicChat
+                ? HistoryVisibility.WorldReadable
+                : HistoryVisibility.Invited;
+        }
+
+        if (opts.joinRule === JoinRule.Restricted) {
+            if (SpaceStore.instance.restrictedJoinRuleSupport?.preferred) {
+                createOpts.room_version = SpaceStore.instance.restrictedJoinRuleSupport.preferred;
+
+                createOpts.initial_state.push({
+                    type: EventType.RoomJoinRules,
+                    content: {
+                        "join_rule": JoinRule.Restricted,
+                        "allow": [{
+                            "type": RestrictedAllowType.RoomMembership,
+                            "room_id": opts.parentSpace.roomId,
+                        }],
+                    },
+                });
+            }
+        }
+    }
+
+    // we handle the restricted join rule in the parentSpace handling block above
+    if (opts.joinRule && opts.joinRule !== JoinRule.Restricted) {
+        createOpts.initial_state.push({
+            type: EventType.RoomJoinRules,
+            content: { join_rule: opts.joinRule },
+        });
+    }
+
+    if (opts.avatar) {
+        let url = opts.avatar;
+        if (opts.avatar instanceof File) {
+            url = await client.uploadContent(opts.avatar);
+        }
+
+        createOpts.initial_state.push({
+            type: EventType.RoomAvatar,
+            content: { url },
+        });
+    }
+
+    if (opts.historyVisibility) {
+        createOpts.initial_state.push({
             type: EventType.RoomHistoryVisibility,
             content: {
-                "history_visibility": opts.createOpts.preset === Preset.PublicChat ? "world_readable" : "invited",
+                "history_visibility": opts.historyVisibility,
             },
         });
     }

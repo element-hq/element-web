@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 .mx_AppearanceUserSettingsTab_fontSlider,
-.mx_AppearanceUserSettingsTab_fontSlider_preview,
-.mx_AppearanceUserSettingsTab_Layout {
+.mx_AppearanceUserSettingsTab_fontSlider_preview {
     @mixin mx_Settings_fullWidthField;
 }
 
@@ -45,6 +44,11 @@ limitations under the License.
     border-radius: 10px;
     padding: 0 16px 9px 16px;
     pointer-events: none;
+    display: flow-root;
+
+    .mx_EventTile[data-layout=bubble] {
+        margin-top: 30px;
+    }
 
     .mx_EventTile_msgOption {
         display: none;
@@ -154,12 +158,9 @@ limitations under the License.
 .mx_AppearanceUserSettingsTab_Layout_RadioButtons {
     display: flex;
     flex-direction: row;
+    gap: 24px;
 
     color: $primary-fg-color;
-
-    .mx_AppearanceUserSettingsTab_spacer {
-        width: 24px;
-    }
 
     > .mx_AppearanceUserSettingsTab_Layout_RadioButton {
         flex-grow: 0;
@@ -209,6 +210,21 @@ limitations under the License.
 
     .mx_RadioButton_checked {
         background-color: rgba($accent-color, 0.08);
+    }
+
+    .mx_EventTile {
+        margin: 0;
+        &[data-layout=bubble] {
+            margin-right: 40px;
+        }
+        &[data-layout=irc] {
+            > a {
+                display: none;
+            }
+        }
+        .mx_EventTile_line {
+            max-width: 90%;
+        }
     }
 }
 

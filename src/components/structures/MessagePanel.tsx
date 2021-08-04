@@ -36,6 +36,7 @@ import DMRoomMap from "../../utils/DMRoomMap";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import defaultDispatcher from '../../dispatcher/dispatcher';
+import CallEventGrouper from "./CallEventGrouper";
 import WhoIsTypingTile from '../views/rooms/WhoIsTypingTile';
 import ScrollPanel, { IScrollState } from "./ScrollPanel";
 import EventListSummary from '../views/elements/EventListSummary';
@@ -232,6 +233,11 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     private readonly showTypingNotificationsWatcherRef: string;
     private eventNodes: Record<string, HTMLElement>;
 
+    // A map of <callId, CallEventGrouper>
+    private callEventGroupers = new Map<string, CallEventGrouper>();
+
+    private membersCount = 0;
+
     constructor(props, context) {
         super(props, context);
 
@@ -252,11 +258,14 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 
     componentDidMount() {
+        this.calculateRoomMembersCount();
+        this.props.room?.on("RoomState.members", this.calculateRoomMembersCount);
         this.isMounted = true;
     }
 
     componentWillUnmount() {
         this.isMounted = false;
+        this.props.room?.off("RoomState.members", this.calculateRoomMembersCount);
         SettingsStore.unwatchSetting(this.showTypingNotificationsWatcherRef);
     }
 
@@ -269,6 +278,10 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             });
         }
     }
+
+    private calculateRoomMembersCount = (): void => {
+        this.membersCount = this.props.room?.getMembers().length || 0;
+    };
 
     private onShowTypingNotificationsChange = (): void => {
         this.setState({
@@ -576,6 +589,20 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             const last = (mxEv === lastShownEvent);
             const { nextEvent, nextTile } = this.getNextEventInfo(this.props.events, i);
 
+            if (
+                mxEv.getType().indexOf("m.call.") === 0 ||
+                mxEv.getType().indexOf("org.matrix.call.") === 0
+            ) {
+                const callId = mxEv.getContent().call_id;
+                if (this.callEventGroupers.has(callId)) {
+                    this.callEventGroupers.get(callId).add(mxEv);
+                } else {
+                    const callEventGrouper = new CallEventGrouper();
+                    callEventGrouper.add(mxEv);
+                    this.callEventGroupers.set(callId, callEventGrouper);
+                }
+            }
+
             if (grouper) {
                 if (grouper.shouldGroup(mxEv)) {
                     grouper.add(mxEv, this.showHiddenEvents);
@@ -591,7 +618,15 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
             for (const Grouper of groupers) {
                 if (Grouper.canStartGroup(this, mxEv)) {
-                    grouper = new Grouper(this, mxEv, prevEvent, lastShownEvent, nextEvent, nextTile);
+                    grouper = new Grouper(
+                        this,
+                        mxEv,
+                        prevEvent,
+                        lastShownEvent,
+                        this.props.layout,
+                        nextEvent,
+                        nextTile,
+                    );
                 }
             }
             if (!grouper) {
@@ -692,6 +727,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         // it's successful: we received it.
         isLastSuccessful = isLastSuccessful && mxEv.getSender() === MatrixClientPeg.get().getUserId();
 
+        const callEventGrouper = this.callEventGroupers.get(mxEv.getContent().call_id);
         // use txnId as key if available so that we don't remount during sending
         ret.push(
             <TileErrorBoundary key={mxEv.getTxnId() || eventId} mxEvent={mxEv}>
@@ -722,7 +758,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     layout={this.props.layout}
                     enableFlair={this.props.enableFlair}
                     showReadReceipts={this.props.showReadReceipts}
-                    hideSender={this.props.room.getMembers().length <= 2 && this.props.layout === Layout.Bubble}
+                    callEventGrouper={callEventGrouper}
+                    hideSender={this.membersCount <= 2 && this.props.layout === Layout.Bubble}
                 />
             </TileErrorBoundary>,
         );
@@ -952,6 +989,7 @@ abstract class BaseGrouper {
         public readonly event: MatrixEvent,
         public readonly prevEvent: MatrixEvent,
         public readonly lastShownEvent: MatrixEvent,
+        protected readonly layout: Layout,
         public readonly nextEvent?: MatrixEvent,
         public readonly nextEventTile?: MatrixEvent,
     ) {
@@ -1078,6 +1116,7 @@ class CreationGrouper extends BaseGrouper {
                 onToggle={panel.onHeightChanged} // Update scroll state
                 summaryMembers={[ev.sender]}
                 summaryText={summaryText}
+                layout={this.layout}
             >
                 { eventTiles }
             </EventListSummary>,
@@ -1105,10 +1144,11 @@ class RedactionGrouper extends BaseGrouper {
         ev: MatrixEvent,
         prevEvent: MatrixEvent,
         lastShownEvent: MatrixEvent,
+        layout: Layout,
         nextEvent: MatrixEvent,
         nextEventTile: MatrixEvent,
     ) {
-        super(panel, ev, prevEvent, lastShownEvent, nextEvent, nextEventTile);
+        super(panel, ev, prevEvent, lastShownEvent, layout, nextEvent, nextEventTile);
         this.events = [ev];
     }
 
@@ -1173,6 +1213,7 @@ class RedactionGrouper extends BaseGrouper {
                 onToggle={panel.onHeightChanged} // Update scroll state
                 summaryMembers={Array.from(senders)}
                 summaryText={_t("%(count)s messages deleted.", { count: eventTiles.length })}
+                layout={this.layout}
             >
                 { eventTiles }
             </EventListSummary>,
@@ -1201,8 +1242,9 @@ class MemberGrouper extends BaseGrouper {
         public readonly event: MatrixEvent,
         public readonly prevEvent: MatrixEvent,
         public readonly lastShownEvent: MatrixEvent,
+        protected readonly layout: Layout,
     ) {
-        super(panel, event, prevEvent, lastShownEvent);
+        super(panel, event, prevEvent, lastShownEvent, layout);
         this.events = [event];
     }
 
@@ -1277,6 +1319,7 @@ class MemberGrouper extends BaseGrouper {
                 events={this.events}
                 onToggle={panel.onHeightChanged} // Update scroll state
                 startExpanded={highlightInMels}
+                layout={this.layout}
             >
                 { eventTiles }
             </MemberEventListSummary>,

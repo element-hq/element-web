@@ -36,6 +36,7 @@ import ResizeNotifier from '../../utils/ResizeNotifier';
 import TimelinePanel from "./TimelinePanel";
 import Spinner from "../views/elements/Spinner";
 import { TileShape } from '../views/rooms/EventTile';
+import { Layout } from "../../settings/Layout";
 
 interface IProps {
     roomId: string;
@@ -267,6 +268,7 @@ class FilePanel extends React.Component<IProps, IState> {
                         tileShape={TileShape.FileGrid}
                         resizeNotifier={this.props.resizeNotifier}
                         empty={emptyState}
+                        layout={Layout.Group}
                     />
                 </BaseCard>
             );

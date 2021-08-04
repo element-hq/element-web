@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { IRecordingUpdate, VoiceRecording } from "../../../voice/VoiceRecording";
+import { IRecordingUpdate, VoiceRecording } from "../../../audio/VoiceRecording";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Clock from "./Clock";
 import { MarkedExecution } from "../../../utils/MarkedExecution";

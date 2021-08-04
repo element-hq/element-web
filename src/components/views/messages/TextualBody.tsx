@@ -17,7 +17,6 @@ limitations under the License.
 import React, { createRef, SyntheticEvent } from 'react';
 import ReactDOM from 'react-dom';
 import highlight from 'highlight.js';
-import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { MsgType } from "matrix-js-sdk/src/@types/event";
 
 import * as HtmlUtils from '../../../HtmlUtils';
@@ -38,37 +37,13 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import UIStore from "../../../stores/UIStore";
 import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../dispatcher/actions";
-import { TileShape } from '../rooms/EventTile';
-import EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
 import Spoiler from "../elements/Spoiler";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import MessageEditHistoryDialog from "../dialogs/MessageEditHistoryDialog";
 import EditMessageComposer from '../rooms/EditMessageComposer';
 import LinkPreviewGroup from '../rooms/LinkPreviewGroup';
-
-interface IProps {
-    /* the MatrixEvent to show */
-    mxEvent: MatrixEvent;
-
-    /* a list of words to highlight */
-    highlights?: string[];
-
-    /* link URL for the highlights */
-    highlightLink?: string;
-
-    /* should show URL previews for this event */
-    showUrlPreview?: boolean;
-
-    /* the shape of the tile, used */
-    tileShape?: TileShape;
-
-    editState?: EditorStateTransfer;
-    replacingEventId?: string;
-
-    /* callback for when our widget has loaded */
-    onHeightChanged(): void;
-}
+import { IBodyProps } from "./IBodyProps";
 
 interface IState {
     // the URLs (if any) to be previewed with a LinkPreviewWidget inside this TextualBody.
@@ -79,7 +54,7 @@ interface IState {
 }
 
 @replaceableComponent("views.messages.TextualBody")
-export default class TextualBody extends React.Component<IProps, IState> {
+export default class TextualBody extends React.Component<IBodyProps, IState> {
     private readonly contentRef = createRef<HTMLSpanElement>();
 
     private unmounted = false;
@@ -539,7 +514,7 @@ export default class TextualBody extends React.Component<IProps, IState> {
         switch (content.msgtype) {
             case MsgType.Emote:
                 return (
-                    <span className="mx_MEmoteBody mx_EventTile_content">
+                    <div className="mx_MEmoteBody mx_EventTile_content">
                         *&nbsp;
                         <span
                             className="mx_MEmoteBody_sender"
@@ -550,21 +525,21 @@ export default class TextualBody extends React.Component<IProps, IState> {
                         &nbsp;
                         { body }
                         { widgets }
-                    </span>
+                    </div>
                 );
             case MsgType.Notice:
                 return (
-                    <span className="mx_MNoticeBody mx_EventTile_content">
+                    <div className="mx_MNoticeBody mx_EventTile_content">
                         { body }
                         { widgets }
-                    </span>
+                    </div>
                 );
             default: // including "m.text"
                 return (
-                    <span className="mx_MTextBody mx_EventTile_content">
+                    <div className="mx_MTextBody mx_EventTile_content">
                         { body }
                         { widgets }
-                    </span>
+                    </div>
                 );
         }
     }
