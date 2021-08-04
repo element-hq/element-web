@@ -33,5 +33,6 @@
     "Your browser can't run %(brand)s": "Votre navigateur ne peut pas exécuter %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s nécessite des fonctionnalités avancées que votre navigateur actuel ne prend pas en charge.",
     "Powered by Matrix": "Propulsé par Matrix",
-    "Use %(brand)s on mobile": "Utiliser %(brand)s sur téléphone"
+    "Use %(brand)s on mobile": "Utiliser %(brand)s sur téléphone",
+    "Switch to space by number": "Afficher un espace par son numéro"
 }
