@@ -3233,9 +3233,9 @@ eslint-config-google@^0.14.0:
   resolved "https://registry.yarnpkg.com/eslint-config-google/-/eslint-config-google-0.14.0.tgz#4f5f8759ba6e11b424294a219dbfa18c508bcc1a"
   integrity sha512-WsbX4WbjuMvTdeVL6+J3rK1RGhCTqjsFjX7UMSMgZiyxxaNLkoJENbrGExzERFeoTpGw3F3FypTiWAP9ZXzkEw==
 
-"eslint-plugin-matrix-org@github:matrix-org/eslint-plugin-matrix-org#main":
-  version "0.3.3"
-  resolved "https://codeload.github.com/matrix-org/eslint-plugin-matrix-org/tar.gz/50d6bdf6704dd95016d5f1f824f00cac6eaa64e1"
+"eslint-plugin-matrix-org@github:matrix-org/eslint-plugin-matrix-org#2306b3d4da4eba908b256014b979f1d3d43d2945":
+  version "0.3.5"
+  resolved "https://codeload.github.com/matrix-org/eslint-plugin-matrix-org/tar.gz/2306b3d4da4eba908b256014b979f1d3d43d2945"
 
 eslint-plugin-react-hooks@^4.2.0:
   version "4.2.0"
@@ -5445,10 +5445,10 @@ mathml-tag-names@^2.1.3:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-matrix-js-sdk@12.1.0:
-  version "12.1.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-12.1.0.tgz#7d159dd9bc03701e45a6b2777f1fa582a7e8b970"
-  integrity sha512-/fSqOjD+mTlMD+/B3s3Ja6BfI46FnTDl43ojzGDUOsHRRmSYUmoONb83qkH5Fjm8cI2q5ZBJMsBfjuZwLVeiZw==
+matrix-js-sdk@12.2.0:
+  version "12.2.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-12.2.0.tgz#e1dc7ddac054289cb24ee3d11dba8a5ba5ddecf5"
+  integrity sha512-foSs3uKRc6uvFNhgY35eErBvLWVDd5RNIxxsdFKlmU3B+70YUf3BP3petyBNW34ORyOqNdX36IiApfLo3npNEw==
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"

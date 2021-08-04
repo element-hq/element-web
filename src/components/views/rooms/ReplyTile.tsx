@@ -67,15 +67,21 @@ export default class ReplyTile extends React.PureComponent<IProps> {
     };
 
     private onClick = (e: React.MouseEvent): void => {
-        // This allows the permalink to be opened in a new tab/window or copied as
-        // matrix.to, but also for it to enable routing within Riot when clicked.
-        e.preventDefault();
-        dis.dispatch({
-            action: 'view_room',
-            event_id: this.props.mxEvent.getId(),
-            highlighted: true,
-            room_id: this.props.mxEvent.getRoomId(),
-        });
+        const clickTarget = e.target as HTMLElement;
+        // Following a link within a reply should not dispatch the `view_room` action
+        // so that the browser can direct the user to the correct location
+        // The exception being the link wrapping the reply
+        if (clickTarget.tagName.toLowerCase() !== "a" || clickTarget.closest("a") === null) {
+            // This allows the permalink to be opened in a new tab/window or copied as
+            // matrix.to, but also for it to enable routing within Riot when clicked.
+            e.preventDefault();
+            dis.dispatch({
+                action: 'view_room',
+                event_id: this.props.mxEvent.getId(),
+                highlighted: true,
+                room_id: this.props.mxEvent.getRoomId(),
+            });
+        }
     };
 
     render() {

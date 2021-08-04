@@ -18,9 +18,15 @@ limitations under the License.
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { EventType, RoomCreateTypeField, RoomType } from "matrix-js-sdk/src/@types/event";
 import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
-import { JoinRule, Preset, RestrictedAllowType, Visibility } from "matrix-js-sdk/src/@types/partials";
+import {
+    HistoryVisibility,
+    JoinRule,
+    Preset,
+    RestrictedAllowType,
+    Visibility,
+} from "matrix-js-sdk/src/@types/partials";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
@@ -52,6 +58,9 @@ export interface IOpts {
     inlineErrors?: boolean;
     andView?: boolean;
     associatedWithCommunity?: string;
+    avatar?: File | string; // will upload if given file, else mxcUrl is needed
+    roomType?: RoomType | string;
+    historyVisibility?: HistoryVisibility;
     parentSpace?: Room;
     joinRule?: JoinRule;
 }
@@ -112,6 +121,13 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         createOpts.is_direct = true;
     }
 
+    if (opts.roomType) {
+        createOpts.creation_content = {
+            ...createOpts.creation_content,
+            [RoomCreateTypeField]: opts.roomType,
+        };
+    }
+
     // By default, view the room after creating it
     if (opts.andView === undefined) {
         opts.andView = true;
@@ -144,12 +160,11 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
 
     if (opts.parentSpace) {
         createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
-        createOpts.initial_state.push({
-            type: EventType.RoomHistoryVisibility,
-            content: {
-                "history_visibility": createOpts.preset === Preset.PublicChat ? "world_readable" : "invited",
-            },
-        });
+        if (!opts.historyVisibility) {
+            opts.historyVisibility = createOpts.preset === Preset.PublicChat
+                ? HistoryVisibility.WorldReadable
+                : HistoryVisibility.Invited;
+        }
 
         if (opts.joinRule === JoinRule.Restricted) {
             if (SpaceStore.instance.restrictedJoinRuleSupport?.preferred) {
@@ -169,10 +184,32 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         }
     }
 
-    if (opts.joinRule !== JoinRule.Restricted) {
+    // we handle the restricted join rule in the parentSpace handling block above
+    if (opts.joinRule && opts.joinRule !== JoinRule.Restricted) {
         createOpts.initial_state.push({
             type: EventType.RoomJoinRules,
             content: { join_rule: opts.joinRule },
+        });
+    }
+
+    if (opts.avatar) {
+        let url = opts.avatar;
+        if (opts.avatar instanceof File) {
+            url = await client.uploadContent(opts.avatar);
+        }
+
+        createOpts.initial_state.push({
+            type: EventType.RoomAvatar,
+            content: { url },
+        });
+    }
+
+    if (opts.historyVisibility) {
+        createOpts.initial_state.push({
+            type: EventType.RoomHistoryVisibility,
+            content: {
+                "history_visibility": opts.historyVisibility,
+            },
         });
     }
 

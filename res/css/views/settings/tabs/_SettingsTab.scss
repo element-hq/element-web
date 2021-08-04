@@ -36,7 +36,6 @@ limitations under the License.
 .mx_SettingsTab_subheading {
     font-size: $font-16px;
     display: block;
-    font-family: $font-family;
     font-weight: 600;
     color: $primary-fg-color;
     margin-bottom: 10px;
@@ -71,6 +70,13 @@ limitations under the License.
     max-width: calc(100% - $font-48px); // Force word wrap instead of colliding with the switch
     box-sizing: border-box;
     padding-right: 10px;
+}
+
+.mx_SettingsTab_section .mx_SettingsFlag .mx_SettingsFlag_microcopy {
+    margin-top: 4px;
+    font-size: $font-12px;
+    line-height: $font-15px;
+    color: $secondary-fg-color;
 }
 
 .mx_SettingsTab_section .mx_SettingsFlag .mx_ToggleSwitch {
