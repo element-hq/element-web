@@ -42,7 +42,7 @@ export default class PlainTextExporter extends Exporter {
             : _t("Media omitted - file size limit exceeded");
     }
 
-    protected textForReplyEvent = (ev: MatrixEvent) => {
+    public textForReplyEvent = (ev: MatrixEvent) => {
         const REPLY_REGEX = /> <(.*?)>(.*?)\n\n(.*)/;
         const REPLY_SOURCE_MAX_LENGTH = 32;
         const content = ev.getContent();

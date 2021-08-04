@@ -30,12 +30,12 @@ import * as Avatar from "../../Avatar";
 import EventTile, { haveTileForEvent } from "../../components/views/rooms/EventTile";
 import DateSeparator from "../../components/views/messages/DateSeparator";
 import BaseAvatar from "../../components/views/avatars/BaseAvatar";
-import exportCSS from "./exportCSS";
 import exportJS from "!!raw-loader!./exportJS";
 import exportIcons from "./exportIcons";
 import { ExportTypes } from "./exportUtils";
 import { IExportOptions } from "./exportUtils";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
+import getExportCSS from "./exportCSS";
 
 export default class HTMLExporter extends Exporter {
     protected avatars: Map<string, boolean>;
@@ -253,38 +253,40 @@ export default class HTMLExporter extends Exporter {
         return wantsDateSeparator(prevEvent.getDate(), event.getDate());
     }
 
-    protected async getEventTile(mxEv: MatrixEvent, continuation: boolean, filePath?: string) {
+    public getEventTile(mxEv: MatrixEvent, continuation: boolean) {
+        return <div className="mx_Export_EventWrapper" id={mxEv.getId()}>
+            <MatrixClientContext.Provider value={this.client}>
+                <EventTile
+                    mxEvent={mxEv}
+                    continuation={continuation}
+                    isRedacted={mxEv.isRedacted()}
+                    replacingEventId={mxEv.replacingEventId()}
+                    forExport={true}
+                    readReceipts={null}
+                    readReceiptMap={null}
+                    showUrlPreview={false}
+                    checkUnmounting={() => false}
+                    isTwelveHour={false}
+                    last={false}
+                    lastInSection={false}
+                    permalinkCreator={this.permalinkCreator}
+                    lastSuccessful={false}
+                    isSelectedEvent={false}
+                    getRelationsForEvent={null}
+                    showReactions={false}
+                    layout={Layout.Group}
+                    enableFlair={false}
+                    showReadReceipts={false}
+                />
+            </MatrixClientContext.Provider>
+        </div>;
+    }
+
+    protected async getEventTileMarkup(mxEv: MatrixEvent, continuation: boolean, filePath?: string) {
         const hasAvatar = !!this.getAvatarURL(mxEv);
         if (hasAvatar) await this.saveAvatarIfNeeded(mxEv);
 
-        const eventTile = (
-            <div className="mx_Export_EventWrapper" id={mxEv.getId()}>
-                <MatrixClientContext.Provider value={this.client}>
-                    <EventTile
-                        mxEvent={mxEv}
-                        continuation={continuation}
-                        isRedacted={mxEv.isRedacted()}
-                        replacingEventId={mxEv.replacingEventId()}
-                        forExport={true}
-                        readReceipts={null}
-                        readReceiptMap={null}
-                        showUrlPreview={false}
-                        checkUnmounting={() => false}
-                        isTwelveHour={false}
-                        last={false}
-                        lastInSection={false}
-                        permalinkCreator={this.permalinkCreator}
-                        lastSuccessful={false}
-                        isSelectedEvent={false}
-                        getRelationsForEvent={null}
-                        showReactions={false}
-                        layout={Layout.Group}
-                        enableFlair={false}
-                        showReadReceipts={false}
-                    />
-                </MatrixClientContext.Provider>
-            </div>
-        );
+        const eventTile = this.getEventTile(mxEv, continuation);
 
         let eventTileMarkup = renderToStaticMarkup(eventTile);
         if (filePath) {
@@ -323,14 +325,14 @@ export default class HTMLExporter extends Exporter {
                     try {
                         const blob = await this.getMediaBlob(mxEv);
                         if (this.totalSize + blob.size > this.exportOptions.maxSize) {
-                            eventTile = await this.getEventTile(
+                            eventTile = await this.getEventTileMarkup(
                                 this.createModifiedEvent(this.mediaOmitText, mxEv),
                                 joined,
                             );
                         } else {
                             this.totalSize += blob.size;
                             const filePath = this.getFilePath(mxEv);
-                            eventTile = await this.getEventTile(mxEv, joined, filePath);
+                            eventTile = await this.getEventTileMarkup(mxEv, joined, filePath);
                             if (this.totalSize == this.exportOptions.maxSize) {
                                 this.exportOptions.attachmentsIncluded = false;
                             }
@@ -338,19 +340,19 @@ export default class HTMLExporter extends Exporter {
                         }
                     } catch (e) {
                         console.log("Error while fetching file" + e);
-                        eventTile = await this.getEventTile(
+                        eventTile = await this.getEventTileMarkup(
                             this.createModifiedEvent(_t("Error fetching file"), mxEv),
                             joined,
                         );
                     }
                 } else {
-                    eventTile = await this.getEventTile(this.createModifiedEvent(this.mediaOmitText, mxEv), joined);
+                    eventTile = await this.getEventTileMarkup(this.createModifiedEvent(this.mediaOmitText, mxEv), joined);
                 }
-            } else eventTile = await this.getEventTile(mxEv, joined);
+            } else eventTile = await this.getEventTileMarkup(mxEv, joined);
         } catch (e) {
             // TODO: Handle callEvent errors
             console.error(e);
-            eventTile = await this.getEventTile(this.createModifiedEvent("Error parsing HTML", mxEv), joined);
+            eventTile = await this.getEventTileMarkup(this.createModifiedEvent("Error parsing HTML", mxEv), joined);
         }
 
         return eventTile;
@@ -388,7 +390,7 @@ export default class HTMLExporter extends Exporter {
 
         this.updateProgress("Creating HTML...");
         const html = await this.createHTML(res);
-
+        const exportCSS = await getExportCSS();
         this.addFile("index.html", new Blob([html]));
         this.addFile("css/style.css", new Blob([exportCSS]));
         this.addFile("js/script.js", new Blob([exportJS]));
