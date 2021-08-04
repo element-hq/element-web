@@ -30,6 +30,7 @@ import { IEncryptedFile } from "matrix-js-sdk/src/@types/event";
 import { uploadFile } from "../ContentMessages";
 import { FixedRollingArray } from "../utils/FixedRollingArray";
 import { clamp } from "../utils/numbers";
+import mxRecorderWorkletPath from "./RecorderWorklet";
 
 const CHANNELS = 1; // stereo isn't important
 export const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
@@ -113,16 +114,10 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             });
             this.recorderSource = this.recorderContext.createMediaStreamSource(this.recorderStream);
 
-            // Set up our worklet. We use this for timing information and waveform analysis: the
-            // web audio API prefers this be done async to avoid holding the main thread with math.
-            const mxRecorderWorkletPath = document.body.dataset.vectorRecorderWorkletScript;
-            if (!mxRecorderWorkletPath) {
-                // noinspection ExceptionCaughtLocallyJS
-                throw new Error("Unable to create recorder: no worklet script registered");
-            }
-
             // Connect our inputs and outputs
             if (this.recorderContext.audioWorklet) {
+                // Set up our worklet. We use this for timing information and waveform analysis: the
+                // web audio API prefers this be done async to avoid holding the main thread with math.
                 await this.recorderContext.audioWorklet.addModule(mxRecorderWorkletPath);
                 this.recorderWorklet = new AudioWorkletNode(this.recorderContext, WORKLET_NAME);
                 this.recorderSource.connect(this.recorderWorklet);
