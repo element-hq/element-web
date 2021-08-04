@@ -485,7 +485,7 @@ export default class CallHandler extends EventEmitter {
                 new PushProcessor(MatrixClientPeg.get()).getPushRuleById(RuleId.IncomingCall) as IPushRule
             );
             const pushRuleEnabled = incomingCallPushRule?.enabled;
-            const tweakSetToRing = incomingCallPushRule.actions.some((action: Tweaks) => (
+            const tweakSetToRing = incomingCallPushRule?.actions.some((action: Tweaks) => (
                 action.set_tweak === TweakName.Sound &&
                 action.value === "ring"
             ));
