@@ -96,6 +96,7 @@ export function createTestClient() {
                 getItem: jest.fn(),
             },
         },
+        pushRules: {},
         decryptEventIfNeeded: () => Promise.resolve(),
         isUserIgnored: jest.fn().mockReturnValue(false),
         getCapabilities: jest.fn().mockResolvedValue({}),

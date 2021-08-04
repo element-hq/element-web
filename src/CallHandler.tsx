@@ -1,7 +1,8 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 New Vector Ltd
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -85,6 +86,8 @@ import { randomUppercaseString, randomLowercaseString } from "matrix-js-sdk/src/
 import EventEmitter from 'events';
 import SdkConfig from './SdkConfig';
 import { ensureDMExists, findDMForUser } from './createRoom';
+import { IPushRule, RuleId, TweakName, Tweaks } from "matrix-js-sdk/src/@types/PushRules";
+import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
 import { WidgetLayoutStore, Container } from './stores/widgets/WidgetLayoutStore';
 import { getIncomingCallToastKey } from './toasts/IncomingCallToast';
 import ToastStore from './stores/ToastStore';
@@ -479,14 +482,28 @@ export default class CallHandler extends EventEmitter {
             }
 
             switch (newState) {
-                case CallState.Ringing:
-                    this.play(AudioID.Ring);
+                case CallState.Ringing: {
+                    const incomingCallPushRule = (
+                        new PushProcessor(MatrixClientPeg.get()).getPushRuleById(RuleId.IncomingCall) as IPushRule
+                    );
+                    const pushRuleEnabled = incomingCallPushRule?.enabled;
+                    const tweakSetToRing = incomingCallPushRule?.actions.some((action: Tweaks) => (
+                        action.set_tweak === TweakName.Sound &&
+                        action.value === "ring"
+                    ));
+
+                    if (pushRuleEnabled && tweakSetToRing) {
+                        this.play(AudioID.Ring);
+                    } else {
+                        this.silenceCall(call.callId);
+                    }
                     break;
-                case CallState.InviteSent:
+                }
+                case CallState.InviteSent: {
                     this.play(AudioID.Ringback);
                     break;
-                case CallState.Ended:
-                {
+                }
+                case CallState.Ended: {
                     const hangupReason = call.hangupReason;
                     Analytics.trackEvent('voip', 'callEnded', 'hangupReason', hangupReason);
                     this.removeCallForRoom(mappedRoomId);
