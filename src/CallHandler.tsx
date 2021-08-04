@@ -481,15 +481,14 @@ export default class CallHandler extends EventEmitter {
             const incomingCallPushRule = (
                 new PushProcessor(MatrixClientPeg.get()).getPushRuleById(RuleId.IncomingCall) as IPushRule
             );
+            const pushRuleEnabled = incomingCallPushRule?.enabled;
+            const tweakSetToRing = incomingCallPushRule.actions.some((action: Tweaks) => (
+                action.set_tweak === TweakName.Sound &&
+                action.value === "ring"
+            ));
             switch (newState) {
                 case CallState.Ringing:
-                    if (
-                        incomingCallPushRule?.enabled &&
-                        incomingCallPushRule.actions.some((a: Tweaks) => (
-                            a.set_tweak === TweakName.Sound &&
-                            a.value === "ring"
-                        ))
-                    ) {
+                    if (pushRuleEnabled && tweakSetToRing) {
                         this.play(AudioID.Ring);
                     } else {
                         this.silenceCall(call.callId);
