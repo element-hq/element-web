@@ -25,7 +25,6 @@ import { CallErrorCode, CallState } from 'matrix-js-sdk/src/webrtc/call';
 import InfoTooltip, { InfoTooltipKind } from '../elements/InfoTooltip';
 import classNames from 'classnames';
 import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
 
 interface IProps {
     mxEvent: MatrixEvent;
