@@ -1,0 +1,14 @@
+on:
+    issues:
+        types: [labeled]
+jobs:
+    move_issues:
+        name: Move issues to project board
+        runs-on: ubuntu-latest
+        steps:
+             - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
+               with:
+                 action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
+                 project-url: "https://github.com/orgs/vector-im/projects/14"
+                 column-name: "📥 Inbox"
+                 label-name: "X-Needs-Design"
