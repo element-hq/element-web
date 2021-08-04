@@ -178,8 +178,11 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                         "appear in search results.",
                     ) }</div>
                     <div>
-                        <AccessibleButton kind="primary" disabled={this.state.enabling}
-                            onClick={this.onEnable}>
+                        <AccessibleButton
+                            kind="primary"
+                            disabled={this.state.enabling}
+                            onClick={this.onEnable}
+                        >
                             { _t("Enable") }
                         </AccessibleButton>
                         { this.state.enabling ? <InlineSpinner /> : <div /> }
@@ -203,8 +206,10 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                         brand,
                     },
                     {
-                        nativeLink: sub => <a href={nativeLink}
-                            target="_blank" rel="noreferrer noopener"
+                        nativeLink: sub => <a
+                            href={nativeLink}
+                            target="_blank"
+                            rel="noreferrer noopener"
                         >{ sub }</a>,
                     },
                 ) }</div>
@@ -219,8 +224,10 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                         brand,
                     },
                     {
-                        desktopLink: sub => <a href="https://element.io/get-started"
-                            target="_blank" rel="noreferrer noopener"
+                        desktopLink: sub => <a
+                            href="https://element.io/get-started"
+                            target="_blank"
+                            rel="noreferrer noopener"
                         >{ sub }</a>,
                     },
                 ) }</div>

@@ -1,7 +1,6 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd.
 Copyright 2019 Bastian Masanek, Noxware IT <matrix@noxware.de>
+Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,31 +15,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
-import { _t } from '../../../languageHandler';
+import React, { ReactNode, KeyboardEvent } from 'react';
 import classNames from "classnames";
 
-export default class InfoDialog extends React.Component {
-    static propTypes = {
-        className: PropTypes.string,
-        title: PropTypes.string,
-        description: PropTypes.node,
-        button: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-        onFinished: PropTypes.func,
-        hasCloseButton: PropTypes.bool,
-        onKeyDown: PropTypes.func,
-        fixedWidth: PropTypes.bool,
-    };
+import { _t } from '../../../languageHandler';
+import * as sdk from '../../../index';
+import { IDialogProps } from "./IDialogProps";
 
+interface IProps extends IDialogProps {
+    title?: string;
+    description?: ReactNode;
+    className?: string;
+    button?: boolean | string;
+    hasCloseButton?: boolean;
+    fixedWidth?: boolean;
+    onKeyDown?(event: KeyboardEvent): void;
+}
+
+export default class InfoDialog extends React.Component<IProps> {
     static defaultProps = {
         title: '',
         description: '',
         hasCloseButton: false,
     };
 
-    onFinished = () => {
+    private onFinished = () => {
         this.props.onFinished();
     };
 
@@ -63,8 +62,7 @@ export default class InfoDialog extends React.Component {
                 { this.props.button !== false && <DialogButtons primaryButton={this.props.button || _t('OK')}
                     onPrimaryButtonClick={this.onFinished}
                     hasCancel={false}
-                >
-                </DialogButtons> }
+                /> }
             </BaseDialog>
         );
     }

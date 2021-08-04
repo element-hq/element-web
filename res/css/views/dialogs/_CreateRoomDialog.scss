@@ -65,7 +65,7 @@ limitations under the License.
 .mx_CreateRoomDialog_aliasContainer {
     display: flex;
     // put margin on container so it can collapse with siblings
-    margin: 10px 0;
+    margin: 24px 0 10px;
 
     .mx_RoomAliasField {
         margin: 0;
@@ -101,10 +101,6 @@ limitations under the License.
         margin-left: 30px;
     }
 
-    .mx_CreateRoomDialog_topic {
-        margin-bottom: 36px;
-    }
-
     .mx_Dialog_content > .mx_SettingsFlag {
         margin-top: 24px;
     }
@@ -114,4 +110,3 @@ limitations under the License.
         font-size: $font-12px;
     }
 }
-

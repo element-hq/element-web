@@ -419,7 +419,8 @@ export default class ImageView extends React.Component<IProps, IState> {
             const avatar = (
                 <MemberAvatar
                     member={mxEvent.sender}
-                    width={32} height={32}
+                    width={32}
+                    height={32}
                     viewUserOnClick={true}
                 />
             );
@@ -438,7 +439,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             // an empty div here, since the panel uses space-between
             // and we want the same placement of elements
             info = (
-                <div></div>
+                <div />
             );
         }
 
@@ -462,15 +463,15 @@ export default class ImageView extends React.Component<IProps, IState> {
                 <AccessibleTooltipButton
                     className="mx_ImageView_button mx_ImageView_button_zoomOut"
                     title={_t("Zoom out")}
-                    onClick={this.onZoomOutClick}>
-                </AccessibleTooltipButton>
+                    onClick={this.onZoomOutClick}
+                />
             );
             zoomInButton = (
                 <AccessibleTooltipButton
                     className="mx_ImageView_button mx_ImageView_button_zoomIn"
                     title={_t("Zoom in")}
-                    onClick={this.onZoomInClick}>
-                </AccessibleTooltipButton>
+                    onClick={this.onZoomInClick}
+                />
             );
         }
 
@@ -492,24 +493,24 @@ export default class ImageView extends React.Component<IProps, IState> {
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_rotateCCW"
                             title={_t("Rotate Left")}
-                            onClick={this.onRotateCounterClockwiseClick}>
-                        </AccessibleTooltipButton>
+                            onClick={this.onRotateCounterClockwiseClick}
+                        />
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_rotateCW"
                             title={_t("Rotate Right")}
-                            onClick={this.onRotateClockwiseClick}>
-                        </AccessibleTooltipButton>
+                            onClick={this.onRotateClockwiseClick}
+                        />
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_download"
                             title={_t("Download")}
-                            onClick={this.onDownloadClick}>
-                        </AccessibleTooltipButton>
+                            onClick={this.onDownloadClick}
+                        />
                         { contextMenuButton }
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_close"
                             title={_t("Close")}
-                            onClick={this.props.onFinished}>
-                        </AccessibleTooltipButton>
+                            onClick={this.props.onFinished}
+                        />
                         { this.renderContextMenu() }
                     </div>
                 </div>

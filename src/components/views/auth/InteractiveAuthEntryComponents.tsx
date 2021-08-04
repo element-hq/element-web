@@ -416,8 +416,10 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
         let submitButton;
         if (this.props.showContinue !== false) {
             // XXX: button classes
-            submitButton = <button className="mx_InteractiveAuthEntryComponents_termsSubmit mx_GeneralButton"
-                onClick={this.trySubmit} disabled={!allChecked}>{ _t("Accept") }</button>;
+            submitButton = <button
+                className="mx_InteractiveAuthEntryComponents_termsSubmit mx_GeneralButton"
+                onClick={this.trySubmit}
+                disabled={!allChecked}>{ _t("Accept") }</button>;
         }
 
         return (
@@ -616,7 +618,9 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
                                 aria-label={_t("Code")}
                             />
                             <br />
-                            <input type="submit" value={_t("Submit")}
+                            <input
+                                type="submit"
+                                value={_t("Submit")}
                                 className={submitClasses}
                                 disabled={!enableSubmit}
                             />

@@ -163,7 +163,7 @@ const shortcuts: Record<Categories, IShortcut[]> = {
                 modifiers: [Modifiers.SHIFT],
                 key: Key.PAGE_UP,
             }],
-                description: _td("Jump to oldest unread message"),
+            description: _td("Jump to oldest unread message"),
         }, {
             keybinds: [{
                 modifiers: [CMD_OR_CTRL, Modifiers.SHIFT],
