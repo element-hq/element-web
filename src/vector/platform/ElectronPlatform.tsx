@@ -257,12 +257,15 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
 
         electron.on('userDownloadCompleted', (ev, { path, name }) => {
+            const key = `DOWNLOAD_TOAST_${path}`;
+
             const onAccept = () => {
                 electron.send('userDownloadOpen', { path });
+                ToastStore.sharedInstance().dismissToast(key);
             };
 
             ToastStore.sharedInstance().addOrReplaceToast({
-                key: `DOWNLOAD_TOAST_${path}`,
+                key,
                 title: _t("Download Completed"),
                 props: {
                     description: name,
