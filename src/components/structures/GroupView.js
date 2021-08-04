@@ -399,6 +399,8 @@ class FeaturedUser extends React.Component {
 const GROUP_JOINPOLICY_OPEN = "open";
 const GROUP_JOINPOLICY_INVITE = "invite";
 
+const UPGRADE_NOTICE_LS_KEY = "mx_hide_community_upgrade_notice";
+
 @replaceableComponent("structures.GroupView")
 export default class GroupView extends React.Component {
     static propTypes = {
@@ -422,6 +424,7 @@ export default class GroupView extends React.Component {
         publicityBusy: false,
         inviterProfile: null,
         showRightPanel: RightPanelStore.getSharedInstance().isOpenForGroup,
+        showUpgradeNotice: !localStorage.getItem(UPGRADE_NOTICE_LS_KEY),
     };
 
     componentDidMount() {
@@ -807,6 +810,11 @@ export default class GroupView extends React.Component {
         showGroupAddRoomDialog(this.props.groupId);
     };
 
+    _dismissUpgradeNotice = () => {
+        localStorage.setItem(UPGRADE_NOTICE_LS_KEY, "true");
+        this.setState({ showUpgradeNotice: false });
+    }
+
     _getGroupSection() {
         const groupSettingsSectionClasses = classnames({
             "mx_GroupView_group": this.state.editing,
@@ -843,10 +851,28 @@ export default class GroupView extends React.Component {
                     },
                 ) }
             </div> : <div />;
+
+        let communitiesUpgradeNotice;
+        if (this.state.showUpgradeNotice) {
+            communitiesUpgradeNotice = <div className="mx_GroupView_spaceUpgradePrompt">
+                <h2>{ _t("Communities can now be made into Spaces") }</h2>
+                <p>
+                    { _t("Spaces are a new way to make a community, with new features coming.") }
+                    &nbsp;
+                    { _t("Ask the admins of this community to make it into a Space " +
+                        "and keep a look out for the invite.") }
+                    &nbsp;
+                    { _t("Communities won't receive further updates.") }
+                </p>
+                <AccessibleButton onClick={this._dismissUpgradeNotice} />
+            </div>;
+        }
+
         return <div className={groupSettingsSectionClasses}>
             { header }
             { hostingSignup }
             { changeDelayWarning }
+            { communitiesUpgradeNotice }
             { this._getJoinableNode() }
             { this._getLongDescriptionNode() }
             { this._getRoomsNode() }

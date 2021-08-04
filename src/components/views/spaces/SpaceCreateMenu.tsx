@@ -18,22 +18,56 @@ import React, { ComponentProps, RefObject, SyntheticEvent, useContext, useRef, u
 import classNames from "classnames";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
 import FocusLock from "react-focus-lock";
+import { HistoryVisibility, Preset } from "matrix-js-sdk/src/@types/partials";
+import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
 
 import { _t } from "../../../languageHandler";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { ChevronFace, ContextMenu } from "../../structures/ContextMenu";
-import createRoom from "../../../createRoom";
+import createRoom, { IOpts as ICreateOpts } from "../../../createRoom";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import SpaceBasicSettings, { SpaceAvatar } from "./SpaceBasicSettings";
 import AccessibleButton from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 import withValidation from "../elements/Validation";
-import { HistoryVisibility, Preset } from "matrix-js-sdk/src/@types/partials";
 import RoomAliasField from "../elements/RoomAliasField";
 import SdkConfig from "../../../SdkConfig";
 import Modal from "../../../Modal";
 import GenericFeatureFeedbackDialog from "../dialogs/GenericFeatureFeedbackDialog";
 import SettingsStore from "../../../settings/SettingsStore";
+
+export const createSpace = async (
+    name: string,
+    isPublic: boolean,
+    alias?: string,
+    topic?: string,
+    avatar?: string | File,
+    createOpts: Partial<ICreateRoomOpts> = {},
+    otherOpts: Partial<Omit<ICreateOpts, "createOpts">> = {},
+) => {
+    return createRoom({
+        createOpts: {
+            name,
+            preset: isPublic ? Preset.PublicChat : Preset.PrivateChat,
+            power_level_content_override: {
+                // Only allow Admins to write to the timeline to prevent hidden sync spam
+                events_default: 100,
+                ...isPublic ? { invite: 0 } : {},
+            },
+            room_alias_name: isPublic && alias ? alias.substr(1, alias.indexOf(":") - 1) : undefined,
+            topic,
+            ...createOpts,
+        },
+        avatar,
+        roomType: RoomType.Space,
+        historyVisibility: isPublic ? HistoryVisibility.WorldReadable : HistoryVisibility.Invited,
+        spinner: false,
+        encryption: false,
+        andView: true,
+        inlineErrors: true,
+        ...otherOpts,
+    });
+};
 
 const SpaceCreateMenuType = ({ title, description, className, onClick }) => {
     return (
@@ -92,7 +126,7 @@ export const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
     </div>;
 };
 
-type BProps = Pick<ComponentProps<typeof SpaceBasicSettings>, "setAvatar" | "name" | "setName" | "topic" | "setTopic">;
+type BProps = Omit<ComponentProps<typeof SpaceBasicSettings>, "nameDisabled" | "topicDisabled" | "avatarDisabled">;
 interface ISpaceCreateFormProps extends BProps {
     busy: boolean;
     alias: string;
@@ -106,6 +140,7 @@ interface ISpaceCreateFormProps extends BProps {
 export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
     busy,
     onSubmit,
+    avatarUrl,
     setAvatar,
     name,
     setName,
@@ -122,7 +157,7 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
     const domain = cli.getDomain();
 
     return <form className="mx_SpaceBasicSettings" onSubmit={onSubmit}>
-        <SpaceAvatar setAvatar={setAvatar} avatarDisabled={busy} />
+        <SpaceAvatar avatarUrl={avatarUrl} setAvatar={setAvatar} avatarDisabled={busy} />
 
         <Field
             name="spaceName"
@@ -200,30 +235,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
         }
 
         try {
-            await createRoom({
-                createOpts: {
-                    preset: visibility === Visibility.Public ? Preset.PublicChat : Preset.PrivateChat,
-                    name,
-                    power_level_content_override: {
-                        // Only allow Admins to write to the timeline to prevent hidden sync spam
-                        events_default: 100,
-                        ...visibility === Visibility.Public ? { invite: 0 } : {},
-                    },
-                    room_alias_name: visibility === Visibility.Public && alias
-                        ? alias.substr(1, alias.indexOf(":") - 1)
-                        : undefined,
-                    topic,
-                },
-                avatar,
-                roomType: RoomType.Space,
-                historyVisibility: visibility === Visibility.Public
-                    ? HistoryVisibility.WorldReadable
-                    : HistoryVisibility.Invited,
-                spinner: false,
-                encryption: false,
-                andView: true,
-                inlineErrors: true,
-            });
+            await createSpace(name, visibility === Visibility.Public, alias, topic, avatar);
 
             onFinished();
         } catch (e) {
