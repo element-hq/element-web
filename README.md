@@ -431,7 +431,7 @@ The Priority label is now deprecated. Defects will now be classed based on their
 | ----------- | ----------- | ----------- |
 | S‑Critical and P‑High<br />S‑Critical and P‑Medium<br />S‑Major and P‑High | P1        | These issues should be worked on in this sprint or next sprint. If the backlog of issues is too long, we should reevaluate why the bugs are not caught earlier. |
 | S‑Critical and P‑Low<br />S‑Major and P‑Medium<br />S‑Minor and P‑High     | P2        | When all the highest priority bugs are done, this is the next set to tackle. Ideally we should be fixing a few issues from this group every week. |
-| S‑Major and P‑Low<br />S‑Minor and P‑Medium<br />S‑Tolerable and P‑High    | P3        | These issues are wishful thinking. We hope to get to them one day, but we they are low priority. There are likely to be some good new contributor issues in here. |
+| S‑Major and P‑Low<br />S‑Minor and P‑Medium<br />S‑Tolerable and P‑High    | P3        | These issues are wishful thinking for now. We hope to get to them one day, but they are low priority. There are likely to be some good new contributor issues in here. |
 | S‑Minor and P‑Low<br />S‑Tolerable&nbsp;and&nbsp;P‑Medium<br />S‑Minor and P‑Low     | P4 and P5 | These issues are unlikely to be actively looked at by the webapp team, but may be picked up by community. |
 
 
