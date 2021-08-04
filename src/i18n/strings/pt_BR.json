@@ -3122,5 +3122,18 @@
     "Identity server (%(server)s)": "Servidor de identidade (%(server)s)",
     "Could not connect to identity server": "Não foi possível conectar-se ao servidor de identidade",
     "Not a valid identity server (status code %(code)s)": "Servidor de identidade inválido (código de status %(code)s)",
-    "Identity server URL must be HTTPS": "O link do servidor de identidade deve começar com HTTPS"
+    "Identity server URL must be HTTPS": "O link do servidor de identidade deve começar com HTTPS",
+    "%(senderName)s banned %(targetName)s": "%(senderName)s baniu %(targetName)s",
+    "%(senderName)s banned %(targetName)s: %(reason)s": "%(senderName)s baniu %(targetName)s: %(reason)s",
+    "%(senderName)s invited %(targetName)s": "%(senderName)s convidou %(targetName)s",
+    "%(targetName)s accepted an invitation": "%(targetName)s aceitou o convite",
+    "%(targetName)s accepted the invitation for %(displayName)s": "%(targetName)s aceitou o convite para %(displayName)s",
+    "Sends the given message as a spoiler": "Envia esta mensagem como spoiler",
+    "Some invites couldn't be sent": "Alguns convites não puderam ser enviados",
+    "We sent the others, but the below people couldn't be invited to <RoomName/>": "Nós enviamos aos outros, mas as pessoas abaixo não puderam ser convidadas para <RoomName/>",
+    "Transfer Failed": "A Transferência Falhou",
+    "Already in call": "Já em um chamada",
+    "Unable to transfer call": "Não foi possível transferir chamada",
+    "The user you called is busy.": "O usuário que você chamou está ocupado.",
+    "User Busy": "Usuário Ocupado"
 }
