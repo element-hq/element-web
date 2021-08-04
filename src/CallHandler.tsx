@@ -481,27 +481,29 @@ export default class CallHandler extends EventEmitter {
                 this.silencedCalls.delete(call.callId);
             }
 
-            const incomingCallPushRule = (
-                new PushProcessor(MatrixClientPeg.get()).getPushRuleById(RuleId.IncomingCall) as IPushRule
-            );
-            const pushRuleEnabled = incomingCallPushRule?.enabled;
-            const tweakSetToRing = incomingCallPushRule?.actions.some((action: Tweaks) => (
-                action.set_tweak === TweakName.Sound &&
-                action.value === "ring"
-            ));
             switch (newState) {
-                case CallState.Ringing:
+                case CallState.Ringing: {
+                    const incomingCallPushRule = (
+                        new PushProcessor(MatrixClientPeg.get()).getPushRuleById(RuleId.IncomingCall) as IPushRule
+                    );
+                    const pushRuleEnabled = incomingCallPushRule?.enabled;
+                    const tweakSetToRing = incomingCallPushRule?.actions.some((action: Tweaks) => (
+                        action.set_tweak === TweakName.Sound &&
+                        action.value === "ring"
+                    ));
+
                     if (pushRuleEnabled && tweakSetToRing) {
                         this.play(AudioID.Ring);
                     } else {
                         this.silenceCall(call.callId);
                     }
                     break;
-                case CallState.InviteSent:
+                }
+                case CallState.InviteSent: {
                     this.play(AudioID.Ringback);
                     break;
-                case CallState.Ended:
-                {
+                }
+                case CallState.Ended: {
                     const hangupReason = call.hangupReason;
                     Analytics.trackEvent('voip', 'callEnded', 'hangupReason', hangupReason);
                     this.removeCallForRoom(mappedRoomId);
