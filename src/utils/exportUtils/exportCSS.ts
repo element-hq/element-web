@@ -20,6 +20,7 @@ import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
 
 const getExportCSS = async (): Promise<string> => {
     const theme = new ThemeWatcher().getEffectiveTheme();
+    // eslint-disable-next-line camelcase
     const hash = __webpack_hash__;
     const bundle = await fetch(`bundles/${hash}/bundle.css`);
     const bundleCSS = await bundle.text();
@@ -32,13 +33,14 @@ const getExportCSS = async (): Promise<string> => {
         themeCSS = await res.text();
     }
     const fontFaceRegex = /@font-face {.*?}/sg;
-    themeCSS.replace(fontFaceRegex, '');
-    themeCSS.replace(
+
+    themeCSS = themeCSS.replace(fontFaceRegex, '');
+    themeCSS = themeCSS.replace(
         /font-family: Inter/g,
         `font-family: -apple-system, BlinkMacSystemFont, avenir next, 
         avenir, segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif`,
     );
-    themeCSS.replace(
+    themeCSS = themeCSS.replace(
         /font-family: Inconsolata/g,
         "font-family: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace",
     );

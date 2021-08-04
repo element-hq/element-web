@@ -36,6 +36,7 @@ import { ExportTypes } from "./exportUtils";
 import { IExportOptions } from "./exportUtils";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import getExportCSS from "./exportCSS";
+import { textForEvent } from "../../TextForEvent";
 
 export default class HTMLExporter extends Exporter {
     protected avatars: Map<string, boolean>;
@@ -346,13 +347,16 @@ export default class HTMLExporter extends Exporter {
                         );
                     }
                 } else {
-                    eventTile = await this.getEventTileMarkup(this.createModifiedEvent(this.mediaOmitText, mxEv), joined);
+                    eventTile = await this.getEventTileMarkup(
+                        this.createModifiedEvent(this.mediaOmitText, mxEv),
+                        joined,
+                    );
                 }
             } else eventTile = await this.getEventTileMarkup(mxEv, joined);
         } catch (e) {
             // TODO: Handle callEvent errors
             console.error(e);
-            eventTile = await this.getEventTileMarkup(this.createModifiedEvent("Error parsing HTML", mxEv), joined);
+            eventTile = await this.getEventTileMarkup(this.createModifiedEvent(textForEvent(mxEv), mxEv), joined);
         }
 
         return eventTile;

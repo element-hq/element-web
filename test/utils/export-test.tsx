@@ -37,6 +37,12 @@ describe('export', function() {
         return MY_USER_ID;
     };
 
+    const mockExportOptions: IExportOptions = {
+        numberOfMessages: 5,
+        maxSize: 100 * 1024 * 1024,
+        attachmentsIncluded: false,
+    };
+
     const invalidExportOptions: IExportOptions[] = [
         {
             numberOfMessages: 10**9,
@@ -97,5 +103,29 @@ describe('export', function() {
             }
         }
     });
+
+    it('tests the file extension splitter', function() {
+        const exporter = new PlainTextExporter(room, ExportTypes.BEGINNING, mockExportOptions, null);
+        const fileNameWithExtensions = {
+            "": ["", ""],
+            "name": ["name", ""],
+            "name.txt": ["name", ".txt"],
+            ".htpasswd": ["", ".htpasswd"],
+            "name.with.many.dots.myext": ["name.with.many.dots", ".myext"],
+        };
+        for (const fileName in fileNameWithExtensions) {
+            expect(exporter.splitFileName(fileName)).toStrictEqual(fileNameWithExtensions[fileName]);
+        }
+    });
+
+    // it('checks if the reply regex executes correctly', function() {
+    //     const eventContents = [
+    //         {
+    //             "msgtype": "m.text",
+    //             "body": "> <@me:here> Testing....\n\nTest",
+    //             "expectedText": "",
+    //         },
+    //     ];
+    // });
 });
 
