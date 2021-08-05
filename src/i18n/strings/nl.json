@@ -393,7 +393,7 @@
     "Delete widget": "Widget verwijderen",
     "Edit": "Bewerken",
     "Enable automatic language detection for syntax highlighting": "Automatische taaldetectie voor zinsbouwmarkeringen inschakelen",
-    "Publish this room to the public in %(domain)s's room directory?": "Dit gesprek vermelden in de openbare gesprekkencatalogus van %(domain)s?",
+    "Publish this room to the public in %(domain)s's room directory?": "Deze kamer vermelden in de publieke kamersgids van %(domain)s?",
     "AM": "AM",
     "PM": "PM",
     "The maximum permitted number of widgets have already been added to this room.": "Het maximum aan toegestane widgets voor dit gesprek is al bereikt.",
@@ -2661,8 +2661,8 @@
     "Go to Home View": "Ga naar welkomscherm",
     "Activate selected button": "Geselecteerde knop activeren",
     "Close dialog or context menu": "Dialoogvenster of contextmenu sluiten",
-    "Previous/next room or DM": "Vorige/volgende gesprek",
-    "Previous/next unread room or DM": "Vorige/volgende ongelezen gesprek",
+    "Previous/next room or DM": "Vorige/volgende kamer of directe chat",
+    "Previous/next unread room or DM": "Vorige/volgende ongelezen kamer of directe chat",
     "Clear room list filter field": "Gespreklijst filter wissen",
     "Expand room list section": "Gespreklijst selectie uitvouwen",
     "Collapse room list section": "Gespreklijst selectie invouwen",
@@ -2759,7 +2759,7 @@
     "Filter rooms and people": "Gespreken en personen filteren",
     "Explore rooms in %(communityName)s": "Ontdek de gesprekken van %(communityName)s",
     "delete the address.": "het adres verwijderen.",
-    "Delete the room address %(alias)s and remove %(name)s from the directory?": "Het gespreksadres %(alias)s en %(name)s uit de catalogus verwijderen?",
+    "Delete the room address %(alias)s and remove %(name)s from the directory?": "Het kameradres %(alias)s en %(name)s uit de gids verwijderen?",
     "You have no visible notifications.": "U hebt geen zichtbare meldingen.",
     "You’re all caught up": "U bent helemaal bij",
     "Self-verification request": "Verzoek om zelfverificatie",
@@ -3515,5 +3515,7 @@
     "Add existing space": "Bestaande space toevoegen",
     "Decrypting": "Ontsleutelen",
     "Show all rooms": "Toon alle kamers",
-    "Give feedback.": "Feedback geven."
+    "Give feedback.": "Feedback geven.",
+    "Missed call": "Oproep gemist",
+    "Call declined": "Oproep geweigerd"
 }
