@@ -148,8 +148,12 @@ export default class ExportE2eKeysDialog extends React.Component {
                                     </label>
                                 </div>
                                 <div className='mx_E2eKeysDialog_inputCell'>
-                                    <input ref={this._passphrase1} id='passphrase1'
-                                        autoFocus={true} size='64' type='password'
+                                    <input
+                                        ref={this._passphrase1}
+                                        id='passphrase1'
+                                        autoFocus={true}
+                                        size='64'
+                                        type='password'
                                         disabled={disableForm}
                                     />
                                 </div>
@@ -161,8 +165,10 @@ export default class ExportE2eKeysDialog extends React.Component {
                                     </label>
                                 </div>
                                 <div className='mx_E2eKeysDialog_inputCell'>
-                                    <input ref={this._passphrase2} id='passphrase2'
-                                        size='64' type='password'
+                                    <input ref={this._passphrase2}
+                                        id='passphrase2'
+                                        size='64'
+                                        type='password'
                                         disabled={disableForm}
                                     />
                                 </div>

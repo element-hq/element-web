@@ -25,10 +25,43 @@ import { Action } from './dispatcher/actions';
 import defaultDispatcher from './dispatcher/dispatcher';
 import { SetRightPanelPhasePayload } from './dispatcher/payloads/SetRightPanelPhasePayload';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixClientPeg } from "./MatrixClientPeg";
 
 // These functions are frequently used just to check whether an event has
 // any text to display at all. For this reason they return deferred values
 // to avoid the expense of looking up translations when they're not needed.
+
+function textForCallInviteEvent(event: MatrixEvent): () => string | null {
+    const getSenderName = () => event.sender ? event.sender.name : _t('Someone');
+    // FIXME: Find a better way to determine this from the event?
+    let isVoice = true;
+    if (event.getContent().offer && event.getContent().offer.sdp &&
+        event.getContent().offer.sdp.indexOf('m=video') !== -1) {
+        isVoice = false;
+    }
+    const isSupported = MatrixClientPeg.get().supportsVoip();
+
+    // This ladder could be reduced down to a couple string variables, however other languages
+    // can have a hard time translating those strings. In an effort to make translations easier
+    // and more accurate, we break out the string-based variables to a couple booleans.
+    if (isVoice && isSupported) {
+        return () => _t("%(senderName)s placed a voice call.", {
+            senderName: getSenderName(),
+        });
+    } else if (isVoice && !isSupported) {
+        return () => _t("%(senderName)s placed a voice call. (not supported by this browser)", {
+            senderName: getSenderName(),
+        });
+    } else if (!isVoice && isSupported) {
+        return () => _t("%(senderName)s placed a video call.", {
+            senderName: getSenderName(),
+        });
+    } else if (!isVoice && !isSupported) {
+        return () => _t("%(senderName)s placed a video call. (not supported by this browser)", {
+            senderName: getSenderName(),
+        });
+    }
+}
 
 function textForMemberEvent(ev: MatrixEvent, allowJSX: boolean, showHiddenEvents?: boolean): () => string | null {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
@@ -567,6 +600,7 @@ interface IHandlers {
 
 const handlers: IHandlers = {
     'm.room.message': textForMessageEvent,
+    'm.call.invite': textForCallInviteEvent,
 };
 
 const stateHandlers: IHandlers = {

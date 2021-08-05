@@ -59,7 +59,6 @@ $hover-select-border: 4px;
         font-size: $font-14px;
         display: inline-block; /* anti-zalgo, with overflow hidden */
         overflow: hidden;
-        cursor: pointer;
         padding-bottom: 0px;
         padding-top: 0px;
         margin: 0px;
@@ -130,15 +129,6 @@ $hover-select-border: 4px;
         .mx_EventTile_line {
             background-color: $event-highlight-bg-color;
         }
-    }
-
-    &.mx_EventTile_info .mx_EventTile_line,
-    & ~ .mx_EventListSummary .mx_EventTile_avatar ~ .mx_EventTile_line {
-        padding-left: calc($left-gutter + 18px);
-    }
-
-    & ~ .mx_EventListSummary .mx_EventTile_line {
-        padding-left: calc($left-gutter);
     }
 
     &.mx_EventTile_selected.mx_EventTile_info .mx_EventTile_line {
@@ -276,8 +266,17 @@ $hover-select-border: 4px;
 
     .mx_ReactionsRow {
         margin: 0;
-        padding: 6px 60px;
+        padding: 4px 64px;
     }
+}
+
+.mx_EventTile:not([data-layout=bubble]).mx_EventTile_info .mx_EventTile_line,
+.mx_EventListSummary:not([data-layout=bubble]) > :not(.mx_EventTile) .mx_EventTile_avatar ~ .mx_EventTile_line {
+    padding-left: calc($left-gutter + 18px);
+}
+
+.mx_EventListSummary:not([data-layout=bubble]) .mx_EventTile_line {
+    padding-left: calc($left-gutter);
 }
 
 /* all the overflow-y: hidden; are to trap Zalgos -
@@ -311,15 +310,17 @@ $hover-select-border: 4px;
 }
 
 .mx_RoomView_timeline_rr_enabled {
-
-    .mx_EventTile:not([data-layout=bubble]) {
+    .mx_EventTile[data-layout=group] {
         .mx_EventTile_line {
             /* ideally should be 100px, but 95px gives us a max thumbnail size of 800x600, which is nice */
             margin-right: 110px;
         }
     }
-
     // on ELS we need the margin to allow interaction with the expand/collapse button which is normally in the RR gutter
+}
+
+.mx_SenderProfile {
+    cursor: pointer;
 }
 
 .mx_EventTile_bubbleContainer {
@@ -456,8 +457,14 @@ $hover-select-border: 4px;
 
 /* Various markdown overrides */
 
-.mx_EventTile_body pre {
-    border: 1px solid transparent;
+.mx_EventTile_body {
+    a:hover {
+        text-decoration: underline;
+    }
+
+    pre {
+        border: 1px solid transparent;
+    }
 }
 
 .mx_EventTile_content .markdown-body {
@@ -571,6 +578,12 @@ $hover-select-border: 4px;
 
 .mx_EventTile_content .markdown-body a {
     color: $accent-color-alt;
+}
+
+.mx_EventTile_content .markdown-body blockquote {
+    border-left: 2px solid $blockquote-bar-color;
+    border-radius: 2px;
+    padding: 0 10px;
 }
 
 .mx_EventTile_content .markdown-body .hljs {

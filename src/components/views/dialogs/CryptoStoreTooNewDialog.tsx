@@ -72,7 +72,7 @@ const CryptoStoreTooNewDialog: React.FC<IProps> = (props: IProps) => {
             hasCancel={false}
             onPrimaryButtonClick={props.onFinished}
         >
-            <button onClick={_onLogoutClicked} >
+            <button onClick={_onLogoutClicked}>
                 { _t('Sign out') }
             </button>
         </DialogButtons>

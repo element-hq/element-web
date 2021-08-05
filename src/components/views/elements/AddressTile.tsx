@@ -122,7 +122,7 @@ export default class AddressTile extends React.Component<IProps> {
         let dismiss;
         if (this.props.canDismiss) {
             dismiss = (
-                <div className="mx_AddressTile_dismiss" onClick={this.props.onDismissed} >
+                <div className="mx_AddressTile_dismiss" onClick={this.props.onDismissed}>
                     <img src={require("../../../../res/img/icon-address-delete.svg")} width="9" height="9" />
                 </div>
             );
