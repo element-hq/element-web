@@ -3550,5 +3550,15 @@
     "Call declined": "Hovor odmítnut",
     "Surround selected text when typing special characters": "Ohraničit označený text při psaní speciálních znaků",
     "Stop recording": "Zastavit nahrávání",
-    "Send voice message": "Odeslat hlasovou zprávu"
+    "Send voice message": "Odeslat hlasovou zprávu",
+    "Mute the microphone": "Ztlumit mikrofon",
+    "Unmute the microphone": "Zrušit ztlumení mikrofonu",
+    "Dialpad": "Číselník",
+    "More": "Více",
+    "Show sidebar": "Zobrazit postranní panel",
+    "Hide sidebar": "Skrýt postranní panel",
+    "Start sharing your screen": "Začít sdílet obrazovku",
+    "Stop sharing your screen": "Přestat sdílet obrazovku",
+    "Stop the camera": "Vypnout kameru",
+    "Start the camera": "Zapnout kameru"
 }
