@@ -209,9 +209,9 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 'mx_VoiceRecordComposerTile_stop': this.state.recorder?.isRecording,
             });
 
-            let tooltip = _t("Record a voice message");
+            let tooltip = _t("Send voice message");
             if (!!this.state.recorder) {
-                tooltip = _t("Stop the recording");
+                tooltip = _t("Stop recording");
             }
 
             let stopOrRecordBtn = <AccessibleTooltipButton
@@ -229,7 +229,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         if (this.state.recorder && this.state.recordingPhase !== RecordingState.Uploading) {
             deleteButton = <AccessibleTooltipButton
                 className='mx_VoiceRecordComposerTile_delete'
-                title={_t("Delete recording")}
+                title={_t("Delete")}
                 onClick={this.onCancel}
             />;
         }
