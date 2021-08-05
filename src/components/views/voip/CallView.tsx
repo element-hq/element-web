@@ -554,7 +554,11 @@ export default class CallView extends React.Component<IProps, IState> {
                     ChevronFace.None,
                     CONTEXT_MENU_VPADDING,
                 )}
-                mountAsChild={true}
+                // We mount the context menus as a as a child typically in order to include the
+                // context menus when fullscreening the call content.
+                // However, this does not work as well when the call is embedded in a
+                // picture-in-picture frame. Thus, only mount as child when we are *not* in PiP.
+                mountAsChild={!this.props.pipMode}
                 onFinished={this.closeDialpad}
                 call={this.props.call}
             />;
@@ -568,7 +572,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     ChevronFace.None,
                     CONTEXT_MENU_VPADDING,
                 )}
-                mountAsChild={true}
+                mountAsChild={!this.props.pipMode}
                 onFinished={this.closeContextMenu}
                 call={this.props.call}
             />;
