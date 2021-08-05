@@ -3071,7 +3071,7 @@
     "Your message wasn't sent because this homeserver has been blocked by it's administrator. Please <a>contact your service administrator</a> to continue using the service.": "你的消息未被发送，因为此主服务器已被其管理员封禁。请<a>联络你的服务管理员</a>已继续使用服务。",
     "Filter all spaces": "过滤所有空间",
     "You have no visible notifications.": "你没有可见的通知。",
-    "Communities are changing to Spaces": "社群正在转变为空间",
+    "Communities are changing to Spaces": "社区正在向空间转变",
     "%(creator)s created this DM.": "%(creator)s 创建了此私聊。",
     "Verification requested": "已请求验证",
     "Security Key mismatch": "安全密钥不符",
