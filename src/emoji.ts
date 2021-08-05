@@ -35,8 +35,15 @@ export const EMOTICON_TO_EMOJI = new Map<string, IEmoji>();
 
 export const getEmojiFromUnicode = unicode => UNICODE_TO_EMOJI.get(stripVariation(unicode));
 
-const isRegionalIndicator = (x: string): boolean =>
-    Array.from(x).length === 1 && x >= '\u{1f1e6}' && x <= '\u{1f1ff}';
+const isRegionalIndicator = (x: string): boolean => {
+    // First verify that the string is a single character. We use Array.from
+    // to make sure we count by characters, not UTF-8 code units.
+    return Array.from(x).length === 1 &&
+        // Next verify that the character is within the code point range for
+        // regional indicators.
+        // http://unicode.org/charts/PDF/Unicode-6.0/U60-1F100.pdf
+        x >= '\u{1f1e6}' && x <= '\u{1f1ff}';
+};
 
 const EMOJIBASE_GROUP_ID_TO_CATEGORY = [
     "people", // smileys
