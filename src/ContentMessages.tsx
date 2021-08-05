@@ -226,11 +226,6 @@ const IMAGE_THUMBNAIL_MIN_REDUCTION_PERCENT = 0.1; // 10%
  * @return {Promise} A promise that resolves with the attachment info.
  */
 async function infoForImageFile(matrixClient: MatrixClient, roomId: string, imageFile: File) {
-    if (imageFile.size <= IMAGE_SIZE_THRESHOLD_THUMBNAIL) {
-        // don't bother generating a thumbnail, image is small enough already
-        return {};
-    }
-
     let thumbnailType = "image/png";
     if (imageFile.type === "image/jpeg") {
         thumbnailType = "image/jpeg";
@@ -238,20 +233,18 @@ async function infoForImageFile(matrixClient: MatrixClient, roomId: string, imag
 
     const imageElement = await loadImageElement(imageFile);
 
-    if (imageElement.width < MAX_WIDTH && imageElement.height < MAX_HEIGHT) {
-        // don't bother uploading thumbnail as it'd be the same resolution as the original.
-        return {};
-    }
-
     const result = await createThumbnail(imageElement.img, imageElement.width, imageElement.height, thumbnailType);
     const imageInfo = result.info;
 
+    // we do all sizing checks here because we still rely on thumbnail generation for making a blurhash from.
     const sizeDifference = imageFile.size - imageInfo.thumbnail_info.size;
-    if (sizeDifference <= IMAGE_THUMBNAIL_MIN_REDUCTION_SIZE &&
-        sizeDifference <= (imageFile.size * IMAGE_THUMBNAIL_MIN_REDUCTION_PERCENT)
+    if (
+        imageFile.size <= IMAGE_SIZE_THRESHOLD_THUMBNAIL || // image is small enough already
+        (sizeDifference <= IMAGE_THUMBNAIL_MIN_REDUCTION_SIZE && // thumbnail is not sufficiently smaller than original
+            sizeDifference <= (imageFile.size * IMAGE_THUMBNAIL_MIN_REDUCTION_PERCENT))
     ) {
-        // don't bother uploading thumbnail as it not sufficiently smaller than the original.
-        return {};
+        delete imageInfo["thumbnail_info"];
+        return imageInfo;
     }
 
     const uploadResult = await uploadFile(matrixClient, roomId, result.thumbnail);
