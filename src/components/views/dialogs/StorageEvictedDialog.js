@@ -48,27 +48,29 @@ export default class StorageEvictedDialog extends React.Component {
                 "To help us prevent this in future, please <a>send us logs</a>.",
                 {},
                 {
-                    a: text => <a href="#" onClick={this._sendBugReport}>{text}</a>,
+                    a: text => <a href="#" onClick={this._sendBugReport}>{ text }</a>,
                 },
             );
         }
 
         return (
-            <BaseDialog className="mx_ErrorDialog" onFinished={this.props.onFinished}
+            <BaseDialog
+                className="mx_ErrorDialog"
+                onFinished={this.props.onFinished}
                 title={_t('Missing session data')}
                 contentId='mx_Dialog_content'
                 hasCancel={false}
             >
                 <div className="mx_Dialog_content" id='mx_Dialog_content'>
-                    <p>{_t(
+                    <p>{ _t(
                         "Some session data, including encrypted message keys, is " +
                         "missing. Sign out and sign in to fix this, restoring keys " +
                         "from backup.",
-                    )}</p>
-                    <p>{_t(
+                    ) }</p>
+                    <p>{ _t(
                         "Your browser likely removed this data when running low on " +
                         "disk space.",
-                    )} {logRequest}</p>
+                    ) } { logRequest }</p>
                 </div>
                 <DialogButtons primaryButton={_t("Sign out")}
                     onPrimaryButtonClick={this._onSignOutClick}

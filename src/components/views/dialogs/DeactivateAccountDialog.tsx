@@ -17,7 +17,6 @@ limitations under the License.
 
 import React from 'react';
 
-import * as sdk from '../../../index';
 import Analytics from '../../../Analytics';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as Lifecycle from '../../../Lifecycle';
@@ -26,6 +25,7 @@ import InteractiveAuth, { ERROR_USER_CANCELLED } from "../../structures/Interact
 import { DEFAULT_PHASE, PasswordAuthEntry, SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import BaseDialog from "./BaseDialog";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -165,8 +165,6 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
     }
 
     public render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-
         let error = null;
         if (this.state.errStr) {
             error = <div className="error">
@@ -174,11 +172,11 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
             </div>;
         }
 
-        let auth = <div>{_t("Loading...")}</div>;
+        let auth = <div>{ _t("Loading...") }</div>;
         if (this.state.authData && this.state.authEnabled) {
             auth = (
                 <div>
-                    {this.state.bodyText}
+                    { this.state.bodyText }
                     <InteractiveAuth
                         matrixClient={MatrixClientPeg.get()}
                         authData={this.state.authData}
@@ -232,18 +230,18 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
                                 checked={this.state.shouldErase}
                                 onChange={this.onEraseFieldChange}
                             >
-                                {_t(
+                                { _t(
                                     "Please forget all messages I have sent when my account is deactivated " +
                                     "(<b>Warning:</b> this will cause future users to see an incomplete view " +
                                     "of conversations)",
                                     {},
                                     { b: (sub) => <b>{ sub }</b> },
-                                )}
+                                ) }
                             </StyledCheckbox>
                         </p>
 
-                        {error}
-                        {auth}
+                        { error }
+                        { auth }
                     </div>
 
                 </div>

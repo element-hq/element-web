@@ -110,20 +110,20 @@ export default class EditHistoryMessage extends React.PureComponent {
         if (!this.props.mxEvent.isRedacted() && !this.props.isBaseEvent && this.state.canRedact) {
             redactButton = (
                 <AccessibleButton onClick={this._onRedactClick}>
-                    {_t("Remove")}
+                    { _t("Remove") }
                 </AccessibleButton>
             );
         }
         const viewSourceButton = (
             <AccessibleButton onClick={this._onViewSourceClick}>
-                {_t("View Source")}
+                { _t("View Source") }
             </AccessibleButton>
         );
         // disabled remove button when not allowed
         return (
             <div className="mx_MessageActionBar">
-                {redactButton}
-                {viewSourceButton}
+                { redactButton }
+                { viewSourceButton }
             </div>
         );
     }
@@ -146,11 +146,11 @@ export default class EditHistoryMessage extends React.PureComponent {
                 contentContainer = (
                     <div className="mx_EventTile_content" ref={this._content}>*&nbsp;
                         <span className="mx_MEmoteBody_sender">{ name }</span>
-                        &nbsp;{contentElements}
+                        &nbsp;{ contentElements }
                     </div>
                 );
             } else {
-                contentContainer = <div className="mx_EventTile_content" ref={this._content}>{contentElements}</div>;
+                contentContainer = <div className="mx_EventTile_content" ref={this._content}>{ contentElements }</div>;
             }
         }
 
@@ -165,7 +165,7 @@ export default class EditHistoryMessage extends React.PureComponent {
             <li>
                 <div className={classes}>
                     <div className="mx_EventTile_line">
-                        <span className="mx_MessageTimestamp">{timestamp}</span>
+                        <span className="mx_MessageTimestamp">{ timestamp }</span>
                         { contentContainer }
                         { this._renderActionBar() }
                     </div>

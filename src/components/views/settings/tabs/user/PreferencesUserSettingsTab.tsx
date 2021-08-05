@@ -20,10 +20,13 @@ import { _t } from "../../../../../languageHandler";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import Field from "../../../elements/Field";
-import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import SettingsFlag from '../../../elements/SettingsFlag';
+import * as KeyboardShortcuts from "../../../../../accessibility/KeyboardShortcuts";
+import AccessibleButton from "../../../elements/AccessibleButton";
+import SpaceStore from "../../../../../stores/SpaceStore";
 
 interface IState {
     autoLaunch: boolean;
@@ -45,36 +48,49 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
         'breadcrumbs',
     ];
 
+    static SPACES_SETTINGS = [
+        "Spaces.allRoomsInHome",
+    ];
+
+    static KEYBINDINGS_SETTINGS = [
+        'ctrlFForSearch',
+    ];
+
     static COMPOSER_SETTINGS = [
         'MessageComposerInput.autoReplaceEmoji',
         'MessageComposerInput.suggestEmoji',
         'sendTypingNotifications',
         'MessageComposerInput.ctrlEnterToSend',
+        'MessageComposerInput.surroundWith',
         'MessageComposerInput.showStickersButton',
     ];
 
-    static TIMELINE_SETTINGS = [
-        'showTypingNotifications',
-        'autoplayGifsAndVideos',
-        'urlPreviewsEnabled',
-        'TextualBody.enableBigEmoji',
-        'showReadReceipts',
+    static TIME_SETTINGS = [
         'showTwelveHourTimestamps',
         'alwaysShowTimestamps',
-        'showRedactions',
+    ];
+    static CODE_BLOCKS_SETTINGS = [
         'enableSyntaxHighlightLanguageDetection',
         'expandCodeByDefault',
-        'scrollToBottomOnMessageSent',
         'showCodeLineNumbers',
-        'showJoinLeaves',
-        'showAvatarChanges',
-        'showDisplaynameChanges',
-        'showImages',
-        'showChatEffects',
-        'Pill.shouldShowPillAvatar',
-        'ctrlFForSearch',
     ];
-
+    static IMAGES_AND_VIDEOS_SETTINGS = [
+        'urlPreviewsEnabled',
+        'autoplayGifsAndVideos',
+        'showImages',
+    ];
+    static TIMELINE_SETTINGS = [
+        'showTypingNotifications',
+        'showRedactions',
+        'showReadReceipts',
+        'showJoinLeaves',
+        'showDisplaynameChanges',
+        'showChatEffects',
+        'showAvatarChanges',
+        'Pill.shouldShowPillAvatar',
+        'TextualBody.enableBigEmoji',
+        'scrollToBottomOnMessageSent',
+    ];
     static GENERAL_SETTINGS = [
         'TagPanel.enableTagPanel',
         'promptBeforeInviteUnknownUsers',
@@ -174,7 +190,6 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
     };
 
     private renderGroup(settingIds: string[]): React.ReactNodeArray {
-        const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
         return settingIds.filter(SettingsStore.isEnabled).map(i => {
             return <SettingsFlag key={i} name={i} level={SettingLevel.ACCOUNT} />;
         });
@@ -215,30 +230,58 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
 
         return (
             <div className="mx_SettingsTab mx_PreferencesUserSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Preferences")}</div>
+                <div className="mx_SettingsTab_heading">{ _t("Preferences") }</div>
 
                 <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Room list")}</span>
-                    {this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
+                    <span className="mx_SettingsTab_subheading">{ _t("Room list") }</span>
+                    { this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS) }
+                </div>
+
+                { SpaceStore.spacesEnabled && <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{ _t("Spaces") }</span>
+                    { this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS) }
+                </div> }
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{ _t("Keyboard shortcuts") }</span>
+                    <AccessibleButton className="mx_SettingsFlag" onClick={KeyboardShortcuts.toggleDialog}>
+                        { _t("To view all keyboard shortcuts, click here.") }
+                    </AccessibleButton>
+                    { this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS) }
                 </div>
 
                 <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Composer")}</span>
-                    {this.renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
+                    <span className="mx_SettingsTab_subheading">{ _t("Displaying time") }</span>
+                    { this.renderGroup(PreferencesUserSettingsTab.TIME_SETTINGS) }
                 </div>
 
                 <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Timeline")}</span>
-                    {this.renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
+                    <span className="mx_SettingsTab_subheading">{ _t("Composer") }</span>
+                    { this.renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS) }
                 </div>
 
                 <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("General")}</span>
-                    {this.renderGroup(PreferencesUserSettingsTab.GENERAL_SETTINGS)}
-                    {minimizeToTrayOption}
-                    {autoHideMenuOption}
-                    {autoLaunchOption}
-                    {warnBeforeExitOption}
+                    <span className="mx_SettingsTab_subheading">{ _t("Code blocks") }</span>
+                    { this.renderGroup(PreferencesUserSettingsTab.CODE_BLOCKS_SETTINGS) }
+                </div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{ _t("Images, GIFs and videos") }</span>
+                    { this.renderGroup(PreferencesUserSettingsTab.IMAGES_AND_VIDEOS_SETTINGS) }
+                </div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{ _t("Timeline") }</span>
+                    { this.renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS) }
+                </div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{ _t("General") }</span>
+                    { this.renderGroup(PreferencesUserSettingsTab.GENERAL_SETTINGS) }
+                    { minimizeToTrayOption }
+                    { autoHideMenuOption }
+                    { autoLaunchOption }
+                    { warnBeforeExitOption }
                     <Field
                         label={_t('Autocomplete delay (ms)')}
                         type='number'

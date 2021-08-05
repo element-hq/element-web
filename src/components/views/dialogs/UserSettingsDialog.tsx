@@ -28,11 +28,11 @@ import PreferencesUserSettingsTab from "../settings/tabs/user/PreferencesUserSet
 import VoiceUserSettingsTab from "../settings/tabs/user/VoiceUserSettingsTab";
 import HelpUserSettingsTab from "../settings/tabs/user/HelpUserSettingsTab";
 import FlairUserSettingsTab from "../settings/tabs/user/FlairUserSettingsTab";
-import * as sdk from "../../../index";
 import SdkConfig from "../../../SdkConfig";
 import MjolnirUserSettingsTab from "../settings/tabs/user/MjolnirUserSettingsTab";
 import { UIFeature } from "../../../settings/UIFeature";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import BaseDialog from "./BaseDialog";
 
 export enum UserTab {
     General = "USER_GENERAL_TAB",
@@ -81,7 +81,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
         this.setState({ mjolnirEnabled: newValue });
     };
 
-    _getTabs() {
+    private getTabs() {
         const tabs = [];
 
         tabs.push(new Tab(
@@ -162,8 +162,6 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
     }
 
     render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-
         return (
             <BaseDialog
                 className='mx_UserSettingsDialog'
@@ -172,7 +170,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 title={_t("Settings")}
             >
                 <div className='mx_SettingsDialog_content'>
-                    <TabbedView tabs={this._getTabs()} initialTabId={this.props.initialTabId} />
+                    <TabbedView tabs={this.getTabs()} initialTabId={this.props.initialTabId} />
                 </div>
             </BaseDialog>
         );

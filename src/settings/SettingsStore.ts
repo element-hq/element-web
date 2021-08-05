@@ -29,6 +29,8 @@ import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
 import { WatchManager, CallbackFn as WatchCallbackFn } from "./WatchManager";
 import { SettingLevel } from "./SettingLevel";
 import SettingsHandler from "./handlers/SettingsHandler";
+import { SettingUpdatedPayload } from "../dispatcher/payloads/SettingUpdatedPayload";
+import { Action } from "../dispatcher/actions";
 
 const defaultWatchManager = new WatchManager();
 
@@ -147,7 +149,7 @@ export default class SettingsStore {
      * if the change in value is worthwhile enough to react upon.
      * @returns {string} A reference to the watcher that was employed.
      */
-    public static watchSetting(settingName: string, roomId: string, callbackFn: CallbackFn): string {
+    public static watchSetting(settingName: string, roomId: string | null, callbackFn: CallbackFn): string {
         const setting = SETTINGS[settingName];
         const originalSettingName = settingName;
         if (!setting) throw new Error(`${settingName} is not a setting`);
@@ -193,7 +195,7 @@ export default class SettingsStore {
      * @param {string} settingName The setting name to monitor.
      * @param {String} roomId The room ID to monitor for changes in. Use null for all rooms.
      */
-    public static monitorSetting(settingName: string, roomId: string) {
+    public static monitorSetting(settingName: string, roomId: string | null) {
         roomId = roomId || null; // the thing wants null specifically to work, so appease it.
 
         if (!this.monitors.has(settingName)) this.monitors.set(settingName, new Map());
@@ -201,8 +203,8 @@ export default class SettingsStore {
         const registerWatcher = () => {
             this.monitors.get(settingName).set(roomId, SettingsStore.watchSetting(
                 settingName, roomId, (settingName, inRoomId, level, newValueAtLevel, newValue) => {
-                    dis.dispatch({
-                        action: 'setting_updated',
+                    dis.dispatch<SettingUpdatedPayload>({
+                        action: Action.SettingUpdated,
                         settingName,
                         roomId: inRoomId,
                         level,

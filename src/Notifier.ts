@@ -27,7 +27,6 @@ import * as TextForEvent from './TextForEvent';
 import Analytics from './Analytics';
 import * as Avatar from './Avatar';
 import dis from './dispatcher/dispatcher';
-import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
 import SettingsStore from "./settings/SettingsStore";
@@ -37,6 +36,7 @@ import { isPushNotifyDisabled } from "./settings/controllers/NotificationControl
 import RoomViewStore from "./stores/RoomViewStore";
 import UserActivity from "./UserActivity";
 import { mediaFromMxc } from "./customisations/Media";
+import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 
 /*
  * Dispatches:
@@ -240,7 +240,6 @@ export const Notifier = {
                         ? _t('%(brand)s does not have permission to send you notifications - ' +
                             'please check your browser settings', { brand })
                         : _t('%(brand)s was not given permission to send notifications - please try again', { brand });
-                    const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
                     Modal.createTrackedDialog('Unable to enable Notifications', result, ErrorDialog, {
                         title: _t('Unable to enable Notifications'),
                         description,
@@ -329,7 +328,7 @@ export const Notifier = {
 
     onEvent: function(ev: MatrixEvent) {
         if (!this.isSyncing) return; // don't alert for any messages initially
-        if (ev.sender && ev.sender.userId === MatrixClientPeg.get().credentials.userId) return;
+        if (ev.getSender() === MatrixClientPeg.get().credentials.userId) return;
 
         MatrixClientPeg.get().decryptEventIfNeeded(ev);
 

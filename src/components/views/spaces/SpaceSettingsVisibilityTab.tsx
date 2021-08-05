@@ -18,13 +18,13 @@ import React, { useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { GuestAccess, HistoryVisibility, JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import AliasSettings from "../room_settings/AliasSettings";
 import { useStateToggle } from "../../../hooks/useStateToggle";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
-import { GuestAccess, HistoryVisibility, JoinRule } from "../settings/tabs/room/SecurityRoomSettingsTab";
 import StyledRadioGroup from "../elements/StyledRadioGroup";
 
 interface IProps {
@@ -39,7 +39,7 @@ enum SpaceVisibility {
 
 const useLocalEcho = <T extends any>(
     currentFactory: () => T,
-    setterFn: (value: T) => Promise<void>,
+    setterFn: (value: T) => Promise<unknown>,
     errorFn: (error: Error) => void,
 ): [value: T, handler: (value: T) => void] => {
     const [value, setValue] = useState(currentFactory);
@@ -123,7 +123,7 @@ const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space }: IProps) => {
     let addressesSection;
     if (visibility !== SpaceVisibility.Private) {
         addressesSection = <>
-            <span className="mx_SettingsTab_subheading">{_t("Address")}</span>
+            <span className="mx_SettingsTab_subheading">{ _t("Address") }</span>
             <div className="mx_SettingsTab_section mx_SettingsTab_subsectionText">
                 <AliasSettings
                     roomId={space.roomId}

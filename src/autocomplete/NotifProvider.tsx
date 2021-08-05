@@ -21,8 +21,8 @@ import AutocompleteProvider from './AutocompleteProvider';
 import { _t } from '../languageHandler';
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import { PillCompletion } from './Components';
-import * as sdk from '../index';
 import { ICompletion, ISelectionRange } from "./Autocompleter";
+import RoomAvatar from '../components/views/avatars/RoomAvatar';
 
 const AT_ROOM_REGEX = /@\S*/g;
 
@@ -40,8 +40,6 @@ export default class NotifProvider extends AutocompleteProvider {
         force = false,
         limit = -1,
     ): Promise<ICompletion[]> {
-        const RoomAvatar = sdk.getComponent('views.avatars.RoomAvatar');
-
         const client = MatrixClientPeg.get();
 
         if (!this.room.currentState.mayTriggerNotifOfType('room', client.credentials.userId)) return [];

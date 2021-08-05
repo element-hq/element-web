@@ -24,12 +24,12 @@ import GeneralRoomSettingsTab from "../settings/tabs/room/GeneralRoomSettingsTab
 import SecurityRoomSettingsTab from "../settings/tabs/room/SecurityRoomSettingsTab";
 import NotificationSettingsTab from "../settings/tabs/room/NotificationSettingsTab";
 import BridgeSettingsTab from "../settings/tabs/room/BridgeSettingsTab";
-import * as sdk from "../../../index";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import BaseDialog from "./BaseDialog";
 
 export const ROOM_GENERAL_TAB = "ROOM_GENERAL_TAB";
 export const ROOM_SECURITY_TAB = "ROOM_SECURITY_TAB";
@@ -119,8 +119,6 @@ export default class RoomSettingsDialog extends React.Component<IProps> {
     }
 
     render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-
         const roomName = MatrixClientPeg.get().getRoom(this.props.roomId).name;
         return (
             <BaseDialog

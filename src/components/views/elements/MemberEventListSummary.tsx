@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactChildren } from 'react';
+import React, { ComponentProps } from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
@@ -25,22 +25,15 @@ import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
 import { isValid3pidInvite } from "../../../RoomInvite";
 import EventListSummary from "./EventListSummary";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { Layout } from '../../../settings/Layout';
 
-interface IProps {
-    // An array of member events to summarise
-    events: MatrixEvent[];
+interface IProps extends Omit<ComponentProps<typeof EventListSummary>, "summaryText" | "summaryMembers"> {
     // The maximum number of names to show in either each summary e.g. 2 would result "A, B and 234 others left"
     summaryLength?: number;
     // The maximum number of avatars to display in the summary
     avatarsMaxLength?: number;
-    // The minimum number of events needed to trigger summarisation
-    threshold?: number,
-    // Whether or not to begin with state.expanded=true
-    startExpanded?: boolean,
-    // An array of EventTiles to render when expanded
-    children: ReactChildren;
-    // Called when the MELS expansion is toggled
-    onToggle?(): void,
+    // The currently selected layout
+    layout: Layout;
 }
 
 interface IUserEvents {
@@ -77,6 +70,7 @@ export default class MemberEventListSummary extends React.Component<IProps> {
         summaryLength: 1,
         threshold: 3,
         avatarsMaxLength: 5,
+        layout: Layout.Group,
     };
 
     shouldComponentUpdate(nextProps) {
@@ -463,6 +457,7 @@ export default class MemberEventListSummary extends React.Component<IProps> {
             startExpanded={this.props.startExpanded}
             children={this.props.children}
             summaryMembers={[...latestUserAvatarMember.values()]}
+            layout={this.props.layout}
             summaryText={this.generateSummary(aggregate.names, orderedTransitionSequences)} />;
     }
 }

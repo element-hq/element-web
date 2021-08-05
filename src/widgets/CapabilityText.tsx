@@ -20,7 +20,7 @@ import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { ElementWidgetCapabilities } from "../stores/widgets/ElementWidgetCapabilities";
 import React from "react";
 
-type GENERIC_WIDGET_KIND = "generic";
+type GENERIC_WIDGET_KIND = "generic"; // eslint-disable-line @typescript-eslint/naming-convention
 const GENERIC_WIDGET_KIND: GENERIC_WIDGET_KIND = "generic";
 
 interface ISendRecvStaticCapText {
@@ -176,7 +176,7 @@ export class CapabilityText {
                         primary: _t("Send <b>%(eventType)s</b> events as you in this room", {
                             eventType: eventCap.eventType,
                         }, {
-                            b: sub => <b>{sub}</b>,
+                            b: sub => <b>{ sub }</b>,
                         }),
                         byline: CapabilityText.bylineFor(eventCap),
                     };
@@ -185,7 +185,7 @@ export class CapabilityText {
                         primary: _t("See <b>%(eventType)s</b> events posted to this room", {
                             eventType: eventCap.eventType,
                         }, {
-                            b: sub => <b>{sub}</b>,
+                            b: sub => <b>{ sub }</b>,
                         }),
                         byline: CapabilityText.bylineFor(eventCap),
                     };
@@ -196,7 +196,7 @@ export class CapabilityText {
                         primary: _t("Send <b>%(eventType)s</b> events as you in your active room", {
                             eventType: eventCap.eventType,
                         }, {
-                            b: sub => <b>{sub}</b>,
+                            b: sub => <b>{ sub }</b>,
                         }),
                         byline: CapabilityText.bylineFor(eventCap),
                     };
@@ -205,7 +205,7 @@ export class CapabilityText {
                         primary: _t("See <b>%(eventType)s</b> events posted to your active room", {
                             eventType: eventCap.eventType,
                         }, {
-                            b: sub => <b>{sub}</b>,
+                            b: sub => <b>{ sub }</b>,
                         }),
                         byline: CapabilityText.bylineFor(eventCap),
                     };
@@ -216,7 +216,7 @@ export class CapabilityText {
         // We don't have enough context to render this capability specially, so we'll present it as-is
         return {
             primary: _t("The <b>%(capability)s</b> capability", { capability }, {
-                b: sub => <b>{sub}</b>,
+                b: sub => <b>{ sub }</b>,
             }),
         };
     }
@@ -324,13 +324,13 @@ export class CapabilityText {
                         primary = _t("Send <b>%(msgtype)s</b> messages as you in this room", {
                             msgtype: eventCap.keyStr,
                         }, {
-                            b: sub => <b>{sub}</b>,
+                            b: sub => <b>{ sub }</b>,
                         });
                     } else {
                         primary = _t("Send <b>%(msgtype)s</b> messages as you in your active room", {
                             msgtype: eventCap.keyStr,
                         }, {
-                            b: sub => <b>{sub}</b>,
+                            b: sub => <b>{ sub }</b>,
                         });
                     }
                 } else {
@@ -338,13 +338,13 @@ export class CapabilityText {
                         primary = _t("See <b>%(msgtype)s</b> messages posted to this room", {
                             msgtype: eventCap.keyStr,
                         }, {
-                            b: sub => <b>{sub}</b>,
+                            b: sub => <b>{ sub }</b>,
                         });
                     } else {
                         primary = _t("See <b>%(msgtype)s</b> messages posted to your active room", {
                             msgtype: eventCap.keyStr,
                         }, {
-                            b: sub => <b>{sub}</b>,
+                            b: sub => <b>{ sub }</b>,
                         });
                     }
                 }

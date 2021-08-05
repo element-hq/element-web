@@ -105,7 +105,7 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
         const checkboxRows = Object.entries(this.state.booleanStates).map(([cap, isChecked], i) => {
             const text = CapabilityText.for(cap, this.props.widgetKind);
             const byline = text.byline
-                ? <span className="mx_WidgetCapabilitiesPromptDialog_byline">{text.byline}</span>
+                ? <span className="mx_WidgetCapabilitiesPromptDialog_byline">{ text.byline }</span>
                 : null;
 
             return (
@@ -113,8 +113,8 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
                     <StyledCheckbox
                         checked={isChecked}
                         onChange={() => this.onToggle(cap)}
-                    >{text.primary}</StyledCheckbox>
-                    {byline}
+                    >{ text.primary }</StyledCheckbox>
+                    { byline }
                 </div>
             );
         });
@@ -127,8 +127,8 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
             >
                 <form onSubmit={this.onSubmit}>
                     <div className="mx_Dialog_content">
-                        <div className="text-muted">{_t("This widget would like to:")}</div>
-                        {checkboxRows}
+                        <div className="text-muted">{ _t("This widget would like to:") }</div>
+                        { checkboxRows }
                         <DialogButtons
                             primaryButton={_t("Approve")}
                             cancelButton={_t("Decline All")}

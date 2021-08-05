@@ -17,7 +17,6 @@ import React from 'react';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import * as sdk from '../../../index';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
@@ -36,20 +35,22 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import VoiceRecordComposerTile from "./VoiceRecordComposerTile";
 import { VoiceRecordingStore } from "../../../stores/VoiceRecordingStore";
-import { RecordingState } from "../../../voice/VoiceRecording";
+import { RecordingState } from "../../../audio/VoiceRecording";
 import Tooltip, { Alignment } from "../elements/Tooltip";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 import { E2EStatus } from '../../../utils/ShieldUtils';
 import SendMessageComposer from "./SendMessageComposer";
 import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../dispatcher/actions";
+import EditorModel from "../../../editor/model";
+import EmojiPicker from '../emojipicker/EmojiPicker';
+import MemberStatusMessageAvatar from "../avatars/MemberStatusMessageAvatar";
 
 interface IComposerAvatarProps {
     me: object;
 }
 
 function ComposerAvatar(props: IComposerAvatarProps) {
-    const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
     return <div className="mx_MessageComposer_avatar">
         <MemberStatusMessageAvatar member={props.me} width={24} height={24} />
     </div>;
@@ -75,7 +76,6 @@ const EmojiButton = ({ addEmoji }) => {
     let contextMenu;
     if (menuDisplayed) {
         const buttonRect = button.current.getBoundingClientRect();
-        const EmojiPicker = sdk.getComponent('emojipicker.EmojiPicker');
         contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false}>
             <EmojiPicker onChoose={addEmoji} showQuickReactions={true} />
         </ContextMenu>;
@@ -98,9 +98,7 @@ const EmojiButton = ({ addEmoji }) => {
             isExpanded={menuDisplayed}
             title={_t('Emoji picker')}
             inputRef={button}
-        >
-
-        </ContextMenuTooltipButton>
+        />
 
         { contextMenu }
     </React.Fragment>;
@@ -318,14 +316,14 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         }
     };
 
-    addEmoji(emoji: string) {
+    private addEmoji(emoji: string) {
         dis.dispatch<ComposerInsertPayload>({
             action: Action.ComposerInsert,
             text: emoji,
         });
     }
 
-    sendMessage = async () => {
+    private sendMessage = async () => {
         if (this.state.haveRecording && this.voiceRecordingButton) {
             // There shouldn't be any text message to send when a voice recording is active, so
             // just send out the voice recording.
@@ -333,11 +331,10 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             return;
         }
 
-        // XXX: Private function access
-        this.messageComposerInput._sendMessage();
+        this.messageComposerInput.sendMessage();
     };
 
-    onChange = (model) => {
+    private onChange = (model: EditorModel) => {
         this.setState({
             isComposerEmpty: model.isEmpty,
         });
@@ -345,8 +342,11 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
     private onVoiceStoreUpdate = () => {
         const recording = VoiceRecordingStore.instance.activeRecording;
-        this.setState({ haveRecording: !!recording });
         if (recording) {
+            // Delay saying we have a recording until it is started, as we might not yet have A/V permissions
+            recording.on(RecordingState.Started, () => {
+                this.setState({ haveRecording: !!VoiceRecordingStore.instance.activeRecording });
+            });
             // We show a little heads up that the recording is about to automatically end soon. The 3s
             // display time is completely arbitrary. Note that we don't need to deregister the listener
             // because the recording instance will clean that up for us.
@@ -354,6 +354,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 this.setState({ recordingTimeLeftSeconds: secondsLeft });
                 setTimeout(() => this.setState({ recordingTimeLeftSeconds: null }), 3000);
             });
+        } else {
+            this.setState({ haveRecording: false });
         }
     };
 
@@ -366,15 +368,12 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         ];
 
         if (!this.state.tombstone && this.state.canSendMessages) {
-            const SendMessageComposer = sdk.getComponent("rooms.SendMessageComposer");
-
             controls.push(
                 <SendMessageComposer
                     ref={(c) => this.messageComposerInput = c}
                     key="controls_input"
                     room={this.props.room}
                     placeholder={this.renderPlaceholderText()}
-                    resizeNotifier={this.props.resizeNotifier}
                     permalinkCreator={this.props.permalinkCreator}
                     replyToEvent={this.props.replyToEvent}
                     onChange={this.onChange}
@@ -395,12 +394,10 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 controls.push(<Stickerpicker key="stickerpicker_controls_button" room={this.props.room} />);
             }
 
-            if (SettingsStore.getValue("feature_voice_messages")) {
-                controls.push(<VoiceRecordComposerTile
-                    key="controls_voice_record"
-                    ref={c => this.voiceRecordingButton = c}
-                    room={this.props.room} />);
-            }
+            controls.push(<VoiceRecordComposerTile
+                key="controls_voice_record"
+                ref={c => this.voiceRecordingButton = c}
+                room={this.props.room} />);
 
             if (!this.state.isComposerEmpty || this.state.haveRecording) {
                 controls.push(
@@ -415,7 +412,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                     className="mx_MessageComposer_roomReplaced_link"
                     onClick={this.onTombstoneClick}
                 >
-                    {_t("The conversation continues here.")}
+                    { _t("The conversation continues here.") }
                 </a>
             ) : '';
 
@@ -425,7 +422,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                         src={require("../../../../res/img/room_replaced.svg")}
                     />
                     <span className="mx_MessageComposer_roomReplaced_header">
-                        {_t("This room has been replaced and is no longer active.")}
+                        { _t("This room has been replaced and is no longer active.") }
                     </span><br />
                     { continuesLink }
                 </div>
@@ -443,13 +440,14 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         if (secondsLeft) {
             recordingTooltip = <Tooltip
                 label={_t("%(seconds)ss left", { seconds: secondsLeft })}
-                alignment={Alignment.Top} yOffset={-50}
+                alignment={Alignment.Top}
+                yOffset={-50}
             />;
         }
 
         return (
             <div className="mx_MessageComposer mx_GroupLayout">
-                {recordingTooltip}
+                { recordingTooltip }
                 <div className="mx_MessageComposer_wrapper">
                     <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
                     <div className="mx_MessageComposer_row">

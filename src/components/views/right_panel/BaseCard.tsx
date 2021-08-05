@@ -43,8 +43,8 @@ interface IGroupProps {
 
 export const Group: React.FC<IGroupProps> = ({ className, title, children }) => {
     return <div className={classNames("mx_BaseCard_Group", className)}>
-        <h1>{title}</h1>
-        {children}
+        <h1>{ title }</h1>
+        { children }
     </div>;
 };
 

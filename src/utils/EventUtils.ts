@@ -19,6 +19,9 @@ import { MatrixEvent, EventStatus } from 'matrix-js-sdk/src/models/event';
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import shouldHideEvent from "../shouldHideEvent";
+import { getHandlerTile, haveTileForEvent } from "../components/views/rooms/EventTile";
+import SettingsStore from "../settings/SettingsStore";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
@@ -96,3 +99,43 @@ export function findEditableEvent(room: Room, isForward: boolean, fromEventId: s
     }
 }
 
+export function getEventDisplayInfo(mxEvent: MatrixEvent): {
+    isInfoMessage: boolean;
+    tileHandler: string;
+    isBubbleMessage: boolean;
+} {
+    const content = mxEvent.getContent();
+    const msgtype = content.msgtype;
+    const eventType = mxEvent.getType();
+
+    let tileHandler = getHandlerTile(mxEvent);
+
+    // Info messages are basically information about commands processed on a room
+    let isBubbleMessage = (
+        eventType.startsWith("m.key.verification") ||
+        (eventType === EventType.RoomMessage && msgtype && msgtype.startsWith("m.key.verification")) ||
+        (eventType === EventType.RoomCreate) ||
+        (eventType === EventType.RoomEncryption) ||
+        (eventType === EventType.CallInvite) ||
+        (tileHandler === "messages.MJitsiWidgetEvent")
+    );
+    let isInfoMessage = (
+        !isBubbleMessage &&
+        eventType !== EventType.RoomMessage &&
+        eventType !== EventType.Sticker &&
+        eventType !== EventType.RoomCreate
+    );
+
+    // If we're showing hidden events in the timeline, we should use the
+    // source tile when there's no regular tile for an event and also for
+    // replace relations (which otherwise would display as a confusing
+    // duplicate of the thing they are replacing).
+    if (SettingsStore.getValue("showHiddenEventsInTimeline") && !haveTileForEvent(mxEvent)) {
+        tileHandler = "messages.ViewSourceEvent";
+        isBubbleMessage = false;
+        // Reuse info message avatar and sender profile styling
+        isInfoMessage = true;
+    }
+
+    return { tileHandler, isInfoMessage, isBubbleMessage };
+}

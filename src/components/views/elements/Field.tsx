@@ -240,11 +240,11 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
 
         let prefixContainer = null;
         if (prefixComponent) {
-            prefixContainer = <span className="mx_Field_prefix">{prefixComponent}</span>;
+            prefixContainer = <span className="mx_Field_prefix">{ prefixComponent }</span>;
         }
         let postfixContainer = null;
         if (postfixComponent) {
-            postfixContainer = <span className="mx_Field_postfix">{postfixComponent}</span>;
+            postfixContainer = <span className="mx_Field_postfix">{ postfixComponent }</span>;
         }
 
         const hasValidationFlag = forceValidity !== null && forceValidity !== undefined;
@@ -260,6 +260,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         });
 
         // Handle displaying feedback on validity
+        // FIXME: Using an import will result in test failures
         const Tooltip = sdk.getComponent("elements.Tooltip");
         let fieldTooltip;
         if (tooltipContent || this.state.feedback) {
@@ -272,11 +273,11 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         }
 
         return <div className={fieldClasses}>
-            {prefixContainer}
-            {fieldInput}
-            <label htmlFor={this.id}>{this.props.label}</label>
-            {postfixContainer}
-            {fieldTooltip}
+            { prefixContainer }
+            { fieldInput }
+            <label htmlFor={this.id}>{ this.props.label }</label>
+            { postfixContainer }
+            { fieldTooltip }
         </div>;
     }
 }

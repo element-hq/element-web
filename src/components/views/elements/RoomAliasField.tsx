@@ -27,6 +27,7 @@ interface IProps {
     value: string;
     label?: string;
     placeholder?: string;
+    disabled?: boolean;
     onChange?(value: string): void;
 }
 
@@ -54,7 +55,7 @@ export default class RoomAliasField extends React.PureComponent<IProps, IState> 
     render() {
         const poundSign = (<span>#</span>);
         const aliasPostfix = ":" + this.props.domain;
-        const domain = (<span title={aliasPostfix}>{aliasPostfix}</span>);
+        const domain = (<span title={aliasPostfix}>{ aliasPostfix }</span>);
         const maxlength = 255 - this.props.domain.length - 2;   // 2 for # and :
         return (
             <Field
@@ -68,6 +69,7 @@ export default class RoomAliasField extends React.PureComponent<IProps, IState> 
                 onChange={this.onChange}
                 value={this.props.value.substring(1, this.props.value.length - this.props.domain.length - 1)}
                 maxLength={maxlength}
+                disabled={this.props.disabled}
             />
         );
     }

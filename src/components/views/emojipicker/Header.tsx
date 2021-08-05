@@ -25,7 +25,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     categories: ICategory[];
-    onAnchorClick(id: CategoryKey): void
+    onAnchorClick(id: CategoryKey): void;
 }
 
 @replaceableComponent("views.emojipicker.Header")
@@ -89,7 +89,7 @@ class Header extends React.PureComponent<IProps> {
                 aria-label={_t("Categories")}
                 onKeyDown={this.onKeyDown}
             >
-                {this.props.categories.map(category => {
+                { this.props.categories.map(category => {
                     const classes = classNames(`mx_EmojiPicker_anchor mx_EmojiPicker_anchor_${category.id}`, {
                         mx_EmojiPicker_anchor_visible: category.visible,
                     });
@@ -106,7 +106,7 @@ class Header extends React.PureComponent<IProps> {
                         aria-selected={category.visible}
                         aria-controls={`mx_EmojiPicker_category_${category.id}`}
                     />;
-                })}
+                }) }
             </nav>
         );
     }

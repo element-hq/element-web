@@ -45,6 +45,16 @@ export interface IThreepidInvite {
     inviterName: string;
 }
 
+// Any data about the room that would normally come from the homeserver
+// but has been passed out-of-band, eg. the room name and avatar URL
+// from an email invite (a workaround for the fact that we can't
+// get this information from the HS using an email invite).
+export interface IOOBData {
+    name?: string; // The room's name
+    avatarUrl?: string; // The mxc:// avatar URL for the room
+    inviterName?: string; // The display name of the person who invited us to the room
+}
+
 const STORAGE_PREFIX = "mx_threepid_invite_";
 
 export default class ThreepidInviteStore extends EventEmitter {
