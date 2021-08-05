@@ -490,7 +490,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     onClick={this.onVidMuteClick}
                     title={this.state.vidMuted ? _t("Start the camera") : _t("Stop the camera")}
                     alignment={Alignment.Top}
-                    yOffset={-20}
+                    yOffset={-24}
                 />
             );
         }
@@ -513,7 +513,7 @@ export default class CallView extends React.Component<IProps, IState> {
                         : _t("Start sharing your screen")
                     }
                     alignment={Alignment.Top}
-                    yOffset={-20}
+                    yOffset={-24}
                 />
             );
         }
@@ -549,7 +549,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     isExpanded={this.state.showMoreMenu}
                     title={_t("More")}
                     alignment={Alignment.Top}
-                    yOffset={-20}
+                    yOffset={-24}
                 />
             );
         }
@@ -563,7 +563,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     isExpanded={this.state.showDialpad}
                     title={_t("Dialpad")}
                     alignment={Alignment.Top}
-                    yOffset={-20}
+                    yOffset={-24}
                 />
             );
         }
@@ -610,7 +610,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     onClick={this.onMicMuteClick}
                     title={this.state.micMuted ? _t("Unmute the microphone") : _t("Mute the microphone")}
                     alignment={Alignment.Top}
-                    yOffset={-20}
+                    yOffset={-24}
                 />
                 { vidMuteButton }
                 <div className={micCacheClasses} />
@@ -623,7 +623,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     onClick={this.onHangupClick}
                     title={_t("Hangup")}
                     alignment={Alignment.Top}
-                    yOffset={-20}
+                    yOffset={-24}
                 />
             </div>
         );
