@@ -35,6 +35,7 @@ import NotificationBadge from "./NotificationBadge";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 import InlineSpinner from "../elements/InlineSpinner";
+import { PlaybackManager } from "../../../audio/PlaybackManager";
 
 interface IProps {
     room: Room;
@@ -177,6 +178,9 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         }
 
         try {
+            // stop any noises which might be happening
+            await PlaybackManager.instance.playOnly(null);
+
             const recorder = VoiceRecordingStore.instance.startRecording();
             await recorder.start();
 
