@@ -3547,5 +3547,8 @@
     "All rooms you're in will appear in Home.": "Všechny místnosti, ve kterých se nacházíte, se zobrazí na domovské obrazovce.",
     "Send pseudonymous analytics data": "Odeslat pseudonymní analytická data",
     "Missed call": "Zmeškaný hovor",
-    "Call declined": "Hovor odmítnut"
+    "Call declined": "Hovor odmítnut",
+    "Surround selected text when typing special characters": "Ohraničit označený text při psaní speciálních znaků",
+    "Stop recording": "Zastavit nahrávání",
+    "Send voice message": "Odeslat hlasovou zprávu"
 }
