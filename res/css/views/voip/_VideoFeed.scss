@@ -15,18 +15,52 @@ limitations under the License.
 */
 
 .mx_VideoFeed {
-    border-radius: 4px;
-
+    overflow: hidden;
+    position: relative;
 
     &.mx_VideoFeed_voice {
         background-color: $inverted-bg-color;
     }
 
-    &.mx_VideoFeed_video {
+    .mx_VideoFeed_video {
+        width: 100%;
         background-color: transparent;
-    }
-}
 
-.mx_VideoFeed_mirror {
-    transform: scale(-1, 1);
+        &.mx_VideoFeed_video_mirror {
+            transform: scale(-1, 1);
+        }
+    }
+
+    .mx_VideoFeed_mic {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 24px;
+        height: 24px;
+
+        background-color: rgba(0, 0, 0, 0.5); // Same on both themes
+        border-radius: 100%;
+
+        &::before {
+            position: absolute;
+            content: "";
+            width: 16px;
+            height: 16px;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            mask-position: center;
+            background-color: white; // Same on both themes
+            border-radius: 7px;
+        }
+
+        &.mx_VideoFeed_mic_muted::before {
+            mask-image: url('$(res)/img/voip/mic-muted.svg');
+        }
+
+        &.mx_VideoFeed_mic_unmuted::before {
+            mask-image: url('$(res)/img/voip/mic-unmuted.svg');
+        }
+    }
 }

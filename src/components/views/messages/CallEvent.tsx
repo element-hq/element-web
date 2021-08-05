@@ -25,7 +25,6 @@ import { CallErrorCode, CallState } from 'matrix-js-sdk/src/webrtc/call';
 import InfoTooltip, { InfoTooltipKind } from '../elements/InfoTooltip';
 import classNames from 'classnames';
 import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -117,14 +116,12 @@ export default class CallEvent extends React.Component<IProps, IState> {
         if (state === CallState.Ended) {
             const hangupReason = this.props.callEventGrouper.hangupReason;
             const gotRejected = this.props.callEventGrouper.gotRejected;
-            const rejectParty = this.props.callEventGrouper.rejectParty;
 
             if (gotRejected) {
-                const weDeclinedCall = MatrixClientPeg.get().getUserId() === rejectParty;
                 return (
                     <div className="mx_CallEvent_content">
-                        { weDeclinedCall ? _t("You declined this call") : _t("They declined this call") }
-                        { this.renderCallBackButton(weDeclinedCall ? _t("Call back") : _t("Call again")) }
+                        { _t("Call declined") }
+                        { this.renderCallBackButton(_t("Call back")) }
                     </div>
                 );
             } else if (([CallErrorCode.UserHangup, "user hangup"].includes(hangupReason) || !hangupReason)) {
@@ -136,14 +133,14 @@ export default class CallEvent extends React.Component<IProps, IState> {
                 // Also, if we don't have a reason
                 return (
                     <div className="mx_CallEvent_content">
-                        { _t("This call has ended") }
+                        { _t("Call ended") }
                     </div>
                 );
             } else if (hangupReason === CallErrorCode.InviteTimeout) {
                 return (
                     <div className="mx_CallEvent_content">
-                        { _t("They didn't pick up") }
-                        { this.renderCallBackButton(_t("Call again")) }
+                        { _t("Missed call") }
+                        { this.renderCallBackButton(_t("Call back")) }
                     </div>
                 );
             }
@@ -176,7 +173,8 @@ export default class CallEvent extends React.Component<IProps, IState> {
                         className="mx_CallEvent_content_tooltip"
                         kind={InfoTooltipKind.Warning}
                     />
-                    { _t("This call has failed") }
+                    { _t("Connection failed") }
+                    { this.renderCallBackButton(_t("Retry")) }
                 </div>
             );
         }
@@ -190,7 +188,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
         if (state === CustomCallState.Missed) {
             return (
                 <div className="mx_CallEvent_content">
-                    { _t("You missed this call") }
+                    { _t("Missed call") }
                     { this.renderCallBackButton(_t("Call back")) }
                 </div>
             );

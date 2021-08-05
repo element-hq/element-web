@@ -23,11 +23,16 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t, _td } from '../../../languageHandler';
 import VideoFeed from './VideoFeed';
 import RoomAvatar from "../avatars/RoomAvatar";
-import { CallState, CallType, MatrixCall, CallEvent } from 'matrix-js-sdk/src/webrtc/call';
+import { CallEvent, CallState, CallType, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import classNames from 'classnames';
 import AccessibleButton from '../elements/AccessibleButton';
 import { isOnlyCtrlOrCmdKeyEvent, Key } from '../../../Keyboard';
-import { alwaysAboveLeftOf, alwaysAboveRightOf, ChevronFace, ContextMenuButton } from '../../structures/ContextMenu';
+import {
+    alwaysAboveLeftOf,
+    alwaysAboveRightOf,
+    ChevronFace,
+    ContextMenuTooltipButton,
+} from '../../structures/ContextMenu';
 import CallContextMenu from '../context_menus/CallContextMenu';
 import { avatarUrlForMember } from '../../../Avatar';
 import DialpadContextMenu from '../context_menus/DialpadContextMenu';
@@ -37,6 +42,8 @@ import DesktopCapturerSourcePicker from "../elements/DesktopCapturerSourcePicker
 import Modal from '../../../Modal';
 import { SDPStreamMetadataPurpose } from 'matrix-js-sdk/src/webrtc/callEventTypes';
 import CallViewSidebar from './CallViewSidebar';
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import { Alignment } from "../elements/Tooltip";
 
 interface IProps {
         // The call for us to display
@@ -67,12 +74,15 @@ interface IState {
     screensharing: boolean;
     callState: CallState;
     controlsVisible: boolean;
+    hoveringControls: boolean;
     showMoreMenu: boolean;
     showDialpad: boolean;
     primaryFeed: CallFeed;
     secondaryFeeds: Array<CallFeed>;
     sidebarShown: boolean;
 }
+
+const tooltipYOffset = -24;
 
 function getFullScreenElement() {
     return (
@@ -102,7 +112,7 @@ function exitFullscreen() {
     if (exitMethod) exitMethod.call(document);
 }
 
-const CONTROLS_HIDE_DELAY = 1000;
+const CONTROLS_HIDE_DELAY = 2000;
 // Height of the header duplicated from CSS because we need to subtract it from our max
 // height to get the max height of the video
 const CONTEXT_MENU_VPADDING = 8; // How far the context menu sits above the button (px)
@@ -128,6 +138,7 @@ export default class CallView extends React.Component<IProps, IState> {
             screensharing: this.props.call.isScreensharing(),
             callState: this.props.call.state,
             controlsVisible: true,
+            hoveringControls: false,
             showMoreMenu: false,
             showDialpad: false,
             primaryFeed: primary,
@@ -244,6 +255,7 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onControlsHideTimer = () => {
+        if (this.state.hoveringControls || this.state.showDialpad || this.state.showMoreMenu) return;
         this.controlsHideTimer = null;
         this.setState({
             controlsVisible: false,
@@ -293,24 +305,10 @@ export default class CallView extends React.Component<IProps, IState> {
 
     private onDialpadClick = (): void => {
         if (!this.state.showDialpad) {
-            if (this.controlsHideTimer) {
-                clearTimeout(this.controlsHideTimer);
-                this.controlsHideTimer = null;
-            }
-
-            this.setState({
-                showDialpad: true,
-                controlsVisible: true,
-            });
+            this.setState({ showDialpad: true });
+            this.showControls();
         } else {
-            if (this.controlsHideTimer !== null) {
-                clearTimeout(this.controlsHideTimer);
-            }
-            this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
-
-            this.setState({
-                showDialpad: false,
-            });
+            this.setState({ showDialpad: false });
         }
     };
 
@@ -345,29 +343,16 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onMoreClick = (): void => {
-        if (this.controlsHideTimer) {
-            clearTimeout(this.controlsHideTimer);
-            this.controlsHideTimer = null;
-        }
-
-        this.setState({
-            showMoreMenu: true,
-            controlsVisible: true,
-        });
+        this.setState({ showMoreMenu: true });
+        this.showControls();
     };
 
     private closeDialpad = (): void => {
-        this.setState({
-            showDialpad: false,
-        });
-        this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
+        this.setState({ showDialpad: false });
     };
 
     private closeContextMenu = (): void => {
-        this.setState({
-            showMoreMenu: false,
-        });
-        this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
+        this.setState({ showMoreMenu: false });
     };
 
     // we register global shortcuts here, they *must not conflict* with local shortcuts elsewhere or both will fire
@@ -401,6 +386,15 @@ export default class CallView extends React.Component<IProps, IState> {
             ev.stopPropagation();
             ev.preventDefault();
         }
+    };
+
+    private onCallControlsMouseEnter = (): void => {
+        this.setState({ hoveringControls: true });
+        this.showControls();
+    };
+
+    private onCallControlsMouseLeave = (): void => {
+        this.setState({ hoveringControls: false });
     };
 
     private onRoomAvatarClick = (): void => {
@@ -493,9 +487,12 @@ export default class CallView extends React.Component<IProps, IState> {
         let vidMuteButton;
         if (this.props.call.type === CallType.Video) {
             vidMuteButton = (
-                <AccessibleButton
+                <AccessibleTooltipButton
                     className={vidClasses}
                     onClick={this.onVidMuteClick}
+                    title={this.state.vidMuted ? _t("Start the camera") : _t("Stop the camera")}
+                    alignment={Alignment.Top}
+                    yOffset={tooltipYOffset}
                 />
             );
         }
@@ -510,9 +507,15 @@ export default class CallView extends React.Component<IProps, IState> {
             this.props.call.state === CallState.Connected
         ) {
             screensharingButton = (
-                <AccessibleButton
+                <AccessibleTooltipButton
                     className={screensharingClasses}
                     onClick={this.onScreenshareClick}
+                    title={this.state.screensharing
+                        ? _t("Stop sharing your screen")
+                        : _t("Start sharing your screen")
+                    }
+                    alignment={Alignment.Top}
+                    yOffset={tooltipYOffset}
                 />
             );
         }
@@ -532,39 +535,88 @@ export default class CallView extends React.Component<IProps, IState> {
                 <AccessibleButton
                     className={sidebarButtonClasses}
                     onClick={this.onToggleSidebar}
+                    aria-label={this.state.sidebarShown ? _t("Hide sidebar") : _t("Show sidebar")}
                 />
             );
         }
 
         // The dial pad & 'more' button actions are only relevant in a connected call
-        // When not connected, we have to put something there to make the flexbox alignment correct
-        let dialpadButton;
         let contextMenuButton;
         if (this.state.callState === CallState.Connected) {
             contextMenuButton = (
-                <ContextMenuButton
+                <ContextMenuTooltipButton
                     className="mx_CallView_callControls_button mx_CallView_callControls_button_more"
                     onClick={this.onMoreClick}
                     inputRef={this.contextMenuButton}
                     isExpanded={this.state.showMoreMenu}
+                    title={_t("More")}
+                    alignment={Alignment.Top}
+                    yOffset={tooltipYOffset}
                 />
             );
+        }
+        let dialpadButton;
+        if (this.state.callState === CallState.Connected && this.props.call.opponentSupportsDTMF()) {
             dialpadButton = (
-                <ContextMenuButton
+                <ContextMenuTooltipButton
                     className="mx_CallView_callControls_button mx_CallView_callControls_dialpad"
                     inputRef={this.dialpadButton}
                     onClick={this.onDialpadClick}
                     isExpanded={this.state.showDialpad}
+                    title={_t("Dialpad")}
+                    alignment={Alignment.Top}
+                    yOffset={tooltipYOffset}
                 />
             );
         }
 
+        let dialPad;
+        if (this.state.showDialpad) {
+            dialPad = <DialpadContextMenu
+                {...alwaysAboveRightOf(
+                    this.dialpadButton.current.getBoundingClientRect(),
+                    ChevronFace.None,
+                    CONTEXT_MENU_VPADDING,
+                )}
+                // We mount the context menus as a as a child typically in order to include the
+                // context menus when fullscreening the call content.
+                // However, this does not work as well when the call is embedded in a
+                // picture-in-picture frame. Thus, only mount as child when we are *not* in PiP.
+                mountAsChild={!this.props.pipMode}
+                onFinished={this.closeDialpad}
+                call={this.props.call}
+            />;
+        }
+
+        let contextMenu;
+        if (this.state.showMoreMenu) {
+            contextMenu = <CallContextMenu
+                {...alwaysAboveLeftOf(
+                    this.contextMenuButton.current.getBoundingClientRect(),
+                    ChevronFace.None,
+                    CONTEXT_MENU_VPADDING,
+                )}
+                mountAsChild={!this.props.pipMode}
+                onFinished={this.closeContextMenu}
+                call={this.props.call}
+            />;
+        }
+
         return (
-            <div className={callControlsClasses}>
+            <div
+                className={callControlsClasses}
+                onMouseEnter={this.onCallControlsMouseEnter}
+                onMouseLeave={this.onCallControlsMouseLeave}
+            >
+                { dialPad }
+                { contextMenu }
                 { dialpadButton }
-                <AccessibleButton
+                <AccessibleTooltipButton
                     className={micClasses}
                     onClick={this.onMicMuteClick}
+                    title={this.state.micMuted ? _t("Unmute the microphone") : _t("Mute the microphone")}
+                    alignment={Alignment.Top}
+                    yOffset={tooltipYOffset}
                 />
                 { vidMuteButton }
                 <div className={micCacheClasses} />
@@ -572,9 +624,12 @@ export default class CallView extends React.Component<IProps, IState> {
                 { screensharingButton }
                 { sidebarButton }
                 { contextMenuButton }
-                <AccessibleButton
+                <AccessibleTooltipButton
                     className="mx_CallView_callControls_button mx_CallView_callControls_button_hangup"
                     onClick={this.onHangupClick}
+                    title={_t("Hangup")}
+                    alignment={Alignment.Top}
+                    yOffset={tooltipYOffset}
                 />
             </div>
         );
@@ -799,7 +854,7 @@ export default class CallView extends React.Component<IProps, IState> {
         let fullScreenButton;
         if (!this.props.pipMode) {
             fullScreenButton = (
-                <div
+                <AccessibleTooltipButton
                     className="mx_CallView_header_button mx_CallView_header_button_fullscreen"
                     onClick={this.onFullscreenClick}
                     title={_t("Fill Screen")}
@@ -809,7 +864,7 @@ export default class CallView extends React.Component<IProps, IState> {
 
         let expandButton;
         if (this.props.pipMode) {
-            expandButton = <div
+            expandButton = <AccessibleTooltipButton
                 className="mx_CallView_header_button mx_CallView_header_button_expand"
                 onClick={this.onExpandClick}
                 title={_t("Return to call")}
@@ -821,10 +876,15 @@ export default class CallView extends React.Component<IProps, IState> {
             { expandButton }
         </div>;
 
+        const callTypeIconClassName = classNames("mx_CallView_header_callTypeIcon", {
+            "mx_CallView_header_callTypeIcon_voice": !isVideoCall,
+            "mx_CallView_header_callTypeIcon_video": isVideoCall,
+        });
+
         let header: React.ReactNode;
         if (!this.props.pipMode) {
             header = <div className="mx_CallView_header">
-                <div className="mx_CallView_header_phoneIcon" />
+                <div className={callTypeIconClassName} />
                 <span className="mx_CallView_header_callType">{ callTypeText }</span>
                 { headerControls }
             </div>;
@@ -863,37 +923,9 @@ export default class CallView extends React.Component<IProps, IState> {
             myClassName = 'mx_CallView_pip';
         }
 
-        let dialPad;
-        if (this.state.showDialpad) {
-            dialPad = <DialpadContextMenu
-                {...alwaysAboveRightOf(
-                    this.dialpadButton.current.getBoundingClientRect(),
-                    ChevronFace.None,
-                    CONTEXT_MENU_VPADDING,
-                )}
-                onFinished={this.closeDialpad}
-                call={this.props.call}
-            />;
-        }
-
-        let contextMenu;
-        if (this.state.showMoreMenu) {
-            contextMenu = <CallContextMenu
-                {...alwaysAboveLeftOf(
-                    this.contextMenuButton.current.getBoundingClientRect(),
-                    ChevronFace.None,
-                    CONTEXT_MENU_VPADDING,
-                )}
-                onFinished={this.closeContextMenu}
-                call={this.props.call}
-            />;
-        }
-
         return <div className={"mx_CallView " + myClassName}>
             { header }
             { contentView }
-            { dialPad }
-            { contextMenu }
         </div>;
     }
 }

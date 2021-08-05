@@ -156,13 +156,14 @@ describe('CallHandler', () => {
         DMRoomMap.setShared(null);
         // @ts-ignore
         window.mxCallHandler = null;
+        fakeCall = null;
         MatrixClientPeg.unset();
 
         document.body.removeChild(audioElement);
         SdkConfig.unset();
     });
 
-    it('should look up the correct user and open the room when a phone number is dialled', async () => {
+    it('should look up the correct user and start a call in the room when a phone number is dialled', async () => {
         MatrixClientPeg.get().getThirdpartyUser = jest.fn().mockResolvedValue([{
             userid: '@user2:example.org',
             protocol: "im.vector.protocol.sip_native",
@@ -179,6 +180,9 @@ describe('CallHandler', () => {
 
         const viewRoomPayload = await untilDispatch('view_room');
         expect(viewRoomPayload.room_id).toEqual(MAPPED_ROOM_ID);
+
+        // Check that a call was started
+        expect(fakeCall.roomId).toEqual(MAPPED_ROOM_ID);
     });
 
     it('should move calls between rooms when remote asserted identity changes', async () => {

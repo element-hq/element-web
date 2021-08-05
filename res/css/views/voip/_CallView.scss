@@ -39,7 +39,7 @@ limitations under the License.
 .mx_CallView_pip {
     width: 320px;
     padding-bottom: 8px;
-    background-color: $voipcall-plinth-color;
+    background-color: $toast-bg-color;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.20);
     border-radius: 8px;
 
@@ -76,15 +76,21 @@ limitations under the License.
 
         &.mx_VideoFeed_voice {
             // We don't want to collide with the call controls that have 52px of height
-            padding-bottom: 52px;
+            margin-bottom: 52px;
             background-color: $inverted-bg-color;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        &.mx_VideoFeed_video {
+        .mx_VideoFeed_video {
+            height: 100%;
             background-color: #000;
+        }
+
+        .mx_VideoFeed_mic {
+            left: 10px;
+            bottom: 10px;
         }
     }
 }
@@ -202,6 +208,7 @@ limitations under the License.
     align-items: center;
     justify-content: left;
     flex-shrink: 0;
+    cursor: pointer;
 }
 
 .mx_CallView_header_callType {
@@ -279,7 +286,7 @@ limitations under the License.
     max-width: 240px;
 }
 
-.mx_CallView_header_phoneIcon {
+.mx_CallView_header_callTypeIcon {
     display: inline-block;
     margin-right: 6px;
     height: 16px;
@@ -293,11 +300,18 @@ limitations under the License.
 
         height: 16px;
         width: 16px;
-        background-color: $warning-color;
+        background-color: $secondary-fg-color;
         mask-repeat: no-repeat;
         mask-size: contain;
         mask-position: center;
+    }
+
+    &.mx_CallView_header_callTypeIcon_voice::before {
         mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
+    }
+
+    &.mx_CallView_header_callTypeIcon_video::before {
+        mask-image: url('$(res)/img/element-icons/call/video-call.svg');
     }
 }
 
@@ -306,7 +320,6 @@ limitations under the License.
     display: flex;
     justify-content: center;
     bottom: 5px;
-    width: 100%;
     opacity: 1;
     transition: opacity 0.5s;
     z-index: 200; // To be above _all_ feeds

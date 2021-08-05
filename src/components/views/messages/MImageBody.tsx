@@ -366,7 +366,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
 
         const thumbnail = (
-            <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight: maxHeight + "px", maxWidth: maxWidth + "px" }}>
+            <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight: maxHeight, maxWidth: maxWidth, aspectRatio: `${infoWidth}/${infoHeight}` }}>
                 { showPlaceholder &&
                     <div
                         className="mx_MImageBody_thumbnail"

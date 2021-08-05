@@ -47,13 +47,23 @@ import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import { SetRightPanelPhasePayload } from "../../dispatcher/payloads/SetRightPanelPhasePayload";
 import { useStateArray } from "../../hooks/useStateArray";
 import SpacePublicShare from "../views/spaces/SpacePublicShare";
-import { shouldShowSpaceSettings, showAddExistingRooms, showCreateNewRoom, showSpaceSettings } from "../../utils/space";
+import {
+    shouldShowSpaceSettings,
+    showAddExistingRooms,
+    showCreateNewRoom,
+    showCreateNewSubspace,
+    showSpaceSettings,
+} from "../../utils/space";
 import { showRoom, SpaceHierarchy } from "./SpaceRoomDirectory";
 import MemberAvatar from "../views/avatars/MemberAvatar";
-import { useStateToggle } from "../../hooks/useStateToggle";
 import SpaceStore from "../../stores/SpaceStore";
 import FacePile from "../views/elements/FacePile";
-import { AddExistingToSpace } from "../views/dialogs/AddExistingToSpaceDialog";
+import {
+    AddExistingToSpace,
+    defaultDmsRenderer,
+    defaultRoomsRenderer,
+    defaultSpacesRenderer,
+} from "../views/dialogs/AddExistingToSpaceDialog";
 import { ChevronFace, ContextMenuButton, useContextMenu } from "./ContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
@@ -62,10 +72,8 @@ import IconizedContextMenu, {
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { BetaPill } from "../views/beta/BetaCard";
 import { UserTab } from "../views/dialogs/UserSettingsDialog";
-import Modal from "../../Modal";
-import BetaFeedbackDialog from "../views/dialogs/BetaFeedbackDialog";
-import SdkConfig from "../../SdkConfig";
 import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
+import { SpaceFeedbackPrompt } from "../views/spaces/SpaceCreateMenu";
 
 interface IProps {
     space: Room;
@@ -91,28 +99,6 @@ enum Phase {
     PrivateCreateRooms,
     PrivateExistingRooms,
 }
-
-// XXX: Temporary for the Spaces Beta only
-export const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
-    if (!SdkConfig.get().bug_report_endpoint_url) return null;
-
-    return <div className="mx_SpaceFeedbackPrompt">
-        <hr />
-        <div>
-            <span className="mx_SpaceFeedbackPrompt_text">{ _t("Spaces are a beta feature.") }</span>
-            <AccessibleButton
-                kind="link"
-                onClick={() => {
-                    if (onClick) onClick();
-                    Modal.createTrackedDialog("Beta Feedback", "feature_spaces", BetaFeedbackDialog, {
-                    featureId: "feature_spaces",
-                    });
-                }}>
-                { _t("Feedback") }
-            </AccessibleButton>
-        </div>
-    </div>;
-};
 
 const RoomMemberCount = ({ room, children }) => {
     const members = useRoomMembers(room);
@@ -206,11 +192,11 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
 
         if (inviteSender) {
             inviterSection = <div className="mx_SpaceRoomView_preview_inviter">
-                <MemberAvatar member={inviter} width={32} height={32} />
+                <MemberAvatar member={inviter} fallbackUserId={inviteSender} width={32} height={32} />
                 <div>
                     <div className="mx_SpaceRoomView_preview_inviter_name">
                         { _t("<inviter/> invites you", {}, {
-                            inviter: () => <b>{ inviter.name || inviteSender }</b>,
+                            inviter: () => <b>{ inviter?.name || inviteSender }</b>,
                         }) }
                     </div>
                     { inviter ? <div className="mx_SpaceRoomView_preview_inviter_mxid">
@@ -307,7 +293,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
     </div>;
 };
 
-const SpaceLandingAddButton = ({ space, onNewRoomAdded }) => {
+const SpaceLandingAddButton = ({ space }) => {
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
 
     let contextMenu;
@@ -331,24 +317,32 @@ const SpaceLandingAddButton = ({ space, onNewRoomAdded }) => {
                         closeMenu();
 
                         if (await showCreateNewRoom(space)) {
-                            onNewRoomAdded();
+                            defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
                         }
                     }}
                 />
                 <IconizedContextMenuOption
                     label={_t("Add existing room")}
                     iconClassName="mx_RoomList_iconHash"
-                    onClick={async (e) => {
+                    onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         closeMenu();
-
-                        const [added] = await showAddExistingRooms(space);
-                        if (added) {
-                            onNewRoomAdded();
-                        }
+                        showAddExistingRooms(space);
                     }}
                 />
+                <IconizedContextMenuOption
+                    label={_t("Add space")}
+                    iconClassName="mx_RoomList_iconPlus"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        closeMenu();
+                        showCreateNewSubspace(space);
+                    }}
+                >
+                    <BetaPill />
+                </IconizedContextMenuOption>
             </IconizedContextMenuOptionList>
         </IconizedContextMenu>;
     }
@@ -389,11 +383,9 @@ const SpaceLanding = ({ space }) => {
 
     const canAddRooms = myMembership === "join" && space.currentState.maySendStateEvent(EventType.SpaceChild, userId);
 
-    const [refreshToken, forceUpdate] = useStateToggle(false);
-
     let addRoomButton;
     if (canAddRooms) {
-        addRoomButton = <SpaceLandingAddButton space={space} onNewRoomAdded={forceUpdate} />;
+        addRoomButton = <SpaceLandingAddButton space={space} />;
     }
 
     let settingsButton;
@@ -416,6 +408,7 @@ const SpaceLanding = ({ space }) => {
     };
 
     return <div className="mx_SpaceRoomView_landing">
+        <SpaceFeedbackPrompt />
         <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
         <div className="mx_SpaceRoomView_landing_name">
             <RoomName room={space}>
@@ -440,15 +433,8 @@ const SpaceLanding = ({ space }) => {
                 </div>
             ) }
         </RoomTopic>
-        <SpaceFeedbackPrompt />
-        <hr />
 
-        <SpaceHierarchy
-            space={space}
-            showRoom={showRoom}
-            refreshToken={refreshToken}
-            additionalButtons={addRoomButton}
-        />
+        <SpaceHierarchy space={space} showRoom={showRoom} additionalButtons={addRoomButton} />
     </div>;
 };
 
@@ -531,7 +517,6 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
                 value={buttonLabel}
             />
         </div>
-        <SpaceFeedbackPrompt />
     </div>;
 };
 
@@ -550,11 +535,12 @@ const SpaceAddExistingRooms = ({ space, onFinished }) => {
                     { _t("Skip for now") }
                 </AccessibleButton>
             }
+            filterPlaceholder={_t("Search for rooms or spaces")}
             onFinished={onFinished}
+            roomsRenderer={defaultRoomsRenderer}
+            spacesRenderer={defaultSpacesRenderer}
+            dmsRenderer={defaultDmsRenderer}
         />
-
-        <div className="mx_SpaceRoomView_buttons" />
-        <SpaceFeedbackPrompt />
     </div>;
 };
 
@@ -574,7 +560,6 @@ const SpaceSetupPublicShare = ({ justCreatedOpts, space, onFinished, createdRoom
                 { createdRooms ? _t("Go to my first room") : _t("Go to my space") }
             </AccessibleButton>
         </div>
-        <SpaceFeedbackPrompt />
     </div>;
 };
 
@@ -603,9 +588,8 @@ const SpaceSetupPrivateScope = ({ space, justCreatedOpts, onFinished }) => {
         </AccessibleButton>
         <div className="mx_SpaceRoomView_betaWarning">
             <h3>{ _t("Teammates might not be able to view or join any private rooms you make.") }</h3>
-            <p>{ _t("We're working on this as part of the beta, but just want to let you know.") }</p>
+            <p>{ _t("We're working on this, but just want to let you know.") }</p>
         </div>
-        <SpaceFeedbackPrompt />
     </div>;
 };
 
@@ -728,7 +712,6 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
                 value={buttonLabel}
             />
         </div>
-        <SpaceFeedbackPrompt />
     </div>;
 };
 
