@@ -78,7 +78,7 @@ export const SpaceButton: React.FC<IButtonProps> = ({
     let notifBadge;
     if (notificationState) {
         let ariaLabel = _t("Jump to first unread room.");
-        if (space.getMyMembership() === "invite") {
+        if (space?.getMyMembership() === "invite") {
             ariaLabel = _t("Jump to first invite.");
         }
 
