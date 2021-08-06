@@ -96,7 +96,7 @@ $menu-bg-color: $header-panel-bg-color;
 $menu-box-shadow-color: $bg-color;
 $menu-selected-color: $room-highlight-color;
 
-$avatar-initial-color: $primary-content;
+$avatar-initial-color: #ffffff;
 $avatar-bg-color: $bg-color;
 
 $h3-color: $primary-fg-color;
@@ -227,7 +227,7 @@ $breadcrumb-placeholder-bg-color: #272c35;
 $user-tile-hover-bg-color: $header-panel-bg-color;
 
 $message-body-panel-fg-color: $secondary-fg-color;
-$message-body-panel-bg-color: $quinary-content; // "Dark Tile"
+$message-body-panel-bg-color: $quinary-content;
 $message-body-panel-icon-fg-color: $secondary-fg-color;
 $message-body-panel-icon-bg-color: $system-dark; // "System Dark"
 
