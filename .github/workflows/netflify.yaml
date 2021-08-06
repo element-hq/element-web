@@ -1,0 +1,32 @@
+name: Upload Preview Build to Netlify
+on:
+    workflow_run:
+        workflows: ["Layered Preview Build"]
+        types:
+            - completed
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        if: >
+            ${{ github.event.workflow_run.event == 'pull_request' &&
+            github.event.workflow_run.conclusion == 'success' }}
+        steps:
+            - name: Download Artifact
+              uses: actions/download-artifact@v2
+              with:
+                  name: "Preview Build"
+            - name: Deploy to Netlify
+              uses: nwtgck/actions-netlify@v1.2
+              with:
+                  publish-dir: .
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  alias: deploy-preview-${{ github.event.number }}
+                  deploy-message: "Deploy from GitHub Actions"
+                  enable-pull-request-comment: true
+                  enable-commit-comment: false
+                  overwrites-pull-request-comment: true
+              env:
+                  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+                  NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+              timeout-minutes: 1
+
