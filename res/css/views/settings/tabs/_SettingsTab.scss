@@ -72,6 +72,13 @@ limitations under the License.
     padding-right: 10px;
 }
 
+.mx_SettingsTab_section .mx_SettingsFlag .mx_SettingsFlag_microcopy {
+    margin-top: 4px;
+    font-size: $font-12px;
+    line-height: $font-15px;
+    color: $secondary-fg-color;
+}
+
 .mx_SettingsTab_section .mx_SettingsFlag .mx_ToggleSwitch {
     float: right;
 }

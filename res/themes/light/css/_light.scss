@@ -8,9 +8,12 @@
 /* Noto Color Emoji contains digits, in fixed-width, therefore causing
    digits in flowed text to stand out.
    TODO: Consider putting all emoji fonts to the end rather than the front. */
-$font-family: Inter, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', Arial, Helvetica, Sans-Serif, 'Noto Color Emoji';
+$font-family: 'Inter', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Arial', 'Helvetica', sans-serif, 'Noto Color Emoji';
 
-$monospace-font-family: Inconsolata, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', Courier, monospace, 'Noto Color Emoji';
+$monospace-font-family: 'Inconsolata', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Courier', monospace, 'Noto Color Emoji';
+
+// Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=557%3A0
+$system-light: #F4F6FA;
 
 // unified palette
 // try to use these colors when possible
@@ -138,7 +141,7 @@ $blockquote-bar-color: #ddd;
 $blockquote-fg-color: #777;
 
 $settings-grey-fg-color: #a2a2a2;
-$settings-profile-placeholder-bg-color: #f4f6fa;
+$settings-profile-placeholder-bg-color: $system-light;
 $settings-profile-overlay-placeholder-fg-color: #2e2f32;
 $settings-profile-button-bg-color: #e7e7e7;
 $settings-profile-button-fg-color: $settings-profile-overlay-placeholder-fg-color;
@@ -167,8 +170,8 @@ $eventtile-meta-color: $roomtopic-color;
 $composer-e2e-icon-color: #91A1C0;
 $header-divider-color: #91A1C0;
 
-// this probably shouldn't have it's own colour
-$voipcall-plinth-color: #F4F6FA;
+$toast-bg-color: $system-light;
+$voipcall-plinth-color: $system-light;
 
 // ********************
 
@@ -327,7 +330,7 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 $message-body-panel-fg-color: $secondary-fg-color;
 $message-body-panel-bg-color: #E3E8F0; // "Separator"
 $message-body-panel-icon-fg-color: $secondary-fg-color;
-$message-body-panel-icon-bg-color: #F4F6FA;
+$message-body-panel-icon-bg-color: $system-light;
 
 // These two don't change between themes. They are the $warning-color, but we don't
 // want custom themes to affect them by accident.
@@ -350,9 +353,9 @@ $groupFilterPanel-background-blur-amount: 20px;
 $composer-shadow-color: rgba(0, 0, 0, 0.04);
 
 // Bubble tiles
-$eventbubble-self-bg: #F8FDFC;
-$eventbubble-others-bg: #F7F8F9;
-$eventbubble-bg-hover: #FEFCF5;
+$eventbubble-self-bg: #F0FBF8;
+$eventbubble-others-bg: $system-light;
+$eventbubble-bg-hover: #FAFBFD;
 $eventbubble-avatar-outline: $primary-bg-color;
 $eventbubble-reply-color: #C1C6CD;
 
@@ -392,7 +395,7 @@ $eventbubble-reply-color: #C1C6CD;
 @define-mixin mx_DialogButton_secondary {
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color ! important;
+    border: 1px solid $accent-color !important;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
 }

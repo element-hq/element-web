@@ -14,17 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_BetaFeedbackDialog {
-    .mx_BetaFeedbackDialog_subheading {
-        color: $primary-fg-color;
-        font-size: $font-14px;
-        line-height: $font-20px;
-        margin-bottom: 24px;
-    }
+import { ActionPayload } from "../payloads";
+import { Action } from "../actions";
+import { SettingLevel } from "../../settings/SettingLevel";
 
-    .mx_AccessibleButton_kind_link {
-        padding: 0;
-        font-size: inherit;
-        line-height: inherit;
-    }
+export interface SettingUpdatedPayload extends ActionPayload {
+    action: Action.SettingUpdated;
+
+    settingName: string;
+    roomId: string;
+    level: SettingLevel;
+    newValueAtLevel: SettingLevel;
+    newValue: any;
 }

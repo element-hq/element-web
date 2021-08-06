@@ -38,18 +38,22 @@ limitations under the License.
         padding-top: 0;
     }
 
+    &::before {
+        content: '';
+        position: absolute;
+        top: -1px;
+        bottom: -1px;
+        left: -60px;
+        right: -60px;
+        z-index: -1;
+        border-radius: 4px;
+    }
+
     &:hover,
     &.mx_EventTile_selected {
+
         &::before {
-            content: '';
-            position: absolute;
-            top: -1px;
-            bottom: -1px;
-            left: -60px;
-            right: -60px;
-            z-index: -1;
             background: $eventbubble-bg-hover;
-            border-radius: 4px;
         }
 
         .mx_EventTile_avatar {
@@ -267,7 +271,7 @@ limitations under the License.
 
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     padding: 5px 0;
 
     .mx_EventTile_avatar {
@@ -275,12 +279,27 @@ limitations under the License.
         order: -1;
         margin-right: 5px;
     }
+
+    .mx_EventTile_line,
+    .mx_EventTile_info {
+        min-width: 100%;
+    }
+
+    .mx_EventTile_e2eIcon {
+        margin-left: 9px;
+    }
+
+    .mx_EventTile_line > a {
+        right: auto;
+        top: -15px;
+        left: -68px;
+    }
 }
 
 .mx_EventListSummary[data-layout=bubble] {
-    --maxWidth: 80%;
+    --maxWidth: 70%;
     margin-left: calc(var(--avatarSize) + var(--gutterSize));
-    margin-right: calc(var(--gutterSize) + var(--avatarSize));
+    margin-right: 94px;
     .mx_EventListSummary_toggle {
         float: none;
         margin: 0;

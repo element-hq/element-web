@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
@@ -24,19 +25,25 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import RestoreKeyBackupDialog from './security/RestoreKeyBackupDialog';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+interface IProps {
+    onFinished: (success: boolean) => void;
+}
+
+interface IState {
+    shouldLoadBackupStatus: boolean;
+    loading: boolean;
+    backupInfo: IKeyBackupInfo;
+    error?: string;
+}
+
 @replaceableComponent("views.dialogs.LogoutDialog")
-export default class LogoutDialog extends React.Component {
-    defaultProps = {
+export default class LogoutDialog extends React.Component<IProps, IState> {
+    static defaultProps = {
         onFinished: function() {},
     };
 
-    constructor() {
-        super();
-        this._onSettingsLinkClick = this._onSettingsLinkClick.bind(this);
-        this._onExportE2eKeysClicked = this._onExportE2eKeysClicked.bind(this);
-        this._onFinished = this._onFinished.bind(this);
-        this._onSetRecoveryMethodClick = this._onSetRecoveryMethodClick.bind(this);
-        this._onLogoutConfirm = this._onLogoutConfirm.bind(this);
+    constructor(props) {
+        super(props);
 
         const cli = MatrixClientPeg.get();
         const shouldLoadBackupStatus = cli.isCryptoEnabled() && !cli.getKeyBackupEnabled();
@@ -49,11 +56,11 @@ export default class LogoutDialog extends React.Component {
         };
 
         if (shouldLoadBackupStatus) {
-            this._loadBackupStatus();
+            this.loadBackupStatus();
         }
     }
 
-    async _loadBackupStatus() {
+    private async loadBackupStatus() {
         try {
             const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
             this.setState({
@@ -69,29 +76,29 @@ export default class LogoutDialog extends React.Component {
         }
     }
 
-    _onSettingsLinkClick() {
+    private onSettingsLinkClick = (): void => {
         // close dialog
-        this.props.onFinished();
-    }
+        this.props.onFinished(true);
+    };
 
-    _onExportE2eKeysClicked() {
+    private onExportE2eKeysClicked = (): void => {
         Modal.createTrackedDialogAsync('Export E2E Keys', '',
             import('../../../async-components/views/dialogs/security/ExportE2eKeysDialog'),
             {
                 matrixClient: MatrixClientPeg.get(),
             },
         );
-    }
+    };
 
-    _onFinished(confirmed) {
+    private onFinished = (confirmed: boolean): void => {
         if (confirmed) {
             dis.dispatch({ action: 'logout' });
         }
         // close dialog
-        this.props.onFinished();
-    }
+        this.props.onFinished(confirmed);
+    };
 
-    _onSetRecoveryMethodClick() {
+    private onSetRecoveryMethodClick = (): void => {
         if (this.state.backupInfo) {
             // A key backup exists for this account, but the creating device is not
             // verified, so restore the backup which will give us the keys from it and
@@ -108,15 +115,15 @@ export default class LogoutDialog extends React.Component {
         }
 
         // close dialog
-        this.props.onFinished();
-    }
+        this.props.onFinished(true);
+    };
 
-    _onLogoutConfirm() {
+    private onLogoutConfirm = (): void => {
         dis.dispatch({ action: 'logout' });
 
         // close dialog
-        this.props.onFinished();
-    }
+        this.props.onFinished(true);
+    };
 
     render() {
         if (this.state.shouldLoadBackupStatus) {
@@ -152,16 +159,16 @@ export default class LogoutDialog extends React.Component {
                     </div>
                     <DialogButtons primaryButton={setupButtonCaption}
                         hasCancel={false}
-                        onPrimaryButtonClick={this._onSetRecoveryMethodClick}
+                        onPrimaryButtonClick={this.onSetRecoveryMethodClick}
                         focus={true}
                     >
-                        <button onClick={this._onLogoutConfirm}>
+                        <button onClick={this.onLogoutConfirm}>
                             { _t("I don't want my encrypted messages") }
                         </button>
                     </DialogButtons>
                     <details>
                         <summary>{ _t("Advanced") }</summary>
-                        <p><button onClick={this._onExportE2eKeysClicked}>
+                        <p><button onClick={this.onExportE2eKeysClicked}>
                             { _t("Manually export keys") }
                         </button></p>
                     </details>
@@ -174,7 +181,7 @@ export default class LogoutDialog extends React.Component {
                 title={_t("You'll lose access to your encrypted messages")}
                 contentId='mx_Dialog_content'
                 hasCancel={true}
-                onFinished={this._onFinished}
+                onFinished={this.onFinished}
             >
                 { dialogContent }
             </BaseDialog>);
@@ -187,7 +194,7 @@ export default class LogoutDialog extends React.Component {
                     "Are you sure you want to sign out?",
                 )}
                 button={_t("Sign out")}
-                onFinished={this._onFinished}
+                onFinished={this.onFinished}
             />);
         }
     }
