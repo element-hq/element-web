@@ -27,9 +27,15 @@ export enum CallEventGrouperEvent {
     SilencedChanged = "silenced_changed",
 }
 
+const CONNECTING_STATES = [
+    CallState.Connecting,
+    CallState.WaitLocalMedia,
+    CallState.CreateOffer,
+    CallState.CreateAnswer,
+];
+
 const SUPPORTED_STATES = [
     CallState.Connected,
-    CallState.Connecting,
     CallState.Ringing,
 ];
 
@@ -136,7 +142,9 @@ export default class CallEventGrouper extends EventEmitter {
     }
 
     private setState = () => {
-        if (SUPPORTED_STATES.includes(this.call?.state)) {
+        if (CONNECTING_STATES.includes(this.call?.state)) {
+            this.state = CallState.Connecting;
+        } else if (SUPPORTED_STATES.includes(this.call?.state)) {
             this.state = this.call.state;
         } else {
             if (this.callWasMissed) this.state = CustomCallState.Missed;
