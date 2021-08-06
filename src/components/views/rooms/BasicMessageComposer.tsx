@@ -1,6 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -725,7 +724,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             <MessageComposerFormatBar ref={this.formatBarRef} onAction={this.onFormatAction} shortcuts={shortcuts} />
             <div
                 className={classes}
-                contentEditable="true"
+                contentEditable={this.props.disabled ? null : true}
                 tabIndex={0}
                 onBlur={this.onBlur}
                 onFocus={this.onFocus}
