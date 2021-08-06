@@ -123,10 +123,10 @@ export function formatTime(date: Date, showTwelveHour = false): string {
     return pad(date.getHours()) + ':' + pad(date.getMinutes());
 }
 
-export function formatCallTime(date: Date): string {
-    const hours = date.getUTCHours();
-    const minutes = date.getUTCMinutes();
-    const seconds = date.getUTCSeconds();
+export function formatCallTime(delta: Date): string {
+    const hours = delta.getUTCHours();
+    const minutes = delta.getUTCMinutes();
+    const seconds = delta.getUTCSeconds();
 
     let output = "";
     if (hours) output += `${hours}h `;
