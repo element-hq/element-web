@@ -64,9 +64,9 @@ const NewRoomIntro = () => {
                 height={AVATAR_SIZE}
                 onClick={() => {
                     defaultDispatcher.dispatch<ViewUserPayload>({
-                    action: Action.ViewUser,
-                    // XXX: We should be using a real member object and not assuming what the receiver wants.
-                    member: member || { userId: dmPartner } as User,
+                        action: Action.ViewUser,
+                        // XXX: We should be using a real member object and not assuming what the receiver wants.
+                        member: member || { userId: dmPartner } as User,
                     });
                 }}
             />

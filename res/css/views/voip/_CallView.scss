@@ -39,7 +39,7 @@ limitations under the License.
 .mx_CallView_pip {
     width: 320px;
     padding-bottom: 8px;
-    background-color: $voipcall-plinth-color;
+    background-color: $toast-bg-color;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.20);
     border-radius: 8px;
 
@@ -75,8 +75,6 @@ limitations under the License.
         height: 100%;
 
         &.mx_VideoFeed_voice {
-            // We don't want to collide with the call controls that have 52px of height
-            margin-bottom: 52px;
             background-color: $inverted-bg-color;
             display: flex;
             justify-content: center;

@@ -22,10 +22,10 @@
       "es2019",
       "dom",
       "dom.iterable"
-    ]
+    ],
   },
   "include": [
     "./src/**/*.ts",
     "./src/**/*.tsx"
-  ]
+  ],  
 }

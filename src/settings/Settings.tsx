@@ -41,6 +41,7 @@ import { Layout } from "./Layout";
 import ReducedMotionController from './controllers/ReducedMotionController';
 import IncompatibleController from "./controllers/IncompatibleController";
 import SdkConfig from "../SdkConfig";
+import PseudonymousAnalyticsController from './controllers/PseudonymousAnalyticsController';
 import NewLayoutSwitcherController from './controllers/NewLayoutSwitcherController';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
@@ -268,6 +269,13 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_pseudonymous_analytics_opt_in": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td('Send pseudonymous analytics data'),
+        default: false,
+        controller: new PseudonymousAnalyticsController(),
+    },
     "advancedRoomListLogging": {
         // TODO: Remove flag before launch: https://github.com/vector-im/element-web/issues/14231
         displayName: _td("Enable advanced debugging for the room list"),
@@ -439,6 +447,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "MessageComposerInput.ctrlEnterToSend": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: isMac ? _td("Use Command + Enter to send a message") : _td("Use Ctrl + Enter to send a message"),
+        default: false,
+    },
+    "MessageComposerInput.surroundWith": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Surround selected text when typing special characters"),
         default: false,
     },
     "MessageComposerInput.autoReplaceEmoji": {

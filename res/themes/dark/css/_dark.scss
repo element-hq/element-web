@@ -1,3 +1,6 @@
+// Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=557%3A0
+$system-dark: #21262C;
+
 // unified palette
 // try to use these colors when possible
 $bg-color: #15191E;
@@ -47,7 +50,7 @@ $inverted-bg-color: $base-color;
 $selected-color: $room-highlight-color;
 
 // selected for hoverover & selected event tiles
-$event-selected-color: #21262c;
+$event-selected-color: $system-dark;
 
 // used for the hairline dividers in RoomView
 $primary-hairline-color: transparent;
@@ -91,7 +94,7 @@ $lightbox-background-bg-color: #000;
 $lightbox-background-bg-opacity: 0.85;
 
 $settings-grey-fg-color: #a2a2a2;
-$settings-profile-placeholder-bg-color: #21262c;
+$settings-profile-placeholder-bg-color: $system-dark;
 $settings-profile-overlay-placeholder-fg-color: #454545;
 $settings-profile-button-bg-color: #e7e7e7;
 $settings-profile-button-fg-color: $settings-profile-overlay-placeholder-fg-color;
@@ -112,8 +115,8 @@ $eventtile-meta-color: $roomtopic-color;
 $header-divider-color: $header-panel-text-primary-color;
 $composer-e2e-icon-color: $header-panel-text-primary-color;
 
-// this probably shouldn't have it's own colour
-$voipcall-plinth-color: #394049;
+$quinary-content-color: #394049;
+$toast-bg-color: $quinary-content-color;
 
 // ********************
 
@@ -175,7 +178,7 @@ $button-link-bg-color: transparent;
 $togglesw-off-color: $room-highlight-color;
 
 $progressbar-fg-color: $accent-color;
-$progressbar-bg-color: #21262c;
+$progressbar-bg-color: $system-dark;
 
 $visual-bell-bg-color: #800;
 
@@ -210,7 +213,7 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 $message-body-panel-fg-color: $secondary-fg-color;
 $message-body-panel-bg-color: #394049; // "Dark Tile"
 $message-body-panel-icon-fg-color: $secondary-fg-color;
-$message-body-panel-icon-bg-color: #21262C; // "System Dark"
+$message-body-panel-icon-bg-color: $system-dark; // "System Dark"
 
 $voice-record-stop-border-color: $quaternary-fg-color;
 $voice-record-waveform-incomplete-fg-color: $quaternary-fg-color;
@@ -228,9 +231,9 @@ $groupFilterPanel-background-blur-amount: 30px;
 $composer-shadow-color: rgba(0, 0, 0, 0.28);
 
 // Bubble tiles
-$eventbubble-self-bg: #143A34;
-$eventbubble-others-bg: #394049;
-$eventbubble-bg-hover: #433C23;
+$eventbubble-self-bg: #14322E;
+$eventbubble-others-bg: $event-selected-color;
+$eventbubble-bg-hover: #1C2026;
 $eventbubble-avatar-outline: $bg-color;
 $eventbubble-reply-color: #C1C6CD;
 
