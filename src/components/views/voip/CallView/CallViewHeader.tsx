@@ -116,7 +116,7 @@ export const CallViewHeader: React.FC<CallViewHeaderProps> = ({
             onMouseDown={onPipMouseDown}
         >
             <AccessibleButton onClick={() => onRoomAvatarClick(roomId)}>
-                <RoomAvatar room={callRoom} height={32} width={32} />;
+                <RoomAvatar room={callRoom} height={32} width={32} />
             </AccessibleButton>
             <div className="mx_CallViewHeader_callInfo">
                 <div className="mx_CallViewHeader_roomName">{ callRoomName }</div>
