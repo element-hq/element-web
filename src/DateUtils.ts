@@ -123,6 +123,19 @@ export function formatTime(date: Date, showTwelveHour = false): string {
     return pad(date.getHours()) + ':' + pad(date.getMinutes());
 }
 
+export function formatCallTime(date: Date): string {
+    const hours = date.getUTCHours();
+    const minutes = date.getUTCMinutes();
+    const seconds = date.getUTCSeconds();
+
+    let output = "";
+    if (hours) output += `${hours}h `;
+    if (minutes || output) output += `${minutes}m `;
+    if (seconds || output) output += `${seconds}s`;
+
+    return output;
+}
+
 const MILLIS_IN_DAY = 86400000;
 export function wantsDateSeparator(prevEventDate: Date, nextEventDate: Date): boolean {
     if (!nextEventDate || !prevEventDate) {
