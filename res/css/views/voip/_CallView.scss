@@ -75,8 +75,6 @@ limitations under the License.
         height: 100%;
 
         &.mx_VideoFeed_voice {
-            // We don't want to collide with the call controls that have 52px of height
-            margin-bottom: 52px;
             background-color: $inverted-bg-color;
             display: flex;
             justify-content: center;
