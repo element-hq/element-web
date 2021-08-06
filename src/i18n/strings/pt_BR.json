@@ -3244,5 +3244,5 @@
     "%(senderName)s removed their display name (%(oldDisplayName)s)": "%(senderName)s removeu seu nome de exibição (%(oldDisplayName)s)",
     "%(senderName)s set their display name to %(displayName)s": "%(senderName)s definiu seu nome de exibição para %(displayName)s",
     "%(oldDisplayName)s changed their display name to %(displayName)s": "%(oldDisplayName)s mudou seu nome de exibição para %(displayName)s",
-    "You can leave the beta any time from settings or tapping on a beta badge, like the one above.": ""
+    "You can leave the beta any time from settings or tapping on a beta badge, like the one above.": "Você pode sair do beta a qualquer momento nas configurações ou tocando em um emblema beta, como o mostrado acima."
 }
