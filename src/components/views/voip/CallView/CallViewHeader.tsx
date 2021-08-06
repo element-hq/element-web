@@ -22,6 +22,7 @@ import RoomAvatar from '../../avatars/RoomAvatar';
 import AccessibleButton from '../../elements/AccessibleButton';
 import dis from '../../../../dispatcher/dispatcher';
 import classNames from 'classnames';
+import AccessibleTooltipButton from '../../elements/AccessibleTooltipButton';
 
 const callTypeTranslationByType: Record<CallType, () => string> = {
     [CallType.Video]: () => _t("Video Call"),
@@ -62,11 +63,11 @@ type CallControlsProps = Pick<CallViewHeaderProps, 'pipMode' | 'type'> & {
 const CallViewHeaderControls: React.FC<CallControlsProps> = ({ pipMode = false, type, roomId }) => {
     return <div className="mx_CallView_header_controls">
         { (pipMode && type === CallType.Video) &&
-      <div className="mx_CallView_header_button mx_CallView_header_button_fullscreen"
-          onClick={onFullscreenClick}
-          title={_t("Fill Screen")}
-      /> }
-        { pipMode && <div className="mx_CallView_header_button mx_CallView_header_button_expand"
+            <AccessibleTooltipButton className="mx_CallView_header_button mx_CallView_header_button_fullscreen"
+                onClick={onFullscreenClick}
+                title={_t("Fill Screen")}
+            /> }
+        { pipMode && <AccessibleTooltipButton className="mx_CallView_header_button mx_CallView_header_button_expand"
             onClick={() => onExpandClick(roomId)}
             title={_t("Return to call")}
         /> }
