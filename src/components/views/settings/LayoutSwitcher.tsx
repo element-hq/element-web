@@ -63,67 +63,69 @@ export default class LayoutSwitcher extends React.Component<IProps, IState> {
             mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: this.state.layout === Layout.Bubble,
         });
 
-        return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_Layout">
-            <span className="mx_SettingsTab_subheading">
-                { _t("Message layout") }
-            </span>
+        return (
+            <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_Layout">
+                <span className="mx_SettingsTab_subheading">
+                    { _t("Message layout") }
+                </span>
 
-            <div className="mx_AppearanceUserSettingsTab_Layout_RadioButtons">
-                <label className={ircClasses}>
-                    <EventTilePreview
-                        className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
-                        message={this.props.messagePreviewText}
-                        layout={Layout.IRC}
-                        userId={this.props.userId}
-                        displayName={this.props.displayName}
-                        avatarUrl={this.props.avatarUrl}
-                    />
-                    <StyledRadioButton
-                        name="layout"
-                        value={Layout.IRC}
-                        checked={this.state.layout === Layout.IRC}
-                        onChange={this.onLayoutChange}
-                    >
-                        { _t("IRC") }
-                    </StyledRadioButton>
-                </label>
-                <label className={groupClasses}>
-                    <EventTilePreview
-                        className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
-                        message={this.props.messagePreviewText}
-                        layout={Layout.Group}
-                        userId={this.props.userId}
-                        displayName={this.props.displayName}
-                        avatarUrl={this.props.avatarUrl}
-                    />
-                    <StyledRadioButton
-                        name="layout"
-                        value={Layout.Group}
-                        checked={this.state.layout == Layout.Group}
-                        onChange={this.onLayoutChange}
-                    >
-                        { _t("Modern") }
-                    </StyledRadioButton>
-                </label>
-                <label className={bubbleClasses}>
-                    <EventTilePreview
-                        className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
-                        message={this.props.messagePreviewText}
-                        layout={Layout.Bubble}
-                        userId={this.props.userId}
-                        displayName={this.props.displayName}
-                        avatarUrl={this.props.avatarUrl}
-                    />
-                    <StyledRadioButton
-                        name="layout"
-                        value={Layout.Bubble}
-                        checked={this.state.layout == Layout.Bubble}
-                        onChange={this.onLayoutChange}
-                    >
-                        { _t("Message bubbles") }
-                    </StyledRadioButton>
-                </label>
+                <div className="mx_AppearanceUserSettingsTab_Layout_RadioButtons">
+                    <label className={ircClasses}>
+                        <EventTilePreview
+                            className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
+                            message={this.props.messagePreviewText}
+                            layout={Layout.IRC}
+                            userId={this.props.userId}
+                            displayName={this.props.displayName}
+                            avatarUrl={this.props.avatarUrl}
+                        />
+                        <StyledRadioButton
+                            name="layout"
+                            value={Layout.IRC}
+                            checked={this.state.layout === Layout.IRC}
+                            onChange={this.onLayoutChange}
+                        >
+                            { _t("IRC") }
+                        </StyledRadioButton>
+                    </label>
+                    <label className={groupClasses}>
+                        <EventTilePreview
+                            className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
+                            message={this.props.messagePreviewText}
+                            layout={Layout.Group}
+                            userId={this.props.userId}
+                            displayName={this.props.displayName}
+                            avatarUrl={this.props.avatarUrl}
+                        />
+                        <StyledRadioButton
+                            name="layout"
+                            value={Layout.Group}
+                            checked={this.state.layout == Layout.Group}
+                            onChange={this.onLayoutChange}
+                        >
+                            { _t("Modern") }
+                        </StyledRadioButton>
+                    </label>
+                    <label className={bubbleClasses}>
+                        <EventTilePreview
+                            className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
+                            message={this.props.messagePreviewText}
+                            layout={Layout.Bubble}
+                            userId={this.props.userId}
+                            displayName={this.props.displayName}
+                            avatarUrl={this.props.avatarUrl}
+                        />
+                        <StyledRadioButton
+                            name="layout"
+                            value={Layout.Bubble}
+                            checked={this.state.layout == Layout.Bubble}
+                            onChange={this.onLayoutChange}
+                        >
+                            { _t("Message bubbles") }
+                        </StyledRadioButton>
+                    </label>
+                </div>
             </div>
-        </div>;
+        );
     }
 }
