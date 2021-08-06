@@ -65,6 +65,7 @@ export const SpaceAvatar = ({
                     }}
                     kind="link"
                     className="mx_SpaceBasicSettings_avatar_remove"
+                    aria-label={_t("Delete avatar")}
                 >
                     { _t("Delete") }
                 </AccessibleButton>
@@ -72,7 +73,11 @@ export const SpaceAvatar = ({
         } else {
             avatarSection = <React.Fragment>
                 <div className="mx_SpaceBasicSettings_avatar" onClick={() => avatarUploadRef.current?.click()} />
-                <AccessibleButton onClick={() => avatarUploadRef.current?.click()} kind="link">
+                <AccessibleButton
+                    onClick={() => avatarUploadRef.current?.click()}
+                    kind="link"
+                    aria-label={_t("Upload avatar")}
+                >
                     { _t("Upload") }
                 </AccessibleButton>
             </React.Fragment>;
