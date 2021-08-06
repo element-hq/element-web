@@ -61,6 +61,10 @@ export default class CallEventGrouper extends EventEmitter {
         return [...this.events].find((event) => event.getType() === EventType.CallReject);
     }
 
+    private get selectAnswer(): MatrixEvent {
+        return [...this.events].find((event) => event.getType() === EventType.CallSelectAnswer);
+    }
+
     public get isVoice(): boolean {
         const invite = this.invite;
         if (!invite) return;
@@ -80,6 +84,11 @@ export default class CallEventGrouper extends EventEmitter {
 
     public get gotRejected(): boolean {
         return Boolean(this.reject);
+    }
+
+    public get duration(): Date {
+        if (!this.hangup || !this.selectAnswer) return;
+        return new Date(this.hangup.getDate().getTime() - this.selectAnswer.getDate().getTime());
     }
 
     /**
