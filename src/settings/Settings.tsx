@@ -333,7 +333,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: null,
     },
-    "feature_hiddenReadReceipts": {
+    "feature_hidden_read_receipts": {
         supportedLevels: LEVELS_FEATURE,
         displayName: _td(
             "Don't send read receipts",
