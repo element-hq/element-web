@@ -33,7 +33,10 @@ limitations under the License.
         > p {
             font-size: $font-15px;
             line-height: $font-24px;
-            color: $secondary-fg-color;
+
+            &:first-of-type {
+                margin-top: 0;
+            }
 
             &.mx_CreateSpaceFromCommunityDialog_flairNotice {
                 font-size: $font-12px;
@@ -45,7 +48,7 @@ limitations under the License.
             > p {
                 font-size: $font-12px;
                 line-height: $font-15px;
-                margin: 8px 0 16px;
+                margin: 16px 0;
             }
         }
 
