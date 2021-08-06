@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { createRef } from 'react';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
@@ -38,6 +38,8 @@ interface IProps {
 
 @replaceableComponent("views.rooms.ReplyTile")
 export default class ReplyTile extends React.PureComponent<IProps> {
+    private anchorElement = createRef<HTMLAnchorElement>();
+
     static defaultProps = {
         onHeightChanged: () => {},
     };
@@ -71,7 +73,11 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         // Following a link within a reply should not dispatch the `view_room` action
         // so that the browser can direct the user to the correct location
         // The exception being the link wrapping the reply
-        if (clickTarget.tagName.toLowerCase() !== "a" || clickTarget.closest("a") === null) {
+        if (
+            clickTarget.tagName.toLowerCase() !== "a" ||
+            clickTarget.closest("a") === null ||
+            clickTarget === this.anchorElement.current
+        ) {
             // This allows the permalink to be opened in a new tab/window or copied as
             // matrix.to, but also for it to enable routing within Riot when clicked.
             e.preventDefault();
@@ -141,7 +147,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
 
         return (
             <div className={classes}>
-                <a href={permalink} onClick={this.onClick}>
+                <a href={permalink} onClick={this.onClick} ref={this.anchorElement}>
                     { sender }
                     <EventTileType
                         ref="tile"
