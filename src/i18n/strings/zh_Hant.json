@@ -3632,5 +3632,18 @@
     "All rooms you're in will appear in Home.": "您所在的所有聊天室都會出現在「首頁」。",
     "Send pseudonymous analytics data": "傳送匿名分析資料",
     "Missed call": "未接來電",
-    "Call declined": "拒絕通話"
+    "Call declined": "拒絕通話",
+    "Stop recording": "停止錄製",
+    "Send voice message": "傳送語音訊息",
+    "Mute the microphone": "麥克風靜音",
+    "Unmute the microphone": "取消麥克風靜音",
+    "Dialpad": "撥號鍵盤",
+    "More": "更多",
+    "Show sidebar": "顯示側邊欄",
+    "Hide sidebar": "隱藏側邊欄",
+    "Start sharing your screen": "開始分享您的畫面",
+    "Stop sharing your screen": "停止分享您的畫面",
+    "Stop the camera": "停止攝影機",
+    "Start the camera": "開啟攝影機",
+    "Surround selected text when typing special characters": "輸入特殊字元以環繞選取的文字"
 }
