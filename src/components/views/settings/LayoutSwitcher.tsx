@@ -53,26 +53,26 @@ export default class LayoutSwitcher extends React.Component<IProps, IState> {
     };
 
     public render(): JSX.Element {
-        const ircClasses = classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
-            mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: this.state.layout == Layout.IRC,
+        const ircClasses = classNames("mx_LayoutSwitcher_RadioButton", {
+            mx_LayoutSwitcher_RadioButton_selected: this.state.layout == Layout.IRC,
         });
-        const groupClasses = classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
-            mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: this.state.layout == Layout.Group,
+        const groupClasses = classNames("mx_LayoutSwitcher_RadioButton", {
+            mx_LayoutSwitcher_RadioButton_selected: this.state.layout == Layout.Group,
         });
-        const bubbleClasses = classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
-            mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: this.state.layout === Layout.Bubble,
+        const bubbleClasses = classNames("mx_LayoutSwitcher_RadioButton", {
+            mx_LayoutSwitcher_RadioButton_selected: this.state.layout === Layout.Bubble,
         });
 
         return (
-            <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_Layout">
+            <div className="mx_SettingsTab_section mx_LayoutSwitcher">
                 <span className="mx_SettingsTab_subheading">
                     { _t("Message layout") }
                 </span>
 
-                <div className="mx_AppearanceUserSettingsTab_Layout_RadioButtons">
+                <div className="mx_LayoutSwitcher_RadioButtons">
                     <label className={ircClasses}>
                         <EventTilePreview
-                            className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
+                            className="mx_LayoutSwitcher_RadioButton_preview"
                             message={this.props.messagePreviewText}
                             layout={Layout.IRC}
                             userId={this.props.userId}
@@ -90,7 +90,7 @@ export default class LayoutSwitcher extends React.Component<IProps, IState> {
                     </label>
                     <label className={groupClasses}>
                         <EventTilePreview
-                            className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
+                            className="mx_LayoutSwitcher_RadioButton_preview"
                             message={this.props.messagePreviewText}
                             layout={Layout.Group}
                             userId={this.props.userId}
@@ -108,7 +108,7 @@ export default class LayoutSwitcher extends React.Component<IProps, IState> {
                     </label>
                     <label className={bubbleClasses}>
                         <EventTilePreview
-                            className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
+                            className="mx_LayoutSwitcher_RadioButton_preview"
                             message={this.props.messagePreviewText}
                             layout={Layout.Bubble}
                             userId={this.props.userId}
