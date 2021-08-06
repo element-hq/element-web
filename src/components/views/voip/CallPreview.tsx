@@ -184,8 +184,8 @@ export default class CallPreview extends React.Component<IProps, IState> {
                     className="mx_CallPreview"
                     draggable={pipMode}
                 >
-                    { (onMouseDownOnHeader, onResizeHandler) => <CallView
-                        onMouseDownOnHeader={onMouseDownOnHeader}
+                    { ({ onStartMoving, onResize }) => <CallView
+                        onMouseDownOnHeader={onStartMoving}
                         call={this.state.primaryCall}
                         secondaryCall={this.state.secondaryCall}
                         pipMode={pipMode}

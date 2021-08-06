@@ -55,7 +55,7 @@ interface IProps {
 
     // a callback which is called when the content in the CallView changes
     // in a way that is likely to cause a resize.
-    onResize?: () => void;
+    onResize?: (event: Event) => void;
 
     // Whether this call view is for picture-in-picture mode
     // otherwise, it's the larger call view when viewing the room the call is in.

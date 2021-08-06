@@ -35,7 +35,7 @@ const PADDING = {
 
 interface IChildrenOptions {
     onStartMoving: (event: React.MouseEvent<Element, MouseEvent>) => void;
-    onResize: (event: React.MouseEvent<Element, MouseEvent>) => void;
+    onResize: (event: Event) => void;
 }
 
 interface IProps {
@@ -218,7 +218,10 @@ export class PictureInPictureDragger extends React.Component<IProps, IState> {
                 ref={this.callViewWrapper}
             >
                 <>
-                    { this.props.children(this.onStartMoving) }
+                    { this.props.children({
+                        onStartMoving: this.onStartMoving,
+                        onResize: this.onResize,
+                    }) }
                 </>
             </div>
         );
