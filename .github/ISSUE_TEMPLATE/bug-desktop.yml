@@ -1,6 +1,5 @@
 name: Bug report for the Element desktop app (not in a browser)
 description: File a bug report if you are using the desktop Element application.
-title: "[Bug]: "
 labels: [T-Defect, triage]
 assignees:
   -   

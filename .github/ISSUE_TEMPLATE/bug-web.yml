@@ -1,6 +1,5 @@
 name: Bug report for Element Web (in browser)
 description: File a bug report if you are using Element in a web browser like Firefox, Chrome, Edge, and so on.
-title: "[Bug]: "
 labels: [T-Defect, triage]
 assignees:
   -   
