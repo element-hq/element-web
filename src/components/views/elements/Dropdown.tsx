@@ -204,7 +204,7 @@ export default class Dropdown extends React.Component<IProps, IState> {
         this.props.onOptionChange(dropdownKey);
     };
 
-    private onInputKeyDown = (e: React.KeyboardEvent) => {
+    private onKeyDown = (e: React.KeyboardEvent) => {
         let handled = true;
 
         // These keys don't generate keypress events and so needs to be on keyup
@@ -320,7 +320,6 @@ export default class Dropdown extends React.Component<IProps, IState> {
                         type="text"
                         autoFocus={true}
                         className="mx_Dropdown_option"
-                        onKeyDown={this.onInputKeyDown}
                         onChange={this.onInputChange}
                         value={this.state.searchQuery}
                         role="combobox"
@@ -358,7 +357,7 @@ export default class Dropdown extends React.Component<IProps, IState> {
 
         // Note the menu sits inside the AccessibleButton div so it's anchored
         // to the input, but overflows below it. The root contains both.
-        return <div className={classnames(dropdownClasses)} ref={this.collectRoot}>
+        return <div className={classnames(dropdownClasses)} ref={this.collectRoot} onKeyDown={this.onKeyDown}>
             <AccessibleButton
                 className="mx_Dropdown_input mx_no_textinput"
                 onClick={this.onInputClick}
