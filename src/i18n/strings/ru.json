@@ -3576,5 +3576,6 @@
     "Some invites couldn't be sent": "Некоторые приглашения не могут быть отправлены",
     "We sent the others, but the below people couldn't be invited to <RoomName/>": "Мы отправили остальных, но нижеперечисленные люди не могут быть приглашены в <RoomName/>",
     "Transfer Failed": "Перевод не удался",
-    "Unable to transfer call": "Не удалось перевести звонок"
+    "Unable to transfer call": "Не удалось перевести звонок",
+    "Olm version:": "Версия olm:"
 }
