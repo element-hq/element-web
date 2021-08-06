@@ -69,6 +69,18 @@ export default class CallEvent extends React.Component<IProps, IState> {
         this.setState({ callState: newState });
     };
 
+    private renderCallBackButton(text: string): JSX.Element {
+        return (
+            <AccessibleButton
+                className="mx_CallEvent_content_button mx_CallEvent_content_button_callBack"
+                onClick={this.props.callEventGrouper.callBack}
+                kind="primary"
+            >
+                <span> { text } </span>
+            </AccessibleButton>
+        );
+    }
+
     private renderContent(state: CallState | CustomCallState): JSX.Element {
         if (state === CallState.Ringing) {
             const silenceClass = classNames({
@@ -103,8 +115,16 @@ export default class CallEvent extends React.Component<IProps, IState> {
         }
         if (state === CallState.Ended) {
             const hangupReason = this.props.callEventGrouper.hangupReason;
+            const gotRejected = this.props.callEventGrouper.gotRejected;
 
-            if ([CallErrorCode.UserHangup, "user hangup"].includes(hangupReason) || !hangupReason) {
+            if (gotRejected) {
+                return (
+                    <div className="mx_CallEvent_content">
+                        { _t("Call declined") }
+                        { this.renderCallBackButton(_t("Call back")) }
+                    </div>
+                );
+            } else if (([CallErrorCode.UserHangup, "user hangup"].includes(hangupReason) || !hangupReason)) {
                 // workaround for https://github.com/vector-im/element-web/issues/5178
                 // it seems Android randomly sets a reason of "user hangup" which is
                 // interpreted as an error code :(
@@ -113,7 +133,14 @@ export default class CallEvent extends React.Component<IProps, IState> {
                 // Also, if we don't have a reason
                 return (
                     <div className="mx_CallEvent_content">
-                        { _t("This call has ended") }
+                        { _t("Call ended") }
+                    </div>
+                );
+            } else if (hangupReason === CallErrorCode.InviteTimeout) {
+                return (
+                    <div className="mx_CallEvent_content">
+                        { _t("Missed call") }
+                        { this.renderCallBackButton(_t("Call back")) }
                     </div>
                 );
             }
@@ -133,8 +160,6 @@ export default class CallEvent extends React.Component<IProps, IState> {
                 // (as opposed to an error code they gave but we don't know about,
                 // in which case we show the error code)
                 reason = _t("An unknown error occurred");
-            } else if (hangupReason === CallErrorCode.InviteTimeout) {
-                reason = _t("No answer");
             } else if (hangupReason === CallErrorCode.UserBusy) {
                 reason = _t("The user you called is busy.");
             } else {
@@ -148,7 +173,8 @@ export default class CallEvent extends React.Component<IProps, IState> {
                         className="mx_CallEvent_content_tooltip"
                         kind={InfoTooltipKind.Warning}
                     />
-                    { _t("This call has failed") }
+                    { _t("Connection failed") }
+                    { this.renderCallBackButton(_t("Retry")) }
                 </div>
             );
         }
@@ -162,14 +188,8 @@ export default class CallEvent extends React.Component<IProps, IState> {
         if (state === CustomCallState.Missed) {
             return (
                 <div className="mx_CallEvent_content">
-                    { _t("You missed this call") }
-                    <AccessibleButton
-                        className="mx_CallEvent_content_button mx_CallEvent_content_button_callBack"
-                        onClick={this.props.callEventGrouper.callBack}
-                        kind="primary"
-                    >
-                        <span> { _t("Call back") } </span>
-                    </AccessibleButton>
+                    { _t("Missed call") }
+                    { this.renderCallBackButton(_t("Call back")) }
                 </div>
             );
         }
@@ -186,11 +206,17 @@ export default class CallEvent extends React.Component<IProps, IState> {
         const sender = event.sender ? event.sender.name : event.getSender();
         const isVoice = this.props.callEventGrouper.isVoice;
         const callType = isVoice ? _t("Voice call") : _t("Video call");
-        const content = this.renderContent(this.state.callState);
+        const callState = this.state.callState;
+        const hangupReason = this.props.callEventGrouper.hangupReason;
+        const content = this.renderContent(callState);
         const className = classNames({
             mx_CallEvent: true,
             mx_CallEvent_voice: isVoice,
             mx_CallEvent_video: !isVoice,
+            mx_CallEvent_missed: (
+                callState === CustomCallState.Missed ||
+                (callState === CallState.Ended && hangupReason === CallErrorCode.InviteTimeout)
+            ),
         });
 
         return (
@@ -206,7 +232,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
                             { sender }
                         </div>
                         <div className="mx_CallEvent_type">
-                            <div className="mx_CallEvent_type_icon"></div>
+                            <div className="mx_CallEvent_type_icon" />
                             { callType }
                         </div>
                     </div>

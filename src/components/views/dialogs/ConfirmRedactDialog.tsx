@@ -37,8 +37,8 @@ export default class ConfirmRedactDialog extends React.Component<IProps> {
                        "Note that if you delete a room name or topic change, it could undo the change.")}
                 placeholder={_t("Reason (optional)")}
                 focus
-                button={_t("Remove")}>
-            </TextInputDialog>
+                button={_t("Remove")}
+            />
         );
     }
 }

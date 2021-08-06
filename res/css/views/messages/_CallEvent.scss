@@ -23,7 +23,7 @@ limitations under the License.
     background-color: $dark-panel-bg-color;
     border-radius: 8px;
     margin: 10px auto;
-    max-width: 75%;
+    width: 75%;
     box-sizing: border-box;
     height: 60px;
 
@@ -41,6 +41,14 @@ limitations under the License.
         .mx_CallEvent_content_button_answer span::before {
             mask-image: url('$(res)/img/element-icons/call/video-call.svg');
         }
+    }
+
+    &.mx_CallEvent_voice.mx_CallEvent_missed .mx_CallEvent_type_icon::before {
+        mask-image: url('$(res)/img/voip/missed-voice.svg');
+    }
+
+    &.mx_CallEvent_video.mx_CallEvent_missed .mx_CallEvent_type_icon::before {
+        mask-image: url('$(res)/img/voip/missed-video.svg');
     }
 
     .mx_CallEvent_info {

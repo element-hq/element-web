@@ -31,6 +31,7 @@ import { Action } from '../../../dispatcher/actions';
 import { SetRightPanelPhasePayload } from '../../../dispatcher/payloads/SetRightPanelPhasePayload';
 import { jsxJoin } from '../../../utils/ReactUtils';
 import { EventType } from 'matrix-js-sdk/src/@types/event';
+import { Layout } from '../../../settings/Layout';
 
 const onPinnedMessagesClick = (): void => {
     defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
@@ -47,6 +48,8 @@ interface IProps extends Omit<ComponentProps<typeof EventListSummary>, "summaryT
     summaryLength?: number;
     // The maximum number of avatars to display in the summary
     avatarsMaxLength?: number;
+    // The currently selected layout
+    layout: Layout;
 }
 
 interface IUserEvents {
@@ -84,6 +87,7 @@ export default class MemberEventListSummary extends React.Component<IProps> {
         summaryLength: 1,
         threshold: 3,
         avatarsMaxLength: 5,
+        layout: Layout.Group,
     };
 
     shouldComponentUpdate(nextProps) {
@@ -489,6 +493,7 @@ export default class MemberEventListSummary extends React.Component<IProps> {
             startExpanded={this.props.startExpanded}
             children={this.props.children}
             summaryMembers={[...latestUserAvatarMember.values()]}
+            layout={this.props.layout}
             summaryText={this.generateSummary(aggregate.names, orderedTransitionSequences)} />;
     }
 }

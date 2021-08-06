@@ -514,7 +514,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         switch (content.msgtype) {
             case MsgType.Emote:
                 return (
-                    <span className="mx_MEmoteBody mx_EventTile_content">
+                    <div className="mx_MEmoteBody mx_EventTile_content">
                         *&nbsp;
                         <span
                             className="mx_MEmoteBody_sender"
@@ -525,21 +525,21 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                         &nbsp;
                         { body }
                         { widgets }
-                    </span>
+                    </div>
                 );
             case MsgType.Notice:
                 return (
-                    <span className="mx_MNoticeBody mx_EventTile_content">
+                    <div className="mx_MNoticeBody mx_EventTile_content">
                         { body }
                         { widgets }
-                    </span>
+                    </div>
                 );
             default: // including "m.text"
                 return (
-                    <span className="mx_MTextBody mx_EventTile_content">
+                    <div className="mx_MTextBody mx_EventTile_content">
                         { body }
                         { widgets }
-                    </span>
+                    </div>
                 );
         }
     }

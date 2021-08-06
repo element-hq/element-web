@@ -86,8 +86,11 @@ export default class LabsUserSettingsTab extends React.Component {
                             'test out new features and help shape them before they actually launch. ' +
                             '<a>Learn more</a>.', {}, {
                             'a': (sub) => {
-                                return <a href="https://github.com/vector-im/element-web/blob/develop/docs/labs.md"
-                                    rel='noreferrer noopener' target='_blank'>{ sub }</a>;
+                                return <a
+                                    href="https://github.com/vector-im/element-web/blob/develop/docs/labs.md"
+                                    rel='noreferrer noopener'
+                                    target='_blank'
+                                >{ sub }</a>;
                             },
                         })
                     }
