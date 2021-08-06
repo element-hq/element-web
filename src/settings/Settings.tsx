@@ -333,12 +333,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: null,
     },
-    "sendReadReceipts": {
-        supportedLevels: LEVELS_ROOM_SETTINGS,
+    "feature_hiddenReadReceipts": {
+        supportedLevels: LEVELS_FEATURE,
         displayName: _td(
-            "Send read receipts for messages (requires compatible homeserver to disable)",
+            "Don't send read receipts",
         ),
-        default: true,
+        default: false,
     },
     "baseFontSize": {
         displayName: _td("Font size"),
