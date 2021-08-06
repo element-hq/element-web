@@ -3622,5 +3622,21 @@
     "Decrypting": "Visszafejtés",
     "Send pseudonymous analytics data": "Pseudo-anonim felhasználási adatok küldése",
     "Missed call": "Nem fogadott hívás",
-    "Call declined": "Hívás elutasítva"
+    "Call declined": "Hívás elutasítva",
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(oneUser)s %(count)s alkalommal megváltoztatta a szoba <a>kitűzött üzeneteit</a>.",
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(severalUsers)s %(count)s alkalommal megváltoztatta a szoba <a>kitűzött üzeneteit</a>.",
+    "Olm version:": "Olm verzió:",
+    "Stop recording": "Felvétel megállítása",
+    "Send voice message": "Hang üzenet küldése",
+    "Mute the microphone": "Mikrofon némítása",
+    "Unmute the microphone": "Mikrofon némításának megszüntetése",
+    "Dialpad": "Tárcsázó",
+    "More": "Több",
+    "Show sidebar": "Oldalsáv megjelenítése",
+    "Hide sidebar": "Oldalsáv elrejtése",
+    "Start sharing your screen": "Képernyőmegosztás indítása",
+    "Stop sharing your screen": "Képernyőmegosztás kikapcsolása",
+    "Stop the camera": "Kamera kikapcsolása",
+    "Start the camera": "Kamera bekapcsolása",
+    "Surround selected text when typing special characters": "Kijelölt szöveg körülvétele speciális karakterek beírásakor"
 }
