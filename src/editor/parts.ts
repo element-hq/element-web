@@ -397,6 +397,14 @@ class UserPillPart extends PillPart {
         super(userId, displayName);
     }
 
+    public get type(): IPillPart["type"] {
+        return Type.UserPill;
+    }
+
+    protected get className() {
+        return "mx_UserPill mx_Pill";
+    }
+
     protected setAvatar(node: HTMLElement): void {
         if (!this.member) {
             return;
@@ -417,14 +425,6 @@ class UserPillPart extends PillPart {
             member: this.member,
         });
     };
-
-    public get type(): IPillPart["type"] {
-        return Type.UserPill;
-    }
-
-    protected get className() {
-        return "mx_UserPill mx_Pill";
-    }
 }
 
 class PillCandidatePart extends PlainBasePart implements IPillCandidatePart {
