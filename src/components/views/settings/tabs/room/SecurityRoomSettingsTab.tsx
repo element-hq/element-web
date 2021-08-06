@@ -143,7 +143,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                         "off later. Encrypting messages in a public room will make receiving and sending " +
                         "messages slower.",
                         null,
-                        { "b": (sub) => <b> { sub } </b> },
+                        { "b": (sub) => <b>{ sub }</b> },
                     ) } </p>
                     <p> { _t(
                         "To avoid these issues, create a <a> new encrypted room </a> for " +
