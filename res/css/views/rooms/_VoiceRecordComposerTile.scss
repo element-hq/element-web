@@ -20,7 +20,7 @@ limitations under the License.
     height: 28px;
     border: 2px solid $voice-record-stop-border-color;
     border-radius: 32px;
-    margin-right: 16px; // between us and the send button
+    margin-right: 8px; // between us and the waveform component
     position: relative;
 
     &::after {
