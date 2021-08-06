@@ -77,11 +77,17 @@ export const SpaceButton: React.FC<IButtonProps> = ({
 
     let notifBadge;
     if (notificationState) {
+        let ariaLabel = _t("Jump to first unread room.");
+        if (space.getMyMembership() === "invite") {
+            ariaLabel = _t("Jump to first invite.");
+        }
+
         notifBadge = <div className="mx_SpacePanel_badgeContainer">
             <NotificationBadge
                 onClick={() => SpaceStore.instance.setActiveRoomInSpace(space || null)}
                 forceCount={false}
                 notification={notificationState}
+                aria-label={ariaLabel}
             />
         </div>;
     }
