@@ -33,9 +33,14 @@ const PADDING = {
     right: 8,
 };
 
+interface IChildrenOptions {
+    onStartMoving: (event: React.MouseEvent<Element, MouseEvent>) => void;
+    onResize: (event: React.MouseEvent<Element, MouseEvent>) => void;
+}
+
 interface IProps {
     className?: string;
-    children: (startMovingEventHandler: (event: React.MouseEvent<Element, MouseEvent>) => void) => React.ReactNode;
+    children: ({ onStartMoving, onResize }: IChildrenOptions) => React.ReactNode;
     draggable: boolean;
 }
 
@@ -74,13 +79,13 @@ export class PictureInPictureDragger extends React.Component<IProps, IState> {
     public componentDidMount() {
         document.addEventListener("mousemove", this.onMoving);
         document.addEventListener("mouseup", this.onEndMoving);
-        window.addEventListener("resize", this.snap);
+        window.addEventListener("resize", this.onResize);
     }
 
     public componentWillUnmount() {
         document.removeEventListener("mousemove", this.onMoving);
         document.removeEventListener("mouseup", this.onEndMoving);
-        window.removeEventListener("resize", this.snap);
+        window.removeEventListener("resize", this.onResize);
     }
 
     private animationCallback = () => {
@@ -126,7 +131,11 @@ export class PictureInPictureDragger extends React.Component<IProps, IState> {
         }
     }
 
-    private snap = () => {
+    private onResize = (): void => {
+        this.snap(false);
+    };
+
+    private snap = (animate = false) => {
         const translationX = this.desiredTranslationX;
         const translationY = this.desiredTranslationY;
         // We subtract the PiP size from the window size in order to calculate
@@ -158,6 +167,17 @@ export class PictureInPictureDragger extends React.Component<IProps, IState> {
         // We start animating here because we want the PiP to move when we're
         // resizing the window
         this.scheduledUpdate.mark();
+
+        if (animate) {
+            // We start animating here because we want the PiP to move when we're
+            // resizing the window
+            this.scheduledUpdate.mark();
+        } else {
+            this.setState({
+                translationX: this.desiredTranslationX,
+                translationY: this.desiredTranslationY,
+            });
+        }
     };
 
     private onStartMoving = (event: React.MouseEvent | MouseEvent) => {
@@ -181,7 +201,7 @@ export class PictureInPictureDragger extends React.Component<IProps, IState> {
 
     private onEndMoving = () => {
         this.moving = false;
-        this.snap();
+        this.snap(true);
     };
 
     public render() {
