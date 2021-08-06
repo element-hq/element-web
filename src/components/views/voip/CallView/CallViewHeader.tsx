@@ -61,20 +61,20 @@ type CallControlsProps = Pick<CallViewHeaderProps, 'pipMode' | 'type'> & {
     roomId: string;
 };
 const CallViewHeaderControls: React.FC<CallControlsProps> = ({ pipMode = false, type, roomId }) => {
-    return <div className="mx_CallView_header_controls">
+    return <div className="mx_CallViewHeader_controls">
         { (pipMode && type === CallType.Video) &&
-            <AccessibleTooltipButton className="mx_CallView_header_button mx_CallView_header_button_fullscreen"
+            <AccessibleTooltipButton className="mx_CallViewHeader_button mx_CallViewHeader_button_fullscreen"
                 onClick={onFullscreenClick}
                 title={_t("Fill Screen")}
             /> }
-        { pipMode && <AccessibleTooltipButton className="mx_CallView_header_button mx_CallView_header_button_expand"
+        { pipMode && <AccessibleTooltipButton className="mx_CallViewHeader_button mx_CallViewHeader_button_expand"
             onClick={() => onExpandClick(roomId)}
             title={_t("Return to call")}
         /> }
     </div>;
 };
 const SecondaryCallInfo: React.FC<{ callRoom: Room }> = ({ callRoom }) => {
-    return <span className="mx_CallView_header_secondaryCallInfo">
+    return <span className="mx_CallViewHeader_secondaryCallInfo">
         <AccessibleButton element='span' onClick={() => onRoomAvatarClick(callRoom.roomId)}>
             <RoomAvatar room={callRoom} height={16} width={16} />
             <span className="mx_CallView_secondaryCall_roomName">
@@ -86,9 +86,9 @@ const SecondaryCallInfo: React.FC<{ callRoom: Room }> = ({ callRoom }) => {
 
 const CallTypeIcon: React.FC<{ type: CallType }> = ({ type }) => {
     const classes = classNames({
-        'mx_CallView_header_callTypeIcon': true,
-        'mx_CallView_header_callTypeIcon_video': type === CallType.Video,
-        'mx_CallView_header_callTypeIcon_voice': type === CallType.Voice,
+        'mx_CallViewHeader_callTypeIcon': true,
+        'mx_CallViewHeader_callTypeIcon_video': type === CallType.Video,
+        'mx_CallViewHeader_callTypeIcon_voice': type === CallType.Voice,
     });
     return <div className={classes} />;
 };
@@ -104,23 +104,23 @@ export const CallViewHeader: React.FC<CallViewHeaderProps> = ({
     const callRoomName = callRoom.name;
     const { roomId } = callRoom;
     if (!pipMode) {
-        return <div className="mx_CallView_header">
+        return <div className="mx_CallViewHeader">
             <CallTypeIcon type={type} />
-            <span className="mx_CallView_header_callType">{ callTypeText }</span>
+            <span className="mx_CallViewHeader_callType">{ callTypeText }</span>
             <CallViewHeaderControls roomId={roomId} pipMode={pipMode} type={type} />
         </div>;
     }
     return (
         <div
-            className="mx_CallView_header"
+            className="mx_CallViewHeader"
             onMouseDown={onPipMouseDown}
         >
             <AccessibleButton onClick={() => onRoomAvatarClick(roomId)}>
                 <RoomAvatar room={callRoom} height={32} width={32} />;
             </AccessibleButton>
-            <div className="mx_CallView_header_callInfo">
-                <div className="mx_CallView_header_roomName">{ callRoomName }</div>
-                <div className="mx_CallView_header_callTypeSmall">
+            <div className="mx_CallViewHeader_callInfo">
+                <div className="mx_CallViewHeader_roomName">{ callRoomName }</div>
+                <div className="mx_CallViewHeader_callTypeSmall">
                     { callTypeText }
                     { onHoldCallRoom && <SecondaryCallInfo callRoom={onHoldCallRoom} /> }
                 </div>
