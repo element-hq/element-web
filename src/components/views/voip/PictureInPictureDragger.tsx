@@ -189,7 +189,7 @@ export class PictureInPictureDragger extends React.Component<IProps, IState> {
         const translatePixelsY = this.state.translationY + "px";
         const style = {
             transform: `translateX(${translatePixelsX})
-                            translateY(${translatePixelsY})`,
+                        translateY(${translatePixelsY})`,
         };
         return (
             <div
