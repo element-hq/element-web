@@ -24,9 +24,9 @@ import dis from '../../../../dispatcher/dispatcher';
 import classNames from 'classnames';
 import AccessibleTooltipButton from '../../elements/AccessibleTooltipButton';
 
-const callTypeTranslationByType: Record<CallType, () => string> = {
-    [CallType.Video]: () => _t("Video Call"),
-    [CallType.Voice]: () => _t("Voice Call"),
+const callTypeTranslationByType: Record<CallType, string> = {
+    [CallType.Video]: _t("Video Call"),
+    [CallType.Voice]: _t("Voice Call"),
 };
 
 interface CallViewHeaderProps {
@@ -103,6 +103,7 @@ export const CallViewHeader: React.FC<CallViewHeaderProps> = ({
     const callTypeText = callTypeTranslationByType[type];
     const callRoomName = callRoom.name;
     const { roomId } = callRoom;
+
     if (!pipMode) {
         return <div className="mx_CallViewHeader">
             <CallTypeIcon type={type} />
