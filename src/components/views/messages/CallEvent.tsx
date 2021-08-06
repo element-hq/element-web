@@ -132,10 +132,10 @@ export default class CallEvent extends React.Component<IProps, IState> {
                 // https://github.com/vector-im/riot-android/issues/2623
                 // Also the correct hangup code as of VoIP v1 (with underscore)
                 // Also, if we don't have a reason
-                const length = this.props.callEventGrouper.length;
+                const duration = this.props.callEventGrouper.duration;
                 let text = _t("Call ended");
-                if (length) {
-                    text += " • " + formatCallTime(length);
+                if (duration) {
+                    text += " • " + formatCallTime(duration);
                 }
                 return (
                     <div className="mx_CallEvent_content">

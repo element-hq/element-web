@@ -86,7 +86,7 @@ export default class CallEventGrouper extends EventEmitter {
         return Boolean(this.reject);
     }
 
-    public get length(): Date {
+    public get duration(): Date {
         if (!this.hangup || !this.selectAnswer) return;
         return new Date(this.hangup.getDate().getTime() - this.selectAnswer.getDate().getTime());
     }
