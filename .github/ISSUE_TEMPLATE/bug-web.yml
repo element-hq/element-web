@@ -57,3 +57,10 @@ body:
       placeholder: e.g. develop.element.io, app.element.io
     validations:
       required: false
+  - type: checkboxes
+    id: logs
+    attributes:
+      label: Logs
+      options:
+        - label: I have sent logs
+          required: false
