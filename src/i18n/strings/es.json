@@ -3568,5 +3568,22 @@
     "You can now share your screen by pressing the \"screen share\" button during a call. You can even do this in audio calls if both sides support it!": "Ahora puedes compartir tu pantalla dándole al botón de «compartir pantalla» durante una llamada. ¡Hasta puedes hacerlo en una llamada de voz si ambas partes lo permiten!",
     "Access": "Acceso",
     "Decide who can join %(roomName)s.": "Decide quién puede unirse a %(roomName)s.",
-    "Space members": "Miembros del espacio"
+    "Space members": "Miembros del espacio",
+    "Missed call": "Llamada perdida",
+    "Call declined": "Llamada rechazada",
+    "Stop recording": "Dejar de grabar",
+    "Send voice message": "Enviar mensaje de voz",
+    "Olm version:": "Versión de Olm:",
+    "Mute the microphone": "Silenciar el micrófono",
+    "Unmute the microphone": "Activar el micrófono",
+    "Dialpad": "Teclado numérico",
+    "More": "Más",
+    "Show sidebar": "Ver menú lateral",
+    "Hide sidebar": "Ocultar menú lateral",
+    "Start sharing your screen": "Comparte tu pantalla",
+    "Stop sharing your screen": "Dejar de compartir la pantalla",
+    "Stop the camera": "Parar la cámara",
+    "Start the camera": "Iniciar la cámara",
+    "Surround selected text when typing special characters": "Rodear texto seleccionado al escribir caracteres especiales",
+    "Send pseudonymous analytics data": "Enviar datos estadísticos seudonimizados"
 }
