@@ -765,7 +765,7 @@
     "Share Link to User": "Sdílet odkaz na uživatele",
     "Send an encrypted reply…": "Odeslat šifrovanou odpověď …",
     "Send an encrypted message…": "Odeslat šifrovanou zprávu…",
-    "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "%(displayName)s (%(userName)s) viděl %(dateTime)s",
+    "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "%(displayName)s (%(userName)s) viděl(a) %(dateTime)s",
     "Replying": "Odpovídá",
     "Share room": "Sdílet místnost",
     "System Alerts": "Systémová varování",
