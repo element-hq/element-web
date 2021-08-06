@@ -269,7 +269,7 @@ export default class Dropdown extends React.Component<IProps, IState> {
     private prevOption(optionKey: string): string {
         const keys = Object.keys(this.childrenByKey);
         const index = keys.indexOf(optionKey);
-        return keys[(index - 1) % keys.length];
+        return keys[index <= 0 ? keys.length - 1 : (index - 1) % keys.length];
     }
 
     private scrollIntoView(node: Element) {
