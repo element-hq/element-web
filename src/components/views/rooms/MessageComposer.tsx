@@ -35,7 +35,7 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import VoiceRecordComposerTile from "./VoiceRecordComposerTile";
 import { VoiceRecordingStore } from "../../../stores/VoiceRecordingStore";
-import { RecordingState } from "../../../voice/VoiceRecording";
+import { RecordingState } from "../../../audio/VoiceRecording";
 import Tooltip, { Alignment } from "../elements/Tooltip";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 import { E2EStatus } from '../../../utils/ShieldUtils';
@@ -98,9 +98,7 @@ const EmojiButton = ({ addEmoji }) => {
             isExpanded={menuDisplayed}
             title={_t('Emoji picker')}
             inputRef={button}
-        >
-
-        </ContextMenuTooltipButton>
+        />
 
         { contextMenu }
     </React.Fragment>;
@@ -344,8 +342,11 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
     private onVoiceStoreUpdate = () => {
         const recording = VoiceRecordingStore.instance.activeRecording;
-        this.setState({ haveRecording: !!recording });
         if (recording) {
+            // Delay saying we have a recording until it is started, as we might not yet have A/V permissions
+            recording.on(RecordingState.Started, () => {
+                this.setState({ haveRecording: !!VoiceRecordingStore.instance.activeRecording });
+            });
             // We show a little heads up that the recording is about to automatically end soon. The 3s
             // display time is completely arbitrary. Note that we don't need to deregister the listener
             // because the recording instance will clean that up for us.
@@ -353,6 +354,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 this.setState({ recordingTimeLeftSeconds: secondsLeft });
                 setTimeout(() => this.setState({ recordingTimeLeftSeconds: null }), 3000);
             });
+        } else {
+            this.setState({ haveRecording: false });
         }
     };
 
@@ -391,12 +394,10 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 controls.push(<Stickerpicker key="stickerpicker_controls_button" room={this.props.room} />);
             }
 
-            if (SettingsStore.getValue("feature_voice_messages")) {
-                controls.push(<VoiceRecordComposerTile
-                    key="controls_voice_record"
-                    ref={c => this.voiceRecordingButton = c}
-                    room={this.props.room} />);
-            }
+            controls.push(<VoiceRecordComposerTile
+                key="controls_voice_record"
+                ref={c => this.voiceRecordingButton = c}
+                room={this.props.room} />);
 
             if (!this.state.isComposerEmpty || this.state.haveRecording) {
                 controls.push(
@@ -411,7 +412,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                     className="mx_MessageComposer_roomReplaced_link"
                     onClick={this.onTombstoneClick}
                 >
-                    {_t("The conversation continues here.")}
+                    { _t("The conversation continues here.") }
                 </a>
             ) : '';
 
@@ -421,7 +422,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                         src={require("../../../../res/img/room_replaced.svg")}
                     />
                     <span className="mx_MessageComposer_roomReplaced_header">
-                        {_t("This room has been replaced and is no longer active.")}
+                        { _t("This room has been replaced and is no longer active.") }
                     </span><br />
                     { continuesLink }
                 </div>
@@ -439,13 +440,14 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         if (secondsLeft) {
             recordingTooltip = <Tooltip
                 label={_t("%(seconds)ss left", { seconds: secondsLeft })}
-                alignment={Alignment.Top} yOffset={-50}
+                alignment={Alignment.Top}
+                yOffset={-50}
             />;
         }
 
         return (
             <div className="mx_MessageComposer mx_GroupLayout">
-                {recordingTooltip}
+                { recordingTooltip }
                 <div className="mx_MessageComposer_wrapper">
                     <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
                     <div className="mx_MessageComposer_row">

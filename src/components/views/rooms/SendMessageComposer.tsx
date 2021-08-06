@@ -441,7 +441,7 @@ export default class SendMessageComposer extends React.Component<IProps> {
     }
 
     // TODO: [REACT-WARNING] Move this to constructor
-    UNSAFE_componentWillMount() { // eslint-disable-line camelcase
+    UNSAFE_componentWillMount() { // eslint-disable-line
         const partCreator = new CommandPartCreator(this.props.room, this.context);
         const parts = this.restoreStoredEditorState(partCreator) || [];
         this.model = new EditorModel(parts, partCreator);
@@ -514,13 +514,11 @@ export default class SendMessageComposer extends React.Component<IProps> {
 
     private onPaste = (event: ClipboardEvent<HTMLDivElement>): boolean => {
         const { clipboardData } = event;
-        // Prioritize text on the clipboard over files as Office on macOS puts a bitmap
-        // in the clipboard as well as the content being copied.
-        if (clipboardData.files.length && !clipboardData.types.some(t => t === "text/plain")) {
-            // This actually not so much for 'files' as such (at time of writing
-            // neither chrome nor firefox let you paste a plain file copied
-            // from Finder) but more images copied from a different website
-            // / word processor etc.
+        // Prioritize text on the clipboard over files if RTF is present as Office on macOS puts a bitmap
+        // in the clipboard as well as the content being copied. Modern versions of Office seem to not do this anymore.
+        // We check text/rtf instead of text/plain as when copy+pasting a file from Finder or Gnome Image Viewer
+        // it puts the filename in as text/plain which we want to ignore.
+        if (clipboardData.files.length && !clipboardData.types.includes("text/rtf")) {
             ContentMessages.sharedInstance().sendContentListToRoom(
                 Array.from(clipboardData.files), this.props.room.roomId, this.context,
             );

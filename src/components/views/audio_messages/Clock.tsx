@@ -43,6 +43,6 @@ export default class Clock extends React.Component<IProps, IState> {
     public render() {
         const minutes = Math.floor(this.props.seconds / 60).toFixed(0).padStart(2, '0');
         const seconds = Math.floor(this.props.seconds % 60).toFixed(0).padStart(2, '0'); // hide millis
-        return <span className='mx_Clock'>{minutes}:{seconds}</span>;
+        return <span className='mx_Clock'>{ minutes }:{ seconds }</span>;
     }
 }

@@ -98,18 +98,14 @@ async function checkRoomSettings(session, expectedSettings) {
     if (expectedSettings.visibility) {
         session.log.step(`checks visibility is ${expectedSettings.visibility}`);
         const radios = await session.queryAll(".mx_RoomSettingsDialog input[type=radio]");
-        assert.equal(radios.length, 7);
-        const inviteOnly = radios[0];
-        const publicNoGuests = radios[1];
-        const publicWithGuests = radios[2];
+        assert.equal(radios.length, 6);
+        const [inviteOnlyRoom, publicRoom] = radios;
 
         let expectedRadio = null;
         if (expectedSettings.visibility === "invite_only") {
-            expectedRadio = inviteOnly;
-        } else if (expectedSettings.visibility === "public_no_guests") {
-            expectedRadio = publicNoGuests;
-        } else if (expectedSettings.visibility === "public_with_guests") {
-            expectedRadio = publicWithGuests;
+            expectedRadio = inviteOnlyRoom;
+        } else if (expectedSettings.visibility === "public") {
+            expectedRadio = publicRoom;
         } else {
             throw new Error(`unrecognized room visibility setting: ${expectedSettings.visibility}`);
         }
@@ -165,17 +161,13 @@ async function changeRoomSettings(session, settings) {
     if (settings.visibility) {
         session.log.step(`sets visibility to ${settings.visibility}`);
         const radios = await session.queryAll(".mx_RoomSettingsDialog label");
-        assert.equal(radios.length, 7);
-        const inviteOnly = radios[0];
-        const publicNoGuests = radios[1];
-        const publicWithGuests = radios[2];
+        assert.equal(radios.length, 6);
+        const [inviteOnlyRoom, publicRoom] = radios;
 
         if (settings.visibility === "invite_only") {
-            await inviteOnly.click();
-        } else if (settings.visibility === "public_no_guests") {
-            await publicNoGuests.click();
-        } else if (settings.visibility === "public_with_guests") {
-            await publicWithGuests.click();
+            await inviteOnlyRoom.click();
+        } else if (settings.visibility === "public") {
+            await publicRoom.click();
         } else {
             throw new Error(`unrecognized room visibility setting: ${settings.visibility}`);
         }

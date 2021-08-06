@@ -1,3 +1,6 @@
+// Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=557%3A0
+$system-dark: #21262C;
+
 // unified palette
 // try to use these colors when possible
 $bg-color: #15191E;
@@ -47,7 +50,7 @@ $inverted-bg-color: $base-color;
 $selected-color: $room-highlight-color;
 
 // selected for hoverover & selected event tiles
-$event-selected-color: #21262c;
+$event-selected-color: $system-dark;
 
 // used for the hairline dividers in RoomView
 $primary-hairline-color: transparent;
@@ -91,7 +94,7 @@ $lightbox-background-bg-color: #000;
 $lightbox-background-bg-opacity: 0.85;
 
 $settings-grey-fg-color: #a2a2a2;
-$settings-profile-placeholder-bg-color: #21262c;
+$settings-profile-placeholder-bg-color: $system-dark;
 $settings-profile-overlay-placeholder-fg-color: #454545;
 $settings-profile-button-bg-color: #e7e7e7;
 $settings-profile-button-fg-color: $settings-profile-overlay-placeholder-fg-color;
@@ -112,13 +115,13 @@ $eventtile-meta-color: $roomtopic-color;
 $header-divider-color: $header-panel-text-primary-color;
 $composer-e2e-icon-color: $header-panel-text-primary-color;
 
-// this probably shouldn't have it's own colour
-$voipcall-plinth-color: #394049;
+$quinary-content-color: #394049;
+$toast-bg-color: $quinary-content-color;
 
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
-$dialpad-button-bg-color: #6F7882;
+$dialpad-button-bg-color: #394049;
 
 $roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-filter-active-bg-color: $bg-color;
@@ -175,7 +178,7 @@ $button-link-bg-color: transparent;
 $togglesw-off-color: $room-highlight-color;
 
 $progressbar-fg-color: $accent-color;
-$progressbar-bg-color: #21262c;
+$progressbar-bg-color: $system-dark;
 
 $visual-bell-bg-color: #800;
 
@@ -209,8 +212,8 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 
 $message-body-panel-fg-color: $secondary-fg-color;
 $message-body-panel-bg-color: #394049; // "Dark Tile"
-$message-body-panel-icon-fg-color: #21262C; // "Separator"
-$message-body-panel-icon-bg-color: $tertiary-fg-color;
+$message-body-panel-icon-fg-color: $secondary-fg-color;
+$message-body-panel-icon-bg-color: $system-dark; // "System Dark"
 
 $voice-record-stop-border-color: $quaternary-fg-color;
 $voice-record-waveform-incomplete-fg-color: $quaternary-fg-color;
@@ -226,6 +229,13 @@ $roomlist-background-blur-amount: 60px;
 $groupFilterPanel-background-blur-amount: 30px;
 
 $composer-shadow-color: rgba(0, 0, 0, 0.28);
+
+// Bubble tiles
+$eventbubble-self-bg: #14322E;
+$eventbubble-others-bg: $event-selected-color;
+$eventbubble-bg-hover: #1C2026;
+$eventbubble-avatar-outline: $bg-color;
+$eventbubble-reply-color: #C1C6CD;
 
 // ***** Mixins! *****
 
@@ -287,4 +297,12 @@ $composer-shadow-color: rgba(0, 0, 0, 0.28);
 // highlight.js overrides
 .hljs-tag {
     color: inherit; // Without this they'd be weirdly blue which doesn't match the theme
+}
+
+.hljs-addition {
+    background: #1a4b59;
+}
+
+.hljs-deletion {
+    background: #53232a;
 }

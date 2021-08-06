@@ -16,8 +16,8 @@ limitations under the License.
 
 import React, { ReactNode, useMemo, useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixClient } from "matrix-js-sdk/src/client";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
+import { ISpaceSummaryRoom, ISpaceSummaryEvent } from "matrix-js-sdk/src/@types/spaces";
 import classNames from "classnames";
 import { sortBy } from "lodash";
 
@@ -42,44 +42,17 @@ import { useStateToggle } from "../../hooks/useStateToggle";
 import { getChildOrder } from "../../stores/SpaceStore";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { linkifyElement } from "../../HtmlUtils";
+import { getDisplayAliasForAliasSet } from "../../Rooms";
+import { useDispatcher } from "../../hooks/useDispatcher";
+import defaultDispatcher from "../../dispatcher/dispatcher";
+import { Action } from "../../dispatcher/actions";
 
 interface IHierarchyProps {
     space: Room;
     initialText?: string;
-    refreshToken?: any;
     additionalButtons?: ReactNode;
     showRoom(room: ISpaceSummaryRoom, viaServers?: string[], autoJoin?: boolean): void;
 }
-
-/* eslint-disable camelcase */
-export interface ISpaceSummaryRoom {
-    canonical_alias?: string;
-    aliases: string[];
-    avatar_url?: string;
-    guest_can_join: boolean;
-    name?: string;
-    num_joined_members: number;
-    room_id: string;
-    topic?: string;
-    world_readable: boolean;
-    num_refs: number;
-    room_type: string;
-}
-
-export interface ISpaceSummaryEvent {
-    room_id: string;
-    event_id: string;
-    origin_server_ts: number;
-    type: string;
-    state_key: string;
-    content: {
-        order?: string;
-        suggested?: boolean;
-        auto_join?: boolean;
-        via?: string[];
-    };
-}
-/* eslint-enable camelcase */
 
 interface ITileProps {
     room: ISpaceSummaryRoom;
@@ -343,18 +316,25 @@ export const HierarchyLevel = ({
     </React.Fragment>;
 };
 
-// mutate argument refreshToken to force a reload
-export const useSpaceSummary = (cli: MatrixClient, space: Room, refreshToken?: any): [
+export const useSpaceSummary = (space: Room): [
     null,
     ISpaceSummaryRoom[],
     Map<string, Map<string, ISpaceSummaryEvent>>?,
     Map<string, Set<string>>?,
     Map<string, Set<string>>?,
 ] | [Error] => {
+    // crude temporary refresh token approach until we have pagination and rework the data flow here
+    const [refreshToken, setRefreshToken] = useState(0);
+    useDispatcher(defaultDispatcher, (payload => {
+        if (payload.action === Action.UpdateSpaceHierarchy) {
+            setRefreshToken(t => t + 1);
+        }
+    }));
+
     // TODO pagination
     return useAsyncMemo(async () => {
         try {
-            const data = await cli.getSpaceSummary(space.roomId);
+            const data = await space.client.getSpaceSummary(space.roomId);
 
             const parentChildRelations = new EnhancedMap<string, Map<string, ISpaceSummaryEvent>>();
             const childParentRelations = new EnhancedMap<string, Set<string>>();
@@ -382,7 +362,6 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
     space,
     initialText = "",
     showRoom,
-    refreshToken,
     additionalButtons,
     children,
 }) => {
@@ -392,7 +371,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
 
     const [selected, setSelected] = useState(new Map<string, Set<string>>()); // Map<parentId, Set<childId>>
 
-    const [summaryError, rooms, parentChildMap, viaMap, childParentMap] = useSpaceSummary(cli, space, refreshToken);
+    const [summaryError, rooms, parentChildMap, viaMap, childParentMap] = useSpaceSummary(space);
 
     const roomsMap = useMemo(() => {
         if (!rooms) return null;
@@ -432,7 +411,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
     const [saving, setSaving] = useState(false);
 
     if (summaryError) {
-        return <p>{_t("Your server does not support showing space hierarchies.")}</p>;
+        return <p>{ _t("Your server does not support showing space hierarchies.") }</p>;
     }
 
     let content;
@@ -597,7 +576,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
     return <>
         <SearchBox
             className="mx_textinput_icon mx_textinput_search"
-            placeholder={ _t("Search names and descriptions") }
+            placeholder={_t("Search names and descriptions")}
             onSearch={setQuery}
             autoFocus={true}
             initialValue={initialText}
@@ -636,7 +615,7 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, onFinished, initialText }
                 { _t("If you can't find the room you're looking for, ask for an invite or <a>create a new room</a>.",
                     null,
                     { a: sub => {
-                        return <AccessibleButton kind="link" onClick={onCreateRoomClick}>{sub}</AccessibleButton>;
+                        return <AccessibleButton kind="link" onClick={onCreateRoomClick}>{ sub }</AccessibleButton>;
                     } },
                 ) }
 
@@ -666,5 +645,5 @@ export default SpaceRoomDirectory;
 // Similar to matrix-react-sdk's MatrixTools.getDisplayAliasForRoom
 // but works with the objects we get from the public room list
 function getDisplayAliasForRoom(room: ISpaceSummaryRoom) {
-    return room.canonical_alias || (room.aliases ? room.aliases[0] : "");
+    return getDisplayAliasForAliasSet(room.canonical_alias, room.aliases);
 }

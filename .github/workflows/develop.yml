@@ -1,5 +1,8 @@
 name: Develop
 on:
+    # These tests won't work for non-develop branches at the moment as they
+    # won't pull in the right versions of other repos, so they're only enabled
+    # on develop.
     push:
         branches: [develop]
     pull_request:

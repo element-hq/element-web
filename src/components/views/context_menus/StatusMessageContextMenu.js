@@ -99,20 +99,22 @@ export default class StatusMessageContextMenu extends React.Component {
                 actionButton = <AccessibleButton className="mx_StatusMessageContextMenu_clear"
                     onClick={this._onClearClick}
                 >
-                    <span>{_t("Clear status")}</span>
+                    <span>{ _t("Clear status") }</span>
                 </AccessibleButton>;
             } else {
                 actionButton = <AccessibleButton className="mx_StatusMessageContextMenu_submit"
                     onClick={this._onSubmit}
                 >
-                    <span>{_t("Update status")}</span>
+                    <span>{ _t("Update status") }</span>
                 </AccessibleButton>;
             }
         } else {
-            actionButton = <AccessibleButton className="mx_StatusMessageContextMenu_submit"
-                disabled={!this.state.message} onClick={this._onSubmit}
+            actionButton = <AccessibleButton
+                className="mx_StatusMessageContextMenu_submit"
+                disabled={!this.state.message}
+                onClick={this._onSubmit}
             >
-                <span>{_t("Set status")}</span>
+                <span>{ _t("Set status") }</span>
             </AccessibleButton>;
         }
 
@@ -121,17 +123,24 @@ export default class StatusMessageContextMenu extends React.Component {
             spinner = <Spinner w="24" h="24" />;
         }
 
-        const form = <form className="mx_StatusMessageContextMenu_form"
-            autoComplete="off" onSubmit={this._onSubmit}
+        const form = <form
+            className="mx_StatusMessageContextMenu_form"
+            autoComplete="off"
+            onSubmit={this._onSubmit}
         >
-            <input type="text" className="mx_StatusMessageContextMenu_message"
-                key="message" placeholder={_t("Set a new status...")}
-                autoFocus={true} maxLength="60" value={this.state.message}
+            <input
+                type="text"
+                className="mx_StatusMessageContextMenu_message"
+                key="message"
+                placeholder={_t("Set a new status...")}
+                autoFocus={true}
+                maxLength="60"
+                value={this.state.message}
                 onChange={this._onStatusChange}
             />
             <div className="mx_StatusMessageContextMenu_actionContainer">
-                {actionButton}
-                {spinner}
+                { actionButton }
+                { spinner }
             </div>
         </form>;
 

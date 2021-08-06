@@ -277,7 +277,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Move into constructor
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillMount() {
         if (this.props.manageReadReceipts) {
             this.updateReadReceiptOnUserActivity();
@@ -290,7 +290,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.timelineSet !== this.props.timelineSet) {
             // throw new Error("changing timelineSet on a TimelinePanel is not supported");
@@ -555,9 +555,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 // more than the timeout on userActiveRecently.
                 //
                 const myUserId = MatrixClientPeg.get().credentials.userId;
-                const sender = ev.sender ? ev.sender.userId : null;
                 callRMUpdated = false;
-                if (sender != myUserId && !UserActivity.sharedInstance().userActiveRecently()) {
+                if (ev.getSender() !== myUserId && !UserActivity.sharedInstance().userActiveRecently()) {
                     updatedState.readMarkerVisible = true;
                 } else if (lastLiveEvent && this.getReadMarkerPosition() === 0) {
                     // we know we're stuckAtBottom, so we can advance the RM
@@ -666,8 +665,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     private readMarkerTimeout(readMarkerPosition: number): number {
         return readMarkerPosition === 0 ?
-            this.state.readMarkerInViewThresholdMs :
-            this.state.readMarkerOutOfViewThresholdMs;
+            this.context?.readMarkerInViewThresholdMs ?? this.state.readMarkerInViewThresholdMs :
+            this.context?.readMarkerOutOfViewThresholdMs ?? this.state.readMarkerOutOfViewThresholdMs;
     }
 
     private async updateReadMarkerOnUserActivity(): Promise<void> {
@@ -863,7 +862,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const myUserId = MatrixClientPeg.get().credentials.userId;
         for (i++; i < events.length; i++) {
             const ev = events[i];
-            if (!ev.sender || ev.sender.userId != myUserId) {
+            if (ev.getSender() !== myUserId) {
                 break;
             }
         }
@@ -1051,6 +1050,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
             { windowLimit: this.props.timelineCap });
 
         const onLoaded = () => {
+            if (this.unmounted) return;
+
             // clear the timeline min-height when
             // (re)loading the timeline
             if (this.messagePanel.current) {
@@ -1092,6 +1093,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
         };
 
         const onError = (error) => {
+            if (this.unmounted) return;
+
             this.setState({ timelineLoading: false });
             console.error(
                 `Error loading timeline panel at ${eventId}: ${error}`,
@@ -1333,8 +1336,9 @@ class TimelinePanel extends React.Component<IProps, IState> {
             }
 
             const shouldIgnore = !!ev.status || // local echo
-                (ignoreOwn && ev.sender && ev.sender.userId == myUserId);   // own message
-            const isWithoutTile = !haveTileForEvent(ev) || shouldHideEvent(ev, this.context);
+                (ignoreOwn && ev.getSender() === myUserId); // own message
+            const isWithoutTile = !haveTileForEvent(ev, this.context?.showHiddenEventsInTimeline) ||
+                shouldHideEvent(ev, this.context);
 
             if (isWithoutTile || !node) {
                 // don't start counting if the event should be ignored,
@@ -1444,7 +1448,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (this.state.events.length == 0 && !this.state.canBackPaginate && this.props.empty) {
             return (
                 <div className={this.props.className + " mx_RoomView_messageListWrapper"}>
-                    <div className="mx_RoomView_empty">{this.props.empty}</div>
+                    <div className="mx_RoomView_empty">{ this.props.empty }</div>
                 </div>
             );
         }
@@ -1489,8 +1493,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 onUserScroll={this.props.onUserScroll}
                 onFillRequest={this.onMessageListFillRequest}
                 onUnfillRequest={this.onMessageListUnfillRequest}
-                isTwelveHour={this.state.isTwelveHour}
-                alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.alwaysShowTimestamps}
+                isTwelveHour={this.context?.showTwelveHourTimestamps ?? this.state.isTwelveHour}
+                alwaysShowTimestamps={
+                    this.props.alwaysShowTimestamps ??
+                    this.context?.alwaysShowTimestamps ??
+                    this.state.alwaysShowTimestamps
+                }
                 className={this.props.className}
                 tileShape={this.props.tileShape}
                 resizeNotifier={this.props.resizeNotifier}

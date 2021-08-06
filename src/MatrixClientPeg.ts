@@ -17,8 +17,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ICreateClientOpts } from 'matrix-js-sdk/src/matrix';
-import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { ICreateClientOpts, PendingEventOrdering } from 'matrix-js-sdk/src/matrix';
+import { IStartClientOpts, MatrixClient } from 'matrix-js-sdk/src/client';
 import { MemoryStore } from 'matrix-js-sdk/src/store/memory';
 import * as utils from 'matrix-js-sdk/src/utils';
 import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
@@ -47,25 +47,8 @@ export interface IMatrixClientCreds {
     freshLogin?: boolean;
 }
 
-// TODO: Move this to the js-sdk
-export interface IOpts {
-    initialSyncLimit?: number;
-    pendingEventOrdering?: "detached" | "chronological";
-    lazyLoadMembers?: boolean;
-    clientWellKnownPollPeriod?: number;
-}
-
 export interface IMatrixClientPeg {
-    opts: IOpts;
-
-    /**
-     * Sets the script href passed to the IndexedDB web worker
-     * If set, a separate web worker will be started to run the IndexedDB
-     * queries on.
-     *
-     * @param {string} script href to the script to be passed to the web worker
-     */
-    setIndexedDbWorkerScript(script: string): void;
+    opts: IStartClientOpts;
 
     /**
      * Return the server name of the user's homeserver
@@ -122,12 +105,12 @@ export interface IMatrixClientPeg {
  * This module provides a singleton instance of this class so the 'current'
  * Matrix Client object is available easily.
  */
-class _MatrixClientPeg implements IMatrixClientPeg {
+class MatrixClientPegClass implements IMatrixClientPeg {
     // These are the default options used when when the
     // client is started in 'start'. These can be altered
     // at any time up to after the 'will_start_client'
     // event is finished processing.
-    public opts: IOpts = {
+    public opts: IStartClientOpts = {
         initialSyncLimit: 20,
     };
 
@@ -139,10 +122,6 @@ class _MatrixClientPeg implements IMatrixClientPeg {
     private currentClientCreds: IMatrixClientCreds;
 
     constructor() {
-    }
-
-    public setIndexedDbWorkerScript(script: string): void {
-        createMatrixClient.indexedDbWorkerScript = script;
     }
 
     public get(): MatrixClient {
@@ -231,7 +210,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
 
         const opts = utils.deepCopy(this.opts);
         // the react sdk doesn't work without this, so don't allow
-        opts.pendingEventOrdering = "detached";
+        opts.pendingEventOrdering = PendingEventOrdering.Detached;
         opts.lazyLoadMembers = true;
         opts.clientWellKnownPollPeriod = 2 * 60 * 60; // 2 hours
 
@@ -321,7 +300,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
 }
 
 if (!window.mxMatrixClientPeg) {
-    window.mxMatrixClientPeg = new _MatrixClientPeg();
+    window.mxMatrixClientPeg = new MatrixClientPegClass();
 }
 
 export const MatrixClientPeg = window.mxMatrixClientPeg;

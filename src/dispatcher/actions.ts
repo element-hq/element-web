@@ -119,6 +119,18 @@ export enum Action {
     DialNumber = "dial_number",
 
     /**
+     * Start a call transfer to a Matrix ID
+     * payload: TransferCallPayload
+     */
+    TransferCallToMatrixID = "transfer_call_to_matrix_id",
+
+    /**
+     * Start a call transfer to a phone number
+     * payload: TransferCallPayload
+     */
+     TransferCallToPhoneNumber = "transfer_call_to_phone_number",
+
+    /**
      * Fired when CallHandler has checked for PSTN protocol support
      * payload: none
      * XXX: Is an action the right thing for this?
@@ -181,4 +193,16 @@ export enum Action {
      * Switches space. Should be used with SwitchSpacePayload.
      */
     SwitchSpace = "switch_space",
+
+    /**
+     * Signals to the visible space hierarchy that a change has occurred an that it should refresh.
+     */
+    UpdateSpaceHierarchy = "update_space_hierarchy",
+
+    /**
+     * Fires when a monitored setting is updated,
+     * see SettingsStore::monitorSetting for more details.
+     * Should be used with SettingUpdatedPayload.
+     */
+    SettingUpdated = "setting_updated",
 }
