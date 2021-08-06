@@ -2086,6 +2086,8 @@
     "%(severalUsers)schanged the server ACLs %(count)s times|one": "%(severalUsers)schanged the server ACLs",
     "%(oneUser)schanged the server ACLs %(count)s times|other": "%(oneUser)schanged the server ACLs %(count)s times",
     "%(oneUser)schanged the server ACLs %(count)s times|one": "%(oneUser)schanged the server ACLs",
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.",
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times.",
     "Power level": "Power level",
     "Custom level": "Custom level",
     "QR Code": "QR Code",
