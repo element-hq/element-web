@@ -28,7 +28,6 @@ limitations under the License.
 
     .mx_CallPreview {
         pointer-events: initial; // restore pointer events so the user can leave/interact
-        cursor: pointer;
 
         .mx_VideoFeed_remote.mx_VideoFeed_voice {
             min-height: 150px;

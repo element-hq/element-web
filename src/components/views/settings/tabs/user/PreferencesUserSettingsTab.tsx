@@ -157,6 +157,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         'MessageComposerInput.suggestEmoji',
         'sendTypingNotifications',
         'MessageComposerInput.ctrlEnterToSend',
+        'MessageComposerInput.surroundWith',
         'MessageComposerInput.showStickersButton',
     ];
 
