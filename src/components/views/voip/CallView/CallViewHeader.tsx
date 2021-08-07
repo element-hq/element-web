@@ -17,7 +17,7 @@ limitations under the License.
 import { CallType } from 'matrix-js-sdk/src/webrtc/call';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import React from 'react';
-import { _t } from '../../../../languageHandler';
+import { _t, _td } from '../../../../languageHandler';
 import RoomAvatar from '../../avatars/RoomAvatar';
 import AccessibleButton from '../../elements/AccessibleButton';
 import dis from '../../../../dispatcher/dispatcher';
@@ -25,8 +25,8 @@ import classNames from 'classnames';
 import AccessibleTooltipButton from '../../elements/AccessibleTooltipButton';
 
 const callTypeTranslationByType: Record<CallType, string> = {
-    [CallType.Video]: _t("Video Call"),
-    [CallType.Voice]: _t("Voice Call"),
+    [CallType.Video]: _td("Video Call"),
+    [CallType.Voice]: _td("Voice Call"),
 };
 
 interface CallViewHeaderProps {
@@ -62,12 +62,13 @@ type CallControlsProps = Pick<CallViewHeaderProps, 'pipMode' | 'type'> & {
 };
 const CallViewHeaderControls: React.FC<CallControlsProps> = ({ pipMode = false, type, roomId }) => {
     return <div className="mx_CallViewHeader_controls">
-        { (pipMode && type === CallType.Video) &&
-            <AccessibleTooltipButton className="mx_CallViewHeader_button mx_CallViewHeader_button_fullscreen"
-                onClick={onFullscreenClick}
-                title={_t("Fill Screen")}
-            /> }
-        { pipMode && <AccessibleTooltipButton className="mx_CallViewHeader_button mx_CallViewHeader_button_expand"
+        { !pipMode && <AccessibleTooltipButton
+            className="mx_CallViewHeader_button mx_CallViewHeader_button_fullscreen"
+            onClick={onFullscreenClick}
+            title={_t("Fill Screen")}
+        /> }
+        { pipMode && <AccessibleTooltipButton
+            className="mx_CallViewHeader_button mx_CallViewHeader_button_expand"
             onClick={() => onExpandClick(roomId)}
             title={_t("Return to call")}
         /> }
@@ -100,7 +101,7 @@ export const CallViewHeader: React.FC<CallViewHeaderProps> = ({
     onPipMouseDown,
 }) => {
     const [callRoom, onHoldCallRoom] = callRooms;
-    const callTypeText = callTypeTranslationByType[type];
+    const callTypeText = _t(callTypeTranslationByType[type]);
     const callRoomName = callRoom.name;
     const { roomId } = callRoom;
 
