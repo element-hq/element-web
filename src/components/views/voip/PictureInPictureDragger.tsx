@@ -60,7 +60,7 @@ export class PictureInPictureDragger extends React.Component<IProps, IState> {
     private initX = 0;
     private initY = 0;
     private desiredTranslationX = UIStore.instance.windowWidth - PADDING.right - PIP_VIEW_WIDTH;
-    private desiredTranslationY = UIStore.instance.windowHeight - PADDING.bottom - PIP_VIEW_WIDTH;
+    private desiredTranslationY = UIStore.instance.windowHeight - PADDING.bottom - PIP_VIEW_HEIGHT;
     private moving = false;
     private scheduledUpdate = new MarkedExecution(
         () => this.animationCallback(),
@@ -72,7 +72,7 @@ export class PictureInPictureDragger extends React.Component<IProps, IState> {
 
         this.state = {
             translationX: UIStore.instance.windowWidth - PADDING.right - PIP_VIEW_WIDTH,
-            translationY: UIStore.instance.windowHeight - PADDING.bottom - PIP_VIEW_WIDTH,
+            translationY: UIStore.instance.windowHeight - PADDING.bottom - PIP_VIEW_HEIGHT,
         };
     }
 
