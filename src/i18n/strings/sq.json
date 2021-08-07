@@ -3616,5 +3616,22 @@
     "Spaces feedback": "Përshtypje mbi hapësirat",
     "Spaces are a new feature.": "Hapësirat janë një veçori e re.",
     "All rooms you're in will appear in Home.": "Krejt dhomat ku gjendeni, do të shfaqen te Home.",
-    "Send pseudonymous analytics data": "Dërgo të dhëna analitike pseudonimike"
+    "Send pseudonymous analytics data": "Dërgo të dhëna analitike pseudonimike",
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(oneUser)sndryshoi <a>mesazhet e fiksuar</a> për dhomën %(count)s herë.",
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(severalUsers)sndryshuan <a>mesazhet e fiksuara</a> për dhomën %(count)s herë.",
+    "Missed call": "Thirrje e humbur",
+    "Call declined": "Thirrja u hodh poshtë",
+    "Stop recording": "Ndale regjistrimin",
+    "Send voice message": "Dërgoni mesazh zanor",
+    "Olm version:": "Version Olm:",
+    "Mute the microphone": "Heshto mikrofonin",
+    "Unmute the microphone": "Hiq heshtimin e mikrofonit",
+    "More": "Më tepër",
+    "Show sidebar": "Shfaqe anështyllën",
+    "Hide sidebar": "Fshihe anështyllën",
+    "Start sharing your screen": "Nisni ndarjen e ekranit tuaj",
+    "Stop sharing your screen": "Reshtni dhënien e ekranit tuaj",
+    "Stop the camera": "Ndale kamerën",
+    "Start the camera": "Nise kamerën",
+    "Surround selected text when typing special characters": "Rrethoje tekstin e përzgjedhur, kur shtypen shenja speciale"
 }
