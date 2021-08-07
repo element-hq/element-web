@@ -62,12 +62,13 @@ type CallControlsProps = Pick<CallViewHeaderProps, 'pipMode' | 'type'> & {
 };
 const CallViewHeaderControls: React.FC<CallControlsProps> = ({ pipMode = false, type, roomId }) => {
     return <div className="mx_CallViewHeader_controls">
-        { (pipMode && type === CallType.Video) &&
-            <AccessibleTooltipButton className="mx_CallViewHeader_button mx_CallViewHeader_button_fullscreen"
-                onClick={onFullscreenClick}
-                title={_t("Fill Screen")}
-            /> }
-        { pipMode && <AccessibleTooltipButton className="mx_CallViewHeader_button mx_CallViewHeader_button_expand"
+        { !pipMode && <AccessibleTooltipButton
+            className="mx_CallViewHeader_button mx_CallViewHeader_button_fullscreen"
+            onClick={onFullscreenClick}
+            title={_t("Fill Screen")}
+        /> }
+        { pipMode && <AccessibleTooltipButton
+            className="mx_CallViewHeader_button mx_CallViewHeader_button_expand"
             onClick={() => onExpandClick(roomId)}
             title={_t("Return to call")}
         /> }
