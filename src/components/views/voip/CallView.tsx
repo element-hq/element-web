@@ -42,7 +42,7 @@ import DesktopCapturerSourcePicker from "../elements/DesktopCapturerSourcePicker
 import Modal from '../../../Modal';
 import { SDPStreamMetadataPurpose } from 'matrix-js-sdk/src/webrtc/callEventTypes';
 import CallViewSidebar from './CallViewSidebar';
-import { CallViewHeader } from './CallView/CallViewHeader';
+import CallViewHeader from './CallView/CallViewHeader';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { Alignment } from "../elements/Tooltip";
 

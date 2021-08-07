@@ -28,7 +28,7 @@ import { CallEvent, CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call'
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { EventSubscription } from 'fbemitter';
-import { PictureInPictureDragger } from './PictureInPictureDragger';
+import PictureInPictureDragger from './PictureInPictureDragger';
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
