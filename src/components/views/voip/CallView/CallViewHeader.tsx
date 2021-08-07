@@ -94,7 +94,7 @@ const CallTypeIcon: React.FC<{ type: CallType }> = ({ type }) => {
     return <div className={classes} />;
 };
 
-export const CallViewHeader: React.FC<CallViewHeaderProps> = ({
+const CallViewHeader: React.FC<CallViewHeaderProps> = ({
     type,
     pipMode = false,
     callRooms = [],
@@ -131,3 +131,5 @@ export const CallViewHeader: React.FC<CallViewHeaderProps> = ({
         </div>
     );
 };
+
+export default CallViewHeader;

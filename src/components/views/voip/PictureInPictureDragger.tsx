@@ -55,7 +55,7 @@ interface IState {
  * (PiP mode). It displays the call(s) which is *not* in the room the user is currently viewing.
  */
 @replaceableComponent("views.voip.PictureInPictureDragger")
-export class PictureInPictureDragger extends React.Component<IProps, IState> {
+export default class PictureInPictureDragger extends React.Component<IProps, IState> {
     private callViewWrapper = createRef<HTMLDivElement>();
     private initX = 0;
     private initY = 0;
