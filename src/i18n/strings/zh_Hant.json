@@ -3645,5 +3645,8 @@
     "Stop sharing your screen": "停止分享您的畫面",
     "Stop the camera": "停止攝影機",
     "Start the camera": "開啟攝影機",
-    "Surround selected text when typing special characters": "輸入特殊字元以環繞選取的文字"
+    "Surround selected text when typing special characters": "輸入特殊字元以環繞選取的文字",
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(oneUser)s 變更了聊天室的<a>釘選訊息</a> %(count)s 次。",
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(severalUsers)s 變更了聊天室的<a>釘選訊息</a> %(count)s 次。",
+    "Olm version:": "Olm 版本："
 }
