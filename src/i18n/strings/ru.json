@@ -3577,5 +3577,7 @@
     "We sent the others, but the below people couldn't be invited to <RoomName/>": "Мы отправили остальных, но нижеперечисленные люди не могут быть приглашены в <RoomName/>",
     "Transfer Failed": "Перевод не удался",
     "Unable to transfer call": "Не удалось перевести звонок",
-    "Olm version:": "Версия Olm:"
+    "Olm version:": "Версия Olm:",
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(oneUser)s изменил(а) <a>прикреплённые сообщения</a> в комнате %(count)s раз.",
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(severalUsers)s изменили <a>прикреплённые сообщения</a> в комнате %(count)s раз."
 }
