@@ -511,7 +511,7 @@ export default class CallHandler extends EventEmitter {
                         this.play(AudioID.Busy);
 
                         // Don't show a modal when we got rejected/the call was hung up
-                        if (!hangupReason || [CallErrorCode.UserHangup, "user hangup"].includes(hangupReason)) return;
+                        if (!hangupReason || [CallErrorCode.UserHangup, "user hangup"].includes(hangupReason)) break;
 
                         let title;
                         let description;
