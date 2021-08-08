@@ -3560,5 +3560,9 @@
     "Start sharing your screen": "Začít sdílet obrazovku",
     "Stop sharing your screen": "Přestat sdílet obrazovku",
     "Stop the camera": "Vypnout kameru",
-    "Start the camera": "Zapnout kameru"
+    "Start the camera": "Zapnout kameru",
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(oneUser)s%(count)s krát změnil(a) <a>připnuté zprávy</a> místnosti.",
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(severalUsers)s%(count)s krát změnili <a>připnuté zprávy</a> místnosti.",
+    "Olm version:": "Verze Olm:",
+    "Don't send read receipts": "Neposílat potvrzení o přečtení"
 }
