@@ -509,13 +509,17 @@ export default class CallHandler extends EventEmitter {
                     this.removeCallForRoom(mappedRoomId);
                     if (oldState === CallState.InviteSent && call.hangupParty === CallParty.Remote) {
                         this.play(AudioID.Busy);
+
+                        // Don't show a modal when we got rejected/the call was hung up
+                        if (!hangupReason || [CallErrorCode.UserHangup, "user hangup"].includes(hangupReason)) break;
+
                         let title;
                         let description;
                         // TODO: We should either do away with these or figure out a copy for each code (expect user_hangup...)
                         if (call.hangupReason === CallErrorCode.UserBusy) {
                             title = _t("User Busy");
                             description = _t("The user you called is busy.");
-                        } else if (hangupReason && ![CallErrorCode.UserHangup, "user hangup"].includes(hangupReason)) {
+                        } else {
                             title = _t("Call Failed");
                             description = _t("The call could not be established");
                         }
