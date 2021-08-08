@@ -54,6 +54,7 @@ import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { ELEMENT_CLIENT_ID } from "../../identifiers";
 import { getUserLanguage } from "../../languageHandler";
+import { WidgetVariableCustomisations } from "../../customisations/WidgetVariables";
 
 // TODO: Destroy all of this code
 
@@ -191,7 +192,8 @@ export class StopGapWidget extends EventEmitter {
     }
 
     private runUrlTemplate(opts = { asPopout: false }): string {
-        const templated = this.mockWidget.getCompleteUrl({
+        const fromCustomisation = WidgetVariableCustomisations?.provideVariables?.() ?? {};
+        const defaults: ITemplateParams = {
             widgetRoomId: this.roomId,
             currentUserId: MatrixClientPeg.get().getUserId(),
             userDisplayName: OwnProfileStore.instance.displayName,
@@ -199,7 +201,8 @@ export class StopGapWidget extends EventEmitter {
             clientId: ELEMENT_CLIENT_ID,
             clientTheme: SettingsStore.getValue("theme"),
             clientLanguage: getUserLanguage(),
-        }, opts?.asPopout);
+        };
+        const templated = this.mockWidget.getCompleteUrl(Object.assign(defaults, fromCustomisation), opts?.asPopout);
 
         const parsed = new URL(templated);
 
@@ -363,6 +366,9 @@ export class StopGapWidget extends EventEmitter {
     }
 
     public async prepare(): Promise<void> {
+        // Ensure the variables are ready for us to be rendered before continuing
+        await (WidgetVariableCustomisations?.isReady?.() ?? Promise.resolve());
+
         if (this.scalarToken) return;
         const existingMessaging = WidgetMessagingStore.instance.getMessaging(this.mockWidget);
         if (existingMessaging) this.messaging = existingMessaging;

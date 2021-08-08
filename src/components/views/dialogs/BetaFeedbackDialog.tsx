@@ -14,22 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useState } from "react";
+import React from "react";
 
-import QuestionDialog from './QuestionDialog';
 import { _t } from '../../../languageHandler';
-import Field from "../elements/Field";
-import SdkConfig from "../../../SdkConfig";
 import { IDialogProps } from "./IDialogProps";
 import SettingsStore from "../../../settings/SettingsStore";
-import { submitFeedback } from "../../../rageshake/submit-rageshake";
-import StyledCheckbox from "../elements/StyledCheckbox";
-import Modal from "../../../Modal";
-import InfoDialog from "./InfoDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "./UserSettingsDialog";
+import GenericFeatureFeedbackDialog from "./GenericFeatureFeedbackDialog";
+
+// XXX: Keep this around for re-use in future Betas
 
 interface IProps extends IDialogProps {
     featureId: string;
@@ -38,77 +34,28 @@ interface IProps extends IDialogProps {
 const BetaFeedbackDialog: React.FC<IProps> = ({ featureId, onFinished }) => {
     const info = SettingsStore.getBetaInfo(featureId);
 
-    const [comment, setComment] = useState("");
-    const [canContact, setCanContact] = useState(false);
-
-    const sendFeedback = async (ok: boolean) => {
-        if (!ok) return onFinished(false);
-
-        const extraData = SettingsStore.getBetaInfo(featureId)?.extraSettings.reduce((o, k) => {
-            o[k] = SettingsStore.getValue(k);
-            return o;
-        }, {});
-
-        submitFeedback(SdkConfig.get().bug_report_endpoint_url, info.feedbackLabel, comment, canContact, extraData);
-        onFinished(true);
-
-        Modal.createTrackedDialog("Beta Dialog Sent", featureId, InfoDialog, {
-            title: _t("Beta feedback"),
-            description: _t("Thank you for your feedback, we really appreciate it."),
-            button: _t("Done"),
-            hasCloseButton: false,
-            fixedWidth: false,
-        });
-    };
-
-    return (<QuestionDialog
-        className="mx_BetaFeedbackDialog"
-        hasCancelButton={true}
+    return <GenericFeatureFeedbackDialog
         title={_t("%(featureName)s beta feedback", { featureName: info.title })}
-        description={<React.Fragment>
-            <div className="mx_BetaFeedbackDialog_subheading">
-                { _t(info.feedbackSubheading) }
-                &nbsp;
-                { _t("Your platform and username will be noted to help us use your feedback as much as we can.") }
-
-                <AccessibleButton
-                    kind="link"
-                    onClick={() => {
-                        onFinished(false);
-                        defaultDispatcher.dispatch({
-                        action: Action.ViewUserSettings,
-                        initialTabId: UserTab.Labs,
-                        });
-                    }}
-                >
-                    { _t("To leave the beta, visit your settings.") }
-                </AccessibleButton>
-            </div>
-
-            <Field
-                id="feedbackComment"
-                label={_t("Feedback")}
-                type="text"
-                autoComplete="off"
-                value={comment}
-                element="textarea"
-                onChange={(ev) => {
-                    setComment(ev.target.value);
-                }}
-                autoFocus={true}
-            />
-
-            <StyledCheckbox
-                checked={canContact}
-                onClick={e => setCanContact((e.target as HTMLInputElement).checked)}
-            >
-                { _t("You may contact me if you have any follow up questions") }
-            </StyledCheckbox>
-        </React.Fragment>}
-        button={_t("Send feedback")}
-        buttonDisabled={!comment}
-        onFinished={sendFeedback}
-    />);
+        subheading={_t(info.feedbackSubheading)}
+        onFinished={onFinished}
+        rageshakeLabel={info.feedbackLabel}
+        rageshakeData={Object.fromEntries((SettingsStore.getBetaInfo(featureId)?.extraSettings || []).map(k => {
+            return SettingsStore.getValue(k);
+        }))}
+    >
+        <AccessibleButton
+            kind="link"
+            onClick={() => {
+                onFinished(false);
+                defaultDispatcher.dispatch({
+                    action: Action.ViewUserSettings,
+                    initialTabId: UserTab.Labs,
+                });
+            }}
+        >
+            { _t("To leave the beta, visit your settings.") }
+        </AccessibleButton>
+    </GenericFeatureFeedbackDialog>;
 };
 
 export default BetaFeedbackDialog;

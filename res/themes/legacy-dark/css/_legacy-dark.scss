@@ -111,8 +111,8 @@ $eventtile-meta-color: $roomtopic-color;
 $header-divider-color: $header-panel-text-primary-color;
 $composer-e2e-icon-color: $header-panel-text-primary-color;
 
-// this probably shouldn't have it's own colour
-$voipcall-plinth-color: #394049;
+$quinary-content-color: #394049;
+$toast-bg-color: $quinary-content-color;
 
 // ********************
 
@@ -221,6 +221,13 @@ $voice-playback-button-fg-color: #21262C;
 $appearance-tab-border-color: $room-highlight-color;
 
 $composer-shadow-color: tranparent;
+
+// Bubble tiles
+$eventbubble-self-bg: #14322E;
+$eventbubble-others-bg: $event-selected-color;
+$eventbubble-bg-hover: #1C2026;
+$eventbubble-avatar-outline: $bg-color;
+$eventbubble-reply-color: #C1C6CD;
 
 // ***** Mixins! *****
 

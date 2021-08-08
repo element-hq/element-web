@@ -43,6 +43,12 @@ $spacePanelWidth: 71px;
                 color: $secondary-fg-color;
                 margin: 0;
             }
+
+            .mx_SpaceFeedbackPrompt {
+                border-top: 1px solid $input-border-color;
+                padding-top: 12px;
+                margin-top: 16px;
+            }
         }
 
         // XXX remove this when spaces leaves Beta
@@ -97,5 +103,27 @@ $spacePanelWidth: 71px;
         .mx_AccessibleButton_disabled {
             cursor: not-allowed;
         }
+    }
+}
+
+.mx_SpaceFeedbackPrompt {
+    font-size: $font-15px;
+    line-height: $font-24px;
+
+    > span {
+        color: $secondary-fg-color;
+        position: relative;
+        font-size: inherit;
+        line-height: inherit;
+        margin-right: auto;
+    }
+
+    .mx_AccessibleButton_kind_link {
+        color: $accent-color;
+        position: relative;
+        padding: 0;
+        margin-left: 8px;
+        font-size: inherit;
+        line-height: inherit;
     }
 }
