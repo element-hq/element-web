@@ -153,6 +153,7 @@ export default class CallView extends React.Component<IProps, IState> {
     public componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         document.addEventListener('keydown', this.onNativeKeyDown);
+        this.showControls();
     }
 
     public componentWillUnmount() {
