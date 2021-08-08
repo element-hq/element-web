@@ -47,11 +47,11 @@ limitations under the License.
         height: 180px;
     }
 
-    .mx_CallView_callControls {
+    .mx_CallViewButtons {
         bottom: 0px;
     }
 
-    .mx_CallView_callControls_button {
+    .mx_CallViewButtons_button {
         &::before {
             width: 36px;
             height: 36px;
@@ -199,20 +199,6 @@ limitations under the License.
     }
 }
 
-.mx_CallView_callControls {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    bottom: 5px;
-    opacity: 1;
-    transition: opacity 0.5s;
-    z-index: 200; // To be above _all_ feeds
-}
-
-.mx_CallView_callControls_hidden {
-    opacity: 0.001; // opacity 0 can cause a re-layout
-    pointer-events: none;
-}
 
 .mx_CallView_presenting {
     opacity: 1;
@@ -231,95 +217,4 @@ limitations under the License.
 .mx_CallView_presenting_hidden {
     opacity: 0.001; // opacity 0 can cause a re-layout
     pointer-events: none;
-}
-
-.mx_CallView_callControls_button {
-    cursor: pointer;
-    margin-left: 2px;
-    margin-right: 2px;
-
-
-    &::before {
-        content: '';
-        display: inline-block;
-
-        height: 48px;
-        width: 48px;
-
-        background-repeat: no-repeat;
-        background-size: contain;
-        background-position: center;
-    }
-}
-
-.mx_CallView_callControls_dialpad {
-    &::before {
-        background-image: url('$(res)/img/voip/dialpad.svg');
-    }
-}
-
-.mx_CallView_callControls_button_micOn {
-    &::before {
-        background-image: url('$(res)/img/voip/mic-on.svg');
-    }
-}
-
-.mx_CallView_callControls_button_micOff {
-    &::before {
-        background-image: url('$(res)/img/voip/mic-off.svg');
-    }
-}
-
-.mx_CallView_callControls_button_vidOn {
-    &::before {
-        background-image: url('$(res)/img/voip/vid-on.svg');
-    }
-}
-
-.mx_CallView_callControls_button_vidOff {
-    &::before {
-        background-image: url('$(res)/img/voip/vid-off.svg');
-    }
-}
-
-.mx_CallView_callControls_button_screensharingOn {
-    &::before {
-        background-image: url('$(res)/img/voip/screensharing-on.svg');
-    }
-}
-
-.mx_CallView_callControls_button_screensharingOff {
-    &::before {
-        background-image: url('$(res)/img/voip/screensharing-off.svg');
-    }
-}
-
-.mx_CallView_callControls_button_sidebarOn {
-    &::before {
-        background-image: url('$(res)/img/voip/sidebar-on.svg');
-    }
-}
-
-.mx_CallView_callControls_button_sidebarOff {
-    &::before {
-        background-image: url('$(res)/img/voip/sidebar-off.svg');
-    }
-}
-
-.mx_CallView_callControls_button_hangup {
-    &::before {
-        background-image: url('$(res)/img/voip/hangup.svg');
-    }
-}
-
-.mx_CallView_callControls_button_more {
-    &::before {
-        background-image: url('$(res)/img/voip/more.svg');
-    }
-}
-
-.mx_CallView_callControls_button_invisible {
-    visibility: hidden;
-    pointer-events: none;
-    position: absolute;
 }
