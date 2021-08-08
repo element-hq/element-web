@@ -1852,6 +1852,8 @@ export default class RoomView extends React.Component<IProps, IState> {
             "mx_RoomView_statusArea_expanded": isStatusAreaExpanded,
         });
 
+        // if statusBar does not exist then statusBarArea is blank and takes up unnecessary space on the screen
+        // show statusBarArea only if statusBar is present
         const statusBarArea = statusBar && <div className={statusBarAreaClass}>
             <div className="mx_RoomView_statusAreaBox">
                 <div className="mx_RoomView_statusAreaBox_line" />
