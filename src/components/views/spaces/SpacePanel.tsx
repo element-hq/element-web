@@ -272,6 +272,7 @@ const SpacePanel = () => {
                     <ul
                         className={classNames("mx_SpacePanel", { collapsed: isPanelCollapsed })}
                         onKeyDown={onKeyDownHandler}
+                        role="tree"
                     >
                         <Droppable droppableId="top-level-spaces">
                             { (provided, snapshot) => (

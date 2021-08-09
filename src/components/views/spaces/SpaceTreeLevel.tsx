@@ -328,7 +328,7 @@ const SpaceTreeLevel: React.FC<ITreeLevelProps> = ({
     isNested,
     parents,
 }) => {
-    return <ul className="mx_SpaceTreeLevel">
+    return <ul className="mx_SpaceTreeLevel" role="group">
         { spaces.map(s => {
             return (<SpaceItem
                 key={s.roomId}
