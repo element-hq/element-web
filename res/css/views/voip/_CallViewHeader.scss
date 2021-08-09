@@ -1,0 +1,129 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_CallViewHeader {
+    height: 44px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.mx_CallViewHeader_callType {
+    font-size: 1.2rem;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.mx_CallViewHeader_secondaryCallInfo {
+    &::before {
+        content: '·';
+        margin-left: 6px;
+        margin-right: 6px;
+    }
+}
+
+.mx_CallViewHeader_controls {
+    margin-left: auto;
+}
+
+.mx_CallViewHeader_button {
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+
+    &::before {
+        content: '';
+        display: inline-block;
+        height: 20px;
+        width: 20px;
+        vertical-align: middle;
+        background-color: $secondary-fg-color;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+    }
+}
+
+.mx_CallViewHeader_button_fullscreen {
+    &::before {
+        mask-image: url('$(res)/img/element-icons/call/fullscreen.svg');
+    }
+}
+
+.mx_CallViewHeader_button_expand {
+    &::before {
+        mask-image: url('$(res)/img/element-icons/call/expand.svg');
+    }
+}
+
+.mx_CallViewHeader_callInfo {
+    margin-left: 12px;
+    margin-right: 16px;
+}
+
+.mx_CallViewHeader_roomName {
+    font-weight: bold;
+    font-size: 12px;
+    line-height: initial;
+    height: 15px;
+}
+
+.mx_CallView_secondaryCall_roomName {
+    margin-left: 4px;
+}
+
+.mx_CallViewHeader_callTypeSmall {
+    font-size: 12px;
+    color: $secondary-fg-color;
+    line-height: initial;
+    height: 15px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 240px;
+}
+
+.mx_CallViewHeader_callTypeIcon {
+    display: inline-block;
+    margin-right: 6px;
+    height: 16px;
+    width: 16px;
+    vertical-align: middle;
+
+    &::before {
+        content: '';
+        display: inline-block;
+        vertical-align: top;
+
+        height: 16px;
+        width: 16px;
+        background-color: $secondary-fg-color;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+    }
+
+    &.mx_CallViewHeader_callTypeIcon_voice::before {
+        mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
+    }
+
+    &.mx_CallViewHeader_callTypeIcon_video::before {
+        mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+    }
+}

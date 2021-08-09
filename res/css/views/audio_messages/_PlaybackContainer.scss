@@ -18,10 +18,10 @@ limitations under the License.
 // are shared amongst multiple voice message components.
 
 // Container for live recording and playback controls
-.mx_VoiceMessagePrimaryContainer {
-    // 7px top and bottom for visual design. 12px left & right, but the waveform (right)
-    // has a 1px padding on it that we want to account for.
-    padding: 7px 12px 7px 11px;
+.mx_MediaBody.mx_VoiceMessagePrimaryContainer {
+    // The waveform (right) has a 1px padding on it that we want to account for, otherwise
+    // inherit from mx_MediaBody
+    padding-right: 11px;
 
     // Cheat at alignment a bit
     display: flex;

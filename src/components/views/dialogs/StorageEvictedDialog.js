@@ -54,7 +54,9 @@ export default class StorageEvictedDialog extends React.Component {
         }
 
         return (
-            <BaseDialog className="mx_ErrorDialog" onFinished={this.props.onFinished}
+            <BaseDialog
+                className="mx_ErrorDialog"
+                onFinished={this.props.onFinished}
                 title={_t('Missing session data')}
                 contentId='mx_Dialog_content'
                 hasCancel={false}

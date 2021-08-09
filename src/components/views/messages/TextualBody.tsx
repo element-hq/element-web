@@ -136,7 +136,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     private addCodeExpansionButton(div: HTMLDivElement, pre: HTMLPreElement): void {
         // Calculate how many percent does the pre element take up.
         // If it's less than 30% we don't add the expansion button.
-        const percentageOfViewport = pre.offsetHeight / UIStore.instance.windowHeight * 100;
+        // We also round the number as it sometimes can be 29.99...
+        const percentageOfViewport = Math.round(pre.offsetHeight / UIStore.instance.windowHeight * 100);
         if (percentageOfViewport < 30) return;
 
         const button = document.createElement("span");
@@ -514,7 +515,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         switch (content.msgtype) {
             case MsgType.Emote:
                 return (
-                    <span className="mx_MEmoteBody mx_EventTile_content">
+                    <div className="mx_MEmoteBody mx_EventTile_content">
                         *&nbsp;
                         <span
                             className="mx_MEmoteBody_sender"
@@ -525,21 +526,21 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                         &nbsp;
                         { body }
                         { widgets }
-                    </span>
+                    </div>
                 );
             case MsgType.Notice:
                 return (
-                    <span className="mx_MNoticeBody mx_EventTile_content">
+                    <div className="mx_MNoticeBody mx_EventTile_content">
                         { body }
                         { widgets }
-                    </span>
+                    </div>
                 );
             default: // including "m.text"
                 return (
-                    <span className="mx_MTextBody mx_EventTile_content">
+                    <div className="mx_MTextBody mx_EventTile_content">
                         { body }
                         { widgets }
-                    </span>
+                    </div>
                 );
         }
     }

@@ -665,8 +665,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     private readMarkerTimeout(readMarkerPosition: number): number {
         return readMarkerPosition === 0 ?
-            this.state.readMarkerInViewThresholdMs :
-            this.state.readMarkerOutOfViewThresholdMs;
+            this.context?.readMarkerInViewThresholdMs ?? this.state.readMarkerInViewThresholdMs :
+            this.context?.readMarkerOutOfViewThresholdMs ?? this.state.readMarkerOutOfViewThresholdMs;
     }
 
     private async updateReadMarkerOnUserActivity(): Promise<void> {
@@ -757,16 +757,20 @@ class TimelinePanel extends React.Component<IProps, IState> {
             }
             this.lastRMSentEventId = this.state.readMarkerEventId;
 
+            const roomId = this.props.timelineSet.room.roomId;
+            const hiddenRR = SettingsStore.getValue("feature_hidden_read_receipts", roomId);
+
             debuglog('TimelinePanel: Sending Read Markers for ',
                 this.props.timelineSet.room.roomId,
                 'rm', this.state.readMarkerEventId,
                 lastReadEvent ? 'rr ' + lastReadEvent.getId() : '',
+                ' hidden:' + hiddenRR,
             );
             MatrixClientPeg.get().setRoomReadMarkers(
-                this.props.timelineSet.room.roomId,
+                roomId,
                 this.state.readMarkerEventId,
                 lastReadEvent, // Could be null, in which case no RR is sent
-                {},
+                { hidden: hiddenRR },
             ).catch((e) => {
                 // /read_markers API is not implemented on this HS, fallback to just RR
                 if (e.errcode === 'M_UNRECOGNIZED' && lastReadEvent) {
@@ -1493,8 +1497,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 onUserScroll={this.props.onUserScroll}
                 onFillRequest={this.onMessageListFillRequest}
                 onUnfillRequest={this.onMessageListUnfillRequest}
-                isTwelveHour={this.state.isTwelveHour}
-                alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.alwaysShowTimestamps}
+                isTwelveHour={this.context?.showTwelveHourTimestamps ?? this.state.isTwelveHour}
+                alwaysShowTimestamps={
+                    this.props.alwaysShowTimestamps ??
+                    this.context?.alwaysShowTimestamps ??
+                    this.state.alwaysShowTimestamps
+                }
                 className={this.props.className}
                 tileShape={this.props.tileShape}
                 resizeNotifier={this.props.resizeNotifier}

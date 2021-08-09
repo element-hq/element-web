@@ -172,7 +172,8 @@ export default class ProfileSettings extends React.Component {
             >
                 <input
                     type="file"
-                    ref={this._avatarUpload} className="mx_ProfileSettings_avatarUpload"
+                    ref={this._avatarUpload}
+                    className="mx_ProfileSettings_avatarUpload"
                     onChange={this._onAvatarChanged}
                     accept="image/*"
                 />
@@ -181,7 +182,8 @@ export default class ProfileSettings extends React.Component {
                         <span className="mx_SettingsTab_subheading">{ _t("Profile") }</span>
                         <Field
                             label={_t("Display Name")}
-                            type="text" value={this.state.displayName}
+                            type="text"
+                            value={this.state.displayName}
                             autoComplete="off"
                             onChange={this._onDisplayNameChanged}
                         />

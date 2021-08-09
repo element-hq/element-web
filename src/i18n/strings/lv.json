@@ -1582,5 +1582,9 @@
     "Upload files": "Failu augšupielāde",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Šie faili <b>pārsniedz</b> augšupielādes izmēra limitu %(limit)s.",
     "Upload files (%(current)s of %(total)s)": "Failu augšupielāde (%(current)s no %(total)s)",
-    "Check your devices": "Pārskatiet savas ierīces"
+    "Check your devices": "Pārskatiet savas ierīces",
+    "Integration manager": "Integrācija pārvaldnieks",
+    "Identity server is": "Indentifikācijas serveris ir",
+    "Identity server": "Identitāšu serveris",
+    "Could not connect to identity server": "Neizdevās pieslēgties identitāšu serverim"
 }
