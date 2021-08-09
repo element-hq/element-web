@@ -48,6 +48,7 @@ export default class PlainTextExporter extends Exporter {
 
         const match = REPLY_REGEX.exec(content.body);
 
+        // if the reply format is invalid, then return the body
         if (!match) return content.body;
 
         let rplSource: string;

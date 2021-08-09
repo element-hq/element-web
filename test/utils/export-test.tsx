@@ -14,13 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IContent, MatrixClient, Room } from "matrix-js-sdk";
+import { IContent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { textForFormat, IExportOptions, ExportTypes } from "../../src/utils/exportUtils/exportUtils";
 import '../skinned-sdk';
 import PlainTextExporter from "../../src/utils/exportUtils/PlainTextExport";
+import HTMLExporter from "../../src/utils/exportUtils/HtmlExport";
 import * as TestUtilsMatrix from '../test-utils';
 import { stubClient } from '../test-utils';
+import { renderToString } from "react-dom/server";
 
 let client: MatrixClient;
 
@@ -65,9 +67,8 @@ describe('export', function() {
         },
     ];
 
-    const events = mkEvents();
+    const events: MatrixEvent[] = mkEvents();
     const room = createRoom();
-    console.log(events);
     function createRoom() {
         const room = new Room(generateRoomId(), null, client.getUserId());
         return room;
@@ -131,7 +132,7 @@ describe('export', function() {
             },
             {
                 "msgtype": "m.text",
-                // if the reply format is invalid, then return the original string as it is
+                // if the reply format is invalid, then return the body
                 "body": "Invalid reply format",
                 "expectedText": "Invalid reply format",
             },
@@ -149,6 +150,14 @@ describe('export', function() {
         const exporter = new PlainTextExporter(room, ExportTypes.BEGINNING, mockExportOptions, null);
         for (const content of eventContents) {
             expect(exporter.textForReplyEvent(content)).toBe(content.expectedText);
+        }
+    });
+
+    it('checks if the render to string works for eventTile', function() {
+        // Todo: Generate different event types
+        const exporter = new HTMLExporter(room, ExportTypes.BEGINNING, mockExportOptions, null);
+        for (const event of events) {
+            expect(renderToString(exporter.getEventTile(event, false))).toBeTruthy();
         }
     });
 });
