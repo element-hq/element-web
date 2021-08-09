@@ -278,6 +278,10 @@ limitations under the License.
         }
     }
 
+    li.mx_SpaceRoomDirectory_roomTileWrapper {
+        list-style: none;
+    }
+
     .mx_SpaceRoomDirectory_roomTile,
     .mx_SpaceRoomDirectory_subspace_children {
         &::before {

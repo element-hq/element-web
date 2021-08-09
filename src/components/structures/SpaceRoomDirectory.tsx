@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode, KeyboardEvent, useMemo, useState } from "react";
+import React, { ReactNode, KeyboardEvent, useMemo, useState, KeyboardEventHandler } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { ISpaceSummaryRoom, ISpaceSummaryEvent } from "matrix-js-sdk/src/@types/spaces";
@@ -185,8 +185,9 @@ const Tile: React.FC<ITileProps> = ({
         </div>
     </React.Fragment>;
 
-    let childToggle;
-    let childSection;
+    let childToggle: JSX.Element;
+    let childSection: JSX.Element;
+    let onKeyDown: KeyboardEventHandler;
     if (children) {
         // the chevron is purposefully a div rather than a button as it should be ignored for a11y
         childToggle = <div
@@ -216,36 +217,41 @@ const Tile: React.FC<ITileProps> = ({
                 { children }
             </div>;
         }
+
+        onKeyDown = (e) => {
+            let handled = false;
+
+            switch (e.key) {
+                case Key.ARROW_LEFT:
+                    if (showChildren) {
+                        handled = true;
+                        toggleShowChildren();
+                    }
+                    break;
+
+                case Key.ARROW_RIGHT:
+                    handled = true;
+                    if (showChildren) {
+                        const childSection = ref.current?.nextElementSibling;
+                        childSection?.querySelector<HTMLDivElement>(".mx_SpaceRoomDirectory_roomTile")?.focus();
+                    } else {
+                        toggleShowChildren();
+                    }
+                    break;
+            }
+
+            if (handled) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        };
     }
 
-    const onKeyDown = children ? (e) => {
-        let handled = false;
-
-        switch (e.key) {
-            case Key.ARROW_LEFT:
-                if (showChildren) {
-                    handled = true;
-                    toggleShowChildren();
-                }
-                break;
-
-            case Key.ARROW_RIGHT:
-                handled = true;
-                if (showChildren) {
-                    (ref.current?.nextElementSibling?.firstElementChild as HTMLElement)?.focus();
-                } else {
-                    toggleShowChildren();
-                }
-                break;
-        }
-
-        if (handled) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-    } : undefined;
-
-    return <>
+    return <li
+        className="mx_SpaceRoomDirectory_roomTileWrapper"
+        role="treeitem"
+        aria-expanded={children ? showChildren : undefined}
+    >
         <AccessibleButton
             className={classNames("mx_SpaceRoomDirectory_roomTile", {
                 mx_SpaceRoomDirectory_subspace: room.room_type === RoomType.Space,
@@ -255,14 +261,12 @@ const Tile: React.FC<ITileProps> = ({
             inputRef={ref}
             onFocus={onFocus}
             tabIndex={isActive ? 0 : -1}
-            aria-expanded={children ? showChildren : undefined}
-            role="treeitem"
         >
             { content }
             { childToggle }
         </AccessibleButton>
         { childSection }
-    </>;
+    </li>;
 };
 
 export const showRoom = (room: ISpaceSummaryRoom, viaServers?: string[], autoJoin = false) => {

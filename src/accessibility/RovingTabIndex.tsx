@@ -196,7 +196,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({ children, handleHomeE
                         handled = true;
                         if (context.state.refs.length > 0) {
                             const idx = context.state.refs.indexOf(context.state.activeRef);
-                            if (idx > 1) {
+                            if (idx > 0) {
                                 context.state.refs[idx - 1].current.focus();
                             }
                         }

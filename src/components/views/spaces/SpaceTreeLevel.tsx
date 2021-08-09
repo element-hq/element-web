@@ -113,7 +113,6 @@ export const SpaceButton: React.FC<IButtonProps> = ({
             onClick={onClick}
             onContextMenu={openMenu}
             forceHide={!isNarrow || menuDisplayed}
-            role="treeitem"
             inputRef={handle}
         >
             { children }
@@ -290,7 +289,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             /> : null;
 
         return (
-            <li {...otherProps} className={itemClasses} ref={innerRef}>
+            <li {...otherProps} className={itemClasses} ref={innerRef} aria-expanded={!collapsed} role="treeitem">
                 <SpaceButton
                     space={space}
                     className={isInvite ? "mx_SpaceButton_invite" : undefined}
@@ -302,9 +301,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                     avatarSize={isNested ? 24 : 32}
                     onClick={this.onClick}
                     onKeyDown={this.onKeyDown}
-                    aria-expanded={!collapsed}
-                    ContextMenuComponent={this.props.space.getMyMembership() === "join"
-                        ? SpaceContextMenu : undefined}
+                    ContextMenuComponent={this.props.space.getMyMembership() === "join" ? SpaceContextMenu : undefined}
                 >
                     { toggleCollapseButton }
                 </SpaceButton>
