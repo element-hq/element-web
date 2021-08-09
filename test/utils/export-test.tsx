@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, Room } from "matrix-js-sdk";
+import { IContent, MatrixClient, Room } from "matrix-js-sdk";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { textForFormat, IExportOptions, ExportTypes } from "../../src/utils/exportUtils/exportUtils";
 import '../skinned-sdk';
@@ -28,6 +28,10 @@ const MY_USER_ID = "@me:here";
 
 function generateRoomId() {
     return '!' + Math.random().toString().slice(2, 10) + ':domain';
+}
+
+interface ITestContent extends IContent {
+    expectedText: string;
 }
 
 describe('export', function() {
@@ -63,7 +67,7 @@ describe('export', function() {
 
     const events = mkEvents();
     const room = createRoom();
-    console.log(events, room);
+    console.log(events);
     function createRoom() {
         const room = new Room(generateRoomId(), null, client.getUserId());
         return room;
@@ -74,8 +78,8 @@ describe('export', function() {
         const ts0 = Date.now();
         for (let i = 0; i < 10; i++) {
             events.push(TestUtilsMatrix.mkMessage({
-                    event: true, room: "!room:id", user: "@user:id",
-                    ts: ts0 + i * 1000,
+                event: true, room: "!room:id", user: "@user:id",
+                ts: ts0 + i * 1000,
             }));
         }
         return events;
@@ -118,14 +122,34 @@ describe('export', function() {
         }
     });
 
-    // it('checks if the reply regex executes correctly', function() {
-    //     const eventContents = [
-    //         {
-    //             "msgtype": "m.text",
-    //             "body": "> <@me:here> Testing....\n\nTest",
-    //             "expectedText": "",
-    //         },
-    //     ];
-    // });
+    it('checks if the reply regex executes correctly', function() {
+        const eventContents: ITestContent[] = [
+            {
+                "msgtype": "m.text",
+                "body": "> <@me:here> Source\n\nReply",
+                "expectedText": "<@me:here \"Source\"> Reply",
+            },
+            {
+                "msgtype": "m.text",
+                // if the reply format is invalid, then return the original string as it is
+                "body": "Invalid reply format",
+                "expectedText": "Invalid reply format",
+            },
+            {
+                "msgtype": "m.text",
+                "body": "> <@me:here> The source is more than 32 characters\n\nReply",
+                "expectedText": "<@me:here \"The source is more than 32 chara...\"> Reply",
+            },
+            {
+                "msgtype": "m.text",
+                "body": "> <@me:here> This\nsource\nhas\nnew\nlines\n\nReply",
+                "expectedText": "<@me:here \"This\"> Reply",
+            },
+        ];
+        const exporter = new PlainTextExporter(room, ExportTypes.BEGINNING, mockExportOptions, null);
+        for (const content of eventContents) {
+            expect(exporter.textForReplyEvent(content)).toBe(content.expectedText);
+        }
+    });
 });
 

@@ -16,7 +16,7 @@ limitations under the License.
 
 import Exporter from "./Exporter";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { formatFullDateNoDay } from "../../DateUtils";
 import { _t } from "../../languageHandler";
 import { haveTileForEvent } from "../../components/views/rooms/EventTile";
@@ -42,10 +42,9 @@ export default class PlainTextExporter extends Exporter {
             : _t("Media omitted - file size limit exceeded");
     }
 
-    public textForReplyEvent = (ev: MatrixEvent) => {
-        const REPLY_REGEX = /> <(.*?)>(.*?)\n\n(.*)/;
+    public textForReplyEvent = (content: IContent) => {
+        const REPLY_REGEX = /> <(.*?)>(.*?)\n\n(.*)/s;
         const REPLY_SOURCE_MAX_LENGTH = 32;
-        const content = ev.getContent();
 
         const match = REPLY_REGEX.exec(content.body);
 
@@ -55,7 +54,7 @@ export default class PlainTextExporter extends Exporter {
         const rplName = match[1];
         const rplText = match[3];
 
-        rplSource = match[2].substring(1, REPLY_SOURCE_MAX_LENGTH);
+        rplSource = match[2].substring(1);
         // Get the first non-blank line from the source.
         const lines = rplSource.split('\n').filter((line) => !/^\s*$/.test(line));
         if (lines.length > 0) {
@@ -99,7 +98,7 @@ export default class PlainTextExporter extends Exporter {
                 }
             } else mediaText = ` (${this.mediaOmitText})`;
         }
-        if (this.isReply(mxEv)) return senderDisplayName + ": " + this.textForReplyEvent(mxEv) + mediaText;
+        if (this.isReply(mxEv)) return senderDisplayName + ": " + this.textForReplyEvent(mxEv.getContent()) + mediaText;
         else return textForEvent(mxEv) + mediaText;
     };
 
