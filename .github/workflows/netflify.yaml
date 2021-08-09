@@ -1,0 +1,51 @@
+name: Upload Preview Build to Netlify
+on:
+    workflow_run:
+        workflows: ["Layered Preview Build"]
+        types:
+            - completed
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        if: >
+            ${{ github.event.workflow_run.conclusion == 'success' }}
+        steps:
+            # There's a 'download artifact' action but it hasn't been updated for the
+            # workflow_run action (https://github.com/actions/download-artifact/issues/60)
+            # so instead we get this mess:
+            - name: 'Download artifact'
+              uses: actions/github-script@v3.1.0
+              with:
+                script: |
+                  var artifacts = await github.actions.listWorkflowRunArtifacts({
+                     owner: context.repo.owner,
+                     repo: context.repo.repo,
+                     run_id: ${{github.event.workflow_run.id }},
+                  });
+                  var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
+                    return artifact.name == "previewbuild"
+                  })[0];
+                  var download = await github.actions.downloadArtifact({
+                     owner: context.repo.owner,
+                     repo: context.repo.repo,
+                     artifact_id: matchArtifact.id,
+                     archive_format: 'zip',
+                  });
+                  var fs = require('fs');
+                  fs.writeFileSync('${{github.workspace}}/previewbuild.zip', Buffer.from(download.data));
+            - run: unzip previewbuild.zip && rm previewbuild.zip
+            - name: Deploy to Netlify
+              uses: nwtgck/actions-netlify@v1.2
+              with:
+                  publish-dir: .
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  alias: deploy-preview-${{ github.event.number }}
+                  deploy-message: "Deploy from GitHub Actions"
+                  enable-pull-request-comment: true
+                  enable-commit-comment: false
+                  overwrites-pull-request-comment: true
+              env:
+                  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+                  NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+              timeout-minutes: 1
+
