@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -153,79 +153,6 @@ limitations under the License.
 
 .mx_SettingsTab_customFontSizeField {
     margin-left: calc($font-16px + 10px);
-}
-
-.mx_AppearanceUserSettingsTab_Layout_RadioButtons {
-    display: flex;
-    flex-direction: row;
-    gap: 24px;
-
-    color: $primary-fg-color;
-
-    > .mx_AppearanceUserSettingsTab_Layout_RadioButton {
-        flex-grow: 0;
-        flex-shrink: 1;
-        display: flex;
-        flex-direction: column;
-
-        width: 300px;
-
-        border: 1px solid $appearance-tab-border-color;
-        border-radius: 10px;
-
-        .mx_EventTile_msgOption,
-        .mx_MessageActionBar {
-            display: none;
-        }
-
-        .mx_AppearanceUserSettingsTab_Layout_RadioButton_preview {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            pointer-events: none;
-        }
-
-        .mx_RadioButton {
-            flex-grow: 0;
-            padding: 10px;
-        }
-
-        .mx_EventTile_content {
-            margin-right: 0;
-        }
-
-        &.mx_AppearanceUserSettingsTab_Layout_RadioButton_selected {
-            border-color: $accent-color;
-        }
-    }
-
-    .mx_RadioButton {
-        border-top: 1px solid $appearance-tab-border-color;
-
-        > input + div {
-            border-color: rgba($muted-fg-color, 0.2);
-        }
-    }
-
-    .mx_RadioButton_checked {
-        background-color: rgba($accent-color, 0.08);
-    }
-
-    .mx_EventTile {
-        margin: 0;
-        &[data-layout=bubble] {
-            margin-right: 40px;
-        }
-        &[data-layout=irc] {
-            > a {
-                display: none;
-            }
-        }
-        .mx_EventTile_line {
-            max-width: 90%;
-        }
-    }
 }
 
 .mx_AppearanceUserSettingsTab_Advanced {

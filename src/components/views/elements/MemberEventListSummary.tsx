@@ -25,7 +25,23 @@ import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
 import { isValid3pidInvite } from "../../../RoomInvite";
 import EventListSummary from "./EventListSummary";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import defaultDispatcher from '../../../dispatcher/dispatcher';
+import { RightPanelPhases } from '../../../stores/RightPanelStorePhases';
+import { Action } from '../../../dispatcher/actions';
+import { SetRightPanelPhasePayload } from '../../../dispatcher/payloads/SetRightPanelPhasePayload';
+import { jsxJoin } from '../../../utils/ReactUtils';
+import { EventType } from 'matrix-js-sdk/src/@types/event';
 import { Layout } from '../../../settings/Layout';
+
+const onPinnedMessagesClick = (): void => {
+    defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
+        action: Action.SetRightPanelPhase,
+        phase: RightPanelPhases.PinnedMessages,
+        allowClose: false,
+    });
+};
+
+const SENDER_AS_DISPLAY_NAME_EVENTS = [EventType.RoomServerAcl, EventType.RoomPinnedEvents];
 
 interface IProps extends Omit<ComponentProps<typeof EventListSummary>, "summaryText" | "summaryMembers"> {
     // The maximum number of names to show in either each summary e.g. 2 would result "A, B and 234 others left"
@@ -60,6 +76,7 @@ enum TransitionType {
     ChangedAvatar = "changed_avatar",
     NoChange = "no_change",
     ServerAcl = "server_acl",
+    ChangedPins = "pinned_messages"
 }
 
 const SEP = ",";
@@ -93,7 +110,10 @@ export default class MemberEventListSummary extends React.Component<IProps> {
      * `Object.keys(eventAggregates)`.
      * @returns {string} the textual summary of the aggregated events that occurred.
      */
-    private generateSummary(eventAggregates: Record<string, string[]>, orderedTransitionSequences: string[]) {
+    private generateSummary(
+        eventAggregates: Record<string, string[]>,
+        orderedTransitionSequences: string[],
+    ): string | JSX.Element {
         const summaries = orderedTransitionSequences.map((transitions) => {
             const userNames = eventAggregates[transitions];
             const nameList = this.renderNameList(userNames);
@@ -122,7 +142,7 @@ export default class MemberEventListSummary extends React.Component<IProps> {
             return null;
         }
 
-        return summaries.join(", ");
+        return jsxJoin(summaries, ", ");
     }
 
     /**
@@ -216,7 +236,11 @@ export default class MemberEventListSummary extends React.Component<IProps> {
      * @param {number} repeats the number of times the transition was repeated in a row.
      * @returns {string} the written Human Readable equivalent of the transition.
      */
-    private static getDescriptionForTransition(t: TransitionType, userCount: number, repeats: number) {
+    private static getDescriptionForTransition(
+        t: TransitionType,
+        userCount: number,
+        repeats: number,
+    ): string | JSX.Element {
         // The empty interpolations 'severalUsers' and 'oneUser'
         // are there only to show translators to non-English languages
         // that the verb is conjugated to plural or singular Subject.
@@ -299,6 +323,15 @@ export default class MemberEventListSummary extends React.Component<IProps> {
                         { severalUsers: "", count: repeats })
                     : _t("%(oneUser)schanged the server ACLs %(count)s times", { oneUser: "", count: repeats });
                 break;
+            case "pinned_messages":
+                res = (userCount > 1)
+                    ? _t("%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.",
+                        { severalUsers: "", count: repeats },
+                        { "a": (sub) => <a onClick={onPinnedMessagesClick}> { sub } </a> })
+                    : _t("%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times.",
+                        { oneUser: "", count: repeats },
+                        { "a": (sub) => <a onClick={onPinnedMessagesClick}> { sub } </a> });
+                break;
         }
 
         return res;
@@ -317,16 +350,18 @@ export default class MemberEventListSummary extends React.Component<IProps> {
      * if a transition is not recognised.
      */
     private static getTransition(e: IUserEvents): TransitionType {
-        if (e.mxEvent.getType() === 'm.room.third_party_invite') {
+        const type = e.mxEvent.getType();
+
+        if (type === EventType.RoomThirdPartyInvite) {
             // Handle 3pid invites the same as invites so they get bundled together
             if (!isValid3pidInvite(e.mxEvent)) {
                 return TransitionType.InviteWithdrawal;
             }
             return TransitionType.Invited;
-        }
-
-        if (e.mxEvent.getType() === 'm.room.server_acl') {
+        } else if (type === EventType.RoomServerAcl) {
             return TransitionType.ServerAcl;
+        } else if (type === EventType.RoomPinnedEvents) {
+            return TransitionType.ChangedPins;
         }
 
         switch (e.mxEvent.getContent().membership) {
@@ -415,22 +450,23 @@ export default class MemberEventListSummary extends React.Component<IProps> {
         // Object mapping user IDs to an array of IUserEvents
         const userEvents: Record<string, IUserEvents[]> = {};
         eventsToRender.forEach((e, index) => {
-            const userId = e.getType() === 'm.room.server_acl' ? e.getSender() : e.getStateKey();
+            const type = e.getType();
+            const userId = type === EventType.RoomServerAcl ? e.getSender() : e.getStateKey();
             // Initialise a user's events
             if (!userEvents[userId]) {
                 userEvents[userId] = [];
             }
 
-            if (e.getType() === 'm.room.server_acl') {
+            if (SENDER_AS_DISPLAY_NAME_EVENTS.includes(type as EventType)) {
                 latestUserAvatarMember.set(userId, e.sender);
             } else if (e.target) {
                 latestUserAvatarMember.set(userId, e.target);
             }
 
             let displayName = userId;
-            if (e.getType() === 'm.room.third_party_invite') {
+            if (type === EventType.RoomThirdPartyInvite) {
                 displayName = e.getContent().display_name;
-            } else if (e.getType() === 'm.room.server_acl') {
+            } else if (SENDER_AS_DISPLAY_NAME_EVENTS.includes(type as EventType)) {
                 displayName = e.sender.name;
             } else if (e.target) {
                 displayName = e.target.name;

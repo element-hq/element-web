@@ -1,6 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -55,6 +54,14 @@ const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.sourc
 
 const IS_MAC = navigator.platform.indexOf("Mac") !== -1;
 
+const SURROUND_WITH_CHARACTERS = ["\"", "_", "`", "'", "*", "~", "$"];
+const SURROUND_WITH_DOUBLE_CHARACTERS = new Map([
+    ["(", ")"],
+    ["[", "]"],
+    ["{", "}"],
+    ["<", ">"],
+]);
+
 function ctrlShortcutLabel(key: string): string {
     return (IS_MAC ? "⌘" : "Ctrl") + "+" + key;
 }
@@ -99,6 +106,7 @@ interface IState {
     showVisualBell?: boolean;
     autoComplete?: AutocompleteWrapperModel;
     completionIndex?: number;
+    surroundWith: boolean;
 }
 
 @replaceableComponent("views.rooms.BasicMessageEditor")
@@ -117,12 +125,14 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private readonly emoticonSettingHandle: string;
     private readonly shouldShowPillAvatarSettingHandle: string;
+    private readonly surroundWithHandle: string;
     private readonly historyManager = new HistoryManager();
 
     constructor(props) {
         super(props);
         this.state = {
             showPillAvatar: SettingsStore.getValue("Pill.shouldShowPillAvatar"),
+            surroundWith: SettingsStore.getValue("MessageComposerInput.surroundWith"),
         };
 
         this.emoticonSettingHandle = SettingsStore.watchSetting('MessageComposerInput.autoReplaceEmoji', null,
@@ -130,6 +140,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.configureEmoticonAutoReplace();
         this.shouldShowPillAvatarSettingHandle = SettingsStore.watchSetting("Pill.shouldShowPillAvatar", null,
             this.configureShouldShowPillAvatar);
+        this.surroundWithHandle = SettingsStore.watchSetting("MessageComposerInput.surroundWith", null,
+            this.surroundWithSettingChanged);
     }
 
     public componentDidUpdate(prevProps: IProps) {
@@ -422,6 +434,28 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     private onKeyDown = (event: React.KeyboardEvent): void => {
         const model = this.props.model;
         let handled = false;
+
+        if (this.state.surroundWith && document.getSelection().type != "Caret") {
+            // This surrounds the selected text with a character. This is
+            // intentionally left out of the keybinding manager as the keybinds
+            // here shouldn't be changeable
+
+            const selectionRange = getRangeForSelection(
+                this.editorRef.current,
+                this.props.model,
+                document.getSelection(),
+            );
+            // trim the range as we want it to exclude leading/trailing spaces
+            selectionRange.trim();
+
+            if ([...SURROUND_WITH_DOUBLE_CHARACTERS.keys(), ...SURROUND_WITH_CHARACTERS].includes(event.key)) {
+                this.historyManager.ensureLastChangesPushed(this.props.model);
+                this.modifiedFlag = true;
+                toggleInlineFormat(selectionRange, event.key, SURROUND_WITH_DOUBLE_CHARACTERS.get(event.key));
+                handled = true;
+            }
+        }
+
         const action = getKeyBindingsManager().getMessageComposerAction(event);
         switch (action) {
             case MessageComposerAction.FormatBold:
@@ -574,6 +608,11 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.setState({ showPillAvatar });
     };
 
+    private surroundWithSettingChanged = () => {
+        const surroundWith = SettingsStore.getValue("MessageComposerInput.surroundWith");
+        this.setState({ surroundWith });
+    };
+
     componentWillUnmount() {
         document.removeEventListener("selectionchange", this.onSelectionChange);
         this.editorRef.current.removeEventListener("input", this.onInput, true);
@@ -581,6 +620,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.editorRef.current.removeEventListener("compositionend", this.onCompositionEnd, true);
         SettingsStore.unwatchSetting(this.emoticonSettingHandle);
         SettingsStore.unwatchSetting(this.shouldShowPillAvatarSettingHandle);
+        SettingsStore.unwatchSetting(this.surroundWithHandle);
     }
 
     componentDidMount() {
@@ -684,7 +724,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             <MessageComposerFormatBar ref={this.formatBarRef} onAction={this.onFormatAction} shortcuts={shortcuts} />
             <div
                 className={classes}
-                contentEditable="true"
+                contentEditable={this.props.disabled ? null : true}
                 tabIndex={0}
                 onBlur={this.onBlur}
                 onFocus={this.onFocus}
