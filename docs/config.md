@@ -136,6 +136,9 @@ For a good example, see https://develop.element.io/config.json.
    1. `obeyAssertedIdentity`: If set, MSC3086 asserted identity messages sent
       on VoIP calls will cause the call to appear in the room corresponding to the
       asserted identity. This *must* only be set in trusted environments.
+1. `posthog`: [Posthog](https://posthog.com/) integration config. If not set, Posthog analytics are disabled.
+   1. `projectApiKey`: The Posthog project API key
+   2. `apiHost`: The Posthog API host
 
 Note that `index.html` also has an og:image meta tag that is set to an image
 hosted on riot.im. This is the image used if links to your copy of Element

@@ -46,7 +46,7 @@
     "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n reskindex,reskindex-react,res,element-js \"yarn reskindex:watch\" \"yarn reskindex:watch-react\" \"yarn start:res\" \"yarn start:js\"",
     "start:https": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n reskindex,reskindex-react,res,element-js \"yarn reskindex:watch\" \"yarn reskindex:watch-react\" \"yarn start:res\" \"yarn start:js --https\"",
     "start:res": "yarn build:jitsi && node scripts/copy-res.js -w",
-    "start:js": "webpack-dev-server --host=0.0.0.0 --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --progress --mode development --disable-host-check",
+    "start:js": "webpack-dev-server --host=0.0.0.0 --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --progress --mode development --disable-host-check --hot",
     "lint": "yarn lint:types && yarn lint:js && yarn lint:style",
     "lint:js": "eslint --max-warnings 0 src",
     "lint:js-fix": "eslint --fix src",
@@ -97,6 +97,7 @@
     "@types/sanitize-html": "^2.3.1",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
+    "allchange": "github:matrix-org/allchange",
     "autoprefixer": "^9.8.6",
     "babel-jest": "^26.6.3",
     "babel-loader": "^8.2.2",
@@ -104,6 +105,7 @@
     "concurrently": "^5.3.0",
     "cpx": "^1.5.0",
     "css-loader": "^3.6.0",
+    "dotenv": "^10.0.0",
     "eslint": "7.18.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-matrix-org": "github:matrix-org/eslint-plugin-matrix-org#2306b3d4da4eba908b256014b979f1d3d43d2945",
@@ -143,6 +145,8 @@
     "rimraf": "^3.0.2",
     "shell-escape": "^0.2.0",
     "simple-proxy-agent": "^1.1.0",
+    "string-replace-loader": "2",
+    "style-loader": "2",
     "stylelint": "^13.9.0",
     "stylelint-config-standard": "^20.0.0",
     "stylelint-scss": "^3.18.0",
@@ -151,7 +155,8 @@
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.2",
-    "worker-loader": "^2.0.0"
+    "worker-loader": "^2.0.0",
+    "worklet-loader": "^2.0.0"
   },
   "jest": {
     "testEnvironment": "jest-environment-jsdom-sixteen",
@@ -176,7 +181,8 @@
       "context-filter-polyfill": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js",
       "FontManager.ts": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/FontManager.js",
       "workers/(.+)\\.worker\\.ts": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/workerMock.js",
-      "^!!raw-loader!.*": "jest-raw-loader"
+      "^!!raw-loader!.*": "jest-raw-loader",
+      "RecorderWorklet": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$",
