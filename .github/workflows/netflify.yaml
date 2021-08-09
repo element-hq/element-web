@@ -39,7 +39,6 @@ jobs:
               with:
                   publish-dir: .
                   github-token: ${{ secrets.GITHUB_TOKEN }}
-                  alias: deploy-preview-${{ github.event.number }}
                   deploy-message: "Deploy from GitHub Actions"
                   enable-pull-request-comment: true
                   enable-commit-comment: false
