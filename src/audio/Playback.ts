@@ -38,17 +38,9 @@ function makePlaybackWaveform(input: number[]): number[] {
     // First, convert negative amplitudes to positive so we don't detect zero as "noisy".
     const noiseWaveform = input.map(v => Math.abs(v));
 
-    // Next, we'll resample the waveform using a smoothing approach so we can keep the same rough shape.
-    // We also rescale the waveform to be 0-1 for the remaining function logic.
-    const resampled = arrayRescale(arraySmoothingResample(noiseWaveform, PLAYBACK_WAVEFORM_SAMPLES), 0, 1);
-
-    // Then, we'll do a high and low pass filter to isolate actual speaking volumes within the rescaled
-    // waveform. Most speech happens below the 0.5 mark.
-    const filtered = resampled.map(v => clamp(v, 0.1, 0.5));
-
-    // Finally, we'll rescale the filtered waveform (0.1-0.5 becomes 0-1 again) so the user sees something
-    // sensible. This is what we return to keep our contract of "values between zero and one".
-    return arrayRescale(filtered, 0, 1);
+    // Then, we'll resample the waveform using a smoothing approach so we can keep the same rough shape.
+    // We also rescale the waveform to be 0-1 so we end up with a clamped waveform to rely upon.
+    return arrayRescale(arraySmoothingResample(noiseWaveform, PLAYBACK_WAVEFORM_SAMPLES), 0, 1);
 }
 
 export class Playback extends EventEmitter implements IDestroyable {

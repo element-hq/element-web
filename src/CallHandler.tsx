@@ -1,7 +1,8 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 New Vector Ltd
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -60,7 +61,6 @@ import Modal from './Modal';
 import { _t } from './languageHandler';
 import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
-import WidgetEchoStore from './stores/WidgetEchoStore';
 import SettingsStore from './settings/SettingsStore';
 import { Jitsi } from "./widgets/Jitsi";
 import { WidgetType } from "./widgets/WidgetType";
@@ -86,6 +86,12 @@ import { randomUppercaseString, randomLowercaseString } from "matrix-js-sdk/src/
 import EventEmitter from 'events';
 import SdkConfig from './SdkConfig';
 import { ensureDMExists, findDMForUser } from './createRoom';
+import { IPushRule, RuleId, TweakName, Tweaks } from "matrix-js-sdk/src/@types/PushRules";
+import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
+import { WidgetLayoutStore, Container } from './stores/widgets/WidgetLayoutStore';
+import { getIncomingCallToastKey } from './toasts/IncomingCallToast';
+import ToastStore from './stores/ToastStore';
+import IncomingCallToast from "./toasts/IncomingCallToast";
 
 export const PROTOCOL_PSTN = 'm.protocol.pstn';
 export const PROTOCOL_PSTN_PREFIXED = 'im.vector.protocol.pstn';
@@ -476,26 +482,44 @@ export default class CallHandler extends EventEmitter {
             }
 
             switch (newState) {
-                case CallState.Ringing:
-                    this.play(AudioID.Ring);
+                case CallState.Ringing: {
+                    const incomingCallPushRule = (
+                        new PushProcessor(MatrixClientPeg.get()).getPushRuleById(RuleId.IncomingCall) as IPushRule
+                    );
+                    const pushRuleEnabled = incomingCallPushRule?.enabled;
+                    const tweakSetToRing = incomingCallPushRule?.actions.some((action: Tweaks) => (
+                        action.set_tweak === TweakName.Sound &&
+                        action.value === "ring"
+                    ));
+
+                    if (pushRuleEnabled && tweakSetToRing) {
+                        this.play(AudioID.Ring);
+                    } else {
+                        this.silenceCall(call.callId);
+                    }
                     break;
-                case CallState.InviteSent:
+                }
+                case CallState.InviteSent: {
                     this.play(AudioID.Ringback);
                     break;
-                case CallState.Ended:
-                {
+                }
+                case CallState.Ended: {
                     const hangupReason = call.hangupReason;
                     Analytics.trackEvent('voip', 'callEnded', 'hangupReason', hangupReason);
                     this.removeCallForRoom(mappedRoomId);
                     if (oldState === CallState.InviteSent && call.hangupParty === CallParty.Remote) {
                         this.play(AudioID.Busy);
+
+                        // Don't show a modal when we got rejected/the call was hung up
+                        if (!hangupReason || [CallErrorCode.UserHangup, "user hangup"].includes(hangupReason)) break;
+
                         let title;
                         let description;
                         // TODO: We should either do away with these or figure out a copy for each code (expect user_hangup...)
                         if (call.hangupReason === CallErrorCode.UserBusy) {
                             title = _t("User Busy");
                             description = _t("The user you called is busy.");
-                        } else if (hangupReason && ![CallErrorCode.UserHangup, "user hangup"].includes(hangupReason)) {
+                        } else {
                             title = _t("Call Failed");
                             description = _t("The call could not be established");
                         }
@@ -623,6 +647,19 @@ export default class CallHandler extends EventEmitter {
         console.log(
             `Call state in ${mappedRoomId} changed to ${status}`,
         );
+
+        const toastKey = getIncomingCallToastKey(call.callId);
+        if (status === CallState.Ringing) {
+            ToastStore.sharedInstance().addOrReplaceToast({
+                key: toastKey,
+                priority: 100,
+                component: IncomingCallToast,
+                bodyClassName: "mx_IncomingCallToast",
+                props: { call },
+            });
+        } else {
+            ToastStore.sharedInstance().dismissToast(toastKey);
+        }
 
         dis.dispatch({
             action: 'call_state',
@@ -914,6 +951,8 @@ export default class CallHandler extends EventEmitter {
             action: 'view_room',
             room_id: roomId,
         });
+
+        await this.placeCall(roomId, PlaceCallType.Voice, null);
     }
 
     private async startTransferToPhoneNumber(call: MatrixCall, destination: string, consultFirst: boolean) {
@@ -993,14 +1032,10 @@ export default class CallHandler extends EventEmitter {
 
         // prevent double clicking the call button
         const room = MatrixClientPeg.get().getRoom(roomId);
-        const currentJitsiWidgets = WidgetUtils.getRoomWidgetsOfType(room, WidgetType.JITSI);
-        const hasJitsi = currentJitsiWidgets.length > 0
-            || WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentJitsiWidgets, WidgetType.JITSI);
-        if (hasJitsi) {
-            Modal.createTrackedDialog('Call already in progress', '', ErrorDialog, {
-                title: _t('Call in Progress'),
-                description: _t('A call is currently being placed!'),
-            });
+        const jitsiWidget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.JITSI.matches(app.type));
+        if (jitsiWidget) {
+            // If there already is a Jitsi widget pin it
+            WidgetLayoutStore.instance.moveToContainer(room, jitsiWidget, Container.Top);
             return;
         }
 

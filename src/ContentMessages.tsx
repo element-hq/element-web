@@ -209,6 +209,14 @@ async function loadImageElement(imageFile: File) {
     return { width, height, img };
 }
 
+// Minimum size for image files before we generate a thumbnail for them.
+const IMAGE_SIZE_THRESHOLD_THUMBNAIL = 1 << 15; // 32KB
+// Minimum size improvement for image thumbnails, if both are not met then don't bother uploading thumbnail.
+const IMAGE_THUMBNAIL_MIN_REDUCTION_SIZE = 1 << 16; // 1MB
+const IMAGE_THUMBNAIL_MIN_REDUCTION_PERCENT = 0.1; // 10%
+// We don't apply these thresholds to video thumbnails as a poster image is always useful
+// and videos tend to be much larger.
+
 /**
  * Read the metadata for an image file and create and upload a thumbnail of the image.
  *
@@ -217,23 +225,33 @@ async function loadImageElement(imageFile: File) {
  * @param {File} imageFile The image to read and thumbnail.
  * @return {Promise} A promise that resolves with the attachment info.
  */
-function infoForImageFile(matrixClient, roomId, imageFile) {
+async function infoForImageFile(matrixClient: MatrixClient, roomId: string, imageFile: File) {
     let thumbnailType = "image/png";
     if (imageFile.type === "image/jpeg") {
         thumbnailType = "image/jpeg";
     }
 
-    let imageInfo;
-    return loadImageElement(imageFile).then((r) => {
-        return createThumbnail(r.img, r.width, r.height, thumbnailType);
-    }).then((result) => {
-        imageInfo = result.info;
-        return uploadFile(matrixClient, roomId, result.thumbnail);
-    }).then((result) => {
-        imageInfo.thumbnail_url = result.url;
-        imageInfo.thumbnail_file = result.file;
+    const imageElement = await loadImageElement(imageFile);
+
+    const result = await createThumbnail(imageElement.img, imageElement.width, imageElement.height, thumbnailType);
+    const imageInfo = result.info;
+
+    // we do all sizing checks here because we still rely on thumbnail generation for making a blurhash from.
+    const sizeDifference = imageFile.size - imageInfo.thumbnail_info.size;
+    if (
+        imageFile.size <= IMAGE_SIZE_THRESHOLD_THUMBNAIL || // image is small enough already
+        (sizeDifference <= IMAGE_THUMBNAIL_MIN_REDUCTION_SIZE && // thumbnail is not sufficiently smaller than original
+            sizeDifference <= (imageFile.size * IMAGE_THUMBNAIL_MIN_REDUCTION_PERCENT))
+    ) {
+        delete imageInfo["thumbnail_info"];
         return imageInfo;
-    });
+    }
+
+    const uploadResult = await uploadFile(matrixClient, roomId, result.thumbnail);
+
+    imageInfo["thumbnail_url"] = uploadResult.url;
+    imageInfo["thumbnail_file"] = uploadResult.file;
+    return imageInfo;
 }
 
 /**

@@ -311,6 +311,13 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: null,
     },
+    "feature_hidden_read_receipts": {
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td(
+            "Don't send read receipts",
+        ),
+        default: false,
+    },
     "baseFontSize": {
         displayName: _td("Font size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -447,6 +454,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "MessageComposerInput.ctrlEnterToSend": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: isMac ? _td("Use Command + Enter to send a message") : _td("Use Ctrl + Enter to send a message"),
+        default: false,
+    },
+    "MessageComposerInput.surroundWith": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Surround selected text when typing special characters"),
         default: false,
     },
     "MessageComposerInput.autoReplaceEmoji": {

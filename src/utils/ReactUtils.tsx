@@ -1,5 +1,4 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,23 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import CallPreview from './CallPreview';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
+import React from "react";
 
-interface IProps {
-
-}
-
-interface IState {
-
-}
-
-@replaceableComponent("views.voip.CallContainer")
-export default class CallContainer extends React.PureComponent<IProps, IState> {
-    public render() {
-        return <div className="mx_CallContainer">
-            <CallPreview />
-        </div>;
-    }
+/**
+ * Joins an array into one value with a joiner. E.g. join(["hello", "world"], " ") -> <span>hello world</span>
+ * @param array the array of element to join
+ * @param joiner the string/JSX.Element to join with
+ * @returns the joined array
+ */
+export function jsxJoin(array: Array<string | JSX.Element>, joiner?: string | JSX.Element): JSX.Element {
+    const newArray = [];
+    array.forEach((element, index) => {
+        newArray.push(element, (index === array.length - 1) ? null : joiner);
+    });
+    return (
+        <span>{ newArray }</span>
+    );
 }
