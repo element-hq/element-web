@@ -117,9 +117,7 @@ export const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
                         "Your feedback will help inform the next versions."),
                     rageshakeLabel: "spaces-feedback",
                     rageshakeData: Object.fromEntries([
-                        "feature_spaces.all_rooms",
-                        "feature_spaces.space_member_dms",
-                        "feature_spaces.space_dm_badges",
+                        "Spaces.allRoomsInHome",
                     ].map(k => [k, SettingsStore.getValue(k)])),
                 });
             }}
