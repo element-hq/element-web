@@ -51,6 +51,10 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/hide.svg');
 }
 
+.mx_TagTileContextMenu_createSpace::before {
+    mask-image: url('$(res)/img/element-icons/message/fwd.svg');
+}
+
 .mx_TagTileContextMenu_separator {
     margin-top: 0;
     margin-bottom: 0;

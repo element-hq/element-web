@@ -114,7 +114,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
             UserTab.Preferences,
             _td("Preferences"),
             "mx_UserSettingsDialog_preferencesIcon",
-            <PreferencesUserSettingsTab />,
+            <PreferencesUserSettingsTab closeSettingsFn={this.props.onFinished} />,
         ));
 
         if (SettingsStore.getValue(UIFeature.Voip)) {
