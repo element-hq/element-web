@@ -41,7 +41,6 @@ $spacePanelWidth: 71px;
             > p {
                 font-size: $font-15px;
                 color: $secondary-fg-color;
-                margin: 0;
             }
 
             .mx_SpaceFeedbackPrompt {
@@ -49,13 +48,6 @@ $spacePanelWidth: 71px;
                 padding-top: 12px;
                 margin-top: 16px;
             }
-        }
-
-        // XXX remove this when spaces leaves Beta
-        .mx_BetaCard_betaPill {
-            position: absolute;
-            top: 24px;
-            right: 24px;
         }
 
         .mx_SpaceCreateMenuType {
@@ -98,6 +90,11 @@ $spacePanelWidth: 71px;
             margin-left: auto;
             display: block;
             width: min-content;
+        }
+
+        .mx_AccessibleButton_kind_link {
+            padding: 0;
+            font-size: inherit;
         }
 
         .mx_AccessibleButton_disabled {

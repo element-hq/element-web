@@ -35,6 +35,9 @@ import SdkConfig from "../../../SdkConfig";
 import Modal from "../../../Modal";
 import GenericFeatureFeedbackDialog from "../dialogs/GenericFeatureFeedbackDialog";
 import SettingsStore from "../../../settings/SettingsStore";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
+import { UserTab } from "../dialogs/UserSettingsDialog";
 
 export const createSpace = async (
     name: string,
@@ -245,10 +248,23 @@ const SpaceCreateMenu = ({ onFinished }) => {
 
     let body;
     if (visibility === null) {
+        const onCreateSpaceFromCommunityClick = () => {
+            defaultDispatcher.dispatch({
+                action: Action.ViewUserSettings,
+                initialTabId: UserTab.Preferences,
+            });
+            onFinished();
+        };
+
         body = <React.Fragment>
             <h2>{ _t("Create a space") }</h2>
-            <p>{ _t("Spaces are a new way to group rooms and people. " +
-                "To join an existing space you'll need an invite.") }</p>
+            <p>
+                { _t("Spaces are a new way to group rooms and people.") }
+                &nbsp;
+                { _t("What kind of Space do you want to create?") }
+                &nbsp;
+                { _t("You can change this later.") }
+            </p>
 
             <SpaceCreateMenuType
                 title={_t("Public")}
@@ -263,7 +279,15 @@ const SpaceCreateMenu = ({ onFinished }) => {
                 onClick={() => setVisibility(Visibility.Private)}
             />
 
-            <p>{ _t("You can change this later") }</p>
+            <p>
+                { _t("You can also create a Space from a <a>community</a>.", {}, {
+                    a: sub => <AccessibleButton kind="link" onClick={onCreateSpaceFromCommunityClick}>
+                        { sub }
+                    </AccessibleButton>,
+                }) }
+                &nbsp;
+                { _t("To join an existing space you'll need an invite") }
+            </p>
 
             <SpaceFeedbackPrompt onClick={onFinished} />
         </React.Fragment>;
