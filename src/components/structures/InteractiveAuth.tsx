@@ -35,7 +35,7 @@ interface IProps {
     // matrix client to use for UI auth requests
     matrixClient: MatrixClient;
     // response from initial request. If not supplied, will do a request on mount.
-    authData: IAuthData;
+    authData?: IAuthData;
     // Inputs provided by the user to the auth process
     // and used by various stages. As passed to js-sdk
     // interactive-auth
@@ -72,11 +72,11 @@ interface IProps {
         extra?: { emailSid?: string, clientSecret?: string },
     ): void;
     // As js-sdk interactive-auth
-    requestEmailToken?(email: string, secret: string, attempt: number, session: string): Promise<{ sid: string }>,
+    requestEmailToken?(email: string, secret: string, attempt: number, session: string): Promise<{ sid: string }>;
     // Called when the stage changes, or the stage's phase changes. First
     // argument is the stage, second is the phase. Some stages do not have
     // phases and will be counted as 0 (numeric).
-    onStagePhaseChange?(stage: string, phase: string | number): void,
+    onStagePhaseChange?(stage: string, phase: string | number): void;
 }
 
 interface IState {
@@ -91,7 +91,7 @@ interface IState {
 @replaceableComponent("structures.InteractiveAuthComponent")
 export default class InteractiveAuthComponent extends React.Component<IProps, IState> {
     private readonly authLogic: InteractiveAuth;
-    private readonly _intervalId: NodeJS.Timeout = null;
+    private readonly intervalId: number = null;
     private readonly stageComponent = createRef<IStageComponent>();
 
     private unmounted = false;
@@ -121,14 +121,14 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
         });
 
         if (this.props.poll) {
-            this._intervalId = setInterval(() => {
+            this.intervalId = setInterval(() => {
                 this.authLogic.poll();
             }, 2000);
         }
     }
 
     // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount() { // eslint-disable-line camelcase
+    UNSAFE_componentWillMount() { // eslint-disable-line @typescript-eslint/naming-convention, camelcase
         this.authLogic.attemptAuth().then((result) => {
             const extra = {
                 emailSid: this.authLogic.getEmailSid(),
@@ -152,8 +152,8 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
     componentWillUnmount() {
         this.unmounted = true;
 
-        if (this._intervalId !== null) {
-            clearInterval(this._intervalId);
+        if (this.intervalId !== null) {
+            clearInterval(this.intervalId);
         }
     }
 
