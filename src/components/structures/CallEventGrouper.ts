@@ -27,9 +27,15 @@ export enum CallEventGrouperEvent {
     SilencedChanged = "silenced_changed",
 }
 
+const CONNECTING_STATES = [
+    CallState.Connecting,
+    CallState.WaitLocalMedia,
+    CallState.CreateOffer,
+    CallState.CreateAnswer,
+];
+
 const SUPPORTED_STATES = [
     CallState.Connected,
-    CallState.Connecting,
     CallState.Ringing,
 ];
 
@@ -61,6 +67,10 @@ export default class CallEventGrouper extends EventEmitter {
         return [...this.events].find((event) => event.getType() === EventType.CallReject);
     }
 
+    private get selectAnswer(): MatrixEvent {
+        return [...this.events].find((event) => event.getType() === EventType.CallSelectAnswer);
+    }
+
     public get isVoice(): boolean {
         const invite = this.invite;
         if (!invite) return;
@@ -80,6 +90,11 @@ export default class CallEventGrouper extends EventEmitter {
 
     public get gotRejected(): boolean {
         return Boolean(this.reject);
+    }
+
+    public get duration(): Date {
+        if (!this.hangup || !this.selectAnswer) return;
+        return new Date(this.hangup.getDate().getTime() - this.selectAnswer.getDate().getTime());
     }
 
     /**
@@ -127,7 +142,9 @@ export default class CallEventGrouper extends EventEmitter {
     }
 
     private setState = () => {
-        if (SUPPORTED_STATES.includes(this.call?.state)) {
+        if (CONNECTING_STATES.includes(this.call?.state)) {
+            this.state = CallState.Connecting;
+        } else if (SUPPORTED_STATES.includes(this.call?.state)) {
             this.state = this.call.state;
         } else {
             if (this.callWasMissed) this.state = CustomCallState.Missed;

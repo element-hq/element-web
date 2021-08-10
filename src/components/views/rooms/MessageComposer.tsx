@@ -58,6 +58,7 @@ function ComposerAvatar(props: IComposerAvatarProps) {
 
 interface ISendButtonProps {
     onClick: () => void;
+    title?: string; // defaults to something generic
 }
 
 function SendButton(props: ISendButtonProps) {
@@ -65,7 +66,7 @@ function SendButton(props: ISendButtonProps) {
         <AccessibleTooltipButton
             className="mx_MessageComposer_sendMessage"
             onClick={props.onClick}
-            title={_t('Send message')}
+            title={props.title ?? _t('Send message')}
         />
     );
 }
@@ -401,7 +402,11 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
             if (!this.state.isComposerEmpty || this.state.haveRecording) {
                 controls.push(
-                    <SendButton key="controls_send" onClick={this.sendMessage} />,
+                    <SendButton
+                        key="controls_send"
+                        onClick={this.sendMessage}
+                        title={this.state.haveRecording ? _t("Send voice message") : undefined}
+                    />,
                 );
             }
         } else if (this.state.tombstone) {
