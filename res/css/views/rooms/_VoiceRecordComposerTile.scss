@@ -20,7 +20,7 @@ limitations under the License.
     height: 28px;
     border: 2px solid $voice-record-stop-border-color;
     border-radius: 32px;
-    margin-right: 16px; // between us and the send button
+    margin-right: 8px; // between us and the waveform component
     position: relative;
 
     &::after {
@@ -46,8 +46,27 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/trashcan.svg');
 }
 
+.mx_VoiceRecordComposerTile_uploadingState {
+    margin-right: 10px;
+    color: $secondary-fg-color;
+}
+
+.mx_VoiceRecordComposerTile_failedState {
+    margin-right: 21px;
+
+    .mx_VoiceRecordComposerTile_uploadState_badge {
+        display: inline-block;
+        margin-right: 4px;
+        vertical-align: middle;
+    }
+}
+
 .mx_MessageComposer_row .mx_VoiceMessagePrimaryContainer {
     // Note: remaining class properties are in the PlayerContainer CSS.
+
+    // fixed height to reduce layout jumps with the play button appearing
+    // https://github.com/vector-im/element-web/issues/18431
+    height: 32px;
 
     margin: 6px; // force the composer area to put a gutter around us
     margin-right: 12px; // isolate from stop/send button
@@ -68,7 +87,7 @@ limitations under the License.
             height: 10px;
             position: absolute;
             left: 12px; // 12px from the left edge for container padding
-            top: 18px; // vertically center (middle align with clock)
+            top: 17px; // vertically center (middle align with clock)
             border-radius: 10px;
         }
     }

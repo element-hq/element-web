@@ -1381,8 +1381,8 @@ const BasicUserInfo: React.FC<{
                 className="mx_UserInfo_field"
                 onClick={() => {
                     dis.dispatch({
-                    action: Action.ViewUserSettings,
-                    initialTabId: UserTab.Security,
+                        action: Action.ViewUserSettings,
+                        initialTabId: UserTab.Security,
                     });
                 }}
             >
