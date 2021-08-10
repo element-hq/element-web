@@ -31,7 +31,7 @@ import { getBlobSafeMimeType } from "./blobs";
  */
 export function decryptFile(
     file: IEncryptedFile,
-    info: IMediaEventInfo | undefined,
+    info?: IMediaEventInfo,
 ): Promise<Blob> {
     const media = mediaFromContent({ file });
     // Download the encrypted file as an array buffer.
