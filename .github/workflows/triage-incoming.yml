@@ -12,4 +12,4 @@ jobs:
         with:
           project: Issue triage
           column: Incoming
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
