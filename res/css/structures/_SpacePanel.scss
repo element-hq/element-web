@@ -192,22 +192,17 @@ $activeBorderColor: $secondary-fg-color;
         }
 
         &.mx_SpaceButton_new .mx_SpaceButton_icon {
-            background-color: $accent-color;
-            transition: all .1s ease-in-out; // TODO transition
+            background-color: $roomlist-button-bg-color;
 
             &::before {
-                background-color: #ffffff;
+                background-color: $primary-fg-color;
                 mask-image: url('$(res)/img/element-icons/plus.svg');
                 transition: all .2s ease-in-out; // TODO transition
             }
         }
 
-        &.mx_SpaceButton_newCancel .mx_SpaceButton_icon {
-            background-color: $icon-button-color;
-
-            &::before {
-                transform: rotate(45deg);
-            }
+        &.mx_SpaceButton_newCancel .mx_SpaceButton_icon::before {
+            transform: rotate(45deg);
         }
 
         .mx_BaseAvatar_image {
