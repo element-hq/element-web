@@ -442,22 +442,20 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string
 
             return () => (
                 <span>
-                    {
-                        _t(
-                            "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.",
-                            { senderName },
-                            {
-                                "a": (sub) =>
-                                    <a onClick={(e) => onPinnedOrUnpinnedMessageClick(messageId, roomId)}>
-                                        { sub }
-                                    </a>,
-                                "b": (sub) =>
-                                    <a onClick={onPinnedMessagesClick}>
-                                        { sub }
-                                    </a>,
-                            },
-                        )
-                    }
+                    { _t(
+                        "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.",
+                        { senderName },
+                        {
+                            "a": (sub) =>
+                                <a onClick={(e) => onPinnedOrUnpinnedMessageClick(messageId, roomId)}>
+                                    { sub }
+                                </a>,
+                            "b": (sub) =>
+                                <a onClick={onPinnedMessagesClick}>
+                                    { sub }
+                                </a>,
+                        },
+                    ) }
                 </span>
             );
         }
@@ -472,22 +470,20 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string
 
             return () => (
                 <span>
-                    {
-                        _t(
-                            "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.",
-                            { senderName },
-                            {
-                                "a": (sub) =>
-                                    <a onClick={(e) => onPinnedOrUnpinnedMessageClick(messageId, roomId)}>
-                                        { sub }
-                                    </a>,
-                                "b": (sub) =>
-                                    <a onClick={onPinnedMessagesClick}>
-                                        { sub }
-                                    </a>,
-                            },
-                        )
-                    }
+                    { _t(
+                        "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.",
+                        { senderName },
+                        {
+                            "a": (sub) =>
+                                <a onClick={(e) => onPinnedOrUnpinnedMessageClick(messageId, roomId)}>
+                                    { sub }
+                                </a>,
+                            "b": (sub) =>
+                                <a onClick={onPinnedMessagesClick}>
+                                    { sub }
+                                </a>,
+                        },
+                    ) }
                 </span>
             );
         }
@@ -498,13 +494,11 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string
     if (allowJSX) {
         return () => (
             <span>
-                {
-                    _t(
-                        "%(senderName)s changed the <a>pinned messages</a> for the room.",
-                        { senderName },
-                        { "a": (sub) => <a onClick={onPinnedMessagesClick}> { sub } </a> },
-                    )
-                }
+                { _t(
+                    "%(senderName)s changed the <a>pinned messages</a> for the room.",
+                    { senderName },
+                    { "a": (sub) => <a onClick={onPinnedMessagesClick}> { sub } </a> },
+                ) }
             </span>
         );
     }
