@@ -1908,6 +1908,7 @@
     "React": "React",
     "Edit": "Edit",
     "Reply": "Reply",
+    "Thread": "Thread",
     "Message Actions": "Message Actions",
     "Download %(text)s": "Download %(text)s",
     "Error decrypting attachment": "Error decrypting attachment",

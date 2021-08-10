@@ -45,6 +45,7 @@ import GroupRoomInfo from "../views/groups/GroupRoomInfo";
 import UserInfo from "../views/right_panel/UserInfo";
 import ThirdPartyMemberInfo from "../views/rooms/ThirdPartyMemberInfo";
 import FilePanel from "./FilePanel";
+import ThreadView from "./ThreadView";
 import NotificationPanel from "./NotificationPanel";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import PinnedMessagesCard from "../views/right_panel/PinnedMessagesCard";
@@ -307,6 +308,14 @@ export default class RightPanel extends React.Component<IProps, IState> {
 
             case RightPanelPhases.FilePanel:
                 panel = <FilePanel roomId={roomId} resizeNotifier={this.props.resizeNotifier} onClose={this.onClose} />;
+                break;
+
+            case RightPanelPhases.ThreadView:
+                panel = <ThreadView
+                    roomId={roomId}
+                    resizeNotifier={this.props.resizeNotifier}
+                    onClose={this.onClose}
+                    mxEvent={this.state.event} />;
                 break;
 
             case RightPanelPhases.RoomSummary:
