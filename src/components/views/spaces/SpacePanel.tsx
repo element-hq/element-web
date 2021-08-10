@@ -138,11 +138,18 @@ const CreateSpaceButton = ({
     }
 
     const onNewClick = menuDisplayed ? closeMenu : () => {
+        // persist that the user has interacted with this, use it to dismiss the beta dot
+        localStorage.setItem("mx_seenSpaces", "1");
         if (!isPanelCollapsed) setPanelCollapsed(true);
         openMenu();
     };
 
-    return <li className={classNames("mx_SpaceItem", {
+    let betaDot: JSX.Element;
+    if (!localStorage.getItem("mx_seenSpaces")) {
+        betaDot = <div className="mx_BetaDot" />;
+    }
+
+    return <li className={classNames("mx_SpaceItem mx_SpaceItem_new", {
         "collapsed": isPanelCollapsed,
     })}>
         <SpaceButton
@@ -153,6 +160,7 @@ const CreateSpaceButton = ({
             onClick={onNewClick}
             isNarrow={isPanelCollapsed}
         />
+        { betaDot }
 
         { contextMenu }
     </li>;
