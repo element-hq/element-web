@@ -53,6 +53,6 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   ISSUE_ID: ${{ github.event.workflow_run.pull_requests[0].number }}
                   message: |
-                      Preview: ${{ steps.netlify.deploy-url }}
+                      Preview: ${{ steps.netlify.outputs.deploy-url }}
                       ⚠️ Do you trust the author of this PR? Maybe this build will steal your keys or give you malware. Exercise caution. Use test accounts.
 
