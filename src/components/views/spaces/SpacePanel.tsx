@@ -279,6 +279,7 @@ const SpacePanel = () => {
                         className={classNames("mx_SpacePanel", { collapsed: isPanelCollapsed })}
                         onKeyDown={onKeyDownHandler}
                         role="tree"
+                        aria-label={_t("Spaces")}
                     >
                         <Droppable droppableId="top-level-spaces">
                             { (provided, snapshot) => (

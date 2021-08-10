@@ -2829,6 +2829,7 @@
     "Mark as suggested": "Mark as suggested",
     "No results found": "No results found",
     "You may want to try a different search or check for typos.": "You may want to try a different search or check for typos.",
+    "Space": "Space",
     "Search names and descriptions": "Search names and descriptions",
     "If you can't find the room you're looking for, ask for an invite or <a>create a new room</a>.": "If you can't find the room you're looking for, ask for an invite or <a>create a new room</a>.",
     "Create room": "Create room",
@@ -3110,7 +3111,6 @@
     "Page Down": "Page Down",
     "Esc": "Esc",
     "Enter": "Enter",
-    "Space": "Space",
     "End": "End",
     "[number]": "[number]"
 }

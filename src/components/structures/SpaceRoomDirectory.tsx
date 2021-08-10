@@ -639,7 +639,12 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
                     { error && <div className="mx_SpaceRoomDirectory_error">
                         { error }
                     </div> }
-                    <AutoHideScrollbar className="mx_SpaceRoomDirectory_list" onKeyDown={onKeyDownHandler} role="tree">
+                    <AutoHideScrollbar
+                        className="mx_SpaceRoomDirectory_list"
+                        onKeyDown={onKeyDownHandler}
+                        role="tree"
+                        aria-label={_t("Space")}
+                    >
                         { results }
                         { children }
                     </AutoHideScrollbar>
