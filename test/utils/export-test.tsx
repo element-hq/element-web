@@ -231,7 +231,7 @@ describe('export', function() {
         }
     });
 
-    it("checks if the render to string doesn't throw any error for different kinds of strings", function() {
+    it("checks if the render to string doesn't throw any error for different types of events", function() {
         const exporter = new HTMLExporter(mockRoom, ExportTypes.BEGINNING, mockExportOptions, null);
         for (const event of events) {
             expect(renderToString(exporter.getEventTile(event, false))).toBeTruthy();
