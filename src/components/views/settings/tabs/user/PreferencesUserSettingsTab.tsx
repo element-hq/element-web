@@ -341,9 +341,8 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{ _t("Communities") }</span>
                     <p>{ _t("Communities have been archived to make way for Spaces but you can convert your " +
-                        "communities into Spaces below.") }</p>
-                    <span>{ _t("Convert your Communities to Spaces") }</span>
-                    <p>{ _t("Converting will ensure your conversations get the latest features.") }</p>
+                        "communities into Spaces below. Converting will ensure your conversations get the latest " +
+                        "features.") }</p>
                     <details>
                         <summary>{ _t("Show my Communities") }</summary>
                         <p>{ _t("If a community isn't shown you may not have permission to convert it.") }</p>

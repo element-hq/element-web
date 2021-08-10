@@ -50,15 +50,21 @@ limitations under the License.
 }
 
 .mx_SettingsTab_section {
+    $right-gutter: 80px;
+
     margin-bottom: 24px;
 
     .mx_SettingsFlag {
-        margin-right: 80px;
+        margin-right: $right-gutter;
         margin-bottom: 10px;
     }
 
+    > p {
+        margin-right: $right-gutter;
+    }
+
     &.mx_SettingsTab_subsectionText .mx_SettingsFlag {
-        margin-right: 0px !important;
+        margin-right: 0 !important;
     }
 }
 
