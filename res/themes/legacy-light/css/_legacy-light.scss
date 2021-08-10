@@ -8,9 +8,12 @@
 /* Noto Color Emoji contains digits, in fixed-width, therefore causing
    digits in flowed text to stand out.
    TODO: Consider putting all emoji fonts to the end rather than the front. */
-$font-family: Nunito, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', Arial, Helvetica, Sans-Serif, 'Noto Color Emoji';
+$font-family: 'Nunito', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Arial', 'Helvetica', sans-serif, 'Noto Color Emoji';
 
-$monospace-font-family: Inconsolata, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', Courier, monospace, 'Noto Color Emoji';
+$monospace-font-family: 'Inconsolata', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Courier', monospace, 'Noto Color Emoji';
+
+// Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=557%3A0
+$system-light: #F4F6FA;
 
 // unified palette
 // try to use these colors when possible
@@ -178,8 +181,8 @@ $eventtile-meta-color: $roomtopic-color;
 $composer-e2e-icon-color: #91a1c0;
 $header-divider-color: #91a1c0;
 
-// this probably shouldn't have it's own colour
-$voipcall-plinth-color: #F4F6FA;
+$toast-bg-color: $system-light;
+$voipcall-plinth-color: $system-light;
 
 // ********************
 
@@ -331,7 +334,7 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 $message-body-panel-fg-color: $secondary-fg-color;
 $message-body-panel-bg-color: #E3E8F0;
 $message-body-panel-icon-fg-color: $secondary-fg-color;
-$message-body-panel-icon-bg-color: #F4F6FA;
+$message-body-panel-icon-bg-color: $system-light;
 
 // See non-legacy _light for variable information
 $voice-record-stop-symbol-color: #ff4b55;
@@ -348,9 +351,9 @@ $appearance-tab-border-color: $input-darker-bg-color;
 $composer-shadow-color: tranparent;
 
 // Bubble tiles
-$eventbubble-self-bg: #F8FDFC;
-$eventbubble-others-bg: #F7F8F9;
-$eventbubble-bg-hover: rgb(242, 242, 242);
+$eventbubble-self-bg: #F0FBF8;
+$eventbubble-others-bg: $system-light;
+$eventbubble-bg-hover: #FAFBFD;
 $eventbubble-avatar-outline: #fff;
 $eventbubble-reply-color: #C1C6CD;
 
@@ -390,7 +393,7 @@ $eventbubble-reply-color: #C1C6CD;
 @define-mixin mx_DialogButton_secondary {
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color ! important;
+    border: 1px solid $accent-color !important;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
 }

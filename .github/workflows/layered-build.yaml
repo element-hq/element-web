@@ -1,0 +1,19 @@
+name: Layered Preview Build
+on:
+    pull_request:
+        branches: [develop]
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Build
+              run: scripts/ci/layered.sh && cd element-web && cp element.io/develop/config.json config.json && CI_PACKAGE=true yarn build
+            - name: Upload Artifact
+              uses: actions/upload-artifact@v2
+              with:
+                  name: previewbuild
+                  path: element-web/webapp
+                  # We'll only use this in a triggered job, then we're done with it
+                  retention-days: 1
+

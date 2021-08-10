@@ -18,9 +18,9 @@ import React, { ReactNode, useContext, useMemo, useState } from "react";
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { sleep } from "matrix-js-sdk/src/utils";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { _t } from '../../../languageHandler';
-import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
 import Dropdown from "../elements/Dropdown";
 import SearchBox from "../../structures/SearchBox";
@@ -35,19 +35,20 @@ import StyledCheckbox from "../elements/StyledCheckbox";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { sortRooms } from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 import ProgressBar from "../elements/ProgressBar";
-import { SpaceFeedbackPrompt } from "../../structures/SpaceRoomView";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import TruncatedList from "../elements/TruncatedList";
 import EntityTile from "../rooms/EntityTile";
 import BaseAvatar from "../avatars/BaseAvatar";
 
-interface IProps extends IDialogProps {
+interface IProps {
     space: Room;
-    onCreateRoomClick(space: Room): void;
+    onCreateRoomClick(): void;
+    onAddSubspaceClick(): void;
+    onFinished(added?: boolean): void;
 }
 
-const Entry = ({ room, checked, onChange }) => {
+export const Entry = ({ room, checked, onChange }) => {
     return <label className="mx_AddExistingToSpace_entry">
         { room?.isSpaceRoom()
             ? <RoomAvatar room={room} height={32} width={32} />
@@ -65,14 +66,36 @@ const Entry = ({ room, checked, onChange }) => {
 interface IAddExistingToSpaceProps {
     space: Room;
     footerPrompt?: ReactNode;
+    filterPlaceholder: string;
     emptySelectionButton?: ReactNode;
     onFinished(added: boolean): void;
+    roomsRenderer?(
+        rooms: Room[],
+        selectedToAdd: Set<Room>,
+        onChange: undefined | ((checked: boolean, room: Room) => void),
+        truncateAt: number,
+        overflowTile: (overflowCount: number, totalCount: number) => JSX.Element,
+    ): ReactNode;
+    spacesRenderer?(
+        spaces: Room[],
+        selectedToAdd: Set<Room>,
+        onChange?: (checked: boolean, room: Room) => void,
+    ): ReactNode;
+    dmsRenderer?(
+        dms: Room[],
+        selectedToAdd: Set<Room>,
+        onChange?: (checked: boolean, room: Room) => void,
+    ): ReactNode;
 }
 
 export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     space,
     footerPrompt,
     emptySelectionButton,
+    filterPlaceholder,
+    roomsRenderer,
+    dmsRenderer,
+    spacesRenderer,
     onFinished,
 }) => {
     const cli = useContext(MatrixClientContext);
@@ -196,7 +219,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         </>;
     }
 
-    const onChange = !busy && !error ? (checked, room) => {
+    const onChange = !busy && !error ? (checked: boolean, room: Room) => {
         if (checked) {
             selectedToAdd.add(room);
         } else {
@@ -206,7 +229,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     } : null;
 
     const [truncateAt, setTruncateAt] = useState(20);
-    function overflowTile(overflowCount, totalCount) {
+    function overflowTile(overflowCount: number, totalCount: number): JSX.Element {
         const text = _t("and %(count)s others...", { count: overflowCount });
         return (
             <EntityTile
@@ -222,73 +245,36 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         );
     }
 
+    let noResults = true;
+    if ((roomsRenderer && rooms.length > 0) ||
+        (dmsRenderer && dms.length > 0) ||
+        (!roomsRenderer && !dmsRenderer && spacesRenderer && spaces.length > 0) // only count spaces when alone
+    ) {
+        noResults = false;
+    }
+
     return <div className="mx_AddExistingToSpace">
         <SearchBox
             className="mx_textinput_icon mx_textinput_search"
-            placeholder={_t("Filter your rooms and spaces")}
+            placeholder={filterPlaceholder}
             onSearch={setQuery}
             autoComplete={true}
             autoFocus={true}
         />
         <AutoHideScrollbar className="mx_AddExistingToSpace_content">
-            { rooms.length > 0 ? (
-                <div className="mx_AddExistingToSpace_section">
-                    <h3>{ _t("Rooms") }</h3>
-                    <TruncatedList
-                        truncateAt={truncateAt}
-                        createOverflowElement={overflowTile}
-                        getChildren={(start, end) => rooms.slice(start, end).map(room =>
-                            <Entry
-                                key={room.roomId}
-                                room={room}
-                                checked={selectedToAdd.has(room)}
-                                onChange={onChange ? (checked) => {
-                                    onChange(checked, room);
-                                } : null}
-                            />,
-                        )}
-                        getChildCount={() => rooms.length}
-                    />
-                </div>
+            { rooms.length > 0 && roomsRenderer ? (
+                roomsRenderer(rooms, selectedToAdd, onChange, truncateAt, overflowTile)
             ) : undefined }
 
-            { spaces.length > 0 ? (
-                <div className="mx_AddExistingToSpace_section mx_AddExistingToSpace_section_spaces">
-                    <h3>{ _t("Spaces") }</h3>
-                    <div className="mx_AddExistingToSpace_section_experimental">
-                        <div>{ _t("Feeling experimental?") }</div>
-                        <div>{ _t("You can add existing spaces to a space.") }</div>
-                    </div>
-                    { spaces.map(space => {
-                        return <Entry
-                            key={space.roomId}
-                            room={space}
-                            checked={selectedToAdd.has(space)}
-                            onChange={onChange ? (checked) => {
-                                onChange(checked, space);
-                            } : null}
-                        />;
-                    }) }
-                </div>
+            { spaces.length > 0 && spacesRenderer ? (
+                spacesRenderer(spaces, selectedToAdd, onChange)
             ) : null }
 
-            { dms.length > 0 ? (
-                <div className="mx_AddExistingToSpace_section">
-                    <h3>{ _t("Direct Messages") }</h3>
-                    { dms.map(room => {
-                        return <Entry
-                            key={room.roomId}
-                            room={room}
-                            checked={selectedToAdd.has(room)}
-                            onChange={onChange ? (checked) => {
-                                onChange(checked, room);
-                            } : null}
-                        />;
-                    }) }
-                </div>
+            { dms.length > 0 && dmsRenderer ? (
+                dmsRenderer(dms, selectedToAdd, onChange)
             ) : null }
 
-            { spaces.length + rooms.length + dms.length < 1 ? <span className="mx_AddExistingToSpace_noResults">
+            { noResults ? <span className="mx_AddExistingToSpace_noResults">
                 { _t("No results") }
             </span> : undefined }
         </AutoHideScrollbar>
@@ -299,50 +285,126 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     </div>;
 };
 
-const AddExistingToSpaceDialog: React.FC<IProps> = ({ space, onCreateRoomClick, onFinished }) => {
-    const [selectedSpace, setSelectedSpace] = useState(space);
-    const existingSubspaces = SpaceStore.instance.getChildSpaces(space.roomId);
+export const defaultRoomsRenderer: IAddExistingToSpaceProps["roomsRenderer"] = (
+    rooms, selectedToAdd, onChange, truncateAt, overflowTile,
+) => (
+    <div className="mx_AddExistingToSpace_section">
+        <h3>{ _t("Rooms") }</h3>
+        <TruncatedList
+            truncateAt={truncateAt}
+            createOverflowElement={overflowTile}
+            getChildren={(start, end) => rooms.slice(start, end).map(room =>
+                <Entry
+                    key={room.roomId}
+                    room={room}
+                    checked={selectedToAdd.has(room)}
+                    onChange={onChange ? (checked: boolean) => {
+                        onChange(checked, room);
+                    } : null}
+                />,
+            )}
+            getChildCount={() => rooms.length}
+        />
+    </div>
+);
 
-    let spaceOptionSection;
-    if (existingSubspaces.length > 0) {
-        const options = [space, ...existingSubspaces].map((space) => {
-            const classes = classNames("mx_AddExistingToSpaceDialog_dropdownOption", {
-                mx_AddExistingToSpaceDialog_dropdownOptionActive: space === selectedSpace,
-            });
-            return <div key={space.roomId} className={classes}>
-                <RoomAvatar room={space} width={24} height={24} />
-                { space.name || getDisplayAliasForRoom(space) || space.roomId }
-            </div>;
-        });
+export const defaultSpacesRenderer: IAddExistingToSpaceProps["spacesRenderer"] = (spaces, selectedToAdd, onChange) => (
+    <div className="mx_AddExistingToSpace_section">
+        { spaces.map(space => {
+            return <Entry
+                key={space.roomId}
+                room={space}
+                checked={selectedToAdd.has(space)}
+                onChange={onChange ? (checked) => {
+                    onChange(checked, space);
+                } : null}
+            />;
+        }) }
+    </div>
+);
 
-        spaceOptionSection = (
+export const defaultDmsRenderer: IAddExistingToSpaceProps["dmsRenderer"] = (dms, selectedToAdd, onChange) => (
+    <div className="mx_AddExistingToSpace_section">
+        <h3>{ _t("Direct Messages") }</h3>
+        { dms.map(room => {
+            return <Entry
+                key={room.roomId}
+                room={room}
+                checked={selectedToAdd.has(room)}
+                onChange={onChange ? (checked: boolean) => {
+                    onChange(checked, room);
+                } : null}
+            />;
+        }) }
+    </div>
+);
+
+interface ISubspaceSelectorProps {
+    title: string;
+    space: Room;
+    value: Room;
+    onChange(space: Room): void;
+}
+
+export const SubspaceSelector = ({ title, space, value, onChange }: ISubspaceSelectorProps) => {
+    const options = useMemo(() => {
+        return [space, ...SpaceStore.instance.getChildSpaces(space.roomId).filter(space => {
+            return space.currentState.maySendStateEvent(EventType.SpaceChild, space.client.credentials.userId);
+        })];
+    }, [space]);
+
+    let body;
+    if (options.length > 1) {
+        body = (
             <Dropdown
                 id="mx_SpaceSelectDropdown"
+                className="mx_SpaceSelectDropdown"
                 onOptionChange={(key: string) => {
-                    setSelectedSpace(existingSubspaces.find(space => space.roomId === key) || space);
+                    onChange(options.find(space => space.roomId === key) || space);
                 }}
-                value={selectedSpace.roomId}
+                value={value.roomId}
                 label={_t("Space selection")}
             >
-                { options }
+                { options.map((space) => {
+                    const classes = classNames({
+                        mx_SubspaceSelector_dropdownOptionActive: space === value,
+                    });
+                    return <div key={space.roomId} className={classes}>
+                        <RoomAvatar room={space} width={24} height={24} />
+                        { space.name || getDisplayAliasForRoom(space) || space.roomId }
+                    </div>;
+                }) }
             </Dropdown>
         );
     } else {
-        spaceOptionSection = <div className="mx_AddExistingToSpaceDialog_onlySpace">
-            { space.name || getDisplayAliasForRoom(space) || space.roomId }
-        </div>;
+        body = (
+            <div className="mx_SubspaceSelector_onlySpace">
+                { space.name || getDisplayAliasForRoom(space) || space.roomId }
+            </div>
+        );
     }
 
-    const title = <React.Fragment>
-        <RoomAvatar room={selectedSpace} height={40} width={40} />
+    return <div className="mx_SubspaceSelector">
+        <RoomAvatar room={value} height={40} width={40} />
         <div>
-            <h1>{ _t("Add existing rooms") }</h1>
-            { spaceOptionSection }
+            <h1>{ title }</h1>
+            { body }
         </div>
-    </React.Fragment>;
+    </div>;
+};
+
+const AddExistingToSpaceDialog: React.FC<IProps> = ({ space, onCreateRoomClick, onAddSubspaceClick, onFinished }) => {
+    const [selectedSpace, setSelectedSpace] = useState(space);
 
     return <BaseDialog
-        title={title}
+        title={(
+            <SubspaceSelector
+                title={_t("Add existing rooms")}
+                space={space}
+                value={selectedSpace}
+                onChange={setSelectedSpace}
+            />
+        )}
         className="mx_AddExistingToSpaceDialog"
         contentId="mx_AddExistingToSpace"
         onFinished={onFinished}
@@ -354,14 +416,35 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ space, onCreateRoomClick, 
                 onFinished={onFinished}
                 footerPrompt={<>
                     <div>{ _t("Want to add a new room instead?") }</div>
-                    <AccessibleButton onClick={() => onCreateRoomClick(space)} kind="link">
+                    <AccessibleButton
+                        kind="link"
+                        onClick={() => {
+                            onCreateRoomClick();
+                            onFinished();
+                        }}
+                    >
                         { _t("Create a new room") }
                     </AccessibleButton>
                 </>}
+                filterPlaceholder={_t("Search for rooms")}
+                roomsRenderer={defaultRoomsRenderer}
+                spacesRenderer={() => (
+                    <div className="mx_AddExistingToSpace_section">
+                        <h3>{ _t("Spaces") }</h3>
+                        <AccessibleButton
+                            kind="link"
+                            onClick={() => {
+                                onAddSubspaceClick();
+                                onFinished();
+                            }}
+                        >
+                            { _t("Adding spaces has moved.") }
+                        </AccessibleButton>
+                    </div>
+                )}
+                dmsRenderer={defaultDmsRenderer}
             />
         </MatrixClientContext.Provider>
-
-        <SpaceFeedbackPrompt onClick={() => onFinished(false)} />
     </BaseDialog>;
 };
 

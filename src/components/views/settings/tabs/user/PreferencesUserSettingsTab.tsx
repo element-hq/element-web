@@ -26,6 +26,7 @@ import { replaceableComponent } from "../../../../../utils/replaceableComponent"
 import SettingsFlag from '../../../elements/SettingsFlag';
 import * as KeyboardShortcuts from "../../../../../accessibility/KeyboardShortcuts";
 import AccessibleButton from "../../../elements/AccessibleButton";
+import SpaceStore from "../../../../../stores/SpaceStore";
 
 interface IState {
     autoLaunch: boolean;
@@ -47,6 +48,10 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
         'breadcrumbs',
     ];
 
+    static SPACES_SETTINGS = [
+        "Spaces.allRoomsInHome",
+    ];
+
     static KEYBINDINGS_SETTINGS = [
         'ctrlFForSearch',
     ];
@@ -56,6 +61,7 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
         'MessageComposerInput.suggestEmoji',
         'sendTypingNotifications',
         'MessageComposerInput.ctrlEnterToSend',
+        'MessageComposerInput.surroundWith',
         'MessageComposerInput.showStickersButton',
     ];
 
@@ -230,6 +236,11 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
                     <span className="mx_SettingsTab_subheading">{ _t("Room list") }</span>
                     { this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS) }
                 </div>
+
+                { SpaceStore.spacesEnabled && <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{ _t("Spaces") }</span>
+                    { this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS) }
+                </div> }
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{ _t("Keyboard shortcuts") }</span>

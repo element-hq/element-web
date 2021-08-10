@@ -896,6 +896,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             mx_EventTile_unknown: !isBubbleMessage && this.state.verified === E2E_STATE.UNKNOWN,
             mx_EventTile_bad: isEncryptionFailure,
             mx_EventTile_emote: msgtype === 'm.emote',
+            mx_EventTile_noSender: this.props.hideSender,
         });
 
         // If the tile is in the Sending state, don't speak the message.
@@ -1165,8 +1166,9 @@ export default class EventTile extends React.Component<IProps, IState> {
                             />
                             { keyRequestInfo }
                             { actionBar }
+                            { this.props.layout === Layout.IRC && (reactionsRow) }
                         </div>
-                        { reactionsRow }
+                        { this.props.layout !== Layout.IRC && (reactionsRow) }
                         { msgOption }
                     </>)
                 );

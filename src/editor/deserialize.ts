@@ -121,6 +121,12 @@ function parseElement(n: HTMLElement, partCreator: PartCreator, lastNode: HTMLEl
             return partCreator.plain(`\`${n.textContent}\``);
         case "DEL":
             return partCreator.plain(`<del>${n.textContent}</del>`);
+        case "SUB":
+            return partCreator.plain(`<sub>${n.textContent}</sub>`);
+        case "SUP":
+            return partCreator.plain(`<sup>${n.textContent}</sup>`);
+        case "U":
+            return partCreator.plain(`<u>${n.textContent}</u>`);
         case "LI": {
             const indent = "  ".repeat(state.listDepth - 1);
             if (n.parentElement.nodeName === "OL") {
