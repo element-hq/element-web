@@ -59,7 +59,7 @@ jobs:
               id: netlify
               uses: nwtgck/actions-netlify@v1.2
               with:
-                  publish-dir: .
+                  publish-dir: webapp
                   deploy-message: "Deploy from GitHub Actions"
                   # These don't work because we're in workflow_run
                   enable-pull-request-comment: false
