@@ -1,13 +1,12 @@
 import * as Sentry from "@sentry/browser";
-import { Integrations } from "@sentry/tracing";
 import PlatformPeg from "./PlatformPeg";
 import SdkConfig from "./SdkConfig";
-import {MatrixClientPeg} from "./MatrixClientPeg";
+import { MatrixClientPeg } from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
-import {MatrixClient} from "../../matrix-js-sdk";
+import { MatrixClient } from "../../matrix-js-sdk";
 
 async function getStorageOptions(): Record<string, string> {
-    const result = {}
+    const result = {};
 
     // add storage persistence/quota information
     if (navigator.storage && navigator.storage.persisted) {
@@ -106,7 +105,7 @@ async function getContext() {
             "user": getUserContext(client),
             "crypto": await getCryptoContext(client),
             "device": getDeviceContext(client),
-            "storage": await getStorageOptions()
+            "storage": await getStorageOptions(),
         },
         "extra": {
 
