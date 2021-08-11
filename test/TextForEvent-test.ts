@@ -23,64 +23,97 @@ function mockPinnedEvent(
     });
 }
 
+// Helper function that renders a component to a plain text string.
+// Once snapshots are introduced in tests, this function will no longer be necessary,
+// and should be replaced with snapshots.
+function renderComponent(component): string {
+    const serializeObject = (object): string => {
+        if (typeof object === 'string') {
+            return object === ' ' ? '' : object;
+        }
+
+        if (Array.isArray(object) && object.length === 1 && typeof object[0] === 'string') {
+            return object[0];
+        }
+
+        if (object['type'] !== undefined && typeof object['children'] !== undefined) {
+            return serializeObject(object.children);
+        }
+
+        if (!Array.isArray(object)) {
+            return '';
+        }
+
+        return object.map(child => {
+            return serializeObject(child);
+        }).join('');
+    };
+
+    return serializeObject(component.toJSON());
+}
+
 describe('TextForEvent', () => {
     describe("TextForPinnedEvent", () => {
         SettingsStore.setValue("feature_pinning", null, SettingLevel.DEVICE, true);
 
         it("mentions message when a single message was pinned, with no previously pinned messages", () => {
             const event = mockPinnedEvent(['message-1']);
-            expect(textForEvent(event)).toBe(
-                "@foo:example.com pinned a message to this room. See all pinned messages.",
-            );
-
+            const plainText = textForEvent(event);
             const component = renderer.create(textForEvent(event, true));
-            expect(component.toJSON()).toMatchSnapshot();
+
+            const expectedText = "@foo:example.com pinned a message to this room. See all pinned messages.";
+            expect(plainText).toBe(expectedText);
+            expect(renderComponent(component)).toBe(expectedText);
         });
 
         it("mentions message when a single message was pinned, with multiple previously pinned messages", () => {
             const event = mockPinnedEvent(['message-3'], ['message-1', 'message-2']);
-            expect(textForEvent(event)).toBe(
-                "@foo:example.com pinned a message to this room. See all pinned messages.",
-            );
-
+            const plainText = textForEvent(event);
             const component = renderer.create(textForEvent(event, true));
-            expect(component.toJSON()).toMatchSnapshot();
+
+            const expectedText = "@foo:example.com pinned a message to this room. See all pinned messages.";
+            expect(plainText).toBe(expectedText);
+            expect(renderComponent(component)).toBe(expectedText);
         });
 
         it("shows generic text when multiple messages were pinned", () => {
             const event = mockPinnedEvent(['message-1', 'message-2', 'message-3'], ['message-1']);
-            expect(textForEvent(event)).toBe("@foo:example.com changed the pinned messages for the room.");
-
+            const plainText = textForEvent(event);
             const component = renderer.create(textForEvent(event, true));
-            expect(component.toJSON()).toMatchSnapshot();
+
+            const expectedText = "@foo:example.com changed the pinned messages for the room.";
+            expect(plainText).toBe(expectedText);
+            expect(renderComponent(component)).toBe(expectedText);
         });
 
         it("mentions message when a single message was unpinned, with a single message previously pinned", () => {
             const event = mockPinnedEvent([], ['message-1']);
-            expect(textForEvent(event)).toBe(
-                "@foo:example.com unpinned a message from this room. See all pinned messages.",
-            );
-
+            const plainText = textForEvent(event);
             const component = renderer.create(textForEvent(event, true));
-            expect(component.toJSON()).toMatchSnapshot();
+
+            const expectedText = "@foo:example.com unpinned a message from this room. See all pinned messages.";
+            expect(plainText).toBe(expectedText);
+            expect(renderComponent(component)).toBe(expectedText);
         });
 
         it("mentions message when a single message was unpinned, with multiple previously pinned messages", () => {
             const event = mockPinnedEvent(['message-2'], ['message-1', 'message-2']);
-            expect(textForEvent(event)).toBe(
-                "@foo:example.com unpinned a message from this room. See all pinned messages.",
-            );
-
+            const plainText = textForEvent(event);
             const component = renderer.create(textForEvent(event, true));
-            expect(component.toJSON()).toMatchSnapshot();
+
+            const expectedText = "@foo:example.com unpinned a message from this room. See all pinned messages.";
+            expect(plainText).toBe(expectedText);
+            expect(renderComponent(component)).toBe(expectedText);
         });
 
         it("shows generic text when multiple messages were unpinned", () => {
             const event = mockPinnedEvent(['message-3'], ['message-1', 'message-2', 'message-3']);
-            expect(textForEvent(event)).toBe("@foo:example.com changed the pinned messages for the room.");
-
+            const plainText = textForEvent(event);
             const component = renderer.create(textForEvent(event, true));
-            expect(component.toJSON()).toMatchSnapshot();
+
+            const expectedText = "@foo:example.com changed the pinned messages for the room.";
+            expect(plainText).toBe(expectedText);
+            expect(renderComponent(component)).toBe(expectedText);
         });
     });
 });
