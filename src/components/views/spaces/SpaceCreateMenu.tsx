@@ -285,8 +285,8 @@ const SpaceCreateMenu = ({ onFinished }) => {
                         { sub }
                     </AccessibleButton>,
                 }) }
-                &nbsp;
-                { _t("To join an existing space you'll need an invite") }
+                <br />
+                { _t("To join an existing space you'll need an invite.") }
             </p>
 
             <SpaceFeedbackPrompt onClick={onFinished} />
