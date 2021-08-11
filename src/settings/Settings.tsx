@@ -16,9 +16,9 @@ limitations under the License.
 */
 
 import { MatrixClient } from 'matrix-js-sdk/src/client';
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 
-import { _t, _td } from '../languageHandler';
+import { _td } from '../languageHandler';
 import {
     NotificationBodyEnabledController,
     NotificationsEnabledController,
@@ -40,7 +40,6 @@ import { OrderedMultiController } from "./controllers/OrderedMultiController";
 import { Layout } from "./Layout";
 import ReducedMotionController from './controllers/ReducedMotionController';
 import IncompatibleController from "./controllers/IncompatibleController";
-import SdkConfig from "../SdkConfig";
 import PseudonymousAnalyticsController from './controllers/PseudonymousAnalyticsController';
 import NewLayoutSwitcherController from './controllers/NewLayoutSwitcherController';
 

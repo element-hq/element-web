@@ -18,7 +18,6 @@ import { EventEmitter } from "events";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
-import "./SpaceStore-setup"; // enable space lab
 import "../skinned-sdk"; // Must be first for skinning to work
 import SpaceStore, {
     UPDATE_HOME_BEHAVIOUR,
