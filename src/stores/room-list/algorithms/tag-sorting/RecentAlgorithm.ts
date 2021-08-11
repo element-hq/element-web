@@ -20,6 +20,25 @@ import { IAlgorithm } from "./IAlgorithm";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import * as Unread from "../../../../Unread";
 import { EffectiveMembership, getEffectiveMembership } from "../../../../utils/membership";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
+const ignoreSelfEvent = (event: MatrixEvent): boolean => {
+    const type = event.getType();
+    const content = event.getContent();
+    const prevContent = event.getPrevContent();
+
+    // Never ignore membership changes
+    if (type === EventType.RoomMember && prevContent.membership !== content.membership) return false;
+
+    // Ignore status changes
+    // XXX: This should be an enum
+    if (type === "im.vector.user_status") return true;
+    // Ignore display name changes
+    if (type === EventType.RoomMember && prevContent.displayname !== content.displayname) return true;
+
+    return false;
+};
 
 export const sortRooms = (rooms: Room[]): Room[] => {
     // We cache the timestamp lookup to avoid iterating forever on the timeline
