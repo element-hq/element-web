@@ -393,6 +393,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                         key={`img-${showPlaceholder}`}
                         timeout={300}
                     >
+                        { /* This weirdly looking div is necessary here, otherwise SwitchTransition fails */ }
                         <div>
                             { showPlaceholder && <div
                                 className={classes}
