@@ -115,5 +115,15 @@ describe('TextForEvent', () => {
             expect(plainText).toBe(expectedText);
             expect(renderComponent(component)).toBe(expectedText);
         });
+
+        it("shows generic text when one message was pinned, and another unpinned", () => {
+            const event = mockPinnedEvent(['message-2'], ['message-1']);
+            const plainText = textForEvent(event);
+            const component = renderer.create(textForEvent(event, true));
+
+            const expectedText = "@foo:example.com changed the pinned messages for the room.";
+            expect(plainText).toBe(expectedText);
+            expect(renderComponent(component)).toBe(expectedText);
+        });
     });
 });

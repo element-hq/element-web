@@ -435,7 +435,7 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string
     const newlyPinned = pinned.filter(item => previouslyPinned.indexOf(item) < 0);
     const newlyUnpinned = previouslyPinned.filter(item => pinned.indexOf(item) < 0);
 
-    if (newlyPinned.length === 1) {
+    if (newlyPinned.length === 1 && newlyUnpinned.length === 0) {
         // A single message was pinned, include a link to that message.
         if (allowJSX) {
             const messageId = newlyPinned.pop();
@@ -463,7 +463,7 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string
         return () => _t("%(senderName)s pinned a message to this room. See all pinned messages.", { senderName });
     }
 
-    if (newlyUnpinned.length === 1) {
+    if (newlyUnpinned.length === 1 && newlyPinned.length === 0) {
         // A single message was unpinned, include a link to that message.
         if (allowJSX) {
             const messageId = newlyUnpinned.pop();
