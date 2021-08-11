@@ -29,11 +29,13 @@ import BaseDialog from "./BaseDialog";
 import Field from '../elements/Field';
 import Spinner from "../elements/Spinner";
 import DialogButtons from "../elements/DialogButtons";
+import {sendSentryReport} from "../../../sentry";
 
 interface IProps {
     onFinished: (success: boolean) => void;
     initialText?: string;
     label?: string;
+    error?: Error;
 }
 
 interface IState {
@@ -113,6 +115,12 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                 });
             }
         });
+
+        // Send a Sentry report if the user agreed to send logs and if there's an error object (Sentry won't be very
+        // useful for grouping errors without exception information to aggregate with)
+        if (sendLogs) {
+            sendSentryReport(userText, this.props.label, this.props.error);
+        }
     };
 
     private onDownload = async (): Promise<void> => {
