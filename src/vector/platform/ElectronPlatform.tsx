@@ -597,7 +597,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         if (!handled &&
             // ideally we would use SpaceStore.spacesEnabled here but importing SpaceStore in this platform
             // breaks skinning as the platform is instantiated prior to the skin being loaded
-            SettingsStore.getValue("feature_spaces") &&
+            !SettingsStore.getValue("showCommunitiesInsteadOfSpaces") &&
             ev.code.startsWith("Digit") &&
             isOnlyCtrlOrCmdKeyEvent(ev)
         ) {
