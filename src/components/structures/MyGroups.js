@@ -138,7 +138,6 @@ export default class MyGroups extends React.Component {
                     </div>
                 </div>*/ }
             </div>
-            <BetaCard featureId="feature_spaces" title={_t("Communities are changing to Spaces")} />
             <div className="mx_MyGroups_content">
                 { contentHeader }
                 { content }

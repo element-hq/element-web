@@ -71,7 +71,7 @@ export interface ISuggestedRoom extends ISpaceSummaryRoom {
 const MAX_SUGGESTED_ROOMS = 20;
 
 // This setting causes the page to reload and can be costly if read frequently, so read it here only
-const spacesEnabled = SettingsStore.getValue("feature_spaces");
+const spacesEnabled = !SettingsStore.getValue("showCommunitiesInsteadOfSpaces");
 
 const getSpaceContextKey = (space?: Room) => `mx_space_context_${space?.roomId || "HOME_SPACE"}`;
 
@@ -764,7 +764,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         // restore selected state from last session if any and still valid
         const lastSpaceId = window.localStorage.getItem(ACTIVE_SPACE_LS_KEY);
         if (lastSpaceId) {
-            this.setActiveSpace(this.matrixClient.getRoom(lastSpaceId));
+            // only context switch if our view is looking at a room, rather than e.g a community
+            this.setActiveSpace(this.matrixClient.getRoom(lastSpaceId), !!RoomViewStore.getRoomId());
         }
     }
 

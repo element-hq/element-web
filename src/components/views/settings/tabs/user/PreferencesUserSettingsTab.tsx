@@ -145,7 +145,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
     ];
 
     static COMMUNITIES_SETTINGS = [
-        // TODO: part of delabsing move the toggle here - https://github.com/vector-im/element-web/issues/18088
+        "showCommunitiesInsteadOfSpaces",
     ];
 
     static KEYBINDINGS_SETTINGS = [
@@ -285,9 +285,9 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         SettingsStore.setValue("readMarkerOutOfViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    private renderGroup(settingIds: string[]): React.ReactNodeArray {
+    private renderGroup(settingIds: string[], level = SettingLevel.ACCOUNT): React.ReactNodeArray {
         return settingIds.filter(SettingsStore.isEnabled).map(i => {
-            return <SettingsFlag key={i} name={i} level={SettingLevel.ACCOUNT} />;
+            return <SettingsFlag key={i} name={i} level={level} />;
         });
     }
 
@@ -348,7 +348,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         <p>{ _t("If a community isn't shown you may not have permission to convert it.") }</p>
                         <CommunityMigrator onFinished={this.props.closeSettingsFn} />
                     </details>
-                    { this.renderGroup(PreferencesUserSettingsTab.COMMUNITIES_SETTINGS) }
+                    { this.renderGroup(PreferencesUserSettingsTab.COMMUNITIES_SETTINGS, SettingLevel.DEVICE) }
                 </div>
 
                 <div className="mx_SettingsTab_section">
