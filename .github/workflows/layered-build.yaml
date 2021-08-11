@@ -16,4 +16,16 @@ jobs:
                   path: element-web/webapp
                   # We'll only use this in a triggered job, then we're done with it
                   retention-days: 1
+            - uses: actions/github-script@v3.1.0
+              with:
+                script: |
+                    var fs = require('fs');
+                    fs.writeFileSync('${{github.workspace}}/context.json', JSON.stringify(context));
+            - name: Upload Context
+              uses: actions/upload-artifact@v2
+              with:
+                  name: context.json
+                  path: context.json
+                  # We'll only use this in a triggered job, then we're done with it
+                  retention-days: 1
 

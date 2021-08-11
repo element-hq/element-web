@@ -33,7 +33,28 @@ jobs:
                   });
                   var fs = require('fs');
                   fs.writeFileSync('${{github.workspace}}/previewbuild.zip', Buffer.from(download.data));
-            - run: unzip previewbuild.zip && rm previewbuild.zip
+
+                  var contextArtifact = artifacts.data.artifacts.filter((artifact) => {
+                    return artifact.name == "context.json"
+                  })[0];
+                  var download = await github.actions.downloadArtifact({
+                     owner: context.repo.owner,
+                     repo: context.repo.repo,
+                     artifact_id: contextArtifact.id,
+                     archive_format: 'zip',
+                  });
+                  var fs = require('fs');
+                  fs.writeFileSync('${{github.workspace}}/context.json.zip', Buffer.from(download.data));
+            - name: Extract Artifacts
+              run: unzip -d webapp previewbuild.zip && rm previewbuild.zip && unzip context.json && rm context.json.zip
+            - name: 'Read Context'
+              id: readctx
+              uses: actions/github-script@v3.1.0
+              with:
+                script: |
+                    var fs = require('fs');
+                    var ctx = JSON.parse(fs.readFileSync('${{github.workspace}}/context.json'));
+                    console.log(`::set-output name=prnumber::${ctx.payload.pull_request.number}`);
             - name: Deploy to Netlify
               id: netlify
               uses: nwtgck/actions-netlify@v1.2
@@ -51,7 +72,7 @@ jobs:
               uses: phulsechinmay/rewritable-pr-comment@v0.3.0
               with:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  ISSUE_ID: ${{ github.event.workflow_run.pull_requests[0].number }}
+                  ISSUE_ID: ${{ steps.readctx.outputs.prnumber }}
                   message: |
                       Preview: ${{ steps.netlify.outputs.deploy-url }}
                       ⚠️ Do you trust the author of this PR? Maybe this build will steal your keys or give you malware. Exercise caution. Use test accounts.
