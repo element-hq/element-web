@@ -116,7 +116,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
             }
         });
 
-        sendSentryReport(userText, this.state.issueUrl, this.props.error);
+        sendSentryReport(this.state.text, this.state.issueUrl, this.props.error);
     };
 
     private onDownload = async (): Promise<void> => {

@@ -84,7 +84,7 @@ class ConsoleLogger {
                     // In development, it can be useful to log complex cyclic
                     // objects to the console for inspection. This is fine for
                     // the console, but default `stringify` can't handle that.
-                    // We w orkaround this by using a special replacer function
+                    // We workaround this by using a special replacer function
                     // to only log values of the root object and avoid cycles.
                     return JSON.stringify(arg, (key, value) => {
                         if (key && typeof value === "object") {

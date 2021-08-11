@@ -115,7 +115,7 @@ export async function sendSentryReport(userText: string, issueUrl: string, error
     const captureContext = {
         "contexts": await getContexts(),
         "extra": {
-            "userText": userText,
+            "user_text": userText,
             "issue_url": issueUrl,
         },
     };

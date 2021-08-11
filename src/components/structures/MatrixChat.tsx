@@ -108,7 +108,7 @@ import SoftLogout from './auth/SoftLogout';
 import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../utils/strings";
 import { PosthogAnalytics } from '../../PosthogAnalytics';
-import {initSentry, sendSentryReport} from "../../sentry";
+import { initSentry, sendSentryReport } from "../../sentry";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -396,14 +396,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         CountlyAnalytics.instance.enable(/* anonymous = */ true);
 
         initSentry(SdkConfig.get()["sentry"]);
-        setTimeout(() => {
-            try {
-                const e = new Error("whoops");
-                throw(e);
-            } catch (e) {
-                sendSentryReport("user text", "label", e);
-            }
-        }, 4000);
     }
 
     private async postLoginSetup() {
