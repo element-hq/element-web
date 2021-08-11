@@ -23,7 +23,8 @@ async function createSpace(session, name, isPublic = false) {
     session.log.step(`creates space "${name}"`);
 
     await openSpaceCreateMenu(session);
-    const visibilityButton = await session.query(isPublic ? ".mx_SpaceCreateMenuType_public" : ".mx_SpaceCreateMenuType_private");
+    const className = isPublic ? ".mx_SpaceCreateMenuType_public" : ".mx_SpaceCreateMenuType_private";
+    const visibilityButton = await session.query(className);
     await visibilityButton.click();
 
     const nameInput = await session.query('input[name="spaceName"]');
