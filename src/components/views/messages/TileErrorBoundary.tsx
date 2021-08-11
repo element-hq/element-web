@@ -51,6 +51,7 @@ export default class TileErrorBoundary extends React.Component<IProps, IState> {
     private onBugReport = (): void => {
         Modal.createTrackedDialog('Bug Report Dialog', '', BugReportDialog, {
             label: 'react-soft-crash-tile',
+            error: this.state.error,
         });
     };
 

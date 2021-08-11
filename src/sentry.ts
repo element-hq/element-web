@@ -98,30 +98,35 @@ function getDeviceContext(client: MatrixClient): Record<String, String> {
     return result;
 }
 
-async function getContext() {
+async function getContexts() {
     const client = MatrixClientPeg.get();
     return {
-        "contexts": {
-            "user": getUserContext(client),
-            "crypto": await getCryptoContext(client),
-            "device": getDeviceContext(client),
-            "storage": await getStorageOptions(),
-        },
-        "extra": {
-
-        },
+        "user": getUserContext(client),
+        "crypto": await getCryptoContext(client),
+        "device": getDeviceContext(client),
+        "storage": await getStorageOptions(),
     };
 }
 
-export async function sendSentryReport(userText: string, label: string, error: Error): void {
-    if (!SdkConfig.get()["sentry"]) return;
+export async function sendSentryReport(userText: string, issueUrl: string, error: Error): void {
+    const sentryConfig = SdkConfig.get()["sentry"];
+    if (!sentryConfig) return;
 
-    // Ignore reports without errors, as they're not useful in sentry and can't easily be aggregated
+    const captureContext = {
+        "contexts": await getContexts(),
+        "extra": {
+            "userText": userText,
+            "issue_url": issueUrl,
+        },
+    };
+
+    // If there's no error and no issueUrl, the report will just produce non-grouped noise in Sentry, so don't
+    // upload it
     if (error) {
-        Sentry.captureException(error, await getContext());
+        Sentry.captureException(error, captureContext);
+    } else if (issueUrl) {
+        Sentry.captureMessage(`Issue: ${issueUrl}`, captureContext);
     }
-
-    // TODO: use https://docs.sentry.io/api/projects/submit-user-feedback/ to submit userText
 }
 
 interface ISentryConfig {
