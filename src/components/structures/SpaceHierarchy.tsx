@@ -441,7 +441,7 @@ const SpaceHierarchy = ({
 
     let content: JSX.Element;
     let loader: JSX.Element;
-    if (loading) {
+    if (loading && !rooms.length) {
         content = <Spinner />;
     } else {
         let manageButtons;
@@ -558,9 +558,11 @@ const SpaceHierarchy = ({
                 />
             </>;
 
-            loader = <div ref={loaderRef}>
-                <Spinner />
-            </div>;
+            if (hierarchy.canLoadMore) {
+                loader = <div ref={loaderRef}>
+                    <Spinner />
+                </div>;
+            }
         } else {
             results = <div className="mx_SpaceHierarchy_noResults">
                 <h3>{ _t("No results found") }</h3>
