@@ -467,6 +467,10 @@ export default class SettingsStore {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
         }
 
+        if (!SettingsStore.isEnabled(settingName)) {
+            return false;
+        }
+
         // When non-beta features are specified in the config.json, we force them as enabled or disabled.
         if (SettingsStore.isFeature(settingName) && !SETTINGS[settingName]?.betaInfo) {
             const configVal = SettingsStore.getValueAt(SettingLevel.CONFIG, settingName, roomId, true, true);

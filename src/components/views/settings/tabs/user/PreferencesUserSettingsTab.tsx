@@ -285,8 +285,16 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         SettingsStore.setValue("readMarkerOutOfViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    private renderGroup(settingIds: string[], level = SettingLevel.ACCOUNT): React.ReactNodeArray {
-        return settingIds.filter(SettingsStore.isEnabled).map(i => {
+    private renderGroup(
+        settingIds: string[],
+        level = SettingLevel.ACCOUNT,
+        includeDisabled = false,
+    ): React.ReactNodeArray {
+        if (!includeDisabled) {
+            settingIds = settingIds.filter(SettingsStore.isEnabled);
+        }
+
+        return settingIds.map(i => {
             return <SettingsFlag key={i} name={i} level={level} />;
         });
     }
@@ -333,10 +341,10 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                     { this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS) }
                 </div>
 
-                { SpaceStore.spacesEnabled && <div className="mx_SettingsTab_section">
+                <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{ _t("Spaces") }</span>
-                    { this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS) }
-                </div> }
+                    { this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS, SettingLevel.ACCOUNT, true) }
+                </div>
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{ _t("Communities") }</span>

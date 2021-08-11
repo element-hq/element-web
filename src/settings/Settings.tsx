@@ -729,6 +729,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         description: _td("All rooms you're in will appear in Home."),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: false,
+        controller: new IncompatibleController("showCommunitiesInsteadOfSpaces", null),
     },
     "showCommunitiesInsteadOfSpaces": {
         displayName: _td("Display Communities instead of Spaces"),

@@ -26,7 +26,7 @@ import SettingsStore from "../SettingsStore";
 export default class IncompatibleController extends SettingController {
     public constructor(
         private settingName: string,
-        private forcedValue = false,
+        private forcedValue: any = false,
         private incompatibleValue: any = true,
     ) {
         super();
@@ -42,6 +42,10 @@ export default class IncompatibleController extends SettingController {
             return this.forcedValue;
         }
         return null; // no override
+    }
+
+    public get settingDisabled(): boolean {
+        return this.incompatibleSetting;
     }
 
     public get incompatibleSetting(): boolean {
