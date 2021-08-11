@@ -4965,6 +4965,11 @@ fbjs@^0.8.4:
     setimmediate "^1.0.5"
     ua-parser-js "^0.7.18"
 
+fflate@^0.4.1:
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/fflate/-/fflate-0.4.8.tgz#f90b82aefbd8ac174213abb338bd7ef848f0f5ae"
+  integrity sha512-FJqqoDBR00Mdj9ppamLa/Y7vxm+PRmNWA67N846RvsoYVMKB4q3y/de5PA7gUmRMYK/8CMz2GDZQmCRN1wBcWA==
+
 figgy-pudding@^3.5.1:
   version "3.5.2"
   resolved "https://registry.yarnpkg.com/figgy-pudding/-/figgy-pudding-3.5.2.tgz#b4eee8148abb01dcf1d1ac34367d59e12fa61d6e"
@@ -7538,21 +7543,6 @@ mathml-tag-names@^2.1.3:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-matrix-js-sdk@12.2.0:
-  version "12.2.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/8a1bc98d4eb5cecd9373ed067c9fbfb6718d2e4f"
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    another-json "^0.2.0"
-    browser-request "^0.3.3"
-    bs58 "^4.0.1"
-    content-type "^1.0.4"
-    loglevel "^1.7.1"
-    p-retry "^4.5.0"
-    qs "^6.9.6"
-    request "^2.88.2"
-    unhomoglyph "^1.0.6"
-
 matrix-js-sdk@12.3.0-rc.1:
   version "12.3.0-rc.1"
   resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-12.3.0-rc.1.tgz#9e192f7bffb08d68deb1298e46082eda3273c6ee"
@@ -7577,9 +7567,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.27.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/e2ef5d1737acda03c186560182fa7daddff8479b"
+matrix-react-sdk@3.28.0-rc.1:
+  version "3.28.0-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.28.0-rc.1.tgz#c9e4ef8c8c0a329dc3039214ee5e8d4a50fbed48"
+  integrity sha512-2xvCV2wA7VOe2k4R7aMUflVzt1l68s+zeRJEzoEZOQZ88vLm7mwl3HolzKdQuorof/rBHUXoeBHnp0JxstHXgg==
   dependencies:
     "@babel/runtime" "^7.12.5"
     await-lock "^2.1.0"
@@ -7607,13 +7598,14 @@ matrix-mock-request@^1.2.3:
     katex "^0.12.0"
     linkifyjs "^2.1.9"
     lodash "^4.17.20"
-    matrix-js-sdk "12.2.0"
+    matrix-js-sdk "12.3.0-rc.1"
     matrix-widget-api "^0.1.0-beta.15"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
     pako "^2.0.3"
     parse5 "^6.0.1"
     png-chunks-extract "^1.0.0"
+    posthog-js "1.12.2"
     prop-types "^15.7.2"
     qrcode "^1.4.4"
     re-resizable "^6.9.0"
@@ -9586,6 +9578,13 @@ postcss@^8.0.2:
     colorette "^1.2.2"
     nanoid "^3.1.23"
     source-map-js "^0.6.2"
+
+posthog-js@1.12.2:
+  version "1.12.2"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.12.2.tgz#ff76e26634067e003f8af7df654d7ea0e647d946"
+  integrity sha512-I0d6c+Yu2f91PFidz65AIkkqZM219EY9Z1wlbTkW5Zqfq5oXqogBMKS8BaDBOrMc46LjLX7IH67ytCcBFRo1uw==
+  dependencies:
+    fflate "^0.4.1"
 
 prelude-ls@^1.2.1:
   version "1.2.1"
