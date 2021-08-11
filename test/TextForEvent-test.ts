@@ -67,7 +67,7 @@ describe('TextForEvent', () => {
         });
 
         it("mentions message when a single message was pinned, with multiple previously pinned messages", () => {
-            const event = mockPinnedEvent(['message-3'], ['message-1', 'message-2']);
+            const event = mockPinnedEvent(['message-1', 'message-2', 'message-3'], ['message-1', 'message-2']);
             const plainText = textForEvent(event);
             const component = renderer.create(textForEvent(event, true));
 
