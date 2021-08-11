@@ -184,6 +184,8 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
                     <InteractiveAuth
                         matrixClient={MatrixClientPeg.get()}
                         authData={this.state.authData}
+                        // XXX: onUIAuthComplete breaches the expected method contract, it gets away with it because it
+                        // knows the entire app is about to die as a result of the account deactivation.
                         makeRequest={this.onUIAuthComplete as any}
                         onAuthFinished={this.onUIAuthFinished}
                         onStagePhaseChange={this.onStagePhaseChange}
