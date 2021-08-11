@@ -444,18 +444,6 @@ const SpaceHierarchy = ({
     if (loading) {
         content = <Spinner />;
     } else {
-        const numRooms = Array.from(filteredRoomSet).filter(r => !r.room_type).length;
-        const numSpaces = filteredRoomSet.size - numRooms - 1; // -1 at the end to exclude the space we are looking at
-
-        let countsStr;
-        if (numSpaces > 1) {
-            countsStr = _t("%(count)s rooms and %(numSpaces)s spaces", { count: numRooms, numSpaces });
-        } else if (numSpaces > 0) {
-            countsStr = _t("%(count)s rooms and 1 space", { count: numRooms, numSpaces });
-        } else {
-            countsStr = _t("%(count)s rooms", { count: numRooms, numSpaces });
-        }
-
         let manageButtons;
         if (space.getMyMembership() === "join" && space.currentState.maySendStateEvent(EventType.SpaceChild, userId)) {
             const selectedRelations = Array.from(selected.keys()).flatMap(parentId => {
@@ -582,7 +570,7 @@ const SpaceHierarchy = ({
 
         content = <>
             <div className="mx_SpaceHierarchy_listHeader">
-                { countsStr }
+                <h4>{ query.trim() ? _t("Results") : _t("Rooms and spaces") }</h4>
                 <span>
                     { additionalButtons }
                     { manageButtons }
