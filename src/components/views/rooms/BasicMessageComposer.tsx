@@ -31,7 +31,7 @@ import {
 } from '../../../editor/operations';
 import { getCaretOffsetAndText, getRangeForSelection } from '../../../editor/dom';
 import Autocomplete, { generateCompletionDomId } from '../rooms/Autocomplete';
-import { getAutoCompleteCreator } from '../../../editor/parts';
+import { getAutoCompleteCreator, Type } from '../../../editor/parts';
 import { parseEvent, parsePlainTextMessage } from '../../../editor/deserialize';
 import { renderModel } from '../../../editor/render';
 import TypingStore from "../../../stores/TypingStore";
@@ -169,7 +169,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         range.expandBackwardsWhile((index, offset) => {
             const part = model.parts[index];
             n -= 1;
-            return n >= 0 && (part.type === "plain" || part.type === "pill-candidate");
+            return n >= 0 && (part.type === Type.Plain || part.type === Type.PillCandidate);
         });
         const emoticonMatch = REGEX_EMOTICON_WHITESPACE.exec(range.text);
         if (emoticonMatch) {
@@ -541,6 +541,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             handled = true;
         } else if (event.key === Key.BACKSPACE || event.key === Key.DELETE) {
             this.formatBarRef.current.hide();
+            handled = this.fakeDeletion(event.key === Key.BACKSPACE);
         }
 
         if (handled) {
@@ -548,6 +549,29 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             event.stopPropagation();
         }
     };
+
+    /**
+     * Because pills have contentEditable="false" there is no event emitted when
+     * the user tries to delete them. Therefore we need to fake what would
+     * normally happen
+     * @param direction in which to delete
+     * @returns handled
+     */
+    private fakeDeletion(backward: boolean): boolean {
+        const selection = document.getSelection();
+        // Use the default handling for ranges
+        if (selection.type === "Range") return false;
+
+        this.modifiedFlag = true;
+        const { caret, text } = getCaretOffsetAndText(this.editorRef.current, selection);
+
+        // Do the deletion itself
+        if (backward) caret.offset--;
+        const newText = text.slice(0, caret.offset) + text.slice(caret.offset + 1);
+
+        this.props.model.update(newText, backward ? "deleteContentBackward" : "deleteContentForward", caret);
+        return true;
+    }
 
     private async tabCompleteName(): Promise<void> {
         try {
@@ -558,9 +582,9 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             const range = model.startRange(position);
             range.expandBackwardsWhile((index, offset, part) => {
                 return part.text[offset] !== " " && part.text[offset] !== "+" && (
-                    part.type === "plain" ||
-                    part.type === "pill-candidate" ||
-                    part.type === "command"
+                    part.type === Type.Plain ||
+                    part.type === Type.PillCandidate ||
+                    part.type === Type.Command
                 );
             });
             const { partCreator } = model;

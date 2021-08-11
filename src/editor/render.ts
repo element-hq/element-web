@@ -15,19 +15,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Part } from "./parts";
+import { Part, Type } from "./parts";
 import EditorModel from "./model";
 
-export function needsCaretNodeBefore(part: Part, prevPart: Part) {
-    const isFirst = !prevPart || prevPart.type === "newline";
+export function needsCaretNodeBefore(part: Part, prevPart: Part): boolean {
+    const isFirst = !prevPart || prevPart.type === Type.Newline;
     return !part.canEdit && (isFirst || !prevPart.canEdit);
 }
 
-export function needsCaretNodeAfter(part: Part, isLastOfLine: boolean) {
+export function needsCaretNodeAfter(part: Part, isLastOfLine: boolean): boolean {
     return !part.canEdit && isLastOfLine;
 }
 
-function insertAfter(node: HTMLElement, nodeToInsert: HTMLElement) {
+function insertAfter(node: HTMLElement, nodeToInsert: HTMLElement): void {
     const next = node.nextSibling;
     if (next) {
         node.parentElement.insertBefore(nodeToInsert, next);
@@ -44,25 +44,25 @@ export const CARET_NODE_CHAR = "\ufeff";
 // a caret node is a node that allows the caret to be placed
 // where otherwise it wouldn't be possible
 // (e.g. next to a pill span without adjacent text node)
-function createCaretNode() {
+function createCaretNode(): HTMLElement {
     const span = document.createElement("span");
     span.className = "caretNode";
     span.appendChild(document.createTextNode(CARET_NODE_CHAR));
     return span;
 }
 
-function updateCaretNode(node: HTMLElement) {
+function updateCaretNode(node: HTMLElement): void {
     // ensure the caret node contains only a zero-width space
     if (node.textContent !== CARET_NODE_CHAR) {
         node.textContent = CARET_NODE_CHAR;
     }
 }
 
-export function isCaretNode(node: HTMLElement) {
+export function isCaretNode(node: HTMLElement): boolean {
     return node && node.tagName === "SPAN" && node.className === "caretNode";
 }
 
-function removeNextSiblings(node: ChildNode) {
+function removeNextSiblings(node: ChildNode): void {
     if (!node) {
         return;
     }
@@ -74,7 +74,7 @@ function removeNextSiblings(node: ChildNode) {
     }
 }
 
-function removeChildren(parent: HTMLElement) {
+function removeChildren(parent: HTMLElement): void {
     const firstChild = parent.firstChild;
     if (firstChild) {
         removeNextSiblings(firstChild);
@@ -82,7 +82,7 @@ function removeChildren(parent: HTMLElement) {
     }
 }
 
-function reconcileLine(lineContainer: ChildNode, parts: Part[]) {
+function reconcileLine(lineContainer: ChildNode, parts: Part[]): void {
     let currentNode;
     let prevPart;
     const lastPart = parts[parts.length - 1];
@@ -131,13 +131,13 @@ function reconcileLine(lineContainer: ChildNode, parts: Part[]) {
     removeNextSiblings(currentNode);
 }
 
-function reconcileEmptyLine(lineContainer) {
+function reconcileEmptyLine(lineContainer: HTMLElement): void {
     // empty div needs to have a BR in it to give it height
     let foundBR = false;
     let partNode = lineContainer.firstChild;
     while (partNode) {
         const nextNode = partNode.nextSibling;
-        if (!foundBR && partNode.tagName === "BR") {
+        if (!foundBR && (partNode as HTMLElement).tagName === "BR") {
             foundBR = true;
         } else {
             partNode.remove();
@@ -149,9 +149,9 @@ function reconcileEmptyLine(lineContainer) {
     }
 }
 
-export function renderModel(editor: HTMLDivElement, model: EditorModel) {
+export function renderModel(editor: HTMLDivElement, model: EditorModel): void {
     const lines = model.parts.reduce((linesArr, part) => {
-        if (part.type === "newline") {
+        if (part.type === Type.Newline) {
             linesArr.push([]);
         } else {
             const lastLine = linesArr[linesArr.length - 1];
@@ -175,7 +175,7 @@ export function renderModel(editor: HTMLDivElement, model: EditorModel) {
         if (parts.length) {
             reconcileLine(lineContainer, parts);
         } else {
-            reconcileEmptyLine(lineContainer);
+            reconcileEmptyLine(lineContainer as HTMLElement);
         }
     });
     if (lines.length) {
