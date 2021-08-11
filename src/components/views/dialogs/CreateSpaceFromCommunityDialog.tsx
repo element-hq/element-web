@@ -288,8 +288,9 @@ const CreateSpaceFromCommunityDialog: React.FC<IProps> = ({ matrixClient: cli, g
             <p>
                 { _t("Spaces are the new version of communities - with new features coming.") }
                 &nbsp;
-                { _t("All rooms will automatically be added, a link to the Space will be " +
-                    "added to your old community description and all community members will be invited.") }
+                { _t("A link to the Space will be put in your community description.") }
+                &nbsp;
+                { _t("All rooms will be added and all community members will be invited.") }
             </p>
             <p className="mx_CreateSpaceFromCommunityDialog_flairNotice">
                 { _t("Flair won't be available in Spaces for the foreseeable future.") }

@@ -50,6 +50,10 @@ limitations under the License.
                 line-height: $font-15px;
                 margin: 16px 0;
             }
+
+            .mx_Field_textarea {
+                margin-bottom: 0;
+            }
         }
 
         .mx_JoinRuleDropdown .mx_Dropdown_menu {
