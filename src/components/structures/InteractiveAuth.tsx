@@ -235,7 +235,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
         this.props.onAuthFinished(false, ERROR_USER_CANCELLED);
     };
 
-    private renderCurrentStage() {
+    private renderCurrentStage(): JSX.Element {
         const stage = this.state.authStage;
         if (!stage) {
             if (this.state.busy) {
