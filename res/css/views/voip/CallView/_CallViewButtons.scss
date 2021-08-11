@@ -1,0 +1,102 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2020 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_CallViewButtons {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    bottom: 5px;
+    opacity: 1;
+    transition: opacity 0.5s;
+    z-index: 200; // To be above _all_ feeds
+
+    &.mx_CallViewButtons_hidden {
+        opacity: 0.001; // opacity 0 can cause a re-layout
+        pointer-events: none;
+    }
+
+    .mx_CallViewButtons_button {
+        cursor: pointer;
+        margin-left: 2px;
+        margin-right: 2px;
+
+
+        &::before {
+            content: '';
+            display: inline-block;
+
+            height: 48px;
+            width: 48px;
+
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+        }
+
+
+        &.mx_CallViewButtons_dialpad::before {
+            background-image: url('$(res)/img/voip/dialpad.svg');
+        }
+
+        &.mx_CallViewButtons_button_micOn::before {
+            background-image: url('$(res)/img/voip/mic-on.svg');
+        }
+
+        &.mx_CallViewButtons_button_micOff::before {
+            background-image: url('$(res)/img/voip/mic-off.svg');
+        }
+
+        &.mx_CallViewButtons_button_vidOn::before {
+            background-image: url('$(res)/img/voip/vid-on.svg');
+        }
+
+        &.mx_CallViewButtons_button_vidOff::before {
+            background-image: url('$(res)/img/voip/vid-off.svg');
+        }
+
+        &.mx_CallViewButtons_button_screensharingOn::before {
+            background-image: url('$(res)/img/voip/screensharing-on.svg');
+        }
+
+        &.mx_CallViewButtons_button_screensharingOff::before {
+            background-image: url('$(res)/img/voip/screensharing-off.svg');
+        }
+
+        &.mx_CallViewButtons_button_sidebarOn::before {
+            background-image: url('$(res)/img/voip/sidebar-on.svg');
+        }
+
+        &.mx_CallViewButtons_button_sidebarOff::before {
+            background-image: url('$(res)/img/voip/sidebar-off.svg');
+        }
+
+        &.mx_CallViewButtons_button_hangup::before {
+            background-image: url('$(res)/img/voip/hangup.svg');
+        }
+
+        &.mx_CallViewButtons_button_more::before {
+            background-image: url('$(res)/img/voip/more.svg');
+        }
+
+        &.mx_CallViewButtons_button_invisible {
+            visibility: hidden;
+            pointer-events: none;
+            position: absolute;
+        }
+    }
+}

@@ -43,7 +43,7 @@ export default class AutocompleteWrapperModel {
     ) {
     }
 
-    public onEscape(e: KeyboardEvent) {
+    public onEscape(e: KeyboardEvent): void {
         this.getAutocompleterComponent().onEscape(e);
         this.updateCallback({
             replaceParts: [this.partCreator.plain(this.queryPart.text)],
@@ -51,27 +51,27 @@ export default class AutocompleteWrapperModel {
         });
     }
 
-    public close() {
+    public close(): void {
         this.updateCallback({ close: true });
     }
 
-    public hasSelection() {
+    public hasSelection(): boolean {
         return this.getAutocompleterComponent().hasSelection();
     }
 
-    public hasCompletions() {
+    public hasCompletions(): boolean {
         const ac = this.getAutocompleterComponent();
         return ac && ac.countCompletions() > 0;
     }
 
-    public onEnter() {
+    public onEnter(): void {
         this.updateCallback({ close: true });
     }
 
     /**
      * If there is no current autocompletion, start one and move to the first selection.
      */
-    public async startSelection() {
+    public async startSelection(): Promise<void> {
         const acComponent = this.getAutocompleterComponent();
         if (acComponent.countCompletions() === 0) {
             // Force completions to show for the text currently entered
@@ -81,15 +81,15 @@ export default class AutocompleteWrapperModel {
         }
     }
 
-    public selectPreviousSelection() {
+    public selectPreviousSelection(): void {
         this.getAutocompleterComponent().moveSelection(-1);
     }
 
-    public selectNextSelection() {
+    public selectNextSelection(): void {
         this.getAutocompleterComponent().moveSelection(+1);
     }
 
-    public onPartUpdate(part: Part, pos: DocumentPosition) {
+    public onPartUpdate(part: Part, pos: DocumentPosition): Promise<void> {
         // cache the typed value and caret here
         // so we can restore it in onComponentSelectionChange when the value is undefined (meaning it should be the typed text)
         this.queryPart = part;
@@ -97,7 +97,7 @@ export default class AutocompleteWrapperModel {
         return this.updateQuery(part.text);
     }
 
-    public onComponentSelectionChange(completion: ICompletion) {
+    public onComponentSelectionChange(completion: ICompletion): void {
         if (!completion) {
             this.updateCallback({
                 replaceParts: [this.queryPart],
@@ -109,14 +109,14 @@ export default class AutocompleteWrapperModel {
         }
     }
 
-    public onComponentConfirm(completion: ICompletion) {
+    public onComponentConfirm(completion: ICompletion): void {
         this.updateCallback({
             replaceParts: this.partForCompletion(completion),
             close: true,
         });
     }
 
-    private partForCompletion(completion: ICompletion) {
+    private partForCompletion(completion: ICompletion): Part[] {
         const { completionId } = completion;
         const text = completion.completion;
         switch (completion.type) {

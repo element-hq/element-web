@@ -35,16 +35,24 @@ jobs:
                   fs.writeFileSync('${{github.workspace}}/previewbuild.zip', Buffer.from(download.data));
             - run: unzip previewbuild.zip && rm previewbuild.zip
             - name: Deploy to Netlify
+              id: netlify
               uses: nwtgck/actions-netlify@v1.2
               with:
                   publish-dir: .
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
                   deploy-message: "Deploy from GitHub Actions"
-                  enable-pull-request-comment: true
+                  # These don't work because we're in workflow_run
+                  enable-pull-request-comment: false
                   enable-commit-comment: false
-                  overwrites-pull-request-comment: true
               env:
                   NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
                   NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
               timeout-minutes: 1
+            - name: Comment on PR
+              uses: phulsechinmay/rewritable-pr-comment@v0.3.0
+              with:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  ISSUE_ID: ${{ github.event.workflow_run.pull_requests[0].number }}
+                  message: |
+                      Preview: ${{ steps.netlify.outputs.deploy-url }}
+                      ⚠️ Do you trust the author of this PR? Maybe this build will steal your keys or give you malware. Exercise caution. Use test accounts.
 
