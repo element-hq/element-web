@@ -34,27 +34,27 @@ jobs:
                   var fs = require('fs');
                   fs.writeFileSync('${{github.workspace}}/previewbuild.zip', Buffer.from(download.data));
 
-                  var contextArtifact = artifacts.data.artifacts.filter((artifact) => {
-                    return artifact.name == "context.json"
+                  var prInfoArtifact = artifacts.data.artifacts.filter((artifact) => {
+                    return artifact.name == "pr.json"
                   })[0];
                   var download = await github.actions.downloadArtifact({
                      owner: context.repo.owner,
                      repo: context.repo.repo,
-                     artifact_id: contextArtifact.id,
+                     artifact_id: prInfoArtifact.id,
                      archive_format: 'zip',
                   });
                   var fs = require('fs');
-                  fs.writeFileSync('${{github.workspace}}/context.json.zip', Buffer.from(download.data));
+                  fs.writeFileSync('${{github.workspace}}/pr.json.zip', Buffer.from(download.data));
             - name: Extract Artifacts
-              run: unzip -d webapp previewbuild.zip && rm previewbuild.zip && unzip context.json && rm context.json.zip
-            - name: 'Read Context'
+              run: unzip -d webapp previewbuild.zip && rm previewbuild.zip && unzip pr.json.zip && rm pr.json.zip
+            - name: 'Read PR Info'
               id: readctx
               uses: actions/github-script@v3.1.0
               with:
                 script: |
                     var fs = require('fs');
-                    var ctx = JSON.parse(fs.readFileSync('${{github.workspace}}/context.json'));
-                    console.log(`::set-output name=prnumber::${ctx.payload.pull_request.number}`);
+                    var pr = JSON.parse(fs.readFileSync('${{github.workspace}}/pr.json'));
+                    console.log(`::set-output name=prnumber::${pr.number}`);
             - name: Deploy to Netlify
               id: netlify
               uses: nwtgck/actions-netlify@v1.2
