@@ -20,6 +20,7 @@ const toastScenarios = require('./scenarios/toast');
 const roomDirectoryScenarios = require('./scenarios/directory');
 const lazyLoadingScenarios = require('./scenarios/lazy-loading');
 const e2eEncryptionScenarios = require('./scenarios/e2e-encryption');
+const spacesScenarios = require('./scenarios/spaces');
 
 module.exports = async function scenario(createSession, restCreator) {
     let firstUser = true;
@@ -40,6 +41,7 @@ module.exports = async function scenario(createSession, restCreator) {
     await toastScenarios(alice, bob);
     await roomDirectoryScenarios(alice, bob);
     await e2eEncryptionScenarios(alice, bob);
+    await spacesScenarios(alice, bob);
     console.log("create REST users:");
     const charlies = await createRestUsers(restCreator);
     await lazyLoadingScenarios(alice, bob, charlies);
