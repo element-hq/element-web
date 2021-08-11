@@ -68,12 +68,13 @@ jobs:
                   NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
                   NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
               timeout-minutes: 1
-            - name: Comment on PR
-              uses: phulsechinmay/rewritable-pr-comment@v0.3.0
-              with:
+            - name: Edit PR Description
+              uses: velas/pr-description@v1.0.1
+              env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  ISSUE_ID: ${{ steps.readctx.outputs.prnumber }}
-                  message: |
+              with:
+                  pull-request-number: ${{ steps.readctx.outputs.prnumber }}
+                  description-message: |
                       Preview: ${{ steps.netlify.outputs.deploy-url }}
                       ⚠️ Do you trust the author of this PR? Maybe this build will steal your keys or give you malware. Exercise caution. Use test accounts.
 
