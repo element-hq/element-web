@@ -151,12 +151,6 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
             }
         }
 
-        /*if (
-            oldWidgetIds.includes(ActiveWidgetStore.getPersistentWidgetId()) &&
-            !roomInfo.widgets.map(w => w.id).includes(ActiveWidgetStore.getPersistentWidgetId())) {
-            ActiveWidgetStore.destroyPersistentWidget(ActiveWidgetStore.getPersistentWidgetId());
-        }*/
-
         this.emit(room.roomId);
     }
 
