@@ -3648,5 +3648,7 @@
     "Surround selected text when typing special characters": "輸入特殊字元以環繞選取的文字",
     "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(oneUser)s 變更了聊天室的<a>釘選訊息</a> %(count)s 次。",
     "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(severalUsers)s 變更了聊天室的<a>釘選訊息</a> %(count)s 次。",
-    "Olm version:": "Olm 版本："
+    "Olm version:": "Olm 版本：",
+    "Delete avatar": "刪除大頭照",
+    "Don't send read receipts": "不要傳送讀取回條"
 }
