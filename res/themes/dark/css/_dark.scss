@@ -20,7 +20,6 @@ $space-nav: rgba($panel-base, 0.1);
 
 // unified palette
 // try to use these colors when possible
-$base-text-color: $primary-content;
 $header-panel-bg-color: #20252B;
 $header-panel-border-color: #000000;
 $header-panel-text-primary-color: #B9BEC6;
@@ -98,7 +97,7 @@ $avatar-bg-color: $background;
 
 $h3-color: $primary-fg-color;
 
-$dialog-title-fg-color: $base-text-color;
+$dialog-title-fg-color: $primary-content;
 $dialog-backdrop-color: #000;
 $dialog-shadow-color: rgba(0, 0, 0, 0.48);
 $dialog-close-fg-color: #9fa9ba;
