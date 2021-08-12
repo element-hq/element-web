@@ -24,7 +24,6 @@ $header-panel-bg-color: #20252B;
 $header-panel-border-color: #000000;
 $header-panel-text-primary-color: #B9BEC6;
 $header-panel-text-secondary-color: #c8c8cd;
-$text-primary-color: $primary-content;
 $text-secondary-color: #B9BEC6;
 $quaternary-fg-color: $quaternary-content;
 $search-bg-color: #181b21;
@@ -32,7 +31,7 @@ $search-placeholder-color: #61708b;
 $room-highlight-color: #343a46;
 
 // typical text (dark-on-white in light skin)
-$primary-fg-color: $text-primary-color;
+$primary-fg-color: $primary-content;
 $muted-fg-color: $header-panel-text-primary-color;
 
 // additional text colors
@@ -113,11 +112,11 @@ $settings-profile-button-bg-color: #e7e7e7;
 $settings-profile-button-fg-color: $settings-profile-overlay-placeholder-fg-color;
 $settings-subsection-fg-color: $text-secondary-color;
 
-$topleftmenu-color: $text-primary-color;
-$roomheader-color: $text-primary-color;
+$topleftmenu-color: $primary-content;
+$roomheader-color: $primary-content;
 $roomheader-bg-color: $background;
 $roomheader-addroom-bg-color: rgba(92, 100, 112, 0.3);
-$roomheader-addroom-fg-color: $text-primary-color;
+$roomheader-addroom-fg-color: $primary-content;
 $groupFilterPanel-button-color: $header-panel-text-primary-color;
 $groupheader-button-color: $header-panel-text-primary-color;
 $rightpanel-button-color: $header-panel-text-primary-color;
@@ -166,12 +165,12 @@ $event-highlight-bg-color: #25271F;
 $event-timestamp-color: $text-secondary-color;
 
 // Tabbed views
-$tab-label-fg-color: $text-primary-color;
-$tab-label-active-fg-color: $text-primary-color;
+$tab-label-fg-color: $primary-content;
+$tab-label-active-fg-color: $primary-content;
 $tab-label-bg-color: transparent;
 $tab-label-active-bg-color: $accent-color;
-$tab-label-icon-bg-color: $text-primary-color;
-$tab-label-active-icon-bg-color: $text-primary-color;
+$tab-label-icon-bg-color: $primary-content;
+$tab-label-active-icon-bg-color: $primary-content;
 
 // Buttons
 $button-primary-fg-color: $primary-content;
