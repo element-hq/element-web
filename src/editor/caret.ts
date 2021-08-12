@@ -19,7 +19,7 @@ import { needsCaretNodeBefore, needsCaretNodeAfter } from "./render";
 import Range from "./range";
 import EditorModel from "./model";
 import DocumentPosition, { IPosition } from "./position";
-import { Part } from "./parts";
+import { Part, Type } from "./parts";
 
 export type Caret = Range | DocumentPosition;
 
@@ -113,7 +113,7 @@ function findNodeInLineForPart(parts: Part[], partIndex: number) {
     // to find newline parts
     for (let i = 0; i <= partIndex; ++i) {
         const part = parts[i];
-        if (part.type === "newline") {
+        if (part.type === Type.Newline) {
             lineIndex += 1;
             nodeIndex = -1;
             prevPart = null;
@@ -128,7 +128,7 @@ function findNodeInLineForPart(parts: Part[], partIndex: number) {
             // and not an adjacent caret node
             if (i < partIndex) {
                 const nextPart = parts[i + 1];
-                const isLastOfLine = !nextPart || nextPart.type === "newline";
+                const isLastOfLine = !nextPart || nextPart.type === Type.Newline;
                 if (needsCaretNodeAfter(part, isLastOfLine)) {
                     nodeIndex += 1;
                 }

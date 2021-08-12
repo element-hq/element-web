@@ -31,7 +31,7 @@ import {
     textSerialize,
     unescapeMessage,
 } from '../../../editor/serialize';
-import { CommandPartCreator, Part, PartCreator, SerializedPart } from '../../../editor/parts';
+import { CommandPartCreator, Part, PartCreator, SerializedPart, Type } from '../../../editor/parts';
 import BasicMessageComposer from "./BasicMessageComposer";
 import ReplyThread from "../elements/ReplyThread";
 import { findEditableEvent } from '../../../utils/EventUtils';
@@ -240,14 +240,14 @@ export default class SendMessageComposer extends React.Component<IProps> {
         const parts = this.model.parts;
         const firstPart = parts[0];
         if (firstPart) {
-            if (firstPart.type === "command" && firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")) {
+            if (firstPart.type === Type.Command && firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")) {
                 return true;
             }
             // be extra resilient when somehow the AutocompleteWrapperModel or
             // CommandPartCreator fails to insert a command part, so we don't send
             // a command as a message
             if (firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")
-                && (firstPart.type === "plain" || firstPart.type === "pill-candidate")) {
+                && (firstPart.type === Type.Plain || firstPart.type === Type.PillCandidate)) {
                 return true;
             }
         }
