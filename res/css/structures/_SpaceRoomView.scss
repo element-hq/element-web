@@ -45,7 +45,7 @@ $SpaceRoomViewInnerWidth: 428px;
         mask-position: center;
         mask-repeat: no-repeat;
         mask-size: 24px;
-        background-color: $tertiary-fg-color;
+        background-color: $tertiary-content;
     }
 
     &:hover {
@@ -330,7 +330,7 @@ $SpaceRoomViewInnerWidth: 428px;
                     top: 0;
                     height: 24px;
                     width: 24px;
-                    background: $tertiary-fg-color;
+                    background: $tertiary-content;
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
@@ -492,7 +492,7 @@ $SpaceRoomViewInnerWidth: 428px;
             left: -2px;
             mask-position: center;
             mask-repeat: no-repeat;
-            background-color: $tertiary-fg-color;
+            background-color: $tertiary-content;
         }
     }
 

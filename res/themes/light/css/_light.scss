@@ -37,7 +37,6 @@ $accent-color: $accent;
 $accent-bg-color: rgba(3, 179, 129, 0.16);
 $notice-primary-color: #ff4b55;
 $notice-primary-bg-color: rgba(255, 75, 85, 0.16);
-$tertiary-fg-color: #8D99A5;
 $header-panel-bg-color: #f3f8fd;
 
 // typical text (dark-on-white in light skin)
@@ -193,7 +192,7 @@ $dialpad-button-bg-color: $quinary-content;
 $roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-filter-active-bg-color: $background;
 $roomlist-bg-color: rgba(245, 245, 245, 0.90);
-$roomlist-header-color: $tertiary-fg-color;
+$roomlist-header-color: $tertiary-content;
 $roomsublist-divider-color: $primary-content;
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%);
 
@@ -350,7 +349,7 @@ $voice-record-live-circle-color: #ff4b55;
 
 $voice-record-stop-border-color: $quinary-content;
 $voice-record-waveform-incomplete-fg-color: $quaternary-content;
-$voice-record-icon-color: $tertiary-fg-color;
+$voice-record-icon-color: $tertiary-content;
 $voice-playback-button-bg-color: $message-body-panel-icon-bg-color;
 $voice-playback-button-fg-color: $message-body-panel-icon-fg-color;
 

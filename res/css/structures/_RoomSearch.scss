@@ -48,7 +48,7 @@ limitations under the License.
         line-height: $font-16px;
 
         &:not(.mx_RoomSearch_inputExpanded)::placeholder {
-            color: $tertiary-fg-color !important; // !important to override default app-wide styles
+            color: $tertiary-content !important; // !important to override default app-wide styles
         }
     }
 

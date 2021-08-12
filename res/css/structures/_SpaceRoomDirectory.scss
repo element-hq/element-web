@@ -171,7 +171,7 @@ limitations under the License.
             width: 16px;
             mask-repeat: no-repeat;
             mask-position: center;
-            background-color: $tertiary-fg-color;
+            background-color: $tertiary-content;
             mask-size: 16px;
             transform: rotate(270deg);
             mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
@@ -214,7 +214,7 @@ limitations under the License.
             .mx_InfoTooltip {
                 display: inline;
                 margin-left: 12px;
-                color: $tertiary-fg-color;
+                color: $tertiary-content;
                 font-size: $font-12px;
                 line-height: $font-15px;
 

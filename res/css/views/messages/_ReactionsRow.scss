@@ -36,7 +36,7 @@ limitations under the License.
             mask-size: 16px;
             mask-repeat: no-repeat;
             mask-position: center;
-            background-color: $tertiary-fg-color;
+            background-color: $tertiary-content;
             mask-image: url('$(res)/img/element-icons/room/message-bar/emoji.svg');
         }
 
@@ -64,7 +64,7 @@ limitations under the License.
     vertical-align: middle;
 
     &:link, &:visited {
-        color: $tertiary-fg-color;
+        color: $tertiary-content;
     }
 
     &:hover {
