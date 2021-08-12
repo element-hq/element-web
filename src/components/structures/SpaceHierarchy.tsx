@@ -23,15 +23,18 @@ import React, {
     useState,
     KeyboardEvent,
     KeyboardEventHandler,
+    useContext,
+    SetStateAction,
+    Dispatch,
 } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { IHierarchyRelation, IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { sortBy } from "lodash";
 
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import dis from "../../dispatcher/dispatcher";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
@@ -53,12 +56,13 @@ import { Action } from "../../dispatcher/actions";
 import { Key } from "../../Keyboard";
 import { IState, RovingTabIndexProvider, useRovingTabIndex } from "../../accessibility/RovingTabIndex";
 import { getDisplayAliasForRoom } from "./RoomDirectory";
+import MatrixClientContext from "../../contexts/MatrixClientContext";
 
 interface IProps {
     space: Room;
     initialText?: string;
     additionalButtons?: ReactNode;
-    showRoom(hierarchy: RoomHierarchy, roomId: string, autoJoin?: boolean): void;
+    showRoom(cli: MatrixClient, hierarchy: RoomHierarchy, roomId: string, autoJoin?: boolean): void;
 }
 
 interface ITileProps {
@@ -81,7 +85,7 @@ const Tile: React.FC<ITileProps> = ({
     numChildRooms,
     children,
 }) => {
-    const cli = MatrixClientPeg.get();
+    const cli = useContext(MatrixClientContext);
     const joinedRoom = cli.getRoom(room.room_id)?.getMyMembership() === "join" ? cli.getRoom(room.room_id) : null;
     const name = joinedRoom?.name || room.name || room.canonical_alias || room.aliases?.[0]
         || (room.room_type === RoomType.Space ? _t("Unnamed Space") : _t("Unnamed Room"));
@@ -238,7 +242,7 @@ const Tile: React.FC<ITileProps> = ({
                     handled = true;
                     if (showChildren) {
                         const childSection = ref.current?.nextElementSibling;
-                        childSection?.querySelector<HTMLDivElement>(".mx_SpaceRoomDirectory_roomTile")?.focus();
+                        childSection?.querySelector<HTMLDivElement>(".mx_SpaceHierarchy_roomTile")?.focus();
                     } else {
                         toggleShowChildren();
                     }
@@ -253,7 +257,7 @@ const Tile: React.FC<ITileProps> = ({
     }
 
     return <li
-        className="mx_SpaceRoomDirectory_roomTileWrapper"
+        className="mx_SpaceHierarchy_roomTileWrapper"
         role="treeitem"
         aria-expanded={children ? showChildren : undefined}
     >
@@ -274,12 +278,12 @@ const Tile: React.FC<ITileProps> = ({
     </li>;
 };
 
-export const showRoom = (hierarchy: RoomHierarchy, roomId: string, autoJoin = false) => {
+export const showRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: string, autoJoin = false) => {
     const room = hierarchy.roomMap.get(roomId);
 
     // Don't let the user view a room they won't be able to either peek or join:
     // fail earlier so they don't have to click back to the directory.
-    if (MatrixClientPeg.get().isGuest()) {
+    if (cli.isGuest()) {
         if (!room.world_readable && !room.guest_can_join) {
             dis.dispatch({ action: "require_registration" });
             return;
@@ -322,7 +326,7 @@ export const HierarchyLevel = ({
     onViewRoomClick,
     onToggleClick,
 }: IHierarchyLevelProps) => {
-    const cli = MatrixClientPeg.get();
+    const cli = useContext(MatrixClientContext);
     const space = cli.getRoom(root.room_id);
     const hasPermissions = space?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
 
@@ -462,14 +466,107 @@ const useIntersectionObserver = (callback: () => void) => {
     };
 };
 
+interface IManageButtonsProps {
+    hierarchy: RoomHierarchy;
+    selected: Map<string, Set<string>>;
+    setSelected: Dispatch<SetStateAction<Map<string, Set<string>>>>;
+    setError: Dispatch<SetStateAction<string>>;
+}
+
+const ManageButtons = ({ hierarchy, selected, setSelected, setError }: IManageButtonsProps) => {
+    const cli = useContext(MatrixClientContext);
+
+    const [removing, setRemoving] = useState(false);
+    const [saving, setSaving] = useState(false);
+
+    const selectedRelations = Array.from(selected.keys()).flatMap(parentId => {
+        return [
+            ...selected.get(parentId).values(),
+        ].map(childId => [parentId, childId]) as [string, string][];
+    });
+
+    const selectionAllSuggested = selectedRelations.every(([parentId, childId]) => {
+        return hierarchy.isSuggested(parentId, childId);
+    });
+
+    const disabled = !selectedRelations.length || removing || saving;
+
+    let Button: React.ComponentType<React.ComponentProps<typeof AccessibleButton>> = AccessibleButton;
+    let props = {};
+    if (!selectedRelations.length) {
+        Button = AccessibleTooltipButton;
+        props = {
+            tooltip: _t("Select a room below first"),
+            yOffset: -40,
+        };
+    }
+
+    return <>
+        <Button
+            {...props}
+            onClick={async () => {
+                setRemoving(true);
+                try {
+                    for (const [parentId, childId] of selectedRelations) {
+                        await cli.sendStateEvent(parentId, EventType.SpaceChild, {}, childId);
+
+                        hierarchy.removeRelation(parentId, childId);
+                    }
+                } catch (e) {
+                    setError(_t("Failed to remove some rooms. Try again later"));
+                }
+                setRemoving(false);
+                setSelected(new Map());
+            }}
+            kind="danger_outline"
+            disabled={disabled}
+        >
+            { removing ? _t("Removing...") : _t("Remove") }
+        </Button>
+        <Button
+            {...props}
+            onClick={async () => {
+                setSaving(true);
+                try {
+                    for (const [parentId, childId] of selectedRelations) {
+                        const suggested = !selectionAllSuggested;
+                        const existingContent = hierarchy.getRelation(parentId, childId)?.content;
+                        if (!existingContent || existingContent.suggested === suggested) continue;
+
+                        const content = {
+                            ...existingContent,
+                            suggested: !selectionAllSuggested,
+                        };
+
+                        await cli.sendStateEvent(parentId, EventType.SpaceChild, content, childId);
+
+                        // mutate the local state to save us having to refetch the world
+                        existingContent.suggested = content.suggested;
+                    }
+                } catch (e) {
+                    setError("Failed to update some suggestions. Try again later");
+                }
+                setSaving(false);
+                setSelected(new Map());
+            }}
+            kind="primary_outline"
+            disabled={disabled}
+        >
+            { saving
+                ? _t("Saving...")
+                : (selectionAllSuggested ? _t("Mark as not suggested") : _t("Mark as suggested"))
+            }
+        </Button>
+    </>;
+};
+
 const SpaceHierarchy = ({
     space,
     initialText = "",
     showRoom,
     additionalButtons,
 }: IProps) => {
-    const cli = MatrixClientPeg.get();
-    const userId = cli.getUserId();
+    const cli = useContext(MatrixClientContext);
     const [query, setQuery] = useState(initialText);
 
     const [selected, setSelected] = useState(new Map<string, Set<string>>()); // Map<parentId, Set<childId>>
@@ -502,8 +599,6 @@ const SpaceHierarchy = ({
     }, [rooms, hierarchy, query]);
 
     const [error, setError] = useState("");
-    const [removing, setRemoving] = useState(false);
-    const [saving, setSaving] = useState(false);
 
     const loaderRef = useIntersectionObserver(loadMore);
 
@@ -511,13 +606,29 @@ const SpaceHierarchy = ({
         return <p>{ _t("Your server does not support showing space hierarchies.") }</p>;
     }
 
-    const onKeyDown = (ev: KeyboardEvent, state: IState) => {
-        if (ev.key === Key.ARROW_DOWN && ev.currentTarget.classList.contains("mx_SpaceRoomDirectory_search")) {
+    const onKeyDown = (ev: KeyboardEvent, state: IState): void => {
+        if (ev.key === Key.ARROW_DOWN && ev.currentTarget.classList.contains("mx_SpaceHierarchy_search")) {
             state.refs[0]?.current?.focus();
         }
     };
 
-    // TODO loading state/error state
+    const onToggleClick = (parentId: string, childId: string): void => {
+        setError("");
+        if (!selected.has(parentId)) {
+            setSelected(new Map(selected.set(parentId, new Set([childId]))));
+            return;
+        }
+
+        const parentSet = selected.get(parentId);
+        if (!parentSet.has(childId)) {
+            setSelected(new Map(selected.set(parentId, new Set([...parentSet, childId]))));
+            return;
+        }
+
+        parentSet.delete(childId);
+        setSelected(new Map(selected.set(parentId, new Set(parentSet))));
+    };
+
     return <RovingTabIndexProvider onKeyDown={onKeyDown} handleHomeEnd handleUpDown>
         { ({ onKeyDownHandler }) => {
             let content: JSX.Element;
@@ -526,93 +637,11 @@ const SpaceHierarchy = ({
             if (loading && !rooms.length) {
                 content = <Spinner />;
             } else {
-                let manageButtons;
-                if (space.getMyMembership() === "join" && space.currentState.maySendStateEvent(EventType.SpaceChild, userId)) {
-                    const selectedRelations = Array.from(selected.keys()).flatMap(parentId => {
-                        return [
-                            ...selected.get(parentId).values(),
-                        ].map(childId => [parentId, childId]) as [string, string][];
-                    });
-
-                    const selectionAllSuggested = selectedRelations.every(([parentId, childId]) => {
-                        return hierarchy.isSuggested(parentId, childId);
-                    });
-
-                    const disabled = !selectedRelations.length || removing || saving;
-
-                    let Button: React.ComponentType<React.ComponentProps<typeof AccessibleButton>> = AccessibleButton;
-                    let props = {};
-                    if (!selectedRelations.length) {
-                        Button = AccessibleTooltipButton;
-                        props = {
-                            tooltip: _t("Select a room below first"),
-                            yOffset: -40,
-                        };
-                    }
-
-                    manageButtons = <>
-                        <Button
-                            {...props}
-                            onClick={async () => {
-                                setRemoving(true);
-                                try {
-                                    for (const [parentId, childId] of selectedRelations) {
-                                        await cli.sendStateEvent(parentId, EventType.SpaceChild, {}, childId);
-
-                                        hierarchy.removeRelation(parentId, childId);
-                                    }
-                                } catch (e) {
-                                    setError(_t("Failed to remove some rooms. Try again later"));
-                                }
-                                setRemoving(false);
-                                setSelected(new Map());
-                            }}
-                            kind="danger_outline"
-                            disabled={disabled}
-                        >
-                            { removing ? _t("Removing...") : _t("Remove") }
-                        </Button>
-                        <Button
-                            {...props}
-                            onClick={async () => {
-                                setSaving(true);
-                                try {
-                                    for (const [parentId, childId] of selectedRelations) {
-                                        const suggested = !selectionAllSuggested;
-                                        const existingContent = hierarchy.getRelation(parentId, childId)?.content;
-                                        if (!existingContent || existingContent.suggested === suggested) continue;
-
-                                        const content = {
-                                            ...existingContent,
-                                            suggested: !selectionAllSuggested,
-                                        };
-
-                                        await cli.sendStateEvent(parentId, EventType.SpaceChild, content, childId);
-
-                                        // mutate the local state to save us having to refetch the world
-                                        existingContent.suggested = content.suggested;
-                                    }
-                                } catch (e) {
-                                    setError("Failed to update some suggestions. Try again later");
-                                }
-                                setSaving(false);
-                                setSelected(new Map());
-                            }}
-                            kind="primary_outline"
-                            disabled={disabled}
-                        >
-                            { saving
-                                ? _t("Saving...")
-                                : (selectionAllSuggested ? _t("Mark as not suggested") : _t("Mark as suggested"))
-                            }
-                        </Button>
-                    </>;
-                }
+                const hasPermissions = space?.getMyMembership() === "join" &&
+                    space.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
 
                 let results: JSX.Element;
                 if (filteredRoomSet.size) {
-                    const hasPermissions = space?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
-
                     results = <>
                         <HierarchyLevel
                             root={hierarchy.roomMap.get(space.roomId)}
@@ -620,24 +649,9 @@ const SpaceHierarchy = ({
                             hierarchy={hierarchy}
                             parents={new Set()}
                             selectedMap={selected}
-                            onToggleClick={hasPermissions ? (parentId, childId) => {
-                                setError("");
-                                if (!selected.has(parentId)) {
-                                    setSelected(new Map(selected.set(parentId, new Set([childId]))));
-                                    return;
-                                }
-
-                                const parentSet = selected.get(parentId);
-                                if (!parentSet.has(childId)) {
-                                    setSelected(new Map(selected.set(parentId, new Set([...parentSet, childId]))));
-                                    return;
-                                }
-
-                                parentSet.delete(childId);
-                                setSelected(new Map(selected.set(parentId, new Set(parentSet))));
-                            } : undefined}
+                            onToggleClick={hasPermissions ? onToggleClick : undefined}
                             onViewRoomClick={(roomId, autoJoin) => {
-                                showRoom(hierarchy, roomId, autoJoin);
+                                showRoom(cli, hierarchy, roomId, autoJoin);
                             }}
                         />
                     </>;
@@ -659,13 +673,25 @@ const SpaceHierarchy = ({
                         <h4>{ query.trim() ? _t("Results") : _t("Rooms and spaces") }</h4>
                         <span>
                             { additionalButtons }
-                            { manageButtons }
+                            { hasPermissions && (
+                                <ManageButtons
+                                    hierarchy={hierarchy}
+                                    selected={selected}
+                                    setSelected={setSelected}
+                                    setError={setError}
+                                />
+                            ) }
                         </span>
                     </div>
                     { error && <div className="mx_SpaceHierarchy_error">
                         { error }
                     </div> }
-                    <ul onKeyDown={onKeyDownHandler} role="tree" aria-label={_t("Space")}>
+                    <ul
+                        className="mx_SpaceHierarchy_list"
+                        onKeyDown={onKeyDownHandler}
+                        role="tree"
+                        aria-label={_t("Space")}
+                    >
                         { results }
                     </ul>
                     { loader }
@@ -674,7 +700,7 @@ const SpaceHierarchy = ({
 
             return <>
                 <SearchBox
-                    className="mx_SpaceRoomDirectory_search mx_textinput_icon mx_textinput_search"
+                    className="mx_SpaceHierarchy_search mx_textinput_icon mx_textinput_search"
                     placeholder={_t("Search names and descriptions")}
                     onSearch={setQuery}
                     autoFocus={true}

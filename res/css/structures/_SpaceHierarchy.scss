@@ -116,6 +116,12 @@ limitations under the License.
         }
     }
 
+    .mx_SpaceHierarchy_list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
     .mx_SpaceHierarchy_roomCount {
         > h3 {
             display: inline;
@@ -264,7 +270,7 @@ limitations under the License.
         }
     }
 
-    li.mx_SpaceRoomDirectory_roomTileWrapper {
+    li.mx_SpaceHierarchy_roomTileWrapper {
         list-style: none;
     }
 
