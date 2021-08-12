@@ -59,6 +59,10 @@ limitations under the License.
         .mx_JoinRuleDropdown .mx_Dropdown_menu {
             width: auto !important; // override fixed width
         }
+
+        .mx_CreateSpaceFromCommunityDialog_nonPublicSpacer {
+            height: 63px; // balance the height of the missing room alias field to prevent modal bouncing
+        }
     }
 
     .mx_CreateSpaceFromCommunityDialog_footer {

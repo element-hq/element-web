@@ -286,8 +286,6 @@ const CreateSpaceFromCommunityDialog: React.FC<IProps> = ({ matrixClient: cli, g
     >
         <div className="mx_CreateSpaceFromCommunityDialog_content">
             <p>
-                { _t("Spaces are the new version of communities - with new features coming.") }
-                &nbsp;
                 { _t("A link to the Space will be put in your community description.") }
                 &nbsp;
                 { _t("All rooms will be added and all community members will be invited.") }
@@ -326,6 +324,9 @@ const CreateSpaceFromCommunityDialog: React.FC<IProps> = ({ matrixClient: cli, g
                     ? _t("Open space for anyone, best for communities")
                     : _t("Invite only, best for yourself or teams")
                 }</p>
+                { joinRule !== JoinRule.Public &&
+                    <div className="mx_CreateSpaceFromCommunityDialog_nonPublicSpacer" />
+                }
             </SpaceCreateForm>
         </div>
 

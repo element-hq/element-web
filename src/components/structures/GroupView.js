@@ -41,6 +41,9 @@ import RightPanelStore from "../../stores/RightPanelStore";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { mediaFromMxc } from "../../customisations/Media";
 import { replaceableComponent } from "../../utils/replaceableComponent";
+import { createSpaceFromCommunity } from "../../utils/space";
+import { Action } from "../../dispatcher/actions";
+import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 
 const LONG_DESC_PLACEHOLDER = _td(
     `<h1>HTML for your community's page</h1>
@@ -815,6 +818,17 @@ export default class GroupView extends React.Component {
         this.setState({ showUpgradeNotice: false });
     }
 
+    _onCreateSpaceClick = () => {
+        createSpaceFromCommunity(this._matrixClient, this.props.groupId);
+    };
+
+    _onAdminsLinkClick = () => {
+        dis.dispatch({
+            action: Action.SetRightPanelPhase,
+            phase: RightPanelPhases.GroupMemberList,
+        });
+    };
+
     _getGroupSection() {
         const groupSettingsSectionClasses = classnames({
             "mx_GroupView_group": this.state.editing,
@@ -854,17 +868,35 @@ export default class GroupView extends React.Component {
 
         let communitiesUpgradeNotice;
         if (this.state.showUpgradeNotice) {
+            let text;
+            if (this.state.isUserPrivileged) {
+                text = _t("You can create a Space from this community <a>here</a>.", {}, {
+                    a: sub => <AccessibleButton onClick={this._onCreateSpaceClick} kind="link">
+                        { sub }
+                    </AccessibleButton>,
+                });
+            } else {
+                text = _t("Ask the <a>admins</a> of this community to make it into a Space " +
+                    "and keep a look out for the invite.", {}, {
+                    a: sub => <AccessibleButton onClick={this._onAdminsLinkClick} kind="link">
+                        { sub }
+                    </AccessibleButton>,
+                });
+            }
+
             communitiesUpgradeNotice = <div className="mx_GroupView_spaceUpgradePrompt">
                 <h2>{ _t("Communities can now be made into Spaces") }</h2>
                 <p>
                     { _t("Spaces are a new way to make a community, with new features coming.") }
                     &nbsp;
-                    { _t("Ask the admins of this community to make it into a Space " +
-                        "and keep a look out for the invite.") }
+                    { text }
                     &nbsp;
                     { _t("Communities won't receive further updates.") }
                 </p>
-                <AccessibleButton onClick={this._dismissUpgradeNotice} />
+                <AccessibleButton
+                    className="mx_GroupView_spaceUpgradePrompt_close"
+                    onClick={this._dismissUpgradeNotice}
+                />
             </div>;
         }
 
