@@ -462,7 +462,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         }
 
         const autocompleteAction = getKeyBindingsManager().getAutocompleteAction(event);
-        if (model.autoComplete && model.autoComplete.hasCompletions()) {
+        if (model.autoComplete?.hasCompletions()) {
             const autoComplete = model.autoComplete;
             switch (autocompleteAction) {
                 case AutocompleteAction.ForceComplete:
@@ -485,7 +485,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 default:
                     return; // don't preventDefault on anything else
             }
-        } else if (autocompleteAction === AutocompleteAction.ForceComplete) {
+        } else if (autocompleteAction === AutocompleteAction.ForceComplete && !this.state.showVisualBell) {
             // there is no current autocomplete window, try to open it
             this.tabCompleteName();
             handled = true;
