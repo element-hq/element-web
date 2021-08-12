@@ -148,7 +148,7 @@ const CreateSpaceButton = ({
     };
 
     let betaDot: JSX.Element;
-    if (!localStorage.getItem("mx_seenSpaces")) {
+    if (!localStorage.getItem("mx_seenSpaces") && !SpaceStore.instance.spacePanelSpaces.length) {
         betaDot = <div className="mx_BetaDot" />;
     }
 
