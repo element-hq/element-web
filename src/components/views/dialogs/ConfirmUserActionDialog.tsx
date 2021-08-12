@@ -104,7 +104,9 @@ export default class ConfirmUserActionDialog extends React.Component<IProps> {
         }
 
         return (
-            <BaseDialog className="mx_ConfirmUserActionDialog" onFinished={this.props.onFinished}
+            <BaseDialog
+                className="mx_ConfirmUserActionDialog"
+                onFinished={this.props.onFinished}
                 title={this.props.title}
                 contentId='mx_Dialog_content'
             >

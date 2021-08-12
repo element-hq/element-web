@@ -89,6 +89,7 @@ import RoomStatusBar from "./RoomStatusBar";
 import MessageComposer from '../views/rooms/MessageComposer';
 import JumpToBottomButton from "../views/rooms/JumpToBottomButton";
 import TopUnreadMessagesBar from "../views/rooms/TopUnreadMessagesBar";
+import SpaceStore from "../../stores/SpaceStore";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -165,6 +166,11 @@ export interface IState {
     canReply: boolean;
     layout: Layout;
     lowBandwidth: boolean;
+    alwaysShowTimestamps: boolean;
+    showTwelveHourTimestamps: boolean;
+    readMarkerInViewThresholdMs: number;
+    readMarkerOutOfViewThresholdMs: number;
+    showHiddenEventsInTimeline: boolean;
     showReadReceipts: boolean;
     showRedactions: boolean;
     showJoinLeaves: boolean;
@@ -229,6 +235,11 @@ export default class RoomView extends React.Component<IProps, IState> {
             canReply: false,
             layout: SettingsStore.getValue("layout"),
             lowBandwidth: SettingsStore.getValue("lowBandwidth"),
+            alwaysShowTimestamps: SettingsStore.getValue("alwaysShowTimestamps"),
+            showTwelveHourTimestamps: SettingsStore.getValue("showTwelveHourTimestamps"),
+            readMarkerInViewThresholdMs: SettingsStore.getValue("readMarkerInViewThresholdMs"),
+            readMarkerOutOfViewThresholdMs: SettingsStore.getValue("readMarkerOutOfViewThresholdMs"),
+            showHiddenEventsInTimeline: SettingsStore.getValue("showHiddenEventsInTimeline"),
             showReadReceipts: true,
             showRedactions: true,
             showJoinLeaves: true,
@@ -252,7 +263,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.context.on("userTrustStatusChanged", this.onUserVerificationChanged);
         this.context.on("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
         this.context.on("Event.decrypted", this.onEventDecrypted);
-        this.context.on("event", this.onEvent);
         // Start listening for RoomViewStore updates
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         this.rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this.onRightPanelStoreUpdate);
@@ -261,11 +271,26 @@ export default class RoomView extends React.Component<IProps, IState> {
         WidgetStore.instance.on(UPDATE_EVENT, this.onWidgetStoreUpdate);
 
         this.settingWatchers = [
-            SettingsStore.watchSetting("layout", null, () =>
-                this.setState({ layout: SettingsStore.getValue("layout") }),
+            SettingsStore.watchSetting("layout", null, (...[,,, value]) =>
+                this.setState({ layout: value as Layout }),
             ),
-            SettingsStore.watchSetting("lowBandwidth", null, () =>
-                this.setState({ lowBandwidth: SettingsStore.getValue("lowBandwidth") }),
+            SettingsStore.watchSetting("lowBandwidth", null, (...[,,, value]) =>
+                this.setState({ lowBandwidth: value as boolean }),
+            ),
+            SettingsStore.watchSetting("alwaysShowTimestamps", null, (...[,,, value]) =>
+                this.setState({ alwaysShowTimestamps: value as boolean }),
+            ),
+            SettingsStore.watchSetting("showTwelveHourTimestamps", null, (...[,,, value]) =>
+                this.setState({ showTwelveHourTimestamps: value as boolean }),
+            ),
+            SettingsStore.watchSetting("readMarkerInViewThresholdMs", null, (...[,,, value]) =>
+                this.setState({ readMarkerInViewThresholdMs: value as number }),
+            ),
+            SettingsStore.watchSetting("readMarkerOutOfViewThresholdMs", null, (...[,,, value]) =>
+                this.setState({ readMarkerOutOfViewThresholdMs: value as number }),
+            ),
+            SettingsStore.watchSetting("showHiddenEventsInTimeline", null, (...[,,, value]) =>
+                this.setState({ showHiddenEventsInTimeline: value as boolean }),
             ),
         ];
     }
@@ -332,30 +357,20 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         // Add watchers for each of the settings we just looked up
         this.settingWatchers = this.settingWatchers.concat([
-            SettingsStore.watchSetting("showReadReceipts", null, () =>
-                this.setState({
-                    showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
-                }),
+            SettingsStore.watchSetting("showReadReceipts", roomId, (...[,,, value]) =>
+                this.setState({ showReadReceipts: value as boolean }),
             ),
-            SettingsStore.watchSetting("showRedactions", null, () =>
-                this.setState({
-                    showRedactions: SettingsStore.getValue("showRedactions", roomId),
-                }),
+            SettingsStore.watchSetting("showRedactions", roomId, (...[,,, value]) =>
+                this.setState({ showRedactions: value as boolean }),
             ),
-            SettingsStore.watchSetting("showJoinLeaves", null, () =>
-                this.setState({
-                    showJoinLeaves: SettingsStore.getValue("showJoinLeaves", roomId),
-                }),
+            SettingsStore.watchSetting("showJoinLeaves", roomId, (...[,,, value]) =>
+                this.setState({ showJoinLeaves: value as boolean }),
             ),
-            SettingsStore.watchSetting("showAvatarChanges", null, () =>
-                this.setState({
-                    showAvatarChanges: SettingsStore.getValue("showAvatarChanges", roomId),
-                }),
+            SettingsStore.watchSetting("showAvatarChanges", roomId, (...[,,, value]) =>
+                this.setState({ showAvatarChanges: value as boolean }),
             ),
-            SettingsStore.watchSetting("showDisplaynameChanges", null, () =>
-                this.setState({
-                    showDisplaynameChanges: SettingsStore.getValue("showDisplaynameChanges", roomId),
-                }),
+            SettingsStore.watchSetting("showDisplaynameChanges", roomId, (...[,,, value]) =>
+                this.setState({ showDisplaynameChanges: value as boolean }),
             ),
         ]);
 
@@ -636,7 +651,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             this.context.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
             this.context.removeListener("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
             this.context.removeListener("Event.decrypted", this.onEventDecrypted);
-            this.context.removeListener("event", this.onEvent);
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
@@ -836,8 +850,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         if (this.unmounted) return;
 
         // ignore events for other rooms
-        if (!room) return;
-        if (!this.state.room || room.roomId != this.state.room.roomId) return;
+        if (!room || room.roomId !== this.state.room?.roomId) return;
 
         // ignore events from filtered timelines
         if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
@@ -858,6 +871,10 @@ export default class RoomView extends React.Component<IProps, IState> {
         // we'll only be showing a spinner.
         if (this.state.joining) return;
 
+        if (!ev.isBeingDecrypted() && !ev.isDecryptionFailure()) {
+            this.handleEffects(ev);
+        }
+
         if (ev.getSender() !== this.context.credentials.userId) {
             // update unread count when scrolled up
             if (!this.state.searchResults && this.state.atEndOfLiveTimeline) {
@@ -870,20 +887,14 @@ export default class RoomView extends React.Component<IProps, IState> {
         }
     };
 
-    private onEventDecrypted = (ev) => {
+    private onEventDecrypted = (ev: MatrixEvent) => {
+        if (!this.state.room || !this.state.matrixClientIsReady) return; // not ready at all
+        if (ev.getRoomId() !== this.state.room.roomId) return; // not for us
         if (ev.isDecryptionFailure()) return;
         this.handleEffects(ev);
     };
 
-    private onEvent = (ev) => {
-        if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
-        this.handleEffects(ev);
-    };
-
-    private handleEffects = (ev) => {
-        if (!this.state.room || !this.state.matrixClientIsReady) return; // not ready at all
-        if (ev.getRoomId() !== this.state.room.roomId) return; // not for us
-
+    private handleEffects = (ev: MatrixEvent) => {
         const notifState = RoomNotificationStateStore.instance.getRoomState(this.state.room);
         if (!notifState.isUnread) return;
 
@@ -916,6 +927,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     // called when state.room is first initialised (either at initial load,
     // after a successful peek, or after we join the room).
     private onRoomLoaded = (room: Room) => {
+        if (this.unmounted) return;
         // Attach a widget store listener only when we get a room
         WidgetLayoutStore.instance.on(WidgetLayoutStore.emissionForRoom(room), this.onWidgetLayoutChange);
         this.onWidgetLayoutChange(); // provoke an update
@@ -930,9 +942,9 @@ export default class RoomView extends React.Component<IProps, IState> {
     };
 
     private async calculateRecommendedVersion(room: Room) {
-        this.setState({
-            upgradeRecommendation: await room.getRecommendedVersion(),
-        });
+        const upgradeRecommendation = await room.getRecommendedVersion();
+        if (this.unmounted) return;
+        this.setState({ upgradeRecommendation });
     }
 
     private async loadMembersIfJoined(room: Room) {
@@ -1022,23 +1034,19 @@ export default class RoomView extends React.Component<IProps, IState> {
     };
 
     private async updateE2EStatus(room: Room) {
-        if (!this.context.isRoomEncrypted(room.roomId)) {
-            return;
-        }
-        if (!this.context.isCryptoEnabled()) {
-            // If crypto is not currently enabled, we aren't tracking devices at all,
-            // so we don't know what the answer is. Let's error on the safe side and show
-            // a warning for this case.
-            this.setState({
-                e2eStatus: E2EStatus.Warning,
-            });
-            return;
+        if (!this.context.isRoomEncrypted(room.roomId)) return;
+
+        // If crypto is not currently enabled, we aren't tracking devices at all,
+        // so we don't know what the answer is. Let's error on the safe side and show
+        // a warning for this case.
+        let e2eStatus = E2EStatus.Warning;
+        if (this.context.isCryptoEnabled()) {
+            /* At this point, the user has encryption on and cross-signing on */
+            e2eStatus = await shieldStatusForRoom(this.context, room);
         }
 
-        /* At this point, the user has encryption on and cross-signing on */
-        this.setState({
-            e2eStatus: await shieldStatusForRoom(this.context, room),
-        });
+        if (this.unmounted) return;
+        this.setState({ e2eStatus });
     }
 
     private onAccountData = (event: MatrixEvent) => {
@@ -1395,7 +1403,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 continue;
             }
 
-            if (!haveTileForEvent(mxEv)) {
+            if (!haveTileForEvent(mxEv, this.state.showHiddenEventsInTimeline)) {
                 // XXX: can this ever happen? It will make the result count
                 // not match the displayed count.
                 continue;
@@ -1732,7 +1740,8 @@ export default class RoomView extends React.Component<IProps, IState> {
                                 onJoinClick={this.onJoinButtonClicked}
                                 onForgetClick={this.onForgetClick}
                                 onRejectClick={this.onRejectThreepidInviteButtonClicked}
-                                canPreview={false} error={this.state.roomLoadError}
+                                canPreview={false}
+                                error={this.state.roomLoadError}
                                 roomAlias={roomAlias}
                                 joining={this.state.joining}
                                 inviterName={inviterName}
@@ -1748,10 +1757,8 @@ export default class RoomView extends React.Component<IProps, IState> {
         }
 
         const myMembership = this.state.room.getMyMembership();
-        if (myMembership === "invite"
-            // SpaceRoomView handles invites itself
-            && (!SettingsStore.getValue("feature_spaces") || !this.state.room.isSpaceRoom())
-        ) {
+        // SpaceRoomView handles invites itself
+        if (myMembership === "invite" && (!SpaceStore.spacesEnabled || !this.state.room.isSpaceRoom())) {
             if (this.state.joining || this.state.rejecting) {
                 return (
                     <ErrorBoundary>
@@ -1882,7 +1889,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                     room={this.state.room}
                 />
             );
-            if (!this.state.canPeek && (!SettingsStore.getValue("feature_spaces") || !this.state.room?.isSpaceRoom())) {
+            if (!this.state.canPeek && (!SpaceStore.spacesEnabled || !this.state.room?.isSpaceRoom())) {
                 return (
                     <div className="mx_RoomView">
                         { previewBar }
@@ -1896,10 +1903,10 @@ export default class RoomView extends React.Component<IProps, IState> {
                     className="mx_RoomView_auxPanel_hiddenHighlights"
                     onClick={this.onHiddenHighlightsClick}
                 >
-                    {_t(
+                    { _t(
                         "You have %(count)s unread notifications in a prior version of this room.",
                         { count: hiddenHighlightCount },
-                    )}
+                    ) }
                 </AccessibleButton>
             );
         }
@@ -2011,7 +2018,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 onScroll={this.onMessageListScroll}
                 onUserScroll={this.onUserScroll}
                 onReadMarkerUpdated={this.updateTopUnreadMessagesBar}
-                showUrlPreview = {this.state.showUrlPreview}
+                showUrlPreview={this.state.showUrlPreview}
                 className={messagePanelClassNames}
                 membersLoaded={this.state.membersLoaded}
                 permalinkCreator={this.getPermalinkCreatorForRoom(this.state.room)}
@@ -2061,7 +2068,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         return (
             <RoomContext.Provider value={this.state}>
                 <main className={mainClasses} ref={this.roomView} onKeyDown={this.onReactKeyDown}>
-                    {showChatEffects && this.roomView.current &&
+                    { showChatEffects && this.roomView.current &&
                         <EffectsOverlay roomWidth={this.roomView.current.offsetWidth} />
                     }
                     <ErrorBoundary>
@@ -2080,22 +2087,22 @@ export default class RoomView extends React.Component<IProps, IState> {
                         />
                         <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier}>
                             <div className="mx_RoomView_body">
-                                {auxPanel}
+                                { auxPanel }
                                 <div className={timelineClasses}>
-                                    {fileDropTarget}
-                                    {topUnreadMessagesBar}
-                                    {jumpToBottom}
-                                    {messagePanel}
-                                    {searchResultsPanel}
+                                    { fileDropTarget }
+                                    { topUnreadMessagesBar }
+                                    { jumpToBottom }
+                                    { messagePanel }
+                                    { searchResultsPanel }
                                 </div>
                                 <div className={statusBarAreaClass}>
                                     <div className="mx_RoomView_statusAreaBox">
                                         <div className="mx_RoomView_statusAreaBox_line" />
-                                        {statusBar}
+                                        { statusBar }
                                     </div>
                                 </div>
-                                {previewBar}
-                                {messageComposer}
+                                { previewBar }
+                                { messageComposer }
                             </div>
                         </MainSplit>
                     </ErrorBoundary>

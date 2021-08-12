@@ -45,11 +45,11 @@ export default class IntegrationsImpossibleDialog extends React.Component {
             >
                 <div className='mx_IntegrationsImpossibleDialog_content'>
                     <p>
-                        {_t(
+                        { _t(
                             "Your %(brand)s doesn't allow you to use an integration manager to do this. " +
                             "Please contact an admin.",
                             { brand },
-                        )}
+                        ) }
                     </p>
                 </div>
                 <DialogButtons

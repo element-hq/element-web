@@ -416,7 +416,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                 kind="link"
                 onClick={this.onForgotPasswordClick}
             >
-                {_t("Forgot password?")}
+                { _t("Forgot password?") }
             </AccessibleButton>;
         }
 
@@ -441,16 +441,16 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                         disabled={this.props.disableSubmit}
                     >
                         <option key={LoginField.MatrixId} value={LoginField.MatrixId}>
-                            {_t('Username')}
+                            { _t('Username') }
                         </option>
                         <option
                             key={LoginField.Email}
                             value={LoginField.Email}
                         >
-                            {_t('Email address')}
+                            { _t('Email address') }
                         </option>
                         <option key={LoginField.Password} value={LoginField.Password}>
-                            {_t('Phone')}
+                            { _t('Phone') }
                         </option>
                     </Field>
                 </div>
@@ -460,8 +460,8 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
         return (
             <div>
                 <form onSubmit={this.onSubmitForm}>
-                    {loginType}
-                    {loginField}
+                    { loginType }
+                    { loginField }
                     <Field
                         className={pwFieldClass}
                         type="password"
@@ -474,7 +474,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                         onValidate={this.onPasswordValidate}
                         ref={field => this[LoginField.Password] = field}
                     />
-                    {forgotPasswordJsx}
+                    { forgotPasswordJsx }
                     { !this.props.busy && <input className="mx_Login_submit"
                         type="submit"
                         value={_t('Sign in')}

@@ -102,10 +102,10 @@ export class BannedUser extends React.Component<IBannedUserProps> {
         const userId = this.props.member.name === this.props.member.userId ? null : this.props.member.userId;
         return (
             <li>
-                {unbanButton}
+                { unbanButton }
                 <span title={_t("Banned by %(displayName)s", { displayName: this.props.by })}>
-                    <strong>{ this.props.member.name }</strong> {userId}
-                    {this.props.reason ? " " + _t('Reason') + ": " + this.props.reason : ""}
+                    <strong>{ this.props.member.name }</strong> { userId }
+                    { this.props.reason ? " " + _t('Reason') + ": " + this.props.reason : "" }
                 </span>
             </li>
         );
@@ -273,7 +273,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             parseIntWithDefault(plContent.events_default, powerLevelDescriptors.events_default.defaultValue),
         );
 
-        let privilegedUsersSection = <div>{_t('No users have specific privileges in this room')}</div>;
+        let privilegedUsersSection = <div>{ _t('No users have specific privileges in this room') }</div>;
         let mutedUsersSection;
         if (Object.keys(userLevels).length) {
             const privilegedUsers = [];
@@ -320,14 +320,14 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                 privilegedUsersSection =
                     <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                         <div className='mx_SettingsTab_subheading'>{ _t('Privileged Users') }</div>
-                        {privilegedUsers}
+                        { privilegedUsers }
                     </div>;
             }
             if (mutedUsers.length) {
                 mutedUsersSection =
                     <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                         <div className='mx_SettingsTab_subheading'>{ _t('Muted Users') }</div>
-                        {mutedUsers}
+                        { mutedUsers }
                     </div>;
             }
         }
@@ -340,18 +340,21 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                     <div className='mx_SettingsTab_subheading'>{ _t('Banned users') }</div>
                     <ul>
-                        {banned.map((member) => {
+                        { banned.map((member) => {
                             const banEvent = member.events.member.getContent();
                             const sender = room.getMember(member.events.member.getSender());
                             let bannedBy = member.events.member.getSender(); // start by falling back to mxid
                             if (sender) bannedBy = sender.name;
                             return (
-                                <BannedUser key={member.userId} canUnban={canBanUsers}
-                                    member={member} reason={banEvent.reason}
+                                <BannedUser
+                                    key={member.userId}
+                                    canUnban={canBanUsers}
+                                    member={member}
+                                    reason={banEvent.reason}
                                     by={bannedBy}
                                 />
                             );
-                        })}
+                        }) }
                     </ul>
                 </div>;
         }
@@ -409,15 +412,15 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
 
         return (
             <div className="mx_SettingsTab mx_RolesRoomSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Roles & Permissions")}</div>
-                {privilegedUsersSection}
-                {mutedUsersSection}
-                {bannedUsersSection}
+                <div className="mx_SettingsTab_heading">{ _t("Roles & Permissions") }</div>
+                { privilegedUsersSection }
+                { mutedUsersSection }
+                { bannedUsersSection }
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    <span className='mx_SettingsTab_subheading'>{_t("Permissions")}</span>
-                    <p>{_t('Select the roles required to change various parts of the room')}</p>
-                    {powerSelectors}
-                    {eventPowerSelectors}
+                    <span className='mx_SettingsTab_subheading'>{ _t("Permissions") }</span>
+                    <p>{ _t('Select the roles required to change various parts of the room') }</p>
+                    { powerSelectors }
+                    { eventPowerSelectors }
                 </div>
             </div>
         );

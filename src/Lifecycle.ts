@@ -21,6 +21,7 @@ import { createClient } from 'matrix-js-sdk/src/matrix';
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { decryptAES, encryptAES, IEncryptedPayload } from "matrix-js-sdk/src/crypto/aes";
+import { QueryDict } from 'matrix-js-sdk/src/utils';
 
 import { IMatrixClientCreds, MatrixClientPeg } from './MatrixClientPeg';
 import SecurityCustomisations from "./customisations/Security";
@@ -47,6 +48,7 @@ import { Jitsi } from "./widgets/Jitsi";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY, SSO_IDP_ID_KEY } from "./BasePlatform";
 import ThreepidInviteStore from "./stores/ThreepidInviteStore";
 import CountlyAnalytics from "./CountlyAnalytics";
+import { PosthogAnalytics } from "./PosthogAnalytics";
 import CallHandler from './CallHandler';
 import LifecycleCustomisations from "./customisations/Lifecycle";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
@@ -65,7 +67,7 @@ interface ILoadSessionOpts {
     guestIsUrl?: string;
     ignoreGuest?: boolean;
     defaultDeviceDisplayName?: string;
-    fragmentQueryParams?: Record<string, string>;
+    fragmentQueryParams?: QueryDict;
 }
 
 /**
@@ -118,8 +120,8 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
         ) {
             console.log("Using guest access credentials");
             return doSetLoggedIn({
-                userId: fragmentQueryParams.guest_user_id,
-                accessToken: fragmentQueryParams.guest_access_token,
+                userId: fragmentQueryParams.guest_user_id as string,
+                accessToken: fragmentQueryParams.guest_access_token as string,
                 homeserverUrl: guestHsUrl,
                 identityServerUrl: guestIsUrl,
                 guest: true,
@@ -173,7 +175,7 @@ export async function getStoredSessionOwner(): Promise<[string, boolean]> {
  *    login, else false
  */
 export function attemptTokenLogin(
-    queryParams: Record<string, string>,
+    queryParams: QueryDict,
     defaultDeviceDisplayName?: string,
     fragmentAfterLogin?: string,
 ): Promise<boolean> {
@@ -198,7 +200,7 @@ export function attemptTokenLogin(
         homeserver,
         identityServer,
         "m.login.token", {
-            token: queryParams.loginToken,
+            token: queryParams.loginToken as string,
             initial_device_display_name: defaultDeviceDisplayName,
         },
     ).then(function(creds) {
@@ -572,6 +574,8 @@ async function doSetLoggedIn(
         await abortLogin();
     }
 
+    PosthogAnalytics.instance.updateAnonymityFromSettings(credentials.userId);
+
     Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl);
 
     MatrixClientPeg.replaceUsingCreds(credentials);
@@ -698,6 +702,8 @@ export function logout(): void {
         // user has logged out, fall back to anonymous
         CountlyAnalytics.instance.enable(/* anonymous = */ true);
     }
+
+    PosthogAnalytics.instance.logout();
 
     if (MatrixClientPeg.get().isGuest()) {
         // logout doesn't work for guest sessions

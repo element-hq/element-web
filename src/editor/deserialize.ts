@@ -20,7 +20,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { walkDOMDepthFirst } from "./dom";
 import { checkBlockNode } from "../HtmlUtils";
 import { getPrimaryPermalinkEntity } from "../utils/permalinks/Permalinks";
-import { PartCreator } from "./parts";
+import { PartCreator, Type } from "./parts";
 import SdkConfig from "../SdkConfig";
 
 function parseAtRoomMentions(text: string, partCreator: PartCreator) {
@@ -121,6 +121,12 @@ function parseElement(n: HTMLElement, partCreator: PartCreator, lastNode: HTMLEl
             return partCreator.plain(`\`${n.textContent}\``);
         case "DEL":
             return partCreator.plain(`<del>${n.textContent}</del>`);
+        case "SUB":
+            return partCreator.plain(`<sub>${n.textContent}</sub>`);
+        case "SUP":
+            return partCreator.plain(`<sup>${n.textContent}</sup>`);
+        case "U":
+            return partCreator.plain(`<u>${n.textContent}</u>`);
         case "LI": {
             const indent = "  ".repeat(state.listDepth - 1);
             if (n.parentElement.nodeName === "OL") {
@@ -200,7 +206,7 @@ function prefixQuoteLines(isFirstNode, parts, partCreator) {
         parts.splice(0, 0, partCreator.plain(QUOTE_LINE_PREFIX));
     }
     for (let i = 0; i < parts.length; i += 1) {
-        if (parts[i].type === "newline") {
+        if (parts[i].type === Type.Newline) {
             parts.splice(i + 1, 0, partCreator.plain(QUOTE_LINE_PREFIX));
             i += 1;
         }

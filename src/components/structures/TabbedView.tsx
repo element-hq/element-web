@@ -74,7 +74,7 @@ export default class TabbedView extends React.Component<IProps, IState> {
         tabLocation: TabLocation.LEFT,
     };
 
-    private _getActiveTabIndex() {
+    private getActiveTabIndex() {
         if (!this.state || !this.state.activeTabIndex) return 0;
         return this.state.activeTabIndex;
     }
@@ -84,7 +84,7 @@ export default class TabbedView extends React.Component<IProps, IState> {
      * @param {Tab} tab the tab to show
      * @private
      */
-    private _setActiveTab(tab: Tab) {
+    private setActiveTab(tab: Tab) {
         const idx = this.props.tabs.indexOf(tab);
         if (idx !== -1) {
             if (this.props.onChange) this.props.onChange(tab.id);
@@ -94,23 +94,23 @@ export default class TabbedView extends React.Component<IProps, IState> {
         }
     }
 
-    private _renderTabLabel(tab: Tab) {
+    private renderTabLabel(tab: Tab) {
         let classes = "mx_TabbedView_tabLabel ";
 
         const idx = this.props.tabs.indexOf(tab);
-        if (idx === this._getActiveTabIndex()) classes += "mx_TabbedView_tabLabel_active";
+        if (idx === this.getActiveTabIndex()) classes += "mx_TabbedView_tabLabel_active";
 
         let tabIcon = null;
         if (tab.icon) {
             tabIcon = <span className={`mx_TabbedView_maskedIcon ${tab.icon}`} />;
         }
 
-        const onClickHandler = () => this._setActiveTab(tab);
+        const onClickHandler = () => this.setActiveTab(tab);
 
         const label = _t(tab.label);
         return (
             <AccessibleButton className={classes} key={"tab_label_" + tab.label} onClick={onClickHandler}>
-                {tabIcon}
+                { tabIcon }
                 <span className="mx_TabbedView_tabLabel_text">
                     { label }
                 </span>
@@ -118,19 +118,19 @@ export default class TabbedView extends React.Component<IProps, IState> {
         );
     }
 
-    private _renderTabPanel(tab: Tab): React.ReactNode {
+    private renderTabPanel(tab: Tab): React.ReactNode {
         return (
             <div className="mx_TabbedView_tabPanel" key={"mx_tabpanel_" + tab.label}>
                 <AutoHideScrollbar className='mx_TabbedView_tabPanelContent'>
-                    {tab.body}
+                    { tab.body }
                 </AutoHideScrollbar>
             </div>
         );
     }
 
     public render(): React.ReactNode {
-        const labels = this.props.tabs.map(tab => this._renderTabLabel(tab));
-        const panel = this._renderTabPanel(this.props.tabs[this._getActiveTabIndex()]);
+        const labels = this.props.tabs.map(tab => this.renderTabLabel(tab));
+        const panel = this.renderTabPanel(this.props.tabs[this.getActiveTabIndex()]);
 
         const tabbedViewClasses = classNames({
             'mx_TabbedView': true,
@@ -141,9 +141,9 @@ export default class TabbedView extends React.Component<IProps, IState> {
         return (
             <div className={tabbedViewClasses}>
                 <div className="mx_TabbedView_tabLabels">
-                    {labels}
+                    { labels }
                 </div>
-                {panel}
+                { panel }
             </div>
         );
     }

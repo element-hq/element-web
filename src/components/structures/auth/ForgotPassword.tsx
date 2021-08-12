@@ -101,7 +101,7 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     public UNSAFE_componentWillReceiveProps(newProps: IProps): void {
         if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
@@ -239,14 +239,14 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
             });
             serverDeadSection = (
                 <div className={classes}>
-                    {this.state.serverDeadError}
+                    { this.state.serverDeadError }
                 </div>
             );
         }
 
         return <div>
-            {errorText}
-            {serverDeadSection}
+            { errorText }
+            { serverDeadSection }
             <ServerPicker
                 serverConfig={this.props.serverConfig}
                 onServerConfigChange={this.props.onServerConfigChange}
@@ -289,10 +289,10 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
                         autoComplete="new-password"
                     />
                 </div>
-                <span>{_t(
+                <span>{ _t(
                     'A verification email will be sent to your inbox to confirm ' +
                     'setting your new password.',
-                )}</span>
+                ) }</span>
                 <input
                     className="mx_Login_submit"
                     type="submit"
@@ -300,7 +300,7 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
                 />
             </form>
             <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
-                {_t('Sign in instead')}
+                { _t('Sign in instead') }
             </a>
         </div>;
     }
@@ -312,23 +312,29 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
 
     renderEmailSent() {
         return <div>
-            {_t("An email has been sent to %(emailAddress)s. Once you've followed the " +
-                "link it contains, click below.", { emailAddress: this.state.email })}
+            { _t("An email has been sent to %(emailAddress)s. Once you've followed the " +
+                "link it contains, click below.", { emailAddress: this.state.email }) }
             <br />
-            <input className="mx_Login_submit" type="button" onClick={this.onVerify}
+            <input
+                className="mx_Login_submit"
+                type="button"
+                onClick={this.onVerify}
                 value={_t('I have verified my email address')} />
         </div>;
     }
 
     renderDone() {
         return <div>
-            <p>{_t("Your password has been reset.")}</p>
-            <p>{_t(
+            <p>{ _t("Your password has been reset.") }</p>
+            <p>{ _t(
                 "You have been logged out of all sessions and will no longer receive " +
                 "push notifications. To re-enable notifications, sign in again on each " +
                 "device.",
-            )}</p>
-            <input className="mx_Login_submit" type="button" onClick={this.props.onComplete}
+            ) }</p>
+            <input
+                className="mx_Login_submit"
+                type="button"
+                onClick={this.props.onComplete}
                 value={_t('Return to login screen')} />
         </div>;
     }
@@ -358,7 +364,7 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
                 <AuthHeader />
                 <AuthBody>
                     <h2> { _t('Set a new password') } </h2>
-                    {resetPasswordJsx}
+                    { resetPasswordJsx }
                 </AuthBody>
             </AuthPage>
         );

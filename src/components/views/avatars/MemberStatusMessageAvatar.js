@@ -145,7 +145,7 @@ export default class MemberStatusMessageAvatar extends React.Component {
                 isExpanded={this.state.menuDisplayed}
                 label={_t("User Status")}
             >
-                {avatar}
+                { avatar }
             </ContextMenuButton>
 
             { contextMenu }

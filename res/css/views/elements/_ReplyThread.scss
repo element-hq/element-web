@@ -16,22 +16,46 @@ limitations under the License.
 
 .mx_ReplyThread {
     margin-top: 0;
-}
-
-.mx_ReplyThread .mx_DateSeparator {
-    font-size: 1em !important;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-bottom: 1px;
-    bottom: -5px;
-}
-
-.mx_ReplyThread_show {
-    cursor: pointer;
-}
-
-blockquote.mx_ReplyThread {
     margin-left: 0;
-    padding-left: 10px;
-    border-left: 4px solid $blockquote-bar-color;
+    margin-right: 0;
+    margin-bottom: 8px;
+    padding: 0 10px;
+    border-left: 2px solid $button-bg-color;
+    border-radius: 2px;
+
+    .mx_ReplyThread_show {
+        cursor: pointer;
+    }
+
+    &.mx_ReplyThread_color1 {
+        border-left-color: $username-variant1-color;
+    }
+
+    &.mx_ReplyThread_color2 {
+        border-left-color: $username-variant2-color;
+    }
+
+    &.mx_ReplyThread_color3 {
+        border-left-color: $username-variant3-color;
+    }
+
+    &.mx_ReplyThread_color4 {
+        border-left-color: $username-variant4-color;
+    }
+
+    &.mx_ReplyThread_color5 {
+        border-left-color: $username-variant5-color;
+    }
+
+    &.mx_ReplyThread_color6 {
+        border-left-color: $username-variant6-color;
+    }
+
+    &.mx_ReplyThread_color7 {
+        border-left-color: $username-variant7-color;
+    }
+
+    &.mx_ReplyThread_color8 {
+        border-left-color: $username-variant8-color;
+    }
 }

@@ -348,7 +348,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                 }
                 {
                     found || !this.state.canonicalAlias ? '' :
-                        <option value={ this.state.canonicalAlias } key='arbitrary'>
+                        <option value={this.state.canonicalAlias} key='arbitrary'>
                             { this.state.canonicalAlias }
                         </option>
                 }
@@ -378,11 +378,11 @@ export default class AliasSettings extends React.Component<IProps, IState> {
 
         return (
             <div className='mx_AliasSettings'>
-                <span className='mx_SettingsTab_subheading'>{_t("Published Addresses")}</span>
+                <span className='mx_SettingsTab_subheading'>{ _t("Published Addresses") }</span>
                 <p>
                     { isSpaceRoom
                         ? _t("Published addresses can be used by anyone on any server to join your space.")
-                        : _t("Published addresses can be used by anyone on any server to join your room.")}
+                        : _t("Published addresses can be used by anyone on any server to join your room.") }
                     &nbsp;
                     { _t("To publish an address, it needs to be set as a local address first.") }
                 </p>
@@ -394,9 +394,9 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                         canSetCanonicalAlias={this.props.canSetCanonicalAlias}
                     /> }
                 <datalist id="mx_AliasSettings_altRecommendations">
-                    {this.getLocalNonAltAliases().map(alias => {
+                    { this.getLocalNonAltAliases().map(alias => {
                         return <option value={alias} key={alias} />;
-                    })};
+                    }) };
                 </datalist>
                 <EditableAliasesList
                     id="roomAltAliases"
@@ -423,7 +423,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                         "through your homeserver (%(localDomain)s)", { localDomain }) }
                 </p>
                 <details onToggle={this.onLocalAliasesToggled} open={this.state.detailsOpen}>
-                    <summary>{ this.state.detailsOpen ? _t('Show less') : _t("Show more")}</summary>
+                    <summary>{ this.state.detailsOpen ? _t('Show less') : _t("Show more") }</summary>
                     { localAliasesList }
                 </details>
             </div>

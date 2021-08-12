@@ -42,24 +42,24 @@ export default class AutocompleteWrapperModel {
     ) {
     }
 
-    public onEscape(e: KeyboardEvent) {
+    public onEscape(e: KeyboardEvent): void {
         this.getAutocompleterComponent().onEscape(e);
     }
 
-    public close() {
+    public close(): void {
         this.updateCallback({ close: true });
     }
 
-    public hasSelection() {
+    public hasSelection(): boolean {
         return this.getAutocompleterComponent().hasSelection();
     }
 
-    public hasCompletions() {
+    public hasCompletions(): boolean {
         const ac = this.getAutocompleterComponent();
         return ac && ac.countCompletions() > 0;
     }
 
-    public async confirmCompletion() {
+    public async confirmCompletion(): Promise<void> {
         await this.getAutocompleterComponent().onConfirmCompletion();
         this.updateCallback({ close: true });
     }
@@ -67,7 +67,7 @@ export default class AutocompleteWrapperModel {
     /**
      * If there is no current autocompletion, start one and move to the first selection.
      */
-    public async startSelection() {
+    public async startSelection(): Promise<void> {
         const acComponent = this.getAutocompleterComponent();
         if (acComponent.countCompletions() === 0) {
             // Force completions to show for the text currently entered
@@ -75,27 +75,27 @@ export default class AutocompleteWrapperModel {
         }
     }
 
-    public selectPreviousSelection() {
+    public selectPreviousSelection(): void {
         this.getAutocompleterComponent().moveSelection(-1);
     }
 
-    public selectNextSelection() {
+    public selectNextSelection(): void {
         this.getAutocompleterComponent().moveSelection(+1);
     }
 
-    public onPartUpdate(part: Part, pos: DocumentPosition) {
+    public onPartUpdate(part: Part, pos: DocumentPosition): Promise<void> {
         this.partIndex = pos.index;
         return this.updateQuery(part.text);
     }
 
-    public onComponentConfirm(completion: ICompletion) {
+    public onComponentConfirm(completion: ICompletion): void {
         this.updateCallback({
             replaceParts: this.partForCompletion(completion),
             close: true,
         });
     }
 
-    private partForCompletion(completion: ICompletion) {
+    private partForCompletion(completion: ICompletion): Part[] {
         const { completionId } = completion;
         const text = completion.completion;
         switch (completion.type) {

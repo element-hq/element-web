@@ -31,13 +31,26 @@ export interface IEncryptedFile {
     v: string;
 }
 
+export interface IMediaEventInfo {
+    thumbnail_url?: string; // eslint-disable-line camelcase
+    thumbnail_file?: IEncryptedFile; // eslint-disable-line camelcase
+    thumbnail_info?: { // eslint-disable-line camelcase
+        mimetype: string;
+        w?: number;
+        h?: number;
+        size?: number;
+    };
+    mimetype: string;
+    w?: number;
+    h?: number;
+    size?: number;
+}
+
 export interface IMediaEventContent {
+    body?: string;
     url?: string; // required on unencrypted media
     file?: IEncryptedFile; // required for *encrypted* media
-    info?: {
-        thumbnail_url?: string; // eslint-disable-line camelcase
-        thumbnail_file?: IEncryptedFile; // eslint-disable-line camelcase
-    };
+    info?: IMediaEventInfo;
 }
 
 export interface IPreparedMedia extends IMediaObject {

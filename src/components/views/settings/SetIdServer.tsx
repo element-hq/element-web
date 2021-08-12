@@ -134,7 +134,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 { _t("Checking server") }
             </div>;
         } else if (this.state.error) {
-            return <span className='warning'>{this.state.error}</span>;
+            return <span className='warning'>{ this.state.error }</span>;
         } else {
             return null;
         }
@@ -193,8 +193,8 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                             "Disconnect from the identity server <current /> and " +
                             "connect to <new /> instead?", {},
                             {
-                                current: sub => <b>{abbreviateUrl(currentClientIdServer)}</b>,
-                                new: sub => <b>{abbreviateUrl(idServer)}</b>,
+                                current: sub => <b>{ abbreviateUrl(currentClientIdServer) }</b>,
+                                new: sub => <b>{ abbreviateUrl(idServer) }</b>,
                             },
                         ),
                         button: _t("Continue"),
@@ -224,10 +224,10 @@ export default class SetIdServer extends React.Component<IProps, IState> {
             description: (
                 <div>
                     <span className="warning">
-                        {_t("The identity server you have chosen does not have any terms of service.")}
+                        { _t("The identity server you have chosen does not have any terms of service.") }
                     </span>
                     <span>
-                        &nbsp;{_t("Only continue if you trust the owner of the server.")}
+                        &nbsp;{ _t("Only continue if you trust the owner of the server.") }
                     </span>
                 </div>
             ),
@@ -243,7 +243,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 title: _t("Disconnect identity server"),
                 unboundMessage: _t(
                     "Disconnect from the identity server <idserver />?", {},
-                    { idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b> },
+                    { idserver: sub => <b>{ abbreviateUrl(this.state.currentClientIdServer) }</b> },
                 ),
                 button: _t("Disconnect"),
             });
@@ -278,41 +278,41 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         let message;
         let danger = false;
         const messageElements = {
-            idserver: sub => <b>{abbreviateUrl(currentClientIdServer)}</b>,
-            b: sub => <b>{sub}</b>,
+            idserver: sub => <b>{ abbreviateUrl(currentClientIdServer) }</b>,
+            b: sub => <b>{ sub }</b>,
         };
         if (!currentServerReachable) {
             message = <div>
-                <p>{_t(
+                <p>{ _t(
                     "You should <b>remove your personal data</b> from identity server " +
                     "<idserver /> before disconnecting. Unfortunately, identity server " +
                     "<idserver /> is currently offline or cannot be reached.",
                     {}, messageElements,
-                )}</p>
-                <p>{_t("You should:")}</p>
+                ) }</p>
+                <p>{ _t("You should:") }</p>
                 <ul>
-                    <li>{_t(
+                    <li>{ _t(
                         "check your browser plugins for anything that might block " +
                         "the identity server (such as Privacy Badger)",
-                    )}</li>
-                    <li>{_t("contact the administrators of identity server <idserver />", {}, {
+                    ) }</li>
+                    <li>{ _t("contact the administrators of identity server <idserver />", {}, {
                         idserver: messageElements.idserver,
-                    })}</li>
-                    <li>{_t("wait and try again later")}</li>
+                    }) }</li>
+                    <li>{ _t("wait and try again later") }</li>
                 </ul>
             </div>;
             danger = true;
             button = _t("Disconnect anyway");
         } else if (boundThreepids.length) {
             message = <div>
-                <p>{_t(
+                <p>{ _t(
                     "You are still <b>sharing your personal data</b> on the identity " +
                     "server <idserver />.", {}, messageElements,
-                )}</p>
-                <p>{_t(
+                ) }</p>
+                <p>{ _t(
                     "We recommend that you remove your email addresses and phone numbers " +
                     "from the identity server before disconnecting.",
-                )}</p>
+                ) }</p>
             </div>;
             danger = true;
             button = _t("Disconnect anyway");
@@ -361,13 +361,13 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 "You are currently using <server></server> to discover and be discoverable by " +
                 "existing contacts you know. You can change your identity server below.",
                 {},
-                { server: sub => <b>{abbreviateUrl(idServerUrl)}</b> },
+                { server: sub => <b>{ abbreviateUrl(idServerUrl) }</b> },
             );
             if (this.props.missingTerms) {
                 bodyText = _t(
                     "If you don't want to use <server /> to discover and be discoverable by existing " +
                     "contacts you know, enter another identity server below.",
-                    {}, { server: sub => <b>{abbreviateUrl(idServerUrl)}</b> },
+                    {}, { server: sub => <b>{ abbreviateUrl(idServerUrl) }</b> },
                 );
             }
         } else {
@@ -399,9 +399,9 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 discoButtonContent = <InlineSpinner />;
             }
             discoSection = <div>
-                <span className="mx_SettingsTab_subsectionText">{discoBodyText}</span>
+                <span className="mx_SettingsTab_subsectionText">{ discoBodyText }</span>
                 <AccessibleButton onClick={this.onDisconnectClicked} kind="danger_sm">
-                    {discoButtonContent}
+                    { discoButtonContent }
                 </AccessibleButton>
             </div>;
         }
@@ -409,10 +409,10 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         return (
             <form className="mx_SettingsTab_section mx_SetIdServer" onSubmit={this.checkIdServer}>
                 <span className="mx_SettingsTab_subheading">
-                    {sectionTitle}
+                    { sectionTitle }
                 </span>
                 <span className="mx_SettingsTab_subsectionText">
-                    {bodyText}
+                    { bodyText }
                 </span>
                 <Field
                     label={_t("Enter a new identity server")}
@@ -426,11 +426,13 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                     disabled={this.state.busy}
                     forceValidity={this.state.error ? false : null}
                 />
-                <AccessibleButton type="submit" kind="primary_sm"
+                <AccessibleButton
+                    type="submit"
+                    kind="primary_sm"
                     onClick={this.checkIdServer}
                     disabled={!this.idServerChangeEnabled()}
-                >{_t("Change")}</AccessibleButton>
-                {discoSection}
+                >{ _t("Change") }</AccessibleButton>
+                { discoSection }
             </form>
         );
     }
