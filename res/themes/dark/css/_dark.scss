@@ -21,7 +21,6 @@ $space-nav: rgba($panel-base, 0.1);
 // unified palette
 // try to use these colors when possible
 $bg-color: $background;
-$base-color: $bg-color;
 $base-text-color: $primary-content;
 $header-panel-bg-color: #20252B;
 $header-panel-border-color: #000000;
@@ -60,7 +59,7 @@ $info-plinth-fg-color: #888;
 $preview-bar-bg-color: $header-panel-bg-color;
 
 $groupFilterPanel-bg-color: rgba(38, 39, 43, 0.82);
-$inverted-bg-color: $base-color;
+$inverted-bg-color: $background;
 
 // used by AddressSelector
 $selected-color: $room-highlight-color;
@@ -216,7 +215,7 @@ $kbd-border-color: #000000;
 $tooltip-timeline-bg-color: $groupFilterPanel-bg-color;
 $tooltip-timeline-fg-color: $primary-content;
 
-$interactive-tooltip-bg-color: $base-color;
+$interactive-tooltip-bg-color: $background;
 $interactive-tooltip-fg-color: $primary-content;
 
 $breadcrumb-placeholder-bg-color: #272c35;
