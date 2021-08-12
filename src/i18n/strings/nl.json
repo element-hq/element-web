@@ -3533,5 +3533,16 @@
     "Start sharing your screen": "Schermdelen starten",
     "Stop sharing your screen": "Schermdelen stoppen",
     "Stop the camera": "Camera stoppen",
-    "Start the camera": "Camera starten"
+    "Start the camera": "Camera starten",
+    "If a community isn't shown you may not have permission to convert it.": "Als een gemeenschap niet zichtbaar is heeft u geen rechten om hem om te zetten.",
+    "Show my Communities": "Mijn gemeenschappen weergeven",
+    "Communities have been archived to make way for Spaces but you can convert your communities into Spaces below. Converting will ensure your conversations get the latest features.": "Gemeenschappen zijn gearchiveerd om ruimte te maken voor Spaces, maar u kunt uw gemeenschap omzetten naar een space hieronder. Hierdoor bent u er zeker van dat uw gesprekken de nieuwste functies krijgen.",
+    "Create Space": "Space aanmaken",
+    "Open Space": "Space openen",
+    "To join an existing space you'll need an invite.": "Om deel te nemen aan een bestaande space heeft u een uitnodiging nodig.",
+    "You can also create a Space from a <a>community</a>.": "U kunt ook een Space maken van een <a>gemeenschap</a>.",
+    "You can change this later.": "U kan dit later aanpassen.",
+    "What kind of Space do you want to create?": "Wat voor soort Space wilt u maken?",
+    "Delete avatar": "Afbeelding verwijderen",
+    "Don't send read receipts": "Geen leesbevestigingen versturen"
 }
