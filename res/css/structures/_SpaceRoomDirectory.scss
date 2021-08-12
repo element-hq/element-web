@@ -22,7 +22,7 @@ limitations under the License.
 .mx_SpaceRoomDirectory {
     height: 100%;
     margin-bottom: 12px;
-    color: $primary-fg-color;
+    color: $primary-content;
     word-break: break-word;
     display: flex;
     flex-direction: column;
@@ -84,7 +84,7 @@ limitations under the License.
         align-items: center;
         font-size: $font-15px;
         line-height: $font-24px;
-        color: $primary-fg-color;
+        color: $primary-content;
 
         .mx_AccessibleButton {
             padding: 4px 12px;
@@ -136,7 +136,7 @@ limitations under the License.
             font-weight: $font-semi-bold;
             font-size: $font-18px;
             line-height: $font-22px;
-            color: $primary-fg-color;
+            color: $primary-content;
         }
 
         > span {

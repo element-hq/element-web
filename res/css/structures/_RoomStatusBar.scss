@@ -171,14 +171,14 @@ limitations under the License.
 }
 
 .mx_RoomStatusBar_connectionLostBar_desc {
-    color: $primary-fg-color;
+    color: $primary-content;
     font-size: $font-13px;
     opacity: 0.5;
     padding-bottom: 20px;
 }
 
 .mx_RoomStatusBar_resend_link {
-    color: $primary-fg-color !important;
+    color: $primary-content !important;
     text-decoration: underline !important;
     cursor: pointer;
 }
@@ -187,7 +187,7 @@ limitations under the License.
     height: 50px;
     line-height: $font-50px;
 
-    color: $primary-fg-color;
+    color: $primary-content;
     opacity: 0.5;
     overflow-y: hidden;
     display: block;

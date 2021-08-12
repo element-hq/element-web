@@ -16,7 +16,7 @@ limitations under the License.
 
 .mx_Dropdown {
     position: relative;
-    color: $primary-fg-color;
+    color: $primary-content;
 }
 
 .mx_Dropdown_disabled {
@@ -52,7 +52,7 @@ limitations under the License.
     padding-right: 9px;
     mask: url('$(res)/img/feather-customised/dropdown-arrow.svg');
     mask-repeat: no-repeat;
-    background: $primary-fg-color;
+    background: $primary-content;
 }
 
 .mx_Dropdown_option {

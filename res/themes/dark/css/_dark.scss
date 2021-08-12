@@ -30,7 +30,6 @@ $search-placeholder-color: #61708b;
 $room-highlight-color: #343a46;
 
 // typical text (dark-on-white in light skin)
-$primary-fg-color: $primary-content;
 $muted-fg-color: $header-panel-text-primary-color;
 
 // additional text colors
@@ -93,7 +92,7 @@ $menu-selected-color: $room-highlight-color;
 $avatar-initial-color: #ffffff;
 $avatar-bg-color: $background;
 
-$h3-color: $primary-fg-color;
+$h3-color: $primary-content;
 
 $dialog-title-fg-color: $primary-content;
 $dialog-backdrop-color: #000;
@@ -135,7 +134,7 @@ $roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filt
 $roomlist-filter-active-bg-color: $background;
 $roomlist-bg-color: rgba(33, 38, 44, 0.90);
 $roomlist-header-color: $tertiary-fg-color;
-$roomsublist-divider-color: $primary-fg-color;
+$roomsublist-divider-color: $primary-content;
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #3e444c 0%, #3e444c00 100%);
 
 $groupFilterPanel-divider-color: $roomlist-header-color;

@@ -56,7 +56,7 @@ $SpaceRoomViewInnerWidth: 428px;
         }
 
         > span {
-            color: $primary-fg-color;
+            color: $primary-content;
         }
     }
 }
@@ -72,7 +72,7 @@ $SpaceRoomViewInnerWidth: 428px;
             margin: 0;
             font-size: $font-24px;
             font-weight: $font-semi-bold;
-            color: $primary-fg-color;
+            color: $primary-content;
             width: max-content;
         }
 
@@ -154,7 +154,7 @@ $SpaceRoomViewInnerWidth: 428px;
             font-weight: $font-semi-bold;
             font-size: $font-14px;
             line-height: $font-24px;
-            color: $primary-fg-color;
+            color: $primary-content;
             margin-top: 24px;
             position: relative;
             padding-left: 24px;
@@ -354,7 +354,7 @@ $SpaceRoomViewInnerWidth: 428px;
 
         .mx_SpaceFeedbackPrompt {
             padding: 7px; // 8px - 1px border
-            border: 1px solid rgba($primary-fg-color, .1);
+            border: 1px solid rgba($primary-content, .1);
             border-radius: 8px;
             width: max-content;
             margin: 0 0 -40px auto; // collapse its own height to not push other components down

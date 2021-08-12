@@ -37,7 +37,6 @@ $accent-color: $accent;
 $accent-bg-color: rgba(3, 179, 129, 0.16);
 $notice-primary-color: #ff4b55;
 $notice-primary-bg-color: rgba(255, 75, 85, 0.16);
-$primary-fg-color: #2e2f32;
 $secondary-fg-color: $secondary-content;
 $tertiary-fg-color: #8D99A5;
 $header-panel-bg-color: #f3f8fd;
@@ -196,7 +195,7 @@ $roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filt
 $roomlist-filter-active-bg-color: $background;
 $roomlist-bg-color: rgba(245, 245, 245, 0.90);
 $roomlist-header-color: $tertiary-fg-color;
-$roomsublist-divider-color: $primary-fg-color;
+$roomsublist-divider-color: $primary-content;
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%);
 
 $groupFilterPanel-divider-color: $roomlist-header-color;
@@ -317,7 +316,7 @@ $dark-panel-bg-color: $secondary-accent-color;
 $panel-gradient: rgba(242, 245, 248, 0), rgba(242, 245, 248, 1);
 
 $message-action-bar-bg-color: $background;
-$message-action-bar-fg-color: $primary-fg-color;
+$message-action-bar-fg-color: $primary-content;
 $message-action-bar-border-color: #e9edf1;
 $message-action-bar-hover-border-color: $focus-bg-color;
 

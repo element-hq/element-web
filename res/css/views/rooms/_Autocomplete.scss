@@ -24,7 +24,7 @@
     user-select: none;
     cursor: pointer;
     align-items: center;
-    color: $primary-fg-color;
+    color: $primary-content;
 }
 
 .mx_Autocomplete_Completion_block * {
@@ -40,7 +40,7 @@
     user-select: none;
     cursor: pointer;
     align-items: center;
-    color: $primary-fg-color;
+    color: $primary-content;
 }
 
 .mx_Autocomplete_Completion_pill > * {
@@ -83,7 +83,7 @@
 
 .mx_Autocomplete_provider_name {
     margin: 12px;
-    color: $primary-fg-color;
+    color: $primary-content;
     font-weight: 400;
     opacity: 0.4;
 }

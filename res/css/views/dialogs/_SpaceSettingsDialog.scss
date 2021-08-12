@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 .mx_SpaceSettingsDialog {
-    color: $primary-fg-color;
+    color: $primary-content;
 
     .mx_SpaceSettings_errorText {
         font-weight: $font-semi-bold;
@@ -50,7 +50,7 @@ limitations under the License.
             .mx_RadioButton_content {
                 font-weight: $font-semi-bold;
                 line-height: $font-18px;
-                color: $primary-fg-color;
+                color: $primary-content;
             }
 
             & + span {
