@@ -733,8 +733,8 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "showCommunitiesInsteadOfSpaces": {
         displayName: _td("Display Communities instead of Spaces"),
-        description: _td("Temporarily show communities instead of Spaces. " +
-            "Support for this will be removed in the near future. This will reload Element"),
+        description: _td("Temporarily show communities instead of Spaces for this session. " +
+            "Support for this will be removed in the near future. This will reload Element."),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: false,
         controller: new ReloadOnChangeController(),
