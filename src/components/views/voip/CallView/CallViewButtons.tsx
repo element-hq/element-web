@@ -21,7 +21,6 @@ import classNames from "classnames";
 import AccessibleTooltipButton from "../../elements/AccessibleTooltipButton";
 import CallContextMenu from "../../context_menus/CallContextMenu";
 import DialpadContextMenu from "../../context_menus/DialpadContextMenu";
-import AccessibleButton from "../../elements/AccessibleButton";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { Alignment } from "../../elements/Tooltip";
 import {
@@ -211,10 +210,12 @@ export default class CallViewButtons extends React.Component<IProps, IState> {
         let sidebarButton;
         if (this.props.buttonsVisibility.sidebar) {
             sidebarButton = (
-                <AccessibleButton
+                <AccessibleTooltipButton
                     className={sidebarButtonClasses}
                     onClick={this.props.handlers.onToggleSidebarClick}
-                    aria-label={this.props.buttonsState.sidebarShown ? _t("Hide sidebar") : _t("Show sidebar")}
+                    title={this.props.buttonsState.sidebarShown ? _t("Hide sidebar") : _t("Show sidebar")}
+                    alignment={Alignment.Top}
+                    yOffset={TOOLTIP_Y_OFFSET}
                 />
             );
         }
