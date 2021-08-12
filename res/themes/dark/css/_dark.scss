@@ -1,5 +1,5 @@
 // Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=557%3A0
-$system-dark: #21262C;
+$system: #21262C;
 
 // unified palette
 // try to use these colors when possible
@@ -50,7 +50,7 @@ $inverted-bg-color: $base-color;
 $selected-color: $room-highlight-color;
 
 // selected for hoverover & selected event tiles
-$event-selected-color: $system-dark;
+$event-selected-color: $system;
 
 // used for the hairline dividers in RoomView
 $primary-hairline-color: transparent;
@@ -94,7 +94,7 @@ $lightbox-background-bg-color: #000;
 $lightbox-background-bg-opacity: 0.85;
 
 $settings-grey-fg-color: #a2a2a2;
-$settings-profile-placeholder-bg-color: $system-dark;
+$settings-profile-placeholder-bg-color: $system;
 $settings-profile-overlay-placeholder-fg-color: #454545;
 $settings-profile-button-bg-color: #e7e7e7;
 $settings-profile-button-fg-color: $settings-profile-overlay-placeholder-fg-color;
@@ -178,7 +178,7 @@ $button-link-bg-color: transparent;
 $togglesw-off-color: $room-highlight-color;
 
 $progressbar-fg-color: $accent-color;
-$progressbar-bg-color: $system-dark;
+$progressbar-bg-color: $system;
 
 $visual-bell-bg-color: #800;
 
@@ -213,7 +213,7 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 $message-body-panel-fg-color: $secondary-fg-color;
 $message-body-panel-bg-color: #394049; // "Dark Tile"
 $message-body-panel-icon-fg-color: $secondary-fg-color;
-$message-body-panel-icon-bg-color: $system-dark; // "System Dark"
+$message-body-panel-icon-bg-color: $system; // "System Dark"
 
 $voice-record-stop-border-color: $quaternary-fg-color;
 $voice-record-waveform-incomplete-fg-color: $quaternary-fg-color;
