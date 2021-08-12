@@ -62,7 +62,7 @@ limitations under the License.
     }
 
     &.mx_RoomSearch_focused, &.mx_RoomSearch_hasQuery {
-        background-color: $roomlist-filter-active-bg-color;
+        background-color: $background;
 
         .mx_RoomSearch_clearButton {
             width: 16px;
