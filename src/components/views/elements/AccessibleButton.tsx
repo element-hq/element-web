@@ -67,7 +67,9 @@ export default function AccessibleButton({
     ...restProps
 }: IProps) {
     const newProps: IAccessibleButtonProps = restProps;
-    if (!disabled) {
+    if (disabled) {
+        newProps["aria-disabled"] = true;
+    } else {
         newProps.onClick = onClick;
         // We need to consume enter onKeyDown and space onKeyUp
         // otherwise we are risking also activating other keyboard focusable elements
@@ -118,7 +120,7 @@ export default function AccessibleButton({
     );
 
     // React.createElement expects InputHTMLAttributes
-    return React.createElement(element, restProps, children);
+    return React.createElement(element, newProps, children);
 }
 
 AccessibleButton.defaultProps = {

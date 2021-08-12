@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import RoomViewStore from './stores/RoomViewStore';
 import { EventSubscription } from 'fbemitter';
+import RoomViewStore from './stores/RoomViewStore';
 
 type Listener = (isActive: boolean) => void;
 

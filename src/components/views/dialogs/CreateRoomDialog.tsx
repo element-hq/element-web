@@ -116,8 +116,8 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             opts.associatedWithCommunity = CommunityPrototypeStore.instance.getSelectedCommunityId();
         }
 
+        opts.parentSpace = this.props.parentSpace;
         if (this.props.parentSpace && this.state.joinRule === JoinRule.Restricted) {
-            opts.parentSpace = this.props.parentSpace;
             opts.joinRule = JoinRule.Restricted;
         }
 

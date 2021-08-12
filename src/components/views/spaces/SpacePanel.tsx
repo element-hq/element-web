@@ -100,9 +100,12 @@ const HomeButton = ({ selected, isPanelCollapsed }: IHomeButtonProps) => {
         return SpaceStore.instance.allRoomsInHome;
     });
 
-    return <li className={classNames("mx_SpaceItem", {
-        "collapsed": isPanelCollapsed,
-    })}>
+    return <li
+        className={classNames("mx_SpaceItem", {
+            "collapsed": isPanelCollapsed,
+        })}
+        role="treeitem"
+    >
         <SpaceButton
             className="mx_SpaceButton_home"
             onClick={() => SpaceStore.instance.setActiveSpace(null)}
@@ -142,9 +145,12 @@ const CreateSpaceButton = ({
         openMenu();
     };
 
-    return <li className={classNames("mx_SpaceItem", {
-        "collapsed": isPanelCollapsed,
-    })}>
+    return <li
+        className={classNames("mx_SpaceItem", {
+            "collapsed": isPanelCollapsed,
+        })}
+        role="treeitem"
+    >
         <SpaceButton
             className={classNames("mx_SpaceButton_new", {
                 mx_SpaceButton_newCancel: menuDisplayed,
@@ -272,6 +278,8 @@ const SpacePanel = () => {
                     <ul
                         className={classNames("mx_SpacePanel", { collapsed: isPanelCollapsed })}
                         onKeyDown={onKeyDownHandler}
+                        role="tree"
+                        aria-label={_t("Spaces")}
                     >
                         <Droppable droppableId="top-level-spaces">
                             { (provided, snapshot) => (
