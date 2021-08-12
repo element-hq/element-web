@@ -53,7 +53,7 @@ limitations under the License.
         height: 20px;
         width: 20px;
         vertical-align: middle;
-        background-color: $secondary-fg-color;
+        background-color: $secondary-content;
         mask-repeat: no-repeat;
         mask-size: contain;
         mask-position: center;
@@ -90,7 +90,7 @@ limitations under the License.
 
 .mx_CallViewHeader_callTypeSmall {
     font-size: 12px;
-    color: $secondary-fg-color;
+    color: $secondary-content;
     line-height: initial;
     height: 15px;
     overflow: hidden;
@@ -113,7 +113,7 @@ limitations under the License.
 
         height: 16px;
         width: 16px;
-        background-color: $secondary-fg-color;
+        background-color: $secondary-content;
         mask-repeat: no-repeat;
         mask-size: contain;
         mask-position: center;

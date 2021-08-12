@@ -130,7 +130,7 @@ $roomListCollapsedWidth: 68px;
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
-                    background: $secondary-fg-color;
+                    background: $secondary-content;
                 }
             }
 
@@ -153,7 +153,7 @@ $roomListCollapsedWidth: 68px;
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
-                    background: $secondary-fg-color;
+                    background: $secondary-content;
                 }
 
                 &.mx_LeftPanel_exploreButton_space::before {

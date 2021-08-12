@@ -33,7 +33,6 @@ $room-highlight-color: #343a46;
 $muted-fg-color: $header-panel-text-primary-color;
 
 // additional text colors
-$secondary-fg-color: $secondary-content;
 $tertiary-fg-color: $tertiary-content;
 
 // used for dialog box text
@@ -139,7 +138,7 @@ $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #3e444c 0%, #3e444c00 100%)
 
 $groupFilterPanel-divider-color: $roomlist-header-color;
 
-$roomtile-preview-color: $secondary-fg-color;
+$roomtile-preview-color: $secondary-content;
 $roomtile-default-badge-bg-color: #61708b;
 $roomtile-selected-bg-color: rgba(141, 151, 165, 0.2);
 
@@ -217,10 +216,10 @@ $breadcrumb-placeholder-bg-color: #272c35;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
 
-$message-body-panel-fg-color: $secondary-fg-color;
+$message-body-panel-fg-color: $secondary-content;
 $message-body-panel-bg-color: $quinary-content;
-$message-body-panel-icon-fg-color: $secondary-fg-color;
-$message-body-panel-icon-bg-color: $system; // "System Dark"
+$message-body-panel-icon-bg-color: $system;
+$message-body-panel-icon-fg-color: $secondary-content;
 
 $voice-record-stop-border-color: $quaternary-content;
 $voice-record-waveform-incomplete-fg-color: $quaternary-content;

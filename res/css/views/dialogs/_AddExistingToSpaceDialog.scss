@@ -44,7 +44,7 @@ limitations under the License.
 
         > h3 {
             margin: 0;
-            color: $secondary-fg-color;
+            color: $secondary-content;
             font-size: $font-12px;
             font-weight: $font-semi-bold;
             line-height: $font-15px;
@@ -66,7 +66,7 @@ limitations under the License.
             flex-grow: 1;
             font-size: $font-12px;
             line-height: $font-15px;
-            color: $secondary-fg-color;
+            color: $secondary-content;
 
             .mx_ProgressBar {
                 height: 8px;
@@ -188,7 +188,7 @@ limitations under the License.
             padding-left: 0;
             flex: unset;
             height: unset;
-            color: $secondary-fg-color;
+            color: $secondary-content;
             font-size: $font-15px;
             line-height: $font-24px;
 
@@ -221,7 +221,7 @@ limitations under the License.
     }
 
     .mx_SubspaceSelector_onlySpace {
-        color: $secondary-fg-color;
+        color: $secondary-content;
         font-size: $font-15px;
         line-height: $font-24px;
     }

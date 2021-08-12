@@ -71,7 +71,7 @@ limitations under the License.
 
             .mx_CallEvent_type {
                 font-weight: 400;
-                color: $secondary-fg-color;
+                color: $secondary-content;
                 font-size: 1.2rem;
                 line-height: $font-13px;
                 display: flex;
@@ -100,7 +100,7 @@ limitations under the License.
         display: flex;
         flex-direction: row;
         align-items: center;
-        color: $secondary-fg-color;
+        color: $secondary-content;
         margin-right: 16px;
 
         .mx_CallEvent_content_button {
