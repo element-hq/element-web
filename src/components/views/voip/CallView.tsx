@@ -502,10 +502,12 @@ export default class CallView extends React.Component<IProps, IState> {
             )
         ) {
             sidebarButton = (
-                <AccessibleButton
+                <AccessibleTooltipButton
                     className={sidebarButtonClasses}
                     onClick={this.onToggleSidebar}
-                    aria-label={this.state.sidebarShown ? _t("Hide sidebar") : _t("Show sidebar")}
+                    title={this.state.sidebarShown ? _t("Hide sidebar") : _t("Show sidebar")}
+                    alignment={Alignment.Top}
+                    yOffset={tooltipYOffset}
                 />
             );
         }
