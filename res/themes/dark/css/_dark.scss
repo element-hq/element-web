@@ -25,7 +25,6 @@ $header-panel-border-color: #000000;
 $header-panel-text-primary-color: #B9BEC6;
 $header-panel-text-secondary-color: #c8c8cd;
 $text-secondary-color: #B9BEC6;
-$quaternary-fg-color: $quaternary-content;
 $search-bg-color: #181b21;
 $search-placeholder-color: #61708b;
 $room-highlight-color: #343a46;
@@ -224,9 +223,9 @@ $message-body-panel-bg-color: $quinary-content;
 $message-body-panel-icon-fg-color: $secondary-fg-color;
 $message-body-panel-icon-bg-color: $system; // "System Dark"
 
-$voice-record-stop-border-color: $quaternary-fg-color;
-$voice-record-waveform-incomplete-fg-color: $quaternary-fg-color;
-$voice-record-icon-color: $quaternary-fg-color;
+$voice-record-stop-border-color: $quaternary-content;
+$voice-record-waveform-incomplete-fg-color: $quaternary-content;
+$voice-record-icon-color: $quaternary-content;
 $voice-playback-button-bg-color: $message-body-panel-icon-bg-color;
 $voice-playback-button-fg-color: $message-body-panel-icon-fg-color;
 
