@@ -38,6 +38,7 @@ import { SpaceWatcher } from "./SpaceWatcher";
 import SpaceStore from "../SpaceStore";
 import { Action } from "../../dispatcher/actions";
 import { SettingUpdatedPayload } from "../../dispatcher/payloads/SettingUpdatedPayload";
+import { ignoreSelfEvent } from "./algorithms/tag-sorting/RecentAlgorithm";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -269,6 +270,9 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
 
             // Ignore non-live events (backfill)
             if (!eventPayload.isLiveEvent || !payload.isLiveUnfilteredRoomTimelineEvent) return;
+
+            // Avoid re-ordering on status, profile etc. changes
+            if (ignoreSelfEvent(eventPayload.event)) return;
 
             const roomId = eventPayload.event.getRoomId();
             const room = this.matrixClient.getRoom(roomId);

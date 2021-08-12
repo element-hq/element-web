@@ -87,10 +87,7 @@ export const sortRooms = (rooms: Room[]): Room[] => {
                 const ev = r.timeline[i];
                 if (!ev.getTs()) continue; // skip events that don't have timestamps (tests only?)
 
-                if (
-                    (ev.getSender() === myUserId && !ignoreSelfEvent(ev)) ||
-                    Unread.eventTriggersUnreadCount(ev)
-                ) {
+                if (ev.getSender() === myUserId || Unread.eventTriggersUnreadCount(ev)) {
                     return ev.getTs();
                 }
             }
