@@ -47,7 +47,7 @@ module.exports = (env, argv) => {
         nodeEnv = "production";
     }
     const devMode = nodeEnv !== 'production';
-    const useCssHotReload = process.env.CSS_HOT_RELOAD === '1' && devMode;
+    const useHMR = process.env.CSS_HOT_RELOAD === '1' && devMode;
 
     const development = {};
     if (argv.mode === "production") {
@@ -90,7 +90,7 @@ module.exports = (env, argv) => {
             "mobileguide": "./src/vector/mobile_guide/index.ts",
             "jitsi": "./src/vector/jitsi/index.ts",
             "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.js",
-            ...(useCssHotReload ? {} : cssThemes),
+            ...(useHMR ? {} : cssThemes),
         },
 
         optimization: {
@@ -174,7 +174,7 @@ module.exports = (env, argv) => {
                 /olm[\\/](javascript[\\/])?olm\.js$/,
             ],
             rules: [
-                useCssHotReload && {
+                useHMR && {
                     test: /devcss\.ts$/,
                     loader: 'string-replace-loader',
                     options: {
@@ -209,7 +209,7 @@ module.exports = (env, argv) => {
                     options: {
                         cacheDirectory: true,
                         plugins: [
-                            development && require.resolve('react-refresh/babel'),
+                            useHMR && require.resolve('react-refresh/babel'),
                         ].filter(Boolean),
                     },
                 },
@@ -270,7 +270,7 @@ module.exports = (env, argv) => {
                          * of the JS/TS files.
                          * Should be MUCH better with webpack 5, but we're stuck to this solution for now.
                          */
-                        useCssHotReload ? {
+                        useHMR ? {
                             loader: 'style-loader',
                             /**
                              * If we refactor the `theme.js` in `matrix-react-sdk` a little bit,
@@ -469,8 +469,8 @@ module.exports = (env, argv) => {
 
             // This exports our CSS using the splitChunks and loaders above.
             new MiniCssExtractPlugin({
-                filename: useCssHotReload ? "bundles/[name].css" : "bundles/[hash]/[name].css",
-                chunkFilename: useCssHotReload ? "bundles/[name].css" : "bundles/[hash]/[name].css",
+                filename: useHMR ? "bundles/[name].css" : "bundles/[hash]/[name].css",
+                chunkFilename: useHMR ? "bundles/[name].css" : "bundles/[hash]/[name].css",
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }),
 
@@ -530,7 +530,7 @@ module.exports = (env, argv) => {
             new HtmlWebpackInjectPreload({
                 files: [{ match: /.*Inter.*\.woff2$/ }],
             }),
-            development && new ReactRefreshWebpackPlugin(),
+            useHMR && new ReactRefreshWebpackPlugin(),
 
         ].filter(Boolean),
 
