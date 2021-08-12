@@ -194,7 +194,7 @@
     "Return to login screen": "Vrátit k přihlašovací obrazovce",
     "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s není oprávněn posílat vám oznámení – zkontrolujte prosím nastavení svého prohlížeče",
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s nebyl oprávněn k posílání oznámení – zkuste to prosím znovu",
-    "%(brand)s version:": "verze %(brand)s:",
+    "%(brand)s version:": "Verze %(brand)s:",
     "Room %(roomId)s not visible": "Místnost %(roomId)s není viditelná",
     "Room Colour": "Barva místnosti",
     "%(roomName)s does not exist.": "%(roomName)s neexistuje.",
@@ -3564,5 +3564,6 @@
     "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(oneUser)s%(count)s krát změnil(a) <a>připnuté zprávy</a> místnosti.",
     "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(severalUsers)s%(count)s krát změnili <a>připnuté zprávy</a> místnosti.",
     "Olm version:": "Verze Olm:",
-    "Don't send read receipts": "Neposílat potvrzení o přečtení"
+    "Don't send read receipts": "Neposílat potvrzení o přečtení",
+    "Delete avatar": "Smazat avatar"
 }
