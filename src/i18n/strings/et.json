@@ -3579,5 +3579,11 @@
     "More": "Veel",
     "Dialpad": "Numbriklahvistik",
     "Unmute the microphone": "Eemalda mikrofoni summutamine",
-    "Mute the microphone": "Summuta mikrofon"
+    "Mute the microphone": "Summuta mikrofon",
+    "You can create a Space from this community <a>here</a>.": "Sellest vana tüüpi kogukonnast saad luua uue kogukonnakeskuse <a>siin</a>.",
+    "Ask the <a>admins</a> of this community to make it into a Space and keep a look out for the invite.": "Palu et <a>haldaja</a> muudaks vana kogukonna uueks kogukonnakeskuseks ja oota liitumiskutset.",
+    "Communities can now be made into Spaces": "Vanad kogukonnad saab nüüd muuta uuteks kogukonnakeskusteks",
+    "Spaces are a new way to make a community, with new features coming.": "Kogukonnakeskused on nüüd uus ja pidevalt täienev lahendus seniste kogukondade jaoks.",
+    "Communities won't receive further updates.": "Kogukondade vana funktsionaalsus enam ei uuene.",
+    "Created from <Community />": "Loodud kogukonnas: <Community />"
 }
