@@ -44,7 +44,7 @@ limitations under the License.
         // Allow the container to collapse on itself if its children
         // are not in the normal document flow
         max-height: 24px;
-        color: $roomlist-header-color;
+        color: $tertiary-content;
 
         .mx_RoomSublist_stickable {
             flex: 1;
@@ -161,7 +161,7 @@ limitations under the License.
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
-                    background-color: $roomlist-header-color;
+                    background-color: $tertiary-content;
                     mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
                 }
 
@@ -262,7 +262,7 @@ limitations under the License.
             mask-position: center;
             mask-size: contain;
             mask-repeat: no-repeat;
-            background: $roomlist-header-color;
+            background: $tertiary-content;
             left: -1px; // adjust for image position
         }
 
