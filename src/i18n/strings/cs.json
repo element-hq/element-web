@@ -3564,5 +3564,6 @@
     "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(oneUser)s%(count)s krát změnil(a) <a>připnuté zprávy</a> místnosti.",
     "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(severalUsers)s%(count)s krát změnili <a>připnuté zprávy</a> místnosti.",
     "Olm version:": "Verze Olm:",
-    "Don't send read receipts": "Neposílat potvrzení o přečtení"
+    "Don't send read receipts": "Neposílat potvrzení o přečtení",
+    "Delete avatar": "Smazat avatar"
 }
