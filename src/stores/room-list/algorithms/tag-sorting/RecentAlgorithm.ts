@@ -23,7 +23,7 @@ import { EffectiveMembership, getEffectiveMembership } from "../../../../utils/m
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
-const ignoreSelfEvent = (event: MatrixEvent): boolean => {
+export function ignoreSelfEvent(event: MatrixEvent): boolean {
     const type = event.getType();
     const content = event.getContent();
     const prevContent = event.getPrevContent();
@@ -38,7 +38,7 @@ const ignoreSelfEvent = (event: MatrixEvent): boolean => {
     if (type === EventType.RoomMember && prevContent.displayname !== content.displayname) return true;
 
     return false;
-};
+}
 
 export const sortRooms = (rooms: Room[]): Room[] => {
     // We cache the timestamp lookup to avoid iterating forever on the timeline
