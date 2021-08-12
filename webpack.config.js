@@ -8,6 +8,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackInjectPreload = require('@principalstudio/html-webpack-inject-preload');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 dotenv.config();
 let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
@@ -207,6 +208,9 @@ module.exports = (env, argv) => {
                     loader: 'babel-loader',
                     options: {
                         cacheDirectory: true,
+                        plugins: [
+                            development && require.resolve('react-refresh/babel'),
+                        ].filter(Boolean),
                     },
                 },
                 {
@@ -526,8 +530,9 @@ module.exports = (env, argv) => {
             new HtmlWebpackInjectPreload({
                 files: [{ match: /.*Inter.*\.woff2$/ }],
             }),
+            development && new ReactRefreshWebpackPlugin(),
 
-        ],
+        ].filter(Boolean),
 
         output: {
             path: path.join(__dirname, "webapp"),
