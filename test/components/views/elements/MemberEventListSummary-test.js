@@ -106,7 +106,7 @@ describe('MemberEventListSummary', function() {
         const result = wrapper.props.children;
 
         expect(result.props.children).toEqual([
-          <div className="event_tile" key="event0">Expanded membership</div>,
+            <div className="event_tile" key="event0">Expanded membership</div>,
         ]);
     });
 
@@ -129,8 +129,8 @@ describe('MemberEventListSummary', function() {
         const result = wrapper.props.children;
 
         expect(result.props.children).toEqual([
-          <div className="event_tile" key="event0">Expanded membership</div>,
-          <div className="event_tile" key="event1">Expanded membership</div>,
+            <div className="event_tile" key="event0">Expanded membership</div>,
+            <div className="event_tile" key="event1">Expanded membership</div>,
         ]);
     });
 

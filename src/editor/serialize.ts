@@ -22,30 +22,31 @@ import { AllHtmlEntities } from 'html-entities';
 import SettingsStore from '../settings/SettingsStore';
 import SdkConfig from '../SdkConfig';
 import cheerio from 'cheerio';
+import { Type } from './parts';
 
-export function mdSerialize(model: EditorModel) {
+export function mdSerialize(model: EditorModel): string {
     return model.parts.reduce((html, part) => {
         switch (part.type) {
-            case "newline":
+            case Type.Newline:
                 return html + "\n";
-            case "plain":
-            case "command":
-            case "pill-candidate":
-            case "at-room-pill":
+            case Type.Plain:
+            case Type.Command:
+            case Type.PillCandidate:
+            case Type.AtRoomPill:
                 return html + part.text;
-            case "room-pill":
+            case Type.RoomPill:
                 // Here we use the resourceId for compatibility with non-rich text clients
                 // See https://github.com/vector-im/element-web/issues/16660
                 return html +
                     `[${part.resourceId.replace(/[[\\\]]/g, c => "\\" + c)}](${makeGenericPermalink(part.resourceId)})`;
-            case "user-pill":
+            case Type.UserPill:
                 return html +
                     `[${part.text.replace(/[[\\\]]/g, c => "\\" + c)}](${makeGenericPermalink(part.resourceId)})`;
         }
     }, "");
 }
 
-export function htmlSerializeIfNeeded(model: EditorModel, { forceHTML = false } = {}) {
+export function htmlSerializeIfNeeded(model: EditorModel, { forceHTML = false } = {}): string {
     let md = mdSerialize(model);
     // copy of raw input to remove unwanted math later
     const orig = md;
@@ -156,31 +157,31 @@ export function htmlSerializeIfNeeded(model: EditorModel, { forceHTML = false } 
     }
 }
 
-export function textSerialize(model: EditorModel) {
+export function textSerialize(model: EditorModel): string {
     return model.parts.reduce((text, part) => {
         switch (part.type) {
-            case "newline":
+            case Type.Newline:
                 return text + "\n";
-            case "plain":
-            case "command":
-            case "pill-candidate":
-            case "at-room-pill":
+            case Type.Plain:
+            case Type.Command:
+            case Type.PillCandidate:
+            case Type.AtRoomPill:
                 return text + part.text;
-            case "room-pill":
+            case Type.RoomPill:
                 // Here we use the resourceId for compatibility with non-rich text clients
                 // See https://github.com/vector-im/element-web/issues/16660
                 return text + `${part.resourceId}`;
-            case "user-pill":
+            case Type.UserPill:
                 return text + `${part.text}`;
         }
     }, "");
 }
 
-export function containsEmote(model: EditorModel) {
+export function containsEmote(model: EditorModel): boolean {
     return startsWith(model, "/me ", false);
 }
 
-export function startsWith(model: EditorModel, prefix: string, caseSensitive = true) {
+export function startsWith(model: EditorModel, prefix: string, caseSensitive = true): boolean {
     const firstPart = model.parts[0];
     // part type will be "plain" while editing,
     // and "command" while composing a message.
@@ -190,26 +191,26 @@ export function startsWith(model: EditorModel, prefix: string, caseSensitive = t
         text = text.toLowerCase();
     }
 
-    return firstPart && (firstPart.type === "plain" || firstPart.type === "command") && text.startsWith(prefix);
+    return firstPart && (firstPart.type === Type.Plain || firstPart.type === Type.Command) && text.startsWith(prefix);
 }
 
-export function stripEmoteCommand(model: EditorModel) {
+export function stripEmoteCommand(model: EditorModel): EditorModel {
     // trim "/me "
     return stripPrefix(model, "/me ");
 }
 
-export function stripPrefix(model: EditorModel, prefix: string) {
+export function stripPrefix(model: EditorModel, prefix: string): EditorModel {
     model = model.clone();
     model.removeText({ index: 0, offset: 0 }, prefix.length);
     return model;
 }
 
-export function unescapeMessage(model: EditorModel) {
+export function unescapeMessage(model: EditorModel): EditorModel {
     const { parts } = model;
     if (parts.length) {
         const firstPart = parts[0];
         // only unescape \/ to / at start of editor
-        if (firstPart.type === "plain" && firstPart.text.startsWith("\\/")) {
+        if (firstPart.type === Type.Plain && firstPart.text.startsWith("\\/")) {
             model = model.clone();
             model.removeText({ index: 0, offset: 0 }, 1);
         }

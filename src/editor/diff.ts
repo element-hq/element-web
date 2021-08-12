@@ -21,7 +21,7 @@ export interface IDiff {
     at?: number;
 }
 
-function firstDiff(a: string, b: string) {
+function firstDiff(a: string, b: string): number {
     const compareLen = Math.min(a.length, b.length);
     for (let i = 0; i < compareLen; ++i) {
         if (a[i] !== b[i]) {

@@ -18,4 +18,3 @@ limitations under the License.
 // SpaceStore reads the SettingsStore which needs the localStorage values set at init time.
 
 localStorage.setItem("mx_labs_feature_feature_spaces", "true");
-localStorage.setItem("mx_labs_feature_feature_spaces.all_rooms", "true");

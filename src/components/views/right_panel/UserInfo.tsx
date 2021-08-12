@@ -851,7 +851,7 @@ const RoomAdminToolsContainer: React.FC<IBaseRoomProps> = ({
     return <div />;
 };
 
-interface GroupMember {
+export interface GroupMember {
     userId: string;
     displayname?: string; // XXX: GroupMember objects are inconsistent :((
     avatarUrl?: string;
@@ -1381,8 +1381,8 @@ const BasicUserInfo: React.FC<{
                 className="mx_UserInfo_field"
                 onClick={() => {
                     dis.dispatch({
-                    action: Action.ViewUserSettings,
-                    initialTabId: UserTab.Security,
+                        action: Action.ViewUserSettings,
+                        initialTabId: UserTab.Security,
                     });
                 }}
             >

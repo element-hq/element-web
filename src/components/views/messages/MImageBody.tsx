@@ -347,12 +347,21 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                     className="mx_MImageBody_thumbnail"
                     src={thumbUrl}
                     ref={this.image}
-                    style={{ maxWidth: `min(100%, ${maxWidth}px)` }}
+                    // Force the image to be the full size of the container, even if the
+                    // pixel size is smaller. The problem here is that we don't know what
+                    // thumbnail size the HS is going to give us, but we have to commit to
+                    // a container size immediately and not change it when the image loads
+                    // or we'll get a scroll jump (or have to leave blank space).
+                    // This will obviously result in an upscaled image which will be a bit
+                    // blurry. The best fix would be for the HS to advertise what size thumbnails
+                    // it guarantees to produce.
+                    style={{ height: '100%' }}
                     alt={content.body}
                     onError={this.onImageError}
                     onLoad={this.onImageLoad}
                     onMouseEnter={this.onImageEnter}
-                    onMouseLeave={this.onImageLeave} />
+                    onMouseLeave={this.onImageLeave}
+                />
             );
         }
 
@@ -379,7 +388,10 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                     </div>
                 }
 
-                <div style={{ display: !showPlaceholder ? undefined : 'none' }}>
+                <div style={{
+                    display: !showPlaceholder ? undefined : 'none',
+                    height: '100%', // Also force to size of a parent to prevent scroll-jumps (see above)
+                }}>
                     { img }
                     { gifLabel }
                 </div>

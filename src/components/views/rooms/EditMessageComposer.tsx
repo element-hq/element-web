@@ -25,7 +25,7 @@ import { getCaretOffsetAndText } from '../../../editor/dom';
 import { htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand } from '../../../editor/serialize';
 import { findEditableEvent } from '../../../utils/EventUtils';
 import { parseEvent } from '../../../editor/deserialize';
-import { CommandPartCreator, Part, PartCreator } from '../../../editor/parts';
+import { CommandPartCreator, Part, PartCreator, Type } from '../../../editor/parts';
 import EditorStateTransfer from '../../../utils/EditorStateTransfer';
 import BasicMessageComposer from "./BasicMessageComposer";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -242,12 +242,12 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
         const parts = this.model.parts;
         const firstPart = parts[0];
         if (firstPart) {
-            if (firstPart.type === "command" && firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")) {
+            if (firstPart.type === Type.Command && firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")) {
                 return true;
             }
 
             if (firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")
-                && (firstPart.type === "plain" || firstPart.type === "pill-candidate")) {
+                && (firstPart.type === Type.Plain || firstPart.type === Type.PillCandidate)) {
                 return true;
             }
         }
@@ -268,7 +268,7 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
     private getSlashCommand(): [Command, string, string] {
         const commandText = this.model.parts.reduce((text, part) => {
             // use mxid to textify user pills in a command
-            if (part.type === "user-pill") {
+            if (part.type === Type.UserPill) {
                 return text + part.resourceId;
             }
             return text + part.text;
