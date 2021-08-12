@@ -400,7 +400,11 @@ limitations under the License.
         background-color: $secondary-fg-color;
     }
 
-    .mx_AccessibleButton {
+    .mx_AccessibleButton_kind_link {
+        padding: 0;
+    }
+
+    .mx_GroupView_spaceUpgradePrompt_close {
         width: 16px;
         height: 16px;
         border-radius: 8px;
