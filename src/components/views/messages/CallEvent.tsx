@@ -175,7 +175,7 @@ export default class CallEvent extends React.PureComponent<IProps, IState> {
             } else if (hangupReason === CallErrorCode.InviteTimeout) {
                 return (
                     <div className="mx_CallEvent_content">
-                        { _t("Missed call") }
+                        { _t("No answer") }
                         { this.renderCallBackButton(_t("Call back")) }
                     </div>
                 );
