@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 async function openSpaceCreateMenu(session) {
-    // click on the icon within otherwise puppeteer clicks on the flashing dot instead as its naive
-    const spaceCreateButton = await session.query('.mx_SpaceButton_new .mx_SpaceButton_icon');
+    const spaceCreateButton = await session.query('.mx_SpaceButton_new');
     await spaceCreateButton.click();
 }
 

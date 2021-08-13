@@ -19,6 +19,7 @@ const { createSpace, inviteSpace } = require("../usecases/create-space");
 module.exports = async function spacesScenarios(alice, bob) {
     console.log(" creating a space for spaces scenarios:");
 
+    await alice.delay(1000); // wait for dialogs to close
     await setupSpaceUsingAliceAndInviteBob(alice, bob);
 };
 
