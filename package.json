@@ -147,7 +147,6 @@
     "@types/react-dom": "^17.0.2",
     "@types/react-transition-group": "^4.4.0",
     "@types/sanitize-html": "^2.3.1",
-    "@types/streamsaver": "^2.0.1",
     "@types/zxcvbn": "^4.4.0",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",

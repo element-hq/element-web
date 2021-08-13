@@ -277,13 +277,13 @@ export default class MFileBody extends React.Component<IProps, IState> {
                 );
             } else if (contentUrl) {
                 const downloadProps = {
-                target: "_blank",
-                rel: "noreferrer noopener",
+                    target: "_blank",
+                    rel: "noreferrer noopener",
 
-                // We set the href regardless of whether or not we intercept the download
-                // because we don't really want to convert the file to a blob eagerly, and
-                // still want "open in new tab" and "save link as" to work.
-                href: contentUrl,
+                    // We set the href regardless of whether or not we intercept the download
+                    // because we don't really want to convert the file to a blob eagerly, and
+                    // still want "open in new tab" and "save link as" to work.
+                    href: contentUrl,
                 };
 
                 // Blobs can only have up to 500mb, so if the file reports as being too large then

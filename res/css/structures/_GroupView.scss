@@ -368,6 +368,65 @@ limitations under the License.
     padding: 40px 20px;
 }
 
+.mx_GroupView_spaceUpgradePrompt {
+    padding: 16px 50px;
+    background-color: $header-panel-bg-color;
+    border-radius: 8px;
+    max-width: 632px;
+    font-size: $font-15px;
+    line-height: $font-24px;
+    margin-top: 24px;
+    position: relative;
+
+    > h2 {
+        font-size: inherit;
+        font-weight: $font-semi-bold;
+    }
+
+    > p, h2 {
+        margin: 0;
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        height: $font-24px;
+        width: 20px;
+        left: 18px;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: contain;
+        mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
+        background-color: $secondary-fg-color;
+    }
+
+    .mx_AccessibleButton_kind_link {
+        padding: 0;
+    }
+
+    .mx_GroupView_spaceUpgradePrompt_close {
+        width: 16px;
+        height: 16px;
+        border-radius: 8px;
+        background-color: $input-darker-bg-color;
+        position: absolute;
+        top: 16px;
+        right: 16px;
+
+        &::before {
+            content: "";
+            position: absolute;
+            width: inherit;
+            height: inherit;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-size: 8px;
+            mask-image: url('$(res)/img/image-view/close.svg');
+            background-color: $secondary-fg-color;
+        }
+    }
+}
+
 .mx_GroupView .mx_MemberInfo .mx_AutoHideScrollbar > :not(.mx_MemberInfo_avatar) {
     padding-left: 16px;
     padding-right: 16px;

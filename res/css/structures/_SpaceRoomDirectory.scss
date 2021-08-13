@@ -269,13 +269,17 @@ limitations under the License.
             }
         }
 
-        &:hover {
+        &:hover, &:focus-within {
             background-color: $groupFilterPanel-bg-color;
 
             .mx_AccessibleButton {
                 visibility: visible;
             }
         }
+    }
+
+    li.mx_SpaceRoomDirectory_roomTileWrapper {
+        list-style: none;
     }
 
     .mx_SpaceRoomDirectory_roomTile,

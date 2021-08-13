@@ -303,13 +303,17 @@ export default class HTMLExporter extends Exporter {
         return eventTileMarkup;
     }
 
-    protected createModifiedEvent(text: string, mxEv: MatrixEvent) {
+    protected createModifiedEvent(text: string, mxEv: MatrixEvent, italic=true) {
         const modifiedContent = {
             msgtype: "m.text",
-            body: `*${text}*`,
+            body: `${text}`,
             format: "org.matrix.custom.html",
-            formatted_body: `<em>${text}</em>`,
+            formatted_body: `${text}`,
         };
+        if (italic) {
+            modifiedContent.formatted_body = '<em>' + modifiedContent.formatted_body + '</em>';
+            modifiedContent.body = '*' + modifiedContent.body + '*';
+        }
         const modifiedEvent = new MatrixEvent();
         modifiedEvent.event = mxEv.event;
         modifiedEvent.sender = mxEv.sender;
@@ -356,7 +360,10 @@ export default class HTMLExporter extends Exporter {
         } catch (e) {
             // TODO: Handle callEvent errors
             console.error(e);
-            eventTile = await this.getEventTileMarkup(this.createModifiedEvent(textForEvent(mxEv), mxEv), joined);
+            eventTile = await this.getEventTileMarkup(
+                this.createModifiedEvent(textForEvent(mxEv), mxEv, false),
+                joined,
+            );
         }
 
         return eventTile;

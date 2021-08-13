@@ -14,13 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, Room } from "matrix-js-sdk";
+import { IContent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { textForFormat, IExportOptions, ExportTypes } from "../../src/utils/exportUtils/exportUtils";
 import '../skinned-sdk';
 import PlainTextExporter from "../../src/utils/exportUtils/PlainTextExport";
+import HTMLExporter from "../../src/utils/exportUtils/HtmlExport";
 import * as TestUtilsMatrix from '../test-utils';
 import { stubClient } from '../test-utils';
+import { renderToString } from "react-dom/server";
 
 let client: MatrixClient;
 
@@ -28,6 +30,10 @@ const MY_USER_ID = "@me:here";
 
 function generateRoomId() {
     return '!' + Math.random().toString().slice(2, 10) + ':domain';
+}
+
+interface ITestContent extends IContent {
+    expectedText: string;
 }
 
 describe('export', function() {
@@ -61,25 +67,102 @@ describe('export', function() {
         },
     ];
 
-    const events = mkEvents();
-    const room = createRoom();
-    console.log(events, room);
     function createRoom() {
         const room = new Room(generateRoomId(), null, client.getUserId());
         return room;
     }
+    const mockRoom = createRoom();
 
     function mkEvents() {
-        const events = [];
+        const matrixEvents = [];
         const ts0 = Date.now();
-        for (let i = 0; i < 10; i++) {
-            events.push(TestUtilsMatrix.mkMessage({
-                    event: true, room: "!room:id", user: "@user:id",
-                    ts: ts0 + i * 1000,
+        let i: number;
+        // plain text
+        for (i = 0; i < 10; i++) {
+            matrixEvents.push(TestUtilsMatrix.mkMessage({
+                event: true, room: "!room:id", user: "@user:id",
+                ts: ts0 + i * 1000,
             }));
         }
-        return events;
+        // reply events
+        for (i = 0; i < 10; i++) {
+            matrixEvents.push(TestUtilsMatrix.mkEvent({
+                "content": {
+                    "body": "> <@me:here> Hi\n\nTest",
+                    "format": "org.matrix.custom.html",
+                    "m.relates_to": {
+                        "m.in_reply_to": {
+                            "event_id": "$" + Math.random() + "-" + Math.random(),
+                        },
+                    },
+                    "msgtype": "m.text",
+                },
+                "user": "@me:here",
+                "type": "m.room.message",
+                "room": mockRoom.roomId,
+                "event": true,
+            }));
+        }
+        // membership events
+        for (i = 0; i < 10; i++) {
+            matrixEvents.push(TestUtilsMatrix.mkMembership({
+                event: true, room: "!room:id", user: "@user:id",
+                target: {
+                    userId: "@user:id",
+                    name: "Bob",
+                    getAvatarUrl: () => {
+                        return "avatar.jpeg";
+                    },
+                    getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
+                },
+                ts: ts0 + i*1000,
+                mship: 'join',
+                prevMship: 'join',
+                name: 'A user',
+            }));
+        }
+        // emote
+        matrixEvents.push(TestUtilsMatrix.mkEvent({
+            "content": {
+                "body": "waves",
+                "msgtype": "m.emote",
+            },
+            "user": "@me:here",
+            "type": "m.room.message",
+            "room": mockRoom.roomId,
+            "event": true,
+        }));
+        // redacted events
+        for (i = 0; i < 10; i++) {
+            matrixEvents.push(new MatrixEvent({
+                type: "m.room.message",
+                sender: MY_USER_ID,
+                content: {},
+                unsigned: {
+                    "age": 72,
+                    "transaction_id": "m1212121212.23",
+                    "redacted_because": {
+                        "content": {},
+                        "origin_server_ts": ts0 + i*1000,
+                        "redacts": "$9999999999999999999999999999999999999999998",
+                        "sender": "@me:here",
+                        "type": "m.room.redaction",
+                        "unsigned": {
+                            "age": 94,
+                            "transaction_id": "m1111111111.1",
+                        },
+                        "event_id": "$9999999999999999999999999999999999999999998",
+                        "room_id": mockRoom.roomId,
+                    },
+                },
+                event_id: "$9999999999999999999999999999999999999999999",
+                room_id: mockRoom.roomId,
+            }));
+        }
+        return matrixEvents;
     }
+
+    const events: MatrixEvent[] = mkEvents();
 
     it('checks if the export format is valid', function() {
         expect(textForFormat('HTML')).toBeTruthy();
@@ -96,7 +179,7 @@ describe('export', function() {
     it('checks if the export options are valid', function() {
         for (const exportOption of invalidExportOptions) {
             try {
-                new PlainTextExporter(room, ExportTypes.BEGINNING, exportOption, null);
+                new PlainTextExporter(mockRoom, ExportTypes.BEGINNING, exportOption, null);
                 throw new Error("Expected to throw an error");
             } catch (e) {
                 expect(e.message).toBe("Invalid export options");
@@ -105,7 +188,7 @@ describe('export', function() {
     });
 
     it('tests the file extension splitter', function() {
-        const exporter = new PlainTextExporter(room, ExportTypes.BEGINNING, mockExportOptions, null);
+        const exporter = new PlainTextExporter(mockRoom, ExportTypes.BEGINNING, mockExportOptions, null);
         const fileNameWithExtensions = {
             "": ["", ""],
             "name": ["name", ""],
@@ -118,14 +201,41 @@ describe('export', function() {
         }
     });
 
-    // it('checks if the reply regex executes correctly', function() {
-    //     const eventContents = [
-    //         {
-    //             "msgtype": "m.text",
-    //             "body": "> <@me:here> Testing....\n\nTest",
-    //             "expectedText": "",
-    //         },
-    //     ];
-    // });
+    it('checks if the reply regex executes correctly', function() {
+        const eventContents: ITestContent[] = [
+            {
+                "msgtype": "m.text",
+                "body": "> <@me:here> Source\n\nReply",
+                "expectedText": "<@me:here \"Source\"> Reply",
+            },
+            {
+                "msgtype": "m.text",
+                // if the reply format is invalid, then return the body
+                "body": "Invalid reply format",
+                "expectedText": "Invalid reply format",
+            },
+            {
+                "msgtype": "m.text",
+                "body": "> <@me:here> The source is more than 32 characters\n\nReply",
+                "expectedText": "<@me:here \"The source is more than 32 chara...\"> Reply",
+            },
+            {
+                "msgtype": "m.text",
+                "body": "> <@me:here> This\nsource\nhas\nnew\nlines\n\nReply",
+                "expectedText": "<@me:here \"This\"> Reply",
+            },
+        ];
+        const exporter = new PlainTextExporter(mockRoom, ExportTypes.BEGINNING, mockExportOptions, null);
+        for (const content of eventContents) {
+            expect(exporter.textForReplyEvent(content)).toBe(content.expectedText);
+        }
+    });
+
+    it("checks if the render to string doesn't throw any error for different types of events", function() {
+        const exporter = new HTMLExporter(mockRoom, ExportTypes.BEGINNING, mockExportOptions, null);
+        for (const event of events) {
+            expect(renderToString(exporter.getEventTile(event, false))).toBeTruthy();
+        }
+    });
 });
 

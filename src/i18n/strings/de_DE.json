@@ -3510,5 +3510,14 @@
     "An unknown error occurred": "Ein unbekannter Fehler ist aufgetreten",
     "Message bubbles": "Nachrichtenblasen",
     "New layout switcher (with message bubbles)": "Layout ändern erlauben (mit Nachrichtenblasen)",
-    "New in the Spaces beta": "Neues in der Spaces Beta"
+    "New in the Spaces beta": "Neues in der Spaces Beta",
+    "To help space members find and join a private room, go to that room's Security & Privacy settings.": "Um Mitgliedern beim Finden privater Räume zu helfen, öffne die Sicherheitseinstellungen des Raumes.",
+    "Help space members find private rooms": "Hilf Mitgliedern, private Räume zu finden",
+    "More": "Mehr",
+    "Show sidebar": "Seitenleiste anzeigen",
+    "Hide sidebar": "Seitenleiste verbergen",
+    "Start sharing your screen": "Bildschirmfreigabe starten",
+    "Stop sharing your screen": "Bildschirmfreigabe beenden",
+    "Don't send read receipts": "Sende keine Lesebestätigungen",
+    "Send pseudonymous analytics data": "Sende pseudonymisierte Nutzungsdaten"
 }

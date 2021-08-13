@@ -36,7 +36,7 @@ export default class HistoryManager {
     private addedSinceLastPush = false;
     private removedSinceLastPush = false;
 
-    clear() {
+    public clear(): void {
         this.stack = [];
         this.newlyTypedCharCount = 0;
         this.currentIndex = -1;
@@ -103,7 +103,7 @@ export default class HistoryManager {
     }
 
     // needs to persist parts and caret position
-    tryPush(model: EditorModel, caret: Caret, inputType: string, diff: IDiff) {
+    public tryPush(model: EditorModel, caret: Caret, inputType: string, diff: IDiff): boolean {
         // ignore state restoration echos.
         // these respect the inputType values of the input event,
         // but are actually passed in from MessageEditor calling model.reset()
@@ -121,22 +121,22 @@ export default class HistoryManager {
         return shouldPush;
     }
 
-    ensureLastChangesPushed(model: EditorModel) {
+    public ensureLastChangesPushed(model: EditorModel): void {
         if (this.changedSinceLastPush) {
             this.pushState(model, this.lastCaret);
         }
     }
 
-    canUndo() {
+    public canUndo(): boolean {
         return this.currentIndex >= 1 || this.changedSinceLastPush;
     }
 
-    canRedo() {
+    public canRedo(): boolean {
         return this.currentIndex < (this.stack.length - 1);
     }
 
     // returns state that should be applied to model
-    undo(model: EditorModel) {
+    public undo(model: EditorModel): IHistory {
         if (this.canUndo()) {
             this.ensureLastChangesPushed(model);
             this.currentIndex -= 1;
@@ -145,7 +145,7 @@ export default class HistoryManager {
     }
 
     // returns state that should be applied to model
-    redo() {
+    public redo(): IHistory {
         if (this.canRedo()) {
             this.changedSinceLastPush = false;
             this.currentIndex += 1;

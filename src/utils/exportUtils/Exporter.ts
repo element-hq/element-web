@@ -98,7 +98,8 @@ export default abstract class Exporter {
     }
 
     protected downloadPlainText(fileName: string, text: string) {
-        saveAs(new Blob[text], fileName);
+        const content = new Blob([text], { type: "text" });
+        saveAs(content, fileName);
     }
 
     protected setEventMetadata(event: MatrixEvent): MatrixEvent {
