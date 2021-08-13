@@ -17,7 +17,7 @@ limitations under the License.
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { IExportOptions, ExportTypes } from "./exportUtils";
+import { IExportOptions, ExportType } from "./exportUtils";
 import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay } from "../../DateUtils";
@@ -38,13 +38,14 @@ export default abstract class Exporter {
 
     protected constructor(
         protected room: Room,
-        protected exportType: ExportTypes,
+        protected exportType: ExportType,
         protected exportOptions: IExportOptions,
         protected exportProgressRef: MutableRefObject<HTMLParagraphElement>,
     ) {
-        if (exportOptions.maxSize < 1 * 1024 * 1024||
-            exportOptions.maxSize > 2000 * 1024 * 1024||
-            exportOptions.numberOfMessages > 10**8) {
+        if (exportOptions.maxSize < 1 * 1024 * 1024|| // Less than 1 MB
+            exportOptions.maxSize > 2000 * 1024 * 1024|| // More than ~ 2 GB
+            exportOptions.numberOfMessages > 10**8
+        ) {
             throw new Error("Invalid export options");
         }
         this.cancelled = false;
@@ -118,10 +119,10 @@ export default abstract class Exporter {
     public getLimit(): number {
         let limit: number;
         switch (this.exportType) {
-            case ExportTypes.LAST_N_MESSAGES:
+            case ExportType.LastNMessages:
                 limit = this.exportOptions.numberOfMessages;
                 break;
-            case ExportTypes.TIMELINE:
+            case ExportType.Timeline:
                 limit = 40;
                 break;
             default:
@@ -166,7 +167,7 @@ export default abstract class Exporter {
                 events.push(mxEv);
             }
             this.updateProgress(
-                ("Fetched " + events.length + " events ") + (this.exportType === ExportTypes.LAST_N_MESSAGES
+                ("Fetched " + events.length + " events ") + (this.exportType === ExportType.LastNMessages
                     ? `out of ${this.exportOptions.numberOfMessages}`
                     : "so far"),
             );

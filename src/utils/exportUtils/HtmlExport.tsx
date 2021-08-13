@@ -32,7 +32,7 @@ import DateSeparator from "../../components/views/messages/DateSeparator";
 import BaseAvatar from "../../components/views/avatars/BaseAvatar";
 import exportJS from "!!raw-loader!./exportJS";
 import exportIcons from "./exportIcons";
-import { ExportTypes } from "./exportUtils";
+import { ExportType } from "./exportUtils";
 import { IExportOptions } from "./exportUtils";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import getExportCSS from "./exportCSS";
@@ -46,7 +46,7 @@ export default class HTMLExporter extends Exporter {
 
     constructor(
         room: Room,
-        exportType: ExportTypes,
+        exportType: ExportType,
         exportOptions: IExportOptions,
         exportProgressRef: MutableRefObject<HTMLParagraphElement>,
     ) {

@@ -20,7 +20,7 @@ import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { formatFullDateNoDay } from "../../DateUtils";
 import { _t } from "../../languageHandler";
 import { haveTileForEvent } from "../../components/views/rooms/EventTile";
-import { ExportTypes } from "./exportUtils";
+import { ExportType } from "./exportUtils";
 import { IExportOptions } from "./exportUtils";
 import { textForEvent } from "../../TextForEvent";
 import { MutableRefObject } from "react";
@@ -31,7 +31,7 @@ export default class PlainTextExporter extends Exporter {
 
     constructor(
         room: Room,
-        exportType: ExportTypes,
+        exportType: ExportType,
         exportOptions: IExportOptions,
         exportProgressRef: MutableRefObject<HTMLParagraphElement>,
     ) {

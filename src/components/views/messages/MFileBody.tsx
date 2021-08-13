@@ -222,125 +222,125 @@ export default class MFileBody extends React.Component<IProps, IState> {
                     { placeholder }
                 </a>
             </span>;
-        } else {
-            const showDownloadLink = this.props.tileShape || !this.props.showGenericPlaceholder;
+        }
 
-            if (isEncrypted) {
-                if (!this.state.decryptedBlob) {
+        const showDownloadLink = this.props.tileShape || !this.props.showGenericPlaceholder;
+
+        if (isEncrypted) {
+            if (!this.state.decryptedBlob) {
                 // Need to decrypt the attachment
                 // Wait for the user to click on the link before downloading
                 // and decrypting the attachment.
 
-                    // This button should actually Download because usercontent/ will try to click itself
-                    // but it is not guaranteed between various browsers' settings.
-                    return (
-                        <span className="mx_MFileBody">
-                            { placeholder }
-                            { showDownloadLink && <div className="mx_MFileBody_download">
-                                <AccessibleButton onClick={this.decryptFile}>
-                                    { _t("Decrypt %(text)s", { text: this.linkText }) }
-                                </AccessibleButton>
-                            </div> }
-                        </span>
-                    );
-                }
-
-                const url = "usercontent/"; // XXX: this path should probably be passed from the skin
-
-                // If the attachment is encrypted then put the link inside an iframe.
+                // This button should actually Download because usercontent/ will try to click itself
+                // but it is not guaranteed between various browsers' settings.
                 return (
                     <span className="mx_MFileBody">
                         { placeholder }
                         { showDownloadLink && <div className="mx_MFileBody_download">
-                            <div style={{ display: "none" }}>
-                                { /*
+                            <AccessibleButton onClick={this.decryptFile}>
+                                { _t("Decrypt %(text)s", { text: this.linkText }) }
+                            </AccessibleButton>
+                        </div> }
+                    </span>
+                );
+            }
+
+            const url = "usercontent/"; // XXX: this path should probably be passed from the skin
+
+            // If the attachment is encrypted then put the link inside an iframe.
+            return (
+                <span className="mx_MFileBody">
+                    { placeholder }
+                    { showDownloadLink && <div className="mx_MFileBody_download">
+                        <div style={{ display: "none" }}>
+                            { /*
                               * Add dummy copy of the "a" tag
                               * We'll use it to learn how the download link
                               * would have been styled if it was rendered inline.
                               */ }
-                                <a ref={this.dummyLink} />
-                            </div>
-                            { /*
+                            <a ref={this.dummyLink} />
+                        </div>
+                        { /*
                             TODO: Move iframe (and dummy link) into FileDownloader.
                             We currently have it set up this way because of styles applied to the iframe
                             itself which cannot be easily handled/overridden by the FileDownloader. In
                             future, the download link may disappear entirely at which point it could also
                             be suitable to just remove this bit of code.
                          */ }
-                            <iframe
-                                src={url}
-                                onLoad={() => this.downloadFile(this.fileName, this.linkText)}
-                                ref={this.iframe}
-                                sandbox="allow-scripts allow-downloads allow-downloads-without-user-activation" />
-                        </div> }
-                    </span>
-                );
-            } else if (contentUrl) {
-                const downloadProps = {
-                    target: "_blank",
-                    rel: "noreferrer noopener",
+                        <iframe
+                            src={url}
+                            onLoad={() => this.downloadFile(this.fileName, this.linkText)}
+                            ref={this.iframe}
+                            sandbox="allow-scripts allow-downloads allow-downloads-without-user-activation" />
+                    </div> }
+                </span>
+            );
+        } else if (contentUrl) {
+            const downloadProps = {
+                target: "_blank",
+                rel: "noreferrer noopener",
 
-                    // We set the href regardless of whether or not we intercept the download
-                    // because we don't really want to convert the file to a blob eagerly, and
-                    // still want "open in new tab" and "save link as" to work.
-                    href: contentUrl,
-                };
+                // We set the href regardless of whether or not we intercept the download
+                // because we don't really want to convert the file to a blob eagerly, and
+                // still want "open in new tab" and "save link as" to work.
+                href: contentUrl,
+            };
 
-                // Blobs can only have up to 500mb, so if the file reports as being too large then
-                // we won't try and convert it. Likewise, if the file size is unknown then we'll assume
-                // it is too big. There is the risk of the reported file size and the actual file size
-                // being different, however the user shouldn't normally run into this problem.
-                const fileTooBig = typeof(fileSize) === 'number' ? fileSize > 524288000 : true;
+            // Blobs can only have up to 500mb, so if the file reports as being too large then
+            // we won't try and convert it. Likewise, if the file size is unknown then we'll assume
+            // it is too big. There is the risk of the reported file size and the actual file size
+            // being different, however the user shouldn't normally run into this problem.
+            const fileTooBig = typeof(fileSize) === 'number' ? fileSize > 524288000 : true;
 
-                if (["application/pdf"].includes(fileType) && !fileTooBig) {
+            if (["application/pdf"].includes(fileType) && !fileTooBig) {
                 // We want to force a download on this type, so use an onClick handler.
-                    downloadProps["onClick"] = (e) => {
-                        console.log(`Downloading ${fileType} as blob (unencrypted)`);
+                downloadProps["onClick"] = (e) => {
+                    console.log(`Downloading ${fileType} as blob (unencrypted)`);
 
-                        // Avoid letting the <a> do its thing
-                        e.preventDefault();
-                        e.stopPropagation();
+                    // Avoid letting the <a> do its thing
+                    e.preventDefault();
+                    e.stopPropagation();
 
-                        // Start a fetch for the download
-                        // Based upon https://stackoverflow.com/a/49500465
-                        this.props.mediaEventHelper.sourceBlob.value.then((blob) => {
-                            const blobUrl = URL.createObjectURL(blob);
+                    // Start a fetch for the download
+                    // Based upon https://stackoverflow.com/a/49500465
+                    this.props.mediaEventHelper.sourceBlob.value.then((blob) => {
+                        const blobUrl = URL.createObjectURL(blob);
 
-                            // We have to create an anchor to download the file
-                            const tempAnchor = document.createElement('a');
-                            tempAnchor.download = this.fileName;
-                            tempAnchor.href = blobUrl;
-                            document.body.appendChild(tempAnchor); // for firefox: https://stackoverflow.com/a/32226068
-                            tempAnchor.click();
-                            tempAnchor.remove();
-                        });
-                    };
-                } else {
-                // Else we are hoping the browser will do the right thing
-                    downloadProps["download"] = this.fileName;
-                }
-
-                return (
-                    <span className="mx_MFileBody">
-                        { placeholder }
-                        { showDownloadLink && <div className="mx_MFileBody_download">
-                            <a {...downloadProps}>
-                                <span className="mx_MFileBody_download_icon" />
-                                { _t("Download %(text)s", { text: this.linkText }) }
-                            </a>
-                            { this.props.tileShape === TileShape.FileGrid && <div className="mx_MImageBody_size">
-                                { this.content.info && this.content.info.size ? filesize(this.content.info.size) : "" }
-                            </div> }
-                        </div> }
-                    </span>
-                );
+                        // We have to create an anchor to download the file
+                        const tempAnchor = document.createElement('a');
+                        tempAnchor.download = this.fileName;
+                        tempAnchor.href = blobUrl;
+                        document.body.appendChild(tempAnchor); // for firefox: https://stackoverflow.com/a/32226068
+                        tempAnchor.click();
+                        tempAnchor.remove();
+                    });
+                };
             } else {
-                const extra = this.linkText ? (': ' + this.linkText) : '';
-                return <span className="mx_MFileBody">
-                    { placeholder }
-                    { _t("Invalid file%(extra)s", { extra: extra }) }
-                </span>;
+                // Else we are hoping the browser will do the right thing
+                downloadProps["download"] = this.fileName;
             }
+
+            return (
+                <span className="mx_MFileBody">
+                    { placeholder }
+                    { showDownloadLink && <div className="mx_MFileBody_download">
+                        <a {...downloadProps}>
+                            <span className="mx_MFileBody_download_icon" />
+                            { _t("Download %(text)s", { text: this.linkText }) }
+                        </a>
+                        { this.props.tileShape === TileShape.FileGrid && <div className="mx_MImageBody_size">
+                            { this.content.info && this.content.info.size ? filesize(this.content.info.size) : "" }
+                        </div> }
+                    </div> }
+                </span>
+            );
+        } else {
+            const extra = this.linkText ? (': ' + this.linkText) : '';
+            return <span className="mx_MFileBody">
+                { placeholder }
+                { _t("Invalid file%(extra)s", { extra: extra }) }
+            </span>;
         }
     }
 }

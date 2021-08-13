@@ -19,24 +19,22 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { formatFullDateNoDay, formatFullDateNoDayNoTime } from "../../DateUtils";
 import { haveTileForEvent } from "../../components/views/rooms/EventTile";
-import { ExportTypes } from "./exportUtils";
+import { ExportType } from "./exportUtils";
 import { IExportOptions } from "./exportUtils";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MutableRefObject } from "react";
 
 export default class JSONExporter extends Exporter {
-    protected totalSize: number;
-    protected messages: any[];
+    protected totalSize = 0;
+    protected messages: any[] = [];
 
     constructor(
         room: Room,
-        exportType: ExportTypes,
+        exportType: ExportType,
         exportOptions: IExportOptions,
         exportProgressRef: MutableRefObject<HTMLParagraphElement>,
     ) {
         super(room, exportType, exportOptions, exportProgressRef);
-        this.totalSize = 0;
-        this.messages = [];
     }
 
     protected createJSONString(): string {

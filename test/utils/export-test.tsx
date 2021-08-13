@@ -16,7 +16,7 @@ limitations under the License.
 
 import { IContent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
-import { textForFormat, IExportOptions, ExportTypes } from "../../src/utils/exportUtils/exportUtils";
+import { textForFormat, IExportOptions, ExportType } from "../../src/utils/exportUtils/exportUtils";
 import '../skinned-sdk';
 import PlainTextExporter from "../../src/utils/exportUtils/PlainTextExport";
 import HTMLExporter from "../../src/utils/exportUtils/HtmlExport";
@@ -179,7 +179,7 @@ describe('export', function() {
     it('checks if the export options are valid', function() {
         for (const exportOption of invalidExportOptions) {
             try {
-                new PlainTextExporter(mockRoom, ExportTypes.BEGINNING, exportOption, null);
+                new PlainTextExporter(mockRoom, ExportType.Beginning, exportOption, null);
                 throw new Error("Expected to throw an error");
             } catch (e) {
                 expect(e.message).toBe("Invalid export options");
@@ -188,7 +188,7 @@ describe('export', function() {
     });
 
     it('tests the file extension splitter', function() {
-        const exporter = new PlainTextExporter(mockRoom, ExportTypes.BEGINNING, mockExportOptions, null);
+        const exporter = new PlainTextExporter(mockRoom, ExportType.Beginning, mockExportOptions, null);
         const fileNameWithExtensions = {
             "": ["", ""],
             "name": ["name", ""],
@@ -225,14 +225,14 @@ describe('export', function() {
                 "expectedText": "<@me:here \"This\"> Reply",
             },
         ];
-        const exporter = new PlainTextExporter(mockRoom, ExportTypes.BEGINNING, mockExportOptions, null);
+        const exporter = new PlainTextExporter(mockRoom, ExportType.Beginning, mockExportOptions, null);
         for (const content of eventContents) {
             expect(exporter.textForReplyEvent(content)).toBe(content.expectedText);
         }
     });
 
     it("checks if the render to string doesn't throw any error for different types of events", function() {
-        const exporter = new HTMLExporter(mockRoom, ExportTypes.BEGINNING, mockExportOptions, null);
+        const exporter = new HTMLExporter(mockRoom, ExportType.Beginning, mockExportOptions, null);
         for (const event of events) {
             expect(renderToString(exporter.getEventTile(event, false))).toBeTruthy();
         }

@@ -16,26 +16,26 @@ limitations under the License.
 
 import { _t } from "../../languageHandler";
 
-export enum ExportFormats {
-    HTML = "HTML",
-    PLAIN_TEXT = "PLAIN_TEXT",
-    JSON = "JSON",
+export enum ExportFormat {
+    Html = "HTML",
+    PlainText = "PLAIN_TEXT",
+    Json = "JSON",
 }
 
-export enum ExportTypes {
-    TIMELINE = "TIMELINE",
-    BEGINNING = "BEGINNING",
-    LAST_N_MESSAGES = "LAST_N_MESSAGES",
+export enum ExportType {
+    Timeline = "TIMELINE",
+    Beginning = "BEGINNING",
+    LastNMessages = "LAST_N_MESSAGES",
     // START_DATE = "START_DATE",
 }
 
 export const textForFormat = (format: string): string => {
     switch (format) {
-        case ExportFormats.HTML:
+        case ExportFormat.Html:
             return _t("HTML");
-        case ExportFormats.JSON:
+        case ExportFormat.Json:
             return _t("JSON");
-        case ExportFormats.PLAIN_TEXT:
+        case ExportFormat.PlainText:
             return _t("Plain Text");
         default:
             throw new Error("Unknown format");
@@ -44,11 +44,11 @@ export const textForFormat = (format: string): string => {
 
 export const textForType = (type: string): string => {
     switch (type) {
-        case ExportTypes.BEGINNING:
+        case ExportType.Beginning:
             return _t("From the beginning");
-        case ExportTypes.LAST_N_MESSAGES:
+        case ExportType.LastNMessages:
             return _t("Specify a number of messages");
-        case ExportTypes.TIMELINE:
+        case ExportType.Timeline:
             return _t("Current Timeline");
         default:
             throw new Error("Unknown type: " + type);
