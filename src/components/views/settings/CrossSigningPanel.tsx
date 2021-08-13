@@ -24,7 +24,7 @@ import Spinner from '../elements/Spinner';
 import InteractiveAuthDialog from '../dialogs/InteractiveAuthDialog';
 import ConfirmDestroyCrossSigningDialog from '../dialogs/security/ConfirmDestroyCrossSigningDialog';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { MatrixEvent } from '../../../../../matrix-js-sdk/src';
+import { MatrixEvent } from 'matrix-js-sdk/src';
 
 interface IState {
     error?: Error;
