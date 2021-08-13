@@ -80,6 +80,16 @@ limitations under the License.
             mask-image: url('$(res)/img/voip/missed-video.svg');
         }
 
+        &.mx_CallEvent_voice.mx_CallEvent_rejected .mx_CallEvent_type_icon::before,
+        &.mx_CallEvent_voice.mx_CallEvent_noAnswer .mx_CallEvent_type_icon::before {
+            mask-image: url('$(res)/img/voip/declined-voice.svg');
+        }
+
+        &.mx_CallEvent_video.mx_CallEvent_rejected .mx_CallEvent_type_icon::before,
+        &.mx_CallEvent_video.mx_CallEvent_noAnswer .mx_CallEvent_type_icon::before {
+            mask-image: url('$(res)/img/voip/declined-video.svg');
+        }
+
         .mx_CallEvent_info {
             display: flex;
             flex-direction: row;
