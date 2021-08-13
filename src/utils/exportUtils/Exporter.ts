@@ -25,6 +25,7 @@ import { Direction, MatrixClient } from "matrix-js-sdk";
 import { MutableRefObject } from "react";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
+import { _t } from "../../languageHandler";
 
 type BlobFile = {
     name: string;
@@ -54,7 +55,7 @@ export default abstract class Exporter {
 
     protected onBeforeUnload(e: BeforeUnloadEvent): string {
         e.preventDefault();
-        return e.returnValue = "Are you sure you want to exit during this export?";
+        return e.returnValue = _t("Are you sure you want to exit during this export?");
     }
 
     protected updateProgress(progress: string, log = true, show = true): void {
@@ -70,7 +71,7 @@ export default abstract class Exporter {
         this.files.push(file);
     }
 
-    protected async downloadZIP(): Promise<string | null> {
+    protected async downloadZIP(): Promise<string | void> {
         const filename = `matrix-export-${formatFullDateNoDay(new Date())}.zip`;
 
         const zip = new JSZip();

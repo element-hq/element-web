@@ -31,7 +31,6 @@ import EventTile, { haveTileForEvent } from "../../components/views/rooms/EventT
 import DateSeparator from "../../components/views/messages/DateSeparator";
 import BaseAvatar from "../../components/views/avatars/BaseAvatar";
 import exportJS from "!!raw-loader!./exportJS";
-import exportIcons from "./exportIcons";
 import { ExportType } from "./exportUtils";
 import { IExportOptions } from "./exportUtils";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
@@ -294,6 +293,7 @@ export default class HTMLExporter extends Exporter {
             const mxc = mxEv.getContent().url || mxEv.getContent().file?.url;
             eventTileMarkup = eventTileMarkup.split(mxc).join(filePath);
         }
+        eventTileMarkup = eventTileMarkup.replace(/<span class="mx_MFileBody_info_icon".*?>.*?<\/span>/, '');
         if (hasAvatar) {
             eventTileMarkup = eventTileMarkup.replace(
                 encodeURI(this.getAvatarURL(mxEv)).replace(/&/g, '&amp;'),
@@ -405,10 +405,6 @@ export default class HTMLExporter extends Exporter {
         this.addFile("index.html", new Blob([html]));
         this.addFile("css/style.css", new Blob([exportCSS]));
         this.addFile("js/script.js", new Blob([exportJS]));
-
-        for (const iconName in exportIcons) {
-            this.addFile(`icons/${iconName}`, new Blob([exportIcons[iconName]]));
-        }
 
         await this.downloadZIP();
 

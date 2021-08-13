@@ -29,13 +29,15 @@ import {
     textForFormat,
     textForType,
 } from "../../../utils/exportUtils/exportUtils";
-import { IFieldState, IValidationResult } from "../elements/Validation";
+import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
 import HTMLExporter from "../../../utils/exportUtils/HtmlExport";
 import JSONExporter from "../../../utils/exportUtils/JSONExport";
 import PlainTextExporter from "../../../utils/exportUtils/PlainTextExport";
 import { useStateCallback } from "../../../hooks/useStateCallback";
 import Exporter from "../../../utils/exportUtils/Exporter";
 import Spinner from "../elements/Spinner";
+import Modal from "../../../Modal";
+import InfoDialog from "./InfoDialog";
 
 interface IProps extends IDialogProps {
     room: Room;
@@ -126,67 +128,85 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         await startExport();
     };
 
-    const onValidateSize = async ({
-        value,
-    }: Pick<IFieldState, "value">): Promise<IValidationResult> => {
-        const parsedSize = parseFloat(value);
-        const min = 1;
-        const max = 2000;
+    const validateSize = withValidation({
+        rules: [
+            {
+                key: "required",
+                test({ value, allowEmpty }) {
+                    return allowEmpty || !!value;
+                },
+                invalid: () => {
+                    const min = 1;
+                    const max = 10 ** 8;
+                    return _t("Enter a number between %(min)s and %(max)s", {
+                        min,
+                        max,
+                    });
+                },
+            }, {
+                key: "number",
+                test: ({ value }) => {
+                    const parsedSize = parseFloat(value);
+                    const min = 1;
+                    const max = 2000;
+                    return !(isNaN(parsedSize) || min > parsedSize || parsedSize > max);
+                },
+                invalid: () => {
+                    const min = 1;
+                    const max = 2000;
+                    return _t(
+                        "Size can only be a number between %(min)s MB and %(max)s MB",
+                        { min, max },
+                    );
+                },
+            },
+        ],
+    });
 
-        if (isNaN(parsedSize)) {
-            return { valid: false, feedback: _t("Size must be a number") };
-        }
-
-        if (min > parsedSize || parsedSize > max) {
-            return {
-                valid: false,
-                feedback: _t(
-                    "Size can only be between %(min)s MB and %(max)s MB",
-                    { min, max },
-                ),
-            };
-        }
-
-        return {
-            valid: true,
-            feedback: _t("Enter size between %(min)s MB and %(max)s MB", {
-                min,
-                max,
-            }),
-        };
+    const onValidateSize = async (fieldState: IFieldState): Promise<IValidationResult> => {
+        const result = await validateSize(fieldState);
+        return result;
     };
 
-    const onValidateNumberOfMessages = async ({
-        value,
-    }: Pick<IFieldState, "value">): Promise<IValidationResult> => {
-        const parsedSize = parseFloat(value);
-        const min = 1;
-        const max = 10 ** 8;
+    const validateNumberOfMessages = withValidation({
+        rules: [
+            {
+                key: "required",
+                test({ value, allowEmpty }) {
+                    return allowEmpty || !!value;
+                },
+                invalid: () => {
+                    const min = 1;
+                    const max = 10 ** 8;
+                    return _t("Enter a number between %(min)s and %(max)s", {
+                        min,
+                        max,
+                    });
+                },
+            }, {
+                key: "number",
+                test: ({ value }) => {
+                    const parsedSize = parseFloat(value);
+                    const min = 1;
+                    const max = 10 ** 8;
+                    if (isNaN(parsedSize)) return false;
+                    return !(min > parsedSize || parsedSize > max);
+                },
+                invalid: () => {
+                    const min = 1;
+                    const max = 10 ** 8;
+                    return _t(
+                        "Number of messages can only be a number between %(min)s and %(max)s",
+                        { min, max },
+                    );
+                },
+            },
+        ],
+    });
 
-        if (isNaN(parsedSize)) {
-            return {
-                valid: false,
-                feedback: _t("Number of messages must be a number"),
-            };
-        }
-
-        if (min > parsedSize || parsedSize > max) {
-            return {
-                valid: false,
-                feedback: _t(
-                    "Number of messages can only be between %(min)s and %(max)s",
-                    { min, max },
-                ),
-            };
-        }
-
-        return {
-            valid: true,
-            feedback: _t("Enter a number between %(min)s and %(max)s", {
-                min,
-                max,
-            }),
-        };
+    const onValidateNumberOfMessages = async (fieldState: IFieldState): Promise<IValidationResult> => {
+        const result = await validateNumberOfMessages(fieldState);
+        return result;
     };
 
     const onCancel = async () => {
@@ -236,42 +256,20 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
 
     if (exportCancelled) {
         // Display successful cancellation message
-        return (
-            <BaseDialog
-                title={_t("Export Cancelled")}
-                className="mx_ExportDialog"
-                contentId="mx_Dialog_content"
-                onFinished={onFinished}
-                fixedWidth={true}
-            >
-                <p>{ _t("The export was cancelled successfully") }</p>
-
-                <DialogButtons
-                    primaryButton={_t("Okay")}
-                    hasCancel={false}
-                    onPrimaryButtonClick={onFinished}
-                />
-            </BaseDialog>
-        );
+        Modal.createTrackedDialog("Export Cancelled", "", InfoDialog, {
+            title: _t("Export Cancelled"),
+            description: <p>{ _t("The export was cancelled successfully") }</p>,
+            hasCloseButton: true,
+        });
+        return null;
     } else if (exportSuccessful) {
         // Display successful export message
-        return (
-            <BaseDialog
-                title={_t("Export Successful")}
-                className="mx_ExportDialog"
-                contentId="mx_Dialog_content"
-                onFinished={onFinished}
-                fixedWidth={true}
-            >
-                <p>{ _t("Your messages were successfully exported") }</p>
-
-                <DialogButtons
-                    primaryButton={_t("Okay")}
-                    hasCancel={false}
-                    onPrimaryButtonClick={onFinished}
-                />
-            </BaseDialog>
-        );
+        Modal.createTrackedDialog("Export Successful", "", InfoDialog, {
+            title: _t("Export Successful"),
+            description: <p>{ _t("Your messages were successfully exported") }</p>,
+            hasCloseButton: true,
+        });
+        return null;
     } else if (displayCancel) {
         // Display cancel warning
         return (

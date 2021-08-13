@@ -16,7 +16,7 @@ limitations under the License.
 
 import { IContent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
-import { textForFormat, IExportOptions, ExportType } from "../../src/utils/exportUtils/exportUtils";
+import { IExportOptions, ExportType, ExportFormat } from "../../src/utils/exportUtils/exportUtils";
 import '../skinned-sdk';
 import PlainTextExporter from "../../src/utils/exportUtils/PlainTextExport";
 import HTMLExporter from "../../src/utils/exportUtils/HtmlExport";
@@ -73,9 +73,60 @@ describe('export', function() {
     }
     const mockRoom = createRoom();
 
+    const ts0 = Date.now();
+
+    function mkRedactedEvent(i = 0) {
+        return new MatrixEvent({
+            type: "m.room.message",
+            sender: MY_USER_ID,
+            content: {},
+            unsigned: {
+                "age": 72,
+                "transaction_id": "m1212121212.23",
+                "redacted_because": {
+                    "content": {},
+                    "origin_server_ts": ts0 + i*1000,
+                    "redacts": "$9999999999999999999999999999999999999999998",
+                    "sender": "@me:here",
+                    "type": "m.room.redaction",
+                    "unsigned": {
+                        "age": 94,
+                        "transaction_id": "m1111111111.1",
+                    },
+                    "event_id": "$9999999999999999999999999999999999999999998",
+                    "room_id": mockRoom.roomId,
+                },
+            },
+            event_id: "$9999999999999999999999999999999999999999999",
+            room_id: mockRoom.roomId,
+        });
+    }
+
+    function mkFileEvent() {
+        return new MatrixEvent({
+            "content": {
+                "body": "index.html",
+                "info": {
+                    "mimetype": "text/html",
+                    "size": 31613,
+                },
+                "msgtype": "m.file",
+                "url": "mxc://test.org",
+            },
+            "origin_server_ts": 1628872988364,
+            "sender": MY_USER_ID,
+            "type": "m.room.message",
+            "unsigned": {
+                "age": 266,
+                "transaction_id": "m99999999.2",
+            },
+            "event_id": "$99999999999999999999",
+            "room_id": mockRoom.roomId,
+        });
+    }
+
     function mkEvents() {
         const matrixEvents = [];
-        const ts0 = Date.now();
         let i: number;
         // plain text
         for (i = 0; i < 10; i++) {
@@ -134,30 +185,7 @@ describe('export', function() {
         }));
         // redacted events
         for (i = 0; i < 10; i++) {
-            matrixEvents.push(new MatrixEvent({
-                type: "m.room.message",
-                sender: MY_USER_ID,
-                content: {},
-                unsigned: {
-                    "age": 72,
-                    "transaction_id": "m1212121212.23",
-                    "redacted_because": {
-                        "content": {},
-                        "origin_server_ts": ts0 + i*1000,
-                        "redacts": "$9999999999999999999999999999999999999999998",
-                        "sender": "@me:here",
-                        "type": "m.room.redaction",
-                        "unsigned": {
-                            "age": 94,
-                            "transaction_id": "m1111111111.1",
-                        },
-                        "event_id": "$9999999999999999999999999999999999999999998",
-                        "room_id": mockRoom.roomId,
-                    },
-                },
-                event_id: "$9999999999999999999999999999999999999999999",
-                room_id: mockRoom.roomId,
-            }));
+            matrixEvents.push(mkRedactedEvent(i));
         }
         return matrixEvents;
     }
@@ -165,10 +193,22 @@ describe('export', function() {
     const events: MatrixEvent[] = mkEvents();
 
     it('checks if the export format is valid', function() {
-        expect(textForFormat('HTML')).toBeTruthy();
-        expect(textForFormat('JSON')).toBeTruthy();
-        expect(textForFormat('PLAIN_TEXT')).toBeTruthy();
-        expect(() => textForFormat('PDF')).toThrowError("Unknown format");
+        function isValidFormat(format: string): boolean {
+            const options: string[] = Object.values(ExportFormat);
+            return options.includes(format);
+        }
+        expect(isValidFormat("Html")).toBeTruthy();
+        expect(isValidFormat("Json")).toBeTruthy();
+        expect(isValidFormat("PlainText")).toBeTruthy();
+        expect(isValidFormat("Pdf")).toBeFalsy();
+    });
+
+    it("checks if the icons' html corresponds to export regex", function() {
+        const exporter = new HTMLExporter(mockRoom, ExportType.Beginning, mockExportOptions, null);
+        const fileRegex = /<span class="mx_MFileBody_info_icon">.*?<\/span>/;
+        expect(fileRegex.test(
+            renderToString(exporter.getEventTile(mkFileEvent(), true))),
+        ).toBeTruthy();
     });
 
     it('checks if the export options are valid', function() {

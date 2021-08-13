@@ -36,7 +36,6 @@ interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | 
     // Whether the onClick of the avatar should be overridden to dispatch `Action.ViewUser`
     viewUserOnClick?: boolean;
     title?: string;
-    forExport?: boolean;
 }
 
 interface IState {
@@ -90,8 +89,7 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
     }
 
     render() {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        let { member, fallbackUserId, onClick, viewUserOnClick, forExport, ...otherProps } = this.props;
+        let { member, fallbackUserId, onClick, viewUserOnClick, ...otherProps } = this.props;
         const userId = member ? member.userId : fallbackUserId;
 
         if (viewUserOnClick) {

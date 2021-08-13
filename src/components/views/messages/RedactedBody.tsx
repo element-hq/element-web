@@ -39,7 +39,6 @@ const RedactedBody = React.forwardRef<any, IBodyProps>(({ mxEvent, forExport }, 
 
     return (
         <span className="mx_RedactedBody" ref={ref} title={titleText}>
-            { forExport ? <img alt={_t("Redacted")} className="mx_export_trash_icon" src="icons/trash.svg" /> : null }
             { text }
         </span>
     );

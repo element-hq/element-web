@@ -16,33 +16,31 @@ limitations under the License.
 
 /* eslint-disable max-len, camelcase */
 
-declare const __webpack_hash__: string;
-
 import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
 
 const getExportCSS = async (): Promise<string> => {
     const theme = new ThemeWatcher().getEffectiveTheme();
-    const hash = __webpack_hash__;
-
-    const bundle = await fetch(`bundles/${hash}/bundle.css`);
-    const bundleCSS = await bundle.text();
-    let themeCSS: string;
-    if (theme === 'light') {
-        const res = await fetch(`bundles/${hash}/theme-light.css`);
-        themeCSS = await res.text();
-    } else {
-        const res = await fetch(`bundles/${hash}/theme-dark.css`);
-        themeCSS = await res.text();
+    const stylesheets: string[] = [];
+    document.querySelectorAll('link[rel="stylesheet"]').forEach((e: any) => {
+        if (e.href.endsWith("bundle.css") || e.href.endsWith(`theme-${theme}.css`)) {
+            stylesheets.push(e.href);
+        }
+    });
+    let CSS: string;
+    for (const stylesheet of stylesheets) {
+        const res = await fetch(stylesheet);
+        const innerText = await res.text();
+        CSS += innerText;
     }
     const fontFaceRegex = /@font-face {.*?}/sg;
 
-    themeCSS = themeCSS.replace(fontFaceRegex, '');
-    themeCSS = themeCSS.replace(
+    CSS = CSS.replace(fontFaceRegex, '');
+    CSS = CSS.replace(
         /font-family: Inter/g,
         `font-family: -apple-system, BlinkMacSystemFont, avenir next, 
         avenir, segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif`,
     );
-    themeCSS = themeCSS.replace(
+    CSS = CSS.replace(
         /font-family: Inconsolata/g,
         "font-family: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace",
     );
@@ -148,6 +146,10 @@ const getExportCSS = async (): Promise<string> => {
     top: 1px;
     left: 0;
   }
+
+  .mx_RedactedBody {
+    padding-left: unset;
+  }
   
   img {
     white-space: nowrap;
@@ -155,7 +157,7 @@ const getExportCSS = async (): Promise<string> => {
   }
 `;
 
-    return themeCSS + bundleCSS + customCSS;
+    return CSS + customCSS;
 };
 
 export default getExportCSS;

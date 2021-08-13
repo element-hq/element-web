@@ -312,7 +312,10 @@ function textForMessageEvent(ev: MatrixEvent): () => string | null {
             message = _t('%(senderDisplayName)s sent an image.', { senderDisplayName });
         } else if (ev.getType() == "m.sticker") {
             message = _t('%(senderDisplayName)s sent a sticker.', { senderDisplayName });
-        } else message = senderDisplayName + ': ' + message;
+        } else {
+            // in this case, parse it as a plain text message
+            message = senderDisplayName + ': ' + message;
+        }
         return message;
     };
 }

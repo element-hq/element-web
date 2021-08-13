@@ -355,10 +355,10 @@ export default class ReplyThread extends React.Component<IProps, IState> {
         } else if (this.props.forExport) {
             const eventId = ReplyThread.getParentEventId(this.props.parentEv);
             header = <p className="mx_ReplyThread_Export">
-                { _t("In reply to <messageLink/>",
+                { _t("In reply to <a>this message</a>",
                     {},
-                    { messageLink: () => (
-                        <a className="mx_reply_anchor" href={`#${eventId}`} scroll-to={eventId}> { _t("this message") } </a>
+                    { a: (sub) => (
+                        <a className="mx_reply_anchor" href={`#${eventId}`} scroll-to={eventId}> { sub } </a>
                     ),
                     })
                 }
