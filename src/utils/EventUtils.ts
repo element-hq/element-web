@@ -116,14 +116,14 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent): {
         (eventType === EventType.RoomMessage && msgtype && msgtype.startsWith("m.key.verification")) ||
         (eventType === EventType.RoomCreate) ||
         (eventType === EventType.RoomEncryption) ||
-        (eventType === EventType.CallInvite) ||
         (tileHandler === "messages.MJitsiWidgetEvent")
     );
     let isInfoMessage = (
         !isBubbleMessage &&
         eventType !== EventType.RoomMessage &&
         eventType !== EventType.Sticker &&
-        eventType !== EventType.RoomCreate
+        eventType !== EventType.RoomCreate &&
+        eventType !== EventType.CallInvite
     );
 
     // If we're showing hidden events in the timeline, we should use the

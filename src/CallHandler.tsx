@@ -86,7 +86,7 @@ import { randomUppercaseString, randomLowercaseString } from "matrix-js-sdk/src/
 import EventEmitter from 'events';
 import SdkConfig from './SdkConfig';
 import { ensureDMExists, findDMForUser } from './createRoom';
-import { IPushRule, RuleId, TweakName, Tweaks } from "matrix-js-sdk/src/@types/PushRules";
+import { RuleId, TweakName, Tweaks } from "matrix-js-sdk/src/@types/PushRules";
 import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
 import { WidgetLayoutStore, Container } from './stores/widgets/WidgetLayoutStore';
 import { getIncomingCallToastKey } from './toasts/IncomingCallToast';
@@ -484,7 +484,7 @@ export default class CallHandler extends EventEmitter {
             switch (newState) {
                 case CallState.Ringing: {
                     const incomingCallPushRule = (
-                        new PushProcessor(MatrixClientPeg.get()).getPushRuleById(RuleId.IncomingCall) as IPushRule
+                        new PushProcessor(MatrixClientPeg.get()).getPushRuleById(RuleId.IncomingCall)
                     );
                     const pushRuleEnabled = incomingCallPushRule?.enabled;
                     const tweakSetToRing = incomingCallPushRule?.actions.some((action: Tweaks) => (
