@@ -41,6 +41,9 @@ import RightPanelStore from "../../stores/RightPanelStore";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { mediaFromMxc } from "../../customisations/Media";
 import { replaceableComponent } from "../../utils/replaceableComponent";
+import { createSpaceFromCommunity } from "../../utils/space";
+import { Action } from "../../dispatcher/actions";
+import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 
 const LONG_DESC_PLACEHOLDER = _td(
     `<h1>HTML for your community's page</h1>
@@ -222,7 +225,7 @@ class FeaturedRoom extends React.Component {
 
         let roomNameNode = null;
         if (permalink) {
-            roomNameNode = <a href={permalink} onClick={this.onClick} >{ roomName }</a>;
+            roomNameNode = <a href={permalink} onClick={this.onClick}>{ roomName }</a>;
         } else {
             roomNameNode = <span>{ roomName }</span>;
         }
@@ -399,6 +402,8 @@ class FeaturedUser extends React.Component {
 const GROUP_JOINPOLICY_OPEN = "open";
 const GROUP_JOINPOLICY_INVITE = "invite";
 
+const UPGRADE_NOTICE_LS_KEY = "mx_hide_community_upgrade_notice";
+
 @replaceableComponent("structures.GroupView")
 export default class GroupView extends React.Component {
     static propTypes = {
@@ -422,6 +427,7 @@ export default class GroupView extends React.Component {
         publicityBusy: false,
         inviterProfile: null,
         showRightPanel: RightPanelStore.getSharedInstance().isOpenForGroup,
+        showUpgradeNotice: !localStorage.getItem(UPGRADE_NOTICE_LS_KEY),
     };
 
     componentDidMount() {
@@ -807,6 +813,22 @@ export default class GroupView extends React.Component {
         showGroupAddRoomDialog(this.props.groupId);
     };
 
+    _dismissUpgradeNotice = () => {
+        localStorage.setItem(UPGRADE_NOTICE_LS_KEY, "true");
+        this.setState({ showUpgradeNotice: false });
+    }
+
+    _onCreateSpaceClick = () => {
+        createSpaceFromCommunity(this._matrixClient, this.props.groupId);
+    };
+
+    _onAdminsLinkClick = () => {
+        dis.dispatch({
+            action: Action.SetRightPanelPhase,
+            phase: RightPanelPhases.GroupMemberList,
+        });
+    };
+
     _getGroupSection() {
         const groupSettingsSectionClasses = classnames({
             "mx_GroupView_group": this.state.editing,
@@ -819,12 +841,12 @@ export default class GroupView extends React.Component {
         let hostingSignup = null;
         if (hostingSignupLink && this.state.isUserPrivileged) {
             hostingSignup = <div className="mx_GroupView_hostingSignup">
-                {_t(
+                { _t(
                     "Want more than a community? <a>Get your own server</a>", {},
                     {
-                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">{sub}</a>,
+                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">{ sub }</a>,
                     },
-                )}
+                ) }
                 <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">
                     <img src={require("../../../res/img/external-link.svg")} width="11" height="10" alt='' />
                 </a>
@@ -843,10 +865,46 @@ export default class GroupView extends React.Component {
                     },
                 ) }
             </div> : <div />;
+
+        let communitiesUpgradeNotice;
+        if (this.state.showUpgradeNotice) {
+            let text;
+            if (this.state.isUserPrivileged) {
+                text = _t("You can create a Space from this community <a>here</a>.", {}, {
+                    a: sub => <AccessibleButton onClick={this._onCreateSpaceClick} kind="link">
+                        { sub }
+                    </AccessibleButton>,
+                });
+            } else {
+                text = _t("Ask the <a>admins</a> of this community to make it into a Space " +
+                    "and keep a look out for the invite.", {}, {
+                    a: sub => <AccessibleButton onClick={this._onAdminsLinkClick} kind="link">
+                        { sub }
+                    </AccessibleButton>,
+                });
+            }
+
+            communitiesUpgradeNotice = <div className="mx_GroupView_spaceUpgradePrompt">
+                <h2>{ _t("Communities can now be made into Spaces") }</h2>
+                <p>
+                    { _t("Spaces are a new way to make a community, with new features coming.") }
+                    &nbsp;
+                    { text }
+                    &nbsp;
+                    { _t("Communities won't receive further updates.") }
+                </p>
+                <AccessibleButton
+                    className="mx_GroupView_spaceUpgradePrompt_close"
+                    onClick={this._dismissUpgradeNotice}
+                />
+            </div>;
+        }
+
         return <div className={groupSettingsSectionClasses}>
             { header }
             { hostingSignup }
             { changeDelayWarning }
+            { communitiesUpgradeNotice }
             { this._getJoinableNode() }
             { this._getLongDescriptionNode() }
             { this._getRoomsNode() }
@@ -1185,10 +1243,13 @@ export default class GroupView extends React.Component {
                     avatarImage = <Spinner />;
                 } else {
                     const GroupAvatar = sdk.getComponent('avatars.GroupAvatar');
-                    avatarImage = <GroupAvatar groupId={this.props.groupId}
+                    avatarImage = <GroupAvatar
+                        groupId={this.props.groupId}
                         groupName={this.state.profileForm.name}
                         groupAvatarUrl={this.state.profileForm.avatar_url}
-                        width={28} height={28} resizeMethod='crop'
+                        width={28}
+                        height={28}
+                        resizeMethod='crop'
                     />;
                 }
 
@@ -1199,9 +1260,12 @@ export default class GroupView extends React.Component {
                         </label>
                         <div className="mx_GroupView_avatarPicker_edit">
                             <label htmlFor="avatarInput" className="mx_GroupView_avatarPicker_label">
-                                <img src={require("../../../res/img/camera.svg")}
-                                    alt={_t("Upload avatar")} title={_t("Upload avatar")}
-                                    width="17" height="15" />
+                                <img
+                                    src={require("../../../res/img/camera.svg")}
+                                    alt={_t("Upload avatar")}
+                                    title={_t("Upload avatar")}
+                                    width="17"
+                                    height="15" />
                             </label>
                             <input id="avatarInput" className="mx_GroupView_uploadInput" type="file" onChange={this._onAvatarSelected} />
                         </div>
@@ -1238,7 +1302,8 @@ export default class GroupView extends React.Component {
                     groupAvatarUrl={groupAvatarUrl}
                     groupName={groupName}
                     onClick={onGroupHeaderItemClick}
-                    width={28} height={28}
+                    width={28}
+                    height={28}
                 />;
                 if (summary.profile && summary.profile.name) {
                     nameNode = <div onClick={onGroupHeaderItemClick}>
@@ -1269,28 +1334,32 @@ export default class GroupView extends React.Component {
                         key="_cancelButton"
                         onClick={this._onCancelClick}
                     >
-                        <img src={require("../../../res/img/cancel.svg")} className="mx_filterFlipColor"
-                            width="18" height="18" alt={_t("Cancel")} />
+                        <img
+                            src={require("../../../res/img/cancel.svg")}
+                            className="mx_filterFlipColor"
+                            width="18"
+                            height="18"
+                            alt={_t("Cancel")} />
                     </AccessibleButton>,
                 );
             } else {
                 if (summary.user && summary.user.membership === 'join') {
                     rightButtons.push(
-                        <AccessibleButton className="mx_GroupHeader_button mx_GroupHeader_editButton"
+                        <AccessibleButton
+                            className="mx_GroupHeader_button mx_GroupHeader_editButton"
                             key="_editButton"
                             onClick={this._onEditClick}
                             title={_t("Community Settings")}
-                        >
-                        </AccessibleButton>,
+                        />,
                     );
                 }
                 rightButtons.push(
-                    <AccessibleButton className="mx_GroupHeader_button mx_GroupHeader_shareButton"
+                    <AccessibleButton
+                        className="mx_GroupHeader_button mx_GroupHeader_shareButton"
                         key="_shareButton"
                         onClick={this._onShareClick}
                         title={_t('Share Community')}
-                    >
-                    </AccessibleButton>,
+                    />,
                 );
             }
 

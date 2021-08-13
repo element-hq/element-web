@@ -98,7 +98,7 @@ export default class Slider extends React.Component<IProps> {
                     { selection }
                 </div>
                 <div className="mx_Slider_dotContainer">
-                    {dots}
+                    { dots }
                 </div>
             </div>
         </div>;
@@ -139,7 +139,7 @@ class Dot extends React.PureComponent<IDotProps> {
             <div className={className} />
             <div className="mx_Slider_labelContainer">
                 <div className="mx_Slider_label">
-                    {this.props.label}
+                    { this.props.label }
                 </div>
             </div>
         </span>;

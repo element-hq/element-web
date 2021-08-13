@@ -369,9 +369,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 <IndicatorScrollbar
                     className="mx_LeftPanel_breadcrumbsContainer mx_AutoHideScrollbar"
                     verticalScrollsHorizontally={true}
-                    // Firefox sometimes makes this element focusable due to
-                    // overflow:scroll;, so force it out of tab order.
-                    tabIndex={-1}
                 >
                     <RoomBreadcrumbs />
                 </IndicatorScrollbar>
@@ -406,7 +403,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     onSelectRoom={this.selectRoom}
                 />
 
-                {dialPadButton}
+                { dialPadButton }
 
                 <AccessibleTooltipButton
                     className={classNames("mx_LeftPanel_exploreButton", {
@@ -425,7 +422,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             leftLeftPanel = (
                 <div className="mx_LeftPanel_GroupFilterPanelContainer">
                     <GroupFilterPanel />
-                    {SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null}
+                    { SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null }
                 </div>
             );
         }
@@ -453,11 +450,11 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         return (
             <div className={containerClasses} ref={this.ref}>
-                {leftLeftPanel}
+                { leftLeftPanel }
                 <aside className="mx_LeftPanel_roomListContainer">
-                    {this.renderHeader()}
-                    {this.renderSearchDialExplore()}
-                    {this.renderBreadcrumbs()}
+                    { this.renderHeader() }
+                    { this.renderSearchDialExplore() }
+                    { this.renderBreadcrumbs() }
                     <RoomListNumResults onVisibilityChange={this.refreshStickyHeaders} />
                     <div className="mx_LeftPanel_roomListWrapper">
                         <div
@@ -467,7 +464,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             // overflow:scroll;, so force it out of tab order.
                             tabIndex={-1}
                         >
-                            {roomList}
+                            { roomList }
                         </div>
                     </div>
                     { !this.props.isMinimized && <LeftPanelWidget /> }

@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from "react";
-import { encode } from "blurhash";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import dis from './dispatcher/dispatcher';
@@ -28,7 +27,6 @@ import RoomViewStore from './stores/RoomViewStore';
 import encrypt from "browser-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
 import Spinner from "./components/views/elements/Spinner";
-
 import { Action } from "./dispatcher/actions";
 import CountlyAnalytics from "./CountlyAnalytics";
 import {
@@ -39,7 +37,8 @@ import {
     UploadStartedPayload,
 } from "./dispatcher/payloads/UploadPayload";
 import { IUpload } from "./models/IUpload";
-import { IImageInfo } from "matrix-js-sdk/src/@types/partials";
+import { IAbortablePromise, IImageInfo } from "matrix-js-sdk/src/@types/partials";
+import { BlurhashEncoder } from "./BlurhashEncoder";
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
@@ -85,10 +84,6 @@ interface IThumbnail {
     thumbnail: Blob;
 }
 
-interface IAbortablePromise<T> extends Promise<T> {
-    abort(): void;
-}
-
 /**
  * Create a thumbnail for a image DOM element.
  * The image will be smaller than MAX_WIDTH and MAX_HEIGHT.
@@ -107,55 +102,62 @@ interface IAbortablePromise<T> extends Promise<T> {
  * @return {Promise} A promise that resolves with an object with an info key
  *  and a thumbnail key.
  */
-function createThumbnail(
+async function createThumbnail(
     element: ThumbnailableElement,
     inputWidth: number,
     inputHeight: number,
     mimeType: string,
 ): Promise<IThumbnail> {
-    return new Promise((resolve) => {
-        let targetWidth = inputWidth;
-        let targetHeight = inputHeight;
-        if (targetHeight > MAX_HEIGHT) {
-            targetWidth = Math.floor(targetWidth * (MAX_HEIGHT / targetHeight));
-            targetHeight = MAX_HEIGHT;
-        }
-        if (targetWidth > MAX_WIDTH) {
-            targetHeight = Math.floor(targetHeight * (MAX_WIDTH / targetWidth));
-            targetWidth = MAX_WIDTH;
-        }
+    let targetWidth = inputWidth;
+    let targetHeight = inputHeight;
+    if (targetHeight > MAX_HEIGHT) {
+        targetWidth = Math.floor(targetWidth * (MAX_HEIGHT / targetHeight));
+        targetHeight = MAX_HEIGHT;
+    }
+    if (targetWidth > MAX_WIDTH) {
+        targetHeight = Math.floor(targetHeight * (MAX_WIDTH / targetWidth));
+        targetWidth = MAX_WIDTH;
+    }
 
-        const canvas = document.createElement("canvas");
+    let canvas: HTMLCanvasElement | OffscreenCanvas;
+    if (window.OffscreenCanvas) {
+        canvas = new window.OffscreenCanvas(targetWidth, targetHeight);
+    } else {
+        canvas = document.createElement("canvas");
         canvas.width = targetWidth;
         canvas.height = targetHeight;
-        const context = canvas.getContext("2d");
-        context.drawImage(element, 0, 0, targetWidth, targetHeight);
-        const imageData = context.getImageData(0, 0, targetWidth, targetHeight);
-        const blurhash = encode(
-            imageData.data,
-            imageData.width,
-            imageData.height,
-            // use 4 components on the longer dimension, if square then both
-            imageData.width >= imageData.height ? 4 : 3,
-            imageData.height >= imageData.width ? 4 : 3,
-        );
-        canvas.toBlob(function(thumbnail) {
-            resolve({
-                info: {
-                    thumbnail_info: {
-                        w: targetWidth,
-                        h: targetHeight,
-                        mimetype: thumbnail.type,
-                        size: thumbnail.size,
-                    },
-                    w: inputWidth,
-                    h: inputHeight,
-                    [BLURHASH_FIELD]: blurhash,
-                },
-                thumbnail,
-            });
-        }, mimeType);
-    });
+    }
+
+    const context = canvas.getContext("2d");
+    context.drawImage(element, 0, 0, targetWidth, targetHeight);
+
+    let thumbnailPromise: Promise<Blob>;
+
+    if (window.OffscreenCanvas) {
+        thumbnailPromise = (canvas as OffscreenCanvas).convertToBlob({ type: mimeType });
+    } else {
+        thumbnailPromise = new Promise<Blob>(resolve => (canvas as HTMLCanvasElement).toBlob(resolve, mimeType));
+    }
+
+    const imageData = context.getImageData(0, 0, targetWidth, targetHeight);
+    // thumbnailPromise and blurhash promise are being awaited concurrently
+    const blurhash = await BlurhashEncoder.instance.getBlurhash(imageData);
+    const thumbnail = await thumbnailPromise;
+
+    return {
+        info: {
+            thumbnail_info: {
+                w: targetWidth,
+                h: targetHeight,
+                mimetype: thumbnail.type,
+                size: thumbnail.size,
+            },
+            w: inputWidth,
+            h: inputHeight,
+            [BLURHASH_FIELD]: blurhash,
+        },
+        thumbnail,
+    };
 }
 
 /**
@@ -207,6 +209,14 @@ async function loadImageElement(imageFile: File) {
     return { width, height, img };
 }
 
+// Minimum size for image files before we generate a thumbnail for them.
+const IMAGE_SIZE_THRESHOLD_THUMBNAIL = 1 << 15; // 32KB
+// Minimum size improvement for image thumbnails, if both are not met then don't bother uploading thumbnail.
+const IMAGE_THUMBNAIL_MIN_REDUCTION_SIZE = 1 << 16; // 1MB
+const IMAGE_THUMBNAIL_MIN_REDUCTION_PERCENT = 0.1; // 10%
+// We don't apply these thresholds to video thumbnails as a poster image is always useful
+// and videos tend to be much larger.
+
 /**
  * Read the metadata for an image file and create and upload a thumbnail of the image.
  *
@@ -215,23 +225,33 @@ async function loadImageElement(imageFile: File) {
  * @param {File} imageFile The image to read and thumbnail.
  * @return {Promise} A promise that resolves with the attachment info.
  */
-function infoForImageFile(matrixClient, roomId, imageFile) {
+async function infoForImageFile(matrixClient: MatrixClient, roomId: string, imageFile: File) {
     let thumbnailType = "image/png";
     if (imageFile.type === "image/jpeg") {
         thumbnailType = "image/jpeg";
     }
 
-    let imageInfo;
-    return loadImageElement(imageFile).then((r) => {
-        return createThumbnail(r.img, r.width, r.height, thumbnailType);
-    }).then((result) => {
-        imageInfo = result.info;
-        return uploadFile(matrixClient, roomId, result.thumbnail);
-    }).then((result) => {
-        imageInfo.thumbnail_url = result.url;
-        imageInfo.thumbnail_file = result.file;
+    const imageElement = await loadImageElement(imageFile);
+
+    const result = await createThumbnail(imageElement.img, imageElement.width, imageElement.height, thumbnailType);
+    const imageInfo = result.info;
+
+    // we do all sizing checks here because we still rely on thumbnail generation for making a blurhash from.
+    const sizeDifference = imageFile.size - imageInfo.thumbnail_info.size;
+    if (
+        imageFile.size <= IMAGE_SIZE_THRESHOLD_THUMBNAIL || // image is small enough already
+        (sizeDifference <= IMAGE_THUMBNAIL_MIN_REDUCTION_SIZE && // thumbnail is not sufficiently smaller than original
+            sizeDifference <= (imageFile.size * IMAGE_THUMBNAIL_MIN_REDUCTION_PERCENT))
+    ) {
+        delete imageInfo["thumbnail_info"];
         return imageInfo;
-    });
+    }
+
+    const uploadResult = await uploadFile(matrixClient, roomId, result.thumbnail);
+
+    imageInfo["thumbnail_url"] = uploadResult.url;
+    imageInfo["thumbnail_file"] = uploadResult.file;
+    return imageInfo;
 }
 
 /**
@@ -333,7 +353,7 @@ export function uploadFile(
     roomId: string,
     file: File | Blob,
     progressHandler?: any, // TODO: Types
-): Promise<{url?: string, file?: any}> { // TODO: Types
+): IAbortablePromise<{url?: string, file?: any}> { // TODO: Types
     let canceled = false;
     if (matrixClient.isRoomEncrypted(roomId)) {
         // If the room is encrypted then encrypt the file before uploading it.
@@ -365,8 +385,8 @@ export function uploadFile(
                 encryptInfo.mimetype = file.type;
             }
             return { "file": encryptInfo };
-        });
-        (prom as IAbortablePromise<any>).abort = () => {
+        }) as IAbortablePromise<{ file: any }>;
+        prom.abort = () => {
             canceled = true;
             if (uploadPromise) matrixClient.cancelUpload(uploadPromise);
         };
@@ -379,8 +399,8 @@ export function uploadFile(
             if (canceled) throw new UploadCanceledError();
             // If the attachment isn't encrypted then include the URL directly.
             return { url };
-        });
-        (promise1 as any).abort = () => {
+        }) as IAbortablePromise<{ url: string }>;
+        promise1.abort = () => {
             canceled = true;
             matrixClient.cancelUpload(basePromise);
         };
@@ -423,10 +443,10 @@ export default class ContentMessages {
             const { finished } = Modal.createTrackedDialog<[boolean]>('Upload Reply Warning', '', QuestionDialog, {
                 title: _t('Replying With Files'),
                 description: (
-                    <div>{_t(
+                    <div>{ _t(
                         'At this time it is not possible to reply with a file. ' +
                         'Would you like to upload this file without replying?',
-                    )}</div>
+                    ) }</div>
                 ),
                 hasCancelButton: true,
                 button: _t("Continue"),
@@ -551,10 +571,10 @@ export default class ContentMessages {
                 content.msgtype = 'm.file';
                 resolve();
             }
-        });
+        }) as IAbortablePromise<void>;
 
         // create temporary abort handler for before the actual upload gets passed off to js-sdk
-        (prom as IAbortablePromise<any>).abort = () => {
+        prom.abort = () => {
             upload.canceled = true;
         };
 
@@ -583,9 +603,7 @@ export default class ContentMessages {
             // XXX: upload.promise must be the promise that
             // is returned by uploadFile as it has an abort()
             // method hacked onto it.
-            upload.promise = uploadFile(
-                matrixClient, roomId, file, onProgress,
-            );
+            upload.promise = uploadFile(matrixClient, roomId, file, onProgress);
             return upload.promise.then(function(result) {
                 content.file = result.file;
                 content.url = result.url;

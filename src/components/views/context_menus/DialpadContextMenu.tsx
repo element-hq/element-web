@@ -14,12 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { _t } from '../../../languageHandler';
+import * as React from "react";
+import { createRef } from "react";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import { ContextMenu, IProps as IContextMenuProps } from '../../structures/ContextMenu';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import Field from "../elements/Field";
-import Dialpad from '../voip/DialPad';
+import DialPad from '../voip/DialPad';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps extends IContextMenuProps {
@@ -32,6 +33,8 @@ interface IState {
 
 @replaceableComponent("views.context_menus.DialpadContextMenu")
 export default class DialpadContextMenu extends React.Component<IProps, IState> {
+    private numberEntryFieldRef: React.RefObject<Field> = createRef();
+
     constructor(props) {
         super(props);
 
@@ -40,9 +43,27 @@ export default class DialpadContextMenu extends React.Component<IProps, IState> 
         };
     }
 
-    onDigitPress = (digit) => {
+    onDigitPress = (digit: string, ev: ButtonEvent) => {
         this.props.call.sendDtmfDigit(digit);
         this.setState({ value: this.state.value + digit });
+
+        // Keep the number field focused so that keyboard entry is still available
+        // However, don't focus if this wasn't the result of directly clicking on the button,
+        // i.e someone using keyboard navigation.
+        if (ev.type === "click") {
+            this.numberEntryFieldRef.current?.focus();
+        }
+    };
+
+    onCancelClick = () => {
+        this.props.onFinished();
+    };
+
+    onKeyDown = (ev) => {
+        // Prevent Backspace and Delete keys from functioning in the entry field
+        if (ev.code === "Backspace" || ev.code === "Delete") {
+            ev.preventDefault();
+        }
     };
 
     onChange = (ev) => {
@@ -51,18 +72,23 @@ export default class DialpadContextMenu extends React.Component<IProps, IState> 
 
     render() {
         return <ContextMenu {...this.props}>
-            <div className="mx_DialPadContextMenu_header">
+            <div className="mx_DialPadContextMenuWrapper">
                 <div>
-                    <span className="mx_DialPadContextMenu_title">{_t("Dial pad")}</span>
+                    <AccessibleButton className="mx_DialPadContextMenu_cancel" onClick={this.onCancelClick} />
                 </div>
-                <Field className="mx_DialPadContextMenu_dialled"
-                    value={this.state.value} autoFocus={true}
-                    onChange={this.onChange}
-                />
-            </div>
-            <div className="mx_DialPadContextMenu_horizSep" />
-            <div className="mx_DialPadContextMenu_dialPad">
-                <Dialpad onDigitPress={this.onDigitPress} hasDialAndDelete={false} />
+                <div className="mx_DialPadContextMenu_header">
+                    <Field
+                        ref={this.numberEntryFieldRef}
+                        className="mx_DialPadContextMenu_dialled"
+                        value={this.state.value}
+                        autoFocus={true}
+                        onKeyDown={this.onKeyDown}
+                        onChange={this.onChange}
+                    />
+                </div>
+                <div className="mx_DialPadContextMenu_dialPad">
+                    <DialPad onDigitPress={this.onDigitPress} hasDial={false} />
+                </div>
             </div>
         </ContextMenu>;
     }

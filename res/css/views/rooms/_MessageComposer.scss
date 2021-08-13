@@ -165,8 +165,6 @@ limitations under the License.
     font-size: $font-14px;
     max-height: 120px;
     overflow: auto;
-    /* needed for FF */
-    font-family: $font-family;
 }
 
 /* hack for FF as vertical alignment of custom placeholder text is broken */

@@ -156,8 +156,8 @@ export default class CommunityPrototypeInviteDialog extends React.PureComponent<
                     height={avatarSize}
                 />
                 <div className="mx_CommunityPrototypeInviteDialog_personIdentifiers">
-                    <span className="mx_CommunityPrototypeInviteDialog_personName">{person.user.name}</span>
-                    <span className="mx_CommunityPrototypeInviteDialog_personId">{person.userId}</span>
+                    <span className="mx_CommunityPrototypeInviteDialog_personName">{ person.user.name }</span>
+                    <span className="mx_CommunityPrototypeInviteDialog_personId">{ person.userId }</span>
                 </div>
                 <StyledCheckbox onChange={(e) => this.setPersonToggle(person, e.target.checked)} />
             </div>
@@ -187,7 +187,7 @@ export default class CommunityPrototypeInviteDialog extends React.PureComponent<
         emailAddresses.push((
             <Field
                 key={emailAddresses.length}
-                value={""}
+                value=""
                 onChange={(e) => this.onAddressChange(e, emailAddresses.length)}
                 label={emailAddresses.length > 0 ? _t("Add another email") : _t("Email address")}
                 placeholder={emailAddresses.length > 0 ? _t("Add another email") : _t("Email address")}
@@ -205,18 +205,21 @@ export default class CommunityPrototypeInviteDialog extends React.PureComponent<
                 people.push((
                     <AccessibleButton
                         onClick={this.onShowMorePeople}
-                        kind="link" key="more"
+                        kind="link"
+                        key="more"
                         className="mx_CommunityPrototypeInviteDialog_morePeople"
-                    >{_t("Show more")}</AccessibleButton>
+                    >
+                        { _t("Show more") }
+                    </AccessibleButton>
                 ));
             }
         }
         if (this.state.people.length > 0) {
             peopleIntro = (
                 <div className="mx_CommunityPrototypeInviteDialog_people">
-                    <span>{_t("People you know on %(brand)s", { brand: SdkConfig.get().brand })}</span>
+                    <span>{ _t("People you know on %(brand)s", { brand: SdkConfig.get().brand }) }</span>
                     <AccessibleButton onClick={this.onShowPeopleClick}>
-                        {this.state.showPeople ? _t("Hide") : _t("Show")}
+                        { this.state.showPeople ? _t("Hide") : _t("Show") }
                     </AccessibleButton>
                 </div>
             );
@@ -236,14 +239,17 @@ export default class CommunityPrototypeInviteDialog extends React.PureComponent<
             >
                 <form onSubmit={this.onSubmit}>
                     <div className="mx_Dialog_content">
-                        {emailAddresses}
-                        {peopleIntro}
-                        {people}
+                        { emailAddresses }
+                        { peopleIntro }
+                        { people }
                         <AccessibleButton
-                            kind="primary" onClick={this.onSubmit}
+                            kind="primary"
+                            onClick={this.onSubmit}
                             disabled={this.state.busy}
                             className="mx_CommunityPrototypeInviteDialog_primaryButton"
-                        >{buttonText}</AccessibleButton>
+                        >
+                            { buttonText }
+                        </AccessibleButton>
                     </div>
                 </form>
             </BaseDialog>

@@ -1,6 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@ import { UIFeature } from "../../../../../settings/UIFeature";
 import { Layout } from "../../../../../settings/Layout";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import { compare } from "../../../../../utils/strings";
+import LayoutSwitcher from "../../LayoutSwitcher";
 
 interface IProps {
 }
@@ -75,7 +76,8 @@ interface IState extends IThemeState {
 export default class AppearanceUserSettingsTab extends React.Component<IProps, IState> {
     private readonly MESSAGE_PREVIEW_TEXT = _t("Hey you. You're the best!");
 
-    private themeTimer: NodeJS.Timeout;
+    private themeTimer: number;
+    private unmounted = false;
 
     constructor(props: IProps) {
         super(props);
@@ -101,12 +103,17 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         const client = MatrixClientPeg.get();
         const userId = client.getUserId();
         const profileInfo = await client.getProfileInfo(userId);
+        if (this.unmounted) return;
 
         this.setState({
             userId,
             displayName: profileInfo.displayname,
             avatarUrl: profileInfo.avatar_url,
         });
+    }
+
+    componentWillUnmount() {
+        this.unmounted = true;
     }
 
     private calculateThemeState(): IThemeState {
@@ -235,6 +242,10 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         this.setState({ customThemeUrl: e.target.value });
     };
 
+    private onLayoutChanged = (layout: Layout): void => {
+        this.setState({ layout: layout });
+    };
+
     private onIRCLayoutChange = (enabled: boolean) => {
         if (enabled) {
             this.setState({ layout: Layout.IRC });
@@ -254,7 +265,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     checked={this.state.useSystemTheme}
                     onChange={(e) => this.onUseSystemThemeChanged(e.target.checked)}
                 >
-                    {SettingsStore.getDisplayName("use_system_theme")}
+                    { SettingsStore.getDisplayName("use_system_theme") }
                 </StyledCheckbox>
             </div>;
         }
@@ -264,9 +275,9 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             let messageElement = null;
             if (this.state.customThemeMessage.text) {
                 if (this.state.customThemeMessage.isError) {
-                    messageElement = <div className='text-error'>{this.state.customThemeMessage.text}</div>;
+                    messageElement = <div className='text-error'>{ this.state.customThemeMessage.text }</div>;
                 } else {
-                    messageElement = <div className='text-success'>{this.state.customThemeMessage.text}</div>;
+                    messageElement = <div className='text-success'>{ this.state.customThemeMessage.text }</div>;
                 }
             }
             customThemeForm = (
@@ -282,10 +293,13 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                         />
                         <AccessibleButton
                             onClick={this.onAddCustomTheme}
-                            type="submit" kind="primary_sm"
+                            type="submit"
+                            kind="primary_sm"
                             disabled={!this.state.customThemeUrl.trim()}
-                        >{_t("Add theme")}</AccessibleButton>
-                        {messageElement}
+                        >
+                            { _t("Add theme") }
+                        </AccessibleButton>
+                        { messageElement }
                     </form>
                 </div>
             );
@@ -300,8 +314,8 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         const orderedThemes = [...builtInThemes, ...customThemes];
         return (
             <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_themeSection">
-                <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
-                {systemThemeSection}
+                <span className="mx_SettingsTab_subheading">{ _t("Theme") }</span>
+                { systemThemeSection }
                 <div className="mx_ThemeSelectors">
                     <StyledRadioGroup
                         name="theme"
@@ -316,7 +330,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                         outlined
                     />
                 </div>
-                {customThemeForm}
+                { customThemeForm }
             </div>
         );
     }
@@ -324,7 +338,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     private renderFontSection() {
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
 
-            <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
+            <span className="mx_SettingsTab_subheading">{ _t("Font size") }</span>
             <EventTilePreview
                 className="mx_AppearanceUserSettingsTab_fontSlider_preview"
                 message={this.MESSAGE_PREVIEW_TEXT}
@@ -375,7 +389,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             className="mx_AppearanceUserSettingsTab_AdvancedToggle"
             onClick={() => this.setState({ showAdvanced: !this.state.showAdvanced })}
         >
-            {this.state.showAdvanced ? _t("Hide advanced") : _t("Show advanced")}
+            { this.state.showAdvanced ? _t("Hide advanced") : _t("Show advanced") }
         </div>;
 
         let advanced: React.ReactNode;
@@ -390,14 +404,17 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     name="useCompactLayout"
                     level={SettingLevel.DEVICE}
                     useCheckbox={true}
-                    disabled={this.state.layout == Layout.IRC}
+                    disabled={this.state.layout !== Layout.Group}
                 />
-                <StyledCheckbox
-                    checked={this.state.layout == Layout.IRC}
-                    onChange={(ev) => this.onIRCLayoutChange(ev.target.checked)}
-                >
-                    {_t("Enable experimental, compact IRC style layout")}
-                </StyledCheckbox>
+
+                { !SettingsStore.getValue("feature_new_layout_switcher") ?
+                    <StyledCheckbox
+                        checked={this.state.layout == Layout.IRC}
+                        onChange={(ev) => this.onIRCLayoutChange(ev.target.checked)}
+                    >
+                        { _t("Enable experimental, compact IRC style layout") }
+                    </StyledCheckbox> : null
+                }
 
                 <SettingsFlag
                     name="useSystemFont"
@@ -423,23 +440,37 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             </>;
         }
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_Advanced">
-            {toggle}
-            {advanced}
+            { toggle }
+            { advanced }
         </div>;
     }
 
     render() {
         const brand = SdkConfig.get().brand;
 
+        let layoutSection;
+        if (SettingsStore.getValue("feature_new_layout_switcher")) {
+            layoutSection = (
+                <LayoutSwitcher
+                    userId={this.state.userId}
+                    displayName={this.state.displayName}
+                    avatarUrl={this.state.avatarUrl}
+                    messagePreviewText={this.MESSAGE_PREVIEW_TEXT}
+                    onLayoutChanged={this.onLayoutChanged}
+                />
+            );
+        }
+
         return (
             <div className="mx_SettingsTab mx_AppearanceUserSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Customise your appearance")}</div>
+                <div className="mx_SettingsTab_heading">{ _t("Customise your appearance") }</div>
                 <div className="mx_SettingsTab_SubHeading">
-                    {_t("Appearance Settings only affect this %(brand)s session.", { brand })}
+                    { _t("Appearance Settings only affect this %(brand)s session.", { brand }) }
                 </div>
-                {this.renderThemeSection()}
-                {this.renderFontSection()}
-                {this.renderAdvancedSection()}
+                { this.renderThemeSection() }
+                { layoutSection }
+                { this.renderFontSection() }
+                { this.renderAdvancedSection() }
             </div>
         );
     }

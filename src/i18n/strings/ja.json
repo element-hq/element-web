@@ -2503,5 +2503,20 @@
     "Support": "サポート",
     "You can change these anytime.": "ここで入力した情報はいつでも編集できます。",
     "Add some details to help people recognise it.": "情報を入力してください。",
-    "View dev tools": "開発者ツールを表示"
+    "View dev tools": "開発者ツールを表示",
+    "To view %(spaceName)s, you need an invite": "%(spaceName)s を閲覧するには招待が必要です",
+    "Integration manager": "インテグレーションマネージャ",
+    "Identity server is": "アイデンティティ・サーバー",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "インテグレーションマネージャは設定データを受け取り、ユーザーの代わりにウィジェットの変更、部屋への招待の送信、権限レベルの設定を行うことができます。",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "インテグレーションマネージャを使用して、ボット、ウィジェット、ステッカーパックを管理します。",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "インテグレーションマネージャ <b>(%(serverName)s)</b> を使用して、ボット、ウィジェット、ステッカーパックを管理します。",
+    "Identity server": "認証サーバ",
+    "Identity server (%(server)s)": "identity サーバー (%(server)s)",
+    "Could not connect to identity server": "identity サーバーに接続できませんでした",
+    "Not a valid identity server (status code %(code)s)": "有効な identity サーバーではありません (ステータスコード %(code)s)",
+    "Identity server URL must be HTTPS": "identityサーバーのURLは HTTPS スキーマである必要があります",
+    "Saving...": "保存しています…",
+    "Failed to save space settings.": "スペースの設定を保存できませんでした。",
+    "Transfer Failed": "転送に失敗しました",
+    "Unable to transfer call": "通話が転送できませんでした"
 }

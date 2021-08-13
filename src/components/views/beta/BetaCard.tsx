@@ -27,6 +27,8 @@ import BetaFeedbackDialog from "../dialogs/BetaFeedbackDialog";
 import SdkConfig from "../../../SdkConfig";
 import SettingsFlag from "../elements/SettingsFlag";
 
+// XXX: Keep this around for re-use in future Betas
+
 interface IProps {
     title?: string;
     featureId: string;
@@ -105,7 +107,7 @@ const BetaCard = ({ title: titleOverride, featureId }: IProps) => {
             </div>
             <img src={image} alt="" />
         </div>
-        { extraSettings && <div className="mx_BetaCard_relatedSettings">
+        { extraSettings && value && <div className="mx_BetaCard_relatedSettings">
             { extraSettings.map(key => (
                 <SettingsFlag key={key} name={key} level={SettingLevel.DEVICE} />
             )) }

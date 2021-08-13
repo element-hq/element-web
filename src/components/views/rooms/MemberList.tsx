@@ -43,6 +43,7 @@ import EntityTile from "./EntityTile";
 import MemberTile from "./MemberTile";
 import BaseAvatar from '../avatars/BaseAvatar';
 import { throttle } from 'lodash';
+import SpaceStore from "../../../stores/SpaceStore";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -92,7 +93,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         this.showPresence = enablePresenceByHsUrl?.[hsUrl] ?? true;
     }
 
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillMount() {
         const cli = MatrixClientPeg.get();
         this.mounted = true;
@@ -305,10 +306,16 @@ export default class MemberList extends React.Component<IProps, IState> {
         // For now we'll pretend this is any entity. It should probably be a separate tile.
         const text = _t("and %(count)s others...", { count: overflowCount });
         return (
-            <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
-                <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
-            } name={text} presenceState="online" suppressOnHover={true}
-            onClick={onClick} />
+            <EntityTile
+                className="mx_EntityTile_ellipsis"
+                avatarJsx={
+                    <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
+                }
+                name={text}
+                presenceState="online"
+                suppressOnHover={true}
+                onClick={onClick}
+            />
         );
     };
 
@@ -464,8 +471,12 @@ export default class MemberList extends React.Component<IProps, IState> {
                 return <MemberTile key={m.userId} member={m} ref={m.userId} showPresence={this.showPresence} />;
             } else {
                 // Is a 3pid invite
-                return <EntityTile key={m.getStateKey()} name={m.getContent().display_name} suppressOnHover={true}
-                    onClick={() => this.onPending3pidInviteClick(m)} />;
+                return <EntityTile
+                    key={m.getStateKey()}
+                    name={m.getContent().display_name}
+                    suppressOnHover={true}
+                    onClick={() => this.onPending3pidInviteClick(m)}
+                />;
             }
         });
     }
@@ -509,7 +520,7 @@ export default class MemberList extends React.Component<IProps, IState> {
             const chat = CommunityPrototypeStore.instance.getSelectedCommunityGeneralChat();
             if (chat && chat.roomId === this.props.roomId) {
                 inviteButtonText = _t("Invite to this community");
-            } else if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) {
+            } else if (SpaceStore.spacesEnabled && room.isSpaceRoom()) {
                 inviteButtonText = _t("Invite to this space");
             }
 
@@ -542,14 +553,14 @@ export default class MemberList extends React.Component<IProps, IState> {
         const footer = (
             <SearchBox
                 className="mx_MemberList_query mx_textinput_icon mx_textinput_search"
-                placeholder={ _t('Filter room members') }
-                onSearch={ this.onSearchQueryChanged } />
+                placeholder={_t('Filter room members')}
+                onSearch={this.onSearchQueryChanged} />
         );
 
         let previousPhase = RightPanelPhases.RoomSummary;
         // We have no previousPhase for when viewing a MemberList from a Space
         let scopeHeader;
-        if (SettingsStore.getValue("feature_spaces") && room?.isSpaceRoom()) {
+        if (SpaceStore.spacesEnabled && room?.isSpaceRoom()) {
             previousPhase = undefined;
             scopeHeader = <div className="mx_RightPanel_scopeHeader">
                 <RoomAvatar room={room} height={32} width={32} />

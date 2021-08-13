@@ -145,7 +145,7 @@ export default class ReadReceiptMarker extends React.PureComponent {
         if (oldInfo && oldInfo.left) {
             // start at the old height and in the old h pos
             startStyles.push({ top: startTopOffset+"px",
-                               left: toPx(oldInfo.left) });
+                left: toPx(oldInfo.left) });
         }
 
         startStyles.push({ top: startTopOffset+'px', left: '0' });
@@ -174,14 +174,14 @@ export default class ReadReceiptMarker extends React.PureComponent {
                 title = _t(
                     "Seen by %(userName)s at %(dateTime)s",
                     { userName: this.props.fallbackUserId,
-                    dateTime: dateString },
+                        dateTime: dateString },
                 );
             } else {
                 title = _t(
                     "Seen by %(displayName)s (%(userName)s) at %(dateTime)s",
                     { displayName: this.props.member.rawDisplayName,
-                    userName: this.props.fallbackUserId,
-                    dateTime: dateString },
+                        userName: this.props.fallbackUserId,
+                        dateTime: dateString },
                 );
             }
         }
@@ -192,7 +192,9 @@ export default class ReadReceiptMarker extends React.PureComponent {
                     member={this.props.member}
                     fallbackUserId={this.props.fallbackUserId}
                     aria-hidden="true"
-                    width={14} height={14} resizeMethod="crop"
+                    width={14}
+                    height={14}
+                    resizeMethod="crop"
                     style={style}
                     title={title}
                     onClick={this.props.onClick}

@@ -18,7 +18,7 @@ import React, { ReactNode } from "react";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { _t } from "../../../languageHandler";
-import { Playback, PlaybackState } from "../../../voice/Playback";
+import { Playback, PlaybackState } from "../../../audio/Playback";
 import classNames from "classnames";
 
 // omitted props are handled by render function
