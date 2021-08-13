@@ -27,31 +27,21 @@ export default class BackdropPanel extends React.PureComponent<IProps> {
     private spacesCanvasRef = createRef<HTMLCanvasElement>();
     private roomListCanvasRef = createRef<HTMLCanvasElement>();
 
-    private spacesCtx: CanvasRenderingContext2D;
-    private roomListCtx: CanvasRenderingContext2D;
-
     private sizes = {
         spacePanelWidth: 0,
         roomListWidth: 0,
         height: 0,
     };
-    private currentFrame?: number;
+    private style = getComputedStyle(document.documentElement);
 
     constructor(props: IProps) {
         super(props);
     }
 
     public componentDidMount() {
-        this.spacesCtx = this.spacesCanvasRef.current.getContext("2d");
-        this.roomListCtx = this.roomListCanvasRef.current.getContext("2d");
         UIStore.instance.on("SpacePanel", this.onResize);
         UIStore.instance.on("LeftPanel", this.onResize);
-    }
-
-    public componentDidUpdate() {
-        if (this.props.backgroundImage) {
-            this.refreshBackdropImage();
-        }
+        this.onResize();
     }
 
     public componentWillUnmount() {
@@ -59,28 +49,31 @@ export default class BackdropPanel extends React.PureComponent<IProps> {
         UIStore.instance.off("LeftPanel", this.onResize);
     }
 
-    private onResize = () => {
-        const spacePanelDimensions = UIStore.instance.getElementDimensions("SpacePanel");
-        const roomListDimensions = UIStore.instance.getElementDimensions("LeftPanel");
-        this.sizes = {
-            spacePanelWidth: spacePanelDimensions?.width ?? 0,
-            roomListWidth: roomListDimensions?.width ?? 0,
-            height: UIStore.instance.windowHeight,
-        };
+    public componentDidUpdate(prevProps: IProps) {
         if (this.props.backgroundImage) {
+            this.onResize();
+        }
+        if (prevProps.backgroundImage && !this.props.backgroundImage) {
+            this.forceUpdate();
+        }
+    }
+
+    private onResize = () => {
+        if (this.props.backgroundImage) {
+            const spacePanelDimensions = UIStore.instance.getElementDimensions("SpacePanel");
+            const roomListDimensions = UIStore.instance.getElementDimensions("LeftPanel");
+            this.sizes = {
+                spacePanelWidth: spacePanelDimensions?.width ?? 0,
+                roomListWidth: roomListDimensions?.width ?? 0,
+                height: UIStore.instance.windowHeight,
+            };
             this.refreshBackdropImage();
         }
     };
 
-    private animate = () => {
-        if (this.currentFrame !== undefined) {
-            cancelAnimationFrame(this.currentFrame);
-            this.currentFrame = undefined;
-        }
-        this.currentFrame = requestAnimationFrame(this.refreshBackdropImage);
-    };
-
     private refreshBackdropImage = (): void => {
+        const spacesCtx = this.spacesCanvasRef.current.getContext("2d");
+        const roomListCtx = this.roomListCanvasRef.current.getContext("2d");
         const { spacePanelWidth, roomListWidth, height } = this.sizes;
         const width = spacePanelWidth + roomListWidth;
         const { backgroundImage } = this.props;
@@ -111,16 +104,21 @@ export default class BackdropPanel extends React.PureComponent<IProps> {
         this.roomListCanvasRef.current.height = height;
         this.roomListCanvasRef.current.style.transform = `translateX(${spacePanelWidth}px)`;
 
-        this.spacesCtx.filter = `blur(30px)`;
-        this.roomListCtx.filter = `blur(60px)`;
-        this.spacesCtx.drawImage(
+        const spacesBlur = this.style.getPropertyValue('--roomlist-background-blur-amount');
+        const roomListBlur = this.style.getPropertyValue('--groupFilterPanel-background-blur-amount');
+
+        spacesCtx.filter = `blur(${spacesBlur})`;
+        roomListCtx.filter = `blur(${roomListBlur})`;
+        spacesCtx.drawImage(
             backgroundImage,
+            0, 0,
+            imageWidth, imageHeight,
             x,
             y,
             resultWidth,
             resultHeight,
         );
-        this.roomListCtx.drawImage(
+        roomListCtx.drawImage(
             backgroundImage,
             0, 0,
             imageWidth, imageHeight,
@@ -132,22 +130,23 @@ export default class BackdropPanel extends React.PureComponent<IProps> {
     };
 
     public render() {
-        return <>
+        if (!this.props.backgroundImage) return null;
+        return <div>
             <canvas
                 ref={this.spacesCanvasRef}
                 className="mx_BackdropPanel"
                 style={{
-                    opacity: .15,
+                    opacity: .19,
                 }}
             />
             <canvas
                 style={{
                     transform: `translateX(0)`,
-                    opacity: .1,
+                    opacity: .12,
                 }}
                 ref={this.roomListCanvasRef}
                 className="mx_BackdropPanel"
             />
-        </>;
+        </div>;
     }
 }
