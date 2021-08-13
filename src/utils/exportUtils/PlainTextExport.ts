@@ -33,9 +33,9 @@ export default class PlainTextExporter extends Exporter {
         room: Room,
         exportType: ExportType,
         exportOptions: IExportOptions,
-        exportProgressRef: MutableRefObject<HTMLParagraphElement>,
+        setProgressText: React.Dispatch<React.SetStateAction<string>>,
     ) {
-        super(room, exportType, exportOptions, exportProgressRef);
+        super(room, exportType, exportOptions, setProgressText);
         this.totalSize = 0;
         this.mediaOmitText = !this.exportOptions.attachmentsIncluded
             ? _t("Media omitted")

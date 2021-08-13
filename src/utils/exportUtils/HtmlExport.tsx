@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { MutableRefObject } from "react";
+import React from "react";
 import Exporter from "./Exporter";
 import { mediaFromMxc } from "../../customisations/Media";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -47,9 +47,9 @@ export default class HTMLExporter extends Exporter {
         room: Room,
         exportType: ExportType,
         exportOptions: IExportOptions,
-        exportProgressRef: MutableRefObject<HTMLParagraphElement>,
+        setProgressText: React.Dispatch<React.SetStateAction<string>>,
     ) {
-        super(room, exportType, exportOptions, exportProgressRef);
+        super(room, exportType, exportOptions, setProgressText);
         this.avatars = new Map<string, boolean>();
         this.permalinkCreator = new RoomPermalinkCreator(this.room);
         this.totalSize = 0;

@@ -32,9 +32,9 @@ export default class JSONExporter extends Exporter {
         room: Room,
         exportType: ExportType,
         exportOptions: IExportOptions,
-        exportProgressRef: MutableRefObject<HTMLParagraphElement>,
+        setProgressText: React.Dispatch<React.SetStateAction<string>>,
     ) {
-        super(room, exportType, exportOptions, exportProgressRef);
+        super(room, exportType, exportOptions, setProgressText);
     }
 
     protected createJSONString(): string {

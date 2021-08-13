@@ -17,27 +17,27 @@ limitations under the License.
 import React, { useRef, useState } from "react";
 import { Room } from "matrix-js-sdk/src";
 import { _t } from "../../../languageHandler";
-import { IDialogProps } from "./IDialogProps";
-import BaseDialog from "./BaseDialog";
-import DialogButtons from "../elements/DialogButtons";
-import Field from "../elements/Field";
-import StyledRadioGroup from "../elements/StyledRadioGroup";
-import StyledCheckbox from "../elements/StyledCheckbox";
+import { IDialogProps } from "../../../components/views/dialogs/IDialogProps";
+import BaseDialog from "../../../components/views/dialogs/BaseDialog";
+import DialogButtons from "../../../components/views/elements/DialogButtons";
+import Field from "../../../components/views/elements/Field";
+import StyledRadioGroup from "../../../components/views/elements/StyledRadioGroup";
+import StyledCheckbox from "../../../components/views/elements/StyledCheckbox";
 import {
     ExportFormat,
     ExportType,
     textForFormat,
     textForType,
 } from "../../../utils/exportUtils/exportUtils";
-import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
+import withValidation, { IFieldState, IValidationResult } from "../../../components/views/elements/Validation";
 import HTMLExporter from "../../../utils/exportUtils/HtmlExport";
 import JSONExporter from "../../../utils/exportUtils/JSONExport";
 import PlainTextExporter from "../../../utils/exportUtils/PlainTextExport";
 import { useStateCallback } from "../../../hooks/useStateCallback";
 import Exporter from "../../../utils/exportUtils/Exporter";
-import Spinner from "../elements/Spinner";
+import Spinner from "../../../components/views/elements/Spinner";
 import Modal from "../../../Modal";
-import InfoDialog from "./InfoDialog";
+import InfoDialog from "../../../components/views/dialogs/InfoDialog";
 
 interface IProps extends IDialogProps {
     room: Room;
@@ -52,7 +52,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     const [sizeLimit, setSizeLimit] = useState<number | null>(8);
     const sizeLimitRef = useRef<Field>();
     const messageCountRef = useRef<Field>();
-    const exportProgressRef = useRef<HTMLParagraphElement>();
+    const [exportProgressText, setExportProgressText] = useState("Processing...");
     const [displayCancel, setCancelWarning] = useState(false);
     const [exportCancelled, setExportCancelled] = useState(false);
     const [exportSuccessful, setExportSuccessful] = useState(false);
@@ -78,7 +78,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                         room,
                         ExportType[exportType],
                         exportOptions,
-                        exportProgressRef,
+                        setExportProgressText,
                     ),
                 );
                 break;
@@ -88,7 +88,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                         room,
                         ExportType[exportType],
                         exportOptions,
-                        exportProgressRef,
+                        setExportProgressText,
                     ),
                 );
                 break;
@@ -98,7 +98,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                         room,
                         ExportType[exportType],
                         exportOptions,
-                        exportProgressRef,
+                        setExportProgressText,
                     ),
                 );
                 break;
@@ -368,8 +368,8 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 { isExporting ? (
                     <div className="mx_ExportDialog_progress">
                         <Spinner w={24} h={24} />
-                        <p ref={exportProgressRef}>
-                            { _t("Processing...") }
+                        <p>
+                            { exportProgressText }
                         </p>
                         <DialogButtons
                             primaryButton={_t("Cancel")}

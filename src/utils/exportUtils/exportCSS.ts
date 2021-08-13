@@ -101,27 +101,15 @@ const getExportCSS = async (): Promise<string> => {
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
   }
-  
-  .mx_MFileBody_info .mx_MFileBody_info_icon img.mx_export_attach_icon {
-    content: '';
-    background-color: ${theme == 'light' ? "#ffffff": "inherit"};
-    width: 13px;
-    height: 15px;
-    position: absolute;
-    top: 8px;
-    left: 9px;
-  }
-  
+
   * {
     scroll-behavior: smooth !important;
   }
-  
   
   .mx_Export_EventWrapper:target {
     background: ${theme == 'light' ? "white" : "#15191E"};
     animation: mx_event_highlight_animation 2s linear;
   }
-  
   
   @keyframes mx_event_highlight_animation {
     0%,100% {
@@ -131,26 +119,16 @@ const getExportCSS = async (): Promise<string> => {
       background: ${theme == 'light' ? "#e3e2df" : "#21262c"};
     }
   }
-  
+
   .mx_ReplyThread_Export {
     margin-top: -5px;
     margin-bottom: 5px;
-  }
-  
-  .mx_RedactedBody img.mx_export_trash_icon {
-    height: 14px;
-    width: 14px;
-    background-color: ${theme == 'light' ? "#ffffff": "inherit"};
-    content: '';
-    position: absolute;
-    top: 1px;
-    left: 0;
   }
 
   .mx_RedactedBody {
     padding-left: unset;
   }
-  
+
   img {
     white-space: nowrap;
     overflow: hidden;

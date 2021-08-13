@@ -22,7 +22,6 @@ import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay } from "../../DateUtils";
 import { Direction, MatrixClient } from "matrix-js-sdk";
-import { MutableRefObject } from "react";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { _t } from "../../languageHandler";
@@ -41,7 +40,7 @@ export default abstract class Exporter {
         protected room: Room,
         protected exportType: ExportType,
         protected exportOptions: IExportOptions,
-        protected exportProgressRef: MutableRefObject<HTMLParagraphElement>,
+        protected setProgressText: React.Dispatch<React.SetStateAction<string>>,
     ) {
         if (exportOptions.maxSize < 1 * 1024 * 1024|| // Less than 1 MB
             exportOptions.maxSize > 2000 * 1024 * 1024|| // More than ~ 2 GB
@@ -60,7 +59,7 @@ export default abstract class Exporter {
 
     protected updateProgress(progress: string, log = true, show = true): void {
         if (log) console.log(progress);
-        if (show && this.exportProgressRef.current) this.exportProgressRef.current.innerText = progress;
+        if (show) this.setProgressText(progress);
     }
 
     protected addFile(filePath: string, blob: Blob): void {
