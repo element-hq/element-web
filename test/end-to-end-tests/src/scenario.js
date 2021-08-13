@@ -20,7 +20,6 @@ const toastScenarios = require('./scenarios/toast');
 const roomDirectoryScenarios = require('./scenarios/directory');
 const lazyLoadingScenarios = require('./scenarios/lazy-loading');
 const e2eEncryptionScenarios = require('./scenarios/e2e-encryption');
-const spacesScenarios = require('./scenarios/spaces');
 
 module.exports = async function scenario(createSession, restCreator) {
     let firstUser = true;
