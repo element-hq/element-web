@@ -249,10 +249,9 @@ export default class CallEvent extends React.PureComponent<IProps, IState> {
             mx_CallEvent_voice: isVoice,
             mx_CallEvent_video: !isVoice,
             mx_CallEvent_narrow: this.state.narrow,
-            mx_CallEvent_missed: (
-                callState === CustomCallState.Missed ||
-                (callState === CallState.Ended && hangupReason === CallErrorCode.InviteTimeout)
-            ),
+            mx_CallEvent_missed: callState === CustomCallState.Missed,
+            mx_CallEvent_noAnswer: callState === CallState.Ended && hangupReason === CallErrorCode.InviteTimeout,
+            mx_CallEvent_rejected: callState === CallState.Ended && this.props.callEventGrouper.gotRejected,
         });
         let silenceIcon;
         if (this.state.narrow && this.state.callState === CallState.Ringing) {
