@@ -41,10 +41,11 @@ module.exports = async function scenario(createSession, restCreator) {
     await toastScenarios(alice, bob);
     await roomDirectoryScenarios(alice, bob);
     await e2eEncryptionScenarios(alice, bob);
-    await spacesScenarios(alice, bob);
     console.log("create REST users:");
     const charlies = await createRestUsers(restCreator);
     await lazyLoadingScenarios(alice, bob, charlies);
+    // do spaces scenarios last as the rest of the tests may get confused by spaces
+    await spacesScenarios(alice, bob);
 };
 
 async function createRestUsers(restCreator) {
