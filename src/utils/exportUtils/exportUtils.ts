@@ -29,7 +29,7 @@ export enum ExportTypes {
     // START_DATE = "START_DATE",
 }
 
-export const textForFormat = (format: string): string => {
+export const textForFormat = (format: ExportFormat): string => {
     switch (format) {
         case ExportFormats.HTML:
             return _t("HTML");
@@ -42,7 +42,7 @@ export const textForFormat = (format: string): string => {
     }
 };
 
-export const textForType = (type: string): string => {
+export const textForType = (type: ExportType): string => {
     switch (type) {
         case ExportTypes.BEGINNING:
             return _t("From the beginning");
