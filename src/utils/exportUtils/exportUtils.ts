@@ -17,19 +17,19 @@ limitations under the License.
 import { _t } from "../../languageHandler";
 
 export enum ExportFormat {
-    Html = "HTML",
-    PlainText = "PLAIN_TEXT",
-    Json = "JSON",
+    Html = "Html",
+    PlainText = "PlainText",
+    Json = "Json",
 }
 
 export enum ExportType {
-    Timeline = "TIMELINE",
-    Beginning = "BEGINNING",
-    LastNMessages = "LAST_N_MESSAGES",
+    Timeline = "Timeline",
+    Beginning = "Beginning",
+    LastNMessages = "LastNMessages",
     // START_DATE = "START_DATE",
 }
 
-export const textForFormat = (format: string): string => {
+export const textForFormat = (format: ExportFormat): string => {
     switch (format) {
         case ExportFormat.Html:
             return _t("HTML");
@@ -42,7 +42,7 @@ export const textForFormat = (format: string): string => {
     }
 };
 
-export const textForType = (type: string): string => {
+export const textForType = (type: ExportType): string => {
     switch (type) {
         case ExportType.Beginning:
             return _t("From the beginning");

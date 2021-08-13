@@ -54,7 +54,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     const [displayCancel, setCancelWarning] = useState(false);
     const [exportCancelled, setExportCancelled] = useState(false);
     const [exportSuccessful, setExportSuccessful] = useState(false);
-    const [Exporter, setExporter] = useStateCallback<Exporter>(
+    const [exporter, setExporter] = useStateCallback<Exporter>(
         null,
         async (exporter: Exporter) => {
             await exporter?.export().then(() => {
@@ -195,7 +195,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     };
 
     const confirmCanel = async () => {
-        await Exporter?.cancelExport().then(() => {
+        await exporter?.cancelExport().then(() => {
             setExportCancelled(true);
             setExporting(false);
             setExporter(null);
@@ -203,14 +203,14 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     };
 
     const exportFormatOptions = Object.keys(ExportFormat).map((format) => ({
-        value: format,
-        label: textForFormat(format),
+        value: ExportFormat[format],
+        label: textForFormat(ExportFormat[format]),
     }));
 
     const exportTypeOptions = Object.keys(ExportType).map((type) => {
         return (
-            <option key={type} value={type}>
-                { textForType(type) }
+            <option key={type} value={ExportType[type]}>
+                { textForType(ExportType[type]) }
             </option>
         );
     });
