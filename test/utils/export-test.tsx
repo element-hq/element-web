@@ -168,22 +168,15 @@ describe('export', function() {
         expect(textForFormat('HTML')).toBeTruthy();
         expect(textForFormat('JSON')).toBeTruthy();
         expect(textForFormat('PLAIN_TEXT')).toBeTruthy();
-        try {
-            textForFormat('PDF');
-            throw new Error("Expected to throw an error");
-        } catch (e) {
-            expect(e.message).toBe("Unknown format");
-        }
+        expect(() => textForFormat('PDF')).toThrowError("Unknown format");
     });
 
     it('checks if the export options are valid', function() {
         for (const exportOption of invalidExportOptions) {
-            try {
-                new PlainTextExporter(mockRoom, ExportType.Beginning, exportOption, null);
-                throw new Error("Expected to throw an error");
-            } catch (e) {
-                expect(e.message).toBe("Invalid export options");
-            }
+            expect(
+                () =>
+                    new PlainTextExporter(mockRoom, ExportType.Beginning, exportOption, null),
+            ).toThrowError("Invalid export options");
         }
     });
 
