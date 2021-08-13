@@ -39,10 +39,11 @@ limitations under the License.
 .mx_CallView_pip {
     width: 320px;
     padding-bottom: 8px;
-    background-color: $toast-bg-color;
+    background-color: $system;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.20);
     border-radius: 8px;
 
+    .mx_CallView_video_hold,
     .mx_CallView_voice {
         height: 180px;
     }

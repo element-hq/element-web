@@ -529,24 +529,24 @@ class LoggedInView extends React.Component<IProps, IState> {
         }
 
         const isModifier = ev.key === Key.ALT || ev.key === Key.CONTROL || ev.key === Key.META || ev.key === Key.SHIFT;
-        if (!isModifier && !ev.altKey && !ev.ctrlKey && !ev.metaKey) {
+        if (!isModifier && !ev.ctrlKey && !ev.metaKey) {
             // The above condition is crafted to _allow_ characters with Shift
             // already pressed (but not the Shift key down itself).
-
             const isClickShortcut = ev.target !== document.body &&
                 (ev.key === Key.SPACE || ev.key === Key.ENTER);
 
-            // Do not capture the context menu key to improve keyboard accessibility
-            if (ev.key === Key.CONTEXT_MENU) {
-                return;
-            }
+            // We explicitly allow alt to be held due to it being a common accent modifier.
+            // XXX: Forwarding Dead keys in this way does not work as intended but better to at least
+            // move focus to the composer so the user can re-type the dead key correctly.
+            const isPrintable = ev.key.length === 1 || ev.key === "Dead";
 
-            if (!isClickShortcut && ev.key !== Key.TAB && !canElementReceiveInput(ev.target)) {
+            // If the user is entering a printable character outside of an input field
+            // redirect it to the composer for them.
+            if (!isClickShortcut && isPrintable && !canElementReceiveInput(ev.target)) {
                 // synchronous dispatch so we focus before key generates input
                 dis.fire(Action.FocusSendMessageComposer, true);
                 ev.stopPropagation();
-                // we should *not* preventDefault() here as
-                // that would prevent typing in the now-focussed composer
+                // we should *not* preventDefault() here as that would prevent typing in the now-focused composer
             }
         }
     };
