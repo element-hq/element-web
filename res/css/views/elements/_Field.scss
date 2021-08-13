@@ -38,6 +38,7 @@ limitations under the License.
 .mx_Field input,
 .mx_Field select,
 .mx_Field textarea {
+    font-family: inherit;
     font-weight: normal;
     font-size: $font-14px;
     border: none;

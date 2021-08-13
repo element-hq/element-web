@@ -698,7 +698,7 @@
     "Verify your other session using one of the options below.": "Перевірте інший сеанс за допомогою одного із варіантів знизу.",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) починає новий сеанс без його підтвердження:",
     "Ask this user to verify their session, or manually verify it below.": "Попросіть цього користувача підтвердити сеанс, або підтвердьте його власноруч унизу.",
-    "Not Trusted": "Недовірене",
+    "Not Trusted": "Не довірений",
     "Manually Verify by Text": "Ручна перевірка за допомогою тексту",
     "Interactively verify by Emoji": "Інтерактивно звірити за допомогою емодзі",
     "Done": "Зроблено",
@@ -1641,5 +1641,10 @@
     "Identity server (%(server)s)": "Сервер ідентифікації (%(server)s)",
     "Could not connect to identity server": "Не вдалося під'єднатись до сервера ідентифікації",
     "There was an error looking up the phone number": "Сталася помилка під час пошуку номеру телефону",
-    "Unable to look up phone number": "Неможливо знайти номер телефону"
+    "Unable to look up phone number": "Неможливо знайти номер телефону",
+    "Not trusted": "Не довірений",
+    "Trusted": "Довірений",
+    "This backup is trusted because it has been restored on this session": "Ця резервна копія є надійною, оскільки її було відновлено під час цього сеансу",
+    "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Індивідуально перевіряйте кожен сеанс, який використовується користувачем, щоб позначити його довіреним, не довіряючи пристроям перехресного підписування.",
+    "To be secure, do this in person or use a trusted way to communicate.": "Для забезпечення безпеки зробіть це особисто або скористайтесь надійним способом зв'язку."
 }

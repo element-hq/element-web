@@ -45,7 +45,7 @@ export default class IncomingCallToast extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            silenced: false,
+            silenced: CallHandler.sharedInstance().isCallSilenced(this.props.call.callId),
         };
     }
 
@@ -61,7 +61,7 @@ export default class IncomingCallToast extends React.Component<IProps, IState> {
         this.setState({ silenced: CallHandler.sharedInstance().isCallSilenced(this.props.call.callId) });
     };
 
-    private onAnswerClick= (e: React.MouseEvent): void => {
+    private onAnswerClick = (e: React.MouseEvent): void => {
         e.stopPropagation();
         dis.dispatch({
             action: 'answer',

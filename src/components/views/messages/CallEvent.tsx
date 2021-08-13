@@ -25,6 +25,7 @@ import { CallErrorCode, CallState } from 'matrix-js-sdk/src/webrtc/call';
 import InfoTooltip, { InfoTooltipKind } from '../elements/InfoTooltip';
 import classNames from 'classnames';
 import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
+import { formatCallTime } from "../../../DateUtils";
 
 const MAX_NON_NARROW_WIDTH = 400 / 70 * 100;
 
@@ -161,9 +162,14 @@ export default class CallEvent extends React.PureComponent<IProps, IState> {
                 // https://github.com/vector-im/riot-android/issues/2623
                 // Also the correct hangup code as of VoIP v1 (with underscore)
                 // Also, if we don't have a reason
+                const duration = this.props.callEventGrouper.duration;
+                let text = _t("Call ended");
+                if (duration) {
+                    text += " • " + formatCallTime(duration);
+                }
                 return (
                     <div className="mx_CallEvent_content">
-                        { _t("Call ended") }
+                        { text }
                     </div>
                 );
             } else if (hangupReason === CallErrorCode.InviteTimeout) {

@@ -1,6 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,10 +37,9 @@ import StyledRadioGroup from "../../../elements/StyledRadioGroup";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { Layout } from "../../../../../settings/Layout";
-import classNames from 'classnames';
-import StyledRadioButton from '../../../elements/StyledRadioButton';
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import { compare } from "../../../../../utils/strings";
+import LayoutSwitcher from "../../LayoutSwitcher";
 
 interface IProps {
 }
@@ -243,17 +242,8 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         this.setState({ customThemeUrl: e.target.value });
     };
 
-    private onLayoutChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        let layout;
-        switch (e.target.value) {
-            case "irc": layout = Layout.IRC; break;
-            case "group": layout = Layout.Group; break;
-            case "bubble": layout = Layout.Bubble; break;
-        }
-
+    private onLayoutChanged = (layout: Layout): void => {
         this.setState({ layout: layout });
-
-        SettingsStore.setValue("layout", null, SettingLevel.DEVICE, layout);
     };
 
     private onIRCLayoutChange = (enabled: boolean) => {
@@ -391,75 +381,6 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         </div>;
     }
 
-    private renderLayoutSection = () => {
-        return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_Layout">
-            <span className="mx_SettingsTab_subheading">{ _t("Message layout") }</span>
-
-            <div className="mx_AppearanceUserSettingsTab_Layout_RadioButtons">
-                <label className={classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
-                    mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: this.state.layout == Layout.IRC,
-                })}>
-                    <EventTilePreview
-                        className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
-                        message={this.MESSAGE_PREVIEW_TEXT}
-                        layout={Layout.IRC}
-                        userId={this.state.userId}
-                        displayName={this.state.displayName}
-                        avatarUrl={this.state.avatarUrl}
-                    />
-                    <StyledRadioButton
-                        name="layout"
-                        value="irc"
-                        checked={this.state.layout === Layout.IRC}
-                        onChange={this.onLayoutChange}
-                    >
-                        { _t("IRC") }
-                    </StyledRadioButton>
-                </label>
-                <label className={classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
-                    mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: this.state.layout == Layout.Group,
-                })}>
-                    <EventTilePreview
-                        className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
-                        message={this.MESSAGE_PREVIEW_TEXT}
-                        layout={Layout.Group}
-                        userId={this.state.userId}
-                        displayName={this.state.displayName}
-                        avatarUrl={this.state.avatarUrl}
-                    />
-                    <StyledRadioButton
-                        name="layout"
-                        value="group"
-                        checked={this.state.layout == Layout.Group}
-                        onChange={this.onLayoutChange}
-                    >
-                        { _t("Modern") }
-                    </StyledRadioButton>
-                </label>
-                <label className={classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
-                    mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: this.state.layout === Layout.Bubble,
-                })}>
-                    <EventTilePreview
-                        className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
-                        message={this.MESSAGE_PREVIEW_TEXT}
-                        layout={Layout.Bubble}
-                        userId={this.state.userId}
-                        displayName={this.state.displayName}
-                        avatarUrl={this.state.avatarUrl}
-                    />
-                    <StyledRadioButton
-                        name="layout"
-                        value="bubble"
-                        checked={this.state.layout == Layout.Bubble}
-                        onChange={this.onLayoutChange}
-                    >
-                        { _t("Message bubbles") }
-                    </StyledRadioButton>
-                </label>
-            </div>
-        </div>;
-    };
-
     private renderAdvancedSection() {
         if (!SettingsStore.getValue(UIFeature.AdvancedSettings)) return null;
 
@@ -527,6 +448,19 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     render() {
         const brand = SdkConfig.get().brand;
 
+        let layoutSection;
+        if (SettingsStore.getValue("feature_new_layout_switcher")) {
+            layoutSection = (
+                <LayoutSwitcher
+                    userId={this.state.userId}
+                    displayName={this.state.displayName}
+                    avatarUrl={this.state.avatarUrl}
+                    messagePreviewText={this.MESSAGE_PREVIEW_TEXT}
+                    onLayoutChanged={this.onLayoutChanged}
+                />
+            );
+        }
+
         return (
             <div className="mx_SettingsTab mx_AppearanceUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{ _t("Customise your appearance") }</div>
@@ -534,7 +468,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     { _t("Appearance Settings only affect this %(brand)s session.", { brand }) }
                 </div>
                 { this.renderThemeSection() }
-                { SettingsStore.getValue("feature_new_layout_switcher") ? this.renderLayoutSection() : null }
+                { layoutSection }
                 { this.renderFontSection() }
                 { this.renderAdvancedSection() }
             </div>
