@@ -167,7 +167,7 @@ function textForTopicEvent(ev: MatrixEvent): () => string | null {
 }
 
 function textForRoomAvatarEvent(ev: MatrixEvent): () => string | null {
-    const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    const senderDisplayName = ev?.sender?.name || ev.getSender();
     return () => _t('%(senderDisplayName)s changed the room avatar.', { senderDisplayName });
 }
 
@@ -298,11 +298,12 @@ function textForMessageEvent(ev: MatrixEvent): () => string | null {
         if (ev.isRedacted()) {
             message = _t("Message deleted");
             const unsigned = ev.getUnsigned();
-            const redactedBecauseUserId = unsigned && unsigned.redacted_because && unsigned.redacted_because.sender;
+            const redactedBecauseUserId = unsigned?.redacted_because?.sender;
             if (redactedBecauseUserId && redactedBecauseUserId !== ev.getSender()) {
                 const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
-                const sender = room && room.getMember(redactedBecauseUserId);
-                message = _t("Message deleted by %(name)s", { name: sender ? sender.name : redactedBecauseUserId });
+                const sender = room?.getMember(redactedBecauseUserId);
+                message = _t("Message deleted by %(name)s", { name: sender?.name
+ || redactedBecauseUserId });
             }
         }
         if (ev.getContent().msgtype === "m.emote") {

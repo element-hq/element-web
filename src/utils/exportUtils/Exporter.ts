@@ -32,9 +32,9 @@ type BlobFile = {
 };
 
 export default abstract class Exporter {
-    protected files: BlobFile[];
+    protected files: BlobFile[] = [];
     protected client: MatrixClient;
-    protected cancelled: boolean;
+    protected cancelled = false;
 
     protected constructor(
         protected room: Room,
@@ -48,8 +48,6 @@ export default abstract class Exporter {
         ) {
             throw new Error("Invalid export options");
         }
-        this.cancelled = false;
-        this.files = [];
         this.client = MatrixClientPeg.get();
         window.addEventListener("beforeunload", this.onBeforeUnload);
     }
@@ -72,7 +70,7 @@ export default abstract class Exporter {
         this.files.push(file);
     }
 
-    protected async downloadZIP(): Promise<any> {
+    protected async downloadZIP(): Promise<string | null> {
         const filename = `matrix-export-${formatFullDateNoDay(new Date())}.zip`;
 
         const zip = new JSZip();
@@ -258,5 +256,5 @@ export default abstract class Exporter {
         return mxEv.getType() === attachmentTypes[0] || attachmentTypes.includes(mxEv.getContent().msgtype);
     }
 
-    abstract export(): Promise<any>;
+    abstract export(): Promise<void>;
 }
