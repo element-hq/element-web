@@ -24,6 +24,7 @@ import Spinner from '../elements/Spinner';
 import InteractiveAuthDialog from '../dialogs/InteractiveAuthDialog';
 import ConfirmDestroyCrossSigningDialog from '../dialogs/security/ConfirmDestroyCrossSigningDialog';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { MatrixEvent } from '../../../../../matrix-js-sdk/src';
 
 interface IState {
     error?: Error;
@@ -63,7 +64,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
         cli.removeListener("crossSigning.keysChanged", this.onStatusChanged);
     }
 
-    private onAccountData = (event): void => {
+    private onAccountData = (event: MatrixEvent): void => {
         const type = event.getType();
         if (type.startsWith("m.cross_signing") || type.startsWith("m.secret_storage")) {
             this.getUpdatedStatus();
