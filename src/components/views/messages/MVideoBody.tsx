@@ -78,6 +78,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
 
     private getContentUrl(): string|null {
         const content = this.props.mxEvent.getContent<IMediaEventContent>();
+        // During export, the content url will point to the MSC, which will later point to a local url
         if (this.props.forExport) return content.file?.url || content.url;
         const media = mediaFromContent(content);
         if (media.isEncrypted) {

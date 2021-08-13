@@ -213,6 +213,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
 
         if (this.props.forExport) {
             const content = this.props.mxEvent.getContent();
+            // During export, the content url will point to the MSC, which will later point to a local url
             return <span className="mx_MFileBody">
                 <a href={content.file?.url || content.url}>
                     { placeholder }

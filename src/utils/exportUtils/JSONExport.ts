@@ -22,7 +22,6 @@ import { haveTileForEvent } from "../../components/views/rooms/EventTile";
 import { ExportType } from "./exportUtils";
 import { IExportOptions } from "./exportUtils";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { MutableRefObject } from "react";
 
 export default class JSONExporter extends Exporter {
     protected totalSize = 0;

@@ -164,7 +164,8 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
     protected getContentUrl(): string {
         const content: IMediaEventContent = this.props.mxEvent.getContent();
-        if (this.props.forExport) return content.url || content.file.url;
+        // During export, the content url will point to the MSC, which will later point to a local url
+        if (this.props.forExport) return content.url || content.file?.url;
         if (this.media.isEncrypted) {
             return this.state.decryptedUrl;
         } else {

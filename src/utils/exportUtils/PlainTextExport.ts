@@ -23,7 +23,6 @@ import { haveTileForEvent } from "../../components/views/rooms/EventTile";
 import { ExportType } from "./exportUtils";
 import { IExportOptions } from "./exportUtils";
 import { textForEvent } from "../../TextForEvent";
-import { MutableRefObject } from "react";
 
 export default class PlainTextExporter extends Exporter {
     protected totalSize: number;

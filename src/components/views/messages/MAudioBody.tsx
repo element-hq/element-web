@@ -86,6 +86,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
 
         if (this.props.forExport) {
             const content = this.props.mxEvent.getContent();
+            // During export, the content url will point to the MSC, which will later point to a local url
             const contentUrl = content.file?.url || content.url;
             return (
                 <span className="mx_MAudioBody">
