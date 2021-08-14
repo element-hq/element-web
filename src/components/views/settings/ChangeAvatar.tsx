@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2021 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,54 +16,62 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Spinner from '../elements/Spinner';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
+import { MatrixEvent, Room } from '../../../../../matrix-js-sdk/src';
+
+interface IProps {
+    initialAvatarUrl?: string;
+    room?: Room;
+    // if false, you need to call changeAvatar.onFileSelected yourself.
+    showUploadSection?: boolean;
+    width?: number;
+    height?: number;
+    className?: string;
+}
+
+interface IState {
+    avatarUrl?: string;
+    errorText?: string;
+    phase?: Phases;
+}
+
+enum Phases {
+    Display = "display",
+    Uploading = "uploading",
+    Error = "error",
+}
 
 @replaceableComponent("views.settings.ChangeAvatar")
-export default class ChangeAvatar extends React.Component {
-    static propTypes = {
-        initialAvatarUrl: PropTypes.string,
-        room: PropTypes.object,
-        // if false, you need to call changeAvatar.onFileSelected yourself.
-        showUploadSection: PropTypes.bool,
-        width: PropTypes.number,
-        height: PropTypes.number,
-        className: PropTypes.string,
-    };
-
-    static Phases = {
-        Display: "display",
-        Uploading: "uploading",
-        Error: "error",
-    };
-
-    static defaultProps = {
+export default class ChangeAvatar extends React.Component<IProps, IState> {
+    public static defaultProps = {
         showUploadSection: true,
         className: "",
         width: 80,
         height: 80,
     };
 
-    constructor(props) {
+    private avatarSet = false;
+
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
             avatarUrl: this.props.initialAvatarUrl,
-            phase: ChangeAvatar.Phases.Display,
+            phase: Phases.Display,
         };
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(newProps) { // eslint-disable-line camelcase
+    public UNSAFE_componentWillReceiveProps(newProps): void { // eslint-disable-line camelcase
         if (this.avatarSet) {
             // don't clobber what the user has just set
             return;
@@ -72,13 +81,13 @@ export default class ChangeAvatar extends React.Component {
         });
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
         }
     }
 
-    onRoomStateEvents = (ev) => {
+    public onRoomStateEvents = (ev: MatrixEvent) => {
         if (!this.props.room) {
             return;
         }
@@ -94,18 +103,17 @@ export default class ChangeAvatar extends React.Component {
         }
     };
 
-    setAvatarFromFile(file) {
+    public setAvatarFromFile(file): Promise<{}> {
         let newUrl = null;
 
         this.setState({
-            phase: ChangeAvatar.Phases.Uploading,
+            phase: Phases.Uploading,
         });
-        const self = this;
-        const httpPromise = MatrixClientPeg.get().uploadContent(file).then(function(url) {
+        const httpPromise = MatrixClientPeg.get().uploadContent(file).then((url) => {
             newUrl = url;
-            if (self.props.room) {
+            if (this.props.room) {
                 return MatrixClientPeg.get().sendStateEvent(
-                    self.props.room.roomId,
+                    this.props.room.roomId,
                     'm.room.avatar',
                     { url: url },
                     '',
@@ -115,33 +123,33 @@ export default class ChangeAvatar extends React.Component {
             }
         });
 
-        httpPromise.then(function() {
-            self.setState({
-                phase: ChangeAvatar.Phases.Display,
+        httpPromise.then(() => {
+            this.setState({
+                phase: Phases.Display,
                 avatarUrl: mediaFromMxc(newUrl).srcHttp,
             });
-        }, function(error) {
-            self.setState({
-                phase: ChangeAvatar.Phases.Error,
+        }, () => {
+            this.setState({
+                phase: Phases.Error,
             });
-            self.onError(error);
+            this.onError();
         });
 
         return httpPromise;
     }
 
-    onFileSelected = (ev) => {
+    private onFileSelected = (ev: React.ChangeEvent<HTMLInputElement>) => {
         this.avatarSet = true;
         return this.setAvatarFromFile(ev.target.files[0]);
     };
 
-    onError = (error) => {
+    private onError = (): void => {
         this.setState({
             errorText: _t("Failed to upload profile picture!"),
         });
     };
 
-    render() {
+    public render(): JSX.Element {
         let avatarImg;
         // Having just set an avatar we just display that since it will take a little
         // time to propagate through to the RoomAvatar.
@@ -178,8 +186,8 @@ export default class ChangeAvatar extends React.Component {
         }
 
         switch (this.state.phase) {
-            case ChangeAvatar.Phases.Display:
-            case ChangeAvatar.Phases.Error:
+            case Phases.Display:
+            case Phases.Error:
                 return (
                     <div>
                         <div className={this.props.className}>
@@ -188,7 +196,7 @@ export default class ChangeAvatar extends React.Component {
                         { uploadSection }
                     </div>
                 );
-            case ChangeAvatar.Phases.Uploading:
+            case Phases.Uploading:
                 return (
                     <Spinner />
                 );
