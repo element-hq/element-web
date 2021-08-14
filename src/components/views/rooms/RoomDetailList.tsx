@@ -14,24 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from 'react';
+import { Room } from 'matrix-js-sdk/src';
+import classNames from 'classnames';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
-import React from 'react';
 import { _t } from '../../../languageHandler';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 
-import { roomShape } from './RoomDetailRow';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-@replaceableComponent("views.rooms.RoomDetailList")
-export default class RoomDetailList extends React.Component {
-    static propTypes = {
-        rooms: PropTypes.arrayOf(roomShape),
-        className: PropTypes.string,
-    };
+interface IProps {
+    rooms?: Room[];
+    className?: string;
+}
 
-    getRows() {
+@replaceableComponent("views.rooms.RoomDetailList")
+export default class RoomDetailList extends React.Component<IProps> {
+    public getRows(): JSX.Element[] {
         if (!this.props.rooms) return [];
 
         const RoomDetailRow = sdk.getComponent('rooms.RoomDetailRow');
@@ -40,15 +39,15 @@ export default class RoomDetailList extends React.Component {
         });
     }
 
-    onDetailsClick = (ev, room) => {
+    public onDetailsClick = (ev: React.MouseEvent, room: Room): void => {
         dis.dispatch({
             action: 'view_room',
             room_id: room.roomId,
-            room_alias: room.canonicalAlias || (room.aliases || [])[0],
+            room_alias: room.getCanonicalAlias() || (room.getAltAliases() || [])[0],
         });
     };
 
-    render() {
+    public render(): JSX.Element {
         const rows = this.getRows();
         let rooms;
         if (rows.length === 0) {
