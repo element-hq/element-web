@@ -1,5 +1,5 @@
 /*
-Copyright 2018-2020 New Vector Ltd
+Copyright 2018-2021 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
+import { MatrixEvent, Room, RoomState } from 'matrix-js-sdk/src';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 
@@ -23,33 +23,31 @@ import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+interface IProps {
+    room: Room;
+}
+
+interface IState {
+    upgraded?: boolean;
+}
+
 @replaceableComponent("views.rooms.RoomUpgradeWarningBar")
-export default class RoomUpgradeWarningBar extends React.PureComponent {
-    static propTypes = {
-        room: PropTypes.object.isRequired,
-        recommendation: PropTypes.object.isRequired,
-    };
-
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
-
-    componentDidMount() {
+export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, IState> {
+    public componentDidMount(): void {
         const tombstone = this.props.room.currentState.getStateEvents("m.room.tombstone", "");
         this.setState({ upgraded: tombstone && tombstone.getContent().replacement_room });
 
-        MatrixClientPeg.get().on("RoomState.events", this._onStateEvents);
+        MatrixClientPeg.get().on("RoomState.events", this.onStateEvents);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         const cli = MatrixClientPeg.get();
         if (cli) {
-            cli.removeListener("RoomState.events", this._onStateEvents);
+            cli.removeListener("RoomState.events", this.onStateEvents);
         }
     }
 
-    _onStateEvents = (event, state) => {
+    private onStateEvents = (event: MatrixEvent, state: RoomState): void => {
         if (!this.props.room || event.getRoomId() !== this.props.room.roomId) {
             return;
         }
@@ -60,12 +58,12 @@ export default class RoomUpgradeWarningBar extends React.PureComponent {
         this.setState({ upgraded: tombstone && tombstone.getContent().replacement_room });
     };
 
-    onUpgradeClick = () => {
+    private onUpgradeClick = (): void => {
         const RoomUpgradeDialog = sdk.getComponent('dialogs.RoomUpgradeDialog');
         Modal.createTrackedDialog('Upgrade Room Version', '', RoomUpgradeDialog, { room: this.props.room });
     };
 
-    render() {
+    public render(): JSX.Element {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let doUpgradeWarnings = (
