@@ -25,7 +25,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 
 export default class JSONExporter extends Exporter {
     protected totalSize = 0;
-    protected messages: any[] = [];
+    protected messages: Record<string, any>[] = [];
 
     constructor(
         room: Room,

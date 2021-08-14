@@ -36,7 +36,7 @@ const getExportCSS = async (): Promise<string> => {
 
     CSS = CSS.replace(fontFaceRegex, '');
     CSS = CSS.replace(
-        /font-family: Inter/g,
+        /font-family: (Inter|'Inter')/g,
         `font-family: -apple-system, BlinkMacSystemFont, avenir next, 
         avenir, segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif`,
     );
