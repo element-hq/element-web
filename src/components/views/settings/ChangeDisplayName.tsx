@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018 - 2021 New Vector Ltd
 Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.settings.ChangeDisplayName")
 export default class ChangeDisplayName extends React.Component {
-    _getDisplayName = async () => {
+    private getDisplayName = async (): Promise<string> => {
         const cli = MatrixClientPeg.get();
         try {
             const res = await cli.getProfileInfo(cli.getUserId());
@@ -34,21 +34,21 @@ export default class ChangeDisplayName extends React.Component {
         }
     };
 
-    _changeDisplayName = (newDisplayname) => {
+    private changeDisplayName = (newDisplayname: string): Promise<{}> => {
         const cli = MatrixClientPeg.get();
-        return cli.setDisplayName(newDisplayname).catch(function(e) {
-            throw new Error("Failed to set display name", e);
+        return cli.setDisplayName(newDisplayname).catch(function() {
+            throw new Error("Failed to set display name");
         });
     };
 
-    render() {
+    public render(): JSX.Element {
         const EditableTextContainer = sdk.getComponent('elements.EditableTextContainer');
         return (
             <EditableTextContainer
-                getInitialValue={this._getDisplayName}
+                getInitialValue={this.getDisplayName}
                 placeholder={_t("No display name")}
                 blurToSubmit={true}
-                onSubmit={this._changeDisplayName} />
+                onSubmit={this.changeDisplayName} />
         );
     }
 }
