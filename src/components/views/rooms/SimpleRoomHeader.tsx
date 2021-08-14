@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2021 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,23 +16,21 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+
+interface IProps {
+    title?: string;
+    // `src` to an image. Optional.
+    icon?: string;
+}
 
 /*
  * A stripped-down room header used for things like the user settings
  * and room directory.
  */
 @replaceableComponent("views.rooms.SimpleRoomHeader")
-export default class SimpleRoomHeader extends React.Component {
-    static propTypes = {
-        title: PropTypes.string,
-
-        // `src` to an image. Optional.
-        icon: PropTypes.string,
-    };
-
-    render() {
+export default class SimpleRoomHeader extends React.PureComponent<IProps> {
+    public render(): JSX.Element {
         let icon;
         if (this.props.icon) {
             icon = <img
