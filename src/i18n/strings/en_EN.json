@@ -1892,7 +1892,7 @@
     "Connection failed": "Connection failed",
     "Their device couldn't start the camera or microphone": "Their device couldn't start the camera or microphone",
     "An unknown error occurred": "An unknown error occurred",
-    "Unknown failure: %(reason)s)": "Unknown failure: %(reason)s)",
+    "Unknown failure: %(reason)s": "Unknown failure: %(reason)s",
     "Retry": "Retry",
     "Missed call": "Missed call",
     "The call is in an unknown state!": "The call is in an unknown state!",
