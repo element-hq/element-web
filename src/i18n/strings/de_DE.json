@@ -1424,7 +1424,7 @@
     "Cancel entering passphrase?": "Eingabe der Passphrase abbrechen?",
     "Setting up keys": "Einrichten der Schlüssel",
     "Encryption upgrade available": "Verschlüsselungsaufstufung verfügbar",
-    "Verifies a user, session, and pubkey tuple": "Verifiziert einen Benutzer, eine Sitzung und die öffentlichen Schlüsselpaare",
+    "Verifies a user, session, and pubkey tuple": "Verifiziert Benutzer, Sitzung und öffentlichen Schlüsselpaare",
     "Unknown (user, session) pair:": "Unbekanntes Nutzer-/Sitzungspaar:",
     "Session already verified!": "Sitzung bereits verifiziert!",
     "WARNING: Session already verified, but keys do NOT MATCH!": "WARNUNG: Die Sitzung wurde bereits verifiziert, aber die Schlüssel passen NICHT ZUSAMMEN!",
