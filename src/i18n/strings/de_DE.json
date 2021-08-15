@@ -645,7 +645,7 @@
     "Clear filter": "Filter zurücksetzen",
     "Key request sent.": "Schlüsselanfrage gesendet.",
     "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Wenn du einen Fehler via GitHub meldest, können Fehlerberichte uns helfen um das Problem zu finden. Sie enthalten Anwendungsdaten wie deinen Nutzernamen, Raum- und Gruppen-IDs und Aliase, die du besucht hast sowie Nutzernamen anderer Nutzer mit denen du schreibst. Sie enthalten keine Nachrichten.",
-    "Submit debug logs": "Fehlerberichte einreichen",
+    "Submit debug logs": "Fehlerbericht einreichen",
     "Code": "Code",
     "Opens the Developer Tools dialog": "Entwickler-Werkzeuge öffnen",
     "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "Von %(displayName)s (%(userName)s) um %(dateTime)s gesehen",
@@ -3369,7 +3369,7 @@
     "Nothing pinned, yet": "Es ist nichts angepinnt. Noch nicht.",
     "End-to-end encryption isn't enabled": "Ende-zu-Ende-Verschlüsselung ist deaktiviert",
     "See when people join, leave, or are invited to your active room": "Anzeigen, wenn Leute den aktuellen Raum betreten, verlassen oder in ihn eingeladen werden",
-    "Teammates might not be able to view or join any private rooms you make.": "Mitglieder werden private Räume möglicherweise weder sehen noch betreten können.",
+    "Teammates might not be able to view or join any private rooms you make.": "Mitglieder werden private Räume möglicherweise weder anzeigen noch betreten können.",
     "Error - Mixed content": "Fehler - Uneinheitlicher Inhalt",
     "Kick, ban, or invite people to your active room, and make you leave": "Den aktiven Raum verlassen, Leute einladen, entfernen oder bannen",
     "Kick, ban, or invite people to this room, and make you leave": "Diesen Raum verlassen, Leute einladen, entfernen oder bannen",
@@ -3520,6 +3520,6 @@
     "Stop sharing your screen": "Bildschirmfreigabe beenden",
     "Don't send read receipts": "Sende keine Lesebestätigungen",
     "Send pseudonymous analytics data": "Sende pseudonymisierte Nutzungsdaten",
-    "Your camera is still enabled": "Deine Kamera ist noch aktiviert",
+    "Your camera is still enabled": "Deine Kamera ist noch aktiv",
     "Your camera is turned off": "Deine Kamera ist ausgeschaltet"
 }
