@@ -3519,5 +3519,7 @@
     "Start sharing your screen": "Bildschirmfreigabe starten",
     "Stop sharing your screen": "Bildschirmfreigabe beenden",
     "Don't send read receipts": "Sende keine Lesebestätigungen",
-    "Send pseudonymous analytics data": "Sende pseudonymisierte Nutzungsdaten"
+    "Send pseudonymous analytics data": "Sende pseudonymisierte Nutzungsdaten",
+    "Your camera is still enabled": "Deine Kamera ist noch aktiviert",
+    "Your camera is turned off": "Deine Kamera ist ausgeschaltet"
 }
