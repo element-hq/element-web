@@ -402,7 +402,7 @@
     "Featured Rooms:": "Hervorgehobene Räume:",
     "Featured Users:": "Hervorgehobene Benutzer:",
     "Automatically replace plain text Emoji": "Klartext-Emoji automatisch ersetzen",
-    "Failed to upload image": "Bild-Hochladen fehlgeschlagen",
+    "Failed to upload image": "Hochladen des Bildes fehlgeschlagen",
     "AM": "a. m.",
     "PM": "p. m.",
     "The maximum permitted number of widgets have already been added to this room.": "Die maximal erlaubte Anzahl an hinzufügbaren Widgets für diesen Raum wurde erreicht.",
@@ -3521,5 +3521,10 @@
     "Don't send read receipts": "Sende keine Lesebestätigungen",
     "Send pseudonymous analytics data": "Sende pseudonymisierte Nutzungsdaten",
     "Your camera is still enabled": "Deine Kamera ist noch aktiv",
-    "Your camera is turned off": "Deine Kamera ist ausgeschaltet"
+    "Your camera is turned off": "Deine Kamera ist ausgeschaltet",
+    "Missed call": "Verpasster Anruf",
+    "Call declined": "Anruf abgelehnt",
+    "Dialpad": "Telefontastatur",
+    "Stop the camera": "Kamera stoppen",
+    "Start the camera": "Kamera starten"
 }
