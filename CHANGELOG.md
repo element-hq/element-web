@@ -1,4 +1,4 @@
-Changes in [1.7.34](https://github.com/vector-im/element-desktop/releases/tag/v1.7.34) (2021-07-02)
+Changes in [1.7.34](https://github.com/vector-im/element-desktop/releases/tag/v1.7.34) (2021-08-02)
 ===================================================================================================
 
 ## 🔒 SECURITY FIXES
