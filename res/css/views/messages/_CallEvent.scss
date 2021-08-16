@@ -144,11 +144,10 @@ limitations under the License.
             gap: 8px;
 
             .mx_CallEvent_content_button {
-                height: 24px;
                 padding: 0px 12px;
 
                 span {
-                    padding: 8px 0;
+                    padding: 1px 0;
                     display: flex;
                     align-items: center;
 
@@ -162,6 +161,8 @@ limitations under the License.
                         width: 16px;
                         height: 16px;
                         margin-right: 8px;
+
+                        flex-shrink: 0;
                     }
                 }
             }
