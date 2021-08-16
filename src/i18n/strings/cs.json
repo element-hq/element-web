@@ -3591,5 +3591,6 @@
     "What kind of Space do you want to create?": "Jaký druh prostoru chcete vytvořit?",
     "Open Space": "Otevřít prostor",
     "To join an existing space you'll need an invite.": "Chcete-li se připojit k existujícímu prostoru, potřebujete pozvánku.",
-    "You can change this later.": "Toto můžete změnit později."
+    "You can change this later.": "Toto můžete změnit později.",
+    "Unknown failure: %(reason)s": "Neznámá chyba: %(reason)s"
 }
