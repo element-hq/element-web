@@ -16,13 +16,13 @@ limitations under the License.
 */
 
 import React from 'react';
+import { MatrixEvent, Room } from 'matrix-js-sdk/src';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Spinner from '../elements/Spinner';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
-import { MatrixEvent, Room } from '../../../../../matrix-js-sdk/src';
 
 interface IProps {
     initialAvatarUrl?: string;
