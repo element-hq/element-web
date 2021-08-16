@@ -3676,5 +3676,6 @@
     "To join an existing space you'll need an invite.": "要加入現有的空間，您必須獲得邀請。",
     "You can also create a Space from a <a>community</a>.": "您也可以從<a>社群</a>建立空間。",
     "You can change this later.": "您可以在稍後變更此設定。",
-    "What kind of Space do you want to create?": "您想建立什麼樣的空間？"
+    "What kind of Space do you want to create?": "您想建立什麼樣的空間？",
+    "Unknown failure: %(reason)s": "未知錯誤：%(reason)s"
 }
