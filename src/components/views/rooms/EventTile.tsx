@@ -451,6 +451,8 @@ export default class EventTile extends React.Component<IProps, IState> {
             client.on("Room.receipt", this.onRoomReceipt);
             this.isListeningForReceipts = true;
         }
+
+        throw new Error("oops");
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event

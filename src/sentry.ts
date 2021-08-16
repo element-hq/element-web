@@ -21,7 +21,7 @@ import { MatrixClientPeg } from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
 import { MatrixClient } from "../../matrix-js-sdk";
 
-async function getStorageOptions(): Record<string, string> {
+async function getStorageOptions(): Promise<Record<string, string>> {
     const result = {};
 
     // add storage persistence/quota information
@@ -65,7 +65,7 @@ function getEnabledLabs(): string {
     }
 }
 
-async function getCryptoContext(client: MatrixClient): Record<String, String> {
+async function getCryptoContext(client: MatrixClient): Promise<Record<string, string>> {
     if (!client.isCryptoEnabled()) {
         return {};
     }
@@ -98,7 +98,7 @@ async function getCryptoContext(client: MatrixClient): Record<String, String> {
     };
 }
 
-function getDeviceContext(client: MatrixClient): Record<String, String> {
+function getDeviceContext(client: MatrixClient): Record<string, string> {
     const result = {
         "device_id": client?.deviceId,
         "mx_local_settings": localStorage.getItem('mx_local_settings'),
@@ -114,7 +114,7 @@ function getDeviceContext(client: MatrixClient): Record<String, String> {
     return result;
 }
 
-async function getContexts() {
+async function getContexts(): Promise<Record<string, any>> {
     const client = MatrixClientPeg.get();
     return {
         "user": getUserContext(client),
@@ -124,7 +124,7 @@ async function getContexts() {
     };
 }
 
-export async function sendSentryReport(userText: string, issueUrl: string, error: Error): void {
+export async function sendSentryReport(userText: string, issueUrl: string, error: Error): Promise<void> {
     const sentryConfig = SdkConfig.get()["sentry"];
     if (!sentryConfig) return;
 

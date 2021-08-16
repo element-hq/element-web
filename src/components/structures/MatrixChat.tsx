@@ -108,7 +108,7 @@ import SoftLogout from './auth/SoftLogout';
 import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../utils/strings";
 import { PosthogAnalytics } from '../../PosthogAnalytics';
-import { initSentry, sendSentryReport } from "../../sentry";
+import { initSentry } from "../../sentry";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
