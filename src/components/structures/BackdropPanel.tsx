@@ -131,10 +131,10 @@ export default class BackdropPanel extends React.PureComponent<IProps> {
 
     public render() {
         if (!this.props.backgroundImage) return null;
-        return <div>
+        return <div className="mx_BackdropPanel">
             <canvas
                 ref={this.spacesCanvasRef}
-                className="mx_BackdropPanel"
+                className="mx_BackdropPanel--canvas"
                 style={{
                     opacity: .19,
                 }}
@@ -145,7 +145,7 @@ export default class BackdropPanel extends React.PureComponent<IProps> {
                     opacity: .12,
                 }}
                 ref={this.roomListCanvasRef}
-                className="mx_BackdropPanel"
+                className="mx_BackdropPanel--canvas"
             />
         </div>;
     }

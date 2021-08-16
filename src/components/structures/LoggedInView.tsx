@@ -644,8 +644,8 @@ class LoggedInView extends React.Component<IProps, IState> {
                             resizeNotifier={this.props.resizeNotifier}
                         />
                         <ResizeHandle />
-                        { pageElement }
                     </div>
+                    { pageElement }
                 </div>
                 <CallContainer />
                 <NonUrgentToastContainer />
