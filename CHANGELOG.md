@@ -1,4 +1,4 @@
-Changes in [3.28.0-rc.1](https://github.com/vector-im/element-desktop/releases/tag/v3.28.0-rc.1) (2021-07-11)
+Changes in [3.28.0-rc.1](https://github.com/vector-im/element-desktop/releases/tag/v3.28.0-rc.1) (2021-08-11)
 =============================================================================================================
 
 ## ✨ Features
@@ -61,7 +61,7 @@ Changes in [3.28.0-rc.1](https://github.com/vector-im/element-desktop/releases/t
  * Fix clicking pills inside replies ([\#6508](https://github.com/matrix-org/matrix-react-sdk/pull/6508)). Fixes vector-im/element-web#18283. Contributed by [SimonBrandner](https://github.com/SimonBrandner).
  * Fix grecaptcha regression ([\#6503](https://github.com/matrix-org/matrix-react-sdk/pull/6503)). Fixes vector-im/element-web#18284. Contributed by [Palid](https://github.com/Palid).
 
-Changes in [3.27.0](https://github.com/vector-im/element-desktop/releases/tag/v3.27.0) (2021-07-02)
+Changes in [3.27.0](https://github.com/vector-im/element-desktop/releases/tag/v3.27.0) (2021-08-02)
 ===================================================================================================
 
 ## 🔒 SECURITY FIXES
