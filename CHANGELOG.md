@@ -1,5 +1,5 @@
-Changes in [1.8.0-rc.1](https://github.com/vector-im/element-desktop/releases/tag/v1.8.0-rc.1) (2021-08-11)
-===========================================================================================================
+Changes in [1.8.0](https://github.com/vector-im/element-desktop/releases/tag/v1.8.0) (2021-08-16)
+=================================================================================================
 
 ## ✨ Features
  * Show how long a call was on call tiles ([\#6570](https://github.com/matrix-org/matrix-react-sdk/pull/6570)). Fixes #18405. Contributed by [SimonBrandner](https://github.com/SimonBrandner).
@@ -19,11 +19,13 @@ Changes in [1.8.0-rc.1](https://github.com/vector-im/element-desktop/releases/ta
  * Improve call event tile wording ([\#6545](https://github.com/matrix-org/matrix-react-sdk/pull/6545)). Fixes #18376. Contributed by [SimonBrandner](https://github.com/SimonBrandner).
  * Show an avatar/a turned off microphone icon for muted users ([\#6486](https://github.com/matrix-org/matrix-react-sdk/pull/6486)). Contributed by [SimonBrandner](https://github.com/SimonBrandner).
  * Prompt user to leave rooms/subspaces in a space when leaving space ([\#6424](https://github.com/matrix-org/matrix-react-sdk/pull/6424)). Fixes #18071.
- * none ([\#6455](https://github.com/matrix-org/matrix-react-sdk/pull/6455)). Fixes #18035.
  * Add support for screen sharing in 1:1 calls ([\#5992](https://github.com/matrix-org/matrix-react-sdk/pull/5992)). Contributed by [SimonBrandner](https://github.com/SimonBrandner).
 
 ## 🐛 Bug Fixes
  * Dismiss electron download toast when clicking Open ([\#18267](https://github.com/vector-im/element-web/pull/18267)). Fixes #18266.
+ * [Release] Fix glare related regressions ([\#6622](https://github.com/matrix-org/matrix-react-sdk/pull/6622)). Contributed by [SimonBrandner](https://github.com/SimonBrandner).
+ * [Release] Fix PiP of held calls ([\#6612](https://github.com/matrix-org/matrix-react-sdk/pull/6612)). Contributed by [SimonBrandner](https://github.com/SimonBrandner).
+ * [Release] Fix toast colors ([\#6607](https://github.com/matrix-org/matrix-react-sdk/pull/6607)). Contributed by [SimonBrandner](https://github.com/SimonBrandner).
  * Fix [object Object] in Widget Permissions ([\#6560](https://github.com/matrix-org/matrix-react-sdk/pull/6560)). Fixes #18384. Contributed by [Palid](https://github.com/Palid).
  * Fix right margin for events on IRC layout ([\#6542](https://github.com/matrix-org/matrix-react-sdk/pull/6542)). Fixes #18354.
  * Mirror only usermedia feeds ([\#6512](https://github.com/matrix-org/matrix-react-sdk/pull/6512)). Fixes #5633. Contributed by [SimonBrandner](https://github.com/SimonBrandner).
@@ -49,7 +51,6 @@ Changes in [1.8.0-rc.1](https://github.com/vector-im/element-desktop/releases/ta
  * Don't flash "Missed call" when accepting a call ([\#6567](https://github.com/matrix-org/matrix-react-sdk/pull/6567)). Fixes #18404. Contributed by [SimonBrandner](https://github.com/SimonBrandner).
  * Fix clicking whitespaces on replies ([\#6571](https://github.com/matrix-org/matrix-react-sdk/pull/6571)). Fixes #18327. Contributed by [SimonBrandner](https://github.com/SimonBrandner).
  * Fix composer not being disabled when sending voice messages ([\#6562](https://github.com/matrix-org/matrix-react-sdk/pull/6562)). Fixes #18413.
- * none ([\#6550](https://github.com/matrix-org/matrix-react-sdk/pull/6550)). Contributed by [SimonBrandner](https://github.com/SimonBrandner).
  * Fix sizing issues of the screen picker ([\#6498](https://github.com/matrix-org/matrix-react-sdk/pull/6498)). Fixes #18281. Contributed by [SimonBrandner](https://github.com/SimonBrandner).
  * Stop voice messages that are playing when starting a recording ([\#6563](https://github.com/matrix-org/matrix-react-sdk/pull/6563)). Fixes #18410.
  * Fix random box appearing when clicking room list headers. ([\#6561](https://github.com/matrix-org/matrix-react-sdk/pull/6561)). Fixes #18414.
