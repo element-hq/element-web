@@ -16,7 +16,6 @@ limitations under the License.
 
 .mx_CallEvent_wrapper {
     display: flex;
-    justify-content: center;
     width: 100%;
 
     .mx_CallEvent {
@@ -28,7 +27,7 @@ limitations under the License.
 
         background-color: $dark-panel-bg-color;
         border-radius: 8px;
-        width: 75%;
+        width: 65%;
         box-sizing: border-box;
         height: 60px;
         margin: 4px 0;
@@ -79,6 +78,16 @@ limitations under the License.
 
         &.mx_CallEvent_video.mx_CallEvent_missed .mx_CallEvent_type_icon::before {
             mask-image: url('$(res)/img/voip/missed-video.svg');
+        }
+
+        &.mx_CallEvent_voice.mx_CallEvent_rejected .mx_CallEvent_type_icon::before,
+        &.mx_CallEvent_voice.mx_CallEvent_noAnswer .mx_CallEvent_type_icon::before {
+            mask-image: url('$(res)/img/voip/declined-voice.svg');
+        }
+
+        &.mx_CallEvent_video.mx_CallEvent_rejected .mx_CallEvent_type_icon::before,
+        &.mx_CallEvent_video.mx_CallEvent_noAnswer .mx_CallEvent_type_icon::before {
+            mask-image: url('$(res)/img/voip/declined-video.svg');
         }
 
         .mx_CallEvent_info {

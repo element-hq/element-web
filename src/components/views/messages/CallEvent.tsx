@@ -175,7 +175,7 @@ export default class CallEvent extends React.PureComponent<IProps, IState> {
             } else if (hangupReason === CallErrorCode.InviteTimeout) {
                 return (
                     <div className="mx_CallEvent_content">
-                        { _t("Missed call") }
+                        { _t("No answer") }
                         { this.renderCallBackButton(_t("Call back")) }
                     </div>
                 );
@@ -199,7 +199,7 @@ export default class CallEvent extends React.PureComponent<IProps, IState> {
             } else if (hangupReason === CallErrorCode.UserBusy) {
                 reason = _t("The user you called is busy.");
             } else {
-                reason = _t('Unknown failure: %(reason)s)', { reason: hangupReason });
+                reason = _t('Unknown failure: %(reason)s', { reason: hangupReason });
             }
 
             return (
@@ -249,10 +249,9 @@ export default class CallEvent extends React.PureComponent<IProps, IState> {
             mx_CallEvent_voice: isVoice,
             mx_CallEvent_video: !isVoice,
             mx_CallEvent_narrow: this.state.narrow,
-            mx_CallEvent_missed: (
-                callState === CustomCallState.Missed ||
-                (callState === CallState.Ended && hangupReason === CallErrorCode.InviteTimeout)
-            ),
+            mx_CallEvent_missed: callState === CustomCallState.Missed,
+            mx_CallEvent_noAnswer: callState === CallState.Ended && hangupReason === CallErrorCode.InviteTimeout,
+            mx_CallEvent_rejected: callState === CallState.Ended && this.props.callEventGrouper.gotRejected,
         });
         let silenceIcon;
         if (this.state.narrow && this.state.callState === CallState.Ringing) {

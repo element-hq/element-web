@@ -139,7 +139,7 @@ export default class EmojiProvider extends AutocompleteProvider {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill"
-                role="listbox"
+                role="presentation"
                 aria-label={_t("Emoji Autocomplete")}
             >
                 { completions }
