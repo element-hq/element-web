@@ -2089,10 +2089,10 @@ ajv@^8.0.1:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-allchange@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/allchange/-/allchange-0.0.1.tgz#3f66f7b06314b942fd0c1630fef6ce2ac1b90972"
-  integrity sha512-YVg1ZcYzEE5/fEnexzlhfWIbPeGtjfFgJ73qUG2DNwl16Apt9sRJQE7z6dLbDPaL9tOlYpIgzf7Id74uS+ccjQ==
+allchange@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/allchange/-/allchange-1.0.0.tgz#f5177b7d97f8e97a2d059a1524db9a72d94dc6d2"
+  integrity sha512-O0VIaMIORxOaReyYEijDfKdpudJhbzzVYLdJR1aROyUgOLBEp9e5V/TDXQpjX23W90IFCSRZxsDb3exLRD05HA==
   dependencies:
     "@actions/core" "^1.4.0"
     "@actions/github" "^5.0.0"
