@@ -3474,5 +3474,6 @@
     "Anyone can find and join.": "Vem som helst kan hitta och gå med.",
     "Only invited people can join.": "Endast inbjudna personer kan gå med.",
     "Private (invite only)": "Privat (endast inbjudan)",
-    "This upgrade will allow members of selected spaces access to this room without an invite.": "Den här uppgraderingen kommer att låta medlemmar i valda utrymmen komma åt det här rummet utan en inbjudan."
+    "This upgrade will allow members of selected spaces access to this room without an invite.": "Den här uppgraderingen kommer att låta medlemmar i valda utrymmen komma åt det här rummet utan en inbjudan.",
+    "This space has no local addresses": "Det här utrymmet har inga lokala adresser"
 }
