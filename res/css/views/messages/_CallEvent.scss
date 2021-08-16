@@ -95,17 +95,23 @@ limitations under the License.
             flex-direction: row;
             align-items: center;
             margin-left: 12px;
+            min-width: 0;
 
             .mx_CallEvent_info_basic {
                 display: flex;
                 flex-direction: column;
                 margin-left: 10px; // To match mx_CallEvent
+                min-width: 0;
 
                 .mx_CallEvent_sender {
                     font-weight: 600;
                     font-size: 1.5rem;
                     line-height: 1.8rem;
                     margin-bottom: 3px;
+
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
                 }
 
                 .mx_CallEvent_type {
@@ -142,6 +148,7 @@ limitations under the License.
             color: $secondary-fg-color;
             margin-right: 16px;
             gap: 8px;
+            min-width: max-content;
 
             .mx_CallEvent_content_button {
                 height: 24px;
