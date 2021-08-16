@@ -97,7 +97,7 @@
     "@types/sanitize-html": "^2.3.1",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
-    "allchange": "^0.0.1",
+    "allchange": "^1.0.0",
     "autoprefixer": "^9.8.6",
     "babel-jest": "^26.6.3",
     "babel-loader": "^8.2.2",
