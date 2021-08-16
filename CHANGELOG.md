@@ -1,4 +1,4 @@
-Changes in [1.8.0-rc.1](https://github.com/vector-im/element-desktop/releases/tag/v1.8.0-rc.1) (2021-07-11)
+Changes in [1.8.0-rc.1](https://github.com/vector-im/element-desktop/releases/tag/v1.8.0-rc.1) (2021-08-11)
 ===========================================================================================================
 
 ## ✨ Features
@@ -63,7 +63,7 @@ Changes in [1.8.0-rc.1](https://github.com/vector-im/element-desktop/releases/ta
  * Fix grecaptcha regression ([\#6503](https://github.com/matrix-org/matrix-react-sdk/pull/6503)). Fixes #18284. Contributed by [Palid](https://github.com/Palid).
  * Fix compatibility with accounts where the security passphrase was created on a mobile device ([\#1819](https://github.com/matrix-org/matrix-js-sdk/pull/1819)).
 
-Changes in [1.7.34](https://github.com/vector-im/element-desktop/releases/tag/v1.7.34) (2021-07-02)
+Changes in [1.7.34](https://github.com/vector-im/element-desktop/releases/tag/v1.7.34) (2021-08-02)
 ===================================================================================================
 
 ## 🔒 SECURITY FIXES
