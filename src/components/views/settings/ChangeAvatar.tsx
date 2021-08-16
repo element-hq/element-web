@@ -71,7 +71,8 @@ export default class ChangeAvatar extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    public UNSAFE_componentWillReceiveProps(newProps): void { // eslint-disable-line camelcase
+    // eslint-disable-next-line
+    public UNSAFE_componentWillReceiveProps(newProps): void {
         if (this.avatarSet) {
             // don't clobber what the user has just set
             return;
