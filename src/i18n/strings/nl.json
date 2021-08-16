@@ -3561,5 +3561,6 @@
     "<SpaceName/> has been made and everyone who was a part of the community has been invited to it.": "<SpaceName/> is gemaakt en iedereen die lid was van de gemeenschap is ervoor uitgenodigd.",
     "Space created": "Space aangemaakt",
     "To view Spaces, hide communities in <a>Preferences</a>": "Om Spaces te zien, verberg gemeenschappen in uw <a>Instellingen</a>",
-    "This community has been upgraded into a Space": "Deze gemeenschap is geupgrade naar een Space"
+    "This community has been upgraded into a Space": "Deze gemeenschap is geupgrade naar een Space",
+    "Unknown failure: %(reason)s": "Onbekende fout: %(reason)s"
 }
