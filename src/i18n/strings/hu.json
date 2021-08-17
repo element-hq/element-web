@@ -3638,5 +3638,6 @@
     "Stop sharing your screen": "Képernyőmegosztás kikapcsolása",
     "Stop the camera": "Kamera kikapcsolása",
     "Start the camera": "Kamera bekapcsolása",
-    "Surround selected text when typing special characters": "Kijelölt szöveg körülvétele speciális karakterek beírásakor"
+    "Surround selected text when typing special characters": "Kijelölt szöveg körülvétele speciális karakterek beírásakor",
+    "Don't send read receipts": "Ne küldjön olvasási visszajelzést"
 }
