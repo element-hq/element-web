@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import { MatrixEvent } from 'matrix-js-sdk/src';
+import { MatrixEvent, Room } from 'matrix-js-sdk/src';
 
 import BaseCard from "../views/right_panel/BaseCard";
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
@@ -25,18 +25,16 @@ import { MatrixClientPeg } from '../../MatrixClientPeg';
 
 import ResizeNotifier from '../../utils/ResizeNotifier';
 import EventTile from '../views/rooms/EventTile';
-import MessageComposer from '../views/rooms/MessageComposer';
-import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
+import { Thread } from '../../../../matrix-js-sdk/src/models/thread';
 
 interface IProps {
     roomId: string;
     onClose: () => void;
     resizeNotifier: ResizeNotifier;
-    mxEvent: MatrixEvent;
-    permalinkCreator?: RoomPermalinkCreator;
 }
 
 interface IState {
+    threads?: Thread[];
 }
 
 /*
@@ -44,19 +42,36 @@ interface IState {
  */
 @replaceableComponent("structures.ThreadView")
 class ThreadView extends React.Component<IProps, IState> {
-    state = {};
+    private room: Room;
+
+    constructor(props: IProps) {
+        super(props);
+        this.room = MatrixClientPeg.get().getRoom(this.props.roomId);
+    }
 
     public componentDidMount(): void {
-        // this.props.mxEvent.getThread().on("Thread.update", this.updateThread);
-        this.props.mxEvent.getThread().once("Thread.ready", this.updateThread);
+        this.room.on("Thread.update", this.onThreadEventReceived);
+        this.room.on("Thread.ready", this.onThreadEventReceived);
+        this.updateThreads(() => {
+            this.state.threads.forEach(thread => {
+                if (!thread.ready) {
+                    thread.fetchReplyChain();
+                }
+            });
+        });
     }
 
     public componentWillUnmount(): void {
-        this.props.mxEvent.getThread().removeListener("Thread.update", this.updateThread);
+        this.room.removeListener("Thread.update", this.onThreadEventReceived);
+        this.room.removeListener("Thread.ready", this.onThreadEventReceived);
     }
 
-    updateThread = () => {
-        this.forceUpdate();
+    public onThreadEventReceived = () => this.updateThreads();
+
+    public updateThreads = (callback?: () => void): void => {
+        this.setState({
+            threads: this.room.getThreads(),
+        }, callback);
     };
 
     public renderEventTile(event: MatrixEvent): JSX.Element {
@@ -70,28 +85,19 @@ class ThreadView extends React.Component<IProps, IState> {
     }
 
     public render() {
-        const thread = this.props.mxEvent.getThread();
-        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
         return (
             <BaseCard
-                className="mx_ThreadView"
+                className="mx_ThreadPanel"
                 onClose={this.props.onClose}
                 previousPhase={RightPanelPhases.RoomSummary}
             >
-                { this.renderEventTile(this.props.mxEvent) }
-
-                { thread && (
-                    thread.eventTimeline.map((event: MatrixEvent) => {
-                        return this.renderEventTile(event);
+                {
+                    this.state?.threads.map((thread: Thread) => {
+                        if (thread.ready) {
+                            return this.renderEventTile(thread.rootEvent);
+                        }
                     })
-                ) }
-
-                <MessageComposer
-                    room={room}
-                    resizeNotifier={this.props.resizeNotifier}
-                    replyToEvent={this.props.mxEvent}
-                    permalinkCreator={this.props.permalinkCreator}
-                />
+                }
             </BaseCard>
         );
     }

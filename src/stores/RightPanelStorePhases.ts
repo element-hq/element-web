@@ -40,6 +40,7 @@ export enum RightPanelPhases {
 
     // Thread stuff
     ThreadView = "ThreadView",
+    ThreadPanel = "ThreadPanel",
 }
 
 // These are the phases that are safe to persist (the ones that don't require additional

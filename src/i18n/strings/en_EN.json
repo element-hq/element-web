@@ -1790,6 +1790,7 @@
     "%(count)s people|other": "%(count)s people",
     "%(count)s people|one": "%(count)s person",
     "Show files": "Show files",
+    "Show threads": "Show threads",
     "Share room": "Share room",
     "Room settings": "Room settings",
     "Trusted": "Trusted",

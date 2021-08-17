@@ -46,17 +46,20 @@ import UserInfo from "../views/right_panel/UserInfo";
 import ThirdPartyMemberInfo from "../views/rooms/ThirdPartyMemberInfo";
 import FilePanel from "./FilePanel";
 import ThreadView from "./ThreadView";
+import ThreadPanel from "./ThreadPanel";
 import NotificationPanel from "./NotificationPanel";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import PinnedMessagesCard from "../views/right_panel/PinnedMessagesCard";
 import { throttle } from 'lodash';
 import SpaceStore from "../../stores/SpaceStore";
+import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
 
 interface IProps {
     room?: Room; // if showing panels for a given room, this is set
     groupId?: string; // if showing panels for a given group, this is set
     user?: User; // used if we know the user ahead of opening the panel
     resizeNotifier: ResizeNotifier;
+    permalinkCreator?: RoomPermalinkCreator;
 }
 
 interface IState {
@@ -315,7 +318,15 @@ export default class RightPanel extends React.Component<IProps, IState> {
                     roomId={roomId}
                     resizeNotifier={this.props.resizeNotifier}
                     onClose={this.onClose}
-                    mxEvent={this.state.event} />;
+                    mxEvent={this.state.event}
+                    permalinkCreator={this.props.permalinkCreator} />;
+                break;
+
+            case RightPanelPhases.ThreadPanel:
+                panel = <ThreadPanel
+                    roomId={roomId}
+                    resizeNotifier={this.props.resizeNotifier}
+                    onClose={this.onClose} />;
                 break;
 
             case RightPanelPhases.RoomSummary:
