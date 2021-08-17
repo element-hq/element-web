@@ -242,6 +242,7 @@ $appearance-tab-border-color: $room-highlight-color;
 :root {
     --llp-background-blur: 60px;
     --lp-background-blur: 30px;
+    --lp-background-overlay: rgba(255, 255, 255, 0.055);
 }
 
 $composer-shadow-color: rgba(0, 0, 0, 0.28);

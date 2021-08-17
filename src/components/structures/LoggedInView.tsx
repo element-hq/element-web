@@ -67,6 +67,7 @@ import UserView from "./UserView";
 import GroupView from "./GroupView";
 import BackdropPanel from "./BackdropPanel";
 import SpaceStore from "../../stores/SpaceStore";
+import classNames from 'classnames';
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -614,10 +615,11 @@ class LoggedInView extends React.Component<IProps, IState> {
                 break;
         }
 
-        let bodyClasses = 'mx_MatrixChat';
-        if (this.state.useCompactLayout) {
-            bodyClasses += ' mx_MatrixChat_useCompactLayout';
-        }
+        const bodyClasses = classNames({
+            'mx_MatrixChat': true,
+            'mx_MatrixChat_useCompactLayout': this.state.useCompactLayout,
+            'mx_MatrixChat--with-avatar': this.state.backgroundImage,
+        });
 
         const audioFeedArraysForCalls = this.state.activeCalls.map((call) => {
             return (
