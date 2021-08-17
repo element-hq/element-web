@@ -29,6 +29,7 @@ import MessageComposer from '../views/rooms/MessageComposer';
 import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
 import { Layout } from '../../settings/Layout';
 import TimelinePanel from './TimelinePanel';
+import { Thread } from '../../../../matrix-js-sdk/src/models/thread';
 
 interface IProps {
     roomId: string;
@@ -40,6 +41,7 @@ interface IProps {
 
 interface IState {
     replyToEvent?: MatrixEvent;
+    thread?: Thread;
 }
 
 /*
@@ -50,16 +52,29 @@ class ThreadView extends React.Component<IProps, IState> {
     state = {};
 
     public componentDidMount(): void {
-        // this.props.mxEvent.getThread().on("Thread.update", this.updateThread);
-        this.props.mxEvent.getThread().once("Thread.ready", this.updateThread);
+        this.setupThread();
     }
 
     public componentWillUnmount(): void {
-        this.props.mxEvent.getThread().removeListener("Thread.update", this.updateThread);
+        if (this.state.thread) {
+            this.state.thread.removeListener("Thread.update", this.updateThread);
+            this.state.thread.removeListener("Thread.ready", this.updateThread);
+        }
     }
 
+    setupThread = () => {
+        const thread = this.props.mxEvent.getThread();
+        if (thread) {
+            thread.on("Thread.update", this.updateThread);
+            thread.once("Thread.ready", this.updateThread);
+            this.updateThread();
+        }
+    };
+
     updateThread = () => {
-        this.forceUpdate();
+        this.setState({
+            thread: this.props.mxEvent.getThread(),
+        });
     };
 
     public renderEventTile(event: MatrixEvent): JSX.Element {

@@ -52,13 +52,6 @@ class ThreadView extends React.Component<IProps, IState> {
     public componentDidMount(): void {
         this.room.on("Thread.update", this.onThreadEventReceived);
         this.room.on("Thread.ready", this.onThreadEventReceived);
-        this.updateThreads(() => {
-            this.state.threads.forEach(thread => {
-                if (!thread.ready) {
-                    thread.fetchReplyChain();
-                }
-            });
-        });
     }
 
     public componentWillUnmount(): void {

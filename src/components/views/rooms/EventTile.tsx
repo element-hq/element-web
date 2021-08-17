@@ -56,6 +56,7 @@ import MessageActionBar from "../messages/MessageActionBar";
 import ReactionsRow from '../messages/ReactionsRow';
 import { getEventDisplayInfo } from '../../../utils/EventUtils';
 import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
+import { Thread } from '../../../../../matrix-js-sdk/src/models/thread';
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -319,6 +320,8 @@ interface IState {
     reactions: Relations;
 
     hover: boolean;
+
+    thread?: Thread;
 }
 
 @replaceableComponent("views.rooms.EventTile")
@@ -355,6 +358,8 @@ export default class EventTile extends React.Component<IProps, IState> {
             reactions: this.getReactions(),
 
             hover: false,
+
+            thread: this.props.mxEvent?.getThread(),
         };
 
         // don't do RR animations until we are mounted
@@ -455,8 +460,17 @@ export default class EventTile extends React.Component<IProps, IState> {
             client.on("Room.receipt", this.onRoomReceipt);
             this.isListeningForReceipts = true;
         }
-        this.props.mxEvent.on("Thread.update", this.forceUpdate);
+
+        this.props.mxEvent.once("Thread.ready", this.updateThread);
+        this.props.mxEvent.on("Thread.update", this.updateThread);
     }
+
+    private updateThread = (thread) => {
+        this.setState({
+            thread,
+        });
+        this.forceUpdate();
+    };
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
     // eslint-disable-next-line
@@ -468,7 +482,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
         if (objectHasDiff(this.state, nextState)) {
             return true;
         }
@@ -497,8 +511,8 @@ export default class EventTile extends React.Component<IProps, IState> {
     }
 
     private renderThreadInfo(): React.ReactNode {
+        const thread = this.state.thread;
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        const thread = room.getThread(this.props.mxEvent.getId());
         if (!thread || this.props.showThreadInfo === false) {
             return null;
         }

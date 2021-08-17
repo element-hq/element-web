@@ -280,7 +280,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
             <Button className="mx_RoomSummaryCard_icon_files" onClick={onRoomFilesClick}>
                 { _t("Show files") }
             </Button>
-            <Button className="mx_RoomSummaryCard_icon_files" onClick={onRoomThreadsClick}>
+            <Button className="mx_RoomSummaryCard_icon_threads" onClick={onRoomThreadsClick}>
                 { _t("Show threads") }
             </Button>
             <Button className="mx_RoomSummaryCard_icon_share" onClick={onShareRoomClick}>
