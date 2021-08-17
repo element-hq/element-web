@@ -69,6 +69,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     private ref: React.RefObject<HTMLDivElement> = createRef();
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
     private groupFilterPanelWatcherRef: string;
+    private groupFilterPanelContainer = createRef<HTMLDivElement>();
     private bgImageWatcherRef: string;
     private focusedElement = null;
     private isDoingStickyHeaders = false;
@@ -93,6 +94,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     public componentDidMount() {
         UIStore.instance.trackElementDimensions("LeftPanel", this.ref.current);
         UIStore.instance.trackElementDimensions("ListContainer", this.listContainerRef.current);
+        if (this.groupFilterPanelContainer.current) {
+            UIStore.instance.trackElementDimensions("GroupFilterPanelContainer", this.groupFilterPanelContainer.current);
+        }
         UIStore.instance.on("ListContainer", this.refreshStickyHeaders);
         // Using the passive option to not block the main thread
         // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
@@ -420,7 +424,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         let leftLeftPanel;
         if (this.state.showGroupFilterPanel) {
             leftLeftPanel = (
-                <div className="mx_LeftPanel_GroupFilterPanelContainer">
+                <div className="mx_LeftPanel_GroupFilterPanelContainer" ref={this.groupFilterPanelContainer}>
                     <GroupFilterPanel />
                     { SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null }
                 </div>
