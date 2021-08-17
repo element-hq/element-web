@@ -238,10 +238,10 @@ $voice-playback-button-fg-color: $message-body-panel-icon-fg-color;
 // Appearance tab colors
 $appearance-tab-border-color: $room-highlight-color;
 
-// blur amounts for left left panel (only for element theme, used in _mods.scss)
+// blur amounts for left left panel (only for element theme)
 :root {
-    --llp-background-blur: 60px;
-    --lp-background-blur: 30px;
+    --llp-background-blur: 160px;
+    --lp-background-blur: 90px;
     --lp-background-overlay: rgba(255, 255, 255, 0.055);
 }
 
