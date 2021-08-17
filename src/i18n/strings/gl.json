@@ -3673,5 +3673,6 @@
     "To join an existing space you'll need an invite.": "Para unirte a un espazo existente precisas un convite.",
     "You can also create a Space from a <a>community</a>.": "Tamén podes crear un Espazo a partir dunha <a>comunidade</a>.",
     "You can change this later.": "Esto poderalo cambiar máis tarde.",
-    "What kind of Space do you want to create?": "Que tipo de Espazo queres crear?"
+    "What kind of Space do you want to create?": "Que tipo de Espazo queres crear?",
+    "Unknown failure: %(reason)s": "Fallo descoñecido: %(reason)s"
 }
