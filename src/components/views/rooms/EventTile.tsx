@@ -932,8 +932,11 @@ export default class EventTile extends React.Component<IProps, IState> {
         } else if (this.props.layout == Layout.IRC) {
             avatarSize = 14;
             needsSenderProfile = true;
-        } else if (this.props.continuation && this.props.tileShape !== TileShape.FileGrid) {
-            // no avatar or sender profile for continuation messages
+        } else if (
+            (this.props.continuation && this.props.tileShape !== TileShape.FileGrid) ||
+            this.props.mxEvent.getType() === EventType.CallInvite
+        ) {
+            // no avatar or sender profile for continuation messages and call tiles
             avatarSize = 0;
             needsSenderProfile = false;
         } else {

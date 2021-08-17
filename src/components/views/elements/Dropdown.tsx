@@ -18,7 +18,7 @@ limitations under the License.
 import React, { ChangeEvent, createRef, CSSProperties, ReactElement, ReactNode, Ref } from 'react';
 import classnames from 'classnames';
 
-import AccessibleButton from './AccessibleButton';
+import AccessibleButton, { ButtonEvent } from './AccessibleButton';
 import { _t } from '../../../languageHandler';
 import { Key } from "../../../Keyboard";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -178,7 +178,7 @@ export default class Dropdown extends React.Component<IProps, IState> {
         this.ignoreEvent = ev;
     };
 
-    private onInputClick = (ev: React.MouseEvent) => {
+    private onAccessibleButtonClick = (ev: ButtonEvent) => {
         if (this.props.disabled) return;
 
         if (!this.state.expanded) {
@@ -186,6 +186,10 @@ export default class Dropdown extends React.Component<IProps, IState> {
                 expanded: true,
             });
             ev.preventDefault();
+        } else if ((ev as React.KeyboardEvent).key === Key.ENTER) {
+            // the accessible button consumes enter onKeyDown for firing onClick, so handle it here
+            this.props.onOptionChange(this.state.highlightedOption);
+            this.close();
         }
     };
 
@@ -204,7 +208,7 @@ export default class Dropdown extends React.Component<IProps, IState> {
         this.props.onOptionChange(dropdownKey);
     };
 
-    private onInputKeyDown = (e: React.KeyboardEvent) => {
+    private onKeyDown = (e: React.KeyboardEvent) => {
         let handled = true;
 
         // These keys don't generate keypress events and so needs to be on keyup
@@ -269,7 +273,7 @@ export default class Dropdown extends React.Component<IProps, IState> {
     private prevOption(optionKey: string): string {
         const keys = Object.keys(this.childrenByKey);
         const index = keys.indexOf(optionKey);
-        return keys[(index - 1) % keys.length];
+        return keys[index <= 0 ? keys.length - 1 : (index - 1) % keys.length];
     }
 
     private scrollIntoView(node: Element) {
@@ -320,7 +324,6 @@ export default class Dropdown extends React.Component<IProps, IState> {
                         type="text"
                         autoFocus={true}
                         className="mx_Dropdown_option"
-                        onKeyDown={this.onInputKeyDown}
                         onChange={this.onInputChange}
                         value={this.state.searchQuery}
                         role="combobox"
@@ -329,6 +332,7 @@ export default class Dropdown extends React.Component<IProps, IState> {
                         aria-owns={`${this.props.id}_listbox`}
                         aria-disabled={this.props.disabled}
                         aria-label={this.props.label}
+                        onKeyDown={this.onKeyDown}
                     />
                 );
             }
@@ -361,13 +365,14 @@ export default class Dropdown extends React.Component<IProps, IState> {
         return <div className={classnames(dropdownClasses)} ref={this.collectRoot}>
             <AccessibleButton
                 className="mx_Dropdown_input mx_no_textinput"
-                onClick={this.onInputClick}
+                onClick={this.onAccessibleButtonClick}
                 aria-haspopup="listbox"
                 aria-expanded={this.state.expanded}
                 disabled={this.props.disabled}
                 inputRef={this.buttonRef}
                 aria-label={this.props.label}
                 aria-describedby={`${this.props.id}_value`}
+                onKeyDown={this.onKeyDown}
             >
                 { currentValue }
                 <span className="mx_Dropdown_arrow" />

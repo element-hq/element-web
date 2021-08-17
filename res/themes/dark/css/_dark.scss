@@ -7,9 +7,9 @@ $secondary-content: #A9B2BC;
 $tertiary-content: #8E99A4;
 $quaternary-content: #6F7882;
 $quinary-content: #394049;
-$system-dark: #21262C;
+$system: #21262C;
 $background: #15191E;
-$panels: rgba($system-dark, 0.9);
+$panels: rgba($system, 0.9);
 $panel-base: #8D97A5; // This color is not intended for use in the app
 $panel-selected: rgba($panel-base, 0.3);
 $panel-hover: rgba($panel-base, 0.1);
@@ -67,7 +67,7 @@ $inverted-bg-color: $base-color;
 $selected-color: $room-highlight-color;
 
 // selected for hoverover & selected event tiles
-$event-selected-color: $system-dark;
+$event-selected-color: $system;
 
 // used for the hairline dividers in RoomView
 $primary-hairline-color: transparent;
@@ -111,7 +111,7 @@ $lightbox-background-bg-color: #000;
 $lightbox-background-bg-opacity: 0.85;
 
 $settings-grey-fg-color: #a2a2a2;
-$settings-profile-placeholder-bg-color: $system-dark;
+$settings-profile-placeholder-bg-color: $system;
 $settings-profile-overlay-placeholder-fg-color: #454545;
 $settings-profile-button-bg-color: #e7e7e7;
 $settings-profile-button-fg-color: $settings-profile-overlay-placeholder-fg-color;
@@ -131,8 +131,6 @@ $eventtile-meta-color: $roomtopic-color;
 
 $header-divider-color: $header-panel-text-primary-color;
 $composer-e2e-icon-color: $header-panel-text-primary-color;
-
-$toast-bg-color: $quinary-content;
 
 // ********************
 
@@ -194,7 +192,7 @@ $button-link-bg-color: transparent;
 $togglesw-off-color: $room-highlight-color;
 
 $progressbar-fg-color: $accent-color;
-$progressbar-bg-color: $system-dark;
+$progressbar-bg-color: $system;
 
 $visual-bell-bg-color: #800;
 
@@ -229,7 +227,7 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 $message-body-panel-fg-color: $secondary-fg-color;
 $message-body-panel-bg-color: $quinary-content;
 $message-body-panel-icon-fg-color: $secondary-fg-color;
-$message-body-panel-icon-bg-color: $system-dark; // "System Dark"
+$message-body-panel-icon-bg-color: $system; // "System Dark"
 
 $voice-record-stop-border-color: $quaternary-fg-color;
 $voice-record-waveform-incomplete-fg-color: $quaternary-fg-color;

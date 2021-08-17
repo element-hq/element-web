@@ -24,6 +24,8 @@ import { MenuItem } from "../../structures/ContextMenu";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import GroupFilterOrderStore from "../../../stores/GroupFilterOrderStore";
+import { createSpaceFromCommunity } from "../../../utils/space";
+import GroupStore from "../../../stores/GroupStore";
 
 @replaceableComponent("views.context_menus.TagTileContextMenu")
 export default class TagTileContextMenu extends React.Component {
@@ -46,6 +48,11 @@ export default class TagTileContextMenu extends React.Component {
 
     _onRemoveClick = () => {
         dis.dispatch(TagOrderActions.removeTag(this.context, this.props.tag));
+        this.props.onFinished();
+    };
+
+    _onCreateSpaceClick = () => {
+        createSpaceFromCommunity(this.context, this.props.tag);
         this.props.onFinished();
     };
 
@@ -77,6 +84,16 @@ export default class TagTileContextMenu extends React.Component {
             );
         }
 
+        let createSpaceOption;
+        if (GroupStore.isUserPrivileged(this.props.tag)) {
+            createSpaceOption = <>
+                <hr className="mx_TagTileContextMenu_separator" role="separator" />
+                <MenuItem className="mx_TagTileContextMenu_item mx_TagTileContextMenu_createSpace" onClick={this._onCreateSpaceClick}>
+                    { _t("Create Space") }
+                </MenuItem>
+            </>;
+        }
+
         return <div>
             <MenuItem className="mx_TagTileContextMenu_item mx_TagTileContextMenu_viewCommunity" onClick={this._onViewCommunityClick}>
                 { _t('View Community') }
@@ -88,6 +105,7 @@ export default class TagTileContextMenu extends React.Component {
             <MenuItem className="mx_TagTileContextMenu_item mx_TagTileContextMenu_hideCommunity" onClick={this._onRemoveClick}>
                 { _t("Unpin") }
             </MenuItem>
+            { createSpaceOption }
         </div>;
     }
 }
