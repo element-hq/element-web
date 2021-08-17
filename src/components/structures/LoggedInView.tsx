@@ -55,7 +55,7 @@ import { getKeyBindingsManager, NavigationAction, RoomAction } from '../../KeyBi
 import { IOpts } from "../../createRoom";
 import SpacePanel from "../views/spaces/SpacePanel";
 import { replaceableComponent } from "../../utils/replaceableComponent";
-import CallHandler, { CallHandlerEvent } from '../../CallHandler';
+import CallHandler from '../../CallHandler';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import AudioFeedArrayForCall from '../views/voip/AudioFeedArrayForCall';
 import RoomView from './RoomView';
@@ -142,6 +142,7 @@ interface IState {
 class LoggedInView extends React.Component<IProps, IState> {
     static displayName = 'LoggedInView';
 
+    private dispatcherRef: string;
     protected readonly _matrixClient: MatrixClient;
     protected readonly _roomView: React.RefObject<any>;
     protected readonly _resizeContainer: React.RefObject<ResizeHandle>;
@@ -172,7 +173,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
     componentDidMount() {
         document.addEventListener('keydown', this.onNativeKeyDown, false);
-        CallHandler.sharedInstance().addListener(CallHandlerEvent.CallsChanged, this.onCallsChanged);
+        this.dispatcherRef = dis.register(this.onAction);
 
         this.updateServerNoticeEvents();
 
@@ -197,7 +198,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
     componentWillUnmount() {
         document.removeEventListener('keydown', this.onNativeKeyDown, false);
-        CallHandler.sharedInstance().removeListener(CallHandlerEvent.CallsChanged, this.onCallsChanged);
+        dis.unregister(this.dispatcherRef);
         this._matrixClient.removeListener("accountData", this.onAccountData);
         this._matrixClient.removeListener("sync", this.onSync);
         this._matrixClient.removeListener("RoomState.events", this.onRoomStateEvents);
@@ -205,10 +206,16 @@ class LoggedInView extends React.Component<IProps, IState> {
         this.resizer.detach();
     }
 
-    private onCallsChanged = () => {
-        this.setState({
-            activeCalls: CallHandler.sharedInstance().getAllActiveCalls(),
-        });
+    private onAction = (payload): void => {
+        switch (payload.action) {
+            case 'call_state': {
+                const activeCalls = CallHandler.sharedInstance().getAllActiveCalls();
+                if (activeCalls !== this.state.activeCalls) {
+                    this.setState({ activeCalls });
+                }
+                break;
+            }
+        }
     };
 
     public canResetTimelineInRoom = (roomId: string) => {
