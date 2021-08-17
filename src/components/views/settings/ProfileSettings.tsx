@@ -19,12 +19,13 @@ import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
 import { getHostingLink } from '../../../utils/HostingLink';
-import * as sdk from "../../../index";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
+import AccessibleButton from '../elements/AccessibleButton';
+import AvatarSetting from './AvatarSetting';
 
 interface IProps {
 
@@ -174,8 +175,6 @@ export default class ProfileSettings extends React.Component<IProps, IState> {
             </span>;
         }
 
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const AvatarSetting = sdk.getComponent('settings.AvatarSetting');
         return (
             <form
                 onSubmit={this.saveProfile}

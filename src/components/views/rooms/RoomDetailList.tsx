@@ -17,11 +17,11 @@ limitations under the License.
 import React from 'react';
 import { Room } from 'matrix-js-sdk/src';
 import classNames from 'classnames';
-import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import RoomDetailRow from "./RoomDetailRow";
 
 interface IProps {
     rooms?: Room[];
@@ -31,9 +31,7 @@ interface IProps {
 @replaceableComponent("views.rooms.RoomDetailList")
 export default class RoomDetailList extends React.Component<IProps> {
     public getRows(): JSX.Element[] {
-        if (!this.props.rooms) return [];
-
-        const RoomDetailRow = sdk.getComponent('rooms.RoomDetailRow');
+        if (!this.props.rooms) return []; s;
         return this.props.rooms.map((room, index) => {
             return <RoomDetailRow key={index} room={room} onClick={this.onDetailsClick} />;
         });

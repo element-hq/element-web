@@ -17,12 +17,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
 import { Key } from "../../../Keyboard";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ActionPayload } from '../../../dispatcher/payloads';
+import Spinner from "../elements/Spinner";
 
 interface IProps {
     // false to display an error saying that we couldn't connect to the integration manager
@@ -85,7 +85,6 @@ export default class IntegrationManager extends React.Component<IProps, IState> 
 
     public render(): JSX.Element {
         if (this.props.loading) {
-            const Spinner = sdk.getComponent("elements.Spinner");
             return (
                 <div className='mx_IntegrationManager_loading'>
                     <h3>{ _t("Connecting to integration manager...") }</h3>

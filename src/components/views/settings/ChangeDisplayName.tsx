@@ -17,10 +17,10 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../index';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import EditableTextContainer from "../elements/EditableTextContainer";
 
 @replaceableComponent("views.settings.ChangeDisplayName")
 export default class ChangeDisplayName extends React.Component {
@@ -42,7 +42,6 @@ export default class ChangeDisplayName extends React.Component {
     };
 
     public render(): JSX.Element {
-        const EditableTextContainer = sdk.getComponent('elements.EditableTextContainer');
         return (
             <EditableTextContainer
                 getInitialValue={this.getDisplayName}

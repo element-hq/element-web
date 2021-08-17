@@ -18,11 +18,12 @@ limitations under the License.
 import React from 'react';
 import { MatrixEvent, Room } from 'matrix-js-sdk/src';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Spinner from '../elements/Spinner';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
+import RoomAvatar from '../avatars/RoomAvatar';
+import BaseAvatar from '../avatars/BaseAvatar';
 
 interface IProps {
     initialAvatarUrl?: string;
@@ -155,7 +156,6 @@ export default class ChangeAvatar extends React.Component<IProps, IState> {
         // Having just set an avatar we just display that since it will take a little
         // time to propagate through to the RoomAvatar.
         if (this.props.room && !this.avatarSet) {
-            const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
             avatarImg = <RoomAvatar
                 room={this.props.room}
                 width={this.props.width}
@@ -163,7 +163,6 @@ export default class ChangeAvatar extends React.Component<IProps, IState> {
                 resizeMethod='crop'
             />;
         } else {
-            const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
             // XXX: FIXME: once we track in the JS what our own displayname is(!) then use it here rather than ?
             avatarImg = <BaseAvatar
                 width={this.props.width}

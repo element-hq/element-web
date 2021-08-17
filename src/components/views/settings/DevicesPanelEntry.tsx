@@ -18,12 +18,12 @@ limitations under the License.
 import React from 'react';
 import { IMyDevice } from 'matrix-js-sdk/src';
 
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { formatDate } from '../../../DateUtils';
 import StyledCheckbox from '../elements/StyledCheckbox';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import EditableTextContainer from "../elements/EditableTextContainer";
 
 interface IProps {
     device?: IMyDevice;
@@ -52,8 +52,6 @@ export default class DevicesPanelEntry extends React.Component<IProps> {
     };
 
     public render(): JSX.Element {
-        const EditableTextContainer = sdk.getComponent('elements.EditableTextContainer');
-
         const device = this.props.device;
 
         let lastSeen = "";

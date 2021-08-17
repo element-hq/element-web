@@ -16,12 +16,13 @@ limitations under the License.
 
 import React from 'react';
 import { MatrixEvent, Room, RoomState } from 'matrix-js-sdk/src';
-import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import RoomUpgradeDialog from '../dialogs/RoomUpgradeDialog';
+import AccessibleButton from '../elements/AccessibleButton';
 
 interface IProps {
     room: Room;
@@ -59,13 +60,10 @@ export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, I
     };
 
     private onUpgradeClick = (): void => {
-        const RoomUpgradeDialog = sdk.getComponent('dialogs.RoomUpgradeDialog');
         Modal.createTrackedDialog('Upgrade Room Version', '', RoomUpgradeDialog, { room: this.props.room });
     };
 
     public render(): JSX.Element {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
         let doUpgradeWarnings = (
             <div>
                 <div className="mx_RoomUpgradeWarningBar_body">

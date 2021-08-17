@@ -21,9 +21,10 @@ import { RoomMember } from 'matrix-js-sdk/src';
 import { _t } from '../../../languageHandler';
 import { formatDate } from '../../../DateUtils';
 import NodeAnimator from "../../../NodeAnimator";
-import * as sdk from "../../../index";
 import { toPx } from "../../../utils/units";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+
+import MemberAvatar from '../avatars/MemberAvatar';
 
 interface IProps {
     // the RoomMember to show the RR for
@@ -169,7 +170,6 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
     }
 
     public render(): JSX.Element {
-        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         if (this.state.suppressDisplay) {
             return <div ref={this.avatar} />;
         }

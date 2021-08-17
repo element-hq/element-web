@@ -20,12 +20,12 @@ import React from 'react';
 import classNames from 'classnames';
 import { IMyDevice } from "matrix-js-sdk/src/client";
 
-import * as sdk from '../../../index';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import { SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import InteractiveAuthDialog from "../dialogs/InteractiveAuthDialog";
 
 interface IProps {
     className?: string;
@@ -119,7 +119,6 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
             }
 
             // pop up an interactive auth dialog
-            const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
 
             const numDevices = this.state.selectedDevices.length;
             const dialogAesthetics = {
