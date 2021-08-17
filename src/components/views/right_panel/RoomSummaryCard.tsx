@@ -280,14 +280,14 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
             <Button className="mx_RoomSummaryCard_icon_files" onClick={onRoomFilesClick}>
                 { _t("Show files") }
             </Button>
+            <Button className="mx_RoomSummaryCard_icon_export" onClick={onRoomExportClick}>
+                { _t("Export chat") }
+            </Button>
             <Button className="mx_RoomSummaryCard_icon_share" onClick={onShareRoomClick}>
                 { _t("Share room") }
             </Button>
             <Button className="mx_RoomSummaryCard_icon_settings" onClick={onRoomSettingsClick}>
                 { _t("Room settings") }
-            </Button>
-            <Button className="mx_RoomSummaryCard_icon_export" onClick={onRoomExportClick}>
-                { _t("Export chat") }
             </Button>
         </Group>
 
