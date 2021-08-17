@@ -1,3 +1,9 @@
+Changes in [3.28.1](https://github.com/vector-im/element-desktop/releases/tag/v3.28.1) (2021-08-17)
+===================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix multiple VoIP regressions ([matrix-org/matrix-js-sdk#1860](https://github.com/matrix-org/matrix-js-sdk/pull/1860)).
+
 Changes in [3.28.0](https://github.com/vector-im/element-desktop/releases/tag/v3.28.0) (2021-08-16)
 ===================================================================================================
 
