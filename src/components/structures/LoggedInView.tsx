@@ -156,7 +156,7 @@ class LoggedInView extends React.Component<IProps, IState> {
             // use compact timeline view
             useCompactLayout: SettingsStore.getValue('useCompactLayout'),
             usageLimitDismissed: false,
-            activeCalls: [],
+            activeCalls: CallHandler.sharedInstance().getAllActiveCalls(),
         };
 
         // stash the MatrixClient in case we log out before we are unmounted

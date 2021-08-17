@@ -32,7 +32,7 @@ export default class AudioFeedArrayForCall extends React.Component<IProps, IStat
         super(props);
 
         this.state = {
-            feeds: [],
+            feeds: this.props.call.getRemoteFeeds(),
         };
     }
 
