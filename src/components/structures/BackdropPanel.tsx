@@ -106,9 +106,8 @@ export default class BackdropPanel extends React.PureComponent<IProps, IState> {
 
         this.leftLeftPanelRef.current.width = leftLeftPanelWidth;
         this.leftLeftPanelRef.current.height = height;
-        this.leftPanelRef.current.width = (window.screen.width * 0.5) - leftLeftPanelWidth;
+        this.leftPanelRef.current.width = (window.screen.width * 0.5);
         this.leftPanelRef.current.height = height;
-        this.leftPanelRef.current.style.transform = `translateX(${leftLeftPanelWidth}px)`;
 
         const spacesBlur = this.style.getPropertyValue('--llp-background-blur');
         const roomListBlur = this.style.getPropertyValue('--lp-background-blur');
