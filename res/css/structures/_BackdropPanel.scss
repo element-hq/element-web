@@ -29,7 +29,7 @@ limitations under the License.
     top: 0;
     height: 100vh;
     width: 100%;
-    background-color: rgba(255, 255, 255, .02);
+    background-color: rgba(255, 255, 255, .055);
   }
 }
 
@@ -42,10 +42,10 @@ limitations under the License.
     pointer-events: none;
     overflow: hidden;
 
-    &:first-of-type {
-      opacity: 0.19;
+    &:nth-of-type(2n-1) {
+      opacity: 0.2;
     }
-    &:last-of-type {
-      opacity:0.12;
+    &:nth-of-type(2n) {
+      opacity:0.1;
     }
 }
