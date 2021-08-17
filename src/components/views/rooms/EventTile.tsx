@@ -55,6 +55,7 @@ import ReadReceiptMarker from "./ReadReceiptMarker";
 import MessageActionBar from "../messages/MessageActionBar";
 import ReactionsRow from '../messages/ReactionsRow';
 import { getEventDisplayInfo } from '../../../utils/EventUtils';
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -299,6 +300,9 @@ interface IProps {
 
     // whether or not to display the sender
     hideSender?: boolean;
+
+    // whether or not to display thread info
+    showThreadInfo?: boolean;
 }
 
 interface IState {
@@ -451,6 +455,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             client.on("Room.receipt", this.onRoomReceipt);
             this.isListeningForReceipts = true;
         }
+        this.props.mxEvent.on("Thread.update", this.forceUpdate);
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
@@ -489,6 +494,38 @@ export default class EventTile extends React.Component<IProps, IState> {
             this.context.on("Room.receipt", this.onRoomReceipt);
             this.isListeningForReceipts = true;
         }
+    }
+
+    private renderThreadInfo(): React.ReactNode {
+        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        const thread = room.getThread(this.props.mxEvent.getId());
+        if (!thread || this.props.showThreadInfo === false) {
+            return null;
+        }
+
+        const avatars = Array.from(thread.participants).map((mxId: string) => {
+            const member = room.getMember(mxId);
+            return <MemberAvatar key={member.userId} member={member} width={14} height={14} />;
+        });
+
+        return (
+            <div
+                onClick={() => {
+                    dis.dispatch({
+                        action: Action.SetRightPanelPhase,
+                        phase: RightPanelPhases.ThreadView,
+                        refireParams: {
+                            event: this.props.mxEvent,
+                        },
+                    });
+                }}
+            >
+                <span className="mx_EventListSummary_avatars">
+                    { avatars }
+                </span>
+                { thread.length } { thread.length === 1 ? 'reply' : 'replies' }
+            </div>
+        );
     }
 
     private onRoomReceipt = (ev, room) => {
@@ -1167,6 +1204,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             { keyRequestInfo }
                             { actionBar }
                             { this.props.layout === Layout.IRC && (reactionsRow) }
+                            { this.renderThreadInfo() }
                         </div>
                         { this.props.layout !== Layout.IRC && (reactionsRow) }
                         { msgOption }

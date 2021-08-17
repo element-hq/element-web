@@ -173,6 +173,8 @@ interface IProps {
     onUnfillRequest?(backwards: boolean, scrollToken: string): void;
 
     getRelationsForEvent?(eventId: string, relationType: string, eventType: string): Relations;
+
+    hideThreadedMessages?: boolean;
 }
 
 interface IState {
@@ -442,6 +444,11 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         // Always show highlighted event
         if (this.props.highlightedEventId === mxEv.getId()) return true;
+
+        const threadingEnabled = SettingsStore.getValue("feature_threading");
+        if (threadingEnabled && mxEv.replyEventId && this.props.hideThreadedMessages === true) {
+            return false;
+        }
 
         return !shouldHideEvent(mxEv, this.context);
     }

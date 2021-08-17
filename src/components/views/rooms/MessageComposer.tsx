@@ -183,6 +183,7 @@ interface IProps {
     resizeNotifier: ResizeNotifier;
     permalinkCreator: RoomPermalinkCreator;
     replyToEvent?: MatrixEvent;
+    showReplyPreview?: boolean;
     e2eStatus?: E2EStatus;
 }
 
@@ -200,6 +201,10 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private messageComposerInput: SendMessageComposer;
     private voiceRecordingButton: VoiceRecordComposerTile;
+
+    static defaultProps = {
+        showReplyPreview: true,
+    };
 
     constructor(props) {
         super(props);
@@ -454,7 +459,9 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             <div className="mx_MessageComposer mx_GroupLayout">
                 { recordingTooltip }
                 <div className="mx_MessageComposer_wrapper">
-                    <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
+                    { this.props.showReplyPreview && (
+                        <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
+                    ) }
                     <div className="mx_MessageComposer_row">
                         { controls }
                     </div>

@@ -24,9 +24,11 @@ import { replaceableComponent } from "../../utils/replaceableComponent";
 import { MatrixClientPeg } from '../../MatrixClientPeg';
 
 import ResizeNotifier from '../../utils/ResizeNotifier';
-import EventTile from '../views/rooms/EventTile';
+import EventTile, { TileShape } from '../views/rooms/EventTile';
 import MessageComposer from '../views/rooms/MessageComposer';
 import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
+import { Layout } from '../../settings/Layout';
+import TimelinePanel from './TimelinePanel';
 
 interface IProps {
     roomId: string;
@@ -37,6 +39,7 @@ interface IProps {
 }
 
 interface IState {
+    replyToEvent?: MatrixEvent;
 }
 
 /*
@@ -65,6 +68,7 @@ class ThreadView extends React.Component<IProps, IState> {
             mxEvent={event}
             enableFlair={false}
             showReadReceipts={false}
+            tileShape={TileShape.FileGrid}
             as="div"
         />;
     }
@@ -77,19 +81,24 @@ class ThreadView extends React.Component<IProps, IState> {
                 className="mx_ThreadView"
                 onClose={this.props.onClose}
                 previousPhase={RightPanelPhases.RoomSummary}
+                withoutScrollContainer={true}
             >
-                { this.renderEventTile(this.props.mxEvent) }
-
-                { thread && (
-                    thread.eventTimeline.map((event: MatrixEvent) => {
-                        return this.renderEventTile(event);
-                    })
-                ) }
-
+                <TimelinePanel
+                    manageReadReceipts={false}
+                    manageReadMarkers={false}
+                    timelineSet={thread.timelineSet}
+                    showUrlPreview={false}
+                    tileShape={TileShape.Notif}
+                    empty={<div>empty</div>}
+                    alwaysShowTimestamps={true}
+                    layout={Layout.Group}
+                    hideThreadedMessages={false}
+                />
                 <MessageComposer
                     room={room}
                     resizeNotifier={this.props.resizeNotifier}
-                    replyToEvent={this.props.mxEvent}
+                    replyToEvent={thread?.replyToEvent}
+                    showReplyPreview={false}
                     permalinkCreator={this.props.permalinkCreator}
                 />
             </BaseCard>
