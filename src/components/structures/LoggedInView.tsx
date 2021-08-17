@@ -200,6 +200,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.refreshBackgroundImage);
         this.loadResizerPreferences();
+        this.refreshBackgroundImage();
     }
 
     componentWillUnmount() {
