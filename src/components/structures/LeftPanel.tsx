@@ -95,7 +95,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         UIStore.instance.trackElementDimensions("LeftPanel", this.ref.current);
         UIStore.instance.trackElementDimensions("ListContainer", this.listContainerRef.current);
         if (this.groupFilterPanelContainer.current) {
-            UIStore.instance.trackElementDimensions("GroupFilterPanelContainer", this.groupFilterPanelContainer.current);
+            const componentName = "GroupFilterPanelContainer";
+            UIStore.instance.trackElementDimensions(componentName, this.groupFilterPanelContainer.current);
         }
         UIStore.instance.on("ListContainer", this.refreshStickyHeaders);
         // Using the passive option to not block the main thread

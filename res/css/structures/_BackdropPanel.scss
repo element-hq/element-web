@@ -15,22 +15,22 @@ limitations under the License.
 */
 
 .mx_BackdropPanel {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100vh;
-  width: 100%;
-  overflow: hidden;
-
-  &:before {
-    content: ' ';
     position: absolute;
     left: 0;
     top: 0;
     height: 100vh;
     width: 100%;
-    background-color: rgba(255, 255, 255, .055);
-  }
+    overflow: hidden;
+
+    &::before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.055);
+    }
 }
 
 .mx_BackdropPanel--canvas {
@@ -43,9 +43,9 @@ limitations under the License.
     overflow: hidden;
 
     &:nth-of-type(2n-1) {
-      opacity: 0.2;
+        opacity: 0.2;
     }
     &:nth-of-type(2n) {
-      opacity:0.1;
+        opacity: 0.1;
     }
 }

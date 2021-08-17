@@ -14,7 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps, Dispatch, ReactNode, SetStateAction, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+    ComponentProps,
+    Dispatch,
+    ReactNode,
+    SetStateAction,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/models/room";
