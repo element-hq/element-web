@@ -57,3 +57,14 @@ body:
       placeholder: e.g. develop.element.io, app.element.io
     validations:
       required: false
+  - type: dropdown
+    id: rageshake
+    attributes:
+      label: Have you submitted a rageshake?
+      description:  |
+        Did you know that you can send a /rageshake command from the web applicaiton to submit logs for this issue? Trigger the defect, then type /rageshake into the message entry area followed by a description of the problem and send the command. This will automatically submit anonymous logs to the developers.
+      options:
+        - 'Yes'
+        - 'No'
+    validations:
+      required: true
