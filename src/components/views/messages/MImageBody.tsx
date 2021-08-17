@@ -25,12 +25,14 @@ import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import InlineSpinner from '../elements/InlineSpinner';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { mediaFromContent } from "../../../customisations/Media";
+import { Media, mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD } from "../../../ContentMessages";
 import { IMediaEventContent } from '../../../customisations/models/IMediaEventContent';
 import ImageView from '../elements/ImageView';
 import { SyncState } from 'matrix-js-sdk/src/sync.api';
 import { IBodyProps } from "./IBodyProps";
+import classNames from 'classnames';
+import { CSSTransition, SwitchTransition } from 'react-transition-group';
 
 interface IState {
     decryptedUrl?: string;
@@ -157,17 +159,19 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             // this is only used as a fallback in case content.info.w/h is missing
             loadedImageDimensions = { naturalWidth, naturalHeight };
         }
-
         this.setState({ imgLoaded: true, loadedImageDimensions });
     };
 
     protected getContentUrl(): string {
-        const media = mediaFromContent(this.props.mxEvent.getContent());
-        if (media.isEncrypted) {
+        if (this.media.isEncrypted) {
             return this.state.decryptedUrl;
         } else {
-            return media.srcHttp;
+            return this.media.srcHttp;
         }
+    }
+
+    private get media(): Media {
+        return mediaFromContent(this.props.mxEvent.getContent());
     }
 
     protected getThumbUrl(): string {
@@ -225,7 +229,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                     info.w > thumbWidth ||
                     info.h > thumbHeight
                 );
-                const isLargeFileSize = info.size > 1*1024*1024; // 1mb
+                const isLargeFileSize = info.size > 1 * 1024 * 1024; // 1mb
 
                 if (isLargeFileSize && isLargerThanThumbnail) {
                     // image is too large physically and bytewise to clutter our timeline so
@@ -347,12 +351,21 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                     className="mx_MImageBody_thumbnail"
                     src={thumbUrl}
                     ref={this.image}
-                    style={{ maxWidth: `min(100%, ${maxWidth}px)` }}
+                    // Force the image to be the full size of the container, even if the
+                    // pixel size is smaller. The problem here is that we don't know what
+                    // thumbnail size the HS is going to give us, but we have to commit to
+                    // a container size immediately and not change it when the image loads
+                    // or we'll get a scroll jump (or have to leave blank space).
+                    // This will obviously result in an upscaled image which will be a bit
+                    // blurry. The best fix would be for the HS to advertise what size thumbnails
+                    // it guarantees to produce.
+                    style={{ height: '100%' }}
                     alt={content.body}
                     onError={this.onImageError}
                     onLoad={this.onImageLoad}
                     onMouseEnter={this.onImageEnter}
-                    onMouseLeave={this.onImageLeave} />
+                    onMouseLeave={this.onImageLeave}
+                />
             );
         }
 
@@ -365,21 +378,41 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             gifLabel = <p className="mx_MImageBody_gifLabel">GIF</p>;
         }
 
+        const classes = classNames({
+            'mx_MImageBody_thumbnail': true,
+            'mx_MImageBody_thumbnail--blurhash': this.props.mxEvent.getContent().info[BLURHASH_FIELD],
+        });
+
+        // This has incredibly broken types.
+        const C = CSSTransition as any;
         const thumbnail = (
             <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight: maxHeight, maxWidth: maxWidth, aspectRatio: `${infoWidth}/${infoHeight}` }}>
-                { showPlaceholder &&
-                    <div
-                        className="mx_MImageBody_thumbnail"
-                        style={{
-                            // Constrain width here so that spinner appears central to the loaded thumbnail
-                            maxWidth: `min(100%, ${infoWidth}px)`,
-                        }}
+                <SwitchTransition mode="out-in">
+                    <C
+                        classNames="mx_rtg--fade"
+                        key={`img-${showPlaceholder}`}
+                        timeout={300}
                     >
-                        { placeholder }
-                    </div>
-                }
+                        { /* This weirdly looking div is necessary here, otherwise SwitchTransition fails */ }
+                        <div>
+                            { showPlaceholder && <div
+                                className={classes}
+                                style={{
+                                    // Constrain width here so that spinner appears central to the loaded thumbnail
+                                    maxWidth: `min(100%, ${infoWidth}px)`,
+                                    maxHeight: maxHeight,
+                                    aspectRatio: `${infoWidth}/${infoHeight}`,
+                                }}
+                            >
+                                { placeholder }
+                            </div> }
+                        </div>
+                    </C>
+                </SwitchTransition>
 
-                <div style={{ display: !showPlaceholder ? undefined : 'none' }}>
+                <div style={{
+                    height: '100%',
+                }}>
                     { img }
                     { gifLabel }
                 </div>
@@ -401,7 +434,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     // Overidden by MStickerBody
     protected getPlaceholder(width: number, height: number): JSX.Element {
         const blurhash = this.props.mxEvent.getContent().info[BLURHASH_FIELD];
-        if (blurhash) return <Blurhash hash={blurhash} width={width} height={height} />;
+        if (blurhash) return <Blurhash className="mx_Blurhash" hash={blurhash} width={width} height={height} />;
         return (
             <InlineSpinner w={32} h={32} />
         );
@@ -443,10 +476,12 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         const thumbnail = this.messageContent(contentUrl, thumbUrl, content);
         const fileBody = this.getFileBody();
 
-        return <div className="mx_MImageBody">
-            { thumbnail }
-            { fileBody }
-        </div>;
+        return (
+            <div className="mx_MImageBody">
+                { thumbnail }
+                { fileBody }
+            </div>
+        );
     }
 }
 

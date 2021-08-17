@@ -1,18 +1,35 @@
-// Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=557%3A0
-$system-dark: #21262C;
+// Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A741
+$accent: #0DBD8B;
+$alert: #FF5B55;
+$links: #0086e6;
+$primary-content: #ffffff;
+$secondary-content: #A9B2BC;
+$tertiary-content: #8E99A4;
+$quaternary-content: #6F7882;
+$quinary-content: #394049;
+$system: #21262C;
+$background: #15191E;
+$panels: rgba($system, 0.9);
+$panel-base: #8D97A5; // This color is not intended for use in the app
+$panel-selected: rgba($panel-base, 0.3);
+$panel-hover: rgba($panel-base, 0.1);
+$panel-actions: rgba($panel-base, 0.2);
+$space-nav: rgba($panel-base, 0.1);
+
+// TODO: Move userId colors here
 
 // unified palette
 // try to use these colors when possible
-$bg-color: #15191E;
+$bg-color: $background;
 $base-color: $bg-color;
-$base-text-color: #ffffff;
+$base-text-color: $primary-content;
 $header-panel-bg-color: #20252B;
 $header-panel-border-color: #000000;
 $header-panel-text-primary-color: #B9BEC6;
 $header-panel-text-secondary-color: #c8c8cd;
-$text-primary-color: #ffffff;
+$text-primary-color: $primary-content;
 $text-secondary-color: #B9BEC6;
-$quaternary-fg-color: #6F7882;
+$quaternary-fg-color: $quaternary-content;
 $search-bg-color: #181b21;
 $search-placeholder-color: #61708b;
 $room-highlight-color: #343a46;
@@ -23,8 +40,8 @@ $primary-bg-color: $bg-color;
 $muted-fg-color: $header-panel-text-primary-color;
 
 // additional text colors
-$secondary-fg-color: #A9B2BC;
-$tertiary-fg-color: #8E99A4;
+$secondary-fg-color: $secondary-content;
+$tertiary-fg-color: $tertiary-content;
 
 // used for dialog box text
 $light-fg-color: $header-panel-text-secondary-color;
@@ -50,7 +67,7 @@ $inverted-bg-color: $base-color;
 $selected-color: $room-highlight-color;
 
 // selected for hoverover & selected event tiles
-$event-selected-color: $system-dark;
+$event-selected-color: $system;
 
 // used for the hairline dividers in RoomView
 $primary-hairline-color: transparent;
@@ -94,7 +111,7 @@ $lightbox-background-bg-color: #000;
 $lightbox-background-bg-opacity: 0.85;
 
 $settings-grey-fg-color: #a2a2a2;
-$settings-profile-placeholder-bg-color: $system-dark;
+$settings-profile-placeholder-bg-color: $system;
 $settings-profile-overlay-placeholder-fg-color: #454545;
 $settings-profile-button-bg-color: #e7e7e7;
 $settings-profile-button-fg-color: $settings-profile-overlay-placeholder-fg-color;
@@ -108,20 +125,17 @@ $roomheader-addroom-fg-color: $text-primary-color;
 $groupFilterPanel-button-color: $header-panel-text-primary-color;
 $groupheader-button-color: $header-panel-text-primary-color;
 $rightpanel-button-color: $header-panel-text-primary-color;
-$icon-button-color: #8E99A4;
+$icon-button-color: $tertiary-content;
 $roomtopic-color: $text-secondary-color;
 $eventtile-meta-color: $roomtopic-color;
 
 $header-divider-color: $header-panel-text-primary-color;
 $composer-e2e-icon-color: $header-panel-text-primary-color;
 
-$quinary-content-color: #394049;
-$toast-bg-color: $quinary-content-color;
-
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
-$dialpad-button-bg-color: #394049;
+$dialpad-button-bg-color: $quinary-content;
 
 $roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-filter-active-bg-color: $bg-color;
@@ -164,12 +178,12 @@ $tab-label-icon-bg-color: $text-primary-color;
 $tab-label-active-icon-bg-color: $text-primary-color;
 
 // Buttons
-$button-primary-fg-color: #ffffff;
+$button-primary-fg-color: $primary-content;
 $button-primary-bg-color: $accent-color;
 $button-secondary-bg-color: transparent;
-$button-danger-fg-color: #ffffff;
+$button-danger-fg-color: $primary-content;
 $button-danger-bg-color: $notice-primary-color;
-$button-danger-disabled-fg-color: #ffffff;
+$button-danger-disabled-fg-color: $primary-content;
 $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
 $button-link-fg-color: $accent-color;
 $button-link-bg-color: transparent;
@@ -178,7 +192,7 @@ $button-link-bg-color: transparent;
 $togglesw-off-color: $room-highlight-color;
 
 $progressbar-fg-color: $accent-color;
-$progressbar-bg-color: $system-dark;
+$progressbar-bg-color: $system;
 
 $visual-bell-bg-color: #800;
 
@@ -201,19 +215,19 @@ $reaction-row-button-selected-border-color: $accent-color;
 $kbd-border-color: #000000;
 
 $tooltip-timeline-bg-color: $groupFilterPanel-bg-color;
-$tooltip-timeline-fg-color: #ffffff;
+$tooltip-timeline-fg-color: $primary-content;
 
 $interactive-tooltip-bg-color: $base-color;
-$interactive-tooltip-fg-color: #ffffff;
+$interactive-tooltip-fg-color: $primary-content;
 
 $breadcrumb-placeholder-bg-color: #272c35;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
 
 $message-body-panel-fg-color: $secondary-fg-color;
-$message-body-panel-bg-color: #394049; // "Dark Tile"
+$message-body-panel-bg-color: $quinary-content;
 $message-body-panel-icon-fg-color: $secondary-fg-color;
-$message-body-panel-icon-bg-color: $system-dark; // "System Dark"
+$message-body-panel-icon-bg-color: $system; // "System Dark"
 
 $voice-record-stop-border-color: $quaternary-fg-color;
 $voice-record-waveform-incomplete-fg-color: $quaternary-fg-color;

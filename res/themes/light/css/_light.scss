@@ -12,23 +12,39 @@ $font-family: 'Inter', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Arial'
 
 $monospace-font-family: 'Inconsolata', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Courier', monospace, 'Noto Color Emoji';
 
-// Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=557%3A0
-$system-light: #F4F6FA;
+// Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A120
+$accent: #0DBD8B;
+$alert: #FF5B55;
+$links: #0086e6;
+$primary-content: #17191C;
+$secondary-content: #737D8C;
+$tertiary-content: #8D97A5;
+$quaternary-content: #c1c6cd;
+$quinary-content: #E3E8F0;
+$system: #F4F6FA;
+$background: #ffffff;
+$panels: rgba($system, 0.9);
+$panel-selected: rgba($tertiary-content, 0.3);
+$panel-hover: rgba($tertiary-content, 0.1);
+$panel-actions: rgba($tertiary-content, 0.2);
+$space-nav: rgba($tertiary-content, 0.15);
+
+// TODO: Move userId colors here
 
 // unified palette
 // try to use these colors when possible
-$accent-color: #0DBD8B;
+$accent-color: $accent;
 $accent-bg-color: rgba(3, 179, 129, 0.16);
 $notice-primary-color: #ff4b55;
 $notice-primary-bg-color: rgba(255, 75, 85, 0.16);
 $primary-fg-color: #2e2f32;
-$secondary-fg-color: #737D8C;
+$secondary-fg-color: $secondary-content;
 $tertiary-fg-color: #8D99A5;
-$quaternary-fg-color: #C1C6CD;
+$quaternary-fg-color: $quaternary-content;
 $header-panel-bg-color: #f3f8fd;
 
 // typical text (dark-on-white in light skin)
-$primary-bg-color: #ffffff;
+$primary-bg-color: $background;
 $muted-fg-color: #61708b; // Commonly used in headings and relevant alt text
 
 // used for dialog box text
@@ -38,7 +54,7 @@ $light-fg-color: #747474;
 $focus-bg-color: #dddddd;
 
 // button UI (white-on-green in light skin)
-$accent-fg-color: #ffffff;
+$accent-fg-color: $background;
 $accent-color-50pct: rgba($accent-color, 0.5);
 $accent-color-darker: #92caad;
 $accent-color-alt: #238CF5;
@@ -82,7 +98,7 @@ $primary-hairline-color: transparent;
 
 // used for the border of input text fields
 $input-border-color: #e7e7e7;
-$input-darker-bg-color: #e3e8f0;
+$input-darker-bg-color: $quinary-content;
 $input-darker-fg-color: #9fa9ba;
 $input-lighter-bg-color: #f2f5f8;
 $input-lighter-fg-color: $input-darker-fg-color;
@@ -90,7 +106,7 @@ $input-focused-border-color: #238cf5;
 $input-valid-border-color: $accent-color;
 $input-invalid-border-color: $warning-color;
 
-$field-focused-label-bg-color: #ffffff;
+$field-focused-label-bg-color: $background;
 
 $button-bg-color: $accent-color;
 $button-fg-color: white;
@@ -112,8 +128,8 @@ $menu-bg-color: #fff;
 $menu-box-shadow-color: rgba(118, 131, 156, 0.6);
 $menu-selected-color: #f5f8fa;
 
-$avatar-initial-color: #ffffff;
-$avatar-bg-color: #ffffff;
+$avatar-initial-color: $background;
+$avatar-bg-color: $background;
 
 $h3-color: #3d3b39;
 
@@ -141,7 +157,7 @@ $blockquote-bar-color: #ddd;
 $blockquote-fg-color: #777;
 
 $settings-grey-fg-color: #a2a2a2;
-$settings-profile-placeholder-bg-color: $system-light;
+$settings-profile-placeholder-bg-color: $system;
 $settings-profile-overlay-placeholder-fg-color: #2e2f32;
 $settings-profile-button-bg-color: #e7e7e7;
 $settings-profile-button-fg-color: $settings-profile-overlay-placeholder-fg-color;
@@ -163,24 +179,23 @@ $roomheader-addroom-fg-color: #5c6470;
 $groupFilterPanel-button-color: #91A1C0;
 $groupheader-button-color: #91A1C0;
 $rightpanel-button-color: #91A1C0;
-$icon-button-color: #C1C6CD;
+$icon-button-color: $quaternary-content;
 $roomtopic-color: #9e9e9e;
 $eventtile-meta-color: $roomtopic-color;
 
 $composer-e2e-icon-color: #91A1C0;
 $header-divider-color: #91A1C0;
 
-$toast-bg-color: $system-light;
-$voipcall-plinth-color: $system-light;
+$voipcall-plinth-color: $system;
 
 // ********************
 
-$theme-button-bg-color: #e3e8f0;
-$dialpad-button-bg-color: #e3e8f0;
+$theme-button-bg-color: $quinary-content;
+$dialpad-button-bg-color: $quinary-content;
 
 
 $roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
-$roomlist-filter-active-bg-color: #ffffff;
+$roomlist-filter-active-bg-color: $background;
 $roomlist-bg-color: rgba(245, 245, 245, 0.90);
 $roomlist-header-color: $tertiary-fg-color;
 $roomsublist-divider-color: $primary-fg-color;
@@ -194,7 +209,7 @@ $roomtile-selected-bg-color: #FFF;
 
 $presence-online: $accent-color;
 $presence-away: #d9b072;
-$presence-offline: #E3E8F0;
+$presence-offline: $quinary-content;
 
 // ********************
 
@@ -257,7 +272,7 @@ $lightbox-border-color: #ffffff;
 
 // Tabbed views
 $tab-label-fg-color: #45474a;
-$tab-label-active-fg-color: #ffffff;
+$tab-label-active-fg-color: $background;
 $tab-label-bg-color: transparent;
 $tab-label-active-bg-color: $accent-color;
 $tab-label-icon-bg-color: #454545;
@@ -267,9 +282,9 @@ $tab-label-active-icon-bg-color: $tab-label-active-fg-color;
 $button-primary-fg-color: #ffffff;
 $button-primary-bg-color: $accent-color;
 $button-secondary-bg-color: $accent-fg-color;
-$button-danger-fg-color: #ffffff;
+$button-danger-fg-color: $background;
 $button-danger-bg-color: $notice-primary-color;
-$button-danger-disabled-fg-color: #ffffff;
+$button-danger-disabled-fg-color: $background;
 $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
 $button-link-fg-color: $accent-color;
 $button-link-bg-color: transparent;
@@ -294,7 +309,7 @@ $memberstatus-placeholder-color: $muted-fg-color;
 
 $authpage-bg-color: #2e3649;
 $authpage-modal-bg-color: rgba(245, 245, 245, 0.90);
-$authpage-body-bg-color: #ffffff;
+$authpage-body-bg-color: $background;
 $authpage-focus-bg-color: #dddddd;
 $authpage-lang-color: #4e5054;
 $authpage-primary-color: #232f32;
@@ -318,26 +333,26 @@ $kbd-border-color: $reaction-row-button-border-color;
 
 $inverted-bg-color: #27303a;
 $tooltip-timeline-bg-color: $inverted-bg-color;
-$tooltip-timeline-fg-color: #ffffff;
+$tooltip-timeline-fg-color: $background;
 
 $interactive-tooltip-bg-color: #27303a;
-$interactive-tooltip-fg-color: #ffffff;
+$interactive-tooltip-fg-color: $background;
 
 $breadcrumb-placeholder-bg-color: #e8eef5;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
 
 $message-body-panel-fg-color: $secondary-fg-color;
-$message-body-panel-bg-color: #E3E8F0; // "Separator"
+$message-body-panel-bg-color: $quinary-content;
 $message-body-panel-icon-fg-color: $secondary-fg-color;
-$message-body-panel-icon-bg-color: $system-light;
+$message-body-panel-icon-bg-color: $system;
 
 // These two don't change between themes. They are the $warning-color, but we don't
 // want custom themes to affect them by accident.
 $voice-record-stop-symbol-color: #ff4b55;
 $voice-record-live-circle-color: #ff4b55;
 
-$voice-record-stop-border-color: #E3E8F0; // "Separator"
+$voice-record-stop-border-color: $quinary-content;
 $voice-record-waveform-incomplete-fg-color: $quaternary-fg-color;
 $voice-record-icon-color: $tertiary-fg-color;
 $voice-playback-button-bg-color: $message-body-panel-icon-bg-color;
@@ -354,10 +369,10 @@ $composer-shadow-color: rgba(0, 0, 0, 0.04);
 
 // Bubble tiles
 $eventbubble-self-bg: #F0FBF8;
-$eventbubble-others-bg: $system-light;
+$eventbubble-others-bg: $system;
 $eventbubble-bg-hover: #FAFBFD;
 $eventbubble-avatar-outline: $primary-bg-color;
-$eventbubble-reply-color: #C1C6CD;
+$eventbubble-reply-color: $quaternary-content;
 
 // ***** Mixins! *****
 
