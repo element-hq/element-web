@@ -2078,7 +2078,7 @@
     "Verify all your sessions to ensure your account & messages are safe": "Ověřte všechny své relace, abyste zaručili, že jsou vaše zprávy a účet bezpečné",
     "Verify the new login accessing your account: %(name)s": "Ověřte nové přihlášení na váš účet: %(name)s",
     "Room name or address": "Jméno nebo adresa místnosti",
-    "Joins room with given address": "Přidat se do místnosti s danou adresou",
+    "Joins room with given address": "Vstoupit do místnosti s danou adresou",
     "Unrecognised room address:": "Nerozpoznaná adresa místnosti:",
     "Font size": "Velikost písma",
     "IRC display name width": "šířka zobrazovného IRC jména",
