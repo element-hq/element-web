@@ -27,7 +27,7 @@ import classNames from 'classnames';
 import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
 import { formatCallTime } from "../../../DateUtils";
 
-const MAX_NON_NARROW_WIDTH = 400 / 70 * 100;
+const MAX_NON_NARROW_WIDTH = 450 / 70 * 100;
 
 interface IProps {
     mxEvent: MatrixEvent;
