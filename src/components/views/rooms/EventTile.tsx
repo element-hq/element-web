@@ -443,16 +443,18 @@ export default class EventTile extends React.Component<IProps, IState> {
     componentDidMount() {
         this.suppressReadReceiptAnimation = false;
         const client = this.context;
-        client.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
-        client.on("userTrustStatusChanged", this.onUserVerificationChanged);
-        this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
-        if (this.props.showReactions) {
-            this.props.mxEvent.on("Event.relationsCreated", this.onReactionsCreated);
-        }
+        if (!this.props.forExport) {
+            client.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
+            client.on("userTrustStatusChanged", this.onUserVerificationChanged);
+            this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
+            if (this.props.showReactions) {
+                this.props.mxEvent.on("Event.relationsCreated", this.onReactionsCreated);
+            }
 
-        if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
-            client.on("Room.receipt", this.onRoomReceipt);
-            this.isListeningForReceipts = true;
+            if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
+                client.on("Room.receipt", this.onRoomReceipt);
+                this.isListeningForReceipts = true;
+            }
         }
     }
 

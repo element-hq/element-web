@@ -121,7 +121,7 @@ const getExportCSS = async (): Promise<string> => {
   }
 
   .mx_ReplyThread_Export {
-    margin-top: -5px;
+    margin-top: 0px;
     margin-bottom: 5px;
   }
 

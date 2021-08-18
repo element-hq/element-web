@@ -15,17 +15,18 @@ limitations under the License.
 */
 
 import React from "react";
+import ReactDOM from "react-dom";
 import Exporter from "./Exporter";
 import { mediaFromMxc } from "../../customisations/Media";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { renderToStaticMarkup } from "react-dom/server";
+import { renderToStaticMarkup, renderToString } from "react-dom/server";
 import { Layout } from "../../settings/Layout";
 import { shouldFormContinuation } from "../../components/structures/MessagePanel";
 import { formatFullDateNoDayNoTime, wantsDateSeparator } from "../../DateUtils";
 import { RoomPermalinkCreator } from "../permalinks/Permalinks";
 import { _t } from "../../languageHandler";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import * as Avatar from "../../Avatar";
 import EventTile, { haveTileForEvent } from "../../components/views/rooms/EventTile";
 import DateSeparator from "../../components/views/messages/DateSeparator";
@@ -115,7 +116,7 @@ export default class HTMLExporter extends Exporter {
                                 { exporterName ? (
                                     <>
                                         <b>{ exporterName }</b>
-                                        { exporter }
+                                        { " (" + exporter + ")" }
                                     </>
                                 ) : (
                                     <b>{ exporter }</b>
@@ -263,6 +264,7 @@ export default class HTMLExporter extends Exporter {
                     replacingEventId={mxEv.replacingEventId()}
                     forExport={true}
                     readReceipts={null}
+                    alwaysShowTimestamps={true}
                     readReceiptMap={null}
                     showUrlPreview={false}
                     checkUnmounting={() => false}
@@ -285,10 +287,26 @@ export default class HTMLExporter extends Exporter {
     protected async getEventTileMarkup(mxEv: MatrixEvent, continuation: boolean, filePath?: string) {
         const hasAvatar = !!this.getAvatarURL(mxEv);
         if (hasAvatar) await this.saveAvatarIfNeeded(mxEv);
+        const EventTile = this.getEventTile(mxEv, continuation);
+        let eventTileMarkup: string;
 
-        const eventTile = this.getEventTile(mxEv, continuation);
+        if (
+            mxEv.getContent().msgtype == MsgType.Emote ||
+            mxEv.getContent().msgtype == MsgType.Notice ||
+            mxEv.getContent().msgtype === MsgType.Text
+        ) {
+            // to linkify textual events, we'll need lifecycle methods which won't be invoked in renderToString
+            // So, we'll have to render the component into a temporary root element
+            const tempRoot = document.createElement('div');
+            ReactDOM.render(
+                EventTile,
+                tempRoot,
+            );
+            eventTileMarkup = tempRoot.innerHTML;
+        } else {
+            eventTileMarkup = renderToString(EventTile);
+        }
 
-        let eventTileMarkup = renderToStaticMarkup(eventTile);
         if (filePath) {
             const mxc = mxEv.getContent().url || mxEv.getContent().file?.url;
             eventTileMarkup = eventTileMarkup.split(mxc).join(filePath);
@@ -390,8 +408,7 @@ export default class HTMLExporter extends Exporter {
     }
 
     public async export() {
-        this.updateProgress("Starting export process", true, false);
-        this.updateProgress("Fetching events");
+        this.updateProgress("Starting export...");
 
         const fetchStart = performance.now();
         const res = await this.getRequiredEvents();
