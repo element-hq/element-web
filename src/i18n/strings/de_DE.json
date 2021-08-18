@@ -3577,5 +3577,8 @@
     "Delete avatar": "Avatar löschen",
     "%(sharerName)s is presenting": "%(sharerName)s präsentiert",
     "You are presenting": "Du präsentierst",
-    "All rooms you're in will appear in Home.": "Alle Räume werden auf der Startseite angezeigt."
+    "All rooms you're in will appear in Home.": "Alle Räume werden auf der Startseite angezeigt.",
+    "Only people invited will be able to find and join this room.": "Nur eingeladene Personen können den Raum finden und betreten.",
+    "Anyone will be able to find and join this room.": "Alle können diesen Raum finden und betreten.",
+    "Anyone will be able to find and join this room, not just members of <SpaceName/>.": "Alle, nicht nur Mitglieder von <SpaceName/>, können beitreten."
 }
