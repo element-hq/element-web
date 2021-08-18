@@ -3228,7 +3228,7 @@
     "You have unverified logins": "Du hast nicht-bestätigte Anmeldungen",
     "Review to ensure your account is safe": "Überprüfen, um sicher zu sein, dass dein Konto sicher ist",
     "Message search initilisation failed": "Initialisierung der Nachrichtensuche fehlgeschlagen",
-    "Support": "Unterstützen",
+    "Support": "Support",
     "This room is suggested as a good one to join": "Dieser Raum wurde als gut zum Beitreten vorgeschlagen",
     "Your message wasn't sent because this homeserver has been blocked by it's administrator. Please <a>contact your service administrator</a> to continue using the service.": "Deine Nachricht wurde nicht versendet, weil dieser Heimserver von dessen Administrator gesperrt wurde. Bitte <a>kontaktiere deinen Dienstadministrator</a> um den Dienst weiterzunutzen.",
     "Verification requested": "Verifizierung angefragt",
@@ -3580,5 +3580,11 @@
     "All rooms you're in will appear in Home.": "Alle Räume werden auf der Startseite angezeigt.",
     "Only people invited will be able to find and join this room.": "Nur eingeladene Personen können den Raum finden und betreten.",
     "Anyone will be able to find and join this room.": "Alle können diesen Raum finden und betreten.",
-    "Anyone will be able to find and join this room, not just members of <SpaceName/>.": "Alle, nicht nur Mitglieder von <SpaceName/>, können beitreten."
+    "Anyone will be able to find and join this room, not just members of <SpaceName/>.": "Alle, nicht nur Mitglieder von <SpaceName/>, können beitreten.",
+    "This community has been upgraded into a Space": "Diese Community hat ein Upgrade erhalten und ist jetzt ein Space",
+    "Visible to space members": "Für Space-Mitglieder sichtbar",
+    "Public room": "Öffentlicher Raum",
+    "Private room (invite only)": "Privater Raum (Einladung erforderlich)",
+    "Room visibility": "Raumsichtbarkeit",
+    "Create a room": "Raum erstellen"
 }
