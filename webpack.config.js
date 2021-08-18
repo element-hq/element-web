@@ -558,8 +558,6 @@ module.exports = (env, argv) => {
             // Only output errors, warnings, or new compilations.
             // This hides the massive list of modules.
             stats: 'minimal',
-            // hot: false,
-            // injectHot: false,
             hotOnly: true,
             inline: true,
         },
