@@ -3586,5 +3586,6 @@
     "Public room": "Öffentlicher Raum",
     "Private room (invite only)": "Privater Raum (Einladung erforderlich)",
     "Room visibility": "Raumsichtbarkeit",
-    "Create a room": "Raum erstellen"
+    "Create a room": "Raum erstellen",
+    "To view Spaces, hide communities in <a>Preferences</a>": "Um Spaces zu sehen, <a>verstecke Communities in den Einstellungen</a>"
 }
