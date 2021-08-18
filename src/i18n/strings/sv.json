@@ -3494,5 +3494,16 @@
     "Set addresses for this space so users can find this space through your homeserver (%(localDomain)s)": "Sätt adresser för det här utrymmet så att användare kan hitta det genom din hemserver (%(localDomain)s)",
     "To publish an address, it needs to be set as a local address first.": "För att publicera en adress så måste den vara satt som en lokal adress först.",
     "Published addresses can be used by anyone on any server to join your room.": "Publicerade adresser kan användas av vem som helst på vilken server som helst för att gå med i ditt rum.",
-    "Published addresses can be used by anyone on any server to join your space.": "Publicerade adresser kan användas av vem som helst på vilken server som helst för att gå med i ditt utrymme."
+    "Published addresses can be used by anyone on any server to join your space.": "Publicerade adresser kan användas av vem som helst på vilken server som helst för att gå med i ditt utrymme.",
+    "Please provide an address": "Ange en adress, tack",
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(oneUser)sändrade de <a>fästa meddelandena</a> för rummet %(count)s gånger.",
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(severalUsers)sändrade de <a>fästa meddelandena</a> för rummet %(count)s gånger.",
+    "%(oneUser)schanged the server ACLs %(count)s times|one": "%(oneUser)sändrade server-ACL:erna",
+    "%(oneUser)schanged the server ACLs %(count)s times|other": "%(oneUser)sändrade server-ACL:erna %(count)s gånger",
+    "%(severalUsers)schanged the server ACLs %(count)s times|one": "%(severalUsers)sändrade server-ACL:erna",
+    "%(severalUsers)schanged the server ACLs %(count)s times|other": "%(severalUsers)sändrade server-ACL:erna %(count)s gånger",
+    "Share content": "Dela innehåll",
+    "Application window": "Programfönster",
+    "Share entire screen": "Dela hela skärmen",
+    "Message search initialisation failed, check <a>your settings</a> for more information": "Initialisering av meddelandesök misslyckades, kolla <a>dina inställningar</a> för mer information"
 }
