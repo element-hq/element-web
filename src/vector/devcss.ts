@@ -23,7 +23,7 @@ limitations under the License.
  *
  * Without this workaround, webpack would import the CSS of all themes, which
  * would defeat the purpose of hot-reloading since all themes would be compiled,
- * which would result in compilation times on the order of 30s, even in a
+ * which would result in compilation times on the order of 30s, even on a
  * powerful machine.
  *
  * For more details, see webpack.config.js:184 (string-replace-loader)
