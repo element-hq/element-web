@@ -20,7 +20,7 @@ import Exporter from "./Exporter";
 import { mediaFromMxc } from "../../customisations/Media";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { renderToStaticMarkup, renderToString } from "react-dom/server";
+import { renderToStaticMarkup } from "react-dom/server";
 import { Layout } from "../../settings/Layout";
 import { shouldFormContinuation } from "../../components/structures/MessagePanel";
 import { formatFullDateNoDayNoTime, wantsDateSeparator } from "../../DateUtils";
@@ -304,7 +304,7 @@ export default class HTMLExporter extends Exporter {
             );
             eventTileMarkup = tempRoot.innerHTML;
         } else {
-            eventTileMarkup = renderToString(EventTile);
+            eventTileMarkup = renderToStaticMarkup(EventTile);
         }
 
         if (filePath) {
