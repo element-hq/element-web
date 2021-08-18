@@ -25,8 +25,8 @@ const cssThemes = {
 };
 
 function getActiveThemes() {
-    // We want to use `light` theme by default if it's not defined.
-    const theme = process.env.MATRIX_THEMES ?? 'dark';
+    // Default to `light` theme when the MATRIX_THEMES environment variable is not defined.
+    const theme = process.env.MATRIX_THEMES ?? 'light';
     const themes = theme.split(',').filter(x => x).map(x => x.trim()).filter(x => x);
     return themes;
 }
@@ -558,8 +558,6 @@ module.exports = (env, argv) => {
             // Only output errors, warnings, or new compilations.
             // This hides the massive list of modules.
             stats: 'minimal',
-            // hot: false,
-            // injectHot: false,
             hotOnly: true,
             inline: true,
         },

@@ -267,9 +267,9 @@ internet.  So please don't depend on resources (JS libs, CSS, images, fonts)
 hosted by external CDNs or servers but instead please package all dependencies
 into Element itself.
 
-CSS hot-reload is currently an opt-in development feature, and if you want to have
-it working properly on your environment, create a `.env` file in this repository
-with proper environmental, see `.env.example` for documentation and example.
+CSS hot-reload is available as an opt-in development feature. You can enable it
+by defining a `CSS_HOT_RELOAD` environment variable, in a `.env` file in the root
+of the repository. See `.env.example` for documentation and an example.
 
 Setting up a dev environment
 ============================
