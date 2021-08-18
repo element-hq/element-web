@@ -21,7 +21,52 @@ import { MatrixClientPeg } from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
 import { MatrixClient } from "matrix-js-sdk";
 
-async function getStorageOptions(): Promise<Record<string, string>> {
+/* eslint-disable camelcase */
+
+type StorageContext = {
+    storageManager_persisted?: string;
+    storageManager_quota?: string;
+    storageManager_usage?: string;
+    storageManager_usageDetails?: string;
+};
+
+type UserContext = {
+    username: string;
+    enabled_labs: string;
+    low_bandwidth: string;
+};
+
+type CryptoContext = {
+    device_keys?: string;
+    cross_signing_ready?: string;
+    cross_signing_supported_by_hs?: string;
+    cross_signing_key?: string;
+    cross_signing_privkey_in_secret_storage?: string;
+    cross_signing_master_privkey_cached?: string;
+    cross_signing_user_signing_privkey_cached?: string;
+    secret_storage_ready?: string;
+    secret_storage_key_in_account?: string;
+    session_backup_key_in_secret_storage?: string;
+    session_backup_key_cached?: string;
+    session_backup_key_well_formed?: string;
+};
+
+type DeviceContext = {
+    device_id: string;
+    mx_local_settings: string;
+    modernizr_missing_features?: string;
+};
+
+type Contexts = {
+    user: UserContext;
+    crypto: CryptoContext;
+    device: DeviceContext;
+    storage: StorageContext;
+};
+
+/* eslint-enable camelcase */
+
+async function getStorageContext(): Promise<StorageContext> {
     const result = {};
 
     // add storage persistence/quota information
@@ -40,9 +85,11 @@ async function getStorageOptions(): Promise<Record<string, string>> {
             result["storageManager_quota"] = String(estimate.quota);
             result["storageManager_usage"] = String(estimate.usage);
             if (estimate.usageDetails) {
+                const usageDetails = [];
                 Object.keys(estimate.usageDetails).forEach(k => {
-                    result[`storageManager_usage_${k}`] = String(estimate.usageDetails[k]);
+                    usageDetails.push(`${k}: ${String(estimate.usageDetails[k])}`);
                 });
+                result[`storageManager_usage`] = usageDetails.join(", ");
             }
         } catch (e) {}
     }
@@ -50,7 +97,7 @@ async function getStorageOptions(): Promise<Record<string, string>> {
     return result;
 }
 
-function getUserContext(client: MatrixClient): Record<string, string> {
+function getUserContext(client: MatrixClient): UserContext {
     return {
         "username": client.credentials.userId,
         "enabled_labs": getEnabledLabs(),
@@ -63,9 +110,10 @@ function getEnabledLabs(): string {
     if (enabledLabs.length) {
         return enabledLabs.join(", ");
     }
+    return "";
 }
 
-async function getCryptoContext(client: MatrixClient): Promise<Record<string, string>> {
+async function getCryptoContext(client: MatrixClient): Promise<CryptoContext> {
     if (!client.isCryptoEnabled()) {
         return {};
     }
@@ -98,7 +146,7 @@ async function getCryptoContext(client: MatrixClient): Promise<Record<string, st
     };
 }
 
-function getDeviceContext(client: MatrixClient): Record<string, string> {
+function getDeviceContext(client: MatrixClient): DeviceContext {
     const result = {
         "device_id": client?.deviceId,
         "mx_local_settings": localStorage.getItem('mx_local_settings'),
@@ -114,13 +162,13 @@ function getDeviceContext(client: MatrixClient): Record<string, string> {
     return result;
 }
 
-async function getContexts(): Promise<Record<string, any>> {
+async function getContexts(): Promise<Contexts> {
     const client = MatrixClientPeg.get();
     return {
         "user": getUserContext(client),
         "crypto": await getCryptoContext(client),
         "device": getDeviceContext(client),
-        "storage": await getStorageOptions(),
+        "storage": await getStorageContext(),
     };
 }
 
