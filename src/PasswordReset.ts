@@ -37,7 +37,7 @@ export default class PasswordReset {
      * @param {string} homeserverUrl The URL to the HS which has the account to reset.
      * @param {string} identityUrl The URL to the IS which has linked the email -> mxid mapping.
      */
-    constructor(homeserverUrl, identityUrl) {
+    constructor(homeserverUrl: string, identityUrl: string) {
         this.client = createClient({
             baseUrl: homeserverUrl,
             idBaseUrl: identityUrl,
