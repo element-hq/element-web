@@ -856,13 +856,14 @@ export default class EventTile extends React.Component<IProps, IState> {
 
     render() {
         const msgtype = this.props.mxEvent.getContent().msgtype;
+        const eventType = this.props.mxEvent.getType() as EventType;
         const { tileHandler, isBubbleMessage, isInfoMessage } = getEventDisplayInfo(this.props.mxEvent);
 
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
         if (!tileHandler) {
             const { mxEvent } = this.props;
-            console.warn(`Event type not supported: type:${mxEvent.getType()} isState:${mxEvent.isState()}`);
+            console.warn(`Event type not supported: type:${eventType} isState:${mxEvent.isState()}`);
             return <div className="mx_EventTile mx_EventTile_info mx_MNoticeBody">
                 <div className="mx_EventTile_line">
                     { _t('This event could not be displayed') }
@@ -886,7 +887,10 @@ export default class EventTile extends React.Component<IProps, IState> {
             mx_EventTile_sending: !isEditing && isSending,
             mx_EventTile_highlight: this.props.tileShape === TileShape.Notif ? false : this.shouldHighlight(),
             mx_EventTile_selected: this.props.isSelectedEvent,
-            mx_EventTile_continuation: this.props.tileShape ? '' : this.props.continuation,
+            mx_EventTile_continuation: (
+                (this.props.tileShape ? '' : this.props.continuation) ||
+                eventType === EventType.CallInvite
+            ),
             mx_EventTile_last: this.props.last,
             mx_EventTile_lastInSection: this.props.lastInSection,
             mx_EventTile_contextual: this.props.contextual,
@@ -934,7 +938,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             needsSenderProfile = true;
         } else if (
             (this.props.continuation && this.props.tileShape !== TileShape.FileGrid) ||
-            this.props.mxEvent.getType() === EventType.CallInvite
+            eventType === EventType.CallInvite
         ) {
             // no avatar or sender profile for continuation messages and call tiles
             avatarSize = 0;
