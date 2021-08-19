@@ -8,6 +8,7 @@ jobs:
   Move_high_priority_issues_to_team_workboard:
     runs-on: ubuntu-latest
     if: >
+        contains(github.event.issue.labels.*.name, 'T-Defect') &&
         contains(github.event.issue.labels.*.name, 'S-Critical') &&
         (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
          contains(github.event.issue.labels.*.name, 'O-Intermediate')) ||
