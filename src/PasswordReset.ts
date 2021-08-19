@@ -53,7 +53,7 @@ export default class PasswordReset {
      * @param {string} newPassword The new password for the account.
      * @return {Promise} Resolves when the email has been sent. Then call checkEmailLinkClicked().
      */
-    public resetPassword(emailAddress, newPassword): Promise<IRequestTokenResponse> {
+    public resetPassword(emailAddress: string, newPassword: string): Promise<IRequestTokenResponse> {
         this.password = newPassword;
         return this.client.requestPasswordEmailToken(emailAddress, this.clientSecret, 1).then((res) => {
             this.sessionId = res.sid;
