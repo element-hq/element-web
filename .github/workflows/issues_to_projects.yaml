@@ -2,27 +2,20 @@ on:
     issues:
         types: [labeled]
 jobs:
-    move_all_issues:
-        name: Move all X-Needs-Design issues to Design project board
+    move_priority_design_issues:
+        name: Move priority X-Needs-Design issues to Design project board
         runs-on: ubuntu-latest
+        if: >
+            contains(github.event.issue.labels.*.name, 'X-Needs-Design') &&
+             (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
+              contains(github.event.issue.labels.*.name, 'O-Intermediate')) &&
+             (contains(github.event.issue.labels.*.name, 'S-Critical') ||
+              contains(github.event.issue.labels.*.name, 'S-Major') ||
+              contains(github.event.issue.labels.*.name, 'S-Minor'))
         steps:
              - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
                with:
                  action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
                  project-url: "https://github.com/orgs/vector-im/projects/14"
                  column-name: "📥 Inbox"
-                 label-name: "X-Needs-Design"
-    move_priority_issues:
-        name: Move all priority X-Needs-Design issues to Design project board
-        runs-on: ubuntu-latest
-        if: >
-            contains(github.event.issue.labels.*.name, 'X-Needs-Design') &&
-            (contains(github.event.issue.labels.*.name, 'S-Critical') ||  contains(github.event.issue.labels.*.name, 'S-Major')) &&
-            contains(github.event.issue.labels.*.name, 'P-High')
-        steps:
-             - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
-               with:
-                 action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
-                 project-url: "https://github.com/orgs/vector-im/projects/14"
-                 column-name: "Most urgent"
                  label-name: "X-Needs-Design"
