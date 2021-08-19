@@ -75,7 +75,7 @@ export default class PasswordReset {
      * with a "message" property which contains a human-readable message detailing why
      * the reset failed, e.g. "There is no mapped matrix user ID for the given email address".
      */
-    public async checkEmailLinkClicked() {
+    public async checkEmailLinkClicked(): Promise<void> {
         const creds = {
             sid: this.sessionId,
             client_secret: this.clientSecret,
