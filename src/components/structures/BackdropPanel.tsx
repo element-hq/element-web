@@ -140,12 +140,13 @@ export default class BackdropPanel extends React.PureComponent<IProps, IState> {
     public render() {
         if (!this.props.backgroundImage) return null;
         return <div className="mx_BackdropPanel">
-            <img
+            { this.state?.llpImage !== 'data:,' && <img
                 className="mx_BackdropPanel--canvas"
-                src={this.state.llpImage} />
-            <img
+                src={this.state.llpImage} /> }
+
+            { this.state?.lpImage !== 'data:,' && <img
                 className="mx_BackdropPanel--canvas"
-                src={this.state.lpImage} />
+                src={this.state.lpImage} /> }
             <canvas
                 ref={this.leftLeftPanelRef}
                 className="mx_BackdropPanel--canvas"
