@@ -74,9 +74,9 @@ limitations under the License.
     > .mx_VideoFeed {
         width: 100%;
         height: 100%;
+        border-width: 0 !important; // Override mx_VideoFeed_speaking
 
         &.mx_VideoFeed_voice {
-            background-color: $inverted-bg-color;
             display: flex;
             justify-content: center;
             align-items: center;
