@@ -58,12 +58,16 @@ import { replaceableComponent } from "../../utils/replaceableComponent";
 import CallHandler from '../../CallHandler';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import AudioFeedArrayForCall from '../views/voip/AudioFeedArrayForCall';
+import { OwnProfileStore } from '../../stores/OwnProfileStore';
+import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import RoomView from './RoomView';
 import ToastContainer from './ToastContainer';
 import MyGroups from "./MyGroups";
 import UserView from "./UserView";
 import GroupView from "./GroupView";
+import BackdropPanel from "./BackdropPanel";
 import SpaceStore from "../../stores/SpaceStore";
+import classNames from 'classnames';
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -127,6 +131,7 @@ interface IState {
     usageLimitEventTs?: number;
     useCompactLayout: boolean;
     activeCalls: Array<MatrixCall>;
+    backgroundImage?: CanvasImageSource;
 }
 
 /**
@@ -193,7 +198,10 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         this.resizer = this.createResizer();
         this.resizer.attach();
+
+        OwnProfileStore.instance.on(UPDATE_EVENT, this.refreshBackgroundImage);
         this.loadResizerPreferences();
+        this.refreshBackgroundImage();
     }
 
     componentWillUnmount() {
@@ -202,9 +210,16 @@ class LoggedInView extends React.Component<IProps, IState> {
         this._matrixClient.removeListener("accountData", this.onAccountData);
         this._matrixClient.removeListener("sync", this.onSync);
         this._matrixClient.removeListener("RoomState.events", this.onRoomStateEvents);
+        OwnProfileStore.instance.off(UPDATE_EVENT, this.refreshBackgroundImage);
         SettingsStore.unwatchSetting(this.compactLayoutWatcherRef);
         this.resizer.detach();
     }
+
+    private refreshBackgroundImage = async (): Promise<void> => {
+        this.setState({
+            backgroundImage: await OwnProfileStore.instance.getAvatarBitmap(),
+        });
+    };
 
     private onAction = (payload): void => {
         switch (payload.action) {
@@ -608,10 +623,11 @@ class LoggedInView extends React.Component<IProps, IState> {
                 break;
         }
 
-        let bodyClasses = 'mx_MatrixChat';
-        if (this.state.useCompactLayout) {
-            bodyClasses += ' mx_MatrixChat_useCompactLayout';
-        }
+        const bodyClasses = classNames({
+            'mx_MatrixChat': true,
+            'mx_MatrixChat_useCompactLayout': this.state.useCompactLayout,
+            'mx_MatrixChat--with-avatar': this.state.backgroundImage,
+        });
 
         const audioFeedArraysForCalls = this.state.activeCalls.map((call) => {
             return (
@@ -629,14 +645,17 @@ class LoggedInView extends React.Component<IProps, IState> {
                 >
                     <ToastContainer />
                     <div ref={this._resizeContainer} className={bodyClasses}>
+                        <BackdropPanel
+                            backgroundImage={this.state.backgroundImage}
+                        />
                         { SpaceStore.spacesEnabled ? <SpacePanel /> : null }
                         <LeftPanel
                             isMinimized={this.props.collapseLhs || false}
                             resizeNotifier={this.props.resizeNotifier}
                         />
                         <ResizeHandle />
-                        { pageElement }
                     </div>
+                    { pageElement }
                 </div>
                 <CallContainer />
                 <NonUrgentToastContainer />

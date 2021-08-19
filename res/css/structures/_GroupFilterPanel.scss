@@ -14,10 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_MatrixChat--with-avatar {
+    .mx_GroupFilterPanel {
+        background-color: transparent;
+    }
+}
+
 .mx_GroupFilterPanel {
-    flex: 1;
     background-color: $groupFilterPanel-bg-color;
+    flex: 1;
     cursor: pointer;
+    position: relative;
 
     display: flex;
     flex-direction: column;

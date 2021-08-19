@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import type { EventSubscription } from "fbemitter";
 import React from 'react';
 import GroupFilterOrderStore from '../../stores/GroupFilterOrderStore';
 
@@ -30,22 +31,43 @@ import AutoHideScrollbar from "./AutoHideScrollbar";
 import SettingsStore from "../../settings/SettingsStore";
 import UserTagTile from "../views/elements/UserTagTile";
 import { replaceableComponent } from "../../utils/replaceableComponent";
+import UIStore from "../../stores/UIStore";
+
+interface IGroupFilterPanelProps {
+
+}
+
+// FIXME: Properly type this after migrating GroupFilterOrderStore.js to Typescript
+type OrderedTagsTemporaryType = Array<{}>;
+// FIXME: Properly type this after migrating GroupFilterOrderStore.js to Typescript
+type SelectedTagsTemporaryType = Array<{}>;
+
+interface IGroupFilterPanelState {
+    // FIXME: Properly type this after migrating GroupFilterOrderStore.js to Typescript
+    orderedTags: OrderedTagsTemporaryType;
+    // FIXME: Properly type this after migrating GroupFilterOrderStore.js to Typescript
+    selectedTags: SelectedTagsTemporaryType;
+}
 
 @replaceableComponent("structures.GroupFilterPanel")
-class GroupFilterPanel extends React.Component {
-    static contextType = MatrixClientContext;
+class GroupFilterPanel extends React.Component<IGroupFilterPanelProps, IGroupFilterPanelState> {
+    public static contextType = MatrixClientContext;
 
-    state = {
+    public state = {
         orderedTags: [],
         selectedTags: [],
     };
 
-    componentDidMount() {
-        this.unmounted = false;
-        this.context.on("Group.myMembership", this._onGroupMyMembership);
-        this.context.on("sync", this._onClientSync);
+    private ref = React.createRef<HTMLDivElement>();
+    private unmounted = false;
+    private groupFilterOrderStoreToken?: EventSubscription;
 
-        this._groupFilterOrderStoreToken = GroupFilterOrderStore.addListener(() => {
+    public componentDidMount() {
+        this.unmounted = false;
+        this.context.on("Group.myMembership", this.onGroupMyMembership);
+        this.context.on("sync", this.onClientSync);
+
+        this.groupFilterOrderStoreToken = GroupFilterOrderStore.addListener(() => {
             if (this.unmounted) {
                 return;
             }
@@ -56,23 +78,25 @@ class GroupFilterPanel extends React.Component {
         });
         // This could be done by anything with a matrix client
         dis.dispatch(GroupActions.fetchJoinedGroups(this.context));
+        UIStore.instance.trackElementDimensions("GroupPanel", this.ref.current);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.unmounted = true;
-        this.context.removeListener("Group.myMembership", this._onGroupMyMembership);
-        this.context.removeListener("sync", this._onClientSync);
-        if (this._groupFilterOrderStoreToken) {
-            this._groupFilterOrderStoreToken.remove();
+        this.context.removeListener("Group.myMembership", this.onGroupMyMembership);
+        this.context.removeListener("sync", this.onClientSync);
+        if (this.groupFilterOrderStoreToken) {
+            this.groupFilterOrderStoreToken.remove();
         }
+        UIStore.instance.stopTrackingElementDimensions("GroupPanel");
     }
 
-    _onGroupMyMembership = () => {
+    private onGroupMyMembership = () => {
         if (this.unmounted) return;
         dis.dispatch(GroupActions.fetchJoinedGroups(this.context));
     };
 
-    _onClientSync = (syncState, prevState) => {
+    private onClientSync = (syncState, prevState) => {
         // Consider the client reconnected if there is no error with syncing.
         // This means the state could be RECONNECTING, SYNCING, PREPARED or CATCHUP.
         const reconnected = syncState !== "ERROR" && prevState !== syncState;
@@ -82,18 +106,18 @@ class GroupFilterPanel extends React.Component {
         }
     };
 
-    onClick = e => {
+    private onClick = e => {
         // only dispatch if its not a no-op
         if (this.state.selectedTags.length > 0) {
             dis.dispatch({ action: 'deselect_tags' });
         }
     };
 
-    onClearFilterClick = ev => {
+    private onClearFilterClick = ev => {
         dis.dispatch({ action: 'deselect_tags' });
     };
 
-    renderGlobalIcon() {
+    private renderGlobalIcon() {
         if (!SettingsStore.getValue("feature_communities_v2_prototypes")) return null;
 
         return (
@@ -104,7 +128,7 @@ class GroupFilterPanel extends React.Component {
         );
     }
 
-    render() {
+    public render() {
         const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
         const ActionButton = sdk.getComponent('elements.ActionButton');
 
@@ -147,7 +171,7 @@ class GroupFilterPanel extends React.Component {
             );
         }
 
-        return <div className={classes} onClick={this.onClearFilterClick}>
+        return <div className={classes} onClick={this.onClearFilterClick} ref={this.ref}>
             <AutoHideScrollbar
                 className="mx_GroupFilterPanel_scroller"
                 onClick={this.onClick}
