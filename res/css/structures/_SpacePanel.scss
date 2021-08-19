@@ -22,11 +22,18 @@ $activeBorderTransparentGap: 1px;
 $activeBackgroundColor: $roomtile-selected-bg-color;
 $activeBorderColor: $secondary-fg-color;
 
+.mx_MatrixChat--with-avatar {
+    .mx_SpacePanel {
+        background-color: transparent;
+    }
+}
+
 .mx_SpacePanel {
-    flex: 0 0 auto;
     background-color: $groupFilterPanel-bg-color;
+    flex: 0 0 auto;
     padding: 0;
     margin: 0;
+    position: relative;
 
     // Create another flexbox so the Panel fills the container
     display: flex;
