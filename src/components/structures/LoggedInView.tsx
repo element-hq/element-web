@@ -221,11 +221,6 @@ class LoggedInView extends React.Component<IProps, IState> {
         });
     };
 
-    private onCallsChanged = () => {
-        this.setState({
-            activeCalls: CallHandler.sharedInstance().getAllActiveCalls(),
-        });
-
     private onAction = (payload): void => {
         switch (payload.action) {
             case 'call_state': {
