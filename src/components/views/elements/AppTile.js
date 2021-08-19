@@ -308,7 +308,6 @@ export default class AppTile extends React.Component {
                 if (this.iframe) {
                     // Reload iframe
                     this.iframe.src = this._sgWidget.embedUrl;
-                    this.setState({});
                 }
             });
         }
