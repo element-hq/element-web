@@ -24,8 +24,6 @@ import MemberAvatar from "../avatars/MemberAvatar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { SDPStreamMetadataPurpose } from 'matrix-js-sdk/src/webrtc/callEventTypes';
 
-const SPEAKING_THRESHOLD = -60;
-
 interface IProps {
     call: MatrixCall;
 
@@ -108,7 +106,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
             this.props.feed.removeListener(CallFeedEvent.NewStream, this.onNewStream);
             this.props.feed.removeListener(CallFeedEvent.MuteStateChanged, this.onMuteStateChanged);
             if (this.props.feed.purpose === SDPStreamMetadataPurpose.Usermedia) {
-                this.props.feed.removeListener(CallFeedEvent.VolumeChanged, this.onVolumeChanged);
+                this.props.feed.removeListener(CallFeedEvent.Speaking, this.onSpeaking);
                 this.props.feed.measureVolumeActivity(false);
             }
             this.stopMedia();
@@ -117,7 +115,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
             this.props.feed.addListener(CallFeedEvent.NewStream, this.onNewStream);
             this.props.feed.addListener(CallFeedEvent.MuteStateChanged, this.onMuteStateChanged);
             if (this.props.feed.purpose === SDPStreamMetadataPurpose.Usermedia) {
-                this.props.feed.addListener(CallFeedEvent.VolumeChanged, this.onVolumeChanged);
+                this.props.feed.addListener(CallFeedEvent.Speaking, this.onSpeaking);
                 this.props.feed.measureVolumeActivity(true);
             }
             this.playMedia();
@@ -174,8 +172,8 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         });
     };
 
-    private onVolumeChanged = (volume: number): void => {
-        this.setState({ speaking: volume > SPEAKING_THRESHOLD });
+    private onSpeaking = (speaking: boolean): void => {
+        this.setState({ speaking });
     };
 
     private onResize = (e) => {
