@@ -377,7 +377,7 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
                 resetPasswordJsx = this.renderDone();
                 break;
             default:
-                resetPasswordJsx = <div className="mx_Login--spinner"><InlineSpinner w={64} h={64} /></div>;
+                resetPasswordJsx = <div className="mx_Login_spinner"><InlineSpinner w={64} h={64} /></div>;
         }
 
         return (
