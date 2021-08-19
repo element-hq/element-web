@@ -17,8 +17,7 @@ limitations under the License.
 // We have to trick webpack into loading our CSS for us.
 require("./index.scss");
 
-import * as qs from 'querystring';
-import {KJUR} from 'jsrsasign';
+import { KJUR } from 'jsrsasign';
 import {
     IOpenIDCredentials,
     IWidgetApiRequest,
@@ -52,15 +51,16 @@ let meetApi: any; // JitsiMeetExternalAPI
 
 (async function() {
     try {
-        // The widget's options are encoded into the fragment to avoid leaking info to the server. The widget
-        // spec on the other hand requires the widgetId and parentUrl to show up in the regular query string.
-        const widgetQuery = qs.parse(window.location.hash.substring(1));
-        const query = Object.assign({}, qs.parse(window.location.search.substring(1)), widgetQuery);
+        // The widget's options are encoded into the fragment to avoid leaking info to the server.
+        const widgetQuery = new URLSearchParams(window.location.hash.substring(1));
+        // The widget spec on the other hand requires the widgetId and parentUrl to show up in the regular query string.
+        const realQuery = new URLSearchParams(window.location.search.substring(1));
         const qsParam = (name: string, optional = false): string => {
-            if (!optional && (!query[name] || typeof (query[name]) !== 'string')) {
+            const vals = widgetQuery.has(name) ? widgetQuery.getAll(name) : realQuery.getAll(name);
+            if (!optional && vals.length !== 1) {
                 throw new Error(`Expected singular ${name} in query string`);
             }
-            return <string>query[name];
+            return <string>vals[0];
         };
 
         // If we have these params, expect a widget API to be available (ie. to be in an iframe
@@ -138,7 +138,7 @@ let meetApi: any; // JitsiMeetExternalAPI
                         });
                         widgetApi.transport.reply(ev.detail, {}); // ack
                     } else {
-                        widgetApi.transport.reply(ev.detail, {error: {message: "Conference not joined"}});
+                        widgetApi.transport.reply(ev.detail, { error: { message: "Conference not joined" } });
                     }
                 },
             );
@@ -168,7 +168,7 @@ function switchVisibleContainers() {
  */
 function createJWTToken() {
     // Header
-    const header = {alg: 'HS256', typ: 'JWT'};
+    const header = { alg: 'HS256', typ: 'JWT' };
     // Payload
     const payload = {
         // As per Jitsi token auth, `iss` needs to be set to something agreed between

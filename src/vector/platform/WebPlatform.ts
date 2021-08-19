@@ -17,13 +17,13 @@ limitations under the License.
 */
 
 import VectorBasePlatform from './VectorBasePlatform';
-import {UpdateCheckStatus} from "matrix-react-sdk/src/BasePlatform";
+import { UpdateCheckStatus } from "matrix-react-sdk/src/BasePlatform";
 import request from 'browser-request';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
-import {_t} from 'matrix-react-sdk/src/languageHandler';
-import {Room} from "matrix-js-sdk/src/models/room";
-import {hideToast as hideUpdateToast, showToast as showUpdateToast} from "matrix-react-sdk/src/toasts/UpdateToast";
-import {Action} from "matrix-react-sdk/src/dispatcher/actions";
+import { _t } from 'matrix-react-sdk/src/languageHandler';
+import { Room } from "matrix-js-sdk/src/models/room";
+import { hideToast as hideUpdateToast, showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/UpdateToast";
+import { Action } from "matrix-react-sdk/src/dispatcher/actions";
 import { CheckUpdatesPayload } from 'matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload';
 
 import UAParser from 'ua-parser-js';
@@ -100,7 +100,7 @@ export default class WebPlatform extends VectorBasePlatform {
         return notification;
     }
 
-    _getVersion(): Promise<string> {
+    private getVersion(): Promise<string> {
         // We add a cachebuster to the request to make sure that we know about
         // the most recent version on the origin server. That might not
         // actually be the version we'd get on a reload (particularly in the
@@ -132,7 +132,7 @@ export default class WebPlatform extends VectorBasePlatform {
         if (this.runningVersion !== null) {
             return Promise.resolve(this.runningVersion);
         }
-        return this._getVersion();
+        return this.getVersion();
     }
 
     startUpdater() {
@@ -145,7 +145,7 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     pollForUpdate = () => {
-        return this._getVersion().then((ver) => {
+        return this.getVersion().then((ver) => {
             if (this.runningVersion === null) {
                 this.runningVersion = ver;
             } else if (this.runningVersion !== ver) {

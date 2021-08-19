@@ -32,5 +32,7 @@
     "Failed to start": "Nepovedlo se nastartovat",
     "Powered by Matrix": "Běží na Matrixu",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s pro desktopový počítač (%(platformName)s)",
-    "Missing indexeddb worker script!": "Nenačetl se skript spravující indexdb!"
+    "Missing indexeddb worker script!": "Nenačetl se skript spravující indexdb!",
+    "Use %(brand)s on mobile": "Používání %(brand)s v mobilních zařízeních",
+    "Switch to space by number": "Přepnout na prostor podle čísla"
 }

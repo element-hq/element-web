@@ -4,5 +4,15 @@
     "Welcome to Element": "ඉලමන්ට් වෙත සාදරයෙන් පිළිගනිමු",
     "Open": "විවෘත කරන්න",
     "Powered by Matrix": "මැට්‍රික්ස් මඟින් බලගන්වා ඇත",
-    "Sign In": "පිවිසෙන්න"
+    "Sign In": "පිවිසෙන්න",
+    "Dismiss": "ඉවතලන්න",
+    "Explore rooms": "කාමර බලන්න",
+    "Create Account": "ගිණුමක් සාදන්න",
+    "Failed to start": "ඇරඹීමට අපොහොසත් විය",
+    "Go to element.io": "element.io වෙත යන්න",
+    "Your browser can't run %(brand)s": "ඔබගේ අතිරික්සුවට %(brand)s ධාවනය කළ නොහැකිය",
+    "Unsupported browser": "සහය නොදක්වන අතිරික්සුව කි",
+    "Go to your browser to complete Sign In": "පිවිසීම සම්පූර්ණ කිරීමට ඔබගේ අතිරික්සුව වෙත යන්න",
+    "Download Completed": "බාගැනීම සම්පූර්ණයි",
+    "Open user settings": "පරිශීලක සැකසුම් විවෘත කරන්න"
 }

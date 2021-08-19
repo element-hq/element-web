@@ -21,7 +21,7 @@
     "Failed to start": "Запуск не вдався",
     "Download Completed": "Завантаження завершено",
     "Missing indexeddb worker script!": "Відсутній робочий сценарій IndexedDB!",
-    "Your Element is misconfigured": "Ваш Element налаштовано невірно",
+    "Your Element is misconfigured": "Ваш Element налаштовано неправильно",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Ваша конфігурація Element містить хибний JSON. Виправте проблему та оновіть сторінку.",
     "Unable to load config file: please refresh the page to try again.": "Неможливо завантажити файл конфігурації. Оновіть, будь ласка, сторінку, щоб спробувати знову.",
     "Open": "Відкрити",
@@ -33,5 +33,6 @@
     "Powered by Matrix": "Працює на Matrix",
     "Your browser can't run %(brand)s": "Ваш переглядач неспроможний запустити %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s використовує передові властивості, які ваш браузер не підтримує.",
-    "Use %(brand)s on mobile": "Користуйтеся %(brand)s на мобільному"
+    "Use %(brand)s on mobile": "Користуйтеся %(brand)s на мобільному",
+    "Switch to space by number": "Перейдіть до простору за номером"
 }

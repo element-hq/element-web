@@ -19,7 +19,7 @@ import * as sdk from 'matrix-react-sdk/src/index';
 import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
 
 export default class VectorAuthPage extends React.PureComponent {
-    static replaces = 'AuthPage'
+    static replaces = 'AuthPage';
 
     static welcomeBackgroundUrl;
 
