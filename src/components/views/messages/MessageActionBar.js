@@ -36,6 +36,7 @@ import Resend from "../../../Resend";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import DownloadActionButton from "./DownloadActionButton";
+import SettingsStore from '../../../settings/SettingsStore';
 
 const OptionsButton = ({ mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
@@ -274,12 +275,14 @@ export default class MessageActionBar extends React.PureComponent {
                             onClick={this.onReplyClick}
                             key="reply"
                         />
-                        <RovingAccessibleTooltipButton
-                            className="mx_MessageActionBar_maskButton mx_MessageActionBar_threadButton"
-                            title={_t("Thread")}
-                            onClick={this.onThreadClick}
-                            key="thread"
-                        />
+                        { SettingsStore.getValue("experimentalThreadSupport") && (
+                            <RovingAccessibleTooltipButton
+                                className="mx_MessageActionBar_maskButton mx_MessageActionBar_threadButton"
+                                title={_t("Thread")}
+                                onClick={this.onThreadClick}
+                                key="thread"
+                            />
+                        )}
                     </>);
                 }
                 if (this.context.canReact) {

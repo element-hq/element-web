@@ -57,6 +57,7 @@ import ReactionsRow from '../messages/ReactionsRow';
 import { getEventDisplayInfo } from '../../../utils/EventUtils';
 import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 import { Thread } from '../../../../../matrix-js-sdk/src/models/thread';
+import SettingsStore from "../../../settings/SettingsStore";
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -461,8 +462,10 @@ export default class EventTile extends React.Component<IProps, IState> {
             this.isListeningForReceipts = true;
         }
 
-        this.props.mxEvent.once("Thread.ready", this.updateThread);
-        this.props.mxEvent.on("Thread.update", this.updateThread);
+        if (SettingsStore.getValue("experimentalThreadSupport")) {
+            this.props.mxEvent.once("Thread.ready", this.updateThread);
+            this.props.mxEvent.on("Thread.update", this.updateThread);
+        }
     }
 
     private updateThread = (thread) => {
@@ -511,6 +514,10 @@ export default class EventTile extends React.Component<IProps, IState> {
     }
 
     private renderThreadInfo(): React.ReactNode {
+        if (!SettingsStore.getValue("experimentalThreadSupport")) {
+            return null;
+        }
+
         const thread = this.state.thread;
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
         if (!thread || this.props.showThreadInfo === false) {

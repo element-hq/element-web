@@ -267,7 +267,9 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     componentDidMount() {
         this.calculateRoomMembersCount();
         this.props.room?.on("RoomState.members", this.calculateRoomMembersCount);
-        this.props.room?.getThreads().forEach(thread => thread.fetchReplyChain());
+        if (SettingsStore.getValue("experimentalThreadSupport")) {
+            this.props.room?.getThreads().forEach(thread => thread.fetchReplyChain());
+        }
         this.isMounted = true;
     }
 
