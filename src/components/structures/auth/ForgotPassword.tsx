@@ -337,7 +337,7 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
                 onClick={this.onVerify}
                 value={_t('I have verified my email address')} />
             { this.state.currentHttpRequest && (
-                <div className="mx_Login--spinner"><InlineSpinner w={64} h={64} /></div>)
+                <div className="mx_Login_spinner"><InlineSpinner w={64} h={64} /></div>)
             }
         </div>;
     }
