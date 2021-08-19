@@ -3677,5 +3677,7 @@
     "You can also create a Space from a <a>community</a>.": "您也可以從<a>社群</a>建立空間。",
     "You can change this later.": "您可以在稍後變更此設定。",
     "What kind of Space do you want to create?": "您想建立什麼樣的空間？",
-    "Unknown failure: %(reason)s": "未知錯誤：%(reason)s"
+    "Unknown failure: %(reason)s": "未知錯誤：%(reason)s",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "除錯紀錄檔包含了使用資料，其中也包含了您的使用者名稱、ID 或您造訪過的聊天室別名、您上次與之互動的使用者介面元素，以及其他使用者的使用者名稱。但不包含訊息。",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "如果您透過 GitHub 遞交臭蟲，除錯紀錄檔可以協助我們追蹤問題。除錯紀錄檔包含了使用資料，其中也包含了您的使用者名稱、ID 或您造訪過的聊天室別名、您上次與之互動的使用者介面元素，以及其他使用者的使用者名稱。但不包含訊息。"
 }
