@@ -218,6 +218,7 @@ export default class AppTile extends React.Component {
 
         // Delete the widget from the persisted store for good measure.
         PersistedElement.destroyElement(this._persistKey);
+        ActiveWidgetStore.destroyPersistentWidget(this.props.app.id);
 
         if (this._sgWidget) this._sgWidget.stop({ forceDestroy: true });
     }
