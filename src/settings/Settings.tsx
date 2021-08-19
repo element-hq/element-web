@@ -211,8 +211,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_threading": {
+    "experimentalThreadSupport": {
         isFeature: true,
+        // Requires a reload as we change an option flag on the `js-sdk`
+        // And the entire sync history needs to be parsed again
+        controller: new ReloadOnChangeController(),
         displayName: _td("Threaded messaging"),
         supportedLevels: LEVELS_FEATURE,
         default: false,

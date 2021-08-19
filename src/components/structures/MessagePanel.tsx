@@ -446,7 +446,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         // Always show highlighted event
         if (this.props.highlightedEventId === mxEv.getId()) return true;
 
-        const threadingEnabled = SettingsStore.getValue("feature_threading");
+        const threadingEnabled = SettingsStore.getValue("experimentalThreadSupport");
         if (threadingEnabled && mxEv.replyEventId && this.props.hideThreadedMessages === true) {
             return false;
         }
