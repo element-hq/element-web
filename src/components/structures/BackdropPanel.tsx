@@ -54,6 +54,7 @@ export default class BackdropPanel extends React.PureComponent<IProps, IState> {
 
     public componentWillUnmount() {
         UIStore.instance.off("SpacePanel", this.onResize);
+        UIStore.instance.on("GroupFilterPanelContainer", this.onResize);
     }
 
     public componentDidUpdate(prevProps: IProps) {
