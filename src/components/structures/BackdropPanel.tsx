@@ -41,10 +41,7 @@ export default class BackdropPanel extends React.PureComponent<IProps, IState> {
     };
     private style = getComputedStyle(document.documentElement);
 
-    constructor(props: IProps) {
-        super(props);
-        this.state = {};
-    }
+    public state = {};
 
     public componentDidMount() {
         UIStore.instance.on("SpacePanel", this.onResize);
