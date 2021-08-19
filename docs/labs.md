@@ -134,8 +134,6 @@ and notification noises are suppressed. Not perfect, but can help reduce noise.
 
 Giphy API integration, that allows the users to send GIFs by searching with keywords, and selecting the one they like. It displays a new button in the composer next to the stickers and emojis. The GIFs are sent as files/attachments in the conversation.
 
-Associated PR: https://github.com/matrix-org/matrix-react-sdk/pull/5814
-
 ## Hidden read receipts (`feature_hidden_read_receipts`)
 
 Enables sending hidden read receipts as per [MSC2285](https://github.com/matrix-org/matrix-doc/pull/2285)
