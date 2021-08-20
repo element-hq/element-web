@@ -133,6 +133,10 @@ const getExportCSS = async (): Promise<string> => {
     white-space: nowrap;
     overflow: hidden;
   }
+
+  .mx_MatrixChat{
+    max_width: 100%;
+  }
 `;
 
     return CSS + customCSS;
