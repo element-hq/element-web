@@ -3506,5 +3506,12 @@
     "Application window": "Programfönster",
     "Share entire screen": "Dela hela skärmen",
     "Message search initialisation failed, check <a>your settings</a> for more information": "Initialisering av meddelandesök misslyckades, kolla <a>dina inställningar</a> för mer information",
-    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Om du har rapporterat en bugg via GitHub så kan felsökningsloggar hjälpa oss att hitta problemet. Felsökningsloggar innehåller användningsdata som inkluderar ditt användarnamn, ID:n eller alias för rum och grupper du har besökt, vilka UI-element du har interagerat med, och användarnamn för andra användare. De innehåller inte meddelanden."
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Om du har rapporterat en bugg via GitHub så kan felsökningsloggar hjälpa oss att hitta problemet. Felsökningsloggar innehåller användningsdata som inkluderar ditt användarnamn, ID:n eller alias för rum och grupper du har besökt, vilka UI-element du har interagerat med, och användarnamn för andra användare. De innehåller inte meddelanden.",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Felsökningsloggar innehåller användningsdata som inkluderar ditt användarnamn, ID:n eller alias för rum och grupper du har besökt, vilka UI-element du har interagerat med, och användarnamn för andra användare. De innehåller inte meddelanden.",
+    "Adding spaces has moved.": "Tilläggning av utrymmen har flyttats.",
+    "Search for rooms": "Sök efter rum",
+    "Search for spaces": "Sök efter utrymmen",
+    "Create a new space": "Skapa ett nytt utrymme",
+    "Want to add a new space instead?": "Vill du lägga till ett nytt utrymme istället?",
+    "Add existing space": "Lägg till existerande utrymme"
 }
