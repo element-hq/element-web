@@ -67,7 +67,7 @@ export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
         super(EMOJI_REGEX);
         this.matcher = new QueryMatcher<ISortedEmoji>(SORTED_EMOJI, {
-            keys: ['emoji.emoticon'],
+            keys: [],
             funcs: [o => o.emoji.shortcodes.map(s => `:${s}:`)],
             // For matching against ascii equivalents
             shouldMatchWordsOnly: false,
