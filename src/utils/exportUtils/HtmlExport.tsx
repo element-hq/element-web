@@ -387,10 +387,10 @@ export default class HTMLExporter extends Exporter {
         return eventTile;
     }
 
-    protected async createHTML(events: MatrixEvent[]) {
+    protected async createHTML(events: MatrixEvent[], start: number) {
         let content = "";
         let prevEvent = null;
-        for (let i = 0; i < events.length; i++) {
+        for (let i = start; i < Math.min(start + 1000, events.length); i++) {
             const event = events[i];
             this.updateProgress(`Processing event ${i + 1} out of ${events.length}`, false, true);
             if (this.cancelled) return this.cleanUp();
@@ -417,9 +417,11 @@ export default class HTMLExporter extends Exporter {
         this.updateProgress(`Fetched ${res.length} events in ${(fetchEnd - fetchStart)/1000}s`, true, false);
 
         this.updateProgress("Creating HTML...");
-        const html = await this.createHTML(res);
+        for (let page = 0; page < res.length / 1000; page++) {
+            const html = await this.createHTML(res, page * 1000);
+            this.addFile(`messages${page ? page + 1 : ""}.html`, new Blob([html]));
+        }
         const exportCSS = await getExportCSS();
-        this.addFile("index.html", new Blob([html]));
         this.addFile("css/style.css", new Blob([exportCSS]));
         this.addFile("js/script.js", new Blob([exportJS]));
 

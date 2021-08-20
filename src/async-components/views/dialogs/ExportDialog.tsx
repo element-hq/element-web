@@ -260,6 +260,9 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
             title: _t("Export Cancelled"),
             description: <p>{ _t("The export was cancelled successfully") }</p>,
             hasCloseButton: true,
+            onFinished: () => {
+                setExportCancelled(false);
+            },
         });
         return null;
     } else if (exportSuccessful) {
@@ -268,6 +271,9 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
             title: _t("Export Successful"),
             description: <p>{ _t("Your messages were successfully exported") }</p>,
             hasCloseButton: true,
+            onFinished: () => {
+                setExportSuccessful(false);
+            },
         });
         return null;
     } else if (displayCancel) {
