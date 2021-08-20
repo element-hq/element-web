@@ -656,7 +656,9 @@ class LoggedInView extends React.Component<IProps, IState> {
                             />
                             <ResizeHandle />
                         </div>
-                        { pageElement }
+                        <div className="mx_RoomView_wrapper">
+                            { pageElement }
+                        </div>
                     </div>
                 </div>
                 <CallContainer />
