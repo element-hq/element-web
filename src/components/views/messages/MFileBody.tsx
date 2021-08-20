@@ -178,7 +178,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
 
     private onPlaceholderClick = async () => {
         const mediaHelper = this.props.mediaEventHelper;
-        if (mediaHelper.media.isEncrypted) {
+        if (mediaHelper?.media.isEncrypted) {
             await this.decryptFile();
             this.downloadFile(this.fileName, this.linkText);
         } else {
@@ -192,7 +192,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
     };
 
     public render() {
-        const isEncrypted = this.props.mediaEventHelper.media.isEncrypted;
+        const isEncrypted = this.props.mediaEventHelper?.media.isEncrypted;
         const contentUrl = this.getContentUrl();
         const fileSize = this.content.info ? this.content.info.size : null;
         const fileType = this.content.info ? this.content.info.mimetype : "application/octet-stream";

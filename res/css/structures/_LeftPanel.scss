@@ -17,15 +17,22 @@ limitations under the License.
 $groupFilterPanelWidth: 56px; // only applies in this file, used for calculations
 $roomListCollapsedWidth: 68px;
 
+.mx_MatrixChat--with-avatar {
+    .mx_LeftPanel,
+    .mx_LeftPanel .mx_LeftPanel_roomListContainer {
+        background-color: transparent;
+    }
+}
+
 .mx_LeftPanel {
     background-color: $roomlist-bg-color;
     // TODO decrease this once Spaces launches as it'll no longer need to include the 56px Community Panel
     min-width: 206px;
-    max-width: 50%;
 
     // Create a row-based flexbox for the GroupFilterPanel and the room list
     display: flex;
     contain: content;
+    position: relative;
 
     .mx_LeftPanel_GroupFilterPanelContainer {
         flex-grow: 0;

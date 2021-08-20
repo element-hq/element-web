@@ -27,7 +27,7 @@ import classNames from 'classnames';
 import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
 import { formatCallTime } from "../../../DateUtils";
 
-const MAX_NON_NARROW_WIDTH = 400 / 70 * 100;
+const MAX_NON_NARROW_WIDTH = 450 / 70 * 100;
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -199,7 +199,7 @@ export default class CallEvent extends React.PureComponent<IProps, IState> {
             } else if (hangupReason === CallErrorCode.UserBusy) {
                 reason = _t("The user you called is busy.");
             } else {
-                reason = _t('Unknown failure: %(reason)s)', { reason: hangupReason });
+                reason = _t('Unknown failure: %(reason)s', { reason: hangupReason });
             }
 
             return (
