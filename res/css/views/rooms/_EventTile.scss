@@ -681,6 +681,30 @@ $hover-select-border: 4px;
     display: flex;
     flex-direction: column;
 
+    .mx_ScrollPanel {
+        margin-top: 20px;
+        .mx_RoomView_MessageList {
+            padding: 0;
+        }
+    }
+
+    .mx_EventTile_senderDetails {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 6px;
+        a {
+            flex: 1;
+            min-width: none;
+            max-width: 100%;
+            display: flex;
+            align-items: center;
+            .mx_SenderProfile {
+                flex: 1;
+            }
+        }
+    }
+
     .mx_ThreadView_List {
         flex: 1;
         overflow: scroll;
@@ -698,7 +722,6 @@ $hover-select-border: 4px;
         width: 100%;
         display: flex;
         flex-direction: column;
-        border-bottom: 1px solid #888;
         margin-top: 0;
         padding-bottom: 5px;
         margin-bottom: 5px;

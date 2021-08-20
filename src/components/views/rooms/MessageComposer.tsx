@@ -185,6 +185,7 @@ interface IProps {
     replyToEvent?: MatrixEvent;
     showReplyPreview?: boolean;
     e2eStatus?: E2EStatus;
+    compact?: boolean;
 }
 
 interface IState {
@@ -204,6 +205,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
     static defaultProps = {
         showReplyPreview: true,
+        compact: false,
     };
 
     constructor(props) {
@@ -367,7 +369,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
     render() {
         const controls = [
-            this.state.me ? <ComposerAvatar key="controls_avatar" me={this.state.me} /> : null,
+            this.state.me && !this.props.compact ? <ComposerAvatar key="controls_avatar" me={this.state.me} /> : null,
             this.props.e2eStatus ?
                 <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" /> :
                 null,
@@ -455,8 +457,14 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             />;
         }
 
+        const classes = classNames({
+            "mx_MessageComposer": true,
+            "mx_GroupLayout": true,
+            "mx_MessageComposer--compact": this.props.compact,
+        });
+
         return (
-            <div className="mx_MessageComposer mx_GroupLayout">
+            <div className={classes}>
                 { recordingTooltip }
                 <div className="mx_MessageComposer_wrapper">
                     { this.props.showReplyPreview && (

@@ -115,6 +115,7 @@ class ThreadView extends React.Component<IProps, IState> {
                     replyToEvent={thread?.replyToEvent}
                     showReplyPreview={false}
                     permalinkCreator={this.props.permalinkCreator}
+                    compact={true}
                 />
             </BaseCard>
         );
