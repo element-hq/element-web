@@ -623,9 +623,12 @@ class LoggedInView extends React.Component<IProps, IState> {
                 break;
         }
 
+        const wrapperClasses = classNames({
+            'mx_MatrixChat_wrapper': true,
+            'mx_MatrixChat_useCompactLayout': this.state.useCompactLayout,
+        });
         const bodyClasses = classNames({
             'mx_MatrixChat': true,
-            'mx_MatrixChat_useCompactLayout': this.state.useCompactLayout,
             'mx_MatrixChat--with-avatar': this.state.backgroundImage,
         });
 
@@ -640,7 +643,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 <div
                     onPaste={this.onPaste}
                     onKeyDown={this.onReactKeyDown}
-                    className='mx_MatrixChat_wrapper'
+                    className={wrapperClasses}
                     aria-hidden={this.props.hideToSRUsers}
                 >
                     <ToastContainer />
