@@ -8,12 +8,14 @@
     border-bottom: none;
     border-radius: 8px 8px 0 0;
     max-height: 50vh;
-    overflow: auto;
+    overflow: clip;
+    display: flex;
     box-shadow: 0px -16px 32px $composer-shadow-color;
 }
 
 .mx_Autocomplete_ProviderSection {
     border-bottom: 1px solid $primary-hairline-color;
+    width: 100%;
 }
 
 /* a "block" completion takes up a whole line */
@@ -59,8 +61,8 @@
 
 .mx_Autocomplete_Completion_container_pill {
     margin: 12px;
-    display: flex;
-    flex-direction: column;
+    height: 100%;
+    overflow-y: scroll;
 }
 
 .mx_Autocomplete_Completion_container_truncate {
