@@ -644,18 +644,22 @@ class LoggedInView extends React.Component<IProps, IState> {
                     aria-hidden={this.props.hideToSRUsers}
                 >
                     <ToastContainer />
-                    <div ref={this._resizeContainer} className={bodyClasses}>
-                        <BackdropPanel
-                            backgroundImage={this.state.backgroundImage}
-                        />
-                        { SpaceStore.spacesEnabled ? <SpacePanel /> : null }
-                        <LeftPanel
-                            isMinimized={this.props.collapseLhs || false}
-                            resizeNotifier={this.props.resizeNotifier}
-                        />
-                        <ResizeHandle />
+                    <div className={bodyClasses}>
+                        <div ref={this._resizeContainer} className='mx_LeftPanel_wrapper'>
+                            <BackdropPanel
+                                backgroundImage={this.state.backgroundImage}
+                            />
+                            { SpaceStore.spacesEnabled ? <SpacePanel /> : null }
+                            <LeftPanel
+                                isMinimized={this.props.collapseLhs || false}
+                                resizeNotifier={this.props.resizeNotifier}
+                            />
+                            <ResizeHandle />
+                        </div>
+                        <div className="mx_RoomView_wrapper">
+                            { pageElement }
+                        </div>
                     </div>
-                    { pageElement }
                 </div>
                 <CallContainer />
                 <NonUrgentToastContainer />
