@@ -18,6 +18,7 @@ limitations under the License.
     overflow: hidden;
     position: relative;
     box-sizing: border-box;
+    border: transparent 2px solid;
 
     &.mx_VideoFeed_voice {
         background-color: $inverted-bg-color;
