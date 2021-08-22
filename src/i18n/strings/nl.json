@@ -3321,7 +3321,7 @@
     "Published addresses can be used by anyone on any server to join your room.": "Gepubliceerde adressen kunnen door iedereen op elke server gebruikt worden om bij uw gesprek te komen.",
     "Published addresses can be used by anyone on any server to join your space.": "Gepubliceerde adressen kunnen door iedereen op elke server gebruikt worden om uw space te betreden.",
     "This space has no local addresses": "Deze space heeft geen lokaaladres",
-    "Space information": "Space informatie",
+    "Space information": "Spaceinformatie",
     "Collapse": "Invouwen",
     "Expand": "Uitvouwen",
     "Recommended for public spaces.": "Aanbevolen voor openbare spaces.",
@@ -3562,5 +3562,7 @@
     "Space created": "Space aangemaakt",
     "To view Spaces, hide communities in <a>Preferences</a>": "Om Spaces te zien, verberg gemeenschappen in uw <a>Instellingen</a>",
     "This community has been upgraded into a Space": "Deze gemeenschap is geupgrade naar een Space",
-    "Unknown failure: %(reason)s": "Onbekende fout: %(reason)s"
+    "Unknown failure: %(reason)s": "Onbekende fout: %(reason)s",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Debug logs bevatten applicatie gebruiksgegevens inclusief uw inlognaam, de ID's of aliassen van de kamers of groepen die u hebt bezocht, welke UI elementen u het laatst hebt gebruikt, en de inlognamen van andere personen. Ze bevatten geen berichten.",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Als u een bug hebt ingediend via GitHub, kunnen debug logs ons helpen het probleem op te sporen. Debug logs bevatten applicatie gebruiksgegevens inclusief uw inlognaam, de ID's of aliassen van de kamers of groepen die u hebt bezocht, welke UI elementen u het laatst hebt gebruikt, en de inlognamen van andere personen. Ze bevatten geen berichten."
 }
