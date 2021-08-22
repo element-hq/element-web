@@ -98,11 +98,6 @@ export default class BackdropPanel extends React.PureComponent<IProps, IState> {
         leftLeftPanelContext.drawImage(
             backgroundImage,
             0, 0,
-            imageWidth, imageHeight,
-            0,
-            0,
-            leftLeftPanelWidth,
-            window.screen.height,
         );
         leftPanelContext.drawImage(
             backgroundImage,
