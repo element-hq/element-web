@@ -31,9 +31,6 @@ interface IState {
 }
 
 export default class BackdropPanel extends React.PureComponent<IProps, IState> {
-    private leftLeftPanelRef = createRef<HTMLCanvasElement>();
-    private leftPanelRef = createRef<HTMLCanvasElement>();
-
     private sizes = {
         leftLeftPanelWidth: 0,
         leftPanelWidth: 0,
@@ -76,36 +73,22 @@ export default class BackdropPanel extends React.PureComponent<IProps, IState> {
     };
 
     private refreshBackdropImage = (): void => {
-        const leftLeftPanelContext = this.leftLeftPanelRef.current.getContext("2d");
-        const leftPanelContext = this.leftPanelRef.current.getContext("2d");
-        const { leftLeftPanelWidth, leftPanelWidth, height } = this.sizes;
-        const width = leftLeftPanelWidth + leftPanelWidth;
+        const leftLeftPanelCanvas = document.createElement('canvas');
+        const leftPanelCanvas = document.createElement('canvas');
+        const leftLeftPanelContext = leftLeftPanelCanvas.getContext("2d");
+        const leftPanelContext = leftPanelCanvas.getContext("2d");
+        const { leftLeftPanelWidth, height } = this.sizes;
         const { backgroundImage } = this.props;
 
         const imageWidth = (backgroundImage as ImageBitmap).width;
         const imageHeight = (backgroundImage as ImageBitmap).height;
-
-        const contentRatio = imageWidth / imageHeight;
-        const containerRatio = width / height;
-        let resultHeight;
-        let resultWidth;
-        if (contentRatio > containerRatio) {
-            resultHeight = height;
-            resultWidth = height * contentRatio;
-        } else {
-            resultWidth = width;
-            resultHeight = width / contentRatio;
-        }
-
         // This value has been chosen to be as close with rendering as the css-only
         // backdrop-filter: blur effect was, mostly takes effect for vertical pictures.
-        const x = width * 0.1;
-        const y = (height - resultHeight) / 2;
 
-        this.leftLeftPanelRef.current.width = leftLeftPanelWidth;
-        this.leftLeftPanelRef.current.height = height;
-        this.leftPanelRef.current.width = (window.screen.width * 0.5);
-        this.leftPanelRef.current.height = height;
+        leftLeftPanelCanvas.width = leftLeftPanelWidth;
+        leftLeftPanelCanvas.height = height;
+        leftPanelCanvas.width = window.screen.width * 0.5;
+        leftPanelCanvas.height = height;
 
         const spacesBlur = this.style.getPropertyValue('--llp-background-blur');
         const roomListBlur = this.style.getPropertyValue('--lp-background-blur');
@@ -116,23 +99,23 @@ export default class BackdropPanel extends React.PureComponent<IProps, IState> {
             backgroundImage,
             0, 0,
             imageWidth, imageHeight,
-            x,
-            y,
-            resultWidth,
-            resultHeight,
+            0,
+            0,
+            leftLeftPanelWidth,
+            window.screen.height,
         );
         leftPanelContext.drawImage(
             backgroundImage,
             0, 0,
             imageWidth, imageHeight,
-            x - leftLeftPanelWidth,
-            y,
-            resultWidth,
-            resultHeight,
+            0,
+            0,
+            window.screen.width * 0.5,
+            window.screen.height,
         );
         this.setState({
-            lpImage: this.leftPanelRef.current.toDataURL('image/jpeg', 1),
-            llpImage: this.leftLeftPanelRef.current.toDataURL('image/jpeg', 1),
+            lpImage: leftPanelCanvas.toDataURL('image/jpeg', 1),
+            llpImage: leftLeftPanelCanvas.toDataURL('image/jpeg', 1),
 
         });
     };
@@ -147,20 +130,6 @@ export default class BackdropPanel extends React.PureComponent<IProps, IState> {
             { this.state?.lpImage !== 'data:,' && <img
                 className="mx_BackdropPanel--canvas"
                 src={this.state.lpImage} /> }
-            <canvas
-                ref={this.leftLeftPanelRef}
-                className="mx_BackdropPanel--canvas"
-                style={{
-                    display: this.state.lpImage ? 'none' : 'block',
-                }}
-            />
-            <canvas
-                style={{
-                    display: this.state.lpImage ? 'none' : 'block',
-                }}
-                ref={this.leftPanelRef}
-                className="mx_BackdropPanel--canvas"
-            />
         </div>;
     }
 }
