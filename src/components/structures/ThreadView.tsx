@@ -16,7 +16,8 @@ limitations under the License.
 */
 
 import React from 'react';
-import { MatrixEvent } from 'matrix-js-sdk/src';
+import { MatrixEvent, Room } from 'matrix-js-sdk/src';
+import { Thread } from 'matrix-js-sdk/src/models/thread';
 
 import BaseCard from "../views/right_panel/BaseCard";
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
@@ -29,12 +30,13 @@ import MessageComposer from '../views/rooms/MessageComposer';
 import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
 import { Layout } from '../../settings/Layout';
 import TimelinePanel from './TimelinePanel';
-import { Thread } from '../../../../matrix-js-sdk/src/models/thread';
 import dis from "../../dispatcher/dispatcher";
 import { ActionPayload } from '../../dispatcher/payloads';
+import { SetRightPanelPhasePayload } from '../../dispatcher/payloads/SetRightPanelPhasePayload';
+import { Action } from '../../dispatcher/actions';
 
 interface IProps {
-    roomId: string;
+    room: Room;
     onClose: () => void;
     resizeNotifier: ResizeNotifier;
     mxEvent: MatrixEvent;
@@ -72,6 +74,13 @@ class ThreadView extends React.Component<IProps, IState> {
         if (prevProps.mxEvent !== this.props.mxEvent) {
             this.teardownThread();
             this.setupThread(this.props.mxEvent);
+        }
+
+        if (prevProps.room !== this.props.room) {
+            dis.dispatch<SetRightPanelPhasePayload>({
+                action: Action.SetRightPanelPhase,
+                phase: RightPanelPhases.RoomSummary,
+            });
         }
     }
 
@@ -120,7 +129,6 @@ class ThreadView extends React.Component<IProps, IState> {
     }
 
     public render() {
-        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
         return (
             <BaseCard
                 className="mx_ThreadView"
@@ -142,7 +150,7 @@ class ThreadView extends React.Component<IProps, IState> {
                     />
                 ) }
                 <MessageComposer
-                    room={room}
+                    room={this.props.room}
                     resizeNotifier={this.props.resizeNotifier}
                     replyToEvent={this.state?.thread?.replyToEvent}
                     showReplyPreview={false}

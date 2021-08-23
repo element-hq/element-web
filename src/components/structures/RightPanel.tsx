@@ -315,7 +315,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
 
             case RightPanelPhases.ThreadView:
                 panel = <ThreadView
-                    roomId={roomId}
+                    room={this.props.room}
                     resizeNotifier={this.props.resizeNotifier}
                     onClose={this.onClose}
                     mxEvent={this.state.event}

@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import { MatrixEvent, Room } from 'matrix-js-sdk/src';
+import { Thread } from 'matrix-js-sdk/src/models/thread';
 
 import BaseCard from "../views/right_panel/BaseCard";
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
@@ -25,7 +26,6 @@ import { MatrixClientPeg } from '../../MatrixClientPeg';
 
 import ResizeNotifier from '../../utils/ResizeNotifier';
 import EventTile from '../views/rooms/EventTile';
-import { Thread } from '../../../../matrix-js-sdk/src/models/thread';
 
 interface IProps {
     roomId: string;
