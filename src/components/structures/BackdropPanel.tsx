@@ -17,8 +17,6 @@ limitations under the License.
 import React from "react";
 import "context-filter-polyfill";
 
-import UIStore from "../../stores/UIStore";
-
 interface IProps {
     backgroundImage?: CanvasImageSource;
 }
@@ -26,8 +24,6 @@ interface IProps {
 interface IState {
     // Left Panel image
     lpImage?: string;
-    // Left-left panel image
-    llpImage?: string;
 }
 
 export default class BackdropPanel extends React.PureComponent<IProps, IState> {
@@ -39,26 +35,14 @@ export default class BackdropPanel extends React.PureComponent<IProps, IState> {
         this.onResize();
     }
 
-    public componentWillUnmount() {
-    }
-
     public componentDidUpdate(prevProps: IProps) {
         if (prevProps.backgroundImage !== this.props.backgroundImage) {
-            this.setState({});
             this.onResize();
         }
     }
 
     private onResize = () => {
         if (this.props.backgroundImage) {
-            const groupFilterPanelDimensions = UIStore.instance.getElementDimensions("GroupFilterPanelContainer");
-            const spacePanelDimensions = UIStore.instance.getElementDimensions("SpacePanel");
-            const roomListDimensions = UIStore.instance.getElementDimensions("LeftPanel");
-            this.sizes = {
-                leftLeftPanelWidth: spacePanelDimensions?.width ?? groupFilterPanelDimensions?.width ?? 0,
-                leftPanelWidth: roomListDimensions?.width ?? 0,
-                height: UIStore.instance.windowHeight,
-            };
             this.refreshBackdropImage();
         }
     };
