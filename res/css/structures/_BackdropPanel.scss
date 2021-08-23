@@ -31,6 +31,11 @@ limitations under the License.
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
-    opacity: 0.2;
-    width: 100%;
+
+    &:nth-of-type(2n-1) {
+        opacity: 0.2;
+    }
+    &:nth-of-type(2n) {
+        opacity: 0.1;
+    }
 }
