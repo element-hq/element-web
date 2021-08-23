@@ -3622,5 +3622,14 @@
     "Create Space from community": "Space aus einer Community erstellen",
     "Failed to migrate community": "Fehler beim konvertieren der Community",
     "<SpaceName/> has been made and everyone who was a part of the community has been invited to it.": "<SpaceName/> wurde erfolgreich erstellt. Alle aus der alten Community wurden eingeladen.",
-    "Space created": "Space erstellt"
+    "Space created": "Space erstellt",
+    "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Upgraden wird eine neue Version des Raums erstellen</b>. Die alten Nachrichten bleiben im alten Raum archiviert.",
+    "Other spaces or rooms you might not know": "Andere Spaces, die du möglicherweise nicht kennst",
+    "Spaces you know that contain this room": "Spaces, in denen du Mitglied bist und diesen Raum enthalten",
+    "You're removing all spaces. Access will default to invite only": "Du entfernst alle Spaces. Neue Personen können nur mehr mit Einladung beitreten",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Debug Logs enthalten Nutzungsdaten wie Nutzernamen von dir und anderen Personen, Raum-IDs deiner beigetretenen Räume und Spaces sowie mit welchen Elementen der Oberfläche du kürzlich interagiert hast aber keine Nachrichteninhalte.",
+    "People with supported clients will be able to join the room without having a registered account.": "Personen können diesen Raum ohne registrierten Account betreten.",
+    "Anyone can find and join.": "Jeder kann finden und beitreten.",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Wenn du einen Bugreport bei GitHub einreichst, können uns Debug Logs helfen, das Problem ausfindig zu machen. Sie enthalten Nutzungsdaten wie Nutzernamen von dir und anderen Personen, Raum-IDs deiner beigetretenen Räume und Spaces sowie mit welchen Elementen der Oberfläche du kürzlich interagiert hast.",
+    "Mute the microphone": "Stummschalten"
 }
