@@ -28,7 +28,7 @@ import StyledRadioGroup from "../elements/StyledRadioGroup";
 
 const existingIssuesUrl = "https://github.com/vector-im/element-web/issues" +
     "?q=is%3Aopen+is%3Aissue+sort%3Areactions-%2B1-desc";
-const newIssueUrl = "https://github.com/vector-im/element-web/issues/new";
+const newIssueUrl = "https://github.com/vector-im/element-web/issues/new/choose";
 
 export default (props) => {
     const [rating, setRating] = useState("");
