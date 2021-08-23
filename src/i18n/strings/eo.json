@@ -3589,5 +3589,20 @@
     "Pinned messages": "Fiksitaj mesaĝoj",
     "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "Se vi havas la bezonajn permesojn, malfermu la menuon sur ajna mesaĝo, kaj klaku al <b>Fiksi</b> por meti ĝin ĉi tien.",
     "Nothing pinned, yet": "Ankoraŭ nenio fiksita",
-    "Set addresses for this space so users can find this space through your homeserver (%(localDomain)s)": "Agordu adresojn por ĉi tiu aro, por ke uzantoj trovu ĝin per via hejmservilo (%(localDomain)s)"
+    "Set addresses for this space so users can find this space through your homeserver (%(localDomain)s)": "Agordu adresojn por ĉi tiu aro, por ke uzantoj trovu ĝin per via hejmservilo (%(localDomain)s)",
+    "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.": "Viaj privataj mesaĝoj normale estas ĉifrataj, sed ĉi tiu ĉambro ne estas ĉifrata. Plej ofte tio okazas pro uzo de nesubtenata aparato aŭ metodo, ekzemple retpoŝtaj invitoj.",
+    "Displaying time": "Montrado de tempo",
+    "If a community isn't shown you may not have permission to convert it.": "Se komunumo ne montriĝas, eble vi ne rajtas fari aron el ĝi.",
+    "Show my Communities": "Montri miajn komunumojn",
+    "Communities have been archived to make way for Spaces but you can convert your communities into Spaces below. Converting will ensure your conversations get the latest features.": "Komunumoj arĥiviĝis pro aroj, sed ĉi-sube vi povas krei arojn el viaj komunumoj. Tiel vi certigos, ke viaj interparoloj havos la plej freŝajn funkciojn.",
+    "Create Space": "Krei aron",
+    "Open Space": "Malfermi aron",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Se vi raportis eraron per GitHub, erarserĉaj protokoloj povas helpi nin trovi la problemon. Erarserĉaj protokoloj enhavas datumojn pri via uzado de aplikaĵo, inkluzive vian uzantonomon, identigilojn aŭ kromnomojn de ĉambroj aŭ grupoj, kiujn vi vizitis, freŝe uzitajn fasadajn elementojn, kaj la uzantonomojn de aliaj uzantoj. Ili ne enhavas mesaĝojn.",
+    "Cross-signing is ready but keys are not backed up.": "Delegaj subskriboj pretas, sed ŝlosiloj ne estas savkopiitaj.",
+    "To join an existing space you'll need an invite.": "Por aliĝi al jama aro, vi bezonos inviton.",
+    "You can also create a Space from a <a>community</a>.": "Vi ankaŭ povas krei novan aron el <a>komunumo</a>.",
+    "You can change this later.": "Vi povas ŝanĝi ĉi tion poste.",
+    "What kind of Space do you want to create?": "Kian aron volas vi krei?",
+    "All rooms you're in will appear in Home.": "Ĉiuj ĉambroj, kie vi estas, aperos en la ĉefpaĝo.",
+    "Show all rooms in Home": "Montri ĉiujn ĉambrojn en ĉefpaĝo"
 }
