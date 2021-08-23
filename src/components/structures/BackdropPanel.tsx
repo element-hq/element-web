@@ -77,13 +77,29 @@ export default class BackdropPanel extends React.PureComponent<IProps, IState> {
         const leftPanelCanvas = document.createElement('canvas');
         const leftLeftPanelContext = leftLeftPanelCanvas.getContext("2d");
         const leftPanelContext = leftPanelCanvas.getContext("2d");
-        const { leftLeftPanelWidth, height } = this.sizes;
         const { backgroundImage } = this.props;
+        const { leftLeftPanelWidth, leftPanelWidth, height } = this.sizes;
+        const width = leftLeftPanelWidth + leftPanelWidth;
 
         const imageWidth = (backgroundImage as ImageBitmap).width;
         const imageHeight = (backgroundImage as ImageBitmap).height;
+
+        const contentRatio = imageWidth / imageHeight;
+        const containerRatio = width / height;
+        let resultHeight;
+        let resultWidth;
+        if (contentRatio > containerRatio) {
+            resultHeight = height;
+            resultWidth = height * contentRatio;
+        } else {
+            resultWidth = width;
+            resultHeight = width / contentRatio;
+        }
+
         // This value has been chosen to be as close with rendering as the css-only
         // backdrop-filter: blur effect was, mostly takes effect for vertical pictures.
+        const x = width * 0.1;
+        const y = (height - resultHeight) / 2;
 
         leftLeftPanelCanvas.width = leftLeftPanelWidth;
         leftLeftPanelCanvas.height = height;
@@ -98,15 +114,20 @@ export default class BackdropPanel extends React.PureComponent<IProps, IState> {
         leftLeftPanelContext.drawImage(
             backgroundImage,
             0, 0,
+            imageWidth, imageHeight,
+            x,
+            y,
+            resultWidth,
+            resultHeight,
         );
         leftPanelContext.drawImage(
             backgroundImage,
             0, 0,
             imageWidth, imageHeight,
-            0,
-            0,
-            window.screen.width * 0.5,
-            window.screen.height,
+            x - leftLeftPanelWidth,
+            y,
+            resultWidth,
+            resultHeight,
         );
         this.setState({
             lpImage: leftPanelCanvas.toDataURL('image/jpeg', 1),
