@@ -19,8 +19,6 @@ import { createRef } from "react";
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/models/room";
 
-import GroupFilterPanel from "./GroupFilterPanel";
-import CustomRoomTagPanel from "./CustomRoomTagPanel";
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import RoomList from "../views/rooms/RoomList";
@@ -33,7 +31,6 @@ import RoomBreadcrumbs from "../views/rooms/RoomBreadcrumbs";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import ResizeNotifier from "../../utils/ResizeNotifier";
-import SettingsStore from "../../settings/SettingsStore";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore";
 import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
@@ -51,7 +48,6 @@ interface IProps {
 
 interface IState {
     showBreadcrumbs: boolean;
-    showGroupFilterPanel: boolean;
     activeSpace?: Room;
 }
 
@@ -68,9 +64,6 @@ const cssClasses = [
 export default class LeftPanel extends React.Component<IProps, IState> {
     private ref: React.RefObject<HTMLDivElement> = createRef();
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
-    private groupFilterPanelWatcherRef: string;
-    private groupFilterPanelContainer = createRef<HTMLDivElement>();
-    private bgImageWatcherRef: string;
     private focusedElement = null;
     private isDoingStickyHeaders = false;
 
@@ -79,25 +72,17 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         this.state = {
             showBreadcrumbs: BreadcrumbsStore.instance.visible,
-            showGroupFilterPanel: SettingsStore.getValue('TagPanel.enableTagPanel'),
             activeSpace: SpaceStore.instance.activeSpace,
         };
 
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
-        this.groupFilterPanelWatcherRef = SettingsStore.watchSetting("TagPanel.enableTagPanel", null, () => {
-            this.setState({ showGroupFilterPanel: SettingsStore.getValue("TagPanel.enableTagPanel") });
-        });
     }
 
     public componentDidMount() {
         UIStore.instance.trackElementDimensions("LeftPanel", this.ref.current);
         UIStore.instance.trackElementDimensions("ListContainer", this.listContainerRef.current);
-        if (this.groupFilterPanelContainer.current) {
-            const componentName = "GroupFilterPanelContainer";
-            UIStore.instance.trackElementDimensions(componentName, this.groupFilterPanelContainer.current);
-        }
         UIStore.instance.on("ListContainer", this.refreshStickyHeaders);
         // Using the passive option to not block the main thread
         // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
@@ -105,7 +90,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount() {
-        SettingsStore.unwatchSetting(this.groupFilterPanelWatcherRef);
         BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
@@ -422,16 +406,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        let leftLeftPanel;
-        if (this.state.showGroupFilterPanel) {
-            leftLeftPanel = (
-                <div className="mx_LeftPanel_GroupFilterPanelContainer" ref={this.groupFilterPanelContainer}>
-                    <GroupFilterPanel />
-                    { SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null }
-                </div>
-            );
-        }
-
         const roomList = <RoomList
             onKeyDown={this.onKeyDown}
             resizeNotifier={this.props.resizeNotifier}
@@ -455,7 +429,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         return (
             <div className={containerClasses} ref={this.ref}>
-                { leftLeftPanel }
                 <aside className="mx_LeftPanel_roomListContainer">
                     { this.renderHeader() }
                     { this.renderSearchDialExplore() }

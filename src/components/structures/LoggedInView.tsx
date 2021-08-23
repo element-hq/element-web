@@ -68,6 +68,8 @@ import GroupView from "./GroupView";
 import BackdropPanel from "./BackdropPanel";
 import SpaceStore from "../../stores/SpaceStore";
 import classNames from 'classnames';
+import GroupFilterPanel from './GroupFilterPanel';
+import CustomRoomTagPanel from './CustomRoomTagPanel';
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -649,6 +651,12 @@ class LoggedInView extends React.Component<IProps, IState> {
                             <BackdropPanel
                                 backgroundImage={this.state.backgroundImage}
                             />
+                            { SettingsStore.getValue('TagPanel.enableTagPanel') &&
+                                (<div className="mx_GroupFilterPanelContainer">
+                                    <GroupFilterPanel />
+                                    { SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null }
+                                </div>)
+                            }
                             { SpaceStore.spacesEnabled ? <SpacePanel /> : null }
                             <div
                                 ref={this._resizeContainer}

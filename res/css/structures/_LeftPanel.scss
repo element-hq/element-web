@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$groupFilterPanelWidth: 56px; // only applies in this file, used for calculations
 $roomListCollapsedWidth: 68px;
 
 .mx_MatrixChat--with-avatar {
@@ -67,19 +66,6 @@ $roomListCollapsedWidth: 68px;
     display: flex;
     contain: content;
     position: relative;
-
-    .mx_LeftPanel_GroupFilterPanelContainer {
-        flex-grow: 0;
-        flex-shrink: 0;
-        flex-basis: $groupFilterPanelWidth;
-        height: 100%;
-
-        // Create another flexbox so the GroupFilterPanel fills the container
-        display: flex;
-        flex-direction: column;
-
-        // GroupFilterPanel handles its own CSS
-    }
 
     // Note: The 'room list' in this context is actually everything that isn't the tag
     // panel, such as the menu options, breadcrumbs, filtering, etc
