@@ -215,7 +215,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                             {
                                 a: (sub) => <a
                                     target="_blank"
-                                    href="https://github.com/vector-im/element-web/issues/new"
+                                    href="https://github.com/vector-im/element-web/issues/new/choose"
                                 >
                                     { sub }
                                 </a>,
