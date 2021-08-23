@@ -68,6 +68,8 @@ import GroupView from "./GroupView";
 import BackdropPanel from "./BackdropPanel";
 import SpaceStore from "../../stores/SpaceStore";
 import classNames from 'classnames';
+import GroupFilterPanel from './GroupFilterPanel';
+import CustomRoomTagPanel from './CustomRoomTagPanel';
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -131,7 +133,7 @@ interface IState {
     usageLimitEventTs?: number;
     useCompactLayout: boolean;
     activeCalls: Array<MatrixCall>;
-    backgroundImage?: CanvasImageSource;
+    backgroundImage?: string;
 }
 
 /**
@@ -222,7 +224,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
     private refreshBackgroundImage = async (): Promise<void> => {
         this.setState({
-            backgroundImage: await OwnProfileStore.instance.getAvatarBitmap(),
+            backgroundImage: OwnProfileStore.instance.getHttpAvatarUrl(),
         });
     };
 
@@ -289,7 +291,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         if (isNaN(lhsSize)) {
             lhsSize = 350;
         }
-        this.resizer.forHandleAt(0).resize(lhsSize);
+        this.resizer.forHandleWithId('lp-resizer').resize(lhsSize);
     }
 
     private onAccountData = (event: MatrixEvent) => {
@@ -653,16 +655,37 @@ class LoggedInView extends React.Component<IProps, IState> {
                 >
                     <ToastContainer />
                     <div className={bodyClasses}>
-                        <div ref={this._resizeContainer} className='mx_LeftPanel_wrapper'>
+                        <div className='mx_LeftPanel_wrapper'>
+                            { SettingsStore.getValue('TagPanel.enableTagPanel') &&
+                                (<div className="mx_GroupFilterPanelContainer">
+                                    <BackdropPanel
+                                        blurMultiplier={0.5}
+                                        backgroundImage={this.state.backgroundImage}
+                                    />
+                                    <GroupFilterPanel />
+                                    { SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null }
+                                </div>)
+                            }
+                            { SpaceStore.spacesEnabled ? <>
+                                <BackdropPanel
+                                    blurMultiplier={0.5}
+                                    backgroundImage={this.state.backgroundImage}
+                                />
+                                <SpacePanel />
+                            </> : null }
                             <BackdropPanel
                                 backgroundImage={this.state.backgroundImage}
                             />
-                            { SpaceStore.spacesEnabled ? <SpacePanel /> : null }
-                            <LeftPanel
-                                isMinimized={this.props.collapseLhs || false}
-                                resizeNotifier={this.props.resizeNotifier}
-                            />
-                            <ResizeHandle />
+                            <div
+                                ref={this._resizeContainer}
+                                className="mx_LeftPanel_wrapper--user"
+                            >
+                                <LeftPanel
+                                    isMinimized={this.props.collapseLhs || false}
+                                    resizeNotifier={this.props.resizeNotifier}
+                                />
+                                <ResizeHandle id="lp-resizer" />
+                            </div>
                         </div>
                         <div className="mx_RoomView_wrapper">
                             { pageElement }

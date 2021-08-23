@@ -182,8 +182,6 @@ export default class Resizer<C extends IConfig = IConfig> {
 
     private getResizeHandles() {
         if (!this.container.children) return [];
-        return Array.from(this.container.children).filter(el => {
-            return this.isResizeHandle(<HTMLElement>el);
-        }) as HTMLElement[];
+        return Array.from(this.container.querySelectorAll(`.${this.classNames.handle}`)) as HTMLElement[];
     }
 }

@@ -14,13 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MatrixChat--with-avatar {
-    .mx_GroupFilterPanel {
-        background-color: transparent;
-    }
+$groupFilterPanelWidth: 56px; // only applies in this file, used for calculations
+
+.mx_GroupFilterPanelContainer {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: $groupFilterPanelWidth;
+    height: 100%;
+
+    // Create another flexbox so the GroupFilterPanel fills the container
+    display: flex;
+    flex-direction: column;
+
+    // GroupFilterPanel handles its own CSS
 }
 
 .mx_GroupFilterPanel {
+    z-index: 1;
     background-color: $groupFilterPanel-bg-color;
     flex: 1;
     cursor: pointer;
