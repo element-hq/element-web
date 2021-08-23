@@ -645,16 +645,21 @@ class LoggedInView extends React.Component<IProps, IState> {
                 >
                     <ToastContainer />
                     <div className={bodyClasses}>
-                        <div ref={this._resizeContainer} className='mx_LeftPanel_wrapper'>
+                        <div className='mx_LeftPanel_wrapper'>
                             <BackdropPanel
                                 backgroundImage={this.state.backgroundImage}
                             />
                             { SpaceStore.spacesEnabled ? <SpacePanel /> : null }
-                            <LeftPanel
-                                isMinimized={this.props.collapseLhs || false}
-                                resizeNotifier={this.props.resizeNotifier}
-                            />
+                            <div
+                                ref={this._resizeContainer}
+                                className="mx_LeftPanel_wrapper--user">
+                                <div className="mx_LeftPanel_background" />
+                                <LeftPanel
+                                    isMinimized={this.props.collapseLhs || false}
+                                    resizeNotifier={this.props.resizeNotifier}
+                                />
                                 <ResizeHandle id="lp-resizer" />
+                            </div>
                         </div>
                         <div className="mx_RoomView_wrapper">
                             { pageElement }

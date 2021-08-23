@@ -21,16 +21,6 @@ limitations under the License.
     height: 100vh;
     width: 100%;
     overflow: hidden;
-
-    &::before {
-        content: " ";
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100vh;
-        width: 100%;
-        background-color: var(--lp-background-overlay);
-    }
 }
 
 .mx_BackdropPanel--canvas {
