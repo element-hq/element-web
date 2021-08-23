@@ -152,6 +152,7 @@ class LoggedInView extends React.Component<IProps, IState> {
     protected readonly _roomView: React.RefObject<any>;
     protected readonly _resizeContainer: React.RefObject<ResizeHandle>;
     protected compactLayoutWatcherRef: string;
+    protected backgroundImageWatcherRef: string;
     protected resizer: Resizer;
 
     constructor(props, context) {
@@ -195,6 +196,9 @@ class LoggedInView extends React.Component<IProps, IState> {
         this.compactLayoutWatcherRef = SettingsStore.watchSetting(
             "useCompactLayout", null, this.onCompactLayoutChanged,
         );
+        this.backgroundImageWatcherRef = SettingsStore.watchSetting(
+            "RoomList.backgroundImage", null, this.refreshBackgroundImage,
+        );
 
         this.resizer = this.createResizer();
         this.resizer.attach();
@@ -212,6 +216,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         this._matrixClient.removeListener("RoomState.events", this.onRoomStateEvents);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.refreshBackgroundImage);
         SettingsStore.unwatchSetting(this.compactLayoutWatcherRef);
+        SettingsStore.unwatchSetting(this.backgroundImageWatcherRef);
         this.resizer.detach();
     }
 
@@ -644,18 +649,22 @@ class LoggedInView extends React.Component<IProps, IState> {
                     aria-hidden={this.props.hideToSRUsers}
                 >
                     <ToastContainer />
-                    <div ref={this._resizeContainer} className={bodyClasses}>
-                        <BackdropPanel
-                            backgroundImage={this.state.backgroundImage}
-                        />
-                        { SpaceStore.spacesEnabled ? <SpacePanel /> : null }
-                        <LeftPanel
-                            isMinimized={this.props.collapseLhs || false}
-                            resizeNotifier={this.props.resizeNotifier}
-                        />
-                        <ResizeHandle />
+                    <div className={bodyClasses}>
+                        <div ref={this._resizeContainer} className='mx_LeftPanel_wrapper'>
+                            <BackdropPanel
+                                backgroundImage={this.state.backgroundImage}
+                            />
+                            { SpaceStore.spacesEnabled ? <SpacePanel /> : null }
+                            <LeftPanel
+                                isMinimized={this.props.collapseLhs || false}
+                                resizeNotifier={this.props.resizeNotifier}
+                            />
+                            <ResizeHandle />
+                        </div>
+                        <div className="mx_RoomView_wrapper">
+                            { pageElement }
+                        </div>
                     </div>
-                    { pageElement }
                 </div>
                 <CallContainer />
                 <NonUrgentToastContainer />

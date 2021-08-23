@@ -915,7 +915,12 @@ export default class EventTile extends React.Component<IProps, IState> {
     render() {
         const msgtype = this.props.mxEvent.getContent().msgtype;
         const eventType = this.props.mxEvent.getType() as EventType;
-        const { tileHandler, isBubbleMessage, isInfoMessage } = getEventDisplayInfo(this.props.mxEvent);
+        const {
+            tileHandler,
+            isBubbleMessage,
+            isInfoMessage,
+            isLeftAlignedBubbleMessage,
+        } = getEventDisplayInfo(this.props.mxEvent);
 
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
@@ -937,6 +942,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         const isEditing = !!this.props.editState;
         const classes = classNames({
             mx_EventTile_bubbleContainer: isBubbleMessage,
+            mx_EventTile_leftAlignedBubble: isLeftAlignedBubbleMessage,
             mx_EventTile: true,
             mx_EventTile_isEditing: isEditing,
             mx_EventTile_info: isInfoMessage,
