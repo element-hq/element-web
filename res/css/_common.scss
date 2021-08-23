@@ -381,6 +381,11 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     font-size: $font-14px;
     color: $primary-fg-color;
     word-wrap: break-word;
+
+    a {
+        color: $accent-color;
+        cursor: pointer;
+    }
 }
 
 .mx_Dialog_buttons {
