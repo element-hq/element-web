@@ -14,21 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_SpaceRoomDirectory_dialogWrapper > .mx_Dialog {
-    max-width: 960px;
-    height: 100%;
-}
-
-.mx_SpaceRoomDirectory {
-    height: 100%;
-    margin-bottom: 12px;
-    color: $primary-fg-color;
-    word-break: break-word;
-    display: flex;
-    flex-direction: column;
-}
-
-.mx_SpaceRoomDirectory,
 .mx_SpaceRoomView_landing {
     .mx_Dialog_title {
         display: flex;
@@ -68,7 +53,7 @@ limitations under the License.
         margin: 24px 0 16px;
     }
 
-    .mx_SpaceRoomDirectory_noResults {
+    .mx_SpaceHierarchy_noResults {
         text-align: center;
 
         > div {
@@ -78,13 +63,19 @@ limitations under the License.
         }
     }
 
-    .mx_SpaceRoomDirectory_listHeader {
+    .mx_SpaceHierarchy_listHeader {
         display: flex;
         min-height: 32px;
         align-items: center;
         font-size: $font-15px;
         line-height: $font-24px;
         color: $primary-fg-color;
+        margin-bottom: 12px;
+
+        > h4 {
+            font-weight: $font-semi-bold;
+            margin: 0;
+        }
 
         .mx_AccessibleButton {
             padding: 4px 12px;
@@ -105,7 +96,7 @@ limitations under the License.
         }
     }
 
-    .mx_SpaceRoomDirectory_error {
+    .mx_SpaceHierarchy_error {
         position: relative;
         font-weight: $font-semi-bold;
         color: $notice-primary-color;
@@ -124,13 +115,14 @@ limitations under the License.
             background-image: url("$(res)/img/element-icons/warning-badge.svg");
         }
     }
-}
 
-.mx_SpaceRoomDirectory_list {
-    margin-top: 16px;
-    padding-bottom: 40px;
+    .mx_SpaceHierarchy_list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
 
-    .mx_SpaceRoomDirectory_roomCount {
+    .mx_SpaceHierarchy_roomCount {
         > h3 {
             display: inline;
             font-weight: $font-semi-bold;
@@ -147,13 +139,13 @@ limitations under the License.
         }
     }
 
-    .mx_SpaceRoomDirectory_subspace {
+    .mx_SpaceHierarchy_subspace {
         .mx_BaseAvatar_image {
             border-radius: 8px;
         }
     }
 
-    .mx_SpaceRoomDirectory_subspace_toggle {
+    .mx_SpaceHierarchy_subspace_toggle {
         position: absolute;
         left: -1px;
         top: 10px;
@@ -177,17 +169,17 @@ limitations under the License.
             mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
         }
 
-        &.mx_SpaceRoomDirectory_subspace_toggle_shown::before {
+        &.mx_SpaceHierarchy_subspace_toggle_shown::before {
             transform: rotate(0deg);
         }
     }
 
-    .mx_SpaceRoomDirectory_subspace_children {
+    .mx_SpaceHierarchy_subspace_children {
         position: relative;
         padding-left: 12px;
     }
 
-    .mx_SpaceRoomDirectory_roomTile {
+    .mx_SpaceHierarchy_roomTile {
         position: relative;
         padding: 8px 16px;
         border-radius: 8px;
@@ -204,7 +196,7 @@ limitations under the License.
             grid-column: 1;
         }
 
-        .mx_SpaceRoomDirectory_roomTile_name {
+        .mx_SpaceHierarchy_roomTile_name {
             font-weight: $font-semi-bold;
             font-size: $font-15px;
             line-height: $font-18px;
@@ -232,7 +224,7 @@ limitations under the License.
             }
         }
 
-        .mx_SpaceRoomDirectory_roomTile_info {
+        .mx_SpaceHierarchy_roomTile_info {
             font-size: $font-14px;
             line-height: $font-18px;
             color: $secondary-fg-color;
@@ -244,7 +236,7 @@ limitations under the License.
             overflow: hidden;
         }
 
-        .mx_SpaceRoomDirectory_actions {
+        .mx_SpaceHierarchy_actions {
             text-align: right;
             margin-left: 20px;
             grid-column: 3;
@@ -278,12 +270,12 @@ limitations under the License.
         }
     }
 
-    li.mx_SpaceRoomDirectory_roomTileWrapper {
+    li.mx_SpaceHierarchy_roomTileWrapper {
         list-style: none;
     }
 
-    .mx_SpaceRoomDirectory_roomTile,
-    .mx_SpaceRoomDirectory_subspace_children {
+    .mx_SpaceHierarchy_roomTile,
+    .mx_SpaceHierarchy_subspace_children {
         &::before {
             content: "";
             position: absolute;
@@ -295,8 +287,8 @@ limitations under the License.
         }
     }
 
-    .mx_SpaceRoomDirectory_actions {
-        .mx_SpaceRoomDirectory_actionsText {
+    .mx_SpaceHierarchy_actions {
+        .mx_SpaceHierarchy_actionsText {
             font-weight: normal;
             font-size: $font-12px;
             line-height: $font-15px;
@@ -311,7 +303,7 @@ limitations under the License.
         margin: 20px 0;
     }
 
-    .mx_SpaceRoomDirectory_createRoom {
+    .mx_SpaceHierarchy_createRoom {
         display: block;
         margin: 16px auto 0;
         width: max-content;

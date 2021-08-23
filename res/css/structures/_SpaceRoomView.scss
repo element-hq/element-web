@@ -363,11 +363,6 @@ $SpaceRoomViewInnerWidth: 428px;
             width: max-content;
             margin: 0 0 -40px auto; // collapse its own height to not push other components down
         }
-
-        .mx_SpaceRoomDirectory_list {
-            // we don't want this container to get forced into the flexbox layout
-            display: contents;
-        }
     }
 
     .mx_SpaceRoomView_privateScope {
