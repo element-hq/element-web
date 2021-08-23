@@ -19,12 +19,10 @@ import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { User } from "matrix-js-sdk/src/models/user";
-import { memoize, throttle } from "lodash";
+import { throttle } from "lodash";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import { mediaFromMxc } from "../customisations/Media";
-import SettingsStore from "../settings/SettingsStore";
-import { getDrawable } from "../utils/drawable";
 
 interface IState {
     displayName?: string;
@@ -138,22 +136,6 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         }
         await this.updateState({ displayName: profileInfo.displayname, avatarUrl: profileInfo.avatar_url });
     };
-
-    public async getAvatarBitmap(avatarSize = 32): Promise<CanvasImageSource> {
-        let avatarUrl = this.getHttpAvatarUrl(avatarSize);
-        const settingBgMxc = SettingsStore.getValue("RoomList.backgroundImage");
-        if (settingBgMxc) {
-            avatarUrl = mediaFromMxc(settingBgMxc).getSquareThumbnailHttp(avatarSize);
-        }
-
-        if (avatarUrl) {
-            return await this.buildBitmap(avatarUrl);
-        } else {
-            return null;
-        }
-    }
-
-    private buildBitmap = memoize(getDrawable);
 
     private onStateEvents = throttle(async (ev: MatrixEvent) => {
         const myUserId = MatrixClientPeg.get().getUserId();

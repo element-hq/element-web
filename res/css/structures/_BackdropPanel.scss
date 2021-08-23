@@ -21,9 +21,10 @@ limitations under the License.
     height: 100vh;
     width: 100%;
     overflow: hidden;
+    filter: blur(var(--lp-background-blur));
 }
 
-.mx_BackdropPanel--canvas {
+.mx_BackdropPanel--image {
     position: absolute;
     top: 0;
     left: 0;
@@ -32,10 +33,4 @@ limitations under the License.
     pointer-events: none;
     overflow: hidden;
 
-    &:nth-of-type(2n-1) {
-        opacity: 0.2;
-    }
-    &:nth-of-type(2n) {
-        opacity: 0.1;
-    }
 }

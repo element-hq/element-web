@@ -14,12 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MatrixChat--with-avatar {
-    .mx_GroupFilterPanel {
-        background-color: transparent;
-    }
-}
-
 $groupFilterPanelWidth: 56px; // only applies in this file, used for calculations
 
 .mx_GroupFilterPanelContainer {
@@ -36,6 +30,7 @@ $groupFilterPanelWidth: 56px; // only applies in this file, used for calculation
 }
 
 .mx_GroupFilterPanel {
+    z-index: 1;
     background-color: $groupFilterPanel-bg-color;
     flex: 1;
     cursor: pointer;

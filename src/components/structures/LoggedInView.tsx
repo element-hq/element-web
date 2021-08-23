@@ -133,7 +133,7 @@ interface IState {
     usageLimitEventTs?: number;
     useCompactLayout: boolean;
     activeCalls: Array<MatrixCall>;
-    backgroundImage?: CanvasImageSource;
+    backgroundImage?: string;
 }
 
 /**
@@ -219,7 +219,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
     private refreshBackgroundImage = async (): Promise<void> => {
         this.setState({
-            backgroundImage: await OwnProfileStore.instance.getAvatarBitmap(),
+            backgroundImage: OwnProfileStore.instance.getHttpAvatarUrl(),
         });
     };
 
@@ -648,20 +648,30 @@ class LoggedInView extends React.Component<IProps, IState> {
                     <ToastContainer />
                     <div className={bodyClasses}>
                         <div className='mx_LeftPanel_wrapper'>
-                            <BackdropPanel
-                                backgroundImage={this.state.backgroundImage}
-                            />
                             { SettingsStore.getValue('TagPanel.enableTagPanel') &&
                                 (<div className="mx_GroupFilterPanelContainer">
+                                    <BackdropPanel
+                                        blurMultiplier={0.5}
+                                        backgroundImage={this.state.backgroundImage}
+                                    />
                                     <GroupFilterPanel />
                                     { SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null }
                                 </div>)
                             }
-                            { SpaceStore.spacesEnabled ? <SpacePanel /> : null }
+                            { SpaceStore.spacesEnabled ? <>
+                                <BackdropPanel
+                                    blurMultiplier={0.5}
+                                    backgroundImage={this.state.backgroundImage}
+                                />
+                                <SpacePanel />
+                            </> : null }
+                            <BackdropPanel
+                                backgroundImage={this.state.backgroundImage}
+                            />
                             <div
                                 ref={this._resizeContainer}
-                                className="mx_LeftPanel_wrapper--user">
-                                <div className="mx_LeftPanel_background" />
+                                className="mx_LeftPanel_wrapper--user"
+                            >
                                 <LeftPanel
                                     isMinimized={this.props.collapseLhs || false}
                                     resizeNotifier={this.props.resizeNotifier}

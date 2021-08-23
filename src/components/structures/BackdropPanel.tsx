@@ -14,74 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
-import "context-filter-polyfill";
+import React, { CSSProperties } from "react";
 
 interface IProps {
-    backgroundImage?: CanvasImageSource;
+    backgroundImage?: string;
+    blurMultiplier?: number;
 }
 
-interface IState {
-    // Left Panel image
-    lpImage?: string;
-}
+export const BackdropPanel: React.FC<IProps> = ({ backgroundImage, blurMultiplier }) => {
+    if (!backgroundImage) return null;
 
-export default class BackdropPanel extends React.PureComponent<IProps, IState> {
-    private style = getComputedStyle(document.documentElement);
-
-    public state: IState = {};
-
-    public componentDidMount() {
-        this.onResize();
-    }
-
-    public componentDidUpdate(prevProps: IProps) {
-        if (prevProps.backgroundImage !== this.props.backgroundImage) {
-            this.onResize();
+    const styles: CSSProperties = {};
+    if (blurMultiplier) {
+        const rootStyle = getComputedStyle(document.documentElement);
+        const blurValue = rootStyle.getPropertyValue('--lp-background-blur');
+        const pixelsValue = blurValue.replace('px', '');
+        const parsed = parseInt(pixelsValue, 10);
+        if (!isNaN(parsed)) {
+            styles.filter = `blur(${parsed * blurMultiplier}px)`;
         }
     }
-
-    private onResize = () => {
-        if (this.props.backgroundImage) {
-            this.refreshBackdropImage();
-        }
-    };
-
-    private refreshBackdropImage = (): void => {
-        const leftPanelCanvas = document.createElement('canvas');
-        const leftPanelContext = leftPanelCanvas.getContext("2d");
-        const { backgroundImage } = this.props;
-
-        const imageWidth = (backgroundImage as ImageBitmap).width;
-        const imageHeight = (backgroundImage as ImageBitmap).height;
-
-        leftPanelCanvas.width = window.screen.width * 0.5;
-        leftPanelCanvas.height = window.screen.height;
-
-        const roomListBlur = this.style.getPropertyValue('--lp-background-blur');
-
-        leftPanelContext.filter = `blur(${roomListBlur})`;
-        leftPanelContext.drawImage(
-            backgroundImage,
-            0, 0,
-            imageWidth, imageHeight,
-            0,
-            0,
-            window.screen.width * 0.5,
-            window.screen.height,
-        );
-        this.setState({
-            lpImage: leftPanelCanvas.toDataURL('image/jpeg', 1),
-
-        });
-    };
-
-    public render() {
-        if (!this.props.backgroundImage) return null;
-        return <div className="mx_BackdropPanel">
-            { this.state?.lpImage !== 'data:,' && <img
-                className="mx_BackdropPanel--canvas"
-                src={this.state.lpImage} /> }
-        </div>;
-    }
-}
+    return <div className="mx_BackdropPanel">
+        <img
+            style={styles}
+            className="mx_BackdropPanel--image"
+            src={backgroundImage} />
+    </div>;
+};
+export default BackdropPanel;

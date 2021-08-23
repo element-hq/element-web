@@ -27,28 +27,8 @@ $roomListCollapsedWidth: 68px;
     display: flex;
     max-width: 50%;
 
-    .mx_LeftPanel_background {
-
-        &::before {
-            content: " ";
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100vh;
-            width: 100%;
-            background-color: var(--lp-background-overlay);
-        }
-
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: $roomlist-bg-color;
-        opacity: 0.5;
-    }
-
     .mx_LeftPanel_wrapper--user {
+        background-color: $roomlist-bg-color;
         display: flex;
         overflow: hidden;
         position: relative;
