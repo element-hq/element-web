@@ -3641,5 +3641,6 @@
     "Enable encryption in settings.": "Aktiviere Verschlüsselung in den Einstellungen.",
     "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.": "Dieser Raum ist nicht verschlüsselt. Oft ist dies aufgrund eines nicht unterstützten Geräts oder Methode wie E-Mail-Einladungen der Fall.",
     "Cross-signing is ready but keys are not backed up.": "Quersignatur ist bereit, die Schlüssel sind aber nicht gesichert.",
-    "Help people in spaces to find and join private rooms": "Hilf Personen in Spaces, privaten Räumen beizutreten"
+    "Help people in spaces to find and join private rooms": "Hilf Personen in Spaces, privaten Räumen beizutreten",
+    "Use Command + F to search timeline": "Nutze Command + F um den Verlauf zu durchsuchen"
 }
