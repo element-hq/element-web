@@ -3613,5 +3613,13 @@
     "All rooms will be added and all community members will be invited.": "Lisame kõik jututoad ja saadame kitse kõikidele senise kogukonna liikmetele.",
     "Flair won't be available in Spaces for the foreseeable future.": "Me ei plaani lähitulevikus pakkuda kogukondades rinnamärkide funktsionaalsust.",
     "This description will be shown to people when they view your space": "Seda kirjeldust kuvame kõigile, kes vaatavad sinu kogukonda",
-    "Unknown failure: %(reason)s": "Tundmatu viga: %(reason)s"
+    "Unknown failure: %(reason)s": "Tundmatu viga: %(reason)s",
+    "Help space members find private rooms": "Aita",
+    "New in the Spaces beta": "Mida",
+    "We sent the others, but the below people couldn't be invited to <RoomName/>": "Teised kasutajad said kutse, kuid allpool toodud kasutajatele ei õnnestunud saata kutset <RoomName/> jututuppa",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Kui sa oled teatanud meile GitHub'i vahendusel veast, siis silumislogid aitavad meil seda viga kergemini parandada. Vigadega seotud logid sisaldavad rakenduse teavet, sealhulgas sinu kasutajanime, külastatud jututubade kasutajatunnuseid või aliasi, viimatikasutatud liidese funktsionaalsusi ning teiste kasutajate kasutajanimesid. Logides ei ole saadetud sõnumite sisu.",
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Vigadega seotud logid sisaldavad rakenduse teavet, sealhulgas sinu kasutajanime, külastatud jututubade kasutajatunnuseid või aliasi, viimatikasutatud liidese funktsionaalsusi ning teiste kasutajate kasutajanimesid. Logides ei ole saadetud sõnumite sisu.",
+    "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.": "Sinu isiklikud sõnumid on tavaliselt läbivalt krüptitud, aga see jututuba ei ole. Tavaliselt on põhjuseks, et kasutusel on mõni seade või meetod nagu e-posti põhised kutsed, mis krüptimist veel ei toeta.",
+    "Enable encryption in settings.": "Võta seadistustes krüptimine kasutusele.",
+    "Cross-signing is ready but keys are not backed up.": "Risttunnustamine on töövalmis, aga krüptovõtmed on varundamata."
 }
