@@ -393,7 +393,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
         const classes = classNames({
             'mx_MImageBody_thumbnail': true,
-            'mx_MImageBody_thumbnail--blurhash': this.props.mxEvent.getContent().info[BLURHASH_FIELD],
+            'mx_MImageBody_thumbnail--blurhash': this.props.mxEvent.getContent().info?.[BLURHASH_FIELD],
         });
 
         // This has incredibly broken types.
@@ -446,7 +446,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
     // Overidden by MStickerBody
     protected getPlaceholder(width: number, height: number): JSX.Element {
-        const blurhash = this.props.mxEvent.getContent().info[BLURHASH_FIELD];
+        const blurhash = this.props.mxEvent.getContent().info?.[BLURHASH_FIELD];
 
         if (blurhash) {
             if (this.state.placeholder === 'no-image') {
