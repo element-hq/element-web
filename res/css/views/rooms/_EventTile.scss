@@ -676,6 +676,10 @@ $hover-select-border: 4px;
 }
 
 
+.mx_ThreadInfo:hover {
+    cursor: pointer;
+}
+
 .mx_ThreadView {
 
     display: flex;

@@ -531,6 +531,7 @@ export default class EventTile extends React.Component<IProps, IState> {
 
         return (
             <div
+                className="mx_ThreadInfo"
                 onClick={() => {
                     dis.dispatch({
                         action: Action.SetRightPanelPhase,
@@ -544,7 +545,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                 <span className="mx_EventListSummary_avatars">
                     { avatars }
                 </span>
-                { thread.length } { thread.length === 1 ? 'reply' : 'replies' }
+                { thread.length - 1 } { thread.length === 2 ? 'reply' : 'replies' }
             </div>
         );
     }
