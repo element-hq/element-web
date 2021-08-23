@@ -62,6 +62,9 @@ $SpaceRoomViewInnerWidth: 428px;
 }
 
 .mx_SpaceRoomView {
+    overflow-y: auto;
+    flex: 1;
+
     .mx_MainSplit > div:first-child {
         padding: 80px 60px;
         flex-grow: 1;
@@ -248,6 +251,7 @@ $SpaceRoomViewInnerWidth: 428px;
     .mx_SpaceRoomView_landing {
         display: flex;
         flex-direction: column;
+        min-width: 0;
 
         > .mx_BaseAvatar_image,
         > .mx_BaseAvatar > .mx_BaseAvatar_image {
