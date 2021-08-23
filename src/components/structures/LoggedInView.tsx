@@ -284,7 +284,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         if (isNaN(lhsSize)) {
             lhsSize = 350;
         }
-        this.resizer.forHandleAt(0).resize(lhsSize);
+        this.resizer.forHandleWithId('lp-resizer').resize(lhsSize);
     }
 
     private onAccountData = (event: MatrixEvent) => {
@@ -654,7 +654,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                                 isMinimized={this.props.collapseLhs || false}
                                 resizeNotifier={this.props.resizeNotifier}
                             />
-                            <ResizeHandle />
+                                <ResizeHandle id="lp-resizer" />
                         </div>
                         <div className="mx_RoomView_wrapper">
                             { pageElement }
