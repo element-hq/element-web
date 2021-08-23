@@ -3666,5 +3666,7 @@
     "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Nëse keni parashtruar një të metë përmes GitHub-it, regjistrat e diagnostikimit mund të na ndihmojnë të zbulojmë problemin. Regjistrat e diagnostikimit përmbajnë të dhëna mbi përdorimin e aplikacionit, përfshi emrin tuaj të përdoruesit, ID-të ose aliaset e dhomave apo grupeve që keni vizituar, me cilat elemente të UI-t keni ndërvepruar së fundi, dhe emrat e përdoruesve të përdoruesve të tjerë. Në to nuk përmbahen mesazhe.",
     "Enable encryption in settings.": "Aktivizoni fshehtëzimin te rregullimet.",
     "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.": "Mesazhet tuaja private normalisht fshehtëzohen, por kjo dhomë s’fshehtëzohet. Zakonisht kjo vjen për shkak të përdorimit të një pajisjeje ose metode të pambuluar, bie fjala, ftesa me email.",
-    "Cross-signing is ready but keys are not backed up.": "“Cross-signing” është gati, por kyçet s’janë koperuajtur."
+    "Cross-signing is ready but keys are not backed up.": "“Cross-signing” është gati, por kyçet s’janë koperuajtur.",
+    "Rooms and spaces": "",
+    "Results": ""
 }
