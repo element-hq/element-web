@@ -180,7 +180,7 @@ export default class MessageActionBar extends React.PureComponent {
             allowClose: false,
             refireParams: {
                 event: this.props.mxEvent,
-            }
+            },
         });
     }
 
@@ -282,7 +282,7 @@ export default class MessageActionBar extends React.PureComponent {
                                 onClick={this.onThreadClick}
                                 key="thread"
                             />
-                        )}
+                        ) }
                     </>);
                 }
                 if (this.context.canReact) {
