@@ -462,7 +462,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             this.isListeningForReceipts = true;
         }
 
-        if (SettingsStore.getValue("experimentalThreadSupport")) {
+        if (SettingsStore.getValue("feature_thread")) {
             this.props.mxEvent.once("Thread.ready", this.updateThread);
             this.props.mxEvent.on("Thread.update", this.updateThread);
         }
@@ -514,7 +514,7 @@ export default class EventTile extends React.Component<IProps, IState> {
     }
 
     private renderThreadInfo(): React.ReactNode {
-        if (!SettingsStore.getValue("experimentalThreadSupport")) {
+        if (!SettingsStore.getValue("feature_thread")) {
             return null;
         }
 

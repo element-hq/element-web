@@ -1,6 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2021 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,7 +21,6 @@ import { Thread } from 'matrix-js-sdk/src/models/thread';
 import BaseCard from "../views/right_panel/BaseCard";
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import { replaceableComponent } from "../../utils/replaceableComponent";
-import { MatrixClientPeg } from '../../MatrixClientPeg';
 
 import ResizeNotifier from '../../utils/ResizeNotifier';
 import EventTile, { TileShape } from '../views/rooms/EventTile';
@@ -48,11 +46,8 @@ interface IState {
     thread?: Thread;
 }
 
-/*
- * Component which shows the filtered file using a TimelinePanel
- */
 @replaceableComponent("structures.ThreadView")
-class ThreadView extends React.Component<IProps, IState> {
+export default class ThreadView extends React.Component<IProps, IState> {
     private dispatcherRef: string;
 
     constructor(props: IProps) {
@@ -93,7 +88,7 @@ class ThreadView extends React.Component<IProps, IState> {
         }
     };
 
-    setupThread = (mxEv: MatrixEvent) => {
+    private setupThread = (mxEv: MatrixEvent) => {
         const thread = mxEv.getThread();
         if (thread) {
             thread.on("Thread.update", this.updateThread);
@@ -102,14 +97,14 @@ class ThreadView extends React.Component<IProps, IState> {
         }
     };
 
-    teardownThread = () => {
+    private teardownThread = () => {
         if (this.state.thread) {
             this.state.thread.removeListener("Thread.update", this.updateThread);
             this.state.thread.removeListener("Thread.ready", this.updateThread);
         }
     };
 
-    updateThread = (thread?: Thread) => {
+    private updateThread = (thread?: Thread) => {
         if (thread) {
             this.setState({ thread });
         } else {
@@ -128,7 +123,7 @@ class ThreadView extends React.Component<IProps, IState> {
         />;
     }
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <BaseCard
                 className="mx_ThreadView"
@@ -161,5 +156,3 @@ class ThreadView extends React.Component<IProps, IState> {
         );
     }
 }
-
-export default ThreadView;

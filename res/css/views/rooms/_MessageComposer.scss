@@ -347,9 +347,11 @@ limitations under the License.
 
 .mx_MessageComposer.mx_MessageComposer--compact {
     margin-right: 0;
+
     .mx_MessageComposer_wrapper {
         padding: 0;
     }
+
     .mx_MessageComposer_button:last-child {
         margin-right: 0;
     }

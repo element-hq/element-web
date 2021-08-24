@@ -275,7 +275,7 @@ export default class MessageActionBar extends React.PureComponent {
                             onClick={this.onReplyClick}
                             key="reply"
                         />
-                        { SettingsStore.getValue("experimentalThreadSupport") && (
+                        { SettingsStore.getValue("feature_thread") && (
                             <RovingAccessibleTooltipButton
                                 className="mx_MessageActionBar_maskButton mx_MessageActionBar_threadButton"
                                 title={_t("Thread")}

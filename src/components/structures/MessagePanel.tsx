@@ -267,7 +267,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     componentDidMount() {
         this.calculateRoomMembersCount();
         this.props.room?.on("RoomState.members", this.calculateRoomMembersCount);
-        if (SettingsStore.getValue("experimentalThreadSupport")) {
+        if (SettingsStore.getValue("feature_thread")) {
             this.props.room?.getThreads().forEach(thread => thread.fetchReplyChain());
         }
         this.isMounted = true;
@@ -448,8 +448,9 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         // Always show highlighted event
         if (this.props.highlightedEventId === mxEv.getId()) return true;
 
-        const threadingEnabled = SettingsStore.getValue("experimentalThreadSupport");
-        if (threadingEnabled && mxEv.replyEventId && this.props.hideThreadedMessages === true) {
+        if (mxEv.replyEventId
+                && this.props.hideThreadedMessages
+                && SettingsStore.getValue("feature_thread")) {
             return false;
         }
 

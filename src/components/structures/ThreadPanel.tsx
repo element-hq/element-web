@@ -1,6 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2021 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,11 +36,8 @@ interface IState {
     threads?: Thread[];
 }
 
-/*
- * Component which shows the filtered file using a TimelinePanel
- */
 @replaceableComponent("structures.ThreadView")
-class ThreadView extends React.Component<IProps, IState> {
+export default class ThreadPanel extends React.Component<IProps, IState> {
     private room: Room;
 
     constructor(props: IProps) {
@@ -59,15 +55,15 @@ class ThreadView extends React.Component<IProps, IState> {
         this.room.removeListener("Thread.ready", this.onThreadEventReceived);
     }
 
-    public onThreadEventReceived = () => this.updateThreads();
+    private onThreadEventReceived = () => this.updateThreads();
 
-    public updateThreads = (callback?: () => void): void => {
+    private updateThreads = (callback?: () => void): void => {
         this.setState({
             threads: this.room.getThreads(),
         }, callback);
     };
 
-    public renderEventTile(event: MatrixEvent): JSX.Element {
+    private renderEventTile(event: MatrixEvent): JSX.Element {
         return <EventTile
             key={event.getId()}
             mxEvent={event}
@@ -77,7 +73,7 @@ class ThreadView extends React.Component<IProps, IState> {
         />;
     }
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <BaseCard
                 className="mx_ThreadPanel"
@@ -95,5 +91,3 @@ class ThreadView extends React.Component<IProps, IState> {
         );
     }
 }
-
-export default ThreadView;
