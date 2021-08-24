@@ -3668,5 +3668,9 @@
     "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.": "Mesazhet tuaja private normalisht fshehtëzohen, por kjo dhomë s’fshehtëzohet. Zakonisht kjo vjen për shkak të përdorimit të një pajisjeje ose metode të pambuluar, bie fjala, ftesa me email.",
     "Cross-signing is ready but keys are not backed up.": "“Cross-signing” është gati, por kyçet s’janë koperuajtur.",
     "Rooms and spaces": "",
-    "Results": ""
+    "Results": "",
+    "Are you sure you want to add encryption to this public room?": "A jeni të sigurtë që dëshironi të shtoni enkriptim në këtë dhomën publike?",
+    "Thumbs up": "Gishtin lart",
+    "Remain on your screen while running": "Rrini në ekran për deri sa është hapur",
+    "Remain on your screen when viewing another room, when running": "Rrini në ekran për deri sa jeni duke shikuar një dhomë tjetër"
 }
