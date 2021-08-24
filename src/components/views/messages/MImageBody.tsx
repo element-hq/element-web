@@ -47,6 +47,7 @@ interface IState {
     };
     hover: boolean;
     showImage: boolean;
+    placeholder: 'no-image' | 'blurhash';
 }
 
 @replaceableComponent("views.messages.MImageBody")
@@ -68,6 +69,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             loadedImageDimensions: null,
             hover: false,
             showImage: SettingsStore.getValue("showImages"),
+            placeholder: 'no-image',
         };
     }
 
@@ -277,6 +279,17 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             this.downloadImage();
             this.setState({ showImage: true });
         } // else don't download anything because we don't want to display anything.
+
+        // Add a 150ms timer for blurhash to first appear.
+        if (this.media.isEncrypted) {
+            setTimeout(() => {
+                if (!this.state.imgLoaded || !this.state.imgError) {
+                    this.setState({
+                        placeholder: 'blurhash',
+                    });
+                }
+            }, 150);
+        }
     }
 
     componentWillUnmount() {
@@ -380,7 +393,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
         const classes = classNames({
             'mx_MImageBody_thumbnail': true,
-            'mx_MImageBody_thumbnail--blurhash': this.props.mxEvent.getContent().info[BLURHASH_FIELD],
+            'mx_MImageBody_thumbnail--blurhash': this.props.mxEvent.getContent().info?.[BLURHASH_FIELD],
         });
 
         // This has incredibly broken types.
@@ -433,8 +446,15 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
     // Overidden by MStickerBody
     protected getPlaceholder(width: number, height: number): JSX.Element {
-        const blurhash = this.props.mxEvent.getContent().info[BLURHASH_FIELD];
-        if (blurhash) return <Blurhash className="mx_Blurhash" hash={blurhash} width={width} height={height} />;
+        const blurhash = this.props.mxEvent.getContent().info?.[BLURHASH_FIELD];
+
+        if (blurhash) {
+            if (this.state.placeholder === 'no-image') {
+                return <div className="mx_no-image-placeholder" style={{ width: width, height: height }} />;
+            } else if (this.state.placeholder === 'blurhash') {
+                return <Blurhash className="mx_Blurhash" hash={blurhash} width={width} height={height} />;
+            }
+        }
         return (
             <InlineSpinner w={32} h={32} />
         );

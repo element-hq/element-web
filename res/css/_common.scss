@@ -168,7 +168,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 // it has the appearance of a text box so the controls
 // appear to be part of the input
 
-.mx_Dialog, .mx_MatrixChat {
+.mx_Dialog, .mx_MatrixChat_wrapper {
     .mx_textinput > input[type=text],
     .mx_textinput > input[type=search] {
         border: none;
@@ -381,6 +381,11 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     font-size: $font-14px;
     color: $primary-content;
     word-wrap: break-word;
+
+    a {
+        color: $accent-color;
+        cursor: pointer;
+    }
 }
 
 .mx_Dialog_buttons {

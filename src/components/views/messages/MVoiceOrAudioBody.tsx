@@ -19,14 +19,12 @@ import MAudioBody from "./MAudioBody";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import MVoiceMessageBody from "./MVoiceMessageBody";
 import { IBodyProps } from "./IBodyProps";
+import { isVoiceMessage } from "../../../utils/EventUtils";
 
 @replaceableComponent("views.messages.MVoiceOrAudioBody")
 export default class MVoiceOrAudioBody extends React.PureComponent<IBodyProps> {
     public render() {
-        // MSC2516 is a legacy identifier. See https://github.com/matrix-org/matrix-doc/pull/3245
-        const isVoiceMessage = !!this.props.mxEvent.getContent()['org.matrix.msc2516.voice']
-            || !!this.props.mxEvent.getContent()['org.matrix.msc3245.voice'];
-        if (isVoiceMessage) {
+        if (isVoiceMessage(this.props.mxEvent)) {
             return <MVoiceMessageBody {...this.props} />;
         } else {
             return <MAudioBody {...this.props} />;

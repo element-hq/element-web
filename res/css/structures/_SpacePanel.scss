@@ -23,10 +23,13 @@ $activeBackgroundColor: $roomtile-selected-bg-color;
 $activeBorderColor: $secondary-content;
 
 .mx_SpacePanel {
-    flex: 0 0 auto;
     background-color: $groupFilterPanel-bg-color;
+    flex: 0 0 auto;
     padding: 0;
     margin: 0;
+    position: relative;
+    // Fix for the blurred avatar-background
+    z-index: 1;
 
     // Create another flexbox so the Panel fills the container
     display: flex;

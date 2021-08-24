@@ -14,31 +14,38 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$groupFilterPanelWidth: 56px; // only applies in this file, used for calculations
 $roomListCollapsedWidth: 68px;
+
+.mx_MatrixChat--with-avatar {
+    .mx_LeftPanel,
+    .mx_LeftPanel .mx_LeftPanel_roomListContainer {
+        background-color: transparent;
+    }
+}
+
+.mx_LeftPanel_wrapper {
+    display: flex;
+    max-width: 50%;
+
+    .mx_LeftPanel_wrapper--user {
+        background-color: $roomlist-bg-color;
+        display: flex;
+        overflow: hidden;
+        position: relative;
+    }
+}
+
+
 
 .mx_LeftPanel {
     background-color: $roomlist-bg-color;
     // TODO decrease this once Spaces launches as it'll no longer need to include the 56px Community Panel
     min-width: 206px;
-    max-width: 50%;
 
     // Create a row-based flexbox for the GroupFilterPanel and the room list
     display: flex;
     contain: content;
-
-    .mx_LeftPanel_GroupFilterPanelContainer {
-        flex-grow: 0;
-        flex-shrink: 0;
-        flex-basis: $groupFilterPanelWidth;
-        height: 100%;
-
-        // Create another flexbox so the GroupFilterPanel fills the container
-        display: flex;
-        flex-direction: column;
-
-        // GroupFilterPanel handles its own CSS
-    }
+    position: relative;
 
     // Note: The 'room list' in this context is actually everything that isn't the tag
     // panel, such as the menu options, breadcrumbs, filtering, etc

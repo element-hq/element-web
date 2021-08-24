@@ -30,7 +30,14 @@ limitations under the License.
             font-size: $font-15px;
             line-height: $font-18px;
 
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
             margin-top: 2px;
+            margin-right: 6px;
+
+            max-width: 200px;
         }
 
         .mx_CallEvent_type {
