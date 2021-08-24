@@ -84,7 +84,7 @@ export default class Resizer<C extends IConfig = IConfig> {
     }
 
     public detach() {
-        const attachment = this?.config?.handler.parentElement ?? this.container;
+        const attachment = this?.config?.handler?.parentElement ?? this.container;
         attachment.removeEventListener("mousedown", this.onMouseDown, false);
         window.removeEventListener("resize", this.onResize);
     }
