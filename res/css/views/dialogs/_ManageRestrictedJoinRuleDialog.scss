@@ -23,7 +23,7 @@ limitations under the License.
 
 .mx_ManageRestrictedJoinRuleDialog {
     width: 480px;
-    color: $primary-fg-color;
+    color: $primary-content;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -52,7 +52,7 @@ limitations under the License.
 
         > h3 {
             margin: 0;
-            color: $secondary-fg-color;
+            color: $secondary-content;
             font-size: $font-12px;
             font-weight: $font-semi-bold;
             line-height: $font-15px;
@@ -85,7 +85,7 @@ limitations under the License.
                 margin-top: 8px;
                 font-size: $font-12px;
                 line-height: $font-15px;
-                color: $tertiary-fg-color;
+                color: $tertiary-content;
             }
 
             .mx_Checkbox {
@@ -113,7 +113,7 @@ limitations under the License.
 
         font-size: $font-12px;
         line-height: $font-15px;
-        color: $secondary-fg-color;
+        color: $secondary-content;
 
         &::before {
             content: '';
@@ -122,7 +122,7 @@ limitations under the License.
             top: calc(50% - 8px); // vertical centering
             height: 16px;
             width: 16px;
-            background-color: $secondary-fg-color;
+            background-color: $secondary-content;
             mask-repeat: no-repeat;
             mask-size: contain;
             mask-image: url('$(res)/img/element-icons/room/room-summary.svg');

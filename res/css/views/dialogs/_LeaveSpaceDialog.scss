@@ -63,7 +63,7 @@ limitations under the License.
 
             font-size: $font-12px;
             line-height: $font-15px;
-            color: $secondary-fg-color;
+            color: $secondary-content;
 
             &::before {
                 content: '';
@@ -72,7 +72,7 @@ limitations under the License.
                 top: calc(50% - 8px); // vertical centering
                 height: 16px;
                 width: 16px;
-                background-color: $secondary-fg-color;
+                background-color: $secondary-content;
                 mask-repeat: no-repeat;
                 mask-size: contain;
                 mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
@@ -81,7 +81,7 @@ limitations under the License.
         }
 
         > p {
-            color: $primary-fg-color;
+            color: $primary-content;
         }
     }
 

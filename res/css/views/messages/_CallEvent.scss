@@ -41,7 +41,7 @@ limitations under the License.
 
                 height: 16px;
                 width: 16px;
-                background-color: $secondary-fg-color;
+                background-color: $secondary-content;
                 mask-repeat: no-repeat;
                 mask-size: contain;
                 mask-position: center;
@@ -116,7 +116,7 @@ limitations under the License.
 
                 .mx_CallEvent_type {
                     font-weight: 400;
-                    color: $secondary-fg-color;
+                    color: $secondary-content;
                     font-size: 1.2rem;
                     line-height: $font-13px;
                     display: flex;
@@ -132,7 +132,7 @@ limitations under the License.
                             position: absolute;
                             height: 13px;
                             width: 13px;
-                            background-color: $secondary-fg-color;
+                            background-color: $secondary-content;
                             mask-repeat: no-repeat;
                             mask-size: contain;
                         }
@@ -145,7 +145,7 @@ limitations under the License.
             display: flex;
             flex-direction: row;
             align-items: center;
-            color: $secondary-fg-color;
+            color: $secondary-content;
             margin-right: 16px;
             gap: 8px;
             min-width: max-content;
