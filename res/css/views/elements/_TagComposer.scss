@@ -25,7 +25,7 @@ limitations under the License.
 
         .mx_AccessibleButton {
             min-width: 70px;
-            padding: 0; // override from button styles
+            padding: 0 8px; // override from button styles
             margin-left: 16px; // distance from <Field>
         }
 
