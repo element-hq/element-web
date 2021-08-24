@@ -50,6 +50,7 @@ $roomListCollapsedWidth: 68px;
     contain: content;
     position: relative;
     flex-grow: 1;
+    overflow: hidden;
 
     // Note: The 'room list' in this context is actually everything that isn't the tag
     // panel, such as the menu options, breadcrumbs, filtering, etc
