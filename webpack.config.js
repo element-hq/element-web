@@ -16,7 +16,7 @@ if (!ogImageUrl) ogImageUrl = 'https://app.element.io/themes/element/img/logos/o
 
 const cssThemes = {
     // CSS themes
-    "theme-legacy": "./node_modules/matrix-react-sdk/res/themes/legacy-light/css/legacy-light.scss",
+    "theme-legacy-light": "./node_modules/matrix-react-sdk/res/themes/legacy-light/css/legacy-light.scss",
     "theme-legacy-dark": "./node_modules/matrix-react-sdk/res/themes/legacy-dark/css/legacy-dark.scss",
     "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
     "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
