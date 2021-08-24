@@ -176,7 +176,7 @@ limitations under the License.
             width: 85%;
             opacity: 0.2;
             border: none;
-            border-bottom: 1px solid $primary-content; // XXX: Variable abuse
+            border-bottom: 1px solid $primary-content;
         }
 
         &.mx_IconizedContextMenu {
