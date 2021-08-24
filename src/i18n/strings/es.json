@@ -2081,7 +2081,7 @@
     "Joins room with given address": "Entrar a la sala con la dirección especificada",
     "Unrecognised room address:": "No se encuentra la dirección de la sala:",
     "Opens chat with the given user": "Abrir una conversación con el usuario especificado",
-    "Sends a message to the given user": "Enviar un mensaje al usuario especificado",
+    "Sends a message to the given user": "Enviar un mensaje al usuario seleccionado",
     "Light": "Claro",
     "Dark": "Oscuro",
     "Unexpected server error trying to leave the room": "Error inesperado del servidor al abandonar esta sala",
