@@ -178,8 +178,9 @@ export default class Resizer<C extends IConfig = IConfig> {
         const vertical = resizeHandle.classList.contains(this.classNames.vertical);
         const reverse = this.isReverseResizeHandle(resizeHandle);
         const Distributor = this.distributorCtor;
+        const useItemContainer = this.config && this.config.handler ? this.container : undefined;
         const sizer = Distributor.createSizer(this.container, vertical, reverse);
-        const item = Distributor.createItem(resizeHandle, this, sizer, this.container);
+        const item = Distributor.createItem(resizeHandle, this, sizer, useItemContainer);
         const distributor = new Distributor(item);
         return { sizer, distributor };
     }
