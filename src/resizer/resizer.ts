@@ -47,8 +47,17 @@ export default class Resizer<C extends IConfig = IConfig> {
         public container: HTMLElement,
         private readonly distributorCtor: {
             new(item: ResizeItem): FixedDistributor<C, any>;
-            createItem(resizeHandle: HTMLDivElement, resizer: Resizer, sizer: Sizer, container: HTMLElement): ResizeItem;
-            createSizer(containerElement: HTMLElement, vertical: boolean, reverse: boolean): Sizer;
+            createItem(
+                resizeHandle: HTMLDivElement,
+                resizer: Resizer,
+                sizer: Sizer,
+                container: HTMLElement
+            ): ResizeItem;
+            createSizer(
+                containerElement: HTMLElement,
+                vertical: boolean,
+                reverse: boolean
+            ): Sizer;
         },
         public readonly config?: C,
     ) {
