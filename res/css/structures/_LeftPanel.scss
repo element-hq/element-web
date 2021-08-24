@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-:root {
-    --room-list-collapsed-width: 68px;
-}
+$roomListCollapsedWidth: 68px;
 
 .mx_MatrixChat--with-avatar {
     .mx_LeftPanel,
@@ -34,6 +32,10 @@ limitations under the License.
         display: flex;
         overflow: hidden;
         position: relative;
+
+        &[data-collapsed] {
+            max-width: $roomListCollapsedWidth;
+        }
     }
 }
 
@@ -208,7 +210,7 @@ limitations under the License.
         width: unset !important;
 
         .mx_LeftPanel_roomListContainer {
-            width: var(--room-list-collapsed-width);
+            width: $roomListCollapsedWidth;
 
             .mx_LeftPanel_userHeader {
                 flex-direction: row;

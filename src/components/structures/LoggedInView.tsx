@@ -686,10 +686,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                             <div
                                 className="mx_LeftPanel_wrapper--user"
                                 ref={this._resizeContainer}
-                                style={{
-                                    maxWidth: this.props.collapseLhs ? getComputedStyle(document.documentElement)
-                                        .getPropertyValue('--room-list-collapsed-width') : undefined,
-                                }}
+                                data-collapsed={this.props.collapseLhs ? true : undefined}
                             >
                                 <LeftPanel
                                     isMinimized={this.props.collapseLhs || false}
