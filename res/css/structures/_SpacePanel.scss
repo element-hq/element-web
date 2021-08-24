@@ -49,7 +49,7 @@ $activeBorderColor: $secondary-content;
         mask-repeat: no-repeat;
         margin-left: $gutterSize;
         margin-bottom: 12px;
-        background-color: $tertiary-content;
+        background-color: $roomlist-header-color;
         mask-image: url('$(res)/img/element-icons/expand-space-panel.svg');
 
         &.expanded {
@@ -161,7 +161,7 @@ $activeBorderColor: $secondary-content;
             mask-position: center;
             mask-size: 20px;
             mask-repeat: no-repeat;
-            background-color: $tertiary-content;
+            background-color: $roomlist-header-color;
             mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
         }
 

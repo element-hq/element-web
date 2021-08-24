@@ -187,10 +187,11 @@ $theme-button-bg-color: $quinary-content;
 
 $roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-bg-color: rgba(245, 245, 245, 0.90);
+$roomlist-header-color: $tertiary-content;
 $roomsublist-divider-color: $primary-content;
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%);
 
-$groupFilterPanel-divider-color: $tertiary-content;
+$groupFilterPanel-divider-color: $roomlist-header-color;
 
 $roomtile-preview-color: $secondary-content;
 $roomtile-default-badge-bg-color: #61708b;
@@ -211,7 +212,7 @@ $username-variant6-color: #2dc2c5;
 $username-variant7-color: #5c56f5;
 $username-variant8-color: #74d12c;
 
-$notice-secondary-color: $tertiary-content;
+$notice-secondary-color: $roomlist-header-color;
 
 $panel-divider-color: transparent;
 
