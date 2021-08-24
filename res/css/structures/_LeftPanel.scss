@@ -32,6 +32,10 @@ $roomListCollapsedWidth: 68px;
         display: flex;
         overflow: hidden;
         position: relative;
+
+        .mx_ResizeHandle.mx_ResizeHandle_horizontal {
+            margin: 0;
+        }
     }
 }
 
