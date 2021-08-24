@@ -35,7 +35,7 @@ limitations under the License.
         // we cheat opacity on the theme colour with an after selector here
         &::after {
             content: '';
-            border-bottom: 1px solid $primary-content; // XXX: Variable abuse
+            border-bottom: 1px solid $primary-content;
             opacity: 0.2;
             display: block;
             padding-top: 8px;
