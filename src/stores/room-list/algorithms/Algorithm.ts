@@ -33,7 +33,6 @@ import { FILTER_CHANGED, IFilterCondition } from "../filters/IFilterCondition";
 import { EffectiveMembership, getEffectiveMembership, splitRoomsByMembership } from "../../../utils/membership";
 import { OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
-import SettingsStore from "../../../settings/SettingsStore";
 import { VisibilityProvider } from "../filters/VisibilityProvider";
 import SpaceStore from "../../SpaceStore";
 
