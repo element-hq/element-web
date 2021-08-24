@@ -151,7 +151,8 @@ class LoggedInView extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     protected readonly _matrixClient: MatrixClient;
     protected readonly _roomView: React.RefObject<any>;
-    protected readonly _resizeContainer: React.RefObject<ResizeHandle>;
+    protected readonly _resizeContainer: React.RefObject<HTMLDivElement>;
+    protected readonly resizeHandler: React.RefObject<HTMLDivElement>;
     protected compactLayoutWatcherRef: string;
     protected backgroundImageWatcherRef: string;
     protected resizer: Resizer;
@@ -176,6 +177,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         this._roomView = React.createRef();
         this._resizeContainer = React.createRef();
+        this.resizeHandler = React.createRef();
     }
 
     componentDidMount() {
@@ -280,6 +282,7 @@ class LoggedInView extends React.Component<IProps, IState> {
             isItemCollapsed: domNode => {
                 return domNode.classList.contains("mx_LeftPanel_minimized");
             },
+            handler: this.resizeHandler.current,
         };
         const resizer = new Resizer(this._resizeContainer.current, CollapseDistributor, collapseConfig);
         resizer.setClassNames({
@@ -681,16 +684,20 @@ class LoggedInView extends React.Component<IProps, IState> {
                                 backgroundImage={this.state.backgroundImage}
                             />
                             <div
-                                ref={this._resizeContainer}
                                 className="mx_LeftPanel_wrapper--user"
+                                ref={this._resizeContainer}
+                                style={{
+                                    maxWidth: this.props.collapseLhs ? getComputedStyle(document.documentElement)
+                                        .getPropertyValue('--room-list-collapsed-width') : undefined,
+                                }}
                             >
                                 <LeftPanel
                                     isMinimized={this.props.collapseLhs || false}
                                     resizeNotifier={this.props.resizeNotifier}
                                 />
-                                <ResizeHandle id="lp-resizer" />
                             </div>
                         </div>
+                        <ResizeHandle passRef={this.resizeHandler} id="lp-resizer" />
                         <div className="mx_RoomView_wrapper">
                             { pageElement }
                         </div>

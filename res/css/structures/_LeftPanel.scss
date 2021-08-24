@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$roomListCollapsedWidth: 68px;
+:root {
+    --room-list-collapsed-width: 68px;
+}
 
 .mx_MatrixChat--with-avatar {
     .mx_LeftPanel,
@@ -32,10 +34,6 @@ $roomListCollapsedWidth: 68px;
         display: flex;
         overflow: hidden;
         position: relative;
-
-        .mx_ResizeHandle.mx_ResizeHandle_horizontal {
-            margin: 0;
-        }
     }
 }
 
@@ -44,12 +42,12 @@ $roomListCollapsedWidth: 68px;
 .mx_LeftPanel {
     background-color: $roomlist-bg-color;
     // TODO decrease this once Spaces launches as it'll no longer need to include the 56px Community Panel
-    min-width: 206px;
 
     // Create a row-based flexbox for the GroupFilterPanel and the room list
     display: flex;
     contain: content;
     position: relative;
+    flex-grow: 1;
 
     // Note: The 'room list' in this context is actually everything that isn't the tag
     // panel, such as the menu options, breadcrumbs, filtering, etc
@@ -182,6 +180,8 @@ $roomListCollapsedWidth: 68px;
         }
 
         .mx_LeftPanel_roomListWrapper {
+            // Make the y-scrollbar more responsive
+            padding-right: 2px;
             overflow: hidden;
             margin-top: 10px; // so we're not up against the search/filter
             flex: 1 0 0; // needed in Safari to properly set flex-basis
@@ -203,11 +203,12 @@ $roomListCollapsedWidth: 68px;
 
     // These styles override the defaults for the minimized (66px) layout
     &.mx_LeftPanel_minimized {
+        flex-grow: 0;
         min-width: unset;
         width: unset !important;
 
         .mx_LeftPanel_roomListContainer {
-            width: $roomListCollapsedWidth;
+            width: var(--room-list-collapsed-width);
 
             .mx_LeftPanel_userHeader {
                 flex-direction: row;
@@ -233,4 +234,5 @@ $roomListCollapsedWidth: 68px;
             }
         }
     }
+
 }
