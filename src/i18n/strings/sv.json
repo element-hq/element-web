@@ -3595,5 +3595,16 @@
     "Anyone will be able to find and join this room.": "Vem som helst kommer kunna hitta och gå med i det här rummet.",
     "Anyone will be able to find and join this room, not just members of <SpaceName/>.": "Vem som helst kommer kunna hitta och gå med i det här rummet, inta bara medlemmar i <SpaceName/>.",
     "You can change this at any time from room settings.": "Du kan ändra detta när som helst i rumsinställningarna.",
-    "Everyone in <SpaceName/> will be able to find and join this room.": "Alla i <SpaceName/> kommer kunna hitta och gå med i det här rummet."
+    "Everyone in <SpaceName/> will be able to find and join this room.": "Alla i <SpaceName/> kommer kunna hitta och gå med i det här rummet.",
+    "Rooms and spaces": "Rum och utrymmen",
+    "Results": "Resultat",
+    "Enable encryption in settings.": "Aktivera kryptering i inställningarna.",
+    "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.": "Dina privata meddelanden är normalt krypterade, men det här rummet är inte det. Detta beror oftast på att en ostödd enhet eller metod används, som e-postinbjudningar.",
+    "To avoid these issues, create a <a>new public room</a> for the conversation you plan to have.": "För att undvika dessa problem, skapa ett <a>nytt offentligt rum</a> för konversationen du planerar att ha.",
+    "<b>It's not recommended to add encryption to public rooms.</b>Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Det rekommenderas inte att lägga till kryptering till offentliga rum.</b> Vem som helst kan hitta och gå med i offentliga rum, som vem som helst kan läsa meddelanden i dem. Du får inga av fördelarna med kryptering, och du kommer inte kunna stänga av det senare. Kryptering av meddelanden i ett offentligt rum kommer att göra sändning och mottagning av meddelanden långsammare.",
+    "<b>It's not recommended to make encrypted rooms public.</b> It will mean anyone can find and join the room, so anyone can read messages. You'll get none of the benefits of encryption. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Det rekommenderas inte att föra krypterade rum offentliga.</b> Det kommer betyda att vem som helst kan hitta och gå med i rummet, som vem som helst kan läsa meddelanden i dem. Du får inga av fördelarna med kryptering. Kryptering av meddelanden i ett offentligt rum kommer att göra sändning och mottagning av meddelanden långsammare.",
+    "Are you sure you want to make this encrypted room public?": "Är du säker på att du vill göra det här krypterade rummet offentligt?",
+    "To avoid these issues, create a <a>new encrypted room</a> for the conversation you plan to have.": "För att undvika dessa problem, skapa ett <a>nytt krypterat rum</a> för konversationen du planerar att ha.",
+    "Are you sure you want to add encryption to this public room?": "Är du säker på att du vill lägga till kryptering till det här offentliga rummet?",
+    "Cross-signing is ready but keys are not backed up.": "Korssignering är klart, men nycklarna är inte säkerhetskopierade än."
 }
