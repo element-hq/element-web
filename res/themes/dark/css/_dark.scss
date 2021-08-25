@@ -208,16 +208,11 @@ $tooltip-timeline-fg-color: $primary-content;
 
 $breadcrumb-placeholder-bg-color: #272c35;
 
-$message-body-panel-fg-color: $secondary-content;
-$message-body-panel-bg-color: $quinary-content;
-$message-body-panel-icon-bg-color: $system;
-$message-body-panel-icon-fg-color: $secondary-content;
-
 $voice-record-stop-border-color: $quaternary-content;
 $voice-record-waveform-incomplete-fg-color: $quaternary-content;
 $voice-record-icon-color: $quaternary-content;
-$voice-playback-button-bg-color: $message-body-panel-icon-bg-color;
-$voice-playback-button-fg-color: $message-body-panel-icon-fg-color;
+$voice-playback-button-bg-color: $system;
+$voice-playback-button-fg-color: $secondary-content;
 
 // Appearance tab colors
 $appearance-tab-border-color: $room-highlight-color;
