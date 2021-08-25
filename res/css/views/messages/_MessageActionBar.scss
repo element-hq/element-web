@@ -23,7 +23,7 @@ limitations under the License.
     height: 32px;
     line-height: $font-24px;
     border-radius: 8px;
-    background: $primary-bg-color;
+    background: $background;
     border: 1px solid $input-border-color;
     top: -32px;
     right: 8px;
@@ -77,11 +77,11 @@ limitations under the License.
     mask-size: 18px;
     mask-repeat: no-repeat;
     mask-position: center;
-    background-color: $secondary-fg-color;
+    background-color: $secondary-content;
 }
 
 .mx_MessageActionBar_maskButton:hover::after {
-    background-color: $primary-fg-color;
+    background-color: $primary-content;
 }
 
 .mx_MessageActionBar_reactButton::after {

@@ -112,7 +112,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         }
     }
 
-    private playMedia() {
+    private async playMedia() {
         const element = this.element;
         if (!element) return;
         // We play audio in AudioFeed, not here
@@ -129,7 +129,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
             // should serialise the ones that need to be serialised but then be able to interrupt
             // them with another load() which will cancel the pending one, but since we don't call
             // load() explicitly, it shouldn't be a problem. - Dave
-            element.play();
+            await element.play();
         } catch (e) {
             logger.info("Failed to play media element with feed", this.props.feed, e);
         }

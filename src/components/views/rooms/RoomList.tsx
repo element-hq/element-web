@@ -38,7 +38,6 @@ import { StaticNotificationState } from "../../../stores/notifications/StaticNot
 import { Action } from "../../../dispatcher/actions";
 import { ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
-import SettingsStore from "../../../settings/SettingsStore";
 import CustomRoomTagStore from "../../../stores/CustomRoomTagStore";
 import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays";
 import { objectShallowClone, objectWithOnly } from "../../../utils/objects";
@@ -320,11 +319,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     private updateLists = () => {
         const newLists = RoomListStore.instance.orderedLists;
-        if (SettingsStore.getValue("advancedRoomListLogging")) {
-            // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
-            console.log("new lists", newLists);
-        }
-
         const previousListIds = Object.keys(this.state.sublists);
         const newListIds = Object.keys(newLists).filter(t => {
             if (!isCustomTag(t)) return true; // always include non-custom tags

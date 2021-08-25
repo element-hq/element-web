@@ -35,6 +35,7 @@ export interface IConfig {
     onResizeStart?(): void;
     onResizeStop?(): void;
     onResized?(size: number, id: string, element: HTMLElement): void;
+    handler?: HTMLDivElement;
 }
 
 export default class Resizer<C extends IConfig = IConfig> {
@@ -46,8 +47,17 @@ export default class Resizer<C extends IConfig = IConfig> {
         public container: HTMLElement,
         private readonly distributorCtor: {
             new(item: ResizeItem): FixedDistributor<C, any>;
-            createItem(resizeHandle: HTMLDivElement, resizer: Resizer, sizer: Sizer): ResizeItem;
-            createSizer(containerElement: HTMLElement, vertical: boolean, reverse: boolean): Sizer;
+            createItem(
+                resizeHandle: HTMLDivElement,
+                resizer: Resizer,
+                sizer: Sizer,
+                container: HTMLElement
+            ): ResizeItem;
+            createSizer(
+                containerElement: HTMLElement,
+                vertical: boolean,
+                reverse: boolean
+            ): Sizer;
         },
         public readonly config?: C,
     ) {
@@ -68,12 +78,14 @@ export default class Resizer<C extends IConfig = IConfig> {
     }
 
     public attach() {
-        this.container.addEventListener("mousedown", this.onMouseDown, false);
+        const attachment = this?.config?.handler?.parentElement ?? this.container;
+        attachment.addEventListener("mousedown", this.onMouseDown, false);
         window.addEventListener("resize", this.onResize);
     }
 
     public detach() {
-        this.container.removeEventListener("mousedown", this.onMouseDown, false);
+        const attachment = this?.config?.handler?.parentElement ?? this.container;
+        attachment.removeEventListener("mousedown", this.onMouseDown, false);
         window.removeEventListener("resize", this.onResize);
     }
 
@@ -113,7 +125,8 @@ export default class Resizer<C extends IConfig = IConfig> {
         // use closest in case the resize handle contains
         // child dom nodes that can be the target
         const resizeHandle = event.target && (<HTMLDivElement>event.target).closest(`.${this.classNames.handle}`);
-        if (!resizeHandle || resizeHandle.parentElement !== this.container) {
+        const hasHandler = this?.config?.handler;
+        if (!resizeHandle || (!hasHandler && resizeHandle.parentElement !== this.container)) {
             return;
         }
         // prevent starting a drag operation
@@ -174,16 +187,18 @@ export default class Resizer<C extends IConfig = IConfig> {
         const vertical = resizeHandle.classList.contains(this.classNames.vertical);
         const reverse = this.isReverseResizeHandle(resizeHandle);
         const Distributor = this.distributorCtor;
+        const useItemContainer = this.config && this.config.handler ? this.container : undefined;
         const sizer = Distributor.createSizer(this.container, vertical, reverse);
-        const item = Distributor.createItem(resizeHandle, this, sizer);
+        const item = Distributor.createItem(resizeHandle, this, sizer, useItemContainer);
         const distributor = new Distributor(item);
         return { sizer, distributor };
     }
 
     private getResizeHandles() {
+        if (this?.config?.handler) {
+            return [this.config.handler];
+        }
         if (!this.container.children) return [];
-        return Array.from(this.container.children).filter(el => {
-            return this.isResizeHandle(<HTMLElement>el);
-        }) as HTMLElement[];
+        return Array.from(this.container.querySelectorAll(`.${this.classNames.handle}`)) as HTMLElement[];
     }
 }

@@ -20,28 +20,17 @@ $space-nav: rgba($panel-base, 0.1);
 
 // unified palette
 // try to use these colors when possible
-$bg-color: $background;
-$base-color: $bg-color;
-$base-text-color: $primary-content;
 $header-panel-bg-color: #20252B;
 $header-panel-border-color: #000000;
 $header-panel-text-primary-color: #B9BEC6;
 $header-panel-text-secondary-color: #c8c8cd;
-$text-primary-color: $primary-content;
 $text-secondary-color: #B9BEC6;
-$quaternary-fg-color: $quaternary-content;
 $search-bg-color: #181b21;
 $search-placeholder-color: #61708b;
 $room-highlight-color: #343a46;
 
 // typical text (dark-on-white in light skin)
-$primary-fg-color: $text-primary-color;
-$primary-bg-color: $bg-color;
 $muted-fg-color: $header-panel-text-primary-color;
-
-// additional text colors
-$secondary-fg-color: $secondary-content;
-$tertiary-fg-color: $tertiary-content;
 
 // used for dialog box text
 $light-fg-color: $header-panel-text-secondary-color;
@@ -61,7 +50,7 @@ $info-plinth-fg-color: #888;
 $preview-bar-bg-color: $header-panel-bg-color;
 
 $groupFilterPanel-bg-color: rgba(38, 39, 43, 0.82);
-$inverted-bg-color: $base-color;
+$inverted-bg-color: $background;
 
 // used by AddressSelector
 $selected-color: $room-highlight-color;
@@ -82,7 +71,7 @@ $input-focused-border-color: #238cf5;
 $input-valid-border-color: $accent-color;
 $input-invalid-border-color: $warning-color;
 
-$field-focused-label-bg-color: $bg-color;
+$field-focused-label-bg-color: $background;
 
 $resend-button-divider-color: #b9bec64a; // muted-text with a 4A opacity.
 
@@ -93,15 +82,15 @@ $scrollbar-track-color: transparent;
 // context menus
 $menu-border-color: $header-panel-border-color;
 $menu-bg-color: $header-panel-bg-color;
-$menu-box-shadow-color: $bg-color;
+$menu-box-shadow-color: $background;
 $menu-selected-color: $room-highlight-color;
 
 $avatar-initial-color: #ffffff;
-$avatar-bg-color: $bg-color;
+$avatar-bg-color: $background;
 
-$h3-color: $primary-fg-color;
+$h3-color: $primary-content;
 
-$dialog-title-fg-color: $base-text-color;
+$dialog-title-fg-color: $primary-content;
 $dialog-backdrop-color: #000;
 $dialog-shadow-color: rgba(0, 0, 0, 0.48);
 $dialog-close-fg-color: #9fa9ba;
@@ -117,11 +106,10 @@ $settings-profile-button-bg-color: #e7e7e7;
 $settings-profile-button-fg-color: $settings-profile-overlay-placeholder-fg-color;
 $settings-subsection-fg-color: $text-secondary-color;
 
-$topleftmenu-color: $text-primary-color;
-$roomheader-color: $text-primary-color;
-$roomheader-bg-color: $bg-color;
+$topleftmenu-color: $primary-content;
+$roomheader-color: $primary-content;
 $roomheader-addroom-bg-color: rgba(92, 100, 112, 0.3);
-$roomheader-addroom-fg-color: $text-primary-color;
+$roomheader-addroom-fg-color: $primary-content;
 $groupFilterPanel-button-color: $header-panel-text-primary-color;
 $groupheader-button-color: $header-panel-text-primary-color;
 $rightpanel-button-color: $header-panel-text-primary-color;
@@ -135,18 +123,16 @@ $composer-e2e-icon-color: $header-panel-text-primary-color;
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
-$dialpad-button-bg-color: $quinary-content;
 
 $roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
-$roomlist-filter-active-bg-color: $bg-color;
 $roomlist-bg-color: rgba(33, 38, 44, 0.90);
-$roomlist-header-color: $tertiary-fg-color;
-$roomsublist-divider-color: $primary-fg-color;
+$roomlist-header-color: $tertiary-content;
+$roomsublist-divider-color: $primary-content;
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #3e444c 0%, #3e444c00 100%);
 
 $groupFilterPanel-divider-color: $roomlist-header-color;
 
-$roomtile-preview-color: $secondary-fg-color;
+$roomtile-preview-color: $secondary-content;
 $roomtile-default-badge-bg-color: #61708b;
 $roomtile-selected-bg-color: rgba(141, 151, 165, 0.2);
 
@@ -170,12 +156,12 @@ $event-highlight-bg-color: #25271F;
 $event-timestamp-color: $text-secondary-color;
 
 // Tabbed views
-$tab-label-fg-color: $text-primary-color;
-$tab-label-active-fg-color: $text-primary-color;
+$tab-label-fg-color: $primary-content;
+$tab-label-active-fg-color: $primary-content;
 $tab-label-bg-color: transparent;
 $tab-label-active-bg-color: $accent-color;
-$tab-label-icon-bg-color: $text-primary-color;
-$tab-label-active-icon-bg-color: $text-primary-color;
+$tab-label-icon-bg-color: $primary-content;
+$tab-label-active-icon-bg-color: $primary-content;
 
 // Buttons
 $button-primary-fg-color: $primary-content;
@@ -217,30 +203,31 @@ $kbd-border-color: #000000;
 $tooltip-timeline-bg-color: $groupFilterPanel-bg-color;
 $tooltip-timeline-fg-color: $primary-content;
 
-$interactive-tooltip-bg-color: $base-color;
+$interactive-tooltip-bg-color: $background;
 $interactive-tooltip-fg-color: $primary-content;
 
 $breadcrumb-placeholder-bg-color: #272c35;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
 
-$message-body-panel-fg-color: $secondary-fg-color;
+$message-body-panel-fg-color: $secondary-content;
 $message-body-panel-bg-color: $quinary-content;
-$message-body-panel-icon-fg-color: $secondary-fg-color;
-$message-body-panel-icon-bg-color: $system; // "System Dark"
+$message-body-panel-icon-bg-color: $system;
+$message-body-panel-icon-fg-color: $secondary-content;
 
-$voice-record-stop-border-color: $quaternary-fg-color;
-$voice-record-waveform-incomplete-fg-color: $quaternary-fg-color;
-$voice-record-icon-color: $quaternary-fg-color;
+$voice-record-stop-border-color: $quaternary-content;
+$voice-record-waveform-incomplete-fg-color: $quaternary-content;
+$voice-record-icon-color: $quaternary-content;
 $voice-playback-button-bg-color: $message-body-panel-icon-bg-color;
 $voice-playback-button-fg-color: $message-body-panel-icon-fg-color;
 
 // Appearance tab colors
 $appearance-tab-border-color: $room-highlight-color;
 
-// blur amounts for left left panel (only for element theme, used in _mods.scss)
-$roomlist-background-blur-amount: 60px;
-$groupFilterPanel-background-blur-amount: 30px;
+// blur amounts for left left panel (only for element theme)
+:root {
+    --lp-background-blur: 45px;
+}
 
 $composer-shadow-color: rgba(0, 0, 0, 0.28);
 
@@ -248,7 +235,7 @@ $composer-shadow-color: rgba(0, 0, 0, 0.28);
 $eventbubble-self-bg: #14322E;
 $eventbubble-others-bg: $event-selected-color;
 $eventbubble-bg-hover: #1C2026;
-$eventbubble-avatar-outline: $bg-color;
+$eventbubble-avatar-outline: $background;
 $eventbubble-reply-color: #C1C6CD;
 
 // ***** Mixins! *****

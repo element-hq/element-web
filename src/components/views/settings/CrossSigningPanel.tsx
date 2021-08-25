@@ -25,6 +25,8 @@ import InteractiveAuthDialog from '../dialogs/InteractiveAuthDialog';
 import ConfirmDestroyCrossSigningDialog from '../dialogs/security/ConfirmDestroyCrossSigningDialog';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { MatrixEvent } from 'matrix-js-sdk/src';
+import SetupEncryptionDialog from '../dialogs/security/SetupEncryptionDialog';
+import { accessSecretStorage } from '../../../SecurityManager';
 
 interface IState {
     error?: Error;
@@ -72,7 +74,16 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
     };
 
     private onBootstrapClick = () => {
-        this.bootstrapCrossSigning({ forceReset: false });
+        if (this.state.crossSigningPrivateKeysInStorage) {
+            Modal.createTrackedDialog(
+                "Verify session", "Verify session", SetupEncryptionDialog,
+                {}, null, /* priority = */ false, /* static = */ true,
+            );
+        } else {
+            // Trigger the flow to set up secure backup, which is what this will do when in
+            // the appropriate state.
+            accessSecretStorage();
+        }
     };
 
     private onStatusChanged = () => {
@@ -176,9 +187,13 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
             summarisedStatus = <p>{ _t(
                 "Your homeserver does not support cross-signing.",
             ) }</p>;
-        } else if (crossSigningReady) {
+        } else if (crossSigningReady && crossSigningPrivateKeysInStorage) {
             summarisedStatus = <p>✅ { _t(
                 "Cross-signing is ready for use.",
+            ) }</p>;
+        } else if (crossSigningReady && !crossSigningPrivateKeysInStorage) {
+            summarisedStatus = <p>⚠️ { _t(
+                "Cross-signing is ready but keys are not backed up.",
             ) }</p>;
         } else if (crossSigningPrivateKeysInStorage) {
             summarisedStatus = <p>{ _t(
@@ -210,9 +225,13 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
 
         // TODO: determine how better to expose this to users in addition to prompts at login/toast
         if (!keysExistEverywhere && homeserverSupportsCrossSigning) {
+            let buttonCaption = _t("Set up Secure Backup");
+            if (crossSigningPrivateKeysInStorage) {
+                buttonCaption = _t("Verify this session");
+            }
             actions.push(
                 <AccessibleButton key="setup" kind="primary" onClick={this.onBootstrapClick}>
-                    { _t("Set up") }
+                    { buttonCaption }
                 </AccessibleButton>,
             );
         }

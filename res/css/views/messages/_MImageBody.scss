@@ -36,6 +36,10 @@ $timelineImageBorderRadius: 4px;
         animation: mx--anim-pulse 1.75s infinite cubic-bezier(.4, 0, .6, 1);
         border-radius: $timelineImageBorderRadius;
     }
+
+    .mx_no-image-placeholder {
+        background-color: $primary-content;
+    }
 }
 
 .mx_MImageBody_thumbnail_container {
@@ -96,5 +100,5 @@ $timelineImageBorderRadius: 4px;
 }
 
 .mx_EventTile:hover .mx_HiddenImagePlaceholder {
-    background-color: $primary-bg-color;
+    background-color: $background;
 }

@@ -25,7 +25,7 @@ limitations under the License.
         }
 
         .mx_BaseAvatar_image {
-            border: 1px solid $primary-bg-color;
+            border: 1px solid $background;
         }
 
         .mx_BaseAvatar_initial {
@@ -47,7 +47,7 @@ limitations under the License.
                 left: 0;
                 height: inherit;
                 width: inherit;
-                background: $tertiary-fg-color;
+                background: $tertiary-content;
                 mask-position: center;
                 mask-size: 20px;
                 mask-repeat: no-repeat;
@@ -60,6 +60,6 @@ limitations under the License.
         margin-left: 12px;
         font-size: $font-14px;
         line-height: $font-24px;
-        color: $tertiary-fg-color;
+        color: $tertiary-content;
     }
 }

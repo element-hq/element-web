@@ -26,7 +26,7 @@ limitations under the License.
     &::before {
         mask: url("$(res)/img/e2e/lock-warning-filled.svg");
         mask-repeat: no-repeat;
-        background-color: $primary-fg-color;
+        background-color: $primary-content;
         content: "";
         position: absolute;
         top: -6px;

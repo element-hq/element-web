@@ -41,7 +41,7 @@ limitations under the License.
 
                 height: 16px;
                 width: 16px;
-                background-color: $tertiary-fg-color;
+                background-color: $secondary-content;
                 mask-repeat: no-repeat;
                 mask-size: contain;
                 mask-position: center;
@@ -95,22 +95,28 @@ limitations under the License.
             flex-direction: row;
             align-items: center;
             margin-left: 12px;
+            min-width: 0;
 
             .mx_CallEvent_info_basic {
                 display: flex;
                 flex-direction: column;
                 margin-left: 10px; // To match mx_CallEvent
+                min-width: 0;
 
                 .mx_CallEvent_sender {
                     font-weight: 600;
                     font-size: 1.5rem;
                     line-height: 1.8rem;
                     margin-bottom: 3px;
+
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
                 }
 
                 .mx_CallEvent_type {
                     font-weight: 400;
-                    color: $secondary-fg-color;
+                    color: $secondary-content;
                     font-size: 1.2rem;
                     line-height: $font-13px;
                     display: flex;
@@ -126,7 +132,7 @@ limitations under the License.
                             position: absolute;
                             height: 13px;
                             width: 13px;
-                            background-color: $tertiary-fg-color;
+                            background-color: $secondary-content;
                             mask-repeat: no-repeat;
                             mask-size: contain;
                         }
@@ -139,16 +145,16 @@ limitations under the License.
             display: flex;
             flex-direction: row;
             align-items: center;
-            color: $secondary-fg-color;
+            color: $secondary-content;
             margin-right: 16px;
             gap: 8px;
+            min-width: max-content;
 
             .mx_CallEvent_content_button {
-                height: 24px;
                 padding: 0px 12px;
 
                 span {
-                    padding: 8px 0;
+                    padding: 1px 0;
                     display: flex;
                     align-items: center;
 
@@ -162,6 +168,8 @@ limitations under the License.
                         width: 16px;
                         height: 16px;
                         margin-right: 8px;
+
+                        flex-shrink: 0;
                     }
                 }
             }
