@@ -48,6 +48,7 @@ module.exports = (env, argv) => {
     }
     const devMode = nodeEnv !== 'production';
     const useHMR = process.env.CSS_HOT_RELOAD === '1' && devMode;
+    const fullPageErrors = process.env.FULL_PAGE_ERRORS === '1' && devMode;
 
     const development = {};
     if (argv.mode === "production") {
@@ -525,7 +526,7 @@ module.exports = (env, argv) => {
             new HtmlWebpackInjectPreload({
                 files: [{ match: /.*Inter.*\.woff2$/ }],
             }),
-            useHMR && new ReactRefreshWebpackPlugin(),
+            useHMR && new ReactRefreshWebpackPlugin(fullPageErrors ? undefined : { overlay: { entry: false } }),
 
         ].filter(Boolean),
 
