@@ -28,7 +28,7 @@ $spacePanelWidth: 71px;
         padding: 24px;
         width: 480px;
         box-sizing: border-box;
-        background-color: $primary-bg-color;
+        background-color: $background;
         position: relative;
 
         > div {
@@ -40,7 +40,7 @@ $spacePanelWidth: 71px;
 
             > p {
                 font-size: $font-15px;
-                color: $secondary-fg-color;
+                color: $secondary-content;
             }
 
             .mx_SpaceFeedbackPrompt {
@@ -76,7 +76,7 @@ $spacePanelWidth: 71px;
                 width: 28px;
                 top: 0;
                 left: 0;
-                background-color: $tertiary-fg-color;
+                background-color: $tertiary-content;
                 transform: rotate(90deg);
                 mask-repeat: no-repeat;
                 mask-position: 2px 3px;
@@ -108,7 +108,7 @@ $spacePanelWidth: 71px;
     line-height: $font-24px;
 
     > span {
-        color: $secondary-fg-color;
+        color: $secondary-content;
         position: relative;
         font-size: inherit;
         line-height: inherit;

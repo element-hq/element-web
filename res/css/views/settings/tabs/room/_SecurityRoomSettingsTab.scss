@@ -22,7 +22,7 @@ limitations under the License.
 
     .mx_SecurityRoomSettingsTab_spacesWithAccess {
         > h4 {
-            color: $secondary-fg-color;
+            color: $secondary-content;
             font-weight: $font-semi-bold;
             font-size: $font-12px;
             line-height: $font-15px;
@@ -33,7 +33,7 @@ limitations under the License.
             font-weight: 500;
             font-size: $font-14px;
             line-height: 32px; // matches height of avatar for v-align
-            color: $secondary-fg-color;
+            color: $secondary-content;
             display: inline-block;
 
             img.mx_RoomAvatar_isSpaceRoom,
@@ -89,7 +89,7 @@ limitations under the License.
             font-weight: $font-semi-bold;
             font-size: $font-15px;
             line-height: $font-24px;
-            color: $primary-fg-color;
+            color: $primary-content;
             display: block;
         }
     }
@@ -100,7 +100,7 @@ limitations under the License.
         margin-bottom: 16px;
         font-size: $font-15px;
         line-height: $font-24px;
-        color: $secondary-fg-color;
+        color: $secondary-content;
 
         & + .mx_RadioButton {
             border-top: 1px solid $menu-border-color;

@@ -37,7 +37,7 @@ limitations under the License.
         right: -6px;
         bottom: -6px;
 
-        background-color: $primary-bg-color;
+        background-color: $background;
         border-radius: 50%;
         z-index: 1;
 
@@ -45,7 +45,7 @@ limitations under the License.
             height: 100%;
             width: 100%;
 
-            background-color: $secondary-fg-color;
+            background-color: $secondary-content;
             mask-position: center;
             mask-repeat: no-repeat;
             mask-image: url('$(res)/img/element-icons/camera.svg');

@@ -43,7 +43,7 @@ a.mx_Pill {
 /* More specific to override `.markdown-body a` color */
 .mx_EventTile_content .markdown-body a.mx_UserPill,
 .mx_UserPill {
-    color: $primary-fg-color;
+    color: $primary-content;
     background-color: $other-user-pill-bg-color;
 }
 

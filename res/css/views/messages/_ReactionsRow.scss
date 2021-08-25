@@ -16,7 +16,7 @@ limitations under the License.
 
 .mx_ReactionsRow {
     margin: 6px 0;
-    color: $primary-fg-color;
+    color: $primary-content;
 
     .mx_ReactionsRow_addReactionButton {
         position: relative;
@@ -36,7 +36,7 @@ limitations under the License.
             mask-size: 16px;
             mask-repeat: no-repeat;
             mask-position: center;
-            background-color: $tertiary-fg-color;
+            background-color: $tertiary-content;
             mask-image: url('$(res)/img/element-icons/room/message-bar/emoji.svg');
         }
 
@@ -46,7 +46,7 @@ limitations under the License.
 
         &:hover, &.mx_ReactionsRow_addReactionButton_active {
             &::before {
-                background-color: $primary-fg-color;
+                background-color: $primary-content;
             }
         }
     }
@@ -64,10 +64,10 @@ limitations under the License.
     vertical-align: middle;
 
     &:link, &:visited {
-        color: $tertiary-fg-color;
+        color: $tertiary-content;
     }
 
     &:hover {
-        color: $primary-fg-color;
+        color: $primary-content;
     }
 }

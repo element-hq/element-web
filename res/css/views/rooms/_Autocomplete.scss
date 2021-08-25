@@ -4,7 +4,7 @@
     z-index: 1001;
     width: 100%;
     border: 1px solid $primary-hairline-color;
-    background: $primary-bg-color;
+    background: $background;
     border-bottom: none;
     border-radius: 8px 8px 0 0;
     max-height: 35vh;
@@ -26,7 +26,7 @@
     user-select: none;
     cursor: pointer;
     align-items: center;
-    color: $primary-fg-color;
+    color: $primary-content;
 }
 
 .mx_Autocomplete_Completion_block * {
@@ -42,7 +42,7 @@
     user-select: none;
     cursor: pointer;
     align-items: center;
-    color: $primary-fg-color;
+    color: $primary-content;
 }
 
 .mx_Autocomplete_Completion_pill > * {
@@ -84,7 +84,7 @@
 
 .mx_Autocomplete_provider_name {
     margin: 12px;
-    color: $primary-fg-color;
+    color: $primary-content;
     font-weight: 400;
     opacity: 0.4;
 }

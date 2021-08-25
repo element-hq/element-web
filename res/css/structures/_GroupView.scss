@@ -132,7 +132,7 @@ limitations under the License.
     width: 100%;
     height: 31px;
     overflow: hidden;
-    color: $primary-fg-color;
+    color: $primary-content;
     font-weight: bold;
     font-size: $font-22px;
     padding-left: 19px;
@@ -397,7 +397,7 @@ limitations under the License.
         mask-position: center;
         mask-size: contain;
         mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
-        background-color: $secondary-fg-color;
+        background-color: $secondary-content;
     }
 
     .mx_AccessibleButton_kind_link {
@@ -422,7 +422,7 @@ limitations under the License.
             mask-position: center;
             mask-size: 8px;
             mask-image: url('$(res)/img/image-view/close.svg');
-            background-color: $secondary-fg-color;
+            background-color: $secondary-content;
         }
     }
 }

@@ -17,10 +17,21 @@ limitations under the License.
 .mx_VideoFeed {
     overflow: hidden;
     position: relative;
+    box-sizing: border-box;
+    border: transparent 2px solid;
+    display: flex;
 
     &.mx_VideoFeed_voice {
         background-color: $inverted-bg-color;
         aspect-ratio: 16 / 9;
+    }
+
+    &.mx_VideoFeed_speaking {
+        border: $accent-color 2px solid;
+
+        .mx_VideoFeed_video {
+            border-radius: 0;
+        }
     }
 
     .mx_VideoFeed_video {
