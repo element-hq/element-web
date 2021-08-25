@@ -19,7 +19,6 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 import { _t, _td } from '../../../languageHandler';
 import AppTile from '../elements/AppTile';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import AccessibleButton from '../elements/AccessibleButton';
 import WidgetUtils, { IWidgetEvent } from '../../../utils/WidgetUtils';
@@ -34,6 +33,7 @@ import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingSto
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ActionPayload } from '../../../dispatcher/payloads';
 import ScalarAuthClient from '../../../ScalarAuthClient';
+import GenericElementContextMenu from "../context_menus/GenericElementContextMenu";
 
 // This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
 // We sit in a context menu, so this should be given to the context menu.
@@ -250,7 +250,6 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         // Use a separate ReactDOM tree to render the AppTile separately so that it persists and does
         // not unmount when we (a) close the sticker picker (b) switch rooms. It's properties are still
         // updated.
-        const PersistedElement = sdk.getComponent("elements.PersistedElement");
 
         // Load stickerpack content
         if (stickerpickerWidget && stickerpickerWidget.content && stickerpickerWidget.content.url) {
@@ -415,7 +414,6 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                     title={_t("Hide Stickers")}
                 />;
 
-            const GenericElementContextMenu = sdk.getComponent('context_menus.GenericElementContextMenu');
             stickerPicker = <ContextMenu
                 chevronOffset={this.state.stickerpickerChevronOffset}
                 chevronFace={ChevronFace.Bottom}
