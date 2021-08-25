@@ -27,10 +27,6 @@ import { mediaFromMxc } from "../../../customisations/Media";
 import AccessibleButton from '../elements/AccessibleButton';
 import AvatarSetting from './AvatarSetting';
 
-interface IProps {
-
-}
-
 interface IState {
     userId?: string;
     originalDisplayName?: string;
@@ -42,9 +38,9 @@ interface IState {
 }
 
 @replaceableComponent("views.settings.ProfileSettings")
-export default class ProfileSettings extends React.Component<IProps, IState> {
+export default class ProfileSettings extends React.Component<{}, IState> {
     private avatarUpload: React.RefObject<HTMLInputElement> = createRef();
-    constructor(props: IProps) {
+    constructor(props: {}) {
         super(props);
 
         const client = MatrixClientPeg.get();
@@ -205,7 +201,7 @@ export default class ProfileSettings extends React.Component<IProps, IState> {
                         </p>
                     </div>
                     <AvatarSetting
-                        avatarUrl={this.state.avatarUrl}
+                        avatarUrl={this.state.avatarUrl.toString()}
                         avatarName={this.state.displayName || this.state.userId}
                         avatarAltText={_t("Profile picture")}
                         uploadAvatar={this.uploadAvatar}
