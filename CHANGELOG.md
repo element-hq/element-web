@@ -1,3 +1,9 @@
+Changes in [1.8.2-rc.2](https://github.com/vector-im/element-desktop/releases/tag/v1.8.2-rc.2) (2021-08-25)
+===========================================================================================================
+
+## ✨ Features
+ * [Release]Increase general app performance by optimizing layers ([\#6672](https://github.com/matrix-org/matrix-react-sdk/pull/6672)). Fixes #18730 and #18730. Contributed by [Palid](https://github.com/Palid).
+
 Changes in [1.8.2-rc.1](https://github.com/vector-im/element-desktop/releases/tag/v1.8.2-rc.1) (2021-08-24)
 ===========================================================================================================
 
