@@ -3621,5 +3621,13 @@
     "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Vigadega seotud logid sisaldavad rakenduse teavet, sealhulgas sinu kasutajanime, külastatud jututubade kasutajatunnuseid või aliasi, viimatikasutatud liidese funktsionaalsusi ning teiste kasutajate kasutajanimesid. Logides ei ole saadetud sõnumite sisu.",
     "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.": "Sinu isiklikud sõnumid on tavaliselt läbivalt krüptitud, aga see jututuba ei ole. Tavaliselt on põhjuseks, et kasutusel on mõni seade või meetod nagu e-posti põhised kutsed, mis krüptimist veel ei toeta.",
     "Enable encryption in settings.": "Võta seadistustes krüptimine kasutusele.",
-    "Cross-signing is ready but keys are not backed up.": "Risttunnustamine on töövalmis, aga krüptovõtmed on varundamata."
+    "Cross-signing is ready but keys are not backed up.": "Risttunnustamine on töövalmis, aga krüptovõtmed on varundamata.",
+    "New layout switcher (with message bubbles)": "Uue kujunduse valik (koos sõnumimullidega)",
+    "This makes it easy for rooms to stay private to a space, while letting people in the space find and join them. All new rooms in a space will have this option available.": "See muudab lihtsaks, et jututoad jääksid kogukonnakeskuse piires privaatseks, kuid lasevad kogukonnakeskuses viibivatel inimestel need üles leida ja nendega liituda. Kõik kogukonnakeskuse uued jututoad on selle võimalusega.",
+    "To help space members find and join a private room, go to that room's Security & Privacy settings.": "Selleks, et aidata kogukonnakeskuse liikmetel leida privaatne jututuba ja sellega liituda, minge selle toa turvalisuse ja privaatsuse seadistustesse.",
+    "Help people in spaces to find and join private rooms": "Aita inimestel kogukonnakeskus leida ja liituda privaatsete tubadega",
+    "See when people join, leave, or are invited to your active room": "Näita, millal inimesed aktiivse toaga liituvad, lahkuvad või sellesse tuppa kutsutakse",
+    "Kick, ban, or invite people to your active room, and make you leave": "Aktiivsest toast inimeste väljalükkamine, keelamine või tuppa kutsumine",
+    "See when people join, leave, or are invited to this room": "Näita, millal inimesed toaga liituvad, lahkuvad või siia tuppa kutsutakse",
+    "Kick, ban, or invite people to this room, and make you leave": "Sellest toast inimeste väljalükkamine, keelamine või tuppa kutsumine"
 }
