@@ -1,3 +1,9 @@
+Changes in [3.29.0-rc.2](https://github.com/vector-im/element-desktop/releases/tag/v3.29.0-rc.2) (2021-08-25)
+=============================================================================================================
+
+## ✨ Features
+ * [Release]Increase general app performance by optimizing layers ([\#6672](https://github.com/matrix-org/matrix-react-sdk/pull/6672)). Fixes vector-im/element-web#18730 and vector-im/element-web#18730. Contributed by [Palid](https://github.com/Palid).
+
 Changes in [3.29.0-rc.1](https://github.com/vector-im/element-desktop/releases/tag/v3.29.0-rc.1) (2021-08-24)
 =============================================================================================================
 
