@@ -57,6 +57,14 @@ body:
       placeholder: e.g. develop.element.io, app.element.io
     validations:
       required: false
+  - type: input
+    id: homeserver
+    attributes:
+      label: Homeserver
+      description: Which server is your account registered on?
+      placeholder: e.g. matrix.org
+    validations:
+      required: false
   - type: dropdown
     id: rageshake
     attributes:
