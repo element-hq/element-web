@@ -55,7 +55,7 @@ $hover-select-border: 4px;
     }
 
     .mx_SenderProfile {
-        color: $primary-fg-color;
+        color: $primary-content;
         font-size: $font-14px;
         display: inline-block; /* anti-zalgo, with overflow hidden */
         overflow: hidden;
@@ -161,7 +161,7 @@ $hover-select-border: 4px;
         // up with the other read receipts
 
         &::before {
-            background-color: $tertiary-fg-color;
+            background-color: $tertiary-content;
             mask-repeat: no-repeat;
             mask-position: center;
             mask-size: 14px;
@@ -618,7 +618,7 @@ $hover-select-border: 4px;
 }
 
 .mx_EventTile_keyRequestInfo_text a {
-    color: $primary-fg-color;
+    color: $primary-content;
     text-decoration: underline;
     cursor: pointer;
 }

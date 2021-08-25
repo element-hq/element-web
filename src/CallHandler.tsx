@@ -86,7 +86,7 @@ import { randomUppercaseString, randomLowercaseString } from "matrix-js-sdk/src/
 import EventEmitter from 'events';
 import SdkConfig from './SdkConfig';
 import { ensureDMExists, findDMForUser } from './createRoom';
-import { IPushRule, RuleId, TweakName, Tweaks } from "matrix-js-sdk/src/@types/PushRules";
+import { RuleId, TweakName, Tweaks } from "matrix-js-sdk/src/@types/PushRules";
 import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
 import { WidgetLayoutStore, Container } from './stores/widgets/WidgetLayoutStore';
 import { getIncomingCallToastKey } from './toasts/IncomingCallToast';
@@ -464,85 +464,7 @@ export default class CallHandler extends EventEmitter {
             this.removeCallForRoom(mappedRoomId);
         });
         call.on(CallEvent.State, (newState: CallState, oldState: CallState) => {
-            if (!this.matchesCallForThisRoom(call)) return;
-
-            this.setCallState(call, newState);
-
-            switch (oldState) {
-                case CallState.Ringing:
-                    this.pause(AudioID.Ring);
-                    break;
-                case CallState.InviteSent:
-                    this.pause(AudioID.Ringback);
-                    break;
-            }
-
-            if (newState !== CallState.Ringing) {
-                this.silencedCalls.delete(call.callId);
-            }
-
-            switch (newState) {
-                case CallState.Ringing: {
-                    const incomingCallPushRule = (
-                        new PushProcessor(MatrixClientPeg.get()).getPushRuleById(RuleId.IncomingCall) as IPushRule
-                    );
-                    const pushRuleEnabled = incomingCallPushRule?.enabled;
-                    const tweakSetToRing = incomingCallPushRule?.actions.some((action: Tweaks) => (
-                        action.set_tweak === TweakName.Sound &&
-                        action.value === "ring"
-                    ));
-
-                    if (pushRuleEnabled && tweakSetToRing) {
-                        this.play(AudioID.Ring);
-                    } else {
-                        this.silenceCall(call.callId);
-                    }
-                    break;
-                }
-                case CallState.InviteSent: {
-                    this.play(AudioID.Ringback);
-                    break;
-                }
-                case CallState.Ended: {
-                    const hangupReason = call.hangupReason;
-                    Analytics.trackEvent('voip', 'callEnded', 'hangupReason', hangupReason);
-                    this.removeCallForRoom(mappedRoomId);
-                    if (oldState === CallState.InviteSent && call.hangupParty === CallParty.Remote) {
-                        this.play(AudioID.Busy);
-
-                        // Don't show a modal when we got rejected/the call was hung up
-                        if (!hangupReason || [CallErrorCode.UserHangup, "user hangup"].includes(hangupReason)) break;
-
-                        let title;
-                        let description;
-                        // TODO: We should either do away with these or figure out a copy for each code (expect user_hangup...)
-                        if (call.hangupReason === CallErrorCode.UserBusy) {
-                            title = _t("User Busy");
-                            description = _t("The user you called is busy.");
-                        } else {
-                            title = _t("Call Failed");
-                            description = _t("The call could not be established");
-                        }
-
-                        Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
-                            title, description,
-                        });
-                    } else if (
-                        hangupReason === CallErrorCode.AnsweredElsewhere && oldState === CallState.Connecting
-                    ) {
-                        Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
-                            title: _t("Answered Elsewhere"),
-                            description: _t("The call was answered on another device."),
-                        });
-                    } else if (oldState !== CallState.Fledgling && oldState !== CallState.Ringing) {
-                        // don't play the end-call sound for calls that never got off the ground
-                        this.play(AudioID.CallEnd);
-                    }
-
-                    this.logCallStats(call, mappedRoomId);
-                    break;
-                }
-            }
+            this.onCallStateChanged(newState, oldState, call);
         });
         call.on(CallEvent.Replaced, (newCall: MatrixCall) => {
             if (!this.matchesCallForThisRoom(call)) return;
@@ -597,6 +519,89 @@ export default class CallHandler extends EventEmitter {
             }
         });
     }
+
+    private onCallStateChanged = (newState: CallState, oldState: CallState, call: MatrixCall): void => {
+        if (!this.matchesCallForThisRoom(call)) return;
+
+        const mappedRoomId = this.roomIdForCall(call);
+        this.setCallState(call, newState);
+
+        switch (oldState) {
+            case CallState.Ringing:
+                this.pause(AudioID.Ring);
+                break;
+            case CallState.InviteSent:
+                this.pause(AudioID.Ringback);
+                break;
+        }
+
+        if (newState !== CallState.Ringing) {
+            this.silencedCalls.delete(call.callId);
+        }
+
+        switch (newState) {
+            case CallState.Ringing: {
+                const incomingCallPushRule = (
+                    new PushProcessor(MatrixClientPeg.get()).getPushRuleById(RuleId.IncomingCall)
+                );
+                const pushRuleEnabled = incomingCallPushRule?.enabled;
+                const tweakSetToRing = incomingCallPushRule?.actions.some((action: Tweaks) => (
+                    action.set_tweak === TweakName.Sound &&
+                    action.value === "ring"
+                ));
+
+                if (pushRuleEnabled && tweakSetToRing) {
+                    this.play(AudioID.Ring);
+                } else {
+                    this.silenceCall(call.callId);
+                }
+                break;
+            }
+            case CallState.InviteSent: {
+                this.play(AudioID.Ringback);
+                break;
+            }
+            case CallState.Ended: {
+                const hangupReason = call.hangupReason;
+                Analytics.trackEvent('voip', 'callEnded', 'hangupReason', hangupReason);
+                this.removeCallForRoom(mappedRoomId);
+                if (oldState === CallState.InviteSent && call.hangupParty === CallParty.Remote) {
+                    this.play(AudioID.Busy);
+
+                    // Don't show a modal when we got rejected/the call was hung up
+                    if (!hangupReason || [CallErrorCode.UserHangup, "user hangup"].includes(hangupReason)) break;
+
+                    let title;
+                    let description;
+                    // TODO: We should either do away with these or figure out a copy for each code (expect user_hangup...)
+                    if (call.hangupReason === CallErrorCode.UserBusy) {
+                        title = _t("User Busy");
+                        description = _t("The user you called is busy.");
+                    } else {
+                        title = _t("Call Failed");
+                        description = _t("The call could not be established");
+                    }
+
+                    Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
+                        title, description,
+                    });
+                } else if (
+                    hangupReason === CallErrorCode.AnsweredElsewhere && oldState === CallState.Connecting
+                ) {
+                    Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
+                        title: _t("Answered Elsewhere"),
+                        description: _t("The call was answered on another device."),
+                    });
+                } else if (oldState !== CallState.Fledgling && oldState !== CallState.Ringing) {
+                    // don't play the end-call sound for calls that never got off the ground
+                    this.play(AudioID.CallEnd);
+                }
+
+                this.logCallStats(call, mappedRoomId);
+                break;
+            }
+        }
+    };
 
     private async logCallStats(call: MatrixCall, mappedRoomId: string) {
         const stats = await call.getCurrentCallStats();
@@ -861,6 +866,8 @@ export default class CallHandler extends EventEmitter {
                     this.calls.set(mappedRoomId, call);
                     this.emit(CallHandlerEvent.CallsChanged, this.calls);
                     this.setCallListeners(call);
+                    // Explicitly handle first state change
+                    this.onCallStateChanged(call.state, null, call);
 
                     // get ready to send encrypted events in the room, so if the user does answer
                     // the call, we'll be ready to send. NB. This is the protocol-level room ID not

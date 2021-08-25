@@ -25,7 +25,7 @@ limitations under the License.
 
         .mx_AccessibleButton {
             min-width: 70px;
-            padding: 0; // override from button styles
+            padding: 0 8px; // override from button styles
             margin-left: 16px; // distance from <Field>
         }
 
@@ -50,7 +50,7 @@ limitations under the License.
             &::before {
                 content: '';
                 border-radius: 20px;
-                background-color: $tertiary-fg-color;
+                background-color: $tertiary-content;
                 opacity: 0.15;
                 position: absolute;
                 top: 0;

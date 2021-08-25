@@ -33,14 +33,14 @@ limitations under the License.
         height: 16px;
         mask: url('$(res)/img/element-icons/roomlist/search.svg');
         mask-repeat: no-repeat;
-        background-color: $secondary-fg-color;
+        background-color: $secondary-content;
         margin-left: 7px;
     }
 
     .mx_RoomSearch_input {
         border: none !important; // !important to override default app-wide styles
         flex: 1 !important; // !important to override default app-wide styles
-        color: $primary-fg-color !important; // !important to override default app-wide styles
+        color: $primary-content !important; // !important to override default app-wide styles
         padding: 0;
         height: 100%;
         width: 100%;
@@ -48,12 +48,12 @@ limitations under the License.
         line-height: $font-16px;
 
         &:not(.mx_RoomSearch_inputExpanded)::placeholder {
-            color: $tertiary-fg-color !important; // !important to override default app-wide styles
+            color: $tertiary-content !important; // !important to override default app-wide styles
         }
     }
 
     &.mx_RoomSearch_hasQuery {
-        border-color: $secondary-fg-color;
+        border-color: $secondary-content;
     }
 
     &.mx_RoomSearch_focused {
@@ -62,7 +62,7 @@ limitations under the License.
     }
 
     &.mx_RoomSearch_focused, &.mx_RoomSearch_hasQuery {
-        background-color: $roomlist-filter-active-bg-color;
+        background-color: $background;
 
         .mx_RoomSearch_clearButton {
             width: 16px;
@@ -71,7 +71,7 @@ limitations under the License.
             mask-position: center;
             mask-size: contain;
             mask-repeat: no-repeat;
-            background-color: $secondary-fg-color;
+            background-color: $secondary-content;
             margin-right: 8px;
         }
     }

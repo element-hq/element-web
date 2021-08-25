@@ -133,6 +133,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.state = {
             showPillAvatar: SettingsStore.getValue("Pill.shouldShowPillAvatar"),
             surroundWith: SettingsStore.getValue("MessageComposerInput.surroundWith"),
+            showVisualBell: false,
         };
 
         this.emoticonSettingHandle = SettingsStore.watchSetting('MessageComposerInput.autoReplaceEmoji', null,
@@ -215,7 +216,11 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         if (isEmpty) {
             this.formatBarRef.current.hide();
         }
-        this.setState({ autoComplete: this.props.model.autoComplete });
+        this.setState({
+            autoComplete: this.props.model.autoComplete,
+            // if a change is happening then clear the showVisualBell
+            showVisualBell: diff ? false : this.state.showVisualBell,
+        });
         this.historyManager.tryPush(this.props.model, selection, inputType, diff);
 
         let isTyping = !this.props.model.isEmpty;
@@ -435,7 +440,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         const model = this.props.model;
         let handled = false;
 
-        if (this.state.surroundWith && document.getSelection().type != "Caret") {
+        if (this.state.surroundWith && document.getSelection().type !== "Caret") {
             // This surrounds the selected text with a character. This is
             // intentionally left out of the keybinding manager as the keybinds
             // here shouldn't be changeable
@@ -454,6 +459,44 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 toggleInlineFormat(selectionRange, event.key, SURROUND_WITH_DOUBLE_CHARACTERS.get(event.key));
                 handled = true;
             }
+        }
+
+        const autocompleteAction = getKeyBindingsManager().getAutocompleteAction(event);
+        if (model.autoComplete?.hasCompletions()) {
+            const autoComplete = model.autoComplete;
+            switch (autocompleteAction) {
+                case AutocompleteAction.ForceComplete:
+                case AutocompleteAction.Complete:
+                    autoComplete.confirmCompletion();
+                    handled = true;
+                    break;
+                case AutocompleteAction.PrevSelection:
+                    autoComplete.selectPreviousSelection();
+                    handled = true;
+                    break;
+                case AutocompleteAction.NextSelection:
+                    autoComplete.selectNextSelection();
+                    handled = true;
+                    break;
+                case AutocompleteAction.Cancel:
+                    autoComplete.onEscape(event);
+                    handled = true;
+                    break;
+                default:
+                    return; // don't preventDefault on anything else
+            }
+        } else if (autocompleteAction === AutocompleteAction.ForceComplete && !this.state.showVisualBell) {
+            // there is no current autocomplete window, try to open it
+            this.tabCompleteName();
+            handled = true;
+        } else if (event.key === Key.BACKSPACE || event.key === Key.DELETE) {
+            this.formatBarRef.current.hide();
+        }
+
+        if (handled) {
+            event.preventDefault();
+            event.stopPropagation();
+            return;
         }
 
         const action = getKeyBindingsManager().getMessageComposerAction(event);
@@ -510,68 +553,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         if (handled) {
             event.preventDefault();
             event.stopPropagation();
-            return;
-        }
-
-        const autocompleteAction = getKeyBindingsManager().getAutocompleteAction(event);
-        if (model.autoComplete && model.autoComplete.hasCompletions()) {
-            const autoComplete = model.autoComplete;
-            switch (autocompleteAction) {
-                case AutocompleteAction.CompleteOrPrevSelection:
-                case AutocompleteAction.PrevSelection:
-                    autoComplete.selectPreviousSelection();
-                    handled = true;
-                    break;
-                case AutocompleteAction.CompleteOrNextSelection:
-                case AutocompleteAction.NextSelection:
-                    autoComplete.selectNextSelection();
-                    handled = true;
-                    break;
-                case AutocompleteAction.Cancel:
-                    autoComplete.onEscape(event);
-                    handled = true;
-                    break;
-                default:
-                    return; // don't preventDefault on anything else
-            }
-        } else if (autocompleteAction === AutocompleteAction.CompleteOrPrevSelection
-            || autocompleteAction === AutocompleteAction.CompleteOrNextSelection) {
-            // there is no current autocomplete window, try to open it
-            this.tabCompleteName();
-            handled = true;
-        } else if (event.key === Key.BACKSPACE || event.key === Key.DELETE) {
-            this.formatBarRef.current.hide();
-            handled = this.fakeDeletion(event.key === Key.BACKSPACE);
-        }
-
-        if (handled) {
-            event.preventDefault();
-            event.stopPropagation();
         }
     };
-
-    /**
-     * Because pills have contentEditable="false" there is no event emitted when
-     * the user tries to delete them. Therefore we need to fake what would
-     * normally happen
-     * @param direction in which to delete
-     * @returns handled
-     */
-    private fakeDeletion(backward: boolean): boolean {
-        const selection = document.getSelection();
-        // Use the default handling for ranges
-        if (selection.type === "Range") return false;
-
-        this.modifiedFlag = true;
-        const { caret, text } = getCaretOffsetAndText(this.editorRef.current, selection);
-
-        // Do the deletion itself
-        if (backward) caret.offset--;
-        const newText = text.slice(0, caret.offset) + text.slice(caret.offset + 1);
-
-        this.props.model.update(newText, backward ? "deleteContentBackward" : "deleteContentForward", caret);
-        return true;
-    }
 
     private async tabCompleteName(): Promise<void> {
         try {
@@ -601,6 +584,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                     this.setState({ showVisualBell: true });
                     model.autoComplete.close();
                 }
+            } else {
+                this.setState({ showVisualBell: true });
             }
         } catch (err) {
             console.error(err);
@@ -616,9 +601,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.props.model.autoComplete.onComponentConfirm(completion);
     };
 
-    private onAutoCompleteSelectionChange = (completion: ICompletion, completionIndex: number): void => {
+    private onAutoCompleteSelectionChange = (completionIndex: number): void => {
         this.modifiedFlag = true;
-        this.props.model.autoComplete.onComponentSelectionChange(completion);
         this.setState({ completionIndex });
     };
 
@@ -742,6 +726,11 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         };
 
         const { completionIndex } = this.state;
+        const hasAutocomplete = Boolean(this.state.autoComplete);
+        let activeDescendant;
+        if (hasAutocomplete && completionIndex >= 0) {
+            activeDescendant = generateCompletionDomId(completionIndex);
+        }
 
         return (<div className={wrapperClasses}>
             { autoComplete }
@@ -760,10 +749,11 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 aria-label={this.props.label}
                 role="textbox"
                 aria-multiline="true"
-                aria-autocomplete="both"
+                aria-autocomplete="list"
                 aria-haspopup="listbox"
-                aria-expanded={Boolean(this.state.autoComplete)}
-                aria-activedescendant={completionIndex >= 0 ? generateCompletionDomId(completionIndex) : undefined}
+                aria-expanded={hasAutocomplete}
+                aria-owns="mx_Autocomplete"
+                aria-activedescendant={activeDescendant}
                 dir="auto"
                 aria-disabled={this.props.disabled}
             />

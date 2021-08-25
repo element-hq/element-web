@@ -16,7 +16,7 @@ limitations under the License.
 
 .mx_AddressSelector {
     position: absolute;
-    background-color: $primary-bg-color;
+    background-color: $background;
     width: 485px;
     max-height: 116px;
     overflow-y: auto;
@@ -31,8 +31,8 @@ limitations under the License.
 }
 
 .mx_AddressSelector_addressListElement .mx_AddressTile {
-    background-color: $primary-bg-color;
-    border: solid 1px $primary-bg-color;
+    background-color: $background;
+    border: solid 1px $background;
 }
 
 .mx_AddressSelector_addressListElement.mx_AddressSelector_selected {

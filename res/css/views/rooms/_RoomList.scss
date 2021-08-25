@@ -43,11 +43,11 @@ limitations under the License.
     div:first-child {
         font-weight: $font-semi-bold;
         line-height: $font-18px;
-        color: $primary-fg-color;
+        color: $primary-content;
     }
 
     .mx_AccessibleButton {
-        color: $primary-fg-color;
+        color: $primary-content;
         position: relative;
         padding: 8px 8px 8px 32px;
         font-size: inherit;
@@ -64,7 +64,7 @@ limitations under the License.
             position: absolute;
             top: 8px;
             left: 8px;
-            background: $secondary-fg-color;
+            background: $secondary-content;
             mask-position: center;
             mask-size: contain;
             mask-repeat: no-repeat;

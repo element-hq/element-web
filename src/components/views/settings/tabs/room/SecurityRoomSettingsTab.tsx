@@ -37,6 +37,8 @@ import RoomUpgradeWarningDialog from '../../../dialogs/RoomUpgradeWarningDialog'
 import { upgradeRoom } from "../../../../../utils/RoomUpgrade";
 import { arrayHasDiff } from "../../../../../utils/arrays";
 import SettingsFlag from '../../../elements/SettingsFlag';
+import createRoom, { IOpts } from '../../../../../createRoom';
+import CreateRoomDialog from '../../../dialogs/CreateRoomDialog';
 
 interface IProps {
     roomId: string;
@@ -129,7 +131,38 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         if (refreshWhenTypes.includes(e.getType() as EventType)) this.forceUpdate();
     };
 
-    private onEncryptionChange = () => {
+    private onEncryptionChange = async () => {
+        if (this.state.joinRule == "public") {
+            const dialog = Modal.createTrackedDialog('Confirm Public Encrypted Room', '', QuestionDialog, {
+                title: _t('Are you sure you want to add encryption to this public room?'),
+                description: <div>
+                    <p> { _t(
+                        "<b>It's not recommended to add encryption to public rooms.</b>" +
+                        "Anyone can find and join public rooms, so anyone can read messages in them. " +
+                        "You'll get none of the benefits of encryption, and you won't be able to turn it " +
+                        "off later. Encrypting messages in a public room will make receiving and sending " +
+                        "messages slower.",
+                        null,
+                        { "b": (sub) => <b>{ sub }</b> },
+                    ) } </p>
+                    <p> { _t(
+                        "To avoid these issues, create a <a>new encrypted room</a> for " +
+                        "the conversation you plan to have.",
+                        null,
+                        { "a": (sub) => <a onClick={() => {
+                            dialog.close();
+                            this.createNewRoom(false, true);
+                        }}> { sub } </a> },
+                    ) } </p>
+                </div>,
+
+            });
+
+            const { finished } = dialog;
+            const [confirm] = await finished;
+            if (!confirm) return;
+        }
+
         Modal.createTrackedDialog('Enable encryption', '', QuestionDialog, {
             title: _t('Enable encryption?'),
             description: _t(
@@ -194,6 +227,41 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             }
         }
 
+        if (
+            this.state.encrypted &&
+            this.state.joinRule !== JoinRule.Public &&
+            joinRule === JoinRule.Public
+        ) {
+            const dialog = Modal.createTrackedDialog('Confirm Public Encrypted Room', '', QuestionDialog, {
+                title: _t("Are you sure you want to make this encrypted room public?"),
+                description: <div>
+                    <p> { _t(
+                        "<b>It's not recommended to make encrypted rooms public.</b> " +
+                        "It will mean anyone can find and join the room, so anyone can read messages. " +
+                        "You'll get none of the benefits of encryption. Encrypting messages in a public " +
+                        "room will make receiving and sending messages slower.",
+                        null,
+                        { "b": (sub) => <b>{ sub }</b> },
+                    ) } </p>
+                    <p> { _t(
+                        "To avoid these issues, create a <a>new public room</a> for the conversation " +
+                        "you plan to have.",
+                        null,
+                        {
+                            "a": (sub) => <a onClick={() => {
+                                dialog.close();
+                                this.createNewRoom(true, false);
+                            }}> { sub } </a>,
+                        },
+                    ) } </p>
+                </div>,
+            });
+
+            const { finished } = dialog;
+            const [confirm] = await finished;
+            if (!confirm) return;
+        }
+
         if (beforeJoinRule === joinRule && !restrictedAllowRoomIds) return;
 
         const content: IContent = {
@@ -252,6 +320,20 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             console.error(e);
             this.setState({ guestAccess: beforeGuestAccess });
         });
+    };
+
+    private createNewRoom = async (defaultPublic: boolean, defaultEncrypted: boolean) => {
+        const modal = Modal.createTrackedDialog<[boolean, IOpts]>(
+            "Create Room",
+            "Create room after trying to make an E2EE room public",
+            CreateRoomDialog,
+            { defaultPublic, defaultEncrypted },
+        );
+        const [shouldCreate, opts] = await modal.finished;
+        if (shouldCreate) {
+            await createRoom(opts);
+        }
+        return shouldCreate;
     };
 
     private onHistoryRadioToggle = (history: HistoryVisibility) => {

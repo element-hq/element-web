@@ -54,7 +54,7 @@ import {
     showCreateNewSubspace,
     showSpaceSettings,
 } from "../../utils/space";
-import { showRoom, SpaceHierarchy } from "./SpaceRoomDirectory";
+import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
 import MemberAvatar from "../views/avatars/MemberAvatar";
 import SpaceStore from "../../stores/SpaceStore";
 import FacePile from "../views/elements/FacePile";
@@ -74,6 +74,10 @@ import { BetaPill } from "../views/beta/BetaCard";
 import { UserTab } from "../views/dialogs/UserSettingsDialog";
 import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
 import { SpaceFeedbackPrompt } from "../views/spaces/SpaceCreateMenu";
+import { CreateEventField, IGroupSummary } from "../views/dialogs/CreateSpaceFromCommunityDialog";
+import { useAsyncMemo } from "../../hooks/useAsyncMemo";
+import Spinner from "../views/elements/Spinner";
+import GroupAvatar from "../views/avatars/GroupAvatar";
 
 interface IProps {
     space: Room;
@@ -158,7 +162,33 @@ const onBetaClick = () => {
     });
 };
 
-const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => {
+// XXX: temporary community migration component
+const GroupTile = ({ groupId }: { groupId: string }) => {
+    const cli = useContext(MatrixClientContext);
+    const groupSummary = useAsyncMemo<IGroupSummary>(() => cli.getGroupSummary(groupId), [cli, groupId]);
+
+    if (!groupSummary) return <Spinner />;
+
+    return <>
+        <GroupAvatar
+            groupId={groupId}
+            groupName={groupSummary.profile.name}
+            groupAvatarUrl={groupSummary.profile.avatar_url}
+            width={16}
+            height={16}
+            resizeMethod='crop'
+        />
+        { groupSummary.profile.name }
+    </>;
+};
+
+interface ISpacePreviewProps {
+    space: Room;
+    onJoinButtonClicked(): void;
+    onRejectButtonClicked(): void;
+}
+
+const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }: ISpacePreviewProps) => {
     const cli = useContext(MatrixClientContext);
     const myMembership = useMyRoomMembership(space);
 
@@ -270,8 +300,18 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         </div>;
     }
 
+    let migratedCommunitySection: JSX.Element;
+    const createContent = space.currentState.getStateEvents(EventType.RoomCreate, "")?.getContent();
+    if (createContent[CreateEventField]) {
+        migratedCommunitySection = <div className="mx_SpaceRoomView_preview_migratedCommunity">
+            { _t("Created from <Community />", {}, {
+                Community: () => <GroupTile groupId={createContent[CreateEventField]} />,
+            }) }
+        </div>;
+    }
+
     return <div className="mx_SpaceRoomView_preview">
-        <BetaPill onClick={onBetaClick} />
+        { migratedCommunitySection }
         { inviterSection }
         <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
         <h1 className="mx_SpaceRoomView_preview_name">
