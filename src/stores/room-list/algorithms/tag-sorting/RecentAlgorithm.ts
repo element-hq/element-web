@@ -23,21 +23,21 @@ import { EffectiveMembership, getEffectiveMembership } from "../../../../utils/m
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
-export function ignoreSelfEvent(event: MatrixEvent): boolean {
+export function shouldCauseReorder(event: MatrixEvent): boolean {
     const type = event.getType();
     const content = event.getContent();
     const prevContent = event.getPrevContent();
 
     // Never ignore membership changes
-    if (type === EventType.RoomMember && prevContent.membership !== content.membership) return false;
+    if (type === EventType.RoomMember && prevContent.membership !== content.membership) return true;
 
     // Ignore status changes
     // XXX: This should be an enum
-    if (type === "im.vector.user_status") return true;
+    if (type === "im.vector.user_status") return false;
     // Ignore display name changes
-    if (type === EventType.RoomMember && prevContent.displayname !== content.displayname) return true;
+    if (type === EventType.RoomMember && prevContent.displayname !== content.displayname) return false;
 
-    return false;
+    return true;
 }
 
 export const sortRooms = (rooms: Room[]): Room[] => {
@@ -88,7 +88,7 @@ export const sortRooms = (rooms: Room[]): Room[] => {
                 if (!ev.getTs()) continue; // skip events that don't have timestamps (tests only?)
 
                 if (
-                    (ev.getSender() === myUserId && !ignoreSelfEvent(ev)) ||
+                    (ev.getSender() === myUserId && shouldCauseReorder(ev)) ||
                     Unread.eventTriggersUnreadCount(ev)
                 ) {
                     return ev.getTs();
