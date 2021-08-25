@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-import { RoomMember } from 'matrix-js-sdk/src';
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import { _t } from '../../../languageHandler';
 import { formatDate } from '../../../DateUtils';
