@@ -20,7 +20,7 @@
 
 /* a "block" completion takes up a whole line */
 .mx_Autocomplete_Completion_block {
-    height: 34px;
+    min-height: 34px;
     display: flex;
     padding: 0 12px;
     user-select: none;
