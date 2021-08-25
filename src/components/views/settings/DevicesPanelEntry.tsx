@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import { IMyDevice } from 'matrix-js-sdk/src';
+import { IMyDevice } from 'matrix-js-sdk/src/client';
 
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
