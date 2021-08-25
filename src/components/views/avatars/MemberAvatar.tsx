@@ -36,6 +36,7 @@ interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | 
     // Whether the onClick of the avatar should be overriden to dispatch `Action.ViewUser`
     viewUserOnClick?: boolean;
     title?: string;
+    style?: any;
 }
 
 interface IState {

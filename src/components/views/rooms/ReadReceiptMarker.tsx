@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from 'react';
+import React, { createRef, RefObject } from 'react';
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import { _t } from '../../../languageHandler';
@@ -75,7 +75,7 @@ interface IReadReceiptMarkerStyle {
 
 @replaceableComponent("views.rooms.ReadReceiptMarker")
 export default class ReadReceiptMarker extends React.PureComponent<IProps, IState> {
-    private avatar: React.RefObject<HTMLDivElement> = createRef();
+    private avatar: React.RefObject<HTMLDivElement | HTMLImageElement | HTMLSpanElement> = createRef();
 
     static defaultProps = {
         leftOffset: 0,
@@ -171,7 +171,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
 
     public render(): JSX.Element {
         if (this.state.suppressDisplay) {
-            return <div ref={this.avatar} />;
+            return <div ref={this.avatar as RefObject<HTMLDivElement>} />;
         }
 
         const style = {
@@ -210,7 +210,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
                     style={style}
                     title={title}
                     onClick={this.props.onClick}
-                    inputRef={this.avatar}
+                    inputRef={this.avatar as RefObject<HTMLImageElement>}
                 />
             </NodeAnimator>
         );

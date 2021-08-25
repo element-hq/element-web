@@ -26,6 +26,9 @@ import Modal from '../../../Modal';
 import { SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import InteractiveAuthDialog from "../dialogs/InteractiveAuthDialog";
+import DevicesPanelEntry from "./DevicesPanelEntry";
+import Spinner from "../elements/Spinner";
+import AccessibleButton from "../elements/AccessibleButton";
 
 interface IProps {
     className?: string;
@@ -175,7 +178,6 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
     }
 
     private renderDevice = (device: IMyDevice): JSX.Element => {
-        const DevicesPanelEntry = sdk.getComponent('settings.DevicesPanelEntry');
         return <DevicesPanelEntry
             key={device.device_id}
             device={device}
@@ -185,9 +187,6 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
     };
 
     public render(): JSX.Element {
-        const Spinner = sdk.getComponent("elements.Spinner");
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-
         if (this.state.deviceLoadError !== undefined) {
             const classes = classNames(this.props.className, "error");
             return (
@@ -200,8 +199,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
         const devices = this.state.devices;
         if (devices === undefined) {
             // still loading
-            const classes = this.props.className;
-            return <Spinner className={classes} />;
+            return <Spinner />;
         }
 
         devices.sort(this.deviceCompare);

@@ -428,7 +428,7 @@ const UserOptionsSection: React.FC<{
     let directMessageButton;
     if (!isMe) {
         directMessageButton = (
-            <AccessibleButton onClick={() => openDMForUser(cli, member.userId)} className="mx_UserInfo_field">
+            <AccessibleButton onClick={() => { openDMForUser(cli, member.userId); }} className="mx_UserInfo_field">
                 { _t('Direct message') }
             </AccessibleButton>
         );
