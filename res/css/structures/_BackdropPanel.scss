@@ -21,19 +21,12 @@ limitations under the License.
     height: 100vh;
     width: 100%;
     overflow: hidden;
-
-    &::before {
-        content: " ";
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100vh;
-        width: 100%;
-        background-color: var(--lp-background-overlay);
-    }
+    filter: blur(var(--lp-background-blur));
+    // Force a new layer for the backdropPanel so it's better hardware supported
+    transform: translateZ(0);
 }
 
-.mx_BackdropPanel--canvas {
+.mx_BackdropPanel--image {
     position: absolute;
     top: 0;
     left: 0;
@@ -41,11 +34,4 @@ limitations under the License.
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
-
-    &:nth-of-type(2n-1) {
-        opacity: 0.2;
-    }
-    &:nth-of-type(2n) {
-        opacity: 0.1;
-    }
 }

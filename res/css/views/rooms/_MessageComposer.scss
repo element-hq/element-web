@@ -130,7 +130,7 @@ limitations under the License.
 
 @keyframes visualbell {
     from { background-color: $visual-bell-bg-color; }
-    to { background-color: $primary-bg-color; }
+    to { background-color: $background; }
 }
 
 .mx_MessageComposer_input_error {
@@ -160,8 +160,8 @@ limitations under the License.
     resize: none;
     outline: none;
     box-shadow: none;
-    color: $primary-fg-color;
-    background-color: $primary-bg-color;
+    color: $primary-content;
+    background-color: $background;
     font-size: $font-14px;
     max-height: 120px;
     overflow: auto;

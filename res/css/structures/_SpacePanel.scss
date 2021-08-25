@@ -20,13 +20,7 @@ $gutterSize: 16px;
 $activeBorderTransparentGap: 1px;
 
 $activeBackgroundColor: $roomtile-selected-bg-color;
-$activeBorderColor: $secondary-fg-color;
-
-.mx_MatrixChat--with-avatar {
-    .mx_SpacePanel {
-        background-color: transparent;
-    }
-}
+$activeBorderColor: $secondary-content;
 
 .mx_SpacePanel {
     background-color: $groupFilterPanel-bg-color;
@@ -34,6 +28,8 @@ $activeBorderColor: $secondary-fg-color;
     padding: 0;
     margin: 0;
     position: relative;
+    // Fix for the blurred avatar-background
+    z-index: 1;
 
     // Create another flexbox so the Panel fills the container
     display: flex;
@@ -242,7 +238,7 @@ $activeBorderColor: $secondary-fg-color;
                 mask-size: contain;
                 mask-repeat: no-repeat;
                 mask-image: url('$(res)/img/element-icons/context-menu.svg');
-                background: $primary-fg-color;
+                background: $primary-content;
             }
         }
     }

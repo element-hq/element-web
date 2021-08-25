@@ -24,7 +24,7 @@ limitations under the License.
 }
 
 .mx_AppearanceUserSettingsTab_fontScaling {
-    color: $primary-fg-color;
+    color: $primary-content;
 }
 
 .mx_AppearanceUserSettingsTab_fontSlider {
@@ -81,7 +81,7 @@ limitations under the License.
 
 .mx_AppearanceUserSettingsTab_themeSection {
     $radio-bg-color: $input-darker-bg-color;
-    color: $primary-fg-color;
+    color: $primary-content;
 
     > .mx_ThemeSelectors {
         display: flex;
@@ -156,7 +156,7 @@ limitations under the License.
 }
 
 .mx_AppearanceUserSettingsTab_Advanced {
-    color: $primary-fg-color;
+    color: $primary-content;
 
     > * {
         margin-bottom: 16px;
