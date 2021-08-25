@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React from 'react';
+import React, { createRef } from 'react';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
@@ -27,7 +27,14 @@ import { makeRoomPermalink, RoomPermalinkCreator } from '../../../utils/permalin
 import ContentMessages from '../../../ContentMessages';
 import E2EIcon from './E2EIcon';
 import SettingsStore from "../../../settings/SettingsStore";
-import { aboveLeftOf, ContextMenu, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
+import {
+    aboveLeftOf,
+    ContextMenu,
+    ContextMenuTooltipButton,
+    useContextMenu,
+    MenuItem,
+    alwaysAboveRightOf,
+} from "../../structures/ContextMenu";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import ReplyPreview from "./ReplyPreview";
 import { UIFeature } from "../../../settings/UIFeature";
@@ -45,6 +52,9 @@ import { Action } from "../../../dispatcher/actions";
 import EditorModel from "../../../editor/model";
 import EmojiPicker from '../emojipicker/EmojiPicker';
 import MemberStatusMessageAvatar from "../avatars/MemberStatusMessageAvatar";
+import UIStore, { UI_EVENTS } from '../../../stores/UIStore';
+
+const NARROW_MODE_BREAKPOINT = 500;
 
 interface IComposerAvatarProps {
     me: object;
@@ -71,13 +81,13 @@ function SendButton(props: ISendButtonProps) {
     );
 }
 
-const EmojiButton = ({ addEmoji }) => {
+const EmojiButton = ({ addEmoji, menuPosition }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
     let contextMenu;
     if (menuDisplayed) {
-        const buttonRect = button.current.getBoundingClientRect();
-        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false}>
+        const position = menuPosition ?? aboveLeftOf(button.current.getBoundingClientRect());
+        contextMenu = <ContextMenu {...position} onFinished={closeMenu} managed={false}>
             <EmojiPicker onChoose={addEmoji} showQuickReactions={true} />
         </ContextMenu>;
     }
@@ -193,6 +203,9 @@ interface IState {
     haveRecording: boolean;
     recordingTimeLeftSeconds?: number;
     me?: RoomMember;
+    narrowMode?: boolean;
+    isMenuOpen: boolean;
+    showStickers: boolean;
 }
 
 @replaceableComponent("views.rooms.MessageComposer")
@@ -200,6 +213,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private messageComposerInput: SendMessageComposer;
     private voiceRecordingButton: VoiceRecordComposerTile;
+    private ref: React.RefObject<HTMLDivElement> = createRef();
 
     constructor(props) {
         super(props);
@@ -211,6 +225,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             isComposerEmpty: true,
             haveRecording: false,
             recordingTimeLeftSeconds: null, // when set to a number, shows a toast
+            isMenuOpen: false,
+            showStickers: false,
         };
     }
 
@@ -218,7 +234,20 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
         this.waitForOwnMember();
+        UIStore.instance.trackElementDimensions("MessageComposer", this.ref.current);
+        UIStore.instance.on("MessageComposer", this.onResize);
     }
+
+    private onResize = (type: UI_EVENTS, entry: ResizeObserverEntry) => {
+        if (type === UI_EVENTS.Resize) {
+            const narrowMode = entry.contentRect.width <= NARROW_MODE_BREAKPOINT;
+            this.setState({
+                narrowMode,
+                isMenuOpen: !narrowMode ? false : this.state.isMenuOpen,
+                showStickers: false,
+            });
+        }
+    };
 
     private onAction = (payload: ActionPayload) => {
         if (payload.action === 'reply_to_event') {
@@ -254,6 +283,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         }
         VoiceRecordingStore.instance.off(UPDATE_EVENT, this.onVoiceStoreUpdate);
         dis.unregister(this.dispatcherRef);
+        UIStore.instance.stopTrackingElementDimensions("MessageComposer");
+        UIStore.instance.removeListener("MessageComposer", this.onResize);
     }
 
     private onRoomStateEvents = (ev, state) => {
@@ -360,6 +391,91 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         }
     };
 
+    private shouldShowStickerPicker = (): boolean => {
+        return SettingsStore.getValue(UIFeature.Widgets)
+        && SettingsStore.getValue("MessageComposerInput.showStickersButton")
+        && !this.state.haveRecording;
+    };
+
+    private showStickers = (showStickers: boolean) => {
+        this.setState({ showStickers });
+    };
+
+    private toggleButtonMenu = (): void => {
+        this.setState({
+            isMenuOpen: !this.state.isMenuOpen,
+        });
+    };
+
+    private renderButtons(): JSX.Element | JSX.Element[] {
+        const buttons = [];
+
+        let menuPosition;
+        if (this.ref.current) {
+            const contentRect = this.ref.current.getBoundingClientRect();
+            menuPosition = alwaysAboveRightOf(contentRect);
+        }
+
+        if (!this.state.haveRecording) {
+            buttons.push(
+                <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
+                <EmojiButton key="emoji_button" addEmoji={this.addEmoji} menuPosition={menuPosition} />,
+            );
+        }
+        if (this.shouldShowStickerPicker()) {
+            buttons.push(<AccessibleTooltipButton
+                id='stickersButton'
+                key="controls_stickers"
+                className="mx_MessageComposer_button mx_MessageComposer_stickers"
+                onClick={() => this.showStickers(!this.state.showStickers)}
+                title={this.state.showStickers ? _t("Hide Stickers") : _t("Show Stickers")}
+            />);
+        }
+        if (!this.state.haveRecording) {
+            buttons.push(
+                <AccessibleTooltipButton
+                    className="mx_MessageComposer_button mx_MessageComposer_voiceMessage"
+                    onClick={() => this.voiceRecordingButton?.onRecordStartEndClick()}
+                    title={_t("Send voice message")}
+                />,
+            );
+        }
+
+        if (!this.state.narrowMode) {
+            return buttons;
+        } else {
+            const classnames = classNames({
+                mx_MessageComposer_button: true,
+                mx_MessageComposer_buttonMenu: true,
+                mx_MessageComposer_closeButtonMenu: this.state.isMenuOpen,
+            });
+
+            return <>
+                { buttons[0] }
+                <AccessibleTooltipButton
+                    className={classnames}
+                    onClick={this.toggleButtonMenu}
+                    title={_t("view more options")}
+                />
+                { this.state.isMenuOpen && (
+                    <ContextMenu
+                        onFinished={this.toggleButtonMenu}
+                        {...menuPosition}
+                        menuPaddingRight={10}
+                        menuPaddingTop={16}
+                        menuWidth={50}
+                    >
+                        { buttons.slice(1).map((button, index) => (
+                            <MenuItem className="mx_CallContextMenu_item" key={index} onClick={() => setTimeout(this.toggleButtonMenu, 500)}>
+                                { button }
+                            </MenuItem>
+                        )) }
+                    </ContextMenu>
+                ) }
+            </>;
+        }
+    }
+
     render() {
         const controls = [
             this.state.me ? <ComposerAvatar key="controls_avatar" me={this.state.me} /> : null,
@@ -367,8 +483,6 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" /> :
                 null,
         ];
-
-        const buttons = [];
 
         if (!this.state.tombstone && this.state.canSendMessages) {
             controls.push(
@@ -384,43 +498,10 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 />,
             );
 
-            if (!this.state.haveRecording) {
-                buttons.push(
-                    <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
-                    <EmojiButton key="emoji_button" addEmoji={this.addEmoji} />,
-                );
-            }
-
-            if (SettingsStore.getValue(UIFeature.Widgets) &&
-                SettingsStore.getValue("MessageComposerInput.showStickersButton") &&
-                !this.state.haveRecording) {
-                buttons.push(<Stickerpicker key="stickerpicker_controls_button" room={this.props.room} />);
-            }
-
             controls.push(<VoiceRecordComposerTile
                 key="controls_voice_record"
                 ref={c => this.voiceRecordingButton = c}
                 room={this.props.room} />);
-
-            if (!this.state.haveRecording) {
-                buttons.push(
-                    <AccessibleTooltipButton
-                        className="mx_MessageComposer_button mx_MessageComposer_voiceMessage"
-                        onClick={() => this.voiceRecordingButton?.onRecordStartEndClick()}
-                        title={_t("Send voice message")}
-                    />,
-                );
-            }
-
-            if (!this.state.isComposerEmpty || this.state.haveRecording) {
-                buttons.push(
-                    <SendButton
-                        key="controls_send"
-                        onClick={this.sendMessage}
-                        title={this.state.haveRecording ? _t("Send voice message") : undefined}
-                    />,
-                );
-            }
         } else if (this.state.tombstone) {
             const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];
 
@@ -462,14 +543,30 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             />;
         }
 
+        controls.push(
+            <Stickerpicker
+                room={this.props.room}
+                showStickers={this.state.showStickers}
+                setShowStickers={this.showStickers} />,
+        );
+
+        const showSendButton = !this.state.isComposerEmpty || this.state.haveRecording;
+
         return (
-            <div className="mx_MessageComposer mx_GroupLayout">
+            <div className="mx_MessageComposer mx_GroupLayout" ref={this.ref}>
                 { recordingTooltip }
                 <div className="mx_MessageComposer_wrapper">
                     <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
                     <div className="mx_MessageComposer_row">
                         { controls }
-                        { buttons }
+                        { this.renderButtons() }
+                        { showSendButton && (
+                            <SendButton
+                                key="controls_send"
+                                onClick={this.sendMessage}
+                                title={this.state.haveRecording ? _t("Send voice message") : undefined}
+                            />
+                        ) }
                     </div>
                 </div>
             </div>

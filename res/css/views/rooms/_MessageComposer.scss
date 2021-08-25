@@ -237,6 +237,15 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/room/composer/sticker.svg');
 }
 
+.mx_MessageComposer_buttonMenu::before {
+    mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+}
+
+.mx_MessageComposer_closeButtonMenu::before {
+    transform: rotate(180deg);
+    transform-origin: center;
+}
+
 .mx_MessageComposer_sendMessage {
     cursor: pointer;
     position: relative;
