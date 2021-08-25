@@ -36,6 +36,8 @@ export function shouldCauseReorder(event: MatrixEvent): boolean {
     if (type === "im.vector.user_status") return false;
     // Ignore display name changes
     if (type === EventType.RoomMember && prevContent.displayname !== content.displayname) return false;
+    // Ignore avatar changes
+    if (type === EventType.RoomMember && prevContent.avatar_url !== content.avatar_url) return false;
 
     return true;
 }
