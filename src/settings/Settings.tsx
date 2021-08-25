@@ -233,7 +233,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "feature_many_integration_managers": {
         isFeature: true,
-        displayName: _td("Multiple integration managers"),
+        displayName: _td("Multiple integration managers (requires manual setup)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -662,7 +662,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "lowBandwidth": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td('Low bandwidth mode'),
+        displayName: _td('Low bandwidth mode (requires compatible homeserver)'),
         default: false,
         controller: new ReloadOnChangeController(),
     },
