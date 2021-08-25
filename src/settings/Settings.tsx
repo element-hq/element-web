@@ -276,12 +276,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: false,
         controller: new PseudonymousAnalyticsController(),
     },
-    "advancedRoomListLogging": {
-        // TODO: Remove flag before launch: https://github.com/vector-im/element-web/issues/14231
-        displayName: _td("Enable advanced debugging for the room list"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: false,
-    },
     "doNotDisturb": {
         supportedLevels: [SettingLevel.DEVICE],
         default: false,
