@@ -43,6 +43,7 @@ const PERSISTED_ELEMENT_KEY = "stickerPicker";
 interface IProps {
     room: Room;
     showStickers: boolean;
+    menuPosition?: any;
     setShowStickers: (showStickers: boolean) => void;
 }
 
@@ -407,6 +408,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
             menuPaddingLeft={0}
             menuPaddingRight={0}
             zIndex={STICKERPICKER_Z_INDEX}
+            {...this.props.menuPosition}
         >
             <GenericElementContextMenu element={this.getStickerpickerContent()} onResize={this.onFinished} />
         </ContextMenu>;

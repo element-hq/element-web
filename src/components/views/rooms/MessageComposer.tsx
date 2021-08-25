@@ -33,7 +33,6 @@ import {
     ContextMenuTooltipButton,
     useContextMenu,
     MenuItem,
-    alwaysAboveRightOf,
 } from "../../structures/ContextMenu";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import ReplyPreview from "./ReplyPreview";
@@ -407,14 +406,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         });
     };
 
-    private renderButtons(): JSX.Element | JSX.Element[] {
+    private renderButtons(menuPosition): JSX.Element | JSX.Element[] {
         const buttons = [];
-
-        let menuPosition;
-        if (this.ref.current) {
-            const contentRect = this.ref.current.getBoundingClientRect();
-            menuPosition = alwaysAboveRightOf(contentRect);
-        }
 
         if (!this.state.haveRecording) {
             buttons.push(
@@ -466,7 +459,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                         menuWidth={50}
                     >
                         { buttons.slice(1).map((button, index) => (
-                            <MenuItem className="mx_CallContextMenu_item" key={index} onClick={() => setTimeout(this.toggleButtonMenu, 500)}>
+                            <MenuItem className="mx_CallContextMenu_item" key={index} onClick={this.toggleButtonMenu}>
                                 { button }
                             </MenuItem>
                         )) }
@@ -483,6 +476,12 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" /> :
                 null,
         ];
+
+        let menuPosition;
+        if (this.ref.current) {
+            const contentRect = this.ref.current.getBoundingClientRect();
+            menuPosition = aboveLeftOf(contentRect);
+        }
 
         if (!this.state.tombstone && this.state.canSendMessages) {
             controls.push(
@@ -547,7 +546,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             <Stickerpicker
                 room={this.props.room}
                 showStickers={this.state.showStickers}
-                setShowStickers={this.showStickers} />,
+                setShowStickers={this.showStickers}
+                menuPosition={menuPosition} />,
         );
 
         const showSendButton = !this.state.isComposerEmpty || this.state.haveRecording;
@@ -559,7 +559,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                     <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
                     <div className="mx_MessageComposer_row">
                         { controls }
-                        { this.renderButtons() }
+                        { this.renderButtons(menuPosition) }
                         { showSendButton && (
                             <SendButton
                                 key="controls_send"
