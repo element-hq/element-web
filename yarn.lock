@@ -2137,10 +2137,10 @@ ajv@^8.0.1:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-allchange@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/allchange/-/allchange-1.0.1.tgz#f32a75f65ab182d044d18e8baa43bd1c9be982f6"
-  integrity sha512-lj8HZcvQ04RsNqwLWjCYSDvchrW4nnjlOZ3z+VGhA78M7KootV0eRwlvTlYJec73jsz/Ts59kVArgooEsACOog==
+allchange@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/allchange/-/allchange-1.0.2.tgz#86b9190e12b7ede4f230ae763cbd504c48fd907b"
+  integrity sha512-qJv1t2yvBThkes8g/dPMt8CGu+04U+q5QjCJn2Ngp92edZU8DJBfKGyGXo7w1iV48LVuQKQDfMsdIWhP7zHdlQ==
   dependencies:
     "@actions/core" "^1.4.0"
     "@actions/github" "^5.0.0"
@@ -7700,8 +7700,6 @@ matrix-mock-request@^1.2.3:
   resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/94449953054a511d19a14c80a397a518bafc768f"
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@sentry/browser" "^6.11.0"
-    "@sentry/tracing" "^6.11.0"
     await-lock "^2.1.0"
     blurhash "^1.1.3"
     browser-encrypt-attachment "^0.3.0"
