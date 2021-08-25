@@ -368,6 +368,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 null,
         ];
 
+        const buttons = [];
+
         if (!this.state.tombstone && this.state.canSendMessages) {
             controls.push(
                 <SendMessageComposer
@@ -383,7 +385,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             );
 
             if (!this.state.haveRecording) {
-                controls.push(
+                buttons.push(
                     <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
                     <EmojiButton key="emoji_button" addEmoji={this.addEmoji} />,
                 );
@@ -392,7 +394,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             if (SettingsStore.getValue(UIFeature.Widgets) &&
                 SettingsStore.getValue("MessageComposerInput.showStickersButton") &&
                 !this.state.haveRecording) {
-                controls.push(<Stickerpicker key="stickerpicker_controls_button" room={this.props.room} />);
+                buttons.push(<Stickerpicker key="stickerpicker_controls_button" room={this.props.room} />);
             }
 
             controls.push(<VoiceRecordComposerTile
@@ -400,8 +402,18 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 ref={c => this.voiceRecordingButton = c}
                 room={this.props.room} />);
 
+            if (!this.state.haveRecording) {
+                buttons.push(
+                    <AccessibleTooltipButton
+                        className="mx_MessageComposer_button mx_MessageComposer_voiceMessage"
+                        onClick={() => this.voiceRecordingButton?.onRecordStartEndClick()}
+                        title={_t("Send voice message")}
+                    />,
+                );
+            }
+
             if (!this.state.isComposerEmpty || this.state.haveRecording) {
-                controls.push(
+                buttons.push(
                     <SendButton
                         key="controls_send"
                         onClick={this.sendMessage}
@@ -457,6 +469,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                     <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
                     <div className="mx_MessageComposer_row">
                         { controls }
+                        { buttons }
                     </div>
                 </div>
             </div>

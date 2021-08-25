@@ -137,7 +137,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         await this.disposeRecording();
     };
 
-    private onRecordStartEndClick = async () => {
+    public onRecordStartEndClick = async () => {
         if (this.state.recorder) {
             await this.state.recorder.stop();
             return;
@@ -215,6 +215,8 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
     }
 
     public render(): ReactNode {
+        if (!this.state.recordingPhase) return null;
+
         let stopOrRecordBtn;
         let deleteButton;
         if (!this.state.recordingPhase || this.state.recordingPhase === RecordingState.Started) {
