@@ -250,7 +250,15 @@ export default class CallHandler extends EventEmitter {
      * @returns {boolean}
      */
     private areAnyCallsUnsilenced(): boolean {
-        return this.calls.size > this.silencedCalls.size;
+        for (const call of this.calls.values()) {
+            if (
+                call.state === CallState.Ringing &&
+                !this.isCallSilenced(call.callId)
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private async checkProtocols(maxTries) {
