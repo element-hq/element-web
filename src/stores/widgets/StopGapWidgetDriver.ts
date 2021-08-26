@@ -34,9 +34,7 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import ActiveRoomObserver from "../../ActiveRoomObserver";
 import Modal from "../../Modal";
 import WidgetOpenIDPermissionsDialog from "../../components/views/dialogs/WidgetOpenIDPermissionsDialog";
-import WidgetCapabilitiesPromptDialog, {
-    getRememberedCapabilitiesForWidget,
-} from "../../components/views/dialogs/WidgetCapabilitiesPromptDialog";
+import WidgetCapabilitiesPromptDialog from "../../components/views/dialogs/WidgetCapabilitiesPromptDialog";
 import { WidgetPermissionCustomisations } from "../../customisations/WidgetPermissions";
 import { OIDCState, WidgetPermissionStore } from "./WidgetPermissionStore";
 import { WidgetType } from "../../widgets/WidgetType";
@@ -49,6 +47,14 @@ import { IEvent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk";
 
 // TODO: Purge this from the universe
+
+function getRememberedCapabilitiesForWidget(widget: Widget): Capability[] {
+    return JSON.parse(localStorage.getItem(`widget_${widget.id}_approved_caps`) || "[]");
+}
+
+function setRememberedCapabilitiesForWidget(widget: Widget, caps: Capability[]) {
+    localStorage.setItem(`widget_${widget.id}_approved_caps`, JSON.stringify(caps));
+}
 
 export class StopGapWidgetDriver extends WidgetDriver {
     private allowedCapabilities: Set<Capability>;
@@ -102,6 +108,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
             }
         }
         // TODO: Do something when the widget requests new capabilities not yet asked for
+        let rememberApproved = false;
         if (missing.size > 0) {
             try {
                 const [result] = await Modal.createTrackedDialog(
@@ -113,12 +120,19 @@ export class StopGapWidgetDriver extends WidgetDriver {
                         widgetKind: this.forWidgetKind,
                     }).finished;
                 (result.approved || []).forEach(cap => allowedSoFar.add(cap));
+                rememberApproved = result.remember;
             } catch (e) {
                 console.error("Non-fatal error getting capabilities: ", e);
             }
         }
 
-        return new Set(iterableUnion(allowedSoFar, requested));
+        const allAllowed = new Set(iterableUnion(allowedSoFar, requested));
+
+        if (rememberApproved) {
+            setRememberedCapabilitiesForWidget(this.forWidget, Array.from(allAllowed));
+        }
+
+        return allAllowed;
     }
 
     public async sendEvent(
@@ -136,6 +150,9 @@ export class StopGapWidgetDriver extends WidgetDriver {
         if (stateKey !== null) {
             // state event
             r = await client.sendStateEvent(roomId, eventType, content, stateKey);
+        } else if (eventType === EventType.RoomRedaction) {
+            // special case: extract the `redacts` property and call redact
+            r = await client.redactEvent(roomId, content['redacts']);
         } else {
             // message event
             r = await client.sendEvent(roomId, eventType, content);
