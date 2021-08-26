@@ -1,5 +1,5 @@
 /*
-Copyright 2021 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -112,7 +112,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         }
     };
 
-    public renderEventTile(event: MatrixEvent): JSX.Element {
+    private renderEventTile(event: MatrixEvent): JSX.Element {
         return <EventTile
             key={event.getId()}
             mxEvent={event}
