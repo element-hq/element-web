@@ -39,11 +39,13 @@ interface IProps {
     defaultPublic?: boolean;
     defaultName?: string;
     parentSpace?: Room;
+    defaultEncrypted?: boolean;
     onFinished(proceed: boolean, opts?: IOpts): void;
 }
 
 interface IState {
     joinRule: JoinRule;
+    isPublic: boolean;
     isEncrypted: boolean;
     name: string;
     topic: string;
@@ -74,8 +76,9 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
 
         const config = SdkConfig.get();
         this.state = {
+            isPublic: this.props.defaultPublic || false,
+            isEncrypted: this.props.defaultEncrypted ?? privateShouldBeEncrypted(),
             joinRule,
-            isEncrypted: privateShouldBeEncrypted(),
             name: this.props.defaultName || "",
             topic: "",
             alias: "",
@@ -116,8 +119,8 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             opts.associatedWithCommunity = CommunityPrototypeStore.instance.getSelectedCommunityId();
         }
 
+        opts.parentSpace = this.props.parentSpace;
         if (this.props.parentSpace && this.state.joinRule === JoinRule.Restricted) {
-            opts.parentSpace = this.props.parentSpace;
             opts.joinRule = JoinRule.Restricted;
         }
 

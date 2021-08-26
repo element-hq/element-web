@@ -103,6 +103,7 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent): {
     isInfoMessage: boolean;
     tileHandler: string;
     isBubbleMessage: boolean;
+    isLeftAlignedBubbleMessage: boolean;
 } {
     const content = mxEvent.getContent();
     const msgtype = content.msgtype;
@@ -116,11 +117,15 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent): {
         (eventType === EventType.RoomMessage && msgtype && msgtype.startsWith("m.key.verification")) ||
         (eventType === EventType.RoomCreate) ||
         (eventType === EventType.RoomEncryption) ||
-        (eventType === EventType.CallInvite) ||
         (tileHandler === "messages.MJitsiWidgetEvent")
+    );
+    const isLeftAlignedBubbleMessage = (
+        !isBubbleMessage &&
+        eventType === EventType.CallInvite
     );
     let isInfoMessage = (
         !isBubbleMessage &&
+        !isLeftAlignedBubbleMessage &&
         eventType !== EventType.RoomMessage &&
         eventType !== EventType.Sticker &&
         eventType !== EventType.RoomCreate
@@ -137,5 +142,14 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent): {
         isInfoMessage = true;
     }
 
-    return { tileHandler, isInfoMessage, isBubbleMessage };
+    return { tileHandler, isInfoMessage, isBubbleMessage, isLeftAlignedBubbleMessage };
+}
+
+export function isVoiceMessage(mxEvent: MatrixEvent): boolean {
+    const content = mxEvent.getContent();
+    // MSC2516 is a legacy identifier. See https://github.com/matrix-org/matrix-doc/pull/3245
+    return (
+        !!content['org.matrix.msc2516.voice'] ||
+        !!content['org.matrix.msc3245.voice']
+    );
 }

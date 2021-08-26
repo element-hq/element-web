@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { createRef } from 'react';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
@@ -25,8 +25,9 @@ import MImageReplyBody from "../messages/MImageReplyBody";
 import * as sdk from '../../../index';
 import { EventType, MsgType } from 'matrix-js-sdk/src/@types/event';
 import { replaceableComponent } from '../../../utils/replaceableComponent';
-import { getEventDisplayInfo } from '../../../utils/EventUtils';
+import { getEventDisplayInfo, isVoiceMessage } from '../../../utils/EventUtils';
 import MFileBody from "../messages/MFileBody";
+import MVoiceMessageBody from "../messages/MVoiceMessageBody";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -38,6 +39,8 @@ interface IProps {
 
 @replaceableComponent("views.rooms.ReplyTile")
 export default class ReplyTile extends React.PureComponent<IProps> {
+    private anchorElement = createRef<HTMLAnchorElement>();
+
     static defaultProps = {
         onHeightChanged: () => {},
     };
@@ -71,7 +74,11 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         // Following a link within a reply should not dispatch the `view_room` action
         // so that the browser can direct the user to the correct location
         // The exception being the link wrapping the reply
-        if (clickTarget.tagName.toLowerCase() !== "a" || clickTarget.closest("a") === null) {
+        if (
+            clickTarget.tagName.toLowerCase() !== "a" ||
+            clickTarget.closest("a") === null ||
+            clickTarget === this.anchorElement.current
+        ) {
             // This allows the permalink to be opened in a new tab/window or copied as
             // matrix.to, but also for it to enable routing within Riot when clicked.
             e.preventDefault();
@@ -89,7 +96,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         const msgType = mxEvent.getContent().msgtype;
         const evType = mxEvent.getType() as EventType;
 
-        const { tileHandler, isInfoMessage } = getEventDisplayInfo(this.props.mxEvent);
+        const { tileHandler, isInfoMessage } = getEventDisplayInfo(mxEvent);
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
         if (!tileHandler) {
@@ -103,14 +110,14 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         const EventTileType = sdk.getComponent(tileHandler);
 
         const classes = classNames("mx_ReplyTile", {
-            mx_ReplyTile_info: isInfoMessage && !this.props.mxEvent.isRedacted(),
+            mx_ReplyTile_info: isInfoMessage && !mxEvent.isRedacted(),
             mx_ReplyTile_audio: msgType === MsgType.Audio,
             mx_ReplyTile_video: msgType === MsgType.Video,
         });
 
         let permalink = "#";
         if (this.props.permalinkCreator) {
-            permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
+            permalink = this.props.permalinkCreator.forEvent(mxEvent.getId());
         }
 
         let sender;
@@ -123,7 +130,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
 
         if (needsSenderProfile) {
             sender = <SenderProfile
-                mxEvent={this.props.mxEvent}
+                mxEvent={mxEvent}
                 enableFlair={false}
             />;
         }
@@ -131,7 +138,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         const msgtypeOverrides = {
             [MsgType.Image]: MImageReplyBody,
             // Override audio and video body with file body. We also hide the download/decrypt button using CSS
-            [MsgType.Audio]: MFileBody,
+            [MsgType.Audio]: isVoiceMessage(mxEvent) ? MVoiceMessageBody : MFileBody,
             [MsgType.Video]: MFileBody,
         };
         const evOverrides = {
@@ -141,18 +148,18 @@ export default class ReplyTile extends React.PureComponent<IProps> {
 
         return (
             <div className={classes}>
-                <a href={permalink} onClick={this.onClick}>
+                <a href={permalink} onClick={this.onClick} ref={this.anchorElement}>
                     { sender }
                     <EventTileType
                         ref="tile"
-                        mxEvent={this.props.mxEvent}
+                        mxEvent={mxEvent}
                         highlights={this.props.highlights}
                         highlightLink={this.props.highlightLink}
                         onHeightChanged={this.props.onHeightChanged}
                         showUrlPreview={false}
                         overrideBodyTypes={msgtypeOverrides}
                         overrideEventTypes={evOverrides}
-                        replacingEventId={this.props.mxEvent.replacingEventId()}
+                        replacingEventId={mxEvent.replacingEventId()}
                         maxImageHeight={96} />
                 </a>
             </div>

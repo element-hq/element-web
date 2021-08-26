@@ -23,7 +23,7 @@ limitations under the License.
 
 .mx_CreateSubspaceDialog {
     width: 480px;
-    color: $primary-fg-color;
+    color: $primary-content;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -57,7 +57,7 @@ limitations under the License.
             flex-grow: 1;
             font-size: $font-12px;
             line-height: $font-15px;
-            color: $secondary-fg-color;
+            color: $secondary-content;
 
             > * {
                 vertical-align: middle;

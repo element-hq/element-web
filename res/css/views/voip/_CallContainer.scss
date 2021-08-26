@@ -26,19 +26,6 @@ limitations under the License.
     // different level.
     pointer-events: none;
 
-    .mx_CallPreview {
-        pointer-events: initial; // restore pointer events so the user can leave/interact
-
-        .mx_VideoFeed_remote.mx_VideoFeed_voice {
-            min-height: 150px;
-        }
-
-        .mx_VideoFeed_local {
-            border-radius: 8px;
-            overflow: hidden;
-        }
-    }
-
     .mx_AppTile_persistedWrapper div {
         min-width: 350px;
     }

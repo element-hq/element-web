@@ -43,9 +43,8 @@ function getManagedIframe(): { iframe: HTMLIFrameElement, onLoadPromise: Promise
 
     // Dev note: the reassignment warnings are entirely incorrect here.
 
-    // @ts-ignore
-    // noinspection JSConstantReassignment
-    managedIframe.style = { display: "none" };
+    managedIframe.style.display = "none";
+
     // @ts-ignore
     // noinspection JSConstantReassignment
     managedIframe.sandbox = "allow-scripts allow-downloads allow-downloads-without-user-activation";

@@ -19,7 +19,7 @@ limitations under the License.
     font-weight: normal;
     font-family: $font-family;
     font-size: $font-14px;
-    color: $primary-fg-color;
+    color: $primary-content;
 
     .mx_Dropdown_input {
         border: 1px solid $input-border-color;
@@ -44,7 +44,7 @@ limitations under the License.
                 top: 8px;
                 mask-repeat: no-repeat;
                 mask-position: center;
-                background-color: $secondary-fg-color;
+                background-color: $secondary-content;
             }
         }
     }
