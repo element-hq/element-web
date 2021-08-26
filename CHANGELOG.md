@@ -1,3 +1,9 @@
+Changes in [1.8.2-rc.3](https://github.com/vector-im/element-desktop/releases/tag/v1.8.2-rc.3) (2021-08-26)
+===========================================================================================================
+
+## 🐛 Bug Fixes
+ * [Release] Fix commit edit history ([\#6690](https://github.com/matrix-org/matrix-react-sdk/pull/6690)). Fixes #18742 and #18742. Contributed by [Palid](https://github.com/Palid).
+
 Changes in [1.8.2-rc.2](https://github.com/vector-im/element-desktop/releases/tag/v1.8.2-rc.2) (2021-08-25)
 ===========================================================================================================
 
