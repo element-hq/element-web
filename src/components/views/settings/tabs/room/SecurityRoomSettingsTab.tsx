@@ -616,6 +616,22 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             historySection = null;
         }
 
+        let advanced;
+        if (this.state.joinRule === JoinRule.Public) {
+            advanced = (
+                <>
+                    <AccessibleButton
+                        onClick={this.toggleAdvancedSection}
+                        kind="link"
+                        className="mx_SettingsTab_showAdvanced"
+                    >
+                        { this.state.showAdvancedSection ? _t("Hide advanced") : _t("Show advanced") }
+                    </AccessibleButton>
+                    { this.state.showAdvancedSection && this.renderAdvanced() }
+                </>
+            );
+        }
+
         return (
             <div className="mx_SettingsTab mx_SecurityRoomSettingsTab">
                 <div className="mx_SettingsTab_heading">{ _t("Security & Privacy") }</div>
@@ -641,15 +657,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     { this.renderJoinRule() }
                 </div>
 
-                <AccessibleButton
-                    onClick={this.toggleAdvancedSection}
-                    kind="link"
-                    className="mx_SettingsTab_showAdvanced"
-                >
-                    { this.state.showAdvancedSection ? _t("Hide advanced") : _t("Show advanced") }
-                </AccessibleButton>
-                { this.state.showAdvancedSection && this.renderAdvanced() }
-
+                { advanced }
                 { historySection }
             </div>
         );
