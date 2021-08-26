@@ -217,7 +217,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
     public render(): ReactNode {
         if (!this.state.recordingPhase) return null;
 
-        let stopOrRecordBtn;
+        let stopBtn;
         let deleteButton;
         if (!this.state.recordingPhase || this.state.recordingPhase === RecordingState.Started) {
             const classes = classNames({
@@ -231,13 +231,13 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 tooltip = _t("Stop recording");
             }
 
-            stopOrRecordBtn = <AccessibleTooltipButton
+            stopBtn = <AccessibleTooltipButton
                 className={classes}
                 onClick={this.onRecordStartEndClick}
                 title={tooltip}
             />;
             if (this.state.recorder && !this.state.recorder?.isRecording) {
-                stopOrRecordBtn = null;
+                stopBtn = null;
             }
         }
 
@@ -266,13 +266,10 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             </span>;
         }
 
-        // The record button (mic icon) is meant to be on the right edge, but we also want the
-        // stop button to be left of the waveform area. Luckily, none of the surrounding UI is
-        // rendered when we're not recording, so the record button ends up in the correct spot.
         return (<>
             { uploadIndicator }
             { deleteButton }
-            { stopOrRecordBtn }
+            { stopBtn }
             { this.renderWaveformArea() }
         </>);
     }
