@@ -22,7 +22,7 @@ import {
     isTimelineCapabilityFor,
     MatrixCapabilities, Symbols,
     WidgetEventCapability,
-    WidgetKind
+    WidgetKind,
 } from "matrix-widget-api";
 import { _t, _td, TranslatedString } from "../languageHandler";
 import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";

@@ -121,7 +121,12 @@ export class StopGapWidgetDriver extends WidgetDriver {
         return new Set(iterableUnion(allowedSoFar, requested));
     }
 
-    public async sendEvent(eventType: string, content: any, stateKey: string = null, targetRoomId: string = null): Promise<ISendEventDetails> {
+    public async sendEvent(
+        eventType: string,
+        content: any,
+        stateKey: string = null,
+        targetRoomId: string = null,
+    ): Promise<ISendEventDetails> {
         const client = MatrixClientPeg.get();
         const roomId = targetRoomId || ActiveRoomObserver.activeRoomId;
 
