@@ -514,7 +514,7 @@ $hover-select-border: 4px;
 
 .mx_EventTile:hover .mx_EventTile_body pre,
 .mx_EventTile.focus-visible:focus-within .mx_EventTile_body pre {
-    border: 1px solid $tertiary-fg-color;
+    border: 1px solid $tertiary-content;
 }
 
 .mx_EventTile_pre_container {
