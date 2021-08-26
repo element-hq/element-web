@@ -112,17 +112,6 @@ export default class ThreadView extends React.Component<IProps, IState> {
         }
     };
 
-    private renderEventTile(event: MatrixEvent): JSX.Element {
-        return <EventTile
-            key={event.getId()}
-            mxEvent={event}
-            enableFlair={false}
-            showReadReceipts={false}
-            tileShape={TileShape.FileGrid}
-            as="div"
-        />;
-    }
-
     public render(): JSX.Element {
         return (
             <BaseCard
