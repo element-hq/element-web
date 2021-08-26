@@ -17,6 +17,7 @@
 @import "./structures/_LeftPanelWidget.scss";
 @import "./structures/_MainSplit.scss";
 @import "./structures/_MatrixChat.scss";
+@import "./structures/_BackdropPanel.scss";
 @import "./structures/_MyGroups.scss";
 @import "./structures/_NonUrgentToastContainer.scss";
 @import "./structures/_NotificationPanel.scss";
@@ -27,8 +28,8 @@
 @import "./structures/_RoomView.scss";
 @import "./structures/_ScrollPanel.scss";
 @import "./structures/_SearchBox.scss";
+@import "./structures/_SpaceHierarchy.scss";
 @import "./structures/_SpacePanel.scss";
-@import "./structures/_SpaceRoomDirectory.scss";
 @import "./structures/_SpaceRoomView.scss";
 @import "./structures/_TabbedView.scss";
 @import "./structures/_ToastContainer.scss";
@@ -75,6 +76,7 @@
 @import "./views/dialogs/_CreateCommunityPrototypeDialog.scss";
 @import "./views/dialogs/_CreateGroupDialog.scss";
 @import "./views/dialogs/_CreateRoomDialog.scss";
+@import "./views/dialogs/_CreateSpaceFromCommunityDialog.scss";
 @import "./views/dialogs/_CreateSubspaceDialog.scss";
 @import "./views/dialogs/_DeactivateAccountDialog.scss";
 @import "./views/dialogs/_DevtoolsDialog.scss";
@@ -270,6 +272,7 @@
 @import "./views/toasts/_IncomingCallToast.scss";
 @import "./views/toasts/_NonUrgentEchoFailureToast.scss";
 @import "./views/verification/_VerificationShowSas.scss";
+@import "./views/voip/CallView/_CallViewButtons.scss";
 @import "./views/voip/_CallContainer.scss";
 @import "./views/voip/_CallPreview.scss";
 @import "./views/voip/_CallView.scss";

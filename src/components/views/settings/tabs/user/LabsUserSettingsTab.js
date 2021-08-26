@@ -79,7 +79,7 @@ export default class LabsUserSettingsTab extends React.Component {
             let hiddenReadReceipts;
             if (this.state.showHiddenReadReceipts) {
                 hiddenReadReceipts = (
-                    <SettingsFlag name="feature_hidden_read_receipts" level={SettingLevel.ACCOUNT} />
+                    <SettingsFlag name="feature_hidden_read_receipts" level={SettingLevel.DEVICE} />
                 );
             }
 
@@ -88,7 +88,6 @@ export default class LabsUserSettingsTab extends React.Component {
                 <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />
                 <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
                 <SettingsFlag name="lowBandwidth" level={SettingLevel.DEVICE} />
-                <SettingsFlag name="advancedRoomListLogging" level={SettingLevel.DEVICE} />
                 { hiddenReadReceipts }
             </div>;
         }

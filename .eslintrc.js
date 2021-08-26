@@ -63,6 +63,11 @@ module.exports = {
             "@typescript-eslint/ban-ts-comment": "off",
         },
     }],
+    settings: {
+        react: {
+            version: "detect",
+        }
+    }
 };
 
 function buildRestrictedPropertiesOptions(properties, message) {

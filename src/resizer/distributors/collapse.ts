@@ -40,8 +40,13 @@ class CollapseItem extends ResizeItem<ICollapseConfig> {
 }
 
 export default class CollapseDistributor extends FixedDistributor<ICollapseConfig, CollapseItem> {
-    static createItem(resizeHandle: HTMLDivElement, resizer: Resizer<ICollapseConfig>, sizer: Sizer) {
-        return new CollapseItem(resizeHandle, resizer, sizer);
+    static createItem(
+        resizeHandle: HTMLDivElement,
+        resizer: Resizer<ICollapseConfig>,
+        sizer: Sizer,
+        container?: HTMLElement,
+    ): CollapseItem {
+        return new CollapseItem(resizeHandle, resizer, sizer, container);
     }
 
     private readonly toggleSize: number;
@@ -55,12 +60,9 @@ export default class CollapseDistributor extends FixedDistributor<ICollapseConfi
 
     public resize(newSize: number) {
         const isCollapsedSize = newSize < this.toggleSize;
-        if (isCollapsedSize && !this.isCollapsed) {
-            this.isCollapsed = true;
-            this.item.notifyCollapsed(true);
-        } else if (!isCollapsedSize && this.isCollapsed) {
-            this.item.notifyCollapsed(false);
-            this.isCollapsed = false;
+        if (isCollapsedSize !== this.isCollapsed) {
+            this.isCollapsed = isCollapsedSize;
+            this.item.notifyCollapsed(isCollapsedSize);
         }
         if (!isCollapsedSize) {
             super.resize(newSize);

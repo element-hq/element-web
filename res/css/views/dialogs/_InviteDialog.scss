@@ -56,7 +56,7 @@ limitations under the License.
             box-sizing: border-box;
             min-width: 40%;
             flex: 1 !important;
-            color: $primary-fg-color !important;
+            color: $primary-content !important;
         }
     }
 
@@ -94,7 +94,7 @@ limitations under the License.
     }
 
     > span {
-        color: $primary-fg-color;
+        color: $primary-content;
     }
 
     .mx_InviteDialog_subname {
@@ -110,7 +110,7 @@ limitations under the License.
     font-size: $font-14px;
 
     > span {
-        color: $primary-fg-color;
+        color: $primary-content;
         font-weight: 600;
     }
 
@@ -220,7 +220,7 @@ limitations under the License.
     .mx_InviteDialog_roomTile_name {
         font-weight: 600;
         font-size: $font-14px;
-        color: $primary-fg-color;
+        color: $primary-content;
         margin-left: 7px;
     }
 
@@ -352,7 +352,7 @@ limitations under the License.
     border-right: 0;
     border-radius: 0;
     margin-top: 0;
-    border-color: $quaternary-fg-color;
+    border-color: $quaternary-content;
 
     input {
         font-size: 18px;
@@ -418,7 +418,7 @@ limitations under the License.
     > h4 {
         font-size: $font-15px;
         line-height: $font-24px;
-        color: $secondary-fg-color;
+        color: $secondary-content;
         font-weight: normal;
     }
 
@@ -432,14 +432,14 @@ limitations under the License.
                     font-size: $font-15px;
                     line-height: $font-24px;
                     font-weight: $font-semi-bold;
-                    color: $primary-fg-color;
+                    color: $primary-content;
                 }
 
                 .mx_InviteDialog_multiInviterError_entry_userId {
                     margin-left: 6px;
                     font-size: $font-12px;
                     line-height: $font-15px;
-                    color: $tertiary-fg-color;
+                    color: $tertiary-content;
                 }
             }
 

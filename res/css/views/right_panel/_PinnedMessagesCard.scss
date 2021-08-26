@@ -48,7 +48,7 @@ limitations under the License.
                 height: 32px;
                 line-height: $font-24px;
                 border-radius: 8px;
-                background: $primary-bg-color;
+                background: $background;
                 border: 1px solid $input-border-color;
                 padding: 1px;
                 width: max-content;
@@ -66,7 +66,7 @@ limitations under the License.
                     z-index: 1;
 
                     &::after {
-                        background-color: $primary-fg-color;
+                        background-color: $primary-content;
                     }
                 }
             }
@@ -75,7 +75,7 @@ limitations under the License.
                 font-weight: $font-semi-bold;
                 font-size: $font-15px;
                 line-height: $font-24px;
-                color: $primary-fg-color;
+                color: $primary-content;
                 margin-top: 24px;
                 margin-bottom: 20px;
             }
@@ -83,7 +83,7 @@ limitations under the License.
             > span {
                 font-size: $font-12px;
                 line-height: $font-15px;
-                color: $secondary-fg-color;
+                color: $secondary-content;
             }
         }
     }
