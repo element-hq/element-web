@@ -129,6 +129,9 @@ export class StopGapWidgetDriver extends WidgetDriver {
         if (stateKey !== null) {
             // state event
             r = await client.sendStateEvent(roomId, eventType, content, stateKey);
+        } else if (eventType === EventType.RoomRedaction) {
+            // special case: extract the `redacts` property and call redact
+            r = await client.redactEvent(roomId, content['redacts']);
         } else {
             // message event
             r = await client.sendEvent(roomId, eventType, content);
