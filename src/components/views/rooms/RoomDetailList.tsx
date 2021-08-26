@@ -30,14 +30,14 @@ interface IProps {
 
 @replaceableComponent("views.rooms.RoomDetailList")
 export default class RoomDetailList extends React.Component<IProps> {
-    public getRows(): JSX.Element[] {
+    private getRows(): JSX.Element[] {
         if (!this.props.rooms) return [];
         return this.props.rooms.map((room, index) => {
             return <RoomDetailRow key={index} room={room} onClick={this.onDetailsClick} />;
         });
     }
 
-    public onDetailsClick = (ev: React.MouseEvent, room: Room): void => {
+    private onDetailsClick = (ev: React.MouseEvent, room: Room): void => {
         dis.dispatch({
             action: 'view_room',
             room_id: room.roomId,

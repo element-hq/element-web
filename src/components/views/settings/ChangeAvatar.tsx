@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2021 New Vector Ltd
+Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -90,7 +89,7 @@ export default class ChangeAvatar extends React.Component<IProps, IState> {
         }
     }
 
-    public onRoomStateEvents = (ev: MatrixEvent) => {
+    private onRoomStateEvents = (ev: MatrixEvent) => {
         if (!this.props.room) {
             return;
         }
@@ -106,7 +105,7 @@ export default class ChangeAvatar extends React.Component<IProps, IState> {
         }
     };
 
-    public setAvatarFromFile(file): Promise<{}> {
+    private setAvatarFromFile(file: File): Promise<{}> {
         let newUrl = null;
 
         this.setState({

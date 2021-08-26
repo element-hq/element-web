@@ -1,5 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
+Copyright 2016-2021 The Matrix.org Foundation C.I.C.
 Copyright 2021 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
