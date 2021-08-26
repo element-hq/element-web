@@ -149,10 +149,12 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                         "To avoid these issues, create a <a>new encrypted room</a> for " +
                         "the conversation you plan to have.",
                         null,
-                        { "a": (sub) => <a onClick={() => {
-                            dialog.close();
-                            this.createNewRoom(false, true);
-                        }}> { sub } </a> },
+                        { "a": (sub) => <a
+                            className="mx_linkButton"
+                            onClick={() => {
+                                dialog.close();
+                                this.createNewRoom(false, true);
+                            }}> { sub } </a> },
                     ) } </p>
                 </div>,
 
@@ -248,10 +250,12 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                         "you plan to have.",
                         null,
                         {
-                            "a": (sub) => <a onClick={() => {
-                                dialog.close();
-                                this.createNewRoom(true, false);
-                            }}> { sub } </a>,
+                            "a": (sub) => <a
+                                className="mx_linkButton"
+                                onClick={() => {
+                                    dialog.close();
+                                    this.createNewRoom(true, false);
+                                }}> { sub } </a>,
                         },
                     ) } </p>
                 </div>,
