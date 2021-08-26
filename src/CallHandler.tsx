@@ -937,6 +937,12 @@ export default class CallHandler extends EventEmitter {
         }
     };
 
+    private stopRingingIfPossible(callId: string): void {
+        this.silencedCalls.delete(callId);
+        if (this.areAnyCallsUnsilenced()) return;
+        this.pause(AudioID.Ring);
+    }
+
     private async dialNumber(number: string) {
         const results = await this.pstnLookup(number);
         if (!results || results.length === 0 || !results[0].userid) {
