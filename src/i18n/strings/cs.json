@@ -3605,5 +3605,7 @@
     "To avoid these issues, create a <a>new encrypted room</a> for the conversation you plan to have.": "Chcete-li se těmto problémům vyhnout, vytvořte pro plánovanou konverzaci <a>novou šifrovanou místnost</a>.",
     "<b>It's not recommended to add encryption to public rooms.</b>Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Nedoporučuje se šifrovat veřejné místnosti.</b>Veřejné místnosti může najít a připojit se k nim kdokoli, takže si v nich může číst zprávy kdokoli. Nezískáte tak žádnou z výhod šifrování a nebudete ho moci později vypnout. Šifrování zpráv ve veřejné místnosti zpomalí příjem a odesílání zpráv.",
     "Are you sure you want to add encryption to this public room?": "Opravdu chcete šifrovat tuto veřejnou místnost?",
-    "Cross-signing is ready but keys are not backed up.": "Křížové podepisování je připraveno, ale klíče nejsou zálohovány."
+    "Cross-signing is ready but keys are not backed up.": "Křížové podepisování je připraveno, ale klíče nejsou zálohovány.",
+    "Low bandwidth mode (requires compatible homeserver)": "Režim malé šířky pásma (vyžaduje kompatibilní homeserver)",
+    "Multiple integration managers (requires manual setup)": "Více správců integrace (vyžaduje ruční nastavení)"
 }
