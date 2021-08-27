@@ -67,7 +67,7 @@ interface IState extends IThemeState {
     showAdvanced: boolean;
     layout: Layout;
     // User profile data for the message preview
-    userId: string;
+    userId?: string;
     displayName: string;
     avatarUrl: string;
 }

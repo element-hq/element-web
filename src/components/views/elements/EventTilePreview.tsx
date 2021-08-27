@@ -46,7 +46,7 @@ interface IProps {
     /**
      * The ID of the displayed user
      */
-    userId: string;
+    userId?: string;
 
     /**
      * The display name of the displayed user
