@@ -119,14 +119,14 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
     }
 
     public render() {
-        if (!this.props.userId) return <div style={{ paddingTop: '9px' }}><InlineSpinner /></div>;
-
-        const event = this.fakeEvent(this.state);
-
         const className = classnames(this.props.className, {
             "mx_IRCLayout": this.props.layout == Layout.IRC,
             "mx_GroupLayout": this.props.layout == Layout.Group,
         });
+
+        if (!this.props.userId) return <div className={className} style={{ paddingTop: '9px 0' }}><InlineSpinner /></div>;
+
+        const event = this.fakeEvent(this.state);
 
         return <div className={className}>
             <EventTile
