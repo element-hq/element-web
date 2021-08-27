@@ -51,18 +51,23 @@ export async function startAnyRegistrationFlow(options) {
         description: _t("Use your account or create a new one to continue."),
         button: _t("Create Account"),
         extraButtons: [
-            <button key="start_login" onClick={() => {
-                modal.close();
-                dis.dispatch({action: 'start_login', screenAfterLogin: options.screen_after});
-            }}>{ _t('Sign In') }</button>,
+            <button
+                key="start_login"
+                onClick={() => {
+                    modal.close();
+                    dis.dispatch({ action: 'start_login', screenAfterLogin: options.screen_after });
+                }}
+            >
+                { _t('Sign In') }
+            </button>,
         ],
         onFinished: (proceed) => {
             if (proceed) {
-                dis.dispatch({action: 'start_registration', screenAfterLogin: options.screen_after});
+                dis.dispatch({ action: 'start_registration', screenAfterLogin: options.screen_after });
             } else if (options.go_home_on_cancel) {
-                dis.dispatch({action: 'view_home_page'});
+                dis.dispatch({ action: 'view_home_page' });
             } else if (options.go_welcome_on_cancel) {
-                dis.dispatch({action: 'view_welcome_page'});
+                dis.dispatch({ action: 'view_welcome_page' });
             }
         },
     });

@@ -17,10 +17,10 @@ limitations under the License.
 import { isKeyComboMatch, KeyCombo } from '../src/KeyBindingsManager';
 
 function mockKeyEvent(key: string, modifiers?: {
-    ctrlKey?: boolean,
-    altKey?: boolean,
-    shiftKey?: boolean,
-    metaKey?: boolean
+    ctrlKey?: boolean;
+    altKey?: boolean;
+    shiftKey?: boolean;
+    metaKey?: boolean;
 }): KeyboardEvent {
     return {
         key,

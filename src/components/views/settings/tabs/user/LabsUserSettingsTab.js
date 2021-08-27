@@ -15,15 +15,16 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../../../languageHandler";
+import { _t } from "../../../../../languageHandler";
 import PropTypes from "prop-types";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
-import * as sdk from "../../../../../index";
-import {SettingLevel} from "../../../../../settings/SettingLevel";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import { SettingLevel } from "../../../../../settings/SettingLevel";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import SdkConfig from "../../../../../SdkConfig";
 import BetaCard from "../../../beta/BetaCard";
+import SettingsFlag from '../../../elements/SettingsFlag';
+import { MatrixClientPeg } from '../../../../../MatrixClientPeg';
 
 export class LabsSettingToggle extends React.Component {
     static propTypes = {
@@ -47,6 +48,14 @@ export class LabsSettingToggle extends React.Component {
 export default class LabsUserSettingsTab extends React.Component {
     constructor() {
         super();
+
+        MatrixClientPeg.get().doesServerSupportUnstableFeature("org.matrix.msc2285").then((showHiddenReadReceipts) => {
+            this.setState({ showHiddenReadReceipts });
+        });
+
+        this.state = {
+            showHiddenReadReceipts: false,
+        };
     }
 
     render() {
@@ -65,29 +74,38 @@ export default class LabsUserSettingsTab extends React.Component {
 
         let labsSection;
         if (SdkConfig.get()['showLabsSettings']) {
-            const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
             const flags = labs.map(f => <LabsSettingToggle featureId={f} key={f} />);
 
+            let hiddenReadReceipts;
+            if (this.state.showHiddenReadReceipts) {
+                hiddenReadReceipts = (
+                    <SettingsFlag name="feature_hidden_read_receipts" level={SettingLevel.DEVICE} />
+                );
+            }
+
             labsSection = <div className="mx_SettingsTab_section">
-                {flags}
+                { flags }
                 <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />
                 <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
                 <SettingsFlag name="lowBandwidth" level={SettingLevel.DEVICE} />
-                <SettingsFlag name="advancedRoomListLogging" level={SettingLevel.DEVICE} />
+                { hiddenReadReceipts }
             </div>;
         }
 
         return (
             <div className="mx_SettingsTab mx_LabsUserSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Labs")}</div>
+                <div className="mx_SettingsTab_heading">{ _t("Labs") }</div>
                 <div className='mx_SettingsTab_subsectionText'>
                     {
                         _t('Feeling experimental? Labs are the best way to get things early, ' +
                             'test out new features and help shape them before they actually launch. ' +
                             '<a>Learn more</a>.', {}, {
                             'a': (sub) => {
-                                return <a href="https://github.com/vector-im/element-web/blob/develop/docs/labs.md"
-                                    rel='noreferrer noopener' target='_blank'>{sub}</a>;
+                                return <a
+                                    href="https://github.com/vector-im/element-web/blob/develop/docs/labs.md"
+                                    rel='noreferrer noopener'
+                                    target='_blank'
+                                >{ sub }</a>;
                             },
                         })
                     }

@@ -1,5 +1,5 @@
 /*
-Copyright 2017 New Vector Ltd.
+Copyright 2017-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,15 +15,16 @@ limitations under the License.
 */
 
 import * as sdk from '../../../index';
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import { _t } from '../../../languageHandler';
 import { linkifyElement } from '../../../HtmlUtils';
 import PropTypes from 'prop-types';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
+import { getDisplayAliasForAliasSet } from '../../../Rooms';
 
 export function getDisplayAliasForRoom(room) {
-    return room.canonicalAlias || (room.aliases ? room.aliases[0] : "");
+    return getDisplayAliasForAliasSet(room.canonicalAlias, room.aliases);
 }
 
 export const roomShape = PropTypes.shape({
@@ -104,8 +105,12 @@ export default class RoomDetailRow extends React.Component {
 
         return <tr key={room.roomId} onClick={this.onClick} onMouseDown={this.props.onMouseDown}>
             <td className="mx_RoomDirectory_roomAvatar">
-                <BaseAvatar width={24} height={24} resizeMethod='crop'
-                    name={name} idName={name}
+                <BaseAvatar
+                    width={24}
+                    height={24}
+                    resizeMethod='crop'
+                    name={name}
+                    idName={name}
                     url={avatarUrl} />
             </td>
             <td className="mx_RoomDirectory_roomDescription">

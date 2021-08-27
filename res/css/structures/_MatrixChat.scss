@@ -29,8 +29,6 @@ limitations under the License.
 .mx_MatrixChat_wrapper {
     display: flex;
 
-    flex-direction: column;
-
     width: 100%;
     height: 100%;
 }
@@ -42,12 +40,11 @@ limitations under the License.
 }
 
 .mx_MatrixChat {
+    position: relative;
     width: 100%;
     height: 100%;
 
     display: flex;
-
-    order: 2;
 
     flex: 1;
     min-height: 0;
@@ -66,8 +63,8 @@ limitations under the License.
 }
 
 /* not the left panel, and not the resize handle, so the roomview/groupview/... */
-.mx_MatrixChat > :not(.mx_LeftPanel):not(.mx_SpacePanel):not(.mx_ResizeHandle) {
-    background-color: $primary-bg-color;
+.mx_MatrixChat > :not(.mx_LeftPanel):not(.mx_SpacePanel):not(.mx_ResizeHandle):not(.mx_LeftPanel_wrapper) {
+    background-color: $background;
 
     flex: 1 1 0;
     min-width: 0;
@@ -94,7 +91,7 @@ limitations under the License.
 
         content: ' ';
 
-        background-color: $primary-fg-color;
+        background-color: $primary-content;
         opacity: 0.8;
     }
 }

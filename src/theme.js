@@ -15,10 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {_t} from "./languageHandler";
+import { _t } from "./languageHandler";
 
 export const DEFAULT_THEME = "light";
-import Tinter from "./Tinter";
 import SettingsStore from "./settings/SettingsStore";
 import ThemeWatcher from "./settings/watchers/ThemeWatcher";
 
@@ -29,7 +28,7 @@ export function enumerateThemes() {
     };
     const customThemes = SettingsStore.getValue("custom_themes");
     const customThemeNames = {};
-    for (const {name} of customThemes) {
+    for (const { name } of customThemes) {
         customThemeNames[`custom-${name}`] = name;
     }
     return Object.assign({}, customThemeNames, BUILTIN_THEMES);
@@ -93,7 +92,7 @@ function generateCustomFontFaceCSS(faces) {
 }
 
 function setCustomThemeVars(customTheme) {
-    const {style} = document.body;
+    const { style } = document.body;
 
     function setCSSColorVariable(name, hexColor, doPct = true) {
         style.setProperty(`--${name}`, hexColor);
@@ -117,7 +116,7 @@ function setCustomThemeVars(customTheme) {
         }
     }
     if (customTheme.fonts) {
-        const {fonts} = customTheme;
+        const { fonts } = customTheme;
         if (fonts.faces) {
             const css = generateCustomFontFaceCSS(fonts.faces);
             const style = document.createElement("style");
@@ -172,15 +171,10 @@ export async function setTheme(theme) {
     // look for the stylesheet elements.
     // styleElements is a map from style name to HTMLLinkElement.
     const styleElements = Object.create(null);
-    let a;
-    for (let i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
-        const href = a.getAttribute("href");
-        // shouldn't we be using the 'title' tag rather than the href?
-        const match = href && href.match(/^bundles\/.*\/theme-(.*)\.css$/);
-        if (match) {
-            styleElements[match[1]] = a;
-        }
-    }
+    const themes = Array.from(document.querySelectorAll('[data-mx-theme]'));
+    themes.forEach(theme => {
+        styleElements[theme.attributes['data-mx-theme'].value.toLowerCase()] = theme;
+    });
 
     if (!(stylesheetName in styleElements)) {
         throw new Error("Unknown theme " + stylesheetName);
@@ -214,7 +208,6 @@ export async function setTheme(theme) {
             if (bodyStyles.backgroundColor) {
                 document.querySelector('meta[name="theme-color"]').content = bodyStyles.backgroundColor;
             }
-            Tinter.setTheme(theme);
             resolve();
         };
 

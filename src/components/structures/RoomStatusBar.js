@@ -17,15 +17,15 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t, _td } from '../../languageHandler';
-import {MatrixClientPeg} from '../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../MatrixClientPeg';
 import Resend from '../../Resend';
 import dis from '../../dispatcher/dispatcher';
-import {messageForResourceLimitError} from '../../utils/ErrorUtils';
-import {Action} from "../../dispatcher/actions";
-import {replaceableComponent} from "../../utils/replaceableComponent";
-import {EventStatus} from "matrix-js-sdk/src/models/event";
+import { messageForResourceLimitError } from '../../utils/ErrorUtils';
+import { Action } from "../../dispatcher/actions";
+import { replaceableComponent } from "../../utils/replaceableComponent";
+import { EventStatus } from "matrix-js-sdk/src/models/event";
 import NotificationBadge from "../views/rooms/NotificationBadge";
-import {StaticNotificationState} from "../../stores/notifications/StaticNotificationState";
+import { StaticNotificationState } from "../../stores/notifications/StaticNotificationState";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import InlineSpinner from "../views/elements/InlineSpinner";
 
@@ -41,7 +41,7 @@ export function getUnsentMessages(room) {
 }
 
 @replaceableComponent("structures.RoomStatusBar")
-export default class RoomStatusBar extends React.Component {
+export default class RoomStatusBar extends React.PureComponent {
     static propTypes = {
         // the room this statusbar is representing.
         room: PropTypes.object.isRequired,
@@ -115,15 +115,15 @@ export default class RoomStatusBar extends React.Component {
 
     _onResendAllClick = () => {
         Resend.resendUnsentEvents(this.props.room).then(() => {
-            this.setState({isResending: false});
+            this.setState({ isResending: false });
         });
-        this.setState({isResending: true});
-        dis.fire(Action.FocusComposer);
+        this.setState({ isResending: true });
+        dis.fire(Action.FocusSendMessageComposer);
     };
 
     _onCancelAllClick = () => {
         Resend.cancelUnsentEvents(this.props.room);
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
     };
 
     _onRoomLocalEchoUpdated = (event, room, oldEventId, oldStatus) => {
@@ -222,17 +222,17 @@ export default class RoomStatusBar extends React.Component {
 
         let buttonRow = <>
             <AccessibleButton onClick={this._onCancelAllClick} className="mx_RoomStatusBar_unsentCancelAllBtn">
-                {_t("Delete all")}
+                { _t("Delete all") }
             </AccessibleButton>
             <AccessibleButton onClick={this._onResendAllClick} className="mx_RoomStatusBar_unsentResendAllBtn">
-                {_t("Retry all")}
+                { _t("Retry all") }
             </AccessibleButton>
         </>;
         if (this.state.isResending) {
             buttonRow = <>
                 <InlineSpinner w={20} h={20} />
-                {/* span for css */}
-                <span>{_t("Sending")}</span>
+                { /* span for css */ }
+                <span>{ _t("Sending") }</span>
             </>;
         }
 
@@ -253,7 +253,7 @@ export default class RoomStatusBar extends React.Component {
                         </div>
                     </div>
                     <div className="mx_RoomStatusBar_unsentButtonBar">
-                        {buttonRow}
+                        { buttonRow }
                     </div>
                 </div>
             </div>
@@ -266,14 +266,18 @@ export default class RoomStatusBar extends React.Component {
                 <div className="mx_RoomStatusBar">
                     <div role="alert">
                         <div className="mx_RoomStatusBar_connectionLostBar">
-                            <img src={require("../../../res/img/feather-customised/warning-triangle.svg")} width="24"
-                                height="24" title="/!\ " alt="/!\ " />
+                            <img
+                                src={require("../../../res/img/feather-customised/warning-triangle.svg")}
+                                width="24"
+                                height="24"
+                                title="/!\ "
+                                alt="/!\ " />
                             <div>
                                 <div className="mx_RoomStatusBar_connectionLostBar_title">
-                                    {_t('Connectivity to the server has been lost.')}
+                                    { _t('Connectivity to the server has been lost.') }
                                 </div>
                                 <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                                    {_t('Sent messages will be stored until your connection has returned.')}
+                                    { _t('Sent messages will be stored until your connection has returned.') }
                                 </div>
                             </div>
                         </div>

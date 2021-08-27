@@ -20,7 +20,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.rooms.TopUnreadMessagesBar")
 export default class TopUnreadMessagesBar extends React.Component {
@@ -32,14 +32,16 @@ export default class TopUnreadMessagesBar extends React.Component {
     render() {
         return (
             <div className="mx_TopUnreadMessagesBar">
-                <AccessibleButton className="mx_TopUnreadMessagesBar_scrollUp"
+                <AccessibleButton
+                    className="mx_TopUnreadMessagesBar_scrollUp"
                     title={_t('Jump to first unread message.')}
-                    onClick={this.props.onScrollUpClick}>
-                </AccessibleButton>
-                <AccessibleButton className="mx_TopUnreadMessagesBar_markAsRead"
+                    onClick={this.props.onScrollUpClick}
+                />
+                <AccessibleButton
+                    className="mx_TopUnreadMessagesBar_markAsRead"
                     title={_t('Mark all as read')}
-                    onClick={this.props.onCloseClick}>
-                </AccessibleButton>
+                    onClick={this.props.onCloseClick}
+                />
             </div>
         );
     }

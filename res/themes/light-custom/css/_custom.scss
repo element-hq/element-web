@@ -38,7 +38,7 @@ $lightbox-border-color: var(--timeline-background-color);
 $menu-bg-color: var(--timeline-background-color);
 $avatar-bg-color: var(--timeline-background-color);
 $message-action-bar-bg-color: var(--timeline-background-color);
-$primary-bg-color: var(--timeline-background-color);
+$background: var(--timeline-background-color);
 $togglesw-ball-color: var(--timeline-background-color);
 $droptarget-bg-color: var(--timeline-background-color-50pct); //still needs alpha at .5
 $authpage-modal-bg-color: var(--timeline-background-color-50pct); //still needs alpha at .59
@@ -69,7 +69,7 @@ $roomlist-bg-color: var(--roomlist-background-color);
 //
 // --timeline-text-color
 $message-action-bar-fg-color: var(--timeline-text-color);
-$primary-fg-color: var(--timeline-text-color);
+$primary-content: var(--timeline-text-color);
 $settings-profile-overlay-placeholder-fg-color: var(--timeline-text-color);
 $roomtopic-color: var(--timeline-text-color-50pct);
 $tab-label-fg-color: var(--timeline-text-color);
@@ -139,4 +139,11 @@ $event-selected-color: var(--timeline-highlights-color);
 $event-highlight-bg-color: var(--timeline-highlights-color);
 //
 // redirect some variables away from their hardcoded values in the light theme
-$settings-grey-fg-color: $primary-fg-color;
+$settings-grey-fg-color: $primary-content;
+
+// --eventbubble colors
+$eventbubble-self-bg: var(--eventbubble-self-bg, $eventbubble-self-bg);
+$eventbubble-others-bg: var(--eventbubble-others-bg, $eventbubble-others-bg);
+$eventbubble-bg-hover: var(--eventbubble-bg-hover, $eventbubble-bg-hover);
+$eventbubble-avatar-outline: var(--eventbubble-avatar-outline, $eventbubble-avatar-outline);
+$eventbubble-reply-color: var(--eventbubble-reply-color, $eventbubble-reply-color);

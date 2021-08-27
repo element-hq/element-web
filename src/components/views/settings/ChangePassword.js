@@ -18,7 +18,7 @@ limitations under the License.
 import Field from "../elements/Field";
 import React from 'react';
 import PropTypes from 'prop-types';
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AccessibleButton from '../elements/AccessibleButton';
 import Spinner from '../elements/Spinner';
 import withValidation from '../elements/Validation';
@@ -27,7 +27,7 @@ import * as sdk from "../../../index";
 import Modal from "../../../Modal";
 import PassphraseField from "../auth/PassphraseField";
 import CountlyAnalytics from "../../../CountlyAnalytics";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { PASSWORD_MIN_SCORE } from '../auth/RegistrationForm';
 
 const FIELD_OLD_PASSWORD = 'field_old_password';
@@ -99,7 +99,7 @@ export default class ChangePassword extends React.Component {
                         'and re-import them afterwards. ' +
                         'In future this will be improved.',
                     ) }
-                    {' '}
+                    { ' ' }
                     <a href="https://github.com/vector-im/element-web/issues/2671" target="_blank" rel="noreferrer noopener">
                         https://github.com/vector-im/element-web/issues/2671
                     </a>

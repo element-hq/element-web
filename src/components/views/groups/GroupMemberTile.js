@@ -22,8 +22,8 @@ import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { GroupMemberType } from '../../../groups';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 @replaceableComponent("views.groups.GroupMemberTile")
 export default class GroupMemberTile extends React.Component {
@@ -56,14 +56,19 @@ export default class GroupMemberTile extends React.Component {
                 aria-hidden="true"
                 name={this.props.member.displayname || this.props.member.userId}
                 idName={this.props.member.userId}
-                width={36} height={36}
+                width={36}
+                height={36}
                 url={avatarUrl}
             />
         );
 
         return (
-            <EntityTile name={name} avatarJsx={av} onClick={this.onClick}
-                suppressOnHover={true} presenceState="online"
+            <EntityTile
+                name={name}
+                avatarJsx={av}
+                onClick={this.onClick}
+                suppressOnHover={true}
+                presenceState="online"
                 powerStatus={this.props.member.isPrivileged ? EntityTile.POWER_STATUS_ADMIN : null}
             />
         );

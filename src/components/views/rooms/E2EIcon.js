@@ -15,11 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState} from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import classNames from 'classnames';
 
-import {_t, _td} from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import AccessibleButton from "../elements/AccessibleButton";
 import Tooltip from "../elements/Tooltip";
 
@@ -42,7 +42,7 @@ const crossSigningRoomTitles = {
     [E2E_STATE.VERIFIED]: _td("Everyone in this room is verified"),
 };
 
-const E2EIcon = ({isUser, status, className, size, onClick, hideTooltip, bordered}) => {
+const E2EIcon = ({ isUser, status, className, size, onClick, hideTooltip, bordered }) => {
     const [hover, setHover] = useState(false);
 
     const classes = classNames({
@@ -62,7 +62,7 @@ const E2EIcon = ({isUser, status, className, size, onClick, hideTooltip, bordere
 
     let style;
     if (size) {
-        style = {width: `${size}px`, height: `${size}px`};
+        style = { width: `${size}px`, height: `${size}px` };
     }
 
     const onMouseOver = () => setHover(true);

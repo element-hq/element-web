@@ -23,9 +23,9 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import InfoTooltip from "../elements/InfoTooltip";
 import dis from "../../../dispatcher/dispatcher";
-import {showCommunityRoomInviteDialog} from "../../../RoomInvite";
+import { showCommunityRoomInviteDialog } from "../../../RoomInvite";
 import GroupStore from "../../../stores/GroupStore";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps extends IDialogProps {
 }
@@ -58,7 +58,7 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
 
     private onNameChange = (ev: ChangeEvent<HTMLInputElement>) => {
         const localpart = (ev.target.value || "").toLowerCase().replace(/[^a-z0-9.\-_]/g, '-');
-        this.setState({name: ev.target.value, localpart});
+        this.setState({ name: ev.target.value, localpart });
     };
 
     private onSubmit = async (ev) => {
@@ -69,7 +69,7 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
 
         // We'll create the community now to see if it's taken, leaving it active in
         // the background for the user to look at while they invite people.
-        this.setState({busy: true});
+        this.setState({ busy: true });
         try {
             let avatarUrl = ''; // must be a string for synapse to accept it
             if (this.state.avatarFile) {
@@ -85,7 +85,7 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
             });
 
             // Ensure the tag gets selected now that we've created it
-            dis.dispatch({action: 'deselect_tags'}, true);
+            dis.dispatch({ action: 'deselect_tags' }, true);
             dis.dispatch({
                 action: 'select_tag',
                 tag: result.group_id,
@@ -123,13 +123,13 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
 
     private onAvatarChanged = (e: ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files || !e.target.files.length) {
-            this.setState({avatarFile: null});
+            this.setState({ avatarFile: null });
         } else {
-            this.setState({busy: true});
+            this.setState({ busy: true });
             const file = e.target.files[0];
             const reader = new FileReader();
             reader.onload = (ev: ProgressEvent<FileReader>) => {
-                this.setState({avatarFile: file, busy: false, avatarPreview: ev.target.result as string});
+                this.setState({ avatarFile: file, busy: false, avatarPreview: ev.target.result as string });
             };
             reader.readAsDataURL(file);
         }
@@ -144,11 +144,11 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
         if (this.state.localpart) {
             communityId = (
                 <span className="mx_CreateCommunityPrototypeDialog_communityId">
-                    {_t("Community ID: +<localpart />:%(domain)s", {
+                    { _t("Community ID: +<localpart />:%(domain)s", {
                         domain: MatrixClientPeg.getHomeserverName(),
                     }, {
-                        localpart: () => <u>{this.state.localpart}</u>,
-                    })}
+                        localpart: () => <u>{ this.state.localpart }</u>,
+                    }) }
                     <InfoTooltip
                         tooltip={_t(
                             "Use this when referencing your community to others. The community ID " +
@@ -161,21 +161,21 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
 
         let helpText = (
             <span className="mx_CreateCommunityPrototypeDialog_subtext">
-                {_t("You can change this later if needed.")}
+                { _t("You can change this later if needed.") }
             </span>
         );
         if (this.state.error) {
             const classes = "mx_CreateCommunityPrototypeDialog_subtext mx_CreateCommunityPrototypeDialog_subtext_error";
             helpText = (
                 <span className={classes}>
-                    {this.state.error}
+                    { this.state.error }
                 </span>
             );
         }
 
         let preview = <img src={this.state.avatarPreview} className="mx_CreateCommunityPrototypeDialog_avatar" />;
         if (!this.state.avatarPreview) {
-            preview = <div className="mx_CreateCommunityPrototypeDialog_placeholderAvatar" />
+            preview = <div className="mx_CreateCommunityPrototypeDialog_placeholderAvatar" />;
         }
 
         return (
@@ -193,31 +193,33 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
                                 placeholder={_t("Enter name")}
                                 label={_t("Enter name")}
                             />
-                            {helpText}
+                            { helpText }
                             <span className="mx_CreateCommunityPrototypeDialog_subtext">
-                                {/*nbsp is to reserve the height of this element when there's nothing*/}
-                                &nbsp;{communityId}
+                                { /*nbsp is to reserve the height of this element when there's nothing*/ }
+                                &nbsp;{ communityId }
                             </span>
                             <AccessibleButton kind="primary" onClick={this.onSubmit} disabled={this.state.busy}>
-                                {_t("Create")}
+                                { _t("Create") }
                             </AccessibleButton>
                         </div>
                         <div className="mx_CreateCommunityPrototypeDialog_colAvatar">
                             <input
-                                type="file" style={{display: "none"}}
-                                ref={this.avatarUploadRef} accept="image/*"
+                                type="file"
+                                style={{ display: "none" }}
+                                ref={this.avatarUploadRef}
+                                accept="image/*"
                                 onChange={this.onAvatarChanged}
                             />
                             <AccessibleButton
                                 onClick={this.onChangeAvatar}
                                 className="mx_CreateCommunityPrototypeDialog_avatarContainer"
                             >
-                                {preview}
+                                { preview }
                             </AccessibleButton>
                             <div className="mx_CreateCommunityPrototypeDialog_tip">
-                                <b>{_t("Add image (optional)")}</b>
+                                <b>{ _t("Add image (optional)") }</b>
                                 <span>
-                                    {_t("An image will help people identify your community.")}
+                                    { _t("An image will help people identify your community.") }
                                 </span>
                             </div>
                         </div>

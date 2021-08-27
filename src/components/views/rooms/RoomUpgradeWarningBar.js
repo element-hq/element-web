@@ -20,11 +20,11 @@ import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 
 import { _t } from '../../../languageHandler';
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.rooms.RoomUpgradeWarningBar")
-export default class RoomUpgradeWarningBar extends React.Component {
+export default class RoomUpgradeWarningBar extends React.PureComponent {
     static propTypes = {
         room: PropTypes.object.isRequired,
         recommendation: PropTypes.object.isRequired,
@@ -37,7 +37,7 @@ export default class RoomUpgradeWarningBar extends React.Component {
 
     componentDidMount() {
         const tombstone = this.props.room.currentState.getStateEvents("m.room.tombstone", "");
-        this.setState({upgraded: tombstone && tombstone.getContent().replacement_room});
+        this.setState({ upgraded: tombstone && tombstone.getContent().replacement_room });
 
         MatrixClientPeg.get().on("RoomState.events", this._onStateEvents);
     }
@@ -57,12 +57,12 @@ export default class RoomUpgradeWarningBar extends React.Component {
         if (event.getType() !== "m.room.tombstone") return;
 
         const tombstone = this.props.room.currentState.getStateEvents("m.room.tombstone", "");
-        this.setState({upgraded: tombstone && tombstone.getContent().replacement_room});
+        this.setState({ upgraded: tombstone && tombstone.getContent().replacement_room });
     };
 
     onUpgradeClick = () => {
         const RoomUpgradeDialog = sdk.getComponent('dialogs.RoomUpgradeDialog');
-        Modal.createTrackedDialog('Upgrade Room Version', '', RoomUpgradeDialog, {room: this.props.room});
+        Modal.createTrackedDialog('Upgrade Room Version', '', RoomUpgradeDialog, { room: this.props.room });
     };
 
     render() {
@@ -72,26 +72,26 @@ export default class RoomUpgradeWarningBar extends React.Component {
             <div>
                 <div className="mx_RoomUpgradeWarningBar_body">
                     <p>
-                        {_t(
+                        { _t(
                             "Upgrading this room will shut down the current instance of the room and create " +
                             "an upgraded room with the same name.",
-                        )}
+                        ) }
                     </p>
                     <p>
-                        {_t(
+                        { _t(
                             "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members " +
                             "to the new version of the room.</i> We'll post a link to the new room in the old " +
                             "version of the room - room members will have to click this link to join the new room.",
                             {}, {
-                                "b": (sub) => <b>{sub}</b>,
-                                "i": (sub) => <i>{sub}</i>,
+                                "b": (sub) => <b>{ sub }</b>,
+                                "i": (sub) => <i>{ sub }</i>,
                             },
-                        )}
+                        ) }
                     </p>
                 </div>
                 <p className="mx_RoomUpgradeWarningBar_upgradelink">
                     <AccessibleButton onClick={this.onUpgradeClick}>
-                        {_t("Upgrade this room to the recommended room version")}
+                        { _t("Upgrade this room to the recommended room version") }
                     </AccessibleButton>
                 </p>
             </div>
@@ -101,7 +101,7 @@ export default class RoomUpgradeWarningBar extends React.Component {
             doUpgradeWarnings = (
                 <div className="mx_RoomUpgradeWarningBar_body">
                     <p>
-                        {_t("This room has already been upgraded.")}
+                        { _t("This room has already been upgraded.") }
                     </p>
                 </div>
             );
@@ -111,19 +111,19 @@ export default class RoomUpgradeWarningBar extends React.Component {
             <div className="mx_RoomUpgradeWarningBar">
                 <div className="mx_RoomUpgradeWarningBar_wrapped">
                     <div className="mx_RoomUpgradeWarningBar_header">
-                        {_t(
+                        { _t(
                             "This room is running room version <roomVersion />, which this homeserver has " +
                             "marked as <i>unstable</i>.",
                             {},
                             {
-                                "roomVersion": () => <code>{this.props.room.getVersion()}</code>,
-                                "i": (sub) => <i>{sub}</i>,
+                                "roomVersion": () => <code>{ this.props.room.getVersion() }</code>,
+                                "i": (sub) => <i>{ sub }</i>,
                             },
-                        )}
+                        ) }
                     </div>
-                    {doUpgradeWarnings}
+                    { doUpgradeWarnings }
                     <div className="mx_RoomUpgradeWarningBar_small">
-                        {_t("Only room administrators will see this warning")}
+                        { _t("Only room administrators will see this warning") }
                     </div>
                 </div>
             </div>

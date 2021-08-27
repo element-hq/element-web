@@ -13,29 +13,35 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, {ComponentProps} from 'react';
-import Room from 'matrix-js-sdk/src/models/room';
+
+import React, { ComponentProps } from 'react';
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
+import classNames from "classnames";
 
 import BaseAvatar from './BaseAvatar';
 import ImageView from '../elements/ImageView';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import * as Avatar from '../../../Avatar';
-import {ResizeMethod} from "../../../Avatar";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
+import DMRoomMap from "../../../utils/DMRoomMap";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
+import { IOOBData } from '../../../stores/ThreepidInviteStore';
 
 interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick"> {
     // Room may be left unset here, but if it is,
     // oobData.avatarUrl should be set (else there
     // would be nowhere to get the avatar from)
     room?: Room;
-    // TODO: type when js-sdk has types
-    oobData?: any;
+    oobData?: IOOBData & {
+        roomId?: string;
+    };
     width?: number;
     height?: number;
     resizeMethod?: ResizeMethod;
     viewAvatarOnClick?: boolean;
+    className?: string;
     onClick?(): void;
 }
 
@@ -128,14 +134,21 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
     };
 
     public render() {
-        const {room, oobData, viewAvatarOnClick, onClick, ...otherProps} = this.props;
+        const { room, oobData, viewAvatarOnClick, onClick, className, ...otherProps } = this.props;
 
         const roomName = room ? room.name : oobData.name;
+        // If the room is a DM, we use the other user's ID for the color hash
+        // in order to match the room avatar with their avatar
+        const idName = room ? (DMRoomMap.shared().getUserIdForRoomId(room.roomId) ?? room.roomId) : oobData.roomId;
 
         return (
-            <BaseAvatar {...otherProps}
+            <BaseAvatar
+                {...otherProps}
+                className={classNames(className, {
+                    mx_RoomAvatar_isSpaceRoom: room?.isSpaceRoom(),
+                })}
                 name={roomName}
-                idName={room ? room.roomId : null}
+                idName={idName}
                 urls={this.state.urls}
                 onClick={viewAvatarOnClick && this.state.urls[0] ? this.onRoomAvatarClick : onClick}
             />

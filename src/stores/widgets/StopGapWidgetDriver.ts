@@ -33,9 +33,7 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import ActiveRoomObserver from "../../ActiveRoomObserver";
 import Modal from "../../Modal";
 import WidgetOpenIDPermissionsDialog from "../../components/views/dialogs/WidgetOpenIDPermissionsDialog";
-import WidgetCapabilitiesPromptDialog, {
-    getRememberedCapabilitiesForWidget,
-} from "../../components/views/dialogs/WidgetCapabilitiesPromptDialog";
+import WidgetCapabilitiesPromptDialog from "../../components/views/dialogs/WidgetCapabilitiesPromptDialog";
 import { WidgetPermissionCustomisations } from "../../customisations/WidgetPermissions";
 import { OIDCState, WidgetPermissionStore } from "./WidgetPermissionStore";
 import { WidgetType } from "../../widgets/WidgetType";
@@ -43,10 +41,18 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { CHAT_EFFECTS } from "../../effects";
 import { containsEmoji } from "../../effects/utils";
 import dis from "../../dispatcher/dispatcher";
-import {tryTransformPermalinkToLocalHref} from "../../utils/permalinks/Permalinks";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import { tryTransformPermalinkToLocalHref } from "../../utils/permalinks/Permalinks";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 // TODO: Purge this from the universe
+
+function getRememberedCapabilitiesForWidget(widget: Widget): Capability[] {
+    return JSON.parse(localStorage.getItem(`widget_${widget.id}_approved_caps`) || "[]");
+}
+
+function setRememberedCapabilitiesForWidget(widget: Widget, caps: Capability[]) {
+    localStorage.setItem(`widget_${widget.id}_approved_caps`, JSON.stringify(caps));
+}
 
 export class StopGapWidgetDriver extends WidgetDriver {
     private allowedCapabilities: Set<Capability>;
@@ -100,6 +106,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
             }
         }
         // TODO: Do something when the widget requests new capabilities not yet asked for
+        let rememberApproved = false;
         if (missing.size > 0) {
             try {
                 const [result] = await Modal.createTrackedDialog(
@@ -111,12 +118,19 @@ export class StopGapWidgetDriver extends WidgetDriver {
                         widgetKind: this.forWidgetKind,
                     }).finished;
                 (result.approved || []).forEach(cap => allowedSoFar.add(cap));
+                rememberApproved = result.remember;
             } catch (e) {
                 console.error("Non-fatal error getting capabilities: ", e);
             }
         }
 
-        return new Set(iterableUnion(allowedSoFar, requested));
+        const allAllowed = new Set(iterableUnion(allowedSoFar, requested));
+
+        if (rememberApproved) {
+            setRememberedCapabilitiesForWidget(this.forWidget, Array.from(allAllowed));
+        }
+
+        return allAllowed;
     }
 
     public async sendEvent(eventType: string, content: any, stateKey: string = null): Promise<ISendEventDetails> {
@@ -129,6 +143,9 @@ export class StopGapWidgetDriver extends WidgetDriver {
         if (stateKey !== null) {
             // state event
             r = await client.sendStateEvent(roomId, eventType, content, stateKey);
+        } else if (eventType === EventType.RoomRedaction) {
+            // special case: extract the `redacts` property and call redact
+            r = await client.redactEvent(roomId, content['redacts']);
         } else {
             // message event
             r = await client.sendEvent(roomId, eventType, content);
@@ -136,16 +153,16 @@ export class StopGapWidgetDriver extends WidgetDriver {
             if (eventType === EventType.RoomMessage) {
                 CHAT_EFFECTS.forEach((effect) => {
                     if (containsEmoji(content, effect.emojis)) {
-                        dis.dispatch({action: `effects.${effect.command}`});
+                        dis.dispatch({ action: `effects.${effect.command}` });
                     }
                 });
             }
         }
 
-        return {roomId, eventId: r.event_id};
+        return { roomId, eventId: r.event_id };
     }
 
-    public async readRoomEvents(eventType: string, msgtype: string | undefined, limit: number): Promise<MatrixEvent[]> {
+    public async readRoomEvents(eventType: string, msgtype: string | undefined, limit: number): Promise<object[]> {
         limit = limit > 0 ? Math.min(limit, 25) : 25; // arbitrary choice
 
         const client = MatrixClientPeg.get();
@@ -159,17 +176,15 @@ export class StopGapWidgetDriver extends WidgetDriver {
             if (results.length >= limit) break;
 
             const ev = events[i];
-            if (ev.getType() !== eventType) continue;
+            if (ev.getType() !== eventType || ev.isState()) continue;
             if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()['msgtype']) continue;
             results.push(ev);
         }
 
-        return results.map(e => e.event);
+        return results.map(e => e.getEffectiveEvent());
     }
 
-    public async readStateEvents(
-        eventType: string, stateKey: string | undefined, limit: number,
-    ): Promise<MatrixEvent[]> {
+    public async readStateEvents(eventType: string, stateKey: string | undefined, limit: number): Promise<object[]> {
         limit = limit > 0 ? Math.min(limit, 100) : 100; // arbitrary choice
 
         const client = MatrixClientPeg.get();
@@ -178,7 +193,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         if (!client || !roomId || !room) throw new Error("Not in a room or not attached to a client");
 
         const results: MatrixEvent[] = [];
-        const state = room.currentState.events.get(eventType);
+        const state: Map<string, MatrixEvent> = room.currentState.events.get(eventType);
         if (state) {
             if (stateKey === "" || !!stateKey) {
                 const forKey = state.get(stateKey);
@@ -201,13 +216,13 @@ export class StopGapWidgetDriver extends WidgetDriver {
         };
 
         if (oidcState === OIDCState.Denied) {
-            return observer.update({state: OpenIDRequestState.Blocked});
+            return observer.update({ state: OpenIDRequestState.Blocked });
         }
         if (oidcState === OIDCState.Allowed) {
-            return observer.update({state: OpenIDRequestState.Allowed, token: await getToken()});
+            return observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
         }
 
-        observer.update({state: OpenIDRequestState.PendingUserConfirmation});
+        observer.update({ state: OpenIDRequestState.PendingUserConfirmation });
 
         Modal.createTrackedDialog("OpenID widget permissions", '', WidgetOpenIDPermissionsDialog, {
             widget: this.forWidget,
@@ -216,10 +231,10 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
             onFinished: async (confirm) => {
                 if (!confirm) {
-                    return observer.update({state: OpenIDRequestState.Blocked});
+                    return observer.update({ state: OpenIDRequestState.Blocked });
                 }
 
-                return observer.update({state: OpenIDRequestState.Allowed, token: await getToken()});
+                return observer.update({ state: OpenIDRequestState.Allowed, token: await getToken() });
             },
         });
     }

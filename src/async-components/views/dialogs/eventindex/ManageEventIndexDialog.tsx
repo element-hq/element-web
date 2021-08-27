@@ -15,15 +15,17 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../../index';
 import { _t } from '../../../../languageHandler';
 import SdkConfig from '../../../../SdkConfig';
 import SettingsStore from "../../../../settings/SettingsStore";
 
 import Modal from '../../../../Modal';
-import {formatBytes, formatCountLong} from "../../../../utils/FormattingUtils";
+import { formatBytes, formatCountLong } from "../../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
-import {SettingLevel} from "../../../../settings/SettingLevel";
+import { SettingLevel } from "../../../../settings/SettingLevel";
+import Field from '../../../../components/views/elements/Field';
+import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
+import DialogButtons from "../../../../components/views/elements/DialogButtons";
 
 interface IProps {
     onFinished: (confirmed: boolean) => void;
@@ -132,20 +134,20 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
     }
 
     private onDisable = async () => {
-        Modal.createTrackedDialogAsync("Disable message search", "Disable message search",
-            import("./DisableEventIndexDialog"),
+        const DisableEventIndexDialog = (await import("./DisableEventIndexDialog")).default;
+        Modal.createTrackedDialog("Disable message search", "Disable message search",
+            DisableEventIndexDialog,
             null, null, /* priority = */ false, /* static = */ true,
         );
     };
 
     private onCrawlerSleepTimeChange = (e) => {
-        this.setState({crawlerSleepTime: e.target.value});
+        this.setState({ crawlerSleepTime: e.target.value });
         SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.value);
     };
 
     render() {
         const brand = SdkConfig.get().brand;
-        const Field = sdk.getComponent('views.elements.Field');
 
         let crawlerState;
         if (this.state.currentRoom === null) {
@@ -160,37 +162,34 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
 
         const eventIndexingSettings = (
             <div>
-                {_t(
+                { _t(
                     "%(brand)s is securely caching encrypted messages locally for them " +
                     "to appear in search results:",
                     { brand },
-                )}
+                ) }
                 <div className='mx_SettingsTab_subsectionText'>
-                    {crawlerState}<br />
-                    {_t("Space used:")} {formatBytes(this.state.eventIndexSize, 0)}<br />
-                    {_t("Indexed messages:")} {formatCountLong(this.state.eventCount)}<br />
-                    {_t("Indexed rooms:")} {_t("%(doneRooms)s out of %(totalRooms)s", {
+                    { crawlerState }<br />
+                    { _t("Space used:") } { formatBytes(this.state.eventIndexSize, 0) }<br />
+                    { _t("Indexed messages:") } { formatCountLong(this.state.eventCount) }<br />
+                    { _t("Indexed rooms:") } { _t("%(doneRooms)s out of %(totalRooms)s", {
                         doneRooms: formatCountLong(doneRooms),
                         totalRooms: formatCountLong(this.state.roomCount),
-                    })} <br />
+                    }) } <br />
                     <Field
                         label={_t('Message downloading sleep time(ms)')}
                         type='number'
-                        value={this.state.crawlerSleepTime}
+                        value={this.state.crawlerSleepTime.toString()}
                         onChange={this.onCrawlerSleepTimeChange} />
                 </div>
             </div>
         );
-
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         return (
             <BaseDialog className='mx_ManageEventIndexDialog'
                 onFinished={this.props.onFinished}
                 title={_t("Message search")}
             >
-                {eventIndexingSettings}
+                { eventIndexingSettings }
                 <DialogButtons
                     primaryButton={_t("Done")}
                     onPrimaryButtonClick={this.props.onFinished}

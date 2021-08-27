@@ -26,13 +26,13 @@ export class CallInviteEventPreview implements IPreview {
             if (isSelf(event)) {
                 return _t("You started a call");
             } else {
-                return _t("%(senderName)s started a call", {senderName: getSenderName(event)});
+                return _t("%(senderName)s started a call", { senderName: getSenderName(event) });
             }
         } else {
             if (isSelf(event)) {
                 return _t("Waiting for answer");
             } else {
-                return _t("%(senderName)s is calling", {senderName: getSenderName(event)});
+                return _t("%(senderName)s is calling", { senderName: getSenderName(event) });
             }
         }
     }

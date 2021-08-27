@@ -17,11 +17,19 @@ limitations under the License.
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { EventType, RoomCreateTypeField, RoomType } from "matrix-js-sdk/src/@types/event";
+import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
+import {
+    HistoryVisibility,
+    JoinRule,
+    Preset,
+    RestrictedAllowType,
+    Visibility,
+} from "matrix-js-sdk/src/@types/partials";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
-import * as sdk from './index';
 import { _t } from './languageHandler';
 import dis from "./dispatcher/dispatcher";
 import * as Rooms from "./Rooms";
@@ -34,67 +42,27 @@ import { isJoinedOrNearlyJoined } from "./utils/membership";
 import { VIRTUAL_ROOM_EVENT_TYPE } from "./CallHandler";
 import SpaceStore from "./stores/SpaceStore";
 import { makeSpaceParentEvent } from "./utils/space";
-import { Action } from "./dispatcher/actions"
+import { Action } from "./dispatcher/actions";
+import ErrorDialog from "./components/views/dialogs/ErrorDialog";
+import Spinner from "./components/views/elements/Spinner";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
 
-// TODO move these interfaces over to js-sdk once it has been typescripted enough to accept them
-export enum Visibility {
-    Public = "public",
-    Private = "private",
-}
-
-export enum Preset {
-    PrivateChat = "private_chat",
-    TrustedPrivateChat = "trusted_private_chat",
-    PublicChat = "public_chat",
-}
-
-interface Invite3PID {
-    id_server: string;
-    id_access_token?: string; // this gets injected by the js-sdk
-    medium: string;
-    address: string;
-}
-
-export interface IStateEvent {
-    type: string;
-    state_key?: string; // defaults to an empty string
-    content: object;
-}
-
-interface ICreateOpts {
-    visibility?: Visibility;
-    room_alias_name?: string;
-    name?: string;
-    topic?: string;
-    invite?: string[];
-    invite_3pid?: Invite3PID[];
-    room_version?: string;
-    creation_content?: object;
-    initial_state?: IStateEvent[];
-    preset?: Preset;
-    is_direct?: boolean;
-    power_level_content_override?: object;
-}
-
 export interface IOpts {
     dmUserId?: string;
-    createOpts?: ICreateOpts;
+    createOpts?: ICreateRoomOpts;
     spinner?: boolean;
     guestAccess?: boolean;
     encryption?: boolean;
     inlineErrors?: boolean;
     andView?: boolean;
     associatedWithCommunity?: string;
+    avatar?: File | string; // will upload if given file, else mxcUrl is needed
+    roomType?: RoomType | string;
+    historyVisibility?: HistoryVisibility;
     parentSpace?: Room;
-}
-
-export interface IInvite3PID {
-    id_server: string,
-    medium: 'email',
-    address: string,
+    joinRule?: JoinRule;
 }
 
 /**
@@ -116,7 +84,7 @@ export interface IInvite3PID {
  * @returns {Promise} which resolves to the room id, or null if the
  * action was aborted or failed.
  */
-export default function createRoom(opts: IOpts): Promise<string | null> {
+export default async function createRoom(opts: IOpts): Promise<string | null> {
     opts = opts || {};
     if (opts.spinner === undefined) opts.spinner = true;
     if (opts.guestAccess === undefined) opts.guestAccess = true;
@@ -124,19 +92,16 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
 
     const startTime = CountlyAnalytics.getTimestamp();
 
-    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-    const Loader = sdk.getComponent("elements.Spinner");
-
     const client = MatrixClientPeg.get();
     if (client.isGuest()) {
-        dis.dispatch({action: 'require_registration'});
-        return Promise.resolve(null);
+        dis.dispatch({ action: 'require_registration' });
+        return null;
     }
 
     const defaultPreset = opts.dmUserId ? Preset.TrustedPrivateChat : Preset.PrivateChat;
 
     // set some defaults for the creation
-    const createOpts = opts.createOpts || {};
+    const createOpts: ICreateRoomOpts = opts.createOpts || {};
     createOpts.preset = createOpts.preset || defaultPreset;
     createOpts.visibility = createOpts.visibility || Visibility.Private;
     if (opts.dmUserId && createOpts.invite === undefined) {
@@ -154,6 +119,13 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
     }
     if (opts.dmUserId && createOpts.is_direct === undefined) {
         createOpts.is_direct = true;
+    }
+
+    if (opts.roomType) {
+        createOpts.creation_content = {
+            ...createOpts.creation_content,
+            [RoomCreateTypeField]: opts.roomType,
+        };
     }
 
     // By default, view the room after creating it
@@ -187,17 +159,62 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
     }
 
     if (opts.parentSpace) {
-        opts.createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
-        opts.createOpts.initial_state.push({
+        createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
+        if (!opts.historyVisibility) {
+            opts.historyVisibility = createOpts.preset === Preset.PublicChat
+                ? HistoryVisibility.WorldReadable
+                : HistoryVisibility.Invited;
+        }
+
+        if (opts.joinRule === JoinRule.Restricted) {
+            if (SpaceStore.instance.restrictedJoinRuleSupport?.preferred) {
+                createOpts.room_version = SpaceStore.instance.restrictedJoinRuleSupport.preferred;
+
+                createOpts.initial_state.push({
+                    type: EventType.RoomJoinRules,
+                    content: {
+                        "join_rule": JoinRule.Restricted,
+                        "allow": [{
+                            "type": RestrictedAllowType.RoomMembership,
+                            "room_id": opts.parentSpace.roomId,
+                        }],
+                    },
+                });
+            }
+        }
+    }
+
+    // we handle the restricted join rule in the parentSpace handling block above
+    if (opts.joinRule && opts.joinRule !== JoinRule.Restricted) {
+        createOpts.initial_state.push({
+            type: EventType.RoomJoinRules,
+            content: { join_rule: opts.joinRule },
+        });
+    }
+
+    if (opts.avatar) {
+        let url = opts.avatar;
+        if (opts.avatar instanceof File) {
+            url = await client.uploadContent(opts.avatar);
+        }
+
+        createOpts.initial_state.push({
+            type: EventType.RoomAvatar,
+            content: { url },
+        });
+    }
+
+    if (opts.historyVisibility) {
+        createOpts.initial_state.push({
             type: EventType.RoomHistoryVisibility,
             content: {
-                "history_visibility": opts.createOpts.preset === Preset.PublicChat ? "world_readable" : "invited",
+                "history_visibility": opts.historyVisibility,
             },
         });
     }
 
     let modal;
-    if (opts.spinner) modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
+    if (opts.spinner) modal = Modal.createDialog(Spinner, null, 'mx_Dialog_spinner');
 
     let roomId;
     return client.createRoom(createOpts).finally(function() {
@@ -293,11 +310,11 @@ export function findDMForUser(client: MatrixClient, userId: string): Room {
  * NOTE: this assumes you've just created the room and there's not been an opportunity
  * for other code to run, so we shouldn't miss RoomState.newMember when it comes by.
  */
-export async function _waitForMember(client: MatrixClient, roomId: string, userId: string, opts = { timeout: 1500 }) {
+export async function waitForMember(client: MatrixClient, roomId: string, userId: string, opts = { timeout: 1500 }) {
     const { timeout } = opts;
     let handler;
     return new Promise((resolve) => {
-        handler = function(_event, _roomstate, member) {
+        handler = function(_, __, member: RoomMember) { // eslint-disable-line @typescript-eslint/naming-convention
             if (member.userId !== userId) return;
             if (member.roomId !== roomId) return;
             resolve(true);
@@ -369,8 +386,8 @@ export async function ensureDMExists(client: MatrixClient, userId: string): Prom
             encryption = await canEncryptToAllUsers(client, [userId]);
         }
 
-        roomId = await createRoom({encryption, dmUserId: userId, spinner: false, andView: false});
-        await _waitForMember(client, roomId, userId);
+        roomId = await createRoom({ encryption, dmUserId: userId, spinner: false, andView: false });
+        await waitForMember(client, roomId, userId);
     }
     return roomId;
 }

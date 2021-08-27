@@ -17,16 +17,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
+import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
+
 import * as AvatarLogic from '../../../Avatar';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
 import RoomContext from "../../../contexts/RoomContext";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {useEventEmitter} from "../../../hooks/useEventEmitter";
-import {toPx} from "../../../utils/units";
-import {ResizeMethod} from "../../../Avatar";
+import { useEventEmitter } from "../../../hooks/useEventEmitter";
+import { toPx } from "../../../utils/units";
 import { _t } from '../../../languageHandler';
 
 interface IProps {
@@ -63,7 +64,7 @@ const calculateUrls = (url, urls, lowBandwidth) => {
     return Array.from(new Set(_urls));
 };
 
-const useImageUrl = ({url, urls}): [string, () => void] => {
+const useImageUrl = ({ url, urls }): [string, () => void] => {
     // Since this is a hot code path and the settings store can be slow, we
     // use the cached lowBandwidth value from the room context if it exists
     const roomContext = useContext(RoomContext);
@@ -114,7 +115,7 @@ const BaseAvatar = (props: IProps) => {
         ...otherProps
     } = props;
 
-    const [imageUrl, onError] = useImageUrl({url, urls});
+    const [imageUrl, onError] = useImageUrl({ url, urls });
 
     if (!imageUrl && defaultToInitialLetter) {
         const initialLetter = AvatarLogic.getInitialLetter(name);
@@ -186,7 +187,8 @@ const BaseAvatar = (props: IProps) => {
                     width: toPx(width),
                     height: toPx(height),
                 }}
-                title={title} alt={_t("Avatar")}
+                title={title}
+                alt={_t("Avatar")}
                 inputRef={inputRef}
                 {...otherProps} />
         );
@@ -200,7 +202,8 @@ const BaseAvatar = (props: IProps) => {
                     width: toPx(width),
                     height: toPx(height),
                 }}
-                title={title} alt=""
+                title={title}
+                alt=""
                 ref={inputRef}
                 {...otherProps} />
         );

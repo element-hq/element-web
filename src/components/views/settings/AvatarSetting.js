@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState} from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import classNames from "classnames";
 
-const AvatarSetting = ({avatarUrl, avatarAltText, avatarName, uploadAvatar, removeAvatar}) => {
+const AvatarSetting = ({ avatarUrl, avatarAltText, avatarName, uploadAvatar, removeAvatar }) => {
     const [isHovering, setIsHovering] = useState(false);
     const hoveringProps = {
         onMouseEnter: () => setIsHovering(true),
@@ -59,7 +59,7 @@ const AvatarSetting = ({avatarUrl, avatarAltText, avatarName, uploadAvatar, remo
     let removeAvatarBtn;
     if (avatarUrl && removeAvatar) {
         removeAvatarBtn = <AccessibleButton onClick={removeAvatar} kind="link_sm">
-            {_t("Remove")}
+            { _t("Remove") }
         </AccessibleButton>;
     }
 
@@ -68,13 +68,13 @@ const AvatarSetting = ({avatarUrl, avatarAltText, avatarName, uploadAvatar, remo
         "mx_AvatarSetting_avatar_hovering": isHovering && uploadAvatar,
     });
     return <div className={avatarClasses}>
-        {avatarElement}
+        { avatarElement }
         <div className="mx_AvatarSetting_hover">
             <div className="mx_AvatarSetting_hoverBg" />
-            <span>{_t("Upload")}</span>
+            <span>{ _t("Upload") }</span>
         </div>
-        {uploadAvatarBtn}
-        {removeAvatarBtn}
+        { uploadAvatarBtn }
+        { removeAvatarBtn }
     </div>;
 };
 

@@ -35,7 +35,7 @@ limitations under the License.
         // we cheat opacity on the theme colour with an after selector here
         &::after {
             content: '';
-            border-bottom: 1px solid $primary-fg-color; // XXX: Variable abuse
+            border-bottom: 1px solid $primary-content;
             opacity: 0.2;
             display: block;
             padding-top: 8px;
@@ -58,7 +58,7 @@ limitations under the License.
             mask-position: center;
             mask-size: contain;
             mask-repeat: no-repeat;
-            background: $tertiary-fg-color;
+            background: $tertiary-content;
             mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
         }
     }
@@ -176,7 +176,7 @@ limitations under the License.
             width: 85%;
             opacity: 0.2;
             border: none;
-            border-bottom: 1px solid $primary-fg-color; // XXX: Variable abuse
+            border-bottom: 1px solid $primary-content;
         }
 
         &.mx_IconizedContextMenu {
@@ -292,7 +292,7 @@ limitations under the License.
             mask-position: center;
             mask-size: contain;
             mask-repeat: no-repeat;
-            background: $primary-fg-color;
+            background: $primary-content;
         }
     }
 

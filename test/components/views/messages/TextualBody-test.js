@@ -19,11 +19,14 @@ import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import { configure, mount } from "enzyme";
 
 import sdk from "../../../skinned-sdk";
-import {mkEvent, mkStubRoom} from "../../../test-utils";
-import {MatrixClientPeg} from "../../../../src/MatrixClientPeg";
+import { mkEvent, mkStubRoom } from "../../../test-utils";
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import * as languageHandler from "../../../../src/languageHandler";
+import * as TestUtils from "../../../test-utils";
+import DMRoomMap from "../../../../src/utils/DMRoomMap";
 
-const TextualBody = sdk.getComponent("views.messages.TextualBody");
+const _TextualBody = sdk.getComponent("views.messages.TextualBody");
+const TextualBody = TestUtils.wrapInMatrixClientContext(_TextualBody);
 
 configure({ adapter: new Adapter() });
 
@@ -39,6 +42,7 @@ describe("<TextualBody />", () => {
             isGuest: () => false,
             mxcUrlToHttp: (s) => s,
         };
+        DMRoomMap.makeShared();
 
         const ev = mkEvent({
             type: "m.room.message",
@@ -64,6 +68,7 @@ describe("<TextualBody />", () => {
             isGuest: () => false,
             mxcUrlToHttp: (s) => s,
         };
+        DMRoomMap.makeShared();
 
         const ev = mkEvent({
             type: "m.room.message",
@@ -90,6 +95,7 @@ describe("<TextualBody />", () => {
                 isGuest: () => false,
                 mxcUrlToHttp: (s) => s,
             };
+            DMRoomMap.makeShared();
         });
 
         it("simple message renders as expected", () => {
@@ -144,6 +150,7 @@ describe("<TextualBody />", () => {
                 isGuest: () => false,
                 mxcUrlToHttp: (s) => s,
             };
+            DMRoomMap.makeShared();
         });
 
         it("italics, bold, underline and strikethrough render as expected", () => {
@@ -290,6 +297,7 @@ describe("<TextualBody />", () => {
             isGuest: () => false,
             mxcUrlToHttp: (s) => s,
         };
+        DMRoomMap.makeShared();
 
         const ev = mkEvent({
             type: "m.room.message",
@@ -302,13 +310,12 @@ describe("<TextualBody />", () => {
             event: true,
         });
 
-        const wrapper = mount(<TextualBody mxEvent={ev} showUrlPreview={true} />);
+        const wrapper = mount(<TextualBody mxEvent={ev} showUrlPreview={true} onHeightChanged={() => {}} />);
         expect(wrapper.text()).toBe(ev.getContent().body);
 
-        let widgets = wrapper.find("LinkPreviewWidget");
-        // at this point we should have exactly one widget
-        expect(widgets.length).toBe(1);
-        expect(widgets.at(0).prop("link")).toBe("https://matrix.org/");
+        let widgets = wrapper.find("LinkPreviewGroup");
+        // at this point we should have exactly one link
+        expect(widgets.at(0).prop("links")).toEqual(["https://matrix.org/"]);
 
         // simulate an event edit and check the transition from the old URL preview to the new one
         const ev2 = mkEvent({
@@ -333,14 +340,11 @@ describe("<TextualBody />", () => {
 
             // XXX: this is to give TextualBody enough time for state to settle
             wrapper.setState({}, () => {
-                widgets = wrapper.find("LinkPreviewWidget");
-                // at this point we should have exactly two widgets (not the matrix.org one anymore)
-                expect(widgets.length).toBe(2);
-                expect(widgets.at(0).prop("link")).toBe("https://vector.im/");
-                expect(widgets.at(1).prop("link")).toBe("https://riot.im/");
+                widgets = wrapper.find("LinkPreviewGroup");
+                // at this point we should have exactly two links (not the matrix.org one anymore)
+                expect(widgets.at(0).prop("links")).toEqual(["https://vector.im/", "https://riot.im/"]);
             });
         });
     });
 });
-
 

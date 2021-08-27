@@ -14,18 +14,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MImageBody {
-    display: block;
-    margin-right: 34px;
+$timelineImageBorderRadius: 4px;
+
+.mx_MImageBody_thumbnail--blurhash {
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 .mx_MImageBody_thumbnail {
-    position: absolute;
-    width: 100%;
+    object-fit: contain;
+    border-radius: $timelineImageBorderRadius;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 100%;
-    left: 0;
-    top: 0;
-    border-radius: 4px;
+    width: 100%;
+
+    .mx_Blurhash > canvas {
+        animation: mx--anim-pulse 1.75s infinite cubic-bezier(.4, 0, .6, 1);
+        border-radius: $timelineImageBorderRadius;
+    }
+
+    .mx_no-image-placeholder {
+        background-color: $primary-content;
+    }
 }
 
 .mx_MImageBody_thumbnail_container {
@@ -35,17 +49,6 @@ limitations under the License.
 
     // Make sure the _thumbnail is positioned relative to the _container
     position: relative;
-}
-
-.mx_MImageBody_thumbnail_spinner {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-}
-
-// Inner img and TintableSvg should be centered around 0, 0
-.mx_MImageBody_thumbnail_spinner > * {
-    transform: translate(-50%, -50%);
 }
 
 .mx_MImageBody_gifLabel {
@@ -97,5 +100,5 @@ limitations under the License.
 }
 
 .mx_EventTile:hover .mx_HiddenImagePlaceholder {
-    background-color: $primary-bg-color;
+    background-color: $background;
 }

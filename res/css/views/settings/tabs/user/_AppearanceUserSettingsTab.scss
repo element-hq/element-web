@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 .mx_AppearanceUserSettingsTab_fontSlider,
-.mx_AppearanceUserSettingsTab_fontSlider_preview,
-.mx_AppearanceUserSettingsTab_Layout {
+.mx_AppearanceUserSettingsTab_fontSlider_preview {
     @mixin mx_Settings_fullWidthField;
 }
 
@@ -25,7 +24,7 @@ limitations under the License.
 }
 
 .mx_AppearanceUserSettingsTab_fontScaling {
-    color: $primary-fg-color;
+    color: $primary-content;
 }
 
 .mx_AppearanceUserSettingsTab_fontSlider {
@@ -45,6 +44,11 @@ limitations under the License.
     border-radius: 10px;
     padding: 0 16px 9px 16px;
     pointer-events: none;
+    display: flow-root;
+
+    .mx_EventTile[data-layout=bubble] {
+        margin-top: 30px;
+    }
 
     .mx_EventTile_msgOption {
         display: none;
@@ -77,7 +81,7 @@ limitations under the License.
 
 .mx_AppearanceUserSettingsTab_themeSection {
     $radio-bg-color: $input-darker-bg-color;
-    color: $primary-fg-color;
+    color: $primary-content;
 
     > .mx_ThemeSelectors {
         display: flex;
@@ -151,69 +155,8 @@ limitations under the License.
     margin-left: calc($font-16px + 10px);
 }
 
-.mx_AppearanceUserSettingsTab_Layout_RadioButtons {
-    display: flex;
-    flex-direction: row;
-
-    color: $primary-fg-color;
-
-    .mx_AppearanceUserSettingsTab_spacer {
-        width: 24px;
-    }
-
-    > .mx_AppearanceUserSettingsTab_Layout_RadioButton {
-        flex-grow: 0;
-        flex-shrink: 1;
-        display: flex;
-        flex-direction: column;
-
-        width: 300px;
-
-        border: 1px solid $appearance-tab-border-color;
-        border-radius: 10px;
-
-        .mx_EventTile_msgOption,
-        .mx_MessageActionBar {
-            display: none;
-        }
-
-        .mx_AppearanceUserSettingsTab_Layout_RadioButton_preview {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            pointer-events: none;
-        }
-
-        .mx_RadioButton {
-            flex-grow: 0;
-            padding: 10px;
-        }
-
-        .mx_EventTile_content {
-            margin-right: 0;
-        }
-
-        &.mx_AppearanceUserSettingsTab_Layout_RadioButton_selected {
-            border-color: $accent-color;
-        }
-    }
-
-    .mx_RadioButton {
-        border-top: 1px solid $appearance-tab-border-color;
-
-        > input + div {
-            border-color: rgba($muted-fg-color, 0.2);
-        }
-    }
-
-    .mx_RadioButton_checked {
-        background-color: rgba($accent-color, 0.08);
-    }
-}
-
 .mx_AppearanceUserSettingsTab_Advanced {
-    color: $primary-fg-color;
+    color: $primary-content;
 
     > * {
         margin-bottom: 16px;

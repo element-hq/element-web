@@ -25,7 +25,7 @@ limitations under the License.
 .mx_SettingsTab_heading {
     font-size: $font-20px;
     font-weight: 600;
-    color: $primary-fg-color;
+    color: $primary-content;
     margin-bottom: 10px;
 }
 
@@ -36,9 +36,8 @@ limitations under the License.
 .mx_SettingsTab_subheading {
     font-size: $font-16px;
     display: block;
-    font-family: $font-family;
     font-weight: 600;
-    color: $primary-fg-color;
+    color: $primary-content;
     margin-bottom: 10px;
     margin-top: 12px;
 }
@@ -47,19 +46,25 @@ limitations under the License.
     color: $settings-subsection-fg-color;
     font-size: $font-14px;
     display: block;
-    margin: 10px 100px 10px 0; // Align with the rest of the view
+    margin: 10px 80px 10px 0; // Align with the rest of the view
 }
 
 .mx_SettingsTab_section {
+    $right-gutter: 80px;
+
     margin-bottom: 24px;
 
     .mx_SettingsFlag {
-        margin-right: 100px;
+        margin-right: $right-gutter;
         margin-bottom: 10px;
     }
 
+    > p {
+        margin-right: $right-gutter;
+    }
+
     &.mx_SettingsTab_subsectionText .mx_SettingsFlag {
-        margin-right: 0px !important;
+        margin-right: 0 !important;
     }
 }
 
@@ -67,10 +72,17 @@ limitations under the License.
     vertical-align: middle;
     display: inline-block;
     font-size: $font-14px;
-    color: $primary-fg-color;
+    color: $primary-content;
     max-width: calc(100% - $font-48px); // Force word wrap instead of colliding with the switch
     box-sizing: border-box;
     padding-right: 10px;
+}
+
+.mx_SettingsTab_section .mx_SettingsFlag .mx_SettingsFlag_microcopy {
+    margin-top: 4px;
+    font-size: $font-12px;
+    line-height: $font-15px;
+    color: $secondary-content;
 }
 
 .mx_SettingsTab_section .mx_SettingsFlag .mx_ToggleSwitch {

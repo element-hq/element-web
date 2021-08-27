@@ -16,12 +16,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Spinner from '../elements/Spinner';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 @replaceableComponent("views.settings.ChangeAvatar")
 export default class ChangeAvatar extends React.Component {
@@ -107,7 +107,7 @@ export default class ChangeAvatar extends React.Component {
                 return MatrixClientPeg.get().sendStateEvent(
                     self.props.room.roomId,
                     'm.room.avatar',
-                    {url: url},
+                    { url: url },
                     '',
                 );
             } else {
@@ -148,13 +148,22 @@ export default class ChangeAvatar extends React.Component {
         if (this.props.room && !this.avatarSet) {
             const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
             avatarImg = <RoomAvatar
-                room={this.props.room} width={this.props.width} height={this.props.height} resizeMethod='crop'
+                room={this.props.room}
+                width={this.props.width}
+                height={this.props.height}
+                resizeMethod='crop'
             />;
         } else {
             const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
             // XXX: FIXME: once we track in the JS what our own displayname is(!) then use it here rather than ?
-            avatarImg = <BaseAvatar width={this.props.width} height={this.props.height} resizeMethod='crop'
-                name='?' idName={MatrixClientPeg.get().getUserIdLocalpart()} url={this.state.avatarUrl} />;
+            avatarImg = <BaseAvatar
+                width={this.props.width}
+                height={this.props.height}
+                resizeMethod='crop'
+                name='?'
+                idName={MatrixClientPeg.get().getUserIdLocalpart()}
+                url={this.state.avatarUrl}
+            />;
         }
 
         let uploadSection;

@@ -14,9 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useCallback, useContext, useEffect, useState} from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { RoomState } from "matrix-js-sdk/src/models/room-state";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from 'matrix-js-sdk/src/@types/event';
 
@@ -28,6 +27,7 @@ import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import PinningUtils from "../../../utils/PinningUtils";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 import PinnedEventTile from "../rooms/PinnedEventTile";
+import { useRoomState } from "../../../hooks/useRoomState";
 
 interface IProps {
     room: Room;
@@ -73,24 +73,6 @@ export const useReadPinnedEvents = (room: Room): Set<string> => {
         };
     }, [update]);
     return readPinnedEvents;
-};
-
-const useRoomState = <T extends any>(room: Room, mapper: (state: RoomState) => T): T => {
-    const [value, setValue] = useState<T>(room ? mapper(room.currentState) : undefined);
-
-    const update = useCallback(() => {
-        if (!room) return;
-        setValue(mapper(room.currentState));
-    }, [room, mapper]);
-
-    useEventEmitter(room?.currentState, "RoomState.events", update);
-    useEffect(() => {
-        update();
-        return () => {
-            setValue(undefined);
-        };
-    }, [update]);
-    return value;
 };
 
 const PinnedMessagesCard = ({ room, onClose }: IProps) => {
@@ -170,7 +152,7 @@ const PinnedMessagesCard = ({ room, onClose }: IProps) => {
                 <h2>{ _t("Nothing pinned, yet") }</h2>
                 { _t("If you have permissions, open the menu on any message and select " +
                     "<b>Pin</b> to stick them here.", {}, {
-                        b: sub => <b>{ sub }</b>,
+                    b: sub => <b>{ sub }</b>,
                 }) }
             </div>
         </div>;

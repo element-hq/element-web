@@ -1,11 +1,11 @@
 import React from 'react';
-import {MatrixClientPeg as peg} from '../src/MatrixClientPeg';
+import { MatrixClientPeg as peg } from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher/dispatcher';
-import {makeType} from "../src/utils/TypeUtils";
-import {ValidatedServerConfig} from "../src/utils/AutoDiscoveryUtils";
+import { makeType } from "../src/utils/TypeUtils";
+import { ValidatedServerConfig } from "../src/utils/AutoDiscoveryUtils";
 import ShallowRenderer from 'react-test-renderer/shallow';
 import MatrixClientContext from "../src/contexts/MatrixClientContext";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 export function getRenderer() {
     // Old: ReactTestUtils.createRenderer();
@@ -78,15 +78,15 @@ export function createTestClient() {
         },
         mxcUrlToHttp: (mxc) => 'http://this.is.a.url/',
         setAccountData: jest.fn(),
+        setRoomAccountData: jest.fn(),
         sendTyping: jest.fn().mockResolvedValue({}),
         sendMessage: () => jest.fn().mockResolvedValue({}),
         getSyncState: () => "SYNCING",
         generateClientSecret: () => "t35tcl1Ent5ECr3T",
         isGuest: () => false,
         isCryptoEnabled: () => false,
-        getSpaceSummary: jest.fn().mockReturnValue({
+        getRoomHierarchy: jest.fn().mockReturnValue({
             rooms: [],
-            events: [],
         }),
 
         // Used by various internal bits we aren't concerned with (yet)
@@ -95,7 +95,10 @@ export function createTestClient() {
                 getItem: jest.fn(),
             },
         },
+        pushRules: {},
         decryptEventIfNeeded: () => Promise.resolve(),
+        isUserIgnored: jest.fn().mockReturnValue(false),
+        getCapabilities: jest.fn().mockResolvedValue({}),
     };
 }
 
@@ -127,8 +130,8 @@ export function mkEvent(opts) {
     if (opts.skey) {
         event.state_key = opts.skey;
     } else if (["m.room.name", "m.room.topic", "m.room.create", "m.room.join_rules",
-         "m.room.power_levels", "m.room.topic", "m.room.history_visibility", "m.room.encryption",
-         "com.example.state"].indexOf(opts.type) !== -1) {
+        "m.room.power_levels", "m.room.topic", "m.room.history_visibility", "m.room.encryption",
+        "com.example.state"].indexOf(opts.type) !== -1) {
         event.state_key = "";
     }
     return opts.event ? new MatrixEvent(event) : event;
@@ -219,7 +222,7 @@ export function mkMessage(opts) {
     return mkEvent(opts);
 }
 
-export function mkStubRoom(roomId = null, name) {
+export function mkStubRoom(roomId = null, name, client) {
     const stubTimeline = { getEvents: () => [] };
     return {
         roomId,
@@ -234,6 +237,7 @@ export function mkStubRoom(roomId = null, name) {
         }),
         getMembersWithMembership: jest.fn().mockReturnValue([]),
         getJoinedMembers: jest.fn().mockReturnValue([]),
+        getJoinedMemberCount: jest.fn().mockReturnValue(1),
         getMembers: jest.fn().mockReturnValue([]),
         getPendingEvents: () => [],
         getLiveTimeline: () => stubTimeline,
@@ -268,6 +272,8 @@ export function mkStubRoom(roomId = null, name) {
         getCanonicalAlias: jest.fn(),
         getAltAliases: jest.fn().mockReturnValue([]),
         timeline: [],
+        getJoinRule: jest.fn().mockReturnValue("invite"),
+        client,
     };
 }
 

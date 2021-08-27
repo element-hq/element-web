@@ -28,7 +28,7 @@ limitations under the License.
 
 .mx_RoomDirectory {
     margin-bottom: 12px;
-    color: $primary-fg-color;
+    color: $primary-content;
     word-break: break-word;
     display: flex;
     flex-direction: column;
@@ -71,14 +71,14 @@ limitations under the License.
             font-weight: $font-semi-bold;
             font-size: $font-15px;
             line-height: $font-18px;
-            color: $primary-fg-color;
+            color: $primary-content;
         }
 
         > p {
             margin: 40px auto 60px;
             font-size: $font-14px;
             line-height: $font-20px;
-            color: $secondary-fg-color;
+            color: $secondary-content;
             max-width: 464px; // easier reading
         }
 
@@ -97,7 +97,7 @@ limitations under the License.
 }
 
 .mx_RoomDirectory_table {
-    color: $primary-fg-color;
+    color: $primary-content;
     display: grid;
     font-size: $font-12px;
     grid-template-columns: max-content auto max-content max-content max-content;

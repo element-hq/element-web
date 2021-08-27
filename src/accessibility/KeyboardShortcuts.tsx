@@ -17,10 +17,10 @@ limitations under the License.
 import * as React from "react";
 import classNames from "classnames";
 
-import * as sdk from "../index";
 import Modal from "../Modal";
 import { _t, _td } from "../languageHandler";
-import {isMac, Key} from "../Keyboard";
+import { isMac, Key } from "../Keyboard";
+import InfoDialog from "../components/views/dialogs/InfoDialog";
 
 // TS: once languageHandler is TS we can probably inline this into the enum
 _td("Navigation");
@@ -57,6 +57,8 @@ export enum Modifiers {
 
 // Meta-modifier: isMac ? CMD : CONTROL
 export const CMD_OR_CTRL = isMac ? Modifiers.COMMAND : Modifiers.CONTROL;
+// Meta-key representing the digits [0-9] often found at the top of standard keyboard layouts
+export const DIGITS = "digits";
 
 interface IKeybind {
     modifiers?: Modifiers[];
@@ -161,7 +163,7 @@ const shortcuts: Record<Categories, IShortcut[]> = {
                 modifiers: [Modifiers.SHIFT],
                 key: Key.PAGE_UP,
             }],
-                description: _td("Jump to oldest unread message"),
+            description: _td("Jump to oldest unread message"),
         }, {
             keybinds: [{
                 modifiers: [CMD_OR_CTRL, Modifiers.SHIFT],
@@ -319,6 +321,7 @@ const alternateKeyName: Record<string, string> = {
     [Key.SPACE]: _td("Space"),
     [Key.HOME]: _td("Home"),
     [Key.END]: _td("End"),
+    [DIGITS]: _td("[number]"),
 };
 const keyIcon: Record<string, string> = {
     [Key.ARROW_UP]: "↑",
@@ -329,7 +332,7 @@ const keyIcon: Record<string, string> = {
 
 const Shortcut: React.FC<{
     shortcut: IShortcut;
-}> = ({shortcut}) => {
+}> = ({ shortcut }) => {
     const classes = classNames({
         "mx_KeyboardShortcutsDialog_inline": shortcut.keybinds.every(k => !k.modifiers || k.modifiers.length === 0),
     });
@@ -367,12 +370,11 @@ export const toggleDialog = () => {
     const sections = categoryOrder.map(category => {
         const list = shortcuts[category];
         return <div className="mx_KeyboardShortcutsDialog_category" key={category}>
-            <h3>{_t(category)}</h3>
-            <div>{list.map(shortcut => <Shortcut key={shortcut.description} shortcut={shortcut} />)}</div>
+            <h3>{ _t(category) }</h3>
+            <div>{ list.map(shortcut => <Shortcut key={shortcut.description} shortcut={shortcut} />) }</div>
         </div>;
     });
 
-    const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
     activeModal = Modal.createTrackedDialog("Keyboard Shortcuts", "", InfoDialog, {
         className: "mx_KeyboardShortcutsDialog",
         title: _t("Keyboard Shortcuts"),

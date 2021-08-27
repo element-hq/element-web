@@ -42,7 +42,7 @@ export default class InviteReason extends React.PureComponent<IProps, IState> {
         this.setState({
             hidden: false,
         });
-    }
+    };
 
     render() {
         const classes = classNames({
@@ -51,11 +51,11 @@ export default class InviteReason extends React.PureComponent<IProps, IState> {
         });
 
         return <div className={classes}>
-            <div className="mx_InviteReason_reason">{this.props.reason}</div>
+            <div className="mx_InviteReason_reason">{ this.props.reason }</div>
             <div className="mx_InviteReason_view"
                 onClick={this.onViewClick}
             >
-                {_t("View message")}
+                { _t("View message") }
             </div>
         </div>;
     }
