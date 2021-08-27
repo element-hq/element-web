@@ -424,7 +424,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 title={this.state.showStickers ? _t("Hide Stickers") : _t("Show Stickers")}
             />);
         }
-        if (!this.state.haveRecording) {
+        if (!this.state.haveRecording && !this.state.narrowMode) {
             buttons.push(
                 <AccessibleTooltipButton
                     className="mx_MessageComposer_button mx_MessageComposer_voiceMessage"
