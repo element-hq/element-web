@@ -78,7 +78,6 @@ import { objectHasDiff } from "../../utils/objects";
 import SpaceRoomView from "./SpaceRoomView";
 import { IOpts } from "../../createRoom";
 import { replaceableComponent } from "../../utils/replaceableComponent";
-import UIStore from "../../stores/UIStore";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import { throttle } from "lodash";
 import ErrorDialog from '../views/dialogs/ErrorDialog';
@@ -156,7 +155,6 @@ export interface IState {
     // used by componentDidUpdate to avoid unnecessary checks
     atEndOfLiveTimelineInit: boolean;
     showTopUnreadMessagesBar: boolean;
-    auxPanelMaxHeight?: number;
     statusBarVisible: boolean;
     // We load this later by asking the js-sdk to suggest a version for us.
     // This object is the result of Room#getRecommendedVersion()
@@ -563,10 +561,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         });
 
         window.addEventListener('beforeunload', this.onPageUnload);
-        if (this.props.resizeNotifier) {
-            this.props.resizeNotifier.on("middlePanelResized", this.onResize);
-        }
-        this.onResize();
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -654,9 +648,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
-        if (this.props.resizeNotifier) {
-            this.props.resizeNotifier.removeListener("middlePanelResized", this.onResize);
-        }
 
         // Remove RoomStore listener
         if (this.roomStoreToken) {
@@ -1617,28 +1608,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         };
     }
 
-    private onResize = () => {
-        // It seems flexbox doesn't give us a way to constrain the auxPanel height to have
-        // a minimum of the height of the video element, whilst also capping it from pushing out the page
-        // so we have to do it via JS instead.  In this implementation we cap the height by putting
-        // a maxHeight on the underlying remote video tag.
-
-        // header + footer + status + give us at least 120px of scrollback at all times.
-        let auxPanelMaxHeight = UIStore.instance.windowHeight -
-                (54 + // height of RoomHeader
-                 36 + // height of the status area
-                 51 + // minimum height of the message composer
-                 120); // amount of desired scrollback
-
-        // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
-        // but it's better than the video going missing entirely
-        if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
-
-        if (this.state.auxPanelMaxHeight !== auxPanelMaxHeight) {
-            this.setState({ auxPanelMaxHeight });
-        }
-    };
-
     private onStatusBarVisible = () => {
         if (this.unmounted || this.state.statusBarVisible) return;
         this.setState({ statusBarVisible: true });
@@ -1926,11 +1895,8 @@ export default class RoomView extends React.Component<IProps, IState> {
         const auxPanel = (
             <AuxPanel
                 room={this.state.room}
-                fullHeight={false}
                 userId={this.context.credentials.userId}
-                maxHeight={this.state.auxPanelMaxHeight}
                 showApps={this.state.showApps}
-                onResize={this.onResize}
                 resizeNotifier={this.props.resizeNotifier}
             >
                 { aux }

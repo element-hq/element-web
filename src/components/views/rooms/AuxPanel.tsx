@@ -35,16 +35,6 @@ interface IProps {
     room: Room;
     userId: string;
     showApps: boolean; // Render apps
-
-    // maxHeight attribute for the aux panel and the video
-    // therein
-    maxHeight: number;
-
-    // a callback which is called when the content of the aux panel changes
-    // content in a way that is likely to make it change size.
-    onResize: () => void;
-    fullHeight: boolean;
-
     resizeNotifier: ResizeNotifier;
 }
 
@@ -92,13 +82,6 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         return objectHasDiff(this.props, nextProps) || objectHasDiff(this.state, nextState);
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        // most changes are likely to cause a resize
-        if (this.props.onResize) {
-            this.props.onResize();
-        }
-    }
-
     private rateLimitedUpdate = throttle(() => {
         this.setState({ counters: this.computeCounters() });
     }, 500, { leading: true, trailing: true });
@@ -138,7 +121,6 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         const callView = (
             <CallViewForRoom
                 roomId={this.props.room.roomId}
-                maxVideoHeight={this.props.maxHeight}
                 resizeNotifier={this.props.resizeNotifier}
             />
         );
@@ -148,7 +130,6 @@ export default class AuxPanel extends React.Component<IProps, IState> {
             appsDrawer = <AppsDrawer
                 room={this.props.room}
                 userId={this.props.userId}
-                maxHeight={this.props.maxHeight}
                 showApps={this.props.showApps}
                 resizeNotifier={this.props.resizeNotifier}
             />;
@@ -204,21 +185,12 @@ export default class AuxPanel extends React.Component<IProps, IState> {
             }
         }
 
-        const classes = classNames({
-            "mx_RoomView_auxPanel": true,
-            "mx_RoomView_auxPanel_fullHeight": this.props.fullHeight,
-        });
-        const style: React.CSSProperties = {};
-        if (!this.props.fullHeight) {
-            style.maxHeight = this.props.maxHeight;
-        }
-
         return (
-            <AutoHideScrollbar className={classes} style={style}>
+            <AutoHideScrollbar className="mx_RoomView_auxPanel">
                 { stateViews }
+                { this.props.children }
                 { appsDrawer }
                 { callView }
-                { this.props.children }
             </AutoHideScrollbar>
         );
     }
