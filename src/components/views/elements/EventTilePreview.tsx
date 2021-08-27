@@ -25,7 +25,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { Layout } from "../../../settings/Layout";
 import { UIFeature } from "../../../settings/UIFeature";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import InlineSpinner from './InlineSpinner';
+import Spinner from './Spinner';
 
 interface IProps {
     /**
@@ -124,7 +124,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
             "mx_GroupLayout": this.props.layout == Layout.Group,
         });
 
-        if (!this.props.userId) return <div className={className} style={{ padding: '9px 0' }}><InlineSpinner /></div>;
+        if (!this.props.userId) return <div className={className} style={{ padding: '9px 0' }}><Spinner /></div>;
 
         const event = this.fakeEvent(this.state);
 
