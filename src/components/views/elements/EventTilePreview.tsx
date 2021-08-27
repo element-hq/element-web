@@ -25,6 +25,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { Layout } from "../../../settings/Layout";
 import { UIFeature } from "../../../settings/UIFeature";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import InlineSpinner from './InlineSpinner';
 
 interface IProps {
     /**
@@ -118,6 +119,8 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
     }
 
     public render() {
+        if (!this.props.userId) return <div style={{ paddingTop: '9px' }}><InlineSpinner /></div>;
+
         const event = this.fakeEvent(this.state);
 
         const className = classnames(this.props.className, {

@@ -92,8 +92,8 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             systemFont: SettingsStore.getValue("systemFont"),
             showAdvanced: false,
             layout: SettingsStore.getValue("layout"),
-            userId: "@erim:fink.fink",
-            displayName: "Erimayas Fink",
+            userId: null,
+            displayName: null,
             avatarUrl: null,
         };
     }
