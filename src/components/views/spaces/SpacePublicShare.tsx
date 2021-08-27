@@ -54,8 +54,8 @@ const SpacePublicShare = ({ space, onFinished }: IProps) => {
         { space.canInvite(MatrixClientPeg.get()?.getUserId()) ? <AccessibleButton
             className="mx_SpacePublicShare_inviteButton"
             onClick={() => {
-                showRoomInviteDialog(space.roomId);
                 if (onFinished) onFinished();
+                showRoomInviteDialog(space.roomId);
             }}
         >
             <h3>{ _t("Invite people") }</h3>
