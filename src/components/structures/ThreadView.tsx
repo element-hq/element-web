@@ -23,7 +23,7 @@ import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 
 import ResizeNotifier from '../../utils/ResizeNotifier';
-import EventTile, { TileShape } from '../views/rooms/EventTile';
+import { TileShape } from '../views/rooms/EventTile';
 import MessageComposer from '../views/rooms/MessageComposer';
 import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
 import { Layout } from '../../settings/Layout';
