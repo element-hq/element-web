@@ -495,7 +495,10 @@ export default class RoomPreviewBar extends React.Component {
                 const memberEventContent = this.props.room.currentState.getMember(myUserId).events.member.event.content;
 
                 if (memberEventContent.reason) {
-                    reasonElement = <InviteReason reason={memberEventContent.reason} htmlReason={memberEventContent["io.element.html_reason"]} />;
+                    reasonElement = <InviteReason
+                        reason={memberEventContent.reason}
+                        htmlReason={memberEventContent["io.element.html_reason"]}
+                    />;
                 }
 
                 primaryActionHandler = this.props.onJoinClick;
