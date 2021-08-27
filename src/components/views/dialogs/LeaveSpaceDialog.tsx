@@ -80,7 +80,7 @@ const SpaceChildPicker = ({ filterPlaceholder, rooms, selected, onChange }) => {
 
 const LeaveRoomsPicker = ({ space, spaceChildren, roomsToLeave, setRoomsToLeave }) => {
     const selected = useMemo(() => new Set(roomsToLeave), [roomsToLeave]);
-    const [state, setState] = useState<string>(RoomsToLeave.All);
+    const [state, setState] = useState<string>(RoomsToLeave.None);
 
     useEffect(() => {
         if (state === RoomsToLeave.All) {
@@ -97,11 +97,11 @@ const LeaveRoomsPicker = ({ space, spaceChildren, roomsToLeave, setRoomsToLeave 
             onChange={setState}
             definitions={[
                 {
-                    value: RoomsToLeave.All,
-                    label: _t("Leave all rooms and spaces"),
-                }, {
                     value: RoomsToLeave.None,
                     label: _t("Don't leave any"),
+                }, {
+                    value: RoomsToLeave.All,
+                    label: _t("Leave all rooms and spaces"),
                 }, {
                     value: RoomsToLeave.Specific,
                     label: _t("Leave specific rooms and spaces"),
