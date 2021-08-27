@@ -25,6 +25,7 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 export enum CallEventGrouperEvent {
     StateChanged = "state_changed",
     SilencedChanged = "silenced_changed",
+    LengthChanged = "length_changed",
 }
 
 const CONNECTING_STATES = [
@@ -113,6 +114,10 @@ export default class CallEventGrouper extends EventEmitter {
         this.emit(CallEventGrouperEvent.SilencedChanged, newState);
     };
 
+    private onLengthChanged = (length: number): void => {
+        this.emit(CallEventGrouperEvent.LengthChanged, length);
+    };
+
     public answerCall = () => {
         this.call?.answer();
     };
@@ -139,6 +144,7 @@ export default class CallEventGrouper extends EventEmitter {
     private setCallListeners() {
         if (!this.call) return;
         this.call.addListener(CallEvent.State, this.setState);
+        this.call.addListener(CallEvent.LengthChanged, this.onLengthChanged);
     }
 
     private setState = () => {

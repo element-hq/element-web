@@ -17,7 +17,7 @@ limitations under the License.
 import React, { createRef } from 'react';
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { _t, _td } from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import MemberAvatar from '../avatars/MemberAvatar';
 import CallEventGrouper, { CallEventGrouperEvent, CustomCallState } from '../../structures/CallEventGrouper';
 import AccessibleButton from '../elements/AccessibleButton';
@@ -26,6 +26,7 @@ import InfoTooltip, { InfoTooltipKind } from '../elements/InfoTooltip';
 import classNames from 'classnames';
 import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
 import { formatCallTime } from "../../../DateUtils";
+import Clock from "../audio_messages/Clock";
 
 const MAX_NON_NARROW_WIDTH = 450 / 70 * 100;
 
@@ -38,12 +39,8 @@ interface IState {
     callState: CallState | CustomCallState;
     silenced: boolean;
     narrow: boolean;
+    length: number;
 }
-
-const TEXTUAL_STATES: Map<CallState | CustomCallState, string> = new Map([
-    [CallState.Connected, _td("Connected")],
-    [CallState.Connecting, _td("Connecting")],
-]);
 
 export default class CallEvent extends React.PureComponent<IProps, IState> {
     private wrapperElement = createRef<HTMLDivElement>();
@@ -56,12 +53,14 @@ export default class CallEvent extends React.PureComponent<IProps, IState> {
             callState: this.props.callEventGrouper.state,
             silenced: false,
             narrow: false,
+            length: 0,
         };
     }
 
     componentDidMount() {
         this.props.callEventGrouper.addListener(CallEventGrouperEvent.StateChanged, this.onStateChanged);
         this.props.callEventGrouper.addListener(CallEventGrouperEvent.SilencedChanged, this.onSilencedChanged);
+        this.props.callEventGrouper.addListener(CallEventGrouperEvent.LengthChanged, this.onLengthChanged);
 
         this.resizeObserver = new ResizeObserver(this.resizeObserverCallback);
         this.resizeObserver.observe(this.wrapperElement.current);
@@ -70,9 +69,14 @@ export default class CallEvent extends React.PureComponent<IProps, IState> {
     componentWillUnmount() {
         this.props.callEventGrouper.removeListener(CallEventGrouperEvent.StateChanged, this.onStateChanged);
         this.props.callEventGrouper.removeListener(CallEventGrouperEvent.SilencedChanged, this.onSilencedChanged);
+        this.props.callEventGrouper.removeListener(CallEventGrouperEvent.LengthChanged, this.onLengthChanged);
 
         this.resizeObserver.disconnect();
     }
+
+    private onLengthChanged = (length: number): void => {
+        this.setState({ length });
+    };
 
     private resizeObserverCallback = (entries: ResizeObserverEntry[]): void => {
         const wrapperElementEntry = entries.find((entry) => entry.target === this.wrapperElement.current);
@@ -214,10 +218,17 @@ export default class CallEvent extends React.PureComponent<IProps, IState> {
                 </div>
             );
         }
-        if (Array.from(TEXTUAL_STATES.keys()).includes(state)) {
+        if (state === CallState.Connected) {
             return (
                 <div className="mx_CallEvent_content">
-                    { TEXTUAL_STATES.get(state) }
+                    <Clock seconds={this.state.length} />
+                </div>
+            );
+        }
+        if (state === CallState.Connecting) {
+            return (
+                <div className="mx_CallEvent_content">
+                    { _t("Connecting") }
                 </div>
             );
         }
