@@ -44,7 +44,6 @@ import { isOnlyCtrlOrCmdKeyEvent, Key } from "matrix-react-sdk/src/Keyboard";
 import React from "react";
 import { randomString } from "matrix-js-sdk/src/randomstring";
 import { Action } from "matrix-react-sdk/src/dispatcher/actions";
-import { ActionPayload } from "matrix-react-sdk/src/dispatcher/payloads";
 import { SwitchSpacePayload } from "matrix-react-sdk/src/dispatcher/payloads/SwitchSpacePayload";
 import { showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/UpdateToast";
 import { CheckUpdatesPayload } from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
@@ -54,6 +53,8 @@ import SettingsStore from 'matrix-react-sdk/src/settings/SettingsStore';
 import { IMatrixProfile, IEventWithRoomId as IMatrixEvent, IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
 
 import VectorBasePlatform from './VectorBasePlatform';
+import CallHandler, { CallHandlerEvent } from "matrix-react-sdk/src/CallHandler";
+import { CallState } from "matrix-js-sdk/src/webrtc/call";
 
 const electron = window.electron;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
@@ -77,11 +78,11 @@ function platformFriendlyName(): string {
     }
 }
 
-function _onAction(payload: ActionPayload) {
-    // Whitelist payload actions, no point sending most across
-    if (['call_state'].includes(payload.action)) {
-        electron.send('app_onAction', payload);
-    }
+function onCallState(roomId: string, state: CallState) {
+    electron.send('app_onAction', {
+        action: "call_state",
+        state,
+    });
 }
 
 function getUpdateCheckStatus(status: boolean | string) {
@@ -229,7 +230,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     constructor() {
         super();
 
-        dis.register(_onAction);
+        CallHandler.instance.addListener(CallHandlerEvent.CallState, onCallState);
         /*
             IPC Call `check_updates` returns:
             true if there is an update available
