@@ -108,24 +108,34 @@ export default class CallEventGrouper extends EventEmitter {
         return [...this.events][0].getContent().call_id;
     }
 
+    private get roomId(): string {
+        return [...this.events][0]?.getRoomId();
+    }
+
     private onSilencedCallsChanged = () => {
         const newState = CallHandler.sharedInstance().isCallSilenced(this.callId);
         this.emit(CallEventGrouperEvent.SilencedChanged, newState);
     };
 
     public answerCall = () => {
-        this.call?.answer();
+        defaultDispatcher.dispatch({
+            action: 'answer',
+            room_id: this.roomId,
+        });
     };
 
     public rejectCall = () => {
-        this.call?.reject();
+        defaultDispatcher.dispatch({
+            action: 'reject',
+            room_id: this.roomId,
+        });
     };
 
     public callBack = () => {
         defaultDispatcher.dispatch({
             action: 'place_call',
             type: this.isVoice ? CallType.Voice : CallType.Video,
-            room_id: [...this.events][0]?.getRoomId(),
+            room_id: this.roomId,
         });
     };
 
