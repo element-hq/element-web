@@ -15,5 +15,6 @@
     "Go to element.io": "ไปยัง element.io",
     "Failed to start": "ไม่สามารถเริ่ม",
     "Open": "เปิด",
-    "Powered by Matrix": "ขับเคลื่อนโดย Matrix"
+    "Powered by Matrix": "ขับเคลื่อนโดย Matrix",
+    "Unexpected error preparing the app. See console for details.": "เกิดข้อผิดพลาดที่ไม่คาดคิดขณะเตรียมพร้อมโปรแกรม ดูรายละเอียดที่Console"
 }
