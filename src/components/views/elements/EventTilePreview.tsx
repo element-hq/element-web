@@ -122,13 +122,10 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         const className = classnames(this.props.className, {
             "mx_IRCLayout": this.props.layout == Layout.IRC,
             "mx_GroupLayout": this.props.layout == Layout.Group,
+            "mx_EventTilePreview_loader": !this.props.userId
         });
 
-        if (!this.props.userId) {
-            return <div className={classnames("mx_EventTilePreview_loader", className)}>
-                <Spinner />
-            </div>;
-        }
+        if (!this.props.userId) return <div className={className}><Spinner /></div>;
 
         const event = this.fakeEvent(this.state);
 
