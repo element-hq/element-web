@@ -16,5 +16,9 @@
     "Failed to start": "ไม่สามารถเริ่ม",
     "Open": "เปิด",
     "Powered by Matrix": "ขับเคลื่อนโดย Matrix",
-    "Unexpected error preparing the app. See console for details.": "เกิดข้อผิดพลาดที่ไม่คาดคิดขณะเตรียมพร้อมโปรแกรม ดูรายละเอียดที่Console"
+    "Unexpected error preparing the app. See console for details.": "เกิดข้อผิดพลาดที่ไม่คาดคิดขณะเตรียมพร้อมโปรแกรม ดูรายละเอียดที่Console",
+    "Unable to load config file: please refresh the page to try again.": "ไม่สามารถโหลดการตั้งค่า: โปรดรีเฟรชหน้าเว็บเพื่อลองใหม่อีกครั้ง.",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "การตั้งค่าของ Element จะต้องอยู่ในรูปแบบ JSON. โปรดแก้ไขการตั้งค่าและโหลดหน้านี้ใหม่อีกครั้ง.",
+    "Your Element is misconfigured": "การตั้งค่าของคุณไม่ถูกต้อง",
+    "Invalid configuration: no default server specified.": "คุณยังไม่ได้ตั้งค่าเซิฟเวอร์หลักในการตั้งค่า."
 }
