@@ -28,6 +28,8 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import InviteReason from "../elements/InviteReason";
 
+const MemberEventHtmlReasonField = "io.element.html_reason";
+
 const MessageCase = Object.freeze({
     NotLoggedIn: "NotLoggedIn",
     Joining: "Joining",
@@ -497,7 +499,7 @@ export default class RoomPreviewBar extends React.Component {
                 if (memberEventContent.reason) {
                     reasonElement = <InviteReason
                         reason={memberEventContent.reason}
-                        htmlReason={memberEventContent["io.element.html_reason"]}
+                        htmlReason={memberEventContent[MemberEventHtmlReasonField]}
                     />;
                 }
 
