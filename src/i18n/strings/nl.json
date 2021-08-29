@@ -3575,5 +3575,7 @@
     "To avoid these issues, create a <a>new encrypted room</a> for the conversation you plan to have.": "Om deze problemen te voorkomen, maak een <a>nieuwe versleutelde kamer</a> voor de gesprekken die u wilt voeren.",
     "<b>It's not recommended to add encryption to public rooms.</b>Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Het wordt afgeraden om versleuteling in te schakelen voor publieke kamers.</b>Iedereen kan publieke kamers vinden en aan deelnemen, dus iedereen kan de berichten lezen. U krijgt geen voordelen van de versleuteling en u kunt het later niet uitschakelen. Berichten versleutelen in een publieke kamer maakt het ontvangen en versturen van berichten langzamer.",
     "Are you sure you want to add encryption to this public room?": "Weet u zeker dat u versleuteling wil inschakelen voor deze publieke kamer?",
-    "Cross-signing is ready but keys are not backed up.": "Kruiselings ondertekenen is klaar, maar de sleutels zijn nog niet geback-upt."
+    "Cross-signing is ready but keys are not backed up.": "Kruiselings ondertekenen is klaar, maar de sleutels zijn nog niet geback-upt.",
+    "Low bandwidth mode (requires compatible homeserver)": "Lage bandbreedte modus (compatibele homeserver vereist)",
+    "Multiple integration managers (requires manual setup)": "Meerdere integratiemanagers (vereist handmatige instelling)"
 }
