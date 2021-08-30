@@ -26,7 +26,7 @@ export class ManagedPlayback extends Playback {
     }
 
     public async play(): Promise<void> {
-        this.manager.playOnly(this);
+        this.manager.pauseAllExcept(this);
         return super.play();
     }
 
