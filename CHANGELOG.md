@@ -1,20 +1,9 @@
-Changes in [1.8.2-rc.3](https://github.com/vector-im/element-desktop/releases/tag/v1.8.2-rc.3) (2021-08-26)
-===========================================================================================================
-
-## 🐛 Bug Fixes
- * [Release] Fix commit edit history ([\#6690](https://github.com/matrix-org/matrix-react-sdk/pull/6690)). Fixes #18742 and #18742. Contributed by [Palid](https://github.com/Palid).
-
-Changes in [1.8.2-rc.2](https://github.com/vector-im/element-desktop/releases/tag/v1.8.2-rc.2) (2021-08-25)
-===========================================================================================================
-
-## ✨ Features
- * [Release]Increase general app performance by optimizing layers ([\#6672](https://github.com/matrix-org/matrix-react-sdk/pull/6672)). Fixes #18730 and #18730. Contributed by [Palid](https://github.com/Palid).
-
-Changes in [1.8.2-rc.1](https://github.com/vector-im/element-desktop/releases/tag/v1.8.2-rc.1) (2021-08-24)
-===========================================================================================================
+Changes in [1.8.2](https://github.com/vector-im/element-desktop/releases/tag/v1.8.2) (2021-08-31)
+=================================================================================================
 
 ## ✨ Features
  * Documentation for sentry config ([\#18608](https://github.com/vector-im/element-web/pull/18608)). Contributed by [novocaine](https://github.com/novocaine).
+ * [Release]Increase general app performance by optimizing layers ([\#6672](https://github.com/matrix-org/matrix-react-sdk/pull/6672)). Fixes #18730 and #18730. Contributed by [Palid](https://github.com/Palid).
  * Add a warning on E2EE rooms if you try to make them public ([\#5698](https://github.com/matrix-org/matrix-react-sdk/pull/5698)). Contributed by [SimonBrandner](https://github.com/SimonBrandner).
  * Allow pagination of the space hierarchy and use new APIs ([\#6507](https://github.com/matrix-org/matrix-react-sdk/pull/6507)). Fixes #18089 and #18427.
  * Improve emoji in composer ([\#6650](https://github.com/matrix-org/matrix-react-sdk/pull/6650)). Fixes #18593 and #18593. Contributed by [SimonBrandner](https://github.com/SimonBrandner).
@@ -30,6 +19,7 @@ Changes in [1.8.2-rc.1](https://github.com/vector-im/element-desktop/releases/ta
  * Accessibility improvements in and around Spaces ([\#6569](https://github.com/matrix-org/matrix-react-sdk/pull/6569)). Fixes #18094 and #18094.
 
 ## 🐛 Bug Fixes
+ * [Release] Fix commit edit history ([\#6690](https://github.com/matrix-org/matrix-react-sdk/pull/6690)). Fixes #18742 and #18742. Contributed by [Palid](https://github.com/Palid).
  * Fix images not rendering when sent from other clients. ([\#6661](https://github.com/matrix-org/matrix-react-sdk/pull/6661)). Fixes #18702 and #18702.
  * Fix autocomplete scrollbar and make the autocomplete a little smaller ([\#6655](https://github.com/matrix-org/matrix-react-sdk/pull/6655)). Fixes #18682 and #18682. Contributed by [SimonBrandner](https://github.com/SimonBrandner).
  * Fix replies on the bubble layout ([\#6451](https://github.com/matrix-org/matrix-react-sdk/pull/6451)). Fixes #18184. Contributed by [SimonBrandner](https://github.com/SimonBrandner).
