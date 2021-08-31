@@ -110,6 +110,7 @@ async function start() {
         loadSkin,
         loadLanguage,
         loadTheme,
+        loadPasswordWordlist,
         loadApp,
         showError,
         showIncompatibleBrowser,
@@ -159,8 +160,14 @@ async function start() {
         const loadThemePromise = loadTheme();
         const loadSkinPromise = loadSkin();
 
+        // Auto-element
+        const loadPasswordWordlistPromise = loadPasswordWordlist();
+
         // await things settling so that any errors we have to render have features like i18n running
-        await settled(loadSkinPromise, loadThemePromise, loadLanguagePromise);
+        await settled(
+            loadSkinPromise, loadThemePromise,
+            loadLanguagePromise, loadPasswordWordlistPromise
+        );
 
         let acceptBrowser = supportedBrowser;
         if (!acceptBrowser && window.localStorage) {
@@ -211,6 +218,7 @@ async function start() {
         await loadSkinPromise;
         await loadThemePromise;
         await loadLanguagePromise;
+        await loadPasswordWordlistPromise;
 
         // We don't care if the log persistence made it through successfully, but we do want to
         // make sure it had a chance to load before we move on. It's prepared much higher up in

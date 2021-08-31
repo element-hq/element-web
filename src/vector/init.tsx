@@ -23,6 +23,7 @@ import olmWasmPath from "@matrix-org/olm/olm.wasm";
 import Olm from '@matrix-org/olm';
 import * as ReactDOM from "react-dom";
 import * as React from "react";
+import request from 'browser-request';
 
 import * as languageHandler from "matrix-react-sdk/src/languageHandler";
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
@@ -31,6 +32,7 @@ import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
 import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
+import PasswordWordlist from "matrix-react-sdk/src/PasswordWordlist";
 import { setTheme } from "matrix-react-sdk/src/theme";
 
 import { initRageshake, initRageshakeStore } from "./rageshakesetup";
@@ -145,6 +147,28 @@ export async function loadSkin() {
 
 export async function loadTheme() {
     setTheme();
+}
+
+export async function loadPasswordWordlist() {
+    // Different from in getConfig. This part probably needs refactoring.
+    type resp = { err: string, response: string }
+    const wordlistResp: resp = await new Promise(function(resolve, reject) {
+        request(
+            { method: "GET", url: "password.wordlist" },
+            (err, response, body) => {
+                try {
+                    if (err || response.status < 200 || response.status >= 300) {
+                        reject({ err: err, response: response });
+                    } else {
+                        resolve({ err: null, response: body });
+                    }
+                } catch (e) {
+                    reject({ err: e, response: null });
+                }
+            },
+        );
+    });
+    PasswordWordlist.words = wordlistResp.response;
 }
 
 export async function loadApp(fragParams: {}) {

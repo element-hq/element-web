@@ -71,6 +71,11 @@ const COPY_LIST = [
     ["node_modules/matrix-react-sdk/res/media/**", "webapp/media"],
     ["node_modules/@matrix-org/olm/olm_legacy.js", "webapp", { directwatch: 1 }],
     ["./config.json", "webapp", { directwatch: 1 }],
+
+    // For auto-element stuff. Didn't know that resources
+    // Need to be copied to webapp/ ..?
+    ["./password.wordlist", "webapp" ],
+
     ["contribute.json", "webapp"],
 ];
 
