@@ -517,6 +517,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
                     andView: false,
                     inlineErrors: true,
                     parentSpace: space,
+                    suggested: true,
                 });
             }));
             onFinished(filteredRoomNames.length > 0);
