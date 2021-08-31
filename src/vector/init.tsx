@@ -32,7 +32,7 @@ import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
 import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import PasswordWordlist from "matrix-react-sdk/src/PasswordWordlist";
+import Wordlist from "matrix-react-sdk/src/Wordlist";
 import { setTheme } from "matrix-react-sdk/src/theme";
 
 import { initRageshake, initRageshakeStore } from "./rageshakesetup";
@@ -149,7 +149,7 @@ export async function loadTheme() {
     setTheme();
 }
 
-export async function loadPasswordWordlist() {
+export async function loadWordlist() {
     // Different from in getConfig. This part probably needs refactoring.
     type resp = { err: string, response: string }
     const wordlistResp: resp = await new Promise(function(resolve, reject) {
@@ -168,7 +168,7 @@ export async function loadPasswordWordlist() {
             },
         );
     });
-    PasswordWordlist.words = wordlistResp.response;
+    Wordlist.set( wordlistResp.response );
 }
 
 export async function loadApp(fragParams: {}) {
