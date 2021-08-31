@@ -145,9 +145,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         return this._allRoomsInHome;
     }
 
-    public async setActiveRoomInSpace(space: Room | null): Promise<void> {
+    public setActiveRoomInSpace(space: Room | null): void {
         if (space && !space.isSpaceRoom()) return;
-        if (space !== this.activeSpace) await this.setActiveSpace(space);
+        if (space !== this.activeSpace) this.setActiveSpace(space);
 
         if (space) {
             const roomId = this.getNotificationState(space.roomId).getFirstRoomWithNotifications();
