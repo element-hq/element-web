@@ -190,7 +190,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
      * @param contextSwitch whether to switch the user's context,
      * should not be done when the space switch is done implicitly due to another event like switching room.
      */
-    public async setActiveSpace(space: Room | null, contextSwitch = true) {
+    public setActiveSpace(space: Room | null, contextSwitch = true) {
         if (space === this.activeSpace || (space && !space.isSpaceRoom())) return;
 
         this._activeSpace = space;
@@ -293,11 +293,15 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
 
         if (space) {
-            const suggestedRooms = await this.fetchSuggestedRooms(space);
-            if (this._activeSpace === space) {
-                this._suggestedRooms = suggestedRooms;
-                this.emit(SUGGESTED_ROOMS, this._suggestedRooms);
-            }
+            this.loadSuggestedRooms(space);
+        }
+    }
+
+    private async loadSuggestedRooms(space) {
+        const suggestedRooms = await this.fetchSuggestedRooms(space);
+        if (this._activeSpace === space) {
+            this._suggestedRooms = suggestedRooms;
+            this.emit(SUGGESTED_ROOMS, this._suggestedRooms);
         }
     }
 
@@ -666,6 +670,14 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                     this.onSpaceUpdate();
                     this.emit(room.roomId);
                 }
+
+                if (room === this.activeSpace && // current space
+                    this.matrixClient.getRoom(ev.getStateKey())?.getMyMembership() !== "join" && // target not joined
+                    ev.getPrevContent().suggested !== ev.getContent().suggested // suggested flag changed
+                ) {
+                    this.loadSuggestedRooms(room);
+                }
+
                 break;
 
             case EventType.SpaceParent:
