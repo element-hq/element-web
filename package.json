@@ -25,7 +25,7 @@
   "bin": {
     "reskindex": "scripts/reskindex.js"
   },
-  "main": "./lib/index.js",
+  "main": "./src/index.js",
   "matrix_src_main": "./src/index.js",
   "matrix_lib_main": "./lib/index.js",
   "matrix_lib_typings": "./lib/index.d.ts",
@@ -207,6 +207,5 @@
     "coverageReporters": [
       "text"
     ]
-  },
-  "typings": "./lib/index.d.ts"
+  }
 }
