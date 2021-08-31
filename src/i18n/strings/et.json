@@ -2232,7 +2232,7 @@
     "For help with using %(brand)s, click <a>here</a>.": "Kui otsid lisateavet %(brand)s'i kasutamise kohta, palun vaata <a>siia</a>.",
     "Add users and servers you want to ignore here. Use asterisks to have %(brand)s match any characters. For example, <code>@bot:*</code> would ignore all users that have the name 'bot' on any server.": "Lisa siia kasutajad ja serverid, mida sa soovid eirata. Kui soovid, et %(brand)s kasutaks üldist asendamist, siis kasuta tärni. Näiteks <code>@bot:*</code> eirab kõikide serverite kasutajat 'bot'.",
     "Use default": "Kasuta vaikimisi väärtusi",
-    "Mentions & Keywords": "Mainimised ja võtmesõnad",
+    "Mentions & Keywords": "Mainimised ja märksõnad",
     "Notification options": "Teavituste eelistused",
     "Room options": "Jututoa eelistused",
     "This room is public": "See jututuba on avalik",
