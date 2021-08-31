@@ -246,21 +246,6 @@ export const Commands = [
         category: CommandCategories.messages,
     }),
     new Command({
-        command: 'ddg',
-        args: '<query>',
-        description: _td('Searches DuckDuckGo for results'),
-        runFn: function() {
-            // TODO Don't explain this away, actually show a search UI here.
-            Modal.createTrackedDialog('Slash Commands', '/ddg is not a command', ErrorDialog, {
-                title: _t('/ddg is not a command'),
-                description: _t('To use it, just wait for autocomplete results to load and tab through them.'),
-            });
-            return success();
-        },
-        category: CommandCategories.actions,
-        hideCompletionAfterSpace: true,
-    }),
-    new Command({
         command: 'upgraderoom',
         args: '<new_version>',
         description: _td('Upgrades a room to a new version'),
