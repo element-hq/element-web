@@ -173,16 +173,16 @@ class EmojiPicker extends React.Component<IProps, IState> {
     };
 
     private onChangeFilter = (filter: string) => {
-        filter = filter.toLowerCase(); // filter is case insensitive stored lower-case
+        const lcFilter = filter.toLowerCase().trim(); // filter is case insensitive
         for (const cat of this.categories) {
             let emojis;
             // If the new filter string includes the old filter string, we don't have to re-filter the whole dataset.
-            if (filter.includes(this.state.filter)) {
+            if (lcFilter.includes(this.state.filter)) {
                 emojis = this.memoizedDataByCategory[cat.id];
             } else {
                 emojis = cat.id === "recent" ? this.recentlyUsed : DATA_BY_CATEGORY[cat.id];
             }
-            emojis = emojis.filter(emoji => this.emojiMatchesFilter(emoji, filter));
+            emojis = emojis.filter(emoji => this.emojiMatchesFilter(emoji, lcFilter));
             this.memoizedDataByCategory[cat.id] = emojis;
             cat.enabled = emojis.length > 0;
             // The setState below doesn't re-render the header and we already have the refs for updateVisibility, so...
@@ -194,9 +194,12 @@ class EmojiPicker extends React.Component<IProps, IState> {
         setTimeout(this.updateVisibility, 0);
     };
 
-    private emojiMatchesFilter = (emoji: IEmoji, filter: string): boolean =>
-        [emoji.annotation, ...emoji.shortcodes, emoji.emoticon, ...emoji.unicode.split(ZERO_WIDTH_JOINER)]
-            .some(x => x?.includes(filter));
+    private emojiMatchesFilter = (emoji: IEmoji, filter: string): boolean => {
+        return emoji.annotation.toLowerCase().includes(filter) ||
+            emoji.emoticon?.toLowerCase().includes(filter) ||
+            emoji.shortcodes.some(x => x.toLowerCase().includes(filter)) ||
+            emoji.unicode.split(ZERO_WIDTH_JOINER).includes(filter);
+    };
 
     private onEnterFilter = () => {
         const btn = this.bodyRef.current.querySelector<HTMLButtonElement>(".mx_EmojiPicker_item");
