@@ -50,7 +50,6 @@ import CallHandler from "./CallHandler";
 import { guessAndSetDMRoom } from "./Rooms";
 import { upgradeRoom } from './utils/RoomUpgrade';
 import UploadConfirmDialog from './components/views/dialogs/UploadConfirmDialog';
-import ErrorDialog from './components/views/dialogs/ErrorDialog';
 import DevtoolsDialog from './components/views/dialogs/DevtoolsDialog';
 import RoomUpgradeWarningDialog from "./components/views/dialogs/RoomUpgradeWarningDialog";
 import InfoDialog from "./components/views/dialogs/InfoDialog";
