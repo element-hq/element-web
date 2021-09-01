@@ -712,5 +712,12 @@
     "%(count)s members including %(commaSeparatedMembers)s|one": "%(commaSeparatedMembers)s",
     "Avatar": "Abhatár",
     "Removing...": "Ag Baint...",
-    "Suggested": "Moltaí"
+    "Suggested": "Moltaí",
+    "The file '%(fileName)s' failed to upload.": "Níor éirigh leis an gcomhad '%(fileName)s' a uaslódáil.",
+    "At this time it is not possible to reply with a file. Would you like to upload this file without replying?": "Ag an am seo ní féidir freagra a thabhairt le comhad. Ar mhaith leat an comhad seo a uaslódáil gan freagra a thabhairt?",
+    "Replying With Files": "Ag Freagairt le Comhaid",
+    "You do not have permission to start a conference call in this room": "Níl cead agat glao comhdhála a thosú sa seomra seo",
+    "You cannot place a call with yourself.": "Ní féidir leat glaoch ort féin.",
+    "The user you called is busy.": "Tá an t-úsáideoir ar a ghlaoigh tú gnóthach.",
+    "User Busy": "Úsáideoir Gnóthach"
 }
