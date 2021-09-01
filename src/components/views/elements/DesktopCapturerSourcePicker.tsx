@@ -22,6 +22,7 @@ import classNames from 'classnames';
 import AccessibleButton from './AccessibleButton';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import TabbedView, { Tab, TabLocation } from '../../structures/TabbedView';
+import { DesktopCapturerSource } from "matrix-js-sdk/src/webrtc/call";
 
 export function getDesktopCapturerSources(): Promise<Array<DesktopCapturerSource>> {
     const options: GetSourcesOptions = {
