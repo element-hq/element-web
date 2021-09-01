@@ -3581,5 +3581,8 @@
     "Are you sure you want to add encryption to this public room?": "你确定要为此公开聊天室开启加密吗？",
     "Cross-signing is ready but keys are not backed up.": "交叉签名已就绪，但尚未备份密钥。",
     "Low bandwidth mode (requires compatible homeserver)": "低带宽模式（需要主服务器兼容）",
-    "Multiple integration managers (requires manual setup)": "多个集成管理器（需要手动设置）"
+    "Multiple integration managers (requires manual setup)": "多个集成管理器（需要手动设置）",
+    "Show threads": "显示主题帖",
+    "Thread": "主题帖",
+    "Threaded messaging": "按主题排列的消息"
 }
