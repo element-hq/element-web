@@ -3607,5 +3607,8 @@
     "Are you sure you want to add encryption to this public room?": "Opravdu chcete šifrovat tuto veřejnou místnost?",
     "Cross-signing is ready but keys are not backed up.": "Křížové podepisování je připraveno, ale klíče nejsou zálohovány.",
     "Low bandwidth mode (requires compatible homeserver)": "Režim malé šířky pásma (vyžaduje kompatibilní homeserver)",
-    "Multiple integration managers (requires manual setup)": "Více správců integrace (vyžaduje ruční nastavení)"
+    "Multiple integration managers (requires manual setup)": "Více správců integrace (vyžaduje ruční nastavení)",
+    "Threaded messaging": "Zprávy ve vláknech",
+    "Thread": "Vlákno",
+    "Show threads": "Zobrazit vlákna"
 }
