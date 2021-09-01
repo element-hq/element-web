@@ -25,49 +25,19 @@ import AccessibleButton from "../elements/AccessibleButton";
 import AliasSettings from "../room_settings/AliasSettings";
 import { useStateToggle } from "../../../hooks/useStateToggle";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
-import StyledRadioGroup from "../elements/StyledRadioGroup";
+import { useLocalEcho } from "../../../hooks/useLocalEcho";
+import JoinRuleSettings from "../settings/JoinRuleSettings";
 
 interface IProps {
     matrixClient: MatrixClient;
     space: Room;
 }
 
-enum SpaceVisibility {
-    Unlisted = "unlisted",
-    Private = "private",
-}
-
-const useLocalEcho = <T extends any>(
-    currentFactory: () => T,
-    setterFn: (value: T) => Promise<unknown>,
-    errorFn: (error: Error) => void,
-): [value: T, handler: (value: T) => void] => {
-    const [value, setValue] = useState(currentFactory);
-    const handler = async (value: T) => {
-        setValue(value);
-        try {
-            await setterFn(value);
-        } catch (e) {
-            setValue(currentFactory());
-            errorFn(e);
-        }
-    };
-
-    return [value, handler];
-};
-
 const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space }: IProps) => {
     const [error, setError] = useState("");
 
     const userId = cli.getUserId();
 
-    const [visibility, setVisibility] = useLocalEcho<SpaceVisibility>(
-        () => space.getJoinRule() === JoinRule.Invite ? SpaceVisibility.Private : SpaceVisibility.Unlisted,
-        visibility => cli.sendStateEvent(space.roomId, EventType.RoomJoinRules, {
-            join_rule: visibility === SpaceVisibility.Unlisted ? JoinRule.Public : JoinRule.Invite,
-        }, ""),
-        () => setError(_t("Failed to update the visibility of this space")),
-    );
     const [guestAccessEnabled, setGuestAccessEnabled] = useLocalEcho<boolean>(
         () => space.currentState.getStateEvents(EventType.RoomGuestAccess, "")
             ?.getContent()?.guest_access === GuestAccess.CanJoin,
@@ -87,7 +57,6 @@ const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space }: IProps) => {
 
     const [showAdvancedSection, toggleAdvancedSection] = useStateToggle();
 
-    const canSetJoinRule = space.currentState.maySendStateEvent(EventType.RoomJoinRules, userId);
     const canSetGuestAccess = space.currentState.maySendStateEvent(EventType.RoomGuestAccess, userId);
     const canSetHistoryVisibility = space.currentState.maySendStateEvent(EventType.RoomHistoryVisibility, userId);
     const canSetCanonical = space.currentState.mayClientSendStateEvent(EventType.RoomCanonicalAlias, cli);
@@ -121,7 +90,7 @@ const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space }: IProps) => {
     }
 
     let addressesSection;
-    if (visibility !== SpaceVisibility.Private) {
+    if (space.getJoinRule() === JoinRule.Public) {
         addressesSection = <>
             <span className="mx_SettingsTab_subheading">{ _t("Address") }</span>
             <div className="mx_SettingsTab_section mx_SettingsTab_subsectionText">
@@ -147,22 +116,9 @@ const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space }: IProps) => {
             </div>
 
             <div>
-                <StyledRadioGroup
-                    name="spaceVisibility"
-                    value={visibility}
-                    onChange={setVisibility}
-                    disabled={!canSetJoinRule}
-                    definitions={[
-                        {
-                            value: SpaceVisibility.Unlisted,
-                            label: _t("Public"),
-                            description: _t("anyone with the link can view and join"),
-                        }, {
-                            value: SpaceVisibility.Private,
-                            label: _t("Invite only"),
-                            description: _t("only invited people can view and join"),
-                        },
-                    ]}
+                <JoinRuleSettings
+                    room={space}
+                    onError={() => setError(_t("Failed to update the visibility of this space"))}
                 />
             </div>
 
