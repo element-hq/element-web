@@ -24,12 +24,6 @@ import { getDesktopCapturerSources } from "matrix-js-sdk/src/webrtc/call";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import TabbedView, { Tab, TabLocation } from '../../structures/TabbedView';
 
-export interface DesktopCapturerSource {
-    id: string;
-    name: string;
-    thumbnailURL;
-}
-
 export enum Tabs {
     Screens = "screen",
     Windows = "window",
