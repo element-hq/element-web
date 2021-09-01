@@ -601,6 +601,8 @@
     "See when anyone posts a sticker to your active room": "See when anyone posts a sticker to your active room",
     "with an empty state key": "with an empty state key",
     "with state key %(stateKey)s": "with state key %(stateKey)s",
+    "The above, but in any room you are joined or invited to as well": "The above, but in any room you are joined or invited to as well",
+    "The above, but in <Room /> as well": "The above, but in <Room /> as well",
     "Send <b>%(eventType)s</b> events as you in this room": "Send <b>%(eventType)s</b> events as you in this room",
     "See <b>%(eventType)s</b> events posted to this room": "See <b>%(eventType)s</b> events posted to this room",
     "Send <b>%(eventType)s</b> events as you in your active room": "Send <b>%(eventType)s</b> events as you in your active room",

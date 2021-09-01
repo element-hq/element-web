@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
+ * Copyright 2020 - 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -418,13 +418,11 @@ export class StopGapWidget extends EventEmitter {
     private onEvent = (ev: MatrixEvent) => {
         MatrixClientPeg.get().decryptEventIfNeeded(ev);
         if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
-        if (ev.getRoomId() !== this.eventListenerRoomId) return;
         this.feedEvent(ev);
     };
 
     private onEventDecrypted = (ev: MatrixEvent) => {
         if (ev.isDecryptionFailure()) return;
-        if (ev.getRoomId() !== this.eventListenerRoomId) return;
         this.feedEvent(ev);
     };
 
@@ -469,7 +467,7 @@ export class StopGapWidget extends EventEmitter {
         this.readUpToMap[ev.getRoomId()] = ev.getId();
 
         const raw = ev.getEffectiveEvent();
-        this.messaging.feedEvent(raw).catch(e => {
+        this.messaging.feedEvent(raw, this.eventListenerRoomId).catch(e => {
             console.error("Error sending event to widget: ", e);
         });
     }
