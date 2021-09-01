@@ -785,5 +785,14 @@
     "Join Room": "Téigh isteach an seomra",
     "(~%(count)s results)|one": "(~%(count)s toradh)",
     "(~%(count)s results)|other": "(~%(count)s torthaí)",
-    "World readable": "Inléite ag gach duine"
+    "World readable": "Inléite ag gach duine",
+    "Communities can now be made into Spaces": "Is féidir Pobail a dhéanamh ina Spásanna anois",
+    "Spaces are a new way to make a community, with new features coming.": "Is bealach nua iad spásanna chun pobal a dhéanamh, le gnéithe nua ag teacht.",
+    "Communities won't receive further updates.": "Ní bhfaighidh pobail nuashonruithe breise.",
+    "Created from <Community />": "Cruthaithe ó <Community />",
+    "No answer": "Gan freagair",
+    "Unknown failure: %(reason)s": "Teip anaithnid: %(reason)s",
+    "Low bandwidth mode (requires compatible homeserver)": "Modh bandaleithid íseal (teastaíonn freastalaí comhoiriúnach)",
+    "Enable encryption in settings.": "Tosaigh criptiú sna socruithe.",
+    "Cross-signing is ready but keys are not backed up.": "Tá tras-sínigh réidh ach ní dhéantar cóip chúltaca d'eochracha."
 }
