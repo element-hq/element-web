@@ -504,14 +504,14 @@
     "Invite": "Tabhair cuireadh",
     "Mention": "Luaigh",
     "Demote": "Bain ceadanna",
-    "Ban": "Coisc",
+    "Ban": "Toirmisc",
     "Kick": "Caith amach",
     "Disinvite": "Tarraing siar cuireadh",
     "Encrypted": "Criptithe",
     "Encryption": "Criptiúchán",
     "Anyone": "Aon duine",
     "Permissions": "Ceadanna",
-    "Unban": "Bain an coisc",
+    "Unban": "Bain an cosc",
     "Browse": "Brabhsáil",
     "Reset": "Athshocraigh",
     "Sounds": "Fuaimeanna",
@@ -735,7 +735,7 @@
     "Muted Users": "Úsáideoirí Fuaim",
     "Privileged Users": "Úsáideoirí Pribhléideacha",
     "Notify everyone": "Tabhair fógraí do gach duine",
-    "Ban users": "Coisc úsáideoirí",
+    "Ban users": "Toirmisc úsáideoirí",
     "Kick users": "Caith úsáideoirí amach",
     "Change settings": "Athraigh socruithe",
     "Invite users": "Tabhair cuirí d'úsáideoirí",
@@ -797,5 +797,5 @@
     "Cross-signing is ready but keys are not backed up.": "Tá tras-sínigh réidh ach ní dhéantar cóip chúltaca d'eochracha.",
     "Ask the <a>admins</a> of this community to make it into a Space and keep a look out for the invite.": "",
     "You can create a Space from this community <a>here</a>.": "",
-    "Bans user with given id": "Coisc úsáideoir leis an ID áirithe"
+    "Bans user with given id": "Toirmisc úsáideoir leis an ID áirithe"
 }
