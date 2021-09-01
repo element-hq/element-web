@@ -3631,5 +3631,8 @@
     "If a community isn't shown you may not have permission to convert it.": "Si echas en falta alguna comunidad, es posible que no tengas permisos suficientes para convertirla.",
     "Are you sure you want to add encryption to this public room?": "¿Seguro que quieres activar el cifrado en esta sala pública?",
     "Low bandwidth mode (requires compatible homeserver)": "Modo de bajo consumo de datos (el servidor base debe ser compatible)",
-    "Multiple integration managers (requires manual setup)": "Varios gestores de integración (hay que configurarlos manualmente)"
+    "Multiple integration managers (requires manual setup)": "Varios gestores de integración (hay que configurarlos manualmente)",
+    "Threaded messaging": "Mensajes en hilos",
+    "Show threads": "Ver hilos",
+    "Thread": "Hilo"
 }
