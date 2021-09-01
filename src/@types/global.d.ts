@@ -49,6 +49,7 @@ import PerformanceMonitor from "../performance";
 import UIStore from "../stores/UIStore";
 import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 import { RoomScrollStateStore } from "../stores/RoomScrollStateStore";
+import { DesktopCapturerSource } from "matrix-js-sdk/src/webrtc/call";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -93,6 +94,20 @@ declare global {
         mxSetupEncryptionStore?: SetupEncryptionStore;
         mxRoomScrollStateStore?: RoomScrollStateStore;
         mxOnRecaptchaLoaded?: () => void;
+        electron?: Electron;
+    }
+
+    interface GetSourcesOptions {
+        types: Array<string>;
+        thumbnailSize?: {
+            height: number;
+            width: number;
+        };
+        fetchWindowIcons?: boolean;
+    }
+
+    interface Electron {
+        getDesktopCapturerSources(options: GetSourcesOptions): Promise<Array<DesktopCapturerSource>>;
     }
 
     interface Document {

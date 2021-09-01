@@ -20,9 +20,22 @@ import BaseDialog from "..//dialogs/BaseDialog";
 import DialogButtons from "./DialogButtons";
 import classNames from 'classnames';
 import AccessibleButton from './AccessibleButton';
-import { getDesktopCapturerSources } from "matrix-js-sdk/src/webrtc/call";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import TabbedView, { Tab, TabLocation } from '../../structures/TabbedView';
+
+export function getDesktopCapturerSources(): Promise<Array<DesktopCapturerSource>> {
+    const options: GetSourcesOptions = {
+        thumbnailSize: {
+            height: 176,
+            width: 312,
+        },
+        types: [
+            "screen",
+            "window",
+        ],
+    };
+    return window.electron.getDesktopCapturerSources(options);
+}
 
 export enum Tabs {
     Screens = "screen",
