@@ -3661,5 +3661,8 @@
     "IRC": "IRC",
     "Low bandwidth mode (requires compatible homeserver)": "Režiim kehva internetiühenduse jaoks (eeldab koduserveripoolset tuge)",
     "Surround selected text when typing special characters": "Erimärkide sisestamisel märgista valitud tekst",
-    "Multiple integration managers (requires manual setup)": "Mitmed lõiminguhaldurid (eeldab käsitsi seadistamist)"
+    "Multiple integration managers (requires manual setup)": "Mitmed lõiminguhaldurid (eeldab käsitsi seadistamist)",
+    "Thread": "Jutulõng",
+    "Show threads": "Näita jutulõnga",
+    "Threaded messaging": "Sõnumid jutulõngana"
 }
