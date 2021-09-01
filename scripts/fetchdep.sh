@@ -10,7 +10,7 @@ defbranch="$3"
 
 rm -r "$defrepo" || true
 
-# A fnction that clones a branch of a repo based on the org, repo and branch
+# A function that clones a branch of a repo based on the org, repo and branch
 clone() {
     org=$1
     repo=$2
