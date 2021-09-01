@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { RefObject, useContext, useRef, useState } from "react";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { Preset, JoinRule } from "matrix-js-sdk/src/@types/partials";
+import { JoinRule, Preset } from "matrix-js-sdk/src/@types/partials";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventSubscription } from "fbemitter";
 
@@ -505,11 +505,12 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
         setError("");
         setBusy(true);
         try {
+            const isPublic = space.getJoinRule() === JoinRule.Public;
             const filteredRoomNames = roomNames.map(name => name.trim()).filter(Boolean);
             await Promise.all(filteredRoomNames.map(name => {
                 return createRoom({
                     createOpts: {
-                        preset: space.getJoinRule() === "public" ? Preset.PublicChat : Preset.PrivateChat,
+                        preset: isPublic ? Preset.PublicChat : Preset.PrivateChat,
                         name,
                     },
                     spinner: false,
@@ -517,6 +518,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
                     andView: false,
                     inlineErrors: true,
                     parentSpace: space,
+                    joinRule: !isPublic ? JoinRule.Restricted : undefined,
                 });
             }));
             onFinished(filteredRoomNames.length > 0);
