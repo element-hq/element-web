@@ -796,5 +796,6 @@
     "Enable encryption in settings.": "Tosaigh criptiú sna socruithe.",
     "Cross-signing is ready but keys are not backed up.": "Tá tras-sínigh réidh ach ní dhéantar cóip chúltaca d'eochracha.",
     "Ask the <a>admins</a> of this community to make it into a Space and keep a look out for the invite.": "",
-    "You can create a Space from this community <a>here</a>.": ""
+    "You can create a Space from this community <a>here</a>.": "",
+    "Bans user with given id": "Coisc úsáideoir leis an ID áirithe"
 }
