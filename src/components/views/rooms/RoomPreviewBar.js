@@ -494,7 +494,7 @@ export default class RoomPreviewBar extends React.Component {
                 }
 
                 const myUserId = MatrixClientPeg.get().getUserId();
-                const memberEventContent = this.props.room.currentState.getMember(myUserId).events.member.event.content;
+                const memberEventContent = this.props.room.currentState.getMember(myUserId).events.member.getContent();
 
                 if (memberEventContent.reason) {
                     reasonElement = <InviteReason
