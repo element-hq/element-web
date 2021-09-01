@@ -185,7 +185,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         limitPerRoom: number,
         roomIds: (string | Symbols.AnyRoom)[] = null,
     ): Promise<object[]> {
-        limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, 25) : 25; // arbitrary choice
+        limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
 
         const rooms = this.pickRooms(roomIds);
         const allResults: IEvent[] = [];
@@ -212,7 +212,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         limitPerRoom: number,
         roomIds: (string | Symbols.AnyRoom)[] = null,
     ): Promise<object[]> {
-        limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, 100) : 100; // arbitrary choice
+        limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
 
         const rooms = this.pickRooms(roomIds);
         const allResults: IEvent[] = [];
