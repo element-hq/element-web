@@ -772,5 +772,18 @@
     "Failure to create room": "Níorbh fhéidir an seomra a chruthú",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Sáraíonn an comhad '%(fileName)s' teorainn méide an freastalaí baile seo le haghaidh uaslódálacha",
     "The server does not support the room version specified.": "Ní thacaíonn an freastalaí leis an leagan seomra a shonraítear.",
-    "Server may be unavailable, overloaded, or you hit a bug.": "D’fhéadfadh nach mbeadh an freastalaí ar fáil, ró-ualaithe, nó fuair tú fabht."
+    "Server may be unavailable, overloaded, or you hit a bug.": "D’fhéadfadh nach mbeadh an freastalaí ar fáil, ró-ualaithe, nó fuair tú fabht.",
+    "Rooms and spaces": "Seomraí agus spásanna",
+    "Collapse reply thread": "Cuir na freagraí i bhfolach",
+    "Threaded messaging": "Teachtaireachtaí i snáitheanna",
+    "Thread": "Snáithe",
+    "Show threads": "Taispeáin snáitheanna",
+    "Low priority": "Tosaíocht íseal",
+    "Start chat": "Tosaigh comhrá",
+    "Share room": "Roinn seomra",
+    "Forget room": "Déan dearmad ar an seomra",
+    "Join Room": "Téigh isteach an seomra",
+    "(~%(count)s results)|one": "(~%(count)s toradh)",
+    "(~%(count)s results)|other": "(~%(count)s torthaí)",
+    "World readable": "Inléite ag gach duine"
 }
