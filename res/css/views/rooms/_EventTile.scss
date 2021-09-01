@@ -480,7 +480,7 @@ $hover-select-border: 4px;
     }
 
     pre code > * {
-        display: inline-block;
+        display: inline;
     }
 
     pre {
@@ -514,7 +514,7 @@ $hover-select-border: 4px;
 
 .mx_EventTile:hover .mx_EventTile_body pre,
 .mx_EventTile.focus-visible:focus-within .mx_EventTile_body pre {
-    border: 1px solid #e5e5e5; // deliberate constant as we're behind an invert filter
+    border: 1px solid $tertiary-content;
 }
 
 .mx_EventTile_pre_container {

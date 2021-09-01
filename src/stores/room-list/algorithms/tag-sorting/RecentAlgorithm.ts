@@ -20,6 +20,27 @@ import { IAlgorithm } from "./IAlgorithm";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import * as Unread from "../../../../Unread";
 import { EffectiveMembership, getEffectiveMembership } from "../../../../utils/membership";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
+export function shouldCauseReorder(event: MatrixEvent): boolean {
+    const type = event.getType();
+    const content = event.getContent();
+    const prevContent = event.getPrevContent();
+
+    // Never ignore membership changes
+    if (type === EventType.RoomMember && prevContent.membership !== content.membership) return true;
+
+    // Ignore status changes
+    // XXX: This should be an enum
+    if (type === "im.vector.user_status") return false;
+    // Ignore display name changes
+    if (type === EventType.RoomMember && prevContent.displayname !== content.displayname) return false;
+    // Ignore avatar changes
+    if (type === EventType.RoomMember && prevContent.avatar_url !== content.avatar_url) return false;
+
+    return true;
+}
 
 export const sortRooms = (rooms: Room[]): Room[] => {
     // We cache the timestamp lookup to avoid iterating forever on the timeline
@@ -68,7 +89,10 @@ export const sortRooms = (rooms: Room[]): Room[] => {
                 const ev = r.timeline[i];
                 if (!ev.getTs()) continue; // skip events that don't have timestamps (tests only?)
 
-                if (ev.getSender() === myUserId || Unread.eventTriggersUnreadCount(ev)) {
+                if (
+                    (ev.getSender() === myUserId && shouldCauseReorder(ev)) ||
+                    Unread.eventTriggersUnreadCount(ev)
+                ) {
                     return ev.getTs();
                 }
             }

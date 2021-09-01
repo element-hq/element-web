@@ -678,12 +678,14 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 }
                 this.emit(room.roomId);
                 break;
+        }
+    };
 
-            case EventType.RoomMember:
-                if (room.isSpaceRoom()) {
-                    this.onSpaceMembersChange(ev);
-                }
-                break;
+    // listening for m.room.member events in onRoomState above doesn't work as the Member object isn't updated by then
+    private onRoomStateMembers = (ev: MatrixEvent) => {
+        const room = this.matrixClient.getRoom(ev.getRoomId());
+        if (room?.isSpaceRoom()) {
+            this.onSpaceMembersChange(ev);
         }
     };
 
@@ -743,6 +745,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             this.matrixClient.removeListener("Room.myMembership", this.onRoom);
             this.matrixClient.removeListener("Room.accountData", this.onRoomAccountData);
             this.matrixClient.removeListener("RoomState.events", this.onRoomState);
+            this.matrixClient.removeListener("RoomState.members", this.onRoomStateMembers);
             this.matrixClient.removeListener("accountData", this.onAccountData);
         }
         await this.reset();
@@ -754,6 +757,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         this.matrixClient.on("Room.myMembership", this.onRoom);
         this.matrixClient.on("Room.accountData", this.onRoomAccountData);
         this.matrixClient.on("RoomState.events", this.onRoomState);
+        this.matrixClient.on("RoomState.members", this.onRoomStateMembers);
         this.matrixClient.on("accountData", this.onAccountData);
 
         this.matrixClient.getCapabilities().then(capabilities => {

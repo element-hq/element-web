@@ -31,14 +31,6 @@ import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { CapabilityText } from "../../../widgets/CapabilityText";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-export function getRememberedCapabilitiesForWidget(widget: Widget): Capability[] {
-    return JSON.parse(localStorage.getItem(`widget_${widget.id}_approved_caps`) || "[]");
-}
-
-function setRememberedCapabilitiesForWidget(widget: Widget, caps: Capability[]) {
-    localStorage.setItem(`widget_${widget.id}_approved_caps`, JSON.stringify(caps));
-}
-
 interface IProps extends IDialogProps {
     requestedCapabilities: Set<Capability>;
     widget: Widget;
@@ -95,10 +87,7 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
     };
 
     private closeAndTryRemember(approved: Capability[]) {
-        if (this.state.rememberSelection) {
-            setRememberedCapabilitiesForWidget(this.props.widget, approved);
-        }
-        this.props.onFinished({ approved });
+        this.props.onFinished({ approved, remember: this.state.rememberSelection });
     }
 
     public render() {
