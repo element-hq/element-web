@@ -3606,5 +3606,7 @@
     "Are you sure you want to make this encrypted room public?": "Är du säker på att du vill göra det här krypterade rummet offentligt?",
     "To avoid these issues, create a <a>new encrypted room</a> for the conversation you plan to have.": "För att undvika dessa problem, skapa ett <a>nytt krypterat rum</a> för konversationen du planerar att ha.",
     "Are you sure you want to add encryption to this public room?": "Är du säker på att du vill lägga till kryptering till det här offentliga rummet?",
-    "Cross-signing is ready but keys are not backed up.": "Korssignering är klart, men nycklarna är inte säkerhetskopierade än."
+    "Cross-signing is ready but keys are not backed up.": "Korssignering är klart, men nycklarna är inte säkerhetskopierade än.",
+    "Low bandwidth mode (requires compatible homeserver)": "Lågbandbreddsläge (kräver kompatibel hemserver)",
+    "Multiple integration managers (requires manual setup)": "Flera integrationshanterare (kräver manuell inställning)"
 }
