@@ -3678,5 +3678,20 @@
     "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Se hai segnalato un errore via Github, i log di debug possono aiutarci a identificare il problema. I log di debug contengono dati di utilizzo dell'applicazione inclusi il nome utente, gli ID o alias delle stanze o gruppi visitati, gli ultimi elementi dell'interfaccia con cui hai interagito e i nomi degli altri utenti. Non contengono messaggi.",
     "Enable encryption in settings.": "Attiva la crittografia nelle impostazioni.",
     "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.": "I tuoi messaggi privati normalmente sono cifrati, ma questa stanza non lo è. Di solito ciò è dovuto ad un dispositivo non supportato o dal metodo usato, come gli inviti per email.",
-    "Cross-signing is ready but keys are not backed up.": "La firma incrociata è pronta ma c'è un backup delle chiavi."
+    "Cross-signing is ready but keys are not backed up.": "La firma incrociata è pronta ma c'è un backup delle chiavi.",
+    "Rooms and spaces": "Stanze e spazi",
+    "Results": "Risultati",
+    "To avoid these issues, create a <a>new public room</a> for the conversation you plan to have.": "Per evitare questi problemi, crea una <a>nuova stanza pubblica</a> per la conversazione che vuoi avere.",
+    "<b>It's not recommended to make encrypted rooms public.</b> It will mean anyone can find and join the room, so anyone can read messages. You'll get none of the benefits of encryption. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Non è consigliabile rendere pubbliche le stanze cifrate.</b> Se lo fai, chiunque potrà trovare ed entrare nella stanza, quindi chiunque potrà leggere i messaggi. Non avrai alcun beneficio dalla crittografia. Cifrare i messaggi in una stanza pubblica renderà più lenti l'invio e la ricezione dei messaggi.",
+    "Are you sure you want to make this encrypted room public?": "Vuoi veramente rendere pubblica questa stanza cifrata?",
+    "To avoid these issues, create a <a>new encrypted room</a> for the conversation you plan to have.": "Per evitare questi problemi, crea una <a>nuova stanza cifrata</a> per la conversazione che vuoi avere.",
+    "<b>It's not recommended to add encryption to public rooms.</b>Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Non è consigliabile aggiungere la crittografia alle stanze pubbliche.</b>Chiunque può trovare ed entrare in stanze pubbliche, quindi chiunque può leggere i messaggi. Non avrai alcun beneficio dalla crittografia e non potrai disattivarla in seguito. Cifrare i messaggi in una stanza pubblica renderà più lenti l'invio e la ricezione dei messaggi.",
+    "Are you sure you want to add encryption to this public room?": "Vuoi veramente aggiungere la crittografia a questa stanza pubblica?",
+    "Low bandwidth mode (requires compatible homeserver)": "Modalità a connessione lenta (richiede un homeserver compatibile)",
+    "Multiple integration managers (requires manual setup)": "Gestori di integrazione multipli (richiede configurazione manuale)",
+    "Thread": "Argomento",
+    "Show threads": "Mostra argomenti",
+    "Threaded messaging": "Messaggi raggruppati",
+    "The above, but in any room you are joined or invited to as well": "Quanto sopra, ma anche in qualsiasi stanza tu sia entrato o invitato",
+    "The above, but in <Room /> as well": "Quanto sopra, ma anche in <Room />"
 }
