@@ -3664,5 +3664,9 @@
     "Multiple integration managers (requires manual setup)": "Mitmed lõiminguhaldurid (eeldab käsitsi seadistamist)",
     "Thread": "Jutulõng",
     "Show threads": "Näita jutulõnga",
-    "Threaded messaging": "Sõnumid jutulõngana"
+    "Threaded messaging": "Sõnumid jutulõngana",
+    "Autoplay videos": "Esita automaatselt videosid",
+    "Autoplay GIFs": "Esita automaatselt liikuvaid pilte",
+    "The above, but in any room you are joined or invited to as well": "Ülaltoodu, aga samuti igas jututoas, millega oled liitunud või kuhu oled kutsutud",
+    "The above, but in <Room /> as well": "Ülaltoodu, aga samuti <Room /> jututoas"
 }
