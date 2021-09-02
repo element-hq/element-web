@@ -3584,5 +3584,7 @@
     "Multiple integration managers (requires manual setup)": "多个集成管理器（需要手动设置）",
     "Show threads": "显示主题帖",
     "Thread": "主题帖",
-    "Threaded messaging": "按主题排列的消息"
+    "Threaded messaging": "按主题排列的消息",
+    "The above, but in <Room /> as well": "以上，但也包括 <Room />",
+    "The above, but in any room you are joined or invited to as well": "以上，但也包括您加入或被邀请加入的任何房间中"
 }
