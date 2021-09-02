@@ -485,9 +485,8 @@ export default class CallHandler extends EventEmitter {
                 this.pause(AudioID.Ringback);
             }
 
-            this.calls.set(mappedRoomId, newCall);
-            this.emit(CallHandlerEvent.CallsChanged, this.calls);
-            this.setCallListeners(newCall);
+            this.addCallForRoom(mappedRoomId, newCall);
+            this.setCallListeners(call);
             this.setCallState(newCall, newCall.state);
         });
         call.on(CallEvent.AssertedIdentityChanged, async () => {
@@ -521,8 +520,7 @@ export default class CallHandler extends EventEmitter {
                     this.removeCallForRoom(mappedRoomId);
                     mappedRoomId = newMappedRoomId;
                     console.log("Moving call to room " + mappedRoomId);
-                    this.calls.set(mappedRoomId, call);
-                    this.emit(CallHandlerEvent.CallChangeRoom, call);
+                    this.addCallForRoom(mappedRoomId, call, true);
                 }
             }
         });
@@ -756,9 +754,7 @@ export default class CallHandler extends EventEmitter {
         console.log("Current turn creds expire in " + timeUntilTurnCresExpire + " ms");
         const call = MatrixClientPeg.get().createCall(mappedRoomId);
 
-        console.log("Adding call for room ", roomId);
-        this.calls.set(roomId, call);
-        this.emit(CallHandlerEvent.CallsChanged, this.calls);
+        this.addCallForRoom(roomId, call);
         if (transferee) {
             this.transferees[call.callId] = transferee;
         }
@@ -810,6 +806,7 @@ export default class CallHandler extends EventEmitter {
                         return;
                     }
 
+                    console.log("getting call for room " + room.roomId);
                     if (this.getCallForRoom(room.roomId)) {
                         Modal.createTrackedDialog('Call Handler', 'Existing Call with user', ErrorDialog, {
                             title: _t('Already in call'),
@@ -870,9 +867,8 @@ export default class CallHandler extends EventEmitter {
                     }
 
                     Analytics.trackEvent('voip', 'receiveCall', 'type', call.type);
-                    console.log("Adding call for room ", mappedRoomId);
-                    this.calls.set(mappedRoomId, call);
-                    this.emit(CallHandlerEvent.CallsChanged, this.calls);
+
+                    this.addCallForRoom(mappedRoomId, call);
                     this.setCallListeners(call);
                     // Explicitly handle first state change
                     this.onCallStateChanged(call.state, null, call);
@@ -1149,5 +1145,22 @@ export default class CallHandler extends EventEmitter {
 
             messaging.transport.send(ElementWidgetActions.HangupCall, {});
         });
+    }
+
+    private addCallForRoom(roomId: string, call: MatrixCall, changedRooms=false): void {
+        if (this.calls.has(roomId)) {
+            console.log(`Couldn't add call to room ${roomId}: already have a call for this room`);
+            throw new Error("Already have a call for room " + roomId);
+        }
+
+        console.log("setting call for room " + roomId);
+        this.calls.set(roomId, call);
+
+        // Should we always emit CallsChanged too?
+        if (changedRooms) {
+            this.emit(CallHandlerEvent.CallChangeRoom, call);
+        } else {
+            this.emit(CallHandlerEvent.CallsChanged, this.calls);
+        }
     }
 }
