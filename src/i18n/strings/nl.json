@@ -3577,5 +3577,10 @@
     "Are you sure you want to add encryption to this public room?": "Weet u zeker dat u versleuteling wil inschakelen voor deze publieke kamer?",
     "Cross-signing is ready but keys are not backed up.": "Kruiselings ondertekenen is klaar, maar de sleutels zijn nog niet geback-upt.",
     "Low bandwidth mode (requires compatible homeserver)": "Lage bandbreedte modus (compatibele homeserver vereist)",
-    "Multiple integration managers (requires manual setup)": "Meerdere integratiemanagers (vereist handmatige instelling)"
+    "Multiple integration managers (requires manual setup)": "Meerdere integratiemanagers (vereist handmatige instelling)",
+    "Thread": "Draad",
+    "Show threads": "Draad weergeven",
+    "Threaded messaging": "Draad berichten",
+    "The above, but in <Room /> as well": "Het bovenstaande, maar ook in <Room />",
+    "The above, but in any room you are joined or invited to as well": "Het bovenstaande, maar in elke kamer waar u aan deelneemt en voor uitgenodigd bent"
 }
