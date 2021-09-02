@@ -250,7 +250,15 @@ export default class CallHandler extends EventEmitter {
      * @returns {boolean}
      */
     private areAnyCallsUnsilenced(): boolean {
-        return this.calls.size > this.silencedCalls.size;
+        for (const call of this.calls.values()) {
+            if (
+                call.state === CallState.Ringing &&
+                !this.isCallSilenced(call.callId)
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private async checkProtocols(maxTries) {
@@ -878,6 +886,8 @@ export default class CallHandler extends EventEmitter {
                 break;
             case 'hangup':
             case 'reject':
+                this.stopRingingIfPossible(this.calls.get(payload.room_id).callId);
+
                 if (!this.calls.get(payload.room_id)) {
                     return; // no call to hangup
                 }
@@ -890,11 +900,15 @@ export default class CallHandler extends EventEmitter {
                 // the hangup event away)
                 break;
             case 'hangup_all':
+                this.stopRingingIfPossible(this.calls.get(payload.room_id).callId);
+
                 for (const call of this.calls.values()) {
                     call.hangup(CallErrorCode.UserHangup, false);
                 }
                 break;
             case 'answer': {
+                this.stopRingingIfPossible(this.calls.get(payload.room_id).callId);
+
                 if (!this.calls.has(payload.room_id)) {
                     return; // no call to answer
                 }
@@ -928,6 +942,12 @@ export default class CallHandler extends EventEmitter {
                 break;
         }
     };
+
+    private stopRingingIfPossible(callId: string): void {
+        this.silencedCalls.delete(callId);
+        if (this.areAnyCallsUnsilenced()) return;
+        this.pause(AudioID.Ring);
+    }
 
     private async dialNumber(number: string) {
         const results = await this.pstnLookup(number);

@@ -20,7 +20,6 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 
 import CommandProvider from './CommandProvider';
 import CommunityProvider from './CommunityProvider';
-import DuckDuckGoProvider from './DuckDuckGoProvider';
 import RoomProvider from './RoomProvider';
 import UserProvider from './UserProvider';
 import EmojiProvider from './EmojiProvider';
@@ -55,7 +54,6 @@ const PROVIDERS = [
     EmojiProvider,
     NotifProvider,
     CommandProvider,
-    DuckDuckGoProvider,
 ];
 
 if (SpaceStore.spacesEnabled) {

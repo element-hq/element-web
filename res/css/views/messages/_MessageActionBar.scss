@@ -92,6 +92,10 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/room/message-bar/reply.svg');
 }
 
+.mx_MessageActionBar_threadButton::after {
+    mask-image: url('$(res)/img/element-icons/message/thread.svg');
+}
+
 .mx_MessageActionBar_editButton::after {
     mask-image: url('$(res)/img/element-icons/room/message-bar/edit.svg');
 }
