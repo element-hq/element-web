@@ -43,11 +43,6 @@ import QuestionDialog from "../dialogs/QuestionDialog";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import AccessibleButton from '../elements/AccessibleButton';
 
-function eventIsReply(mxEvent: MatrixEvent): boolean {
-    const relatesTo = mxEvent.getContent()["m.relates_to"];
-    return !!(relatesTo && relatesTo["m.in_reply_to"]);
-}
-
 function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
     const html = mxEvent.getContent().formatted_body;
     if (!html) {
@@ -72,7 +67,7 @@ function createEditContent(model: EditorModel, editedEvent: MatrixEvent): IConte
     if (isEmote) {
         model = stripEmoteCommand(model);
     }
-    const isReply = eventIsReply(editedEvent);
+    const isReply = !!editedEvent.replyEventId;
     let plainPrefix = "";
     let htmlPrefix = "";
 
