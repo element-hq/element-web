@@ -26,7 +26,7 @@ import { Layout } from "../../../settings/Layout";
 import { SettingLevel } from "../../../settings/SettingLevel";
 
 interface IProps {
-    userId: string;
+    userId?: string;
     displayName: string;
     avatarUrl: string;
     messagePreviewText: string;

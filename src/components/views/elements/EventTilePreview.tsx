@@ -25,6 +25,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { Layout } from "../../../settings/Layout";
 import { UIFeature } from "../../../settings/UIFeature";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import Spinner from './Spinner';
 
 interface IProps {
     /**
@@ -45,7 +46,7 @@ interface IProps {
     /**
      * The ID of the displayed user
      */
-    userId: string;
+    userId?: string;
 
     /**
      * The display name of the displayed user
@@ -118,12 +119,15 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
     }
 
     public render() {
-        const event = this.fakeEvent(this.state);
-
         const className = classnames(this.props.className, {
             "mx_IRCLayout": this.props.layout == Layout.IRC,
             "mx_GroupLayout": this.props.layout == Layout.Group,
+            "mx_EventTilePreview_loader": !this.props.userId,
         });
+
+        if (!this.props.userId) return <div className={className}><Spinner /></div>;
+
+        const event = this.fakeEvent(this.state);
 
         return <div className={className}>
             <EventTile

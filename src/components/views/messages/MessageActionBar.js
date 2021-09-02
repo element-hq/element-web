@@ -23,6 +23,8 @@ import { EventStatus } from 'matrix-js-sdk/src/models/event';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
+import { Action } from '../../../dispatcher/actions';
+import { RightPanelPhases } from '../../../stores/RightPanelStorePhases';
 import { aboveLeftOf, ContextMenu, ContextMenuTooltipButton, useContextMenu } from '../../structures/ContextMenu';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
 import RoomContext from "../../../contexts/RoomContext";
@@ -34,6 +36,7 @@ import Resend from "../../../Resend";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import DownloadActionButton from "./DownloadActionButton";
+import SettingsStore from '../../../settings/SettingsStore';
 
 const OptionsButton = ({ mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
@@ -170,6 +173,17 @@ export default class MessageActionBar extends React.PureComponent {
         });
     };
 
+    onThreadClick = () => {
+        dis.dispatch({
+            action: Action.SetRightPanelPhase,
+            phase: RightPanelPhases.ThreadView,
+            allowClose: false,
+            refireParams: {
+                event: this.props.mxEvent,
+            },
+        });
+    }
+
     onEditClick = (ev) => {
         dis.dispatch({
             action: 'edit_event',
@@ -254,12 +268,22 @@ export default class MessageActionBar extends React.PureComponent {
                 // The only catch is we do the reply button first so that we can make sure the react
                 // button is the very first button without having to do length checks for `splice()`.
                 if (this.context.canReply) {
-                    toolbarOpts.splice(0, 0, <RovingAccessibleTooltipButton
-                        className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
-                        title={_t("Reply")}
-                        onClick={this.onReplyClick}
-                        key="reply"
-                    />);
+                    toolbarOpts.splice(0, 0, <>
+                        <RovingAccessibleTooltipButton
+                            className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
+                            title={_t("Reply")}
+                            onClick={this.onReplyClick}
+                            key="reply"
+                        />
+                        { SettingsStore.getValue("feature_thread") && (
+                            <RovingAccessibleTooltipButton
+                                className="mx_MessageActionBar_maskButton mx_MessageActionBar_threadButton"
+                                title={_t("Thread")}
+                                onClick={this.onThreadClick}
+                                key="thread"
+                            />
+                        ) }
+                    </>);
                 }
                 if (this.context.canReact) {
                     toolbarOpts.splice(0, 0, <ReactButton
