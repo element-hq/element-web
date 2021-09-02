@@ -104,11 +104,11 @@ export default class CallEventGrouper extends EventEmitter {
         return ![...this.events].some((event) => event.sender?.userId === MatrixClientPeg.get().getUserId());
     }
 
-    private get callId(): string {
-        return [...this.events][0].getContent().call_id;
+    private get callId(): string | undefined {
+        return [...this.events][0]?.getContent()?.call_id;
     }
 
-    private get roomId(): string {
+    private get roomId(): string | undefined {
         return [...this.events][0]?.getRoomId();
     }
 
