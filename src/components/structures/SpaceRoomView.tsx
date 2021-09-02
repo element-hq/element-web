@@ -519,6 +519,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
                     inlineErrors: true,
                     parentSpace: space,
                     joinRule: !isPublic ? JoinRule.Restricted : undefined,
+                    suggested: true,
                 });
             }));
             onFinished(filteredRoomNames.length > 0);

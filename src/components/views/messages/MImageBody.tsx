@@ -128,7 +128,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     private onImageEnter = (e: React.MouseEvent<HTMLImageElement>): void => {
         this.setState({ hover: true });
 
-        if (!this.state.showImage || !this.isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
+        if (!this.state.showImage || !this.isGif() || SettingsStore.getValue("autoplayGifs")) {
             return;
         }
         const imgElement = e.currentTarget;
@@ -138,7 +138,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     private onImageLeave = (e: React.MouseEvent<HTMLImageElement>): void => {
         this.setState({ hover: false });
 
-        if (!this.state.showImage || !this.isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
+        if (!this.state.showImage || !this.isGif() || SettingsStore.getValue("autoplayGifs")) {
             return;
         }
         const imgElement = e.currentTarget;
@@ -387,7 +387,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             showPlaceholder = false; // because we're hiding the image, so don't show the placeholder.
         }
 
-        if (this.isGif() && !SettingsStore.getValue("autoplayGifsAndVideos") && !this.state.hover) {
+        if (this.isGif() && !SettingsStore.getValue("autoplayGifs") && !this.state.hover) {
             gifLabel = <p className="mx_MImageBody_gifLabel">GIF</p>;
         }
 
@@ -487,7 +487,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
         const contentUrl = this.getContentUrl();
         let thumbUrl;
-        if (this.isGif() && SettingsStore.getValue("autoplayGifsAndVideos")) {
+        if (this.isGif() && SettingsStore.getValue("autoplayGifs")) {
             thumbUrl = contentUrl;
         } else {
             thumbUrl = this.getThumbUrl();
