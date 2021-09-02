@@ -807,6 +807,11 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     };
 
     private onAction = (payload: ActionPayload) => {
+        if (payload.action === "view_room" && payload.room_id === this.props.space.roomId) {
+            this.setState({ phase: Phase.Landing });
+            return;
+        }
+
         if (payload.action !== Action.ViewUser && payload.action !== "view_3pid_invite") return;
 
         if (payload.action === Action.ViewUser && payload.member) {
