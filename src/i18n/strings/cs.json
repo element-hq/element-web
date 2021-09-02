@@ -3612,5 +3612,7 @@
     "Thread": "Vlákno",
     "Show threads": "Zobrazit vlákna",
     "The above, but in <Room /> as well": "Výše uvedené, ale také v <Room />",
-    "The above, but in any room you are joined or invited to as well": "Výše uvedené, ale také v jakékoli místnosti, ke které jste připojeni nebo do které jste pozváni"
+    "The above, but in any room you are joined or invited to as well": "Výše uvedené, ale také v jakékoli místnosti, ke které jste připojeni nebo do které jste pozváni",
+    "Autoplay videos": "Automatické přehrávání videí",
+    "Autoplay GIFs": "Automatické přehrávání GIFů"
 }
