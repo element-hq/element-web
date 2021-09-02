@@ -485,8 +485,9 @@ export default class CallHandler extends EventEmitter {
                 this.pause(AudioID.Ringback);
             }
 
+            this.removeCallForRoom(mappedRoomId);
             this.addCallForRoom(mappedRoomId, newCall);
-            this.setCallListeners(call);
+            this.setCallListeners(newCall);
             this.setCallState(newCall, newCall.state);
         });
         call.on(CallEvent.AssertedIdentityChanged, async () => {
