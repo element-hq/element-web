@@ -22,7 +22,6 @@ import classNames from 'classnames';
 import AccessibleButton from './AccessibleButton';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import TabbedView, { Tab, TabLocation } from '../../structures/TabbedView';
-import { DesktopCapturerSource } from "matrix-js-sdk/src/webrtc/call";
 
 export function getDesktopCapturerSources(): Promise<Array<DesktopCapturerSource>> {
     const options: GetSourcesOptions = {
@@ -86,7 +85,7 @@ export interface PickerIState {
     selectedSource: DesktopCapturerSource | null;
 }
 export interface PickerIProps {
-    onFinished(source: DesktopCapturerSource): void;
+    onFinished(sourceId: string): void;
 }
 
 @replaceableComponent("views.elements.DesktopCapturerSourcePicker")
@@ -131,7 +130,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<
     };
 
     private onShare = (): void => {
-        this.props.onFinished(this.state.selectedSource);
+        this.props.onFinished(this.state.selectedSource.id);
     };
 
     private onTabChange = (): void => {
