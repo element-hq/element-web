@@ -754,7 +754,15 @@ export default class CallHandler extends EventEmitter {
         console.log("Current turn creds expire in " + timeUntilTurnCresExpire + " ms");
         const call = MatrixClientPeg.get().createCall(mappedRoomId);
 
-        this.addCallForRoom(roomId, call);
+        try {
+            this.addCallForRoom(roomId, call);
+        } catch (e) {
+            Modal.createTrackedDialog('Call Handler', 'Existing Call with user', ErrorDialog, {
+                title: _t('Already in call'),
+                description: _t("You're already in a call with this person."),
+            });
+            return;
+        }
         if (transferee) {
             this.transferees[call.callId] = transferee;
         }
@@ -806,14 +814,8 @@ export default class CallHandler extends EventEmitter {
                         return;
                     }
 
-                    console.log("getting call for room " + room.roomId);
-                    if (this.getCallForRoom(room.roomId)) {
-                        Modal.createTrackedDialog('Call Handler', 'Existing Call with user', ErrorDialog, {
-                            title: _t('Already in call'),
-                            description: _t("You're already in a call with this person."),
-                        });
-                        return;
-                    }
+                    // We leave the check for whether there's already a call in this room until later,
+                    // otherwise it can race.
 
                     const members = room.getJoinedMembers();
                     if (members.length <= 1) {
