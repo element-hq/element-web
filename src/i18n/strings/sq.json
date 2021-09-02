@@ -3682,5 +3682,7 @@
     "To avoid these issues, create a <a>new public room</a> for the conversation you plan to have.": "Për të shmangur këto probleme, krijoni për bisedën që keni në plan një <a>dhomë të re publike</a>.",
     "Low bandwidth mode (requires compatible homeserver)": "Mënyra trafik me shpejtësi të ulët (lyp shërbyes Home të përputhshëm)",
     "Multiple integration managers (requires manual setup)": "Përgjegjës të shumtë integrimi (lyp ujdisje dorazi)",
-    "Threaded messaging": "Mesazhe me rrjedha"
+    "Threaded messaging": "Mesazhe me rrjedha",
+    "The above, but in <Room /> as well": "Atë më sipër, por edhe te <Room />",
+    "The above, but in any room you are joined or invited to as well": "Atë më sipër, por edhe në çfarëdo dhome ku keni hyrë ose jeni ftuar"
 }
