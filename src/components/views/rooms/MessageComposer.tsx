@@ -548,7 +548,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 yOffset={-50}
             />;
         }
-	controls.push(
+        controls.push(
             <Stickerpicker
                 room={this.props.room}
                 showStickers={this.state.showStickers}
