@@ -7610,8 +7610,8 @@ mathml-tag-names@^2.1.3:
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "12.3.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/92d822d494cc1179affbf1f14fc8635ed5595b3c"
+  version "12.4.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2783d162b77d6629c574f35e88bea9ae29765c34"
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
@@ -7633,8 +7633,8 @@ matrix-mock-request@^1.2.3:
     expect "^1.20.2"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.28.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/94449953054a511d19a14c80a397a518bafc768f"
+  version "3.29.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/3046f0ed85704ccee3de6d5d663950fe8c72752b"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@sentry/browser" "^6.11.0"
@@ -7702,10 +7702,10 @@ matrix-react-test-utils@^0.2.3:
     "@babel/traverse" "^7.13.17"
     walk "^2.3.14"
 
-matrix-widget-api@^0.1.0-beta.15:
-  version "0.1.0-beta.15"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.15.tgz#b02511f93fe1a3634868b6e246d736107f182745"
-  integrity sha512-sWmtb8ZarSbHVbk5ni7IHBR9jOh7m1+5R4soky0fEO9VKl+MN7skT0+qNux3J9WuUAu2D80dZW9xPUT9cxfxbg==
+matrix-widget-api@^0.1.0-beta.16:
+  version "0.1.0-beta.16"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.16.tgz#32655f05cab48239b97fe4111a1d0858f2aad61a"
+  integrity sha512-9zqaNLaM14YDHfFb7WGSUOivGOjYw+w5Su84ZfOl6A4IUy1xT9QPp0nsSA8wNfz0LpxOIPn3nuoF8Tn/40F5tg==
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.2.0"
