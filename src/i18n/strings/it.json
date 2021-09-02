@@ -3688,5 +3688,10 @@
     "<b>It's not recommended to add encryption to public rooms.</b>Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Non è consigliabile aggiungere la crittografia alle stanze pubbliche.</b>Chiunque può trovare ed entrare in stanze pubbliche, quindi chiunque può leggere i messaggi. Non avrai alcun beneficio dalla crittografia e non potrai disattivarla in seguito. Cifrare i messaggi in una stanza pubblica renderà più lenti l'invio e la ricezione dei messaggi.",
     "Are you sure you want to add encryption to this public room?": "Vuoi veramente aggiungere la crittografia a questa stanza pubblica?",
     "Low bandwidth mode (requires compatible homeserver)": "Modalità a connessione lenta (richiede un homeserver compatibile)",
-    "Multiple integration managers (requires manual setup)": "Gestori di integrazione multipli (richiede configurazione manuale)"
+    "Multiple integration managers (requires manual setup)": "Gestori di integrazione multipli (richiede configurazione manuale)",
+    "Thread": "Argomento",
+    "Show threads": "Mostra argomenti",
+    "Threaded messaging": "Messaggi raggruppati",
+    "The above, but in any room you are joined or invited to as well": "Quanto sopra, ma anche in qualsiasi stanza tu sia entrato o invitato",
+    "The above, but in <Room /> as well": "Quanto sopra, ma anche in <Room />"
 }
