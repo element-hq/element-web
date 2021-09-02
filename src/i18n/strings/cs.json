@@ -3610,5 +3610,7 @@
     "Multiple integration managers (requires manual setup)": "Více správců integrace (vyžaduje ruční nastavení)",
     "Threaded messaging": "Zprávy ve vláknech",
     "Thread": "Vlákno",
-    "Show threads": "Zobrazit vlákna"
+    "Show threads": "Zobrazit vlákna",
+    "The above, but in <Room /> as well": "Výše uvedené, ale také v <Room />",
+    "The above, but in any room you are joined or invited to as well": "Výše uvedené, ale také v jakékoli místnosti, ke které jste připojeni nebo do které jste pozváni"
 }
