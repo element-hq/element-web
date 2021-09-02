@@ -209,14 +209,26 @@ export default class ReplyThread extends React.Component<IProps, IState> {
 
     public static makeReplyMixIn(ev: MatrixEvent, replyInThread: boolean) {
         if (!ev) return {};
-        return {
+
+        const replyMixin = {
             'm.relates_to': {
                 'm.in_reply_to': {
                     'event_id': ev.getId(),
-                    [UNSTABLE_ELEMENT_REPLY_IN_THREAD.name]: replyInThread,
                 },
             },
         };
+
+        /**
+         * @experimental
+         * Rendering hint for threads, only attached if true to make
+         * sure that Element does not start sending that property for all events
+         */
+        if (replyInThread) {
+            const inReplyTo = replyMixin['m.relates_to']['m.in_reply_to'];
+            inReplyTo[UNSTABLE_ELEMENT_REPLY_IN_THREAD.name] = replyInThread;
+        }
+
+        return replyMixin;
     }
 
     public static makeThread(
