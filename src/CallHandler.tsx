@@ -1150,7 +1150,7 @@ export default class CallHandler extends EventEmitter {
         });
     }
 
-    private addCallForRoom(roomId: string, call: MatrixCall, changedRooms=false): void {
+    private addCallForRoom(roomId: string, call: MatrixCall, changedRooms = false): void {
         if (this.calls.has(roomId)) {
             console.log(`Couldn't add call to room ${roomId}: already have a call for this room`);
             throw new Error("Already have a call for room " + roomId);
