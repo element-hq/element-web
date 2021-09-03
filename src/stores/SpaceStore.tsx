@@ -782,7 +782,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         // restore selected state from last session if any and still valid
         const lastSpaceId = window.localStorage.getItem(ACTIVE_SPACE_LS_KEY);
         if (lastSpaceId) {
-            this.setActiveSpace(this.matrixClient.getRoom(lastSpaceId));
+            // don't context switch here as it may break permalinks
+            this.setActiveSpace(this.matrixClient.getRoom(lastSpaceId), false);
         }
     }
 
