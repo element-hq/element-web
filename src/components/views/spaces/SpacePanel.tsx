@@ -223,6 +223,8 @@ const SpacePanel = () => {
     }, []);
 
     const onKeyDown = (ev: React.KeyboardEvent) => {
+        if (ev.defaultPrevented) return;
+
         let handled = true;
 
         switch (ev.key) {
