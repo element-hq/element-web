@@ -238,11 +238,11 @@ limitations under the License.
 }
 
 .mx_MessageComposer_buttonMenu::before {
-    mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+    mask-image: url('$(res)/img/image-view/more.svg');
 }
 
 .mx_MessageComposer_closeButtonMenu::before {
-    transform: rotate(180deg);
+    transform: rotate(90deg);
     transform-origin: center;
 }
 
@@ -364,4 +364,9 @@ limitations under the License.
     .mx_MessageComposer_button:last-child {
         margin-right: 0;
     }
+}
+
+.mx_MessageComposer_Menu .mx_CallContextMenu_item {
+    display: flex;
+    align-items: center;
 }

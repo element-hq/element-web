@@ -33,6 +33,7 @@ import {
     ContextMenuTooltipButton,
     useContextMenu,
     MenuItem,
+    ChevronFace,
 } from "../../structures/ContextMenu";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import ReplyPreview from "./ReplyPreview";
@@ -416,25 +417,32 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     };
 
     private renderButtons(menuPosition): JSX.Element | JSX.Element[] {
-        const buttons = [];
-
+        const buttons = new Map<string, JSX.Element>();
         if (!this.state.haveRecording) {
-            buttons.push(
+            buttons.set(
+                _t("Send File"),
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
+            );
+            buttons.set(
+                _t("Show Emojis"),
                 <EmojiButton key="emoji_button" addEmoji={this.addEmoji} menuPosition={menuPosition} />,
             );
         }
         if (this.shouldShowStickerPicker()) {
-            buttons.push(<AccessibleTooltipButton
-                id='stickersButton'
-                key="controls_stickers"
-                className="mx_MessageComposer_button mx_MessageComposer_stickers"
-                onClick={() => this.showStickers(!this.state.showStickers)}
-                title={this.state.showStickers ? _t("Hide Stickers") : _t("Show Stickers")}
-            />);
+            buttons.set(
+                _t("Show Stickers"),
+                <AccessibleTooltipButton
+                    id='stickersButton'
+                    key="controls_stickers"
+                    className="mx_MessageComposer_button mx_MessageComposer_stickers"
+                    onClick={() => this.showStickers(!this.state.showStickers)}
+                    title={this.state.showStickers ? _t("Hide Stickers") : _t("Show Stickers")}
+                />,
+            );
         }
         if (!this.state.haveRecording && !this.state.narrowMode) {
-            buttons.push(
+            buttons.set(
+                _t("Send voice message"),
                 <AccessibleTooltipButton
                     className="mx_MessageComposer_button mx_MessageComposer_voiceMessage"
                     onClick={() => this.voiceRecordingButton?.onRecordStartEndClick()}
@@ -444,7 +452,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         }
 
         if (!this.state.narrowMode) {
-            return buttons;
+            return Array.from(buttons.values());
         } else {
             const classnames = classNames({
                 mx_MessageComposer_button: true,
@@ -457,19 +465,23 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 <AccessibleTooltipButton
                     className={classnames}
                     onClick={this.toggleButtonMenu}
-                    title={_t("view more options")}
+                    title={_t("Composer menu")}
+                    tooltip={false}
                 />
                 { this.state.isMenuOpen && (
                     <ContextMenu
                         onFinished={this.toggleButtonMenu}
                         {...menuPosition}
                         menuPaddingRight={10}
-                        menuPaddingTop={16}
-                        menuWidth={50}
+                        menuPaddingTop={5}
+                        menuPaddingBottom={5}
+                        menuWidth={150}
+                        wrapperClassName="mx_MessageComposer_Menu"
                     >
-                        { buttons.slice(1).map((button, index) => (
-                            <MenuItem className="mx_CallContextMenu_item" key={index} onClick={this.toggleButtonMenu}>
+                        { Array.from(buttons).slice(1).map(([label, button]) => (
+                            <MenuItem className="mx_CallContextMenu_item" key={label} onClick={this.toggleButtonMenu}>
                                 { button }
+                                { label }
                             </MenuItem>
                         )) }
                     </ContextMenu>
@@ -568,7 +580,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         });
 
         return (
-            <div className={classes}>
+            <div className={classes} ref={this.ref}>
                 { recordingTooltip }
                 <div className="mx_MessageComposer_wrapper">
                     { this.props.showReplyPreview && (
