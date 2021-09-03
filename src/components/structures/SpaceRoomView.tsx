@@ -496,6 +496,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
             onChange={ev => setRoomName(i, ev.target.value)}
             autoFocus={i === 2}
             disabled={busy}
+            autoComplete="off"
         />;
     });
 
