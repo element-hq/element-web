@@ -301,7 +301,10 @@ export class StopGapWidget extends EventEmitter {
         // requests timeline capabilities in other rooms down the road. It's just easier to manage here.
         for (const room of MatrixClientPeg.get().getRooms()) {
             // Timelines are most recent last
-            this.readUpToMap[room.roomId] = arrayFastClone(room.getLiveTimeline().getEvents()).reverse()[0].getId();
+            const events = room.getLiveTimeline()?.getEvents() || [];
+            const roomEvent = events[events.length - 1];
+            if (!roomEvent) continue; // force later code to think the room is fresh
+            this.readUpToMap[room.roomId] = roomEvent.getId();
         }
 
         // Attach listeners for feeding events - the underlying widget classes handle permissions for us

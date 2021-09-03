@@ -136,6 +136,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 <MessageComposer
                     room={this.props.room}
                     resizeNotifier={this.props.resizeNotifier}
+                    replyInThread={true}
                     replyToEvent={this.state?.thread?.replyToEvent}
                     showReplyPreview={false}
                     permalinkCreator={this.props.permalinkCreator}

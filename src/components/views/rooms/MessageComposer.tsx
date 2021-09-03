@@ -192,6 +192,7 @@ interface IProps {
     resizeNotifier: ResizeNotifier;
     permalinkCreator: RoomPermalinkCreator;
     replyToEvent?: MatrixEvent;
+    replyInThread?: boolean;
     showReplyPreview?: boolean;
     e2eStatus?: E2EStatus;
     compact?: boolean;
@@ -217,6 +218,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     private ref: React.RefObject<HTMLDivElement> = createRef();
 
     static defaultProps = {
+        replyInThread: false,
         showReplyPreview: true,
         compact: false,
     };
@@ -498,6 +500,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                     room={this.props.room}
                     placeholder={this.renderPlaceholderText()}
                     permalinkCreator={this.props.permalinkCreator}
+                    replyInThread={this.props.replyInThread}
                     replyToEvent={this.props.replyToEvent}
                     onChange={this.onChange}
                     disabled={this.state.haveRecording}

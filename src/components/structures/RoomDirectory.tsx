@@ -347,7 +347,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         });
     }
 
-    private onRoomClicked = (room: IPublicRoomsChunkRoom, ev: ButtonEvent) => {
+    private onRoomClicked = (room: IPublicRoomsChunkRoom, ev: React.MouseEvent) => {
         // If room was shift-clicked, remove it from the room directory
         if (ev.shiftKey && !this.state.selectedCommunityId) {
             ev.preventDefault();

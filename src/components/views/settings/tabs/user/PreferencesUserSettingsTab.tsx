@@ -172,7 +172,8 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
     ];
     static IMAGES_AND_VIDEOS_SETTINGS = [
         'urlPreviewsEnabled',
-        'autoplayGifsAndVideos',
+        'autoplayGifs',
+        'autoplayVideo',
         'showImages',
     ];
     static TIMELINE_SETTINGS = [
