@@ -3686,5 +3686,9 @@
     "Multiple integration managers (requires manual setup)": "Több integrációs menedzser (kézi beállítást igényel)",
     "Autoplay videos": "Videók automatikus lejátszása",
     "Autoplay GIFs": "GIF-ek automatikus lejátszása",
-    "The above, but in <Room /> as well": "A felül lévő, de ebben a szobában is: <Room />"
+    "The above, but in <Room /> as well": "A felül lévő, de ebben a szobában is: <Room />",
+    "Show threads": "Témaszálak megjelenítése",
+    "Threaded messaging": "Témaszálas beszélgetés",
+    "The above, but in any room you are joined or invited to as well": "Ami felette van, de minden szobában amibe belépett vagy meghívták",
+    "Thread": "Téma"
 }
