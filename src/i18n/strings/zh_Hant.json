@@ -3697,5 +3697,7 @@
     "Show threads": "顯示討論串",
     "Threaded messaging": "討論串訊息",
     "The above, but in <Room /> as well": "以上，但也在 <Room /> 中",
-    "The above, but in any room you are joined or invited to as well": "以上，但在任何您已加入或被邀請的聊天室中"
+    "The above, but in any room you are joined or invited to as well": "以上，但在任何您已加入或被邀請的聊天室中",
+    "Autoplay videos": "自動播放影片",
+    "Autoplay GIFs": "自動播放 GIF"
 }
