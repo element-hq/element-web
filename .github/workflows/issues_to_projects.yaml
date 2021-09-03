@@ -19,20 +19,3 @@ jobs:
                  project-url: "https://github.com/orgs/vector-im/projects/14"
                  column-name: "📥 Inbox"
                  label-name: "X-Needs-Design"
-    test_board_beta_with_design_issues:
-        name: Move priority X-Needs-Design issues to Beta test project board
-        runs-on: ubuntu-latest
-        if: >
-            contains(github.event.issue.labels.*.name, 'X-Needs-Design') &&
-             (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
-              contains(github.event.issue.labels.*.name, 'O-Intermediate')) &&
-             (contains(github.event.issue.labels.*.name, 'S-Critical') ||
-              contains(github.event.issue.labels.*.name, 'S-Major') ||
-              contains(github.event.issue.labels.*.name, 'S-Minor'))
-        steps:
-             - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
-               with:
-                 action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
-                 project-url: "https://github.com/orgs/vector-im/projects/15"
-                 column-name: "Todo"
-                 label-name: "X-Needs-Design"
