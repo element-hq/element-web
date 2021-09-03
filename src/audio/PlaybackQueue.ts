@@ -22,6 +22,7 @@ import { arrayFastClone } from "../utils/arrays";
 import { PlaybackManager } from "./PlaybackManager";
 import { isVoiceMessage } from "../utils/EventUtils";
 import RoomViewStore from "../stores/RoomViewStore";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 /**
  * Audio playback queue management for a given room. This keeps track of where the user
@@ -137,13 +138,17 @@ export class PlaybackQueue {
                             }
                             if (!scanForVoiceMessage) continue;
 
-                            // Dev note: This is where we'd break to cause text/non-voice messages to
-                            // interrupt automatic playback.
+                            if (!isVoiceMessage(event)) {
+                                const evType = event.getType();
+                                if (evType !== EventType.RoomMessage && evType !== EventType.Sticker) {
+                                    continue; // Event can be skipped for automatic playback consideration
+                                }
+                                break; // Stop automatic playback: next useful event is not a voice message
+                            }
 
-                            const isRightType = isVoiceMessage(event);
                             const havePlayback = this.playbacks.has(event.getId());
                             const isRecentlyCompleted = this.recentFullPlays.has(event.getId());
-                            if (isRightType && havePlayback && !isRecentlyCompleted) {
+                            if (havePlayback && !isRecentlyCompleted) {
                                 nextEv = event;
                                 break;
                             }
