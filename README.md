@@ -401,6 +401,6 @@ For a developer guide, see the [translating dev doc](docs/translating-dev.md).
 Triaging issues
 ===============
 
-Issues are triaged by community members and the Web App Team, following the [triage process](https://github.com/vector-im/element-web/wiki/Triage-process).
+Issues are triaged by community members and the Web App Team, following the [triage process](https://github.com/vector-im/element-meta/wiki/Triage-process).
 
-We use [issue labels](https://github.com/vector-im/element-web/wiki/Issue-labelling) to sort all incoming issues.
+We use [issue labels](https://github.com/vector-im/element-meta/wiki/Issue-labelling) to sort all incoming issues.
