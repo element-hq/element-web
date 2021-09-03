@@ -7765,7 +7765,7 @@ matrix-react-test-utils@^0.2.3:
     "@babel/traverse" "^7.13.17"
     walk "^2.3.14"
 
-matrix-widget-api@^0.1.0-beta.15, matrix-widget-api@^0.1.0-beta.16:
+matrix-widget-api@^0.1.0-beta.16:
   version "0.1.0-beta.16"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.16.tgz#32655f05cab48239b97fe4111a1d0858f2aad61a"
   integrity sha512-9zqaNLaM14YDHfFb7WGSUOivGOjYw+w5Su84ZfOl6A4IUy1xT9QPp0nsSA8wNfz0LpxOIPn3nuoF8Tn/40F5tg==
