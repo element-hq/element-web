@@ -3634,5 +3634,9 @@
     "Multiple integration managers (requires manual setup)": "Varios gestores de integración (hay que configurarlos manualmente)",
     "Threaded messaging": "Mensajes en hilos",
     "Show threads": "Ver hilos",
-    "Thread": "Hilo"
+    "Thread": "Hilo",
+    "The above, but in any room you are joined or invited to as well": "Lo de arriba, pero en cualquier sala en la que estés o te inviten",
+    "The above, but in <Room /> as well": "Lo de arriba, pero también en <Room />",
+    "Autoplay videos": "Reproducir automáticamente los vídeos",
+    "Autoplay GIFs": "Reproducir automáticamente los GIFs"
 }
