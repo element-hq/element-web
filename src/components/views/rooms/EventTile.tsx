@@ -243,6 +243,7 @@ interface IProps {
     // opaque readreceipt info for each userId; used by ReadReceiptMarker
     // to manage its animations. Should be an empty object when the room
     // first loads
+    // TODO: Proper typing for RR info
     readReceiptMap?: any;
 
     // A function which is used to check if the parent panel is being

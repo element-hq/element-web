@@ -19,7 +19,7 @@ import React, { ReactHTML } from 'react';
 import { Key } from '../../../Keyboard';
 import classnames from 'classnames';
 
-export type ButtonEvent = React.MouseEvent<Element> | React.KeyboardEvent<Element>;
+export type ButtonEvent = React.MouseEvent<Element> | React.KeyboardEvent<Element> | React.FormEvent<Element>;
 
 /**
  * children: React's magic prop. Represents all children given to the element.
@@ -39,7 +39,7 @@ interface IProps extends React.InputHTMLAttributes<Element> {
     tabIndex?: number;
     disabled?: boolean;
     className?: string;
-    onClick(e?: ButtonEvent): void;
+    onClick(e?: ButtonEvent): void | Promise<void>;
 }
 
 interface IAccessibleButtonProps extends React.InputHTMLAttributes<Element> {
