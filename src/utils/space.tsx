@@ -162,7 +162,9 @@ export const leaveSpace = (space: Room) => {
             if (!leave) return;
             const modal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
             try {
-                await Promise.all(rooms.map(r => leaveRoomBehaviour(r.roomId)));
+                for (const room of rooms) {
+                    await leaveRoomBehaviour(room.roomId);
+                }
                 await leaveRoomBehaviour(space.roomId);
             } finally {
                 modal.close();
