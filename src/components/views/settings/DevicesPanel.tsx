@@ -35,13 +35,21 @@ interface IProps {
 interface IState {
     devices: IMyDevice[];
     deviceLoadError?: string;
-    selectedDevices?: string[];
+    selectedDevices: string[];
     deleting?: boolean;
 }
 
 @replaceableComponent("views.settings.DevicesPanel")
 export default class DevicesPanel extends React.Component<IProps, IState> {
     private unmounted = false;
+
+    constructor(props: IProps) {
+        super(props);
+        this.state = {
+            devices: [],
+            selectedDevices: [],
+        };
+    }
 
     public componentDidMount(): void {
         this.loadDevices();
