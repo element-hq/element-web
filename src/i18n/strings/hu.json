@@ -3683,5 +3683,8 @@
     "To avoid these issues, create a <a>new encrypted room</a> for the conversation you plan to have.": "Az ehhez hasonló problémák elkerüléséhez készítsen <a>új titkosított szobát</a> a tervezett beszélgetésekhez.",
     "<b>It's not recommended to add encryption to public rooms.</b>Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Nyilvános szobához nem javasolt a titkosítás beállítása.</b>Bárki megtalálhatja és csatlakozhat nyilvános szobákhoz, így bárki elolvashatja az üzeneteket bennük. A titkosítás előnyeit így nem jelentkeznek és később ezt nem lehet kikapcsolni. Nyilvános szobákban a titkosított üzenetek az üzenetküldést és fogadást csak lassítják.",
     "Low bandwidth mode (requires compatible homeserver)": "Alacsony sávszélesség mód (kompatibilis matrix szervert igényel)",
-    "Multiple integration managers (requires manual setup)": "Több integrációs menedzser (kézi beállítást igényel)"
+    "Multiple integration managers (requires manual setup)": "Több integrációs menedzser (kézi beállítást igényel)",
+    "Autoplay videos": "Videók automatikus lejátszása",
+    "Autoplay GIFs": "GIF-ek automatikus lejátszása",
+    "The above, but in <Room /> as well": "A felül lévő, de ebben a szobában is: <Room />"
 }
