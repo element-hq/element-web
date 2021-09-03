@@ -270,8 +270,10 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             ? StaticNotificationState.forSymbol("!", NotificationColor.Red)
             : SpaceStore.instance.getNotificationState(space.roomId);
 
+        const hasChildren = this.state.childSpaces?.length;
+
         let childItems;
-        if (this.state.childSpaces?.length && !collapsed) {
+        if (hasChildren && !collapsed) {
             childItems = <SpaceTreeLevel
                 spaces={this.state.childSpaces}
                 activeSpaces={activeSpaces}
@@ -280,7 +282,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             />;
         }
 
-        const toggleCollapseButton = this.state.childSpaces?.length ?
+        const toggleCollapseButton = hasChildren ?
             <AccessibleButton
                 className="mx_SpaceButton_toggleCollapse"
                 onClick={this.toggleCollapse}
@@ -289,7 +291,13 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             /> : null;
 
         return (
-            <li {...otherProps} className={itemClasses} ref={innerRef} aria-expanded={!collapsed} role="treeitem">
+            <li
+                {...otherProps}
+                className={itemClasses}
+                ref={innerRef}
+                aria-expanded={hasChildren ? !collapsed : undefined}
+                role="treeitem"
+            >
                 <SpaceButton
                     space={space}
                     className={isInvite ? "mx_SpaceButton_invite" : undefined}
