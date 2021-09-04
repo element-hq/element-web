@@ -34,7 +34,7 @@ interface IProps {
 }
 
 interface IState {
-    icon: Phase;
+    icon: string;
 }
 
 @replaceableComponent("views.dialogs.security.SetupEncryptionDialog")
