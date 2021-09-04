@@ -3588,5 +3588,9 @@
     "The above, but in <Room /> as well": "以上，但也包括 <Room />",
     "The above, but in any room you are joined or invited to as well": "以上，但也包括您加入或被邀请加入的任何房间中",
     "Autoplay videos": "自动播放视频",
-    "Autoplay GIFs": "自动播放 GIF"
+    "Autoplay GIFs": "自动播放 GIF",
+    "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s从此聊天室中取消固定了一条消息。查看所有固定消息。",
+    "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s 从此聊天室中取消固定了<a>一条消息</a>。查看所有<b>固定消息</b>。",
+    "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s将一条消息固定到此聊天室。查看所有固定信息。",
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s 将<a>一条消息</a>固定到此聊天室。查看所有<b>固定消息</b>。"
 }
