@@ -3684,5 +3684,11 @@
     "Multiple integration managers (requires manual setup)": "Përgjegjës të shumtë integrimi (lyp ujdisje dorazi)",
     "Threaded messaging": "Mesazhe me rrjedha",
     "The above, but in <Room /> as well": "Atë më sipër, por edhe te <Room />",
-    "The above, but in any room you are joined or invited to as well": "Atë më sipër, por edhe në çfarëdo dhome ku keni hyrë ose jeni ftuar"
+    "The above, but in any room you are joined or invited to as well": "Atë më sipër, por edhe në çfarëdo dhome ku keni hyrë ose jeni ftuar",
+    "Autoplay videos": "Vetëluaji videot",
+    "Autoplay GIFs": "Vetëluaji GIF-et",
+    "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s hoqi fiksimin e një mesazhi nga kjo dhomë. Shihni krejt mesazhet e fiksuar.",
+    "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s hoqi fiksimin e <a>një mesazhi</a> nga kjo dhomë. Shihni krejt <b>mesazhet e fiksuar</b>.",
+    "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s fiksoi një mesazh te kjo dhomë. Shihni krejt mesazhet e fiksuar.",
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s fiksoi <a>një mesazh</a> te kjo dhomë. Shini krejt <b>mesazhet e fiksuar</b>."
 }
