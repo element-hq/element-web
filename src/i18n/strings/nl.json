@@ -3584,5 +3584,9 @@
     "The above, but in <Room /> as well": "Het bovenstaande, maar ook in <Room />",
     "The above, but in any room you are joined or invited to as well": "Het bovenstaande, maar in elke kamer waar u aan deelneemt en voor uitgenodigd bent",
     "Autoplay videos": "Videos automatisch afspelen",
-    "Autoplay GIFs": "GIF's automatisch afspelen"
+    "Autoplay GIFs": "GIF's automatisch afspelen",
+    "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s maakte een vastgeprikt bericht los van deze kamer. Bekijk alle vastgeprikte berichten.",
+    "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s maakte <a>een vastgeprikt bericht</a> los van deze kamer. Bekijk alle <b>vastgeprikte berichten</b>.",
+    "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s prikte een bericht vast aan deze kamer. Bekijk alle vastgeprikte berichten.",
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s prikte <a>een bericht</a> aan deze kamer. Bekijk alle <b>vastgeprikte berichten</b>."
 }
