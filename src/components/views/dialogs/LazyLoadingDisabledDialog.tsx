@@ -20,7 +20,12 @@ import QuestionDialog from './QuestionDialog';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 
-export default (props) => {
+interface IProps {
+    onFinished: () => void;
+    host: string;
+}
+
+const LazyLoadingDisabledDialog: React.FC<IProps> = (props: IProps) => {
     const brand = SdkConfig.get().brand;
     const description1 = _t(
         "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. " +
@@ -49,3 +54,5 @@ export default (props) => {
         onFinished={props.onFinished}
     />);
 };
+
+export default LazyLoadingDisabledDialog;
