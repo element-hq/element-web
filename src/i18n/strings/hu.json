@@ -3444,7 +3444,7 @@
     "Move down": "Mozgatás le",
     "Move up": "Mozgatás fel",
     "Report": "Jelentés",
-    "Collapse reply thread": "Beszélgetés szál becsukása",
+    "Collapse reply thread": "Üzenetszál becsukása",
     "Show preview": "Előnézet megjelenítése",
     "View source": "Forrás megtekintése",
     "Forward": "Továbbítás",
@@ -3687,8 +3687,12 @@
     "Autoplay videos": "Videók automatikus lejátszása",
     "Autoplay GIFs": "GIF-ek automatikus lejátszása",
     "The above, but in <Room /> as well": "A felül lévő, de ebben a szobában is: <Room />",
-    "Show threads": "Témaszálak megjelenítése",
-    "Threaded messaging": "Témaszálas beszélgetés",
+    "Show threads": "Üzenetszálak megjelenítése",
+    "Threaded messaging": "Üzenetszálas beszélgetés",
     "The above, but in any room you are joined or invited to as well": "Ami felette van, de minden szobában amibe belépett vagy meghívták",
-    "Thread": "Téma"
+    "Thread": "Üzenetszál",
+    "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s levett egy kitűzött üzenetet ebből a szobában. Minden kitűzött üzenet megjelenítése.",
+    "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s levett egy kitűzött <a>üzenetet</a> ebből a szobában. Minden <b>kitűzött üzenet</b> megjelenítése.",
+    "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s kitűzött egy üzenetet ebben a szobában. Minden kitűzött üzenet megjelenítése.",
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s kitűzött <a>egy üzenetet</a> ebben a szobában. Minden <b>kitűzött üzenet</b> megjelenítése."
 }
