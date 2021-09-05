@@ -15,23 +15,23 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import * as sdk from "../../../index";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-@replaceableComponent("views.dialogs.IntegrationsImpossibleDialog")
-export default class IntegrationsImpossibleDialog extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-    };
+interface IProps {
+    onFinished: () => void;
 
-    _onAcknowledgeClick = () => {
+}
+
+@replaceableComponent("views.dialogs.IntegrationsImpossibleDialog")
+export default class IntegrationsImpossibleDialog extends React.Component<IProps> {
+    private onAcknowledgeClick = (): void => {
         this.props.onFinished();
     };
 
-    render() {
+    public render(): JSX.Element {
         const brand = SdkConfig.get().brand;
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
@@ -54,7 +54,7 @@ export default class IntegrationsImpossibleDialog extends React.Component {
                 </div>
                 <DialogButtons
                     primaryButton={_t("OK")}
-                    onPrimaryButtonClick={this._onAcknowledgeClick}
+                    onPrimaryButtonClick={this.onAcknowledgeClick}
                     hasCancel={false}
                 />
             </BaseDialog>
