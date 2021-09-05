@@ -15,21 +15,37 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from '../../../languageHandler';
-import * as sdk from "../../../index";
 import { wantsDateSeparator } from '../../../DateUtils';
 import SettingsStore from '../../../settings/SettingsStore';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import BaseDialog from "./BaseDialog";
+import ScrollPanel from "../../structures/ScrollPanel";
+import Spinner from "../elements/Spinner";
+import EditHistoryMessage from "../messages/EditHistoryMessage";
+import DateSeparator from "../messages/DateSeparator";
+
+interface IProps {
+    mxEvent: MatrixEvent;
+    onFinished: () => void;
+}
+
+interface IState {
+    originalEvent: MatrixEvent;
+    error: {
+        errcode: string;
+    };
+    events: MatrixEvent[];
+    nextBatch: string;
+    isLoading: boolean;
+    isTwelveHour: boolean;
+}
 
 @replaceableComponent("views.dialogs.MessageEditHistoryDialog")
-export default class MessageEditHistoryDialog extends React.PureComponent {
-    static propTypes = {
-        mxEvent: PropTypes.object.isRequired,
-    };
-
-    constructor(props) {
+export default class MessageEditHistoryDialog extends React.PureComponent<IProps, IState> {
+    constructor(props: IProps) {
         super(props);
         this.state = {
             originalEvent: null,
@@ -41,7 +57,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
         };
     }
 
-    loadMoreEdits = async (backwards) => {
+    private loadMoreEdits = async (backwards?: boolean): Promise<boolean> => {
         if (backwards || (!this.state.nextBatch && !this.state.isLoading)) {
             // bail out on backwards as we only paginate in one direction
             return false;
@@ -53,7 +69,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
         let result;
         let resolve;
         let reject;
-        const promise = new Promise((_resolve, _reject) => {resolve = _resolve; reject = _reject;});
+        const promise = new Promise<boolean>((_resolve, _reject) => {resolve = _resolve; reject = _reject;});
         try {
             result = await client.relations(
                 roomId, eventId, "m.replace", "m.room.message", opts);
@@ -67,7 +83,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
         }
 
         const newEvents = result.events;
-        this._locallyRedactEventsIfNeeded(newEvents);
+        this.locallyRedactEventsIfNeeded(newEvents);
         this.setState({
             originalEvent: this.state.originalEvent || result.originalEvent,
             events: this.state.events.concat(newEvents),
@@ -78,9 +94,9 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
             resolve(hasMoreResults);
         });
         return promise;
-    }
+    };
 
-    _locallyRedactEventsIfNeeded(newEvents) {
+    private locallyRedactEventsIfNeeded(newEvents: MatrixEvent[]): void {
         const roomId = this.props.mxEvent.getRoomId();
         const client = MatrixClientPeg.get();
         const room = client.getRoom(roomId);
@@ -95,13 +111,11 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
         }
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         this.loadMoreEdits();
     }
 
-    _renderEdits() {
-        const EditHistoryMessage = sdk.getComponent('messages.EditHistoryMessage');
-        const DateSeparator = sdk.getComponent('messages.DateSeparator');
+    private renderEdits(): JSX.Element[] {
         const nodes = [];
         let lastEvent;
         let allEvents = this.state.events;
@@ -128,7 +142,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
         return nodes;
     }
 
-    render() {
+    public render(): JSX.Element {
         let content;
         if (this.state.error) {
             const { error } = this.state;
@@ -149,20 +163,17 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
                 </p>);
             }
         } else if (this.state.isLoading) {
-            const Spinner = sdk.getComponent("elements.Spinner");
             content = <Spinner />;
         } else {
-            const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
             content = (<ScrollPanel
                 className="mx_MessageEditHistoryDialog_scrollPanel"
                 onFillRequest={this.loadMoreEdits}
                 stickyBottom={false}
                 startAtBottom={false}
             >
-                <ul className="mx_MessageEditHistoryDialog_edits">{ this._renderEdits() }</ul>
+                <ul className="mx_MessageEditHistoryDialog_edits">{ this.renderEdits() }</ul>
             </ScrollPanel>);
         }
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog
                 className='mx_MessageEditHistoryDialog'
