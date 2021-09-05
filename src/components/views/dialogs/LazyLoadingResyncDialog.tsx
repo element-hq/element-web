@@ -20,7 +20,11 @@ import QuestionDialog from './QuestionDialog';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 
-export default (props) => {
+interface IProps {
+    onFinished: () => void;
+}
+
+const LazyLoadingResyncDialog: React.FC<IProps> = (props: IProps) => {
     const brand = SdkConfig.get().brand;
     const description =
         _t(
@@ -38,3 +42,5 @@ export default (props) => {
         onFinished={props.onFinished}
     />);
 };
+
+export default LazyLoadingResyncDialog;
