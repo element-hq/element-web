@@ -3618,5 +3618,7 @@
     "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s odepnul zprávu z této místnosti. Zobrazit všechny připnuté zprávy.",
     "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s odepnul <a>zprávu</a> z této místnosti. Zobrazit všechny <b>připnuté zprávy</b>.",
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s připnul zprávu k této místnosti. Zobrazit všechny připnuté zprávy.",
-    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s připnul <a>zprávu</a> k této místnosti. Zobrazit všechny <b>připnuté zprávy</b>."
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s připnul <a>zprávu</a> k této místnosti. Zobrazit všechny <b>připnuté zprávy</b>.",
+    "Currently, %(count)s spaces have access|one": "V současné době má prostor přístup",
+    "& %(count)s more|one": "a %(count)s další"
 }
