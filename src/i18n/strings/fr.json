@@ -3672,5 +3672,11 @@
     "Multiple integration managers (requires manual setup)": "Multiple gestionnaires d’intégration (nécessite un réglage manuel)",
     "Threaded messaging": "Fils de discussion",
     "The above, but in <Room /> as well": "Comme ci-dessus, mais également dans <Room />",
-    "The above, but in any room you are joined or invited to as well": "Comme ci-dessus, mais également dans tous les salons dans lesquels vous avez été invité ou que vous avez rejoint"
+    "The above, but in any room you are joined or invited to as well": "Comme ci-dessus, mais également dans tous les salons dans lesquels vous avez été invité ou que vous avez rejoint",
+    "Currently, %(count)s spaces have access|one": "Actuellement, un espace a accès",
+    "& %(count)s more|one": "& %(count)s autres",
+    "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s a désépinglé un message de ce salon. Voir tous les messages épinglés.",
+    "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s a désépinglé <a>un message</a> de ce salon. Voir tous les <b>messages épinglés</b>.",
+    "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s a épinglé un message dans ce salon. Voir tous les messages épinglés.",
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s a épinglé <a>un message</a> dans ce salon. Voir tous les <b>messages épinglés</b>."
 }
