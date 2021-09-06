@@ -44,7 +44,7 @@ limitations under the License.
 
         > h3 {
             margin: 0;
-            color: $secondary-fg-color;
+            color: $secondary-content;
             font-size: $font-12px;
             font-weight: $font-semi-bold;
             line-height: $font-15px;
@@ -66,7 +66,7 @@ limitations under the License.
             flex-grow: 1;
             font-size: $font-12px;
             line-height: $font-15px;
-            color: $secondary-fg-color;
+            color: $secondary-content;
 
             .mx_ProgressBar {
                 height: 8px;
@@ -79,7 +79,7 @@ limitations under the License.
                 margin-top: 8px;
                 font-size: $font-15px;
                 line-height: $font-24px;
-                color: $primary-fg-color;
+                color: $primary-content;
             }
 
             > * {
@@ -105,7 +105,7 @@ limitations under the License.
                 margin-top: 4px;
                 font-size: $font-12px;
                 line-height: $font-15px;
-                color: $primary-fg-color;
+                color: $primary-content;
             }
         }
 
@@ -126,7 +126,7 @@ limitations under the License.
             &::before {
                 content: '';
                 position: absolute;
-                background-color: $primary-fg-color;
+                background-color: $primary-content;
                 mask-repeat: no-repeat;
                 mask-position: center;
                 mask-size: contain;
@@ -145,7 +145,7 @@ limitations under the License.
 
 .mx_AddExistingToSpaceDialog {
     width: 480px;
-    color: $primary-fg-color;
+    color: $primary-content;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -188,7 +188,7 @@ limitations under the License.
             padding-left: 0;
             flex: unset;
             height: unset;
-            color: $secondary-fg-color;
+            color: $secondary-content;
             font-size: $font-15px;
             line-height: $font-24px;
 
@@ -221,7 +221,7 @@ limitations under the License.
     }
 
     .mx_SubspaceSelector_onlySpace {
-        color: $secondary-fg-color;
+        color: $secondary-content;
         font-size: $font-15px;
         line-height: $font-24px;
     }

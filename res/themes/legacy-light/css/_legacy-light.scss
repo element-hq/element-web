@@ -13,7 +13,7 @@ $font-family: 'Nunito', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Arial
 $monospace-font-family: 'Inconsolata', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Courier', monospace, 'Noto Color Emoji';
 
 // Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=557%3A0
-$system-light: #F4F6FA;
+$system: #F4F6FA;
 
 // unified palette
 // try to use these colors when possible
@@ -32,7 +32,12 @@ $primary-bg-color: #ffffff;
 $muted-fg-color: #61708b; // Commonly used in headings and relevant alt text
 
 // Legacy theme backports
-$quaternary-fg-color: #C1C6CD;
+$primary-content: $primary-fg-color;
+$secondary-content: $secondary-fg-color;
+$tertiary-content: $tertiary-fg-color;
+$quaternary-content: #C1C6CD;
+$quinary-content: #e3e8f0;
+$background: $primary-bg-color;
 
 // used for dialog box text
 $light-fg-color: #747474;
@@ -181,14 +186,11 @@ $eventtile-meta-color: $roomtopic-color;
 $composer-e2e-icon-color: #91a1c0;
 $header-divider-color: #91a1c0;
 
-$toast-bg-color: $system-light;
-$voipcall-plinth-color: $system-light;
+$voipcall-plinth-color: $system;
 
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
-$dialpad-button-bg-color: #e3e8f0;
-
 
 $roomlist-button-bg-color: #fff; // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-filter-active-bg-color: $roomlist-button-bg-color;
@@ -334,7 +336,7 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 $message-body-panel-fg-color: $secondary-fg-color;
 $message-body-panel-bg-color: #E3E8F0;
 $message-body-panel-icon-fg-color: $secondary-fg-color;
-$message-body-panel-icon-bg-color: $system-light;
+$message-body-panel-icon-bg-color: $system;
 
 // See non-legacy _light for variable information
 $voice-record-stop-symbol-color: #ff4b55;
@@ -352,7 +354,7 @@ $composer-shadow-color: tranparent;
 
 // Bubble tiles
 $eventbubble-self-bg: #F0FBF8;
-$eventbubble-others-bg: $system-light;
+$eventbubble-others-bg: $system;
 $eventbubble-bg-hover: #FAFBFD;
 $eventbubble-avatar-outline: #fff;
 $eventbubble-reply-color: #C1C6CD;

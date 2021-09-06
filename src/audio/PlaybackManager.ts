@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { DEFAULT_WAVEFORM, Playback } from "./Playback";
+import { DEFAULT_WAVEFORM, Playback, PlaybackState } from "./Playback";
 import { ManagedPlayback } from "./ManagedPlayback";
 
 /**
@@ -34,12 +34,14 @@ export class PlaybackManager {
     }
 
     /**
-     * Stops all other playback instances. If no playback is provided, all instances
-     * are stopped.
+     * Pauses all other playback instances. If no playback is provided, all playing
+     * instances are paused.
      * @param playback Optional. The playback to leave untouched.
      */
-    public playOnly(playback?: Playback) {
-        this.instances.filter(p => p !== playback).forEach(p => p.stop());
+    public pauseAllExcept(playback?: Playback) {
+        this.instances
+            .filter(p => p !== playback && p.currentState === PlaybackState.Playing)
+            .forEach(p => p.pause());
     }
 
     public destroyPlaybackInstance(playback: ManagedPlayback) {

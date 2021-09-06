@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { RefObject, useContext, useRef, useState } from "react";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { Preset, JoinRule } from "matrix-js-sdk/src/@types/partials";
+import { JoinRule, Preset } from "matrix-js-sdk/src/@types/partials";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventSubscription } from "fbemitter";
 
@@ -54,7 +54,7 @@ import {
     showCreateNewSubspace,
     showSpaceSettings,
 } from "../../utils/space";
-import { showRoom, SpaceHierarchy } from "./SpaceRoomDirectory";
+import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
 import MemberAvatar from "../views/avatars/MemberAvatar";
 import SpaceStore from "../../stores/SpaceStore";
 import FacePile from "../views/elements/FacePile";
@@ -492,6 +492,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
             onChange={ev => setRoomName(i, ev.target.value)}
             autoFocus={i === 2}
             disabled={busy}
+            autoComplete="off"
         />;
     });
 
@@ -501,11 +502,12 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
         setError("");
         setBusy(true);
         try {
+            const isPublic = space.getJoinRule() === JoinRule.Public;
             const filteredRoomNames = roomNames.map(name => name.trim()).filter(Boolean);
             await Promise.all(filteredRoomNames.map(name => {
                 return createRoom({
                     createOpts: {
-                        preset: space.getJoinRule() === "public" ? Preset.PublicChat : Preset.PrivateChat,
+                        preset: isPublic ? Preset.PublicChat : Preset.PrivateChat,
                         name,
                     },
                     spinner: false,
@@ -513,6 +515,8 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
                     andView: false,
                     inlineErrors: true,
                     parentSpace: space,
+                    joinRule: !isPublic ? JoinRule.Restricted : undefined,
+                    suggested: true,
                 });
             }));
             onFinished(filteredRoomNames.length > 0);
@@ -801,6 +805,11 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     };
 
     private onAction = (payload: ActionPayload) => {
+        if (payload.action === "view_room" && payload.room_id === this.props.space.roomId) {
+            this.setState({ phase: Phase.Landing });
+            return;
+        }
+
         if (payload.action !== Action.ViewUser && payload.action !== "view_3pid_invite") return;
 
         if (payload.action === Action.ViewUser && payload.member) {

@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,53 +15,55 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
 import { Key } from "../../../Keyboard";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { ActionPayload } from '../../../dispatcher/payloads';
+import Spinner from "../elements/Spinner";
+
+interface IProps {
+    // false to display an error saying that we couldn't connect to the integration manager
+    connected: boolean;
+
+    // true to display a loading spinner
+    loading: boolean;
+
+    // The source URL to load
+    url?: string;
+
+    // callback when the manager is dismissed
+    onFinished: () => void;
+}
+
+interface IState {
+    errored: boolean;
+}
 
 @replaceableComponent("views.settings.IntegrationManager")
-export default class IntegrationManager extends React.Component {
-    static propTypes = {
-        // false to display an error saying that we couldn't connect to the integration manager
-        connected: PropTypes.bool.isRequired,
+export default class IntegrationManager extends React.Component<IProps, IState> {
+    private dispatcherRef: string;
 
-        // true to display a loading spinner
-        loading: PropTypes.bool.isRequired,
-
-        // The source URL to load
-        url: PropTypes.string,
-
-        // callback when the manager is dismissed
-        onFinished: PropTypes.func.isRequired,
-    };
-
-    static defaultProps = {
+    public static defaultProps = {
         connected: true,
         loading: false,
     };
 
-    constructor(props) {
-        super(props);
+    public state = {
+        errored: false,
+    };
 
-        this.state = {
-            errored: false,
-        };
-    }
-
-    componentDidMount() {
+    public componentDidMount(): void {
         this.dispatcherRef = dis.register(this.onAction);
         document.addEventListener("keydown", this.onKeyDown);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         dis.unregister(this.dispatcherRef);
         document.removeEventListener("keydown", this.onKeyDown);
     }
 
-    onKeyDown = (ev) => {
+    private onKeyDown = (ev: KeyboardEvent): void => {
         if (ev.key === Key.ESCAPE) {
             ev.stopPropagation();
             ev.preventDefault();
@@ -70,19 +71,18 @@ export default class IntegrationManager extends React.Component {
         }
     };
 
-    onAction = (payload) => {
+    private onAction = (payload: ActionPayload): void => {
         if (payload.action === 'close_scalar') {
             this.props.onFinished();
         }
     };
 
-    onError = () => {
+    private onError = (): void => {
         this.setState({ errored: true });
     };
 
-    render() {
+    public render(): JSX.Element {
         if (this.props.loading) {
-            const Spinner = sdk.getComponent("elements.Spinner");
             return (
                 <div className='mx_IntegrationManager_loading'>
                     <h3>{ _t("Connecting to integration manager...") }</h3>

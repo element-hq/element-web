@@ -30,13 +30,20 @@ limitations under the License.
             font-size: $font-15px;
             line-height: $font-18px;
 
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
             margin-top: 2px;
+            margin-right: 6px;
+
+            max-width: 200px;
         }
 
         .mx_CallEvent_type {
             font-size: $font-12px;
             line-height: $font-15px;
-            color: $tertiary-fg-color;
+            color: $tertiary-content;
 
             margin-top: 4px;
             margin-bottom: 6px;
@@ -55,7 +62,7 @@ limitations under the License.
                     position: absolute;
                     height: inherit;
                     width: inherit;
-                    background-color: $tertiary-fg-color;
+                    background-color: $tertiary-content;
                     mask-repeat: no-repeat;
                     mask-size: contain;
                 }
@@ -132,7 +139,7 @@ limitations under the License.
 
             height: inherit;
             width: inherit;
-            background-color: $tertiary-fg-color;
+            background-color: $tertiary-content;
             mask-repeat: no-repeat;
             mask-size: contain;
             mask-position: center;

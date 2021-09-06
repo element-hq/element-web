@@ -25,7 +25,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import Autocompleter from '../../../autocomplete/Autocompleter';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-const COMPOSER_SELECTED = 0;
 const MAX_PROVIDER_MATCHES = 20;
 
 export const generateCompletionDomId = (number) => `mx_Autocomplete_Completion_${number}`;
@@ -34,9 +33,9 @@ interface IProps {
     // the query string for which to show autocomplete suggestions
     query: string;
     // method invoked with range and text content when completion is confirmed
-    onConfirm: (ICompletion) => void;
+    onConfirm: (completion: ICompletion) => void;
     // method invoked when selected (if any) completion changes
-    onSelectionChange?: (ICompletion, number) => void;
+    onSelectionChange?: (partIndex: number) => void;
     selection: ISelectionRange;
     // The room in which we're autocompleting
     room: Room;
@@ -71,7 +70,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
             completionList: [],
 
             // how far down the completion list we are (THIS IS 1-INDEXED!)
-            selectionOffset: COMPOSER_SELECTED,
+            selectionOffset: 1,
 
             // whether we should show completions if they're available
             shouldShowCompletions: true,
@@ -86,7 +85,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this.applyNewProps();
     }
 
-    private applyNewProps(oldQuery?: string, oldRoom?: Room) {
+    private applyNewProps(oldQuery?: string, oldRoom?: Room): void {
         if (oldRoom && this.props.room.roomId !== oldRoom.roomId) {
             this.autocompleter.destroy();
             this.autocompleter = new Autocompleter(this.props.room);
@@ -104,7 +103,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this.autocompleter.destroy();
     }
 
-    complete(query: string, selection: ISelectionRange) {
+    private complete(query: string, selection: ISelectionRange): Promise<void> {
         this.queryRequested = query;
         if (this.debounceCompletionsRequest) {
             clearTimeout(this.debounceCompletionsRequest);
@@ -115,7 +114,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
                 completions: [],
                 completionList: [],
                 // Reset selected completion
-                selectionOffset: COMPOSER_SELECTED,
+                selectionOffset: 1,
                 // Hide the autocomplete box
                 hide: true,
             });
@@ -135,7 +134,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         });
     }
 
-    processQuery(query: string, selection: ISelectionRange) {
+    private processQuery(query: string, selection: ISelectionRange): Promise<void> {
         return this.autocompleter.getCompletions(
             query, selection, this.state.forceComplete, MAX_PROVIDER_MATCHES,
         ).then((completions) => {
@@ -147,30 +146,35 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         });
     }
 
-    processCompletions(completions: IProviderCompletions[]) {
+    private processCompletions(completions: IProviderCompletions[]): void {
         const completionList = flatMap(completions, (provider) => provider.completions);
 
         // Reset selection when completion list becomes empty.
-        let selectionOffset = COMPOSER_SELECTED;
+        let selectionOffset = 1;
         if (completionList.length > 0) {
             /* If the currently selected completion is still in the completion list,
              try to find it and jump to it. If not, select composer.
              */
-            const currentSelection = this.state.selectionOffset === 0 ? null :
+            const currentSelection = this.state.selectionOffset <= 1 ? null :
                 this.state.completionList[this.state.selectionOffset - 1].completion;
             selectionOffset = completionList.findIndex(
                 (completion) => completion.completion === currentSelection);
             if (selectionOffset === -1) {
-                selectionOffset = COMPOSER_SELECTED;
+                selectionOffset = 1;
             } else {
                 selectionOffset++; // selectionOffset is 1-indexed!
             }
         }
 
-        let hide = this.state.hide;
+        let hide = true;
         // If `completion.command.command` is truthy, then a provider has matched with the query
         const anyMatches = completions.some((completion) => !!completion.command.command);
-        hide = !anyMatches;
+        if (anyMatches) {
+            hide = false;
+            if (this.props.onSelectionChange) {
+                this.props.onSelectionChange(selectionOffset - 1);
+            }
+        }
 
         this.setState({
             completions,
@@ -182,25 +186,25 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         });
     }
 
-    hasSelection(): boolean {
+    public hasSelection(): boolean {
         return this.countCompletions() > 0 && this.state.selectionOffset !== 0;
     }
 
-    countCompletions(): number {
+    public countCompletions(): number {
         return this.state.completionList.length;
     }
 
     // called from MessageComposerInput
-    moveSelection(delta: number) {
+    public moveSelection(delta: number): void {
         const completionCount = this.countCompletions();
         if (completionCount === 0) return; // there are no items to move the selection through
 
         // Note: selectionOffset 0 represents the unsubstituted text, while 1 means first pill selected
-        const index = (this.state.selectionOffset + delta + completionCount + 1) % (completionCount + 1);
-        this.setSelection(index);
+        const index = (this.state.selectionOffset + delta + completionCount - 1) % completionCount;
+        this.setSelection(1 + index);
     }
 
-    onEscape(e: KeyboardEvent): boolean {
+    public onEscape(e: KeyboardEvent): boolean {
         const completionCount = this.countCompletions();
         if (completionCount === 0) {
             // autocomplete is already empty, so don't preventDefault
@@ -213,16 +217,16 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this.hide();
     }
 
-    hide = () => {
+    private hide = (): void => {
         this.setState({
             hide: true,
-            selectionOffset: 0,
+            selectionOffset: 1,
             completions: [],
             completionList: [],
         });
     };
 
-    forceComplete() {
+    public forceComplete(): Promise<number> {
         return new Promise((resolve) => {
             this.setState({
                 forceComplete: true,
@@ -235,8 +239,13 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         });
     }
 
-    onCompletionClicked = (selectionOffset: number): boolean => {
-        if (this.countCompletions() === 0 || selectionOffset === COMPOSER_SELECTED) {
+    public onConfirmCompletion = (): void => {
+        this.onCompletionClicked(this.state.selectionOffset);
+    };
+
+    private onCompletionClicked = (selectionOffset: number): boolean => {
+        const count = this.countCompletions();
+        if (count === 0 || selectionOffset < 1 || selectionOffset > count) {
             return false;
         }
 
@@ -246,10 +255,10 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         return true;
     };
 
-    setSelection(selectionOffset: number) {
+    private setSelection(selectionOffset: number): void {
         this.setState({ selectionOffset, hide: false });
         if (this.props.onSelectionChange) {
-            this.props.onSelectionChange(this.state.completionList[selectionOffset - 1], selectionOffset - 1);
+            this.props.onSelectionChange(selectionOffset - 1);
         }
     }
 
@@ -292,7 +301,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
             });
 
             return completions.length > 0 ? (
-                <div key={i} className="mx_Autocomplete_ProviderSection">
+                <div key={i} className="mx_Autocomplete_ProviderSection" role="presentation">
                     <div className="mx_Autocomplete_provider_name">{ completionResult.provider.getName() }</div>
                     { completionResult.provider.renderCompletions(completions) }
                 </div>
@@ -300,7 +309,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         }).filter((completion) => !!completion);
 
         return !this.state.hide && renderedCompletions.length > 0 ? (
-            <div className="mx_Autocomplete" ref={this.containerRef}>
+            <div id="mx_Autocomplete" className="mx_Autocomplete" ref={this.containerRef} role="listbox">
                 { renderedCompletions }
             </div>
         ) : null;

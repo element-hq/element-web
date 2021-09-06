@@ -29,11 +29,13 @@ import BaseDialog from "./BaseDialog";
 import Field from '../elements/Field';
 import Spinner from "../elements/Spinner";
 import DialogButtons from "../elements/DialogButtons";
+import { sendSentryReport } from "../../../sentry";
 
 interface IProps {
     onFinished: (success: boolean) => void;
     initialText?: string;
     label?: string;
+    error?: Error;
 }
 
 interface IState {
@@ -113,6 +115,8 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                 });
             }
         });
+
+        sendSentryReport(this.state.text, this.state.issueUrl, this.props.error);
     };
 
     private onDownload = async (): Promise<void> => {
@@ -200,8 +204,8 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                         { _t(
                             "Debug logs contain application usage data including your " +
                             "username, the IDs or aliases of the rooms or groups you " +
-                            "have visited and the usernames of other users. They do " +
-                            "not contain messages.",
+                            "have visited, which UI elements you last interacted with, " +
+                            "and the usernames of other users. They do not contain messages.",
                         ) }
                     </p>
                     <p><b>
@@ -211,7 +215,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                             {
                                 a: (sub) => <a
                                     target="_blank"
-                                    href="https://github.com/vector-im/element-web/issues/new"
+                                    href="https://github.com/vector-im/element-web/issues/new/choose"
                                 >
                                     { sub }
                                 </a>,

@@ -16,7 +16,7 @@ limitations under the License.
 
 .mx_ReplyPreview {
     border: 1px solid $primary-hairline-color;
-    background: $primary-bg-color;
+    background: $background;
     border-bottom: none;
     border-radius: 8px 8px 0 0;
     max-height: 50vh;
@@ -28,7 +28,7 @@ limitations under the License.
 
         .mx_ReplyPreview_header {
             margin: 8px;
-            color: $primary-fg-color;
+            color: $primary-content;
             font-weight: 400;
             opacity: 0.4;
         }

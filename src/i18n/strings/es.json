@@ -3585,5 +3585,17 @@
     "Stop the camera": "Parar la cámara",
     "Start the camera": "Iniciar la cámara",
     "Surround selected text when typing special characters": "Rodear texto seleccionado al escribir caracteres especiales",
-    "Send pseudonymous analytics data": "Enviar datos estadísticos seudonimizados"
+    "Send pseudonymous analytics data": "Enviar datos estadísticos seudonimizados",
+    "Created from <Community />": "Creado a partir de <Community />",
+    "Space created": "Espacio creado",
+    "This community has been upgraded into a Space": "Esta comunidad se ha convertido en un espacio",
+    "Unknown failure: %(reason)s": "Fallo desconocido: %(reason)s",
+    "Show my Communities": "Ver mis comunidades",
+    "Create Space": "Crear espacio",
+    "Open Space": "Abrir espacio",
+    "To join an existing space you'll need an invite.": "Para unirte a un espacio ya existente necesitas que te inviten a él.",
+    "You can also create a Space from a <a>community</a>.": "También puedes crear un espacio a partir de una <a>comunidad</a>.",
+    "You can change this later.": "Puedes cambiarlo más tarde.",
+    "What kind of Space do you want to create?": "¿Qué tipo de espacio quieres crear?",
+    "Don't send read receipts": "No enviar confirmaciones de lectura"
 }

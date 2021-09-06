@@ -3579,5 +3579,7 @@
     "Unable to transfer call": "Не удалось перевести звонок",
     "Olm version:": "Версия Olm:",
     "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(oneUser)s изменил(а) <a>прикреплённые сообщения</a> в комнате %(count)s раз.",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(severalUsers)s изменили <a>прикреплённые сообщения</a> в комнате %(count)s раз."
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|other": "%(severalUsers)s изменили <a>прикреплённые сообщения</a> в комнате %(count)s раз.",
+    "Delete avatar": "Удалить аватар",
+    "Don't send read receipts": "Не отправлять уведомления о прочтении"
 }

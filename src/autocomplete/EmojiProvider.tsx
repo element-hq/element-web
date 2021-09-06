@@ -67,7 +67,7 @@ export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
         super(EMOJI_REGEX);
         this.matcher = new QueryMatcher<ISortedEmoji>(SORTED_EMOJI, {
-            keys: ['emoji.emoticon'],
+            keys: [],
             funcs: [o => o.emoji.shortcodes.map(s => `:${s}:`)],
             // For matching against ascii equivalents
             shouldMatchWordsOnly: false,
@@ -91,7 +91,8 @@ export default class EmojiProvider extends AutocompleteProvider {
 
         let completions = [];
         const { command, range } = this.getCurrentCommand(query, selection);
-        if (command) {
+
+        if (command && command[0].length > 2) {
             const matchedString = command[0];
             completions = this.matcher.match(matchedString, limit);
 
@@ -139,7 +140,7 @@ export default class EmojiProvider extends AutocompleteProvider {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill"
-                role="listbox"
+                role="presentation"
                 aria-label={_t("Emoji Autocomplete")}
             >
                 { completions }

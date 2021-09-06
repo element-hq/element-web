@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { createClient } from 'matrix-js-sdk/src/matrix';
+import { createClient, IRequestTokenResponse, MatrixClient } from 'matrix-js-sdk/src/matrix';
 import { _t } from './languageHandler';
 
 /**
@@ -26,12 +26,18 @@ import { _t } from './languageHandler';
  * API on the homeserver in question with the new password.
  */
 export default class PasswordReset {
+    private client: MatrixClient;
+    private clientSecret: string;
+    private identityServerDomain: string;
+    private password: string;
+    private sessionId: string;
+
     /**
      * Configure the endpoints for password resetting.
      * @param {string} homeserverUrl The URL to the HS which has the account to reset.
      * @param {string} identityUrl The URL to the IS which has linked the email -> mxid mapping.
      */
-    constructor(homeserverUrl, identityUrl) {
+    constructor(homeserverUrl: string, identityUrl: string) {
         this.client = createClient({
             baseUrl: homeserverUrl,
             idBaseUrl: identityUrl,
@@ -47,7 +53,7 @@ export default class PasswordReset {
      * @param {string} newPassword The new password for the account.
      * @return {Promise} Resolves when the email has been sent. Then call checkEmailLinkClicked().
      */
-    resetPassword(emailAddress, newPassword) {
+    public resetPassword(emailAddress: string, newPassword: string): Promise<IRequestTokenResponse> {
         this.password = newPassword;
         return this.client.requestPasswordEmailToken(emailAddress, this.clientSecret, 1).then((res) => {
             this.sessionId = res.sid;
@@ -69,7 +75,7 @@ export default class PasswordReset {
      * with a "message" property which contains a human-readable message detailing why
      * the reset failed, e.g. "There is no mapped matrix user ID for the given email address".
      */
-    async checkEmailLinkClicked() {
+    public async checkEmailLinkClicked(): Promise<void> {
         const creds = {
             sid: this.sessionId,
             client_secret: this.clientSecret,

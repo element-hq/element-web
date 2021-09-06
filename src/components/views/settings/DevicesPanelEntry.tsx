@@ -1,5 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
+Copyright 2016 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,30 +15,28 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
+import { IMyDevice } from 'matrix-js-sdk/src/client';
 
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { formatDate } from '../../../DateUtils';
 import StyledCheckbox from '../elements/StyledCheckbox';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import EditableTextContainer from "../elements/EditableTextContainer";
+
+interface IProps {
+    device?: IMyDevice;
+    onDeviceToggled?: (device: IMyDevice) => void;
+    selected?: boolean;
+}
 
 @replaceableComponent("views.settings.DevicesPanelEntry")
-export default class DevicesPanelEntry extends React.Component {
-    constructor(props) {
-        super(props);
+export default class DevicesPanelEntry extends React.Component<IProps> {
+    public static defaultProps = {
+        onDeviceToggled: () => {},
+    };
 
-        this._unmounted = false;
-        this.onDeviceToggled = this.onDeviceToggled.bind(this);
-        this._onDisplayNameChanged = this._onDisplayNameChanged.bind(this);
-    }
-
-    componentWillUnmount() {
-        this._unmounted = true;
-    }
-
-    _onDisplayNameChanged(value) {
+    private onDisplayNameChanged = (value: string): Promise<{}> => {
         const device = this.props.device;
         return MatrixClientPeg.get().setDeviceDetails(device.device_id, {
             display_name: value,
@@ -46,15 +44,13 @@ export default class DevicesPanelEntry extends React.Component {
             console.error("Error setting session display name", e);
             throw new Error(_t("Failed to set display name"));
         });
-    }
+    };
 
-    onDeviceToggled() {
+    private onDeviceToggled = (): void => {
         this.props.onDeviceToggled(this.props.device);
-    }
+    };
 
-    render() {
-        const EditableTextContainer = sdk.getComponent('elements.EditableTextContainer');
-
+    public render(): JSX.Element {
         const device = this.props.device;
 
         let lastSeen = "";
@@ -76,7 +72,7 @@ export default class DevicesPanelEntry extends React.Component {
                 </div>
                 <div className="mx_DevicesPanel_deviceName">
                     <EditableTextContainer initialValue={device.display_name}
-                        onSubmit={this._onDisplayNameChanged}
+                        onSubmit={this.onDisplayNameChanged}
                         placeholder={device.device_id}
                     />
                 </div>
@@ -90,12 +86,3 @@ export default class DevicesPanelEntry extends React.Component {
         );
     }
 }
-
-DevicesPanelEntry.propTypes = {
-    device: PropTypes.object.isRequired,
-    onDeviceToggled: PropTypes.func,
-};
-
-DevicesPanelEntry.defaultProps = {
-    onDeviceToggled: function() {},
-};

@@ -268,7 +268,8 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                             "If you've submitted a bug via GitHub, debug logs can help " +
                             "us track down the problem. Debug logs contain application " +
                             "usage data including your username, the IDs or aliases of " +
-                            "the rooms or groups you have visited and the usernames of " +
+                            "the rooms or groups you have visited, which UI elements you " +
+                            "last interacted with, and the usernames of " +
                             "other users. They do not contain messages.",
                         ) }
                         <div className='mx_HelpUserSettingsTab_debugButton'>

@@ -181,7 +181,7 @@ export default class UserProvider extends AutocompleteProvider {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill"
-                role="listbox"
+                role="presentation"
                 aria-label={_t("User Autocomplete")}
             >
                 { completions }

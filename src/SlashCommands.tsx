@@ -50,7 +50,6 @@ import CallHandler from "./CallHandler";
 import { guessAndSetDMRoom } from "./Rooms";
 import { upgradeRoom } from './utils/RoomUpgrade';
 import UploadConfirmDialog from './components/views/dialogs/UploadConfirmDialog';
-import ErrorDialog from './components/views/dialogs/ErrorDialog';
 import DevtoolsDialog from './components/views/dialogs/DevtoolsDialog';
 import RoomUpgradeWarningDialog from "./components/views/dialogs/RoomUpgradeWarningDialog";
 import InfoDialog from "./components/views/dialogs/InfoDialog";
@@ -244,21 +243,6 @@ export const Commands = [
             return successSync(ContentHelpers.makeHtmlMessage(messages, messages));
         },
         category: CommandCategories.messages,
-    }),
-    new Command({
-        command: 'ddg',
-        args: '<query>',
-        description: _td('Searches DuckDuckGo for results'),
-        runFn: function() {
-            // TODO Don't explain this away, actually show a search UI here.
-            Modal.createTrackedDialog('Slash Commands', '/ddg is not a command', ErrorDialog, {
-                title: _t('/ddg is not a command'),
-                description: _t('To use it, just wait for autocomplete results to load and tab through them.'),
-            });
-            return success();
-        },
-        category: CommandCategories.actions,
-        hideCompletionAfterSpace: true,
     }),
     new Command({
         command: 'upgraderoom',

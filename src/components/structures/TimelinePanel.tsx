@@ -126,6 +126,8 @@ interface IProps {
 
     // callback which is called when we wish to paginate the timeline window.
     onPaginationRequest?(timelineWindow: TimelineWindow, direction: string, size: number): Promise<boolean>;
+
+    hideThreadedMessages?: boolean;
 }
 
 interface IState {
@@ -214,6 +216,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         timelineCap: Number.MAX_VALUE,
         className: 'mx_RoomView_messagePanel',
         sendReadReceiptOnLoad: true,
+        hideThreadedMessages: true,
     };
 
     private lastRRSentEventId: string = undefined;
@@ -1511,6 +1514,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 showReactions={this.props.showReactions}
                 layout={this.props.layout}
                 enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+                hideThreadedMessages={this.props.hideThreadedMessages}
             />
         );
     }

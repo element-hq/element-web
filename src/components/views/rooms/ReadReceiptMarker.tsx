@@ -15,61 +15,74 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { createRef, RefObject } from 'react';
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+
 import { _t } from '../../../languageHandler';
 import { formatDate } from '../../../DateUtils';
 import NodeAnimator from "../../../NodeAnimator";
-import * as sdk from "../../../index";
 import { toPx } from "../../../utils/units";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+import MemberAvatar from '../avatars/MemberAvatar';
+
+interface IProps {
+    // the RoomMember to show the RR for
+    member?: RoomMember;
+    // userId to fallback the avatar to
+    // if the member hasn't been loaded yet
+    fallbackUserId: string;
+
+    // number of pixels to offset the avatar from the right of its parent;
+    // typically a negative value.
+    leftOffset?: number;
+
+    // true to hide the avatar (it will still be animated)
+    hidden?: boolean;
+
+    // don't animate this RR into position
+    suppressAnimation?: boolean;
+
+    // an opaque object for storing information about this user's RR in
+    // this room
+    // TODO: proper typing for RR info
+    readReceiptInfo: any;
+
+    // A function which is used to check if the parent panel is being
+    // unmounted, to avoid unnecessary work. Should return true if we
+    // are being unmounted.
+    checkUnmounting?: () => boolean;
+
+    // callback for clicks on this RR
+    onClick?: (e: React.MouseEvent) => void;
+
+    // Timestamp when the receipt was read
+    timestamp?: number;
+
+    // True to show twelve hour format, false otherwise
+    showTwelveHour?: boolean;
+}
+
+interface IState {
+    suppressDisplay: boolean;
+    startStyles?: IReadReceiptMarkerStyle[];
+}
+
+interface IReadReceiptMarkerStyle {
+    top: number;
+    left: number;
+}
+
 @replaceableComponent("views.rooms.ReadReceiptMarker")
-export default class ReadReceiptMarker extends React.PureComponent {
-    static propTypes = {
-        // the RoomMember to show the RR for
-        member: PropTypes.object,
-        // userId to fallback the avatar to
-        // if the member hasn't been loaded yet
-        fallbackUserId: PropTypes.string.isRequired,
-
-        // number of pixels to offset the avatar from the right of its parent;
-        // typically a negative value.
-        leftOffset: PropTypes.number,
-
-        // true to hide the avatar (it will still be animated)
-        hidden: PropTypes.bool,
-
-        // don't animate this RR into position
-        suppressAnimation: PropTypes.bool,
-
-        // an opaque object for storing information about this user's RR in
-        // this room
-        readReceiptInfo: PropTypes.object,
-
-        // A function which is used to check if the parent panel is being
-        // unmounted, to avoid unnecessary work. Should return true if we
-        // are being unmounted.
-        checkUnmounting: PropTypes.func,
-
-        // callback for clicks on this RR
-        onClick: PropTypes.func,
-
-        // Timestamp when the receipt was read
-        timestamp: PropTypes.number,
-
-        // True to show twelve hour format, false otherwise
-        showTwelveHour: PropTypes.bool,
-    };
+export default class ReadReceiptMarker extends React.PureComponent<IProps, IState> {
+    private avatar: React.RefObject<HTMLDivElement | HTMLImageElement | HTMLSpanElement> = createRef();
 
     static defaultProps = {
         leftOffset: 0,
     };
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
-
-        this._avatar = createRef();
 
         this.state = {
             // if we are going to animate the RR, we don't show it on first render,
@@ -80,7 +93,7 @@ export default class ReadReceiptMarker extends React.PureComponent {
         };
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         // before we remove the rr, store its location in the map, so that if
         // it reappears, it can be animated from the right place.
         const rrInfo = this.props.readReceiptInfo;
@@ -95,29 +108,29 @@ export default class ReadReceiptMarker extends React.PureComponent {
             return;
         }
 
-        const avatarNode = this._avatar.current;
+        const avatarNode = this.avatar.current;
         rrInfo.top = avatarNode.offsetTop;
         rrInfo.left = avatarNode.offsetLeft;
         rrInfo.parent = avatarNode.offsetParent;
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         if (!this.state.suppressDisplay) {
             // we've already done our display - nothing more to do.
             return;
         }
-        this._animateMarker();
+        this.animateMarker();
     }
 
-    componentDidUpdate(prevProps) {
+    public componentDidUpdate(prevProps: IProps): void {
         const differentLeftOffset = prevProps.leftOffset !== this.props.leftOffset;
         const visibilityChanged = prevProps.hidden !== this.props.hidden;
         if (differentLeftOffset || visibilityChanged) {
-            this._animateMarker();
+            this.animateMarker();
         }
     }
 
-    _animateMarker() {
+    private animateMarker(): void {
         // treat new RRs as though they were off the top of the screen
         let oldTop = -15;
 
@@ -126,7 +139,7 @@ export default class ReadReceiptMarker extends React.PureComponent {
             oldTop = oldInfo.top + oldInfo.parent.getBoundingClientRect().top;
         }
 
-        const newElement = this._avatar.current;
+        const newElement = this.avatar.current;
         let startTopOffset;
         if (!newElement.offsetParent) {
             // this seems to happen sometimes for reasons I don't understand
@@ -156,10 +169,9 @@ export default class ReadReceiptMarker extends React.PureComponent {
         });
     }
 
-    render() {
-        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+    public render(): JSX.Element {
         if (this.state.suppressDisplay) {
-            return <div ref={this._avatar} />;
+            return <div ref={this.avatar as RefObject<HTMLDivElement>} />;
         }
 
         const style = {
@@ -198,7 +210,7 @@ export default class ReadReceiptMarker extends React.PureComponent {
                     style={style}
                     title={title}
                     onClick={this.props.onClick}
-                    inputRef={this._avatar}
+                    inputRef={this.avatar as RefObject<HTMLImageElement>}
                 />
             </NodeAnimator>
         );

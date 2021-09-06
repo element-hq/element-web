@@ -145,7 +145,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
     }
 
     async componentDidMount() {
-        const autoplay = SettingsStore.getValue("autoplayGifsAndVideos") as boolean;
+        const autoplay = SettingsStore.getValue("autoplayVideo") as boolean;
         this.loadBlurhash();
 
         if (this.props.mediaEventHelper.media.isEncrypted && this.state.decryptedUrl === null) {
@@ -209,7 +209,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
 
     render() {
         const content = this.props.mxEvent.getContent();
-        const autoplay = SettingsStore.getValue("autoplayGifsAndVideos");
+        const autoplay = SettingsStore.getValue("autoplayVideo");
 
         if (this.state.error !== null) {
             return (

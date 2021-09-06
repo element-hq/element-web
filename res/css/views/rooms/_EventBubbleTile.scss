@@ -33,6 +33,14 @@ limitations under the License.
         margin-top: 2px;
     }
 
+    &.mx_EventTile_highlight {
+        &::before {
+            background-color: $event-highlight-bg-color;
+        }
+
+        color: $event-highlight-fg-color;
+    }
+
     /* For replies */
     .mx_EventTile {
         padding-top: 0;
@@ -105,6 +113,8 @@ limitations under the License.
 
         .mx_ReplyTile .mx_SenderProfile {
             display: block;
+            top: unset;
+            left: unset;
         }
 
         .mx_ReactionsRow {
@@ -188,8 +198,6 @@ limitations under the License.
         }
 
         .mx_ReplyThread {
-            margin: 0 calc(-1 * var(--gutterSize));
-
             .mx_EventTile_reply {
                 max-width: 90%;
                 padding: 0;
@@ -221,11 +229,6 @@ limitations under the License.
     .mx_ReactionsRow {
         margin-right: -18px;
         margin-left: -9px;
-    }
-
-    .mx_ReplyThread {
-        border-left-width: 2px;
-        border-left-color: $eventbubble-reply-color;
     }
 
     /* Special layout scenario for "Unable To Decrypt (UTD)" events */
@@ -264,6 +267,7 @@ limitations under the License.
 }
 
 .mx_EventTile.mx_EventTile_bubbleContainer[data-layout=bubble],
+.mx_EventTile.mx_EventTile_leftAlignedBubble[data-layout=bubble],
 .mx_EventTile.mx_EventTile_info[data-layout=bubble],
 .mx_EventListSummary[data-layout=bubble][data-expanded=false] {
     --backgroundColor: transparent;

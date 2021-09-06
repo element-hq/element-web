@@ -111,7 +111,7 @@ export default class CallView extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
-        const { primary, secondary } = this.getOrderedFeeds(this.props.call.getFeeds());
+        const { primary, secondary } = CallView.getOrderedFeeds(this.props.call.getFeeds());
 
         this.state = {
             isLocalOnHold: this.props.call.isLocalOnHold(),
@@ -147,7 +147,16 @@ export default class CallView extends React.Component<IProps, IState> {
         dis.unregister(this.dispatcherRef);
     }
 
-    public componentDidUpdate(prevProps) {
+    static getDerivedStateFromProps(props: IProps): Partial<IState> {
+        const { primary, secondary } = CallView.getOrderedFeeds(props.call.getFeeds());
+
+        return {
+            primaryFeed: primary,
+            secondaryFeeds: secondary,
+        };
+    }
+
+    public componentDidUpdate(prevProps: IProps): void {
         if (this.props.call === prevProps.call) return;
 
         this.setState({
@@ -201,7 +210,7 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onFeedsChanged = (newFeeds: Array<CallFeed>) => {
-        const { primary, secondary } = this.getOrderedFeeds(newFeeds);
+        const { primary, secondary } = CallView.getOrderedFeeds(newFeeds);
         this.setState({
             primaryFeed: primary,
             secondaryFeeds: secondary,
@@ -226,7 +235,7 @@ export default class CallView extends React.Component<IProps, IState> {
         this.buttonsRef.current?.showControls();
     };
 
-    private getOrderedFeeds(feeds: Array<CallFeed>): { primary: CallFeed, secondary: Array<CallFeed> } {
+    static getOrderedFeeds(feeds: Array<CallFeed>): { primary: CallFeed, secondary: Array<CallFeed> } {
         let primary;
 
         // Try to use a screensharing as primary, a remote one if possible

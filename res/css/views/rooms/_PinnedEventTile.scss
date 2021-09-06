@@ -67,7 +67,7 @@ limitations under the License.
             //left: 0;
             height: inherit;
             width: inherit;
-            background: $secondary-fg-color;
+            background: $secondary-content;
             mask-position: center;
             mask-size: 8px;
             mask-repeat: no-repeat;
@@ -87,7 +87,7 @@ limitations under the License.
         .mx_PinnedEventTile_timestamp {
             font-size: inherit;
             line-height: inherit;
-            color: $secondary-fg-color;
+            color: $secondary-content;
         }
 
         .mx_AccessibleButton_kind_link {

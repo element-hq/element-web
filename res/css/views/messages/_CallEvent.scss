@@ -14,126 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_CallEvent {
+.mx_CallEvent_wrapper {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    width: 100%;
 
-    background-color: $dark-panel-bg-color;
-    border-radius: 8px;
-    margin: 10px auto;
-    width: 75%;
-    box-sizing: border-box;
-    height: 60px;
-
-    &.mx_CallEvent_voice {
-        .mx_CallEvent_type_icon::before,
-        .mx_CallEvent_content_button_callBack span::before,
-        .mx_CallEvent_content_button_answer span::before {
-            mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
-        }
-    }
-
-    &.mx_CallEvent_video {
-        .mx_CallEvent_type_icon::before,
-        .mx_CallEvent_content_button_callBack span::before,
-        .mx_CallEvent_content_button_answer span::before {
-            mask-image: url('$(res)/img/element-icons/call/video-call.svg');
-        }
-    }
-
-    &.mx_CallEvent_voice.mx_CallEvent_missed .mx_CallEvent_type_icon::before {
-        mask-image: url('$(res)/img/voip/missed-voice.svg');
-    }
-
-    &.mx_CallEvent_video.mx_CallEvent_missed .mx_CallEvent_type_icon::before {
-        mask-image: url('$(res)/img/voip/missed-video.svg');
-    }
-
-    .mx_CallEvent_info {
+    .mx_CallEvent {
+        position: relative;
         display: flex;
         flex-direction: row;
         align-items: center;
-        margin-left: 12px;
+        justify-content: space-between;
 
-        .mx_CallEvent_info_basic {
-            display: flex;
-            flex-direction: column;
-            margin-left: 10px; // To match mx_CallEvent
-
-            .mx_CallEvent_sender {
-                font-weight: 600;
-                font-size: 1.5rem;
-                line-height: 1.8rem;
-                margin-bottom: 3px;
-            }
-
-            .mx_CallEvent_type {
-                font-weight: 400;
-                color: $secondary-fg-color;
-                font-size: 1.2rem;
-                line-height: $font-13px;
-                display: flex;
-                align-items: center;
-
-                .mx_CallEvent_type_icon {
-                    height: 13px;
-                    width: 13px;
-                    margin-right: 5px;
-
-                    &::before {
-                        content: '';
-                        position: absolute;
-                        height: 13px;
-                        width: 13px;
-                        background-color: $tertiary-fg-color;
-                        mask-repeat: no-repeat;
-                        mask-size: contain;
-                    }
-                }
-            }
-        }
-    }
-
-    .mx_CallEvent_content {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        color: $secondary-fg-color;
-        margin-right: 16px;
-
-        .mx_CallEvent_content_button {
-            height: 24px;
-            padding: 0px 12px;
-            margin-left: 8px;
-
-            span {
-                padding: 8px 0;
-                display: flex;
-                align-items: center;
-
-                &::before {
-                    content: '';
-                    display: inline-block;
-                    background-color: $button-fg-color;
-                    mask-position: center;
-                    mask-repeat: no-repeat;
-                    mask-size: 16px;
-                    width: 16px;
-                    height: 16px;
-                    margin-right: 8px;
-                }
-            }
-        }
-
-        .mx_CallEvent_content_button_reject span::before {
-            mask-image: url('$(res)/img/element-icons/call/hangup.svg');
-        }
-
-        .mx_CallEvent_content_tooltip {
-            margin-right: 5px;
-        }
+        background-color: $dark-panel-bg-color;
+        border-radius: 8px;
+        width: 65%;
+        box-sizing: border-box;
+        height: 60px;
+        margin: 4px 0;
 
         .mx_CallEvent_iconButton {
             display: inline-flex;
@@ -144,7 +41,7 @@ limitations under the License.
 
                 height: 16px;
                 width: 16px;
-                background-color: $tertiary-fg-color;
+                background-color: $secondary-content;
                 mask-repeat: no-repeat;
                 mask-size: contain;
                 mask-position: center;
@@ -157,6 +54,166 @@ limitations under the License.
 
         .mx_CallEvent_unSilence::before {
             mask-image: url('$(res)/img/voip/un-silence.svg');
+        }
+
+        &.mx_CallEvent_voice {
+            .mx_CallEvent_type_icon::before,
+            .mx_CallEvent_content_button_callBack span::before,
+            .mx_CallEvent_content_button_answer span::before {
+                mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
+            }
+        }
+
+        &.mx_CallEvent_video {
+            .mx_CallEvent_type_icon::before,
+            .mx_CallEvent_content_button_callBack span::before,
+            .mx_CallEvent_content_button_answer span::before {
+                mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+            }
+        }
+
+        &.mx_CallEvent_voice.mx_CallEvent_missed .mx_CallEvent_type_icon::before {
+            mask-image: url('$(res)/img/voip/missed-voice.svg');
+        }
+
+        &.mx_CallEvent_video.mx_CallEvent_missed .mx_CallEvent_type_icon::before {
+            mask-image: url('$(res)/img/voip/missed-video.svg');
+        }
+
+        &.mx_CallEvent_voice.mx_CallEvent_rejected .mx_CallEvent_type_icon::before,
+        &.mx_CallEvent_voice.mx_CallEvent_noAnswer .mx_CallEvent_type_icon::before {
+            mask-image: url('$(res)/img/voip/declined-voice.svg');
+        }
+
+        &.mx_CallEvent_video.mx_CallEvent_rejected .mx_CallEvent_type_icon::before,
+        &.mx_CallEvent_video.mx_CallEvent_noAnswer .mx_CallEvent_type_icon::before {
+            mask-image: url('$(res)/img/voip/declined-video.svg');
+        }
+
+        .mx_CallEvent_info {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-left: 12px;
+            min-width: 0;
+
+            .mx_CallEvent_info_basic {
+                display: flex;
+                flex-direction: column;
+                margin-left: 10px; // To match mx_CallEvent
+                min-width: 0;
+
+                .mx_CallEvent_sender {
+                    font-weight: 600;
+                    font-size: 1.5rem;
+                    line-height: 1.8rem;
+                    margin-bottom: 3px;
+
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+
+                .mx_CallEvent_type {
+                    font-weight: 400;
+                    color: $secondary-content;
+                    font-size: 1.2rem;
+                    line-height: $font-13px;
+                    display: flex;
+                    align-items: center;
+
+                    .mx_CallEvent_type_icon {
+                        height: 13px;
+                        width: 13px;
+                        margin-right: 5px;
+
+                        &::before {
+                            content: '';
+                            position: absolute;
+                            height: 13px;
+                            width: 13px;
+                            background-color: $secondary-content;
+                            mask-repeat: no-repeat;
+                            mask-size: contain;
+                        }
+                    }
+                }
+            }
+        }
+
+        .mx_CallEvent_content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            color: $secondary-content;
+            margin-right: 16px;
+            gap: 8px;
+            min-width: max-content;
+
+            .mx_CallEvent_content_button {
+                padding: 0px 12px;
+
+                span {
+                    padding: 1px 0;
+                    display: flex;
+                    align-items: center;
+
+                    &::before {
+                        content: '';
+                        display: inline-block;
+                        background-color: $button-fg-color;
+                        mask-position: center;
+                        mask-repeat: no-repeat;
+                        mask-size: 16px;
+                        width: 16px;
+                        height: 16px;
+                        margin-right: 8px;
+
+                        flex-shrink: 0;
+                    }
+                }
+            }
+
+            .mx_CallEvent_content_button_reject span::before {
+                mask-image: url('$(res)/img/element-icons/call/hangup.svg');
+            }
+
+            .mx_CallEvent_content_tooltip {
+                margin-right: 5px;
+            }
+        }
+
+        &.mx_CallEvent_narrow {
+            height: unset;
+            width: 290px;
+            flex-direction: column;
+            align-items: unset;
+            gap: 16px;
+
+            .mx_CallEvent_iconButton {
+                position: absolute;
+                margin-right: 0;
+                top: 12px;
+                right: 12px;
+                height: 16px;
+                width: 16px;
+                display: flex;
+            }
+
+            .mx_CallEvent_info {
+                align-items: unset;
+                margin-top: 12px;
+                margin-right: 12px;
+
+                .mx_CallEvent_sender {
+                    margin-bottom: 8px;
+                }
+            }
+
+            .mx_CallEvent_content {
+                margin-left: 54px; // mx_CallEvent margin (12px) + avatar (32px) + mx_CallEvent_info_basic margin (10px)
+                margin-bottom: 16px;
+            }
         }
     }
 }
