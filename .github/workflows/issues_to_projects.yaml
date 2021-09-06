@@ -21,9 +21,12 @@ jobs:
                  label-name: "X-Needs-Design"
 
     move_spaces_issues:
-        name: Move A-Spaces issues to Delight project board
+        name: Move Spaces issues to Delight project board
         runs-on: ubuntu-latest
-        if: contains(github.event.issue.labels.*.name, 'A-Spaces')
+        if: >
+            contains(github.event.issue.labels.*.name, 'A-Spaces') ||
+            contains(github.event.issue.labels.*.name, 'A-Space-Settings') ||
+            contains(github.event.issue.labels.*.name, 'A-Subspaces')
         steps:
              - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
                with:
