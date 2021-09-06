@@ -22,20 +22,27 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import EventTileBubble from "./EventTileBubble";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import DMRoomMap from "../../../utils/DMRoomMap";
+import { objectHasDiff } from "../../../utils/objects";
 
 interface IProps {
     mxEvent: MatrixEvent;
 }
+
+const ALGORITHM = "m.megolm.v1.aes-sha2";
 
 const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent }, ref) => {
     const cli = useContext(MatrixClientContext);
     const roomId = mxEvent.getRoomId();
     const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(roomId);
 
-    if (mxEvent.getContent().algorithm === 'm.megolm.v1.aes-sha2' && isRoomEncrypted) {
+    if (!objectHasDiff(mxEvent.getPrevContent(), mxEvent.getContent())) return null; // nop
+
+    if (mxEvent.getContent().algorithm === ALGORITHM && isRoomEncrypted) {
         let subtitle: string;
         const dmPartner = DMRoomMap.shared().getUserIdForRoomId(roomId);
-        if (dmPartner) {
+        if (mxEvent.getPrevContent().algorithm === ALGORITHM) {
+            subtitle = _t("Some encryption parameters have been changed.");
+        } else if (dmPartner) {
             const displayName = cli?.getRoom(roomId)?.getMember(dmPartner)?.rawDisplayName || dmPartner;
             subtitle = _t("Messages here are end-to-end encrypted. " +
                 "Verify %(displayName)s in their profile - tap on their avatar.", { displayName });
@@ -49,7 +56,9 @@ const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent }, ref) =>
             title={_t("Encryption enabled")}
             subtitle={subtitle}
         />;
-    } else if (isRoomEncrypted) {
+    }
+
+    if (isRoomEncrypted) {
         return <EventTileBubble
             className="mx_cryptoEvent mx_cryptoEvent_icon"
             title={_t("Encryption enabled")}
