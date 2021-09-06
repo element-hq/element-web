@@ -33,7 +33,6 @@ import {
     ContextMenuTooltipButton,
     useContextMenu,
     MenuItem,
-    ChevronFace,
 } from "../../structures/ContextMenu";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import ReplyPreview from "./ReplyPreview";

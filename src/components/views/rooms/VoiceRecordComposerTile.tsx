@@ -20,7 +20,6 @@ import React, { ReactNode } from "react";
 import { IUpload, RecordingState, VoiceRecording } from "../../../audio/VoiceRecording";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import classNames from "classnames";
 import LiveRecordingWaveform from "../audio_messages/LiveRecordingWaveform";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import LiveRecordingClock from "../audio_messages/LiveRecordingClock";
@@ -219,20 +218,14 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
 
         let stopBtn;
         let deleteButton;
-        if (!this.state.recordingPhase || this.state.recordingPhase === RecordingState.Started) {
-            const classes = classNames({
-                'mx_MessageComposer_button': !this.state.recorder,
-                'mx_MessageComposer_voiceMessage': !this.state.recorder,
-                'mx_VoiceRecordComposerTile_stop': this.state.recorder?.isRecording,
-            });
-
+        if (this.state.recordingPhase === RecordingState.Started) {
             let tooltip = _t("Send voice message");
             if (!!this.state.recorder) {
                 tooltip = _t("Stop recording");
             }
 
             stopBtn = <AccessibleTooltipButton
-                className={classes}
+                className="mx_VoiceRecordComposerTile_stop"
                 onClick={this.onRecordStartEndClick}
                 title={tooltip}
             />;
