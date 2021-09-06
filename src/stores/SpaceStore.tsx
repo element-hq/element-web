@@ -366,16 +366,18 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     }
 
     public getParents(roomId: string, canonicalOnly = false): Room[] {
+        const userId = this.matrixClient?.getUserId();
         const room = this.matrixClient?.getRoom(roomId);
         return room?.currentState.getStateEvents(EventType.SpaceParent)
-            .filter(ev => {
+            .map(ev => {
                 const content = ev.getContent();
-                if (!content?.via?.length) return false;
-                // TODO apply permissions check to verify that the parent mapping is valid
-                if (canonicalOnly && !content?.canonical) return false;
-                return true;
+                if (!Array.isArray(content?.via)) return;
+                const parent = this.matrixClient.getRoom(ev.getStateKey());
+                if (canonicalOnly && !content?.canonical) return;
+                if (parent.currentState.maySendStateEvent(EventType.SpaceChild, userId)) {
+                    return parent;
+                }
             })
-            .map(ev => this.matrixClient.getRoom(ev.getStateKey()))
             .filter(Boolean) || [];
     }
 
@@ -530,6 +532,14 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             });
         }
 
+        const hiddenChildren = new EnhancedMap<string, Set<string>>();
+        visibleRooms.forEach(room => {
+            if (room.getMyMembership() !== "join") return;
+            this.getParents(room.roomId).forEach(parent => {
+                hiddenChildren.getOrCreate(parent.roomId, new Set()).add(room.roomId);
+            });
+        });
+
         this.rootSpaces.forEach(s => {
             // traverse each space tree in DFS to build up the supersets as you go up,
             // reusing results from like subtrees.
@@ -558,6 +568,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                     fn(childSpace.roomId, newPath)?.forEach(roomId => {
                         roomIds.add(roomId);
                     });
+                });
+                hiddenChildren.get(spaceId)?.forEach(roomId => {
+                    roomIds.add(roomId);
                 });
                 this.spaceFilteredRooms.set(spaceId, roomIds);
                 return roomIds;
@@ -689,6 +702,12 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                     this.onRoomUpdate(room);
                 }
                 this.emit(room.roomId);
+                break;
+
+            case EventType.RoomPowerLevels:
+                if (room.isSpaceRoom()) {
+                    this.onRoomsUpdate();
+                }
                 break;
         }
     };
