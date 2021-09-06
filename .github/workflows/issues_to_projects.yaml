@@ -19,3 +19,15 @@ jobs:
                  project-url: "https://github.com/orgs/vector-im/projects/14"
                  column-name: "📥 Inbox"
                  label-name: "X-Needs-Design"
+
+    move_spaces_issues:
+        name: Move A-Spaces issues to Delight project board
+        runs-on: ubuntu-latest
+        if: contains(github.event.issue.labels.*.name, 'A-Spaces')
+        steps:
+             - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
+               with:
+                 action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
+                 project-url: "https://github.com/orgs/vector-im/projects/6"
+                 column-name: "📥 Inbox"
+                 label-name: "A-Spaces"
