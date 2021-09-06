@@ -37,11 +37,12 @@ import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import DownloadActionButton from "./DownloadActionButton";
 import SettingsStore from '../../../settings/SettingsStore';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
+import ReplyThread from '../elements/ReplyThread';
 
 interface IOptionsButtonProps {
     mxEvent: MatrixEvent;
     getTile: () => any; // TODO: FIXME, haven't figured out what the return type is here
-    getReplyThread: () => any; // TODO: FIXME, haven't figured out what the return type is here
+    getReplyThread: () => ReplyThread;
     permalinkCreator: RoomPermalinkCreator;
     onFocusChange: (menuDisplayed: boolean) => void;
 }
@@ -130,7 +131,7 @@ interface IMessageActionBarProps {
     reactions?: any;
     permalinkCreator?: RoomPermalinkCreator;
     getTile: () => any; // TODO: FIXME, haven't figured out what the return type is here
-    getReplyThread?: () => JSX.Element;
+    getReplyThread?: () => ReplyThread;
     onFocusChange?: (menuDisplayed: boolean) => void;
 }
 
