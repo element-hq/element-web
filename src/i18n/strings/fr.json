@@ -3436,7 +3436,7 @@
     "Show all rooms in Home": "Afficher tous les salons dans Accueil",
     "%(senderName)s changed the <a>pinned messages</a> for the room.": "%(senderName)s a changé <a>les messages épinglés</a> du salon.",
     "%(senderName)s kicked %(targetName)s": "%(senderName)s a expulsé %(targetName)s",
-    "%(senderName)s kicked %(targetName)s: %(reason)s": "%(senderName)s a explusé %(targetName)s : %(reason)s",
+    "%(senderName)s kicked %(targetName)s: %(reason)s": "%(senderName)s a expulsé %(targetName)s : %(reason)s",
     "%(senderName)s withdrew %(targetName)s's invitation": "%(senderName)s a annulé l’invitation de %(targetName)s",
     "%(senderName)s withdrew %(targetName)s's invitation: %(reason)s": "%(senderName)s a annulé l’invitation de %(targetName)s : %(reason)s",
     "%(senderName)s unbanned %(targetName)s": "%(senderName)s a révoqué le bannissement de %(targetName)s",
