@@ -81,7 +81,13 @@ function SendButton(props: ISendButtonProps) {
     );
 }
 
-const EmojiButton = ({ addEmoji, menuPosition }) => {
+interface IEmojiButtonProps {
+    addEmoji: (unicode: string) => boolean;
+    menuPosition: any; // TODO: Types
+    narrowMode: boolean;
+}
+
+const EmojiButton: React.FC<IEmojiButtonProps> = ({ addEmoji, menuPosition, narrowMode }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
     let contextMenu;
@@ -103,12 +109,11 @@ const EmojiButton = ({ addEmoji, menuPosition }) => {
     // TODO: replace ContextMenuTooltipButton with a unified representation of
     // the header buttons and the right panel buttons
     return <React.Fragment>
-        <ContextMenuTooltipButton
+        <AccessibleTooltipButton
             className={className}
             onClick={openMenu}
-            isExpanded={menuDisplayed}
-            title={_t('Emoji picker')}
-            inputRef={button}
+            title={!narrowMode && _t('Emoji picker')}
+            label={narrowMode && _t("Send an emoji")}
         />
 
         { contextMenu }
@@ -364,11 +369,12 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         }
     };
 
-    private addEmoji(emoji: string) {
+    private addEmoji(emoji: string): boolean {
         dis.dispatch<ComposerInsertPayload>({
             action: Action.ComposerInsert,
             text: emoji,
         });
+        return true;
     }
 
     private sendMessage = async () => {
@@ -424,32 +430,34 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     };
 
     private renderButtons(menuPosition): JSX.Element | JSX.Element[] {
-        const buttons = new Map<string, JSX.Element>();
+        const buttons: JSX.Element[] = [];
         if (!this.state.haveRecording) {
-            buttons.set(
-                _t("Send a file"),
+            buttons.push(
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
             );
-            buttons.set(
-                _t("Add emoji"),
-                <EmojiButton key="emoji_button" addEmoji={this.addEmoji} menuPosition={menuPosition} />,
+            buttons.push(
+                <EmojiButton key="emoji_button" addEmoji={this.addEmoji} menuPosition={menuPosition} narrowMode={this.state.narrowMode} />,
             );
         }
         if (this.shouldShowStickerPicker()) {
-            buttons.set(
-                _t("Send a sticker"),
+            let title;
+            if (!this.state.narrowMode) {
+                title = this.state.showStickers ? _t("Hide Stickers") : _t("Show Stickers");
+            }
+
+            buttons.push(
                 <AccessibleTooltipButton
                     id='stickersButton'
                     key="controls_stickers"
                     className="mx_MessageComposer_button mx_MessageComposer_stickers"
                     onClick={() => this.showStickers(!this.state.showStickers)}
-                    title={this.state.showStickers ? _t("Hide Stickers") : _t("Show Stickers")}
+                    title={title}
+                    label={this.state.narrowMode && _t("Send a sticker")}
                 />,
             );
         }
         if (!this.state.haveRecording && !this.state.narrowMode) {
-            buttons.set(
-                _t("Send a voice message"),
+            buttons.push(
                 <AccessibleTooltipButton
                     className="mx_MessageComposer_button mx_MessageComposer_voiceMessage"
                     onClick={() => this.voiceRecordingButton?.onRecordStartEndClick()}
@@ -458,9 +466,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             );
         }
 
-        const buttonsArray = Array.from(buttons.values());
         if (!this.state.narrowMode) {
-            return buttonsArray;
+            return buttons;
         } else {
             const classnames = classNames({
                 mx_MessageComposer_button: true,
@@ -469,7 +476,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             });
 
             return <>
-                { buttonsArray[0] }
+                { buttons[0] }
                 <AccessibleTooltipButton
                     className={classnames}
                     onClick={this.toggleButtonMenu}
@@ -486,10 +493,9 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                         menuWidth={150}
                         wrapperClassName="mx_MessageComposer_Menu"
                     >
-                        { Array.from(buttons).slice(1).map(([label, button]) => (
-                            <MenuItem className="mx_CallContextMenu_item" key={label} onClick={this.toggleButtonMenu}>
+                        { buttons.slice(1).map((button, index) => (
+                            <MenuItem className="mx_CallContextMenu_item" key={index} onClick={this.toggleButtonMenu}>
                                 { button }
-                                { label }
                             </MenuItem>
                         )) }
                     </ContextMenu>

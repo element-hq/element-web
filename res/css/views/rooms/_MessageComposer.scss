@@ -186,11 +186,14 @@ limitations under the License.
 }
 
 .mx_MessageComposer_button {
+    --size: 26px;
     position: relative;
     margin-right: 6px;
     cursor: pointer;
-    height: 26px;
-    width: 26px;
+    height: var(--size);
+    line-height: var(--size);
+    width: auto;
+    padding-left: calc(var(--size) + 5px);
     border-radius: 100%;
 
     &::before {
@@ -207,8 +210,21 @@ limitations under the License.
         mask-position: center;
     }
 
+    &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 0;
+        width: var(--size);
+        height: var(--size);
+        border-radius: 50%;
+    }
+
     &:hover {
-        background: rgba($accent-color, 0.1);
+        &::after {
+            background: rgba($accent-color, 0.1);
+        }
 
         &::before {
             background-color: $accent-color;
