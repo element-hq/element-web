@@ -35,6 +35,7 @@ const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent }, ref) =>
     const roomId = mxEvent.getRoomId();
     const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(roomId);
 
+    // if no change happened then skip rendering this, a shallow check is enough as events are parsed JSON
     if (!objectHasDiff(mxEvent.getPrevContent(), mxEvent.getContent())) return null; // nop
 
     if (mxEvent.getContent().algorithm === ALGORITHM && isRoomEncrypted) {
