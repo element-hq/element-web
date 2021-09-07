@@ -66,7 +66,7 @@ export default class WidgetOpenIDPermissionsDialog extends React.PureComponent<I
         this.props.onFinished(allowed);
     }
 
-    private onRememberSelectionChange = (newVal) => {
+    private onRememberSelectionChange = (newVal: boolean) => {
         this.setState({ rememberSelection: newVal });
     };
 
