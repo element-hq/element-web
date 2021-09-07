@@ -1848,6 +1848,19 @@ export default class RoomView extends React.Component<IProps, IState> {
             />;
         }
 
+        const statusBarAreaClass = classNames("mx_RoomView_statusArea", {
+            "mx_RoomView_statusArea_expanded": isStatusAreaExpanded,
+        });
+
+        // if statusBar does not exist then statusBarArea is blank and takes up unnecessary space on the screen
+        // show statusBarArea only if statusBar is present
+        const statusBarArea = statusBar && <div className={statusBarAreaClass}>
+            <div className="mx_RoomView_statusAreaBox">
+                <div className="mx_RoomView_statusAreaBox_line" />
+                { statusBar }
+            </div>
+        </div>;
+
         const roomVersionRecommendation = this.state.upgradeRecommendation;
         const showRoomUpgradeBar = (
             roomVersionRecommendation &&
@@ -2045,10 +2058,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             />);
         }
 
-        const statusBarAreaClass = classNames("mx_RoomView_statusArea", {
-            "mx_RoomView_statusArea_expanded": isStatusAreaExpanded,
-        });
-
         const showRightPanel = this.state.room && this.state.showRightPanel;
         const rightPanel = showRightPanel
             ? <RightPanel
@@ -2097,12 +2106,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                                     { messagePanel }
                                     { searchResultsPanel }
                                 </div>
-                                <div className={statusBarAreaClass}>
-                                    <div className="mx_RoomView_statusAreaBox">
-                                        <div className="mx_RoomView_statusAreaBox_line" />
-                                        { statusBar }
-                                    </div>
-                                </div>
+                                { statusBarArea }
                                 { previewBar }
                                 { messageComposer }
                             </div>
