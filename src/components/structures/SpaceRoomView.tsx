@@ -89,7 +89,7 @@ interface IProps {
 
 interface IState {
     phase: Phase;
-    firstRoomId?: boolean; // internal state for the creation wizard
+    firstRoomId?: string; // internal state for the creation wizard
     showRightPanel: boolean;
     myMembership: string;
 }
@@ -588,7 +588,11 @@ const SpaceAddExistingRooms = ({ space, onFinished }) => {
     </div>;
 };
 
-const SpaceSetupPublicShare = ({ justCreatedOpts, space, onFinished, firstRoomId }) => {
+interface ISpaceSetupPublicShareProps extends Pick<IProps & IState, "justCreatedOpts" | "space" | "firstRoomId"> {
+    onFinished(): void;
+}
+
+const SpaceSetupPublicShare = ({ justCreatedOpts, space, onFinished, firstRoomId }: ISpaceSetupPublicShareProps) => {
     return <div className="mx_SpaceRoomView_publicShare">
         <h1>{ _t("Share %(name)s", {
             name: justCreatedOpts?.createOpts?.name || space.name,
@@ -877,7 +881,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                         _t("Let's create a room for each of them.") + "\n" +
                         _t("You can add more later too, including already existing ones.")
                     }
-                    onFinished={(firstRoomId: boolean) => this.setState({ phase: Phase.PublicShare, firstRoomId })}
+                    onFinished={(firstRoomId: string) => this.setState({ phase: Phase.PublicShare, firstRoomId })}
                 />;
             case Phase.PublicShare:
                 return <SpaceSetupPublicShare
@@ -906,7 +910,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                     title={_t("What projects are you working on?")}
                     description={_t("We'll create rooms for each of them. " +
                         "You can add more later too, including already existing ones.")}
-                    onFinished={(firstRoomId: boolean) => this.setState({ phase: Phase.Landing, firstRoomId })}
+                    onFinished={(firstRoomId: string) => this.setState({ phase: Phase.Landing, firstRoomId })}
                 />;
             case Phase.PrivateExistingRooms:
                 return <SpaceAddExistingRooms
