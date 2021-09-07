@@ -3703,5 +3703,7 @@
     "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s 從此聊天室取消釘選了訊息。檢視所有釘選的訊息。",
     "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s 從此聊天室取消釘選了<a>訊息</a>。檢視所有<b>釘選的訊息</b>。",
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s 釘選了訊息到此聊天室。檢視所有已釘選的訊息。",
-    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s 釘選了<a>訊息</a>到此聊天室。檢視所有<b>釘選的訊息</b>。"
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s 釘選了<a>訊息</a>到此聊天室。檢視所有<b>釘選的訊息</b>。",
+    "Currently, %(count)s spaces have access|one": "目前，1 個空間可存取",
+    "& %(count)s more|one": "與其他 %(count)s 個"
 }
