@@ -90,7 +90,7 @@ const OptionsButton: React.FC<IOptionsButtonProps> =
 
 interface IReactButtonProps {
     mxEvent: MatrixEvent;
-    reactions: any;
+    reactions: any; // TODO: types
     onFocusChange: (menuDisplayed: boolean) => void;
 }
 
@@ -128,7 +128,7 @@ const ReactButton: React.FC<IReactButtonProps> = ({ mxEvent, reactions, onFocusC
 interface IMessageActionBarProps {
     mxEvent: MatrixEvent;
     // The Relations model from the JS SDK for reactions to `mxEvent`
-    reactions?: any;
+    reactions?: any;  // TODO: types
     permalinkCreator?: RoomPermalinkCreator;
     getTile: () => any; // TODO: FIXME, haven't figured out what the return type is here
     getReplyThread?: () => ReplyThread;
