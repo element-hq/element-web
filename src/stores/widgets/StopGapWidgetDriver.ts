@@ -44,7 +44,7 @@ import { containsEmoji } from "../../effects/utils";
 import dis from "../../dispatcher/dispatcher";
 import { tryTransformPermalinkToLocalHref } from "../../utils/permalinks/Permalinks";
 import { IEvent, MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 // TODO: Purge this from the universe
 
