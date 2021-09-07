@@ -1884,5 +1884,9 @@
     "Sign in": "Увійти",
     "Got an account? <a>Sign in</a>": "Маєте обліковий запис? <a>Увійти</a>",
     "Sign in instead": "Натомість увійти",
-    "Homeserver": "Домашній сервер"
+    "Homeserver": "Домашній сервер",
+    "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s відкріплює повідомлення з цієї кімнати. Перегляньте всі прикріплені повідомлення.",
+    "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s відкріплює <a>повідомлення</a> з цієї кімнати. Перегляньте всі <b>прикріплені повідомлення</b>.",
+    "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s прикріплює повідомлення до цієї кімнати. Перегляньте всі прикріплені повідомлення.",
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s прикріплює <a>повідомлення</a> до цієї кімнати. Перегляньте всі <b>прикріплені повідомлення</b>."
 }
