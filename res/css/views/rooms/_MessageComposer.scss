@@ -237,15 +237,6 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/room/composer/sticker.svg');
 }
 
-.mx_MessageComposer_buttonMenu::before {
-    mask-image: url('$(res)/img/image-view/more.svg');
-}
-
-.mx_MessageComposer_closeButtonMenu::before {
-    transform: rotate(90deg);
-    transform-origin: center;
-}
-
 .mx_MessageComposer_sendMessage {
     cursor: pointer;
     position: relative;
@@ -364,9 +355,4 @@ limitations under the License.
     .mx_MessageComposer_button:last-child {
         margin-right: 0;
     }
-}
-
-.mx_MessageComposer_Menu .mx_CallContextMenu_item {
-    display: flex;
-    align-items: center;
 }

@@ -20,6 +20,7 @@ import React, { ReactNode } from "react";
 import { IUpload, RecordingState, VoiceRecording } from "../../../audio/VoiceRecording";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import classNames from "classnames";
 import LiveRecordingWaveform from "../audio_messages/LiveRecordingWaveform";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import LiveRecordingClock from "../audio_messages/LiveRecordingClock";
@@ -136,7 +137,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         await this.disposeRecording();
     };
 
-    public onRecordStartEndClick = async () => {
+    private onRecordStartEndClick = async () => {
         if (this.state.recorder) {
             await this.state.recorder.stop();
             return;
@@ -214,23 +215,27 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
     }
 
     public render(): ReactNode {
-        if (!this.state.recordingPhase) return null;
-
-        let stopBtn;
+        let stopOrRecordBtn;
         let deleteButton;
-        if (this.state.recordingPhase === RecordingState.Started) {
+        if (!this.state.recordingPhase || this.state.recordingPhase === RecordingState.Started) {
+            const classes = classNames({
+                'mx_MessageComposer_button': !this.state.recorder,
+                'mx_MessageComposer_voiceMessage': !this.state.recorder,
+                'mx_VoiceRecordComposerTile_stop': this.state.recorder?.isRecording,
+            });
+
             let tooltip = _t("Send voice message");
             if (!!this.state.recorder) {
                 tooltip = _t("Stop recording");
             }
 
-            stopBtn = <AccessibleTooltipButton
-                className="mx_VoiceRecordComposerTile_stop"
+            stopOrRecordBtn = <AccessibleTooltipButton
+                className={classes}
                 onClick={this.onRecordStartEndClick}
                 title={tooltip}
             />;
             if (this.state.recorder && !this.state.recorder?.isRecording) {
-                stopBtn = null;
+                stopOrRecordBtn = null;
             }
         }
 
@@ -259,10 +264,13 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             </span>;
         }
 
+        // The record button (mic icon) is meant to be on the right edge, but we also want the
+        // stop button to be left of the waveform area. Luckily, none of the surrounding UI is
+        // rendered when we're not recording, so the record button ends up in the correct spot.
         return (<>
             { uploadIndicator }
             { deleteButton }
-            { stopBtn }
+            { stopOrRecordBtn }
             { this.renderWaveformArea() }
         </>);
     }
