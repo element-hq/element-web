@@ -3606,5 +3606,18 @@
     "Are you sure you want to make this encrypted room public?": "Är du säker på att du vill göra det här krypterade rummet offentligt?",
     "To avoid these issues, create a <a>new encrypted room</a> for the conversation you plan to have.": "För att undvika dessa problem, skapa ett <a>nytt krypterat rum</a> för konversationen du planerar att ha.",
     "Are you sure you want to add encryption to this public room?": "Är du säker på att du vill lägga till kryptering till det här offentliga rummet?",
-    "Cross-signing is ready but keys are not backed up.": "Korssignering är klart, men nycklarna är inte säkerhetskopierade än."
+    "Cross-signing is ready but keys are not backed up.": "Korssignering är klart, men nycklarna är inte säkerhetskopierade än.",
+    "Low bandwidth mode (requires compatible homeserver)": "Lågbandbreddsläge (kräver kompatibel hemserver)",
+    "Multiple integration managers (requires manual setup)": "Flera integrationshanterare (kräver manuell inställning)",
+    "Thread": "Trådar",
+    "Show threads": "Visa trådar",
+    "Autoplay videos": "Autospela videor",
+    "Autoplay GIFs": "Autospela GIF:ar",
+    "Threaded messaging": "Trådat meddelande",
+    "The above, but in <Room /> as well": "Det ovanstående, men i <Room /> också",
+    "The above, but in any room you are joined or invited to as well": "Det ovanstående, men i vilket som helst rum du är med i eller inbjuden till också",
+    "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s avfäste ett meddelande i det här rummet. Se alla fästa meddelanden.",
+    "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s avfäste <a>ett meddelande</a> i det här rummet. Se alla <b>fästa meddelanden</b>.",
+    "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s fäste ett meddelande i det här rummet. Se alla fästa meddelanden.",
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s fäste <a>ett meddelande</a> i det här rummet. Se alla <b>fästa meddelanden</b>."
 }
