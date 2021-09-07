@@ -358,11 +358,15 @@ limitations under the License.
     margin-right: 0;
 
     .mx_MessageComposer_wrapper {
-        padding: 0;
+        padding: 0 0 0 25px;
     }
 
     .mx_MessageComposer_button:last-child {
         margin-right: 0;
+    }
+
+    .mx_MessageComposer_e2eIcon {
+        left: 0;
     }
 }
 

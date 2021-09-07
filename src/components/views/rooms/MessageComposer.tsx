@@ -53,6 +53,7 @@ import EmojiPicker from '../emojipicker/EmojiPicker';
 import MemberStatusMessageAvatar from "../avatars/MemberStatusMessageAvatar";
 import UIStore, { UI_EVENTS } from '../../../stores/UIStore';
 
+let instanceCount = 0;
 const NARROW_MODE_BREAKPOINT = 500;
 
 interface IComposerAvatarProps {
@@ -216,6 +217,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     private messageComposerInput: SendMessageComposer;
     private voiceRecordingButton: VoiceRecordComposerTile;
     private ref: React.RefObject<HTMLDivElement> = createRef();
+    private instanceId: number;
 
     static defaultProps = {
         replyInThread: false,
@@ -236,14 +238,16 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             isMenuOpen: false,
             showStickers: false,
         };
+
+        this.instanceId = instanceCount++;
     }
 
     componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
         this.waitForOwnMember();
-        UIStore.instance.trackElementDimensions("MessageComposer", this.ref.current);
-        UIStore.instance.on("MessageComposer", this.onResize);
+        UIStore.instance.trackElementDimensions(`MessageComposer${this.instanceId}`, this.ref.current);
+        UIStore.instance.on(`MessageComposer${this.instanceId}`, this.onResize);
     }
 
     private onResize = (type: UI_EVENTS, entry: ResizeObserverEntry) => {
@@ -291,8 +295,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         }
         VoiceRecordingStore.instance.off(UPDATE_EVENT, this.onVoiceStoreUpdate);
         dis.unregister(this.dispatcherRef);
-        UIStore.instance.stopTrackingElementDimensions("MessageComposer");
-        UIStore.instance.removeListener("MessageComposer", this.onResize);
+        UIStore.instance.stopTrackingElementDimensions(`MessageComposer${this.instanceId}`);
+        UIStore.instance.removeListener(`MessageComposer${this.instanceId}`, this.onResize);
     }
 
     private onRoomStateEvents = (ev, state) => {
@@ -342,7 +346,11 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
     private renderPlaceholderText = () => {
         if (this.props.replyToEvent) {
-            if (this.props.e2eStatus) {
+            if (this.props.replyInThread && this.props.e2eStatus) {
+                return _t('Reply to encrypted thread…');
+            } else if (this.props.replyInThread) {
+                return _t('Reply to thread…');
+            } else if (this.props.e2eStatus) {
                 return _t('Send an encrypted reply…');
             } else {
                 return _t('Send a reply…');
@@ -419,17 +427,17 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         const buttons = new Map<string, JSX.Element>();
         if (!this.state.haveRecording) {
             buttons.set(
-                _t("Send File"),
+                _t("Send a file"),
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
             );
             buttons.set(
-                _t("Show Emojis"),
+                _t("Add emoji"),
                 <EmojiButton key="emoji_button" addEmoji={this.addEmoji} menuPosition={menuPosition} />,
             );
         }
         if (this.shouldShowStickerPicker()) {
             buttons.set(
-                _t("Show Stickers"),
+                _t("Send a sticker"),
                 <AccessibleTooltipButton
                     id='stickersButton'
                     key="controls_stickers"
@@ -441,7 +449,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         }
         if (!this.state.haveRecording && !this.state.narrowMode) {
             buttons.set(
-                _t("Send voice message"),
+                _t("Send a voice message"),
                 <AccessibleTooltipButton
                     className="mx_MessageComposer_button mx_MessageComposer_voiceMessage"
                     onClick={() => this.voiceRecordingButton?.onRecordStartEndClick()}
@@ -450,8 +458,9 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             );
         }
 
+        const buttonsArray = Array.from(buttons.values());
         if (!this.state.narrowMode) {
-            return Array.from(buttons.values());
+            return buttonsArray;
         } else {
             const classnames = classNames({
                 mx_MessageComposer_button: true,
@@ -460,11 +469,11 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             });
 
             return <>
-                { buttons[0] }
+                { buttonsArray[0] }
                 <AccessibleTooltipButton
                     className={classnames}
                     onClick={this.toggleButtonMenu}
-                    title={_t("Composer menu")}
+                    title={_t("More options")}
                     tooltip={false}
                 />
                 { this.state.isMenuOpen && (
