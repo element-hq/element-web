@@ -3690,5 +3690,20 @@
     "To avoid these issues, create a <a>new encrypted room</a> for the conversation you plan to have.": "為了避免這些問題，請為您計畫中的對話建立<a>新的加密聊天室</a>。",
     "<b>It's not recommended to add encryption to public rooms.</b>Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>不建議加密公開聊天室。</b>任何人都可以尋找並加入公開聊天室，所以任何人都可以閱讀其中的訊息。您不會得到任何加密的好處，而您也無法在稍後關閉加密功能。在公開聊天室中加密訊息會讓接收與傳送訊息更慢。",
     "Are you sure you want to add encryption to this public room?": "您確定您要在此公開聊天室新增加密？",
-    "Cross-signing is ready but keys are not backed up.": "已準備好交叉簽署但金鑰未備份。"
+    "Cross-signing is ready but keys are not backed up.": "已準備好交叉簽署但金鑰未備份。",
+    "Low bandwidth mode (requires compatible homeserver)": "低頻寬模式（需要相容的家伺服器）",
+    "Multiple integration managers (requires manual setup)": "多個整合管理程式（需要手動設定）",
+    "Thread": "討論串",
+    "Show threads": "顯示討論串",
+    "Threaded messaging": "討論串訊息",
+    "The above, but in <Room /> as well": "以上，但也在 <Room /> 中",
+    "The above, but in any room you are joined or invited to as well": "以上，但在任何您已加入或被邀請的聊天室中",
+    "Autoplay videos": "自動播放影片",
+    "Autoplay GIFs": "自動播放 GIF",
+    "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s 從此聊天室取消釘選了訊息。檢視所有釘選的訊息。",
+    "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s 從此聊天室取消釘選了<a>訊息</a>。檢視所有<b>釘選的訊息</b>。",
+    "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s 釘選了訊息到此聊天室。檢視所有已釘選的訊息。",
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s 釘選了<a>訊息</a>到此聊天室。檢視所有<b>釘選的訊息</b>。",
+    "Currently, %(count)s spaces have access|one": "目前，1 個空間可存取",
+    "& %(count)s more|one": "與其他 %(count)s 個"
 }
