@@ -32,6 +32,7 @@ import dis from "../../dispatcher/dispatcher";
 import { ActionPayload } from '../../dispatcher/payloads';
 import { SetRightPanelPhasePayload } from '../../dispatcher/payloads/SetRightPanelPhasePayload';
 import { Action } from '../../dispatcher/actions';
+import { MatrixClientPeg } from '../../MatrixClientPeg';
 
 interface IProps {
     room: Room;
@@ -89,12 +90,15 @@ export default class ThreadView extends React.Component<IProps, IState> {
     };
 
     private setupThread = (mxEv: MatrixEvent) => {
-        const thread = mxEv.getThread();
-        if (thread) {
-            thread.on("Thread.update", this.updateThread);
-            thread.once("Thread.ready", this.updateThread);
-            this.updateThread(thread);
+        let thread = mxEv.getThread();
+        if (!thread) {
+            const client = MatrixClientPeg.get();
+            thread = new Thread([mxEv], this.props.room, client);
+            mxEv.setThread(thread);
         }
+        thread.on("Thread.update", this.updateThread);
+        thread.once("Thread.ready", this.updateThread);
+        this.updateThread(thread);
     };
 
     private teardownThread = () => {
