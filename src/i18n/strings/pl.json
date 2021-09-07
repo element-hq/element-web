@@ -2378,5 +2378,9 @@
     "Identity server (%(server)s)": "Serwer tożsamości (%(server)s)",
     "Could not connect to identity server": "Nie można połączyć z serwerem tożsamości",
     "Not a valid identity server (status code %(code)s)": "Nieprawidłowy serwer tożsamości (kod statusu %(code)s)",
-    "Identity server URL must be HTTPS": "URL serwera tożsamości musi być HTTPS"
+    "Identity server URL must be HTTPS": "URL serwera tożsamości musi być HTTPS",
+    "Your homeserver rejected your log in attempt. This could be due to things just taking too long. Please try again. If this continues, please contact your homeserver administrator.": "Twój serwer domowy odrzucił twoją próbę zalogowania się. Może być to spowodowane zbyt długim czasem oczekiwania. Prosimy spróbować ponownie. Jeśli problem się powtórzy, prosimy o kontakt z administratorem twojego serwera domowego.",
+    "Failed to transfer call": "Nie udało się przekazać połączenia",
+    "Transfer Failed": "Transfer nie powiódł się",
+    "Unable to transfer call": "Nie udało się przekazać połączenia"
 }
