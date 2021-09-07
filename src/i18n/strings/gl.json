@@ -3687,5 +3687,20 @@
     "To avoid these issues, create a <a>new encrypted room</a> for the conversation you plan to have.": "Para evitar estos problemas, crea unha <a>nova sala cifrada</a> para a conversa que pretendes manter.",
     "<b>It's not recommended to add encryption to public rooms.</b>Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Non se recomenda engadir cifrado a salas públicas.</b> Calquera pode atopar e unirse a salas públicas, polo que tamén ler as mensaxes. Non vas ter ningún dos beneficios do cifrado, e máis tarde non poderás desactivalo. Cifrar as mensaxes nunha sala pública tamén fará máis lenta a entrega e recepción das mensaxes.",
     "Are you sure you want to add encryption to this public room?": "Tes a certeza de querer engadir cifrado a esta sala pública?",
-    "Cross-signing is ready but keys are not backed up.": "A sinatura-cruzada está preparada pero non hai copia das chaves."
+    "Cross-signing is ready but keys are not backed up.": "A sinatura-cruzada está preparada pero non hai copia das chaves.",
+    "Low bandwidth mode (requires compatible homeserver)": "Modo de ancho de banda limitado (require servidor de inicio compatible)",
+    "Multiple integration managers (requires manual setup)": "Varios xestores de integración (require configuración manual)",
+    "Thread": "Tema",
+    "Show threads": "Mostrar temas",
+    "Currently, %(count)s spaces have access|one": "Actualmente, un espazo ten acceso",
+    "& %(count)s more|one": "e %(count)s máis",
+    "Autoplay GIFs": "Reprod. automática GIFs",
+    "Autoplay videos": "Reprod. automática vídeo",
+    "Threaded messaging": "Mensaxes fiadas",
+    "The above, but in <Room /> as well": "O de arriba, pero tamén en <Room />",
+    "The above, but in any room you are joined or invited to as well": "O de enriba, pero en calquera sala á que te uniches ou foches convidada",
+    "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s desafixou unha mensaxe desta sala. Mira tódalas mensaxes fixadas.",
+    "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s deafixou <a>unha mensaxe</a> desta sala. Mira tódalas <b>mensaxes fixadas</b>.",
+    "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s fixou unha mensaxe nesta sala. Mira tódalas mensaxes fixadas.",
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s fixou <a>unha mensaxe</a> nesta sala. Mira tódalas <b>mensaxes fixadas</b>."
 }
