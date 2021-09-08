@@ -3693,5 +3693,13 @@
     "Show threads": "Mostra argomenti",
     "Threaded messaging": "Messaggi raggruppati",
     "The above, but in any room you are joined or invited to as well": "Quanto sopra, ma anche in qualsiasi stanza tu sia entrato o invitato",
-    "The above, but in <Room /> as well": "Quanto sopra, ma anche in <Room />"
+    "The above, but in <Room /> as well": "Quanto sopra, ma anche in <Room />",
+    "Currently, %(count)s spaces have access|one": "Attualmente, uno spazio ha accesso",
+    "& %(count)s more|one": "e altri %(count)s",
+    "Autoplay videos": "Auto-riproduci i video",
+    "Autoplay GIFs": "Auto-riproduci le GIF",
+    "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s ha tolto un messaggio ancorato da questa stanza. Vedi tutti i messaggi ancorati.",
+    "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s ha tolto un <a>messaggio ancorato</a> da questa stanza. Vedi tutti i <b>messaggi ancorati</b>.",
+    "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s ha ancorato un messaggio a questa stanza. Vedi tutti i messaggi ancorati.",
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s ha ancorato <a>un messaggio</a> a questa stanza. Vedi tutti i <b>messaggi ancorati</b>."
 }
