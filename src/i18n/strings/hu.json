@@ -3696,5 +3696,6 @@
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s kitűzött egy üzenetet ebben a szobában. Minden kitűzött üzenet megjelenítése.",
     "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s kitűzött <a>egy üzenetet</a> ebben a szobában. Minden <b>kitűzött üzenet</b> megjelenítése.",
     "Currently, %(count)s spaces have access|one": "Jelenleg a Térnek hozzáférése van",
-    "& %(count)s more|one": "és még %(count)s"
+    "& %(count)s more|one": "és még %(count)s",
+    "Some encryption parameters have been changed.": "Néhány titkosítási paraméter megváltozott."
 }
