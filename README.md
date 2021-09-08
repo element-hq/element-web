@@ -122,7 +122,7 @@ Ensure you have the latest LTS version of Node.js installed.
 Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
 guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it already.
 
-1. Install or update `node.js` so that your `node` is at least v10.x.
+1. Install or update `node.js` so that your `node` is at least v14.x.
 1. Install `yarn` if not present already.
 1. Clone the repo: `git clone https://github.com/vector-im/element-web.git`.
 1. Switch to the element-web directory: `cd element-web`.
@@ -267,9 +267,9 @@ internet.  So please don't depend on resources (JS libs, CSS, images, fonts)
 hosted by external CDNs or servers but instead please package all dependencies
 into Element itself.
 
-CSS hot-reload is currently an opt-in development feature, and if you want to have
-it working properly on your environment, create a `.env` file in this repository
-with proper environmental, see `.env.example` for documentation and example.
+CSS hot-reload is available as an opt-in development feature. You can enable it
+by defining a `CSS_HOT_RELOAD` environment variable, in a `.env` file in the root
+of the repository. See `.env.example` for documentation and an example.
 
 Setting up a dev environment
 ============================
@@ -401,83 +401,6 @@ For a developer guide, see the [translating dev doc](docs/translating-dev.md).
 Triaging issues
 ===============
 
-We strive to completely cover all applicable issues with these core labels:
+Issues are triaged by community members and the Web App Team, following the [triage process](https://github.com/vector-im/element-web/wiki/Triage-process).
 
-1. __Type__ — Every issue is assigned a type:
-   * __[T-Defect](https://github.com/vector-im/element-web/labels/T-Defect):__
-     Bugs, crashes, hangs, vulnerabilities, or other reported problems
-   * __[T-Enhancement](https://github.com/vector-im/element-web/labels/T-Enhancement):__
-     New features, changes in functionality, performance boosts, user-facing
-     improvements
-   * __[T-Task](https://github.com/vector-im/element-web/labels/T-Task):__
-     Refactoring, enabling or disabling functionality, other engineering tasks
-   * __[T-Other](https://github.com/vector-im/element-web/labels/T-Other):__
-     Questions, user support, anything else
-
-2. __Severity__ — All issues labeled `T-Defect` are also assigned a severity:
-   * __[S-Critical](https://github.com/vector-im/element-web/labels/S-Critical):__
-     Prevents work, causes data loss, affects many users, and/or has no
-     workaround
-   * __[S-Major](https://github.com/vector-im/element-web/labels/S-Major):__
-     Severely degrades major functionality or product features, with no
-     satisfactory workaround
-   * __[S-Minor](https://github.com/vector-im/element-web/labels/S-Minor):__
-     Impairs non-critical functionality, or suitable workarounds exist
-   * __[S-Tolerable](https://github.com/vector-im/element-web/labels/S-Tolerable):__
-     Purely cosmetic or low / no impact to users
-
-3. __Prevalence__ — All issues labeled `T-Defect` are also assigned a prevalence:
-   * __[P-High](https://github.com/vector-im/element-web/labels/P-High):__ Affects most users regularly or impacts most users' first experience (e.g. registration) 
-   * __[P-Medium](https://github.com/vector-im/element-web/labels/P-Medium):__ Affects some users regularly or most users rarely
-   * __[P-Low](https://github.com/vector-im/element-web/labels/P-Low):__ Most users are unlikely to come across this or it is a corner case
- 
-   This label may also be used for other types of issues.
-
-4. __Area__ — Most issues are assigned one or several "areas" using one of the
-   many `A-` prefixed labels, e.g. `A-Composer` or `A-Spaces`. Each area label
-   maps to a group of features or portion of the UI surface in the app.
-
-The Priority label is now deprecated. Defects will now be classed based on their severity and prevalence:
-| Labels    | Equivalent priority | What it means |
-| ----------- | ----------- | ----------- |
-| S‑Critical and P‑High<br />S‑Critical and P‑Medium<br />S‑Major and P‑High | P1        | These issues should be worked on in this sprint or next sprint. If the backlog of issues is too long, we should reevaluate why the bugs are not caught earlier. |
-| S‑Critical and P‑Low<br />S‑Major and P‑Medium<br />S‑Minor and P‑High     | P2        | When all the highest priority bugs are done, this is the next set to tackle. Ideally we should be fixing a few issues from this group every week. |
-| S‑Major and P‑Low<br />S‑Minor and P‑Medium<br />S‑Tolerable and P‑High    | P3        | These issues are wishful thinking for now. We hope to get to them one day, but they are low priority. There are likely to be some good new contributor issues in here. |
-| S‑Minor and P‑Low<br />S‑Tolerable&nbsp;and&nbsp;P‑Medium<br />S‑Minor and P‑Low     | P4 and P5 | These issues are unlikely to be actively looked at by the webapp team, but may be picked up by community. |
-
-
-### Other common labels
-
-We have a handful of other labels which are added on an as-needed basis, and not expected to be exhaustive:
-
-* __Exceptions__ — Special flags for issues and pull requests:
-  * __[X-Needs-Info](https://github.com/vector-im/element-web/labels/X-Needs-Info):__
-    This issue is blocked pending further information from the reporter
-  * __[X-Regression](https://github.com/vector-im/element-web/labels/X-Regression):__
-    Denotes things breaking which previously worked
-  * __[X-Release-Blocker](https://github.com/vector-im/element-web/labels/X-Release-Blocker):__
-    Issues which must be resolved before making a release
-
-* __[Easy](https://github.com/vector-im/element-web/labels/Easy)__ / __[Help
-  Wanted](https://github.com/vector-im/element-web/labels/Help%20Wanted)__ —
-  Well-defined issues which are suitable for folks new to the codebase
-
-* __[A11y](https://github.com/vector-im/element-web/labels/A11y)__ /
-  __[Meta](https://github.com/vector-im/element-web/labels/Meta)__ /
-  __[I18n](https://github.com/vector-im/element-web/labels/I18n)__ /
-  __[Privacy](https://github.com/vector-im/element-web/labels/Privacy)__ /
-  __[Security](https://github.com/vector-im/element-web/labels/Security)__ —
-  Issues which fall under these conceptual themes (which apply to many software
-  projects and are not specific to Element)
-
-* __[Sponsored](https://github.com/vector-im/element-web/labels/Sponsored)__ —
-  Used internally by Element to denote issues with external funding
-
-### Ad hoc labels (`Z-`)
-
-We have reserved the `Z-` prefix for ad hoc labels.
-
-Any member of the core team is welcome to create labels beginning with `Z-` for
-any purpose, such as tracking personal areas of interest or providing a common
-way to label cross-repo initiatives. The prefix avoids interference with the
-project's main labels.
+We use [issue labels](https://github.com/vector-im/element-web/wiki/Issue-labelling) to sort all incoming issues.

@@ -8,6 +8,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackInjectPreload = require('@principalstudio/html-webpack-inject-preload');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 dotenv.config();
 let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
@@ -15,7 +16,7 @@ if (!ogImageUrl) ogImageUrl = 'https://app.element.io/themes/element/img/logos/o
 
 const cssThemes = {
     // CSS themes
-    "theme-legacy": "./node_modules/matrix-react-sdk/res/themes/legacy-light/css/legacy-light.scss",
+    "theme-legacy-light": "./node_modules/matrix-react-sdk/res/themes/legacy-light/css/legacy-light.scss",
     "theme-legacy-dark": "./node_modules/matrix-react-sdk/res/themes/legacy-dark/css/legacy-dark.scss",
     "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
     "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
@@ -24,8 +25,8 @@ const cssThemes = {
 };
 
 function getActiveThemes() {
-    // We want to use `light` theme by default if it's not defined.
-    const theme = process.env.MATRIX_THEMES ?? 'dark';
+    // Default to `light` theme when the MATRIX_THEMES environment variable is not defined.
+    const theme = process.env.MATRIX_THEMES ?? 'light';
     const themes = theme.split(',').filter(x => x).map(x => x.trim()).filter(x => x);
     return themes;
 }
@@ -46,7 +47,8 @@ module.exports = (env, argv) => {
         nodeEnv = "production";
     }
     const devMode = nodeEnv !== 'production';
-    const useCssHotReload = process.env.CSS_HOT_RELOAD === '1' && devMode;
+    const useHMR = process.env.CSS_HOT_RELOAD === '1' && devMode;
+    const fullPageErrors = process.env.FULL_PAGE_ERRORS === '1' && devMode;
 
     const development = {};
     if (argv.mode === "production") {
@@ -89,7 +91,7 @@ module.exports = (env, argv) => {
             "mobileguide": "./src/vector/mobile_guide/index.ts",
             "jitsi": "./src/vector/jitsi/index.ts",
             "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.js",
-            ...(useCssHotReload ? {} : cssThemes),
+            ...(useHMR ? {} : cssThemes),
         },
 
         optimization: {
@@ -173,7 +175,7 @@ module.exports = (env, argv) => {
                 /olm[\\/](javascript[\\/])?olm\.js$/,
             ],
             rules: [
-                useCssHotReload && {
+                useHMR && {
                     test: /devcss\.ts$/,
                     loader: 'string-replace-loader',
                     options: {
@@ -207,6 +209,9 @@ module.exports = (env, argv) => {
                     loader: 'babel-loader',
                     options: {
                         cacheDirectory: true,
+                        plugins: [
+                            useHMR && require.resolve('react-refresh/babel'),
+                        ].filter(Boolean),
                     },
                 },
                 {
@@ -266,7 +271,7 @@ module.exports = (env, argv) => {
                          * of the JS/TS files.
                          * Should be MUCH better with webpack 5, but we're stuck to this solution for now.
                          */
-                        useCssHotReload ? {
+                        useHMR ? {
                             loader: 'style-loader',
                             /**
                              * If we refactor the `theme.js` in `matrix-react-sdk` a little bit,
@@ -458,15 +463,10 @@ module.exports = (env, argv) => {
         },
 
         plugins: [
-            new webpack.EnvironmentPlugin({
-                NODE_ENV: 'development', // use 'development' unless process.env.NODE_ENV is defined
-                DEBUG: false,
-            }),
-
             // This exports our CSS using the splitChunks and loaders above.
             new MiniCssExtractPlugin({
-                filename: useCssHotReload ? "bundles/[name].css" : "bundles/[hash]/[name].css",
-                chunkFilename: useCssHotReload ? "bundles/[name].css" : "bundles/[hash]/[name].css",
+                filename: useHMR ? "bundles/[name].css" : "bundles/[hash]/[name].css",
+                chunkFilename: useHMR ? "bundles/[name].css" : "bundles/[hash]/[name].css",
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }),
 
@@ -526,8 +526,9 @@ module.exports = (env, argv) => {
             new HtmlWebpackInjectPreload({
                 files: [{ match: /.*Inter.*\.woff2$/ }],
             }),
+            useHMR && new ReactRefreshWebpackPlugin(fullPageErrors ? undefined : { overlay: { entry: false } }),
 
-        ],
+        ].filter(Boolean),
 
         output: {
             path: path.join(__dirname, "webapp"),
@@ -553,8 +554,6 @@ module.exports = (env, argv) => {
             // Only output errors, warnings, or new compilations.
             // This hides the massive list of modules.
             stats: 'minimal',
-            // hot: false,
-            // injectHot: false,
             hotOnly: true,
             inline: true,
         },
