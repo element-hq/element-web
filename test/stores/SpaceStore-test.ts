@@ -276,10 +276,12 @@ describe("SpaceStore", () => {
 
         describe("test fixture 1", () => {
             beforeEach(async () => {
-                [fav1, fav2, fav3, dm1, dm2, dm3, orphan1, orphan2, invite1, invite2, room1].forEach(mkRoom);
+                [fav1, fav2, fav3, dm1, dm2, dm3, orphan1, orphan2, invite1, invite2, room1, room2, room3]
+                    .forEach(mkRoom);
                 mkSpace(space1, [fav1, room1]);
                 mkSpace(space2, [fav1, fav2, fav3, room1]);
                 mkSpace(space3, [invite2]);
+                // client.getRoom.mockImplementation(roomId => rooms.find(room => room.roomId === roomId));
 
                 [fav1, fav2, fav3].forEach(roomId => {
                     client.getRoom(roomId).tags = {
@@ -328,6 +330,48 @@ describe("SpaceStore", () => {
                     dm2Partner,
                 ]);
                 // dmPartner3 is not in any common spaces with you
+
+                // room 2 claims to be a child of space2 and is so via a valid m.space.parent
+                const cliRoom2 = client.getRoom(room2);
+                cliRoom2.currentState.getStateEvents.mockImplementation(testUtils.mockStateEventImplementation([
+                    mkEvent({
+                        event: true,
+                        type: EventType.SpaceParent,
+                        room: room2,
+                        user: client.getUserId(),
+                        skey: space2,
+                        content: { via: [], canonical: true },
+                        ts: Date.now(),
+                    }),
+                ]));
+                const cliSpace2 = client.getRoom(space2);
+                cliSpace2.currentState.maySendStateEvent.mockImplementation((evType: string, userId: string) => {
+                    if (evType === EventType.SpaceChild) {
+                        return userId === client.getUserId();
+                    }
+                    return true;
+                });
+
+                // room 3 claims to be a child of space3 but is not due to invalid m.space.parent (permissions)
+                const cliRoom3 = client.getRoom(room3);
+                cliRoom3.currentState.getStateEvents.mockImplementation(testUtils.mockStateEventImplementation([
+                    mkEvent({
+                        event: true,
+                        type: EventType.SpaceParent,
+                        room: room3,
+                        user: client.getUserId(),
+                        skey: space3,
+                        content: { via: [], canonical: true },
+                        ts: Date.now(),
+                    }),
+                ]));
+                const cliSpace3 = client.getRoom(space3);
+                cliSpace3.currentState.maySendStateEvent.mockImplementation((evType: string, userId: string) => {
+                    if (evType === EventType.SpaceChild) {
+                        return false;
+                    }
+                    return true;
+                });
 
                 await run();
             });
@@ -444,6 +488,14 @@ describe("SpaceStore", () => {
                 expect(store.getNotificationState(space1).rooms.map(r => r.roomId).includes(room1)).toBeTruthy();
                 expect(store.getNotificationState(space2).rooms.map(r => r.roomId).includes(room1)).toBeTruthy();
                 expect(store.getNotificationState(space3).rooms.map(r => r.roomId).includes(room1)).toBeFalsy();
+            });
+
+            it("honours m.space.parent if sender has permission in parent space", () => {
+                expect(store.getSpaceFilteredRoomIds(client.getRoom(space2)).has(room2)).toBeTruthy();
+            });
+
+            it("does not honour m.space.parent if sender does not have permission in parent space", () => {
+                expect(store.getSpaceFilteredRoomIds(client.getRoom(space3)).has(room3)).toBeFalsy();
             });
         });
     });
@@ -562,7 +614,7 @@ describe("SpaceStore", () => {
             ]);
             mkSpace(space3).getMyMembership.mockReturnValue("invite");
             await run();
-            await store.setActiveSpace(null);
+            store.setActiveSpace(null);
             expect(store.activeSpace).toBe(null);
         });
         afterEach(() => {
@@ -570,31 +622,31 @@ describe("SpaceStore", () => {
         });
 
         it("switch to home space", async () => {
-            await store.setActiveSpace(client.getRoom(space1));
+            store.setActiveSpace(client.getRoom(space1));
             fn.mockClear();
 
-            await store.setActiveSpace(null);
+            store.setActiveSpace(null);
             expect(fn).toHaveBeenCalledWith(UPDATE_SELECTED_SPACE, null);
             expect(store.activeSpace).toBe(null);
         });
 
         it("switch to invited space", async () => {
             const space = client.getRoom(space3);
-            await store.setActiveSpace(space);
+            store.setActiveSpace(space);
             expect(fn).toHaveBeenCalledWith(UPDATE_SELECTED_SPACE, space);
             expect(store.activeSpace).toBe(space);
         });
 
         it("switch to top level space", async () => {
             const space = client.getRoom(space1);
-            await store.setActiveSpace(space);
+            store.setActiveSpace(space);
             expect(fn).toHaveBeenCalledWith(UPDATE_SELECTED_SPACE, space);
             expect(store.activeSpace).toBe(space);
         });
 
         it("switch to subspace", async () => {
             const space = client.getRoom(space2);
-            await store.setActiveSpace(space);
+            store.setActiveSpace(space);
             expect(fn).toHaveBeenCalledWith(UPDATE_SELECTED_SPACE, space);
             expect(store.activeSpace).toBe(space);
         });
@@ -602,7 +654,7 @@ describe("SpaceStore", () => {
         it("switch to unknown space is a nop", async () => {
             expect(store.activeSpace).toBe(null);
             const space = client.getRoom(room1); // not a space
-            await store.setActiveSpace(space);
+            store.setActiveSpace(space);
             expect(fn).not.toHaveBeenCalledWith(UPDATE_SELECTED_SPACE, space);
             expect(store.activeSpace).toBe(null);
         });
@@ -635,59 +687,59 @@ describe("SpaceStore", () => {
         };
 
         it("last viewed room in target space is the current viewed and in both spaces", async () => {
-            await store.setActiveSpace(client.getRoom(space1));
+            store.setActiveSpace(client.getRoom(space1));
             viewRoom(room2);
-            await store.setActiveSpace(client.getRoom(space2));
+            store.setActiveSpace(client.getRoom(space2));
             viewRoom(room2);
-            await store.setActiveSpace(client.getRoom(space1));
+            store.setActiveSpace(client.getRoom(space1));
             expect(getCurrentRoom()).toBe(room2);
         });
 
         it("last viewed room in target space is in the current space", async () => {
-            await store.setActiveSpace(client.getRoom(space1));
+            store.setActiveSpace(client.getRoom(space1));
             viewRoom(room2);
-            await store.setActiveSpace(client.getRoom(space2));
+            store.setActiveSpace(client.getRoom(space2));
             expect(getCurrentRoom()).toBe(space2);
-            await store.setActiveSpace(client.getRoom(space1));
+            store.setActiveSpace(client.getRoom(space1));
             expect(getCurrentRoom()).toBe(room2);
         });
 
         it("last viewed room in target space is not in the current space", async () => {
-            await store.setActiveSpace(client.getRoom(space1));
+            store.setActiveSpace(client.getRoom(space1));
             viewRoom(room1);
-            await store.setActiveSpace(client.getRoom(space2));
+            store.setActiveSpace(client.getRoom(space2));
             viewRoom(room2);
-            await store.setActiveSpace(client.getRoom(space1));
+            store.setActiveSpace(client.getRoom(space1));
             expect(getCurrentRoom()).toBe(room1);
         });
 
         it("last viewed room is target space is not known", async () => {
-            await store.setActiveSpace(client.getRoom(space1));
+            store.setActiveSpace(client.getRoom(space1));
             viewRoom(room1);
             localStorage.setItem(`mx_space_context_${space2}`, orphan2);
-            await store.setActiveSpace(client.getRoom(space2));
+            store.setActiveSpace(client.getRoom(space2));
             expect(getCurrentRoom()).toBe(space2);
         });
 
         it("last viewed room is target space is no longer in that space", async () => {
-            await store.setActiveSpace(client.getRoom(space1));
+            store.setActiveSpace(client.getRoom(space1));
             viewRoom(room1);
             localStorage.setItem(`mx_space_context_${space2}`, room1);
-            await store.setActiveSpace(client.getRoom(space2));
+            store.setActiveSpace(client.getRoom(space2));
             expect(getCurrentRoom()).toBe(space2); // Space home instead of room1
         });
 
         it("no last viewed room in target space", async () => {
-            await store.setActiveSpace(client.getRoom(space1));
+            store.setActiveSpace(client.getRoom(space1));
             viewRoom(room1);
-            await store.setActiveSpace(client.getRoom(space2));
+            store.setActiveSpace(client.getRoom(space2));
             expect(getCurrentRoom()).toBe(space2);
         });
 
         it("no last viewed room in home space", async () => {
-            await store.setActiveSpace(client.getRoom(space1));
+            store.setActiveSpace(client.getRoom(space1));
             viewRoom(room1);
-            await store.setActiveSpace(null);
+            store.setActiveSpace(null);
             expect(getCurrentRoom()).toBeNull(); // Home
         });
     });
@@ -715,28 +767,28 @@ describe("SpaceStore", () => {
 
         it("no switch required, room is in current space", async () => {
             viewRoom(room1);
-            await store.setActiveSpace(client.getRoom(space1), false);
+            store.setActiveSpace(client.getRoom(space1), false);
             viewRoom(room2);
             expect(store.activeSpace).toBe(client.getRoom(space1));
         });
 
         it("switch to canonical parent space for room", async () => {
             viewRoom(room1);
-            await store.setActiveSpace(client.getRoom(space2), false);
+            store.setActiveSpace(client.getRoom(space2), false);
             viewRoom(room2);
             expect(store.activeSpace).toBe(client.getRoom(space2));
         });
 
         it("switch to first containing space for room", async () => {
             viewRoom(room2);
-            await store.setActiveSpace(client.getRoom(space2), false);
+            store.setActiveSpace(client.getRoom(space2), false);
             viewRoom(room3);
             expect(store.activeSpace).toBe(client.getRoom(space1));
         });
 
         it("switch to home for orphaned room", async () => {
             viewRoom(room1);
-            await store.setActiveSpace(client.getRoom(space1), false);
+            store.setActiveSpace(client.getRoom(space1), false);
             viewRoom(orphan1);
             expect(store.activeSpace).toBeNull();
         });
@@ -744,7 +796,7 @@ describe("SpaceStore", () => {
         it("when switching rooms in the all rooms home space don't switch to related space", async () => {
             await setShowAllRooms(true);
             viewRoom(room2);
-            await store.setActiveSpace(null, false);
+            store.setActiveSpace(null, false);
             viewRoom(room1);
             expect(store.activeSpace).toBeNull();
         });

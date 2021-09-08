@@ -14,11 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from "react";
 import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
 import classNames from 'classnames';
 
-export default (props) => {
+interface IProps {
+    numUnreadMessages: number;
+    highlight: boolean;
+    onScrollToBottomClick: (e: React.MouseEvent) => void;
+}
+
+const JumpToBottomButton: React.FC<IProps> = (props) => {
     const className = classNames({
         'mx_JumpToBottomButton': true,
         'mx_JumpToBottomButton_highlight': props.highlight,
@@ -36,3 +43,5 @@ export default (props) => {
         { badge }
     </div>);
 };
+
+export default JumpToBottomButton;

@@ -10,6 +10,7 @@
     max-height: 35vh;
     overflow: clip;
     display: flex;
+    flex-direction: column;
     box-shadow: 0px -16px 32px $composer-shadow-color;
 }
 

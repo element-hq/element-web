@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,17 +19,30 @@ import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
 import { getHostingLink } from '../../../utils/HostingLink';
-import * as sdk from "../../../index";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
+import AccessibleButton from '../elements/AccessibleButton';
+import AvatarSetting from './AvatarSetting';
+
+interface IState {
+    userId?: string;
+    originalDisplayName?: string;
+    displayName?: string;
+    originalAvatarUrl?: string;
+    avatarUrl?: string | ArrayBuffer;
+    avatarFile?: File;
+    enableProfileSave?: boolean;
+}
 
 @replaceableComponent("views.settings.ProfileSettings")
-export default class ProfileSettings extends React.Component {
-    constructor() {
-        super();
+export default class ProfileSettings extends React.Component<{}, IState> {
+    private avatarUpload: React.RefObject<HTMLInputElement> = createRef();
+
+    constructor(props: {}) {
+        super(props);
 
         const client = MatrixClientPeg.get();
         let avatarUrl = OwnProfileStore.instance.avatarMxc;
@@ -43,17 +56,15 @@ export default class ProfileSettings extends React.Component {
             avatarFile: null,
             enableProfileSave: false,
         };
-
-        this._avatarUpload = createRef();
     }
 
-    _uploadAvatar = () => {
-        this._avatarUpload.current.click();
+    private uploadAvatar = (): void => {
+        this.avatarUpload.current.click();
     };
 
-    _removeAvatar = () => {
+    private removeAvatar = (): void => {
         // clear file upload field so same file can be selected
-        this._avatarUpload.current.value = "";
+        this.avatarUpload.current.value = "";
         this.setState({
             avatarUrl: null,
             avatarFile: null,
@@ -61,7 +72,7 @@ export default class ProfileSettings extends React.Component {
         });
     };
 
-    _cancelProfileChanges = async (e) => {
+    private cancelProfileChanges = async (e: React.MouseEvent): Promise<void> => {
         e.stopPropagation();
         e.preventDefault();
 
@@ -74,7 +85,7 @@ export default class ProfileSettings extends React.Component {
         });
     };
 
-    _saveProfile = async (e) => {
+    private saveProfile = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.stopPropagation();
         e.preventDefault();
 
@@ -82,7 +93,7 @@ export default class ProfileSettings extends React.Component {
         this.setState({ enableProfileSave: false });
 
         const client = MatrixClientPeg.get();
-        const newState = {};
+        const newState: IState = {};
 
         const displayName = this.state.displayName.trim();
         try {
@@ -115,14 +126,14 @@ export default class ProfileSettings extends React.Component {
         this.setState(newState);
     };
 
-    _onDisplayNameChanged = (e) => {
+    private onDisplayNameChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             displayName: e.target.value,
             enableProfileSave: true,
         });
     };
 
-    _onAvatarChanged = (e) => {
+    private onAvatarChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
         if (!e.target.files || !e.target.files.length) {
             this.setState({
                 avatarUrl: this.state.originalAvatarUrl,
@@ -144,7 +155,7 @@ export default class ProfileSettings extends React.Component {
         reader.readAsDataURL(file);
     };
 
-    render() {
+    public render(): JSX.Element {
         const hostingSignupLink = getHostingLink('user-settings');
         let hostingSignup = null;
         if (hostingSignupLink) {
@@ -161,20 +172,18 @@ export default class ProfileSettings extends React.Component {
             </span>;
         }
 
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const AvatarSetting = sdk.getComponent('settings.AvatarSetting');
         return (
             <form
-                onSubmit={this._saveProfile}
+                onSubmit={this.saveProfile}
                 autoComplete="off"
                 noValidate={true}
                 className="mx_ProfileSettings_profileForm"
             >
                 <input
                     type="file"
-                    ref={this._avatarUpload}
+                    ref={this.avatarUpload}
                     className="mx_ProfileSettings_avatarUpload"
-                    onChange={this._onAvatarChanged}
+                    onChange={this.onAvatarChanged}
                     accept="image/*"
                 />
                 <div className="mx_ProfileSettings_profile">
@@ -185,7 +194,7 @@ export default class ProfileSettings extends React.Component {
                             type="text"
                             value={this.state.displayName}
                             autoComplete="off"
-                            onChange={this._onDisplayNameChanged}
+                            onChange={this.onDisplayNameChanged}
                         />
                         <p>
                             { this.state.userId }
@@ -193,22 +202,22 @@ export default class ProfileSettings extends React.Component {
                         </p>
                     </div>
                     <AvatarSetting
-                        avatarUrl={this.state.avatarUrl}
+                        avatarUrl={this.state.avatarUrl?.toString()}
                         avatarName={this.state.displayName || this.state.userId}
                         avatarAltText={_t("Profile picture")}
-                        uploadAvatar={this._uploadAvatar}
-                        removeAvatar={this._removeAvatar} />
+                        uploadAvatar={this.uploadAvatar}
+                        removeAvatar={this.removeAvatar} />
                 </div>
                 <div className="mx_ProfileSettings_buttons">
                     <AccessibleButton
-                        onClick={this._cancelProfileChanges}
+                        onClick={this.cancelProfileChanges}
                         kind="link"
                         disabled={!this.state.enableProfileSave}
                     >
                         { _t("Cancel") }
                     </AccessibleButton>
                     <AccessibleButton
-                        onClick={this._saveProfile}
+                        onClick={this.saveProfile}
                         kind="primary"
                         disabled={!this.state.enableProfileSave}
                     >

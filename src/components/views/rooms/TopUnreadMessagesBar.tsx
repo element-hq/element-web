@@ -1,7 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
-Copyright 2019 New Vector Ltd
+Copyright 2016 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,19 +15,18 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-@replaceableComponent("views.rooms.TopUnreadMessagesBar")
-export default class TopUnreadMessagesBar extends React.Component {
-    static propTypes = {
-        onScrollUpClick: PropTypes.func,
-        onCloseClick: PropTypes.func,
-    };
+interface IProps {
+    onScrollUpClick?: (e: React.MouseEvent) => void;
+    onCloseClick?: (e: React.MouseEvent) => void;
+}
 
-    render() {
+@replaceableComponent("views.rooms.TopUnreadMessagesBar")
+export default class TopUnreadMessagesBar extends React.PureComponent<IProps> {
+    public render(): JSX.Element {
         return (
             <div className="mx_TopUnreadMessagesBar">
                 <AccessibleButton

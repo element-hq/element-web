@@ -28,6 +28,8 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import InviteReason from "../elements/InviteReason";
 
+const MemberEventHtmlReasonField = "io.element.html_reason";
+
 const MessageCase = Object.freeze({
     NotLoggedIn: "NotLoggedIn",
     Joining: "Joining",
@@ -492,9 +494,13 @@ export default class RoomPreviewBar extends React.Component {
                 }
 
                 const myUserId = MatrixClientPeg.get().getUserId();
-                const reason = this.props.room.currentState.getMember(myUserId).events.member.event.content.reason;
-                if (reason) {
-                    reasonElement = <InviteReason reason={reason} />;
+                const memberEventContent = this.props.room.currentState.getMember(myUserId).events.member.getContent();
+
+                if (memberEventContent.reason) {
+                    reasonElement = <InviteReason
+                        reason={memberEventContent.reason}
+                        htmlReason={memberEventContent[MemberEventHtmlReasonField]}
+                    />;
                 }
 
                 primaryActionHandler = this.props.onJoinClick;

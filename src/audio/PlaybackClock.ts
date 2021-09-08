@@ -89,9 +89,9 @@ export class PlaybackClock implements IDestroyable {
         return this.observable;
     }
 
-    private checkTime = () => {
+    private checkTime = (force = false) => {
         const now = this.timeSeconds; // calculated dynamically
-        if (this.lastCheck !== now) {
+        if (this.lastCheck !== now || force) {
             this.observable.update([now, this.durationSeconds]);
             this.lastCheck = now;
         }
@@ -141,7 +141,7 @@ export class PlaybackClock implements IDestroyable {
     public syncTo(contextTime: number, clipTime: number) {
         this.clipStart = contextTime - clipTime;
         this.stopped = false; // count as a mid-stream pause (if we were stopped)
-        this.checkTime();
+        this.checkTime(true);
     }
 
     public destroy() {

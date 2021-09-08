@@ -393,9 +393,14 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Always show message timestamps'),
         default: false,
     },
-    "autoplayGifsAndVideos": {
+    "autoplayGifs": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Autoplay GIFs and videos'),
+        displayName: _td('Autoplay GIFs'),
+        default: false,
+    },
+    "autoplayVideo": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Autoplay videos'),
         default: false,
     },
     "enableSyntaxHighlightLanguageDetection": {

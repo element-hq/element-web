@@ -46,7 +46,7 @@ describe('<SendMessageComposer/>', () => {
             const model = new EditorModel([], createPartCreator(), createRenderer());
             model.update("hello world", "insertText", { offset: 11, atNodeEnd: true });
 
-            const content = createMessageContent(model, permalinkCreator);
+            const content = createMessageContent(model, null, false, permalinkCreator);
 
             expect(content).toEqual({
                 body: "hello world",
@@ -58,7 +58,7 @@ describe('<SendMessageComposer/>', () => {
             const model = new EditorModel([], createPartCreator(), createRenderer());
             model.update("hello *world*", "insertText", { offset: 13, atNodeEnd: true });
 
-            const content = createMessageContent(model, permalinkCreator);
+            const content = createMessageContent(model, null, false, permalinkCreator);
 
             expect(content).toEqual({
                 body: "hello *world*",
@@ -72,7 +72,7 @@ describe('<SendMessageComposer/>', () => {
             const model = new EditorModel([], createPartCreator(), createRenderer());
             model.update("/me blinks __quickly__", "insertText", { offset: 22, atNodeEnd: true });
 
-            const content = createMessageContent(model, permalinkCreator);
+            const content = createMessageContent(model, null, false, permalinkCreator);
 
             expect(content).toEqual({
                 body: "blinks __quickly__",
@@ -86,7 +86,7 @@ describe('<SendMessageComposer/>', () => {
             const model = new EditorModel([], createPartCreator(), createRenderer());
             model.update("//dev/null is my favourite place", "insertText", { offset: 32, atNodeEnd: true });
 
-            const content = createMessageContent(model, permalinkCreator);
+            const content = createMessageContent(model, null, false, permalinkCreator);
 
             expect(content).toEqual({
                 body: "/dev/null is my favourite place",
