@@ -33,7 +33,7 @@ export async function upgradeRoom(
     awaitRoom = false,
 ): Promise<string> {
     const cli = room.client;
-    const modal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
+    const spinnerModal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
 
     let newRoomId: string;
     try {
@@ -101,6 +101,6 @@ export async function upgradeRoom(
         }
     }
 
-    modal.close();
+    spinnerModal.close();
     return newRoomId;
 }
