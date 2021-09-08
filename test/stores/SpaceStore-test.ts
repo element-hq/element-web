@@ -276,10 +276,12 @@ describe("SpaceStore", () => {
 
         describe("test fixture 1", () => {
             beforeEach(async () => {
-                [fav1, fav2, fav3, dm1, dm2, dm3, orphan1, orphan2, invite1, invite2, room1].forEach(mkRoom);
+                [fav1, fav2, fav3, dm1, dm2, dm3, orphan1, orphan2, invite1, invite2, room1, room2, room3]
+                    .forEach(mkRoom);
                 mkSpace(space1, [fav1, room1]);
                 mkSpace(space2, [fav1, fav2, fav3, room1]);
                 mkSpace(space3, [invite2]);
+                // client.getRoom.mockImplementation(roomId => rooms.find(room => room.roomId === roomId));
 
                 [fav1, fav2, fav3].forEach(roomId => {
                     client.getRoom(roomId).tags = {
@@ -328,6 +330,48 @@ describe("SpaceStore", () => {
                     dm2Partner,
                 ]);
                 // dmPartner3 is not in any common spaces with you
+
+                // room 2 claims to be a child of space2 and is so via a valid m.space.parent
+                const cliRoom2 = client.getRoom(room2);
+                cliRoom2.currentState.getStateEvents.mockImplementation(testUtils.mockStateEventImplementation([
+                    mkEvent({
+                        event: true,
+                        type: EventType.SpaceParent,
+                        room: room2,
+                        user: client.getUserId(),
+                        skey: space2,
+                        content: { via: [], canonical: true },
+                        ts: Date.now(),
+                    }),
+                ]));
+                const cliSpace2 = client.getRoom(space2);
+                cliSpace2.currentState.maySendStateEvent.mockImplementation((evType: string, userId: string) => {
+                    if (evType === EventType.SpaceChild) {
+                        return userId === client.getUserId();
+                    }
+                    return true;
+                });
+
+                // room 3 claims to be a child of space3 but is not due to invalid m.space.parent (permissions)
+                const cliRoom3 = client.getRoom(room3);
+                cliRoom3.currentState.getStateEvents.mockImplementation(testUtils.mockStateEventImplementation([
+                    mkEvent({
+                        event: true,
+                        type: EventType.SpaceParent,
+                        room: room3,
+                        user: client.getUserId(),
+                        skey: space3,
+                        content: { via: [], canonical: true },
+                        ts: Date.now(),
+                    }),
+                ]));
+                const cliSpace3 = client.getRoom(space3);
+                cliSpace3.currentState.maySendStateEvent.mockImplementation((evType: string, userId: string) => {
+                    if (evType === EventType.SpaceChild) {
+                        return false;
+                    }
+                    return true;
+                });
 
                 await run();
             });
@@ -444,6 +488,14 @@ describe("SpaceStore", () => {
                 expect(store.getNotificationState(space1).rooms.map(r => r.roomId).includes(room1)).toBeTruthy();
                 expect(store.getNotificationState(space2).rooms.map(r => r.roomId).includes(room1)).toBeTruthy();
                 expect(store.getNotificationState(space3).rooms.map(r => r.roomId).includes(room1)).toBeFalsy();
+            });
+
+            it("honours m.space.parent if sender has permission in parent space", () => {
+                expect(store.getSpaceFilteredRoomIds(client.getRoom(space2)).has(room2)).toBeTruthy();
+            });
+
+            it("does not honour m.space.parent if sender does not have permission in parent space", () => {
+                expect(store.getSpaceFilteredRoomIds(client.getRoom(space3)).has(room3)).toBeFalsy();
             });
         });
     });
