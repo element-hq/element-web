@@ -37,12 +37,10 @@ export function decorateStartSendingTime(content: object) {
 export function sendRoundTripMetric(client: MatrixClient, inRoomId: string, forEventId: string) {
     // noinspection JSIgnoredPromiseFromCall
     client.sendEvent(inRoomId, 'io.element.performance_metric', {
-        // XXX: We stick all of this into `m.relates_to` so it doesn't end up encrypted.
-        "m.relates_to": {
-            rel_type: "io.element.metric",
-            event_id: forEventId,
+        "io.element.performance_metrics": {
+            forEventId: forEventId,
             responseTs: Date.now(),
             kind: 'send_time',
-        } as any, // override types because we're actually allowed to add extra metadata to relates_to
+        },
     });
 }
