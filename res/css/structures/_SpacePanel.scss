@@ -208,7 +208,7 @@ $activeBorderColor: $secondary-content;
             background-color: $roomlist-button-bg-color;
 
             &::before {
-                background-color: $primary-fg-color;
+                background-color: $primary-content;
                 mask-image: url('$(res)/img/element-icons/plus.svg');
                 transition: all .2s ease-in-out; // TODO transition
             }
