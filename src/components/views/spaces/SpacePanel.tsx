@@ -203,12 +203,10 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({ children, isPanelCo
                 { (provided, snapshot) => (
                     <SpaceItem
                         {...provided.draggableProps}
-                        {...provided.dragHandleProps}
+                        dragHandleProps={provided.dragHandleProps}
                         key={s.roomId}
                         innerRef={provided.innerRef}
-                        className={snapshot.isDragging
-                            ? "mx_SpaceItem_dragging"
-                            : undefined}
+                        className={snapshot.isDragging ? "mx_SpaceItem_dragging" : undefined}
                         space={s}
                         activeSpaces={activeSpaces}
                         isPanelCollapsed={isPanelCollapsed}
@@ -231,6 +229,8 @@ const SpacePanel = () => {
     }, []);
 
     const onKeyDown = (ev: React.KeyboardEvent) => {
+        if (ev.defaultPrevented) return;
+
         let handled = true;
 
         switch (ev.key) {

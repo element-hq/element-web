@@ -39,7 +39,7 @@ const SpacePublicShare = ({ space, onFinished }: IProps) => {
             onClick={async () => {
                 const permalinkCreator = new RoomPermalinkCreator(space);
                 permalinkCreator.load();
-                const success = await copyPlaintext(permalinkCreator.forRoom());
+                const success = await copyPlaintext(permalinkCreator.forShareableRoom());
                 const text = success ? _t("Copied!") : _t("Failed to copy");
                 setCopiedText(text);
                 await sleep(5000);

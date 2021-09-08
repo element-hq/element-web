@@ -100,6 +100,7 @@ export default class DeviceListener {
      * @param {String[]} deviceIds List of device IDs to dismiss notifications for
      */
     async dismissUnverifiedSessions(deviceIds: Iterable<string>) {
+        console.log("Dismissing unverified sessions: " + Array.from(deviceIds).join(','));
         for (const d of deviceIds) {
             this.dismissed.add(d);
         }
@@ -284,6 +285,9 @@ export default class DeviceListener {
                 }
             }
         }
+
+        console.log("Old unverified sessions: " + Array.from(oldUnverifiedDeviceIds).join(','));
+        console.log("New unverified sessions: " + Array.from(newUnverifiedDeviceIds).join(','));
 
         // Display or hide the batch toast for old unverified sessions
         if (oldUnverifiedDeviceIds.size > 0) {
