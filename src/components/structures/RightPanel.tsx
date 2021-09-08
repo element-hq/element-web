@@ -269,7 +269,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
             case RightPanelPhases.EncryptionPanel:
                 panel = <UserInfo
                     user={this.state.member}
-                    room={this.state.phase === RightPanelPhases.SpaceMemberInfo ? this.state.space : this.props.room}
+                    room={this.context.getRoom(this.state.member.roomId) ?? this.props.room}
                     key={roomId || this.state.member.userId}
                     onClose={this.onClose}
                     phase={this.state.phase}
