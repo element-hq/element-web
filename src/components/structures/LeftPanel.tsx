@@ -399,7 +399,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                         mx_LeftPanel_exploreButton_space: !!this.state.activeSpace,
                     })}
                     onClick={this.onExplore}
-                    title={_t("Explore rooms")}
+                    title={this.state.activeSpace
+                        ? _t("Explore %(spaceName)s", { spaceName: this.state.activeSpace.name })
+                        : _t("Explore rooms")}
                 />
             </div>
         );
