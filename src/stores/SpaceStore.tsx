@@ -257,7 +257,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                                     "go to that room's Security & Privacy settings.") }</p>
 
                                 { /* Reuses classes from TabbedView for simplicity, non-interactive */ }
-                                <div style={{ width: "190px" }}>
+                                <div className="mx_TabbedView_tabsOnLeft" style={{ width: "190px", position: "relative" }}>
                                     <div className="mx_TabbedView_tabLabel">
                                         <span className="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_settingsIcon" />
                                         <span className="mx_TabbedView_tabLabel_text">{ _t("General") }</span>
