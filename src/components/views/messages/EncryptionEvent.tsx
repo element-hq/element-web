@@ -16,6 +16,7 @@ limitations under the License.
 
 import React, { forwardRef, useContext } from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IRoomEncryption } from "matrix-js-sdk/src/crypto/RoomList";
 
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
@@ -35,13 +36,16 @@ const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent }, ref) =>
     const roomId = mxEvent.getRoomId();
     const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(roomId);
 
-    // if no change happened then skip rendering this, a shallow check is enough as events are parsed JSON
-    if (!objectHasDiff(mxEvent.getPrevContent(), mxEvent.getContent())) return null; // nop
+    const prevContent = mxEvent.getPrevContent() as IRoomEncryption;
+    const content = mxEvent.getContent<IRoomEncryption>();
 
-    if (mxEvent.getContent().algorithm === ALGORITHM && isRoomEncrypted) {
+    // if no change happened then skip rendering this, a shallow check is enough as all known fields are top-level.
+    if (!objectHasDiff(prevContent, content)) return null; // nop
+
+    if (content.algorithm === ALGORITHM && isRoomEncrypted) {
         let subtitle: string;
         const dmPartner = DMRoomMap.shared().getUserIdForRoomId(roomId);
-        if (mxEvent.getPrevContent().algorithm === ALGORITHM) {
+        if (prevContent.algorithm === ALGORITHM) {
             subtitle = _t("Some encryption parameters have been changed.");
         } else if (dmPartner) {
             const displayName = cli?.getRoom(roomId)?.getMember(dmPartner)?.rawDisplayName || dmPartner;
