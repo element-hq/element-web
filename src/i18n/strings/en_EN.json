@@ -1643,6 +1643,7 @@
     "Start a new chat": "Start a new chat",
     "Explore all public rooms": "Explore all public rooms",
     "Quick actions": "Quick actions",
+    "Explore %(spaceName)s": "Explore %(spaceName)s",
     "Use the + to make a new room or explore existing ones below": "Use the + to make a new room or explore existing ones below",
     "%(count)s results in all spaces|other": "%(count)s results in all spaces",
     "%(count)s results in all spaces|one": "%(count)s result in all spaces",
