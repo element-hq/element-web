@@ -105,8 +105,12 @@ export default class CallEventGrouper extends EventEmitter {
         return ![...this.events].some((event) => event.sender?.userId === MatrixClientPeg.get().getUserId());
     }
 
-    private get callId(): string {
-        return [...this.events][0].getContent().call_id;
+    private get callId(): string | undefined {
+        return [...this.events][0]?.getContent()?.call_id;
+    }
+
+    private get roomId(): string | undefined {
+        return [...this.events][0]?.getRoomId();
     }
 
     private onSilencedCallsChanged = () => {
@@ -119,18 +123,24 @@ export default class CallEventGrouper extends EventEmitter {
     };
 
     public answerCall = () => {
-        this.call?.answer();
+        defaultDispatcher.dispatch({
+            action: 'answer',
+            room_id: this.roomId,
+        });
     };
 
     public rejectCall = () => {
-        this.call?.reject();
+        defaultDispatcher.dispatch({
+            action: 'reject',
+            room_id: this.roomId,
+        });
     };
 
     public callBack = () => {
         defaultDispatcher.dispatch({
             action: 'place_call',
             type: this.isVoice ? CallType.Voice : CallType.Video,
-            room_id: [...this.events][0]?.getRoomId(),
+            room_id: this.roomId,
         });
     };
 

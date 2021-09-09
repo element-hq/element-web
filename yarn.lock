@@ -2036,10 +2036,10 @@ ajv@^8.0.1:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-allchange@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/allchange/-/allchange-1.0.2.tgz#86b9190e12b7ede4f230ae763cbd504c48fd907b"
-  integrity sha512-qJv1t2yvBThkes8g/dPMt8CGu+04U+q5QjCJn2Ngp92edZU8DJBfKGyGXo7w1iV48LVuQKQDfMsdIWhP7zHdlQ==
+allchange@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/allchange/-/allchange-1.0.3.tgz#f8814ddfbcfe39a01bf4570778ee7e6d9ff0ebb3"
+  integrity sha512-UZkfz5SkNEMFQFLr8vZcXHaph2EbJxmkVNF5Nt6D9RIa5pmAar7oAMfNdda714jg7IQijvaFty5PYazXLgd5WA==
   dependencies:
     "@actions/core" "^1.4.0"
     "@actions/github" "^5.0.0"

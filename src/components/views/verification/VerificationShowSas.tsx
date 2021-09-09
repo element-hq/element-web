@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import { SAS } from "matrix-js-sdk/src/crypto/verification/SAS";
+import { IGeneratedSas } from "matrix-js-sdk/src/crypto/verification/SAS";
 import { DeviceInfo } from "matrix-js-sdk/src//crypto/deviceinfo";
 import { _t, _td } from '../../../languageHandler';
 import { PendingActionSpinner } from "../right_panel/EncryptionInfo";
@@ -30,7 +30,7 @@ interface IProps {
     device?: DeviceInfo;
     onDone: () => void;
     onCancel: () => void;
-    sas: SAS.sas;
+    sas: IGeneratedSas;
     isSelf?: boolean;
     inDialog?: boolean; // whether this component is being shown in a dialog and to use DialogButtons
 }

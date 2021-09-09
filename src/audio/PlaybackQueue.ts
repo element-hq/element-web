@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room } from "matrix-js-sdk/src/models/room";
 import { Playback, PlaybackState } from "./Playback";
 import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { MatrixClientPeg } from "../MatrixClientPeg";
