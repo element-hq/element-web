@@ -3701,5 +3701,7 @@
     "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s ha tolto un messaggio ancorato da questa stanza. Vedi tutti i messaggi ancorati.",
     "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s ha tolto un <a>messaggio ancorato</a> da questa stanza. Vedi tutti i <b>messaggi ancorati</b>.",
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s ha ancorato un messaggio a questa stanza. Vedi tutti i messaggi ancorati.",
-    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s ha ancorato <a>un messaggio</a> a questa stanza. Vedi tutti i <b>messaggi ancorati</b>."
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s ha ancorato <a>un messaggio</a> a questa stanza. Vedi tutti i <b>messaggi ancorati</b>.",
+    "Some encryption parameters have been changed.": "Alcuni parametri di crittografia sono stati modificati.",
+    "Role in <RoomName/>": "Ruolo in <RoomName/>"
 }
