@@ -52,6 +52,7 @@ interface IState {
 @replaceableComponent("structures.ThreadView")
 export default class ThreadView extends React.Component<IProps, IState> {
     private dispatcherRef: string;
+    private timelinePanelRef: React.RefObject<TimelinePanel> = React.createRef();
 
     constructor(props: IProps) {
         super(props);
@@ -112,10 +113,13 @@ export default class ThreadView extends React.Component<IProps, IState> {
 
     private updateThread = (thread?: Thread) => {
         if (thread) {
-            this.setState({ thread });
-        } else {
-            this.forceUpdate();
+            this.setState({
+                thread,
+                replyToEvent: thread.replyToEvent,
+            });
         }
+
+        this.timelinePanelRef.current?.refreshTimeline();
     };
 
     public render(): JSX.Element {
@@ -128,6 +132,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
             >
                 { this.state.thread && (
                     <TimelinePanel
+                        ref={this.timelinePanelRef}
                         manageReadReceipts={false}
                         manageReadMarkers={false}
                         timelineSet={this.state?.thread?.timelineSet}
