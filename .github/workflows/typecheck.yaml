@@ -15,11 +15,10 @@ jobs:
             - name: Switch js-sdk to release mode
               run: |
                   scripts/ci/js-sdk-to-release.js
-                  pushd node_modules/matrix-js-sdk
+                  cd node_modules/matrix-js-sdk
                   yarn install
                   yarn run build:compile
                   yarn run build:types
-                  popd
             - name: Typecheck (release mode)
               run: "yarn run lint:types"
 
