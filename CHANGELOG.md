@@ -1,3 +1,12 @@
+Changes in [3.30.0-rc.2](https://github.com/vector-im/element-desktop/releases/tag/v3.30.0-rc.2) (2021-09-09)
+=============================================================================================================
+
+## ✨ Features
+ * [Release] Add config option to turn on in-room event sending timing metrics  ([\#6773](https://github.com/matrix-org/matrix-react-sdk/pull/6773)).
+
+## 🐛 Bug Fixes
+ * Debounce read marker update on scroll ([\#6774](https://github.com/matrix-org/matrix-react-sdk/pull/6774)).
+
 Changes in [3.30.0-rc.1](https://github.com/vector-im/element-desktop/releases/tag/v3.30.0-rc.1) (2021-09-07)
 =============================================================================================================
 
