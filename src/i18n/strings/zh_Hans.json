@@ -3596,5 +3596,10 @@
     "Currently, %(count)s spaces have access|one": "目前，一个空间有访问权限",
     "& %(count)s more|one": "& 另外 %(count)s",
     "Some encryption parameters have been changed.": "一些加密参数已更改。",
-    "Role in <RoomName/>": "<RoomName/> 中的角色"
+    "Role in <RoomName/>": "<RoomName/> 中的角色",
+    "Explore %(spaceName)s": "探索 %(spaceName)s",
+    "Send a sticker": "发送贴纸",
+    "Reply to thread…": "回复主题帖…",
+    "Reply to encrypted thread…": "回复加密的主题帖…",
+    "Add emoji": "添加表情"
 }
