@@ -3621,5 +3621,6 @@
     "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s připnul <a>zprávu</a> k této místnosti. Zobrazit všechny <b>připnuté zprávy</b>.",
     "Currently, %(count)s spaces have access|one": "V současné době má prostor přístup",
     "& %(count)s more|one": "a %(count)s další",
-    "Some encryption parameters have been changed.": "Byly změněny některé parametry šifrování."
+    "Some encryption parameters have been changed.": "Byly změněny některé parametry šifrování.",
+    "Role in <RoomName/>": "Role v <RoomName/>"
 }
