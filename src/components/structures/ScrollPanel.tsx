@@ -275,7 +275,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         // fractional values (both too big and too small)
         // for scrollTop happen on certain browsers/platforms
         // when scrolled all the way down. E.g. Chrome 72 on debian.
-        // so check difference < 1;
+        // so check difference <= 1;
         return Math.abs(sn.scrollHeight - (sn.scrollTop + sn.clientHeight)) <= 1;
     };
 
