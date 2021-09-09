@@ -121,14 +121,20 @@ const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange }: IProps
             const onRestrictedRoomIdsChange = (newAllowRoomIds: string[]) => {
                 if (!arrayHasDiff(restrictedAllowRoomIds || [], newAllowRoomIds)) return;
 
-                const newContent: IJoinRuleEventContent = {
+                if (!newAllowRoomIds.length) {
+                    setContent({
+                        join_rule: JoinRule.Invite,
+                    });
+                    return;
+                }
+
+                setContent({
                     join_rule: JoinRule.Restricted,
                     allow: newAllowRoomIds.map(roomId => ({
                         "type": RestrictedAllowType.RoomMembership,
                         "room_id": roomId,
                     })),
-                };
-                setContent(newContent);
+                });
             };
 
             const onEditRestrictedClick = async () => {
@@ -208,6 +214,11 @@ const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange }: IProps
                     },
                 });
                 return;
+            }
+
+            // when setting to 0 allowed rooms/spaces set to invite only instead as per the note
+            if (!restrictedAllowRoomIds.length) {
+                joinRule = JoinRule.Invite;
             }
         }
 
