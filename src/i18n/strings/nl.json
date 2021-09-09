@@ -3590,5 +3590,7 @@
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s prikte een bericht vast aan deze kamer. Bekijk alle vastgeprikte berichten.",
     "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s prikte <a>een bericht</a> aan deze kamer. Bekijk alle <b>vastgeprikte berichten</b>.",
     "Currently, %(count)s spaces have access|one": "Momenteel heeft één ruimte toegang",
-    "& %(count)s more|one": "& %(count)s meer"
+    "& %(count)s more|one": "& %(count)s meer",
+    "Some encryption parameters have been changed.": "Enkele versleutingsparameters zijn gewijzigd.",
+    "Role in <RoomName/>": "Rol in <RoomName/>"
 }
