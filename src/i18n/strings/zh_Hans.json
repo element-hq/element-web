@@ -3594,5 +3594,7 @@
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s将一条消息固定到此聊天室。查看所有固定信息。",
     "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s 将<a>一条消息</a>固定到此聊天室。查看所有<b>固定消息</b>。",
     "Currently, %(count)s spaces have access|one": "目前，一个空间有访问权限",
-    "& %(count)s more|one": "& 另外 %(count)s"
+    "& %(count)s more|one": "& 另外 %(count)s",
+    "Some encryption parameters have been changed.": "一些加密参数已更改。",
+    "Role in <RoomName/>": "<RoomName/> 中的角色"
 }
