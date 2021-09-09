@@ -1179,6 +1179,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
         this.setState(this.getEvents());
     }
 
+    // Force refresh the timeline before threads support pending events
+    public refreshTimeline(): void {
+        this.loadTimeline();
+        this.reloadEvents();
+    }
+
     // get the list of events from the timeline window and the pending event list
     private getEvents(): Pick<IState, "events" | "liveEvents" | "firstVisibleEventIndex"> {
         const events: MatrixEvent[] = this.timelineWindow.getEvents();
