@@ -25,6 +25,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 interface ITooltipProps extends React.ComponentProps<typeof AccessibleButton> {
     title: string;
     tooltip?: React.ReactNode;
+    label?: React.ReactNode;
     tooltipClassName?: string;
     forceHide?: boolean;
     yOffset?: number;
@@ -84,7 +85,8 @@ export default class AccessibleTooltipButton extends React.PureComponent<IToolti
                 aria-label={title}
             >
                 { children }
-                { tip }
+                { this.props.label }
+                { (tooltip || title) && tip }
             </AccessibleButton>
         );
     }

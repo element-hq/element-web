@@ -33,6 +33,7 @@ import { ActionPayload } from '../../dispatcher/payloads';
 import { SetRightPanelPhasePayload } from '../../dispatcher/payloads/SetRightPanelPhasePayload';
 import { Action } from '../../dispatcher/actions';
 import { MatrixClientPeg } from '../../MatrixClientPeg';
+import { E2EStatus } from '../../utils/ShieldUtils';
 
 interface IProps {
     room: Room;
@@ -40,6 +41,7 @@ interface IProps {
     resizeNotifier: ResizeNotifier;
     mxEvent: MatrixEvent;
     permalinkCreator?: RoomPermalinkCreator;
+    e2eStatus?: E2EStatus;
 }
 
 interface IState {
@@ -144,6 +146,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                     replyToEvent={this.state?.thread?.replyToEvent}
                     showReplyPreview={false}
                     permalinkCreator={this.props.permalinkCreator}
+                    e2eStatus={this.props.e2eStatus}
                     compact={true}
                 />
             </BaseCard>
