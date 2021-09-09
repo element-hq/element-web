@@ -38,6 +38,7 @@ import ErrorDialog from "../../../dialogs/ErrorDialog";
 
 interface IProps {
     roomId: string;
+    closeSettingsFn: () => void;
 }
 
 interface IState {
@@ -276,6 +277,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 room={room}
                 beforeChange={this.onBeforeJoinRuleChange}
                 onError={this.onJoinRuleChangeError}
+                closeSettingsFn={this.props.closeSettingsFn}
                 promptUpgrade={true}
             />
         </div>;

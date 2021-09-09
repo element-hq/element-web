@@ -57,7 +57,7 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
     // state to show a spinner immediately after clicking "start verification",
     // before we have a request
     const [isRequesting, setRequesting] = useState(false);
-    const [phase, setPhase] = useState(request && request.phase);
+    const [phase, setPhase] = useState(request?.phase);
     useEffect(() => {
         setRequest(verificationRequest);
         if (verificationRequest) {

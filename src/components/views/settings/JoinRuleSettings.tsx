@@ -31,15 +31,18 @@ import RoomUpgradeWarningDialog from "../dialogs/RoomUpgradeWarningDialog";
 import { upgradeRoom } from "../../../utils/RoomUpgrade";
 import { arrayHasDiff } from "../../../utils/arrays";
 import { useLocalEcho } from "../../../hooks/useLocalEcho";
+import dis from "../../../dispatcher/dispatcher";
+import { ROOM_SECURITY_TAB } from "../dialogs/RoomSettingsDialog";
 
 interface IProps {
     room: Room;
     promptUpgrade?: boolean;
+    closeSettingsFn(): void;
     onError(error: Error): void;
     beforeChange?(joinRule: JoinRule): Promise<boolean>; // if returns false then aborts the change
 }
 
-const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange }: IProps) => {
+const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange, closeSettingsFn }: IProps) => {
     const cli = room.client;
 
     const restrictedRoomCapabilities = SpaceStore.instance.restrictedJoinRuleSupport;
@@ -208,9 +211,20 @@ const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange }: IProps
                     targetVersion,
                     description: _t("This upgrade will allow members of selected spaces " +
                         "access to this room without an invite."),
-                    onFinished: (resp) => {
+                    onFinished: async (resp) => {
                         if (!resp?.continue) return;
-                        upgradeRoom(room, targetVersion, resp.invite);
+                        const roomId = await upgradeRoom(room, targetVersion, resp.invite, true, true, true);
+                        closeSettingsFn();
+                        // switch to the new room in the background
+                        dis.dispatch({
+                            action: "view_room",
+                            room_id: roomId,
+                        });
+                        // open new settings on this tab
+                        dis.dispatch({
+                            action: "open_room_settings",
+                            initial_tab_id: ROOM_SECURITY_TAB,
+                        });
                     },
                 });
                 return;

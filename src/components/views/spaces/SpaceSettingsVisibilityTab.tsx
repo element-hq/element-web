@@ -31,9 +31,10 @@ import JoinRuleSettings from "../settings/JoinRuleSettings";
 interface IProps {
     matrixClient: MatrixClient;
     space: Room;
+    closeSettingsFn(): void;
 }
 
-const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space }: IProps) => {
+const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space, closeSettingsFn }: IProps) => {
     const [error, setError] = useState("");
 
     const userId = cli.getUserId();
@@ -119,6 +120,7 @@ const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space }: IProps) => {
                 <JoinRuleSettings
                     room={space}
                     onError={() => setError(_t("Failed to update the visibility of this space"))}
+                    closeSettingsFn={closeSettingsFn}
                 />
             </div>
 
