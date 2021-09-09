@@ -30,7 +30,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {
     aboveLeftOf,
     ContextMenu,
-    ContextMenuTooltipButton,
     useContextMenu,
     MenuItem,
 } from "../../structures/ContextMenu";
@@ -113,7 +112,7 @@ const EmojiButton: React.FC<IEmojiButtonProps> = ({ addEmoji, menuPosition, narr
             className={className}
             onClick={openMenu}
             title={!narrowMode && _t('Emoji picker')}
-            label={narrowMode && _t("Send an emoji")}
+            label={narrowMode && _t("Add emoji")}
         />
 
         { contextMenu }

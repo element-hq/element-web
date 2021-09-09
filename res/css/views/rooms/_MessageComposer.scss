@@ -221,7 +221,8 @@ limitations under the License.
         border-radius: 50%;
     }
 
-    &:hover {
+    &:hover,
+    &.mx_MessageComposer_closeButtonMenu {
         &::after {
             background: rgba($accent-color, 0.1);
         }
@@ -265,7 +266,6 @@ limitations under the License.
 .mx_MessageComposer_sendMessage {
     cursor: pointer;
     position: relative;
-    margin-right: 6px;
     width: 32px;
     height: 32px;
     border-radius: 100%;
