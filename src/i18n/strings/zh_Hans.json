@@ -3604,5 +3604,10 @@
     "Add emoji": "添加表情",
     "Unknown failure": "未知失败",
     "Failed to update the join rules": "未能更新加入列表",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "<spaceName/> 中的任何人都可以寻找和加入。你也可以选择其他空间。"
+    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "<spaceName/> 中的任何人都可以寻找和加入。你也可以选择其他空间。",
+    "Select the roles required to change various parts of the space": "选择改变空间各个部分所需的角色",
+    "Change description": "更改描述",
+    "Change main address for the space": "更改空间主地址",
+    "Change space name": "更改空间名称",
+    "Change space avatar": "更改空间头像"
 }
