@@ -273,14 +273,14 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onScreenshareClick = async (): Promise<void> => {
-        const isScreensharing = await this.props.call.setScreensharingEnabled(
-            !this.state.screensharing,
-            async (): Promise<DesktopCapturerSource> => {
-                const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
-                const [source] = await finished;
-                return source;
-            },
-        );
+        let isScreensharing;
+        if (this.state.screensharing) {
+            isScreensharing = await this.props.call.setScreensharingEnabled(false);
+        } else {
+            const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
+            const [source] = await finished;
+            isScreensharing = await this.props.call.setScreensharingEnabled(true, source);
+        }
 
         this.setState({
             sidebarShown: true,
