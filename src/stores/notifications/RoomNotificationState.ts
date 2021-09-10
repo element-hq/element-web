@@ -88,7 +88,7 @@ export class RoomNotificationState extends NotificationState implements IDestroy
 
         if (getUnsentMessages(this.room).length > 0) {
             // When there are unsent messages we show a red `!`
-            this._color = NotificationColor.Red;
+            this._color = NotificationColor.Unsent;
             this._symbol = "!";
             this._count = 1; // not used, technically
         } else if (RoomNotifs.getRoomNotifsState(this.room.roomId) === RoomNotifs.MUTE) {

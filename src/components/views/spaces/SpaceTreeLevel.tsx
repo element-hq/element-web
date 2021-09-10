@@ -93,6 +93,7 @@ export const SpaceButton: React.FC<IButtonProps> = ({
                 notification={notificationState}
                 aria-label={ariaLabel}
                 tabIndex={tabIndex}
+                showUnsentTooltip={true}
             />
         </div>;
     }
