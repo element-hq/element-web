@@ -3601,5 +3601,8 @@
     "Send a sticker": "发送贴纸",
     "Reply to thread…": "回复主题帖…",
     "Reply to encrypted thread…": "回复加密的主题帖…",
-    "Add emoji": "添加表情"
+    "Add emoji": "添加表情",
+    "Unknown failure": "未知失败",
+    "Failed to update the join rules": "未能更新加入列表",
+    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "<spaceName/> 中的任何人都可以寻找和加入。你也可以选择其他空间。"
 }
