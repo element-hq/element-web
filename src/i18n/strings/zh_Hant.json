@@ -3707,5 +3707,10 @@
     "Currently, %(count)s spaces have access|one": "目前，1 個空間可存取",
     "& %(count)s more|one": "與其他 %(count)s 個",
     "Some encryption parameters have been changed.": "部份加密參數已變更。",
-    "Role in <RoomName/>": "<RoomName/> 中的角色"
+    "Role in <RoomName/>": "<RoomName/> 中的角色",
+    "Explore %(spaceName)s": "探索 %(spaceName)s",
+    "Send a sticker": "傳送貼圖",
+    "Reply to thread…": "回覆討論串……",
+    "Reply to encrypted thread…": "回覆給已加密的討論串……",
+    "Add emoji": "新增表情符號"
 }
