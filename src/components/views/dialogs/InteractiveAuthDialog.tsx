@@ -127,7 +127,7 @@ export default class InteractiveAuthDialog extends React.Component<IProps, IStat
         }
     };
 
-    private onUpdateStagePhase = (newStage, newPhase): void => {
+    private onUpdateStagePhase = (newStage: number, newPhase: number): void => {
         // We copy the stage and stage phase params into state for title selection in render()
         this.setState({ uiaStage: newStage, uiaStagePhase: newPhase });
     };
