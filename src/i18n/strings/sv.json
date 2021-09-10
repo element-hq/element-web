@@ -3619,5 +3619,6 @@
     "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s avfäste ett meddelande i det här rummet. Se alla fästa meddelanden.",
     "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s avfäste <a>ett meddelande</a> i det här rummet. Se alla <b>fästa meddelanden</b>.",
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s fäste ett meddelande i det här rummet. Se alla fästa meddelanden.",
-    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s fäste <a>ett meddelande</a> i det här rummet. Se alla <b>fästa meddelanden</b>."
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s fäste <a>ett meddelande</a> i det här rummet. Se alla <b>fästa meddelanden</b>.",
+    "& %(count)s more|one": "& %(count)s till"
 }

@@ -3638,5 +3638,11 @@
     "The above, but in any room you are joined or invited to as well": "Lo de arriba, pero en cualquier sala en la que estés o te inviten",
     "The above, but in <Room /> as well": "Lo de arriba, pero también en <Room />",
     "Autoplay videos": "Reproducir automáticamente los vídeos",
-    "Autoplay GIFs": "Reproducir automáticamente los GIFs"
+    "Autoplay GIFs": "Reproducir automáticamente los GIFs",
+    "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s ha anclado un mensaje en esta sala. Mira todos los mensajes anclados.",
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s ha anclado <a>un mensaje</a> en esta sala. Mira todos los <b>mensajes anclados</b>.",
+    "Some encryption parameters have been changed.": "Algunos parámetros del cifrado han cambiado.",
+    "Role in <RoomName/>": "Rol en <RoomName/>",
+    "Currently, %(count)s spaces have access|one": "Ahora mismo, un espacio tiene acceso",
+    "& %(count)s more|one": "y %(count)s más"
 }
