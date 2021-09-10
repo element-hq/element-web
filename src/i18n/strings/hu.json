@@ -3698,5 +3698,10 @@
     "Currently, %(count)s spaces have access|one": "Jelenleg a Térnek hozzáférése van",
     "& %(count)s more|one": "és még %(count)s",
     "Some encryption parameters have been changed.": "Néhány titkosítási paraméter megváltozott.",
-    "Role in <RoomName/>": "Szerep itt: <RoomName/>"
+    "Role in <RoomName/>": "Szerep itt: <RoomName/>",
+    "Explore %(spaceName)s": "%(spaceName)s feltérképezése",
+    "Send a sticker": "Matrica küldése",
+    "Reply to thread…": "Válasz az üzenetszálra…",
+    "Reply to encrypted thread…": "Válasz a titkosított üzenetszálra…",
+    "Add emoji": "Emodzsi hozzáadás"
 }
