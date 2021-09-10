@@ -143,15 +143,16 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
         });
 
         if (onClick) {
-            let tooltip;
+            let label: string;
+            let tooltip: JSX.Element;
             if (showUnsentTooltip && this.state.showTooltip && notification.color === NotificationColor.Unsent) {
-                tooltip = (
-                    <Tooltip className="mx_RoleButton_tooltip" label={_t("Message didn't send. Click for info.")} />
-                );
+                label = _t("Message didn't send. Click for info.");
+                tooltip = <Tooltip className="mx_RoleButton_tooltip" label={label} />;
             }
 
             return (
                 <AccessibleButton
+                    aria-label={label}
                     {...props}
                     className={classes}
                     onClick={onClick}

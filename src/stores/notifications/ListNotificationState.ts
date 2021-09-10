@@ -31,10 +31,6 @@ export class ListNotificationState extends NotificationState {
         super();
     }
 
-    public get symbol(): string {
-        return null; // This notification state doesn't support symbols
-    }
-
     public setRooms(rooms: Room[]) {
         // If we're only concerned about the tile count, don't bother setting up listeners.
         if (this.byTileCount) {
@@ -82,6 +78,7 @@ export class ListNotificationState extends NotificationState {
     private calculateTotalState() {
         const snapshot = this.snapshot();
 
+        this._symbol = null;
         if (this.byTileCount) {
             this._color = NotificationColor.Red;
             this._count = this.rooms.length;
@@ -91,6 +88,10 @@ export class ListNotificationState extends NotificationState {
             for (const state of Object.values(this.states)) {
                 this._count += state.count;
                 this._color = Math.max(this.color, state.color);
+            }
+
+            if (this._color === NotificationColor.Unsent) {
+                this._symbol = "!";
             }
         }
 
