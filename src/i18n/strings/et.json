@@ -3676,5 +3676,10 @@
     "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s klammerdas siin jututoas <a>ühe sõnumi</a>. Vaata kõiki <b>klammerdatud sõnumeid</b>.",
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s klammerdas siin jututoas ühe sõnumi. Vaata kõiki klammerdatud sõnumeid.",
     "Some encryption parameters have been changed.": "Mõned krüptimise parameetrid on muutunud.",
-    "Role in <RoomName/>": "Roll jututoas <RoomName/>"
+    "Role in <RoomName/>": "Roll jututoas <RoomName/>",
+    "Add emoji": "Lisa emoji",
+    "Reply to encrypted thread…": "Vasta krüptitud jutulõngas…",
+    "Reply to thread…": "Vasta jutulõngas…",
+    "Send a sticker": "Saada kleeps",
+    "Explore %(spaceName)s": "Tutvu kogukonnaga - %(spaceName)s"
 }
