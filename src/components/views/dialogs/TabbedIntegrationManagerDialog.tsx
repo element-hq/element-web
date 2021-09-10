@@ -25,15 +25,9 @@ import { IntegrationManagerInstance } from "../../../integrations/IntegrationMan
 import ScalarAuthClient from "../../../ScalarAuthClient";
 import AccessibleButton from "../elements/AccessibleButton";
 import IntegrationManager from "../settings/IntegrationManager";
+import { IDialogProps } from "./IDialogProps";
 
-interface IProps {
-    /**
-     * Called with:
-     *     * success {bool} True if the user accepted any douments, false if cancelled
-     *     * agreedUrls {string[]} List of agreed URLs
-     */
-    onFinished: () => void;
-
+interface IProps extends IDialogProps {
     /**
      * Optional room where the integration manager should be open to
      */

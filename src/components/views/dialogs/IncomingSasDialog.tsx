@@ -26,6 +26,7 @@ import Spinner from "../elements/Spinner";
 import VerificationShowSas from "../verification/VerificationShowSas";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
+import { IDialogProps } from "./IDialogProps";
 
 const PHASE_START = 0;
 const PHASE_SHOW_SAS = 1;
@@ -33,9 +34,8 @@ const PHASE_WAIT_FOR_PARTNER_TO_CONFIRM = 2;
 const PHASE_VERIFIED = 3;
 const PHASE_CANCELLED = 4;
 
-interface IProps {
+interface IProps extends IDialogProps {
     verifier: any; // TODO types
-    onFinished: (confirmed: boolean) => void;
 }
 
 interface IState {

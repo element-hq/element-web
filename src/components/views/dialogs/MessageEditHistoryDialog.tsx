@@ -26,10 +26,10 @@ import ScrollPanel from "../../structures/ScrollPanel";
 import Spinner from "../elements/Spinner";
 import EditHistoryMessage from "../messages/EditHistoryMessage";
 import DateSeparator from "../messages/DateSeparator";
+import { IDialogProps } from "./IDialogProps";
 
-interface IProps {
+interface IProps extends IDialogProps {
     mxEvent: MatrixEvent;
-    onFinished: () => void;
 }
 
 interface IState {

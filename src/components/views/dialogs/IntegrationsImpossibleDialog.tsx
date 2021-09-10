@@ -19,11 +19,9 @@ import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import * as sdk from "../../../index";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { IDialogProps } from "./IDialogProps";
 
-interface IProps {
-    onFinished: () => void;
-
-}
+interface IProps extends IDialogProps {}
 
 @replaceableComponent("views.dialogs.IntegrationsImpossibleDialog")
 export default class IntegrationsImpossibleDialog extends React.Component<IProps> {

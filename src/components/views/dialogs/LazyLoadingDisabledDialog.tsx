@@ -20,8 +20,7 @@ import QuestionDialog from './QuestionDialog';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 
-interface IProps {
-    onFinished: () => void;
+interface IProps extends IDialogProps {
     host: string;
 }
 

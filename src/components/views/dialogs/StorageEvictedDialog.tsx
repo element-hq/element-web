@@ -22,10 +22,9 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import BugReportDialog from "./BugReportDialog";
+import { IDialogProps } from "./IDialogProps";
 
-interface IProps {
-    onFinished: (confirmed: boolean) => void;
-}
+interface IProps extends IDialogProps { }
 
 @replaceableComponent("views.dialogs.StorageEvictedDialog")
 export default class StorageEvictedDialog extends React.Component<IProps> {

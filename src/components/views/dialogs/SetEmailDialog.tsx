@@ -26,10 +26,10 @@ import ErrorDialog from "./ErrorDialog";
 import QuestionDialog from "./QuestionDialog";
 import BaseDialog from "./BaseDialog";
 import EditableText from "../elements/EditableText";
+import { IDialogProps } from "./IDialogProps";
 
-interface IProps {
+interface IProps extends IDialogProps {
     title: string;
-    onFinished: (confirmed: boolean) => void;
 }
 
 interface IState {

@@ -25,10 +25,10 @@ import QuestionDialog from "./QuestionDialog";
 import BugReportDialog from "./BugReportDialog";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
+import { IDialogProps } from "./IDialogProps";
 
-interface IProps {
+interface IProps extends IDialogProps {
     error: string;
-    onFinished: () => void;
 }
 
 @replaceableComponent("views.dialogs.SessionRestoreErrorDialog")

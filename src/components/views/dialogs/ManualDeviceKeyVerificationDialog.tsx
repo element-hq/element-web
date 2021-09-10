@@ -25,11 +25,11 @@ import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import QuestionDialog from "./QuestionDialog";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
+import { IDialogProps } from "./IDialogProps";
 
-interface IProps {
+interface IProps extends IDialogProps {
     userId: string;
     device: DeviceInfo;
-    onFinished: (confirmed: boolean) => void;
 }
 
 @replaceableComponent("views.dialogs.ManualDeviceKeyVerificationDialog")

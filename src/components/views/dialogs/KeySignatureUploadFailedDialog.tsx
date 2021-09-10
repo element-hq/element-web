@@ -20,15 +20,15 @@ import SdkConfig from '../../../SdkConfig';
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import Spinner from "../elements/Spinner";
+import { IDialogProps } from "./IDialogProps";
 
-interface IProps {
+interface IProps extends IDialogProps {
     failures: Record<string, Record<string, {
         errcode: string;
         error: string;
     }>>;
     source: string;
     continuation: () => void;
-    onFinished: () => void;
 }
 
 const KeySignatureUploadFailedDialog: React.FC<IProps> = ({

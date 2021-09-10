@@ -21,8 +21,9 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { IFieldState, IValidationResult } from "../elements/Validation";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
+import { IDialogProps } from "./IDialogProps";
 
- interface IProps {
+interface IProps extends IDialogProps {
     title?: string;
     description?: string | JSX.Element;
     value?: string;
@@ -30,7 +31,6 @@ import DialogButtons from "../elements/DialogButtons";
     button?: string;
     busyMessage?: string; // pass _td string
     focus?: boolean;
-    onFinished: (success: boolean, value?: string) => void;
     hasCancel?: boolean;
     validator?: (fieldState: IFieldState) => IValidationResult; // result of withValidation
     fixedWidth?: boolean;

@@ -21,10 +21,9 @@ import { Action } from "../../../dispatcher/actions";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
+import { IDialogProps } from "./IDialogProps";
 
-interface IProps {
-    onFinished: () => void;
-}
+interface IProps extends IDialogProps {}
 
 @replaceableComponent("views.dialogs.IntegrationsDisabledDialog")
 export default class IntegrationsDisabledDialog extends React.Component<IProps> {

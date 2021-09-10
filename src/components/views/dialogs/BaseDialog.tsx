@@ -27,14 +27,9 @@ import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import { IDialogProps } from "./IDialogProps";
 
-interface IProps {
-    // onFinished callback to call when Escape is pressed
-    // Take a boolean which is true if the dialog was dismissed
-    // with a positive / confirm action or false if it was
-    // cancelled (BaseDialog itself only calls this with false).
-    onFinished: (confirm: any) => void;
-
+interface IProps extends IDialogProps {
     // Whether the dialog should have a 'close' button that will
     // cause the dialog to be cancelled. This should only be set
     // to false if there is nothing the app can sensibly do if the

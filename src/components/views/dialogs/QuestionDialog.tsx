@@ -20,8 +20,9 @@ import classNames from "classnames";
 
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import { IDialogProps } from "./IDialogProps";
 
-interface IProps {
+interface IProps extends IDialogProps {
     title?: string;
     description?: React.ReactNode;
     extraButtons?: React.ReactNode;
@@ -29,7 +30,6 @@ interface IProps {
     buttonDisabled?: boolean;
     danger?: boolean;
     focus?: boolean;
-    onFinished: (confirmed: boolean) => void;
     headerImage?: string;
     quitOnly?: boolean; // quitOnly doesn't show the cancel button just the quit [x].
     fixedWidth?: boolean;

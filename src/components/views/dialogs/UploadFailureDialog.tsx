@@ -22,12 +22,12 @@ import ContentMessages from '../../../ContentMessages';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
+import { IDialogProps } from "./IDialogProps";
 
-interface IProps {
+interface IProps extends IDialogProps {
     badFiles: File[];
     totalFiles: number;
     contentMessages: ContentMessages;
-    onFinished: (success: boolean) => void;
 }
 
 /*

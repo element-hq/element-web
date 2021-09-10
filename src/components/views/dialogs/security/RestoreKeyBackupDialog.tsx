@@ -23,6 +23,7 @@ import { accessSecretStorage } from '../../../../SecurityManager';
 import { IKeyBackupInfo, IKeyBackupRestoreResult } from "matrix-js-sdk/src/crypto/keybackup";
 import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
 import * as sdk from '../../../../index';
+import { IDialogProps } from "../IDialogProps";
 
 enum RestoreType {
     Passphrase = "passphrase",
@@ -37,15 +38,13 @@ enum ProgressState {
 
 }
 
-interface IProps {
+interface IProps extends IDialogProps {
     // if false, will close the dialog as soon as the restore completes succesfully
     // default: true
     showSummary?: boolean;
     // If specified, gather the key from the user but then call the function with the backup
     // key rather than actually (necessarily) restoring the backup.
     keyCallback?: (key: Uint8Array) => void;
-
-    onFinished: (success: boolean) => void;
 }
 
 interface IState {

@@ -27,8 +27,9 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import BaseDialog from "./BaseDialog";
 import { IAuthData } from "matrix-js-sdk/src/interactive-auth";
+import { IDialogProps } from "./IDialogProps";
 
-interface IProps {
+interface IProps extends IDialogProps {
     // matrix client to use for UI auth requests
     matrixClient: MatrixClient;
 
@@ -42,8 +43,6 @@ interface IProps {
 
     // callback
     makeRequest: (auth: IAuthData) => Promise<IAuthData>;
-
-    onFinished: (confirmed: boolean, result?) => void;
 
     // Optional title and body to show when not showing a particular stage
     title?: string;

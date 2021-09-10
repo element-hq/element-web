@@ -25,14 +25,13 @@ import Modal from "../../../Modal";
 import BugReportDialog from "./BugReportDialog";
 import InfoDialog from "./InfoDialog";
 import StyledRadioGroup from "../elements/StyledRadioGroup";
+import { IDialogProps } from "./IDialogProps";
 
 const existingIssuesUrl = "https://github.com/vector-im/element-web/issues" +
     "?q=is%3Aopen+is%3Aissue+sort%3Areactions-%2B1-desc";
 const newIssueUrl = "https://github.com/vector-im/element-web/issues/new/choose";
 
-interface IProps {
-    onFinished: () => void;
-}
+interface IProps extends IDialogProps {}
 
 const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
     const [rating, setRating] = useState<string>();

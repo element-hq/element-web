@@ -17,11 +17,10 @@ limitations under the License.
 import React from 'react';
 import { _t } from "../../../languageHandler";
 import { CommandCategories, Commands } from "../../../SlashCommands";
+import { IDialogProps } from "./IDialogProps";
 import InfoDialog from "./InfoDialog";
 
-interface IProps {
-    onFinished: () => void;
-}
+interface IProps extends IDialogProps {}
 
 const SlashCommandHelpDialog: React.FC<IProps> = ({ onFinished }) => {
     const categories = {};
