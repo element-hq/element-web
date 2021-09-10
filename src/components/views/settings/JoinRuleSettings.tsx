@@ -103,6 +103,7 @@ const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange, closeSet
 
         let description;
         if (joinRule === JoinRule.Restricted && restrictedAllowRoomIds?.length) {
+            // only show the first 4 spaces we know about, so that the UI doesn't grow out of proportion there are lots.
             const shownSpaces = restrictedAllowRoomIds
                 .map(roomId => cli.getRoom(roomId))
                 .filter(room => room?.isSpaceRoom())
