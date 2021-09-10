@@ -31,7 +31,7 @@ interface IProps extends IDialogProps {
     /**
      * Optional room where the integration manager should be open to
      */
-    room: Room;
+    room?: Room;
 
     /**
      * Optional screen to open on the integration manager
