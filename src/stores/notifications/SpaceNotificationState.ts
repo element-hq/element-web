@@ -30,6 +30,10 @@ export class SpaceNotificationState extends NotificationState {
         super();
     }
 
+    public get symbol(): string {
+        return this._color === NotificationColor.Unsent ? "!" : null;
+    }
+
     public setRooms(rooms: Room[]) {
         const oldRooms = this.rooms;
         const diff = arrayDiff(oldRooms, rooms);
@@ -75,10 +79,7 @@ export class SpaceNotificationState extends NotificationState {
             this._color = Math.max(this.color, state.color);
         }
 
-        this._symbol = this._color === NotificationColor.Unsent ? "!" : null;
-
         // finally, publish an update if needed
         this.emitIfUpdated(snapshot);
     }
 }
-
