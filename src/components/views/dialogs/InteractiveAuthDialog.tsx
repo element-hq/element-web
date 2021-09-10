@@ -73,8 +73,8 @@ interface IState {
     authError: Error;
 
     // See _onUpdateStagePhase()
-    uiaStage: number;
-    uiaStagePhase: number;
+    uiaStage: number | string;
+    uiaStagePhase: number | string;
 }
 
 @replaceableComponent("views.dialogs.InteractiveAuthDialog")
@@ -127,7 +127,7 @@ export default class InteractiveAuthDialog extends React.Component<IProps, IStat
         }
     };
 
-    private onUpdateStagePhase = (newStage: number, newPhase: number): void => {
+    private onUpdateStagePhase = (newStage: string | number, newPhase: string | number): void => {
         // We copy the stage and stage phase params into state for title selection in render()
         this.setState({ uiaStage: newStage, uiaStagePhase: newPhase });
     };
