@@ -186,11 +186,14 @@ limitations under the License.
 }
 
 .mx_MessageComposer_button {
+    --size: 26px;
     position: relative;
     margin-right: 6px;
     cursor: pointer;
-    height: 26px;
-    width: 26px;
+    height: var(--size);
+    line-height: var(--size);
+    width: auto;
+    padding-left: calc(var(--size) + 5px);
     border-radius: 100%;
 
     &::before {
@@ -207,8 +210,22 @@ limitations under the License.
         mask-position: center;
     }
 
-    &:hover {
-        background: rgba($accent-color, 0.1);
+    &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 0;
+        width: var(--size);
+        height: var(--size);
+        border-radius: 50%;
+    }
+
+    &:hover,
+    &.mx_MessageComposer_closeButtonMenu {
+        &::after {
+            background: rgba($accent-color, 0.1);
+        }
 
         &::before {
             background-color: $accent-color;
@@ -237,10 +254,18 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/room/composer/sticker.svg');
 }
 
+.mx_MessageComposer_buttonMenu::before {
+    mask-image: url('$(res)/img/image-view/more.svg');
+}
+
+.mx_MessageComposer_closeButtonMenu::before {
+    transform: rotate(90deg);
+    transform-origin: center;
+}
+
 .mx_MessageComposer_sendMessage {
     cursor: pointer;
     position: relative;
-    margin-right: 6px;
     width: 32px;
     height: 32px;
     border-radius: 100%;
@@ -349,10 +374,19 @@ limitations under the License.
     margin-right: 0;
 
     .mx_MessageComposer_wrapper {
-        padding: 0;
+        padding: 0 0 0 25px;
     }
 
     .mx_MessageComposer_button:last-child {
         margin-right: 0;
     }
+
+    .mx_MessageComposer_e2eIcon {
+        left: 0;
+    }
+}
+
+.mx_MessageComposer_Menu .mx_CallContextMenu_item {
+    display: flex;
+    align-items: center;
 }

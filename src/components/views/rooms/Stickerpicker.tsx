@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
-import classNames from 'classnames';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { _t, _td } from '../../../languageHandler';
 import AppTile from '../elements/AppTile';
@@ -27,7 +26,6 @@ import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
 import { ChevronFace, ContextMenu } from "../../structures/ContextMenu";
 import { WidgetType } from "../../../widgets/WidgetType";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { Action } from "../../../dispatcher/actions";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -44,10 +42,12 @@ const PERSISTED_ELEMENT_KEY = "stickerPicker";
 
 interface IProps {
     room: Room;
+    showStickers: boolean;
+    menuPosition?: any;
+    setShowStickers: (showStickers: boolean) => void;
 }
 
 interface IState {
-    showStickers: boolean;
     imError: string;
     stickerpickerX: number;
     stickerpickerY: number;
@@ -72,7 +72,6 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
-            showStickers: false,
             imError: null,
             stickerpickerX: null,
             stickerpickerY: null,
@@ -114,7 +113,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
             console.warn('No widget ID specified, not disabling assets');
         }
 
-        this.setState({ showStickers: false });
+        this.props.setShowStickers(false);
         WidgetUtils.removeStickerpickerWidgets().then(() => {
             this.forceUpdate();
         }).catch((e) => {
@@ -146,15 +145,15 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
     }
 
     public componentDidUpdate(prevProps: IProps, prevState: IState): void {
-        this.sendVisibilityToWidget(this.state.showStickers);
+        this.sendVisibilityToWidget(this.props.showStickers);
     }
 
     private imError(errorMsg: string, e: Error): void {
         console.error(errorMsg, e);
         this.setState({
-            showStickers: false,
             imError: _t(errorMsg),
         });
+        this.props.setShowStickers(false);
     }
 
     private updateWidget = (): void => {
@@ -194,12 +193,12 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                 this.forceUpdate();
                 break;
             case "stickerpicker_close":
-                this.setState({ showStickers: false });
+                this.props.setShowStickers(false);
                 break;
             case Action.AfterRightPanelPhaseChange:
             case "show_left_panel":
             case "hide_left_panel":
-                this.setState({ showStickers: false });
+                this.props.setShowStickers(false);
                 break;
         }
     };
@@ -338,8 +337,8 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
 
         const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
 
+        this.props.setShowStickers(true);
         this.setState({
-            showStickers: true,
             stickerpickerX: x,
             stickerpickerY: y,
             stickerpickerChevronOffset,
@@ -351,8 +350,8 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
      * @param  {Event} ev Event that triggered the function call
      */
     private onHideStickersClick = (ev: React.MouseEvent): void => {
-        if (this.state.showStickers) {
-            this.setState({ showStickers: false });
+        if (this.props.showStickers) {
+            this.props.setShowStickers(false);
         }
     };
 
@@ -360,8 +359,8 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
      * Called when the window is resized
      */
     private onResize = (): void => {
-        if (this.state.showStickers) {
-            this.setState({ showStickers: false });
+        if (this.props.showStickers) {
+            this.props.setShowStickers(false);
         }
     };
 
@@ -369,8 +368,8 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
      * The stickers picker was hidden
      */
     private onFinished = (): void => {
-        if (this.state.showStickers) {
-            this.setState({ showStickers: false });
+        if (this.props.showStickers) {
+            this.props.setShowStickers(false);
         }
     };
 
@@ -395,54 +394,23 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
     };
 
     public render(): JSX.Element {
-        let stickerPicker;
-        let stickersButton;
-        const className = classNames(
-            "mx_MessageComposer_button",
-            "mx_MessageComposer_stickers",
-            "mx_Stickers_hideStickers",
-            "mx_MessageComposer_button_highlight",
-        );
-        if (this.state.showStickers) {
-            // Show hide-stickers button
-            stickersButton =
-                <AccessibleButton
-                    id='stickersButton'
-                    key="controls_hide_stickers"
-                    className={className}
-                    onClick={this.onHideStickersClick}
-                    title={_t("Hide Stickers")}
-                />;
+        if (!this.props.showStickers) return null;
 
-            stickerPicker = <ContextMenu
-                chevronOffset={this.state.stickerpickerChevronOffset}
-                chevronFace={ChevronFace.Bottom}
-                left={this.state.stickerpickerX}
-                top={this.state.stickerpickerY}
-                menuWidth={this.popoverWidth}
-                menuHeight={this.popoverHeight}
-                onFinished={this.onFinished}
-                menuPaddingTop={0}
-                menuPaddingLeft={0}
-                menuPaddingRight={0}
-                zIndex={STICKERPICKER_Z_INDEX}
-            >
-                <GenericElementContextMenu element={this.getStickerpickerContent()} onResize={this.onFinished} />
-            </ContextMenu>;
-        } else {
-            // Show show-stickers button
-            stickersButton =
-                <AccessibleTooltipButton
-                    id='stickersButton'
-                    key="controls_show_stickers"
-                    className="mx_MessageComposer_button mx_MessageComposer_stickers"
-                    onClick={this.onShowStickersClick}
-                    title={_t("Show Stickers")}
-                />;
-        }
-        return <React.Fragment>
-            { stickersButton }
-            { stickerPicker }
-        </React.Fragment>;
+        return <ContextMenu
+            chevronOffset={this.state.stickerpickerChevronOffset}
+            chevronFace={ChevronFace.Bottom}
+            left={this.state.stickerpickerX}
+            top={this.state.stickerpickerY}
+            menuWidth={this.popoverWidth}
+            menuHeight={this.popoverHeight}
+            onFinished={this.onFinished}
+            menuPaddingTop={0}
+            menuPaddingLeft={0}
+            menuPaddingRight={0}
+            zIndex={STICKERPICKER_Z_INDEX}
+            {...this.props.menuPosition}
+        >
+            <GenericElementContextMenu element={this.getStickerpickerContent()} onResize={this.onFinished} />
+        </ContextMenu>;
     }
 }

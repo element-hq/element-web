@@ -54,6 +54,7 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import { ActionPayload } from "../../../dispatcher/payloads";
+import { decorateStartSendingTime, sendRoundTripMetric } from "../../../sendTimePerformanceMetrics";
 
 function addReplyToMessageContent(
     content: IContent,
@@ -418,6 +419,10 @@ export default class SendMessageComposer extends React.Component<IProps> {
             // don't bother sending an empty message
             if (!content.body.trim()) return;
 
+            if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
+                decorateStartSendingTime(content);
+            }
+
             const prom = this.context.sendMessage(roomId, content);
             if (replyToEvent) {
                 // Clear reply_to_event as we put the message into the queue
@@ -433,6 +438,11 @@ export default class SendMessageComposer extends React.Component<IProps> {
                     dis.dispatch({ action: `effects.${effect.command}` });
                 }
             });
+            if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
+                prom.then(resp => {
+                    sendRoundTripMetric(this.context, roomId, resp.event_id);
+                });
+            }
             CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, !!replyToEvent, content);
         }
 

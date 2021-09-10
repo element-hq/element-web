@@ -60,7 +60,7 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
                 SpaceSettingsTab.Visibility,
                 _td("Visibility"),
                 "mx_SpaceSettingsDialog_visibilityIcon",
-                <SpaceSettingsVisibilityTab matrixClient={cli} space={space} />,
+                <SpaceSettingsVisibilityTab matrixClient={cli} space={space} closeSettingsFn={onFinished} />,
             ),
             SettingsStore.getValue(UIFeature.AdvancedSettings)
                 ? new Tab(

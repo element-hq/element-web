@@ -1,5 +1,6 @@
 /*
 Copyright 2019 Travis Ralston
+Copyright 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,13 +21,13 @@ import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { Widget, WidgetKind } from "matrix-widget-api";
 import { OIDCState, WidgetPermissionStore } from "../../../stores/widgets/WidgetPermissionStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import DialogButtons from "../elements/DialogButtons";
+import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
 
-interface IProps {
-    onFinished: (confirmed: boolean) => void;
+interface IProps extends IDialogProps {
     widget: Widget;
-    widgetKind: WidgetKind; // WidgetKind from widget-api
+    widgetKind: WidgetKind;
     inRoomId?: string;
 }
 
@@ -35,7 +36,7 @@ interface IState {
 }
 
 @replaceableComponent("views.dialogs.WidgetOpenIDPermissionsDialog")
-export default class WidgetOpenIDPermissionsDialog extends React.Component<IProps, IState> {
+export default class WidgetOpenIDPermissionsDialog extends React.PureComponent<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
@@ -69,7 +70,7 @@ export default class WidgetOpenIDPermissionsDialog extends React.Component<IProp
         this.setState({ rememberSelection: newVal });
     };
 
-    render() {
+    public render(): JSX.Element {
         return (
             <BaseDialog
                 className='mx_WidgetOpenIDPermissionsDialog'

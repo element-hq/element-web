@@ -759,6 +759,10 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: true,
         controller: new ReducedMotionController(),
     },
+    "Performance.addSendMessageTimingMetadata": {
+        supportedLevels: [SettingLevel.CONFIG],
+        default: false,
+    },
     "Widgets.pinned": { // deprecated
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: {},
