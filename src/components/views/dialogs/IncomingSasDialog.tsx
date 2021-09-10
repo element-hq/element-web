@@ -27,6 +27,7 @@ import VerificationShowSas from "../verification/VerificationShowSas";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import { IDialogProps } from "./IDialogProps";
+import { IGeneratedSas, ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
 
 const PHASE_START = 0;
 const PHASE_SHOW_SAS = 1;
@@ -47,12 +48,12 @@ interface IState {
         displayname?: string;
     };
     opponentProfileError: Error;
-    sas: any; // TODO types
+    sas: IGeneratedSas;
 }
 
 @replaceableComponent("views.dialogs.IncomingSasDialog")
 export default class IncomingSasDialog extends React.Component<IProps, IState> {
-    private showSasEvent: any; // TODO: Types
+    private showSasEvent: ISasEvent;
 
     constructor(props: IProps) {
         super(props);
@@ -115,8 +116,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
         });
     };
 
-    // TODO: Types
-    private onVerifierShowSas = (e): void => {
+    private onVerifierShowSas = (e: ISasEvent): void => {
         this.showSasEvent = e;
         this.setState({
             phase: PHASE_SHOW_SAS,
@@ -124,8 +124,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
         });
     };
 
-    // TODO: Types
-    private onVerifierCancel = (e): void => {
+    private onVerifierCancel = (): void => {
         this.setState({
             phase: PHASE_CANCELLED,
         });
