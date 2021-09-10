@@ -3694,5 +3694,10 @@
     "Some encryption parameters have been changed.": "Janë ndryshuar disa parametra fshehtëzimi.",
     "Role in <RoomName/>": "Rol në <RoomName/>",
     "Currently, %(count)s spaces have access|one": "Aktualisht një hapësirë ka hyrje",
-    "& %(count)s more|one": "& %(count)s më tepër"
+    "& %(count)s more|one": "& %(count)s më tepër",
+    "Explore %(spaceName)s": "Eksploroni %(spaceName)s",
+    "Send a sticker": "Dërgoni një ngjitës",
+    "Reply to thread…": "Përgjigjuni te rrjedhë…",
+    "Reply to encrypted thread…": "Përgjigjuni te rrjedhë e fshehtëzuar…",
+    "Add emoji": "Shtoni emoji"
 }
