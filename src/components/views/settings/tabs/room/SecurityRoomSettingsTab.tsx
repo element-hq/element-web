@@ -425,7 +425,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         }
 
         let advanced;
-        if (this.state.joinRule === JoinRule.Public) {
+        if (room.getJoinRule() === JoinRule.Public) {
             advanced = (
                 <>
                     <AccessibleButton

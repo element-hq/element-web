@@ -27,6 +27,7 @@ import { useStateToggle } from "../../../hooks/useStateToggle";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { useLocalEcho } from "../../../hooks/useLocalEcho";
 import JoinRuleSettings from "../settings/JoinRuleSettings";
+import { useRoomState } from "../../../hooks/useRoomState";
 
 interface IProps {
     matrixClient: MatrixClient;
@@ -39,6 +40,7 @@ const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space, closeSettingsFn 
 
     const userId = cli.getUserId();
 
+    const joinRule = useRoomState(space, state => state.getJoinRule());
     const [guestAccessEnabled, setGuestAccessEnabled] = useLocalEcho<boolean>(
         () => space.currentState.getStateEvents(EventType.RoomGuestAccess, "")
             ?.getContent()?.guest_access === GuestAccess.CanJoin,
@@ -64,7 +66,7 @@ const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space, closeSettingsFn 
     const canonicalAliasEv = space.currentState.getStateEvents(EventType.RoomCanonicalAlias, "");
 
     let advancedSection;
-    if (visibility === SpaceVisibility.Unlisted) {
+    if (joinRule === JoinRule.Public) {
         if (showAdvancedSection) {
             advancedSection = <>
                 <AccessibleButton onClick={toggleAdvancedSection} kind="link" className="mx_SettingsTab_showAdvanced">
