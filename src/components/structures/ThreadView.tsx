@@ -33,6 +33,7 @@ import { ActionPayload } from '../../dispatcher/payloads';
 import { SetRightPanelPhasePayload } from '../../dispatcher/payloads/SetRightPanelPhasePayload';
 import { Action } from '../../dispatcher/actions';
 import { MatrixClientPeg } from '../../MatrixClientPeg';
+import { E2EStatus } from '../../utils/ShieldUtils';
 
 interface IProps {
     room: Room;
@@ -40,6 +41,7 @@ interface IProps {
     resizeNotifier: ResizeNotifier;
     mxEvent: MatrixEvent;
     permalinkCreator?: RoomPermalinkCreator;
+    e2eStatus?: E2EStatus;
 }
 
 interface IState {
@@ -50,6 +52,7 @@ interface IState {
 @replaceableComponent("structures.ThreadView")
 export default class ThreadView extends React.Component<IProps, IState> {
     private dispatcherRef: string;
+    private timelinePanelRef: React.RefObject<TimelinePanel> = React.createRef();
 
     constructor(props: IProps) {
         super(props);
@@ -110,10 +113,13 @@ export default class ThreadView extends React.Component<IProps, IState> {
 
     private updateThread = (thread?: Thread) => {
         if (thread) {
-            this.setState({ thread });
-        } else {
-            this.forceUpdate();
+            this.setState({
+                thread,
+                replyToEvent: thread.replyToEvent,
+            });
         }
+
+        this.timelinePanelRef.current?.refreshTimeline();
     };
 
     public render(): JSX.Element {
@@ -126,6 +132,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
             >
                 { this.state.thread && (
                     <TimelinePanel
+                        ref={this.timelinePanelRef}
                         manageReadReceipts={false}
                         manageReadMarkers={false}
                         timelineSet={this.state?.thread?.timelineSet}
@@ -144,6 +151,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                     replyToEvent={this.state?.thread?.replyToEvent}
                     showReplyPreview={false}
                     permalinkCreator={this.props.permalinkCreator}
+                    e2eStatus={this.props.e2eStatus}
                     compact={true}
                 />
             </BaseCard>

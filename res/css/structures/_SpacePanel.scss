@@ -114,6 +114,7 @@ $activeBorderColor: $secondary-content;
         align-items: center;
         padding: 4px 4px 4px 0;
         width: 100%;
+        cursor: pointer;
 
         &.mx_SpaceButton_active {
             &:not(.mx_SpaceButton_narrow) .mx_SpaceButton_selectionWrapper {
