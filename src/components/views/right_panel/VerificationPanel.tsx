@@ -29,43 +29,27 @@ import VerificationQRCode from "../elements/crypto/VerificationQRCode";
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import E2EIcon from "../rooms/E2EIcon";
-import {
-    PHASE_READY,
-    PHASE_DONE,
-    PHASE_STARTED,
-    PHASE_CANCELLED,
-} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { Phase } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import Spinner from "../elements/Spinner";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleButton from "../elements/AccessibleButton";
 import VerificationShowSas from "../verification/VerificationShowSas";
 
-// XXX: Should be defined in matrix-js-sdk
-enum VerificationPhase {
-    PHASE_UNSENT,
-    PHASE_REQUESTED,
-    PHASE_READY,
-    PHASE_DONE,
-    PHASE_STARTED,
-    PHASE_CANCELLED,
-}
-
 interface IProps {
     layout: string;
     request: VerificationRequest;
     member: RoomMember | User;
-    phase: VerificationPhase;
+    phase: Phase;
     onClose: () => void;
     isRoomEncrypted: boolean;
     inDialog: boolean;
-    key: number;
 }
 
 interface IState {
-    sasEvent?: SAS;
+    sasEvent?: SAS["sasEvent"];
     emojiButtonClicked?: boolean;
     reciprocateButtonClicked?: boolean;
-    reciprocateQREvent?: ReciprocateQRCode;
+    reciprocateQREvent?: ReciprocateQRCode["reciprocateQREvent"];
 }
 
 @replaceableComponent("views.right_panel.VerificationPanel")
@@ -321,9 +305,9 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         const displayName = (member as User).displayName || (member as RoomMember).name || member.userId;
 
         switch (phase) {
-            case PHASE_READY:
+            case Phase.Ready:
                 return this.renderQRPhase();
-            case PHASE_STARTED:
+            case Phase.Started:
                 switch (request.chosenMethod) {
                     case verificationMethods.RECIPROCATE_QR_CODE:
                         return this.renderQRReciprocatePhase();
@@ -346,9 +330,9 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                     default:
                         return null;
                 }
-            case PHASE_DONE:
+            case Phase.Done:
                 return this.renderVerifiedPhase();
-            case PHASE_CANCELLED:
+            case Phase.Cancelled:
                 return this.renderCancelledPhase();
         }
         console.error("VerificationPanel unhandled phase:", phase);
@@ -375,7 +359,8 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
     private updateVerifierState = () => {
         const { request } = this.props;
-        const { sasEvent, reciprocateQREvent } = request.verifier;
+        const sasEvent = (request.verifier as SAS).sasEvent;
+        const reciprocateQREvent = (request.verifier as ReciprocateQRCode).reciprocateQREvent;
         request.verifier.off('show_sas', this.updateVerifierState);
         request.verifier.off('show_reciprocate_qr', this.updateVerifierState);
         this.setState({ sasEvent, reciprocateQREvent });
@@ -402,7 +387,8 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         const { request } = this.props;
         request.on("change", this.onRequestChange);
         if (request.verifier) {
-            const { sasEvent, reciprocateQREvent } = request.verifier;
+            const sasEvent = (request.verifier as SAS).sasEvent;
+            const reciprocateQREvent = (request.verifier as ReciprocateQRCode).reciprocateQREvent;
             this.setState({ sasEvent, reciprocateQREvent });
         }
         this.onRequestChange();

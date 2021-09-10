@@ -94,30 +94,32 @@ const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space }: IProps) => {
     const canonicalAliasEv = space.currentState.getStateEvents(EventType.RoomCanonicalAlias, "");
 
     let advancedSection;
-    if (showAdvancedSection) {
-        advancedSection = <>
-            <AccessibleButton onClick={toggleAdvancedSection} kind="link" className="mx_SettingsTab_showAdvanced">
-                { _t("Hide advanced") }
-            </AccessibleButton>
+    if (visibility === SpaceVisibility.Unlisted) {
+        if (showAdvancedSection) {
+            advancedSection = <>
+                <AccessibleButton onClick={toggleAdvancedSection} kind="link" className="mx_SettingsTab_showAdvanced">
+                    { _t("Hide advanced") }
+                </AccessibleButton>
 
-            <LabelledToggleSwitch
-                value={guestAccessEnabled}
-                onChange={setGuestAccessEnabled}
-                disabled={!canSetGuestAccess}
-                label={_t("Enable guest access")}
-            />
-            <p>
-                { _t("Guests can join a space without having an account.") }
-                <br />
-                { _t("This may be useful for public spaces.") }
-            </p>
-        </>;
-    } else {
-        advancedSection = <>
-            <AccessibleButton onClick={toggleAdvancedSection} kind="link" className="mx_SettingsTab_showAdvanced">
-                { _t("Show advanced") }
-            </AccessibleButton>
-        </>;
+                <LabelledToggleSwitch
+                    value={guestAccessEnabled}
+                    onChange={setGuestAccessEnabled}
+                    disabled={!canSetGuestAccess}
+                    label={_t("Enable guest access")}
+                />
+                <p>
+                    { _t("Guests can join a space without having an account.") }
+                    <br />
+                    { _t("This may be useful for public spaces.") }
+                </p>
+            </>;
+        } else {
+            advancedSection = <>
+                <AccessibleButton onClick={toggleAdvancedSection} kind="link" className="mx_SettingsTab_showAdvanced">
+                    { _t("Show advanced") }
+                </AccessibleButton>
+            </>;
+        }
     }
 
     let addressesSection;

@@ -39,9 +39,12 @@ import { arrayHasDiff } from "../../../../../utils/arrays";
 import SettingsFlag from '../../../elements/SettingsFlag';
 import createRoom, { IOpts } from '../../../../../createRoom';
 import CreateRoomDialog from '../../../dialogs/CreateRoomDialog';
+import dis from "../../../../../dispatcher/dispatcher";
+import { ROOM_SECURITY_TAB } from "../../../dialogs/RoomSettingsDialog";
 
 interface IProps {
     roomId: string;
+    closeSettingsFn: () => void;
 }
 
 interface IState {
@@ -220,9 +223,20 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     targetVersion,
                     description: _t("This upgrade will allow members of selected spaces " +
                         "access to this room without an invite."),
-                    onFinished: (resp) => {
+                    onFinished: async (resp) => {
                         if (!resp?.continue) return;
-                        upgradeRoom(room, targetVersion, resp.invite);
+                        const roomId = await upgradeRoom(room, targetVersion, resp.invite, true, true, true);
+                        this.props.closeSettingsFn();
+                        // switch to the new room in the background
+                        dis.dispatch({
+                            action: "view_room",
+                            room_id: roomId,
+                        });
+                        // open new settings on this tab
+                        dis.dispatch({
+                            action: "open_room_settings",
+                            initial_tab_id: ROOM_SECURITY_TAB,
+                        });
                     },
                 });
                 return;
@@ -620,6 +634,22 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             historySection = null;
         }
 
+        let advanced;
+        if (this.state.joinRule === JoinRule.Public) {
+            advanced = (
+                <>
+                    <AccessibleButton
+                        onClick={this.toggleAdvancedSection}
+                        kind="link"
+                        className="mx_SettingsTab_showAdvanced"
+                    >
+                        { this.state.showAdvancedSection ? _t("Hide advanced") : _t("Show advanced") }
+                    </AccessibleButton>
+                    { this.state.showAdvancedSection && this.renderAdvanced() }
+                </>
+            );
+        }
+
         return (
             <div className="mx_SettingsTab mx_SecurityRoomSettingsTab">
                 <div className="mx_SettingsTab_heading">{ _t("Security & Privacy") }</div>
@@ -645,15 +675,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     { this.renderJoinRule() }
                 </div>
 
-                <AccessibleButton
-                    onClick={this.toggleAdvancedSection}
-                    kind="link"
-                    className="mx_SettingsTab_showAdvanced"
-                >
-                    { this.state.showAdvancedSection ? _t("Hide advanced") : _t("Show advanced") }
-                </AccessibleButton>
-                { this.state.showAdvancedSection && this.renderAdvanced() }
-
+                { advanced }
                 { historySection }
             </div>
         );

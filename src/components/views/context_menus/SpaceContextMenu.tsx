@@ -168,7 +168,7 @@ const SpaceContextMenu = ({ space, onFinished, ...props }: IProps) => {
         defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
             action: Action.SetRightPanelPhase,
             phase: RightPanelPhases.SpaceMemberList,
-            refireParams: { space: space },
+            refireParams: { space },
         });
         onFinished();
     };
