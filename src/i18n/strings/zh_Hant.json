@@ -3705,5 +3705,12 @@
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s 釘選了訊息到此聊天室。檢視所有已釘選的訊息。",
     "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s 釘選了<a>訊息</a>到此聊天室。檢視所有<b>釘選的訊息</b>。",
     "Currently, %(count)s spaces have access|one": "目前，1 個空間可存取",
-    "& %(count)s more|one": "與其他 %(count)s 個"
+    "& %(count)s more|one": "與其他 %(count)s 個",
+    "Some encryption parameters have been changed.": "部份加密參數已變更。",
+    "Role in <RoomName/>": "<RoomName/> 中的角色",
+    "Explore %(spaceName)s": "探索 %(spaceName)s",
+    "Send a sticker": "傳送貼圖",
+    "Reply to thread…": "回覆討論串……",
+    "Reply to encrypted thread…": "回覆給已加密的討論串……",
+    "Add emoji": "新增表情符號"
 }
