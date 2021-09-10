@@ -3702,5 +3702,10 @@
     "Add emoji": "Shtoni emoji",
     "Unknown failure": "Dështim i panjohur",
     "Failed to update the join rules": "S’u arrit të përditësohen rregulla hyrjeje",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Cilido te <spaceName/> mund ta gjejë dhe hyjë në të. Mund të përzgjidhni gjithashtu hapësira të tjera."
+    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Cilido te <spaceName/> mund ta gjejë dhe hyjë në të. Mund të përzgjidhni gjithashtu hapësira të tjera.",
+    "Select the roles required to change various parts of the space": "Përzgjidhni rolet e domosdoshëm për të ndryshuar pjesë të ndryshme të hapësirës",
+    "Change description": "Ndryshoni përshkrimin",
+    "Change main address for the space": "Ndryshoni adresë kryesore për hapësirën",
+    "Change space name": "Ndryshoni emër hapësire",
+    "Change space avatar": "Ndryshoni avatar hapësire"
 }
