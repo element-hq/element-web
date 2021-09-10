@@ -56,7 +56,7 @@ export const createSpace = async (
             power_level_content_override: {
                 // Only allow Admins to write to the timeline to prevent hidden sync spam
                 events_default: 100,
-                ...isPublic ? { invite: 0 } : {},
+                invite: isPublic ? 0 : 50,
             },
             room_alias_name: isPublic && alias ? alias.substr(1, alias.indexOf(":") - 1) : undefined,
             topic,
