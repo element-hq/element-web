@@ -41,6 +41,7 @@ import { Layout } from "./Layout";
 import ReducedMotionController from './controllers/ReducedMotionController';
 import IncompatibleController from "./controllers/IncompatibleController";
 import SdkConfig from "../SdkConfig";
+import PseudonymousAnalyticsController from './controllers/PseudonymousAnalyticsController';
 import NewLayoutSwitcherController from './controllers/NewLayoutSwitcherController';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
@@ -124,6 +125,7 @@ export interface ISetting {
     // not use this for new settings.
     invertedSettingName?: string;
 
+    // XXX: Keep this around for re-use in future Betas
     betaInfo?: {
         title: string; // _td
         caption: string; // _td
@@ -179,42 +181,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             feedbackSubheading: _td("Your feedback will help make spaces better. " +
                 "The more detail you can go into, the better."),
             feedbackLabel: "spaces-feedback",
-            extraSettings: [
-                "feature_spaces.all_rooms",
-                "feature_spaces.space_member_dms",
-                "feature_spaces.space_dm_badges",
-            ],
         },
-    },
-    "feature_spaces.all_rooms": {
-        displayName: _td("Show all rooms in Home"),
-        supportedLevels: LEVELS_FEATURE,
-        default: true,
-        controller: new ReloadOnChangeController(),
-    },
-    "feature_spaces.space_member_dms": {
-        displayName: _td("Show people in spaces"),
-        description: _td("If disabled, you can still add Direct Messages to Personal Spaces. " +
-            "If enabled, you'll automatically see everyone who is a member of the Space."),
-        supportedLevels: LEVELS_FEATURE,
-        default: true,
-        controller: new ReloadOnChangeController(),
-    },
-    "feature_spaces.space_dm_badges": {
-        displayName: _td("Show notification badges for People in Spaces"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-        controller: new ReloadOnChangeController(),
     },
     "feature_dnd": {
         isFeature: true,
         displayName: _td("Show options to enable 'Do not disturb' mode"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
-    "feature_voice_messages": {
-        isFeature: true,
-        displayName: _td("Send and receive voice messages"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -240,6 +211,15 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_thread": {
+        isFeature: true,
+        // Requires a reload as we change an option flag on the `js-sdk`
+        // And the entire sync history needs to be parsed again
+        controller: new ReloadOnChangeController(),
+        displayName: _td("Threaded messaging"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_custom_status": {
         isFeature: true,
         displayName: _td("Custom user status messages"),
@@ -262,7 +242,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "feature_many_integration_managers": {
         isFeature: true,
-        displayName: _td("Multiple integration managers"),
+        displayName: _td("Multiple integration managers (requires manual setup)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -298,11 +278,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "advancedRoomListLogging": {
-        // TODO: Remove flag before launch: https://github.com/vector-im/element-web/issues/14231
-        displayName: _td("Enable advanced debugging for the room list"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+    "feature_pseudonymous_analytics_opt_in": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td('Send pseudonymous analytics data'),
         default: false,
+        controller: new PseudonymousAnalyticsController(),
     },
     "doNotDisturb": {
         supportedLevels: [SettingLevel.DEVICE],
@@ -332,6 +313,13 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "RoomList.backgroundImage": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: null,
+    },
+    "feature_hidden_read_receipts": {
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td(
+            "Don't send read receipts",
+        ),
+        default: false,
     },
     "baseFontSize": {
         displayName: _td("Font size"),
@@ -405,9 +393,14 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Always show message timestamps'),
         default: false,
     },
-    "autoplayGifsAndVideos": {
+    "autoplayGifs": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Autoplay GIFs and videos'),
+        displayName: _td('Autoplay GIFs'),
+        default: false,
+    },
+    "autoplayVideo": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Autoplay videos'),
         default: false,
     },
     "enableSyntaxHighlightLanguageDetection": {
@@ -469,6 +462,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "MessageComposerInput.ctrlEnterToSend": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: isMac ? _td("Use Command + Enter to send a message") : _td("Use Ctrl + Enter to send a message"),
+        default: false,
+    },
+    "MessageComposerInput.surroundWith": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Surround selected text when typing special characters"),
         default: false,
     },
     "MessageComposerInput.autoReplaceEmoji": {
@@ -678,7 +676,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "lowBandwidth": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td('Low bandwidth mode'),
+        displayName: _td('Low bandwidth mode (requires compatible homeserver)'),
         default: false,
         controller: new ReloadOnChangeController(),
     },
@@ -761,6 +759,10 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: true,
         controller: new ReducedMotionController(),
     },
+    "Performance.addSendMessageTimingMetadata": {
+        supportedLevels: [SettingLevel.CONFIG],
+        default: false,
+    },
     "Widgets.pinned": { // deprecated
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: {},
@@ -772,6 +774,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "Widgets.leftPanel": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: null,
+    },
+    "Spaces.allRoomsInHome": {
+        displayName: _td("Show all rooms in Home"),
+        description: _td("All rooms you're in will appear in Home."),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: false,
     },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,

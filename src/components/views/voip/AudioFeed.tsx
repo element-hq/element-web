@@ -23,8 +23,20 @@ interface IProps {
     feed: CallFeed;
 }
 
-export default class AudioFeed extends React.Component<IProps> {
+interface IState {
+    audioMuted: boolean;
+}
+
+export default class AudioFeed extends React.Component<IProps, IState> {
     private element = createRef<HTMLAudioElement>();
+
+    constructor(props: IProps) {
+        super(props);
+
+        this.state = {
+            audioMuted: this.props.feed.isAudioMuted(),
+        };
+    }
 
     componentDidMount() {
         MediaDeviceHandler.instance.addListener(
@@ -60,8 +72,9 @@ export default class AudioFeed extends React.Component<IProps> {
         }
     };
 
-    private playMedia() {
+    private async playMedia() {
         const element = this.element.current;
+        if (!element) return;
         this.onAudioOutputChanged(MediaDeviceHandler.getAudioOutput());
         element.muted = false;
         element.srcObject = this.props.feed.stream;
@@ -77,7 +90,7 @@ export default class AudioFeed extends React.Component<IProps> {
             // should serialise the ones that need to be serialised but then be able to interrupt
             // them with another load() which will cancel the pending one, but since we don't call
             // load() explicitly, it shouldn't be a problem. - Dave
-            element.play();
+            await element.load();
         } catch (e) {
             logger.info("Failed to play media element with feed", this.props.feed, e);
         }
@@ -85,6 +98,7 @@ export default class AudioFeed extends React.Component<IProps> {
 
     private stopMedia() {
         const element = this.element.current;
+        if (!element) return;
 
         element.pause();
         element.src = null;
@@ -96,10 +110,16 @@ export default class AudioFeed extends React.Component<IProps> {
     }
 
     private onNewStream = () => {
+        this.setState({
+            audioMuted: this.props.feed.isAudioMuted(),
+        });
         this.playMedia();
     };
 
     render() {
+        // Do not render the audio element if there is no audio track
+        if (this.state.audioMuted) return null;
+
         return (
             <audio ref={this.element} />
         );

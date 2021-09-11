@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Playback, PlaybackState } from "../../../voice/Playback";
 import React, { createRef, ReactNode, RefObject } from "react";
-import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import PlayPauseButton from "./PlayPauseButton";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { formatBytes } from "../../../utils/FormattingUtils";
@@ -25,46 +23,12 @@ import { Key } from "../../../Keyboard";
 import { _t } from "../../../languageHandler";
 import SeekBar from "./SeekBar";
 import PlaybackClock from "./PlaybackClock";
-
-interface IProps {
-    // Playback instance to render. Cannot change during component lifecycle: create
-    // an all-new component instead.
-    playback: Playback;
-
-    mediaName: string;
-}
-
-interface IState {
-    playbackPhase: PlaybackState;
-    error?: boolean;
-}
+import AudioPlayerBase from "./AudioPlayerBase";
 
 @replaceableComponent("views.audio_messages.AudioPlayer")
-export default class AudioPlayer extends React.PureComponent<IProps, IState> {
+export default class AudioPlayer extends AudioPlayerBase {
     private playPauseRef: RefObject<PlayPauseButton> = createRef();
     private seekRef: RefObject<SeekBar> = createRef();
-
-    constructor(props: IProps) {
-        super(props);
-
-        this.state = {
-            playbackPhase: PlaybackState.Decoding, // default assumption
-        };
-
-        // We don't need to de-register: the class handles this for us internally
-        this.props.playback.on(UPDATE_EVENT, this.onPlaybackUpdate);
-
-        // Don't wait for the promise to complete - it will emit a progress update when it
-        // is done, and it's not meant to take long anyhow.
-        this.props.playback.prepare().catch(e => {
-            console.error("Error processing audio file:", e);
-            this.setState({ error: true });
-        });
-    }
-
-    private onPlaybackUpdate = (ev: PlaybackState) => {
-        this.setState({ playbackPhase: ev });
-    };
 
     private onKeyDown = (ev: React.KeyboardEvent) => {
         // stopPropagation() prevents the FocusComposer catch-all from triggering,
@@ -91,10 +55,10 @@ export default class AudioPlayer extends React.PureComponent<IProps, IState> {
         return `(${formatBytes(bytes)})`;
     }
 
-    public render(): ReactNode {
+    protected renderComponent(): ReactNode {
         // tabIndex=0 to ensure that the whole component becomes a tab stop, where we handle keyboard
         // events for accessibility
-        return <>
+        return (
             <div className='mx_MediaBody mx_AudioPlayer_container' tabIndex={0} onKeyDown={this.onKeyDown}>
                 <div className='mx_AudioPlayer_primaryContainer'>
                     <PlayPauseButton
@@ -124,7 +88,6 @@ export default class AudioPlayer extends React.PureComponent<IProps, IState> {
                     <PlaybackClock playback={this.props.playback} defaultDisplaySeconds={0} />
                 </div>
             </div>
-            { this.state.error && <div className="text-warning">{ _t("Error downloading audio") }</div> }
-        </>;
+        );
     }
 }

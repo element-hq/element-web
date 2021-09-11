@@ -18,4 +18,15 @@ limitations under the License.
     position: fixed;
     left: 0;
     top: 0;
+
+    pointer-events: initial; // restore pointer events so the user can leave/interact
+
+    .mx_VideoFeed_remote.mx_VideoFeed_voice {
+        min-height: 150px;
+    }
+
+    .mx_VideoFeed_local {
+        border-radius: 8px;
+        overflow: hidden;
+    }
 }

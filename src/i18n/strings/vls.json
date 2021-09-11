@@ -1445,5 +1445,11 @@
     "Remove %(email)s?": "%(email)s verwydern?",
     "Remove %(phone)s?": "%(phone)s verwydern?",
     "Explore rooms": "Gesprekkn ountdekkn",
-    "Create Account": "Account anmoakn"
+    "Create Account": "Account anmoakn",
+    "Integration manager": "Integroasjebeheerder",
+    "Identity server": "Identiteitsserver",
+    "Identity server (%(server)s)": "Identiteitsserver (%(server)s)",
+    "Could not connect to identity server": "Kostege geen verbindienge moakn me den identiteitsserver",
+    "Not a valid identity server (status code %(code)s)": "Geen geldigen identiteitsserver (statuscode %(code)s)",
+    "Identity server URL must be HTTPS": "Den identiteitsserver-URL moet HTTPS zyn"
 }

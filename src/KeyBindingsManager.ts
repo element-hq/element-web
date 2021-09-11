@@ -52,13 +52,11 @@ export enum MessageComposerAction {
 
 /** Actions for text editing autocompletion */
 export enum AutocompleteAction {
-    /**
-     * Select previous selection or, if the autocompletion window is not shown, open the window and select the first
-     * selection.
-     */
-    CompleteOrPrevSelection = 'ApplySelection',
-    /** Select next selection or, if the autocompletion window is not shown, open it and select the first selection */
-    CompleteOrNextSelection = 'CompleteOrNextSelection',
+    /** Accepts chosen autocomplete selection */
+    Complete = 'Complete',
+    /** Accepts chosen autocomplete selection or,
+     * if the autocompletion window is not shown, open the window and select the first selection */
+    ForceComplete = 'ForceComplete',
     /** Move to the previous autocomplete selection */
     PrevSelection = 'PrevSelection',
     /** Move to the next autocomplete selection */

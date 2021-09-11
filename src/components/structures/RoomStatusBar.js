@@ -266,8 +266,12 @@ export default class RoomStatusBar extends React.PureComponent {
                 <div className="mx_RoomStatusBar">
                     <div role="alert">
                         <div className="mx_RoomStatusBar_connectionLostBar">
-                            <img src={require("../../../res/img/feather-customised/warning-triangle.svg")} width="24"
-                                height="24" title="/!\ " alt="/!\ " />
+                            <img
+                                src={require("../../../res/img/feather-customised/warning-triangle.svg")}
+                                width="24"
+                                height="24"
+                                title="/!\ "
+                                alt="/!\ " />
                             <div>
                                 <div className="mx_RoomStatusBar_connectionLostBar_title">
                                     { _t('Connectivity to the server has been lost.') }

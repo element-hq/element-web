@@ -20,10 +20,10 @@ import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 
 export default function KeySignatureUploadFailedDialog({
-        failures,
-        source,
-        continuation,
-        onFinished,
+    failures,
+    source,
+    continuation,
+    onFinished,
 }) {
     const RETRIES = 2;
     const BaseDialog = sdk.getComponent('dialogs.BaseDialog');

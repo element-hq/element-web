@@ -92,7 +92,7 @@ const MiniAvatarUploader: React.FC<IProps> = ({ hasAvatar, hasAvatarLabel, noAva
             <div className="mx_MiniAvatarUploader_indicator">
                 { busy ?
                     <Spinner w={20} h={20} /> :
-                    <div className="mx_MiniAvatarUploader_cameraIcon"></div> }
+                    <div className="mx_MiniAvatarUploader_cameraIcon" /> }
             </div>
 
             <div className={classNames("mx_Tooltip", {

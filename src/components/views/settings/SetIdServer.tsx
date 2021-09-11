@@ -426,7 +426,9 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                     disabled={this.state.busy}
                     forceValidity={this.state.error ? false : null}
                 />
-                <AccessibleButton type="submit" kind="primary_sm"
+                <AccessibleButton
+                    type="submit"
+                    kind="primary_sm"
                     onClick={this.checkIdServer}
                     disabled={!this.idServerChangeEnabled()}
                 >{ _t("Change") }</AccessibleButton>

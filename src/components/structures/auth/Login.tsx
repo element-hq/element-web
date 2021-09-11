@@ -463,7 +463,9 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                         "Either use HTTPS or <a>enable unsafe scripts</a>.", {},
                     {
                         'a': (sub) => {
-                            return <a target="_blank" rel="noreferrer noopener"
+                            return <a
+                                target="_blank"
+                                rel="noreferrer noopener"
                                 href="https://www.google.com/search?&q=enable%20unsafe%20scripts"
                             >
                                 { sub }

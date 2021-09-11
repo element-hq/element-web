@@ -17,6 +17,7 @@ limitations under the License.
 import React, { ChangeEvent, createRef, FormEvent, MouseEvent } from 'react';
 import classNames from 'classnames';
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import { AuthType, IAuthDict, IInputs, IStageStatus } from 'matrix-js-sdk/src/interactive-auth';
 
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -73,33 +74,6 @@ import CaptchaForm from "./CaptchaForm";
  * Each component may also provide the following functions (beyond the standard React ones):
  *    focus: set the input focus appropriately in the form.
  */
-
-enum AuthType {
-    Password = "m.login.password",
-    Recaptcha = "m.login.recaptcha",
-    Terms = "m.login.terms",
-    Email = "m.login.email.identity",
-    Msisdn = "m.login.msisdn",
-    Sso = "m.login.sso",
-    SsoUnstable = "org.matrix.login.sso",
-}
-
-/* eslint-disable camelcase */
-interface IAuthDict {
-    type?: AuthType;
-    // TODO: Remove `user` once servers support proper UIA
-    // See https://github.com/vector-im/element-web/issues/10312
-    user?: string;
-    identifier?: any;
-    password?: string;
-    response?: string;
-    // TODO: Remove `threepid_creds` once servers support proper UIA
-    // See https://github.com/vector-im/element-web/issues/10312
-    // See https://github.com/matrix-org/matrix-doc/issues/2220
-    threepid_creds?: any;
-    threepidCreds?: any;
-}
-/* eslint-enable camelcase */
 
 export const DEFAULT_PHASE = 0;
 
@@ -416,8 +390,10 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
         let submitButton;
         if (this.props.showContinue !== false) {
             // XXX: button classes
-            submitButton = <button className="mx_InteractiveAuthEntryComponents_termsSubmit mx_GeneralButton"
-                onClick={this.trySubmit} disabled={!allChecked}>{ _t("Accept") }</button>;
+            submitButton = <button
+                className="mx_InteractiveAuthEntryComponents_termsSubmit mx_GeneralButton"
+                onClick={this.trySubmit}
+                disabled={!allChecked}>{ _t("Accept") }</button>;
         }
 
         return (
@@ -616,7 +592,9 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
                                 aria-label={_t("Code")}
                             />
                             <br />
-                            <input type="submit" value={_t("Submit")}
+                            <input
+                                type="submit"
+                                value={_t("Submit")}
                                 className={submitClasses}
                                 disabled={!enableSubmit}
                             />
@@ -831,7 +809,26 @@ export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
     }
 }
 
-export default function getEntryComponentForLoginType(loginType: AuthType): typeof React.Component {
+export interface IStageComponentProps extends IAuthEntryProps {
+    clientSecret?: string;
+    stageParams?: Record<string, any>;
+    inputs?: IInputs;
+    stageState?: IStageStatus;
+    showContinue?: boolean;
+    continueText?: string;
+    continueKind?: string;
+    fail?(e: Error): void;
+    setEmailSid?(sid: string): void;
+    onCancel?(): void;
+}
+
+export interface IStageComponent extends React.ComponentClass<React.PropsWithRef<IStageComponentProps>> {
+    tryContinue?(): void;
+    attemptFailed?(): void;
+    focus?(): void;
+}
+
+export default function getEntryComponentForLoginType(loginType: AuthType): IStageComponent {
     switch (loginType) {
         case AuthType.Password:
             return PasswordAuthEntry;

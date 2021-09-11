@@ -18,7 +18,6 @@ import {
     objectClone,
     objectDiff,
     objectExcluding,
-    objectFromEntries,
     objectHasDiff,
     objectKeyChanges,
     objectShallowClone,
@@ -240,23 +239,6 @@ describe('objects', () => {
             expect(result).toMatchObject(a);
             expect(result.test).not.toBe(a.test);
             expect(result.test.third).not.toBe(a.test.third);
-        });
-    });
-
-    describe('objectFromEntries', () => {
-        it('should create an object from an array of entries', () => {
-            const output = { a: 1, b: 2, c: 3 };
-            const result = objectFromEntries(Object.entries(output));
-            expect(result).toBeDefined();
-            expect(result).toMatchObject(output);
-        });
-
-        it('should maintain pointers in values', () => {
-            const output = { a: {}, b: 2, c: 3 };
-            const result = objectFromEntries(Object.entries(output));
-            expect(result).toBeDefined();
-            expect(result).toMatchObject(output);
-            expect(result['a']).toBe(output.a);
         });
     });
 });

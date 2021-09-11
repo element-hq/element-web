@@ -18,7 +18,7 @@ limitations under the License.
 .mx_EntityTile {
     display: flex;
     align-items: center;
-    color: $primary-fg-color;
+    color: $primary-content;
     cursor: pointer;
 
     .mx_E2EIcon {
@@ -86,12 +86,12 @@ limitations under the License.
 
 .mx_EntityTile_ellipsis .mx_EntityTile_name {
     font-style: italic;
-    color: $primary-fg-color;
+    color: $primary-content;
 }
 
 .mx_EntityTile_invitePlaceholder .mx_EntityTile_name {
     font-style: italic;
-    color: $primary-fg-color;
+    color: $primary-content;
 }
 
 .mx_EntityTile_unavailable .mx_EntityTile_avatar,

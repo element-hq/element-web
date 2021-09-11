@@ -101,14 +101,16 @@ class Category extends React.PureComponent<IProps> {
                     { name }
                 </h2>
                 <LazyRenderList
-                    element="ul" className="mx_EmojiPicker_list"
-                    itemHeight={EMOJI_HEIGHT} items={rows}
+                    element="ul"
+                    className="mx_EmojiPicker_list"
+                    itemHeight={EMOJI_HEIGHT}
+                    items={rows}
                     scrollTop={localScrollTop}
                     height={localHeight}
                     overflowItems={OVERFLOW_ROWS}
                     overflowMargin={0}
-                    renderItem={this.renderEmojiRow}>
-                </LazyRenderList>
+                    renderItem={this.renderEmojiRow}
+                />
             </section>
         );
     }

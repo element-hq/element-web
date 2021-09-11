@@ -118,9 +118,7 @@ export default class BaseDialog extends React.Component {
 
         let headerImage;
         if (this.props.headerImage) {
-            headerImage = <img className="mx_Dialog_titleImage" src={this.props.headerImage}
-                alt=""
-            />;
+            headerImage = <img className="mx_Dialog_titleImage" src={this.props.headerImage} alt="" />;
         }
 
         return (

@@ -21,6 +21,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { Thread } from 'matrix-js-sdk/src/models/thread';
 
 import ReplyThread from "../elements/ReplyThread";
 import { _t } from '../../../languageHandler';
@@ -55,6 +56,8 @@ import ReadReceiptMarker from "./ReadReceiptMarker";
 import MessageActionBar from "../messages/MessageActionBar";
 import ReactionsRow from '../messages/ReactionsRow';
 import { getEventDisplayInfo } from '../../../utils/EventUtils';
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
+import SettingsStore from "../../../settings/SettingsStore";
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -240,6 +243,7 @@ interface IProps {
     // opaque readreceipt info for each userId; used by ReadReceiptMarker
     // to manage its animations. Should be an empty object when the room
     // first loads
+    // TODO: Proper typing for RR info
     readReceiptMap?: any;
 
     // A function which is used to check if the parent panel is being
@@ -299,6 +303,9 @@ interface IProps {
 
     // whether or not to display the sender
     hideSender?: boolean;
+
+    // whether or not to display thread info
+    showThreadInfo?: boolean;
 }
 
 interface IState {
@@ -315,6 +322,8 @@ interface IState {
     reactions: Relations;
 
     hover: boolean;
+
+    thread?: Thread;
 }
 
 @replaceableComponent("views.rooms.EventTile")
@@ -351,6 +360,8 @@ export default class EventTile extends React.Component<IProps, IState> {
             reactions: this.getReactions(),
 
             hover: false,
+
+            thread: this.props.mxEvent?.getThread(),
         };
 
         // don't do RR animations until we are mounted
@@ -451,7 +462,19 @@ export default class EventTile extends React.Component<IProps, IState> {
             client.on("Room.receipt", this.onRoomReceipt);
             this.isListeningForReceipts = true;
         }
+
+        if (SettingsStore.getValue("feature_thread")) {
+            this.props.mxEvent.once("Thread.ready", this.updateThread);
+            this.props.mxEvent.on("Thread.update", this.updateThread);
+        }
     }
+
+    private updateThread = (thread) => {
+        this.setState({
+            thread,
+        });
+        this.forceUpdate();
+    };
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
     // eslint-disable-next-line
@@ -463,7 +486,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
         if (objectHasDiff(this.state, nextState)) {
             return true;
         }
@@ -489,6 +512,43 @@ export default class EventTile extends React.Component<IProps, IState> {
             this.context.on("Room.receipt", this.onRoomReceipt);
             this.isListeningForReceipts = true;
         }
+    }
+
+    private renderThreadInfo(): React.ReactNode {
+        if (!SettingsStore.getValue("feature_thread")) {
+            return null;
+        }
+
+        const thread = this.state.thread;
+        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        if (!thread || this.props.showThreadInfo === false) {
+            return null;
+        }
+
+        const avatars = Array.from(thread.participants).map((mxId: string) => {
+            const member = room.getMember(mxId);
+            return <MemberAvatar key={member.userId} member={member} width={14} height={14} />;
+        });
+
+        return (
+            <div
+                className="mx_ThreadInfo"
+                onClick={() => {
+                    dis.dispatch({
+                        action: Action.SetRightPanelPhase,
+                        phase: RightPanelPhases.ThreadView,
+                        refireParams: {
+                            event: this.props.mxEvent,
+                        },
+                    });
+                }}
+            >
+                <span className="mx_EventListSummary_avatars">
+                    { avatars }
+                </span>
+                { thread.length - 1 } { thread.length === 2 ? 'reply' : 'replies' }
+            </div>
+        );
     }
 
     private onRoomReceipt = (ev, room) => {
@@ -711,9 +771,12 @@ export default class EventTile extends React.Component<IProps, IState> {
 
             // add to the start so the most recent is on the end (ie. ends up rightmost)
             avatars.unshift(
-                <ReadReceiptMarker key={userId} member={receipt.roomMember}
+                <ReadReceiptMarker
+                    key={userId}
+                    member={receipt.roomMember}
                     fallbackUserId={userId}
-                    leftOffset={left} hidden={hidden}
+                    leftOffset={left}
+                    hidden={hidden}
                     readReceiptInfo={readReceiptInfo}
                     checkUnmounting={this.props.checkUnmounting}
                     suppressAnimation={this.suppressReadReceiptAnimation}
@@ -853,13 +916,19 @@ export default class EventTile extends React.Component<IProps, IState> {
 
     render() {
         const msgtype = this.props.mxEvent.getContent().msgtype;
-        const { tileHandler, isBubbleMessage, isInfoMessage } = getEventDisplayInfo(this.props.mxEvent);
+        const eventType = this.props.mxEvent.getType() as EventType;
+        const {
+            tileHandler,
+            isBubbleMessage,
+            isInfoMessage,
+            isLeftAlignedBubbleMessage,
+        } = getEventDisplayInfo(this.props.mxEvent);
 
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
         if (!tileHandler) {
             const { mxEvent } = this.props;
-            console.warn(`Event type not supported: type:${mxEvent.getType()} isState:${mxEvent.isState()}`);
+            console.warn(`Event type not supported: type:${eventType} isState:${mxEvent.isState()}`);
             return <div className="mx_EventTile mx_EventTile_info mx_MNoticeBody">
                 <div className="mx_EventTile_line">
                     { _t('This event could not be displayed') }
@@ -875,6 +944,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         const isEditing = !!this.props.editState;
         const classes = classNames({
             mx_EventTile_bubbleContainer: isBubbleMessage,
+            mx_EventTile_leftAlignedBubble: isLeftAlignedBubbleMessage,
             mx_EventTile: true,
             mx_EventTile_isEditing: isEditing,
             mx_EventTile_info: isInfoMessage,
@@ -883,7 +953,10 @@ export default class EventTile extends React.Component<IProps, IState> {
             mx_EventTile_sending: !isEditing && isSending,
             mx_EventTile_highlight: this.props.tileShape === TileShape.Notif ? false : this.shouldHighlight(),
             mx_EventTile_selected: this.props.isSelectedEvent,
-            mx_EventTile_continuation: this.props.tileShape ? '' : this.props.continuation,
+            mx_EventTile_continuation: (
+                (this.props.tileShape ? '' : this.props.continuation) ||
+                eventType === EventType.CallInvite
+            ),
             mx_EventTile_last: this.props.last,
             mx_EventTile_lastInSection: this.props.lastInSection,
             mx_EventTile_contextual: this.props.contextual,
@@ -893,6 +966,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             mx_EventTile_unknown: !isBubbleMessage && this.state.verified === E2E_STATE.UNKNOWN,
             mx_EventTile_bad: isEncryptionFailure,
             mx_EventTile_emote: msgtype === 'm.emote',
+            mx_EventTile_noSender: this.props.hideSender,
         });
 
         // If the tile is in the Sending state, don't speak the message.
@@ -928,8 +1002,11 @@ export default class EventTile extends React.Component<IProps, IState> {
         } else if (this.props.layout == Layout.IRC) {
             avatarSize = 14;
             needsSenderProfile = true;
-        } else if (this.props.continuation && this.props.tileShape !== TileShape.FileGrid) {
-            // no avatar or sender profile for continuation messages
+        } else if (
+            (this.props.continuation && this.props.tileShape !== TileShape.FileGrid) ||
+            eventType === EventType.CallInvite
+        ) {
+            // no avatar or sender profile for continuation messages and call tiles
             avatarSize = 0;
             needsSenderProfile = false;
         } else {
@@ -949,8 +1026,10 @@ export default class EventTile extends React.Component<IProps, IState> {
             }
             avatar = (
                 <div className="mx_EventTile_avatar">
-                    <MemberAvatar member={member}
-                        width={avatarSize} height={avatarSize}
+                    <MemberAvatar
+                        member={member}
+                        width={avatarSize}
+                        height={avatarSize}
                         viewUserOnClick={true}
                     />
                 </div>
@@ -1160,8 +1239,10 @@ export default class EventTile extends React.Component<IProps, IState> {
                             />
                             { keyRequestInfo }
                             { actionBar }
+                            { this.props.layout === Layout.IRC && (reactionsRow) }
+                            { this.renderThreadInfo() }
                         </div>
-                        { reactionsRow }
+                        { this.props.layout !== Layout.IRC && (reactionsRow) }
                         { msgOption }
                     </>)
                 );

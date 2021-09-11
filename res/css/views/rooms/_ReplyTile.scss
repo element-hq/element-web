@@ -42,7 +42,7 @@ limitations under the License.
         display: flex;
         flex-direction: column;
         text-decoration: none;
-        color: $primary-fg-color;
+        color: $primary-content;
     }
 
     .mx_RedactedBody {
@@ -59,8 +59,6 @@ limitations under the License.
     .mx_EventTile_content {
         $reply-lines: 2;
         $line-height: $font-22px;
-
-        pointer-events: none;
 
         text-overflow: ellipsis;
         display: -webkit-box;

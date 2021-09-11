@@ -103,8 +103,8 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
     }
 
     private resetRecaptcha() {
-        if (this.captchaWidgetId !== null) {
-            global.grecaptcha.reset(this.captchaWidgetId);
+        if (this.captchaWidgetId) {
+            global?.grecaptcha?.reset(this.captchaWidgetId);
         }
     }
 

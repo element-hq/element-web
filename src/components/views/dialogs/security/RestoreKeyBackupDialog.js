@@ -399,7 +399,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
 
             let keyStatus;
             if (this.state.recoveryKey.length === 0) {
-                keyStatus = <div className="mx_RestoreKeyBackupDialog_keyStatus"></div>;
+                keyStatus = <div className="mx_RestoreKeyBackupDialog_keyStatus" />;
             } else if (this.state.recoveryKeyValid) {
                 keyStatus = <div className="mx_RestoreKeyBackupDialog_keyStatus">
                     { "\uD83D\uDC4D " }{ _t("This looks like a valid Security Key!") }

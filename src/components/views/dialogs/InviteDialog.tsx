@@ -55,7 +55,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { getAddressType } from "../../../UserAddress";
 import BaseAvatar from '../avatars/BaseAvatar';
-import AccessibleButton from '../elements/AccessibleButton';
+import AccessibleButton, { ButtonEvent } from '../elements/AccessibleButton';
 import { compare } from '../../../utils/strings';
 import { IInvite3PID } from "matrix-js-sdk/src/@types/requests";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
@@ -196,7 +196,9 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
             ? <img
                 className='mx_InviteDialog_userTile_avatar mx_InviteDialog_userTile_threepidAvatar'
                 src={require("../../../../res/img/icon-email-pill-avatar.svg")}
-                width={avatarSize} height={avatarSize} />
+                width={avatarSize}
+                height={avatarSize}
+            />
             : <BaseAvatar
                 className='mx_InviteDialog_userTile_avatar'
                 url={this.props.member.getMxcAvatarUrl()
@@ -214,8 +216,11 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
                     className='mx_InviteDialog_userTile_remove'
                     onClick={this.onRemove}
                 >
-                    <img src={require("../../../../res/img/icon-pill-remove.svg")}
-                        alt={_t('Remove')} width={8} height={8}
+                    <img
+                        src={require("../../../../res/img/icon-pill-remove.svg")}
+                        alt={_t('Remove')}
+                        width={8}
+                        height={8}
                     />
                 </AccessibleButton>
             );
@@ -297,7 +302,9 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         const avatar = (this.props.member as ThreepidMember).isEmail
             ? <img
                 src={require("../../../../res/img/icon-email-pill-avatar.svg")}
-                width={avatarSize} height={avatarSize} />
+                width={avatarSize}
+                height={avatarSize}
+            />
             : <BaseAvatar
                 url={this.props.member.getMxcAvatarUrl()
                     ? mediaFromMxc(this.props.member.getMxcAvatarUrl()).getSquareThumbnailHttp(avatarSize)
@@ -387,6 +394,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     private closeCopiedTooltip: () => void;
     private debounceTimer: number = null; // actually number because we're in the browser
     private editorRef = createRef<HTMLInputElement>();
+    private numberEntryFieldRef: React.RefObject<Field> = createRef();
     private unmounted = false;
 
     constructor(props) {
@@ -1276,13 +1284,27 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         this.setState({ dialPadValue: ev.currentTarget.value });
     };
 
-    private onDigitPress = digit => {
+    private onDigitPress = (digit: string, ev: ButtonEvent) => {
         this.setState({ dialPadValue: this.state.dialPadValue + digit });
+
+        // Keep the number field focused so that keyboard entry is still available
+        // However, don't focus if this wasn't the result of directly clicking on the button,
+        // i.e someone using keyboard navigation.
+        if (ev.type === "click") {
+            this.numberEntryFieldRef.current?.focus();
+        }
     };
 
-    private onDeletePress = () => {
+    private onDeletePress = (ev: ButtonEvent) => {
         if (this.state.dialPadValue.length === 0) return;
         this.setState({ dialPadValue: this.state.dialPadValue.slice(0, -1) });
+
+        // Keep the number field focused so that keyboard entry is still available
+        // However, don't focus if this wasn't the result of directly clicking on the button,
+        // i.e someone using keyboard navigation.
+        if (ev.type === "click") {
+            this.numberEntryFieldRef.current?.focus();
+        }
     };
 
     private onTabChange = (tabId: TabId) => {
@@ -1458,7 +1480,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         <p className='mx_InviteDialog_helpText'>
                             <img
                                 src={require("../../../../res/img/element-icons/info.svg")}
-                                width={14} height={14} />
+                                width={14}
+                                height={14} />
                             { " " + _t("Invited people will be able to read old messages.") }
                         </p>;
                 }
@@ -1534,14 +1557,20 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             // Only show the backspace button if the field has content
             let dialPadField;
             if (this.state.dialPadValue.length !== 0) {
-                dialPadField = <Field className="mx_InviteDialog_dialPadField" id="dialpad_number"
+                dialPadField = <Field
+                    ref={this.numberEntryFieldRef}
+                    className="mx_InviteDialog_dialPadField"
+                    id="dialpad_number"
                     value={this.state.dialPadValue}
                     autoFocus={true}
                     onChange={this.onDialChange}
                     postfixComponent={backspaceButton}
                 />;
             } else {
-                dialPadField = <Field className="mx_InviteDialog_dialPadField" id="dialpad_number"
+                dialPadField = <Field
+                    ref={this.numberEntryFieldRef}
+                    className="mx_InviteDialog_dialPadField"
+                    id="dialpad_number"
                     value={this.state.dialPadValue}
                     autoFocus={true}
                     onChange={this.onDialChange}
@@ -1552,14 +1581,19 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 <form onSubmit={this.onDialFormSubmit}>
                     { dialPadField }
                 </form>
-                <Dialpad hasDial={false}
-                    onDigitPress={this.onDigitPress} onDeletePress={this.onDeletePress}
+                <Dialpad
+                    hasDial={false}
+                    onDigitPress={this.onDigitPress}
+                    onDeletePress={this.onDeletePress}
                 />
             </div>;
             tabs.push(new Tab(TabId.DialPad, _td("Dial pad"), 'mx_InviteDialog_dialPadIcon', dialPadSection));
             dialogContent = <React.Fragment>
-                <TabbedView tabs={tabs} initialTabId={this.state.currentTabId}
-                    tabLocation={TabLocation.TOP} onChange={this.onTabChange}
+                <TabbedView
+                    tabs={tabs}
+                    initialTabId={this.state.currentTabId}
+                    tabLocation={TabLocation.TOP}
+                    onChange={this.onTabChange}
                 />
                 { consultConnectSection }
             </React.Fragment>;

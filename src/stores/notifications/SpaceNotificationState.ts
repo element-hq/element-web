@@ -23,7 +23,7 @@ import { NOTIFICATION_STATE_UPDATE, NotificationState } from "./NotificationStat
 import { FetchRoomFn } from "./ListNotificationState";
 
 export class SpaceNotificationState extends NotificationState {
-    private rooms: Room[] = [];
+    public rooms: Room[] = []; // exposed only for tests
     private states: { [spaceId: string]: RoomNotificationState } = {};
 
     constructor(private spaceId: string | symbol, private getRoomFn: FetchRoomFn) {

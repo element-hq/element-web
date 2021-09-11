@@ -124,7 +124,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
                 url={avatarUrl}
             />;
         } else {
-            networkIcon = <div className="noProtocolIcon"></div>;
+            networkIcon = <div className="noProtocolIcon" />;
         }
         let networkItem = null;
         if (network) {

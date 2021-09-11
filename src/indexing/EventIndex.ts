@@ -21,7 +21,7 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { EventTimelineSet } from 'matrix-js-sdk/src/models/event-timeline-set';
 import { RoomState } from 'matrix-js-sdk/src/models/room-state';
-import { TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
+import { TimelineIndex, TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
 import { sleep } from "matrix-js-sdk/src/utils";
 import { IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
 
@@ -859,13 +859,27 @@ export default class EventIndex extends EventEmitter {
             return Promise.resolve(true);
         }
 
-        const paginationMethod = async (timelineWindow, timeline, room, direction, limit) => {
-            const timelineSet = timelineWindow._timelineSet;
-            const token = timeline.timeline.getPaginationToken(direction);
+        const paginationMethod = async (
+            timelineWindow: TimelineWindow,
+            timelineIndex: TimelineIndex,
+            room: Room,
+            direction: Direction,
+            limit: number,
+        ) => {
+            const timeline = timelineIndex.timeline;
+            const timelineSet = timeline.getTimelineSet();
+            const token = timeline.getPaginationToken(direction);
 
-            const ret = await this.populateFileTimeline(timelineSet, timeline.timeline, room, limit, token, direction);
+            const ret = await this.populateFileTimeline(
+                timelineSet,
+                timeline,
+                room,
+                limit,
+                token,
+                direction,
+            );
 
-            timeline.pendingPaginate = null;
+            timelineIndex.pendingPaginate = null;
             timelineWindow.extend(direction, limit);
 
             return ret;

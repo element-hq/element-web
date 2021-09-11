@@ -160,6 +160,17 @@ export function _t(text: string, variables?: IVariables, tags?: Tags): Translate
     }
 }
 
+/**
+ * Sanitizes unsafe text for the sanitizer, ensuring references to variables will not be considered
+ * replaceable by the translation functions.
+ * @param {string} text The text to sanitize.
+ * @returns {string} The sanitized text.
+ */
+export function sanitizeForTranslation(text: string): string {
+    // Add a non-breaking space so the regex doesn't trigger when translating.
+    return text.replace(/%\(([^)]*)\)/g, '%\xa0($1)');
+}
+
 /*
  * Similar to _t(), except only does substitutions, and no translation
  * @param {string} text The text, e.g "click <a>here</a> now to %(foo)s".

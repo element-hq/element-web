@@ -61,7 +61,9 @@ export default class AutoHideScrollbar extends React.Component<IProps> {
             style={style}
             className={["mx_AutoHideScrollbar", className].join(" ")}
             onWheel={onWheel}
-            tabIndex={tabIndex}
+            // Firefox sometimes makes this element focusable due to
+            // overflow:scroll;, so force it out of tab order by default.
+            tabIndex={tabIndex ?? -1}
         >
             { children }
         </div>);

@@ -30,7 +30,7 @@ limitations under the License.
     margin-right: 20px;
 
     /* a separator between the input line and the dial buttons */
-    border-bottom: 1px solid $quaternary-fg-color;
+    border-bottom: 1px solid $quaternary-content;
     transition: border-bottom 0.25s;
 }
 
@@ -69,7 +69,6 @@ limitations under the License.
     overflow: hidden;
     max-width: 185px;
     text-align: left;
-    direction: rtl;
     padding: 8px 0px;
     background-color: rgb(0, 0, 0, 0);
 }

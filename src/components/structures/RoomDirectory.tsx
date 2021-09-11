@@ -347,7 +347,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         });
     }
 
-    private onRoomClicked = (room: IPublicRoomsChunkRoom, ev: ButtonEvent) => {
+    private onRoomClicked = (room: IPublicRoomsChunkRoom, ev: React.MouseEvent) => {
         // If room was shift-clicked, remove it from the room directory
         if (ev.shiftKey && !this.state.selectedCommunityId) {
             ev.preventDefault();
@@ -833,6 +833,6 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
 
 // Similar to matrix-react-sdk's MatrixTools.getDisplayAliasForRoom
 // but works with the objects we get from the public room list
-function getDisplayAliasForRoom(room: IPublicRoomsChunkRoom) {
+export function getDisplayAliasForRoom(room: IPublicRoomsChunkRoom) {
     return getDisplayAliasForAliasSet(room.canonical_alias, room.aliases);
 }

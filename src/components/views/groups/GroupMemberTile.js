@@ -56,14 +56,19 @@ export default class GroupMemberTile extends React.Component {
                 aria-hidden="true"
                 name={this.props.member.displayname || this.props.member.userId}
                 idName={this.props.member.userId}
-                width={36} height={36}
+                width={36}
+                height={36}
                 url={avatarUrl}
             />
         );
 
         return (
-            <EntityTile name={name} avatarJsx={av} onClick={this.onClick}
-                suppressOnHover={true} presenceState="online"
+            <EntityTile
+                name={name}
+                avatarJsx={av}
+                onClick={this.onClick}
+                suppressOnHover={true}
+                presenceState="online"
                 powerStatus={this.props.member.isPrivileged ? EntityTile.POWER_STATUS_ADMIN : null}
             />
         );

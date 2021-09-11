@@ -665,8 +665,8 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
                 onChange={this.onQueryChanged}
                 placeholder={this.getPlaceholder()}
                 defaultValue={this.props.value}
-                autoFocus={this.props.focus}>
-            </textarea>,
+                autoFocus={this.props.focus}
+            />,
         );
 
         const filteredSuggestedList = this.getFilteredSuggestions();
@@ -727,8 +727,12 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
         }
 
         return (
-            <BaseDialog className="mx_AddressPickerDialog" onKeyDown={this.onKeyDown}
-                onFinished={this.props.onFinished} title={this.props.title}>
+            <BaseDialog
+                className="mx_AddressPickerDialog"
+                onKeyDown={this.onKeyDown}
+                onFinished={this.props.onFinished}
+                title={this.props.title}
+            >
                 { inputLabel }
                 <div className="mx_Dialog_content">
                     <div className="mx_AddressPickerDialog_inputContainer">{ query }</div>

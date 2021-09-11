@@ -38,7 +38,6 @@ import { StaticNotificationState } from "../../../stores/notifications/StaticNot
 import { Action } from "../../../dispatcher/actions";
 import { ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
-import SettingsStore from "../../../settings/SettingsStore";
 import CustomRoomTagStore from "../../../stores/CustomRoomTagStore";
 import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays";
 import { objectShallowClone, objectWithOnly } from "../../../utils/objects";
@@ -49,6 +48,7 @@ import SpaceStore, { ISuggestedRoom, SUGGESTED_ROOMS } from "../../../stores/Spa
 import { showAddExistingRooms, showCreateNewRoom, showSpaceInvite } from "../../../utils/space";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import RoomAvatar from "../avatars/RoomAvatar";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -140,7 +140,7 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
                             e.preventDefault();
                             e.stopPropagation();
                             onFinished();
-                            showCreateNewRoom(MatrixClientPeg.get(), SpaceStore.instance.activeSpace);
+                            showCreateNewRoom(SpaceStore.instance.activeSpace);
                         }}
                         disabled={!canAddRooms}
                         tooltip={canAddRooms ? undefined
@@ -153,7 +153,7 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
                             e.preventDefault();
                             e.stopPropagation();
                             onFinished();
-                            showAddExistingRooms(MatrixClientPeg.get(), SpaceStore.instance.activeSpace);
+                            showAddExistingRooms(SpaceStore.instance.activeSpace);
                         }}
                         disabled={!canAddRooms}
                         tooltip={canAddRooms ? undefined
@@ -320,11 +320,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     private updateLists = () => {
         const newLists = RoomListStore.instance.orderedLists;
-        if (SettingsStore.getValue("advancedRoomListLogging")) {
-            // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
-            console.log("new lists", newLists);
-        }
-
         const previousListIds = Object.keys(this.state.sublists);
         const newListIds = Object.keys(newLists).filter(t => {
             if (!isCustomTag(t)) return true; // always include non-custom tags
@@ -428,7 +423,9 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     groupId={g.groupId}
                     groupName={g.name}
                     groupAvatarUrl={g.avatarUrl}
-                    width={32} height={32} resizeMethod='crop'
+                    width={32}
+                    height={32}
+                    resizeMethod='crop'
                 />
             );
             const openGroup = () => {
@@ -526,20 +523,23 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             } else if (
                 this.props.activeSpace?.canInvite(userId) || this.props.activeSpace?.getMyMembership() === "join"
             ) {
+                const spaceName = this.props.activeSpace.name;
                 explorePrompt = <div className="mx_RoomList_explorePrompt">
                     <div>{ _t("Quick actions") }</div>
-                    { this.props.activeSpace.canInvite(userId) && <AccessibleButton
+                    { this.props.activeSpace.canInvite(userId) && <AccessibleTooltipButton
                         className="mx_RoomList_explorePrompt_spaceInvite"
                         onClick={this.onSpaceInviteClick}
+                        title={_t("Invite to %(spaceName)s", { spaceName })}
                     >
                         { _t("Invite people") }
-                    </AccessibleButton> }
-                    { this.props.activeSpace.getMyMembership() === "join" && <AccessibleButton
+                    </AccessibleTooltipButton> }
+                    { this.props.activeSpace.getMyMembership() === "join" && <AccessibleTooltipButton
                         className="mx_RoomList_explorePrompt_spaceExplore"
                         onClick={this.onExplore}
+                        title={_t("Explore %(spaceName)s", { spaceName })}
                     >
                         { _t("Explore rooms") }
-                    </AccessibleButton> }
+                    </AccessibleTooltipButton> }
                 </div>;
             } else if (Object.values(this.state.sublists).some(list => list.length > 0)) {
                 const unfilteredLists = RoomListStore.instance.unfilteredLists;

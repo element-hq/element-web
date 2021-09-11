@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { CSSProperties, RefObject, useRef, useState } from "react";
+import React, { CSSProperties, RefObject, SyntheticEvent, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 
@@ -79,6 +79,10 @@ export interface IProps extends IPosition {
     // whether this context menu should be focus managed. If false it must handle itself
     managed?: boolean;
     wrapperClassName?: string;
+
+    // If true, this context menu will be mounted as a child to the parent container. Otherwise
+    // it will be mounted to a container at the root of the DOM.
+    mountAsChild?: boolean;
 
     // Function to be called on menu close
     onFinished();
@@ -390,7 +394,13 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
     }
 
     render(): React.ReactChild {
-        return ReactDOM.createPortal(this.renderMenu(), getOrCreateContainer());
+        if (this.props.mountAsChild) {
+            // Render as a child of the current parent
+            return this.renderMenu();
+        } else {
+            // Render as a child of a container at the root of the DOM
+            return ReactDOM.createPortal(this.renderMenu(), getOrCreateContainer());
+        }
     }
 }
 
@@ -461,10 +471,14 @@ type ContextMenuTuple<T> = [boolean, RefObject<T>, () => void, () => void, (val:
 export const useContextMenu = <T extends any = HTMLElement>(): ContextMenuTuple<T> => {
     const button = useRef<T>(null);
     const [isOpen, setIsOpen] = useState(false);
-    const open = () => {
+    const open = (ev?: SyntheticEvent) => {
+        ev?.preventDefault();
+        ev?.stopPropagation();
         setIsOpen(true);
     };
-    const close = () => {
+    const close = (ev?: SyntheticEvent) => {
+        ev?.preventDefault();
+        ev?.stopPropagation();
         setIsOpen(false);
     };
 

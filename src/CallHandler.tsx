@@ -1,7 +1,8 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 New Vector Ltd
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -56,12 +57,10 @@ limitations under the License.
 import React from 'react';
 
 import { MatrixClientPeg } from './MatrixClientPeg';
-import PlatformPeg from './PlatformPeg';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
-import WidgetEchoStore from './stores/WidgetEchoStore';
 import SettingsStore from './settings/SettingsStore';
 import { Jitsi } from "./widgets/Jitsi";
 import { WidgetType } from "./widgets/WidgetType";
@@ -80,7 +79,6 @@ import CountlyAnalytics from "./CountlyAnalytics";
 import { UIFeature } from "./settings/UIFeature";
 import { CallError } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from 'matrix-js-sdk/src/logger';
-import DesktopCapturerSourcePicker from "./components/views/elements/DesktopCapturerSourcePicker";
 import { Action } from './dispatcher/actions';
 import VoipUserMapper from './VoipUserMapper';
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
@@ -88,6 +86,12 @@ import { randomUppercaseString, randomLowercaseString } from "matrix-js-sdk/src/
 import EventEmitter from 'events';
 import SdkConfig from './SdkConfig';
 import { ensureDMExists, findDMForUser } from './createRoom';
+import { RuleId, TweakName, Tweaks } from "matrix-js-sdk/src/@types/PushRules";
+import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
+import { WidgetLayoutStore, Container } from './stores/widgets/WidgetLayoutStore';
+import { getIncomingCallToastKey } from './toasts/IncomingCallToast';
+import ToastStore from './stores/ToastStore';
+import IncomingCallToast from "./toasts/IncomingCallToast";
 
 export const PROTOCOL_PSTN = 'm.protocol.pstn';
 export const PROTOCOL_PSTN_PREFIXED = 'im.vector.protocol.pstn';
@@ -129,14 +133,9 @@ interface ThirdpartyLookupResponse {
     fields: ThirdpartyLookupResponseFields;
 }
 
-// Unlike 'CallType' in js-sdk, this one includes screen sharing
-// (because a screen sharing call is only a screen sharing call to the caller,
-// to the callee it's just a video call, at least as far as the current impl
-// is concerned).
 export enum PlaceCallType {
     Voice = 'voice',
     Video = 'video',
-    ScreenSharing = 'screensharing',
 }
 
 export enum CallHandlerEvent {
@@ -251,7 +250,15 @@ export default class CallHandler extends EventEmitter {
      * @returns {boolean}
      */
     private areAnyCallsUnsilenced(): boolean {
-        return this.calls.size > this.silencedCalls.size;
+        for (const call of this.calls.values()) {
+            if (
+                call.state === CallState.Ringing &&
+                !this.isCallSilenced(call.callId)
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private async checkProtocols(maxTries) {
@@ -465,77 +472,7 @@ export default class CallHandler extends EventEmitter {
             this.removeCallForRoom(mappedRoomId);
         });
         call.on(CallEvent.State, (newState: CallState, oldState: CallState) => {
-            if (!this.matchesCallForThisRoom(call)) return;
-
-            this.setCallState(call, newState);
-
-            switch (oldState) {
-                case CallState.Ringing:
-                    this.pause(AudioID.Ring);
-                    break;
-                case CallState.InviteSent:
-                    this.pause(AudioID.Ringback);
-                    break;
-            }
-
-            if (newState !== CallState.Ringing) {
-                this.silencedCalls.delete(call.callId);
-            }
-
-            switch (newState) {
-                case CallState.Ringing:
-                    this.play(AudioID.Ring);
-                    break;
-                case CallState.InviteSent:
-                    this.play(AudioID.Ringback);
-                    break;
-                case CallState.Ended:
-                {
-                    Analytics.trackEvent('voip', 'callEnded', 'hangupReason', call.hangupReason);
-                    this.removeCallForRoom(mappedRoomId);
-                    if (oldState === CallState.InviteSent && (
-                        call.hangupParty === CallParty.Remote ||
-                        (call.hangupParty === CallParty.Local && call.hangupReason === CallErrorCode.InviteTimeout)
-                    )) {
-                        this.play(AudioID.Busy);
-                        let title;
-                        let description;
-                        if (call.hangupReason === CallErrorCode.UserHangup) {
-                            title = _t("Call Declined");
-                            description = _t("The other party declined the call.");
-                        } else if (call.hangupReason === CallErrorCode.UserBusy) {
-                            title = _t("User Busy");
-                            description = _t("The user you called is busy.");
-                        } else if (call.hangupReason === CallErrorCode.InviteTimeout) {
-                            title = _t("Call Failed");
-                            // XXX: full stop appended as some relic here, but these
-                            // strings need proper input from design anyway, so let's
-                            // not change this string until we have a proper one.
-                            description = _t('The remote side failed to pick up') + '.';
-                        } else {
-                            title = _t("Call Failed");
-                            description = _t("The call could not be established");
-                        }
-
-                        Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
-                            title, description,
-                        });
-                    } else if (
-                        call.hangupReason === CallErrorCode.AnsweredElsewhere && oldState === CallState.Connecting
-                    ) {
-                        Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
-                            title: _t("Answered Elsewhere"),
-                            description: _t("The call was answered on another device."),
-                        });
-                    } else if (oldState !== CallState.Fledgling && oldState !== CallState.Ringing) {
-                        // don't play the end-call sound for calls that never got off the ground
-                        this.play(AudioID.CallEnd);
-                    }
-
-                    this.logCallStats(call, mappedRoomId);
-                    break;
-                }
-            }
+            this.onCallStateChanged(newState, oldState, call);
         });
         call.on(CallEvent.Replaced, (newCall: MatrixCall) => {
             if (!this.matchesCallForThisRoom(call)) return;
@@ -548,8 +485,8 @@ export default class CallHandler extends EventEmitter {
                 this.pause(AudioID.Ringback);
             }
 
-            this.calls.set(mappedRoomId, newCall);
-            this.emit(CallHandlerEvent.CallsChanged, this.calls);
+            this.removeCallForRoom(mappedRoomId);
+            this.addCallForRoom(mappedRoomId, newCall);
             this.setCallListeners(newCall);
             this.setCallState(newCall, newCall.state);
         });
@@ -584,12 +521,94 @@ export default class CallHandler extends EventEmitter {
                     this.removeCallForRoom(mappedRoomId);
                     mappedRoomId = newMappedRoomId;
                     console.log("Moving call to room " + mappedRoomId);
-                    this.calls.set(mappedRoomId, call);
-                    this.emit(CallHandlerEvent.CallChangeRoom, call);
+                    this.addCallForRoom(mappedRoomId, call, true);
                 }
             }
         });
     }
+
+    private onCallStateChanged = (newState: CallState, oldState: CallState, call: MatrixCall): void => {
+        if (!this.matchesCallForThisRoom(call)) return;
+
+        const mappedRoomId = this.roomIdForCall(call);
+        this.setCallState(call, newState);
+
+        switch (oldState) {
+            case CallState.Ringing:
+                this.pause(AudioID.Ring);
+                break;
+            case CallState.InviteSent:
+                this.pause(AudioID.Ringback);
+                break;
+        }
+
+        if (newState !== CallState.Ringing) {
+            this.silencedCalls.delete(call.callId);
+        }
+
+        switch (newState) {
+            case CallState.Ringing: {
+                const incomingCallPushRule = (
+                    new PushProcessor(MatrixClientPeg.get()).getPushRuleById(RuleId.IncomingCall)
+                );
+                const pushRuleEnabled = incomingCallPushRule?.enabled;
+                const tweakSetToRing = incomingCallPushRule?.actions.some((action: Tweaks) => (
+                    action.set_tweak === TweakName.Sound &&
+                    action.value === "ring"
+                ));
+
+                if (pushRuleEnabled && tweakSetToRing) {
+                    this.play(AudioID.Ring);
+                } else {
+                    this.silenceCall(call.callId);
+                }
+                break;
+            }
+            case CallState.InviteSent: {
+                this.play(AudioID.Ringback);
+                break;
+            }
+            case CallState.Ended: {
+                const hangupReason = call.hangupReason;
+                Analytics.trackEvent('voip', 'callEnded', 'hangupReason', hangupReason);
+                this.removeCallForRoom(mappedRoomId);
+                if (oldState === CallState.InviteSent && call.hangupParty === CallParty.Remote) {
+                    this.play(AudioID.Busy);
+
+                    // Don't show a modal when we got rejected/the call was hung up
+                    if (!hangupReason || [CallErrorCode.UserHangup, "user hangup"].includes(hangupReason)) break;
+
+                    let title;
+                    let description;
+                    // TODO: We should either do away with these or figure out a copy for each code (expect user_hangup...)
+                    if (call.hangupReason === CallErrorCode.UserBusy) {
+                        title = _t("User Busy");
+                        description = _t("The user you called is busy.");
+                    } else {
+                        title = _t("Call Failed");
+                        description = _t("The call could not be established");
+                    }
+
+                    Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
+                        title, description,
+                    });
+                } else if (
+                    hangupReason === CallErrorCode.AnsweredElsewhere && oldState === CallState.Connecting
+                ) {
+                    Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
+                        title: _t("Answered Elsewhere"),
+                        description: _t("The call was answered on another device."),
+                    });
+                } else if (oldState !== CallState.Fledgling && oldState !== CallState.Ringing) {
+                    // don't play the end-call sound for calls that never got off the ground
+                    this.play(AudioID.CallEnd);
+                }
+
+                this.logCallStats(call, mappedRoomId);
+                break;
+            }
+        }
+    };
 
     private async logCallStats(call: MatrixCall, mappedRoomId: string) {
         const stats = await call.getCurrentCallStats();
@@ -640,6 +659,19 @@ export default class CallHandler extends EventEmitter {
         console.log(
             `Call state in ${mappedRoomId} changed to ${status}`,
         );
+
+        const toastKey = getIncomingCallToastKey(call.callId);
+        if (status === CallState.Ringing) {
+            ToastStore.sharedInstance().addOrReplaceToast({
+                key: toastKey,
+                priority: 100,
+                component: IncomingCallToast,
+                bodyClassName: "mx_IncomingCallToast",
+                props: { call },
+            });
+        } else {
+            ToastStore.sharedInstance().dismissToast(toastKey);
+        }
 
         dis.dispatch({
             action: 'call_state',
@@ -723,9 +755,15 @@ export default class CallHandler extends EventEmitter {
         console.log("Current turn creds expire in " + timeUntilTurnCresExpire + " ms");
         const call = MatrixClientPeg.get().createCall(mappedRoomId);
 
-        console.log("Adding call for room ", roomId);
-        this.calls.set(roomId, call);
-        this.emit(CallHandlerEvent.CallsChanged, this.calls);
+        try {
+            this.addCallForRoom(roomId, call);
+        } catch (e) {
+            Modal.createTrackedDialog('Call Handler', 'Existing Call with user', ErrorDialog, {
+                title: _t('Already in call'),
+                description: _t("You're already in a call with this person."),
+            });
+            return;
+        }
         if (transferee) {
             this.transferees[call.callId] = transferee;
         }
@@ -738,25 +776,6 @@ export default class CallHandler extends EventEmitter {
             call.placeVoiceCall();
         } else if (type === 'video') {
             call.placeVideoCall();
-        } else if (type === PlaceCallType.ScreenSharing) {
-            const screenCapErrorString = PlatformPeg.get().screenCaptureErrorString();
-            if (screenCapErrorString) {
-                this.removeCallForRoom(roomId);
-                console.log("Can't capture screen: " + screenCapErrorString);
-                Modal.createTrackedDialog('Call Handler', 'Unable to capture screen', ErrorDialog, {
-                    title: _t('Unable to capture screen'),
-                    description: screenCapErrorString,
-                });
-                return;
-            }
-
-            call.placeScreenSharingCall(
-                async (): Promise<DesktopCapturerSource> => {
-                    const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
-                    const [source] = await finished;
-                    return source;
-                },
-            );
         } else {
             console.error("Unknown conf call type: " + type);
         }
@@ -796,13 +815,8 @@ export default class CallHandler extends EventEmitter {
                         return;
                     }
 
-                    if (this.getCallForRoom(room.roomId)) {
-                        Modal.createTrackedDialog('Call Handler', 'Existing Call with user', ErrorDialog, {
-                            title: _t('Already in call'),
-                            description: _t("You're already in a call with this person."),
-                        });
-                        return;
-                    }
+                    // We leave the check for whether there's already a call in this room until later,
+                    // otherwise it can race.
 
                     const members = room.getJoinedMembers();
                     if (members.length <= 1) {
@@ -856,10 +870,11 @@ export default class CallHandler extends EventEmitter {
                     }
 
                     Analytics.trackEvent('voip', 'receiveCall', 'type', call.type);
-                    console.log("Adding call for room ", mappedRoomId);
-                    this.calls.set(mappedRoomId, call);
-                    this.emit(CallHandlerEvent.CallsChanged, this.calls);
+
+                    this.addCallForRoom(mappedRoomId, call);
                     this.setCallListeners(call);
+                    // Explicitly handle first state change
+                    this.onCallStateChanged(call.state, null, call);
 
                     // get ready to send encrypted events in the room, so if the user does answer
                     // the call, we'll be ready to send. NB. This is the protocol-level room ID not
@@ -870,6 +885,8 @@ export default class CallHandler extends EventEmitter {
                 break;
             case 'hangup':
             case 'reject':
+                this.stopRingingIfPossible(this.calls.get(payload.room_id).callId);
+
                 if (!this.calls.get(payload.room_id)) {
                     return; // no call to hangup
                 }
@@ -882,11 +899,15 @@ export default class CallHandler extends EventEmitter {
                 // the hangup event away)
                 break;
             case 'hangup_all':
+                this.stopRingingIfPossible(this.calls.get(payload.room_id).callId);
+
                 for (const call of this.calls.values()) {
                     call.hangup(CallErrorCode.UserHangup, false);
                 }
                 break;
             case 'answer': {
+                this.stopRingingIfPossible(this.calls.get(payload.room_id).callId);
+
                 if (!this.calls.has(payload.room_id)) {
                     return; // no call to answer
                 }
@@ -921,6 +942,12 @@ export default class CallHandler extends EventEmitter {
         }
     };
 
+    private stopRingingIfPossible(callId: string): void {
+        this.silencedCalls.delete(callId);
+        if (this.areAnyCallsUnsilenced()) return;
+        this.pause(AudioID.Ring);
+    }
+
     private async dialNumber(number: string) {
         const results = await this.pstnLookup(number);
         if (!results || results.length === 0 || !results[0].userid) {
@@ -950,6 +977,8 @@ export default class CallHandler extends EventEmitter {
             action: 'view_room',
             room_id: roomId,
         });
+
+        await this.placeCall(roomId, PlaceCallType.Voice, null);
     }
 
     private async startTransferToPhoneNumber(call: MatrixCall, destination: string, consultFirst: boolean) {
@@ -1029,14 +1058,10 @@ export default class CallHandler extends EventEmitter {
 
         // prevent double clicking the call button
         const room = MatrixClientPeg.get().getRoom(roomId);
-        const currentJitsiWidgets = WidgetUtils.getRoomWidgetsOfType(room, WidgetType.JITSI);
-        const hasJitsi = currentJitsiWidgets.length > 0
-            || WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentJitsiWidgets, WidgetType.JITSI);
-        if (hasJitsi) {
-            Modal.createTrackedDialog('Call already in progress', '', ErrorDialog, {
-                title: _t('Call in Progress'),
-                description: _t('A call is currently being placed!'),
-            });
+        const jitsiWidget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.JITSI.matches(app.type));
+        if (jitsiWidget) {
+            // If there already is a Jitsi widget pin it
+            WidgetLayoutStore.instance.moveToContainer(room, jitsiWidget, Container.Top);
             return;
         }
 
@@ -1123,5 +1148,22 @@ export default class CallHandler extends EventEmitter {
 
             messaging.transport.send(ElementWidgetActions.HangupCall, {});
         });
+    }
+
+    private addCallForRoom(roomId: string, call: MatrixCall, changedRooms = false): void {
+        if (this.calls.has(roomId)) {
+            console.log(`Couldn't add call to room ${roomId}: already have a call for this room`);
+            throw new Error("Already have a call for room " + roomId);
+        }
+
+        console.log("setting call for room " + roomId);
+        this.calls.set(roomId, call);
+
+        // Should we always emit CallsChanged too?
+        if (changedRooms) {
+            this.emit(CallHandlerEvent.CallChangeRoom, call);
+        } else {
+            this.emit(CallHandlerEvent.CallsChanged, this.calls);
+        }
     }
 }

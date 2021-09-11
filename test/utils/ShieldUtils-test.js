@@ -49,7 +49,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
 
     it.each(
         [[true, true], [true, false],
-        [false, true], [false, false]],
+            [false, true], [false, false]],
     )("2 unverified: returns 'normal', self-trust = %s, DM = %s", async (trusted, dm) => {
         const client = mkClient(trusted);
         const room = {
@@ -62,7 +62,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
 
     it.each(
         [["verified", true, true], ["verified", true, false],
-        ["verified", false, true], ["warning", false, false]],
+            ["verified", false, true], ["warning", false, false]],
     )("2 verified: returns '%s', self-trust = %s, DM = %s", async (result, trusted, dm) => {
         const client = mkClient(trusted);
         const room = {
@@ -75,7 +75,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
 
     it.each(
         [["normal", true, true], ["normal", true, false],
-        ["normal", false, true], ["warning", false, false]],
+            ["normal", false, true], ["warning", false, false]],
     )("2 mixed: returns '%s', self-trust = %s, DM = %s", async (result, trusted, dm) => {
         const client = mkClient(trusted);
         const room = {
@@ -88,7 +88,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
 
     it.each(
         [["verified", true, true], ["verified", true, false],
-        ["warning", false, true], ["warning", false, false]],
+            ["warning", false, true], ["warning", false, false]],
     )("0 others: returns '%s', self-trust = %s, DM = %s", async (result, trusted, dm) => {
         const client = mkClient(trusted);
         const room = {
@@ -101,7 +101,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
 
     it.each(
         [["verified", true, true], ["verified", true, false],
-        ["verified", false, true], ["verified", false, false]],
+            ["verified", false, true], ["verified", false, false]],
     )("1 verified: returns '%s', self-trust = %s, DM = %s", async (result, trusted, dm) => {
         const client = mkClient(trusted);
         const room = {
@@ -114,7 +114,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
 
     it.each(
         [["normal", true, true], ["normal", true, false],
-        ["normal", false, true], ["normal", false, false]],
+            ["normal", false, true], ["normal", false, false]],
     )("1 unverified: returns '%s', self-trust = %s, DM = %s", async (result, trusted, dm) => {
         const client = mkClient(trusted);
         const room = {

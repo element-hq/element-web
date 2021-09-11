@@ -17,6 +17,7 @@ module.exports = {
         "selector-list-comma-newline-after": null,
         "at-rule-no-unknown": null,
         "no-descending-specificity": null,
+        "no-empty-first-line": true,
         "scss/at-rule-no-unknown": [true, {
             // https://github.com/vector-im/element-web/issues/10544
             "ignoreAtRules": ["define-mixin"],

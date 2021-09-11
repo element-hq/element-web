@@ -48,8 +48,10 @@ class GroupRoomTile extends React.Component {
             : null;
 
         const av = (
-            <BaseAvatar name={this.props.groupRoom.displayname}
-                width={36} height={36}
+            <BaseAvatar
+                name={this.props.groupRoom.displayname}
+                width={36}
+                height={36}
                 url={avatarUrl}
             />
         );

@@ -17,7 +17,7 @@ limitations under the License.
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
-import { VoiceRecording } from "../voice/VoiceRecording";
+import { VoiceRecording } from "../audio/VoiceRecording";
 
 interface IState {
     recording?: VoiceRecording;

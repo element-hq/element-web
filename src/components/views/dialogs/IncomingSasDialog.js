@@ -133,18 +133,23 @@ export default class IncomingSasDialog extends React.Component {
                 ? mediaFromMxc(oppProfile.avatar_url).getSquareThumbnailHttp(48)
                 : null;
             profile = <div className="mx_IncomingSasDialog_opponentProfile">
-                <BaseAvatar name={oppProfile.displayname}
+                <BaseAvatar
+                    name={oppProfile.displayname}
                     idName={this.props.verifier.userId}
                     url={url}
-                    width={48} height={48} resizeMethod='crop'
+                    width={48}
+                    height={48}
+                    resizeMethod='crop'
                 />
                 <h2>{ oppProfile.displayname }</h2>
             </div>;
         } else if (this.state.opponentProfileError) {
             profile = <div>
-                <BaseAvatar name={this.props.verifier.userId.slice(1)}
+                <BaseAvatar
+                    name={this.props.verifier.userId.slice(1)}
                     idName={this.props.verifier.userId}
-                    width={48} height={48}
+                    width={48}
+                    height={48}
                 />
                 <h2>{ this.props.verifier.userId }</h2>
             </div>;

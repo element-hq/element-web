@@ -47,10 +47,13 @@ import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Spinner from "../views/elements/Spinner";
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import ErrorDialog from '../views/dialogs/ErrorDialog';
+import { debounce } from 'lodash';
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
 const READ_RECEIPT_INTERVAL_MS = 500;
+
+const READ_MARKER_DEBOUNCE_MS = 100;
 
 const DEBUG = false;
 
@@ -126,6 +129,8 @@ interface IProps {
 
     // callback which is called when we wish to paginate the timeline window.
     onPaginationRequest?(timelineWindow: TimelineWindow, direction: string, size: number): Promise<boolean>;
+
+    hideThreadedMessages?: boolean;
 }
 
 interface IState {
@@ -214,6 +219,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         timelineCap: Number.MAX_VALUE,
         className: 'mx_RoomView_messagePanel',
         sendReadReceiptOnLoad: true,
+        hideThreadedMessages: true,
     };
 
     private lastRRSentEventId: string = undefined;
@@ -472,21 +478,34 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
 
         if (this.props.manageReadMarkers) {
-            const rmPosition = this.getReadMarkerPosition();
-            // we hide the read marker when it first comes onto the screen, but if
-            // it goes back off the top of the screen (presumably because the user
-            // clicks on the 'jump to bottom' button), we need to re-enable it.
-            if (rmPosition < 0) {
-                this.setState({ readMarkerVisible: true });
-            }
-
-            // if read marker position goes between 0 and -1/1,
-            // (and user is active), switch timeout
-            const timeout = this.readMarkerTimeout(rmPosition);
-            // NO-OP when timeout already has set to the given value
-            this.readMarkerActivityTimer.changeTimeout(timeout);
+            this.doManageReadMarkers();
         }
     };
+
+    /*
+     * Debounced function to manage read markers because we don't need to
+     * do this on every tiny scroll update. It also sets state which causes
+     * a component update, which can in turn reset the scroll position, so
+     * it's important we allow the browser to scroll a bit before running this
+     * (hence trailing edge only and debounce rather than throttle because
+     * we really only need to update this once the user has finished scrolling,
+     * not periodically while they scroll).
+     */
+    private doManageReadMarkers = debounce(() => {
+        const rmPosition = this.getReadMarkerPosition();
+        // we hide the read marker when it first comes onto the screen, but if
+        // it goes back off the top of the screen (presumably because the user
+        // clicks on the 'jump to bottom' button), we need to re-enable it.
+        if (rmPosition < 0) {
+            this.setState({ readMarkerVisible: true });
+        }
+
+        // if read marker position goes between 0 and -1/1,
+        // (and user is active), switch timeout
+        const timeout = this.readMarkerTimeout(rmPosition);
+        // NO-OP when timeout already has set to the given value
+        this.readMarkerActivityTimer.changeTimeout(timeout);
+    }, READ_MARKER_DEBOUNCE_MS, { leading: false, trailing: true });
 
     private onAction = (payload: ActionPayload): void => {
         switch (payload.action) {
@@ -757,16 +776,20 @@ class TimelinePanel extends React.Component<IProps, IState> {
             }
             this.lastRMSentEventId = this.state.readMarkerEventId;
 
+            const roomId = this.props.timelineSet.room.roomId;
+            const hiddenRR = SettingsStore.getValue("feature_hidden_read_receipts", roomId);
+
             debuglog('TimelinePanel: Sending Read Markers for ',
                 this.props.timelineSet.room.roomId,
                 'rm', this.state.readMarkerEventId,
                 lastReadEvent ? 'rr ' + lastReadEvent.getId() : '',
+                ' hidden:' + hiddenRR,
             );
             MatrixClientPeg.get().setRoomReadMarkers(
-                this.props.timelineSet.room.roomId,
+                roomId,
                 this.state.readMarkerEventId,
                 lastReadEvent, // Could be null, in which case no RR is sent
-                {},
+                { hidden: hiddenRR },
             ).catch((e) => {
                 // /read_markers API is not implemented on this HS, fallback to just RR
                 if (e.errcode === 'M_UNRECOGNIZED' && lastReadEvent) {
@@ -1172,6 +1195,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
         this.setState(this.getEvents());
     }
 
+    // Force refresh the timeline before threads support pending events
+    public refreshTimeline(): void {
+        this.loadTimeline();
+        this.reloadEvents();
+    }
+
     // get the list of events from the timeline window and the pending event list
     private getEvents(): Pick<IState, "events" | "liveEvents" | "firstVisibleEventIndex"> {
         const events: MatrixEvent[] = this.timelineWindow.getEvents();
@@ -1507,6 +1536,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 showReactions={this.props.showReactions}
                 layout={this.props.layout}
                 enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+                hideThreadedMessages={this.props.hideThreadedMessages}
             />
         );
     }

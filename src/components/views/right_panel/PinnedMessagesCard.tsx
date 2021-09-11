@@ -152,7 +152,7 @@ const PinnedMessagesCard = ({ room, onClose }: IProps) => {
                 <h2>{ _t("Nothing pinned, yet") }</h2>
                 { _t("If you have permissions, open the menu on any message and select " +
                     "<b>Pin</b> to stick them here.", {}, {
-                        b: sub => <b>{ sub }</b>,
+                    b: sub => <b>{ sub }</b>,
                 }) }
             </div>
         </div>;

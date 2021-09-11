@@ -16,7 +16,7 @@ limitations under the License.
 
 .mx_ForwardDialog {
     width: 520px;
-    color: $primary-fg-color;
+    color: $primary-content;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -25,7 +25,7 @@ limitations under the License.
 
     > h3 {
         margin: 0 0 6px;
-        color: $secondary-fg-color;
+        color: $secondary-content;
         font-size: $font-12px;
         font-weight: $font-semi-bold;
         line-height: $font-15px;

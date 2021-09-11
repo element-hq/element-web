@@ -150,13 +150,14 @@ const reducer = (state: IState, action: IAction) => {
 
 interface IProps {
     handleHomeEnd?: boolean;
+    handleUpDown?: boolean;
     children(renderProps: {
         onKeyDownHandler(ev: React.KeyboardEvent);
     });
     onKeyDown?(ev: React.KeyboardEvent, state: IState);
 }
 
-export const RovingTabIndexProvider: React.FC<IProps> = ({ children, handleHomeEnd, onKeyDown }) => {
+export const RovingTabIndexProvider: React.FC<IProps> = ({ children, handleHomeEnd, handleUpDown, onKeyDown }) => {
     const [state, dispatch] = useReducer<Reducer<IState, IAction>>(reducer, {
         activeRef: null,
         refs: [],
@@ -167,21 +168,50 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({ children, handleHomeE
     const onKeyDownHandler = useCallback((ev) => {
         let handled = false;
         // Don't interfere with input default keydown behaviour
-        if (handleHomeEnd && ev.target.tagName !== "INPUT" && ev.target.tagName !== "TEXTAREA") {
+        if (ev.target.tagName !== "INPUT" && ev.target.tagName !== "TEXTAREA") {
             // check if we actually have any items
             switch (ev.key) {
                 case Key.HOME:
-                    handled = true;
-                    // move focus to first item
-                    if (context.state.refs.length > 0) {
-                        context.state.refs[0].current.focus();
+                    if (handleHomeEnd) {
+                        handled = true;
+                        // move focus to first item
+                        if (context.state.refs.length > 0) {
+                            context.state.refs[0].current.focus();
+                        }
                     }
                     break;
+
                 case Key.END:
-                    handled = true;
-                    // move focus to last item
-                    if (context.state.refs.length > 0) {
-                        context.state.refs[context.state.refs.length - 1].current.focus();
+                    if (handleHomeEnd) {
+                        handled = true;
+                        // move focus to last item
+                        if (context.state.refs.length > 0) {
+                            context.state.refs[context.state.refs.length - 1].current.focus();
+                        }
+                    }
+                    break;
+
+                case Key.ARROW_UP:
+                    if (handleUpDown) {
+                        handled = true;
+                        if (context.state.refs.length > 0) {
+                            const idx = context.state.refs.indexOf(context.state.activeRef);
+                            if (idx > 0) {
+                                context.state.refs[idx - 1].current.focus();
+                            }
+                        }
+                    }
+                    break;
+
+                case Key.ARROW_DOWN:
+                    if (handleUpDown) {
+                        handled = true;
+                        if (context.state.refs.length > 0) {
+                            const idx = context.state.refs.indexOf(context.state.activeRef);
+                            if (idx < context.state.refs.length - 1) {
+                                context.state.refs[idx + 1].current.focus();
+                            }
+                        }
                     }
                     break;
             }
@@ -193,7 +223,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({ children, handleHomeE
         } else if (onKeyDown) {
             return onKeyDown(ev, context.state);
         }
-    }, [context.state, onKeyDown, handleHomeEnd]);
+    }, [context.state, onKeyDown, handleHomeEnd, handleUpDown]);
 
     return <RovingTabIndexContext.Provider value={context}>
         { children({ onKeyDownHandler }) }

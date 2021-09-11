@@ -10,6 +10,7 @@ defbranch="$3"
 
 rm -r "$defrepo" || true
 
+# A function that clones a branch of a repo based on the org, repo and branch
 clone() {
     org=$1
     repo=$2
@@ -21,44 +22,37 @@ clone() {
     fi
 }
 
-# Try the PR author's branch in case it exists on the deps as well.
-# First we check if GITHUB_HEAD_REF is defined,
-# Then we check if BUILDKITE_BRANCH is defined,
-# if they aren't we can assume this is a Netlify build
-if [ -n "$GITHUB_HEAD_REF" ]; then
-    head=$GITHUB_HEAD_REF
-elif [ -n "$BUILDKITE_BRANCH" ]; then
-	head=$BUILDKITE_BRANCH
-else
-    # Netlify doesn't give us info about the fork so we have to get it from GitHub API
-    apiEndpoint="https://api.github.com/repos/matrix-org/matrix-react-sdk/pulls/"
-    apiEndpoint+=$REVIEW_ID
-    head=$(curl $apiEndpoint | jq -r '.head.label')
-fi
+# A function that gets info about a PR from the GitHub API based on its number
+getPRInfo() {
+    number=$1
+    if [ -n "$number" ]; then
+        echo "Getting info about a PR with number $number"
 
-# If head is set, it will contain on Buildkite either:
-#   * "branch" when the author's branch and target branch are in the same repo
-#   * "fork:branch" when the author's branch is in their fork or if this is a Netlify build
-# We can split on `:` into an array to check.
-# For GitHub Actions we need to inspect GITHUB_REPOSITORY and GITHUB_ACTOR
-# to determine whether the branch is from a fork or not
-BRANCH_ARRAY=(${head//:/ })
-if [[ "${#BRANCH_ARRAY[@]}" == "1" ]]; then
+        apiEndpoint="https://api.github.com/repos/matrix-org/matrix-react-sdk/pulls/"
+        apiEndpoint+=$number
 
-    if [ -n "$GITHUB_HEAD_REF" ]; then
-        if [[ "$GITHUB_REPOSITORY" == "$deforg"* ]]; then
-            clone $deforg $defrepo $GITHUB_HEAD_REF
-        else
-            REPO_ARRAY=(${GITHUB_REPOSITORY//\// })
-            clone $REPO_ARRAY[0] $defrepo $GITHUB_HEAD_REF
-        fi
-    else
-        clone $deforg $defrepo $BUILDKITE_BRANCH
+        head=$(curl $apiEndpoint | jq -r '.head.label')
     fi
+}
 
-elif [[ "${#BRANCH_ARRAY[@]}" == "2" ]]; then
-    clone ${BRANCH_ARRAY[0]} $defrepo ${BRANCH_ARRAY[1]}
+# Some CIs don't give us enough info, so we just get the PR number and ask the
+# GH API for more info - "fork:branch". Some give us this directly.
+if [ -n "$BUILDKITE_BRANCH" ]; then
+    # BuildKite
+    head=$BUILDKITE_BRANCH
+elif [ -n "$PR_NUMBER" ]; then
+    # GitHub
+    getPRInfo $PR_NUMBER
+elif [ -n "$REVIEW_ID" ]; then
+    # Netlify
+    getPRInfo $REVIEW_ID
 fi
+
+# $head will always be in the format "fork:branch", so we split it by ":" into
+# an array. The first element will then be the fork and the second the branch.
+# Based on that we clone
+BRANCH_ARRAY=(${head//:/ })
+clone ${BRANCH_ARRAY[0]} $defrepo ${BRANCH_ARRAY[1]}
 
 # Try the target branch of the push or PR.
 if [ -n $GITHUB_BASE_REF ]; then

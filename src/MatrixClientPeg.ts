@@ -213,6 +213,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         opts.pendingEventOrdering = PendingEventOrdering.Detached;
         opts.lazyLoadMembers = true;
         opts.clientWellKnownPollPeriod = 2 * 60 * 60; // 2 hours
+        opts.experimentalThreadSupport = SettingsStore.getValue("feature_thread");
 
         // Connect the matrix client to the dispatcher and setting handlers
         MatrixActionCreators.start(this.matrixClient);

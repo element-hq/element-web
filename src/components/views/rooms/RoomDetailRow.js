@@ -105,8 +105,12 @@ export default class RoomDetailRow extends React.Component {
 
         return <tr key={room.roomId} onClick={this.onClick} onMouseDown={this.props.onMouseDown}>
             <td className="mx_RoomDirectory_roomAvatar">
-                <BaseAvatar width={24} height={24} resizeMethod='crop'
-                    name={name} idName={name}
+                <BaseAvatar
+                    width={24}
+                    height={24}
+                    resizeMethod='crop'
+                    name={name}
+                    idName={name}
                     url={avatarUrl} />
             </td>
             <td className="mx_RoomDirectory_roomDescription">

@@ -109,8 +109,7 @@ export default class MyGroups extends React.Component {
             <SimpleRoomHeader title={_t("Communities")} icon={require("../../../res/img/icons-groups.svg")} />
             <div className='mx_MyGroups_header'>
                 <div className="mx_MyGroups_headerCard">
-                    <AccessibleButton className='mx_MyGroups_headerCard_button' onClick={this._onCreateGroupClick}>
-                    </AccessibleButton>
+                    <AccessibleButton className='mx_MyGroups_headerCard_button' onClick={this._onCreateGroupClick} />
                     <div className="mx_MyGroups_headerCard_content">
                         <div className="mx_MyGroups_headerCard_header">
                             { _t('Create a new community') }

@@ -43,8 +43,10 @@ limitations under the License.
         margin-bottom: 7px;
         mask-image: url('$(res)/img/feather-customised/minimise.svg');
     }
+}
 
-    &:hover .mx_ViewSourceEvent_toggle {
+.mx_EventTile:hover {
+    .mx_ViewSourceEvent_toggle {
         visibility: visible;
     }
 }

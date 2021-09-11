@@ -34,7 +34,6 @@ import { getAddressType } from './UserAddress';
 import { abbreviateUrl } from './utils/UrlUtils';
 import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from './utils/IdentityServerUtils';
 import { isPermalinkHost, parsePermalink } from "./utils/permalinks/Permalinks";
-import { inviteUsersToRoom } from "./RoomInvite";
 import { WidgetType } from "./widgets/WidgetType";
 import { Jitsi } from "./widgets/Jitsi";
 import { parseFragment as parseHtml, Element as ChildElement } from "parse5";
@@ -49,8 +48,8 @@ import { UIFeature } from "./settings/UIFeature";
 import { CHAT_EFFECTS } from "./effects";
 import CallHandler from "./CallHandler";
 import { guessAndSetDMRoom } from "./Rooms";
+import { upgradeRoom } from './utils/RoomUpgrade';
 import UploadConfirmDialog from './components/views/dialogs/UploadConfirmDialog';
-import ErrorDialog from './components/views/dialogs/ErrorDialog';
 import DevtoolsDialog from './components/views/dialogs/DevtoolsDialog';
 import RoomUpgradeWarningDialog from "./components/views/dialogs/RoomUpgradeWarningDialog";
 import InfoDialog from "./components/views/dialogs/InfoDialog";
@@ -246,21 +245,6 @@ export const Commands = [
         category: CommandCategories.messages,
     }),
     new Command({
-        command: 'ddg',
-        args: '<query>',
-        description: _td('Searches DuckDuckGo for results'),
-        runFn: function() {
-            // TODO Don't explain this away, actually show a search UI here.
-            Modal.createTrackedDialog('Slash Commands', '/ddg is not a command', ErrorDialog, {
-                title: _t('/ddg is not a command'),
-                description: _t('To use it, just wait for autocomplete results to load and tab through them.'),
-            });
-            return success();
-        },
-        category: CommandCategories.actions,
-        hideCompletionAfterSpace: true,
-    }),
-    new Command({
         command: 'upgraderoom',
         args: '<new_version>',
         description: _td('Upgrades a room to a new version'),
@@ -277,50 +261,8 @@ export const Commands = [
                     /*isPriority=*/false, /*isStatic=*/true);
 
                 return success(finished.then(async ([resp]) => {
-                    if (!resp.continue) return;
-
-                    let checkForUpgradeFn;
-                    try {
-                        const upgradePromise = cli.upgradeRoom(roomId, args);
-
-                        // We have to wait for the js-sdk to give us the room back so
-                        // we can more effectively abuse the MultiInviter behaviour
-                        // which heavily relies on the Room object being available.
-                        if (resp.invite) {
-                            checkForUpgradeFn = async (newRoom) => {
-                                // The upgradePromise should be done by the time we await it here.
-                                const { replacement_room: newRoomId } = await upgradePromise;
-                                if (newRoom.roomId !== newRoomId) return;
-
-                                const toInvite = [
-                                    ...room.getMembersWithMembership("join"),
-                                    ...room.getMembersWithMembership("invite"),
-                                ].map(m => m.userId).filter(m => m !== cli.getUserId());
-
-                                if (toInvite.length > 0) {
-                                    // Errors are handled internally to this function
-                                    await inviteUsersToRoom(newRoomId, toInvite);
-                                }
-
-                                cli.removeListener('Room', checkForUpgradeFn);
-                            };
-                            cli.on('Room', checkForUpgradeFn);
-                        }
-
-                        // We have to await after so that the checkForUpgradesFn has a proper reference
-                        // to the new room's ID.
-                        await upgradePromise;
-                    } catch (e) {
-                        console.error(e);
-
-                        if (checkForUpgradeFn) cli.removeListener('Room', checkForUpgradeFn);
-
-                        Modal.createTrackedDialog('Slash Commands', 'room upgrade error', ErrorDialog, {
-                            title: _t('Error upgrading room'),
-                            description: _t(
-                                'Double check that your server supports the room version chosen and try again.'),
-                        });
-                    }
+                    if (!resp?.continue) return;
+                    await upgradeRoom(room, args, resp.invite);
                 }));
             }
             return reject(this.getUsage());

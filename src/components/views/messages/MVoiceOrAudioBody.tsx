@@ -17,18 +17,14 @@ limitations under the License.
 import React from "react";
 import MAudioBody from "./MAudioBody";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import SettingsStore from "../../../settings/SettingsStore";
 import MVoiceMessageBody from "./MVoiceMessageBody";
 import { IBodyProps } from "./IBodyProps";
+import { isVoiceMessage } from "../../../utils/EventUtils";
 
 @replaceableComponent("views.messages.MVoiceOrAudioBody")
 export default class MVoiceOrAudioBody extends React.PureComponent<IBodyProps> {
     public render() {
-        // MSC2516 is a legacy identifier. See https://github.com/matrix-org/matrix-doc/pull/3245
-        const isVoiceMessage = !!this.props.mxEvent.getContent()['org.matrix.msc2516.voice']
-            || !!this.props.mxEvent.getContent()['org.matrix.msc3245.voice'];
-        const voiceMessagesEnabled = SettingsStore.getValue("feature_voice_messages");
-        if (isVoiceMessage && voiceMessagesEnabled) {
+        if (isVoiceMessage(this.props.mxEvent)) {
             return <MVoiceMessageBody {...this.props} />;
         } else {
             return <MAudioBody {...this.props} />;

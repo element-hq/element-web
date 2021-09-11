@@ -2421,5 +2421,17 @@
     "New Zealand": "Naujoji Zelandija",
     "New Caledonia": "Naujoji Kaledonija",
     "Netherlands": "Nyderlandai",
-    "Cayman Islands": "Kaimanų Salos"
+    "Cayman Islands": "Kaimanų Salos",
+    "Integration manager": "Integracijų tvarkytuvas",
+    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Jūsų %(brand)s neleidžia jums naudoti integracijų tvarkytuvo tam atlikti. Susisiekite su administratoriumi.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Naudojimasis šiuo valdikliu gali pasidalinti duomenimis <helpIcon /> su %(widgetDomain)s ir jūsų integracijų tvarkytuvu.",
+    "Identity server is": "Tapatybės serveris yra",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Integracijų Tvarkytuvai gauna konfigūracijos duomenis ir jūsų vardu gali keisti valdiklius, siųsti kambario pakvietimus ir nustatyti galios lygius.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Naudokite Integracijų Tvarkytuvą botų, valdiklių ir lipdukų pakuočių tvarkymui.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Naudokite Integracijų Tvarkytuvą <b>(%(serverName)s)</b> botų, valdiklių ir lipdukų pakuočių tvarkymui.",
+    "Identity server": "Tapatybės serveris",
+    "Identity server (%(server)s)": "Tapatybės serveris (%(server)s)",
+    "Could not connect to identity server": "Nepavyko prisijungti prie tapatybės serverio",
+    "Not a valid identity server (status code %(code)s)": "Netinkamas tapatybės serveris (statuso kodas %(code)s)",
+    "Identity server URL must be HTTPS": "Tapatybės Serverio URL privalo būti HTTPS"
 }

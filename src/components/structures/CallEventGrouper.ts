@@ -25,11 +25,18 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 export enum CallEventGrouperEvent {
     StateChanged = "state_changed",
     SilencedChanged = "silenced_changed",
+    LengthChanged = "length_changed",
 }
+
+const CONNECTING_STATES = [
+    CallState.Connecting,
+    CallState.WaitLocalMedia,
+    CallState.CreateOffer,
+    CallState.CreateAnswer,
+];
 
 const SUPPORTED_STATES = [
     CallState.Connected,
-    CallState.Connecting,
     CallState.Ringing,
 ];
 
@@ -61,6 +68,10 @@ export default class CallEventGrouper extends EventEmitter {
         return [...this.events].find((event) => event.getType() === EventType.CallReject);
     }
 
+    private get selectAnswer(): MatrixEvent {
+        return [...this.events].find((event) => event.getType() === EventType.CallSelectAnswer);
+    }
+
     public get isVoice(): boolean {
         const invite = this.invite;
         if (!invite) return;
@@ -74,6 +85,19 @@ export default class CallEventGrouper extends EventEmitter {
         return this.hangup?.getContent()?.reason;
     }
 
+    public get rejectParty(): string {
+        return this.reject?.getSender();
+    }
+
+    public get gotRejected(): boolean {
+        return Boolean(this.reject);
+    }
+
+    public get duration(): Date {
+        if (!this.hangup || !this.selectAnswer) return;
+        return new Date(this.hangup.getDate().getTime() - this.selectAnswer.getDate().getTime());
+    }
+
     /**
      * Returns true if there are only events from the other side - we missed the call
      */
@@ -81,8 +105,12 @@ export default class CallEventGrouper extends EventEmitter {
         return ![...this.events].some((event) => event.sender?.userId === MatrixClientPeg.get().getUserId());
     }
 
-    private get callId(): string {
-        return [...this.events][0].getContent().call_id;
+    private get callId(): string | undefined {
+        return [...this.events][0]?.getContent()?.call_id;
+    }
+
+    private get roomId(): string | undefined {
+        return [...this.events][0]?.getRoomId();
     }
 
     private onSilencedCallsChanged = () => {
@@ -90,19 +118,29 @@ export default class CallEventGrouper extends EventEmitter {
         this.emit(CallEventGrouperEvent.SilencedChanged, newState);
     };
 
+    private onLengthChanged = (length: number): void => {
+        this.emit(CallEventGrouperEvent.LengthChanged, length);
+    };
+
     public answerCall = () => {
-        this.call?.answer();
+        defaultDispatcher.dispatch({
+            action: 'answer',
+            room_id: this.roomId,
+        });
     };
 
     public rejectCall = () => {
-        this.call?.reject();
+        defaultDispatcher.dispatch({
+            action: 'reject',
+            room_id: this.roomId,
+        });
     };
 
     public callBack = () => {
         defaultDispatcher.dispatch({
             action: 'place_call',
             type: this.isVoice ? CallType.Voice : CallType.Video,
-            room_id: [...this.events][0]?.getRoomId(),
+            room_id: this.roomId,
         });
     };
 
@@ -116,10 +154,13 @@ export default class CallEventGrouper extends EventEmitter {
     private setCallListeners() {
         if (!this.call) return;
         this.call.addListener(CallEvent.State, this.setState);
+        this.call.addListener(CallEvent.LengthChanged, this.onLengthChanged);
     }
 
     private setState = () => {
-        if (SUPPORTED_STATES.includes(this.call?.state)) {
+        if (CONNECTING_STATES.includes(this.call?.state)) {
+            this.state = CallState.Connecting;
+        } else if (SUPPORTED_STATES.includes(this.call?.state)) {
             this.state = this.call.state;
         } else {
             if (this.callWasMissed) this.state = CustomCallState.Missed;

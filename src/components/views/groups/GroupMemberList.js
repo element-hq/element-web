@@ -86,10 +86,16 @@ export default class GroupMemberList extends React.Component {
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
         const text = _t("and %(count)s others...", { count: overflowCount });
         return (
-            <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
-                <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
-            } name={text} presenceState="online" suppressOnHover={true}
-            onClick={this._showFullMemberList} />
+            <EntityTile
+                className="mx_EntityTile_ellipsis"
+                avatarJsx={
+                    <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
+                }
+                name={text}
+                presenceState="online"
+                suppressOnHover={true}
+                onClick={this._showFullMemberList}
+            />
         );
     };
 
@@ -152,7 +158,9 @@ export default class GroupMemberList extends React.Component {
             );
         });
 
-        return <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
+        return <TruncatedList
+            className="mx_MemberList_wrapper"
+            truncateAt={this.state.truncateAt}
             createOverflowElement={this._createOverflowTile}
         >
             { memberTiles }

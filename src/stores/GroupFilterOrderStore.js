@@ -14,12 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import { Store } from 'flux/utils';
+import { EventType } from "matrix-js-sdk/src/@types/event";
 import dis from '../dispatcher/dispatcher';
 import GroupStore from './GroupStore';
 import Analytics from '../Analytics';
 import * as RoomNotifs from "../RoomNotifs";
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import SettingsStore from "../settings/SettingsStore";
+import { CreateEventField } from "../components/views/dialogs/CreateSpaceFromCommunityDialog";
 
 const INITIAL_STATE = {
     orderedTags: null,
@@ -235,8 +237,12 @@ class GroupFilterOrderStore extends Store {
             (t) => (t[0] !== '+' || groupIds.includes(t)) && !removedTags.has(t),
         );
 
+        const cli = MatrixClientPeg.get();
+        const migratedCommunities = new Set(cli.getRooms().map(r => {
+            return r.currentState.getStateEvents(EventType.RoomCreate, "")?.getContent()[CreateEventField];
+        }).filter(Boolean));
         const groupIdsToAdd = groupIds.filter(
-            (groupId) => !tags.includes(groupId) && !removedTags.has(groupId),
+            (groupId) => !tags.includes(groupId) && !removedTags.has(groupId) && !migratedCommunities.has(groupId),
         );
 
         return tagsToKeep.concat(groupIdsToAdd);

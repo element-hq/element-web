@@ -205,7 +205,7 @@ function DeviceItem({ userId, device }: {userId: string, device: IDevice}) {
 
     if (isVerified) {
         return (
-            <div className={classes} title={device.deviceId} >
+            <div className={classes} title={device.deviceId}>
                 <div className={iconClasses} />
                 <div className="mx_UserInfo_device_name">{ deviceName }</div>
                 <div className="mx_UserInfo_device_trusted">{ trustedLabel }</div>
@@ -428,7 +428,7 @@ const UserOptionsSection: React.FC<{
     let directMessageButton;
     if (!isMe) {
         directMessageButton = (
-            <AccessibleButton onClick={() => openDMForUser(cli, member.userId)} className="mx_UserInfo_field">
+            <AccessibleButton onClick={() => { openDMForUser(cli, member.userId); }} className="mx_UserInfo_field">
                 { _t('Direct message') }
             </AccessibleButton>
         );
@@ -851,7 +851,7 @@ const RoomAdminToolsContainer: React.FC<IBaseRoomProps> = ({
     return <div />;
 };
 
-interface GroupMember {
+export interface GroupMember {
     userId: string;
     displayname?: string; // XXX: GroupMember objects are inconsistent :((
     avatarUrl?: string;
@@ -1278,7 +1278,9 @@ const BasicUserInfo: React.FC<{
         // hide the Roles section for DMs as it doesn't make sense there
         if (!DMRoomMap.shared().getUserIdForRoomId((member as RoomMember).roomId)) {
             memberDetails = <div className="mx_UserInfo_container">
-                <h3>{ _t("Role") }</h3>
+                <h3>{ _t("Role in <RoomName/>", {}, {
+                    RoomName: () => <b>{ room.name }</b>,
+                }) }</h3>
                 <PowerLevelSection
                     powerLevels={powerLevels}
                     user={member as RoomMember}
@@ -1353,13 +1355,16 @@ const BasicUserInfo: React.FC<{
         if (hasCrossSigningKeys !== undefined) {
             // Note: mx_UserInfo_verifyButton is for the end-to-end tests
             verifyButton = (
-                <AccessibleButton className="mx_UserInfo_field mx_UserInfo_verifyButton" onClick={() => {
-                    if (hasCrossSigningKeys) {
-                        verifyUser(member as User);
-                    } else {
-                        legacyVerifyUser(member as User);
-                    }
-                }}>
+                <AccessibleButton
+                    className="mx_UserInfo_field mx_UserInfo_verifyButton"
+                    onClick={() => {
+                        if (hasCrossSigningKeys) {
+                            verifyUser(member as User);
+                        } else {
+                            legacyVerifyUser(member as User);
+                        }
+                    }}
+                >
                     { _t("Verify") }
                 </AccessibleButton>
             );
@@ -1374,12 +1379,15 @@ const BasicUserInfo: React.FC<{
     let editDevices;
     if (member.userId == cli.getUserId()) {
         editDevices = (<p>
-            <AccessibleButton className="mx_UserInfo_field" onClick={() => {
-                dis.dispatch({
-                    action: Action.ViewUserSettings,
-                    initialTabId: UserTab.Security,
-                });
-            }}>
+            <AccessibleButton
+                className="mx_UserInfo_field"
+                onClick={() => {
+                    dis.dispatch({
+                        action: Action.ViewUserSettings,
+                        initialTabId: UserTab.Security,
+                    });
+                }}
+            >
                 { _t("Edit devices") }
             </AccessibleButton>
         </p>);
@@ -1567,11 +1575,12 @@ const UserInfo: React.FC<IProps> = ({
     // We have no previousPhase for when viewing a UserInfo from a Group or without a Room at this time
     if (room && phase === RightPanelPhases.EncryptionPanel) {
         previousPhase = RightPanelPhases.RoomMemberInfo;
-        refireParams = { member: member };
+        refireParams = { member };
+    } else if (room?.isSpaceRoom() && SpaceStore.spacesEnabled) {
+        previousPhase = previousPhase = RightPanelPhases.SpaceMemberList;
+        refireParams = { space: room };
     } else if (room) {
-        previousPhase = previousPhase = SpaceStore.spacesEnabled && room.isSpaceRoom()
-            ? RightPanelPhases.SpaceMemberList
-            : RightPanelPhases.RoomMemberList;
+        previousPhase = RightPanelPhases.RoomMemberList;
     }
 
     const onEncryptionPanelClose = () => {

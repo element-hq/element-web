@@ -45,6 +45,8 @@ import BaseAvatar from '../avatars/BaseAvatar';
 import { throttle } from 'lodash';
 import SpaceStore from "../../../stores/SpaceStore";
 
+const getSearchQueryLSKey = (roomId: string) => `mx_MemberList_searchQuarry_${roomId}`;
+
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
 const SHOW_MORE_INCREMENT = 100;
@@ -171,20 +173,27 @@ export default class MemberList extends React.Component<IProps, IState> {
     }
 
     private getMembersState(members: Array<RoomMember>): IState {
+        let searchQuery;
+        try {
+            searchQuery = window.localStorage.getItem(getSearchQueryLSKey(this.props.roomId));
+        } catch (error) {
+            console.warn("Failed to get last the MemberList search query", error);
+        }
+
         // set the state after determining showPresence to make sure it's
         // taken into account while rendering
         return {
             loading: false,
             members: members,
-            filteredJoinedMembers: this.filterMembers(members, 'join'),
-            filteredInvitedMembers: this.filterMembers(members, 'invite'),
+            filteredJoinedMembers: this.filterMembers(members, 'join', searchQuery),
+            filteredInvitedMembers: this.filterMembers(members, 'invite', searchQuery),
             canInvite: this.canInvite,
 
             // ideally we'd size this to the page height, but
             // in practice I find that a little constraining
             truncateAtJoined: INITIAL_LOAD_NUM_MEMBERS,
             truncateAtInvited: INITIAL_LOAD_NUM_INVITED,
-            searchQuery: "",
+            searchQuery: searchQuery ?? "",
         };
     }
 
@@ -306,10 +315,16 @@ export default class MemberList extends React.Component<IProps, IState> {
         // For now we'll pretend this is any entity. It should probably be a separate tile.
         const text = _t("and %(count)s others...", { count: overflowCount });
         return (
-            <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
-                <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
-            } name={text} presenceState="online" suppressOnHover={true}
-            onClick={onClick} />
+            <EntityTile
+                className="mx_EntityTile_ellipsis"
+                avatarJsx={
+                    <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
+                }
+                name={text}
+                presenceState="online"
+                suppressOnHover={true}
+                onClick={onClick}
+            />
         );
     };
 
@@ -408,6 +423,12 @@ export default class MemberList extends React.Component<IProps, IState> {
     };
 
     private onSearchQueryChanged = (searchQuery: string): void => {
+        try {
+            window.localStorage.setItem(getSearchQueryLSKey(this.props.roomId), searchQuery);
+        } catch (error) {
+            console.warn("Failed to set the last MemberList search query", error);
+        }
+
         this.setState({
             searchQuery,
             filteredJoinedMembers: this.filterMembers(this.state.members, 'join', searchQuery),
@@ -465,8 +486,12 @@ export default class MemberList extends React.Component<IProps, IState> {
                 return <MemberTile key={m.userId} member={m} ref={m.userId} showPresence={this.showPresence} />;
             } else {
                 // Is a 3pid invite
-                return <EntityTile key={m.getStateKey()} name={m.getContent().display_name} suppressOnHover={true}
-                    onClick={() => this.onPending3pidInviteClick(m)} />;
+                return <EntityTile
+                    key={m.getStateKey()}
+                    name={m.getContent().display_name}
+                    suppressOnHover={true}
+                    onClick={() => this.onPending3pidInviteClick(m)}
+                />;
             }
         });
     }
@@ -544,7 +569,9 @@ export default class MemberList extends React.Component<IProps, IState> {
             <SearchBox
                 className="mx_MemberList_query mx_textinput_icon mx_textinput_search"
                 placeholder={_t('Filter room members')}
-                onSearch={this.onSearchQueryChanged} />
+                onSearch={this.onSearchQueryChanged}
+                initialValue={this.state.searchQuery}
+            />
         );
 
         let previousPhase = RightPanelPhases.RoomSummary;

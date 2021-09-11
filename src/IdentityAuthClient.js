@@ -146,23 +146,23 @@ export default class IdentityAuthClient {
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             const { finished } = Modal.createTrackedDialog('Default identity server terms warning', '',
                 QuestionDialog, {
-                title: _t("Identity server has no terms of service"),
-                description: (
-                    <div>
-                        <p>{ _t(
-                            "This action requires accessing the default identity server " +
+                    title: _t("Identity server has no terms of service"),
+                    description: (
+                        <div>
+                            <p>{ _t(
+                                "This action requires accessing the default identity server " +
                             "<server /> to validate an email address or phone number, " +
                             "but the server does not have any terms of service.", {},
-                            {
-                                server: () => <b>{ abbreviateUrl(identityServerUrl) }</b>,
-                            },
-                        ) }</p>
-                        <p>{ _t(
-                            "Only continue if you trust the owner of the server.",
-                        ) }</p>
-                    </div>
-                ),
-                button: _t("Trust"),
+                                {
+                                    server: () => <b>{ abbreviateUrl(identityServerUrl) }</b>,
+                                },
+                            ) }</p>
+                            <p>{ _t(
+                                "Only continue if you trust the owner of the server.",
+                            ) }</p>
+                        </div>
+                    ),
+                    button: _t("Trust"),
                 });
             const [confirmed] = await finished;
             if (confirmed) {

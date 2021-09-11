@@ -34,7 +34,7 @@ limitations under the License.
 .mx_LinkPreviewWidget_caption {
     margin-left: 15px;
     flex: 1 1 auto;
-    overflow-x: hidden; // cause it to wrap rather than clip
+    overflow: hidden; // cause it to wrap rather than clip
 }
 
 .mx_LinkPreviewWidget_title {
