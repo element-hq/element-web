@@ -354,9 +354,11 @@ export default class SendMessageComposer extends React.Component<IProps> {
         }
 
         // Replace emoticon at the end of the message
-        const caret = this.editorRef.current?.getCaret();
-        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
-        this.editorRef.current?.replaceEmoticon(position, REGEX_EMOTICON);
+        if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
+            const caret = this.editorRef.current?.getCaret();
+            const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+            this.editorRef.current?.replaceEmoticon(position, REGEX_EMOTICON);
+        }
 
         const replyToEvent = this.props.replyToEvent;
         let shouldSend = true;
