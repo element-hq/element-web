@@ -48,5 +48,13 @@
       "privacyPolicyUrl": "https://element.io/privacy",
       "termsOfServiceUrl": "https://element.io/terms-of-service",
       "url": "https://ems.element.io/element-home/in-app-loader"
+    },
+    "sentry": {
+        "dsn": "https://029a0eb289f942508ae0fb17935bd8c5@sentry.matrix.org/6",
+        "environment": "develop"
+    },
+    "posthog": {
+        "projectApiKey": "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
+        "apiHost": "https://posthog.hss.element.io"
     }
 }
