@@ -3620,5 +3620,21 @@
     "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s avfäste <a>ett meddelande</a> i det här rummet. Se alla <b>fästa meddelanden</b>.",
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s fäste ett meddelande i det här rummet. Se alla fästa meddelanden.",
     "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s fäste <a>ett meddelande</a> i det här rummet. Se alla <b>fästa meddelanden</b>.",
-    "& %(count)s more|one": "& %(count)s till"
+    "& %(count)s more|one": "& %(count)s till",
+    "Some encryption parameters have been changed.": "Vissa krypteringsparametrar har ändrats.",
+    "Role in <RoomName/>": "Roll i <RoomName/>",
+    "Explore %(spaceName)s": "Utforska %(spaceName)s",
+    "Send a sticker": "Skicka en dekal",
+    "Reply to thread…": "Svara på tråd…",
+    "Reply to encrypted thread…": "Svara på krypterad tråd…",
+    "Add emoji": "Lägg till emoji",
+    "Unknown failure": "Okänt fel",
+    "Failed to update the join rules": "Misslyckades att uppdatera regler för att gå med",
+    "Select the roles required to change various parts of the space": "Välj de roller som krävs för att ändra olika delar av utrymmet",
+    "Change description": "Ändra beskrivningen",
+    "Change main address for the space": "Byt huvudadress för utrymmet",
+    "Change space name": "Byt utrymmesnamn",
+    "Change space avatar": "Byt utrymmesavatar",
+    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Vem som helst i <spaceName/> kan hitta och gå med. Du kan välja andra utrymmen också.",
+    "Currently, %(count)s spaces have access|one": "Just nu har ett utrymme åtkomst"
 }
