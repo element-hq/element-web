@@ -3712,5 +3712,13 @@
     "Send a sticker": "傳送貼圖",
     "Reply to thread…": "回覆討論串……",
     "Reply to encrypted thread…": "回覆給已加密的討論串……",
-    "Add emoji": "新增表情符號"
+    "Add emoji": "新增表情符號",
+    "Unknown failure": "未知錯誤",
+    "Failed to update the join rules": "更新加入規則失敗",
+    "Select the roles required to change various parts of the space": "選取變更空間各個部份所需的角色",
+    "Change description": "變更描述",
+    "Change main address for the space": "變更空間的主要地址",
+    "Change space name": "變更空間名稱",
+    "Change space avatar": "變更空間大頭照",
+    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "在 <spaceName/> 中的任何人都可以找到並加入。您也可以選取其他空間。"
 }
