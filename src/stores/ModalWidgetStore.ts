@@ -17,10 +17,10 @@ limitations under the License.
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
-import Modal, {IHandle, IModal} from "../Modal";
+import Modal, { IHandle, IModal } from "../Modal";
 import ModalWidgetDialog from "../components/views/dialogs/ModalWidgetDialog";
-import {WidgetMessagingStore} from "./widgets/WidgetMessagingStore";
-import {IModalWidgetOpenRequestData, IModalWidgetReturnData, Widget} from "matrix-widget-api";
+import { WidgetMessagingStore } from "./widgets/WidgetMessagingStore";
+import { IModalWidgetOpenRequestData, IModalWidgetReturnData, Widget } from "matrix-widget-api";
 
 interface IState {
     modal?: IModal<any>;
@@ -56,7 +56,7 @@ export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
         if (this.modalInstance) return;
         this.openSourceWidgetId = sourceWidget.id;
         this.modalInstance = Modal.createTrackedDialog('Modal Widget', '', ModalWidgetDialog, {
-            widgetDefinition: {...requestData},
+            widgetDefinition: { ...requestData },
             widgetRoomId,
             sourceWidgetId: sourceWidget.id,
             onFinished: (success: boolean, data?: IModalWidgetReturnData) => {

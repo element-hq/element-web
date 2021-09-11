@@ -32,14 +32,14 @@ limitations under the License.
     // first triggering the enter state with the newest breadcrumb off screen (-40px) then
     // sliding it into view.
     &.mx_RoomBreadcrumbs-enter {
-        margin-left: -40px; // 32px for the avatar, 8px for the margin
+        transform: translateX(-40px); // 32px for the avatar, 8px for the margin
     }
     &.mx_RoomBreadcrumbs-enter-active {
-        margin-left: 0;
+        transform: translateX(0);
 
         // Timing function is as-requested by design.
         // NOTE: The transition time MUST match the value passed to CSSTransition!
-        transition: margin-left 640ms cubic-bezier(0.66, 0.02, 0.36, 1);
+        transition: transform 640ms cubic-bezier(0.66, 0.02, 0.36, 1);
     }
 
     .mx_RoomBreadcrumbs_placeholder {

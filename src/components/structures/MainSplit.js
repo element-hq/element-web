@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import { Resizable } from 're-resizable';
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 
 @replaceableComponent("structures.MainSplit")
 export default class MainSplit extends React.Component {
@@ -73,7 +73,7 @@ export default class MainSplit extends React.Component {
                 onResize={this._onResize}
                 onResizeStop={this._onResizeStop}
                 className="mx_RightPanel_ResizeWrapper"
-                handleClasses={{left: "mx_RightPanel_ResizeHandle"}}
+                handleClasses={{ left: "mx_RightPanel_ResizeHandle" }}
             >
                 { panelView }
             </Resizable>;

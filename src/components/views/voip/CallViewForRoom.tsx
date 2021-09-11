@@ -16,25 +16,25 @@ limitations under the License.
 
 import { CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import React from 'react';
-import CallHandler from '../../../CallHandler';
+import CallHandler, { CallHandlerEvent } from '../../../CallHandler';
 import CallView from './CallView';
 import dis from '../../../dispatcher/dispatcher';
-import {Resizable} from "re-resizable";
+import { Resizable } from "re-resizable";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // What room we should display the call for
-    roomId: string,
+    roomId: string;
 
     // maxHeight style attribute for the video panel
     maxVideoHeight?: number;
 
-    resizeNotifier: ResizeNotifier,
+    resizeNotifier: ResizeNotifier;
 }
 
 interface IState {
-    call: MatrixCall,
+    call: MatrixCall;
 }
 
 /*
@@ -54,21 +54,27 @@ export default class CallViewForRoom extends React.Component<IProps, IState> {
 
     public componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
+        CallHandler.sharedInstance().addListener(CallHandlerEvent.CallChangeRoom, this.updateCall);
     }
 
     public componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
+        CallHandler.sharedInstance().removeListener(CallHandlerEvent.CallChangeRoom, this.updateCall);
     }
 
     private onAction = (payload) => {
         switch (payload.action) {
             case 'call_state': {
-                const newCall = this.getCall();
-                if (newCall !== this.state.call) {
-                    this.setState({call: newCall});
-                }
+                this.updateCall();
                 break;
             }
+        }
+    };
+
+    private updateCall = () => {
+        const newCall = this.getCall();
+        if (newCall !== this.state.call) {
+            this.setState({ call: newCall });
         }
     };
 
@@ -115,7 +121,7 @@ export default class CallViewForRoom extends React.Component<IProps, IState> {
                     onResize={this.onResize}
                     onResizeStop={this.onResizeStop}
                     className="mx_CallViewForRoom_ResizeWrapper"
-                    handleClasses={{bottom: "mx_CallViewForRoom_ResizeHandle"}}
+                    handleClasses={{ bottom: "mx_CallViewForRoom_ResizeHandle" }}
                 >
                     <CallView
                         call={this.state.call}

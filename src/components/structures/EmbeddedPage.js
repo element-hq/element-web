@@ -22,7 +22,7 @@ import request from 'browser-request';
 import { _t } from '../../languageHandler';
 import sanitizeHtml from 'sanitize-html';
 import dis from '../../dispatcher/dispatcher';
-import {MatrixClientPeg} from '../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../MatrixClientPeg';
 import classnames from 'classnames';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
@@ -120,16 +120,15 @@ export default class EmbeddedPage extends React.PureComponent {
 
         const content = <div className={`${className}_body`}
             dangerouslySetInnerHTML={{ __html: this.state.page }}
-        >
-        </div>;
+        />;
 
         if (this.props.scrollbar) {
             return <AutoHideScrollbar className={classes}>
-                {content}
+                { content }
             </AutoHideScrollbar>;
         } else {
             return <div className={classes}>
-                {content}
+                { content }
             </div>;
         }
     }

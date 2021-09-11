@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import * as React from "react";
-import {toDataURL, QRCodeSegment, QRCodeToDataURLOptions} from "qrcode";
+import { toDataURL, QRCodeSegment, QRCodeToDataURLOptions } from "qrcode";
 import classNames from "classnames";
 
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import Spinner from "./Spinner";
 
 interface IProps extends QRCodeToDataURLOptions {
@@ -30,11 +30,11 @@ const defaultOptions: QRCodeToDataURLOptions = {
     errorCorrectionLevel: 'L', // we want it as trivial-looking as possible
 };
 
-const QRCode: React.FC<IProps> = ({data, className, ...options}) => {
+const QRCode: React.FC<IProps> = ({ data, className, ...options }) => {
     const [dataUri, setUri] = React.useState<string>(null);
     React.useEffect(() => {
         let cancelled = false;
-        toDataURL(data, {...defaultOptions, ...options}).then(uri => {
+        toDataURL(data, { ...defaultOptions, ...options }).then(uri => {
             if (cancelled) return;
             setUri(uri);
         });

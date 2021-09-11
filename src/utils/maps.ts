@@ -30,7 +30,7 @@ export function mapDiff<K, V>(a: Map<K, V>, b: Map<K, V>): { changed: K[], added
     const possibleChanges = arrayUnion(aKeys, bKeys);
     const changes = possibleChanges.filter(k => a.get(k) !== b.get(k));
 
-    return {changed: changes, added: keyDiff.added, removed: keyDiff.removed};
+    return { changed: changes, added: keyDiff.added, removed: keyDiff.removed };
 }
 
 /**

@@ -2080,5 +2080,14 @@
     "The call was answered on another device.": "Hovor bol prijatý na inom zariadení.",
     "The call could not be established": "Hovor nemohol byť realizovaný",
     "The other party declined the call.": "Druhá strana odmietla hovor.",
-    "Call Declined": "Hovor odmietnutý"
+    "Call Declined": "Hovor odmietnutý",
+    "Integration manager": "Správca integrácií",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Integračné servery zhromažďujú údaje nastavení, môžu spravovať widgety, odosielať vo vašom mene pozvánky alebo meniť úroveň moci.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Použiť integračný server na správu botov, widgetov a balíčkov s nálepkami.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Použiť integračný server <b>(%(serverName)s)</b> na správu botov, widgetov a balíčkov s nálepkami.",
+    "Identity server": "Server totožností",
+    "Identity server (%(server)s)": "Server totožností (%(server)s)",
+    "Could not connect to identity server": "Nie je možné sa pripojiť k serveru totožností",
+    "Not a valid identity server (status code %(code)s)": "Toto nie je funkčný server totožností (kód stavu %(code)s)",
+    "Identity server URL must be HTTPS": "URL adresa servera totožností musí začínať HTTPS"
 }

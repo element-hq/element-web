@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import SdkConfig from "../SdkConfig";
-import {MatrixClientPeg} from "../MatrixClientPeg";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 
 const JITSI_WK_PROPERTY = "im.vector.riot.jitsi";
 

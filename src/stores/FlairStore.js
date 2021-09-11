@@ -65,6 +65,10 @@ class FlairStore extends EventEmitter {
         delete this._userGroups[userId];
     }
 
+    cachedPublicisedGroups(userId) {
+        return this._userGroups[userId];
+    }
+
     getPublicisedGroupsCached(matrixClient, userId) {
         if (this._userGroups[userId]) {
             return Promise.resolve(this._userGroups[userId]);

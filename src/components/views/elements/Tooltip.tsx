@@ -17,13 +17,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
-import React, {Component, CSSProperties} from 'react';
+import React, { Component, CSSProperties } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import UIStore from "../../../stores/UIStore";
 
 const MIN_TOOLTIP_HEIGHT = 25;
+
+export enum Alignment {
+    Natural, // Pick left or right
+    Left,
+    Right,
+    Top, // Centered
+    Bottom, // Centered
+}
 
 interface IProps {
         // Class applied to the element used to position the tooltip
@@ -36,7 +44,7 @@ interface IProps {
         visible?: boolean;
         // the react element to put into the tooltip
         label: React.ReactNode;
-        forceOnRight?: boolean;
+        alignment?: Alignment; // defaults to Natural
         yOffset?: number;
 }
 
@@ -46,10 +54,14 @@ export default class Tooltip extends React.Component<IProps> {
     private tooltip: void | Element | Component<Element, any, any>;
     private parent: Element;
 
+    // XXX: This is because some components (Field) are unable to `import` the Tooltip class,
+    // so we expose the Alignment options off of us statically.
+    public static readonly Alignment = Alignment;
 
     public static readonly defaultProps = {
         visible: true,
         yOffset: 0,
+        alignment: Alignment.Natural,
     };
 
     // Create a wrapper for the tooltip outside the parent and attach it to the body element
@@ -57,7 +69,10 @@ export default class Tooltip extends React.Component<IProps> {
         this.tooltipContainer = document.createElement("div");
         this.tooltipContainer.className = "mx_Tooltip_wrapper";
         document.body.appendChild(this.tooltipContainer);
-        window.addEventListener('scroll', this.renderTooltip, true);
+        window.addEventListener('scroll', this.renderTooltip, {
+            passive: true,
+            capture: true,
+        });
 
         this.parent = ReactDOM.findDOMNode(this).parentNode as Element;
 
@@ -72,7 +87,9 @@ export default class Tooltip extends React.Component<IProps> {
     public componentWillUnmount() {
         ReactDOM.unmountComponentAtNode(this.tooltipContainer);
         document.body.removeChild(this.tooltipContainer);
-        window.removeEventListener('scroll', this.renderTooltip, true);
+        window.removeEventListener('scroll', this.renderTooltip, {
+            capture: true,
+        });
     }
 
     private updatePosition(style: CSSProperties) {
@@ -85,12 +102,36 @@ export default class Tooltip extends React.Component<IProps> {
             // we need so that we're still centered.
             offset = Math.floor(parentBox.height - MIN_TOOLTIP_HEIGHT);
         }
-
-        style.top = (parentBox.top - 2 + this.props.yOffset) + window.pageYOffset + offset;
-        if (!this.props.forceOnRight && parentBox.right > window.innerWidth / 2) {
-            style.right = window.innerWidth - parentBox.right - window.pageXOffset - 16;
-        } else {
-            style.left = parentBox.right + window.pageXOffset + 6;
+        const width = UIStore.instance.windowWidth;
+        const baseTop = (parentBox.top - 2 + this.props.yOffset) + window.pageYOffset;
+        const top = baseTop + offset;
+        const right = width - parentBox.right - window.pageXOffset - 16;
+        const left = parentBox.right + window.pageXOffset + 6;
+        const horizontalCenter = parentBox.right - window.pageXOffset - (parentBox.width / 2);
+        switch (this.props.alignment) {
+            case Alignment.Natural:
+                if (parentBox.right > width / 2) {
+                    style.right = right;
+                    style.top = top;
+                    break;
+                }
+                // fall through to Right
+            case Alignment.Right:
+                style.left = left;
+                style.top = top;
+                break;
+            case Alignment.Left:
+                style.right = right;
+                style.top = top;
+                break;
+            case Alignment.Top:
+                style.top = baseTop - 16;
+                style.left = horizontalCenter;
+                break;
+            case Alignment.Bottom:
+                style.top = baseTop + parentBox.height;
+                style.left = horizontalCenter;
+                break;
         }
 
         return style;
@@ -125,8 +166,7 @@ export default class Tooltip extends React.Component<IProps> {
     public render() {
         // Render a placeholder
         return (
-            <div className={this.props.className}>
-            </div>
+            <div className={this.props.className} />
         );
     }
 }

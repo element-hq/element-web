@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {useCallback, useState} from "react";
-import {MatrixClient} from "matrix-js-sdk/src/client";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { useCallback, useState } from "react";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room } from "matrix-js-sdk/src/models/room";
 
-import {useEventEmitter} from "./useEventEmitter";
+import { useEventEmitter } from "./useEventEmitter";
 
 // Hook to simplify watching whether a Matrix room is encrypted, returns undefined if room is undefined
 export function useIsEncrypted(cli: MatrixClient, room?: Room): boolean | undefined {

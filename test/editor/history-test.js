@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import HistoryManager, {MAX_STEP_LENGTH} from "../../src/editor/history";
+import HistoryManager, { MAX_STEP_LENGTH } from "../../src/editor/history";
 
 describe('editor/history', function() {
     it('push, then undo', function() {
         const history = new HistoryManager();
         const parts = ["hello"];
-        const model = {serializeParts: () => parts.slice()};
+        const model = { serializeParts: () => parts.slice() };
         const caret1 = {};
         const result1 = history.tryPush(model, caret1);
         expect(result1).toEqual(true);
@@ -35,7 +35,7 @@ describe('editor/history', function() {
     it('push, undo, then redo', function() {
         const history = new HistoryManager();
         const parts = ["hello"];
-        const model = {serializeParts: () => parts.slice()};
+        const model = { serializeParts: () => parts.slice() };
         history.tryPush(model, {});
         parts[0] = "hello world";
         const caret2 = {};
@@ -51,7 +51,7 @@ describe('editor/history', function() {
     it('push, undo, push, ensure you can`t redo', function() {
         const history = new HistoryManager();
         const parts = ["hello"];
-        const model = {serializeParts: () => parts.slice()};
+        const model = { serializeParts: () => parts.slice() };
         history.tryPush(model, {});
         parts[0] = "hello world";
         history.tryPush(model, {});
@@ -63,10 +63,10 @@ describe('editor/history', function() {
     it('not every keystroke stores a history step', function() {
         const history = new HistoryManager();
         const parts = ["hello"];
-        const model = {serializeParts: () => parts.slice()};
+        const model = { serializeParts: () => parts.slice() };
         const firstCaret = {};
         history.tryPush(model, firstCaret);
-        const diff = {added: "o"};
+        const diff = { added: "o" };
         let keystrokeCount = 0;
         do {
             parts[0] = parts[0] + diff.added;
@@ -80,24 +80,24 @@ describe('editor/history', function() {
     });
     it('history step is added at word boundary', function() {
         const history = new HistoryManager();
-        const model = {serializeParts: () => parts.slice()};
+        const model = { serializeParts: () => parts.slice() };
         const parts = ["h"];
-        let diff = {added: "h"};
+        let diff = { added: "h" };
         expect(history.tryPush(model, {}, "insertText", diff)).toEqual(false);
-        diff = {added: "i"};
+        diff = { added: "i" };
         parts[0] = "hi";
         expect(history.tryPush(model, {}, "insertText", diff)).toEqual(false);
-        diff = {added: " "};
+        diff = { added: " " };
         parts[0] = "hi ";
         const spaceCaret = {};
         expect(history.tryPush(model, spaceCaret, "insertText", diff)).toEqual(true);
-        diff = {added: "y"};
+        diff = { added: "y" };
         parts[0] = "hi y";
         expect(history.tryPush(model, {}, "insertText", diff)).toEqual(false);
-        diff = {added: "o"};
+        diff = { added: "o" };
         parts[0] = "hi yo";
         expect(history.tryPush(model, {}, "insertText", diff)).toEqual(false);
-        diff = {added: "u"};
+        diff = { added: "u" };
         parts[0] = "hi you";
 
         expect(history.canUndo()).toEqual(true);
@@ -108,11 +108,11 @@ describe('editor/history', function() {
     it('keystroke that didn\'t add a step can undo', function() {
         const history = new HistoryManager();
         const parts = ["hello"];
-        const model = {serializeParts: () => parts.slice()};
+        const model = { serializeParts: () => parts.slice() };
         const firstCaret = {};
         history.tryPush(model, {});
         parts[0] = "helloo";
-        const result = history.tryPush(model, {}, "insertText", {added: "o"});
+        const result = history.tryPush(model, {}, "insertText", { added: "o" });
         expect(result).toEqual(false);
         expect(history.canUndo()).toEqual(true);
         const undoState = history.undo(model);
@@ -122,11 +122,11 @@ describe('editor/history', function() {
     it('undo after keystroke that didn\'t add a step is able to redo', function() {
         const history = new HistoryManager();
         const parts = ["hello"];
-        const model = {serializeParts: () => parts.slice()};
+        const model = { serializeParts: () => parts.slice() };
         history.tryPush(model, {});
         parts[0] = "helloo";
-        const caret = {last: true};
-        history.tryPush(model, caret, "insertText", {added: "o"});
+        const caret = { last: true };
+        history.tryPush(model, caret, "insertText", { added: "o" });
         history.undo(model);
         expect(history.canRedo()).toEqual(true);
         const redoState = history.redo();
@@ -136,10 +136,10 @@ describe('editor/history', function() {
     it('overwriting text always stores a step', function() {
         const history = new HistoryManager();
         const parts = ["hello"];
-        const model = {serializeParts: () => parts.slice()};
+        const model = { serializeParts: () => parts.slice() };
         const firstCaret = {};
         history.tryPush(model, firstCaret);
-        const diff = {at: 1, added: "a", removed: "e"};
+        const diff = { at: 1, added: "a", removed: "e" };
         const result = history.tryPush(model, {}, "insertText", diff);
         expect(result).toEqual(true);
     });

@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ICryptoCallbacks, IDeviceTrustLevel, ISecretStorageKeyInfo } from 'matrix-js-sdk/src/matrix';
+import { ICryptoCallbacks } from 'matrix-js-sdk/src/matrix';
+import { ISecretStorageKeyInfo } from 'matrix-js-sdk/src/crypto/api';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import Modal from './Modal';
 import * as sdk from './index';
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { MatrixClientPeg } from './MatrixClientPeg';
 import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 import { _t } from './languageHandler';
@@ -28,6 +29,7 @@ import AccessSecretStorageDialog from './components/views/dialogs/security/Acces
 import RestoreKeyBackupDialog from './components/views/dialogs/security/RestoreKeyBackupDialog';
 import SettingsStore from "./settings/SettingsStore";
 import SecurityCustomisations from "./customisations/Security";
+import { DeviceTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
@@ -41,8 +43,8 @@ let secretStorageBeingAccessed = false;
 let nonInteractive = false;
 
 let dehydrationCache: {
-    key?: Uint8Array,
-    keyInfo?: ISecretStorageKeyInfo,
+    key?: Uint8Array;
+    keyInfo?: ISecretStorageKeyInfo;
 } = {};
 
 function isCachingAllowed(): boolean {
@@ -134,7 +136,7 @@ async function getSecretStorageKey(
 
     const keyFromCustomisations = SecurityCustomisations.getSecretStorageKey?.();
     if (keyFromCustomisations) {
-        console.log("Using key from security customisations (secret storage)")
+        console.log("Using key from security customisations (secret storage)");
         cacheSecretStorageKey(keyId, keyInfo, keyFromCustomisations);
         return [keyId, keyFromCustomisations];
     }
@@ -184,7 +186,7 @@ export async function getDehydrationKey(
 ): Promise<Uint8Array> {
     const keyFromCustomisations = SecurityCustomisations.getSecretStorageKey?.();
     if (keyFromCustomisations) {
-        console.log("Using key from security customisations (dehydration)")
+        console.log("Using key from security customisations (dehydration)");
         return keyFromCustomisations;
     }
 
@@ -223,7 +225,7 @@ export async function getDehydrationKey(
     const key = await inputToKey(input);
 
     // need to copy the key because rehydration (unpickling) will clobber it
-    dehydrationCache = {key: new Uint8Array(key), keyInfo};
+    dehydrationCache = { key: new Uint8Array(key), keyInfo };
 
     return key;
 }
@@ -244,7 +246,7 @@ async function onSecretRequested(
     deviceId: string,
     requestId: string,
     name: string,
-    deviceTrust: IDeviceTrustLevel,
+    deviceTrust: DeviceTrustLevel,
 ): Promise<string> {
     console.log("onSecretRequested", userId, deviceId, requestId, name, deviceTrust);
     const client = MatrixClientPeg.get();
@@ -271,7 +273,7 @@ async function onSecretRequested(
         }
         return key && encodeBase64(key);
     } else if (name === "m.megolm_backup.v1") {
-        const key = await client._crypto.getSessionBackupPrivateKey();
+        const key = await client.crypto.getSessionBackupPrivateKey();
         if (!key) {
             console.log(
                 `session backup key requested by ${deviceId}, but not found in cache`,
@@ -353,6 +355,7 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
                 throw new Error("Secret storage creation canceled");
             }
         } else {
+            // FIXME: Using an import will result in test failures
             const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
             await cli.bootstrapCrossSigning({
                 authUploadDeviceSigningKeys: async (makeRequest) => {

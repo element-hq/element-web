@@ -279,5 +279,9 @@
     "A call is currently being placed!": "Sedang melakukan panggilan sekarang!",
     "A call is already in progress!": "Masih ada panggilan berlangsung!",
     "Permission Required": "Permisi Dibutuhkan",
-    "You do not have permission to start a conference call in this room": "Anda tidak memiliki permisi untuk memulai panggilan massal di ruang ini"
+    "You do not have permission to start a conference call in this room": "Anda tidak memiliki permisi untuk memulai panggilan massal di ruang ini",
+    "Explore rooms": "Jelajahi ruang",
+    "Sign In": "Masuk",
+    "Create Account": "Buat Akun",
+    "Identity server": "Server Identitas"
 }

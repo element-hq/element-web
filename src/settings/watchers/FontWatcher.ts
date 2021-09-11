@@ -63,7 +63,7 @@ export class FontWatcher implements IWatcher {
         (<HTMLElement>document.querySelector(":root")).style.fontSize = toPx(fontSize);
     };
 
-    private setSystemFont = ({useSystemFont, font}) => {
+    private setSystemFont = ({ useSystemFont, font }) => {
         document.body.style.fontFamily = useSystemFont ? font : "";
     };
 }

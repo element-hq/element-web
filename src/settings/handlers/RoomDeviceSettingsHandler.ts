@@ -57,7 +57,7 @@ export default class RoomDeviceSettingsHandler extends SettingsHandler {
         if (newValue === null) {
             localStorage.removeItem(this.getKey(settingName, roomId));
         } else {
-            newValue = JSON.stringify({value: newValue});
+            newValue = JSON.stringify({ value: newValue });
             localStorage.setItem(this.getKey(settingName, roomId), newValue);
         }
 

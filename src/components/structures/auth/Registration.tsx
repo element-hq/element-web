@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016, 2017, 2018, 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,23 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {createClient} from 'matrix-js-sdk/src/matrix';
-import React, {ReactNode} from 'react';
-import {MatrixClient} from "matrix-js-sdk/src/client";
+import { createClient } from 'matrix-js-sdk/src/matrix';
+import React, { ReactNode } from 'react';
+import { MatrixClient } from "matrix-js-sdk/src/client";
 
-import * as sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
-import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
 import classNames from "classnames";
 import * as Lifecycle from '../../../Lifecycle';
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { IMatrixClientCreds, MatrixClientPeg } from "../../../MatrixClientPeg";
 import AuthPage from "../../views/auth/AuthPage";
-import Login, {ISSOFlow} from "../../../Login";
+import Login, { ISSOFlow } from "../../../Login";
 import dis from "../../../dispatcher/dispatcher";
 import SSOButtons from "../../views/elements/SSOButtons";
 import ServerPicker from '../../views/elements/ServerPicker';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import RegistrationForm from '../../views/auth/RegistrationForm';
+import AccessibleButton from '../../views/elements/AccessibleButton';
+import AuthBody from "../../views/auth/AuthBody";
+import AuthHeader from "../../views/auth/AuthHeader";
+import InteractiveAuth from "../InteractiveAuth";
+import Spinner from "../../views/elements/Spinner";
 
 interface IProps {
     serverConfig: ValidatedServerConfig;
@@ -47,13 +52,7 @@ interface IProps {
     // - The user's password, if available and applicable (may be cached in memory
     //   for a short time so the user is not required to re-enter their password
     //   for operations like uploading cross-signing keys).
-    onLoggedIn(params: {
-        userId: string;
-        deviceId: string
-        homeserverUrl: string;
-        identityServerUrl?: string;
-        accessToken: string;
-    }, password: string): void;
+    onLoggedIn(params: IMatrixClientCreds, password: string): void;
     makeRegistrationUrl(params: {
         /* eslint-disable camelcase */
         client_secret: string;
@@ -61,7 +60,7 @@ interface IProps {
         is_url?: string;
         session_id: string;
         /* eslint-enable camelcase */
-    }): void;
+    }): string;
     // registration shouldn't know or care how login is done.
     onLoginClick(): void;
     onServerConfigChange(config: ValidatedServerConfig): void;
@@ -95,7 +94,7 @@ interface IState {
     // be seeing.
     serverIsAlive: boolean;
     serverErrorIsFatal: boolean;
-    serverDeadError: string;
+    serverDeadError?: ReactNode;
 
     // Our matrix client - part of state because we can't render the UI auth
     // component without it.
@@ -131,7 +130,7 @@ export default class Registration extends React.Component<IProps, IState> {
             serverDeadError: "",
         };
 
-        const {hsUrl, isUrl} = this.props.serverConfig;
+        const { hsUrl, isUrl } = this.props.serverConfig;
         this.loginLogic = new Login(hsUrl, isUrl, null, {
             defaultDeviceDisplayName: "Element login check", // We shouldn't ever be used
         });
@@ -142,7 +141,7 @@ export default class Registration extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
@@ -180,7 +179,7 @@ export default class Registration extends React.Component<IProps, IState> {
             }
         }
 
-        const {hsUrl, isUrl} = serverConfig;
+        const { hsUrl, isUrl } = serverConfig;
         const cli = createClient({
             baseUrl: hsUrl,
             idBaseUrl: isUrl,
@@ -223,13 +222,14 @@ export default class Registration extends React.Component<IProps, IState> {
                 this.setState({
                     flows: e.data.flows,
                 });
-            } else if (e.httpStatus === 403 && e.errcode === "M_UNKNOWN") {
+            } else if (e.httpStatus === 403 || e.errcode === "M_FORBIDDEN") {
+                // Check for 403 or M_FORBIDDEN, Synapse used to send 403 M_UNKNOWN but now sends 403 M_FORBIDDEN.
                 // At this point registration is pretty much disabled, but before we do that let's
                 // quickly check to see if the server supports SSO instead. If it does, we'll send
                 // the user off to the login page to figure their account out.
                 if (ssoFlow) {
                     // Redirect to login page - server probably expects SSO only
-                    dis.dispatch({action: 'start_login'});
+                    dis.dispatch({ action: 'start_login' });
                 } else {
                     this.setState({
                         serverErrorIsFatal: true, // fatal because user cannot continue on this server
@@ -245,7 +245,7 @@ export default class Registration extends React.Component<IProps, IState> {
         }
     }
 
-    private onFormSubmit = formVals => {
+    private onFormSubmit = async (formVals): Promise<void> => {
         this.setState({
             errorText: "",
             busy: true,
@@ -266,9 +266,9 @@ export default class Registration extends React.Component<IProps, IState> {
                 session_id: sessionId,
             }),
         );
-    }
+    };
 
-    private onUIAuthFinished = async (success, response, extra) => {
+    private onUIAuthFinished = async (success: boolean, response: any) => {
         if (!success) {
             let msg = response.message || response.toString();
             // can we give a better error message?
@@ -290,8 +290,8 @@ export default class Registration extends React.Component<IProps, IState> {
                     },
                 );
                 msg = <div>
-                    <p>{errorTop}</p>
-                    <p>{errorDetail}</p>
+                    <p>{ errorTop }</p>
+                    <p>{ errorDetail }</p>
                 </div>;
             } else if (response.required_stages && response.required_stages.indexOf('m.login.msisdn') > -1) {
                 let msisdnAvailable = false;
@@ -431,18 +431,16 @@ export default class Registration extends React.Component<IProps, IState> {
     private onLoginClickWithCheck = async ev => {
         ev.preventDefault();
 
-        const sessionLoaded = await Lifecycle.loadSession({ignoreGuest: true});
+        const sessionLoaded = await Lifecycle.loadSession({ ignoreGuest: true });
         if (!sessionLoaded) {
             // ok fine, there's still no session: really go to the login page
             this.props.onLoginClick();
         }
+
+        return sessionLoaded;
     };
 
     private renderRegisterComponent() {
-        const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
-        const Spinner = sdk.getComponent('elements.Spinner');
-        const RegistrationForm = sdk.getComponent('auth.RegistrationForm');
-
         if (this.state.matrixClient && this.state.doingUIAuth) {
             return <InteractiveAuth
                 matrixClient={this.state.matrixClient}
@@ -465,7 +463,7 @@ export default class Registration extends React.Component<IProps, IState> {
             let ssoSection;
             if (this.state.ssoFlow) {
                 let continueWithSection;
-                const providers = this.state.ssoFlow["org.matrix.msc2858.identity_providers"] || [];
+                const providers = this.state.ssoFlow.identity_providers || [];
                 // when there is only a single (or 0) providers we show a wide button with `Continue with X` text
                 if (providers.length > 1) {
                     // i18n: ssoButtons is a placeholder to help translators understand context
@@ -484,7 +482,13 @@ export default class Registration extends React.Component<IProps, IState> {
                         fragmentAfterLogin={this.props.fragmentAfterLogin}
                     />
                     <h3 className="mx_AuthBody_centered">
-                        { _t("%(ssoButtons)s Or %(usernamePassword)s", { ssoButtons: "", usernamePassword: ""}).trim() }
+                        { _t(
+                            "%(ssoButtons)s Or %(usernamePassword)s",
+                            {
+                                ssoButtons: "",
+                                usernamePassword: "",
+                            },
+                        ).trim() }
                     </h3>
                 </React.Fragment>;
             }
@@ -507,10 +511,6 @@ export default class Registration extends React.Component<IProps, IState> {
     }
 
     render() {
-        const AuthHeader = sdk.getComponent('auth.AuthHeader');
-        const AuthBody = sdk.getComponent("auth.AuthBody");
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
         let errorText;
         const err = this.state.errorText;
         if (err) {
@@ -526,15 +526,15 @@ export default class Registration extends React.Component<IProps, IState> {
             });
             serverDeadSection = (
                 <div className={classes}>
-                    {this.state.serverDeadError}
+                    { this.state.serverDeadError }
                 </div>
             );
         }
 
         const signIn = <span className="mx_AuthBody_changeFlow">
-            {_t("Already have an account? <a>Sign in here</a>", {}, {
+            { _t("Already have an account? <a>Sign in here</a>", {}, {
                 a: sub => <a onClick={this.onLoginClick} href="#">{ sub }</a>,
-            })}
+            }) }
         </span>;
 
         // Only show the 'go back' button if you're not looking at the form
@@ -550,38 +550,47 @@ export default class Registration extends React.Component<IProps, IState> {
             let regDoneText;
             if (this.state.differentLoggedInUserId) {
                 regDoneText = <div>
-                    <p>{_t(
+                    <p>{ _t(
                         "Your new account (%(newAccountId)s) is registered, but you're already " +
                         "logged into a different account (%(loggedInUserId)s).", {
                             newAccountId: this.state.registeredUsername,
                             loggedInUserId: this.state.differentLoggedInUserId,
                         },
-                    )}</p>
-                    <p><AccessibleButton element="span" className="mx_linkButton" onClick={this.onLoginClickWithCheck}>
-                        {_t("Continue with previous account")}
+                    ) }</p>
+                    <p><AccessibleButton
+                        element="span"
+                        className="mx_linkButton"
+                        onClick={async event => {
+                            const sessionLoaded = await this.onLoginClickWithCheck(event);
+                            if (sessionLoaded) {
+                                dis.dispatch({ action: "view_welcome_page" });
+                            }
+                        }}
+                    >
+                        { _t("Continue with previous account") }
                     </AccessibleButton></p>
                 </div>;
             } else if (this.state.formVals.password) {
                 // We're the client that started the registration
-                regDoneText = <h3>{_t(
+                regDoneText = <h3>{ _t(
                     "<a>Log in</a> to your new account.", {},
                     {
-                        a: (sub) => <a href="#/login" onClick={this.onLoginClickWithCheck}>{sub}</a>,
+                        a: (sub) => <a href="#/login" onClick={this.onLoginClickWithCheck}>{ sub }</a>,
                     },
-                )}</h3>;
+                ) }</h3>;
             } else {
                 // We're not the original client: the user probably got to us by clicking the
                 // email validation link. We can't offer a 'go straight to your account' link
                 // as we don't have the original creds.
-                regDoneText = <h3>{_t(
+                regDoneText = <h3>{ _t(
                     "You can now close this window or <a>log in</a> to your new account.", {},
                     {
-                        a: (sub) => <a href="#/login" onClick={this.onLoginClickWithCheck}>{sub}</a>,
+                        a: (sub) => <a href="#/login" onClick={this.onLoginClickWithCheck}>{ sub }</a>,
                     },
-                )}</h3>;
+                ) }</h3>;
             }
             body = <div>
-                <h2>{_t("Registration Successful")}</h2>
+                <h2>{ _t("Registration Successful") }</h2>
                 { regDoneText }
             </div>;
         } else {

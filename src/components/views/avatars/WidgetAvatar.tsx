@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ComponentProps} from 'react';
+import React, { ComponentProps } from 'react';
 import classNames from 'classnames';
 
-import {IApp} from "../../../stores/WidgetStore";
-import BaseAvatar, {BaseAvatarType} from "./BaseAvatar";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { IApp } from "../../../stores/WidgetStore";
+import BaseAvatar, { BaseAvatarType } from "./BaseAvatar";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 interface IProps extends Omit<ComponentProps<BaseAvatarType>, "name" | "url" | "urls"> {
     app: IApp;
@@ -49,7 +49,7 @@ const WidgetAvatar: React.FC<IProps> = ({ app, className, width = 20, height = 2
             width={width}
             height={height}
         />
-    )
+    );
 };
 
 export default WidgetAvatar;

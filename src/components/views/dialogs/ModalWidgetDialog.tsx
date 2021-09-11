@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ limitations under the License.
 
 import * as React from 'react';
 import BaseDialog from './BaseDialog';
-import { _t } from '../../../languageHandler';
+import { _t, getUserLanguage } from '../../../languageHandler';
 import AccessibleButton from "../elements/AccessibleButton";
 import {
     ClientWidgetApi,
@@ -33,12 +33,14 @@ import {
     WidgetApiFromWidgetAction,
     WidgetKind,
 } from "matrix-widget-api";
-import {StopGapWidgetDriver} from "../../../stores/widgets/StopGapWidgetDriver";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {OwnProfileStore} from "../../../stores/OwnProfileStore";
+import { StopGapWidgetDriver } from "../../../stores/widgets/StopGapWidgetDriver";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { arrayFastClone } from "../../../utils/arrays";
 import { ElementWidget } from "../../../stores/widgets/StopGapWidget";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { ELEMENT_CLIENT_ID } from "../../../identifiers";
+import SettingsStore from "../../../settings/SettingsStore";
 
 interface IProps {
     widgetDefinition: IModalWidgetOpenRequestData;
@@ -61,7 +63,8 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     private appFrame: React.RefObject<HTMLIFrameElement> = React.createRef();
 
     state: IState = {
-        disabledButtonIds: [],
+        disabledButtonIds: (this.props.widgetDefinition.buttons || []).filter(b => b.disabled)
+            .map(b => b.id),
     };
 
     constructor(props) {
@@ -78,7 +81,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     public componentDidMount() {
         const driver = new StopGapWidgetDriver( [], this.widget, WidgetKind.Modal);
         const messaging = new ClientWidgetApi(this.widget, this.appFrame.current, driver);
-        this.setState({messaging});
+        this.setState({ messaging });
     }
 
     public componentWillUnmount() {
@@ -99,14 +102,14 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
 
     private onWidgetClose = (ev: CustomEvent<IModalWidgetCloseRequest>) => {
         this.props.onFinished(true, ev.detail.data);
-    }
+    };
 
     private onButtonEnableToggle = (ev: CustomEvent<ISetModalButtonEnabledActionRequest>) => {
         ev.preventDefault();
         const isClose = ev.detail.data.button === BuiltInModalButtonID.Close;
         if (isClose || !this.possibleButtons.includes(ev.detail.data.button)) {
             return this.state.messaging.transport.reply(ev.detail, {
-                error: {message: "Invalid button"},
+                error: { message: "Invalid button" },
             } as IWidgetApiErrorResponseData);
         }
 
@@ -119,7 +122,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
             tempSet.add(ev.detail.data.button);
             buttonIds = Array.from(tempSet);
         }
-        this.setState({disabledButtonIds: buttonIds});
+        this.setState({ disabledButtonIds: buttonIds });
         this.state.messaging.transport.reply(ev.detail, {} as IWidgetApiAcknowledgeResponseData);
     };
 
@@ -129,6 +132,9 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
             currentUserId: MatrixClientPeg.get().getUserId(),
             userDisplayName: OwnProfileStore.instance.displayName,
             userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl(),
+            clientId: ELEMENT_CLIENT_ID,
+            clientTheme: SettingsStore.getValue("theme"),
+            clientLanguage: getUserLanguage(),
         });
 
         const parsed = new URL(templated);
@@ -154,7 +160,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                         break;
                     case ModalButtonKind.Secondary:
                         kind = "primary_outline";
-                        break
+                        break;
                     case ModalButtonKind.Danger:
                         kind = "danger";
                         break;
@@ -185,9 +191,9 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                     width="16"
                     alt=""
                 />
-                {_t("Data on this screen is shared with %(widgetDomain)s", {
+                { _t("Data on this screen is shared with %(widgetDomain)s", {
                     widgetDomain: parsed.hostname,
-                })}
+                }) }
             </div>
             <div>
                 <iframe

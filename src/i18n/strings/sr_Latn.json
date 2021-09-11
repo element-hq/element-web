@@ -58,5 +58,6 @@
     "Failed to invite users to the room:": "Nije uspelo pozivanje korisnika u sobu:",
     "You need to be logged in.": "Morate biti prijavljeni",
     "You need to be able to invite users to do that.": "Mora vam biti dozvoljeno da pozovete korisnike kako bi to uradili.",
-    "Failed to send request.": "Slanje zahteva nije uspelo."
+    "Failed to send request.": "Slanje zahteva nije uspelo.",
+    "Create Account": "Napravite nalog"
 }

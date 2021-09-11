@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import {Room} from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/models/room";
 import CallHandler from "../../../CallHandler";
 import { RoomListCustomisations } from "../../../customisations/RoomList";
 import VoipUserMapper from "../../../VoipUserMapper";
-import SettingsStore from "../../../settings/SettingsStore";
+import SpaceStore from "../../SpaceStore";
 
 export class VisibilityProvider {
     private static internalInstance: VisibilityProvider;
@@ -37,7 +37,11 @@ export class VisibilityProvider {
         await VoipUserMapper.sharedInstance().onNewInvitedRoom(room);
     }
 
-    public isRoomVisible(room: Room): boolean {
+    public isRoomVisible(room?: Room): boolean {
+        if (!room) {
+            return false;
+        }
+
         if (
             CallHandler.sharedInstance().getSupportsVirtualRooms() &&
             VoipUserMapper.sharedInstance().isVirtualRoom(room)
@@ -46,7 +50,7 @@ export class VisibilityProvider {
         }
 
         // hide space rooms as they'll be shown in the SpacePanel
-        if (room.isSpaceRoom() && SettingsStore.getValue("feature_spaces")) {
+        if (SpaceStore.spacesEnabled && room.isSpaceRoom()) {
             return false;
         }
 

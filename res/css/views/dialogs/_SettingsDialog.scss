@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 // Not actually a component but things shared by settings components
-.mx_UserSettingsDialog, .mx_RoomSettingsDialog {
+.mx_UserSettingsDialog, .mx_RoomSettingsDialog, .mx_SpaceSettingsDialog {
     width: 90vw;
     max-width: 1000px;
     // set the height too since tabbed view scrolls itself.

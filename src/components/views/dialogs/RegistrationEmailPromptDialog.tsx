@@ -18,7 +18,7 @@ import * as React from "react";
 
 import { _t } from '../../../languageHandler';
 import { IDialogProps } from "./IDialogProps";
-import {useRef, useState} from "react";
+import { useRef, useState } from "react";
 import Field from "../elements/Field";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import withValidation from "../elements/Validation";
@@ -40,7 +40,7 @@ const validation = withValidation({
     ],
 });
 
-const RegistrationEmailPromptDialog: React.FC<IProps> = ({onFinished}) => {
+const RegistrationEmailPromptDialog: React.FC<IProps> = ({ onFinished }) => {
     const [email, setEmail] = useState("");
     const fieldRef = useRef<Field>();
 
@@ -67,10 +67,10 @@ const RegistrationEmailPromptDialog: React.FC<IProps> = ({onFinished}) => {
         fixedWidth={false}
     >
         <div className="mx_Dialog_content" id="mx_RegistrationEmailPromptDialog">
-            <p>{_t("Just a heads up, if you don't add an email and forget your password, you could " +
+            <p>{ _t("Just a heads up, if you don't add an email and forget your password, you could " +
                 "<b>permanently lose access to your account</b>.", {}, {
-                b: sub => <b>{sub}</b>,
-            })}</p>
+                b: sub => <b>{ sub }</b>,
+            }) }</p>
             <form onSubmit={onSubmit}>
                 <Field
                     ref={fieldRef}

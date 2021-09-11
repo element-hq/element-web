@@ -22,6 +22,7 @@ import { FetchRoomFn, ListNotificationState } from "./ListNotificationState";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomNotificationState } from "./RoomNotificationState";
 import { SummarizedNotificationState } from "./SummarizedNotificationState";
+import { VisibilityProvider } from "../room-list/filters/VisibilityProvider";
 
 interface IState {}
 
@@ -47,7 +48,9 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
         // This will include highlights from the previous version of the room internally
         const globalState = new SummarizedNotificationState();
         for (const room of this.matrixClient.getVisibleRooms()) {
-            globalState.add(this.getRoomState(room));
+            if (VisibilityProvider.instance.isRoomVisible(room)) {
+                globalState.add(this.getRoomState(room));
+            }
         }
         return globalState;
     }

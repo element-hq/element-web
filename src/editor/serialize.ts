@@ -16,36 +16,37 @@ limitations under the License.
 */
 
 import Markdown from '../Markdown';
-import {makeGenericPermalink} from "../utils/permalinks/Permalinks";
+import { makeGenericPermalink } from "../utils/permalinks/Permalinks";
 import EditorModel from "./model";
 import { AllHtmlEntities } from 'html-entities';
 import SettingsStore from '../settings/SettingsStore';
 import SdkConfig from '../SdkConfig';
 import cheerio from 'cheerio';
+import { Type } from './parts';
 
-export function mdSerialize(model: EditorModel) {
+export function mdSerialize(model: EditorModel): string {
     return model.parts.reduce((html, part) => {
         switch (part.type) {
-            case "newline":
+            case Type.Newline:
                 return html + "\n";
-            case "plain":
-            case "command":
-            case "pill-candidate":
-            case "at-room-pill":
+            case Type.Plain:
+            case Type.Command:
+            case Type.PillCandidate:
+            case Type.AtRoomPill:
                 return html + part.text;
-            case "room-pill":
+            case Type.RoomPill:
                 // Here we use the resourceId for compatibility with non-rich text clients
                 // See https://github.com/vector-im/element-web/issues/16660
                 return html +
                     `[${part.resourceId.replace(/[[\\\]]/g, c => "\\" + c)}](${makeGenericPermalink(part.resourceId)})`;
-            case "user-pill":
+            case Type.UserPill:
                 return html +
                     `[${part.text.replace(/[[\\\]]/g, c => "\\" + c)}](${makeGenericPermalink(part.resourceId)})`;
         }
     }, "");
 }
 
-export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = {}) {
+export function htmlSerializeIfNeeded(model: EditorModel, { forceHTML = false } = {}): string {
     let md = mdSerialize(model);
     // copy of raw input to remove unwanted math later
     const orig = md;
@@ -61,9 +62,9 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
                 // const inlinePattern = "(?:^|\\s)(?<!\\\\)\\$(?!\\s)(([^$]|\\\\\\$)+?)(?<!\\\\|\\s)\\$";
 
                 // conditions for display math detection $$...$$:
-                // - pattern starts at beginning of line or is not prefixed with backslash or dollar
+                // - pattern starts and ends on a new line
                 // - left delimiter ($$) is not escaped by backslash
-                "display": "(^|[^\\\\$])\\$\\$(([^$]|\\\\\\$)+?)\\$\\$",
+                "display": "(^)\\$\\$(([^$]|\\\\\\$)+?)\\$\\$$",
 
                 // conditions for inline math detection $...$:
                 // - pattern starts at beginning of line, follows whitespace character or punctuation
@@ -78,9 +79,9 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
                 // detect math with latex delimiters, inline: \(...\), display \[...\]
 
                 // conditions for display math detection \[...\]:
-                // - pattern starts at beginning of line or is not prefixed with backslash
+                // - pattern starts and ends on a new line
                 // - pattern is not empty
-                "display": "(^|[^\\\\])\\\\\\[(?!\\\\\\])(.*?)\\\\\\]",
+                "display": "(^)\\\\\\[(?!\\\\\\])(.*?)\\\\\\]$",
 
                 // conditions for inline math detection \(...\):
                 // - pattern starts at beginning of line or is not prefixed with backslash
@@ -116,14 +117,22 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
     const parser = new Markdown(md);
     if (!parser.isPlainText() || forceHTML) {
         // feed Markdown output to HTML parser
-        const phtml = cheerio.load(parser.toHTML(),
-            { _useHtmlParser2: true, decodeEntities: false });
+        const phtml = cheerio.load(parser.toHTML(), {
+            // @ts-ignore: The `_useHtmlParser2` internal option is the
+            // simplest way to both parse and render using `htmlparser2`.
+            _useHtmlParser2: true,
+            decodeEntities: false,
+        });
 
         if (SettingsStore.getValue("feature_latex_maths")) {
             // original Markdown without LaTeX replacements
             const parserOrig = new Markdown(orig);
-            const phtmlOrig = cheerio.load(parserOrig.toHTML(),
-                { _useHtmlParser2: true, decodeEntities: false });
+            const phtmlOrig = cheerio.load(parserOrig.toHTML(), {
+                // @ts-ignore: The `_useHtmlParser2` internal option is the
+                // simplest way to both parse and render using `htmlparser2`.
+                _useHtmlParser2: true,
+                decodeEntities: false,
+            });
 
             // since maths delimiters are handled before Markdown,
             // code blocks could contain mangled content.
@@ -134,9 +143,9 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
 
             // add fallback output for latex math, which should not be interpreted as markdown
             phtml('div, span').each(function(i, e) {
-                const tex = phtml(e).attr('data-mx-maths')
+                const tex = phtml(e).attr('data-mx-maths');
                 if (tex) {
-                    phtml(e).html(`<code>${tex}</code>`)
+                    phtml(e).html(`<code>${tex}</code>`);
                 }
             });
         }
@@ -148,31 +157,31 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
     }
 }
 
-export function textSerialize(model: EditorModel) {
+export function textSerialize(model: EditorModel): string {
     return model.parts.reduce((text, part) => {
         switch (part.type) {
-            case "newline":
+            case Type.Newline:
                 return text + "\n";
-            case "plain":
-            case "command":
-            case "pill-candidate":
-            case "at-room-pill":
+            case Type.Plain:
+            case Type.Command:
+            case Type.PillCandidate:
+            case Type.AtRoomPill:
                 return text + part.text;
-            case "room-pill":
+            case Type.RoomPill:
                 // Here we use the resourceId for compatibility with non-rich text clients
                 // See https://github.com/vector-im/element-web/issues/16660
                 return text + `${part.resourceId}`;
-            case "user-pill":
+            case Type.UserPill:
                 return text + `${part.text}`;
         }
     }, "");
 }
 
-export function containsEmote(model: EditorModel) {
+export function containsEmote(model: EditorModel): boolean {
     return startsWith(model, "/me ", false);
 }
 
-export function startsWith(model: EditorModel, prefix: string, caseSensitive = true) {
+export function startsWith(model: EditorModel, prefix: string, caseSensitive = true): boolean {
     const firstPart = model.parts[0];
     // part type will be "plain" while editing,
     // and "command" while composing a message.
@@ -182,28 +191,28 @@ export function startsWith(model: EditorModel, prefix: string, caseSensitive = t
         text = text.toLowerCase();
     }
 
-    return firstPart && (firstPart.type === "plain" || firstPart.type === "command") && text.startsWith(prefix);
+    return firstPart && (firstPart.type === Type.Plain || firstPart.type === Type.Command) && text.startsWith(prefix);
 }
 
-export function stripEmoteCommand(model: EditorModel) {
+export function stripEmoteCommand(model: EditorModel): EditorModel {
     // trim "/me "
     return stripPrefix(model, "/me ");
 }
 
-export function stripPrefix(model: EditorModel, prefix: string) {
+export function stripPrefix(model: EditorModel, prefix: string): EditorModel {
     model = model.clone();
-    model.removeText({index: 0, offset: 0}, prefix.length);
+    model.removeText({ index: 0, offset: 0 }, prefix.length);
     return model;
 }
 
-export function unescapeMessage(model: EditorModel) {
-    const {parts} = model;
+export function unescapeMessage(model: EditorModel): EditorModel {
+    const { parts } = model;
     if (parts.length) {
         const firstPart = parts[0];
         // only unescape \/ to / at start of editor
-        if (firstPart.type === "plain" && firstPart.text.startsWith("\\/")) {
+        if (firstPart.type === Type.Plain && firstPart.text.startsWith("\\/")) {
             model = model.clone();
-            model.removeText({index: 0, offset: 0}, 1);
+            model.removeText({ index: 0, offset: 0 }, 1);
         }
     }
     return model;

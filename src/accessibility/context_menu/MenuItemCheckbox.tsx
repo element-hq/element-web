@@ -26,7 +26,7 @@ interface IProps extends React.ComponentProps<typeof AccessibleButton> {
 }
 
 // Semantic component for representing a role=menuitemcheckbox
-export const MenuItemCheckbox: React.FC<IProps> = ({children, label, active, disabled, ...props}) => {
+export const MenuItemCheckbox: React.FC<IProps> = ({ children, label, active, disabled, ...props }) => {
     return (
         <AccessibleButton
             {...props}

@@ -93,7 +93,7 @@ limitations under the License.
         }
 
         > h1 {
-            color: $tertiary-fg-color;
+            color: $tertiary-content;
             font-size: $font-12px;
             font-weight: 500;
         }
@@ -145,7 +145,7 @@ limitations under the License.
         justify-content: space-around;
 
         .mx_AccessibleButton_kind_secondary {
-            color: $secondary-fg-color;
+            color: $secondary-content;
             background-color: rgba(141, 151, 165, 0.2);
             font-weight: $font-semi-bold;
             font-size: $font-14px;

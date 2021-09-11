@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from "react";
-import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
+import React, { createRef } from "react";
+import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
 
-import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
 import BaseDialog from './BaseDialog';
 import { _t } from '../../../languageHandler';
 import AccessibleButton from "../elements/AccessibleButton";
@@ -25,8 +25,8 @@ import SdkConfig from "../../../SdkConfig";
 import Field from "../elements/Field";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import TextWithTooltip from "../elements/TextWithTooltip";
-import withValidation, {IFieldState} from "../elements/Validation";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import withValidation, { IFieldState } from "../elements/Validation";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     title?: string;
@@ -110,7 +110,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                 console.error(e);
 
                 const stateForError = AutoDiscoveryUtils.authComponentStateForError(e);
-                if (stateForError.isFatalError) {
+                if (stateForError.serverErrorIsFatal) {
                     let error = _t("Unable to validate homeserver");
                     if (e.translatedMessage) {
                         error = e.translatedMessage;
@@ -168,11 +168,11 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
             text = _t("Matrix.org is the biggest public homeserver in the world, so it’s a good place for many.");
         }
 
-        let defaultServerName = this.defaultServer.hsName;
+        let defaultServerName: React.ReactNode = this.defaultServer.hsName;
         if (this.defaultServer.hsNameIsDifferent) {
             defaultServerName = (
                 <TextWithTooltip class="mx_Login_underlinedServerName" tooltip={this.defaultServer.hsUrl}>
-                    {this.defaultServer.hsName}
+                    { this.defaultServer.hsName }
                 </TextWithTooltip>
             );
         }
@@ -187,7 +187,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
         >
             <form className="mx_Dialog_content" id="mx_ServerPickerDialog" onSubmit={this.onSubmit}>
                 <p>
-                    {_t("We call the places where you can host your account ‘homeservers’.")} {text}
+                    { _t("We call the places where you can host your account ‘homeservers’.") } { text }
                 </p>
 
                 <StyledRadioButton
@@ -196,7 +196,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                     checked={this.state.defaultChosen}
                     onChange={this.onDefaultChosen}
                 >
-                    {defaultServerName}
+                    { defaultServerName }
                 </StyledRadioButton>
 
                 <StyledRadioButton
@@ -205,31 +205,33 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                     className="mx_ServerPickerDialog_otherHomeserverRadio"
                     checked={!this.state.defaultChosen}
                     onChange={this.onOtherChosen}
+                    childrenInLabel={false}
                 >
                     <Field
                         type="text"
                         className="mx_ServerPickerDialog_otherHomeserver"
                         label={_t("Other homeserver")}
                         onChange={this.onHomeserverChange}
-                        onClick={this.onOtherChosen}
+                        onFocus={this.onOtherChosen}
                         ref={this.fieldRef}
                         onValidate={this.onHomeserverValidate}
                         value={this.state.otherHomeserver}
                         validateOnChange={false}
                         validateOnFocus={false}
+                        id="mx_homeserverInput"
                     />
                 </StyledRadioButton>
                 <p>
-                    {_t("Use your preferred Matrix homeserver if you have one, or host your own.")}
+                    { _t("Use your preferred Matrix homeserver if you have one, or host your own.") }
                 </p>
 
                 <AccessibleButton className="mx_ServerPickerDialog_continue" kind="primary" onClick={this.onSubmit}>
-                    {_t("Continue")}
+                    { _t("Continue") }
                 </AccessibleButton>
 
-                <h4>{_t("Learn more")}</h4>
+                <h4>{ _t("Learn more") }</h4>
                 <a href="https://matrix.org/faq/#what-is-a-homeserver%3F" target="_blank" rel="noreferrer noopener">
-                    {_t("About homeservers")}
+                    { _t("About homeservers") }
                 </a>
             </form>
         </BaseDialog>;

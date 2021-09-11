@@ -16,8 +16,8 @@ limitations under the License.
 
 import React from "react";
 
-import {useRovingTabIndex} from "../RovingTabIndex";
-import {FocusHandler, Ref} from "./types";
+import { useRovingTabIndex } from "../RovingTabIndex";
+import { FocusHandler, Ref } from "./types";
 
 interface IProps {
     inputRef?: Ref;
@@ -29,7 +29,7 @@ interface IProps {
 }
 
 // Wrapper to allow use of useRovingTabIndex outside of React Functional Components.
-export const RovingTabIndexWrapper: React.FC<IProps> = ({children, inputRef}) => {
+export const RovingTabIndexWrapper: React.FC<IProps> = ({ children, inputRef }) => {
     const [onFocus, isActive, ref] = useRovingTabIndex(inputRef);
-    return children({onFocus, isActive, ref});
+    return children({ onFocus, isActive, ref });
 };

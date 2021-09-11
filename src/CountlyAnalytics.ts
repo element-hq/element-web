@@ -14,21 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {randomString} from "matrix-js-sdk/src/randomstring";
+import { randomString } from "matrix-js-sdk/src/randomstring";
+import { IContent } from "matrix-js-sdk/src/models/event";
+import { sleep } from "matrix-js-sdk/src/utils";
 
-import {getCurrentLanguage} from './languageHandler';
+import { getCurrentLanguage } from './languageHandler';
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
-import {MatrixClientPeg} from "./MatrixClientPeg";
-import {sleep} from "./utils/promise";
+import { MatrixClientPeg } from "./MatrixClientPeg";
 import RoomViewStore from "./stores/RoomViewStore";
-
-// polyfill textencoder if necessary
-import * as TextEncodingUtf8 from 'text-encoding-utf-8';
-let TextEncoder = window.TextEncoder;
-if (!TextEncoder) {
-    TextEncoder = TextEncodingUtf8.TextEncoder;
-}
+import { Action } from "./dispatcher/actions";
 
 const INACTIVITY_TIME = 20; // seconds
 const HEARTBEAT_INTERVAL = 5_000; // ms
@@ -261,11 +256,11 @@ interface ICreateRoomEvent extends IEvent {
         num_users: number;
         is_encrypted: boolean;
         is_public: boolean;
-    }
+    };
 }
 
 interface IJoinRoomEvent extends IEvent {
-    key: "join_room";
+    key: Action.JoinRoom;
     dur: number; // how long it took to join (until remote echo)
     segmentation: {
         room_id: string; // hashed
@@ -344,8 +339,8 @@ const getRoomStats = (roomId: string) => {
         "is_encrypted": cli?.isRoomEncrypted(roomId),
         // eslint-disable-next-line camelcase
         "is_public": room?.currentState.getStateEvents("m.room.join_rules", "")?.getContent()?.join_rule === "public",
-    }
-}
+    };
+};
 
 // async wrapper for regex-powered String.prototype.replace
 const strReplaceAsync = async (str: string, regex: RegExp, fn: (...args: string[]) => Promise<string>) => {
@@ -369,8 +364,8 @@ export default class CountlyAnalytics {
 
     private initTime = CountlyAnalytics.getTimestamp();
     private firstPage = true;
-    private heartbeatIntervalId: NodeJS.Timeout;
-    private activityIntervalId: NodeJS.Timeout;
+    private heartbeatIntervalId: number;
+    private activityIntervalId: number;
     private trackTime = true;
     private lastBeat: number;
     private storedDuration = 0;
@@ -420,7 +415,7 @@ export default class CountlyAnalytics {
 
         this.anonymous = anonymous;
         if (anonymous) {
-            await this.changeUserKey(randomString(64))
+            await this.changeUserKey(randomString(64));
         } else {
             await this.changeUserKey(await hashHex(MatrixClientPeg.get().getUserId()), true);
         }
@@ -444,7 +439,7 @@ export default class CountlyAnalytics {
         await this.track("Opt-Out" );
         this.endSession();
         window.clearInterval(this.heartbeatIntervalId);
-        window.clearTimeout(this.activityIntervalId)
+        window.clearTimeout(this.activityIntervalId);
         this.baseUrl = null;
         // remove listeners bound in trackSessions()
         window.removeEventListener("beforeunload", this.endSession);
@@ -668,14 +663,14 @@ export default class CountlyAnalytics {
     }
 
     private queue(args: Omit<IEvent, "timestamp" | "hour" | "dow" | "count"> & Partial<Pick<IEvent, "count">>) {
-        const {count = 1, ...rest} = args;
+        const { count = 1, ...rest } = args;
         const ev = {
             ...this.getTimeParams(),
             ...rest,
             count,
             platform: this.appPlatform,
             app_version: this.appVersion,
-        }
+        };
 
         this.pendingEvents.push(ev);
         if (this.pendingEvents.length > MAX_PENDING_EVENTS) {
@@ -684,7 +679,9 @@ export default class CountlyAnalytics {
     }
 
     private getOrientation = (): Orientation => {
-        return window.innerWidth > window.innerHeight ? Orientation.Landscape : Orientation.Portrait;
+        return window.matchMedia("(orientation: landscape)").matches
+            ? Orientation.Landscape
+            : Orientation.Portrait;
     };
 
     private reportOrientation = () => {
@@ -753,7 +750,7 @@ export default class CountlyAnalytics {
             const request: Parameters<typeof CountlyAnalytics.prototype.request>[0] = {
                 begin_session: 1,
                 user_details: JSON.stringify(userDetails),
-            }
+            };
 
             const metrics = this.getMetrics();
             if (metrics) {
@@ -777,7 +774,7 @@ export default class CountlyAnalytics {
 
     private endSession = () => {
         if (this.sessionStarted) {
-            window.removeEventListener("resize", this.reportOrientation)
+            window.removeEventListener("resize", this.reportOrientation);
 
             this.reportViewDuration();
             this.request({
@@ -813,7 +810,9 @@ export default class CountlyAnalytics {
         window.addEventListener("mousemove", this.onUserActivity);
         window.addEventListener("click", this.onUserActivity);
         window.addEventListener("keydown", this.onUserActivity);
-        window.addEventListener("scroll", this.onUserActivity);
+        // Using the passive option to not block the main thread
+        // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
+        window.addEventListener("scroll", this.onUserActivity, { passive: true });
 
         this.activityIntervalId = setInterval(() => {
             this.inactivityCounter++;
@@ -858,7 +857,7 @@ export default class CountlyAnalytics {
     }
 
     public trackRoomJoin(startTime: number, roomId: string, type: IJoinRoomEvent["segmentation"]["type"]) {
-        this.track<IJoinRoomEvent>("join_room", { type }, roomId, {
+        this.track<IJoinRoomEvent>(Action.JoinRoom, { type }, roomId, {
             dur: CountlyAnalytics.getTimestamp() - startTime,
         });
     }
@@ -870,7 +869,7 @@ export default class CountlyAnalytics {
         roomId: string,
         isEdit: boolean,
         isReply: boolean,
-        content: {format?: string, msgtype: string},
+        content: IContent,
     ) {
         if (this.disabled) return;
         const cli = MatrixClientPeg.get();

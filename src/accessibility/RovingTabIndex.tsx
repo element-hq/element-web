@@ -26,8 +26,8 @@ import React, {
     Dispatch,
 } from "react";
 
-import {Key} from "../Keyboard";
-import {FocusHandler, Ref} from "./roving/types";
+import { Key } from "../Keyboard";
+import { FocusHandler, Ref } from "./roving/types";
 
 /**
  * Module to simplify implementing the Roving TabIndex accessibility technique
@@ -150,38 +150,68 @@ const reducer = (state: IState, action: IAction) => {
 
 interface IProps {
     handleHomeEnd?: boolean;
+    handleUpDown?: boolean;
     children(renderProps: {
         onKeyDownHandler(ev: React.KeyboardEvent);
     });
     onKeyDown?(ev: React.KeyboardEvent, state: IState);
 }
 
-export const RovingTabIndexProvider: React.FC<IProps> = ({children, handleHomeEnd, onKeyDown}) => {
+export const RovingTabIndexProvider: React.FC<IProps> = ({ children, handleHomeEnd, handleUpDown, onKeyDown }) => {
     const [state, dispatch] = useReducer<Reducer<IState, IAction>>(reducer, {
         activeRef: null,
         refs: [],
     });
 
-    const context = useMemo<IContext>(() => ({state, dispatch}), [state]);
+    const context = useMemo<IContext>(() => ({ state, dispatch }), [state]);
 
     const onKeyDownHandler = useCallback((ev) => {
         let handled = false;
         // Don't interfere with input default keydown behaviour
-        if (handleHomeEnd && ev.target.tagName !== "INPUT") {
+        if (ev.target.tagName !== "INPUT" && ev.target.tagName !== "TEXTAREA") {
             // check if we actually have any items
             switch (ev.key) {
                 case Key.HOME:
-                    handled = true;
-                    // move focus to first item
-                    if (context.state.refs.length > 0) {
-                        context.state.refs[0].current.focus();
+                    if (handleHomeEnd) {
+                        handled = true;
+                        // move focus to first item
+                        if (context.state.refs.length > 0) {
+                            context.state.refs[0].current.focus();
+                        }
                     }
                     break;
+
                 case Key.END:
-                    handled = true;
-                    // move focus to last item
-                    if (context.state.refs.length > 0) {
-                        context.state.refs[context.state.refs.length - 1].current.focus();
+                    if (handleHomeEnd) {
+                        handled = true;
+                        // move focus to last item
+                        if (context.state.refs.length > 0) {
+                            context.state.refs[context.state.refs.length - 1].current.focus();
+                        }
+                    }
+                    break;
+
+                case Key.ARROW_UP:
+                    if (handleUpDown) {
+                        handled = true;
+                        if (context.state.refs.length > 0) {
+                            const idx = context.state.refs.indexOf(context.state.activeRef);
+                            if (idx > 0) {
+                                context.state.refs[idx - 1].current.focus();
+                            }
+                        }
+                    }
+                    break;
+
+                case Key.ARROW_DOWN:
+                    if (handleUpDown) {
+                        handled = true;
+                        if (context.state.refs.length > 0) {
+                            const idx = context.state.refs.indexOf(context.state.activeRef);
+                            if (idx < context.state.refs.length - 1) {
+                                context.state.refs[idx + 1].current.focus();
+                            }
+                        }
                     }
                     break;
             }
@@ -193,10 +223,10 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({children, handleHomeEn
         } else if (onKeyDown) {
             return onKeyDown(ev, context.state);
         }
-    }, [context.state, onKeyDown, handleHomeEnd]);
+    }, [context.state, onKeyDown, handleHomeEnd, handleUpDown]);
 
     return <RovingTabIndexContext.Provider value={context}>
-        { children({onKeyDownHandler}) }
+        { children({ onKeyDownHandler }) }
     </RovingTabIndexContext.Provider>;
 };
 
@@ -218,13 +248,13 @@ export const useRovingTabIndex = (inputRef?: Ref): [FocusHandler, boolean, Ref] 
     useLayoutEffect(() => {
         context.dispatch({
             type: Type.Register,
-            payload: {ref},
+            payload: { ref },
         });
         // teardown
         return () => {
             context.dispatch({
                 type: Type.Unregister,
-                payload: {ref},
+                payload: { ref },
             });
         };
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -232,7 +262,7 @@ export const useRovingTabIndex = (inputRef?: Ref): [FocusHandler, boolean, Ref] 
     const onFocus = useCallback(() => {
         context.dispatch({
             type: Type.SetFocus,
-            payload: {ref},
+            payload: { ref },
         });
     }, [ref, context]);
 
@@ -241,6 +271,6 @@ export const useRovingTabIndex = (inputRef?: Ref): [FocusHandler, boolean, Ref] 
 };
 
 // re-export the semantic helper components for simplicity
-export {RovingTabIndexWrapper} from "./roving/RovingTabIndexWrapper";
-export {RovingAccessibleButton} from "./roving/RovingAccessibleButton";
-export {RovingAccessibleTooltipButton} from "./roving/RovingAccessibleTooltipButton";
+export { RovingTabIndexWrapper } from "./roving/RovingTabIndexWrapper";
+export { RovingAccessibleButton } from "./roving/RovingAccessibleButton";
+export { RovingAccessibleTooltipButton } from "./roving/RovingAccessibleTooltipButton";

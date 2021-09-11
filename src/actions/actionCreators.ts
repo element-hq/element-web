@@ -51,9 +51,9 @@ export function asyncAction(id: string, fn: () => Promise<any>, pendingFn: () =>
             request: typeof pendingFn === 'function' ? pendingFn() : undefined,
         });
         fn().then((result) => {
-            dispatch({action: id + '.success', result});
+            dispatch({ action: id + '.success', result });
         }).catch((err) => {
-            dispatch({action: id + '.failure', err});
+            dispatch({ action: id + '.failure', err });
         });
     };
     return new AsyncActionPayload(helper);

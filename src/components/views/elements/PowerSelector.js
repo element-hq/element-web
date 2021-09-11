@@ -19,8 +19,8 @@ import PropTypes from 'prop-types';
 import * as Roles from '../../../Roles';
 import { _t } from '../../../languageHandler';
 import Field from "./Field";
-import {Key} from "../../../Keyboard";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { Key } from "../../../Keyboard";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.elements.PowerSelector")
 export default class PowerSelector extends React.Component {
@@ -97,15 +97,15 @@ export default class PowerSelector extends React.Component {
     onSelectChange = event => {
         const isCustom = event.target.value === "SELECT_VALUE_CUSTOM";
         if (isCustom) {
-            this.setState({custom: true});
+            this.setState({ custom: true });
         } else {
             this.props.onChange(event.target.value, this.props.powerLevelKey);
-            this.setState({selectValue: event.target.value});
+            this.setState({ selectValue: event.target.value });
         }
     };
 
     onCustomChange = event => {
-        this.setState({customValue: event.target.value});
+        this.setState({ customValue: event.target.value });
     };
 
     onCustomBlur = event => {
@@ -134,10 +134,16 @@ export default class PowerSelector extends React.Component {
         const label = typeof this.props.label === "undefined" ? _t("Power level") : this.props.label;
         if (this.state.custom) {
             picker = (
-                <Field type="number"
-                       label={label} max={this.props.maxValue}
-                       onBlur={this.onCustomBlur} onKeyDown={this.onCustomKeyDown} onChange={this.onCustomChange}
-                       value={String(this.state.customValue)} disabled={this.props.disabled} />
+                <Field
+                    type="number"
+                    label={label}
+                    max={this.props.maxValue}
+                    onBlur={this.onCustomBlur}
+                    onKeyDown={this.onCustomKeyDown}
+                    onChange={this.onCustomChange}
+                    value={String(this.state.customValue)}
+                    disabled={this.props.disabled}
+                />
             );
         } else {
             // Each level must have a definition in this.state.levelRoleMap
@@ -153,10 +159,14 @@ export default class PowerSelector extends React.Component {
             });
 
             picker = (
-                <Field element="select"
-                       label={label} onChange={this.onSelectChange}
-                       value={String(this.state.selectValue)} disabled={this.props.disabled}>
-                    {options}
+                <Field
+                    element="select"
+                    label={label}
+                    onChange={this.onSelectChange}
+                    value={String(this.state.selectValue)}
+                    disabled={this.props.disabled}
+                >
+                    { options }
                 </Field>
             );
         }

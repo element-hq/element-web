@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {RefObject} from "react";
+import { RefObject } from "react";
 
 export type Ref = RefObject<HTMLElement>;
 

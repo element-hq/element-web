@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { MatrixClient } from 'matrix-js-sdk/src/client';
@@ -140,41 +140,44 @@ export default class ImportE2eKeysDialog extends React.Component {
                         </div>
                         <div className='mx_E2eKeysDialog_inputTable'>
                             <div className='mx_E2eKeysDialog_inputRow'>
-                               <div className='mx_E2eKeysDialog_inputLabel'>
-                                   <label htmlFor='importFile'>
-                                       { _t("File to import") }
-                                   </label>
-                               </div>
-                               <div className='mx_E2eKeysDialog_inputCell'>
-                                   <input
-                                       ref={this._file}
-                                       id='importFile'
-                                       type='file'
-                                       autoFocus={true}
-                                       onChange={this._onFormChange}
-                                       disabled={disableForm} />
-                               </div>
+                                <div className='mx_E2eKeysDialog_inputLabel'>
+                                    <label htmlFor='importFile'>
+                                        { _t("File to import") }
+                                    </label>
+                                </div>
+                                <div className='mx_E2eKeysDialog_inputCell'>
+                                    <input
+                                        ref={this._file}
+                                        id='importFile'
+                                        type='file'
+                                        autoFocus={true}
+                                        onChange={this._onFormChange}
+                                        disabled={disableForm} />
+                                </div>
                             </div>
                             <div className='mx_E2eKeysDialog_inputRow'>
-                               <div className='mx_E2eKeysDialog_inputLabel'>
-                                   <label htmlFor='passphrase'>
-                                       { _t("Enter passphrase") }
-                                   </label>
-                               </div>
-                               <div className='mx_E2eKeysDialog_inputCell'>
-                                   <input
-                                       ref={this._passphrase}
-                                       id='passphrase'
-                                       size='64'
-                                       type='password'
-                                       onChange={this._onFormChange}
-                                       disabled={disableForm} />
-                               </div>
+                                <div className='mx_E2eKeysDialog_inputLabel'>
+                                    <label htmlFor='passphrase'>
+                                        { _t("Enter passphrase") }
+                                    </label>
+                                </div>
+                                <div className='mx_E2eKeysDialog_inputCell'>
+                                    <input
+                                        ref={this._passphrase}
+                                        id='passphrase'
+                                        size='64'
+                                        type='password'
+                                        onChange={this._onFormChange}
+                                        disabled={disableForm} />
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div className='mx_Dialog_buttons'>
-                        <input className='mx_Dialog_primary' type='submit' value={_t('Import')}
+                        <input
+                            className='mx_Dialog_primary'
+                            type='submit'
+                            value={_t('Import')}
                             disabled={!this.state.enableSubmit || disableForm}
                         />
                         <button onClick={this._onCancelClick} disabled={disableForm}>

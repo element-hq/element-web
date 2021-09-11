@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import SettingController from "./SettingController";
-import {DEFAULT_THEME, enumerateThemes} from "../../theme";
+import { DEFAULT_THEME, enumerateThemes } from "../../theme";
 import { SettingLevel } from "../SettingLevel";
 
 export default class ThemeController extends SettingController {

@@ -15,11 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {KeyboardEvent} from "react";
+import { KeyboardEvent } from "react";
 
-import {Part, CommandPartCreator, PartCreator} from "./parts";
+import { Part, CommandPartCreator, PartCreator } from "./parts";
 import DocumentPosition from "./position";
-import {ICompletion} from "../autocomplete/Autocompleter";
+import { ICompletion } from "../autocomplete/Autocompleter";
 import Autocomplete from "../components/views/rooms/Autocomplete";
 
 export interface ICallback {
@@ -32,7 +32,6 @@ export type GetAutocompleterComponent = () => Autocomplete;
 export type UpdateQuery = (test: string) => Promise<void>;
 
 export default class AutocompleteWrapperModel {
-    private queryPart: Part;
     private partIndex: number;
 
     constructor(
@@ -43,81 +42,61 @@ export default class AutocompleteWrapperModel {
     ) {
     }
 
-    public onEscape(e: KeyboardEvent) {
+    public onEscape(e: KeyboardEvent): void {
         this.getAutocompleterComponent().onEscape(e);
-        this.updateCallback({
-            replaceParts: [this.partCreator.plain(this.queryPart.text)],
-            close: true,
-        });
     }
 
-    public close() {
-        this.updateCallback({close: true});
+    public close(): void {
+        this.updateCallback({ close: true });
     }
 
-    public hasSelection() {
+    public hasSelection(): boolean {
         return this.getAutocompleterComponent().hasSelection();
     }
 
-    public hasCompletions() {
+    public hasCompletions(): boolean {
         const ac = this.getAutocompleterComponent();
         return ac && ac.countCompletions() > 0;
     }
 
-    public onEnter() {
-        this.updateCallback({close: true});
+    public async confirmCompletion(): Promise<void> {
+        await this.getAutocompleterComponent().onConfirmCompletion();
+        this.updateCallback({ close: true });
     }
 
     /**
      * If there is no current autocompletion, start one and move to the first selection.
      */
-    public async startSelection() {
+    public async startSelection(): Promise<void> {
         const acComponent = this.getAutocompleterComponent();
         if (acComponent.countCompletions() === 0) {
             // Force completions to show for the text currently entered
             await acComponent.forceComplete();
-            // Select the first item by moving "down"
-            await acComponent.moveSelection(+1);
         }
     }
 
-    public selectPreviousSelection() {
+    public selectPreviousSelection(): void {
         this.getAutocompleterComponent().moveSelection(-1);
     }
 
-    public selectNextSelection() {
+    public selectNextSelection(): void {
         this.getAutocompleterComponent().moveSelection(+1);
     }
 
-    public onPartUpdate(part: Part, pos: DocumentPosition) {
-        // cache the typed value and caret here
-        // so we can restore it in onComponentSelectionChange when the value is undefined (meaning it should be the typed text)
-        this.queryPart = part;
+    public onPartUpdate(part: Part, pos: DocumentPosition): Promise<void> {
         this.partIndex = pos.index;
         return this.updateQuery(part.text);
     }
 
-    public onComponentSelectionChange(completion: ICompletion) {
-        if (!completion) {
-            this.updateCallback({
-                replaceParts: [this.queryPart],
-            });
-        } else {
-            this.updateCallback({
-                replaceParts: this.partForCompletion(completion),
-            });
-        }
-    }
-
-    public onComponentConfirm(completion: ICompletion) {
+    public onComponentConfirm(completion: ICompletion): void {
         this.updateCallback({
             replaceParts: this.partForCompletion(completion),
             close: true,
         });
     }
 
-    private partForCompletion(completion: ICompletion) {
-        const {completionId} = completion;
+    private partForCompletion(completion: ICompletion): Part[] {
+        const { completionId } = completion;
         const text = completion.completion;
         switch (completion.type) {
             case "room":
@@ -125,10 +104,8 @@ export default class AutocompleteWrapperModel {
             case "at-room":
                 return [this.partCreator.atRoomPill(completionId), this.partCreator.plain(completion.suffix)];
             case "user":
-                // not using suffix here, because we also need to calculate
-                // the suffix when clicking a display name to insert a mention,
-                // which happens in createMentionParts
-                return this.partCreator.createMentionParts(this.partIndex, text, completionId);
+                // Insert suffix only if the pill is the part with index 0 - we are at the start of the composer
+                return this.partCreator.createMentionParts(this.partIndex === 0, text, completionId);
             case "command":
                 // command needs special handling for auto complete, but also renders as plain texts
                 return [(this.partCreator as CommandPartCreator).command(text)];

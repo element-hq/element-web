@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 import dis from '../dispatcher/dispatcher';
-import {pendingVerificationRequestForUser} from '../verification';
-import {Store} from 'flux/utils';
+import { pendingVerificationRequestForUser } from '../verification';
+import { Store } from 'flux/utils';
 import SettingsStore from "../settings/SettingsStore";
-import {RightPanelPhases, RIGHT_PANEL_PHASES_NO_ARGS} from "./RightPanelStorePhases";
-import {ActionPayload} from "../dispatcher/payloads";
-import {Action} from '../dispatcher/actions';
+import { RightPanelPhases, RIGHT_PANEL_PHASES_NO_ARGS } from "./RightPanelStorePhases";
+import { ActionPayload } from "../dispatcher/payloads";
+import { Action } from '../dispatcher/actions';
 import { SettingLevel } from "../settings/SettingLevel";
 
 interface RightPanelStoreState {
@@ -67,6 +67,7 @@ const MEMBER_INFO_PHASES = [
 export default class RightPanelStore extends Store<ActionPayload> {
     private static instance: RightPanelStore;
     private state: RightPanelStoreState;
+    private lastRoomId: string;
 
     constructor() {
         super(dis);
@@ -143,27 +144,32 @@ export default class RightPanelStore extends Store<ActionPayload> {
         this.__emitChange();
     }
 
-    __onDispatch(payload: ActionPayload) {
+    __onDispatch(payload: ActionPayload) { // eslint-disable-line @typescript-eslint/naming-convention
         switch (payload.action) {
             case 'view_room':
+                if (payload.room_id === this.lastRoomId) break; // skip this transition, probably a permalink
+                // fallthrough
             case 'view_group':
+                this.lastRoomId = payload.room_id;
+
                 // Reset to the member list if we're viewing member info
                 if (MEMBER_INFO_PHASES.includes(this.state.lastRoomPhase)) {
-                    this.setState({lastRoomPhase: RightPanelPhases.RoomMemberList, lastRoomPhaseParams: {}});
+                    this.setState({ lastRoomPhase: RightPanelPhases.RoomMemberList, lastRoomPhaseParams: {} });
                 }
 
                 // Do the same for groups
                 if (this.state.lastGroupPhase === RightPanelPhases.GroupMemberInfo) {
-                    this.setState({lastGroupPhase: RightPanelPhases.GroupMemberList});
+                    this.setState({ lastGroupPhase: RightPanelPhases.GroupMemberList });
                 }
                 break;
 
             case Action.SetRightPanelPhase: {
                 let targetPhase = payload.phase;
                 let refireParams = payload.refireParams;
+                const allowClose = payload.allowClose ?? true;
                 // redirect to EncryptionPanel if there is an ongoing verification request
                 if (targetPhase === RightPanelPhases.RoomMemberInfo && payload.refireParams) {
-                    const {member} = payload.refireParams;
+                    const { member } = payload.refireParams;
                     const pendingRequest = pendingVerificationRequestForUser(member);
                     if (pendingRequest) {
                         targetPhase = RightPanelPhases.EncryptionPanel;
@@ -192,7 +198,7 @@ export default class RightPanelStore extends Store<ActionPayload> {
                         });
                     }
                 } else {
-                    if (targetPhase === this.state.lastRoomPhase && !refireParams) {
+                    if (targetPhase === this.state.lastRoomPhase && !refireParams && allowClose) {
                         this.setState({
                             showRoomPanel: !this.state.showRoomPanel,
                             previousPhase: null,

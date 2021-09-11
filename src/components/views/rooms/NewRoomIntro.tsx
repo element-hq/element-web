@@ -14,26 +14,39 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useContext} from "react";
-import {EventType} from "matrix-js-sdk/src/@types/event";
+import React, { useContext } from "react";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { User } from "matrix-js-sdk/src/models/user";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RoomContext from "../../../contexts/RoomContext";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
-import MiniAvatarUploader, {AVATAR_SIZE} from "../elements/MiniAvatarUploader";
+import MiniAvatarUploader, { AVATAR_SIZE } from "../elements/MiniAvatarUploader";
 import RoomAvatar from "../avatars/RoomAvatar";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {ViewUserPayload} from "../../../dispatcher/payloads/ViewUserPayload";
-import {Action} from "../../../dispatcher/actions";
+import { ViewUserPayload } from "../../../dispatcher/payloads/ViewUserPayload";
+import { Action } from "../../../dispatcher/actions";
 import dis from "../../../dispatcher/dispatcher";
 import SpaceStore from "../../../stores/SpaceStore";
-import {showSpaceInvite} from "../../../utils/space";
+import { showSpaceInvite } from "../../../utils/space";
+import { privateShouldBeEncrypted } from "../../../createRoom";
+import EventTileBubble from "../messages/EventTileBubble";
+import { ROOM_SECURITY_TAB } from "../dialogs/RoomSettingsDialog";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+
+function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room): boolean {
+    const isEncrypted: boolean = matrixClient.isRoomEncrypted(room.roomId);
+    const isPublic: boolean = room.getJoinRule() === "public";
+    return isPublic || !privateShouldBeEncrypted() || isEncrypted;
+}
 
 const NewRoomIntro = () => {
     const cli = useContext(MatrixClientContext);
-    const {room, roomId} = useContext(RoomContext);
+    const { room, roomId } = useContext(RoomContext);
 
     const dmPartner = DMRoomMap.shared().getUserIdForRoomId(roomId);
     let body;
@@ -46,19 +59,24 @@ const NewRoomIntro = () => {
         const member = room?.getMember(dmPartner);
         const displayName = member?.rawDisplayName || dmPartner;
         body = <React.Fragment>
-            <RoomAvatar room={room} width={AVATAR_SIZE} height={AVATAR_SIZE} onClick={() => {
-                defaultDispatcher.dispatch<ViewUserPayload>({
-                    action: Action.ViewUser,
-                    // XXX: We should be using a real member object and not assuming what the receiver wants.
-                    member: member || {userId: dmPartner},
-                });
-            }} />
+            <RoomAvatar
+                room={room}
+                width={AVATAR_SIZE}
+                height={AVATAR_SIZE}
+                onClick={() => {
+                    defaultDispatcher.dispatch<ViewUserPayload>({
+                        action: Action.ViewUser,
+                        // XXX: We should be using a real member object and not assuming what the receiver wants.
+                        member: member || { userId: dmPartner } as User,
+                    });
+                }}
+            />
 
             <h2>{ room.name }</h2>
 
-            <p>{_t("This is the beginning of your direct message history with <displayName/>.", {}, {
+            <p>{ _t("This is the beginning of your direct message history with <displayName/>.", {}, {
                 displayName: () => <b>{ displayName }</b>,
-            })}</p>
+            }) }</p>
             { caption && <p>{ caption }</p> }
         </React.Fragment>;
     } else {
@@ -120,7 +138,7 @@ const NewRoomIntro = () => {
                         showSpaceInvite(parentSpace);
                     }}
                 >
-                    {_t("Invite to %(spaceName)s", { spaceName: parentSpace.name })}
+                    { _t("Invite to %(spaceName)s", { spaceName: parentSpace.name }) }
                 </AccessibleButton>
                 { room.canInvite(cli.getUserId()) && <AccessibleButton
                     className="mx_NewRoomIntro_inviteButton"
@@ -129,7 +147,7 @@ const NewRoomIntro = () => {
                         dis.dispatch({ action: "view_invite", roomId });
                     }}
                 >
-                    {_t("Invite to just this room")}
+                    { _t("Invite to just this room") }
                 </AccessibleButton> }
             </div>;
         } else if (room.canInvite(cli.getUserId())) {
@@ -141,7 +159,7 @@ const NewRoomIntro = () => {
                         dis.dispatch({ action: "view_invite", roomId });
                     }}
                 >
-                    {_t("Invite to this room")}
+                    { _t("Invite to this room") }
                 </AccessibleButton>
             </div>;
         }
@@ -158,15 +176,49 @@ const NewRoomIntro = () => {
 
             <h2>{ room.name }</h2>
 
-            <p>{createdText} {_t("This is the start of <roomName/>.", {}, {
+            <p>{ createdText } { _t("This is the start of <roomName/>.", {}, {
                 roomName: () => <b>{ room.name }</b>,
-            })}</p>
-            <p>{topicText}</p>
+            }) }</p>
+            <p>{ topicText }</p>
             { buttons }
         </React.Fragment>;
     }
 
+    function openRoomSettings(event) {
+        event.preventDefault();
+        dis.dispatch({
+            action: "open_room_settings",
+            initial_tab_id: ROOM_SECURITY_TAB,
+        });
+    }
+
+    const subText = _t(
+        "Your private messages are normally encrypted, but this room isn't. "+
+        "Usually this is due to an unsupported device or method being used, " +
+        "like email invites.",
+    );
+
+    let subButton;
+    if (room.currentState.mayClientSendStateEvent(EventType.RoomEncryption, MatrixClientPeg.get())) {
+        subButton = (
+            <a onClick={openRoomSettings} href="#"> { _t("Enable encryption in settings.") }</a>
+        );
+    }
+
+    const subtitle = (
+        <span> { subText } { subButton } </span>
+    );
+
     return <div className="mx_NewRoomIntro">
+
+        { !hasExpectedEncryptionSettings(cli, room) && (
+            <EventTileBubble
+                className="mx_cryptoEvent mx_cryptoEvent_icon_warning"
+                title={_t("End-to-end encryption isn't enabled")}
+                subtitle={subtitle}
+            />
+        ) }
+
         { body }
     </div>;
 };

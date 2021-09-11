@@ -16,7 +16,7 @@ limitations under the License.
 
 import DocumentOffset from "./offset";
 import EditorModel from "./model";
-import {Part} from "./parts";
+import { Part } from "./parts";
 
 export interface IPosition {
     index: number;
@@ -30,7 +30,7 @@ export default class DocumentPosition implements IPosition {
     constructor(public readonly index: number, public readonly offset: number) {
     }
 
-    compare(otherPos: DocumentPosition) {
+    public compare(otherPos: DocumentPosition): number {
         if (this.index === otherPos.index) {
             return this.offset - otherPos.offset;
         } else {
@@ -38,7 +38,7 @@ export default class DocumentPosition implements IPosition {
         }
     }
 
-    iteratePartsBetween(other: DocumentPosition, model: EditorModel, callback: Callback) {
+    public iteratePartsBetween(other: DocumentPosition, model: EditorModel, callback: Callback): void {
         if (this.index === -1 || other.index === -1) {
             return;
         }
@@ -57,13 +57,13 @@ export default class DocumentPosition implements IPosition {
         }
     }
 
-    forwardsWhile(model: EditorModel, predicate: Predicate) {
+    public forwardsWhile(model: EditorModel, predicate: Predicate): DocumentPosition {
         if (this.index === -1) {
             return this;
         }
 
-        let {index, offset} = this;
-        const {parts} = model;
+        let { index, offset } = this;
+        const { parts } = model;
         while (index < parts.length) {
             const part = parts[index];
             while (offset < part.text.length) {
@@ -82,12 +82,12 @@ export default class DocumentPosition implements IPosition {
         }
     }
 
-    backwardsWhile(model: EditorModel, predicate: Predicate) {
+    public backwardsWhile(model: EditorModel, predicate: Predicate): DocumentPosition {
         if (this.index === -1) {
             return this;
         }
 
-        let {index, offset} = this;
+        let { index, offset } = this;
         const parts = model.parts;
         while (index >= 0) {
             const part = parts[index];
@@ -107,7 +107,7 @@ export default class DocumentPosition implements IPosition {
         }
     }
 
-    asOffset(model: EditorModel) {
+    public asOffset(model: EditorModel): DocumentOffset {
         if (this.index === -1) {
             return new DocumentOffset(0, true);
         }
@@ -121,7 +121,7 @@ export default class DocumentPosition implements IPosition {
         return new DocumentOffset(offset, atEnd);
     }
 
-    isAtEnd(model: EditorModel) {
+    public isAtEnd(model: EditorModel): boolean {
         if (model.parts.length === 0) {
             return true;
         }
@@ -130,7 +130,7 @@ export default class DocumentPosition implements IPosition {
         return this.index === lastPartIdx && this.offset === lastPart.text.length;
     }
 
-    isAtStart() {
+    public isAtStart(): boolean {
         return this.index === 0 && this.offset === 0;
     }
 }

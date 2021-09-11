@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 import { IDestroyable } from "./IDestroyable";
 import { arrayFastClone } from "./arrays";
 
@@ -36,7 +35,7 @@ export abstract class Whenable<T> implements IDestroyable {
      * @returns This.
      */
     public when(condition: T, fn: WhenFn<T>): Whenable<T> {
-        this.listeners.push({condition, fn});
+        this.listeners.push({ condition, fn });
         return this;
     }
 
@@ -59,7 +58,7 @@ export abstract class Whenable<T> implements IDestroyable {
      * @returns This.
      */
     public whenAnything(fn: WhenFn<T>): Whenable<T> {
-        this.listeners.push({condition: null, fn});
+        this.listeners.push({ condition: null, fn });
         return this;
     }
 

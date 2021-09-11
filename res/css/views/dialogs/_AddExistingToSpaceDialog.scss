@@ -21,159 +21,65 @@ limitations under the License.
     }
 }
 
-.mx_AddExistingToSpaceDialog {
-    width: 480px;
-    color: $primary-fg-color;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    min-height: 0;
-    height: 80vh;
-
-    .mx_Dialog_title {
-        display: flex;
-
-        .mx_BaseAvatar_image {
-            border-radius: 8px;
-            margin: 0;
-            vertical-align: unset;
-        }
-
-        .mx_BaseAvatar {
-            display: inline-flex;
-            margin: 5px 16px 5px 5px;
-            vertical-align: middle;
-        }
-
-        > div {
-            > h1 {
-                font-weight: $font-semi-bold;
-                font-size: $font-18px;
-                line-height: $font-22px;
-                margin: 0;
-            }
-
-            .mx_AddExistingToSpaceDialog_onlySpace {
-                color: $secondary-fg-color;
-                font-size: $font-15px;
-                line-height: $font-24px;
-            }
-        }
-
-        .mx_Dropdown_input {
-            border: none;
-
-            > .mx_Dropdown_option {
-                padding-left: 0;
-                flex: unset;
-                height: unset;
-                color: $secondary-fg-color;
-                font-size: $font-15px;
-                line-height: $font-24px;
-
-                .mx_BaseAvatar {
-                    display: none;
-                }
-            }
-
-            .mx_Dropdown_menu {
-                .mx_AddExistingToSpaceDialog_dropdownOptionActive {
-                    color: $accent-color;
-                    padding-right: 32px;
-                    position: relative;
-
-                    &::before {
-                        content: '';
-                        width: 20px;
-                        height: 20px;
-                        top: 8px;
-                        right: 0;
-                        position: absolute;
-                        mask-position: center;
-                        mask-size: contain;
-                        mask-repeat: no-repeat;
-                        background-color: $accent-color;
-                        mask-image: url('$(res)/img/element-icons/roomlist/checkmark.svg');
-                    }
-                }
-            }
-        }
-    }
-
+.mx_AddExistingToSpace {
     .mx_SearchBox {
-        margin: 0;
+        // To match the space around the title
+        margin: 0 0 15px 0;
         flex-grow: 0;
     }
 
-    .mx_AddExistingToSpaceDialog_errorText {
-        font-weight: $font-semi-bold;
-        font-size: $font-12px;
-        line-height: $font-15px;
-        color: $notice-primary-color;
-        margin-bottom: 28px;
+    .mx_AddExistingToSpace_content {
+        flex-grow: 1;
     }
 
-    .mx_AddExistingToSpaceDialog_content {
-        flex-grow: 1;
+    .mx_AddExistingToSpace_noResults {
+        display: block;
+        margin-top: 24px;
+    }
 
-        .mx_AddExistingToSpaceDialog_noResults {
-            display: block;
+    .mx_AddExistingToSpace_section {
+        &:not(:first-child) {
             margin-top: 24px;
         }
-    }
-
-    .mx_AddExistingToSpaceDialog_section {
-        margin-top: 24px;
 
         > h3 {
             margin: 0;
-            color: $secondary-fg-color;
+            color: $secondary-content;
             font-size: $font-12px;
             font-weight: $font-semi-bold;
             line-height: $font-15px;
         }
 
-        .mx_AddExistingToSpaceDialog_entry {
-            display: flex;
-            margin-top: 12px;
-
-            .mx_BaseAvatar {
-                margin-right: 12px;
-            }
-
-            .mx_AddExistingToSpaceDialog_entry_name {
-                font-size: $font-15px;
-                line-height: 30px;
-                flex-grow: 1;
-            }
-
-            .mx_FormButton {
-                min-width: 92px;
-                font-weight: normal;
-                box-sizing: border-box;
-            }
+        .mx_AccessibleButton_kind_link {
+            font-size: $font-12px;
+            line-height: $font-15px;
+            margin-top: 8px;
+            padding: 0;
         }
     }
 
-    .mx_AddExistingToSpaceDialog_section_spaces {
-        .mx_BaseAvatar_image {
-            border-radius: 8px;
-        }
-    }
-
-    .mx_AddExistingToSpaceDialog_footer {
+    .mx_AddExistingToSpace_footer {
         display: flex;
-        margin-top: 32px;
+        margin-top: 20px;
 
         > span {
             flex-grow: 1;
-            font-size: $font-14px;
+            font-size: $font-12px;
             line-height: $font-15px;
-            font-weight: $font-semi-bold;
+            color: $secondary-content;
 
-            .mx_AccessibleButton {
-                font-size: inherit;
-                display: inline-block;
+            .mx_ProgressBar {
+                height: 8px;
+                width: 100%;
+
+                @mixin ProgressBarBorderRadius 8px;
+            }
+
+            .mx_AddExistingToSpace_progressText {
+                margin-top: 8px;
+                font-size: $font-15px;
+                line-height: $font-24px;
+                color: $primary-content;
             }
 
             > * {
@@ -181,16 +87,171 @@ limitations under the License.
             }
         }
 
+        .mx_AddExistingToSpace_error {
+            padding-left: 12px;
+
+            > img {
+                align-self: center;
+            }
+
+            .mx_AddExistingToSpace_errorHeading {
+                font-weight: $font-semi-bold;
+                font-size: $font-15px;
+                line-height: $font-18px;
+                color: $notice-primary-color;
+            }
+
+            .mx_AddExistingToSpace_errorCaption {
+                margin-top: 4px;
+                font-size: $font-12px;
+                line-height: $font-15px;
+                color: $primary-content;
+            }
+        }
+
         .mx_AccessibleButton {
             display: inline-block;
+            align-self: center;
+        }
+
+        .mx_AccessibleButton_kind_primary {
+            padding: 8px 36px;
+        }
+
+        .mx_AddExistingToSpace_retryButton {
+            margin-left: 12px;
+            padding-left: 24px;
+            position: relative;
+
+            &::before {
+                content: '';
+                position: absolute;
+                background-color: $primary-content;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: contain;
+                mask-image: url('$(res)/img/element-icons/retry.svg');
+                width: 18px;
+                height: 18px;
+                left: 0;
+            }
         }
 
         .mx_AccessibleButton_kind_link {
             padding: 0;
         }
     }
+}
 
-    .mx_FormButton {
-        padding: 8px 22px;
+.mx_AddExistingToSpaceDialog {
+    width: 480px;
+    color: $primary-content;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    min-height: 0;
+    height: 80vh;
+
+    .mx_AddExistingToSpace {
+        display: contents;
+    }
+}
+
+.mx_SubspaceSelector {
+    display: flex;
+
+    .mx_BaseAvatar_image {
+        border-radius: 8px;
+        margin: 0;
+        vertical-align: unset;
+    }
+
+    .mx_BaseAvatar {
+        display: inline-flex;
+        margin: auto 16px auto 5px;
+        vertical-align: middle;
+    }
+
+    > div {
+        > h1 {
+            font-weight: $font-semi-bold;
+            font-size: $font-18px;
+            line-height: $font-22px;
+            margin: 0;
+        }
+    }
+
+    .mx_Dropdown_input {
+        border: none;
+
+        > .mx_Dropdown_option {
+            padding-left: 0;
+            flex: unset;
+            height: unset;
+            color: $secondary-content;
+            font-size: $font-15px;
+            line-height: $font-24px;
+
+            .mx_BaseAvatar {
+                display: none;
+            }
+        }
+
+        .mx_Dropdown_menu {
+            .mx_SubspaceSelector_dropdownOptionActive {
+                color: $accent-color;
+                padding-right: 32px;
+                position: relative;
+
+                &::before {
+                    content: '';
+                    width: 20px;
+                    height: 20px;
+                    top: 8px;
+                    right: 0;
+                    position: absolute;
+                    mask-position: center;
+                    mask-size: contain;
+                    mask-repeat: no-repeat;
+                    background-color: $accent-color;
+                    mask-image: url('$(res)/img/element-icons/roomlist/checkmark.svg');
+                }
+            }
+        }
+    }
+
+    .mx_SubspaceSelector_onlySpace {
+        color: $secondary-content;
+        font-size: $font-15px;
+        line-height: $font-24px;
+    }
+}
+
+.mx_AddExistingToSpace_entry {
+    display: flex;
+    margin-top: 12px;
+
+    .mx_DecoratedRoomAvatar, // we can't target .mx_BaseAvatar here as it'll break the decorated avatar styling
+    .mx_BaseAvatar.mx_RoomAvatar_isSpaceRoom {
+        margin-right: 12px;
+    }
+
+    img.mx_RoomAvatar_isSpaceRoom,
+    .mx_RoomAvatar_isSpaceRoom img {
+        border-radius: 8px;
+    }
+
+    .mx_AddExistingToSpace_entry_name {
+        font-size: $font-15px;
+        line-height: 30px;
+        flex-grow: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        margin-right: 12px;
+    }
+
+    .mx_Checkbox {
+        align-items: center;
     }
 }

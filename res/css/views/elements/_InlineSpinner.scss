@@ -18,7 +18,11 @@ limitations under the License.
     display: inline;
 }
 
-.mx_InlineSpinner_spin img {
+.mx_InlineSpinner img, .mx_InlineSpinner_icon {
     margin: 0px 6px;
     vertical-align: -3px;
+}
+
+.mx_InlineSpinner_icon {
+    display: inline-block;
 }

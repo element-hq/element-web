@@ -1,5 +1,12 @@
+let hasCalled = false;
 function remoteRender(event) {
     const data = event.data;
+
+    // If we're handling secondary calls, start from scratch
+    if (hasCalled) {
+        document.body.replaceWith(document.createElement("BODY"));
+    }
+    hasCalled = true;
 
     const img = document.createElement("span"); // we'll mask it as an image
     img.id = "img";

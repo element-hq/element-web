@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
-const {range} = require('./util');
+const { range } = require('./util');
 const signup = require('./usecases/signup');
 const toastScenarios = require('./scenarios/toast');
 const roomDirectoryScenarios = require('./scenarios/directory');

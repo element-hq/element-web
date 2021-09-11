@@ -23,11 +23,9 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import Analytics from "../../../Analytics";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { CSSTransition } from "react-transition-group";
-import RoomListStore from "../../../stores/room-list/RoomListStore";
-import { DefaultTagID } from "../../../stores/room-list/models";
 import { RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
 import Toolbar from "../../../accessibility/Toolbar";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
 }
@@ -73,32 +71,29 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
         // The second update, on the next available tick, causes the "enter" animation to start
         // again and this time we want to show the newest breadcrumb because it'll be hidden
         // off screen for the animation.
-        this.setState({doAnimation: false, skipFirst: true});
-        setTimeout(() => this.setState({doAnimation: true, skipFirst: false}), 0);
+        this.setState({ doAnimation: false, skipFirst: true });
+        setTimeout(() => this.setState({ doAnimation: true, skipFirst: false }), 0);
     };
 
     private viewRoom = (room: Room, index: number) => {
         Analytics.trackEvent("Breadcrumbs", "click_node", String(index));
-        defaultDispatcher.dispatch({action: "view_room", room_id: room.roomId});
+        defaultDispatcher.dispatch({ action: "view_room", room_id: room.roomId });
     };
 
     public render(): React.ReactElement {
         const tiles = BreadcrumbsStore.instance.rooms.map((r, i) => {
-            const roomTags = RoomListStore.instance.getTagsForRoom(r);
-            const roomTag = roomTags.includes(DefaultTagID.DM) ? DefaultTagID.DM : roomTags[0];
             return (
                 <RovingAccessibleTooltipButton
                     className="mx_RoomBreadcrumbs_crumb"
                     key={r.roomId}
                     onClick={() => this.viewRoom(r, i)}
-                    aria-label={_t("Room %(name)s", {name: r.name})}
+                    aria-label={_t("Room %(name)s", { name: r.name })}
                     title={r.name}
                     tooltipClassName="mx_RoomBreadcrumbs_Tooltip"
                 >
                     <DecoratedRoomAvatar
                         room={r}
                         avatarSize={32}
-                        tag={roomTag}
                         displayBadge={true}
                         forceCount={true}
                     />
@@ -110,11 +105,13 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
             // NOTE: The CSSTransition timeout MUST match the timeout in our CSS!
             return (
                 <CSSTransition
-                    appear={true} in={this.state.doAnimation} timeout={640}
+                    appear={true}
+                    in={this.state.doAnimation}
+                    timeout={640}
                     classNames='mx_RoomBreadcrumbs'
                 >
                     <Toolbar className='mx_RoomBreadcrumbs' aria-label={_t("Recently visited rooms")}>
-                        {tiles.slice(this.state.skipFirst ? 1 : 0)}
+                        { tiles.slice(this.state.skipFirst ? 1 : 0) }
                     </Toolbar>
                 </CSSTransition>
             );
@@ -122,7 +119,7 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
             return (
                 <div className='mx_RoomBreadcrumbs'>
                     <div className="mx_RoomBreadcrumbs_placeholder">
-                        {_t("No recently visited rooms")}
+                        { _t("No recently visited rooms") }
                     </div>
                 </div>
             );

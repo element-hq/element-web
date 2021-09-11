@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes} from 'react';
+import React, { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
 import classNames from 'classnames';
 import * as sdk from '../../../index';
-import {debounce} from "lodash";
-import {IFieldState, IValidationResult} from "./Validation";
+import { debounce } from "lodash";
+import { IFieldState, IValidationResult } from "./Validation";
 
 // Invoke validation from user input (when typing, etc.) at most once every N ms.
 const VALIDATION_THROTTLE_MS = 200;
@@ -27,6 +27,11 @@ const BASE_ID = "mx_Field";
 let count = 1;
 function getId() {
     return `${BASE_ID}_${count++}`;
+}
+
+export interface IValidateOpts {
+    focused?: boolean;
+    allowEmpty?: boolean;
 }
 
 interface IProps {
@@ -180,7 +185,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         }
     };
 
-    public async validate({ focused, allowEmpty = true }: {focused?: boolean, allowEmpty?: boolean}) {
+    public async validate({ focused, allowEmpty = true }: IValidateOpts) {
         if (!this.props.onValidate) {
             return;
         }
@@ -217,7 +222,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
         const { element, prefixComponent, postfixComponent, className, onValidate, children,
             tooltipContent, forceValidity, tooltipClassName, list, validateOnBlur, validateOnChange, validateOnFocus,
-            ...inputProps} = this.props;
+            ...inputProps } = this.props;
 
         // Set some defaults for the <input> element
         const ref = input => this.input = input;
@@ -229,17 +234,17 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         inputProps.onBlur = this.onBlur;
 
         // Appease typescript's inference
-        const inputProps_ = {...inputProps, ref, list};
+        const inputProps_ = { ...inputProps, ref, list };
 
         const fieldInput = React.createElement(this.props.element, inputProps_, children);
 
         let prefixContainer = null;
         if (prefixComponent) {
-            prefixContainer = <span className="mx_Field_prefix">{prefixComponent}</span>;
+            prefixContainer = <span className="mx_Field_prefix">{ prefixComponent }</span>;
         }
         let postfixContainer = null;
         if (postfixComponent) {
-            postfixContainer = <span className="mx_Field_postfix">{postfixComponent}</span>;
+            postfixContainer = <span className="mx_Field_postfix">{ postfixComponent }</span>;
         }
 
         const hasValidationFlag = forceValidity !== null && forceValidity !== undefined;
@@ -255,6 +260,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         });
 
         // Handle displaying feedback on validity
+        // FIXME: Using an import will result in test failures
         const Tooltip = sdk.getComponent("elements.Tooltip");
         let fieldTooltip;
         if (tooltipContent || this.state.feedback) {
@@ -262,16 +268,16 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
                 tooltipClassName={classNames("mx_Field_tooltip", tooltipClassName)}
                 visible={(this.state.focused && this.props.forceTooltipVisible) || this.state.feedbackVisible}
                 label={tooltipContent || this.state.feedback}
-                forceOnRight
+                alignment={Tooltip.Alignment.Right}
             />;
         }
 
         return <div className={fieldClasses}>
-            {prefixContainer}
-            {fieldInput}
-            <label htmlFor={this.id}>{this.props.label}</label>
-            {postfixContainer}
-            {fieldTooltip}
+            { prefixContainer }
+            { fieldInput }
+            <label htmlFor={this.id}>{ this.props.label }</label>
+            { postfixContainer }
+            { fieldTooltip }
         </div>;
     }
 }

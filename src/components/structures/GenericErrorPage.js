@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 
 @replaceableComponent("structures.GenericErrorPage")
 export default class GenericErrorPage extends React.PureComponent {
@@ -28,8 +28,8 @@ export default class GenericErrorPage extends React.PureComponent {
     render() {
         return <div className='mx_GenericErrorPage'>
             <div className='mx_GenericErrorPage_box'>
-                <h1>{this.props.title}</h1>
-                <p>{this.props.message}</p>
+                <h1>{ this.props.title }</h1>
+                <p>{ this.props.message }</p>
             </div>
         </div>;
     }

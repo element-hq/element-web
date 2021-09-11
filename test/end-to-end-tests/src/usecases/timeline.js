@@ -69,7 +69,6 @@ module.exports.receiveMessage = async function(session, expectedMessage) {
     session.log.done();
 };
 
-
 module.exports.checkTimelineContains = async function(session, expectedMessages, sendersDescription) {
     session.log.step(`checks timeline contains ${expectedMessages.length} ` +
         `given messages${sendersDescription ? ` from ${sendersDescription}`:""}`);
@@ -122,7 +121,7 @@ function getAllEventTiles(session) {
 }
 
 async function getMessageFromEventTile(eventTile) {
-    const senderElement = await eventTile.$(".mx_SenderProfile_name");
+    const senderElement = await eventTile.$(".mx_SenderProfile_displayName");
     const className = await (await eventTile.getProperty("className")).jsonValue();
     const classNames = className.split(" ");
     const bodyElement = await eventTile.$(".mx_EventTile_body");

@@ -53,7 +53,7 @@ export abstract class GenericEchoChamber<C extends EchoContext, K, V> extends Ev
     }
 
     private cacheVal(key: K, val: V, txn: EchoTransaction) {
-        this.cache.set(key, {txn, val});
+        this.cache.set(key, { txn, val });
         this.emit(PROPERTY_UPDATED, key);
     }
 

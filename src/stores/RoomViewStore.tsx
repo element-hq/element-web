@@ -17,17 +17,18 @@ limitations under the License.
 */
 
 import React from "react";
-import {Store} from 'flux/utils';
-import {MatrixError} from "matrix-js-sdk/src/http-api";
+import { Store } from 'flux/utils';
+import { MatrixError } from "matrix-js-sdk/src/http-api";
 
 import dis from '../dispatcher/dispatcher';
-import {MatrixClientPeg} from '../MatrixClientPeg';
+import { MatrixClientPeg } from '../MatrixClientPeg';
 import * as sdk from '../index';
 import Modal from '../Modal';
 import { _t } from '../languageHandler';
 import { getCachedRoomIDForAlias, storeRoomAliasInCache } from '../RoomAliasCache';
-import {ActionPayload} from "../dispatcher/payloads";
-import {retry} from "../utils/promise";
+import { ActionPayload } from "../dispatcher/payloads";
+import { Action } from "../dispatcher/actions";
+import { retry } from "../utils/promise";
 import CountlyAnalytics from "../CountlyAnalytics";
 
 const NUM_JOIN_RETRY = 5;
@@ -53,13 +54,15 @@ const INITIAL_STATE = {
     // Any error that has occurred during loading
     roomLoadError: null,
 
-    forwardingEvent: null,
-
     quotingEvent: null,
 
     replyingToEvent: null,
 
     shouldPeek: false,
+
+    viaServers: [],
+
+    wasContextSwitch: false,
 };
 
 /**
@@ -93,7 +96,7 @@ class RoomViewStore extends Store<ActionPayload> {
         this.__emitChange();
     }
 
-    __onDispatch(payload) {
+    __onDispatch(payload) { // eslint-disable-line @typescript-eslint/naming-convention
         switch (payload.action) {
             // view_room:
             //      - room_alias:   '#somealias:matrix.org'
@@ -113,6 +116,8 @@ class RoomViewStore extends Store<ActionPayload> {
                 this.setState({
                     roomId: null,
                     roomAlias: null,
+                    viaServers: [],
+                    wasContextSwitch: false,
                 });
                 break;
             case 'view_room_error':
@@ -130,23 +135,18 @@ class RoomViewStore extends Store<ActionPayload> {
                 break;
             // join_room:
             //      - opts: options for joinRoom
-            case 'join_room':
+            case Action.JoinRoom:
                 this.joinRoom(payload);
                 break;
-            case 'join_room_error':
+            case Action.JoinRoomError:
                 this.joinRoomError(payload);
                 break;
-            case 'join_room_ready':
+            case Action.JoinRoomReady:
                 this.setState({ shouldPeek: false });
                 break;
             case 'on_client_not_viable':
             case 'on_logged_out':
                 this.reset();
-                break;
-            case 'forward_event':
-                this.setState({
-                    forwardingEvent: payload.event,
-                });
                 break;
             case 'reply_to_event':
                 // If currently viewed room does not match the room in which we wish to reply then change rooms
@@ -164,9 +164,11 @@ class RoomViewStore extends Store<ActionPayload> {
                 }
                 break;
             case 'open_room_settings': {
+                // FIXME: Using an import will result in test failures
                 const RoomSettingsDialog = sdk.getComponent("dialogs.RoomSettingsDialog");
                 Modal.createTrackedDialog('Room settings', '', RoomSettingsDialog, {
                     roomId: payload.room_id || this.state.roomId,
+                    initialTabId: payload.initial_tab_id,
                 }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
                 break;
             }
@@ -180,7 +182,6 @@ class RoomViewStore extends Store<ActionPayload> {
                 roomAlias: payload.room_alias,
                 initialEventId: payload.event_id,
                 isInitialEventHighlighted: payload.highlighted,
-                forwardingEvent: null,
                 roomLoading: false,
                 roomLoadError: null,
                 // should peek by default
@@ -191,6 +192,8 @@ class RoomViewStore extends Store<ActionPayload> {
                 replyingToEvent: null,
                 // pull the user out of Room Settings
                 isEditingSettings: false,
+                viaServers: payload.via_servers,
+                wasContextSwitch: payload.context_switch,
             };
 
             // Allow being given an event to be replied to when switching rooms but sanity check its for this room
@@ -198,18 +201,14 @@ class RoomViewStore extends Store<ActionPayload> {
                 newState.replyingToEvent = payload.replyingToEvent;
             }
 
-            if (this.state.forwardingEvent) {
-                dis.dispatch({
-                    action: 'send_event',
-                    room_id: newState.roomId,
-                    event: this.state.forwardingEvent,
-                });
-            }
-
             this.setState(newState);
 
             if (payload.auto_join) {
-                this.joinRoom(payload);
+                dis.dispatch({
+                    ...payload,
+                    action: Action.JoinRoom,
+                    roomId: payload.room_id,
+                });
             }
         } else if (payload.room_alias) {
             // Try the room alias to room ID navigation cache first to avoid
@@ -226,6 +225,8 @@ class RoomViewStore extends Store<ActionPayload> {
                     roomAlias: payload.room_alias,
                     roomLoading: true,
                     roomLoadError: null,
+                    viaServers: payload.via_servers,
+                    wasContextSwitch: payload.context_switch,
                 });
                 try {
                     const result = await MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias);
@@ -251,6 +252,8 @@ class RoomViewStore extends Store<ActionPayload> {
                 room_alias: payload.room_alias,
                 auto_join: payload.auto_join,
                 oob_data: payload.oob_data,
+                viaServers: payload.via_servers,
+                wasContextSwitch: payload.context_switch,
             });
         }
     }
@@ -272,9 +275,10 @@ class RoomViewStore extends Store<ActionPayload> {
 
         const cli = MatrixClientPeg.get();
         const address = this.state.roomAlias || this.state.roomId;
+        const viaServers = this.state.viaServers || [];
         try {
-            await retry<void, MatrixError>(() => cli.joinRoom(address, {
-                viaServers: payload.via_servers,
+            await retry<any, MatrixError>(() => cli.joinRoom(address, {
+                viaServers,
                 ...payload.opts,
             }), NUM_JOIN_RETRY, (err) => {
                 // if we received a Gateway timeout then retry
@@ -285,40 +289,15 @@ class RoomViewStore extends Store<ActionPayload> {
             // We do *not* clear the 'joining' flag because the Room object and/or our 'joined' member event may not
             // have come down the sync stream yet, and that's the point at which we'd consider the user joined to the
             // room.
-            dis.dispatch({ action: 'join_room_ready' });
+            dis.dispatch({
+                action: Action.JoinRoomReady,
+                roomId: this.state.roomId,
+            });
         } catch (err) {
             dis.dispatch({
-                action: 'join_room_error',
+                action: Action.JoinRoomError,
+                roomId: this.state.roomId,
                 err: err,
-            });
-
-            let msg = err.message ? err.message : JSON.stringify(err);
-            console.log("Failed to join room:", msg);
-
-            if (err.name === "ConnectionError") {
-                msg = _t("There was an error joining the room");
-            } else if (err.errcode === 'M_INCOMPATIBLE_ROOM_VERSION') {
-                msg = <div>
-                    {_t("Sorry, your homeserver is too old to participate in this room.")}<br />
-                    {_t("Please contact your homeserver administrator.")}
-                </div>;
-            } else if (err.httpStatus === 404) {
-                const invitingUserId = this.getInvitingUserId(this.state.roomId);
-                // only provide a better error message for invites
-                if (invitingUserId) {
-                    // if the inviting user is on the same HS, there can only be one cause: they left.
-                    if (invitingUserId.endsWith(`:${MatrixClientPeg.get().getDomain()}`)) {
-                        msg = _t("The person who invited you already left the room.");
-                    } else {
-                        msg = _t("The person who invited you already left the room, or their server is offline.");
-                    }
-                }
-            }
-
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Failed to join room', '', ErrorDialog, {
-                title: _t("Failed to join room"),
-                description: msg,
             });
         }
     }
@@ -337,6 +316,36 @@ class RoomViewStore extends Store<ActionPayload> {
         this.setState({
             joining: false,
             joinError: payload.err,
+        });
+        const err = payload.err;
+        let msg = err.message ? err.message : JSON.stringify(err);
+        console.log("Failed to join room:", msg);
+
+        if (err.name === "ConnectionError") {
+            msg = _t("There was an error joining the room");
+        } else if (err.errcode === 'M_INCOMPATIBLE_ROOM_VERSION') {
+            msg = <div>
+                { _t("Sorry, your homeserver is too old to participate in this room.") }<br />
+                { _t("Please contact your homeserver administrator.") }
+            </div>;
+        } else if (err.httpStatus === 404) {
+            const invitingUserId = this.getInvitingUserId(this.state.roomId);
+            // only provide a better error message for invites
+            if (invitingUserId) {
+                // if the inviting user is on the same HS, there can only be one cause: they left.
+                if (invitingUserId.endsWith(`:${MatrixClientPeg.get().getDomain()}`)) {
+                    msg = _t("The person who invited you already left the room.");
+                } else {
+                    msg = _t("The person who invited you already left the room, or their server is offline.");
+                }
+            }
+        }
+
+        // FIXME: Using an import will result in test failures
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createTrackedDialog('Failed to join room', '', ErrorDialog, {
+            title: _t("Failed to join room"),
+            description: msg,
         });
     }
 
@@ -406,11 +415,6 @@ class RoomViewStore extends Store<ActionPayload> {
         return this.state.joinError;
     }
 
-    // The mxEvent if one is about to be forwarded
-    public getForwardingEvent() {
-        return this.state.forwardingEvent;
-    }
-
     // The mxEvent if one is currently being replied to/quoted
     public getQuotingEvent() {
         return this.state.replyingToEvent;
@@ -419,9 +423,13 @@ class RoomViewStore extends Store<ActionPayload> {
     public shouldPeek() {
         return this.state.shouldPeek;
     }
+
+    public getWasContextSwitch() {
+        return this.state.wasContextSwitch;
+    }
 }
 
-let singletonRoomViewStore = null;
+let singletonRoomViewStore: RoomViewStore = null;
 if (!singletonRoomViewStore) {
     singletonRoomViewStore = new RoomViewStore();
 }

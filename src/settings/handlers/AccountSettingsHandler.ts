@@ -15,10 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from '../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
-import {objectClone, objectKeyChanges} from "../../utils/objects";
-import {SettingLevel} from "../SettingLevel";
+import { objectClone, objectKeyChanges } from "../../utils/objects";
+import { SettingLevel } from "../SettingLevel";
 import { WatchManager } from "../WatchManager";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -73,7 +73,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             const val = event.getContent()['enabled'];
             this.watchers.notifyUpdate("recent_emoji", null, SettingLevel.ACCOUNT, val);
         }
-    }
+    };
 
     public getValue(settingName: string, roomId: string): any {
         // Special case URL previews
@@ -110,6 +110,21 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             return content ? content['enabled'] : null;
         }
 
+        // Special case for autoplaying videos and GIFs
+        if (["autoplayGifs", "autoplayVideo"].includes(settingName)) {
+            const settings = this.getSettings() || {};
+            const value = settings[settingName];
+            // Fallback to old combined setting
+            if (value === null || value === undefined) {
+                const oldCombinedValue = settings["autoplayGifsAndVideos"];
+                // Write, so that we can remove this in the future
+                this.setValue("autoplayGifs", roomId, oldCombinedValue);
+                this.setValue("autoplayVideo", roomId, oldCombinedValue);
+                return oldCombinedValue;
+            }
+            return value;
+        }
+
         const settings = this.getSettings() || {};
         let preferredValue = settings[settingName];
 
@@ -123,12 +138,13 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         return preferredValue;
     }
 
-    public setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
+    public async setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
         // Special case URL previews
         if (settingName === "urlPreviewsEnabled") {
             const content = this.getSettings("org.matrix.preview_urls") || {};
             content['disable'] = !newValue;
-            return MatrixClientPeg.get().setAccountData("org.matrix.preview_urls", content);
+            await MatrixClientPeg.get().setAccountData("org.matrix.preview_urls", content);
+            return;
         }
 
         // Special case for breadcrumbs
@@ -141,26 +157,29 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             if (!content) content = {}; // If we still don't have content, make some
 
             content['recent_rooms'] = newValue;
-            return MatrixClientPeg.get().setAccountData(BREADCRUMBS_EVENT_TYPE, content);
+            await MatrixClientPeg.get().setAccountData(BREADCRUMBS_EVENT_TYPE, content);
+            return;
         }
 
         // Special case recent emoji
         if (settingName === "recent_emoji") {
             const content = this.getSettings(RECENT_EMOJI_EVENT_TYPE) || {};
             content["recent_emoji"] = newValue;
-            return MatrixClientPeg.get().setAccountData(RECENT_EMOJI_EVENT_TYPE, content);
+            await MatrixClientPeg.get().setAccountData(RECENT_EMOJI_EVENT_TYPE, content);
+            return;
         }
 
         // Special case integration manager provisioning
         if (settingName === "integrationProvisioning") {
             const content = this.getSettings(INTEG_PROVISIONING_EVENT_TYPE) || {};
             content['enabled'] = newValue;
-            return MatrixClientPeg.get().setAccountData(INTEG_PROVISIONING_EVENT_TYPE, content);
+            await MatrixClientPeg.get().setAccountData(INTEG_PROVISIONING_EVENT_TYPE, content);
+            return;
         }
 
         const content = this.getSettings() || {};
         content[settingName] = newValue;
-        return MatrixClientPeg.get().setAccountData("im.vector.web.settings", content);
+        await MatrixClientPeg.get().setAccountData("im.vector.web.settings", content);
     }
 
     public canSetValue(settingName: string, roomId: string): boolean {

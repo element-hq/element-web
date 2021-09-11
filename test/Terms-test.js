@@ -18,7 +18,7 @@ import * as Matrix from 'matrix-js-sdk';
 
 import { startTermsFlow, Service } from '../src/Terms';
 import { stubClient } from './test-utils';
-import {MatrixClientPeg} from '../src/MatrixClientPeg';
+import { MatrixClientPeg } from '../src/MatrixClientPeg';
 
 const POLICY_ONE = {
     version: "six",

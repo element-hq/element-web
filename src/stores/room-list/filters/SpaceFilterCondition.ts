@@ -19,7 +19,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 
 import { FILTER_CHANGED, FilterKind, IFilterCondition } from "./IFilterCondition";
 import { IDestroyable } from "../../../utils/IDestroyable";
-import SpaceStore, {HOME_SPACE} from "../../SpaceStore";
+import SpaceStore, { HOME_SPACE } from "../../SpaceStore";
 import { setHasDiff } from "../../../utils/sets";
 
 /**
@@ -29,7 +29,7 @@ import { setHasDiff } from "../../../utils/sets";
  *  + All DMs
  */
 export class SpaceFilterCondition extends EventEmitter implements IFilterCondition, IDestroyable {
-    private roomIds = new Set<Room>();
+    private roomIds = new Set<string>();
     private space: Room = null;
 
     public get kind(): FilterKind {
@@ -42,10 +42,16 @@ export class SpaceFilterCondition extends EventEmitter implements IFilterConditi
 
     private onStoreUpdate = async (): Promise<void> => {
         const beforeRoomIds = this.roomIds;
-        this.roomIds = SpaceStore.instance.getSpaceFilteredRoomIds(this.space);
+        // clone the set as it may be mutated by the space store internally
+        this.roomIds = new Set(SpaceStore.instance.getSpaceFilteredRoomIds(this.space));
 
         if (setHasDiff(beforeRoomIds, this.roomIds)) {
             this.emit(FILTER_CHANGED);
+            // XXX: Room List Store has a bug where updates to the pre-filter during a local echo of a
+            // tags transition seem to be ignored, so refire in the next tick to work around it
+            setImmediate(() => {
+                this.emit(FILTER_CHANGED);
+            });
         }
     };
 

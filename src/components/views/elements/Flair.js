@@ -19,9 +19,8 @@ import PropTypes from 'prop-types';
 import FlairStore from '../../../stores/FlairStore';
 import dis from '../../../dispatcher/dispatcher';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
-
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 class FlairAvatar extends React.Component {
     constructor() {
@@ -116,7 +115,7 @@ export default class Flair extends React.Component {
 
     render() {
         if (this.state.profiles.length === 0) {
-            return <span className="mx_Flair" />;
+            return null;
         }
         const avatars = this.state.profiles.map((profile, index) => {
             return <FlairAvatar key={index} groupProfile={profile} />;

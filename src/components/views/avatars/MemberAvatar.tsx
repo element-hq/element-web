@@ -16,14 +16,14 @@ limitations under the License.
 */
 
 import React from 'react';
-import {RoomMember} from "matrix-js-sdk/src/models/room-member";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
 
 import dis from "../../../dispatcher/dispatcher";
-import {Action} from "../../../dispatcher/actions";
+import { Action } from "../../../dispatcher/actions";
 import BaseAvatar from "./BaseAvatar";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
-import {ResizeMethod} from "../../../Avatar";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url"> {
     member: RoomMember;
@@ -36,6 +36,7 @@ interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | 
     // Whether the onClick of the avatar should be overriden to dispatch `Action.ViewUser`
     viewUserOnClick?: boolean;
     title?: string;
+    style?: any;
 }
 
 interface IState {
@@ -68,8 +69,8 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
             let imageUrl = null;
             if (props.member.getMxcAvatarUrl()) {
                 imageUrl = mediaFromMxc(props.member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(
-                    Math.floor(props.width * window.devicePixelRatio),
-                    Math.floor(props.height * window.devicePixelRatio),
+                    props.width,
+                    props.height,
                     props.resizeMethod,
                 );
             }
@@ -89,7 +90,7 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
     }
 
     render() {
-        let {member, fallbackUserId, onClick, viewUserOnClick, ...otherProps} = this.props;
+        let { member, fallbackUserId, onClick, viewUserOnClick, ...otherProps } = this.props;
         const userId = member ? member.userId : fallbackUserId;
 
         if (viewUserOnClick) {
@@ -102,8 +103,12 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
         }
 
         return (
-            <BaseAvatar {...otherProps} name={this.state.name} title={this.state.title}
-                idName={userId} url={this.state.imageUrl} onClick={onClick} />
+            <BaseAvatar {...otherProps}
+                name={this.state.name}
+                title={this.state.title}
+                idName={userId}
+                url={this.state.imageUrl}
+                onClick={onClick} />
         );
     }
 }

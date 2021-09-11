@@ -29,6 +29,7 @@ $irc-line-height: $font-18px;
         // timestamps are links which shouldn't be underlined
         > a {
             text-decoration: none;
+            min-width: 45px;
         }
 
         display: flex;
@@ -47,18 +48,6 @@ $irc-line-height: $font-18px;
             .mx_EventTile_readAvatars {
                 top: 0.2rem; // ($irc-line-height - avatar height) / 2
             }
-        }
-
-        > .mx_SenderProfile {
-            order: 2;
-            flex-shrink: 0;
-            width: var(--name-width);
-            text-overflow: ellipsis;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            overflow: visible;
-            justify-content: flex-end;
         }
 
         .mx_EventTile_line, .mx_EventTile_reply {
@@ -115,8 +104,7 @@ $irc-line-height: $font-18px;
         .mx_EventTile_line {
             .mx_EventTile_e2eIcon,
             .mx_TextualEvent,
-            .mx_MTextBody,
-            .mx_ReplyThread_wrapper_empty {
+            .mx_MTextBody {
                 display: inline-block;
             }
         }
@@ -127,6 +115,11 @@ $irc-line-height: $font-18px;
 
         .mx_EditMessageComposer_buttons {
             position: relative;
+        }
+
+        .mx_ReactionsRow {
+            padding-left: 0;
+            padding-right: 0;
         }
     }
 
@@ -174,47 +167,65 @@ $irc-line-height: $font-18px;
         border-left: 0;
     }
 
-    .mx_SenderProfile_hover {
-        background-color: $primary-bg-color;
-        overflow: hidden;
+    .mx_SenderProfile {
+        width: var(--name-width);
+        display: flex;
+        order: 2;
+        flex-shrink: 0;
+        justify-content: flex-start;
+        align-items: center;
 
-        > span {
-            display: flex;
+        > .mx_SenderProfile_displayName {
+            width: 100%;
+            text-align: end;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-            > .mx_SenderProfile_name {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                min-width: var(--name-width);
-                text-align: end;
-            }
+        > .mx_SenderProfile_mxid {
+            visibility: collapse;
         }
     }
 
     .mx_SenderProfile:hover {
-        justify-content: flex-start;
-    }
-
-    .mx_SenderProfile_hover:hover {
         overflow: visible;
-        width: max(auto, 100%);
         z-index: 10;
+
+        > .mx_SenderProfile_displayName {
+            overflow: visible;
+        }
+
+        > .mx_SenderProfile_mxid {
+            visibility: visible;
+        }
     }
 
     .mx_ReplyThread {
         margin: 0;
         .mx_SenderProfile {
+            order: unset;
+            max-width: unset;
             width: unset;
-            max-width: var(--name-width);
+            background: transparent;
         }
 
-        .mx_SenderProfile_hover {
-            background: transparent;
-
-            > span {
-                > .mx_SenderProfile_name {
-                    min-width: inherit;
-                }
+        .mx_EventTile_emote {
+            > .mx_EventTile_avatar {
+                margin-left: initial;
             }
+        }
+
+        .mx_MessageTimestamp {
+            width: initial;
+        }
+
+        /**
+         * adding the icon back in the document flow
+         * if it's not present, there's no unwanted wasted space
+         */
+        .mx_EventTile_e2eIcon {
+            position: relative;
+            order: -1;
         }
     }
 

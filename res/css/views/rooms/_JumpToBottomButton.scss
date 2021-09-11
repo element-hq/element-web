@@ -52,10 +52,11 @@ limitations under the License.
 
 .mx_JumpToBottomButton_scrollDown {
     position: relative;
+    display: block;
     height: 38px;
     border-radius: 19px;
     box-sizing: border-box;
-    background: $primary-bg-color;
+    background: $background;
     border: 1.3px solid $muted-fg-color;
     cursor: pointer;
 }

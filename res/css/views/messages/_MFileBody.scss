@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -60,11 +60,7 @@ limitations under the License.
 }
 
 .mx_MFileBody_info {
-    background-color: $message-body-panel-bg-color;
-    border-radius: 4px;
-    width: 270px;
-    padding: 8px;
-    color: $message-body-panel-fg-color;
+    cursor: pointer;
 
     .mx_MFileBody_info_icon {
         background-color: $message-body-panel-icon-bg-color;
@@ -82,13 +78,13 @@ limitations under the License.
             mask-position: center;
             mask-size: cover;
             mask-image: url('$(res)/img/element-icons/room/composer/attach.svg');
-            background-color: $message-body-panel-fg-color;
-            width: 13px;
+            background-color: $message-body-panel-icon-fg-color;
+            width: 15px;
             height: 15px;
 
             position: absolute;
             top: 8px;
-            left: 9px;
+            left: 8px;
         }
     }
 

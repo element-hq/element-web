@@ -26,77 +26,7 @@ limitations under the License.
     // different level.
     pointer-events: none;
 
-    .mx_CallPreview {
-        pointer-events: initial; // restore pointer events so the user can leave/interact
-        cursor: pointer;
-
-        .mx_CallView_video {
-            width: 350px;
-        }
-
-        .mx_VideoFeed_local {
-            border-radius: 8px;
-            overflow: hidden;
-        }
-    }
-
     .mx_AppTile_persistedWrapper div {
         min-width: 350px;
-    }
-
-    .mx_IncomingCallBox {
-        min-width: 250px;
-        background-color: $voipcall-plinth-color;
-        padding: 8px;
-        box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.08);
-        border-radius: 8px;
-
-        pointer-events: initial; // restore pointer events so the user can accept/decline
-        cursor: pointer;
-
-        .mx_IncomingCallBox_CallerInfo {
-            display: flex;
-            direction: row;
-
-            img, .mx_BaseAvatar_initial {
-                margin: 8px;
-            }
-
-            > div {
-                display: flex;
-                flex-direction: column;
-
-                justify-content: center;
-            }
-
-            h1, p {
-                margin: 0px;
-                padding: 0px;
-                font-size: $font-14px;
-                line-height: $font-16px;
-            }
-
-            h1 {
-                font-weight: bold;
-            }
-        }
-
-        .mx_IncomingCallBox_buttons {
-            padding: 8px;
-            display: flex;
-            flex-direction: row;
-
-            > .mx_IncomingCallBox_spacer {
-                width: 8px;
-            }
-
-            > * {
-                flex-shrink: 0;
-                flex-grow: 1;
-                margin-right: 0;
-                font-size: $font-15px;
-                line-height: $font-24px;
-            }
-        }
     }
 }

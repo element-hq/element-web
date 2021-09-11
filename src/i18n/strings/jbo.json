@@ -580,5 +580,8 @@
     "%(displayName)s cancelled verification.": ".i la'o zoi. %(displayName)s .zoi co'u co'a lacri",
     "Decrypt %(text)s": "nu facki le du'u mifra la'o zoi. %(text)s .zoi",
     "Download %(text)s": "nu kibycpa la'o zoi. %(text)s .zoi",
-    "Download this file": "nu kibycpa le vreji"
+    "Download this file": "nu kibycpa le vreji",
+    "Explore rooms": "nu facki le du'u ve zilbe'i",
+    "Create Account": "nu pa re'u co'a jaspu",
+    "Dismiss": "nu mipri"
 }

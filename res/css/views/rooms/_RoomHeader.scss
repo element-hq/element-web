@@ -17,7 +17,7 @@ limitations under the License.
 .mx_RoomHeader {
     flex: 0 0 50px;
     border-bottom: 1px solid $primary-hairline-color;
-    background-color: $roomheader-bg-color;
+    background-color: $background;
 
     .mx_RoomHeader_e2eIcon {
         height: 12px;
@@ -74,7 +74,7 @@ limitations under the License.
 
 .mx_RoomHeader_buttons {
     display: flex;
-    background-color: $primary-bg-color;
+    background-color: $background;
 }
 
 .mx_RoomHeader_info {
@@ -275,24 +275,6 @@ limitations under the License.
 
 .mx_RoomHeader_voipButtons {
     margin-top: 18px;
-}
-
-.mx_RoomHeader_pinnedButton::before {
-    mask-image: url('$(res)/img/element-icons/room/pin.svg');
-}
-
-.mx_RoomHeader_pinsIndicator {
-    position: absolute;
-    right: 0;
-    bottom: 4px;
-    width: 8px;
-    height: 8px;
-    border-radius: 8px;
-    background-color: $pinned-color;
-}
-
-.mx_RoomHeader_pinsIndicatorUnread {
-    background-color: $pinned-unread-color;
 }
 
 @media only screen and (max-width: 480px) {

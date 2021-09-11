@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ReactNode} from 'react';
+import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
-import {Action} from "../../../dispatcher/actions";
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
+import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
+import { Action } from "../../../dispatcher/actions";
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 
 interface IProps {
     header?: ReactNode;
@@ -43,8 +43,8 @@ interface IGroupProps {
 
 export const Group: React.FC<IGroupProps> = ({ className, title, children }) => {
     return <div className={classNames("mx_BaseCard_Group", className)}>
-        <h1>{title}</h1>
-        {children}
+        <h1>{ title }</h1>
+        { children }
     </div>;
 };
 

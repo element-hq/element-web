@@ -1,0 +1,46 @@
+name: Develop
+on:
+    # These tests won't work for non-develop branches at the moment as they
+    # won't pull in the right versions of other repos, so they're only enabled
+    # on develop.
+    push:
+        branches: [develop]
+    pull_request:
+        branches: [develop]
+jobs:
+    end-to-end:
+        runs-on: ubuntu-latest
+        env: 
+          PR_NUMBER: ${{github.event.number}}
+        container: vectorim/element-web-ci-e2etests-env:latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            - name: Prepare End-to-End tests
+              run: ./scripts/ci/prepare-end-to-end-tests.sh
+            - name: Run End-to-End tests
+              run: ./scripts/ci/run-end-to-end-tests.sh
+            - name: Archive logs
+              uses: actions/upload-artifact@v2
+              if: ${{ always() }}
+              with:
+                path: |
+                    test/end-to-end-tests/logs/**/*
+                    test/end-to-end-tests/synapse/installations/consent/homeserver.log
+                retention-days: 14
+            - name: Download previous benchmark data
+              uses: actions/cache@v1
+              with:
+                path: ./cache
+                key: ${{ runner.os }}-benchmark
+            - name: Store benchmark result
+              uses: matrix-org/github-action-benchmark@jsperfentry-1
+              with:
+                tool: 'jsperformanceentry'
+                output-file-path: test/end-to-end-tests/performance-entries.json
+                fail-on-alert: false
+                comment-on-alert: false
+                # Only temporary to monitor where failures occur
+                alert-comment-cc-users: '@gsouquet'
+                github-token: ${{ secrets.DEPLOY_GH_PAGES }}
+                auto-push: ${{ github.ref == 'refs/heads/develop' }}

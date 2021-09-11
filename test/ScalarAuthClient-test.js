@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import ScalarAuthClient from '../src/ScalarAuthClient';
-import {MatrixClientPeg} from '../src/MatrixClientPeg';
+import { MatrixClientPeg } from '../src/MatrixClientPeg';
 import { stubClient } from './test-utils';
 
 describe('ScalarAuthClient', function() {
@@ -29,7 +29,7 @@ describe('ScalarAuthClient', function() {
     it('should request a new token if the old one fails', async function() {
         const sac = new ScalarAuthClient();
 
-        sac._getAccountName = jest.fn((arg) => {
+        sac.getAccountName = jest.fn((arg) => {
             switch (arg) {
                 case "brokentoken":
                     return Promise.reject({

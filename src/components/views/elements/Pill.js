@@ -20,14 +20,14 @@ import classNames from 'classnames';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import PropTypes from 'prop-types';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import FlairStore from "../../../stores/FlairStore";
-import {getPrimaryPermalinkEntity, parseAppLocalLink} from "../../../utils/permalinks/Permalinks";
+import { getPrimaryPermalinkEntity, parseAppLocalLink } from "../../../utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {Action} from "../../../dispatcher/actions";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { Action } from "../../../dispatcher/actions";
+import { mediaFromMxc } from "../../../customisations/Media";
 import Tooltip from './Tooltip';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.elements.Pill")
 class Pill extends React.Component {
@@ -144,7 +144,7 @@ class Pill extends React.Component {
                 }
             }
         }
-        this.setState({resourceId, pillType, member, group, room});
+        this.setState({ resourceId, pillType, member, group, room });
     }
 
     componentDidMount() {
@@ -180,19 +180,20 @@ class Pill extends React.Component {
             member.rawDisplayName = resp.displayname;
             member.events.member = {
                 getContent: () => {
-                    return {avatar_url: resp.avatar_url};
+                    return { avatar_url: resp.avatar_url };
                 },
                 getDirectionalContent: function() {
                     return this.getContent();
                 },
             };
-            this.setState({member});
+            this.setState({ member });
         }).catch((err) => {
             console.error('Could not retrieve profile data for ' + userId + ':', err);
         });
     }
 
-    onUserPillClicked = () => {
+    onUserPillClicked = (e) => {
+        e.preventDefault();
         dis.dispatch({
             action: Action.ViewUser,
             member: this.state.member,
@@ -225,19 +226,19 @@ class Pill extends React.Component {
             }
                 break;
             case Pill.TYPE_USER_MENTION: {
-                    // If this user is not a member of this room, default to the empty member
-                    const member = this.state.member;
-                    if (member) {
-                        userId = member.userId;
-                        member.rawDisplayName = member.rawDisplayName || '';
-                        linkText = member.rawDisplayName;
-                        if (this.props.shouldShowPillAvatar) {
-                            avatar = <MemberAvatar member={member} width={16} height={16} aria-hidden="true" />;
-                        }
-                        pillClass = 'mx_UserPill';
-                        href = null;
-                        onClick = this.onUserPillClicked;
+                // If this user is not a member of this room, default to the empty member
+                const member = this.state.member;
+                if (member) {
+                    userId = member.userId;
+                    member.rawDisplayName = member.rawDisplayName || '';
+                    linkText = member.rawDisplayName;
+                    if (this.props.shouldShowPillAvatar) {
+                        avatar = <MemberAvatar member={member} width={16} height={16} aria-hidden="true" />;
                     }
+                    pillClass = 'mx_UserPill';
+                    href = null;
+                    onClick = this.onUserPillClicked;
+                }
             }
                 break;
             case Pill.TYPE_ROOM_MENTION: {
@@ -253,12 +254,15 @@ class Pill extends React.Component {
                 break;
             case Pill.TYPE_GROUP_MENTION: {
                 if (this.state.group) {
-                    const {avatarUrl, groupId, name} = this.state.group;
+                    const { avatarUrl, groupId, name } = this.state.group;
 
                     linkText = groupId;
                     if (this.props.shouldShowPillAvatar) {
                         avatar = <BaseAvatar
-                            name={name || groupId} width={16} height={16} aria-hidden="true"
+                            name={name || groupId}
+                            width={16}
+                            height={16}
+                            aria-hidden="true"
                             url={avatarUrl ? mediaFromMxc(avatarUrl).getSquareThumbnailHttp(16) : null} />;
                     }
                     pillClass = 'mx_GroupPill';
@@ -273,7 +277,7 @@ class Pill extends React.Component {
         });
 
         if (this.state.pillType) {
-            const {yOffset} = this.props;
+            const { yOffset } = this.props;
 
             let tip;
             if (this.state.hover && resource) {

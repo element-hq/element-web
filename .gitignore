@@ -2,6 +2,7 @@
 /*.log
 package-lock.json
 
+/coverage
 /node_modules
 /lib
 
@@ -14,3 +15,6 @@ package-lock.json
 
 .DS_Store
 *.tmp
+
+.vscode
+.vscode/

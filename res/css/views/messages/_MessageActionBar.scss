@@ -20,11 +20,12 @@ limitations under the License.
     visibility: hidden;
     cursor: pointer;
     display: flex;
-    height: 24px;
+    height: 32px;
     line-height: $font-24px;
-    border-radius: 4px;
-    background: $message-action-bar-bg-color;
-    top: -26px;
+    border-radius: 8px;
+    background: $background;
+    border: 1px solid $input-border-color;
+    top: -32px;
     right: 8px;
     user-select: none;
     // Ensure the action bar appears above over things, like the read marker.
@@ -51,31 +52,19 @@ limitations under the License.
         white-space: nowrap;
         display: inline-block;
         position: relative;
-        border: 1px solid $message-action-bar-border-color;
-        margin-left: -1px;
+        margin: 2px;
 
         &:hover {
-            border-color: $message-action-bar-hover-border-color;
+            background: $roomlist-button-bg-color;
+            border-radius: 6px;
             z-index: 1;
-        }
-
-        &:first-child {
-            border-radius: 3px 0 0 3px;
-        }
-
-        &:last-child {
-            border-radius: 0 3px 3px 0;
-        }
-
-        &:only-child {
-            border-radius: 3px;
         }
     }
 }
 
-
 .mx_MessageActionBar_maskButton {
-    width: 27px;
+    width: 28px;
+    height: 28px;
 }
 
 .mx_MessageActionBar_maskButton::after {
@@ -85,9 +74,14 @@ limitations under the License.
     left: 0;
     height: 100%;
     width: 100%;
+    mask-size: 18px;
     mask-repeat: no-repeat;
     mask-position: center;
-    background-color: $message-action-bar-fg-color;
+    background-color: $secondary-content;
+}
+
+.mx_MessageActionBar_maskButton:hover::after {
+    background-color: $primary-content;
 }
 
 .mx_MessageActionBar_reactButton::after {
@@ -98,10 +92,31 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/room/message-bar/reply.svg');
 }
 
+.mx_MessageActionBar_threadButton::after {
+    mask-image: url('$(res)/img/element-icons/message/thread.svg');
+}
+
 .mx_MessageActionBar_editButton::after {
     mask-image: url('$(res)/img/element-icons/room/message-bar/edit.svg');
 }
 
 .mx_MessageActionBar_optionsButton::after {
     mask-image: url('$(res)/img/element-icons/context-menu.svg');
+}
+
+.mx_MessageActionBar_resendButton::after {
+    mask-image: url('$(res)/img/element-icons/retry.svg');
+}
+
+.mx_MessageActionBar_cancelButton::after {
+    mask-image: url('$(res)/img/element-icons/trashcan.svg');
+}
+
+.mx_MessageActionBar_downloadButton::after {
+    mask-size: 14px;
+    mask-image: url('$(res)/img/download.svg');
+}
+
+.mx_MessageActionBar_downloadButton.mx_MessageActionBar_downloadSpinnerButton::after {
+    background-color: transparent; // hide the download icon mask
 }

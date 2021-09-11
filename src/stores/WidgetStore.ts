@@ -24,8 +24,8 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import WidgetEchoStore from "../stores/WidgetEchoStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import WidgetUtils from "../utils/WidgetUtils";
-import {WidgetType} from "../widgets/WidgetType";
-import {UPDATE_EVENT} from "./AsyncStore";
+import { WidgetType } from "../widgets/WidgetType";
+import { UPDATE_EVENT } from "./AsyncStore";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 
 interface IState {}
@@ -137,6 +137,20 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         if (edited && !this.roomMap.has(room.roomId)) {
             this.roomMap.set(room.roomId, roomInfo);
         }
+
+        // If a persistent widget is active, check to see if it's just been removed.
+        // If it has, it needs to destroyed otherwise unmounting the node won't kill it
+        const persistentWidgetId = ActiveWidgetStore.getPersistentWidgetId();
+        if (persistentWidgetId) {
+            if (
+                ActiveWidgetStore.getRoomId(persistentWidgetId) === room.roomId &&
+                !roomInfo.widgets.some(w => w.id === persistentWidgetId)
+            ) {
+                console.log(`Persistent widget ${persistentWidgetId} removed from room ${room.roomId}: destroying.`);
+                ActiveWidgetStore.destroyPersistentWidget(persistentWidgetId);
+            }
+        }
+
         this.emit(room.roomId);
     }
 
