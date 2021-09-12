@@ -3684,5 +3684,11 @@
     "Explore %(spaceName)s": "Tutvu kogukonnaga - %(spaceName)s",
     "Unknown failure": "Määratlemata viga",
     "Failed to update the join rules": "Liitumisreeglite uuendamine ei õnnestunud",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Kõik <spaceName/> kogukonnakeskuse liikmed saavad leida ja liituda. Sa võid valida ka muid kogukonnakeskuseid."
+    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Kõik <spaceName/> kogukonnakeskuse liikmed saavad leida ja liituda. Sa võid valida ka muid kogukonnakeskuseid.",
+    "Select the roles required to change various parts of the space": "Vali rollid, mis on vajalikud kogukonna eri osade muutmiseks",
+    "Change description": "Muuda kirjeldust",
+    "Change main address for the space": "Muuda kogukonna põhiaadressi",
+    "Change space name": "Muuda kogukonna nime",
+    "Change space avatar": "Muuda kogukonna tunnuspilti",
+    "Displaying time": "Aegade kuvamine"
 }
