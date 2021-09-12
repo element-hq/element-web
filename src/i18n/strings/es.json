@@ -3644,5 +3644,18 @@
     "Some encryption parameters have been changed.": "Algunos parámetros del cifrado han cambiado.",
     "Role in <RoomName/>": "Rol en <RoomName/>",
     "Currently, %(count)s spaces have access|one": "Ahora mismo, un espacio tiene acceso",
-    "& %(count)s more|one": "y %(count)s más"
+    "& %(count)s more|one": "y %(count)s más",
+    "Select the roles required to change various parts of the space": "Selecciona los roles necesarios para cambiar varios ajustes del espacio",
+    "Failed to update the join rules": "Fallo al actualizar las reglas para unirse",
+    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Cualquiera en <spaceName/> puede encontrar y unirse. También puedes seleccionar otros espacios.",
+    "Explore %(spaceName)s": "Explorar %(spaceName)s",
+    "Send a sticker": "Enviar una pegatina",
+    "Reply to encrypted thread…": "Responder al tema cifrado…",
+    "Reply to thread…": "Responder al tema…",
+    "Add emoji": "Añadir emojis",
+    "Unknown failure": "Fallo desconocido",
+    "Change space avatar": "Cambiar la imagen del espacio",
+    "Change space name": "Cambiar el nombre del espacio",
+    "Change main address for the space": "Cambiar dirección principal del espacio",
+    "Change description": "Cambiar descripción"
 }
