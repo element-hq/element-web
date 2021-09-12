@@ -3703,5 +3703,13 @@
     "Send a sticker": "Matrica küldése",
     "Reply to thread…": "Válasz az üzenetszálra…",
     "Reply to encrypted thread…": "Válasz a titkosított üzenetszálra…",
-    "Add emoji": "Emodzsi hozzáadás"
+    "Add emoji": "Emodzsi hozzáadás",
+    "Unknown failure": "Ismeretlen hiba",
+    "Failed to update the join rules": "A csatlakozási szabályokat nem sikerült frissíteni",
+    "Select the roles required to change various parts of the space": "A tér bizonyos beállításainak megváltoztatásához szükséges szerep kiválasztása",
+    "Change description": "Leírás megváltoztatása",
+    "Change main address for the space": "Tér elsődleges címének megváltoztatása",
+    "Change space name": "Tér nevének megváltoztatása",
+    "Change space avatar": "Tér profilkép megváltoztatása",
+    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "<spaceName/> téren bárki megtalálhatja és beléphet. Kiválaszthat más tereket is."
 }
