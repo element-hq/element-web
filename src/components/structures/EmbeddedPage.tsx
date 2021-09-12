@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import request from 'browser-request';
 import { _t } from '../../languageHandler';
 import sanitizeHtml from 'sanitize-html';
@@ -27,37 +26,43 @@ import classnames from 'classnames';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 
-export default class EmbeddedPage extends React.PureComponent {
-    static propTypes = {
-        // URL to request embedded page content from
-        url: PropTypes.string,
-        // Class name prefix to apply for a given instance
-        className: PropTypes.string,
-        // Whether to wrap the page in a scrollbar
-        scrollbar: PropTypes.bool,
-        // Map of keys to replace with values, e.g {$placeholder: "value"}
-        replaceMap: PropTypes.object,
-    };
+interface IProps {
+    // URL to request embedded page content from
+    url?: string;
+    // Class name prefix to apply for a given instance
+    className?: string;
+    // Whether to wrap the page in a scrollbar
+    scrollbar?: boolean;
+    // Map of keys to replace with values, e.g {$placeholder: "value"}
+    replaceMap?: Map<string, string>;
+}
 
-    static contextType = MatrixClientContext;
+interface IState {
+    page: string;
+}
 
-    constructor(props, context) {
+export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
+    public static contextType = MatrixClientContext;
+    private unmounted = true;
+    private dispatcherRef: string;
+
+    constructor(props: IProps, context: typeof MatrixClientContext) {
         super(props, context);
 
-        this._dispatcherRef = null;
+        this.dispatcherRef = null;
 
         this.state = {
             page: '',
         };
     }
 
-    translate(s) {
+    private translate(s: string): string {
         // default implementation - skins may wish to extend this
         return sanitizeHtml(_t(s));
     }
 
-    componentDidMount() {
-        this._unmounted = false;
+    public componentDidMount(): void {
+        this.unmounted = false;
 
         if (!this.props.url) {
             return;
@@ -70,7 +75,7 @@ export default class EmbeddedPage extends React.PureComponent {
         request(
             { method: "GET", url: this.props.url },
             (err, response, body) => {
-                if (this._unmounted) {
+                if (this.unmounted) {
                     return;
                 }
 
@@ -92,22 +97,22 @@ export default class EmbeddedPage extends React.PureComponent {
             },
         );
 
-        this._dispatcherRef = dis.register(this.onAction);
+        this.dispatcherRef = dis.register(this.onAction);
     }
 
-    componentWillUnmount() {
-        this._unmounted = true;
-        if (this._dispatcherRef !== null) dis.unregister(this._dispatcherRef);
+    public componentWillUnmount(): void {
+        this.unmounted = true;
+        if (this.dispatcherRef !== null) dis.unregister(this.dispatcherRef);
     }
 
-    onAction = (payload) => {
+    private onAction = (payload): void => {
         // HACK: Workaround for the context's MatrixClient not being set up at render time.
         if (payload.action === 'client_started') {
             this.forceUpdate();
         }
     };
 
-    render() {
+    public render(): JSX.Element {
         // HACK: Workaround for the context's MatrixClient not updating.
         const client = this.context || MatrixClientPeg.get();
         const isGuest = client ? client.isGuest() : true;
