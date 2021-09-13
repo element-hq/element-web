@@ -1,3 +1,10 @@
+Changes in [1.8.4](https://github.com/vector-im/element-web/releases/tag/v1.8.4) (2021-09-13)
+=================================================================================================
+
+## 🔒 SECURITY FIXES
+ * Fix a security issue with message key sharing. See https://matrix.org/blog/2021/09/13/vulnerability-disclosure-key-sharing
+   for details.
+
 Changes in [1.8.2](https://github.com/vector-im/element-desktop/releases/tag/v1.8.2) (2021-08-31)
 =================================================================================================
 
