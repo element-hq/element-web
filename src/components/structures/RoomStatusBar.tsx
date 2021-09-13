@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import { _t, _td } from '../../languageHandler';
-import { MatrixClientPeg } from '../../MatrixClientPeg';
 import Resend from '../../Resend';
 import dis from '../../dispatcher/dispatcher';
 import { messageForResourceLimitError } from '../../utils/ErrorUtils';
@@ -30,6 +29,7 @@ import InlineSpinner from "../views/elements/InlineSpinner";
 import { SyncState } from "matrix-js-sdk/src/sync.api";
 import { ISyncStateData } from "matrix-js-sdk/src/sync";
 import { Room } from "matrix-js-sdk/src/models/room";
+import MatrixClientContext from "../../contexts/MatrixClientContext";
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
@@ -84,20 +84,23 @@ interface IState {
 
 @replaceableComponent("structures.RoomStatusBar")
 export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
-    constructor(props: IProps) {
-        super(props);
+    public static contextType = MatrixClientContext;
+
+    constructor(props: IProps, context: typeof MatrixClientContext) {
+        super(props, context);
 
         this.state = {
-            syncState: MatrixClientPeg.get().getSyncState(),
-            syncStateData: MatrixClientPeg.get().getSyncStateData(),
+            syncState: this.context.getSyncState(),
+            syncStateData: this.context.getSyncStateData(),
             unsentMessages: getUnsentMessages(this.props.room),
             isResending: false,
         };
     }
 
     public componentDidMount(): void {
-        MatrixClientPeg.get().on("sync", this.onSyncStateChange);
-        MatrixClientPeg.get().on("Room.localEchoUpdated", this.onRoomLocalEchoUpdated);
+        const client = this.context;
+        client.on("sync", this.onSyncStateChange);
+        client.on("Room.localEchoUpdated", this.onRoomLocalEchoUpdated);
 
         this.checkSize();
     }
@@ -108,7 +111,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
 
     public componentWillUnmount(): void {
         // we may have entirely lost our client as we're logging out before clicking login on the guest bar...
-        const client = MatrixClientPeg.get();
+        const client = this.context;
         if (client) {
             client.removeListener("sync", this.onSyncStateChange);
             client.removeListener("Room.localEchoUpdated", this.onRoomLocalEchoUpdated);
