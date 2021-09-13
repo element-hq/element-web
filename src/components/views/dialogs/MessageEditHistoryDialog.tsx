@@ -27,6 +27,7 @@ import Spinner from "../elements/Spinner";
 import EditHistoryMessage from "../messages/EditHistoryMessage";
 import DateSeparator from "../messages/DateSeparator";
 import { IDialogProps } from "./IDialogProps";
+import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 
 interface IProps extends IDialogProps {
     mxEvent: MatrixEvent;
@@ -72,7 +73,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
         const promise = new Promise<boolean>((_resolve, _reject) => {resolve = _resolve; reject = _reject;});
         try {
             result = await client.relations(
-                roomId, eventId, "m.replace", "m.room.message", opts);
+                roomId, eventId, RelationType.Replace, EventType.RoomMessage, opts);
         } catch (error) {
             // log if the server returned an error
             if (error.errcode) {
