@@ -28,6 +28,7 @@ import EditHistoryMessage from "../messages/EditHistoryMessage";
 import DateSeparator from "../messages/DateSeparator";
 import { IDialogProps } from "./IDialogProps";
 import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
+import { defer } from "matrix-js-sdk/src/utils";
 
 interface IProps extends IDialogProps {
     mxEvent: MatrixEvent;
@@ -67,10 +68,10 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
         const roomId = this.props.mxEvent.getRoomId();
         const eventId = this.props.mxEvent.getId();
         const client = MatrixClientPeg.get();
+
+        const { resolve, reject, promise } = defer<boolean>();
         let result;
-        let resolve;
-        let reject;
-        const promise = new Promise<boolean>((_resolve, _reject) => {resolve = _resolve; reject = _reject;});
+
         try {
             result = await client.relations(
                 roomId, eventId, RelationType.Replace, EventType.RoomMessage, opts);
