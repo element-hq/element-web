@@ -35,11 +35,7 @@ interface IProps extends IDialogProps {
 
     // response from initial request. If not supplied, will do a request on
     // mount.
-    authData?: {
-        flows: [];
-        params: {};
-        session: string;
-    };
+    authData?: IAuthData;
 
     // callback
     makeRequest: (auth: IAuthData) => Promise<IAuthData>;
