@@ -32,6 +32,7 @@ import {
     ContextMenu,
     useContextMenu,
     MenuItem,
+    AboveLeftOf,
 } from "../../structures/ContextMenu";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import ReplyPreview from "./ReplyPreview";
@@ -511,7 +512,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 null,
         ];
 
-        let menuPosition;
+        let menuPosition: AboveLeftOf | undefined;
         if (this.ref.current) {
             const contentRect = this.ref.current.getBoundingClientRect();
             menuPosition = aboveLeftOf(contentRect);
