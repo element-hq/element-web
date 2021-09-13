@@ -322,10 +322,11 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
 
         const menuClasses = classNames({
             'mx_ContextualMenu': true,
-            'mx_ContextualMenu_left': !hasChevron && position.left,
-            'mx_ContextualMenu_right': !hasChevron && position.right,
-            'mx_ContextualMenu_top': !hasChevron && position.top,
-            'mx_ContextualMenu_bottom': !hasChevron && position.bottom,
+            // Defensively check for counter cases
+            'mx_ContextualMenu_left': !hasChevron && position.left !== undefined && !position.right,
+            'mx_ContextualMenu_right': !hasChevron && position.right !== undefined && !position.left,
+            'mx_ContextualMenu_top': !hasChevron && position.top !== undefined && !position.bottom,
+            'mx_ContextualMenu_bottom': !hasChevron && position.bottom !== undefined && !position.top,
             'mx_ContextualMenu_withChevron_left': chevronFace === ChevronFace.Left,
             'mx_ContextualMenu_withChevron_right': chevronFace === ChevronFace.Right,
             'mx_ContextualMenu_withChevron_top': chevronFace === ChevronFace.Top,
