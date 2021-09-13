@@ -29,6 +29,17 @@ import BaseDialog from "./BaseDialog";
 import { IAuthData } from "matrix-js-sdk/src/interactive-auth";
 import { IDialogProps } from "./IDialogProps";
 
+interface IDialogAesthetics {
+    [x: string]: {
+        [x: number]: {
+            title: string;
+            body: string;
+            continueText: string;
+            continueKind: string;
+        };
+    };
+}
+
 interface IProps extends IDialogProps {
     // matrix client to use for UI auth requests
     matrixClient: MatrixClient;
@@ -62,7 +73,7 @@ interface IProps extends IDialogProps {
     // }
     //
     // Default is defined in _getDefaultDialogAesthetics()
-    aestheticsForStagePhases?: {};
+    aestheticsForStagePhases?: IDialogAesthetics;
 }
 
 interface IState {
@@ -87,7 +98,7 @@ export default class InteractiveAuthDialog extends React.Component<IProps, IStat
         };
     }
 
-    private getDefaultDialogAesthetics() {
+    private getDefaultDialogAesthetics(): IDialogAesthetics {
         const ssoAesthetics = {
             [SSOAuthEntry.PHASE_PREAUTH]: {
                 title: _t("Use Single Sign On to continue"),
