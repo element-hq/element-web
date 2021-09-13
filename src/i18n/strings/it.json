@@ -3711,5 +3711,10 @@
     "Add emoji": "Aggiungi emoji",
     "Unknown failure": "Errore sconosciuto",
     "Failed to update the join rules": "Modifica delle regole di accesso fallita",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Chiunque in <spaceName/> può trovare ed entrare. Puoi selezionare anche altri spazi."
+    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Chiunque in <spaceName/> può trovare ed entrare. Puoi selezionare anche altri spazi.",
+    "Select the roles required to change various parts of the space": "Seleziona i ruoli necessari per cambiare varie parti dello spazio",
+    "Change description": "Cambia descrizione",
+    "Change main address for the space": "Cambia indirizzo principale dello spazio",
+    "Change space name": "Cambia nome dello spazio",
+    "Change space avatar": "Cambia avatar dello spazio"
 }
