@@ -3678,5 +3678,12 @@
     "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s a désépinglé un message de ce salon. Voir tous les messages épinglés.",
     "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s a désépinglé <a>un message</a> de ce salon. Voir tous les <b>messages épinglés</b>.",
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s a épinglé un message dans ce salon. Voir tous les messages épinglés.",
-    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s a épinglé <a>un message</a> dans ce salon. Voir tous les <b>messages épinglés</b>."
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s a épinglé <a>un message</a> dans ce salon. Voir tous les <b>messages épinglés</b>.",
+    "Some encryption parameters have been changed.": "Certains paramètres de chiffrement ont été changés.",
+    "Role in <RoomName/>": "Rôle dans <RoomName/>",
+    "Explore %(spaceName)s": "Explorer %(spaceName)s",
+    "Send a sticker": "Envoyer un autocollant",
+    "Reply to thread…": "Répondre au fil…",
+    "Reply to encrypted thread…": "Répondre au fil chiffré…",
+    "Add emoji": "Ajouter une émoticône"
 }
