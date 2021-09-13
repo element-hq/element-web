@@ -29,7 +29,6 @@ import { IDialogProps } from "../views/dialogs/IDialogProps";
 import BaseDialog from "../views/dialogs/BaseDialog";
 
 interface IProps extends IDialogProps {
-    onFinished: () => void;
     mxEvent: MatrixEvent; // the MatrixEvent associated with the context menu
 }
 

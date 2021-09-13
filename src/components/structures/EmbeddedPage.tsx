@@ -25,6 +25,7 @@ import { MatrixClientPeg } from '../../MatrixClientPeg';
 import classnames from 'classnames';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
+import { ActionPayload } from "../../dispatcher/payloads";
 
 interface IProps {
     // URL to request embedded page content from
@@ -44,12 +45,10 @@ interface IState {
 export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
     public static contextType = MatrixClientContext;
     private unmounted = false;
-    private dispatcherRef: string;
+    private dispatcherRef: string = null;
 
     constructor(props: IProps, context: typeof MatrixClientContext) {
         super(props, context);
-
-        this.dispatcherRef = null;
 
         this.state = {
             page: '',
@@ -105,7 +104,7 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
         if (this.dispatcherRef !== null) dis.unregister(this.dispatcherRef);
     }
 
-    private onAction = (payload): void => {
+    private onAction = (payload: ActionPayload): void => {
         // HACK: Workaround for the context's MatrixClient not being set up at render time.
         if (payload.action === 'client_started') {
             this.forceUpdate();

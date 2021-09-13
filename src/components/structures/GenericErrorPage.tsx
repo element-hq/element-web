@@ -18,8 +18,8 @@ import React from 'react';
 import { replaceableComponent } from "../../utils/replaceableComponent";
 
 interface IProps {
-    title: JSX.Element;
-    message: JSX.Element;
+    title: React.ReactNode;
+    message: React.ReactNode;
 }
 
 @replaceableComponent("structures.GenericErrorPage")
