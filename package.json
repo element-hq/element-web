@@ -61,7 +61,7 @@
     "highlight.js": "^10.5.0",
     "jsrsasign": "^10.2.0",
     "katex": "^0.12.0",
-    "matrix-js-sdk": "12.4.0",
+    "matrix-js-sdk": "12.4.1",
     "matrix-react-sdk": "3.29.0",
     "matrix-widget-api": "^0.1.0-beta.15",
     "prop-types": "^15.7.2",
