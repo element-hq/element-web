@@ -59,7 +59,7 @@ interface IState {
     recoverInfo: IKeyBackupRestoreResult;
     recoveryKeyValid: boolean;
     forceRecoveryKey: boolean;
-    passPhrase: "";
+    passPhrase: string;
     restoreType: RestoreType;
     progress: {
         stage: ProgressState;

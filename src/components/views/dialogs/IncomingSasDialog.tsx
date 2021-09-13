@@ -28,6 +28,7 @@ import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import { IDialogProps } from "./IDialogProps";
 import { IGeneratedSas, ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
+import { VerificationBase } from "matrix-js-sdk/src/crypto/verification/Base";
 
 const PHASE_START = 0;
 const PHASE_SHOW_SAS = 1;
@@ -36,7 +37,7 @@ const PHASE_VERIFIED = 3;
 const PHASE_CANCELLED = 4;
 
 interface IProps extends IDialogProps {
-    verifier: any; // TODO types
+    verifier: VerificationBase; // TODO types
 }
 
 interface IState {
@@ -59,7 +60,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
         super(props);
 
         let phase = PHASE_START;
-        if (this.props.verifier.cancelled) {
+        if (this.props.verifier.hasBeenCancelled) {
             console.log("Verifier was cancelled in the background.");
             phase = PHASE_CANCELLED;
         }
@@ -79,7 +80,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
 
     public componentWillUnmount(): void {
         if (this.state.phase !== PHASE_CANCELLED && this.state.phase !== PHASE_VERIFIED) {
-            this.props.verifier.cancel('User cancel');
+            this.props.verifier.cancel(new Error('User cancel'));
         }
         this.props.verifier.removeListener('show_sas', this.onVerifierShowSas);
     }

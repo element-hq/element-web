@@ -25,7 +25,7 @@ import { IDialogProps } from "./IDialogProps";
 
 interface IProps extends IDialogProps {
     title?: string;
-    description?: string | JSX.Element;
+    description?: React.ReactNode;
     value?: string;
     placeholder?: string;
     button?: string;

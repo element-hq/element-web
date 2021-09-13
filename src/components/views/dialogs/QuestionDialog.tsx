@@ -35,7 +35,7 @@ interface IProps extends IDialogProps {
     fixedWidth?: boolean;
     className?: string;
     hasCancelButton?: boolean;
-    cancelButton?: JSX.Element;
+    cancelButton?: React.ReactNode;
 }
 
 export default class QuestionDialog extends React.Component<IProps> {

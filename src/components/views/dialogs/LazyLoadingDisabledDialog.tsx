@@ -25,7 +25,7 @@ interface IProps extends IDialogProps {
     host: string;
 }
 
-const LazyLoadingDisabledDialog: React.FC<IProps> = (props: IProps) => {
+const LazyLoadingDisabledDialog: React.FC<IProps> = (props) => {
     const brand = SdkConfig.get().brand;
     const description1 = _t(
         "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. " +

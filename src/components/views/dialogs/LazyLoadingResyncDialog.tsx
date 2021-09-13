@@ -23,7 +23,7 @@ import { IDialogProps } from "./IDialogProps";
 
 interface IProps extends IDialogProps {}
 
-const LazyLoadingResyncDialog: React.FC<IProps> = (props: IProps) => {
+const LazyLoadingResyncDialog: React.FC<IProps> = (props) => {
     const brand = SdkConfig.get().brand;
     const description =
         _t(
