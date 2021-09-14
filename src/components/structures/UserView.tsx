@@ -28,7 +28,6 @@ import MainSplit from "./MainSplit";
 import RightPanel from "./RightPanel";
 import Spinner from "../views/elements/Spinner";
 import ResizeNotifier from "../../utils/ResizeNotifier";
-import { RoomState } from "matrix-js-sdk/src/models/room-state";
 
 interface IProps {
     userId?: string;
