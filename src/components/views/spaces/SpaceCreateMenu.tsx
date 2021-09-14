@@ -177,6 +177,7 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
                 const newName = ev.target.value;
                 if (!alias || alias === `#${nameToLocalpart(name)}:${domain}`) {
                     setAlias(`#${nameToLocalpart(newName)}:${domain}`);
+                    aliasFieldRef.current.validate({ allowEmpty: true });
                 }
                 setName(newName);
             }}
