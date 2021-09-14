@@ -322,7 +322,12 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
 
         const menuClasses = classNames({
             'mx_ContextualMenu': true,
-            // Defensively check for counter cases
+            /**
+             * In some cases we may get the number of 0, which still means that we're supposed to properly
+             * add the specific position class, but as it was falsy things didn't work as intended.
+             * In addition, defensively check for counter cases where we may get more than one value,
+             * even if we shouldn't.
+             */
             'mx_ContextualMenu_left': !hasChevron && position.left !== undefined && !position.right,
             'mx_ContextualMenu_right': !hasChevron && position.right !== undefined && !position.left,
             'mx_ContextualMenu_top': !hasChevron && position.top !== undefined && !position.bottom,
