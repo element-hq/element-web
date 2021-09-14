@@ -48,11 +48,6 @@ export default class Resend {
             // XXX: temporary logging to try to diagnose
             // https://github.com/vector-im/element-web/issues/3148
             console.log('Resend got send failure: ' + err.name + '(' + err + ')');
-
-            dis.dispatch({
-                action: 'message_send_failed',
-                event: event,
-            });
         });
     }
 

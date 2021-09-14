@@ -1897,15 +1897,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     onSendEvent(roomId: string, event: MatrixEvent) {
         const cli = MatrixClientPeg.get();
-        if (!cli) {
-            dis.dispatch({ action: 'message_send_failed' });
-            return;
-        }
+        if (!cli) return;
 
         cli.sendEvent(roomId, event.getType(), event.getContent()).then(() => {
             dis.dispatch({ action: 'message_sent' });
-        }, (err) => {
-            dis.dispatch({ action: 'message_send_failed' });
         });
     }
 
