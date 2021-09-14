@@ -630,7 +630,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
     private onRoom = (room: Room, newMembership?: string, oldMembership?: string) => {
         const roomMembership = room.getMyMembership();
-        if (roomMembership === null) {
+        if (!roomMembership) {
             // room is still being baked in the js-sdk, we'll process it at Room.myMembership instead
             return;
         }
