@@ -28,6 +28,7 @@ limitations under the License.
     margin-top: var(--gutterSize);
     margin-left: 50px;
     margin-right: 100px;
+    font-size: $font-14px;
 
     &.mx_EventTile_continuation {
         margin-top: 2px;
@@ -81,6 +82,7 @@ limitations under the License.
         position: relative;
         top: -2px;
         left: 2px;
+        font-size: $font-15px;
     }
 
     &[data-self=false] {
