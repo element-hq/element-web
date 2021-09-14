@@ -18,6 +18,7 @@ import posthog, { PostHog } from 'posthog-js';
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 import SettingsStore from './settings/SettingsStore';
+import { MatrixClientPeg } from "./MatrixClientPeg";
 
 /* Posthog analytics tracking.
  *
@@ -274,9 +275,30 @@ export class PosthogAnalytics {
         this.anonymity = anonymity;
     }
 
-    public async identifyUser(userId: string): Promise<void> {
+    private static getUUIDv4(): string {
+        // https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid
+        return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16),
+        );
+    }
+
+    public async identifyUser(): Promise<void> {
         if (this.anonymity == Anonymity.Pseudonymous) {
-            this.posthog.identify(await hashHex(userId));
+            // Check the user's account_data for an analytics ID to use. Storing the ID in account_data allows
+            // different devices to send the same ID.
+            const client = MatrixClientPeg.get();
+            const accountData = await client.getAccountDataFromServer("im.vector.web.analytics_id");
+            let analyticsID = accountData?.id;
+            if (!analyticsID) {
+                // Couldn't retrieve an analytics ID from user settings, so create one and set it on the server.
+                // Note there's a race condition here - if two devices do these steps at the same time, last write
+                // wins, and the first writer will send tracking with an ID that doesn't match the one on the server
+                // until the next time account data is refreshed and this function is called (most likely on next
+                // page load). This will happen pretty infrequently, so we can tolerate the possibility.
+                analyticsID = PosthogAnalytics.getUUIDv4();
+                await client.setAccountData("im.vector.web.analytics_id", { id: analyticsID });
+            }
+            this.posthog.identify(analyticsID);
         }
     }
 
