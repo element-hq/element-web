@@ -23,7 +23,6 @@ limitations under the License.
 }
 
 .mx_EventTile[data-layout=bubble] {
-
     position: relative;
     margin-top: var(--gutterSize);
     margin-left: 49px;
@@ -287,6 +286,7 @@ limitations under the License.
     .mx_EventTile_line,
     .mx_EventTile_info {
         min-width: 100%;
+        // Preserve alignment with left edge of text in bubbles
         margin: 0;
     }
 
@@ -295,6 +295,7 @@ limitations under the License.
     }
 
     .mx_EventTile_line > a {
+        // Align timestamps with those of normal bubble tiles
         right: auto;
         top: -11px;
         left: -95px;
@@ -329,6 +330,7 @@ limitations under the License.
     .mx_EventTile_line {
         margin: 0;
         > a {
+            // Align timestamps with those of normal bubble tiles
             left: -76px;
         }
     }
@@ -339,6 +341,7 @@ limitations under the License.
 }
 
 .mx_EventListSummary[data-expanded=false][data-layout=bubble] {
+    // Align with left edge of bubble tiles
     padding: 0 49px;
 }
 
