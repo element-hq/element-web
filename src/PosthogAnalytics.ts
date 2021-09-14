@@ -18,7 +18,8 @@ import posthog, { PostHog } from 'posthog-js';
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 import SettingsStore from './settings/SettingsStore';
-import { IMatrixClientPeg, MatrixClientPeg } from "./MatrixClientPeg";
+import { MatrixClientPeg } from "./MatrixClientPeg";
+import { MatrixClient } from "../../matrix-js-sdk";
 
 /* Posthog analytics tracking.
  *
@@ -275,14 +276,11 @@ export class PosthogAnalytics {
         this.anonymity = anonymity;
     }
 
-    private static getUUIDv4(): string {
-        // https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid
-        return ("10000000-1000-4000-8000-100000000000").replace(/[018]/g, c =>
-            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16),
-        );
+    private static getRandomAnalyticsId(): string {
+        return [...crypto.getRandomValues(new Uint8Array(16))].map((c) => c.toString(16)).join('');
     }
 
-    public async identifyUser(client: IMatrixClientPeg, analyticsIdGenerator: () => string): Promise<void> {
+    public async identifyUser(client: MatrixClient, analyticsIdGenerator: () => string): Promise<void> {
         if (this.anonymity == Anonymity.Pseudonymous) {
             // Check the user's account_data for an analytics ID to use. Storing the ID in account_data allows
             // different devices to send the same ID.
@@ -376,7 +374,7 @@ export class PosthogAnalytics {
         // Identify the user (via hashed user ID) to posthog if anonymity is pseudonmyous
         this.setAnonymity(PosthogAnalytics.getAnonymityFromSettings());
         if (userId && this.getAnonymity() == Anonymity.Pseudonymous) {
-            await this.identifyUser(MatrixClientPeg.get(), PosthogAnalytics.getUUIDv4);
+            await this.identifyUser(MatrixClientPeg.get(), PosthogAnalytics.getRandomAnalyticsId);
         }
     }
 }

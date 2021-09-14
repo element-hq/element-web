@@ -24,7 +24,6 @@ import {
 } from '../src/PosthogAnalytics';
 
 import SdkConfig from '../src/SdkConfig';
-import { MatrixClientPeg } from "../src/MatrixClientPeg";
 
 class FakePosthog {
     public capture;
