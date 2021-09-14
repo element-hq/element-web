@@ -3690,5 +3690,6 @@
     "Change main address for the space": "Muuda kogukonna põhiaadressi",
     "Change space name": "Muuda kogukonna nime",
     "Change space avatar": "Muuda kogukonna tunnuspilti",
-    "Displaying time": "Aegade kuvamine"
+    "Displaying time": "Aegade kuvamine",
+    "Message didn't send. Click for info.": "Sõnum jäi saatmata. Lisateabe saamiseks klõpsi."
 }
