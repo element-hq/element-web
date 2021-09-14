@@ -53,3 +53,23 @@ limitations under the License.
         transition: none;
     }
 }
+
+
+@keyframes mx_Dialog_lightbox_background_keyframes {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: $lightbox-background-bg-opacity;
+    }
+}
+
+
+@keyframes mx_ImageView_panel_keyframes {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
