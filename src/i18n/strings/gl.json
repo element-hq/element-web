@@ -3702,5 +3702,20 @@
     "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s desafixou unha mensaxe desta sala. Mira tódalas mensaxes fixadas.",
     "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s deafixou <a>unha mensaxe</a> desta sala. Mira tódalas <b>mensaxes fixadas</b>.",
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s fixou unha mensaxe nesta sala. Mira tódalas mensaxes fixadas.",
-    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s fixou <a>unha mensaxe</a> nesta sala. Mira tódalas <b>mensaxes fixadas</b>."
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s fixou <a>unha mensaxe</a> nesta sala. Mira tódalas <b>mensaxes fixadas</b>.",
+    "Some encryption parameters have been changed.": "Algún dos parámetros de cifrado foron cambiados.",
+    "Role in <RoomName/>": "Rol en <RoomName/>",
+    "Explore %(spaceName)s": "Explora %(spaceName)s",
+    "Send a sticker": "Enviar un adhesivo",
+    "Reply to thread…": "Responder á conversa…",
+    "Reply to encrypted thread…": "Responder á conversa cifrada…",
+    "Add emoji": "Engadir emoji",
+    "Unknown failure": "Fallo descoñecido",
+    "Failed to update the join rules": "Fallou a actualización das normas para unirse",
+    "Select the roles required to change various parts of the space": "Elexir os roles requeridos para cambiar varias partes do espazo",
+    "Change description": "Cambiar a descrición",
+    "Change main address for the space": "Cambiar o enderezo principal do espazo",
+    "Change space name": "Cambiar o nome do espazo",
+    "Change space avatar": "Cambiar o avatar do espazo",
+    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Calquera en <spaceName/> pode atopar e unirse. Tamén podes elexir outros espazos."
 }
