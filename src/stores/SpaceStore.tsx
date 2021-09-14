@@ -629,11 +629,18 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     };
 
     private onRoom = (room: Room, newMembership?: string, oldMembership?: string) => {
-        const membership = newMembership || room.getMyMembership();
+        const roomMembership = room.getMyMembership();
+        if (!roomMembership) {
+            // room is still being baked in the js-sdk, we'll process it at Room.myMembership instead
+            return;
+        }
+        const membership = newMembership || roomMembership;
 
         if (!room.isSpaceRoom()) {
             // this.onRoomUpdate(room);
-            this.onRoomsUpdate();
+            // this.onRoomsUpdate();
+            // ideally we only need onRoomsUpdate here but it doesn't rebuild parentMap so always adds new rooms to Home
+            this.rebuild();
 
             if (membership === "join") {
                 // the user just joined a room, remove it from the suggested list if it was there

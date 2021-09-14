@@ -97,9 +97,8 @@ const spaceNameValidator = withValidation({
     ],
 });
 
-const nameToAlias = (name: string, domain: string): string => {
-    const localpart = name.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9_-]+/gi, "");
-    return `#${localpart}:${domain}`;
+const nameToLocalpart = (name: string): string => {
+    return name.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9_-]+/gi, "");
 };
 
 // XXX: Temporary for the Spaces release only
@@ -176,8 +175,9 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
             value={name}
             onChange={ev => {
                 const newName = ev.target.value;
-                if (!alias || alias === nameToAlias(name, domain)) {
-                    setAlias(nameToAlias(newName, domain));
+                if (!alias || alias === `#${nameToLocalpart(name)}:${domain}`) {
+                    setAlias(`#${nameToLocalpart(newName)}:${domain}`);
+                    aliasFieldRef.current?.validate({ allowEmpty: true });
                 }
                 setName(newName);
             }}
@@ -194,7 +194,7 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
                 onChange={setAlias}
                 domain={domain}
                 value={alias}
-                placeholder={name ? nameToAlias(name, domain) : _t("e.g. my-space")}
+                placeholder={name ? nameToLocalpart(name) : _t("e.g. my-space")}
                 label={_t("Address")}
                 disabled={busy}
                 onKeyDown={onKeyDown}
@@ -217,6 +217,7 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
 };
 
 const SpaceCreateMenu = ({ onFinished }) => {
+    const cli = useContext(MatrixClientContext);
     const [visibility, setVisibility] = useState<Visibility>(null);
     const [busy, setBusy] = useState<boolean>(false);
 
@@ -233,14 +234,18 @@ const SpaceCreateMenu = ({ onFinished }) => {
 
         setBusy(true);
         // require & validate the space name field
-        if (!await spaceNameField.current.validate({ allowEmpty: false })) {
+        if (!(await spaceNameField.current.validate({ allowEmpty: false }))) {
             spaceNameField.current.focus();
             spaceNameField.current.validate({ allowEmpty: false, focused: true });
             setBusy(false);
             return;
         }
-        // validate the space name alias field but do not require it
-        if (visibility === Visibility.Public && !await spaceAliasField.current.validate({ allowEmpty: true })) {
+
+        // validate the space alias field but do not require it
+        const aliasLocalpart = alias.substring(1, alias.length - cli.getDomain().length - 1);
+        if (visibility === Visibility.Public && aliasLocalpart &&
+            (await spaceAliasField.current.validate({ allowEmpty: true })) === false
+        ) {
             spaceAliasField.current.focus();
             spaceAliasField.current.validate({ allowEmpty: true, focused: true });
             setBusy(false);
@@ -248,7 +253,13 @@ const SpaceCreateMenu = ({ onFinished }) => {
         }
 
         try {
-            await createSpace(name, visibility === Visibility.Public, alias, topic, avatar);
+            await createSpace(
+                name,
+                visibility === Visibility.Public,
+                aliasLocalpart ? alias : undefined,
+                topic,
+                avatar,
+            );
 
             onFinished();
         } catch (e) {
