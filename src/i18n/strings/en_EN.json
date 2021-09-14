@@ -1598,6 +1598,7 @@
     "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.": "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.",
     "Enable encryption in settings.": "Enable encryption in settings.",
     "End-to-end encryption isn't enabled": "End-to-end encryption isn't enabled",
+    "Message didn't send. Click for info.": "Message didn't send. Click for info.",
     "Unpin": "Unpin",
     "View message": "View message",
     "%(duration)ss": "%(duration)ss",
