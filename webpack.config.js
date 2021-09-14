@@ -16,7 +16,7 @@ if (!ogImageUrl) ogImageUrl = 'https://app.element.io/themes/element/img/logos/o
 
 const cssThemes = {
     // CSS themes
-    "theme-legacy": "./node_modules/matrix-react-sdk/res/themes/legacy-light/css/legacy-light.scss",
+    "theme-legacy-light": "./node_modules/matrix-react-sdk/res/themes/legacy-light/css/legacy-light.scss",
     "theme-legacy-dark": "./node_modules/matrix-react-sdk/res/themes/legacy-dark/css/legacy-dark.scss",
     "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
     "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
@@ -48,6 +48,7 @@ module.exports = (env, argv) => {
     }
     const devMode = nodeEnv !== 'production';
     const useHMR = process.env.CSS_HOT_RELOAD === '1' && devMode;
+    const fullPageErrors = process.env.FULL_PAGE_ERRORS === '1' && devMode;
 
     const development = {};
     if (argv.mode === "production") {
@@ -525,7 +526,7 @@ module.exports = (env, argv) => {
             new HtmlWebpackInjectPreload({
                 files: [{ match: /.*Inter.*\.woff2$/ }],
             }),
-            useHMR && new ReactRefreshWebpackPlugin(),
+            useHMR && new ReactRefreshWebpackPlugin(fullPageErrors ? undefined : { overlay: { entry: false } }),
 
         ].filter(Boolean),
 

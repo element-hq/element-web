@@ -21,17 +21,14 @@ body:
     validations:
       required: true
   - type: textarea
-    id: what-happened
+    id: result
     attributes:
       label: What happened?
       placeholder: Tell us what went wrong
-    validations:
-      required: true
-  - type: textarea
-    id: expected-result
-    attributes:
-      label: What did you expect?
-      placeholder: Tell us what you expected to happen
+      value: |
+        ### What did you expect?
+
+        ### What happened?
     validations:
       required: true
   - type: input
@@ -55,6 +52,14 @@ body:
       label: URL for webapp
       description: Which URL are you using to access the webapp? If a private server, tell us what version of Element Web you are using.
       placeholder: e.g. develop.element.io, app.element.io
+    validations:
+      required: false
+  - type: input
+    id: homeserver
+    attributes:
+      label: Homeserver
+      description: Which server is your account registered on?
+      placeholder: e.g. matrix.org
     validations:
       required: false
   - type: dropdown
