@@ -34,7 +34,7 @@ const newIssueUrl = "https://github.com/vector-im/element-web/issues/new/choose"
 interface IProps extends IDialogProps {}
 
 const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
-    const [rating, setRating] = useState<string>();
+    const [rating, setRating] = useState<Rating>();
     const [comment, setComment] = useState<string>("");
 
     const onDebugLogsLinkClick = (): void => {
@@ -45,7 +45,7 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
     const hasFeedback = CountlyAnalytics.instance.canEnable();
     const onFinished = (sendFeedback: boolean): void => {
         if (hasFeedback && sendFeedback) {
-            CountlyAnalytics.instance.reportFeedback((parseInt(rating) as Rating), comment);
+            CountlyAnalytics.instance.reportFeedback(rating, comment);
             Modal.createTrackedDialog('Feedback sent', '', InfoDialog, {
                 title: _t('Feedback sent'),
                 description: _t('Thank you!'),
@@ -68,8 +68,8 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
 
                 <StyledRadioGroup
                     name="feedbackRating"
-                    value={rating}
-                    onChange={setRating}
+                    value={String(rating)}
+                    onChange={(r) => setRating(parseInt(r, 10) as Rating)}
                     definitions={[
                         { value: "1", label: "😠" },
                         { value: "2", label: "😞" },
@@ -141,7 +141,7 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
             { countlyFeedbackSection }
         </React.Fragment>}
         button={hasFeedback ? _t("Send feedback") : _t("Go back")}
-        buttonDisabled={hasFeedback && rating === ""}
+        buttonDisabled={hasFeedback && !rating}
         onFinished={onFinished}
     />);
 };
