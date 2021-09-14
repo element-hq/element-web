@@ -137,7 +137,7 @@ export default class MemberStatusMessageAvatar extends React.Component<IProps, I
                     menuWidth={226}
                     onFinished={this.closeMenu}
                 >
-                    <StatusMessageContextMenu user={this.props.member.user} onFinished={this.closeMenu} />
+                    <StatusMessageContextMenu user={this.props.member.user} />
                 </ContextMenu>
             );
         }
