@@ -1791,8 +1791,8 @@
     "Cat": "猫",
     "Dog": "犬",
     "To be secure, do this in person or use a trusted way to communicate.": "安全を確保するため、1人でこれを行うか、または信頼できる方法で連携してください。",
-    "They don't match": "それらは一致しません",
-    "They match": "それらは一致します",
+    "They don't match": "異なる絵文字です",
+    "They match": "同じ絵文字です",
     "Cancelling…": "取り消し中…",
     "Waiting for your other session to verify…": "他のセッションによる検証を待っています…",
     "Waiting for your other session, %(deviceName)s (%(deviceId)s), to verify…": "他のセッション %(deviceName)s (%(deviceId)s) による検証を待っています…",
@@ -2542,5 +2542,13 @@
     "Only invited people can join.": "招待された人のみ参加できます。",
     "Private (invite only)": "プライベート (招待者のみ)",
     "Decide who can join %(roomName)s.": "%(roomName)s に参加できる人を設定します。",
-    "%(senderName)s invited %(targetName)s": "%(senderName)s が %(targetName)s を招待しました"
+    "%(senderName)s invited %(targetName)s": "%(senderName)s が %(targetName)s を招待しました",
+    "Verify other login": "他のログインを使用した検証",
+    "Accept on your other login…": "他のログインで了承してください…",
+    "Use Security Key": "セキュリティキーで検証",
+    "Use another login": "他の端末から検証",
+    "Verify your identity to access encrypted messages and prove your identity to others.": "あなたが本人であることを検証し、暗号化されたメッセージにアクセスします。",
+    "New? <a>Create account</a>": "<a>アカウント作成</a>",
+    "Are you sure you want to sign out?": "サインアウトしてよろしいですか？",
+    "Upgrade to %(hostSignupBrand)s": "%(hostSignupBrand)s にアップグレード"
 }
