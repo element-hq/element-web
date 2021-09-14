@@ -52,7 +52,7 @@ limitations under the License.
 
     pointer-events: none;
 
-    background-color: $primary-bg-color;
+    background-color: $background;
     opacity: 0.95;
 
     position: absolute;
@@ -99,7 +99,7 @@ limitations under the License.
     left: 0;
     right: 0;
     z-index: 3000;
-    background-color: $primary-bg-color;
+    background-color: $background;
 }
 
 .mx_RoomView_auxPanel_hiddenHighlights {
@@ -172,7 +172,7 @@ limitations under the License.
     flex: 0 0 auto;
 
     max-height: 0px;
-    background-color: $primary-bg-color;
+    background-color: $background;
     z-index: 1000;
     overflow: hidden;
 
@@ -257,7 +257,7 @@ hr.mx_RoomView_myReadMarker {
 }
 
 .mx_RoomView_callStatusBar .mx_UploadBar_uploadProgressInner {
-    background-color: $primary-bg-color;
+    background-color: $background;
 }
 
 .mx_RoomView_callStatusBar .mx_UploadBar_uploadFilename {

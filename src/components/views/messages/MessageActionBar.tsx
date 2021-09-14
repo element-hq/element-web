@@ -17,12 +17,13 @@ limitations under the License.
 */
 
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { EventStatus } from 'matrix-js-sdk/src/models/event';
+import { MatrixEvent, EventStatus } from 'matrix-js-sdk/src/models/event';
 
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
+import { Action } from '../../../dispatcher/actions';
+import { RightPanelPhases } from '../../../stores/RightPanelStorePhases';
 import { aboveLeftOf, ContextMenu, ContextMenuTooltipButton, useContextMenu } from '../../structures/ContextMenu';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
 import RoomContext from "../../../contexts/RoomContext";
@@ -34,48 +35,66 @@ import Resend from "../../../Resend";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import DownloadActionButton from "./DownloadActionButton";
+import SettingsStore from '../../../settings/SettingsStore';
+import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
+import ReplyThread from '../elements/ReplyThread';
 
-const OptionsButton = ({ mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange }) => {
-    const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
-    const [onFocus, isActive, ref] = useRovingTabIndex(button);
-    useEffect(() => {
-        onFocusChange(menuDisplayed);
-    }, [onFocusChange, menuDisplayed]);
+interface IOptionsButtonProps {
+    mxEvent: MatrixEvent;
+    getTile: () => any; // TODO: FIXME, haven't figured out what the return type is here
+    getReplyThread: () => ReplyThread;
+    permalinkCreator: RoomPermalinkCreator;
+    onFocusChange: (menuDisplayed: boolean) => void;
+}
 
-    let contextMenu;
-    if (menuDisplayed) {
-        const MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
+const OptionsButton: React.FC<IOptionsButtonProps> =
+    ({ mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange }) => {
+        const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
+        const [onFocus, isActive, ref] = useRovingTabIndex(button);
+        useEffect(() => {
+            onFocusChange(menuDisplayed);
+        }, [onFocusChange, menuDisplayed]);
 
-        const tile = getTile && getTile();
-        const replyThread = getReplyThread && getReplyThread();
+        let contextMenu;
+        if (menuDisplayed) {
+            const MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
 
-        const buttonRect = button.current.getBoundingClientRect();
-        contextMenu = <MessageContextMenu
-            {...aboveLeftOf(buttonRect)}
-            mxEvent={mxEvent}
-            permalinkCreator={permalinkCreator}
-            eventTileOps={tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined}
-            collapseReplyThread={replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined}
-            onFinished={closeMenu}
-        />;
-    }
+            const tile = getTile && getTile();
+            const replyThread = getReplyThread && getReplyThread();
 
-    return <React.Fragment>
-        <ContextMenuTooltipButton
-            className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
-            title={_t("Options")}
-            onClick={openMenu}
-            isExpanded={menuDisplayed}
-            inputRef={ref}
-            onFocus={onFocus}
-            tabIndex={isActive ? 0 : -1}
-        />
+            const buttonRect = button.current.getBoundingClientRect();
+            contextMenu = <MessageContextMenu
+                {...aboveLeftOf(buttonRect)}
+                mxEvent={mxEvent}
+                permalinkCreator={permalinkCreator}
+                eventTileOps={tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined}
+                collapseReplyThread={replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined}
+                onFinished={closeMenu}
+            />;
+        }
 
-        { contextMenu }
-    </React.Fragment>;
-};
+        return <React.Fragment>
+            <ContextMenuTooltipButton
+                className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
+                title={_t("Options")}
+                onClick={openMenu}
+                isExpanded={menuDisplayed}
+                inputRef={ref}
+                onFocus={onFocus}
+                tabIndex={isActive ? 0 : -1}
+            />
 
-const ReactButton = ({ mxEvent, reactions, onFocusChange }) => {
+            { contextMenu }
+        </React.Fragment>;
+    };
+
+interface IReactButtonProps {
+    mxEvent: MatrixEvent;
+    reactions: any; // TODO: types
+    onFocusChange: (menuDisplayed: boolean) => void;
+}
+
+const ReactButton: React.FC<IReactButtonProps> = ({ mxEvent, reactions, onFocusChange }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
     const [onFocus, isActive, ref] = useRovingTabIndex(button);
     useEffect(() => {
@@ -106,21 +125,21 @@ const ReactButton = ({ mxEvent, reactions, onFocusChange }) => {
     </React.Fragment>;
 };
 
+interface IMessageActionBarProps {
+    mxEvent: MatrixEvent;
+    // The Relations model from the JS SDK for reactions to `mxEvent`
+    reactions?: any;  // TODO: types
+    permalinkCreator?: RoomPermalinkCreator;
+    getTile: () => any; // TODO: FIXME, haven't figured out what the return type is here
+    getReplyThread?: () => ReplyThread;
+    onFocusChange?: (menuDisplayed: boolean) => void;
+}
+
 @replaceableComponent("views.messages.MessageActionBar")
-export default class MessageActionBar extends React.PureComponent {
-    static propTypes = {
-        mxEvent: PropTypes.object.isRequired,
-        // The Relations model from the JS SDK for reactions to `mxEvent`
-        reactions: PropTypes.object,
-        permalinkCreator: PropTypes.object,
-        getTile: PropTypes.func,
-        getReplyThread: PropTypes.func,
-        onFocusChange: PropTypes.func,
-    };
+export default class MessageActionBar extends React.PureComponent<IMessageActionBarProps> {
+    public static contextType = RoomContext;
 
-    static contextType = RoomContext;
-
-    componentDidMount() {
+    public componentDidMount(): void {
         if (this.props.mxEvent.status && this.props.mxEvent.status !== EventStatus.SENT) {
             this.props.mxEvent.on("Event.status", this.onSent);
         }
@@ -134,43 +153,54 @@ export default class MessageActionBar extends React.PureComponent {
         this.props.mxEvent.on("Event.beforeRedaction", this.onBeforeRedaction);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.props.mxEvent.off("Event.status", this.onSent);
         this.props.mxEvent.off("Event.decrypted", this.onDecrypted);
         this.props.mxEvent.off("Event.beforeRedaction", this.onBeforeRedaction);
     }
 
-    onDecrypted = () => {
+    private onDecrypted = (): void => {
         // When an event decrypts, it is likely to change the set of available
         // actions, so we force an update to check again.
         this.forceUpdate();
     };
 
-    onBeforeRedaction = () => {
+    private onBeforeRedaction = (): void => {
         // When an event is redacted, we can't edit it so update the available actions.
         this.forceUpdate();
     };
 
-    onSent = () => {
+    private onSent = (): void => {
         // When an event is sent and echoed the possible actions change.
         this.forceUpdate();
     };
 
-    onFocusChange = (focused) => {
+    private onFocusChange = (focused: boolean): void => {
         if (!this.props.onFocusChange) {
             return;
         }
         this.props.onFocusChange(focused);
     };
 
-    onReplyClick = (ev) => {
+    private onReplyClick = (ev: React.MouseEvent): void => {
         dis.dispatch({
             action: 'reply_to_event',
             event: this.props.mxEvent,
         });
     };
 
-    onEditClick = (ev) => {
+    private onThreadClick = (): void => {
+        dis.dispatch({
+            action: Action.SetRightPanelPhase,
+            phase: RightPanelPhases.ThreadView,
+            allowClose: false,
+            refireParams: {
+                event: this.props.mxEvent,
+            },
+        });
+    };
+
+    private onEditClick = (ev: React.MouseEvent): void => {
         dis.dispatch({
             action: 'edit_event',
             event: this.props.mxEvent,
@@ -186,7 +216,7 @@ export default class MessageActionBar extends React.PureComponent {
      * @param {Function} fn The execution function.
      * @param {Function} checkFn The test function.
      */
-    runActionOnFailedEv(fn, checkFn) {
+    private runActionOnFailedEv(fn: (ev: MatrixEvent) => void, checkFn?: (ev: MatrixEvent) => boolean): void {
         if (!checkFn) checkFn = () => true;
 
         const mxEvent = this.props.mxEvent;
@@ -201,18 +231,18 @@ export default class MessageActionBar extends React.PureComponent {
         }
     }
 
-    onResendClick = (ev) => {
+    private onResendClick = (ev: React.MouseEvent): void => {
         this.runActionOnFailedEv((tarEv) => Resend.resend(tarEv));
     };
 
-    onCancelClick = (ev) => {
+    private onCancelClick = (ev: React.MouseEvent): void => {
         this.runActionOnFailedEv(
             (tarEv) => Resend.removeFromQueue(tarEv),
             (testEv) => canCancel(testEv.status),
         );
     };
 
-    render() {
+    public render(): JSX.Element {
         const toolbarOpts = [];
         if (canEditContent(this.props.mxEvent)) {
             toolbarOpts.push(<RovingAccessibleTooltipButton
@@ -235,7 +265,7 @@ export default class MessageActionBar extends React.PureComponent {
         const editStatus = mxEvent.replacingEvent() && mxEvent.replacingEvent().status;
         const redactStatus = mxEvent.localRedactionEvent() && mxEvent.localRedactionEvent().status;
         const allowCancel = canCancel(mxEvent.status) || canCancel(editStatus) || canCancel(redactStatus);
-        const isFailed = [mxEvent.status, editStatus, redactStatus].includes("not_sent");
+        const isFailed = [mxEvent.status, editStatus, redactStatus].includes(EventStatus.NOT_SENT);
         if (allowCancel && isFailed) {
             // The resend button needs to appear ahead of the edit button, so insert to the
             // start of the opts
@@ -254,12 +284,22 @@ export default class MessageActionBar extends React.PureComponent {
                 // The only catch is we do the reply button first so that we can make sure the react
                 // button is the very first button without having to do length checks for `splice()`.
                 if (this.context.canReply) {
-                    toolbarOpts.splice(0, 0, <RovingAccessibleTooltipButton
-                        className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
-                        title={_t("Reply")}
-                        onClick={this.onReplyClick}
-                        key="reply"
-                    />);
+                    toolbarOpts.splice(0, 0, <>
+                        <RovingAccessibleTooltipButton
+                            className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
+                            title={_t("Reply")}
+                            onClick={this.onReplyClick}
+                            key="reply"
+                        />
+                        { SettingsStore.getValue("feature_thread") && (
+                            <RovingAccessibleTooltipButton
+                                className="mx_MessageActionBar_maskButton mx_MessageActionBar_threadButton"
+                                title={_t("Thread")}
+                                onClick={this.onThreadClick}
+                                key="thread"
+                            />
+                        ) }
+                    </>);
                 }
                 if (this.context.canReact) {
                     toolbarOpts.splice(0, 0, <ReactButton

@@ -115,7 +115,7 @@ const LeftPanelWidget: React.FC = () => {
                     aria-expanded={expanded}
                     aria-level={1}
                     onClick={() => {
-                        setExpanded(e => !e);
+                        setExpanded(!expanded);
                     }}
                 >
                     <span className={classNames({

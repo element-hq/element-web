@@ -45,6 +45,7 @@ interface IProps {
 interface IState {
     audioMuted: boolean;
     videoMuted: boolean;
+    speaking: boolean;
 }
 
 @replaceableComponent("views.voip.VideoFeed")
@@ -57,6 +58,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         this.state = {
             audioMuted: this.props.feed.isAudioMuted(),
             videoMuted: this.props.feed.isVideoMuted(),
+            speaking: false,
         };
     }
 
@@ -103,11 +105,19 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         if (oldFeed) {
             this.props.feed.removeListener(CallFeedEvent.NewStream, this.onNewStream);
             this.props.feed.removeListener(CallFeedEvent.MuteStateChanged, this.onMuteStateChanged);
+            if (this.props.feed.purpose === SDPStreamMetadataPurpose.Usermedia) {
+                this.props.feed.removeListener(CallFeedEvent.Speaking, this.onSpeaking);
+                this.props.feed.measureVolumeActivity(false);
+            }
             this.stopMedia();
         }
         if (newFeed) {
             this.props.feed.addListener(CallFeedEvent.NewStream, this.onNewStream);
             this.props.feed.addListener(CallFeedEvent.MuteStateChanged, this.onMuteStateChanged);
+            if (this.props.feed.purpose === SDPStreamMetadataPurpose.Usermedia) {
+                this.props.feed.addListener(CallFeedEvent.Speaking, this.onSpeaking);
+                this.props.feed.measureVolumeActivity(true);
+            }
             this.playMedia();
         }
     }
@@ -162,6 +172,10 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         });
     };
 
+    private onSpeaking = (speaking: boolean): void => {
+        this.setState({ speaking });
+    };
+
     private onResize = (e) => {
         if (this.props.onResize && !this.props.feed.isLocal()) {
             this.props.onResize(e);
@@ -173,6 +187,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
 
         const wrapperClasses = classnames("mx_VideoFeed", {
             mx_VideoFeed_voice: this.state.videoMuted,
+            mx_VideoFeed_speaking: this.state.speaking,
         });
         const micIconClasses = classnames("mx_VideoFeed_mic", {
             mx_VideoFeed_mic_muted: this.state.audioMuted,

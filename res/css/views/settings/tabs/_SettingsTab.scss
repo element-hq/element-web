@@ -25,7 +25,7 @@ limitations under the License.
 .mx_SettingsTab_heading {
     font-size: $font-20px;
     font-weight: 600;
-    color: $primary-fg-color;
+    color: $primary-content;
     margin-bottom: 10px;
 }
 
@@ -37,7 +37,7 @@ limitations under the License.
     font-size: $font-16px;
     display: block;
     font-weight: 600;
-    color: $primary-fg-color;
+    color: $primary-content;
     margin-bottom: 10px;
     margin-top: 12px;
 }
@@ -72,7 +72,7 @@ limitations under the License.
     vertical-align: middle;
     display: inline-block;
     font-size: $font-14px;
-    color: $primary-fg-color;
+    color: $primary-content;
     max-width: calc(100% - $font-48px); // Force word wrap instead of colliding with the switch
     box-sizing: border-box;
     padding-right: 10px;
@@ -82,7 +82,7 @@ limitations under the License.
     margin-top: 4px;
     font-size: $font-12px;
     line-height: $font-15px;
-    color: $secondary-fg-color;
+    color: $secondary-content;
 }
 
 .mx_SettingsTab_section .mx_SettingsFlag .mx_ToggleSwitch {

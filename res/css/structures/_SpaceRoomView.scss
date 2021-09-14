@@ -32,7 +32,7 @@ $SpaceRoomViewInnerWidth: 428px;
     }
 
     > span {
-        color: $secondary-fg-color;
+        color: $secondary-content;
     }
 
     &::before {
@@ -45,7 +45,7 @@ $SpaceRoomViewInnerWidth: 428px;
         mask-position: center;
         mask-repeat: no-repeat;
         mask-size: 24px;
-        background-color: $tertiary-fg-color;
+        background-color: $tertiary-content;
     }
 
     &:hover {
@@ -56,7 +56,7 @@ $SpaceRoomViewInnerWidth: 428px;
         }
 
         > span {
-            color: $primary-fg-color;
+            color: $primary-content;
         }
     }
 }
@@ -75,13 +75,13 @@ $SpaceRoomViewInnerWidth: 428px;
             margin: 0;
             font-size: $font-24px;
             font-weight: $font-semi-bold;
-            color: $primary-fg-color;
+            color: $primary-content;
             width: max-content;
         }
 
         .mx_SpaceRoomView_description {
             font-size: $font-15px;
-            color: $secondary-fg-color;
+            color: $secondary-content;
             margin-top: 12px;
             margin-bottom: 24px;
             max-width: $SpaceRoomViewInnerWidth;
@@ -157,7 +157,7 @@ $SpaceRoomViewInnerWidth: 428px;
             font-weight: $font-semi-bold;
             font-size: $font-14px;
             line-height: $font-24px;
-            color: $primary-fg-color;
+            color: $primary-content;
             margin-top: 24px;
             position: relative;
             padding-left: 24px;
@@ -179,7 +179,7 @@ $SpaceRoomViewInnerWidth: 428px;
                 mask-position: center;
                 mask-size: contain;
                 mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
-                background-color: $secondary-fg-color;
+                background-color: $secondary-content;
             }
         }
 
@@ -210,7 +210,7 @@ $SpaceRoomViewInnerWidth: 428px;
 
                 .mx_SpaceRoomView_preview_inviter_mxid {
                     line-height: $font-24px;
-                    color: $secondary-fg-color;
+                    color: $secondary-content;
                 }
             }
         }
@@ -227,7 +227,7 @@ $SpaceRoomViewInnerWidth: 428px;
         .mx_SpaceRoomView_preview_topic {
             font-size: $font-14px;
             line-height: $font-22px;
-            color: $secondary-fg-color;
+            color: $secondary-content;
             margin: 20px 0;
             max-height: 160px;
             overflow-y: auto;
@@ -261,7 +261,7 @@ $SpaceRoomViewInnerWidth: 428px;
         .mx_SpaceRoomView_landing_name {
             margin: 24px 0 16px;
             font-size: $font-15px;
-            color: $secondary-fg-color;
+            color: $secondary-content;
 
             > span {
                 display: inline-block;
@@ -334,7 +334,7 @@ $SpaceRoomViewInnerWidth: 428px;
                     top: 0;
                     height: 24px;
                     width: 24px;
-                    background: $tertiary-fg-color;
+                    background: $tertiary-content;
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
@@ -358,7 +358,7 @@ $SpaceRoomViewInnerWidth: 428px;
 
         .mx_SpaceFeedbackPrompt {
             padding: 7px; // 8px - 1px border
-            border: 1px solid rgba($primary-fg-color, .1);
+            border: 1px solid rgba($primary-content, .1);
             border-radius: 8px;
             width: max-content;
             margin: 0 0 -40px auto; // collapse its own height to not push other components down
@@ -387,7 +387,7 @@ $SpaceRoomViewInnerWidth: 428px;
         width: 432px;
         border-radius: 8px;
         background-color: $info-plinth-bg-color;
-        color: $secondary-fg-color;
+        color: $secondary-content;
         box-sizing: border-box;
 
         > h3 {
@@ -414,7 +414,7 @@ $SpaceRoomViewInnerWidth: 428px;
             position: absolute;
             top: 14px;
             left: 14px;
-            background-color: $secondary-fg-color;
+            background-color: $secondary-content;
         }
     }
 
@@ -437,7 +437,7 @@ $SpaceRoomViewInnerWidth: 428px;
         }
 
         .mx_SpaceRoomView_inviteTeammates_buttons {
-            color: $secondary-fg-color;
+            color: $secondary-content;
             margin-top: 28px;
 
             .mx_AccessibleButton {
@@ -453,7 +453,7 @@ $SpaceRoomViewInnerWidth: 428px;
                     width: 24px;
                     top: 0;
                     left: 0;
-                    background-color: $secondary-fg-color;
+                    background-color: $secondary-content;
                     mask-repeat: no-repeat;
                     mask-position: center;
                     mask-size: contain;
@@ -472,7 +472,7 @@ $SpaceRoomViewInnerWidth: 428px;
 }
 
 .mx_SpaceRoomView_info {
-    color: $secondary-fg-color;
+    color: $secondary-content;
     font-size: $font-15px;
     line-height: $font-24px;
     margin: 20px 0;
@@ -491,7 +491,7 @@ $SpaceRoomViewInnerWidth: 428px;
             left: -2px;
             mask-position: center;
             mask-repeat: no-repeat;
-            background-color: $tertiary-fg-color;
+            background-color: $tertiary-content;
         }
     }
 

@@ -1016,6 +1016,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setStateForNewView({
             view: Views.LOGGED_IN,
             justRegistered,
+            currentRoomId: null,
         });
         this.setPage(PageTypes.HomePage);
         this.notifyNewScreen('home');

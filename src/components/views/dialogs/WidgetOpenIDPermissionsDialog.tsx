@@ -1,5 +1,6 @@
 /*
 Copyright 2019 Travis Ralston
+Copyright 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,42 +16,46 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _t } from "../../../languageHandler";
-import * as sdk from "../../../index";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
-import { Widget } from "matrix-widget-api";
+import { Widget, WidgetKind } from "matrix-widget-api";
 import { OIDCState, WidgetPermissionStore } from "../../../stores/widgets/WidgetPermissionStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { IDialogProps } from "./IDialogProps";
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
+
+interface IProps extends IDialogProps {
+    widget: Widget;
+    widgetKind: WidgetKind;
+    inRoomId?: string;
+}
+
+interface IState {
+    rememberSelection: boolean;
+}
 
 @replaceableComponent("views.dialogs.WidgetOpenIDPermissionsDialog")
-export default class WidgetOpenIDPermissionsDialog extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-        widget: PropTypes.objectOf(Widget).isRequired,
-        widgetKind: PropTypes.string.isRequired, // WidgetKind from widget-api
-        inRoomId: PropTypes.string,
-    };
-
-    constructor() {
-        super();
+export default class WidgetOpenIDPermissionsDialog extends React.PureComponent<IProps, IState> {
+    constructor(props: IProps) {
+        super(props);
 
         this.state = {
             rememberSelection: false,
         };
     }
 
-    _onAllow = () => {
-        this._onPermissionSelection(true);
+    private onAllow = () => {
+        this.onPermissionSelection(true);
     };
 
-    _onDeny = () => {
-        this._onPermissionSelection(false);
+    private onDeny = () => {
+        this.onPermissionSelection(false);
     };
 
-    _onPermissionSelection(allowed) {
+    private onPermissionSelection(allowed: boolean) {
         if (this.state.rememberSelection) {
-            console.log(`Remembering ${this.props.widgetId} as allowed=${allowed} for OpenID`);
+            console.log(`Remembering ${this.props.widget.id} as allowed=${allowed} for OpenID`);
 
             WidgetPermissionStore.instance.setOIDCState(
                 this.props.widget, this.props.widgetKind, this.props.inRoomId,
@@ -61,14 +66,11 @@ export default class WidgetOpenIDPermissionsDialog extends React.Component {
         this.props.onFinished(allowed);
     }
 
-    _onRememberSelectionChange = (newVal) => {
+    private onRememberSelectionChange = (newVal: boolean) => {
         this.setState({ rememberSelection: newVal });
     };
 
-    render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
+    public render() {
         return (
             <BaseDialog
                 className='mx_WidgetOpenIDPermissionsDialog'
@@ -87,13 +89,13 @@ export default class WidgetOpenIDPermissionsDialog extends React.Component {
                 </div>
                 <DialogButtons
                     primaryButton={_t("Continue")}
-                    onPrimaryButtonClick={this._onAllow}
-                    onCancel={this._onDeny}
+                    onPrimaryButtonClick={this.onAllow}
+                    onCancel={this.onDeny}
                     additive={
                         <LabelledToggleSwitch
                             value={this.state.rememberSelection}
                             toggleInFront={true}
-                            onChange={this._onRememberSelectionChange}
+                            onChange={this.onRememberSelectionChange}
                             label={_t("Remember this")} />}
                 />
             </BaseDialog>

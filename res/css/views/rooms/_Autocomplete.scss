@@ -4,12 +4,12 @@
     z-index: 1001;
     width: 100%;
     border: 1px solid $primary-hairline-color;
-    background: $primary-bg-color;
+    background: $background;
     border-bottom: none;
     border-radius: 8px 8px 0 0;
-    max-height: 35vh;
     overflow: clip;
     display: flex;
+    flex-direction: column;
     box-shadow: 0px -16px 32px $composer-shadow-color;
 }
 
@@ -20,13 +20,13 @@
 
 /* a "block" completion takes up a whole line */
 .mx_Autocomplete_Completion_block {
-    height: 34px;
+    min-height: 34px;
     display: flex;
     padding: 0 12px;
     user-select: none;
     cursor: pointer;
     align-items: center;
-    color: $primary-fg-color;
+    color: $primary-content;
 }
 
 .mx_Autocomplete_Completion_block * {
@@ -42,7 +42,7 @@
     user-select: none;
     cursor: pointer;
     align-items: center;
-    color: $primary-fg-color;
+    color: $primary-content;
 }
 
 .mx_Autocomplete_Completion_pill > * {
@@ -63,6 +63,7 @@
     margin: 12px;
     height: 100%;
     overflow-y: scroll;
+    max-height: 35vh;
 }
 
 .mx_Autocomplete_Completion_container_truncate {
@@ -84,7 +85,7 @@
 
 .mx_Autocomplete_provider_name {
     margin: 12px;
-    color: $primary-fg-color;
+    color: $primary-content;
     font-weight: 400;
     opacity: 0.4;
 }

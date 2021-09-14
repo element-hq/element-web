@@ -49,7 +49,7 @@ limitations under the License.
         bottom: 0;
         left: 0;
         right: 0;
-        background-color: $tertiary-fg-color;
+        background-color: $tertiary-content;
         height: 1px;
         opacity: 0.4;
         content: '';
@@ -70,7 +70,7 @@ limitations under the License.
 }
 
 .mx_NotificationPanel .mx_EventTile_roomName a {
-    color: $primary-fg-color;
+    color: $primary-content;
 }
 
 .mx_NotificationPanel .mx_EventTile_avatar {
@@ -79,7 +79,7 @@ limitations under the License.
 
 .mx_NotificationPanel .mx_EventTile .mx_SenderProfile,
 .mx_NotificationPanel .mx_EventTile .mx_MessageTimestamp {
-    color: $primary-fg-color;
+    color: $primary-content;
     font-size: $font-12px;
     display: inline;
 }
@@ -118,7 +118,7 @@ limitations under the License.
 }
 
 .mx_NotificationPanel .mx_EventTile:hover .mx_EventTile_line {
-    background-color: $primary-bg-color;
+    background-color: $background;
 }
 
 .mx_NotificationPanel .mx_EventTile_content {

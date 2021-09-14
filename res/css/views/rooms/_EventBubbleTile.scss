@@ -33,6 +33,14 @@ limitations under the License.
         margin-top: 2px;
     }
 
+    &.mx_EventTile_highlight {
+        &::before {
+            background-color: $event-highlight-bg-color;
+        }
+
+        color: $event-highlight-fg-color;
+    }
+
     /* For replies */
     .mx_EventTile {
         padding-top: 0;

@@ -1867,7 +1867,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 isRoomEncrypted={this.context.isRoomEncrypted(this.state.room.roomId)}
             />;
         } else if (showRoomUpgradeBar) {
-            aux = <RoomUpgradeWarningBar room={this.state.room} recommendation={roomVersionRecommendation} />;
+            aux = <RoomUpgradeWarningBar room={this.state.room} />;
         } else if (myMembership !== "join") {
             // We do have a room object for this room, but we're not currently in it.
             // We may have a 3rd party invite to it.
@@ -2042,7 +2042,6 @@ export default class RoomView extends React.Component<IProps, IState> {
                 highlight={this.state.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0}
                 numUnreadMessages={this.state.numUnreadMessages}
                 onScrollToBottomClick={this.jumpToLiveTimeline}
-                roomId={this.state.roomId}
             />);
         }
 
@@ -2052,7 +2051,10 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         const showRightPanel = this.state.room && this.state.showRightPanel;
         const rightPanel = showRightPanel
-            ? <RightPanel room={this.state.room} resizeNotifier={this.props.resizeNotifier} />
+            ? <RightPanel
+                room={this.state.room}
+                resizeNotifier={this.props.resizeNotifier}
+                permalinkCreator={this.getPermalinkCreatorForRoom(this.state.room)} />
             : null;
 
         const timelineClasses = classNames("mx_RoomView_timeline", {

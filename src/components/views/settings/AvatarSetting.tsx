@@ -15,12 +15,19 @@ limitations under the License.
 */
 
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import classNames from "classnames";
 
-const AvatarSetting = ({ avatarUrl, avatarAltText, avatarName, uploadAvatar, removeAvatar }) => {
+interface IProps {
+    avatarUrl?: string;
+    avatarName: string; // name of user/room the avatar belongs to
+    uploadAvatar?: (e: React.MouseEvent) => void;
+    removeAvatar?: (e: React.MouseEvent) => void;
+    avatarAltText: string;
+}
+
+const AvatarSetting: React.FC<IProps> = ({ avatarUrl, avatarAltText, avatarName, uploadAvatar, removeAvatar }) => {
     const [isHovering, setIsHovering] = useState(false);
     const hoveringProps = {
         onMouseEnter: () => setIsHovering(true),
@@ -76,14 +83,6 @@ const AvatarSetting = ({ avatarUrl, avatarAltText, avatarName, uploadAvatar, rem
         { uploadAvatarBtn }
         { removeAvatarBtn }
     </div>;
-};
-
-AvatarSetting.propTypes = {
-    avatarUrl: PropTypes.string,
-    avatarName: PropTypes.string.isRequired, // name of user/room the avatar belongs to
-    uploadAvatar: PropTypes.func,
-    removeAvatar: PropTypes.func,
-    avatarAltText: PropTypes.string.isRequired,
 };
 
 export default AvatarSetting;

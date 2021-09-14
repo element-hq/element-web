@@ -1,6 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2016 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,52 +15,58 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { IMyDevice } from "matrix-js-sdk/src/client";
 
-import * as sdk from '../../../index';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import { SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import InteractiveAuthDialog from "../dialogs/InteractiveAuthDialog";
+import DevicesPanelEntry from "./DevicesPanelEntry";
+import Spinner from "../elements/Spinner";
+import AccessibleButton from "../elements/AccessibleButton";
+
+interface IProps {
+    className?: string;
+}
+
+interface IState {
+    devices: IMyDevice[];
+    deviceLoadError?: string;
+    selectedDevices: string[];
+    deleting?: boolean;
+}
 
 @replaceableComponent("views.settings.DevicesPanel")
-export default class DevicesPanel extends React.Component {
-    constructor(props) {
+export default class DevicesPanel extends React.Component<IProps, IState> {
+    private unmounted = false;
+
+    constructor(props: IProps) {
         super(props);
-
         this.state = {
-            devices: undefined,
-            deviceLoadError: undefined,
-
+            devices: [],
             selectedDevices: [],
-            deleting: false,
         };
-
-        this._unmounted = false;
-
-        this._renderDevice = this._renderDevice.bind(this);
-        this._onDeviceSelectionToggled = this._onDeviceSelectionToggled.bind(this);
-        this._onDeleteClick = this._onDeleteClick.bind(this);
     }
 
-    componentDidMount() {
-        this._loadDevices();
+    public componentDidMount(): void {
+        this.loadDevices();
     }
 
-    componentWillUnmount() {
-        this._unmounted = true;
+    public componentWillUnmount(): void {
+        this.unmounted = true;
     }
 
-    _loadDevices() {
+    private loadDevices(): void {
         MatrixClientPeg.get().getDevices().then(
             (resp) => {
-                if (this._unmounted) { return; }
+                if (this.unmounted) { return; }
                 this.setState({ devices: resp.devices || [] });
             },
             (error) => {
-                if (this._unmounted) { return; }
+                if (this.unmounted) { return; }
                 let errtxt;
                 if (error.httpStatus == 404) {
                     // 404 probably means the HS doesn't yet support the API.
@@ -79,7 +84,7 @@ export default class DevicesPanel extends React.Component {
      * compare two devices, sorting from most-recently-seen to least-recently-seen
      * (and then, for stability, by device id)
      */
-    _deviceCompare(a, b) {
+    private deviceCompare(a: IMyDevice, b: IMyDevice): number {
         // return < 0 if a comes before b, > 0 if a comes after b.
         const lastSeenDelta =
               (b.last_seen_ts || 0) - (a.last_seen_ts || 0);
@@ -91,8 +96,8 @@ export default class DevicesPanel extends React.Component {
         return (idA < idB) ? -1 : (idA > idB) ? 1 : 0;
     }
 
-    _onDeviceSelectionToggled(device) {
-        if (this._unmounted) { return; }
+    private onDeviceSelectionToggled = (device: IMyDevice): void => {
+        if (this.unmounted) { return; }
 
         const deviceId = device.device_id;
         this.setState((state, props) => {
@@ -108,22 +113,21 @@ export default class DevicesPanel extends React.Component {
 
             return { selectedDevices };
         });
-    }
+    };
 
-    _onDeleteClick() {
+    private onDeleteClick = (): void => {
         this.setState({
             deleting: true,
         });
 
-        this._makeDeleteRequest(null).catch((error) => {
-            if (this._unmounted) { return; }
+        this.makeDeleteRequest(null).catch((error) => {
+            if (this.unmounted) { return; }
             if (error.httpStatus !== 401 || !error.data || !error.data.flows) {
                 // doesn't look like an interactive-auth failure
                 throw error;
             }
 
             // pop up an interactive auth dialog
-            const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
 
             const numDevices = this.state.selectedDevices.length;
             const dialogAesthetics = {
@@ -148,7 +152,7 @@ export default class DevicesPanel extends React.Component {
                 title: _t("Authentication"),
                 matrixClient: MatrixClientPeg.get(),
                 authData: error.data,
-                makeRequest: this._makeDeleteRequest.bind(this),
+                makeRequest: this.makeDeleteRequest.bind(this),
                 aestheticsForStagePhases: {
                     [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
                     [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
@@ -156,15 +160,16 @@ export default class DevicesPanel extends React.Component {
             });
         }).catch((e) => {
             console.error("Error deleting sessions", e);
-            if (this._unmounted) { return; }
+            if (this.unmounted) { return; }
         }).finally(() => {
             this.setState({
                 deleting: false,
             });
         });
-    }
+    };
 
-    _makeDeleteRequest(auth) {
+    // TODO: proper typing for auth
+    private makeDeleteRequest(auth?: any): Promise<any> {
         return MatrixClientPeg.get().deleteMultipleDevices(this.state.selectedDevices, auth).then(
             () => {
                 // Remove the deleted devices from `devices`, reset selection to []
@@ -178,20 +183,16 @@ export default class DevicesPanel extends React.Component {
         );
     }
 
-    _renderDevice(device) {
-        const DevicesPanelEntry = sdk.getComponent('settings.DevicesPanelEntry');
+    private renderDevice = (device: IMyDevice): JSX.Element => {
         return <DevicesPanelEntry
             key={device.device_id}
             device={device}
             selected={this.state.selectedDevices.includes(device.device_id)}
-            onDeviceToggled={this._onDeviceSelectionToggled}
+            onDeviceToggled={this.onDeviceSelectionToggled}
         />;
-    }
+    };
 
-    render() {
-        const Spinner = sdk.getComponent("elements.Spinner");
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-
+    public render(): JSX.Element {
         if (this.state.deviceLoadError !== undefined) {
             const classes = classNames(this.props.className, "error");
             return (
@@ -204,15 +205,14 @@ export default class DevicesPanel extends React.Component {
         const devices = this.state.devices;
         if (devices === undefined) {
             // still loading
-            const classes = this.props.className;
-            return <Spinner className={classes} />;
+            return <Spinner />;
         }
 
-        devices.sort(this._deviceCompare);
+        devices.sort(this.deviceCompare);
 
         const deleteButton = this.state.deleting ?
             <Spinner w={22} h={22} /> :
-            <AccessibleButton onClick={this._onDeleteClick} kind="danger_sm">
+            <AccessibleButton onClick={this.onDeleteClick} kind="danger_sm">
                 { _t("Delete %(count)s sessions", { count: this.state.selectedDevices.length }) }
             </AccessibleButton>;
 
@@ -227,12 +227,8 @@ export default class DevicesPanel extends React.Component {
                         { this.state.selectedDevices.length > 0 ? deleteButton : null }
                     </div>
                 </div>
-                { devices.map(this._renderDevice) }
+                { devices.map(this.renderDevice) }
             </div>
         );
     }
 }
-
-DevicesPanel.propTypes = {
-    className: PropTypes.string,
-};

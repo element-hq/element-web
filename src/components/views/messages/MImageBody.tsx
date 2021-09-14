@@ -55,6 +55,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     static contextType = MatrixClientContext;
     private unmounted = true;
     private image = createRef<HTMLImageElement>();
+    private timeout?: number;
 
     constructor(props: IBodyProps) {
         super(props);
@@ -128,7 +129,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     private onImageEnter = (e: React.MouseEvent<HTMLImageElement>): void => {
         this.setState({ hover: true });
 
-        if (!this.state.showImage || !this.isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
+        if (!this.state.showImage || !this.isGif() || SettingsStore.getValue("autoplayGifs")) {
             return;
         }
         const imgElement = e.currentTarget;
@@ -138,7 +139,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     private onImageLeave = (e: React.MouseEvent<HTMLImageElement>): void => {
         this.setState({ hover: false });
 
-        if (!this.state.showImage || !this.isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
+        if (!this.state.showImage || !this.isGif() || SettingsStore.getValue("autoplayGifs")) {
             return;
         }
         const imgElement = e.currentTarget;
@@ -146,12 +147,14 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     };
 
     private onImageError = (): void => {
+        this.clearBlurhashTimeout();
         this.setState({
             imgError: true,
         });
     };
 
     private onImageLoad = (): void => {
+        this.clearBlurhashTimeout();
         this.props.onHeightChanged();
 
         let loadedImageDimensions;
@@ -267,6 +270,13 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
     }
 
+    private clearBlurhashTimeout() {
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+            this.timeout = undefined;
+        }
+    }
+
     componentDidMount() {
         this.unmounted = false;
         this.context.on('sync', this.onClientSync);
@@ -281,8 +291,9 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         } // else don't download anything because we don't want to display anything.
 
         // Add a 150ms timer for blurhash to first appear.
-        if (this.media.isEncrypted) {
-            setTimeout(() => {
+        if (this.props.mxEvent.getContent().info?.[BLURHASH_FIELD]) {
+            this.clearBlurhashTimeout();
+            this.timeout = setTimeout(() => {
                 if (!this.state.imgLoaded || !this.state.imgError) {
                     this.setState({
                         placeholder: 'blurhash',
@@ -295,6 +306,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     componentWillUnmount() {
         this.unmounted = true;
         this.context.removeListener('sync', this.onClientSync);
+        this.clearBlurhashTimeout();
     }
 
     protected messageContent(
@@ -387,7 +399,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             showPlaceholder = false; // because we're hiding the image, so don't show the placeholder.
         }
 
-        if (this.isGif() && !SettingsStore.getValue("autoplayGifsAndVideos") && !this.state.hover) {
+        if (this.isGif() && !SettingsStore.getValue("autoplayGifs") && !this.state.hover) {
             gifLabel = <p className="mx_MImageBody_gifLabel">GIF</p>;
         }
 
@@ -487,7 +499,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
         const contentUrl = this.getContentUrl();
         let thumbUrl;
-        if (this.isGif() && SettingsStore.getValue("autoplayGifsAndVideos")) {
+        if (this.isGif() && SettingsStore.getValue("autoplayGifs")) {
             thumbUrl = contentUrl;
         } else {
             thumbUrl = this.getThumbUrl();

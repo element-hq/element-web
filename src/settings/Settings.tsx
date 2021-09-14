@@ -211,6 +211,15 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_thread": {
+        isFeature: true,
+        // Requires a reload as we change an option flag on the `js-sdk`
+        // And the entire sync history needs to be parsed again
+        controller: new ReloadOnChangeController(),
+        displayName: _td("Threaded messaging"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_custom_status": {
         isFeature: true,
         displayName: _td("Custom user status messages"),
@@ -233,7 +242,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "feature_many_integration_managers": {
         isFeature: true,
-        displayName: _td("Multiple integration managers"),
+        displayName: _td("Multiple integration managers (requires manual setup)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -275,12 +284,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Send pseudonymous analytics data'),
         default: false,
         controller: new PseudonymousAnalyticsController(),
-    },
-    "advancedRoomListLogging": {
-        // TODO: Remove flag before launch: https://github.com/vector-im/element-web/issues/14231
-        displayName: _td("Enable advanced debugging for the room list"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: false,
     },
     "doNotDisturb": {
         supportedLevels: [SettingLevel.DEVICE],
@@ -390,9 +393,14 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Always show message timestamps'),
         default: false,
     },
-    "autoplayGifsAndVideos": {
+    "autoplayGifs": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Autoplay GIFs and videos'),
+        displayName: _td('Autoplay GIFs'),
+        default: false,
+    },
+    "autoplayVideo": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Autoplay videos'),
         default: false,
     },
     "enableSyntaxHighlightLanguageDetection": {
@@ -668,7 +676,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "lowBandwidth": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td('Low bandwidth mode'),
+        displayName: _td('Low bandwidth mode (requires compatible homeserver)'),
         default: false,
         controller: new ReloadOnChangeController(),
     },
@@ -750,6 +758,10 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Show chat effects (animations when receiving e.g. confetti)"),
         default: true,
         controller: new ReducedMotionController(),
+    },
+    "Performance.addSendMessageTimingMetadata": {
+        supportedLevels: [SettingLevel.CONFIG],
+        default: false,
     },
     "Widgets.pinned": { // deprecated
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,

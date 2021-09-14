@@ -36,7 +36,7 @@ limitations under the License.
             //
             // Therefore, we just hack in a line and border the thing ourselves
             &::before {
-                border-top: 1px solid $primary-fg-color;
+                border-top: 1px solid $primary-content;
                 opacity: 0.1;
                 content: '';
 
@@ -63,7 +63,7 @@ limitations under the License.
             padding-top: 12px;
             padding-bottom: 12px;
             text-decoration: none;
-            color: $primary-fg-color;
+            color: $primary-content;
             font-size: $font-15px;
             line-height: $font-24px;
 
@@ -119,7 +119,7 @@ limitations under the License.
             mask-position: center;
             mask-size: contain;
             mask-repeat: no-repeat;
-            background: $primary-fg-color;
+            background: $primary-content;
         }
     }
 

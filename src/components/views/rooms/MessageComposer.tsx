@@ -183,7 +183,10 @@ interface IProps {
     resizeNotifier: ResizeNotifier;
     permalinkCreator: RoomPermalinkCreator;
     replyToEvent?: MatrixEvent;
+    replyInThread?: boolean;
+    showReplyPreview?: boolean;
     e2eStatus?: E2EStatus;
+    compact?: boolean;
 }
 
 interface IState {
@@ -200,6 +203,12 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private messageComposerInput: SendMessageComposer;
     private voiceRecordingButton: VoiceRecordComposerTile;
+
+    static defaultProps = {
+        replyInThread: false,
+        showReplyPreview: true,
+        compact: false,
+    };
 
     constructor(props) {
         super(props);
@@ -362,7 +371,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
     render() {
         const controls = [
-            this.state.me ? <ComposerAvatar key="controls_avatar" me={this.state.me} /> : null,
+            this.state.me && !this.props.compact ? <ComposerAvatar key="controls_avatar" me={this.state.me} /> : null,
             this.props.e2eStatus ?
                 <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" /> :
                 null,
@@ -376,6 +385,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                     room={this.props.room}
                     placeholder={this.renderPlaceholderText()}
                     permalinkCreator={this.props.permalinkCreator}
+                    replyInThread={this.props.replyInThread}
                     replyToEvent={this.props.replyToEvent}
                     onChange={this.onChange}
                     disabled={this.state.haveRecording}
@@ -450,11 +460,19 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             />;
         }
 
+        const classes = classNames({
+            "mx_MessageComposer": true,
+            "mx_GroupLayout": true,
+            "mx_MessageComposer--compact": this.props.compact,
+        });
+
         return (
-            <div className="mx_MessageComposer mx_GroupLayout">
+            <div className={classes}>
                 { recordingTooltip }
                 <div className="mx_MessageComposer_wrapper">
-                    <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
+                    { this.props.showReplyPreview && (
+                        <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
+                    ) }
                     <div className="mx_MessageComposer_row">
                         { controls }
                     </div>

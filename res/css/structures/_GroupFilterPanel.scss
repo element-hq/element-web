@@ -92,13 +92,13 @@ $groupFilterPanelWidth: 56px; // only applies in this file, used for calculation
 }
 
 .mx_GroupFilterPanel .mx_TagTile.mx_TagTile_selected_prototype {
-    background-color: $primary-bg-color;
+    background-color: $background;
     border-radius: 6px;
 }
 
 .mx_TagTile_selected_prototype {
     .mx_TagTile_homeIcon::before {
-        background-color: $primary-fg-color; // dark-on-light
+        background-color: $primary-content; // dark-on-light
     }
 }
 
