@@ -101,7 +101,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         this.roomProps = EchoChamber.forRoom(this.props.room);
     }
 
-    private onRoomNameUpdate = (room) => {
+    private onRoomNameUpdate = (room: Room) => {
         this.forceUpdate();
     };
 
@@ -164,7 +164,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         );
         this.notificationState.on(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
         this.roomProps.on(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
-        this.roomProps.on("Room.name", this.onRoomNameUpdate);
+        this.props.room?.on("Room.name", this.onRoomNameUpdate);
         CommunityPrototypeStore.instance.on(
             CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
             this.onCommunityUpdate,
