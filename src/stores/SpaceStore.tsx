@@ -845,10 +845,11 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 break;
 
             case Action.SwitchSpace:
-                if (payload.num === 0) {
+                // 1 is Home, 2-9 are the spaces after Home
+                if (payload.num === 1) {
                     this.setActiveSpace(null);
                 } else if (this.spacePanelSpaces.length >= payload.num) {
-                    this.setActiveSpace(this.spacePanelSpaces[payload.num - 1]);
+                    this.setActiveSpace(this.spacePanelSpaces[payload.num - 2]);
                 }
                 break;
 
