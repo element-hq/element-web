@@ -19,6 +19,7 @@ import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 import SettingsStore from './settings/SettingsStore';
 import { MatrixClientPeg } from "./MatrixClientPeg";
+import { MatrixClient } from "../../matrix-js-sdk";
 
 /* Posthog analytics tracking.
  *
@@ -282,23 +283,28 @@ export class PosthogAnalytics {
         );
     }
 
-    public async identifyUser(): Promise<void> {
+    public async identifyUser(client: MatrixClientPeg, analyticsIdGenerator: () => string): Promise<void> {
         if (this.anonymity == Anonymity.Pseudonymous) {
             // Check the user's account_data for an analytics ID to use. Storing the ID in account_data allows
             // different devices to send the same ID.
-            const client = MatrixClientPeg.get();
-            const accountData = await client.getAccountDataFromServer("im.vector.web.analytics_id");
-            let analyticsID = accountData?.id;
-            if (!analyticsID) {
-                // Couldn't retrieve an analytics ID from user settings, so create one and set it on the server.
-                // Note there's a race condition here - if two devices do these steps at the same time, last write
-                // wins, and the first writer will send tracking with an ID that doesn't match the one on the server
-                // until the next time account data is refreshed and this function is called (most likely on next
-                // page load). This will happen pretty infrequently, so we can tolerate the possibility.
-                analyticsID = PosthogAnalytics.getUUIDv4();
-                await client.setAccountData("im.vector.web.analytics_id", { id: analyticsID });
+            try {
+                const accountData = await client.getAccountDataFromServer("im.vector.web.analytics_id");
+                let analyticsID = accountData?.id;
+                if (!analyticsID) {
+                    // Couldn't retrieve an analytics ID from user settings, so create one and set it on the server.
+                    // Note there's a race condition here - if two devices do these steps at the same time, last write
+                    // wins, and the first writer will send tracking with an ID that doesn't match the one on the server
+                    // until the next time account data is refreshed and this function is called (most likely on next
+                    // page load). This will happen pretty infrequently, so we can tolerate the possibility.
+                    analyticsID = analyticsIdGenerator();
+                    await client.setAccountData("im.vector.web.analytics_id", { id: analyticsID });
+                }
+                this.posthog.identify(analyticsID);
+            } catch (e) {
+                // The above could fail due to network requests, but not essential to starting the application,
+                // so swallow it.
+                console.log("Unable to identify user for tracking" + e.toString());
             }
-            this.posthog.identify(analyticsID);
         }
     }
 
@@ -371,7 +377,7 @@ export class PosthogAnalytics {
         // Identify the user (via hashed user ID) to posthog if anonymity is pseudonmyous
         this.setAnonymity(PosthogAnalytics.getAnonymityFromSettings());
         if (userId && this.getAnonymity() == Anonymity.Pseudonymous) {
-            await this.identifyUser(userId);
+            await this.identifyUser(MatrixClientPeg.get(), PosthogAnalytics.getUUIDv4);
         }
     }
 }

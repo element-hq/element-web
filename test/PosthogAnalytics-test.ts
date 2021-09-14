@@ -24,6 +24,7 @@ import {
 } from '../src/PosthogAnalytics';
 
 import SdkConfig from '../src/SdkConfig';
+import { MatrixClientPeg } from "../src/MatrixClientPeg";
 
 class FakePosthog {
     public capture;
@@ -218,15 +219,28 @@ bd75b3e080945674c0351f75e0db33d1e90986fa07b318ea7edf776f5eef38d4`);
 
         it("Should identify the user to posthog if pseudonymous", async () => {
             analytics.setAnonymity(Anonymity.Pseudonymous);
-            await analytics.identifyUser("foo");
-            expect(fakePosthog.identify.mock.calls[0][0])
-                .toBe("2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae");
+            class FakeClient {
+                getAccountDataFromServer = jest.fn().mockResolvedValue(null);
+                setAccountData = jest.fn().mockResolvedValue({});
+            }
+            await analytics.identifyUser(new FakeClient(), () => "analytics_id" );
+            expect(fakePosthog.identify.mock.calls[0][0]).toBe("analytics_id");
         });
 
         it("Should not identify the user to posthog if anonymous", async () => {
             analytics.setAnonymity(Anonymity.Anonymous);
-            await analytics.identifyUser("foo");
+            await analytics.identifyUser(null);
             expect(fakePosthog.identify.mock.calls.length).toBe(0);
+        });
+
+        it("Should identify using the server's analytics id if present", async () => {
+            analytics.setAnonymity(Anonymity.Pseudonymous);
+            class FakeClient {
+                getAccountDataFromServer = jest.fn().mockResolvedValue({ id: "existing_analytics_id" });
+                setAccountData = jest.fn().mockResolvedValue({});
+            }
+            await analytics.identifyUser(new FakeClient(), () => "new_analytics_id" );
+            expect(fakePosthog.identify.mock.calls[0][0]).toBe("existing_analytics_id");
         });
     });
 });
