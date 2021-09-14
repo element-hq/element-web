@@ -78,6 +78,7 @@ import { CreateEventField, IGroupSummary } from "../views/dialogs/CreateSpaceFro
 import { useAsyncMemo } from "../../hooks/useAsyncMemo";
 import Spinner from "../views/elements/Spinner";
 import GroupAvatar from "../views/avatars/GroupAvatar";
+import { useDispatcher } from "../../hooks/useDispatcher";
 
 interface IProps {
     space: Room;
@@ -191,6 +192,11 @@ interface ISpacePreviewProps {
 const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }: ISpacePreviewProps) => {
     const cli = useContext(MatrixClientContext);
     const myMembership = useMyRoomMembership(space);
+    useDispatcher(defaultDispatcher, payload => {
+        if (payload.action === Action.JoinRoomError && payload.roomId === space.roomId) {
+            setBusy(false); // stop the spinner, join failed
+        }
+    });
 
     const [busy, setBusy] = useState(false);
 

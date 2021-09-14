@@ -7,7 +7,6 @@
     background: $background;
     border-bottom: none;
     border-radius: 8px 8px 0 0;
-    max-height: 35vh;
     overflow: clip;
     display: flex;
     flex-direction: column;
@@ -64,6 +63,7 @@
     margin: 12px;
     height: 100%;
     overflow-y: scroll;
+    max-height: 35vh;
 }
 
 .mx_Autocomplete_Completion_container_truncate {

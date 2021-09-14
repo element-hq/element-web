@@ -98,14 +98,14 @@ limitations under the License.
     transition:
         font-size 0.25s ease-out 0.1s,
         color 0.25s ease-out 0.1s,
-        top 0.25s ease-out 0.1s,
+        transform 0.25s ease-out 0.1s,
         background-color 0.25s ease-out 0.1s;
     color: $primary-content;
     background-color: transparent;
     font-size: $font-14px;
+    transform: translateY(0);
     position: absolute;
     left: 0px;
-    top: 0px;
     margin: 7px 8px;
     padding: 2px;
     pointer-events: none; // Allow clicks to fall through to the input
@@ -124,10 +124,10 @@ limitations under the License.
     transition:
         font-size 0.25s ease-out 0s,
         color 0.25s ease-out 0s,
-        top 0.25s ease-out 0s,
+        transform 0.25s ease-out 0s,
         background-color 0.25s ease-out 0s;
     font-size: $font-10px;
-    top: -13px;
+    transform: translateY(-13px);
     padding: 0 2px;
     background-color: $field-focused-label-bg-color;
     pointer-events: initial;

@@ -670,6 +670,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                             onClick={this.onBadgeClick}
                             tabIndex={tabIndex}
                             aria-label={ariaLabel}
+                            showUnsentTooltip={true}
                         />
                     );
 
