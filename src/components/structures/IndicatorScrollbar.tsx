@@ -29,7 +29,7 @@ interface IProps {
     // with no vertical scroll opportunity.
     verticalScrollsHorizontally?: boolean;
 
-    children: JSX.Element | JSX.Element[];
+    children: React.ReactNode;
     className: string;
 }
 
@@ -65,8 +65,8 @@ export default class IndicatorScrollbar extends React.Component<IProps, IState> 
     };
 
     public componentDidUpdate(prevProps: IProps): void {
-        const prevLen = ("length" in prevProps?.children) ? prevProps.children.length : 0;
-        const curLen = ("length" in this.props?.children) ? this.props.children.length : 0;
+        const prevLen = React.Children.count(prevProps.children);
+        const curLen = React.Children.count(this.props.children);
         // check overflow only if amount of children changes.
         // if we don't guard here, we end up with an infinite
         // render > componentDidUpdate > checkOverflow > setState > render loop
