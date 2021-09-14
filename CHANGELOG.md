@@ -1,3 +1,10 @@
+Changes in [3.29.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.29.1) (2021-09-13)
+===================================================================================================
+
+## 🔒 SECURITY FIXES
+ * Fix a security issue with message key sharing. See https://matrix.org/blog/2021/09/13/vulnerability-disclosure-key-sharing
+   for details.
+
 Changes in [3.29.0](https://github.com/vector-im/element-desktop/releases/tag/v3.29.0) (2021-08-31)
 ===================================================================================================
 
