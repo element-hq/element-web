@@ -45,6 +45,7 @@ const ZOOM_COEFFICIENT = 0.0025;
 // If we have moved only this much we can zoom
 const ZOOM_DISTANCE = 10;
 
+// Height of mx_ImageView_panel
 const PANEL_HEIGHT = 68;
 
 interface IProps extends IDialogProps {
