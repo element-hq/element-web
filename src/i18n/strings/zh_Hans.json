@@ -3609,5 +3609,6 @@
     "Change description": "更改描述",
     "Change main address for the space": "更改空间主地址",
     "Change space name": "更改空间名称",
-    "Change space avatar": "更改空间头像"
+    "Change space avatar": "更改空间头像",
+    "Message didn't send. Click for info.": "消息没有发送。点击查看信息。"
 }
