@@ -140,12 +140,12 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.image.current.removeEventListener("load", this.imageLoaded);
     }
 
-    private imageLoaded = async () => {
+    private imageLoaded = () => {
         // First, we calculate the zoom, so that the image has the same size as
         // the thumbnail
         const { thumbnailInfo } = this.props;
         if (thumbnailInfo?.width) {
-            await this.setState({ zoom: thumbnailInfo.width / this.image.current.naturalWidth });
+            this.setState({ zoom: thumbnailInfo.width / this.image.current.naturalWidth });
         }
 
         // Once the zoom is set, we the image is considered loaded and we can
@@ -153,7 +153,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.imageIsLoaded = true;
         this.animatingLoading = true;
         this.setZoomAndRotation();
-        await this.setState({
+        this.setState({
             translationX: 0,
             translationY: 0,
         });
