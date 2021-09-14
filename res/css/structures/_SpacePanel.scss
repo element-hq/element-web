@@ -139,7 +139,6 @@ $activeBorderColor: $secondary-content;
         &:not(.mx_SpaceButton_narrow) {
             .mx_SpaceButton_selectionWrapper {
                 width: 100%;
-                padding-right: 16px;
                 overflow: hidden;
             }
         }
@@ -151,7 +150,6 @@ $activeBorderColor: $secondary-content;
             display: block;
             text-overflow: ellipsis;
             overflow: hidden;
-            padding-right: 8px;
             font-size: $font-14px;
             line-height: $font-18px;
         }
@@ -225,8 +223,7 @@ $activeBorderColor: $secondary-content;
             margin-top: auto;
             margin-bottom: auto;
             display: none;
-            position: absolute;
-            right: 4px;
+            position: relative;
 
             &::before {
                 top: 2px;
@@ -245,8 +242,6 @@ $activeBorderColor: $secondary-content;
     }
 
     .mx_SpacePanel_badgeContainer {
-        position: absolute;
-
         // Create a flexbox to make aligning dot badges easier
         display: flex;
         align-items: center;
@@ -264,6 +259,7 @@ $activeBorderColor: $secondary-content;
     &.collapsed {
         .mx_SpaceButton {
             .mx_SpacePanel_badgeContainer {
+                position: absolute;
                 right: 0;
                 top: 0;
 
@@ -293,19 +289,12 @@ $activeBorderColor: $secondary-content;
     }
 
     &:not(.collapsed) {
-        .mx_SpacePanel_badgeContainer {
-            position: absolute;
-            right: 4px;
-        }
-
         .mx_SpaceButton:hover,
         .mx_SpaceButton:focus-within,
         .mx_SpaceButton_hasMenuOpen {
             &:not(.mx_SpaceButton_invite) {
                 // Hide the badge container on hover because it'll be a menu button
                 .mx_SpacePanel_badgeContainer {
-                    width: 0;
-                    height: 0;
                     display: none;
                 }
 
