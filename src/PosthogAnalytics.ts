@@ -18,8 +18,7 @@ import posthog, { PostHog } from 'posthog-js';
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 import SettingsStore from './settings/SettingsStore';
-import { MatrixClientPeg } from "./MatrixClientPeg";
-import { MatrixClient } from "../../matrix-js-sdk";
+import { IMatrixClientPeg, MatrixClientPeg } from "./MatrixClientPeg";
 
 /* Posthog analytics tracking.
  *
@@ -278,12 +277,12 @@ export class PosthogAnalytics {
 
     private static getUUIDv4(): string {
         // https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid
-        return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        return ("10000000-1000-4000-8000-100000000000").replace(/[018]/g, c =>
             (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16),
         );
     }
 
-    public async identifyUser(client: MatrixClientPeg, analyticsIdGenerator: () => string): Promise<void> {
+    public async identifyUser(client: IMatrixClientPeg, analyticsIdGenerator: () => string): Promise<void> {
         if (this.anonymity == Anonymity.Pseudonymous) {
             // Check the user's account_data for an analytics ID to use. Storing the ID in account_data allows
             // different devices to send the same ID.
