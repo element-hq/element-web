@@ -136,18 +136,6 @@ describe("PosthogAnalytics", () => {
             expect(fakePosthog.capture.mock.calls[0][1]["foo"]).toEqual("bar");
         });
 
-        it("Should pass trackRoomEvent to posthog", async () => {
-            analytics.setAnonymity(Anonymity.Pseudonymous);
-            const roomId = "42";
-            await analytics.trackRoomEvent<IRoomEvent>("jest_test_event", roomId, {
-                foo: "bar",
-            });
-            expect(fakePosthog.capture.mock.calls[0][0]).toBe("jest_test_event");
-            expect(fakePosthog.capture.mock.calls[0][1]["foo"]).toEqual("bar");
-            expect(fakePosthog.capture.mock.calls[0][1]["hashedRoomId"])
-                .toEqual("73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049");
-        });
-
         it("Should pass trackPseudonymousEvent() to posthog", async () => {
             analytics.setAnonymity(Anonymity.Pseudonymous);
             await analytics.trackPseudonymousEvent<ITestEvent>("jest_test_pseudo_event", {
@@ -171,9 +159,6 @@ describe("PosthogAnalytics", () => {
                 foo: "bar",
             });
             await analytics.trackAnonymousEvent<ITestEvent>("jest_test_event", {
-                foo: "bar",
-            });
-            await analytics.trackRoomEvent<ITestRoomEvent>("room id", "foo", {
                 foo: "bar",
             });
             await analytics.trackPageView(200);

@@ -101,17 +101,13 @@ export async function getRedactedCurrentLocation(
     if (hash == "") {
         hashStr = "";
     } else {
-        let [beforeFirstSlash, screen, ...parts] = hash.split("/");
+        let [beforeFirstSlash, screen] = hash.split("/");
 
         if (!whitelistedScreens.has(screen)) {
             screen = "<redacted_screen_name>";
         }
 
-        for (let i = 0; i < parts.length; i++) {
-            parts[i] = anonymity === Anonymity.Anonymous ? `<redacted>` : await hashHex(parts[i]);
-        }
-
-        hashStr = `${beforeFirstSlash}/${screen}/${parts.join("/")}`;
+        hashStr = `${beforeFirstSlash}/${screen}/<redacted>`;
     }
     return origin + pathname + hashStr;
 }
@@ -133,7 +129,7 @@ export class PosthogAnalytics {
      *
      * To pass an event to Posthog:
      *
-     * 1. Declare a type for the event, extending IAnonymousEvent, IPseudonymousEvent or IRoomEvent.
+     * 1. Declare a type for the event, extending IAnonymousEvent or IPseudonymousEvent.
      * 2. Call the appropriate track*() method. Pseudonymous events will be dropped when anonymity is
      *    Anonymous or Disabled; Anonymous events will be dropped when anonymity is Disabled.
      */
@@ -331,18 +327,6 @@ export class PosthogAnalytics {
     ): Promise<void> {
         if (this.anonymity == Anonymity.Disabled) return;
         await this.capture(eventName, properties);
-    }
-
-    public async trackRoomEvent<E extends IRoomEvent>(
-        eventName: E["eventName"],
-        roomId: string,
-        properties: Omit<E["properties"], "roomId">,
-    ): Promise<void> {
-        const updatedProperties = {
-            ...properties,
-            hashedRoomId: roomId ? await hashHex(roomId) : null,
-        };
-        await this.trackPseudonymousEvent(eventName, updatedProperties);
     }
 
     public async trackPageView(durationMs: number): Promise<void> {
