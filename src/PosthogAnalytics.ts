@@ -29,10 +29,11 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
  * - If [Do Not Track](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack) is
  *   enabled, events are not sent (this detection is built into posthog and turned on via the
  *   `respect_dnt` flag being passed to `posthog.init`).
- * - If the `feature_pseudonymous_analytics_opt_in` labs flag is `true`, track pseudonomously, i.e.
- *   hash all matrix identifiers in tracking events (user IDs, room IDs etc) using SHA-256.
- * - Otherwise, if the existing `analyticsOptIn` flag is `true`, track anonymously, i.e.
- *   redact all matrix identifiers in tracking events.
+ * - If the `feature_pseudonymous_analytics_opt_in` labs flag is `true`, track pseudonomously by maintaining
+ *   a randomised analytics ID in account_data for that user (shared between devices) and sending it to posthog to
+     identify the user.
+ * - Otherwise, if the existing `analyticsOptIn` flag is `true`, track anonymously, i.e. do not identify the user
+     using any identifier that would be consistent across devices.
  * - If both flags are false or not set, events are not sent.
  */
 
@@ -73,12 +74,6 @@ interface IPageView extends IAnonymousEvent {
     };
 }
 
-const hashHex = async (input: string): Promise<string> => {
-    const buf = new TextEncoder().encode(input);
-    const digestBuf = await window.crypto.subtle.digest("sha-256", buf);
-    return [...new Uint8Array(digestBuf)].map((b: number) => b.toString(16).padStart(2, "0")).join("");
-};
-
 const whitelistedScreens = new Set([
     "register", "login", "forgot_password", "soft_logout", "new", "settings", "welcome", "home", "start", "directory",
     "start_sso", "start_cas", "groups", "complete_security", "post_registration", "room", "user", "group",
@@ -91,7 +86,6 @@ export async function getRedactedCurrentLocation(
     anonymity: Anonymity,
 ): Promise<string> {
     // Redact PII from the current location.
-    // If anonymous is true, redact entirely, if false, substitute it with a hash.
     // For known screens, assumes a URL structure of /<screen name>/might/be/pii
     if (origin.startsWith('file://')) {
         pathname = "/<redacted_file_scheme_url>/";
@@ -101,17 +95,13 @@ export async function getRedactedCurrentLocation(
     if (hash == "") {
         hashStr = "";
     } else {
-        let [beforeFirstSlash, screen, ...parts] = hash.split("/");
+        let [beforeFirstSlash, screen] = hash.split("/");
 
         if (!whitelistedScreens.has(screen)) {
             screen = "<redacted_screen_name>";
         }
 
-        for (let i = 0; i < parts.length; i++) {
-            parts[i] = anonymity === Anonymity.Anonymous ? `<redacted>` : await hashHex(parts[i]);
-        }
-
-        hashStr = `${beforeFirstSlash}/${screen}/${parts.join("/")}`;
+        hashStr = `${beforeFirstSlash}/${screen}/<redacted>`;
     }
     return origin + pathname + hashStr;
 }
@@ -125,15 +115,15 @@ export class PosthogAnalytics {
     /* Wrapper for Posthog analytics.
      * 3 modes of anonymity are supported, governed by this.anonymity
      * - Anonymity.Disabled means *no data* is passed to posthog
-     * - Anonymity.Anonymous means all identifers will be redacted before being passed to posthog
-     * - Anonymity.Pseudonymous means all identifiers will be hashed via SHA-256 before being passed
-     *   to Posthog
+     * - Anonymity.Anonymous means no identifier is passed to posthog
+     * - Anonymity.Pseudonymous means an analytics ID stored in account_data and shared between devices
+     *   is passed to posthog.
      *
      * To update anonymity, call updateAnonymityFromSettings() or you can set it directly via setAnonymity().
      *
      * To pass an event to Posthog:
      *
-     * 1. Declare a type for the event, extending IAnonymousEvent, IPseudonymousEvent or IRoomEvent.
+     * 1. Declare a type for the event, extending IAnonymousEvent or IPseudonymousEvent.
      * 2. Call the appropriate track*() method. Pseudonymous events will be dropped when anonymity is
      *    Anonymous or Disabled; Anonymous events will be dropped when anonymity is Disabled.
      */
@@ -331,18 +321,6 @@ export class PosthogAnalytics {
     ): Promise<void> {
         if (this.anonymity == Anonymity.Disabled) return;
         await this.capture(eventName, properties);
-    }
-
-    public async trackRoomEvent<E extends IRoomEvent>(
-        eventName: E["eventName"],
-        roomId: string,
-        properties: Omit<E["properties"], "roomId">,
-    ): Promise<void> {
-        const updatedProperties = {
-            ...properties,
-            hashedRoomId: roomId ? await hashHex(roomId) : null,
-        };
-        await this.trackPseudonymousEvent(eventName, updatedProperties);
     }
 
     public async trackPageView(durationMs: number): Promise<void> {
