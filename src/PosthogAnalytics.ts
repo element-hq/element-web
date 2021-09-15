@@ -19,7 +19,7 @@ import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 import SettingsStore from './settings/SettingsStore';
 import { MatrixClientPeg } from "./MatrixClientPeg";
-import { MatrixClient } from "../../matrix-js-sdk";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 
 /* Posthog analytics tracking.
  *
@@ -143,6 +143,7 @@ export class PosthogAnalytics {
     private enabled = false;
     private static _instance = null;
     private platformSuperProperties = {};
+    private static ANALYTICS_ID_EVENT_TYPE = "im.vector.web.analytics_id";
 
     public static get instance(): PosthogAnalytics {
         if (!this._instance) {
@@ -285,7 +286,7 @@ export class PosthogAnalytics {
             // Check the user's account_data for an analytics ID to use. Storing the ID in account_data allows
             // different devices to send the same ID.
             try {
-                const accountData = await client.getAccountDataFromServer("im.vector.web.analytics_id");
+                const accountData = await client.getAccountDataFromServer(PosthogAnalytics.ANALYTICS_ID_EVENT_TYPE);
                 let analyticsID = accountData?.id;
                 if (!analyticsID) {
                     // Couldn't retrieve an analytics ID from user settings, so create one and set it on the server.
