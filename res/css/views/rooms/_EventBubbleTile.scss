@@ -23,11 +23,11 @@ limitations under the License.
 }
 
 .mx_EventTile[data-layout=bubble] {
-
     position: relative;
     margin-top: var(--gutterSize);
-    margin-left: 50px;
+    margin-left: 49px;
     margin-right: 100px;
+    font-size: $font-14px;
 
     &.mx_EventTile_continuation {
         margin-top: 2px;
@@ -77,10 +77,11 @@ limitations under the License.
         max-width: 70%;
     }
 
-    .mx_SenderProfile {
+    > .mx_SenderProfile {
         position: relative;
         top: -2px;
         left: 2px;
+        font-size: $font-15px;
     }
 
     &[data-self=false] {
@@ -113,8 +114,6 @@ limitations under the License.
 
         .mx_ReplyTile .mx_SenderProfile {
             display: block;
-            top: unset;
-            left: unset;
         }
 
         .mx_ReactionsRow {
@@ -287,6 +286,8 @@ limitations under the License.
     .mx_EventTile_line,
     .mx_EventTile_info {
         min-width: 100%;
+        // Preserve alignment with left edge of text in bubbles
+        margin: 0;
     }
 
     .mx_EventTile_e2eIcon {
@@ -294,9 +295,10 @@ limitations under the License.
     }
 
     .mx_EventTile_line > a {
+        // Align timestamps with those of normal bubble tiles
         right: auto;
-        top: -15px;
-        left: -68px;
+        top: -11px;
+        left: -95px;
     }
 }
 
@@ -326,11 +328,10 @@ limitations under the License.
     }
 
     .mx_EventTile_line {
-        margin: 0 5px;
+        margin: 0;
         > a {
-            left: auto;
-            right: 0;
-            transform: translateX(calc(100% + 5px));
+            // Align timestamps with those of normal bubble tiles
+            left: -76px;
         }
     }
 
@@ -340,7 +341,8 @@ limitations under the License.
 }
 
 .mx_EventListSummary[data-expanded=false][data-layout=bubble] {
-    padding: 0 34px;
+    // Align with left edge of bubble tiles
+    padding: 0 49px;
 }
 
 /* events that do not require bubble layout */

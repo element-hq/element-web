@@ -15,43 +15,48 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-import PropTypes from 'prop-types';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from "../../../languageHandler";
 import MemberAvatar from '../avatars/MemberAvatar';
 import classNames from 'classnames';
 import StatusMessageContextMenu from "../context_menus/StatusMessageContextMenu";
 import SettingsStore from "../../../settings/SettingsStore";
-import { ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
+import { ChevronFace, ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { ResizeMethod } from "matrix-js-sdk/src/@types/partials";
+
+interface IProps {
+    member: RoomMember;
+    width?: number;
+    height?: number;
+    resizeMethod?: ResizeMethod;
+}
+
+interface IState {
+    hasStatus: boolean;
+    menuDisplayed: boolean;
+}
 
 @replaceableComponent("views.avatars.MemberStatusMessageAvatar")
-export default class MemberStatusMessageAvatar extends React.Component {
-    static propTypes = {
-        member: PropTypes.object.isRequired,
-        width: PropTypes.number,
-        height: PropTypes.number,
-        resizeMethod: PropTypes.string,
-    };
-
-    static defaultProps = {
+export default class MemberStatusMessageAvatar extends React.Component<IProps, IState> {
+    public static defaultProps: Partial<IProps> = {
         width: 40,
         height: 40,
         resizeMethod: 'crop',
     };
+    private button = createRef<HTMLDivElement>();
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
             hasStatus: this.hasStatus,
             menuDisplayed: false,
         };
-
-        this._button = createRef();
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         if (this.props.member.userId !== MatrixClientPeg.get().getUserId()) {
             throw new Error("Cannot use MemberStatusMessageAvatar on anyone but the logged in user");
         }
@@ -62,44 +67,44 @@ export default class MemberStatusMessageAvatar extends React.Component {
         if (!user) {
             return;
         }
-        user.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
+        user.on("User._unstable_statusMessage", this.onStatusMessageCommitted);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         const { user } = this.props.member;
         if (!user) {
             return;
         }
         user.removeListener(
             "User._unstable_statusMessage",
-            this._onStatusMessageCommitted,
+            this.onStatusMessageCommitted,
         );
     }
 
-    get hasStatus() {
+    private get hasStatus(): boolean {
         const { user } = this.props.member;
         if (!user) {
             return false;
         }
-        return !!user._unstable_statusMessage;
+        return !!user.unstable_statusMessage;
     }
 
-    _onStatusMessageCommitted = () => {
+    private onStatusMessageCommitted = (): void => {
         // The `User` object has observed a status message change.
         this.setState({
             hasStatus: this.hasStatus,
         });
     };
 
-    openMenu = () => {
+    private openMenu = (): void => {
         this.setState({ menuDisplayed: true });
     };
 
-    closeMenu = () => {
+    private closeMenu = (): void => {
         this.setState({ menuDisplayed: false });
     };
 
-    render() {
+    public render(): JSX.Element {
         const avatar = <MemberAvatar
             member={this.props.member}
             width={this.props.width}
@@ -118,7 +123,7 @@ export default class MemberStatusMessageAvatar extends React.Component {
 
         let contextMenu;
         if (this.state.menuDisplayed) {
-            const elementRect = this._button.current.getBoundingClientRect();
+            const elementRect = this.button.current.getBoundingClientRect();
 
             const chevronWidth = 16; // See .mx_ContextualMenu_chevron_bottom
             const chevronMargin = 1; // Add some spacing away from target
@@ -126,13 +131,13 @@ export default class MemberStatusMessageAvatar extends React.Component {
             contextMenu = (
                 <ContextMenu
                     chevronOffset={(elementRect.width - chevronWidth) / 2}
-                    chevronFace="bottom"
+                    chevronFace={ChevronFace.Bottom}
                     left={elementRect.left + window.pageXOffset}
                     top={elementRect.top + window.pageYOffset - chevronMargin}
                     menuWidth={226}
                     onFinished={this.closeMenu}
                 >
-                    <StatusMessageContextMenu user={this.props.member.user} onFinished={this.closeMenu} />
+                    <StatusMessageContextMenu user={this.props.member.user} />
                 </ContextMenu>
             );
         }
@@ -140,7 +145,7 @@ export default class MemberStatusMessageAvatar extends React.Component {
         return <React.Fragment>
             <ContextMenuButton
                 className={classes}
-                inputRef={this._button}
+                inputRef={this.button}
                 onClick={this.openMenu}
                 isExpanded={this.state.menuDisplayed}
                 label={_t("User Status")}
