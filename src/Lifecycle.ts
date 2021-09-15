@@ -574,11 +574,12 @@ async function doSetLoggedIn(
         await abortLogin();
     }
 
-    PosthogAnalytics.instance.updateAnonymityFromSettings(credentials.userId);
-
     Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl);
 
     MatrixClientPeg.replaceUsingCreds(credentials);
+
+    PosthogAnalytics.instance.updateAnonymityFromSettings(credentials.userId);
+
     const client = MatrixClientPeg.get();
 
     if (credentials.freshLogin && SettingsStore.getValue("feature_dehydration")) {
