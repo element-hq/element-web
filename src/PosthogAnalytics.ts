@@ -74,12 +74,6 @@ interface IPageView extends IAnonymousEvent {
     };
 }
 
-const hashHex = async (input: string): Promise<string> => {
-    const buf = new TextEncoder().encode(input);
-    const digestBuf = await window.crypto.subtle.digest("sha-256", buf);
-    return [...new Uint8Array(digestBuf)].map((b: number) => b.toString(16).padStart(2, "0")).join("");
-};
-
 const whitelistedScreens = new Set([
     "register", "login", "forgot_password", "soft_logout", "new", "settings", "welcome", "home", "start", "directory",
     "start_sso", "start_cas", "groups", "complete_security", "post_registration", "room", "user", "group",
