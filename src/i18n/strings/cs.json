@@ -3606,7 +3606,7 @@
     "<b>It's not recommended to add encryption to public rooms.</b>Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Nedoporučuje se šifrovat veřejné místnosti.</b>Veřejné místnosti může najít a připojit se k nim kdokoli, takže si v nich může číst zprávy kdokoli. Nezískáte tak žádnou z výhod šifrování a nebudete ho moci později vypnout. Šifrování zpráv ve veřejné místnosti zpomalí příjem a odesílání zpráv.",
     "Are you sure you want to add encryption to this public room?": "Opravdu chcete šifrovat tuto veřejnou místnost?",
     "Cross-signing is ready but keys are not backed up.": "Křížové podepisování je připraveno, ale klíče nejsou zálohovány.",
-    "Low bandwidth mode (requires compatible homeserver)": "Režim malé šířky pásma (vyžaduje kompatibilní homeserver)",
+    "Low bandwidth mode (requires compatible homeserver)": "Režim malé šířky pásma (vyžaduje kompatibilní domovský server)",
     "Multiple integration managers (requires manual setup)": "Více správců integrace (vyžaduje ruční nastavení)",
     "Threaded messaging": "Zprávy ve vláknech",
     "Thread": "Vlákno",
@@ -3635,5 +3635,6 @@
     "Change main address for the space": "Změnit hlavní adresu prostoru",
     "Change space name": "Změnit název prostoru",
     "Change space avatar": "Změnit avatar prostoru",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Kdokoli v <spaceName/> může prostor najít a připojit se. Můžete vybrat i další prostory."
+    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Kdokoli v <spaceName/> může prostor najít a připojit se. Můžete vybrat i další prostory.",
+    "Message didn't send. Click for info.": "Zpráva se neodeslala. Klikněte pro informace."
 }
