@@ -3720,5 +3720,6 @@
     "Change main address for the space": "變更空間的主要地址",
     "Change space name": "變更空間名稱",
     "Change space avatar": "變更空間大頭照",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "在 <spaceName/> 中的任何人都可以找到並加入。您也可以選取其他空間。"
+    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "在 <spaceName/> 中的任何人都可以找到並加入。您也可以選取其他空間。",
+    "Message didn't send. Click for info.": "訊息未傳送。點擊以取得更多資訊。"
 }
