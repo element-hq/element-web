@@ -43,7 +43,7 @@ export default class MStickerBody extends MImageBody {
     // Placeholder to show in place of the sticker image if
     // img onLoad hasn't fired yet.
     protected getPlaceholder(width: number, height: number): JSX.Element {
-        if (this.props.mxEvent.getContent().info[BLURHASH_FIELD]) return super.getPlaceholder(width, height);
+        if (this.props.mxEvent.getContent().info?.[BLURHASH_FIELD]) return super.getPlaceholder(width, height);
         return <img src={require("../../../../res/img/icons-show-stickers.svg")} width="75" height="75" />;
     }
 

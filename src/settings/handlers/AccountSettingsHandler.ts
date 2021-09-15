@@ -110,6 +110,21 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             return content ? content['enabled'] : null;
         }
 
+        // Special case for autoplaying videos and GIFs
+        if (["autoplayGifs", "autoplayVideo"].includes(settingName)) {
+            const settings = this.getSettings() || {};
+            const value = settings[settingName];
+            // Fallback to old combined setting
+            if (value === null || value === undefined) {
+                const oldCombinedValue = settings["autoplayGifsAndVideos"];
+                // Write, so that we can remove this in the future
+                this.setValue("autoplayGifs", roomId, oldCombinedValue);
+                this.setValue("autoplayVideo", roomId, oldCombinedValue);
+                return oldCombinedValue;
+            }
+            return value;
+        }
+
         const settings = this.getSettings() || {};
         let preferredValue = settings[settingName];
 

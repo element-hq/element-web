@@ -20,13 +20,16 @@ $gutterSize: 16px;
 $activeBorderTransparentGap: 1px;
 
 $activeBackgroundColor: $roomtile-selected-bg-color;
-$activeBorderColor: $secondary-fg-color;
+$activeBorderColor: $secondary-content;
 
 .mx_SpacePanel {
-    flex: 0 0 auto;
     background-color: $groupFilterPanel-bg-color;
+    flex: 0 0 auto;
     padding: 0;
     margin: 0;
+    position: relative;
+    // Fix for the blurred avatar-background
+    z-index: 1;
 
     // Create another flexbox so the Panel fills the container
     display: flex;
@@ -111,6 +114,7 @@ $activeBorderColor: $secondary-fg-color;
         align-items: center;
         padding: 4px 4px 4px 0;
         width: 100%;
+        cursor: pointer;
 
         &.mx_SpaceButton_active {
             &:not(.mx_SpaceButton_narrow) .mx_SpaceButton_selectionWrapper {
@@ -135,7 +139,6 @@ $activeBorderColor: $secondary-fg-color;
         &:not(.mx_SpaceButton_narrow) {
             .mx_SpaceButton_selectionWrapper {
                 width: 100%;
-                padding-right: 16px;
                 overflow: hidden;
             }
         }
@@ -147,7 +150,6 @@ $activeBorderColor: $secondary-fg-color;
             display: block;
             text-overflow: ellipsis;
             overflow: hidden;
-            padding-right: 8px;
             font-size: $font-14px;
             line-height: $font-18px;
         }
@@ -221,8 +223,7 @@ $activeBorderColor: $secondary-fg-color;
             margin-top: auto;
             margin-bottom: auto;
             display: none;
-            position: absolute;
-            right: 4px;
+            position: relative;
 
             &::before {
                 top: 2px;
@@ -235,14 +236,12 @@ $activeBorderColor: $secondary-fg-color;
                 mask-size: contain;
                 mask-repeat: no-repeat;
                 mask-image: url('$(res)/img/element-icons/context-menu.svg');
-                background: $primary-fg-color;
+                background: $primary-content;
             }
         }
     }
 
     .mx_SpacePanel_badgeContainer {
-        position: absolute;
-
         // Create a flexbox to make aligning dot badges easier
         display: flex;
         align-items: center;
@@ -260,6 +259,7 @@ $activeBorderColor: $secondary-fg-color;
     &.collapsed {
         .mx_SpaceButton {
             .mx_SpacePanel_badgeContainer {
+                position: absolute;
                 right: 0;
                 top: 0;
 
@@ -289,19 +289,12 @@ $activeBorderColor: $secondary-fg-color;
     }
 
     &:not(.collapsed) {
-        .mx_SpacePanel_badgeContainer {
-            position: absolute;
-            right: 4px;
-        }
-
         .mx_SpaceButton:hover,
         .mx_SpaceButton:focus-within,
         .mx_SpaceButton_hasMenuOpen {
             &:not(.mx_SpaceButton_invite) {
                 // Hide the badge container on hover because it'll be a menu button
                 .mx_SpacePanel_badgeContainer {
-                    width: 0;
-                    height: 0;
                     display: none;
                 }
 

@@ -25,7 +25,7 @@ const defaultMapper: Mapper<RoomState> = (roomState: RoomState) => roomState;
 
 // Hook to simplify watching Matrix Room state
 export const useRoomState = <T extends any = RoomState>(
-    room: Room,
+    room?: Room,
     mapper: Mapper<T> = defaultMapper as Mapper<T>,
 ): T => {
     const [value, setValue] = useState<T>(room ? mapper(room.currentState) : undefined);

@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { RefObject, useContext, useRef, useState } from "react";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { Preset, JoinRule } from "matrix-js-sdk/src/@types/partials";
+import { JoinRule, Preset } from "matrix-js-sdk/src/@types/partials";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventSubscription } from "fbemitter";
 
@@ -54,7 +54,7 @@ import {
     showCreateNewSubspace,
     showSpaceSettings,
 } from "../../utils/space";
-import { showRoom, SpaceHierarchy } from "./SpaceRoomDirectory";
+import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
 import MemberAvatar from "../views/avatars/MemberAvatar";
 import SpaceStore from "../../stores/SpaceStore";
 import FacePile from "../views/elements/FacePile";
@@ -78,6 +78,7 @@ import { CreateEventField, IGroupSummary } from "../views/dialogs/CreateSpaceFro
 import { useAsyncMemo } from "../../hooks/useAsyncMemo";
 import Spinner from "../views/elements/Spinner";
 import GroupAvatar from "../views/avatars/GroupAvatar";
+import { useDispatcher } from "../../hooks/useDispatcher";
 
 interface IProps {
     space: Room;
@@ -89,7 +90,7 @@ interface IProps {
 
 interface IState {
     phase: Phase;
-    createdRooms?: boolean; // internal state for the creation wizard
+    firstRoomId?: string; // internal state for the creation wizard
     showRightPanel: boolean;
     myMembership: string;
 }
@@ -191,6 +192,11 @@ interface ISpacePreviewProps {
 const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }: ISpacePreviewProps) => {
     const cli = useContext(MatrixClientContext);
     const myMembership = useMyRoomMembership(space);
+    useDispatcher(defaultDispatcher, payload => {
+        if (payload.action === Action.JoinRoomError && payload.roomId === space.roomId) {
+            setBusy(false); // stop the spinner, join failed
+        }
+    });
 
     const [busy, setBusy] = useState(false);
 
@@ -496,6 +502,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
             onChange={ev => setRoomName(i, ev.target.value)}
             autoFocus={i === 2}
             disabled={busy}
+            autoComplete="off"
         />;
     });
 
@@ -505,11 +512,12 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
         setError("");
         setBusy(true);
         try {
+            const isPublic = space.getJoinRule() === JoinRule.Public;
             const filteredRoomNames = roomNames.map(name => name.trim()).filter(Boolean);
-            await Promise.all(filteredRoomNames.map(name => {
+            const roomIds = await Promise.all(filteredRoomNames.map(name => {
                 return createRoom({
                     createOpts: {
-                        preset: space.getJoinRule() === "public" ? Preset.PublicChat : Preset.PrivateChat,
+                        preset: isPublic ? Preset.PublicChat : Preset.PrivateChat,
                         name,
                     },
                     spinner: false,
@@ -517,9 +525,11 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
                     andView: false,
                     inlineErrors: true,
                     parentSpace: space,
+                    joinRule: !isPublic ? JoinRule.Restricted : undefined,
+                    suggested: true,
                 });
             }));
-            onFinished(filteredRoomNames.length > 0);
+            onFinished(roomIds[0]);
         } catch (e) {
             console.error("Failed to create initial space rooms", e);
             setError(_t("Failed to create initial space rooms"));
@@ -529,7 +539,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
 
     let onClick = (ev) => {
         ev.preventDefault();
-        onFinished(false);
+        onFinished();
     };
     let buttonLabel = _t("Skip for now");
     if (roomNames.some(name => name.trim())) {
@@ -584,7 +594,11 @@ const SpaceAddExistingRooms = ({ space, onFinished }) => {
     </div>;
 };
 
-const SpaceSetupPublicShare = ({ justCreatedOpts, space, onFinished, createdRooms }) => {
+interface ISpaceSetupPublicShareProps extends Pick<IProps & IState, "justCreatedOpts" | "space" | "firstRoomId"> {
+    onFinished(): void;
+}
+
+const SpaceSetupPublicShare = ({ justCreatedOpts, space, onFinished, firstRoomId }: ISpaceSetupPublicShareProps) => {
     return <div className="mx_SpaceRoomView_publicShare">
         <h1>{ _t("Share %(name)s", {
             name: justCreatedOpts?.createOpts?.name || space.name,
@@ -597,7 +611,7 @@ const SpaceSetupPublicShare = ({ justCreatedOpts, space, onFinished, createdRoom
 
         <div className="mx_SpaceRoomView_buttons">
             <AccessibleButton kind="primary" onClick={onFinished}>
-                { createdRooms ? _t("Go to my first room") : _t("Go to my space") }
+                { firstRoomId ? _t("Go to my first room") : _t("Go to my space") }
             </AccessibleButton>
         </div>
     </div>;
@@ -805,6 +819,11 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     };
 
     private onAction = (payload: ActionPayload) => {
+        if (payload.action === "view_room" && payload.room_id === this.props.space.roomId) {
+            this.setState({ phase: Phase.Landing });
+            return;
+        }
+
         if (payload.action !== Action.ViewUser && payload.action !== "view_3pid_invite") return;
 
         if (payload.action === Action.ViewUser && payload.member) {
@@ -835,35 +854,10 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     };
 
     private goToFirstRoom = async () => {
-        // TODO actually go to the first room
-
-        const childRooms = SpaceStore.instance.getChildRooms(this.props.space.roomId);
-        if (childRooms.length) {
-            const room = childRooms[0];
+        if (this.state.firstRoomId) {
             defaultDispatcher.dispatch({
                 action: "view_room",
-                room_id: room.roomId,
-            });
-            return;
-        }
-
-        let suggestedRooms = SpaceStore.instance.suggestedRooms;
-        if (SpaceStore.instance.activeSpace !== this.props.space) {
-            // the space store has the suggested rooms loaded for a different space, fetch the right ones
-            suggestedRooms = (await SpaceStore.instance.fetchSuggestedRooms(this.props.space, 1));
-        }
-
-        if (suggestedRooms.length) {
-            const room = suggestedRooms[0];
-            defaultDispatcher.dispatch({
-                action: "view_room",
-                room_id: room.room_id,
-                room_alias: room.canonical_alias || room.aliases?.[0],
-                via_servers: room.viaServers,
-                oobData: {
-                    avatarUrl: room.avatar_url,
-                    name: room.name || room.canonical_alias || room.aliases?.[0] || _t("Empty room"),
-                },
+                room_id: this.state.firstRoomId,
             });
             return;
         }
@@ -893,14 +887,14 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                         _t("Let's create a room for each of them.") + "\n" +
                         _t("You can add more later too, including already existing ones.")
                     }
-                    onFinished={(createdRooms: boolean) => this.setState({ phase: Phase.PublicShare, createdRooms })}
+                    onFinished={(firstRoomId: string) => this.setState({ phase: Phase.PublicShare, firstRoomId })}
                 />;
             case Phase.PublicShare:
                 return <SpaceSetupPublicShare
                     justCreatedOpts={this.props.justCreatedOpts}
                     space={this.props.space}
                     onFinished={this.goToFirstRoom}
-                    createdRooms={this.state.createdRooms}
+                    firstRoomId={this.state.firstRoomId}
                 />;
 
             case Phase.PrivateScope:
@@ -922,7 +916,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                     title={_t("What projects are you working on?")}
                     description={_t("We'll create rooms for each of them. " +
                         "You can add more later too, including already existing ones.")}
-                    onFinished={(createdRooms: boolean) => this.setState({ phase: Phase.Landing, createdRooms })}
+                    onFinished={(firstRoomId: string) => this.setState({ phase: Phase.Landing, firstRoomId })}
                 />;
             case Phase.PrivateExistingRooms:
                 return <SpaceAddExistingRooms

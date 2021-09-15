@@ -31,6 +31,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { PASSWORD_MIN_SCORE } from '../../views/auth/RegistrationForm';
 
 import { IValidationResult } from "../../views/elements/Validation";
+import InlineSpinner from '../../views/elements/InlineSpinner';
 
 enum Phase {
     // Show the forgot password inputs
@@ -66,13 +67,14 @@ interface IState {
     serverDeadError: string;
 
     passwordFieldValid: boolean;
+    currentHttpRequest?: Promise<any>;
 }
 
 @replaceableComponent("structures.auth.ForgotPassword")
 export default class ForgotPassword extends React.Component<IProps, IState> {
     private reset: PasswordReset;
 
-    state = {
+    state: IState = {
         phase: Phase.Forgot,
         email: "",
         password: "",
@@ -148,8 +150,10 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
             console.error("onVerify called before submitPasswordReset!");
             return;
         }
+        if (this.state.currentHttpRequest) return;
+
         try {
-            await this.reset.checkEmailLinkClicked();
+            await this.handleHttpRequest(this.reset.checkEmailLinkClicked());
             this.setState({ phase: Phase.Done });
         } catch (err) {
             this.showErrorDialog(err.message);
@@ -158,9 +162,10 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
 
     private onSubmitForm = async (ev: React.FormEvent): Promise<void> => {
         ev.preventDefault();
+        if (this.state.currentHttpRequest) return;
 
         // refresh the server errors, just in case the server came back online
-        await this.checkServerLiveliness(this.props.serverConfig);
+        await this.handleHttpRequest(this.checkServerLiveliness(this.props.serverConfig));
 
         await this['password_field'].validate({ allowEmpty: false });
 
@@ -218,6 +223,17 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
     private onPasswordValidate(result: IValidationResult) {
         this.setState({
             passwordFieldValid: result.valid,
+        });
+    }
+
+    private handleHttpRequest<T = unknown>(request: Promise<T>): Promise<T> {
+        this.setState({
+            currentHttpRequest: request,
+        });
+        return request.finally(() => {
+            this.setState({
+                currentHttpRequest: undefined,
+            });
         });
     }
 
@@ -320,6 +336,9 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
                 type="button"
                 onClick={this.onVerify}
                 value={_t('I have verified my email address')} />
+            { this.state.currentHttpRequest && (
+                <div className="mx_Login_spinner"><InlineSpinner w={64} h={64} /></div>)
+            }
         </div>;
     }
 
@@ -357,6 +376,8 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
             case Phase.Done:
                 resetPasswordJsx = this.renderDone();
                 break;
+            default:
+                resetPasswordJsx = <div className="mx_Login_spinner"><InlineSpinner w={64} h={64} /></div>;
         }
 
         return (

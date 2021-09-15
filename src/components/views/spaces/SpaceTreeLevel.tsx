@@ -29,7 +29,6 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import SpaceStore from "../../../stores/SpaceStore";
 import SpaceTreeLevelLayoutStore from "../../../stores/SpaceTreeLevelLayoutStore";
 import NotificationBadge from "../rooms/NotificationBadge";
-import { RovingAccessibleTooltipButton } from "../../../accessibility/roving/RovingAccessibleTooltipButton";
 import { _t } from "../../../languageHandler";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import { toRightOf, useContextMenu } from "../../structures/ContextMenu";
@@ -40,8 +39,11 @@ import { NotificationColor } from "../../../stores/notifications/NotificationCol
 import { getKeyBindingsManager, RoomListAction } from "../../../KeyBindingsManager";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
+import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 
-interface IButtonProps extends Omit<ComponentProps<typeof RovingAccessibleTooltipButton>, "title"> {
+interface IButtonProps extends Omit<ComponentProps<typeof AccessibleTooltipButton>, "title"> {
     space?: Room;
     className?: string;
     selected?: boolean;
@@ -68,7 +70,9 @@ export const SpaceButton: React.FC<IButtonProps> = ({
     ContextMenuComponent,
     ...props
 }) => {
-    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLElement>();
+    const [menuDisplayed, ref, openMenu, closeMenu] = useContextMenu<HTMLElement>();
+    const [onFocus, isActive, handle] = useRovingTabIndex(ref);
+    const tabIndex = isActive ? 0 : -1;
 
     let avatar = <div className="mx_SpaceButton_avatarPlaceholder"><div className="mx_SpaceButton_icon" /></div>;
     if (space) {
@@ -88,6 +92,8 @@ export const SpaceButton: React.FC<IButtonProps> = ({
                 forceCount={false}
                 notification={notificationState}
                 aria-label={ariaLabel}
+                tabIndex={tabIndex}
+                showUnsentTooltip={true}
             />
         </div>;
     }
@@ -102,7 +108,7 @@ export const SpaceButton: React.FC<IButtonProps> = ({
     }
 
     return (
-        <RovingAccessibleTooltipButton
+        <AccessibleTooltipButton
             {...props}
             className={classNames("mx_SpaceButton", className, {
                 mx_SpaceButton_active: selected,
@@ -114,6 +120,8 @@ export const SpaceButton: React.FC<IButtonProps> = ({
             onContextMenu={openMenu}
             forceHide={!isNarrow || menuDisplayed}
             inputRef={handle}
+            tabIndex={tabIndex}
+            onFocus={onFocus}
         >
             { children }
             <div className="mx_SpaceButton_selectionWrapper">
@@ -130,7 +138,7 @@ export const SpaceButton: React.FC<IButtonProps> = ({
 
                 { contextMenu }
             </div>
-        </RovingAccessibleTooltipButton>
+        </AccessibleTooltipButton>
     );
 };
 
@@ -142,6 +150,7 @@ interface IItemProps extends InputHTMLAttributes<HTMLLIElement> {
     onExpand?: Function;
     parents?: Set<string>;
     innerRef?: LegacyRef<HTMLLIElement>;
+    dragHandleProps?: DraggableProvidedDragHandleProps;
 }
 
 interface IItemState {
@@ -252,7 +261,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
 
     render() {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { space, activeSpaces, isNested, isPanelCollapsed, onExpand, parents, innerRef,
+        const { space, activeSpaces, isNested, isPanelCollapsed, onExpand, parents, innerRef, dragHandleProps,
             ...otherProps } = this.props;
 
         const collapsed = this.isCollapsed;
@@ -270,8 +279,10 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             ? StaticNotificationState.forSymbol("!", NotificationColor.Red)
             : SpaceStore.instance.getNotificationState(space.roomId);
 
+        const hasChildren = this.state.childSpaces?.length;
+
         let childItems;
-        if (this.state.childSpaces?.length && !collapsed) {
+        if (hasChildren && !collapsed) {
             childItems = <SpaceTreeLevel
                 spaces={this.state.childSpaces}
                 activeSpaces={activeSpaces}
@@ -280,7 +291,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             />;
         }
 
-        const toggleCollapseButton = this.state.childSpaces?.length ?
+        const toggleCollapseButton = hasChildren ?
             <AccessibleButton
                 className="mx_SpaceButton_toggleCollapse"
                 onClick={this.toggleCollapse}
@@ -288,9 +299,19 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                 aria-label={collapsed ? _t("Expand") : _t("Collapse")}
             /> : null;
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { tabIndex, ...restDragHandleProps } = dragHandleProps || {};
+
         return (
-            <li {...otherProps} className={itemClasses} ref={innerRef} aria-expanded={!collapsed} role="treeitem">
+            <li
+                {...otherProps}
+                className={itemClasses}
+                ref={innerRef}
+                aria-expanded={hasChildren ? !collapsed : undefined}
+                role="treeitem"
+            >
                 <SpaceButton
+                    {...restDragHandleProps}
                     space={space}
                     className={isInvite ? "mx_SpaceButton_invite" : undefined}
                     selected={activeSpaces.includes(space)}

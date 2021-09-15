@@ -36,7 +36,7 @@ limitations under the License.
 }
 
 .mx_WhoIsTypingTile_avatars .mx_BaseAvatar {
-    border: 1px solid $primary-bg-color;
+    border: 1px solid $background;
     border-radius: 40px;
 }
 
@@ -45,7 +45,7 @@ limitations under the License.
     display: inline-block;
     color: #acacac;
     background-color: #ddd;
-    border: 1px solid $primary-bg-color;
+    border: 1px solid $background;
     border-radius: 40px;
     width: 24px;
     height: 24px;

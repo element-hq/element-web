@@ -173,6 +173,8 @@ interface IProps {
     onUnfillRequest?(backwards: boolean, scrollToken: string): void;
 
     getRelationsForEvent?(eventId: string, relationType: string, eventType: string): Relations;
+
+    hideThreadedMessages?: boolean;
 }
 
 interface IState {
@@ -265,6 +267,9 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     componentDidMount() {
         this.calculateRoomMembersCount();
         this.props.room?.on("RoomState.members", this.calculateRoomMembersCount);
+        if (SettingsStore.getValue("feature_thread")) {
+            this.props.room?.getThreads().forEach(thread => thread.fetchReplyChain());
+        }
         this.isMounted = true;
     }
 
@@ -442,6 +447,12 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         // Always show highlighted event
         if (this.props.highlightedEventId === mxEv.getId()) return true;
+
+        if (mxEv.replyInThread
+                && this.props.hideThreadedMessages
+                && SettingsStore.getValue("feature_thread")) {
+            return false;
+        }
 
         return !shouldHideEvent(mxEv, this.context);
     }
@@ -694,9 +705,9 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         let willWantDateSeparator = false;
         let lastInSection = true;
-        if (nextEvent) {
-            willWantDateSeparator = this.wantsDateSeparator(mxEv, nextEvent.getDate() || new Date());
-            lastInSection = willWantDateSeparator || mxEv.getSender() !== nextEvent.getSender();
+        if (nextEventWithTile) {
+            willWantDateSeparator = this.wantsDateSeparator(mxEv, nextEventWithTile.getDate() || new Date());
+            lastInSection = willWantDateSeparator || mxEv.getSender() !== nextEventWithTile.getSender();
         }
 
         // is this a continuation of the previous message?

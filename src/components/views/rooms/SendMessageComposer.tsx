@@ -31,8 +31,8 @@ import {
     textSerialize,
     unescapeMessage,
 } from '../../../editor/serialize';
+import BasicMessageComposer, { REGEX_EMOTICON } from "./BasicMessageComposer";
 import { CommandPartCreator, Part, PartCreator, SerializedPart, Type } from '../../../editor/parts';
-import BasicMessageComposer from "./BasicMessageComposer";
 import ReplyThread from "../elements/ReplyThread";
 import { findEditableEvent } from '../../../utils/EventUtils';
 import SendHistoryManager from "../../../SendHistoryManager";
@@ -54,18 +54,20 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import { ActionPayload } from "../../../dispatcher/payloads";
+import { decorateStartSendingTime, sendRoundTripMetric } from "../../../sendTimePerformanceMetrics";
 
 function addReplyToMessageContent(
     content: IContent,
-    repliedToEvent: MatrixEvent,
+    replyToEvent: MatrixEvent,
+    replyInThread: boolean,
     permalinkCreator: RoomPermalinkCreator,
 ): void {
-    const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
+    const replyContent = ReplyThread.makeReplyMixIn(replyToEvent, replyInThread);
     Object.assign(content, replyContent);
 
     // Part of Replies fallback support - prepend the text we're sending
     // with the text we're replying to
-    const nestedReply = ReplyThread.getNestedReplyText(repliedToEvent, permalinkCreator);
+    const nestedReply = ReplyThread.getNestedReplyText(replyToEvent, permalinkCreator);
     if (nestedReply) {
         if (content.formatted_body) {
             content.formatted_body = nestedReply.html + content.formatted_body;
@@ -77,8 +79,9 @@ function addReplyToMessageContent(
 // exported for tests
 export function createMessageContent(
     model: EditorModel,
-    permalinkCreator: RoomPermalinkCreator,
     replyToEvent: MatrixEvent,
+    replyInThread: boolean,
+    permalinkCreator: RoomPermalinkCreator,
 ): IContent {
     const isEmote = containsEmote(model);
     if (isEmote) {
@@ -101,7 +104,7 @@ export function createMessageContent(
     }
 
     if (replyToEvent) {
-        addReplyToMessageContent(content, replyToEvent, permalinkCreator);
+        addReplyToMessageContent(content, replyToEvent, replyInThread, permalinkCreator);
     }
 
     return content;
@@ -129,6 +132,7 @@ interface IProps {
     room: Room;
     placeholder?: string;
     permalinkCreator: RoomPermalinkCreator;
+    replyInThread?: boolean;
     replyToEvent?: MatrixEvent;
     disabled?: boolean;
     onChange?(model: EditorModel): void;
@@ -343,21 +347,35 @@ export default class SendMessageComposer extends React.Component<IProps> {
     }
 
     public async sendMessage(): Promise<void> {
-        if (this.model.isEmpty) {
+        const model = this.model;
+
+        if (model.isEmpty) {
             return;
+        }
+
+        // Replace emoticon at the end of the message
+        if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
+            const caret = this.editorRef.current?.getCaret();
+            const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+            this.editorRef.current?.replaceEmoticon(position, REGEX_EMOTICON);
         }
 
         const replyToEvent = this.props.replyToEvent;
         let shouldSend = true;
         let content;
 
-        if (!containsEmote(this.model) && this.isSlashCommand()) {
+        if (!containsEmote(model) && this.isSlashCommand()) {
             const [cmd, args, commandText] = this.getSlashCommand();
             if (cmd) {
                 if (cmd.category === CommandCategories.messages) {
                     content = await this.runSlashCommand(cmd, args);
                     if (replyToEvent) {
-                        addReplyToMessageContent(content, replyToEvent, this.props.permalinkCreator);
+                        addReplyToMessageContent(
+                            content,
+                            replyToEvent,
+                            this.props.replyInThread,
+                            this.props.permalinkCreator,
+                        );
                     }
                 } else {
                     this.runSlashCommand(cmd, args);
@@ -391,7 +409,7 @@ export default class SendMessageComposer extends React.Component<IProps> {
             }
         }
 
-        if (isQuickReaction(this.model)) {
+        if (isQuickReaction(model)) {
             shouldSend = false;
             this.sendQuickReaction();
         }
@@ -400,10 +418,19 @@ export default class SendMessageComposer extends React.Component<IProps> {
             const startTime = CountlyAnalytics.getTimestamp();
             const { roomId } = this.props.room;
             if (!content) {
-                content = createMessageContent(this.model, this.props.permalinkCreator, replyToEvent);
+                content = createMessageContent(
+                    model,
+                    replyToEvent,
+                    this.props.replyInThread,
+                    this.props.permalinkCreator,
+                );
             }
             // don't bother sending an empty message
             if (!content.body.trim()) return;
+
+            if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
+                decorateStartSendingTime(content);
+            }
 
             const prom = this.context.sendMessage(roomId, content);
             if (replyToEvent) {
@@ -420,12 +447,17 @@ export default class SendMessageComposer extends React.Component<IProps> {
                     dis.dispatch({ action: `effects.${effect.command}` });
                 }
             });
+            if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
+                prom.then(resp => {
+                    sendRoundTripMetric(this.context, roomId, resp.event_id);
+                });
+            }
             CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, !!replyToEvent, content);
         }
 
-        this.sendHistoryManager.save(this.model, replyToEvent);
+        this.sendHistoryManager.save(model, replyToEvent);
         // clear composer
-        this.model.reset([]);
+        model.reset([]);
         this.editorRef.current?.clearUndoHistory();
         this.editorRef.current?.focus();
         this.clearStoredEditorState();

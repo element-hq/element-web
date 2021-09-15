@@ -218,6 +218,7 @@ export default class AppTile extends React.Component {
 
         // Delete the widget from the persisted store for good measure.
         PersistedElement.destroyElement(this._persistKey);
+        ActiveWidgetStore.destroyPersistentWidget(this.props.app.id);
 
         if (this._sgWidget) this._sgWidget.stop({ forceDestroy: true });
     }
@@ -307,7 +308,6 @@ export default class AppTile extends React.Component {
                 if (this.iframe) {
                     // Reload iframe
                     this.iframe.src = this._sgWidget.embedUrl;
-                    this.setState({});
                 }
             });
         }
@@ -333,7 +333,7 @@ export default class AppTile extends React.Component {
         // this would only be for content hosted on the same origin as the element client: anything
         // hosted on the same origin as the client will get the same access as if you clicked
         // a link to it.
-        const sandboxFlags = "allow-forms allow-popups allow-popups-to-escape-sandbox "+
+        const sandboxFlags = "allow-forms allow-popups allow-popups-to-escape-sandbox " +
             "allow-same-origin allow-scripts allow-presentation";
 
         // Additional iframe feature pemissions
@@ -443,25 +443,25 @@ export default class AppTile extends React.Component {
         return <React.Fragment>
             <div className={appTileClasses} id={this.props.app.id}>
                 { this.props.showMenubar &&
-                <div className="mx_AppTileMenuBar">
-                    <span className="mx_AppTileMenuBarTitle" style={{ pointerEvents: (this.props.handleMinimisePointerEvents ? 'all' : false) }}>
-                        { this.props.showTitle && this._getTileTitle() }
-                    </span>
-                    <span className="mx_AppTileMenuBarWidgets">
-                        { this.props.showPopout && <AccessibleButton
-                            className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_popout"
-                            title={_t('Popout widget')}
-                            onClick={this._onPopoutWidgetClick}
-                        /> }
-                        <ContextMenuButton
-                            className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_menu"
-                            label={_t("Options")}
-                            isExpanded={this.state.menuDisplayed}
-                            inputRef={this._contextMenuButton}
-                            onClick={this._onContextMenuClick}
-                        />
-                    </span>
-                </div> }
+                    <div className="mx_AppTileMenuBar">
+                        <span className="mx_AppTileMenuBarTitle" style={{ pointerEvents: (this.props.handleMinimisePointerEvents ? 'all' : false) }}>
+                            { this.props.showTitle && this._getTileTitle() }
+                        </span>
+                        <span className="mx_AppTileMenuBarWidgets">
+                            { this.props.showPopout && <AccessibleButton
+                                className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_popout"
+                                title={_t('Popout widget')}
+                                onClick={this._onPopoutWidgetClick}
+                            /> }
+                            <ContextMenuButton
+                                className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_menu"
+                                label={_t("Options")}
+                                isExpanded={this.state.menuDisplayed}
+                                inputRef={this._contextMenuButton}
+                                onClick={this._onContextMenuClick}
+                            />
+                        </span>
+                    </div> }
                 { appTileBody }
             </div>
 

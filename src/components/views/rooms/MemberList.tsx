@@ -45,6 +45,8 @@ import BaseAvatar from '../avatars/BaseAvatar';
 import { throttle } from 'lodash';
 import SpaceStore from "../../../stores/SpaceStore";
 
+const getSearchQueryLSKey = (roomId: string) => `mx_MemberList_searchQuarry_${roomId}`;
+
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
 const SHOW_MORE_INCREMENT = 100;
@@ -171,20 +173,27 @@ export default class MemberList extends React.Component<IProps, IState> {
     }
 
     private getMembersState(members: Array<RoomMember>): IState {
+        let searchQuery;
+        try {
+            searchQuery = window.localStorage.getItem(getSearchQueryLSKey(this.props.roomId));
+        } catch (error) {
+            console.warn("Failed to get last the MemberList search query", error);
+        }
+
         // set the state after determining showPresence to make sure it's
         // taken into account while rendering
         return {
             loading: false,
             members: members,
-            filteredJoinedMembers: this.filterMembers(members, 'join'),
-            filteredInvitedMembers: this.filterMembers(members, 'invite'),
+            filteredJoinedMembers: this.filterMembers(members, 'join', searchQuery),
+            filteredInvitedMembers: this.filterMembers(members, 'invite', searchQuery),
             canInvite: this.canInvite,
 
             // ideally we'd size this to the page height, but
             // in practice I find that a little constraining
             truncateAtJoined: INITIAL_LOAD_NUM_MEMBERS,
             truncateAtInvited: INITIAL_LOAD_NUM_INVITED,
-            searchQuery: "",
+            searchQuery: searchQuery ?? "",
         };
     }
 
@@ -414,6 +423,12 @@ export default class MemberList extends React.Component<IProps, IState> {
     };
 
     private onSearchQueryChanged = (searchQuery: string): void => {
+        try {
+            window.localStorage.setItem(getSearchQueryLSKey(this.props.roomId), searchQuery);
+        } catch (error) {
+            console.warn("Failed to set the last MemberList search query", error);
+        }
+
         this.setState({
             searchQuery,
             filteredJoinedMembers: this.filterMembers(this.state.members, 'join', searchQuery),
@@ -554,7 +569,9 @@ export default class MemberList extends React.Component<IProps, IState> {
             <SearchBox
                 className="mx_MemberList_query mx_textinput_icon mx_textinput_search"
                 placeholder={_t('Filter room members')}
-                onSearch={this.onSearchQueryChanged} />
+                onSearch={this.onSearchQueryChanged}
+                initialValue={this.state.searchQuery}
+            />
         );
 
         let previousPhase = RightPanelPhases.RoomSummary;
