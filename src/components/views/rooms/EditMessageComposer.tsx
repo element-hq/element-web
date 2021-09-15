@@ -25,7 +25,7 @@ import { getCaretOffsetAndText } from '../../../editor/dom';
 import { htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand } from '../../../editor/serialize';
 import { findEditableEvent } from '../../../utils/EventUtils';
 import { parseEvent } from '../../../editor/deserialize';
-import { CommandPartCreator, Part, PartCreator } from '../../../editor/parts';
+import { CommandPartCreator, Part, PartCreator, Type } from '../../../editor/parts';
 import EditorStateTransfer from '../../../utils/EditorStateTransfer';
 import BasicMessageComposer from "./BasicMessageComposer";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -42,11 +42,6 @@ import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import AccessibleButton from '../elements/AccessibleButton';
-
-function eventIsReply(mxEvent: MatrixEvent): boolean {
-    const relatesTo = mxEvent.getContent()["m.relates_to"];
-    return !!(relatesTo && relatesTo["m.in_reply_to"]);
-}
 
 function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
     const html = mxEvent.getContent().formatted_body;
@@ -72,7 +67,7 @@ function createEditContent(model: EditorModel, editedEvent: MatrixEvent): IConte
     if (isEmote) {
         model = stripEmoteCommand(model);
     }
-    const isReply = eventIsReply(editedEvent);
+    const isReply = !!editedEvent.replyEventId;
     let plainPrefix = "";
     let htmlPrefix = "";
 
@@ -181,7 +176,7 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
                 } else {
                     this.clearStoredEditorState();
                     dis.dispatch({ action: 'edit_event', event: null });
-                    dis.fire(Action.FocusComposer);
+                    dis.fire(Action.FocusSendMessageComposer);
                 }
                 event.preventDefault();
                 break;
@@ -200,7 +195,7 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
     private cancelEdit = (): void => {
         this.clearStoredEditorState();
         dis.dispatch({ action: "edit_event", event: null });
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
     };
 
     private get shouldSaveStoredEditorState(): boolean {
@@ -242,12 +237,12 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
         const parts = this.model.parts;
         const firstPart = parts[0];
         if (firstPart) {
-            if (firstPart.type === "command" && firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")) {
+            if (firstPart.type === Type.Command && firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")) {
                 return true;
             }
 
             if (firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")
-                && (firstPart.type === "plain" || firstPart.type === "pill-candidate")) {
+                && (firstPart.type === Type.Plain || firstPart.type === Type.PillCandidate)) {
                 return true;
             }
         }
@@ -268,7 +263,7 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
     private getSlashCommand(): [Command, string, string] {
         const commandText = this.model.parts.reduce((text, part) => {
             // use mxid to textify user pills in a command
-            if (part.type === "user-pill") {
+            if (part.type === Type.UserPill) {
                 return text + part.resourceId;
             }
             return text + part.text;
@@ -375,7 +370,7 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
 
         // close the event editing and focus composer
         dis.dispatch({ action: "edit_event", event: null });
-        dis.fire(Action.FocusComposer);
+        dis.fire(Action.FocusSendMessageComposer);
     };
 
     private cancelPreviousPendingEdit(): void {
@@ -452,6 +447,8 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
             } else if (payload.text) {
                 this.editorRef.current?.insertPlaintext(payload.text);
             }
+        } else if (payload.action === Action.FocusEditMessageComposer && this.editorRef.current) {
+            this.editorRef.current.focus();
         }
     };
 

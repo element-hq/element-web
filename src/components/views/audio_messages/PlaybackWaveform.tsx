@@ -18,7 +18,7 @@ import React from "react";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { arraySeed, arrayTrimFill } from "../../../utils/arrays";
 import Waveform from "./Waveform";
-import { Playback, PLAYBACK_WAVEFORM_SAMPLES } from "../../../voice/Playback";
+import { Playback, PLAYBACK_WAVEFORM_SAMPLES } from "../../../audio/Playback";
 import { percentageOf } from "../../../utils/numbers";
 
 interface IProps {

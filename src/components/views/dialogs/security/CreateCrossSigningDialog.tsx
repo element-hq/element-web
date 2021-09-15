@@ -175,7 +175,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
         let content;
         if (this.state.error) {
             content = <div>
-                <p>{_t("Unable to set up keys")}</p>
+                <p>{ _t("Unable to set up keys") }</p>
                 <div className="mx_Dialog_buttons">
                     <DialogButtons primaryButton={_t('Retry')}
                         onPrimaryButtonClick={this.bootstrapCrossSigning}
@@ -197,7 +197,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
                 fixedWidth={false}
             >
                 <div>
-                    {content}
+                    { content }
                 </div>
             </BaseDialog>
         );

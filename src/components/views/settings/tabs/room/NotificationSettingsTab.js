@@ -142,36 +142,36 @@ export default class NotificationsSettingsTab extends React.Component {
         if (this.state.uploadedFile) {
             currentUploadedFile = (
                 <div>
-                    <span>{_t("Uploaded sound")}: <code>{this.state.uploadedFile.name}</code></span>
+                    <span>{ _t("Uploaded sound") }: <code>{ this.state.uploadedFile.name }</code></span>
                 </div>
             );
         }
 
         return (
             <div className="mx_SettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Notifications")}</div>
+                <div className="mx_SettingsTab_heading">{ _t("Notifications") }</div>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    <span className='mx_SettingsTab_subheading'>{_t("Sounds")}</span>
+                    <span className='mx_SettingsTab_subheading'>{ _t("Sounds") }</span>
                     <div>
-                        <span>{_t("Notification sound")}: <code>{this.state.currentSound}</code></span><br />
+                        <span>{ _t("Notification sound") }: <code>{ this.state.currentSound }</code></span><br />
                         <AccessibleButton className="mx_NotificationSound_resetSound" disabled={this.state.currentSound == "default"} onClick={this._clearSound.bind(this)} kind="primary">
-                            {_t("Reset")}
+                            { _t("Reset") }
                         </AccessibleButton>
                     </div>
                     <div>
-                        <h3>{_t("Set a new custom sound")}</h3>
+                        <h3>{ _t("Set a new custom sound") }</h3>
                         <form autoComplete="off" noValidate={true}>
                             <input ref={this._soundUpload} className="mx_NotificationSound_soundUpload" type="file" onChange={this._onSoundUploadChanged.bind(this)} accept="audio/*" />
                         </form>
 
-                        {currentUploadedFile}
+                        { currentUploadedFile }
 
                         <AccessibleButton className="mx_NotificationSound_browse" onClick={this._triggerUploader.bind(this)} kind="primary">
-                            {_t("Browse")}
+                            { _t("Browse") }
                         </AccessibleButton>
 
                         <AccessibleButton className="mx_NotificationSound_save" disabled={this.state.uploadedFile == null} onClick={this._onClickSaveSound.bind(this)} kind="primary">
-                            {_t("Save")}
+                            { _t("Save") }
                         </AccessibleButton>
                         <br />
                     </div>

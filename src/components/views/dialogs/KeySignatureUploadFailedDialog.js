@@ -20,10 +20,10 @@ import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 
 export default function KeySignatureUploadFailedDialog({
-        failures,
-        source,
-        continuation,
-        onFinished,
+    failures,
+    source,
+    continuation,
+    onFinished,
 }) {
     const RETRIES = 2;
     const BaseDialog = sdk.getComponent('dialogs.BaseDialog');
@@ -69,10 +69,10 @@ export default function KeySignatureUploadFailedDialog({
         const brand = SdkConfig.get().brand;
 
         body = (<div>
-            <p>{_t("%(brand)s encountered an error during upload of:", { brand })}</p>
-            <p>{reason}</p>
-            {retrying && <Spinner />}
-            <pre>{JSON.stringify(failures, null, 2)}</pre>
+            <p>{ _t("%(brand)s encountered an error during upload of:", { brand }) }</p>
+            <p>{ reason }</p>
+            { retrying && <Spinner /> }
+            <pre>{ JSON.stringify(failures, null, 2) }</pre>
             <DialogButtons
                 primaryButton='Retry'
                 hasCancel={true}
@@ -83,11 +83,11 @@ export default function KeySignatureUploadFailedDialog({
         </div>);
     } else {
         body = (<div>
-            {success ?
-                <span>{_t("Upload completed")}</span> :
+            { success ?
+                <span>{ _t("Upload completed") }</span> :
                 cancelled ?
-                    <span>{_t("Cancelled signature upload")}</span> :
-                    <span>{_t("Unable to upload")}</span>}
+                    <span>{ _t("Cancelled signature upload") }</span> :
+                    <span>{ _t("Unable to upload") }</span> }
             <DialogButtons
                 primaryButton={_t("OK")}
                 hasCancel={false}
@@ -104,7 +104,7 @@ export default function KeySignatureUploadFailedDialog({
             fixedWidth={false}
             onFinished={() => {}}
         >
-            {body}
+            { body }
         </BaseDialog>
     );
 }

@@ -386,7 +386,7 @@ export default class WidgetUtils {
         });
     }
 
-    static removeIntegrationManagerWidgets(): Promise<void> {
+    static async removeIntegrationManagerWidgets(): Promise<void> {
         const client = MatrixClientPeg.get();
         if (!client) {
             throw new Error('User not logged in');
@@ -399,7 +399,7 @@ export default class WidgetUtils {
                 delete userWidgets[key];
             }
         });
-        return client.setAccountData('m.widgets', userWidgets);
+        await client.setAccountData('m.widgets', userWidgets);
     }
 
     static addIntegrationManagerWidget(name: string, uiUrl: string, apiUrl: string): Promise<void> {
@@ -407,7 +407,7 @@ export default class WidgetUtils {
             "integration_manager_" + (new Date().getTime()),
             WidgetType.INTEGRATION_MANAGER,
             uiUrl,
-            "Integration Manager: " + name,
+            "Integration manager: " + name,
             { "api_url": apiUrl },
         );
     }
@@ -416,7 +416,7 @@ export default class WidgetUtils {
      * Remove all stickerpicker widgets (stickerpickers are user widgets by nature)
      * @return {Promise} Resolves on account data updated
      */
-    static removeStickerpickerWidgets(): Promise<void> {
+    static async removeStickerpickerWidgets(): Promise<void> {
         const client = MatrixClientPeg.get();
         if (!client) {
             throw new Error('User not logged in');
@@ -429,7 +429,7 @@ export default class WidgetUtils {
                 delete userWidgets[key];
             }
         });
-        return client.setAccountData('m.widgets', userWidgets);
+        await client.setAccountData('m.widgets', userWidgets);
     }
 
     static makeAppConfig(

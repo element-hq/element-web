@@ -18,10 +18,11 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { User } from "matrix-js-sdk/src/models/user";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { ResizeMethod } from "matrix-js-sdk/src/@types/partials";
+import { split } from "lodash";
 
 import DMRoomMap from './utils/DMRoomMap';
 import { mediaFromMxc } from "./customisations/Media";
-import SettingsStore from "./settings/SettingsStore";
+import SpaceStore from "./stores/SpaceStore";
 
 // Not to be used for BaseAvatar urls as that has similar default avatar fallback already
 export function avatarUrlForMember(
@@ -122,27 +123,13 @@ export function getInitialLetter(name: string): string {
         return undefined;
     }
 
-    let idx = 0;
     const initial = name[0];
     if ((initial === '@' || initial === '#' || initial === '+') && name[1]) {
-        idx++;
+        name = name.substring(1);
     }
 
-    // string.codePointAt(0) would do this, but that isn't supported by
-    // some browsers (notably PhantomJS).
-    let chars = 1;
-    const first = name.charCodeAt(idx);
-
-    // check if it’s the start of a surrogate pair
-    if (first >= 0xD800 && first <= 0xDBFF && name[idx+1]) {
-        const second = name.charCodeAt(idx+1);
-        if (second >= 0xDC00 && second <= 0xDFFF) {
-            chars++;
-        }
-    }
-
-    const firstChar = name.substring(idx, idx+chars);
-    return firstChar.toUpperCase();
+    // rely on the grapheme cluster splitter in lodash so that we don't break apart compound emojis
+    return split(name, "", 1)[0].toUpperCase();
 }
 
 export function avatarUrlForRoom(room: Room, width: number, height: number, resizeMethod?: ResizeMethod) {
@@ -153,7 +140,7 @@ export function avatarUrlForRoom(room: Room, width: number, height: number, resi
     }
 
     // space rooms cannot be DMs so skip the rest
-    if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) return null;
+    if (SpaceStore.spacesEnabled && room.isSpaceRoom()) return null;
 
     let otherMember = null;
     const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);

@@ -63,23 +63,23 @@ export default class ViewSource extends React.Component {
                 <>
                     <details open className="mx_ViewSource_details">
                         <summary>
-                            <span className="mx_ViewSource_heading">{_t("Decrypted event source")}</span>
+                            <span className="mx_ViewSource_heading">{ _t("Decrypted event source") }</span>
                         </summary>
-                        <SyntaxHighlight className="json">{JSON.stringify(decryptedEventSource, null, 2)}</SyntaxHighlight>
+                        <SyntaxHighlight className="json">{ JSON.stringify(decryptedEventSource, null, 2) }</SyntaxHighlight>
                     </details>
                     <details className="mx_ViewSource_details">
                         <summary>
-                            <span className="mx_ViewSource_heading">{_t("Original event source")}</span>
+                            <span className="mx_ViewSource_heading">{ _t("Original event source") }</span>
                         </summary>
-                        <SyntaxHighlight className="json">{JSON.stringify(originalEventSource, null, 2)}</SyntaxHighlight>
+                        <SyntaxHighlight className="json">{ JSON.stringify(originalEventSource, null, 2) }</SyntaxHighlight>
                     </details>
                 </>
             );
         } else {
             return (
                 <>
-                    <div className="mx_ViewSource_heading">{_t("Original event source")}</div>
-                    <SyntaxHighlight className="json">{JSON.stringify(originalEventSource, null, 2)}</SyntaxHighlight>
+                    <div className="mx_ViewSource_heading">{ _t("Original event source") }</div>
+                    <SyntaxHighlight className="json">{ JSON.stringify(originalEventSource, null, 2) }</SyntaxHighlight>
                 </>
             );
         }
@@ -110,7 +110,7 @@ export default class ViewSource extends React.Component {
         if (isStateEvent) {
             return (
                 <MatrixClientContext.Consumer>
-                    {(cli) => (
+                    { (cli) => (
                         <SendCustomEvent
                             room={cli.getRoom(roomId)}
                             forceStateEvent={true}
@@ -121,7 +121,7 @@ export default class ViewSource extends React.Component {
                                 stateKey: mxEvent.getStateKey(),
                             }}
                         />
-                    )}
+                    ) }
                 </MatrixClientContext.Consumer>
             );
         } else {
@@ -142,7 +142,7 @@ export default class ViewSource extends React.Component {
             };
             return (
                 <MatrixClientContext.Consumer>
-                    {(cli) => (
+                    { (cli) => (
                         <SendCustomEvent
                             room={cli.getRoom(roomId)}
                             forceStateEvent={false}
@@ -153,7 +153,7 @@ export default class ViewSource extends React.Component {
                                 evContent: JSON.stringify(newContent, null, "\t"),
                             }}
                         />
-                    )}
+                    ) }
                 </MatrixClientContext.Consumer>
             );
         }
@@ -176,16 +176,16 @@ export default class ViewSource extends React.Component {
         return (
             <BaseDialog className="mx_ViewSource" onFinished={this.props.onFinished} title={_t("View Source")}>
                 <div>
-                    <div>Room ID: {roomId}</div>
-                    <div>Event ID: {eventId}</div>
+                    <div>Room ID: { roomId }</div>
+                    <div>Event ID: { eventId }</div>
                     <div className="mx_ViewSource_separator" />
-                    {isEditing ? this.editSourceContent() : this.viewSourceContent()}
+                    { isEditing ? this.editSourceContent() : this.viewSourceContent() }
                 </div>
-                {!isEditing && canEdit && (
+                { !isEditing && canEdit && (
                     <div className="mx_Dialog_buttons">
-                        <button onClick={() => this.onEdit()}>{_t("Edit")}</button>
+                        <button onClick={() => this.onEdit()}>{ _t("Edit") }</button>
                     </div>
-                )}
+                ) }
             </BaseDialog>
         );
     }

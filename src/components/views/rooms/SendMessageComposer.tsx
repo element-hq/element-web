@@ -31,8 +31,8 @@ import {
     textSerialize,
     unescapeMessage,
 } from '../../../editor/serialize';
-import { CommandPartCreator, Part, PartCreator, SerializedPart } from '../../../editor/parts';
-import BasicMessageComposer from "./BasicMessageComposer";
+import BasicMessageComposer, { REGEX_EMOTICON } from "./BasicMessageComposer";
+import { CommandPartCreator, Part, PartCreator, SerializedPart, Type } from '../../../editor/parts';
 import ReplyThread from "../elements/ReplyThread";
 import { findEditableEvent } from '../../../utils/EventUtils';
 import SendHistoryManager from "../../../SendHistoryManager";
@@ -54,18 +54,20 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import { ActionPayload } from "../../../dispatcher/payloads";
+import { decorateStartSendingTime, sendRoundTripMetric } from "../../../sendTimePerformanceMetrics";
 
 function addReplyToMessageContent(
     content: IContent,
-    repliedToEvent: MatrixEvent,
+    replyToEvent: MatrixEvent,
+    replyInThread: boolean,
     permalinkCreator: RoomPermalinkCreator,
 ): void {
-    const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
+    const replyContent = ReplyThread.makeReplyMixIn(replyToEvent, replyInThread);
     Object.assign(content, replyContent);
 
     // Part of Replies fallback support - prepend the text we're sending
     // with the text we're replying to
-    const nestedReply = ReplyThread.getNestedReplyText(repliedToEvent, permalinkCreator);
+    const nestedReply = ReplyThread.getNestedReplyText(replyToEvent, permalinkCreator);
     if (nestedReply) {
         if (content.formatted_body) {
             content.formatted_body = nestedReply.html + content.formatted_body;
@@ -77,8 +79,9 @@ function addReplyToMessageContent(
 // exported for tests
 export function createMessageContent(
     model: EditorModel,
-    permalinkCreator: RoomPermalinkCreator,
     replyToEvent: MatrixEvent,
+    replyInThread: boolean,
+    permalinkCreator: RoomPermalinkCreator,
 ): IContent {
     const isEmote = containsEmote(model);
     if (isEmote) {
@@ -101,7 +104,7 @@ export function createMessageContent(
     }
 
     if (replyToEvent) {
-        addReplyToMessageContent(content, replyToEvent, permalinkCreator);
+        addReplyToMessageContent(content, replyToEvent, replyInThread, permalinkCreator);
     }
 
     return content;
@@ -129,6 +132,7 @@ interface IProps {
     room: Room;
     placeholder?: string;
     permalinkCreator: RoomPermalinkCreator;
+    replyInThread?: boolean;
     replyToEvent?: MatrixEvent;
     disabled?: boolean;
     onChange?(model: EditorModel): void;
@@ -240,14 +244,14 @@ export default class SendMessageComposer extends React.Component<IProps> {
         const parts = this.model.parts;
         const firstPart = parts[0];
         if (firstPart) {
-            if (firstPart.type === "command" && firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")) {
+            if (firstPart.type === Type.Command && firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")) {
                 return true;
             }
             // be extra resilient when somehow the AutocompleteWrapperModel or
             // CommandPartCreator fails to insert a command part, so we don't send
             // a command as a message
             if (firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")
-                && (firstPart.type === "plain" || firstPart.type === "pill-candidate")) {
+                && (firstPart.type === Type.Plain || firstPart.type === Type.PillCandidate)) {
                 return true;
             }
         }
@@ -343,21 +347,35 @@ export default class SendMessageComposer extends React.Component<IProps> {
     }
 
     public async sendMessage(): Promise<void> {
-        if (this.model.isEmpty) {
+        const model = this.model;
+
+        if (model.isEmpty) {
             return;
+        }
+
+        // Replace emoticon at the end of the message
+        if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
+            const caret = this.editorRef.current?.getCaret();
+            const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+            this.editorRef.current?.replaceEmoticon(position, REGEX_EMOTICON);
         }
 
         const replyToEvent = this.props.replyToEvent;
         let shouldSend = true;
         let content;
 
-        if (!containsEmote(this.model) && this.isSlashCommand()) {
+        if (!containsEmote(model) && this.isSlashCommand()) {
             const [cmd, args, commandText] = this.getSlashCommand();
             if (cmd) {
                 if (cmd.category === CommandCategories.messages) {
                     content = await this.runSlashCommand(cmd, args);
                     if (replyToEvent) {
-                        addReplyToMessageContent(content, replyToEvent, this.props.permalinkCreator);
+                        addReplyToMessageContent(
+                            content,
+                            replyToEvent,
+                            this.props.replyInThread,
+                            this.props.permalinkCreator,
+                        );
                     }
                 } else {
                     this.runSlashCommand(cmd, args);
@@ -391,7 +409,7 @@ export default class SendMessageComposer extends React.Component<IProps> {
             }
         }
 
-        if (isQuickReaction(this.model)) {
+        if (isQuickReaction(model)) {
             shouldSend = false;
             this.sendQuickReaction();
         }
@@ -400,10 +418,19 @@ export default class SendMessageComposer extends React.Component<IProps> {
             const startTime = CountlyAnalytics.getTimestamp();
             const { roomId } = this.props.room;
             if (!content) {
-                content = createMessageContent(this.model, this.props.permalinkCreator, replyToEvent);
+                content = createMessageContent(
+                    model,
+                    replyToEvent,
+                    this.props.replyInThread,
+                    this.props.permalinkCreator,
+                );
             }
             // don't bother sending an empty message
             if (!content.body.trim()) return;
+
+            if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
+                decorateStartSendingTime(content);
+            }
 
             const prom = this.context.sendMessage(roomId, content);
             if (replyToEvent) {
@@ -420,12 +447,17 @@ export default class SendMessageComposer extends React.Component<IProps> {
                     dis.dispatch({ action: `effects.${effect.command}` });
                 }
             });
+            if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
+                prom.then(resp => {
+                    sendRoundTripMetric(this.context, roomId, resp.event_id);
+                });
+            }
             CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, !!replyToEvent, content);
         }
 
-        this.sendHistoryManager.save(this.model, replyToEvent);
+        this.sendHistoryManager.save(model, replyToEvent);
         // clear composer
-        this.model.reset([]);
+        model.reset([]);
         this.editorRef.current?.clearUndoHistory();
         this.editorRef.current?.focus();
         this.clearStoredEditorState();
@@ -441,7 +473,7 @@ export default class SendMessageComposer extends React.Component<IProps> {
     }
 
     // TODO: [REACT-WARNING] Move this to constructor
-    UNSAFE_componentWillMount() { // eslint-disable-line camelcase
+    UNSAFE_componentWillMount() { // eslint-disable-line
         const partCreator = new CommandPartCreator(this.props.room, this.context);
         const parts = this.restoreStoredEditorState(partCreator) || [];
         this.model = new EditorModel(parts, partCreator);
@@ -497,7 +529,7 @@ export default class SendMessageComposer extends React.Component<IProps> {
 
         switch (payload.action) {
             case 'reply_to_event':
-            case Action.FocusComposer:
+            case Action.FocusSendMessageComposer:
                 this.editorRef.current?.focus();
                 break;
             case "send_composer_insert":
@@ -514,13 +546,11 @@ export default class SendMessageComposer extends React.Component<IProps> {
 
     private onPaste = (event: ClipboardEvent<HTMLDivElement>): boolean => {
         const { clipboardData } = event;
-        // Prioritize text on the clipboard over files as Office on macOS puts a bitmap
-        // in the clipboard as well as the content being copied.
-        if (clipboardData.files.length && !clipboardData.types.some(t => t === "text/plain")) {
-            // This actually not so much for 'files' as such (at time of writing
-            // neither chrome nor firefox let you paste a plain file copied
-            // from Finder) but more images copied from a different website
-            // / word processor etc.
+        // Prioritize text on the clipboard over files if RTF is present as Office on macOS puts a bitmap
+        // in the clipboard as well as the content being copied. Modern versions of Office seem to not do this anymore.
+        // We check text/rtf instead of text/plain as when copy+pasting a file from Finder or Gnome Image Viewer
+        // it puts the filename in as text/plain which we want to ignore.
+        if (clipboardData.files.length && !clipboardData.types.includes("text/rtf")) {
             ContentMessages.sharedInstance().sendContentListToRoom(
                 Array.from(clipboardData.files), this.props.room.roomId, this.context,
             );

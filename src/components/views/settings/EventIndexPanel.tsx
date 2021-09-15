@@ -152,7 +152,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         if (EventIndexPeg.get() !== null) {
             eventIndexingSettings = (
                 <div>
-                    <div className='mx_SettingsTab_subsectionText'>{_t(
+                    <div className='mx_SettingsTab_subsectionText'>{ _t(
                         "Securely cache encrypted messages locally for them " +
                         "to appear in search results, using %(size)s to store messages from %(rooms)s rooms.",
                         {
@@ -162,10 +162,10 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                             count: this.state.roomCount,
                             rooms: formatCountLong(this.state.roomCount),
                         },
-                    )}</div>
+                    ) }</div>
                     <div>
                         <AccessibleButton kind="primary" onClick={this.onManage}>
-                            {_t("Manage")}
+                            { _t("Manage") }
                         </AccessibleButton>
                     </div>
                 </div>
@@ -173,16 +173,19 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         } else if (!this.state.eventIndexingEnabled && EventIndexPeg.supportIsInstalled()) {
             eventIndexingSettings = (
                 <div>
-                    <div className='mx_SettingsTab_subsectionText'>{_t(
+                    <div className='mx_SettingsTab_subsectionText'>{ _t(
                         "Securely cache encrypted messages locally for them to " +
                         "appear in search results.",
-                    )}</div>
+                    ) }</div>
                     <div>
-                        <AccessibleButton kind="primary" disabled={this.state.enabling}
-                            onClick={this.onEnable}>
-                            {_t("Enable")}
+                        <AccessibleButton
+                            kind="primary"
+                            disabled={this.state.enabling}
+                            onClick={this.onEnable}
+                        >
+                            { _t("Enable") }
                         </AccessibleButton>
-                        {this.state.enabling ? <InlineSpinner /> : <div />}
+                        { this.state.enabling ? <InlineSpinner /> : <div /> }
                     </div>
                 </div>
             );
@@ -194,7 +197,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
             );
 
             eventIndexingSettings = (
-                <div className='mx_SettingsTab_subsectionText'>{_t(
+                <div className='mx_SettingsTab_subsectionText'>{ _t(
                     "%(brand)s is missing some components required for securely " +
                     "caching encrypted messages locally. If you'd like to " +
                     "experiment with this feature, build a custom %(brand)s Desktop " +
@@ -203,15 +206,17 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                         brand,
                     },
                     {
-                        nativeLink: sub => <a href={nativeLink}
-                            target="_blank" rel="noreferrer noopener"
-                        >{sub}</a>,
+                        nativeLink: sub => <a
+                            href={nativeLink}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                        >{ sub }</a>,
                     },
-                )}</div>
+                ) }</div>
             );
         } else if (!EventIndexPeg.platformHasSupport()) {
             eventIndexingSettings = (
-                <div className='mx_SettingsTab_subsectionText'>{_t(
+                <div className='mx_SettingsTab_subsectionText'>{ _t(
                     "%(brand)s can't securely cache encrypted messages locally " +
                     "while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> " +
                     "for encrypted messages to appear in search results.",
@@ -219,34 +224,36 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                         brand,
                     },
                     {
-                        desktopLink: sub => <a href="https://element.io/get-started"
-                            target="_blank" rel="noreferrer noopener"
-                        >{sub}</a>,
+                        desktopLink: sub => <a
+                            href="https://element.io/get-started"
+                            target="_blank"
+                            rel="noreferrer noopener"
+                        >{ sub }</a>,
                     },
-                )}</div>
+                ) }</div>
             );
         } else {
             eventIndexingSettings = (
                 <div className='mx_SettingsTab_subsectionText'>
                     <p>
-                        {this.state.enabling
+                        { this.state.enabling
                             ? <InlineSpinner />
                             : _t("Message search initialisation failed")
                         }
                     </p>
-                    {EventIndexPeg.error && (
+                    { EventIndexPeg.error && (
                         <details>
-                            <summary>{_t("Advanced")}</summary>
+                            <summary>{ _t("Advanced") }</summary>
                             <code>
-                                {EventIndexPeg.error.message}
+                                { EventIndexPeg.error.message }
                             </code>
                             <p>
                                 <AccessibleButton key="delete" kind="danger" onClick={this.confirmEventStoreReset}>
-                                    {_t("Reset")}
+                                    { _t("Reset") }
                                 </AccessibleButton>
                             </p>
                         </details>
-                    )}
+                    ) }
                 </div>
             );
         }

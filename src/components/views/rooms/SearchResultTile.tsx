@@ -15,14 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { SearchResult } from "matrix-js-sdk/src/models/search-result";
-import EventTile, { haveTileForEvent } from "./EventTile";
-import DateSeparator from '../messages/DateSeparator';
+import RoomContext from "../../../contexts/RoomContext";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import DateSeparator from "../messages/DateSeparator";
+import EventTile, { haveTileForEvent } from "./EventTile";
 
 interface IProps {
     // a matrix-js-sdk SearchResult containing the details of this result
@@ -37,6 +38,8 @@ interface IProps {
 
 @replaceableComponent("views.rooms.SearchResultTile")
 export default class SearchResultTile extends React.Component<IProps> {
+    static contextType = RoomContext;
+
     public render() {
         const result = this.props.searchResult;
         const mxEv = result.context.getEvent();
@@ -44,7 +47,10 @@ export default class SearchResultTile extends React.Component<IProps> {
 
         const ts1 = mxEv.getTs();
         const ret = [<DateSeparator key={ts1 + "-search"} ts={ts1} />];
+        const layout = SettingsStore.getValue("layout");
+        const isTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
         const alwaysShowTimestamps = SettingsStore.getValue("alwaysShowTimestamps");
+        const enableFlair = SettingsStore.getValue(UIFeature.Flair);
 
         const timeline = result.context.getTimeline();
         for (let j = 0; j < timeline.length; j++) {
@@ -54,26 +60,25 @@ export default class SearchResultTile extends React.Component<IProps> {
             if (!contextual) {
                 highlights = this.props.searchHighlights;
             }
-            if (haveTileForEvent(ev)) {
-                ret.push((
+            if (haveTileForEvent(ev, this.context?.showHiddenEventsInTimeline)) {
+                ret.push(
                     <EventTile
                         key={`${eventId}+${j}`}
                         mxEvent={ev}
+                        layout={layout}
                         contextual={contextual}
                         highlights={highlights}
                         permalinkCreator={this.props.permalinkCreator}
                         highlightLink={this.props.resultLink}
                         onHeightChanged={this.props.onHeightChanged}
-                        isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
+                        isTwelveHour={isTwelveHour}
                         alwaysShowTimestamps={alwaysShowTimestamps}
-                        enableFlair={SettingsStore.getValue(UIFeature.Flair)}
-                    />
-                ));
+                        enableFlair={enableFlair}
+                    />,
+                );
             }
         }
-        return (
-            <li data-scroll-tokens={eventId}>
-                { ret }
-            </li>);
+
+        return <li data-scroll-tokens={eventId}>{ ret }</li>;
     }
 }

@@ -198,14 +198,14 @@ export class EmailAddress extends React.Component {
         let status;
         if (verifying) {
             status = <span>
-                {_t("Verify the link in your inbox")}
+                { _t("Verify the link in your inbox") }
                 <AccessibleButton
                     className="mx_ExistingEmailAddress_confirmBtn"
                     kind="primary_sm"
                     onClick={this.onContinueClick}
                     disabled={this.state.continueDisabled}
                 >
-                    {_t("Complete")}
+                    { _t("Complete") }
                 </AccessibleButton>
             </span>;
         } else if (bound) {
@@ -214,7 +214,7 @@ export class EmailAddress extends React.Component {
                 kind="danger_sm"
                 onClick={this.onRevokeClick}
             >
-                {_t("Revoke")}
+                { _t("Revoke") }
             </AccessibleButton>;
         } else {
             status = <AccessibleButton
@@ -222,14 +222,14 @@ export class EmailAddress extends React.Component {
                 kind="primary_sm"
                 onClick={this.onShareClick}
             >
-                {_t("Share")}
+                { _t("Share") }
             </AccessibleButton>;
         }
 
         return (
             <div className="mx_ExistingEmailAddress">
-                <span className="mx_ExistingEmailAddress_email">{address}</span>
-                {status}
+                <span className="mx_ExistingEmailAddress_email">{ address }</span>
+                { status }
             </div>
         );
     }
@@ -249,13 +249,13 @@ export default class EmailAddresses extends React.Component {
             });
         } else {
             content = <span className="mx_SettingsTab_subsectionText">
-                {_t("Discovery options will appear once you have added an email above.")}
+                { _t("Discovery options will appear once you have added an email above.") }
             </span>;
         }
 
         return (
             <div className="mx_EmailAddresses">
-                {content}
+                { content }
             </div>
         );
     }

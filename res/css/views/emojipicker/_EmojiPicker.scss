@@ -57,7 +57,7 @@ limitations under the License.
 }
 
 .mx_EmojiPicker_anchor::before {
-    background-color: $primary-fg-color;
+    background-color: $primary-content;
     content: '';
     display: inline-block;
     mask-size: 100%;
@@ -89,7 +89,7 @@ limitations under the License.
     margin: 8px;
     border-radius: 4px;
     border: 1px solid $input-border-color;
-    background-color: $primary-bg-color;
+    background-color: $background;
     display: flex;
 
     input {
@@ -126,7 +126,7 @@ limitations under the License.
 .mx_EmojiPicker_search_icon::after {
     mask: url('$(res)/img/emojipicker/search.svg') no-repeat;
     mask-size: 100%;
-    background-color: $primary-fg-color;
+    background-color: $primary-content;
     content: '';
     display: inline-block;
     width: 100%;

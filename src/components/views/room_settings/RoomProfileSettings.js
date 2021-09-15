@@ -185,14 +185,14 @@ export default class RoomProfileSettings extends React.Component {
                         kind="link"
                         disabled={!this.state.enableProfileSave}
                     >
-                        {_t("Cancel")}
+                        { _t("Cancel") }
                     </AccessibleButton>
                     <AccessibleButton
                         onClick={this._saveProfile}
                         kind="primary"
                         disabled={!this.state.enableProfileSave}
                     >
-                        {_t("Save")}
+                        { _t("Save") }
                     </AccessibleButton>
                 </div>
             );

@@ -35,16 +35,16 @@ export default ({ onFinished }) => {
         const rows = [
             <tr key={"_category_" + category} className="mx_SlashCommandHelpDialog_headerRow">
                 <td colSpan={3}>
-                    <h2>{_t(category)}</h2>
+                    <h2>{ _t(category) }</h2>
                 </td>
             </tr>,
         ];
 
         categories[category].forEach(cmd => {
             rows.push(<tr key={cmd.command}>
-                <td><strong>{cmd.getCommand()}</strong></td>
-                <td>{cmd.args}</td>
-                <td>{cmd.description}</td>
+                <td><strong>{ cmd.getCommand() }</strong></td>
+                <td>{ cmd.args }</td>
+                <td>{ cmd.description }</td>
             </tr>);
         });
 
@@ -56,7 +56,7 @@ export default ({ onFinished }) => {
         title={_t("Command Help")}
         description={<table>
             <tbody>
-                {body}
+                { body }
             </tbody>
         </table>}
         hasCloseButton={true}

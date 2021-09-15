@@ -41,10 +41,10 @@ export default class MjolnirBody extends React.Component {
 
     render() {
         return (
-            <div className='mx_MjolnirBody'><i>{_t(
+            <div className='mx_MjolnirBody'><i>{ _t(
                 "You have ignored this user, so their message is hidden. <a>Show anyways.</a>",
-                {}, { a: (sub) => <a href="#" onClick={this._onAllowClick}>{sub}</a> },
-            )}</i></div>
+                {}, { a: (sub) => <a href="#" onClick={this._onAllowClick}>{ sub }</a> },
+            ) }</i></div>
         );
     }
 }

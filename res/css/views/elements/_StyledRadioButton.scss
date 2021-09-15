@@ -46,7 +46,7 @@ limitations under the License.
         width: $font-16px;
     }
 
-    > input[type=radio] {
+    input[type=radio] {
         // Remove the OS's representation
         margin: 0;
         padding: 0;
@@ -111,6 +111,12 @@ limitations under the License.
                 background-color: $radio-circle-color;
             }
         }
+    }
+
+    .mx_RadioButton_innerLabel {
+        display: flex;
+        position: relative;
+        top: 4px;
     }
 }
 

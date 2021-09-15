@@ -91,7 +91,7 @@ export default class InlineTermsAgreement extends React.Component<IProps, IState
                     policyLink: () => {
                         return (
                             <a href={policy.url} rel='noreferrer noopener' target='_blank'>
-                                {policy.name}
+                                { policy.name }
                                 <span className='mx_InlineTermsAgreement_link' />
                             </a>
                         );
@@ -100,10 +100,10 @@ export default class InlineTermsAgreement extends React.Component<IProps, IState
             );
             rendered.push(
                 <div key={i} className='mx_InlineTermsAgreement_cbContainer'>
-                    <div>{introText}</div>
+                    <div>{ introText }</div>
                     <div className='mx_InlineTermsAgreement_checkbox'>
                         <StyledCheckbox onChange={() => this.togglePolicy(i)} checked={policy.checked}>
-                            {_t("Accept")}
+                            { _t("Accept") }
                         </StyledCheckbox>
                     </div>
                 </div>,
@@ -118,14 +118,14 @@ export default class InlineTermsAgreement extends React.Component<IProps, IState
 
         return (
             <div>
-                {this.props.introElement}
-                {this.renderCheckboxes()}
+                { this.props.introElement }
+                { this.renderCheckboxes() }
                 <AccessibleButton
                     onClick={this.onContinue}
                     disabled={hasUnchecked || this.state.busy}
                     kind="primary_sm"
                 >
-                    {_t("Continue")}
+                    { _t("Continue") }
                 </AccessibleButton>
             </div>
         );

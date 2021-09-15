@@ -63,21 +63,21 @@ export class EditableItem extends React.Component<IItemProps, IItemState> {
             return (
                 <div className="mx_EditableItem">
                     <span className="mx_EditableItem_promptText">
-                        {_t("Are you sure?")}
+                        { _t("Are you sure?") }
                     </span>
                     <AccessibleButton
                         onClick={this.onActuallyRemove}
                         kind="primary_sm"
                         className="mx_EditableItem_confirmBtn"
                     >
-                        {_t("Yes")}
+                        { _t("Yes") }
                     </AccessibleButton>
                     <AccessibleButton
                         onClick={this.onDontRemove}
                         kind="danger_sm"
                         className="mx_EditableItem_confirmBtn"
                     >
-                        {_t("No")}
+                        { _t("No") }
                     </AccessibleButton>
                 </div>
             );
@@ -86,7 +86,7 @@ export class EditableItem extends React.Component<IItemProps, IItemState> {
         return (
             <div className="mx_EditableItem">
                 <div onClick={this.onRemove} className="mx_EditableItem_delete" title={_t("Remove")} role="button" />
-                <span className="mx_EditableItem_item">{this.props.value}</span>
+                <span className="mx_EditableItem_item">{ this.props.value }</span>
             </div>
         );
     }
@@ -155,7 +155,7 @@ export default class EditableItemList<P = {}> extends React.PureComponent<IProps
     render() {
         const editableItems = this.props.items.map((item, index) => {
             if (!this.props.canRemove) {
-                return <li key={item}>{item}</li>;
+                return <li key={item}>{ item }</li>;
             }
 
             return <EditableItem
@@ -166,7 +166,7 @@ export default class EditableItemList<P = {}> extends React.PureComponent<IProps
             />;
         });
 
-        const editableItemsSection = this.props.canRemove ? editableItems : <ul>{editableItems}</ul>;
+        const editableItemsSection = this.props.canRemove ? editableItems : <ul>{ editableItems }</ul>;
         const label = this.props.items.length > 0 ? this.props.itemsLabel : this.props.noItemsLabel;
 
         return (

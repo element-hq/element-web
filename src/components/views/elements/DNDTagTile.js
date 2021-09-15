@@ -41,6 +41,6 @@ export default function DNDTagTile(props) {
             menuDisplayed={menuDisplayed}
             openMenu={openMenu}
         />
-        {contextMenu}
+        { contextMenu }
     </>;
 }

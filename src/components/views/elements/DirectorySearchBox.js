@@ -88,7 +88,7 @@ export default class DirectorySearchBox extends React.Component {
         if (this.props.showJoinButton) {
             joinButton = <AccessibleButton className="mx_DirectorySearchBox_joinButton"
                 onClick={this._onJoinButtonClick}
-            >{_t("Join")}</AccessibleButton>;
+            >{ _t("Join") }</AccessibleButton>;
         }
 
         return <div className={`mx_DirectorySearchBox ${this.props.className} mx_textinput`}>

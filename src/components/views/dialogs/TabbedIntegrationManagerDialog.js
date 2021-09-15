@@ -134,7 +134,7 @@ export default class TabbedIntegrationManagerDialog extends React.Component {
                     key={`tab_${i}`}
                     disabled={this.state.busy}
                 >
-                    {m.name}
+                    { m.name }
                 </AccessibleButton>
             );
         });
@@ -163,10 +163,10 @@ export default class TabbedIntegrationManagerDialog extends React.Component {
         return (
             <div className='mx_TabbedIntegrationManagerDialog_container'>
                 <div className='mx_TabbedIntegrationManagerDialog_tabs'>
-                    {this._renderTabs()}
+                    { this._renderTabs() }
                 </div>
                 <div className='mx_TabbedIntegrationManagerDialog_currentManager'>
-                    {this._renderTab()}
+                    { this._renderTab() }
                 </div>
             </div>
         );

@@ -102,7 +102,7 @@ export default class CreateGroupDialog extends React.Component<IProps, IState> {
         });
     };
 
-    _onCancel = () => {
+    private onCancel = () => {
         this.props.onFinished(false);
     };
 
@@ -123,7 +123,9 @@ export default class CreateGroupDialog extends React.Component<IProps, IState> {
         }
 
         return (
-            <BaseDialog className="mx_CreateGroupDialog" onFinished={this.props.onFinished}
+            <BaseDialog
+                className="mx_CreateGroupDialog"
+                onFinished={this.props.onFinished}
                 title={_t('Create Community')}
             >
                 <form onSubmit={this.onFormSubmit}>
@@ -133,8 +135,11 @@ export default class CreateGroupDialog extends React.Component<IProps, IState> {
                                 <label htmlFor="groupname">{ _t('Community Name') }</label>
                             </div>
                             <div>
-                                <input id="groupname" className="mx_CreateGroupDialog_input"
-                                    autoFocus={true} size={64}
+                                <input
+                                    id="groupname"
+                                    className="mx_CreateGroupDialog_input"
+                                    autoFocus={true}
+                                    size={64}
                                     placeholder={_t('Example')}
                                     onChange={this.onGroupNameChange}
                                     value={this.state.groupName}
@@ -167,7 +172,7 @@ export default class CreateGroupDialog extends React.Component<IProps, IState> {
                     </div>
                     <div className="mx_Dialog_buttons">
                         <input type="submit" value={_t('Create')} className="mx_Dialog_primary" />
-                        <button onClick={this._onCancel}>
+                        <button onClick={this.onCancel}>
                             { _t("Cancel") }
                         </button>
                     </div>

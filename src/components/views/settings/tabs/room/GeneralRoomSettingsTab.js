@@ -65,7 +65,7 @@ export default class GeneralRoomSettingsTab extends React.Component {
         const groupsEvent = room.currentState.getStateEvents("m.room.related_groups", "");
 
         let urlPreviewSettings = <>
-            <span className='mx_SettingsTab_subheading'>{_t("URL Previews")}</span>
+            <span className='mx_SettingsTab_subheading'>{ _t("URL Previews") }</span>
             <div className='mx_SettingsTab_section'>
                 <UrlPreviewSettings room={room} />
             </div>
@@ -77,7 +77,7 @@ export default class GeneralRoomSettingsTab extends React.Component {
         let flairSection;
         if (SettingsStore.getValue(UIFeature.Flair)) {
             flairSection = <>
-                <span className='mx_SettingsTab_subheading'>{_t("Flair")}</span>
+                <span className='mx_SettingsTab_subheading'>{ _t("Flair") }</span>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                     <RelatedGroupSettings
                         roomId={room.roomId}
@@ -90,22 +90,25 @@ export default class GeneralRoomSettingsTab extends React.Component {
 
         return (
             <div className="mx_SettingsTab mx_GeneralRoomSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("General")}</div>
+                <div className="mx_SettingsTab_heading">{ _t("General") }</div>
                 <div className='mx_SettingsTab_section mx_GeneralRoomSettingsTab_profileSection'>
                     <RoomProfileSettings roomId={this.props.roomId} />
                 </div>
 
-                <div className="mx_SettingsTab_heading">{_t("Room Addresses")}</div>
+                <div className="mx_SettingsTab_heading">{ _t("Room Addresses") }</div>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    <AliasSettings roomId={this.props.roomId}
-                        canSetCanonicalAlias={canSetCanonical} canSetAliases={canSetAliases}
-                        canonicalAliasEvent={canonicalAliasEv} />
+                    <AliasSettings
+                        roomId={this.props.roomId}
+                        canSetCanonicalAlias={canSetCanonical}
+                        canSetAliases={canSetAliases}
+                        canonicalAliasEvent={canonicalAliasEv}
+                    />
                 </div>
-                <div className="mx_SettingsTab_heading">{_t("Other")}</div>
+                <div className="mx_SettingsTab_heading">{ _t("Other") }</div>
                 { flairSection }
                 { urlPreviewSettings }
 
-                <span className='mx_SettingsTab_subheading'>{_t("Leave room")}</span>
+                <span className='mx_SettingsTab_subheading'>{ _t("Leave room") }</span>
                 <div className='mx_SettingsTab_section'>
                     <AccessibleButton kind='danger' onClick={this._onLeaveClick}>
                         { _t('Leave room') }

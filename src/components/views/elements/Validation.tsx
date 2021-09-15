@@ -147,16 +147,16 @@ export default function withValidation<T = undefined, D = void>({
         let details;
         if (results && results.length) {
             details = <ul className="mx_Validation_details">
-                {results.map(result => {
+                { results.map(result => {
                     const classes = classNames({
                         "mx_Validation_detail": true,
                         "mx_Validation_valid": result.valid,
                         "mx_Validation_invalid": !result.valid,
                     });
                     return <li key={result.key} className={classes}>
-                        {result.text}
+                        { result.text }
                     </li>;
-                })}
+                }) }
             </ul>;
         }
 
@@ -165,14 +165,14 @@ export default function withValidation<T = undefined, D = void>({
             // We're setting `this` to whichever component holds the validation
             // function. That allows rules to access the state of the component.
             const content = description.call(this, derivedData);
-            summary = <div className="mx_Validation_description">{content}</div>;
+            summary = <div className="mx_Validation_description">{ content }</div>;
         }
 
         let feedback;
         if (summary || details) {
             feedback = <div className="mx_Validation">
-                {summary}
-                {details}
+                { summary }
+                { details }
             </div>;
         }
 

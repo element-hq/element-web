@@ -42,7 +42,13 @@ export const getEmojiFlag = (countryCode: string) => {
     return String.fromCodePoint(...countryCode.split('').map(l => UNICODE_BASE + l.charCodeAt(0)));
 };
 
-export const COUNTRIES = [
+export interface PhoneNumberCountryDefinition {
+    iso2: string;
+    name: string;
+    prefix: string;
+}
+
+export const COUNTRIES: PhoneNumberCountryDefinition[] = [
     {
         "iso2": "GB",
         "name": _td("United Kingdom"),

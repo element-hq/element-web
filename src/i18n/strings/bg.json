@@ -2897,5 +2897,17 @@
     "Already in call": "Вече в разговор",
     "You're already in a call with this person.": "Вече сте в разговор в този човек.",
     "Too Many Calls": "Твърде много повиквания",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Неуспешно повикване поради неуспешен достъп до микрофон. Проверете дали микрофонът е включен и настроен правилно."
+    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Неуспешно повикване поради неуспешен достъп до микрофон. Проверете дали микрофонът е включен и настроен правилно.",
+    "Integration manager": "Мениджър на интеграции",
+    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Вашият %(brand)s не позволява да използвате мениджъра на интеграции за да направите това. Свържете се с администратор.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Използването на това приспособление може да сподели данни <helpIcon /> с %(widgetDomain)s и с мениджъра на интеграции.",
+    "Identity server is": "Сървър за самоличност:",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Мениджърът на интеграции получава конфигурационни данни, може да модифицира приспособления, да изпраща покани за стаи и да настройва нива на достъп от ваше име.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "Използвай мениджър на интеграции за управление на ботове, приспособления и стикери.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Използвай мениджър на интеграции <b>%(serverName)s</b> за управление на ботове, приспособления и стикери.",
+    "Identity server": "Сървър за самоличност",
+    "Identity server (%(server)s)": "Сървър за самоличност (%(server)s)",
+    "Could not connect to identity server": "Неуспешна връзка със сървъра за самоличност",
+    "Not a valid identity server (status code %(code)s)": "Невалиден сървър за самоличност (статус код %(code)s)",
+    "Identity server URL must be HTTPS": "Адресът на сървъра за самоличност трябва да бъде HTTPS"
 }

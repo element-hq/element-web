@@ -78,7 +78,7 @@ const FacePile = ({ room, onlyKnownUsers = true, numShown = DEFAULT_NUM_FACES, .
         <TextWithTooltip class="mx_FacePile_faces" tooltip={tooltip} tooltipProps={{ yOffset: 32 }}>
             { members.length > numShown ? <span className="mx_FacePile_face mx_FacePile_more" /> : null }
             { shownMembers.map(m =>
-                <MemberAvatar key={m.userId} member={m} width={28} height={28} className="mx_FacePile_face" /> )}
+                <MemberAvatar key={m.userId} member={m} width={28} height={28} className="mx_FacePile_face" /> ) }
         </TextWithTooltip>
         { onlyKnownUsers && <span className="mx_FacePile_summary">
             { _t("%(count)s people you know have already joined", { count: members.length }) }

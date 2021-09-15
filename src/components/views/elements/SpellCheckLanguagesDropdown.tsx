@@ -45,7 +45,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<SpellCh
                                                                          SpellCheckLanguagesDropdownIState> {
     constructor(props) {
         super(props);
-        this._onSearchChange = this._onSearchChange.bind(this);
+        this.onSearchChange = this.onSearchChange.bind(this);
 
         this.state = {
             searchQuery: '',
@@ -76,10 +76,8 @@ export default class SpellCheckLanguagesDropdown extends React.Component<SpellCh
         }
     }
 
-    _onSearchChange(search) {
-        this.setState({
-            searchQuery: search,
-        });
+    private onSearchChange(searchQuery: string) {
+        this.setState({ searchQuery });
     }
 
     render() {
@@ -117,7 +115,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<SpellCh
             id="mx_LanguageDropdown"
             className={this.props.className}
             onOptionChange={this.props.onOptionChange}
-            onSearchChange={this._onSearchChange}
+            onSearchChange={this.onSearchChange}
             searchEnabled={true}
             value={value}
             label={_t("Language Dropdown")}>

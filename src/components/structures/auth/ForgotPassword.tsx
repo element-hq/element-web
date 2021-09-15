@@ -31,6 +31,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { PASSWORD_MIN_SCORE } from '../../views/auth/RegistrationForm';
 
 import { IValidationResult } from "../../views/elements/Validation";
+import InlineSpinner from '../../views/elements/InlineSpinner';
 
 enum Phase {
     // Show the forgot password inputs
@@ -66,13 +67,14 @@ interface IState {
     serverDeadError: string;
 
     passwordFieldValid: boolean;
+    currentHttpRequest?: Promise<any>;
 }
 
 @replaceableComponent("structures.auth.ForgotPassword")
 export default class ForgotPassword extends React.Component<IProps, IState> {
     private reset: PasswordReset;
 
-    state = {
+    state: IState = {
         phase: Phase.Forgot,
         email: "",
         password: "",
@@ -101,7 +103,7 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     public UNSAFE_componentWillReceiveProps(newProps: IProps): void {
         if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
@@ -148,8 +150,10 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
             console.error("onVerify called before submitPasswordReset!");
             return;
         }
+        if (this.state.currentHttpRequest) return;
+
         try {
-            await this.reset.checkEmailLinkClicked();
+            await this.handleHttpRequest(this.reset.checkEmailLinkClicked());
             this.setState({ phase: Phase.Done });
         } catch (err) {
             this.showErrorDialog(err.message);
@@ -158,9 +162,10 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
 
     private onSubmitForm = async (ev: React.FormEvent): Promise<void> => {
         ev.preventDefault();
+        if (this.state.currentHttpRequest) return;
 
         // refresh the server errors, just in case the server came back online
-        await this.checkServerLiveliness(this.props.serverConfig);
+        await this.handleHttpRequest(this.checkServerLiveliness(this.props.serverConfig));
 
         await this['password_field'].validate({ allowEmpty: false });
 
@@ -221,6 +226,17 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
         });
     }
 
+    private handleHttpRequest<T = unknown>(request: Promise<T>): Promise<T> {
+        this.setState({
+            currentHttpRequest: request,
+        });
+        return request.finally(() => {
+            this.setState({
+                currentHttpRequest: undefined,
+            });
+        });
+    }
+
     renderForgot() {
         const Field = sdk.getComponent('elements.Field');
 
@@ -239,14 +255,14 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
             });
             serverDeadSection = (
                 <div className={classes}>
-                    {this.state.serverDeadError}
+                    { this.state.serverDeadError }
                 </div>
             );
         }
 
         return <div>
-            {errorText}
-            {serverDeadSection}
+            { errorText }
+            { serverDeadSection }
             <ServerPicker
                 serverConfig={this.props.serverConfig}
                 onServerConfigChange={this.props.onServerConfigChange}
@@ -289,10 +305,10 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
                         autoComplete="new-password"
                     />
                 </div>
-                <span>{_t(
+                <span>{ _t(
                     'A verification email will be sent to your inbox to confirm ' +
                     'setting your new password.',
-                )}</span>
+                ) }</span>
                 <input
                     className="mx_Login_submit"
                     type="submit"
@@ -300,7 +316,7 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
                 />
             </form>
             <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
-                {_t('Sign in instead')}
+                { _t('Sign in instead') }
             </a>
         </div>;
     }
@@ -312,23 +328,32 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
 
     renderEmailSent() {
         return <div>
-            {_t("An email has been sent to %(emailAddress)s. Once you've followed the " +
-                "link it contains, click below.", { emailAddress: this.state.email })}
+            { _t("An email has been sent to %(emailAddress)s. Once you've followed the " +
+                "link it contains, click below.", { emailAddress: this.state.email }) }
             <br />
-            <input className="mx_Login_submit" type="button" onClick={this.onVerify}
+            <input
+                className="mx_Login_submit"
+                type="button"
+                onClick={this.onVerify}
                 value={_t('I have verified my email address')} />
+            { this.state.currentHttpRequest && (
+                <div className="mx_Login_spinner"><InlineSpinner w={64} h={64} /></div>)
+            }
         </div>;
     }
 
     renderDone() {
         return <div>
-            <p>{_t("Your password has been reset.")}</p>
-            <p>{_t(
+            <p>{ _t("Your password has been reset.") }</p>
+            <p>{ _t(
                 "You have been logged out of all sessions and will no longer receive " +
                 "push notifications. To re-enable notifications, sign in again on each " +
                 "device.",
-            )}</p>
-            <input className="mx_Login_submit" type="button" onClick={this.props.onComplete}
+            ) }</p>
+            <input
+                className="mx_Login_submit"
+                type="button"
+                onClick={this.props.onComplete}
                 value={_t('Return to login screen')} />
         </div>;
     }
@@ -351,6 +376,8 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
             case Phase.Done:
                 resetPasswordJsx = this.renderDone();
                 break;
+            default:
+                resetPasswordJsx = <div className="mx_Login_spinner"><InlineSpinner w={64} h={64} /></div>;
         }
 
         return (
@@ -358,7 +385,7 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
                 <AuthHeader />
                 <AuthBody>
                     <h2> { _t('Set a new password') } </h2>
-                    {resetPasswordJsx}
+                    { resetPasswordJsx }
                 </AuthBody>
             </AuthPage>
         );

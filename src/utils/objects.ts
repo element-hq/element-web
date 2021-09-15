@@ -141,21 +141,3 @@ export function objectKeyChanges<O extends {}>(a: O, b: O): (keyof O)[] {
 export function objectClone<O extends {}>(obj: O): O {
     return JSON.parse(JSON.stringify(obj));
 }
-
-/**
- * Converts a series of entries to an object.
- * @param entries The entries to convert.
- * @returns The converted object.
- */
-// NOTE: Deprecated once we have Object.fromEntries() support.
-// @ts-ignore - return type is complaining about non-string keys, but we know better
-export function objectFromEntries<K, V>(entries: Iterable<[K, V]>): {[k: K]: V} {
-    const obj: {
-        // @ts-ignore - same as return type
-        [k: K]: V;} = {};
-    for (const e of entries) {
-        // @ts-ignore - same as return type
-        obj[e[0]] = e[1];
-    }
-    return obj;
-}

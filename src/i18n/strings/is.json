@@ -728,5 +728,7 @@
     "Explore all public rooms": "Kanna öll almenningsherbergi",
     "Liberate your communication": "Frelsaðu samskipti þín",
     "Welcome to <name/>": "Velkomin til <name/>",
-    "Welcome to %(appName)s": "Velkomin til %(appName)s"
+    "Welcome to %(appName)s": "Velkomin til %(appName)s",
+    "Identity server is": "Auðkennisþjónn er",
+    "Identity server": "Auðkennisþjónn"
 }

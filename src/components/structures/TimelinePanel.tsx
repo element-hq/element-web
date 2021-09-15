@@ -47,10 +47,13 @@ import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Spinner from "../views/elements/Spinner";
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import ErrorDialog from '../views/dialogs/ErrorDialog';
+import { debounce } from 'lodash';
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
 const READ_RECEIPT_INTERVAL_MS = 500;
+
+const READ_MARKER_DEBOUNCE_MS = 100;
 
 const DEBUG = false;
 
@@ -126,6 +129,8 @@ interface IProps {
 
     // callback which is called when we wish to paginate the timeline window.
     onPaginationRequest?(timelineWindow: TimelineWindow, direction: string, size: number): Promise<boolean>;
+
+    hideThreadedMessages?: boolean;
 }
 
 interface IState {
@@ -214,6 +219,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         timelineCap: Number.MAX_VALUE,
         className: 'mx_RoomView_messagePanel',
         sendReadReceiptOnLoad: true,
+        hideThreadedMessages: true,
     };
 
     private lastRRSentEventId: string = undefined;
@@ -277,7 +283,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Move into constructor
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillMount() {
         if (this.props.manageReadReceipts) {
             this.updateReadReceiptOnUserActivity();
@@ -290,7 +296,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line
     UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.timelineSet !== this.props.timelineSet) {
             // throw new Error("changing timelineSet on a TimelinePanel is not supported");
@@ -472,21 +478,34 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
 
         if (this.props.manageReadMarkers) {
-            const rmPosition = this.getReadMarkerPosition();
-            // we hide the read marker when it first comes onto the screen, but if
-            // it goes back off the top of the screen (presumably because the user
-            // clicks on the 'jump to bottom' button), we need to re-enable it.
-            if (rmPosition < 0) {
-                this.setState({ readMarkerVisible: true });
-            }
-
-            // if read marker position goes between 0 and -1/1,
-            // (and user is active), switch timeout
-            const timeout = this.readMarkerTimeout(rmPosition);
-            // NO-OP when timeout already has set to the given value
-            this.readMarkerActivityTimer.changeTimeout(timeout);
+            this.doManageReadMarkers();
         }
     };
+
+    /*
+     * Debounced function to manage read markers because we don't need to
+     * do this on every tiny scroll update. It also sets state which causes
+     * a component update, which can in turn reset the scroll position, so
+     * it's important we allow the browser to scroll a bit before running this
+     * (hence trailing edge only and debounce rather than throttle because
+     * we really only need to update this once the user has finished scrolling,
+     * not periodically while they scroll).
+     */
+    private doManageReadMarkers = debounce(() => {
+        const rmPosition = this.getReadMarkerPosition();
+        // we hide the read marker when it first comes onto the screen, but if
+        // it goes back off the top of the screen (presumably because the user
+        // clicks on the 'jump to bottom' button), we need to re-enable it.
+        if (rmPosition < 0) {
+            this.setState({ readMarkerVisible: true });
+        }
+
+        // if read marker position goes between 0 and -1/1,
+        // (and user is active), switch timeout
+        const timeout = this.readMarkerTimeout(rmPosition);
+        // NO-OP when timeout already has set to the given value
+        this.readMarkerActivityTimer.changeTimeout(timeout);
+    }, READ_MARKER_DEBOUNCE_MS, { leading: false, trailing: true });
 
     private onAction = (payload: ActionPayload): void => {
         switch (payload.action) {
@@ -555,9 +574,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 // more than the timeout on userActiveRecently.
                 //
                 const myUserId = MatrixClientPeg.get().credentials.userId;
-                const sender = ev.sender ? ev.sender.userId : null;
                 callRMUpdated = false;
-                if (sender != myUserId && !UserActivity.sharedInstance().userActiveRecently()) {
+                if (ev.getSender() !== myUserId && !UserActivity.sharedInstance().userActiveRecently()) {
                     updatedState.readMarkerVisible = true;
                 } else if (lastLiveEvent && this.getReadMarkerPosition() === 0) {
                     // we know we're stuckAtBottom, so we can advance the RM
@@ -666,8 +684,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     private readMarkerTimeout(readMarkerPosition: number): number {
         return readMarkerPosition === 0 ?
-            this.state.readMarkerInViewThresholdMs :
-            this.state.readMarkerOutOfViewThresholdMs;
+            this.context?.readMarkerInViewThresholdMs ?? this.state.readMarkerInViewThresholdMs :
+            this.context?.readMarkerOutOfViewThresholdMs ?? this.state.readMarkerOutOfViewThresholdMs;
     }
 
     private async updateReadMarkerOnUserActivity(): Promise<void> {
@@ -758,16 +776,20 @@ class TimelinePanel extends React.Component<IProps, IState> {
             }
             this.lastRMSentEventId = this.state.readMarkerEventId;
 
+            const roomId = this.props.timelineSet.room.roomId;
+            const hiddenRR = SettingsStore.getValue("feature_hidden_read_receipts", roomId);
+
             debuglog('TimelinePanel: Sending Read Markers for ',
                 this.props.timelineSet.room.roomId,
                 'rm', this.state.readMarkerEventId,
                 lastReadEvent ? 'rr ' + lastReadEvent.getId() : '',
+                ' hidden:' + hiddenRR,
             );
             MatrixClientPeg.get().setRoomReadMarkers(
-                this.props.timelineSet.room.roomId,
+                roomId,
                 this.state.readMarkerEventId,
                 lastReadEvent, // Could be null, in which case no RR is sent
-                {},
+                { hidden: hiddenRR },
             ).catch((e) => {
                 // /read_markers API is not implemented on this HS, fallback to just RR
                 if (e.errcode === 'M_UNRECOGNIZED' && lastReadEvent) {
@@ -863,7 +885,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const myUserId = MatrixClientPeg.get().credentials.userId;
         for (i++; i < events.length; i++) {
             const ev = events[i];
-            if (!ev.sender || ev.sender.userId != myUserId) {
+            if (ev.getSender() !== myUserId) {
                 break;
             }
         }
@@ -1051,6 +1073,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
             { windowLimit: this.props.timelineCap });
 
         const onLoaded = () => {
+            if (this.unmounted) return;
+
             // clear the timeline min-height when
             // (re)loading the timeline
             if (this.messagePanel.current) {
@@ -1092,6 +1116,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
         };
 
         const onError = (error) => {
+            if (this.unmounted) return;
+
             this.setState({ timelineLoading: false });
             console.error(
                 `Error loading timeline panel at ${eventId}: ${error}`,
@@ -1167,6 +1193,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (this.unmounted) return;
 
         this.setState(this.getEvents());
+    }
+
+    // Force refresh the timeline before threads support pending events
+    public refreshTimeline(): void {
+        this.loadTimeline();
+        this.reloadEvents();
     }
 
     // get the list of events from the timeline window and the pending event list
@@ -1333,8 +1365,9 @@ class TimelinePanel extends React.Component<IProps, IState> {
             }
 
             const shouldIgnore = !!ev.status || // local echo
-                (ignoreOwn && ev.sender && ev.sender.userId == myUserId);   // own message
-            const isWithoutTile = !haveTileForEvent(ev) || shouldHideEvent(ev, this.context);
+                (ignoreOwn && ev.getSender() === myUserId); // own message
+            const isWithoutTile = !haveTileForEvent(ev, this.context?.showHiddenEventsInTimeline) ||
+                shouldHideEvent(ev, this.context);
 
             if (isWithoutTile || !node) {
                 // don't start counting if the event should be ignored,
@@ -1444,7 +1477,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (this.state.events.length == 0 && !this.state.canBackPaginate && this.props.empty) {
             return (
                 <div className={this.props.className + " mx_RoomView_messageListWrapper"}>
-                    <div className="mx_RoomView_empty">{this.props.empty}</div>
+                    <div className="mx_RoomView_empty">{ this.props.empty }</div>
                 </div>
             );
         }
@@ -1489,8 +1522,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 onUserScroll={this.props.onUserScroll}
                 onFillRequest={this.onMessageListFillRequest}
                 onUnfillRequest={this.onMessageListUnfillRequest}
-                isTwelveHour={this.state.isTwelveHour}
-                alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.alwaysShowTimestamps}
+                isTwelveHour={this.context?.showTwelveHourTimestamps ?? this.state.isTwelveHour}
+                alwaysShowTimestamps={
+                    this.props.alwaysShowTimestamps ??
+                    this.context?.alwaysShowTimestamps ??
+                    this.state.alwaysShowTimestamps
+                }
                 className={this.props.className}
                 tileShape={this.props.tileShape}
                 resizeNotifier={this.props.resizeNotifier}
@@ -1499,6 +1536,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 showReactions={this.props.showReactions}
                 layout={this.props.layout}
                 enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+                hideThreadedMessages={this.props.hideThreadedMessages}
             />
         );
     }

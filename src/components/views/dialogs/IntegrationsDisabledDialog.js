@@ -49,7 +49,7 @@ export default class IntegrationsDisabledDialog extends React.Component {
                 title={_t("Integrations are disabled")}
             >
                 <div className='mx_IntegrationsDisabledDialog_content'>
-                    <p>{_t("Enable 'Manage Integrations' in Settings to do this.")}</p>
+                    <p>{ _t("Enable 'Manage Integrations' in Settings to do this.") }</p>
                 </div>
                 <DialogButtons
                     primaryButton={_t("Settings")}

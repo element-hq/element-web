@@ -15,7 +15,11 @@ limitations under the License.
 */
 
 import EventEmitter from "events";
-import ResizeObserver from 'resize-observer-polyfill';
+// XXX: resize-observer-polyfill has types that now conflict with typescript's
+// own DOM types: https://github.com/que-etc/resize-observer-polyfill/issues/80
+// Using require here rather than import is a horrenous workaround. We should
+// be able to remove the polyfill once Safari 14 is released.
+const ResizeObserverPolyfill = require('resize-observer-polyfill'); // eslint-disable-line @typescript-eslint/no-var-requires
 import ResizeObserverEntry from 'resize-observer-polyfill/src/ResizeObserverEntry';
 
 export enum UI_EVENTS {
@@ -43,7 +47,7 @@ export default class UIStore extends EventEmitter {
         // eslint-disable-next-line no-restricted-properties
         this.windowHeight = window.innerHeight;
 
-        this.resizeObserver = new ResizeObserver(this.resizeObserverCallback);
+        this.resizeObserver = new ResizeObserverPolyfill(this.resizeObserverCallback);
         this.resizeObserver.observe(document.body);
     }
 

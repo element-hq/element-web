@@ -44,7 +44,7 @@ const REACHABILITY_TIMEOUT = 10000; // ms
 async function checkIdentityServerUrl(u) {
     const parsedUrl = url.parse(u);
 
-    if (parsedUrl.protocol !== 'https:') return _t("Identity Server URL must be HTTPS");
+    if (parsedUrl.protocol !== 'https:') return _t("Identity server URL must be HTTPS");
 
     // XXX: duplicated logic from js-sdk but it's quite tied up in the validation logic in the
     // js-sdk so probably as easy to duplicate it than to separate it out so we can reuse it
@@ -53,17 +53,17 @@ async function checkIdentityServerUrl(u) {
         if (response.ok) {
             return null;
         } else if (response.status < 200 || response.status >= 300) {
-            return _t("Not a valid Identity Server (status code %(code)s)", { code: response.status });
+            return _t("Not a valid identity server (status code %(code)s)", { code: response.status });
         } else {
-            return _t("Could not connect to Identity Server");
+            return _t("Could not connect to identity server");
         }
     } catch (e) {
-        return _t("Could not connect to Identity Server");
+        return _t("Could not connect to identity server");
     }
 }
 
 interface IProps {
-    // Whether or not the ID server is missing terms. This affects the text
+    // Whether or not the identity server is missing terms. This affects the text
     // shown to the user.
     missingTerms: boolean;
 }
@@ -87,7 +87,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
 
         let defaultIdServer = '';
         if (!MatrixClientPeg.get().getIdentityServerUrl() && getDefaultIdentityServerUrl()) {
-            // If no ID server is configured but there's one in the config, prepopulate
+            // If no identity server is configured but there's one in the config, prepopulate
             // the field to help the user.
             defaultIdServer = abbreviateUrl(getDefaultIdentityServerUrl());
         }
@@ -112,7 +112,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
     }
 
     private onAction = (payload: ActionPayload) => {
-        // We react to changes in the ID server in the event the user is staring at this form
+        // We react to changes in the identity server in the event the user is staring at this form
         // when changing their identity server on another device.
         if (payload.action !== "id_server_changed") return;
 
@@ -134,7 +134,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 { _t("Checking server") }
             </div>;
         } else if (this.state.error) {
-            return <span className='warning'>{this.state.error}</span>;
+            return <span className='warning'>{ this.state.error }</span>;
         } else {
             return null;
         }
@@ -193,8 +193,8 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                             "Disconnect from the identity server <current /> and " +
                             "connect to <new /> instead?", {},
                             {
-                                current: sub => <b>{abbreviateUrl(currentClientIdServer)}</b>,
-                                new: sub => <b>{abbreviateUrl(idServer)}</b>,
+                                current: sub => <b>{ abbreviateUrl(currentClientIdServer) }</b>,
+                                new: sub => <b>{ abbreviateUrl(idServer) }</b>,
                             },
                         ),
                         button: _t("Continue"),
@@ -224,10 +224,10 @@ export default class SetIdServer extends React.Component<IProps, IState> {
             description: (
                 <div>
                     <span className="warning">
-                        {_t("The identity server you have chosen does not have any terms of service.")}
+                        { _t("The identity server you have chosen does not have any terms of service.") }
                     </span>
                     <span>
-                        &nbsp;{_t("Only continue if you trust the owner of the server.")}
+                        &nbsp;{ _t("Only continue if you trust the owner of the server.") }
                     </span>
                 </div>
             ),
@@ -243,7 +243,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 title: _t("Disconnect identity server"),
                 unboundMessage: _t(
                     "Disconnect from the identity server <idserver />?", {},
-                    { idserver: sub => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b> },
+                    { idserver: sub => <b>{ abbreviateUrl(this.state.currentClientIdServer) }</b> },
                 ),
                 button: _t("Disconnect"),
             });
@@ -278,41 +278,41 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         let message;
         let danger = false;
         const messageElements = {
-            idserver: sub => <b>{abbreviateUrl(currentClientIdServer)}</b>,
-            b: sub => <b>{sub}</b>,
+            idserver: sub => <b>{ abbreviateUrl(currentClientIdServer) }</b>,
+            b: sub => <b>{ sub }</b>,
         };
         if (!currentServerReachable) {
             message = <div>
-                <p>{_t(
+                <p>{ _t(
                     "You should <b>remove your personal data</b> from identity server " +
                     "<idserver /> before disconnecting. Unfortunately, identity server " +
                     "<idserver /> is currently offline or cannot be reached.",
                     {}, messageElements,
-                )}</p>
-                <p>{_t("You should:")}</p>
+                ) }</p>
+                <p>{ _t("You should:") }</p>
                 <ul>
-                    <li>{_t(
+                    <li>{ _t(
                         "check your browser plugins for anything that might block " +
                         "the identity server (such as Privacy Badger)",
-                    )}</li>
-                    <li>{_t("contact the administrators of identity server <idserver />", {}, {
+                    ) }</li>
+                    <li>{ _t("contact the administrators of identity server <idserver />", {}, {
                         idserver: messageElements.idserver,
-                    })}</li>
-                    <li>{_t("wait and try again later")}</li>
+                    }) }</li>
+                    <li>{ _t("wait and try again later") }</li>
                 </ul>
             </div>;
             danger = true;
             button = _t("Disconnect anyway");
         } else if (boundThreepids.length) {
             message = <div>
-                <p>{_t(
+                <p>{ _t(
                     "You are still <b>sharing your personal data</b> on the identity " +
                     "server <idserver />.", {}, messageElements,
-                )}</p>
-                <p>{_t(
+                ) }</p>
+                <p>{ _t(
                     "We recommend that you remove your email addresses and phone numbers " +
                     "from the identity server before disconnecting.",
-                )}</p>
+                ) }</p>
             </div>;
             danger = true;
             button = _t("Disconnect anyway");
@@ -356,22 +356,22 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         let sectionTitle;
         let bodyText;
         if (idServerUrl) {
-            sectionTitle = _t("Identity Server (%(server)s)", { server: abbreviateUrl(idServerUrl) });
+            sectionTitle = _t("Identity server (%(server)s)", { server: abbreviateUrl(idServerUrl) });
             bodyText = _t(
                 "You are currently using <server></server> to discover and be discoverable by " +
                 "existing contacts you know. You can change your identity server below.",
                 {},
-                { server: sub => <b>{abbreviateUrl(idServerUrl)}</b> },
+                { server: sub => <b>{ abbreviateUrl(idServerUrl) }</b> },
             );
             if (this.props.missingTerms) {
                 bodyText = _t(
                     "If you don't want to use <server /> to discover and be discoverable by existing " +
                     "contacts you know, enter another identity server below.",
-                    {}, { server: sub => <b>{abbreviateUrl(idServerUrl)}</b> },
+                    {}, { server: sub => <b>{ abbreviateUrl(idServerUrl) }</b> },
                 );
             }
         } else {
-            sectionTitle = _t("Identity Server");
+            sectionTitle = _t("Identity server");
             bodyText = _t(
                 "You are not currently using an identity server. " +
                 "To discover and be discoverable by existing contacts you know, " +
@@ -399,9 +399,9 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 discoButtonContent = <InlineSpinner />;
             }
             discoSection = <div>
-                <span className="mx_SettingsTab_subsectionText">{discoBodyText}</span>
+                <span className="mx_SettingsTab_subsectionText">{ discoBodyText }</span>
                 <AccessibleButton onClick={this.onDisconnectClicked} kind="danger_sm">
-                    {discoButtonContent}
+                    { discoButtonContent }
                 </AccessibleButton>
             </div>;
         }
@@ -409,10 +409,10 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         return (
             <form className="mx_SettingsTab_section mx_SetIdServer" onSubmit={this.checkIdServer}>
                 <span className="mx_SettingsTab_subheading">
-                    {sectionTitle}
+                    { sectionTitle }
                 </span>
                 <span className="mx_SettingsTab_subsectionText">
-                    {bodyText}
+                    { bodyText }
                 </span>
                 <Field
                     label={_t("Enter a new identity server")}
@@ -426,11 +426,13 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                     disabled={this.state.busy}
                     forceValidity={this.state.error ? false : null}
                 />
-                <AccessibleButton type="submit" kind="primary_sm"
+                <AccessibleButton
+                    type="submit"
+                    kind="primary_sm"
                     onClick={this.checkIdServer}
                     disabled={!this.idServerChangeEnabled()}
-                >{_t("Change")}</AccessibleButton>
-                {discoSection}
+                >{ _t("Change") }</AccessibleButton>
+                { discoSection }
             </form>
         );
     }

@@ -134,8 +134,10 @@ export default class PowerSelector extends React.Component {
         const label = typeof this.props.label === "undefined" ? _t("Power level") : this.props.label;
         if (this.state.custom) {
             picker = (
-                <Field type="number"
-                    label={label} max={this.props.maxValue}
+                <Field
+                    type="number"
+                    label={label}
+                    max={this.props.maxValue}
                     onBlur={this.onCustomBlur}
                     onKeyDown={this.onCustomKeyDown}
                     onChange={this.onCustomChange}
@@ -157,11 +159,14 @@ export default class PowerSelector extends React.Component {
             });
 
             picker = (
-                <Field element="select"
-                    label={label} onChange={this.onSelectChange}
-                    value={String(this.state.selectValue)} disabled={this.props.disabled}
+                <Field
+                    element="select"
+                    label={label}
+                    onChange={this.onSelectChange}
+                    value={String(this.state.selectValue)}
+                    disabled={this.props.disabled}
                 >
-                    {options}
+                    { options }
                 </Field>
             );
         }

@@ -118,9 +118,7 @@ export default class BaseDialog extends React.Component {
 
         let headerImage;
         if (this.props.headerImage) {
-            headerImage = <img className="mx_Dialog_titleImage" src={this.props.headerImage}
-                alt=""
-            />;
+            headerImage = <img className="mx_Dialog_titleImage" src={this.props.headerImage} alt="" />;
         }
 
         return (
@@ -149,7 +147,7 @@ export default class BaseDialog extends React.Component {
                         'mx_Dialog_headerWithCancel': !!cancelButton,
                     })}>
                         <div className={classNames('mx_Dialog_title', this.props.titleClass)} id='mx_BaseDialog_title'>
-                            {headerImage}
+                            { headerImage }
                             { this.props.title }
                         </div>
                         { this.props.headerButton }

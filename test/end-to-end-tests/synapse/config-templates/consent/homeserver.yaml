@@ -572,11 +572,11 @@ uploads_path: "{{SYNAPSE_ROOT}}uploads"
 ## Captcha ##
 # See docs/CAPTCHA_SETUP for full details of configuring this.
 
-# This Home Server's ReCAPTCHA public key.
+# This homeserver's ReCAPTCHA public key.
 #
 #recaptcha_public_key: "YOUR_PUBLIC_KEY"
 
-# This Home Server's ReCAPTCHA private key.
+# This homeserver's ReCAPTCHA private key.
 #
 #recaptcha_private_key: "YOUR_PRIVATE_KEY"
 
@@ -685,7 +685,7 @@ registration_shared_secret: "{{REGISTRATION_SHARED_SECRET}}"
 # The list of identity servers trusted to verify third party
 # identifiers by this server.
 #
-# Also defines the ID server which will be called when an account is
+# Also defines the identity server which will be called when an account is
 # deactivated (one will be picked arbitrarily).
 #
 #trusted_third_party_id_servers:
@@ -889,7 +889,7 @@ email:
    smtp_user: "exampleusername"
    smtp_pass: "examplepassword"
    require_transport_security: False
-   notif_from: "Your Friendly %(app)s Home Server <noreply@example.com>"
+   notif_from: "Your Friendly %(app)s homeserver <noreply@example.com>"
    app_name: Matrix
    # if template_dir is unset, uses the example templates that are part of
    # the Synapse distribution.

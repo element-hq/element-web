@@ -3007,5 +3007,19 @@
     "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>": "این کار آنها را به %(communityName)s دعوت نمی‌کند. برای دعوت افراد به %(communityName)s،<a>اینجا</a> کلیک کنید",
     "Start a conversation with someone using their name or username (like <userId/>).": "با استفاده از نام یا نام کاربری (مانند <userId/>)، گفتگوی جدیدی را با دیگران شروع کنید.",
     "Start a conversation with someone using their name, email address or username (like <userId/>).": "با استفاده از نام، آدرس ایمیل و یا نام کاربری (مانند <userId/>)، یک گفتگوی جدید را شروع کنید.",
-    "May include members not in %(communityName)s": "ممکن شامل اعضایی که در %(communityName)s نیستند نیز شود"
+    "May include members not in %(communityName)s": "ممکن شامل اعضایی که در %(communityName)s نیستند نیز شود",
+    "Integration manager": "مدیر یکپارچگی",
+    "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s شما اجازهٔ استفاده از یک مدیر یکپارچگی را برای این کار نمی دهد. لطفاً با مدیری تماس بگیرید.",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "استفاده از این ابزارک ممکن است داده‌هایی <helpIcon /> را با %(widgetDomain)s و مدیر یکپارچگیتان هم رسانی کند.",
+    "Use an integration manager to manage bots, widgets, and sticker packs.": "برای مدیریت بات‌ها، ابزارک‌ها و بسته‌های برچسب، از یک مدیر پکپارچه‌سازی استفاده کنید.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "برای مدیریت بات‌ها، ابزارک‌ها و بسته‌های برچسب، از یک مدیر پکپارچه‌سازی <b>(%(serverName)s)</b> استفاده کنید.",
+    "Identity server": "کارساز هویت",
+    "Identity server (%(server)s)": "کارساز هویت (%(server)s)",
+    "Could not connect to identity server": "نتوانست به کارساز هویت وصل شود",
+    "Not a valid identity server (status code %(code)s)": "کارساز هویت معتبر نیست (کد وضعیت %(code)s)",
+    "Identity server URL must be HTTPS": "نشانی کارساز هویت باید HTTPS باشد",
+    "Transfer Failed": "انتقال شکست خورد",
+    "Unable to transfer call": "ناتوان در انتقال تماس",
+    "The user you called is busy.": "کاربر موردنظر مشغول است.",
+    "User Busy": "کاربر مشغول"
 }

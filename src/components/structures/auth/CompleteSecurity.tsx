@@ -79,8 +79,8 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
             <AuthPage>
                 <CompleteSecurityBody>
                     <h2 className="mx_CompleteSecurity_header">
-                        {icon}
-                        {title}
+                        { icon }
+                        { title }
                     </h2>
                     <div className="mx_CompleteSecurity_body">
                         <SetupEncryptionBody onFinished={this.props.onFinished} />

@@ -90,7 +90,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         };
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
-        if (SettingsStore.getValue("feature_spaces")) {
+        if (SpaceStore.spacesEnabled) {
             SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
         }
 
@@ -115,7 +115,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onProfileUpdate);
         this.tagStoreRef.remove();
-        if (SettingsStore.getValue("feature_spaces")) {
+        if (SpaceStore.spacesEnabled) {
             SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
         }
         MatrixClientPeg.get().removeListener("Room", this.onRoom);
@@ -342,20 +342,20 @@ export default class UserMenu extends React.Component<IProps, IState> {
         if (MatrixClientPeg.get().isGuest()) {
             topSection = (
                 <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_guestPrompts">
-                    {_t("Got an account? <a>Sign in</a>", {}, {
+                    { _t("Got an account? <a>Sign in</a>", {}, {
                         a: sub => (
                             <AccessibleButton kind="link" onClick={this.onSignInClick}>
-                                {sub}
+                                { sub }
                             </AccessibleButton>
                         ),
-                    })}
-                    {_t("New here? <a>Create an account</a>", {}, {
+                    }) }
+                    { _t("New here? <a>Create an account</a>", {}, {
                         a: sub => (
                             <AccessibleButton kind="link" onClick={this.onRegisterClick}>
-                                {sub}
+                                { sub }
                             </AccessibleButton>
                         ),
-                    })}
+                    }) }
                 </div>
             );
         } else if (hostSignupConfig) {
@@ -394,17 +394,17 @@ export default class UserMenu extends React.Component<IProps, IState> {
         let primaryHeader = (
             <div className="mx_UserMenu_contextMenu_name">
                 <span className="mx_UserMenu_contextMenu_displayName">
-                    {OwnProfileStore.instance.displayName}
+                    { OwnProfileStore.instance.displayName }
                 </span>
                 <span className="mx_UserMenu_contextMenu_userId">
-                    {MatrixClientPeg.get().getUserId()}
+                    { MatrixClientPeg.get().getUserId() }
                 </span>
             </div>
         );
         let primaryOptionList = (
             <React.Fragment>
                 <IconizedContextMenuOptionList>
-                    {homeButton}
+                    { homeButton }
                     <IconizedContextMenuOption
                         iconClassName="mx_UserMenu_iconBell"
                         label={_t("Notification settings")}
@@ -420,11 +420,11 @@ export default class UserMenu extends React.Component<IProps, IState> {
                         label={_t("All settings")}
                         onClick={(e) => this.onSettingsOpen(e, null)}
                     />
-                    {/* <IconizedContextMenuOption
+                    { /* <IconizedContextMenuOption
                         iconClassName="mx_UserMenu_iconArchive"
                         label={_t("Archived rooms")}
                         onClick={this.onShowArchived}
-                    /> */}
+                    /> */ }
                     { feedbackButton }
                 </IconizedContextMenuOptionList>
                 <IconizedContextMenuOptionList red>
@@ -443,7 +443,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
             primaryHeader = (
                 <div className="mx_UserMenu_contextMenu_name">
                     <span className="mx_UserMenu_contextMenu_displayName">
-                        {prototypeCommunityName}
+                        { prototypeCommunityName }
                     </span>
                 </div>
             );
@@ -470,13 +470,13 @@ export default class UserMenu extends React.Component<IProps, IState> {
             }
             primaryOptionList = (
                 <IconizedContextMenuOptionList>
-                    {settingsOption}
+                    { settingsOption }
                     <IconizedContextMenuOption
                         iconClassName="mx_UserMenu_iconMembers"
                         label={_t("Members")}
                         onClick={this.onCommunityMembersClick}
                     />
-                    {inviteOption}
+                    { inviteOption }
                 </IconizedContextMenuOptionList>
             );
             secondarySection = (
@@ -485,10 +485,10 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     <div className="mx_UserMenu_contextMenu_header">
                         <div className="mx_UserMenu_contextMenu_name">
                             <span className="mx_UserMenu_contextMenu_displayName">
-                                {OwnProfileStore.instance.displayName}
+                                { OwnProfileStore.instance.displayName }
                             </span>
                             <span className="mx_UserMenu_contextMenu_userId">
-                                {MatrixClientPeg.get().getUserId()}
+                                { MatrixClientPeg.get().getUserId() }
                             </span>
                         </div>
                     </div>
@@ -540,7 +540,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
             className={classes}
         >
             <div className="mx_UserMenu_contextMenu_header">
-                {primaryHeader}
+                { primaryHeader }
                 <AccessibleTooltipButton
                     className="mx_UserMenu_contextMenu_themeButton"
                     onClick={this.onSwitchThemeClick}
@@ -553,9 +553,9 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     />
                 </AccessibleTooltipButton>
             </div>
-            {topSection}
-            {primaryOptionList}
-            {secondarySection}
+            { topSection }
+            { primaryOptionList }
+            { secondarySection }
         </IconizedContextMenu>;
     };
 
@@ -570,27 +570,27 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         let isPrototype = false;
         let menuName = _t("User menu");
-        let name = <span className="mx_UserMenu_userName">{displayName}</span>;
+        let name = <span className="mx_UserMenu_userName">{ displayName }</span>;
         let buttons = (
             <span className="mx_UserMenu_headerButtons">
-                {/* masked image in CSS */}
+                { /* masked image in CSS */ }
             </span>
         );
         let dnd;
         if (this.state.selectedSpace) {
             name = (
                 <div className="mx_UserMenu_doubleName">
-                    <span className="mx_UserMenu_userName">{displayName}</span>
+                    <span className="mx_UserMenu_userName">{ displayName }</span>
                     <RoomName room={this.state.selectedSpace}>
-                        {(roomName) => <span className="mx_UserMenu_subUserName">{roomName}</span>}
+                        { (roomName) => <span className="mx_UserMenu_subUserName">{ roomName }</span> }
                     </RoomName>
                 </div>
             );
         } else if (prototypeCommunityName) {
             name = (
                 <div className="mx_UserMenu_doubleName">
-                    <span className="mx_UserMenu_userName">{prototypeCommunityName}</span>
-                    <span className="mx_UserMenu_subUserName">{displayName}</span>
+                    <span className="mx_UserMenu_userName">{ prototypeCommunityName }</span>
+                    <span className="mx_UserMenu_subUserName">{ displayName }</span>
                 </div>
             );
             menuName = _t("Community and user menu");
@@ -598,8 +598,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
         } else if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
             name = (
                 <div className="mx_UserMenu_doubleName">
-                    <span className="mx_UserMenu_userName">{_t("Home")}</span>
-                    <span className="mx_UserMenu_subUserName">{displayName}</span>
+                    <span className="mx_UserMenu_userName">{ _t("Home") }</span>
+                    <span className="mx_UserMenu_subUserName">{ displayName }</span>
                 </div>
             );
             isPrototype = true;
@@ -647,20 +647,20 @@ export default class UserMenu extends React.Component<IProps, IState> {
                                 className="mx_UserMenu_userAvatar"
                             />
                         </span>
-                        {name}
-                        {this.state.pendingRoomJoin.size > 0 && (
+                        { name }
+                        { this.state.pendingRoomJoin.size > 0 && (
                             <InlineSpinner>
                                 <TooltipButton helpText={_t(
                                     "Currently joining %(count)s rooms",
                                     { count: this.state.pendingRoomJoin.size },
                                 )} />
                             </InlineSpinner>
-                        )}
-                        {dnd}
-                        {buttons}
+                        ) }
+                        { dnd }
+                        { buttons }
                     </div>
                 </ContextMenuButton>
-                {this.renderContextMenu()}
+                { this.renderContextMenu() }
             </React.Fragment>
         );
     }

@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Clock from "./Clock";
-import { Playback } from "../../../voice/Playback";
+import { Playback } from "../../../audio/Playback";
 
 interface IProps {
     playback: Playback;

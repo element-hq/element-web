@@ -21,4 +21,5 @@ export enum NotificationColor {
     Bold, // no badge, show as unread
     Grey, // unread notified messages
     Red,  // unread pings
+    Unsent, // some messages failed to send
 }

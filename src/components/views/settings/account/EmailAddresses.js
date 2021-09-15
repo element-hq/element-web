@@ -88,21 +88,21 @@ export class ExistingEmailAddress extends React.Component {
             return (
                 <div className="mx_ExistingEmailAddress">
                     <span className="mx_ExistingEmailAddress_promptText">
-                        {_t("Remove %(email)s?", { email: this.props.email.address } )}
+                        { _t("Remove %(email)s?", { email: this.props.email.address } ) }
                     </span>
                     <AccessibleButton
                         onClick={this._onActuallyRemove}
                         kind="danger_sm"
                         className="mx_ExistingEmailAddress_confirmBtn"
                     >
-                        {_t("Remove")}
+                        { _t("Remove") }
                     </AccessibleButton>
                     <AccessibleButton
                         onClick={this._onDontRemove}
                         kind="link_sm"
                         className="mx_ExistingEmailAddress_confirmBtn"
                     >
-                        {_t("Cancel")}
+                        { _t("Cancel") }
                     </AccessibleButton>
                 </div>
             );
@@ -110,9 +110,9 @@ export class ExistingEmailAddress extends React.Component {
 
         return (
             <div className="mx_ExistingEmailAddress">
-                <span className="mx_ExistingEmailAddress_email">{this.props.email.address}</span>
+                <span className="mx_ExistingEmailAddress_email">{ this.props.email.address }</span>
                 <AccessibleButton onClick={this._onRemove} kind="danger_sm">
-                    {_t("Remove")}
+                    { _t("Remove") }
                 </AccessibleButton>
             </div>
         );
@@ -229,19 +229,19 @@ export default class EmailAddresses extends React.Component {
 
         let addButton = (
             <AccessibleButton onClick={this._onAddClick} kind="primary">
-                {_t("Add")}
+                { _t("Add") }
             </AccessibleButton>
         );
         if (this.state.verifying) {
             addButton = (
                 <div>
-                    <div>{_t("We've sent you an email to verify your address. Please follow the instructions there and then click the button below.")}</div>
+                    <div>{ _t("We've sent you an email to verify your address. Please follow the instructions there and then click the button below.") }</div>
                     <AccessibleButton
                         onClick={this._onContinueClick}
                         kind="primary"
                         disabled={this.state.continueDisabled}
                     >
-                        {_t("Continue")}
+                        { _t("Continue") }
                     </AccessibleButton>
                 </div>
             );
@@ -249,7 +249,7 @@ export default class EmailAddresses extends React.Component {
 
         return (
             <div className="mx_EmailAddresses">
-                {existingEmailElements}
+                { existingEmailElements }
                 <form
                     onSubmit={this._onAddClick}
                     autoComplete="off"
@@ -264,7 +264,7 @@ export default class EmailAddresses extends React.Component {
                         value={this.state.newEmailAddress}
                         onChange={this._onChangeNewEmailAddress}
                     />
-                    {addButton}
+                    { addButton }
                 </form>
             </div>
         );

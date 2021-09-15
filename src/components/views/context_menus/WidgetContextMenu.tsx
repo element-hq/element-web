@@ -76,7 +76,8 @@ const WidgetContextMenu: React.FC<IProps> = ({
             onFinished();
         };
         streamAudioStreamButton = <IconizedContextMenuOption
-            onClick={onStreamAudioClick} label={_t("Start audio stream")}
+            onClick={onStreamAudioClick}
+            label={_t("Start audio stream")}
         />;
     }
 

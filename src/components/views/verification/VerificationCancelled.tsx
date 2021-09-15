@@ -28,9 +28,9 @@ export default class VerificationCancelled extends React.Component<IProps> {
     public render(): React.ReactNode {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
-            <p>{_t(
+            <p>{ _t(
                 "The other party cancelled the verification.",
-            )}</p>
+            ) }</p>
             <DialogButtons
                 primaryButton={_t('OK')}
                 hasCancel={false}

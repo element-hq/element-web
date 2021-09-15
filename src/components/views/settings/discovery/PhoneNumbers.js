@@ -205,9 +205,9 @@ export class PhoneNumber extends React.Component {
         if (verifying) {
             status = <span className="mx_ExistingPhoneNumber_verification">
                 <span>
-                    {_t("Please enter verification code sent via text.")}
+                    { _t("Please enter verification code sent via text.") }
                     <br />
-                    {this.state.verifyError}
+                    { this.state.verifyError }
                 </span>
                 <form onSubmit={this.onContinueClick} autoComplete="off" noValidate={true}>
                     <Field
@@ -226,7 +226,7 @@ export class PhoneNumber extends React.Component {
                 kind="danger_sm"
                 onClick={this.onRevokeClick}
             >
-                {_t("Revoke")}
+                { _t("Revoke") }
             </AccessibleButton>;
         } else {
             status = <AccessibleButton
@@ -234,14 +234,14 @@ export class PhoneNumber extends React.Component {
                 kind="primary_sm"
                 onClick={this.onShareClick}
             >
-                {_t("Share")}
+                { _t("Share") }
             </AccessibleButton>;
         }
 
         return (
             <div className="mx_ExistingPhoneNumber">
-                <span className="mx_ExistingPhoneNumber_address">+{address}</span>
-                {status}
+                <span className="mx_ExistingPhoneNumber_address">+{ address }</span>
+                { status }
             </div>
         );
     }
@@ -261,13 +261,13 @@ export default class PhoneNumbers extends React.Component {
             });
         } else {
             content = <span className="mx_SettingsTab_subsectionText">
-                {_t("Discovery options will appear once you have added a phone number above.")}
+                { _t("Discovery options will appear once you have added a phone number above.") }
             </span>;
         }
 
         return (
             <div className="mx_PhoneNumbers">
-                {content}
+                { content }
             </div>
         );
     }

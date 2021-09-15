@@ -44,7 +44,7 @@ class Emoji extends React.PureComponent<IProps> {
                 label={emoji.unicode}
             >
                 <div className={`mx_EmojiPicker_item ${isSelected ? 'mx_EmojiPicker_item_selected' : ''}`}>
-                    {emoji.unicode}
+                    { emoji.unicode }
                 </div>
             </MenuItem>
         );

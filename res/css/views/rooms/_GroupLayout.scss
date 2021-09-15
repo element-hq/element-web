@@ -26,6 +26,7 @@ $left-gutter: 64px;
 
         > .mx_EventTile_avatar {
             position: absolute;
+            z-index: 9;
         }
 
         .mx_MessageTimestamp {

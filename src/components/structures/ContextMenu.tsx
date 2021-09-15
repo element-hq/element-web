@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { CSSProperties, RefObject, useRef, useState } from "react";
+import React, { CSSProperties, RefObject, SyntheticEvent, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 
@@ -79,6 +79,10 @@ export interface IProps extends IPosition {
     // whether this context menu should be focus managed. If false it must handle itself
     managed?: boolean;
     wrapperClassName?: string;
+
+    // If true, this context menu will be mounted as a child to the parent container. Otherwise
+    // it will be mounted to a container at the root of the DOM.
+    mountAsChild?: boolean;
 
     // Function to be called on menu close
     onFinished();
@@ -318,10 +322,16 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
 
         const menuClasses = classNames({
             'mx_ContextualMenu': true,
-            'mx_ContextualMenu_left': !hasChevron && position.left,
-            'mx_ContextualMenu_right': !hasChevron && position.right,
-            'mx_ContextualMenu_top': !hasChevron && position.top,
-            'mx_ContextualMenu_bottom': !hasChevron && position.bottom,
+            /**
+             * In some cases we may get the number of 0, which still means that we're supposed to properly
+             * add the specific position class, but as it was falsy things didn't work as intended.
+             * In addition, defensively check for counter cases where we may get more than one value,
+             * even if we shouldn't.
+             */
+            'mx_ContextualMenu_left': !hasChevron && position.left !== undefined && !position.right,
+            'mx_ContextualMenu_right': !hasChevron && position.right !== undefined && !position.left,
+            'mx_ContextualMenu_top': !hasChevron && position.top !== undefined && !position.bottom,
+            'mx_ContextualMenu_bottom': !hasChevron && position.bottom !== undefined && !position.top,
             'mx_ContextualMenu_withChevron_left': chevronFace === ChevronFace.Left,
             'mx_ContextualMenu_withChevron_right': chevronFace === ChevronFace.Right,
             'mx_ContextualMenu_withChevron_top': chevronFace === ChevronFace.Top,
@@ -390,21 +400,37 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
     }
 
     render(): React.ReactChild {
-        return ReactDOM.createPortal(this.renderMenu(), getOrCreateContainer());
+        if (this.props.mountAsChild) {
+            // Render as a child of the current parent
+            return this.renderMenu();
+        } else {
+            // Render as a child of a container at the root of the DOM
+            return ReactDOM.createPortal(this.renderMenu(), getOrCreateContainer());
+        }
     }
 }
 
+export type ToRightOf = {
+    left: number;
+    top: number;
+    chevronOffset: number;
+};
+
 // Placement method for <ContextMenu /> to position context menu to right of elementRect with chevronOffset
-export const toRightOf = (elementRect: Pick<DOMRect, "right" | "top" | "height">, chevronOffset = 12) => {
+export const toRightOf = (elementRect: Pick<DOMRect, "right" | "top" | "height">, chevronOffset = 12): ToRightOf => {
     const left = elementRect.right + window.pageXOffset + 3;
     let top = elementRect.top + (elementRect.height / 2) + window.pageYOffset;
     top -= chevronOffset + 8; // where 8 is half the height of the chevron
     return { left, top, chevronOffset };
 };
 
+export type AboveLeftOf = IPosition & {
+    chevronFace: ChevronFace;
+};
+
 // Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the left of elementRect,
 // and either above or below: wherever there is more space (maybe this should be aboveOrBelowLeftOf?)
-export const aboveLeftOf = (elementRect: DOMRect, chevronFace = ChevronFace.None, vPadding = 0) => {
+export const aboveLeftOf = (elementRect: DOMRect, chevronFace = ChevronFace.None, vPadding = 0): AboveLeftOf => {
     const menuOptions: IPosition & { chevronFace: ChevronFace } = { chevronFace };
 
     const buttonRight = elementRect.right + window.pageXOffset;
@@ -461,10 +487,14 @@ type ContextMenuTuple<T> = [boolean, RefObject<T>, () => void, () => void, (val:
 export const useContextMenu = <T extends any = HTMLElement>(): ContextMenuTuple<T> => {
     const button = useRef<T>(null);
     const [isOpen, setIsOpen] = useState(false);
-    const open = () => {
+    const open = (ev?: SyntheticEvent) => {
+        ev?.preventDefault();
+        ev?.stopPropagation();
         setIsOpen(true);
     };
-    const close = () => {
+    const close = (ev?: SyntheticEvent) => {
+        ev?.preventDefault();
+        ev?.stopPropagation();
         setIsOpen(false);
     };
 

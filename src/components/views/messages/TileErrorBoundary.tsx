@@ -51,6 +51,7 @@ export default class TileErrorBoundary extends React.Component<IProps, IState> {
     private onBugReport = (): void => {
         Modal.createTrackedDialog('Bug Report Dialog', '', BugReportDialog, {
             label: 'react-soft-crash-tile',
+            error: this.state.error,
         });
     };
 
@@ -67,14 +68,14 @@ export default class TileErrorBoundary extends React.Component<IProps, IState> {
             let submitLogsButton;
             if (SdkConfig.get().bug_report_endpoint_url) {
                 submitLogsButton = <a onClick={this.onBugReport} href="#">
-                    {_t("Submit logs")}
+                    { _t("Submit logs") }
                 </a>;
             }
 
             return (<div className={classNames(classes)}>
                 <div className="mx_EventTile_line">
                     <span>
-                        {_t("Can't load this message")}
+                        { _t("Can't load this message") }
                         { mxEvent && ` (${mxEvent.getType()})` }
                         { submitLogsButton }
                     </span>

@@ -203,7 +203,7 @@ export default async function sendBugReport(bugReportEndpoint: string, opts: IOp
     const body = await collectBugReport(opts);
 
     progressCallback(_t("Uploading logs"));
-    await _submitReport(bugReportEndpoint, body, progressCallback);
+    await submitReport(bugReportEndpoint, body, progressCallback);
 }
 
 /**
@@ -289,10 +289,10 @@ export async function submitFeedback(
         body.append(k, extraData[k]);
     }
 
-    await _submitReport(SdkConfig.get().bug_report_endpoint_url, body, () => {});
+    await submitReport(SdkConfig.get().bug_report_endpoint_url, body, () => {});
 }
 
-function _submitReport(endpoint: string, body: FormData, progressCallback: (string) => void) {
+function submitReport(endpoint: string, body: FormData, progressCallback: (str: string) => void) {
     return new Promise<void>((resolve, reject) => {
         const req = new XMLHttpRequest();
         req.open("POST", endpoint);

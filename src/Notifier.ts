@@ -328,7 +328,7 @@ export const Notifier = {
 
     onEvent: function(ev: MatrixEvent) {
         if (!this.isSyncing) return; // don't alert for any messages initially
-        if (ev.sender && ev.sender.userId === MatrixClientPeg.get().credentials.userId) return;
+        if (ev.getSender() === MatrixClientPeg.get().credentials.userId) return;
 
         MatrixClientPeg.get().decryptEventIfNeeded(ev);
 

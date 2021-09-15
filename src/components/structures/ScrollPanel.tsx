@@ -183,11 +183,17 @@ export default class ScrollPanel extends React.Component<IProps> {
     private readonly itemlist = createRef<HTMLOListElement>();
     private unmounted = false;
     private scrollTimeout: Timer;
+    // Are we currently trying to backfill?
     private isFilling: boolean;
+    // Is the current fill request caused by a props update?
+    private isFillingDueToPropsUpdate = false;
+    // Did another request to check the fill state arrive while we were trying to backfill?
     private fillRequestWhileRunning: boolean;
+    // Is that next fill request scheduled because of a props update?
+    private pendingFillDueToPropsUpdate: boolean;
     private scrollState: IScrollState;
     private preventShrinkingState: IPreventShrinkingState;
-    private unfillDebouncer: NodeJS.Timeout;
+    private unfillDebouncer: number;
     private bottomGrowth: number;
     private pages: number;
     private heightUpdateInProgress: boolean;
@@ -213,7 +219,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         // adding events to the top).
         //
         // This will also re-check the fill state, in case the paginate was inadequate
-        this.checkScroll();
+        this.checkScroll(true);
         this.updatePreventShrinking();
     }
 
@@ -251,12 +257,12 @@ export default class ScrollPanel extends React.Component<IProps> {
 
     // after an update to the contents of the panel, check that the scroll is
     // where it ought to be, and set off pagination requests if necessary.
-    public checkScroll = () => {
+    public checkScroll = (isFromPropsUpdate = false) => {
         if (this.unmounted) {
             return;
         }
         this.restoreSavedScrollState();
-        this.checkFillState();
+        this.checkFillState(0, isFromPropsUpdate);
     };
 
     // return true if the content is fully scrolled down right now; else false.
@@ -319,7 +325,7 @@ export default class ScrollPanel extends React.Component<IProps> {
     }
 
     // check the scroll state and send out backfill requests if necessary.
-    public checkFillState = async (depth = 0): Promise<void> => {
+    public checkFillState = async (depth = 0, isFromPropsUpdate = false): Promise<void> => {
         if (this.unmounted) {
             return;
         }
@@ -355,14 +361,20 @@ export default class ScrollPanel extends React.Component<IProps> {
         // don't allow more than 1 chain of calls concurrently
         // do make a note when a new request comes in while already running one,
         // so we can trigger a new chain of calls once done.
+        // However, we make an exception for when we're already filling due to a
+        // props (or children) update, because very often the children include
+        // spinners to say whether we're paginating or not, so this would cause
+        // infinite paginating.
         if (isFirstCall) {
-            if (this.isFilling) {
+            if (this.isFilling && !this.isFillingDueToPropsUpdate) {
                 debuglog("isFilling: not entering while request is ongoing, marking for a subsequent request");
                 this.fillRequestWhileRunning = true;
+                this.pendingFillDueToPropsUpdate = isFromPropsUpdate;
                 return;
             }
             debuglog("isFilling: setting");
             this.isFilling = true;
+            this.isFillingDueToPropsUpdate = isFromPropsUpdate;
         }
 
         const itemlist = this.itemlist.current;
@@ -393,11 +405,14 @@ export default class ScrollPanel extends React.Component<IProps> {
         if (isFirstCall) {
             debuglog("isFilling: clearing");
             this.isFilling = false;
+            this.isFillingDueToPropsUpdate = false;
         }
 
         if (this.fillRequestWhileRunning) {
+            const refillDueToPropsUpdate = this.pendingFillDueToPropsUpdate;
             this.fillRequestWhileRunning = false;
-            this.checkFillState();
+            this.pendingFillDueToPropsUpdate = false;
+            this.checkFillState(0, refillDueToPropsUpdate);
         }
     };
 

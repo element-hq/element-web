@@ -23,7 +23,7 @@ import { compare } from "../../../../utils/strings";
  * Sorts rooms according to the browser's determination of alphabetic.
  */
 export class AlphabeticAlgorithm implements IAlgorithm {
-    public async sortRooms(rooms: Room[], tagId: TagID): Promise<Room[]> {
+    public sortRooms(rooms: Room[], tagId: TagID): Room[] {
         return rooms.sort((a, b) => {
             return compare(a.name, b.name);
         });

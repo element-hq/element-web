@@ -106,7 +106,7 @@ export default class RelatedGroupSettings extends React.Component {
             <EditableItemList
                 id="relatedGroups"
                 items={this.state.newGroupsList}
-                className={"mx_RelatedGroupSettings"}
+                className="mx_RelatedGroupSettings"
                 newItem={this.state.newGroupId}
                 canRemove={this.props.canSetRelatedGroups}
                 canEdit={this.props.canSetRelatedGroups}

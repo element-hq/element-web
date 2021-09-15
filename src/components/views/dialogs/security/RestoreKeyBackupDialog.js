@@ -288,7 +288,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                 details = _t("Fetching keys from server...");
             }
             content = <div>
-                <div>{details}</div>
+                <div>{ details }</div>
                 <Spinner />
             </div>;
         } else if (this.state.loadError) {
@@ -299,18 +299,18 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                 if (this.state.restoreType === RESTORE_TYPE_RECOVERYKEY) {
                     title = _t("Security Key mismatch");
                     content = <div>
-                        <p>{_t(
+                        <p>{ _t(
                             "Backup could not be decrypted with this Security Key: " +
                             "please verify that you entered the correct Security Key.",
-                        )}</p>
+                        ) }</p>
                     </div>;
                 } else {
                     title = _t("Incorrect Security Phrase");
                     content = <div>
-                        <p>{_t(
+                        <p>{ _t(
                             "Backup could not be decrypted with this Security Phrase: " +
                             "please verify that you entered the correct Security Phrase.",
-                        )}</p>
+                        ) }</p>
                     </div>;
                 }
             } else {
@@ -325,14 +325,14 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             title = _t("Keys restored");
             let failedToDecrypt;
             if (this.state.recoverInfo.total > this.state.recoverInfo.imported) {
-                failedToDecrypt = <p>{_t(
+                failedToDecrypt = <p>{ _t(
                     "Failed to decrypt %(failedCount)s sessions!",
                     { failedCount: this.state.recoverInfo.total - this.state.recoverInfo.imported },
-                )}</p>;
+                ) }</p>;
             }
             content = <div>
-                <p>{_t("Successfully restored %(sessionCount)s keys", { sessionCount: this.state.recoverInfo.imported })}</p>
-                {failedToDecrypt}
+                <p>{ _t("Successfully restored %(sessionCount)s keys", { sessionCount: this.state.recoverInfo.imported }) }</p>
+                { failedToDecrypt }
                 <DialogButtons primaryButton={_t('OK')}
                     onPrimaryButtonClick={this._onDone}
                     hasCancel={false}
@@ -344,15 +344,15 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
             title = _t("Enter Security Phrase");
             content = <div>
-                <p>{_t(
+                <p>{ _t(
                     "<b>Warning</b>: you should only set up key backup " +
                     "from a trusted computer.", {},
-                    { b: sub => <b>{sub}</b> },
-                )}</p>
-                <p>{_t(
+                    { b: sub => <b>{ sub }</b> },
+                ) }</p>
+                <p>{ _t(
                     "Access your secure message history and set up secure " +
                     "messaging by entering your Security Phrase.",
-                )}</p>
+                ) }</p>
 
                 <form className="mx_RestoreKeyBackupDialog_primaryContainer">
                     <input type="password"
@@ -370,7 +370,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                         focus={false}
                     />
                 </form>
-                {_t(
+                { _t(
                     "If you've forgotten your Security Phrase you can "+
                     "<button1>use your Security Key</button1> or " +
                     "<button2>set up new recovery options</button2>",
@@ -381,16 +381,16 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                             element="span"
                             onClick={this._onUseRecoveryKeyClick}
                         >
-                            {s}
+                            { s }
                         </AccessibleButton>,
                         button2: s => <AccessibleButton
                             className="mx_linkButton"
                             element="span"
                             onClick={this._onResetRecoveryClick}
                         >
-                            {s}
+                            { s }
                         </AccessibleButton>,
-                    })}
+                    }) }
             </div>;
         } else {
             title = _t("Enter Security Key");
@@ -399,27 +399,27 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
 
             let keyStatus;
             if (this.state.recoveryKey.length === 0) {
-                keyStatus = <div className="mx_RestoreKeyBackupDialog_keyStatus"></div>;
+                keyStatus = <div className="mx_RestoreKeyBackupDialog_keyStatus" />;
             } else if (this.state.recoveryKeyValid) {
                 keyStatus = <div className="mx_RestoreKeyBackupDialog_keyStatus">
-                    {"\uD83D\uDC4D "}{_t("This looks like a valid Security Key!")}
+                    { "\uD83D\uDC4D " }{ _t("This looks like a valid Security Key!") }
                 </div>;
             } else {
                 keyStatus = <div className="mx_RestoreKeyBackupDialog_keyStatus">
-                    {"\uD83D\uDC4E "}{_t("Not a valid Security Key")}
+                    { "\uD83D\uDC4E " }{ _t("Not a valid Security Key") }
                 </div>;
             }
 
             content = <div>
-                <p>{_t(
+                <p>{ _t(
                     "<b>Warning</b>: You should only set up key backup " +
                     "from a trusted computer.", {},
-                    { b: sub => <b>{sub}</b> },
-                )}</p>
-                <p>{_t(
+                    { b: sub => <b>{ sub }</b> },
+                ) }</p>
+                <p>{ _t(
                     "Access your secure message history and set up secure " +
                     "messaging by entering your Security Key.",
-                )}</p>
+                ) }</p>
 
                 <div className="mx_RestoreKeyBackupDialog_primaryContainer">
                     <input className="mx_RestoreKeyBackupDialog_recoveryKeyInput"
@@ -427,7 +427,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                         value={this.state.recoveryKey}
                         autoFocus={true}
                     />
-                    {keyStatus}
+                    { keyStatus }
                     <DialogButtons primaryButton={_t('Next')}
                         onPrimaryButtonClick={this._onRecoveryKeyNext}
                         hasCancel={true}
@@ -436,7 +436,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                         primaryDisabled={!this.state.recoveryKeyValid}
                     />
                 </div>
-                {_t(
+                { _t(
                     "If you've forgotten your Security Key you can "+
                     "<button>set up new recovery options</button>",
                     {},
@@ -445,10 +445,10 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                             element="span"
                             onClick={this._onResetRecoveryClick}
                         >
-                            {s}
+                            { s }
                         </AccessibleButton>,
                     },
-                )}
+                ) }
             </div>;
         }
 
@@ -458,7 +458,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                 title={title}
             >
                 <div className='mx_RestoreKeyBackupDialog_content'>
-                    {content}
+                    { content }
                 </div>
             </BaseDialog>
         );

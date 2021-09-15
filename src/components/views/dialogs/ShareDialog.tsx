@@ -35,7 +35,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
-import GenericTextContextMenu from "../context_menus/GenericTextContextMenu.js";
+import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
 
 const socials = [
     {
@@ -158,7 +158,7 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
             if (this.state.linkSpecificEvent) {
                 matrixToUrl = this.props.permalinkCreator.forEvent(this.props.target.getId());
             } else {
-                matrixToUrl = this.props.permalinkCreator.forRoom();
+                matrixToUrl = this.props.permalinkCreator.forShareableRoom();
             }
         }
         return matrixToUrl;

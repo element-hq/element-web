@@ -59,7 +59,7 @@ export default class ChangelogDialog extends React.Component<IProps> {
         return (
             <li key={commit.sha} className="mx_ChangelogDialog_li">
                 <a href={commit.html_url} target="_blank" rel="noreferrer noopener">
-                    {commit.commit.message.split('\n')[0]}
+                    { commit.commit.message.split('\n')[0] }
                 </a>
             </li>
         );
@@ -79,15 +79,15 @@ export default class ChangelogDialog extends React.Component<IProps> {
             }
             return (
                 <div key={repo}>
-                    <h2>{repo}</h2>
-                    <ul>{content}</ul>
+                    <h2>{ repo }</h2>
+                    <ul>{ content }</ul>
                 </div>
             );
         });
 
         const content = (
             <div className="mx_ChangelogDialog_content">
-                {this.props.version == null || this.props.newVersion == null ? <h2>{_t("Unavailable")}</h2> : logs}
+                { this.props.version == null || this.props.newVersion == null ? <h2>{ _t("Unavailable") }</h2> : logs }
             </div>
         );
 

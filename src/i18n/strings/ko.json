@@ -1667,5 +1667,13 @@
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "사용자 %(userId)s의 세션 %(deviceId)s에서 받은 서명 키와 당신이 제공한 서명 키가 일치합니다. 세션이 검증되었습니다.",
     "Show more": "더 보기",
     "Changing password will currently reset any end-to-end encryption keys on all sessions, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "비밀번호를 변경한다면 방의 암호화 키를 내보낸 후 다시 가져오지 않는 이상 모든 종단간 암호화 키는 초기화 될 것이고, 암호화된 대화 내역은 읽을 수 없게 될 것입니다. 이 문제는 추후에 개선될 것입니다.",
-    "Create Account": "계정 만들기"
+    "Create Account": "계정 만들기",
+    "Integration manager": "통합 관리자",
+    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "이 위젯을 사용하면 <helpcon /> %(widgetDomain)s & 통합 관리자와 데이터를 공유합니다.",
+    "Identity server is": "ID 서버:",
+    "Identity server": "ID 서버",
+    "Identity server (%(server)s)": "ID 서버 (%(server)s)",
+    "Could not connect to identity server": "ID 서버에 연결할 수 없음",
+    "Not a valid identity server (status code %(code)s)": "올바르지 않은 ID 서버 (상태 코드 %(code)s)",
+    "Identity server URL must be HTTPS": "ID 서버 URL은 HTTPS이어야 함"
 }

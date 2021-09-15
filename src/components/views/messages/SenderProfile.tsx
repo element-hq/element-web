@@ -15,12 +15,14 @@
  */
 
 import React from 'react';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MsgType } from "matrix-js-sdk/src/@types/event";
+
 import Flair from '../elements/Flair';
 import FlairStore from '../../../stores/FlairStore';
 import { getUserNameColorClass } from '../../../utils/FormattingUtils';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -36,7 +38,7 @@ interface IState {
 @replaceableComponent("views.messages.SenderProfile")
 export default class SenderProfile extends React.Component<IProps, IState> {
     static contextType = MatrixClientContext;
-    private unmounted: boolean;
+    private unmounted = false;
 
     constructor(props: IProps) {
         super(props);
@@ -49,8 +51,7 @@ export default class SenderProfile extends React.Component<IProps, IState> {
     }
 
     componentDidMount() {
-        this.unmounted = false;
-        this._updateRelatedGroups();
+        this.updateRelatedGroups();
 
         if (this.state.userGroups.length === 0) {
             this.getPublicisedGroups();
@@ -64,35 +65,29 @@ export default class SenderProfile extends React.Component<IProps, IState> {
         this.context.removeListener('RoomState.events', this.onRoomStateEvents);
     }
 
-    async getPublicisedGroups() {
-        if (!this.unmounted) {
-            const userGroups = await FlairStore.getPublicisedGroupsCached(
-                this.context, this.props.mxEvent.getSender(),
-            );
-            this.setState({ userGroups });
-        }
+    private async getPublicisedGroups() {
+        const userGroups = await FlairStore.getPublicisedGroupsCached(this.context, this.props.mxEvent.getSender());
+        if (this.unmounted) return;
+        this.setState({ userGroups });
     }
 
-    onRoomStateEvents = event => {
-        if (event.getType() === 'm.room.related_groups' &&
-            event.getRoomId() === this.props.mxEvent.getRoomId()
-        ) {
-            this._updateRelatedGroups();
+    private onRoomStateEvents = (event: MatrixEvent) => {
+        if (event.getType() === 'm.room.related_groups' && event.getRoomId() === this.props.mxEvent.getRoomId()) {
+            this.updateRelatedGroups();
         }
     };
 
-    _updateRelatedGroups() {
-        if (this.unmounted) return;
+    private updateRelatedGroups() {
         const room = this.context.getRoom(this.props.mxEvent.getRoomId());
         if (!room) return;
 
         const relatedGroupsEvent = room.currentState.getStateEvents('m.room.related_groups', '');
         this.setState({
-            relatedGroups: relatedGroupsEvent ? relatedGroupsEvent.getContent().groups || [] : [],
+            relatedGroups: relatedGroupsEvent?.getContent().groups || [],
         });
     }
 
-    _getDisplayedGroups(userGroups, relatedGroups) {
+    private getDisplayedGroups(userGroups?: string[], relatedGroups?: string[]) {
         let displayedGroups = userGroups || [];
         if (relatedGroups && relatedGroups.length > 0) {
             displayedGroups = relatedGroups.filter((groupId) => {
@@ -113,7 +108,7 @@ export default class SenderProfile extends React.Component<IProps, IState> {
         const displayName = mxEvent.sender?.rawDisplayName || mxEvent.getSender() || "";
         const mxid = mxEvent.sender?.userId || mxEvent.getSender() || "";
 
-        if (msgtype === 'm.emote') {
+        if (msgtype === MsgType.Emote) {
             return null; // emote message must include the name so don't duplicate it
         }
 
@@ -128,7 +123,7 @@ export default class SenderProfile extends React.Component<IProps, IState> {
 
         let flair;
         if (this.props.enableFlair) {
-            const displayedGroups = this._getDisplayedGroups(
+            const displayedGroups = this.getDisplayedGroups(
                 this.state.userGroups, this.state.relatedGroups,
             );
 

@@ -953,5 +953,10 @@
     "Unable to access microphone": "No s'ha pogut accedir al micròfon",
     "Explore rooms": "Explora sales",
     "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)sno ha fet canvis",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)sno ha fet canvis %(count)s cops"
+    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)sno ha fet canvis %(count)s cops",
+    "Integration manager": "Gestor d'integracions",
+    "Identity server is": "El servidor d'identitat és",
+    "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Els gestors d'integracions reben dades de configuració i poden modificar ginys, enviar invitacions a sales i establir nivells d'autoritat en nom teu.",
+    "Identity server": "Servidor d'identitat",
+    "Could not connect to identity server": "No s'ha pogut connectar amb el servidor d'identitat"
 }

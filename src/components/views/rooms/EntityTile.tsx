@@ -129,23 +129,23 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
                     presenceState={this.props.presenceState} />;
             }
             if (this.props.subtextLabel) {
-                presenceLabel = <span className="mx_EntityTile_subtext">{this.props.subtextLabel}</span>;
+                presenceLabel = <span className="mx_EntityTile_subtext">{ this.props.subtextLabel }</span>;
             }
             nameEl = (
                 <div className="mx_EntityTile_details">
                     <div className="mx_EntityTile_name" dir="auto">
                         { name }
                     </div>
-                    {presenceLabel}
+                    { presenceLabel }
                 </div>
             );
         } else if (this.props.subtextLabel) {
             nameEl = (
                 <div className="mx_EntityTile_details">
                     <div className="mx_EntityTile_name" dir="auto">
-                        {name}
+                        { name }
                     </div>
-                    <span className="mx_EntityTile_subtext">{this.props.subtextLabel}</span>
+                    <span className="mx_EntityTile_subtext">{ this.props.subtextLabel }</span>
                 </div>
             );
         } else {
@@ -167,7 +167,7 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
         const powerStatus = this.props.powerStatus;
         if (powerStatus) {
             const powerText = PowerLabel[powerStatus];
-            powerLabel = <div className="mx_EntityTile_power">{powerText}</div>;
+            powerLabel = <div className="mx_EntityTile_power">{ powerText }</div>;
         }
 
         let e2eIcon;

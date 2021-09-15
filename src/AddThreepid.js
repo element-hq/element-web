@@ -248,7 +248,7 @@ export default class AddThreepid {
 
     /**
      * Takes a phone number verification code as entered by the user and validates
-     * it with the ID server, then if successful, adds the phone number.
+     * it with the identity server, then if successful, adds the phone number.
      * @param {string} msisdnToken phone number verification code as entered by the user
      * @return {Promise} Resolves if the phone number was added. Rejects with an object
      * with a "message" property which contains a human-readable message detailing why

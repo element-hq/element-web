@@ -25,7 +25,7 @@ module.exports = async function roomDirectoryScenarios(alice, bob) {
     console.log(" creating a public room and join through directory:");
     const room = 'test';
     await createRoom(alice, room);
-    await changeRoomSettings(alice, { directory: true, visibility: "public_no_guests", alias: "#test" });
+    await changeRoomSettings(alice, { directory: true, visibility: "public", alias: "#test" });
     await join(bob, room); //looks up room in directory
     const bobMessage = "hi Alice!";
     await sendMessage(bob, bobMessage);

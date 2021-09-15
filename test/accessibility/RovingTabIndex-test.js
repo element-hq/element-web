@@ -48,7 +48,7 @@ const button4 = <Button key={4}>d</Button>;
 describe("RovingTabIndex", () => {
     it("RovingTabIndexProvider renders children as expected", () => {
         const wrapper = mount(<RovingTabIndexProvider>
-            {() => <div><span>Test</span></div>}
+            { () => <div><span>Test</span></div> }
         </RovingTabIndexProvider>);
         expect(wrapper.text()).toBe("Test");
         expect(wrapper.html()).toBe('<div><span>Test</span></div>');
@@ -56,11 +56,11 @@ describe("RovingTabIndex", () => {
 
     it("RovingTabIndexProvider works as expected with useRovingTabIndex", () => {
         const wrapper = mount(<RovingTabIndexProvider>
-            {() => <React.Fragment>
+            { () => <React.Fragment>
                 { button1 }
                 { button2 }
                 { button3 }
-            </React.Fragment>}
+            </React.Fragment> }
         </RovingTabIndexProvider>);
 
         // should begin with 0th being active
@@ -98,15 +98,15 @@ describe("RovingTabIndex", () => {
 
     it("RovingTabIndexProvider works as expected with RovingTabIndexWrapper", () => {
         const wrapper = mount(<RovingTabIndexProvider>
-            {() => <React.Fragment>
+            { () => <React.Fragment>
                 { button1 }
                 { button2 }
                 <RovingTabIndexWrapper>
-                    {({ onFocus, isActive, ref }) =>
+                    { ({ onFocus, isActive, ref }) =>
                         <button onFocus={onFocus} tabIndex={isActive ? 0 : -1} ref={ref}>.</button>
                     }
                 </RovingTabIndexWrapper>
-            </React.Fragment>}
+            </React.Fragment> }
         </RovingTabIndexProvider>);
 
         // should begin with 0th being active

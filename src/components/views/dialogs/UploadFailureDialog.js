@@ -60,7 +60,7 @@ export default class UploadFailureDialog extends React.Component {
                     limit: filesize(this.props.contentMessages.getUploadLimit()),
                     sizeOfThisFile: filesize(this.props.badFiles[0].size),
                 }, {
-                    b: sub => <b>{sub}</b>,
+                    b: sub => <b>{ sub }</b>,
                 },
             );
             buttons = <DialogButtons primaryButton={_t('OK')}
@@ -75,7 +75,7 @@ export default class UploadFailureDialog extends React.Component {
                 {
                     limit: filesize(this.props.contentMessages.getUploadLimit()),
                 }, {
-                    b: sub => <b>{sub}</b>,
+                    b: sub => <b>{ sub }</b>,
                 },
             );
             buttons = <DialogButtons primaryButton={_t('OK')}
@@ -90,7 +90,7 @@ export default class UploadFailureDialog extends React.Component {
                 {
                     limit: filesize(this.props.contentMessages.getUploadLimit()),
                 }, {
-                    b: sub => <b>{sub}</b>,
+                    b: sub => <b>{ sub }</b>,
                 },
             );
             const howManyOthers = this.props.totalFiles - this.props.badFiles.length;
@@ -111,11 +111,11 @@ export default class UploadFailureDialog extends React.Component {
                 contentId='mx_Dialog_content'
             >
                 <div id='mx_Dialog_content'>
-                    {message}
-                    {preview}
+                    { message }
+                    { preview }
                 </div>
 
-                {buttons}
+                { buttons }
             </BaseDialog>
         );
     }

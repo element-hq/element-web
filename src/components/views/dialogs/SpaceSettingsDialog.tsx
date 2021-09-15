@@ -29,10 +29,12 @@ import SpaceSettingsVisibilityTab from "../spaces/SpaceSettingsVisibilityTab";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import AdvancedRoomSettingsTab from "../settings/tabs/room/AdvancedRoomSettingsTab";
+import RolesRoomSettingsTab from "../settings/tabs/room/RolesRoomSettingsTab";
 
 export enum SpaceSettingsTab {
     General = "SPACE_GENERAL_TAB",
     Visibility = "SPACE_VISIBILITY_TAB",
+    Roles = "SPACE_ROLES_TAB",
     Advanced = "SPACE_ADVANCED_TAB",
 }
 
@@ -60,7 +62,13 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
                 SpaceSettingsTab.Visibility,
                 _td("Visibility"),
                 "mx_SpaceSettingsDialog_visibilityIcon",
-                <SpaceSettingsVisibilityTab matrixClient={cli} space={space} />,
+                <SpaceSettingsVisibilityTab matrixClient={cli} space={space} closeSettingsFn={onFinished} />,
+            ),
+            new Tab(
+                SpaceSettingsTab.Roles,
+                _td("Roles & Permissions"),
+                "mx_RoomSettingsDialog_rolesIcon",
+                <RolesRoomSettingsTab roomId={space.roomId} />,
             ),
             SettingsStore.getValue(UIFeature.AdvancedSettings)
                 ? new Tab(

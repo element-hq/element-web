@@ -378,7 +378,7 @@ export class ModalManager {
             const dialog = (
                 <div className={classes}>
                     <div className="mx_Dialog">
-                        {modal.elem}
+                        { modal.elem }
                     </div>
                     <div className="mx_Dialog_background" onClick={this.onBackgroundClick} />
                 </div>

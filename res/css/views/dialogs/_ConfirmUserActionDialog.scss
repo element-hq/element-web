@@ -34,10 +34,9 @@ limitations under the License.
 }
 
 .mx_ConfirmUserActionDialog_reasonField {
-    font-family: $font-family;
     font-size: $font-14px;
-    color: $primary-fg-color;
-    background-color: $primary-bg-color;
+    color: $primary-content;
+    background-color: $background;
 
     border-radius: 3px;
     border: solid 1px $input-border-color;

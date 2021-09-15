@@ -116,6 +116,11 @@ $irc-line-height: $font-18px;
         .mx_EditMessageComposer_buttons {
             position: relative;
         }
+
+        .mx_ReactionsRow {
+            padding-left: 0;
+            padding-right: 0;
+        }
     }
 
     .mx_EventTile_emote {
@@ -198,8 +203,9 @@ $irc-line-height: $font-18px;
     .mx_ReplyThread {
         margin: 0;
         .mx_SenderProfile {
+            order: unset;
+            max-width: unset;
             width: unset;
-            max-width: var(--name-width);
             background: transparent;
         }
 

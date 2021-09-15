@@ -84,7 +84,7 @@ export default class ExtraTile extends React.Component<IProps, IState> {
         let nameContainer = (
             <div className="mx_RoomTile_nameContainer">
                 <div title={name} className={nameClasses} tabIndex={-1} dir="auto">
-                    {name}
+                    { name }
                 </div>
             </div>
         );
@@ -106,11 +106,11 @@ export default class ExtraTile extends React.Component<IProps, IState> {
                     title={this.props.isMinimized ? name : undefined}
                 >
                     <div className="mx_RoomTile_avatarContainer">
-                        {this.props.avatar}
+                        { this.props.avatar }
                     </div>
-                    {nameContainer}
+                    { nameContainer }
                     <div className="mx_RoomTile_badgeContainer">
-                        {badge}
+                        { badge }
                     </div>
                 </Button>
             </React.Fragment>

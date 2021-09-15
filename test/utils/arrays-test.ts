@@ -29,7 +29,6 @@ import {
     ArrayUtil,
     GroupedArray,
 } from "../../src/utils/arrays";
-import { objectFromEntries } from "../../src/utils/objects";
 
 function expectSample(i: number, input: number[], expected: number[], smooth = false) {
     console.log(`Resample case index: ${i}`); // for debugging test failures
@@ -336,7 +335,7 @@ describe('arrays', () => {
             expect(result).toBeDefined();
             expect(result.value).toBeDefined();
 
-            const asObject = objectFromEntries(result.value.entries());
+            const asObject = Object.fromEntries(result.value.entries());
             expect(asObject).toMatchObject(output);
         });
     });

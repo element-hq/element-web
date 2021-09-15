@@ -131,7 +131,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             const accepted = request.ready || request.started || request.done;
             if (accepted) {
                 stateLabel = (<AccessibleButton onClick={this.openRequest}>
-                    {this.acceptedLabel(request.receivingUserId)}
+                    { this.acceptedLabel(request.receivingUserId) }
                 </AccessibleButton>);
             } else if (request.cancelled) {
                 stateLabel = this.cancelledLabel(request.cancellingUserId);
@@ -140,7 +140,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             } else if (request.declining) {
                 stateLabel = _t("Declining …");
             }
-            stateNode = (<div className="mx_cryptoEvent_state">{stateLabel}</div>);
+            stateNode = (<div className="mx_cryptoEvent_state">{ stateLabel }</div>);
         }
 
         if (!request.initiatedByMe) {
@@ -150,10 +150,10 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             if (request.canAccept) {
                 stateNode = (<div className="mx_cryptoEvent_buttons">
                     <AccessibleButton kind="danger" onClick={this.onRejectClicked}>
-                        {_t("Decline")}
+                        { _t("Decline") }
                     </AccessibleButton>
                     <AccessibleButton kind="primary" onClick={this.onAcceptClicked}>
-                        {_t("Accept")}
+                        { _t("Accept") }
                     </AccessibleButton>
                 </div>);
             }

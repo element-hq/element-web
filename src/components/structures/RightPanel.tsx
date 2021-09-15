@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import { Room } from "matrix-js-sdk/src/models/room";
+import { RoomState } from "matrix-js-sdk/src/models/room-state";
 import { User } from "matrix-js-sdk/src/models/user";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -44,16 +45,23 @@ import GroupRoomInfo from "../views/groups/GroupRoomInfo";
 import UserInfo from "../views/right_panel/UserInfo";
 import ThirdPartyMemberInfo from "../views/rooms/ThirdPartyMemberInfo";
 import FilePanel from "./FilePanel";
+import ThreadView from "./ThreadView";
+import ThreadPanel from "./ThreadPanel";
 import NotificationPanel from "./NotificationPanel";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import PinnedMessagesCard from "../views/right_panel/PinnedMessagesCard";
 import { throttle } from 'lodash';
+import SpaceStore from "../../stores/SpaceStore";
+import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
+import { E2EStatus } from '../../utils/ShieldUtils';
 
 interface IProps {
     room?: Room; // if showing panels for a given room, this is set
     groupId?: string; // if showing panels for a given group, this is set
     user?: User; // used if we know the user ahead of opening the panel
     resizeNotifier: ResizeNotifier;
+    permalinkCreator?: RoomPermalinkCreator;
+    e2eStatus?: E2EStatus;
 }
 
 interface IState {
@@ -107,7 +115,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
                 return RightPanelPhases.GroupMemberList;
             }
             return rps.groupPanelPhase;
-        } else if (SettingsStore.getValue("feature_spaces") && this.props.room?.isSpaceRoom()
+        } else if (SpaceStore.spacesEnabled && this.props.room?.isSpaceRoom()
             && !RIGHT_PANEL_SPACE_PHASES.includes(rps.roomPanelPhase)
         ) {
             return RightPanelPhases.SpaceMemberList;
@@ -151,7 +159,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(newProps) { // eslint-disable-line camelcase
+    UNSAFE_componentWillReceiveProps(newProps) { // eslint-disable-line
         if (newProps.groupId !== this.props.groupId) {
             this.unregisterGroupStore();
             this.initGroupStore(newProps.groupId);
@@ -173,7 +181,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
         });
     };
 
-    private onRoomStateMember = (ev: MatrixEvent, _, member: RoomMember) => {
+    private onRoomStateMember = (ev: MatrixEvent, state: RoomState, member: RoomMember) => {
         if (!this.props.room || member.roomId !== this.props.room.roomId) {
             return;
         }
@@ -263,7 +271,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
             case RightPanelPhases.EncryptionPanel:
                 panel = <UserInfo
                     user={this.state.member}
-                    room={this.state.phase === RightPanelPhases.SpaceMemberInfo ? this.state.space : this.props.room}
+                    room={this.context.getRoom(this.state.member.roomId) ?? this.props.room}
                     key={roomId || this.state.member.userId}
                     onClose={this.onClose}
                     phase={this.state.phase}
@@ -305,6 +313,23 @@ export default class RightPanel extends React.Component<IProps, IState> {
 
             case RightPanelPhases.FilePanel:
                 panel = <FilePanel roomId={roomId} resizeNotifier={this.props.resizeNotifier} onClose={this.onClose} />;
+                break;
+
+            case RightPanelPhases.ThreadView:
+                panel = <ThreadView
+                    room={this.props.room}
+                    resizeNotifier={this.props.resizeNotifier}
+                    onClose={this.onClose}
+                    mxEvent={this.state.event}
+                    permalinkCreator={this.props.permalinkCreator}
+                    e2eStatus={this.props.e2eStatus} />;
+                break;
+
+            case RightPanelPhases.ThreadPanel:
+                panel = <ThreadPanel
+                    roomId={roomId}
+                    resizeNotifier={this.props.resizeNotifier}
+                    onClose={this.onClose} />;
                 break;
 
             case RightPanelPhases.RoomSummary:

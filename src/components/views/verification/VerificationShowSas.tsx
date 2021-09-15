@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import { SAS } from "matrix-js-sdk/src/crypto/verification/SAS";
+import { IGeneratedSas } from "matrix-js-sdk/src/crypto/verification/SAS";
 import { DeviceInfo } from "matrix-js-sdk/src//crypto/deviceinfo";
 import { _t, _td } from '../../../languageHandler';
 import { PendingActionSpinner } from "../right_panel/EncryptionInfo";
@@ -30,7 +30,7 @@ interface IProps {
     device?: DeviceInfo;
     onDone: () => void;
     onCancel: () => void;
-    sas: SAS.sas;
+    sas: IGeneratedSas;
     isSelf?: boolean;
     inDialog?: boolean; // whether this component is being shown in a dialog and to use DialogButtons
 }
@@ -81,14 +81,14 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
                         { emoji[0] }
                     </div>
                     <div className="mx_VerificationShowSas_emojiSas_label">
-                        {_t(capFirst(emoji[1]))}
+                        { _t(capFirst(emoji[1])) }
                     </div>
                 </div>,
             );
             sasDisplay = <div className="mx_VerificationShowSas_emojiSas">
-                {emojiBlocks.slice(0, 4)}
+                { emojiBlocks.slice(0, 4) }
                 <div className="mx_VerificationShowSas_emojiSas_break" />
-                {emojiBlocks.slice(4)}
+                { emojiBlocks.slice(4) }
             </div>;
             sasCaption = this.props.isSelf ?
                 _t(
@@ -99,10 +99,10 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
                 );
         } else if (this.props.sas.decimal) {
             const numberBlocks = this.props.sas.decimal.map((num, i) => <span key={i}>
-                {num}
+                { num }
             </span>);
             sasDisplay = <div className="mx_VerificationShowSas_decimalSas">
-                {numberBlocks}
+                { numberBlocks }
             </div>;
             sasCaption = this.props.isSelf ?
                 _t(
@@ -113,9 +113,9 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
                 );
         } else {
             return <div>
-                {_t("Unable to find a supported verification method.")}
+                { _t("Unable to find a supported verification method.") }
                 <AccessibleButton kind="primary" onClick={this.props.onCancel} className="mx_UserInfo_wideButton">
-                    {_t('Cancel')}
+                    { _t('Cancel') }
                 </AccessibleButton>
             </div>;
         }
@@ -165,12 +165,12 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
         }
 
         return <div className="mx_VerificationShowSas">
-            <p>{sasCaption}</p>
-            {sasDisplay}
-            <p>{this.props.isSelf ?
+            <p>{ sasCaption }</p>
+            { sasDisplay }
+            <p>{ this.props.isSelf ?
                 "":
-                _t("To be secure, do this in person or use a trusted way to communicate.")}</p>
-            {confirm}
+                _t("To be secure, do this in person or use a trusted way to communicate.") }</p>
+            { confirm }
         </div>;
     }
 }

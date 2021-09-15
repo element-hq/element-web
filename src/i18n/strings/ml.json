@@ -130,5 +130,7 @@
     "Checking for an update...": "അപ്ഡേറ്റ് ഉണ്ടോ എന്ന് തിരയുന്നു...",
     "Explore rooms": "മുറികൾ കണ്ടെത്തുക",
     "Sign In": "പ്രവേശിക്കുക",
-    "Create Account": "അക്കൗണ്ട് സൃഷ്ടിക്കുക"
+    "Create Account": "അക്കൗണ്ട് സൃഷ്ടിക്കുക",
+    "Integration manager": "സംയോജക മാനേജർ",
+    "Identity server": "തിരിച്ചറിയൽ സെർവർ"
 }

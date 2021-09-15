@@ -12,20 +12,14 @@
     "outDir": "./lib",
     "declaration": true,
     "jsx": "react",
-    "types": [
-      "node",
-      "react",
-      "flux",
-      "react-transition-group"
-    ],
     "lib": [
       "es2019",
       "dom",
       "dom.iterable"
-    ]
+    ],
   },
   "include": [
     "./src/**/*.ts",
     "./src/**/*.tsx"
-  ]
+  ],
 }

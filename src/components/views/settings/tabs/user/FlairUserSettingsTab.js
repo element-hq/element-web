@@ -24,7 +24,7 @@ export default class FlairUserSettingsTab extends React.Component {
     render() {
         return (
             <div className="mx_SettingsTab">
-                <span className="mx_SettingsTab_heading">{_t("Flair")}</span>
+                <span className="mx_SettingsTab_heading">{ _t("Flair") }</span>
                 <div className="mx_SettingsTab_section">
                     <GroupUserSettings />
                 </div>

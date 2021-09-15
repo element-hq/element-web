@@ -78,8 +78,11 @@ export default class RoomAvatarEvent extends React.Component {
                     { senderDisplayName: senderDisplayName },
                     {
                         'img': () =>
-                            <AccessibleButton key="avatar" className="mx_RoomAvatarEvent_avatar"
-                                onClick={this.onAvatarClick}>
+                            <AccessibleButton
+                                key="avatar"
+                                className="mx_RoomAvatarEvent_avatar"
+                                onClick={this.onAvatarClick}
+                            >
                                 <RoomAvatar width={14} height={14} oobData={oobData} />
                             </AccessibleButton>,
                     })

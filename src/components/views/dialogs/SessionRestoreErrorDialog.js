@@ -85,7 +85,9 @@ export default class SessionRestoreErrorDialog extends React.Component {
         }
 
         return (
-            <BaseDialog className="mx_ErrorDialog" onFinished={this.props.onFinished}
+            <BaseDialog
+                className="mx_ErrorDialog"
+                onFinished={this.props.onFinished}
                 title={_t('Unable to restore session')}
                 contentId='mx_Dialog_content'
                 hasCancel={false}

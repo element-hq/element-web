@@ -38,16 +38,16 @@ limitations under the License.
 .mx_Field input,
 .mx_Field select,
 .mx_Field textarea {
+    font-family: inherit;
     font-weight: normal;
-    font-family: $font-family;
     font-size: $font-14px;
     border: none;
     // Even without a border here, we still need this avoid overlapping the rounded
     // corners on the field above.
     border-radius: 4px;
     padding: 8px 9px;
-    color: $primary-fg-color;
-    background-color: $primary-bg-color;
+    color: $primary-content;
+    background-color: $background;
     flex: 1;
     min-width: 0;
 }
@@ -67,7 +67,7 @@ limitations under the License.
     height: 6px;
     mask: url('$(res)/img/feather-customised/dropdown-arrow.svg');
     mask-repeat: no-repeat;
-    background-color: $primary-fg-color;
+    background-color: $primary-content;
     z-index: 1;
     pointer-events: none;
 }
@@ -98,14 +98,14 @@ limitations under the License.
     transition:
         font-size 0.25s ease-out 0.1s,
         color 0.25s ease-out 0.1s,
-        top 0.25s ease-out 0.1s,
+        transform 0.25s ease-out 0.1s,
         background-color 0.25s ease-out 0.1s;
-    color: $primary-fg-color;
+    color: $primary-content;
     background-color: transparent;
     font-size: $font-14px;
+    transform: translateY(0);
     position: absolute;
     left: 0px;
-    top: 0px;
     margin: 7px 8px;
     padding: 2px;
     pointer-events: none; // Allow clicks to fall through to the input
@@ -124,10 +124,10 @@ limitations under the License.
     transition:
         font-size 0.25s ease-out 0s,
         color 0.25s ease-out 0s,
-        top 0.25s ease-out 0s,
+        transform 0.25s ease-out 0s,
         background-color 0.25s ease-out 0s;
     font-size: $font-10px;
-    top: -13px;
+    transform: translateY(-13px);
     padding: 0 2px;
     background-color: $field-focused-label-bg-color;
     pointer-events: initial;

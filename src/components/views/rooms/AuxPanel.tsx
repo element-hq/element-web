@@ -179,9 +179,9 @@ export default class AuxPanel extends React.Component<IProps, IState> {
                     <span
                         className="m_RoomView_auxPanel_stateViews_span"
                         data-severity={severity}
-                        key={ "x-" + stateKey }
+                        key={"x-" + stateKey}
                     >
-                        {span}
+                        { span }
                     </span>
                 );
 

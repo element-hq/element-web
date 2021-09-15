@@ -112,11 +112,9 @@ export function arrayRescale(input: number[], newMin: number, newMax: number): n
  * @returns {T[]} The array.
  */
 export function arraySeed<T>(val: T, length: number): T[] {
-    const a: T[] = [];
-    for (let i = 0; i < length; i++) {
-        a.push(val);
-    }
-    return a;
+    // Size the array up front for performance, and use `fill` to let the browser
+    // optimize the operation better than we can with a `for` loop, if it wants.
+    return new Array<T>(length).fill(val);
 }
 
 /**

@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
+import { sleep } from "matrix-js-sdk/src/utils";
+
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import Modal from "../Modal";
@@ -83,9 +85,10 @@ export function isJoinedOrNearlyJoined(membership: string): boolean {
     return effective === EffectiveMembership.Join || effective === EffectiveMembership.Invite;
 }
 
-export async function leaveRoomBehaviour(roomId: string) {
+export async function leaveRoomBehaviour(roomId: string, retry = true) {
+    const cli = MatrixClientPeg.get();
     let leavingAllVersions = true;
-    const history = await MatrixClientPeg.get().getRoomUpgradeHistory(roomId);
+    const history = cli.getRoomUpgradeHistory(roomId);
     if (history && history.length > 0) {
         const currentRoom = history[history.length - 1];
         if (currentRoom.roomId !== roomId) {
@@ -95,20 +98,28 @@ export async function leaveRoomBehaviour(roomId: string) {
         }
     }
 
-    let results: { [roomId: string]: Error & { errcode: string, message: string } } = {};
+    let results: { [roomId: string]: Error & { errcode?: string, message: string, data?: Record<string, any> } } = {};
     if (!leavingAllVersions) {
         try {
-            await MatrixClientPeg.get().leave(roomId);
+            await cli.leave(roomId);
         } catch (e) {
-            if (e && e.data && e.data.errcode) {
+            if (e?.data?.errcode) {
                 const message = e.data.error || _t("Unexpected server error trying to leave the room");
-                results[roomId] = Object.assign(new Error(message), { errcode: e.data.errcode });
+                results[roomId] = Object.assign(new Error(message), { errcode: e.data.errcode, data: e.data });
             } else {
                 results[roomId] = e || new Error("Failed to leave room for unknown causes");
             }
         }
     } else {
-        results = await MatrixClientPeg.get().leaveRoomChain(roomId);
+        results = await cli.leaveRoomChain(roomId, retry);
+    }
+
+    if (retry) {
+        const limitExceededError = Object.values(results).find(e => e?.errcode === "M_LIMIT_EXCEEDED");
+        if (limitExceededError) {
+            await sleep(limitExceededError.data.retry_after_ms ?? 100);
+            return leaveRoomBehaviour(roomId, false);
+        }
     }
 
     const errors = Object.entries(results).filter(r => !!r[1]);

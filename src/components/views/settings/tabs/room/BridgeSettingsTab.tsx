@@ -61,36 +61,36 @@ export default class BridgeSettingsTab extends React.Component<IProps> {
         let content: JSX.Element;
         if (bridgeEvents.length > 0) {
             content = <div>
-                <p>{_t(
+                <p>{ _t(
                     "This room is bridging messages to the following platforms. " +
                     "<a>Learn more.</a>", {},
                     {
                         // TODO: We don't have this link yet: this will prevent the translators
                         // having to re-translate the string when we do.
-                        a: sub => <a href={BRIDGES_LINK} target="_blank" rel="noreferrer noopener">{sub}</a>,
+                        a: sub => <a href={BRIDGES_LINK} target="_blank" rel="noreferrer noopener">{ sub }</a>,
                     },
-                )}</p>
+                ) }</p>
                 <ul className="mx_RoomSettingsDialog_BridgeList">
                     { bridgeEvents.map((event) => this.renderBridgeCard(event, room)) }
                 </ul>
             </div>;
         } else {
-            content = <p>{_t(
+            content = <p>{ _t(
                 "This room isn’t bridging messages to any platforms. " +
                 "<a>Learn more.</a>", {},
                 {
                     // TODO: We don't have this link yet: this will prevent the translators
                     // having to re-translate the string when we do.
-                    a: sub => <a href={BRIDGES_LINK} target="_blank" rel="noreferrer noopener">{sub}</a>,
+                    a: sub => <a href={BRIDGES_LINK} target="_blank" rel="noreferrer noopener">{ sub }</a>,
                 },
-            )}</p>;
+            ) }</p>;
         }
 
         return (
             <div className="mx_SettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Bridges")}</div>
+                <div className="mx_SettingsTab_heading">{ _t("Bridges") }</div>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    {content}
+                    { content }
                 </div>
             </div>
         );
