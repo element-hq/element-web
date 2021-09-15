@@ -15,40 +15,40 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { highlightBlock } from 'highlight.js';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+interface IProps {
+    className?: string;
+    children?: React.ReactNode;
+}
+
 @replaceableComponent("views.elements.SyntaxHighlight")
-export default class SyntaxHighlight extends React.Component {
-    static propTypes = {
-        className: PropTypes.string,
-        children: PropTypes.node,
-    };
+export default class SyntaxHighlight extends React.Component<IProps> {
+    private el: HTMLPreElement = null;
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
-
-        this._ref = this._ref.bind(this);
     }
 
     // componentDidUpdate used here for reusability
-    componentDidUpdate() {
-        if (this._el) highlightBlock(this._el);
+    public componentDidUpdate(): void {
+        if (this.el) highlightBlock(this.el);
     }
 
     // call componentDidUpdate because _ref is fired on initial render
     // which does not fire componentDidUpdate
-    _ref(el) {
-        this._el = el;
+    private ref = (el: HTMLPreElement): void => {
+        this.el = el;
         this.componentDidUpdate();
-    }
+    };
 
-    render() {
+    public render(): JSX.Element {
         const { className, children } = this.props;
 
-        return <pre className={`${className} mx_SyntaxHighlight`} ref={this._ref}>
+        return <pre className={`${className} mx_SyntaxHighlight`} ref={this.ref}>
             <code>{ children }</code>
         </pre>;
     }
 }
+
