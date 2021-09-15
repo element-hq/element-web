@@ -29,10 +29,11 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
  * - If [Do Not Track](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack) is
  *   enabled, events are not sent (this detection is built into posthog and turned on via the
  *   `respect_dnt` flag being passed to `posthog.init`).
- * - If the `feature_pseudonymous_analytics_opt_in` labs flag is `true`, track pseudonomously, i.e.
- *   hash all matrix identifiers in tracking events (user IDs, room IDs etc) using SHA-256.
- * - Otherwise, if the existing `analyticsOptIn` flag is `true`, track anonymously, i.e.
- *   redact all matrix identifiers in tracking events.
+ * - If the `feature_pseudonymous_analytics_opt_in` labs flag is `true`, track pseudonomously by maintaining
+ *   a randomised analytics ID in account_data for that user (shared between devices) and sending it to posthog to
+     identify the user.
+ * - Otherwise, if the existing `analyticsOptIn` flag is `true`, track anonymously, i.e. do not identify the user
+     using any identifier that would be consistent across devices.
  * - If both flags are false or not set, events are not sent.
  */
 
