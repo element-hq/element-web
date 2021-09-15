@@ -8,7 +8,7 @@ jobs:
         if: >
             contains(github.event.issue.labels.*.name, 'X-Needs-Design') &&
              (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
-              contains(github.event.issue.labels.*.name, 'O-Intermediate')) &&
+              contains(github.event.issue.labels.*.name, 'O-Occasional')) &&
              (contains(github.event.issue.labels.*.name, 'S-Critical') ||
               contains(github.event.issue.labels.*.name, 'S-Major') ||
               contains(github.event.issue.labels.*.name, 'S-Minor'))
