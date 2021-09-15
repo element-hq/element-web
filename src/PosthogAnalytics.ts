@@ -86,7 +86,6 @@ export async function getRedactedCurrentLocation(
     anonymity: Anonymity,
 ): Promise<string> {
     // Redact PII from the current location.
-    // If anonymous is true, redact entirely, if false, substitute it with a hash.
     // For known screens, assumes a URL structure of /<screen name>/might/be/pii
     if (origin.startsWith('file://')) {
         pathname = "/<redacted_file_scheme_url>/";
@@ -116,9 +115,9 @@ export class PosthogAnalytics {
     /* Wrapper for Posthog analytics.
      * 3 modes of anonymity are supported, governed by this.anonymity
      * - Anonymity.Disabled means *no data* is passed to posthog
-     * - Anonymity.Anonymous means all identifers will be redacted before being passed to posthog
-     * - Anonymity.Pseudonymous means all identifiers will be hashed via SHA-256 before being passed
-     *   to Posthog
+     * - Anonymity.Anonymous means no identifier is passed to posthog
+     * - Anonymity.Pseudonymous means an analytics ID stored in account_data and shared between devices
+     *   is passed to posthog.
      *
      * To update anonymity, call updateAnonymityFromSettings() or you can set it directly via setAnonymity().
      *
