@@ -3711,5 +3711,6 @@
     "Change main address for the space": "Tér elsődleges címének megváltoztatása",
     "Change space name": "Tér nevének megváltoztatása",
     "Change space avatar": "Tér profilkép megváltoztatása",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "<spaceName/> téren bárki megtalálhatja és beléphet. Kiválaszthat más tereket is."
+    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "<spaceName/> téren bárki megtalálhatja és beléphet. Kiválaszthat más tereket is.",
+    "Message didn't send. Click for info.": "Az üzenet nincs elküldve. Kattintson az információkért."
 }
