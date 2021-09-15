@@ -3705,5 +3705,21 @@
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s 釘選了訊息到此聊天室。檢視所有已釘選的訊息。",
     "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s 釘選了<a>訊息</a>到此聊天室。檢視所有<b>釘選的訊息</b>。",
     "Currently, %(count)s spaces have access|one": "目前，1 個空間可存取",
-    "& %(count)s more|one": "與其他 %(count)s 個"
+    "& %(count)s more|one": "與其他 %(count)s 個",
+    "Some encryption parameters have been changed.": "部份加密參數已變更。",
+    "Role in <RoomName/>": "<RoomName/> 中的角色",
+    "Explore %(spaceName)s": "探索 %(spaceName)s",
+    "Send a sticker": "傳送貼圖",
+    "Reply to thread…": "回覆討論串……",
+    "Reply to encrypted thread…": "回覆給已加密的討論串……",
+    "Add emoji": "新增表情符號",
+    "Unknown failure": "未知錯誤",
+    "Failed to update the join rules": "更新加入規則失敗",
+    "Select the roles required to change various parts of the space": "選取變更空間各個部份所需的角色",
+    "Change description": "變更描述",
+    "Change main address for the space": "變更空間的主要地址",
+    "Change space name": "變更空間名稱",
+    "Change space avatar": "變更空間大頭照",
+    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "在 <spaceName/> 中的任何人都可以找到並加入。您也可以選取其他空間。",
+    "Message didn't send. Click for info.": "訊息未傳送。點擊以取得更多資訊。"
 }
