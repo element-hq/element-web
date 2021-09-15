@@ -3583,7 +3583,7 @@
     "You're the only admin of this space. Leaving it will mean no one has control over it.": "Vous êtes le seul administrateur de cet espace. En le quittant, plus personne n’aura le contrôle dessus.",
     "You won't be able to rejoin unless you are re-invited.": "Il vous sera impossible de revenir à moins d’y être réinvité.",
     "Search %(spaceName)s": "Rechercher %(spaceName)s",
-    "Leave specific rooms and spaces": "Laisser certains salons et espaces",
+    "Leave specific rooms and spaces": "Quitter certains salons et espaces",
     "Don't leave any": "Ne rien quitter",
     "Leave all rooms and spaces": "Quitter tous les salons et les espaces",
     "Want to add an existing space instead?": "Vous voulez plutôt ajouter un espace existant ?",
