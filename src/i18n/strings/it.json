@@ -3717,5 +3717,19 @@
     "Change main address for the space": "Cambia indirizzo principale dello spazio",
     "Change space name": "Cambia nome dello spazio",
     "Change space avatar": "Cambia avatar dello spazio",
-    "Message didn't send. Click for info.": "Il messaggio non è stato inviato. Clicca per informazioni."
+    "Message didn't send. Click for info.": "Il messaggio non è stato inviato. Clicca per informazioni.",
+    "To join this Space, hide communities in your <a>preferences</a>": "Per entrare in questo spazio, nascondi le comunità nelle <a>preferenze</a>",
+    "To join %(communityName)s, swap to communities in your <a>preferences</a>": "Per entrare in %(communityName)s, passa alle comunità nelle <a>preferenze</a>",
+    "To view %(communityName)s, swap to communities in your <a>preferences</a>": "Per vedere %(communityName)s, passa alle comunità nelle <a>preferenze</a>",
+    "To view this Space, hide communities in your <a>preferences</a>": "Per vedere questo spazio, nascondi le comunità nelle <a>preferenze</a>",
+    "Private community": "Comunità privata",
+    "Public community": "Comunità pubblica",
+    "Message": "Messaggio",
+    "Upgrade anyway": "Aggiorna comunque",
+    "This room is in some spaces you’re not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Questa stanza è in alcuni spazi di cui non sei amministratore. In quegli spazi, la vecchia stanza verrà ancora mostrata, ma alla gente verrà chiesto di entrare in quella nuova.",
+    "Before you upgrade": "Prima di aggiornare",
+    "To join a space you'll need an invite.": "Per entrare in uno spazio ti serve un invito.",
+    "You can also make Spaces from <a>communities</a>.": "Puoi anche creare spazi dalle <a>comunità</a>.",
+    "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Mostra temporaneamente le comunità invece degli spazi per questa sessione. Il supporto per questa azione verrà rimosso nel breve termine. Element verrà ricaricato.",
+    "Display Communities instead of Spaces": "Mostra le comunità invece degli spazi"
 }
