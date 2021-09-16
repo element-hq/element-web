@@ -3594,5 +3594,22 @@
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s将一条消息固定到此聊天室。查看所有固定信息。",
     "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s 将<a>一条消息</a>固定到此聊天室。查看所有<b>固定消息</b>。",
     "Currently, %(count)s spaces have access|one": "目前，一个空间有访问权限",
-    "& %(count)s more|one": "& 另外 %(count)s"
+    "& %(count)s more|one": "& 另外 %(count)s",
+    "Some encryption parameters have been changed.": "一些加密参数已更改。",
+    "Role in <RoomName/>": "<RoomName/> 中的角色",
+    "Explore %(spaceName)s": "探索 %(spaceName)s",
+    "Send a sticker": "发送贴纸",
+    "Reply to thread…": "回复主题帖…",
+    "Reply to encrypted thread…": "回复加密的主题帖…",
+    "Add emoji": "添加表情",
+    "Unknown failure": "未知失败",
+    "Failed to update the join rules": "未能更新加入列表",
+    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "<spaceName/> 中的任何人都可以寻找和加入。你也可以选择其他空间。",
+    "Select the roles required to change various parts of the space": "选择改变空间各个部分所需的角色",
+    "Change description": "更改描述",
+    "Change main address for the space": "更改空间主地址",
+    "Change space name": "更改空间名称",
+    "Change space avatar": "更改空间头像",
+    "Message didn't send. Click for info.": "消息没有发送。点击查看信息。",
+    "Message": "消息"
 }
