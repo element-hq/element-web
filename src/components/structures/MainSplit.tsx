@@ -24,7 +24,7 @@ import { Direction } from "re-resizable/lib/resizer";
 interface IProps {
     resizeNotifier: ResizeNotifier;
     collapsedRhs?: boolean;
-    panel: JSX.Element;
+    panel?: JSX.Element;
 }
 
 @replaceableComponent("structures.MainSplit")
