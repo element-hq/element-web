@@ -1800,11 +1800,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 subAction: params.action,
             });
         } else if (screen.indexOf('group/') === 0) {
-            if (SpaceStore.spacesEnabled) {
-                dis.dispatch({ action: "view_home_page" });
-                return;
-            }
-
             const groupId = screen.substring(6);
 
             // TODO: Check valid group ID

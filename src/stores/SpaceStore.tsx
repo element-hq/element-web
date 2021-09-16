@@ -71,7 +71,7 @@ export interface ISuggestedRoom extends IHierarchyRoom {
 const MAX_SUGGESTED_ROOMS = 20;
 
 // This setting causes the page to reload and can be costly if read frequently, so read it here only
-const spacesEnabled = SettingsStore.getValue("feature_spaces");
+const spacesEnabled = !SettingsStore.getValue("showCommunitiesInsteadOfSpaces");
 
 const getSpaceContextKey = (space?: Room) => `mx_space_context_${space?.roomId || "HOME_SPACE"}`;
 

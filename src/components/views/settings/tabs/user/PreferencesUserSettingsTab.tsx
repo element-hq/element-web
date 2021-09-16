@@ -28,7 +28,6 @@ import { replaceableComponent } from "../../../../../utils/replaceableComponent"
 import SettingsFlag from '../../../elements/SettingsFlag';
 import * as KeyboardShortcuts from "../../../../../accessibility/KeyboardShortcuts";
 import AccessibleButton from "../../../elements/AccessibleButton";
-import SpaceStore from "../../../../../stores/SpaceStore";
 import GroupAvatar from "../../../avatars/GroupAvatar";
 import dis from "../../../../../dispatcher/dispatcher";
 import GroupActions from "../../../../../actions/GroupActions";
@@ -145,7 +144,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
     ];
 
     static COMMUNITIES_SETTINGS = [
-        // TODO: part of delabsing move the toggle here - https://github.com/vector-im/element-web/issues/18088
+        "showCommunitiesInsteadOfSpaces",
     ];
 
     static KEYBINDINGS_SETTINGS = [
@@ -286,9 +285,17 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         SettingsStore.setValue("readMarkerOutOfViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    private renderGroup(settingIds: string[]): React.ReactNodeArray {
-        return settingIds.filter(SettingsStore.isEnabled).map(i => {
-            return <SettingsFlag key={i} name={i} level={SettingLevel.ACCOUNT} />;
+    private renderGroup(
+        settingIds: string[],
+        level = SettingLevel.ACCOUNT,
+        includeDisabled = false,
+    ): React.ReactNodeArray {
+        if (!includeDisabled) {
+            settingIds = settingIds.filter(SettingsStore.isEnabled);
+        }
+
+        return settingIds.map(i => {
+            return <SettingsFlag key={i} name={i} level={level} />;
         });
     }
 
@@ -334,10 +341,10 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                     { this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS) }
                 </div>
 
-                { SpaceStore.spacesEnabled && <div className="mx_SettingsTab_section">
+                <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{ _t("Spaces") }</span>
-                    { this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS) }
-                </div> }
+                    { this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS, SettingLevel.ACCOUNT, true) }
+                </div>
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{ _t("Communities") }</span>
@@ -349,7 +356,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         <p>{ _t("If a community isn't shown you may not have permission to convert it.") }</p>
                         <CommunityMigrator onFinished={this.props.closeSettingsFn} />
                     </details>
-                    { this.renderGroup(PreferencesUserSettingsTab.COMMUNITIES_SETTINGS) }
+                    { this.renderGroup(PreferencesUserSettingsTab.COMMUNITIES_SETTINGS, SettingLevel.DEVICE) }
                 </div>
 
                 <div className="mx_SettingsTab_section">

@@ -117,9 +117,7 @@ export const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
                         "Your feedback will help inform the next versions."),
                     rageshakeLabel: "spaces-feedback",
                     rageshakeData: Object.fromEntries([
-                        "feature_spaces.all_rooms",
-                        "feature_spaces.space_member_dms",
-                        "feature_spaces.space_dm_badges",
+                        "Spaces.allRoomsInHome",
                     ].map(k => [k, SettingsStore.getValue(k)])),
                 });
             }}
@@ -301,13 +299,13 @@ const SpaceCreateMenu = ({ onFinished }) => {
             />
 
             <p>
-                { _t("You can also create a Space from a <a>community</a>.", {}, {
+                { _t("You can also make Spaces from <a>communities</a>.", {}, {
                     a: sub => <AccessibleButton kind="link" onClick={onCreateSpaceFromCommunityClick}>
                         { sub }
                     </AccessibleButton>,
                 }) }
                 <br />
-                { _t("To join an existing space you'll need an invite.") }
+                { _t("To join a space you'll need an invite.") }
             </p>
 
             <SpaceFeedbackPrompt onClick={onFinished} />
