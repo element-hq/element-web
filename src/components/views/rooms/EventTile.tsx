@@ -21,7 +21,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { Thread } from 'matrix-js-sdk/src/models/thread';
+import { Thread, THREAD_EVENTS } from 'matrix-js-sdk/src/models/thread';
 
 import ReplyThread from "../elements/ReplyThread";
 import { _t } from '../../../languageHandler';
@@ -464,8 +464,8 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         if (SettingsStore.getValue("feature_thread")) {
-            this.props.mxEvent.once("Thread.ready", this.updateThread);
-            this.props.mxEvent.on("Thread.update", this.updateThread);
+            this.props.mxEvent.once(THREAD_EVENTS.ready, this.updateThread);
+            this.props.mxEvent.on(THREAD_EVENTS.update, this.updateThread);
         }
     }
 
