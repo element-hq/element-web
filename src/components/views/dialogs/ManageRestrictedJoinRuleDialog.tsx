@@ -126,7 +126,6 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                 className="mx_textinput_icon mx_textinput_search"
                 placeholder={_t("Search spaces")}
                 onSearch={setQuery}
-                autoComplete={true}
                 autoFocus={true}
             />
             <AutoHideScrollbar className="mx_ManageRestrictedJoinRuleDialog_content">

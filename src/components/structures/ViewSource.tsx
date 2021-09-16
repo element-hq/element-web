@@ -17,24 +17,28 @@ limitations under the License.
 */
 
 import React from "react";
-import PropTypes from "prop-types";
 import SyntaxHighlight from "../views/elements/SyntaxHighlight";
 import { _t } from "../../languageHandler";
-import * as sdk from "../../index";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { SendCustomEvent } from "../views/dialogs/DevtoolsDialog";
 import { canEditContent } from "../../utils/EventUtils";
 import { MatrixClientPeg } from '../../MatrixClientPeg';
 import { replaceableComponent } from "../../utils/replaceableComponent";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IDialogProps } from "../views/dialogs/IDialogProps";
+import BaseDialog from "../views/dialogs/BaseDialog";
+
+interface IProps extends IDialogProps {
+    mxEvent: MatrixEvent; // the MatrixEvent associated with the context menu
+}
+
+interface IState {
+    isEditing: boolean;
+}
 
 @replaceableComponent("structures.ViewSource")
-export default class ViewSource extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-        mxEvent: PropTypes.object.isRequired, // the MatrixEvent associated with the context menu
-    };
-
-    constructor(props) {
+export default class ViewSource extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -42,19 +46,20 @@ export default class ViewSource extends React.Component {
         };
     }
 
-    onBack() {
+    private onBack(): void {
         // TODO: refresh the "Event ID:" modal header
         this.setState({ isEditing: false });
     }
 
-    onEdit() {
+    private onEdit(): void {
         this.setState({ isEditing: true });
     }
 
     // returns the dialog body for viewing the event source
-    viewSourceContent() {
+    private viewSourceContent(): JSX.Element {
         const mxEvent = this.props.mxEvent.replacingEvent() || this.props.mxEvent; // show the replacing event, not the original, if it is an edit
         const isEncrypted = mxEvent.isEncrypted();
+        // @ts-ignore
         const decryptedEventSource = mxEvent.clearEvent; // FIXME: clearEvent is private
         const originalEventSource = mxEvent.event;
 
@@ -86,7 +91,7 @@ export default class ViewSource extends React.Component {
     }
 
     // returns the id of the initial message, not the id of the previous edit
-    getBaseEventId() {
+    private getBaseEventId(): string {
         const mxEvent = this.props.mxEvent.replacingEvent() || this.props.mxEvent; // show the replacing event, not the original, if it is an edit
         const isEncrypted = mxEvent.isEncrypted();
         const baseMxEvent = this.props.mxEvent;
@@ -100,7 +105,7 @@ export default class ViewSource extends React.Component {
     }
 
     // returns the SendCustomEvent component prefilled with the correct details
-    editSourceContent() {
+    private editSourceContent(): JSX.Element {
         const mxEvent = this.props.mxEvent.replacingEvent() || this.props.mxEvent; // show the replacing event, not the original, if it is an edit
 
         const isStateEvent = mxEvent.isState();
@@ -159,14 +164,13 @@ export default class ViewSource extends React.Component {
         }
     }
 
-    canSendStateEvent(mxEvent) {
+    private canSendStateEvent(mxEvent: MatrixEvent): boolean {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(mxEvent.getRoomId());
         return room.currentState.mayClientSendStateEvent(mxEvent.getType(), cli);
     }
 
-    render() {
-        const BaseDialog = sdk.getComponent("views.dialogs.BaseDialog");
+    public render(): JSX.Element {
         const mxEvent = this.props.mxEvent.replacingEvent() || this.props.mxEvent; // show the replacing event, not the original, if it is an edit
 
         const isEditing = this.state.isEditing;
