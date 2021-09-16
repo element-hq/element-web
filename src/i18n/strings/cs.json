@@ -3636,5 +3636,19 @@
     "Change space name": "Změnit název prostoru",
     "Change space avatar": "Změnit avatar prostoru",
     "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Kdokoli v <spaceName/> může prostor najít a připojit se. Můžete vybrat i další prostory.",
-    "Message didn't send. Click for info.": "Zpráva se neodeslala. Klikněte pro informace."
+    "Message didn't send. Click for info.": "Zpráva se neodeslala. Klikněte pro informace.",
+    "To join this Space, hide communities in your <a>preferences</a>": "Pro připojení k tomuto prostoru, skryjte zobrazení skupin v <a>předvolbách</a>",
+    "To view this Space, hide communities in your <a>preferences</a>": "Pro zobrazení tohoto prostoru, skryjte zobrazení skupin v <a>předvolbách</a>",
+    "To join %(communityName)s, swap to communities in your <a>preferences</a>": "Pro připojení k %(communityName)s, přepněte na skupiny v <a>předvolbách</a>",
+    "To view %(communityName)s, swap to communities in your <a>preferences</a>": "Pro zobrazní %(communityName)s, přepněte na zobrazení skupin v <a>předvolbách</a>",
+    "Private community": "Soukromá skupina",
+    "Public community": "Veřejná skupina",
+    "Message": "Zpráva",
+    "Upgrade anyway": "I přesto aktualizovat",
+    "This room is in some spaces you’re not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Tato místnost se nachází v některých prostorech, jejichž nejste správcem. V těchto prostorech bude stará místnost stále zobrazena, ale lidé budou vyzváni, aby se připojili k nové místnosti.",
+    "Before you upgrade": "Než provedete aktualizaci",
+    "To join a space you'll need an invite.": "Pro připojení k prostoru potřebujete pozvánku.",
+    "You can also make Spaces from <a>communities</a>.": "Můžete také vytvořit prostory ze <a>skupin</a>.",
+    "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Dočasně zobrazit skupiny místo prostorů pro tuto relaci. Podpora bude v blízké budoucnosti odstraněna. Toto provede přenačtení Elementu.",
+    "Display Communities instead of Spaces": "Zobrazit skupiny místo prostorů"
 }
