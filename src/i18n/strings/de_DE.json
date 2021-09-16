@@ -892,7 +892,7 @@
     "<b>Save it</b> on a USB key or backup drive": "<b>Speichere ihn</b> auf einem USB-Schlüssel oder Sicherungslaufwerk",
     "<b>Copy it</b> to your personal cloud storage": "<b>Kopiere ihn</b> in deinen persönlichen Cloud-Speicher",
     "Unable to create key backup": "Konnte Schlüsselsicherung nicht erstellen",
-    "Retry": "Erneut probieren",
+    "Retry": "Wiederholen",
     "Unable to restore backup": "Konnte Schlüsselsicherung nicht wiederherstellen",
     "No backup found!": "Keine Schlüsselsicherung gefunden!",
     "This looks like a valid recovery key!": "Dies sieht wie ein gültiger Wiederherstellungsschlüssel aus!",
