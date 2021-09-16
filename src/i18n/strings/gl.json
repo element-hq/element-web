@@ -3717,5 +3717,6 @@
     "Change main address for the space": "Cambiar o enderezo principal do espazo",
     "Change space name": "Cambiar o nome do espazo",
     "Change space avatar": "Cambiar o avatar do espazo",
-    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Calquera en <spaceName/> pode atopar e unirse. Tamén podes elexir outros espazos."
+    "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Calquera en <spaceName/> pode atopar e unirse. Tamén podes elexir outros espazos.",
+    "Message didn't send. Click for info.": "Non se enviou a mensaxe. Click para info."
 }
