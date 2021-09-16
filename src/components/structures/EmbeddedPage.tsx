@@ -55,7 +55,7 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
         };
     }
 
-    private translate(s: string): string {
+    protected translate(s: string): string {
         // default implementation - skins may wish to extend this
         return sanitizeHtml(_t(s));
     }
