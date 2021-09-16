@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import { MatrixEvent, Room } from 'matrix-js-sdk/src';
-import { Thread, THREAD_EVENTS } from 'matrix-js-sdk/src/models/thread';
+import { Thread, ThreadEvents } from 'matrix-js-sdk/src/models/thread';
 
 import BaseCard from "../views/right_panel/BaseCard";
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
@@ -46,13 +46,13 @@ export default class ThreadPanel extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        this.room.on(THREAD_EVENTS.update, this.onThreadEventReceived);
-        this.room.on(THREAD_EVENTS.ready, this.onThreadEventReceived);
+        this.room.on(ThreadEvents.Update, this.onThreadEventReceived);
+        this.room.on(ThreadEvents.Ready, this.onThreadEventReceived);
     }
 
     public componentWillUnmount(): void {
-        this.room.removeListener(THREAD_EVENTS.update, this.onThreadEventReceived);
-        this.room.removeListener(THREAD_EVENTS.ready, this.onThreadEventReceived);
+        this.room.removeListener(ThreadEvents.Update, this.onThreadEventReceived);
+        this.room.removeListener(ThreadEvents.Ready, this.onThreadEventReceived);
     }
 
     private onThreadEventReceived = () => this.updateThreads();
