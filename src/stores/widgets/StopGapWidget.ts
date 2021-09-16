@@ -67,7 +67,7 @@ interface IAppTileProps {
     userId: string;
     creatorUserId: string;
     waitForIframeLoad: boolean;
-    whitelistCapabilities: string[];
+    whitelistCapabilities?: string[];
     userWidget: boolean;
 }
 
