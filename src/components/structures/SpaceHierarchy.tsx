@@ -57,6 +57,7 @@ import { Key } from "../../Keyboard";
 import { IState, RovingTabIndexProvider, useRovingTabIndex } from "../../accessibility/RovingTabIndex";
 import { getDisplayAliasForRoom } from "./RoomDirectory";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
+import { useEventEmitterState } from "../../hooks/useEventEmitter";
 
 interface IProps {
     space: Room;
@@ -87,7 +88,8 @@ const Tile: React.FC<ITileProps> = ({
 }) => {
     const cli = useContext(MatrixClientContext);
     const joinedRoom = cli.getRoom(room.room_id)?.getMyMembership() === "join" ? cli.getRoom(room.room_id) : null;
-    const name = joinedRoom?.name || room.name || room.canonical_alias || room.aliases?.[0]
+    const joinedRoomName = useEventEmitterState(joinedRoom, "Room.name", room => room?.name);
+    const name = joinedRoomName || room.name || room.canonical_alias || room.aliases?.[0]
         || (room.room_type === RoomType.Space ? _t("Unnamed Space") : _t("Unnamed Room"));
 
     const [showChildren, toggleShowChildren] = useStateToggle(true);

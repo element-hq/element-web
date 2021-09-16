@@ -93,6 +93,7 @@ export const SpaceButton: React.FC<IButtonProps> = ({
                 notification={notificationState}
                 aria-label={ariaLabel}
                 tabIndex={tabIndex}
+                showUnsentTooltip={true}
             />
         </div>;
     }
@@ -260,7 +261,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
 
     render() {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { space, activeSpaces, isNested, isPanelCollapsed, onExpand, parents, innerRef,
+        const { space, activeSpaces, isNested, isPanelCollapsed, onExpand, parents, innerRef, dragHandleProps,
             ...otherProps } = this.props;
 
         const collapsed = this.isCollapsed;
@@ -299,7 +300,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             /> : null;
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { tabIndex, ...dragHandleProps } = this.props.dragHandleProps || {};
+        const { tabIndex, ...restDragHandleProps } = dragHandleProps || {};
 
         return (
             <li
@@ -310,7 +311,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                 role="treeitem"
             >
                 <SpaceButton
-                    {...dragHandleProps}
+                    {...restDragHandleProps}
                     space={space}
                     className={isInvite ? "mx_SpaceButton_invite" : undefined}
                     selected={activeSpaces.includes(space)}
