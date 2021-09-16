@@ -181,7 +181,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
             if (data) {
                 const { partCreator } = model;
-                const moveStart = emoticonMatch[0][0] === " " ? 1 : 0;
+                const firstMatch = emoticonMatch[0];
+                const moveStart = firstMatch[0] === " " ? 1 : 0;
 
                 // we need the range to only comprise of the emoticon
                 // because we'll replace the whole range with an emoji,
@@ -189,7 +190,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 // Take + 1 because index is reported without the possible preceding space.
                 range.moveStartForwards(emoticonMatch.index + moveStart);
                 // If the end is a trailing space/newline move end backwards, so that we don't replace it
-                if (["\n", " "].includes(emoticonMatch[0][emoticonMatch[0].length - 1])) {
+                if (["\n", " "].includes(firstMatch[firstMatch.length - 1])) {
                     range.moveEndBackwards(1);
                 }
 
