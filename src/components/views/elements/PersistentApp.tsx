@@ -19,57 +19,70 @@ import React from 'react';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import WidgetUtils from '../../../utils/WidgetUtils';
-import * as sdk from '../../../index';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { EventSubscription } from 'fbemitter';
+import AppTile from "./AppTile";
+import { Room } from "matrix-js-sdk/src/models/room";
+
+interface IState {
+    roomId: string;
+    persistentWidgetId: string;
+}
 
 @replaceableComponent("views.elements.PersistentApp")
-export default class PersistentApp extends React.Component {
-    state = {
-        roomId: RoomViewStore.getRoomId(),
-        persistentWidgetId: ActiveWidgetStore.getPersistentWidgetId(),
-    };
+export default class PersistentApp extends React.Component<{}, IState> {
+    private roomStoreToken: EventSubscription;
 
-    componentDidMount() {
-        this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
-        ActiveWidgetStore.on('update', this._onActiveWidgetStoreUpdate);
-        MatrixClientPeg.get().on("Room.myMembership", this._onMyMembership);
+    constructor() {
+        super({});
+
+        this.state = {
+            roomId: RoomViewStore.getRoomId(),
+            persistentWidgetId: ActiveWidgetStore.getPersistentWidgetId(),
+        };
     }
 
-    componentWillUnmount() {
-        if (this._roomStoreToken) {
-            this._roomStoreToken.remove();
+    public componentDidMount(): void {
+        this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
+        ActiveWidgetStore.on('update', this.onActiveWidgetStoreUpdate);
+        MatrixClientPeg.get().on("Room.myMembership", this.onMyMembership);
+    }
+
+    public componentWillUnmount(): void {
+        if (this.roomStoreToken) {
+            this.roomStoreToken.remove();
         }
-        ActiveWidgetStore.removeListener('update', this._onActiveWidgetStoreUpdate);
+        ActiveWidgetStore.removeListener('update', this.onActiveWidgetStoreUpdate);
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("Room.myMembership", this._onMyMembership);
+            MatrixClientPeg.get().removeListener("Room.myMembership", this.onMyMembership);
         }
     }
 
-    _onRoomViewStoreUpdate = payload => {
+    private onRoomViewStoreUpdate = (): void => {
         if (RoomViewStore.getRoomId() === this.state.roomId) return;
         this.setState({
             roomId: RoomViewStore.getRoomId(),
         });
     };
 
-    _onActiveWidgetStoreUpdate = () => {
+    private onActiveWidgetStoreUpdate = (): void => {
         this.setState({
             persistentWidgetId: ActiveWidgetStore.getPersistentWidgetId(),
         });
     };
 
-    _onMyMembership = async (room, membership) => {
+    private onMyMembership = async (room: Room, membership: string): Promise<void> => {
         const persistentWidgetInRoomId = ActiveWidgetStore.getRoomId(this.state.persistentWidgetId);
         if (membership !== "join") {
             // we're not in the room anymore - delete
-            if (room.roomId === persistentWidgetInRoomId) {
+            if (room .roomId === persistentWidgetInRoomId) {
                 ActiveWidgetStore.destroyPersistentWidget(this.state.persistentWidgetId);
             }
         }
     };
 
-    render() {
+    public render(): JSX.Element {
         if (this.state.persistentWidgetId) {
             const persistentWidgetInRoomId = ActiveWidgetStore.getRoomId(this.state.persistentWidgetId);
 
@@ -89,7 +102,6 @@ export default class PersistentApp extends React.Component {
                     appEvent.getStateKey(), appEvent.getContent(), appEvent.getSender(),
                     persistentWidgetInRoomId, appEvent.getId(),
                 );
-                const AppTile = sdk.getComponent('elements.AppTile');
                 return <AppTile
                     key={app.id}
                     app={app}
