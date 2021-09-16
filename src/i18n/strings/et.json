@@ -3691,5 +3691,13 @@
     "Change space name": "Muuda kogukonna nime",
     "Change space avatar": "Muuda kogukonna tunnuspilti",
     "Displaying time": "Aegade kuvamine",
-    "Message didn't send. Click for info.": "Sõnum jäi saatmata. Lisateabe saamiseks klõpsi."
+    "Message didn't send. Click for info.": "Sõnum jäi saatmata. Lisateabe saamiseks klõpsi.",
+    "To join this Space, hide communities in your <a>preferences</a>": "Selle uut tüüpi kogukonnakeskusega liitumiseks peida <a>seadistustest</a> vanad kogukonnad",
+    "To view this Space, hide communities in your <a>preferences</a>": "Selle uut tüüpi kogukonnakeskuse nägemiseks peida <a>seadistustest</a> vanad kogukonnad",
+    "To join %(communityName)s, swap to communities in your <a>preferences</a>": "Liitumaks %(communityName)s kogukonnaga võta <a>seadistustes</a> kasutusele vana tüüpi kogukonnad",
+    "To view %(communityName)s, swap to communities in your <a>preferences</a>": "Senise %(communityName)s kogukonna nägemiseks võta <a>seadistustes</a> kasutusele vana tüüpi kogukonnad",
+    "This room is in some spaces you’re not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "See jututuba on mõne sellise kogukonnakeskuse osa, kus sul pole haldaja õigusi. Selliselt juhul vana jututuba jätkuvalt kuvatakse, kuid selle asutajatele pakutakse võimalust uuega liituda.",
+    "You can also make Spaces from <a>communities</a>.": "Sa võid ka <a>vana kogukonna</a> muuta uueks kogukonnakeskuseks.",
+    "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Ajutiselt näita selles sessioonis uute kogukonnakeskuste asemel vanu kogukondi. Lähitulevikus selline funktsionaalsus kaob. Eeldab rakenduse taaskäivitamist.",
+    "Display Communities instead of Spaces": "Kuva uute kogukonnakeskuste asemel vanu kogukondi"
 }
