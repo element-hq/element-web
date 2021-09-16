@@ -55,6 +55,7 @@ export interface IOOBData {
     inviterName?: string; // The display name of the person who invited us to the room
     // eslint-disable-next-line camelcase
     room_name?: string; // The name of the room, to be used until we are told better by the server
+    isSpaceRoom?: boolean; // Whether or not we think the room is actually a space
 }
 
 const STORAGE_PREFIX = "mx_threepid_invite_";
