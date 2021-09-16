@@ -3611,5 +3611,18 @@
     "Change space name": "更改空间名称",
     "Change space avatar": "更改空间头像",
     "Message didn't send. Click for info.": "消息没有发送。点击查看信息。",
-    "Message": "消息"
+    "Message": "消息",
+    "To join this Space, hide communities in your <a>preferences</a>": "要加入此空间，在你的<a>首选项</a>中隐藏社区",
+    "To view this Space, hide communities in your <a>preferences</a>": "要查看此空间，在你的<a>首选项</a>中隐藏社区",
+    "To join %(communityName)s, swap to communities in your <a>preferences</a>": "要加入 %(communityName)s，在<a>首选项</a>中滑动至社区",
+    "To view %(communityName)s, swap to communities in your <a>preferences</a>": "要查看 %(communityName)s，在<a>首选项</a>中滑动至社区",
+    "Private community": "私密社区",
+    "Public community": "公开社区",
+    "Upgrade anyway": "仍要升级",
+    "This room is in some spaces you’re not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "此聊天室位于某些不是由你管理的空间中。在这些空间中，旧聊天室仍将被展示，但人们将被提示加入新聊天室。",
+    "Before you upgrade": "在你升级前",
+    "To join a space you'll need an invite.": "要加入一个空间，你需要一个邀请。",
+    "You can also make Spaces from <a>communities</a>.": "你也可以从 <a>社区</a>创造空间。",
+    "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "在此会话中暂时展示社区而空间。此功能将在不久的将来被移除。这将重新加载 Element。",
+    "Display Communities instead of Spaces": "展示社区而非空间"
 }
