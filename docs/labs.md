@@ -12,14 +12,6 @@ dropped. Ask in the room if you are unclear about any details here.**
 A new version of the "Report" dialog that lets users send abuse reports directly to room moderators,
 if the room supports it.
 
-## Matrix Spaces [MSC1772](https://github.com/matrix-org/matrix-doc/pull/1772) support (`feature_spaces`)
-
-Enables showing, using, creating, and managing spaces. Create Spaces from the all new Space Panel (to left of Room List).
-
-Incompatible with (will disable) `feature_custom_tags`, `feature_communities_v2_prototypes` and stable Communities/Groups support.
-
-Still in heavy development.
-
 ## Render LaTeX maths in messages (`feature_latex_maths`)
 
 Enables rendering of LaTeX maths in messages using [KaTeX](https://katex.org/). LaTeX between single dollar-signs is interpreted as inline maths and double dollar-signs as display maths (i.e. centred on its own line).
