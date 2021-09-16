@@ -3707,5 +3707,20 @@
     "Change description": "Ndryshoni përshkrimin",
     "Change main address for the space": "Ndryshoni adresë kryesore për hapësirën",
     "Change space name": "Ndryshoni emër hapësire",
-    "Change space avatar": "Ndryshoni avatar hapësire"
+    "Change space avatar": "Ndryshoni avatar hapësire",
+    "To join this Space, hide communities in your <a>preferences</a>": "Që të hyni te kjo Hapësirë, fshihni bashkësitë te <a>parapëlqimet</a> tuaja",
+    "To view this Space, hide communities in your <a>preferences</a>": "Që të shihni këtë Hapësirë, fshihni bashkësitë te <a>parapëlqimet</a> tuaja",
+    "To join %(communityName)s, swap to communities in your <a>preferences</a>": "Që të hyni te %(communityName)s, kaloni te bashkësitë, që nga <a>parapëlqimet</a> tuaja",
+    "To view %(communityName)s, swap to communities in your <a>preferences</a>": "Që të shihni %(communityName)s, kaloni te bashkësitë, që nga <a>parapëlqimet</a> tuaja",
+    "Private community": "Bashkësi private",
+    "Public community": "Bashkësi publike",
+    "Message": "Mesazh",
+    "Message didn't send. Click for info.": "Mesazhi s’u dërgua. Klikoni për hollësi.",
+    "Upgrade anyway": "Përmirësoje, sido qoftë",
+    "This room is in some spaces you’re not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Kjo dhomë gjendet në disa hapësira për të cilat nuk jeni një nga përgjegjësit. Në këto hapësira, dhoma e vjetër prapë do të shfaqet, por njerëzve do t’u kërkohet të marrin pjesë te e reja.",
+    "Before you upgrade": "Para se të përmirësoni",
+    "To join a space you'll need an invite.": "Që të hyni në një hapësirë, do t’ju duhet një ftesë.",
+    "You can also make Spaces from <a>communities</a>.": "Mundeni edhe të krijoni Hapësira që nga <a>bashkësitë</a>.",
+    "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Për këtë sesion shfaq përkohësisht bashkësi, në vend se Hapësira. Mbulimi i kësaj do të hiqet në të ardhmen e afërt. Kjo do të sjellë ringarkim të Element-it.",
+    "Display Communities instead of Spaces": "Shfaq Bashkësi, në vend se Hapësira"
 }
