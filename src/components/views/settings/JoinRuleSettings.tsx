@@ -28,6 +28,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from "../../../Modal";
 import ManageRestrictedJoinRuleDialog from "../dialogs/ManageRestrictedJoinRuleDialog";
 import RoomUpgradeWarningDialog from "../dialogs/RoomUpgradeWarningDialog";
+import QuestionDialog from "../dialogs/QuestionDialog";
 import { upgradeRoom } from "../../../utils/RoomUpgrade";
 import { arrayHasDiff } from "../../../utils/arrays";
 import { useLocalEcho } from "../../../hooks/useLocalEcho";
@@ -207,27 +208,50 @@ const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange, closeSet
             } else if (preferredRestrictionVersion) {
                 // Block this action on a room upgrade otherwise it'd make their room unjoinable
                 const targetVersion = preferredRestrictionVersion;
-                Modal.createTrackedDialog('Restricted join rule upgrade', '', RoomUpgradeWarningDialog, {
+
+                const modal = Modal.createTrackedDialog('Restricted join rule upgrade', '', RoomUpgradeWarningDialog, {
                     roomId: room.roomId,
                     targetVersion,
                     description: _t("This upgrade will allow members of selected spaces " +
                         "access to this room without an invite."),
-                    onFinished: async (resp) => {
-                        if (!resp?.continue) return;
-                        const roomId = await upgradeRoom(room, targetVersion, resp.invite, true, true, true);
-                        closeSettingsFn();
-                        // switch to the new room in the background
-                        dis.dispatch({
-                            action: "view_room",
-                            room_id: roomId,
-                        });
-                        // open new settings on this tab
-                        dis.dispatch({
-                            action: "open_room_settings",
-                            initial_tab_id: ROOM_SECURITY_TAB,
-                        });
-                    },
                 });
+
+                const [resp] = await modal.finished;
+                if (!resp?.continue) return;
+
+                const userId = cli.getUserId();
+                const unableToUpdateSomeParents = Array.from(SpaceStore.instance.getKnownParents(room.roomId))
+                    .some(roomId => !cli.getRoom(roomId)?.currentState.maySendStateEvent(EventType.SpaceChild, userId));
+                if (unableToUpdateSomeParents) {
+                    const modal = Modal.createTrackedDialog<[boolean]>('Parent relink warning', '', QuestionDialog, {
+                        title: _t("Before you upgrade"),
+                        description: (
+                            <div>{ _t("This room is in some spaces you’re not an admin of. " +
+                                "In those spaces, the old room will still be shown, " +
+                                "but people will be prompted to join the new one.") }</div>
+                        ),
+                        hasCancelButton: true,
+                        button: _t("Upgrade anyway"),
+                        danger: true,
+                    });
+
+                    const [shouldUpgrade] = await modal.finished;
+                    if (!shouldUpgrade) return;
+                }
+
+                const roomId = await upgradeRoom(room, targetVersion, resp.invite, true, true, true);
+                closeSettingsFn();
+                // switch to the new room in the background
+                dis.dispatch({
+                    action: "view_room",
+                    room_id: roomId,
+                });
+                // open new settings on this tab
+                dis.dispatch({
+                    action: "open_room_settings",
+                    initial_tab_id: ROOM_SECURITY_TAB,
+                });
+
                 return;
             }
 
