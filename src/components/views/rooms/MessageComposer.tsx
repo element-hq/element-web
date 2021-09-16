@@ -57,7 +57,7 @@ let instanceCount = 0;
 const NARROW_MODE_BREAKPOINT = 500;
 
 interface IComposerAvatarProps {
-    me: object;
+    me: RoomMember;
 }
 
 function ComposerAvatar(props: IComposerAvatarProps) {

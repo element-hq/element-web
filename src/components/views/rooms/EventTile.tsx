@@ -1192,14 +1192,19 @@ export default class EventTile extends React.Component<IProps, IState> {
             }
 
             default: {
-                const thread = ReplyThread.makeThread(
-                    this.props.mxEvent,
-                    this.props.onHeightChanged,
-                    this.props.permalinkCreator,
-                    this.replyThread,
-                    this.props.layout,
-                    this.props.alwaysShowTimestamps || this.state.hover,
-                );
+                let thread;
+                // When the "showHiddenEventsInTimeline" lab is enabled,
+                // avoid showing replies for hidden events (events without tiles)
+                if (haveTileForEvent(this.props.mxEvent)) {
+                    thread = ReplyThread.makeThread(
+                        this.props.mxEvent,
+                        this.props.onHeightChanged,
+                        this.props.permalinkCreator,
+                        this.replyThread,
+                        this.props.layout,
+                        this.props.alwaysShowTimestamps || this.state.hover,
+                    );
+                }
 
                 const isOwnEvent = this.props.mxEvent?.sender?.userId === MatrixClientPeg.get().getUserId();
 

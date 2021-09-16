@@ -547,7 +547,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                 const unfilteredHistorical = unfilteredLists[DefaultTagID.Archived] || [];
                 const unfilteredFavourite = unfilteredLists[DefaultTagID.Favourite] || [];
                 // show a prompt to join/create rooms if the user is in 0 rooms and no historical
-                if (unfilteredRooms.length < 1 && unfilteredHistorical < 1 && unfilteredFavourite < 1) {
+                if (unfilteredRooms.length < 1 && unfilteredHistorical.length < 1 && unfilteredFavourite.length < 1) {
                     explorePrompt = <div className="mx_RoomList_explorePrompt">
                         <div>{ _t("Use the + to make a new room or explore existing ones below") }</div>
                         <AccessibleButton

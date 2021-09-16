@@ -15,45 +15,41 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-/*
+interface IProps {
+    element: React.ReactNode;
+    // Function to be called when the parent window is resized
+    // This can be used to reposition or close the menu on resize and
+    // ensure that it is not displayed in a stale position.
+    onResize?: () => void;
+}
+
+/**
  * This component can be used to display generic HTML content in a contextual
  * menu.
  */
-
 @replaceableComponent("views.context_menus.GenericElementContextMenu")
-export default class GenericElementContextMenu extends React.Component {
-    static propTypes = {
-        element: PropTypes.element.isRequired,
-        // Function to be called when the parent window is resized
-        // This can be used to reposition or close the menu on resize and
-        // ensure that it is not displayed in a stale position.
-        onResize: PropTypes.func,
-    };
-
-    constructor(props) {
+export default class GenericElementContextMenu extends React.Component<IProps> {
+    constructor(props: IProps) {
         super(props);
-        this.resize = this.resize.bind(this);
     }
 
-    componentDidMount() {
-        this.resize = this.resize.bind(this);
+    public componentDidMount(): void {
         window.addEventListener("resize", this.resize);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         window.removeEventListener("resize", this.resize);
     }
 
-    resize() {
+    private resize = (): void => {
         if (this.props.onResize) {
             this.props.onResize();
         }
-    }
+    };
 
-    render() {
+    public render(): JSX.Element {
         return <div>{ this.props.element }</div>;
     }
 }

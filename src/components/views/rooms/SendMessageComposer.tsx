@@ -31,8 +31,8 @@ import {
     textSerialize,
     unescapeMessage,
 } from '../../../editor/serialize';
+import BasicMessageComposer, { REGEX_EMOTICON } from "./BasicMessageComposer";
 import { CommandPartCreator, Part, PartCreator, SerializedPart, Type } from '../../../editor/parts';
-import BasicMessageComposer from "./BasicMessageComposer";
 import ReplyThread from "../elements/ReplyThread";
 import { findEditableEvent } from '../../../utils/EventUtils';
 import SendHistoryManager from "../../../SendHistoryManager";
@@ -347,15 +347,24 @@ export default class SendMessageComposer extends React.Component<IProps> {
     }
 
     public async sendMessage(): Promise<void> {
-        if (this.model.isEmpty) {
+        const model = this.model;
+
+        if (model.isEmpty) {
             return;
+        }
+
+        // Replace emoticon at the end of the message
+        if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
+            const caret = this.editorRef.current?.getCaret();
+            const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+            this.editorRef.current?.replaceEmoticon(position, REGEX_EMOTICON);
         }
 
         const replyToEvent = this.props.replyToEvent;
         let shouldSend = true;
         let content;
 
-        if (!containsEmote(this.model) && this.isSlashCommand()) {
+        if (!containsEmote(model) && this.isSlashCommand()) {
             const [cmd, args, commandText] = this.getSlashCommand();
             if (cmd) {
                 if (cmd.category === CommandCategories.messages) {
@@ -400,7 +409,7 @@ export default class SendMessageComposer extends React.Component<IProps> {
             }
         }
 
-        if (isQuickReaction(this.model)) {
+        if (isQuickReaction(model)) {
             shouldSend = false;
             this.sendQuickReaction();
         }
@@ -410,7 +419,7 @@ export default class SendMessageComposer extends React.Component<IProps> {
             const { roomId } = this.props.room;
             if (!content) {
                 content = createMessageContent(
-                    this.model,
+                    model,
                     replyToEvent,
                     this.props.replyInThread,
                     this.props.permalinkCreator,
@@ -446,9 +455,9 @@ export default class SendMessageComposer extends React.Component<IProps> {
             CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, !!replyToEvent, content);
         }
 
-        this.sendHistoryManager.save(this.model, replyToEvent);
+        this.sendHistoryManager.save(model, replyToEvent);
         // clear composer
-        this.model.reset([]);
+        model.reset([]);
         this.editorRef.current?.clearUndoHistory();
         this.editorRef.current?.focus();
         this.clearStoredEditorState();
