@@ -3606,5 +3606,17 @@
     "Change space name": "Ruimtenaam wijzigen",
     "Change space avatar": "Ruimte-afbeelding wijzigen",
     "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Iedereen in <spaceName/> kan zoeken en deelnemen. U kunt ook andere ruimtes selecteren.",
-    "Message didn't send. Click for info.": "Bericht is niet verstuur. Klik voor meer info."
+    "Message didn't send. Click for info.": "Bericht is niet verstuur. Klik voor meer info.",
+    "To join %(communityName)s, swap to communities in your <a>preferences</a>": "Om aan %(communityName)s deel te nemen, wissel naar gemeenschappen in uw <a>instellingen</a>",
+    "To view %(communityName)s, swap to communities in your <a>preferences</a>": "Om %(communityName)s te bekijken, wissel naar gemeenschappen in uw <a>instellingen</a>",
+    "Private community": "Privégemeenschap",
+    "Public community": "Publieke gemeenschap",
+    "Message": "Bericht",
+    "Upgrade anyway": "Upgrade alsnog uitvoeren",
+    "This room is in some spaces you’re not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Deze kamer is in ruimtes waar u geen beheerder van bent. In deze ruimtes zal de oude kamer nog worden getoond, maar leden zullen een melding krijgen om deel te nemen aan de nieuwe kamer.",
+    "Before you upgrade": "Voordat u upgrade",
+    "To join a space you'll need an invite.": "Om te kunnen deelnemen aan een ruimte heeft u een uitnodiging nodig.",
+    "You can also make Spaces from <a>communities</a>.": "U kunt ook ruimtes maken van uw <a>gemeenschappen</a>.",
+    "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Tijdelijk gemeenschappen tonen in plaats van ruimtes voor deze sessie. Ondersteuning zal worden verwijderd in de nabije toekomst. Dit zal Element herladen.",
+    "Display Communities instead of Spaces": "Gemeenschappen tonen ipv ruimtes"
 }
