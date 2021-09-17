@@ -3706,5 +3706,7 @@
     "Message": "Sõnum",
     "Upgrade anyway": "Uuenda ikkagi",
     "Before you upgrade": "Enne uuendamist",
-    "To join a space you'll need an invite.": "Kogukonnakeskusega liitumiseks vajad kutset."
+    "To join a space you'll need an invite.": "Kogukonnakeskusega liitumiseks vajad kutset.",
+    "%(reactors)s reacted with %(content)s": "%(reactors)s kasutajat reageeris järgnevalt: %(content)s",
+    "Joining space …": "Liitun kohukonnakeskusega…"
 }
