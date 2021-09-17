@@ -323,7 +323,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         const messageCase = this.getMessageCase();
         switch (messageCase) {
             case MessageCase.Joining: {
-                title = this.props.oobData.roomType === RoomType.Space ? _t("Joining space …") : _t("Joining room …");
+                title = this.props.oobData?.roomType === RoomType.Space ? _t("Joining space …") : _t("Joining room …");
                 showSpinner = true;
                 break;
             }
