@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixError } from "matrix-js-sdk/src/http-api";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { IJoinRuleEventContent, JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
@@ -323,7 +323,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         const messageCase = this.getMessageCase();
         switch (messageCase) {
             case MessageCase.Joining: {
-                title = this.props.oobData.isSpaceRoom ? _t("Joining space …") : _t("Joining room …");
+                title = this.props.oobData.roomType === RoomType.Space ? _t("Joining space …") : _t("Joining room …");
                 showSpinner = true;
                 break;
             }

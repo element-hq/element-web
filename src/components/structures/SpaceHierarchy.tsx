@@ -58,6 +58,7 @@ import { IState, RovingTabIndexProvider, useRovingTabIndex } from "../../accessi
 import { getDisplayAliasForRoom } from "./RoomDirectory";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { useEventEmitterState } from "../../hooks/useEventEmitter";
+import { IOOBData } from "../../stores/ThreepidInviteStore";
 
 interface IProps {
     space: Room;
@@ -68,7 +69,7 @@ interface IProps {
         hierarchy: RoomHierarchy,
         roomId: string,
         autoJoin?: boolean,
-        isSpaceRoom?: boolean,
+        roomType?: RoomType,
     ): void;
 }
 
@@ -78,7 +79,7 @@ interface ITileProps {
     selected?: boolean;
     numChildRooms?: number;
     hasPermissions?: boolean;
-    onViewRoomClick(autoJoin: boolean, isSpaceRoom: boolean): void;
+    onViewRoomClick(autoJoin: boolean, roomType: RoomType): void;
     onToggleClick?(): void;
 }
 
@@ -104,12 +105,12 @@ const Tile: React.FC<ITileProps> = ({
     const onPreviewClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
-        onViewRoomClick(false, room.room_type === RoomType.Space);
+        onViewRoomClick(false, room.room_type as RoomType);
     };
     const onJoinClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
-        onViewRoomClick(true, room.room_type === RoomType.Space);
+        onViewRoomClick(true, room.room_type as RoomType);
     };
 
     let button;
@@ -291,7 +292,7 @@ export const showRoom = (
     hierarchy: RoomHierarchy,
     roomId: string,
     autoJoin = false,
-    isSpaceRoom = false,
+    roomType?: RoomType,
 ) => {
     const room = hierarchy.roomMap.get(roomId);
 
@@ -317,8 +318,8 @@ export const showRoom = (
             avatarUrl: room.avatar_url,
             // XXX: This logic is duplicated from the JS SDK which would normally decide what the name is.
             name: room.name || roomAlias || _t("Unnamed room"),
-            isSpaceRoom,
-        },
+            roomType,
+        } as IOOBData,
     });
 };
 
@@ -328,7 +329,7 @@ interface IHierarchyLevelProps {
     hierarchy: RoomHierarchy;
     parents: Set<string>;
     selectedMap?: Map<string, Set<string>>;
-    onViewRoomClick(roomId: string, autoJoin: boolean, isSpaceRoom: boolean): void;
+    onViewRoomClick(roomId: string, autoJoin: boolean, roomType?: RoomType): void;
     onToggleClick?(parentId: string, childId: string): void;
 }
 
@@ -366,8 +367,8 @@ export const HierarchyLevel = ({
                     room={room}
                     suggested={hierarchy.isSuggested(root.room_id, room.room_id)}
                     selected={selectedMap?.get(root.room_id)?.has(room.room_id)}
-                    onViewRoomClick={(autoJoin, isSpaceRoom) => {
-                        onViewRoomClick(room.room_id, autoJoin, isSpaceRoom);
+                    onViewRoomClick={(autoJoin, roomType) => {
+                        onViewRoomClick(room.room_id, autoJoin, roomType);
                     }}
                     hasPermissions={hasPermissions}
                     onToggleClick={onToggleClick ? () => onToggleClick(root.room_id, room.room_id) : undefined}
@@ -386,8 +387,8 @@ export const HierarchyLevel = ({
                     }).length}
                     suggested={hierarchy.isSuggested(root.room_id, space.room_id)}
                     selected={selectedMap?.get(root.room_id)?.has(space.room_id)}
-                    onViewRoomClick={(autoJoin, isSpaceRoom) => {
-                        onViewRoomClick(space.room_id, autoJoin, isSpaceRoom);
+                    onViewRoomClick={(autoJoin, roomType) => {
+                        onViewRoomClick(space.room_id, autoJoin, roomType);
                     }}
                     hasPermissions={hasPermissions}
                     onToggleClick={onToggleClick ? () => onToggleClick(root.room_id, space.room_id) : undefined}
@@ -665,8 +666,8 @@ const SpaceHierarchy = ({
                             parents={new Set()}
                             selectedMap={selected}
                             onToggleClick={hasPermissions ? onToggleClick : undefined}
-                            onViewRoomClick={(roomId, autoJoin, isSpaceRoom) => {
-                                showRoom(cli, hierarchy, roomId, autoJoin, isSpaceRoom);
+                            onViewRoomClick={(roomId, autoJoin, roomType) => {
+                                showRoom(cli, hierarchy, roomId, autoJoin, roomType);
                             }}
                         />
                     </>;
