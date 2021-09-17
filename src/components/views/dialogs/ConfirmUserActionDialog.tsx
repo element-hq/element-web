@@ -14,9 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import classNames from "classnames";
+
 import { _t } from '../../../languageHandler';
 import { GroupMemberType } from '../../../groups';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -28,9 +30,9 @@ import DialogButtons from "../elements/DialogButtons";
 
 interface IProps {
     // matrix-js-sdk (room) member object. Supply either this or 'groupMember'
-    member: RoomMember;
+    member?: RoomMember;
     // group member object. Supply either this or 'member'
-    groupMember: GroupMemberType;
+    groupMember?: GroupMemberType;
     // needed if a group member is specified
     matrixClient?: MatrixClient;
     action: string; // eg. 'Ban'
@@ -41,6 +43,8 @@ interface IProps {
     // be the string entered.
     askReason?: boolean;
     danger?: boolean;
+    children?: ReactNode;
+    className?: string;
     onFinished: (success: boolean, reason?: string) => void;
 }
 
@@ -105,19 +109,23 @@ export default class ConfirmUserActionDialog extends React.Component<IProps> {
 
         return (
             <BaseDialog
-                className="mx_ConfirmUserActionDialog"
+                className={classNames("mx_ConfirmUserActionDialog", this.props.className)}
                 onFinished={this.props.onFinished}
                 title={this.props.title}
                 contentId='mx_Dialog_content'
             >
                 <div id="mx_Dialog_content" className="mx_Dialog_content">
-                    <div className="mx_ConfirmUserActionDialog_avatar">
-                        { avatar }
+                    <div className="mx_ConfirmUserActionDialog_user">
+                        <div className="mx_ConfirmUserActionDialog_avatar">
+                            { avatar }
+                        </div>
+                        <div className="mx_ConfirmUserActionDialog_name">{ name }</div>
+                        <div className="mx_ConfirmUserActionDialog_userId">{ userId }</div>
                     </div>
-                    <div className="mx_ConfirmUserActionDialog_name">{ name }</div>
-                    <div className="mx_ConfirmUserActionDialog_userId">{ userId }</div>
+
+                    { reasonBox }
+                    { this.props.children }
                 </div>
-                { reasonBox }
                 <DialogButtons primaryButton={this.props.action}
                     onPrimaryButtonClick={this.onOk}
                     primaryButtonClass={confirmButtonClass}
