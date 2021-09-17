@@ -590,7 +590,7 @@ const SpaceHierarchy = ({
     const { loading, rooms, hierarchy, loadMore } = useSpaceSummary(space);
 
     const filteredRoomSet = useMemo<Set<IHierarchyRoom>>(() => {
-        if (!rooms.length) return new Set();
+        if (!rooms?.length) return new Set();
         const lcQuery = query.toLowerCase().trim();
         if (!lcQuery) return new Set(rooms);
 
