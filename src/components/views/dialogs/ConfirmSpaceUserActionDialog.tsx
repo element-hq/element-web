@@ -27,6 +27,7 @@ interface IProps extends Omit<BaseProps, "groupMember" | "matrixClient" | "child
     allLabel: string;
     specificLabel: string;
     noneLabel?: string;
+    warningMessage?: string;
     onFinished(success: boolean, reason?: string, rooms?: Room[]): void;
     spaceChildFilter?(child: Room): boolean;
 }
@@ -37,6 +38,7 @@ const ConfirmSpaceUserActionDialog: React.FC<IProps> = ({
     allLabel,
     specificLabel,
     noneLabel,
+    warningMessage,
     onFinished,
     ...props
 }) => {
@@ -58,6 +60,10 @@ const ConfirmSpaceUserActionDialog: React.FC<IProps> = ({
                 "so banning won’t remove them from any rooms or spaces in <SpaceName/>.", {}, {
                 SpaceName: () => <b>{ space.name }</b>,
             }) }
+        </div>;
+    } else if (warningMessage) {
+        warning = <div className="mx_ConfirmSpaceUserActionDialog_warning">
+            { warningMessage }
         </div>;
     }
 
