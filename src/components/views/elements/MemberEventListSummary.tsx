@@ -135,7 +135,7 @@ export default class MemberEventListSummary extends React.Component<IProps> {
 
             const desc = formatCommaSeparatedList(descs);
 
-            return _t('%(nameList)s %(transitionList)s', { nameList: nameList, transitionList: desc });
+            return _t('%(nameList)s %(transitionList)s', { nameList, transitionList: desc });
         });
 
         if (!summaries) {

@@ -15,16 +15,15 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { replaceableComponent } from "../../utils/replaceableComponent";
 
-@replaceableComponent("structures.GenericErrorPage")
-export default class GenericErrorPage extends React.PureComponent {
-    static propTypes = {
-        title: PropTypes.object.isRequired, // jsx for title
-        message: PropTypes.object.isRequired, // jsx to display
-    };
+interface IProps {
+    title: React.ReactNode;
+    message: React.ReactNode;
+}
 
+@replaceableComponent("structures.GenericErrorPage")
+export default class GenericErrorPage extends React.PureComponent<IProps> {
     render() {
         return <div className='mx_GenericErrorPage'>
             <div className='mx_GenericErrorPage_box'>

@@ -258,7 +258,6 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
             className="mx_textinput_icon mx_textinput_search"
             placeholder={filterPlaceholder}
             onSearch={setQuery}
-            autoComplete={true}
             autoFocus={true}
         />
         <AutoHideScrollbar className="mx_AddExistingToSpace_content">

@@ -73,12 +73,6 @@ $groupFilterPanelWidth: 56px; // only applies in this file, used for calculation
 .mx_GroupFilterPanel .mx_TagTile {
     // opacity: 0.5;
     position: relative;
-
-    .mx_BetaDot {
-        position: absolute;
-        right: -13px;
-        top: -11px;
-    }
 }
 
 .mx_GroupFilterPanel .mx_TagTile.mx_TagTile_prototype {

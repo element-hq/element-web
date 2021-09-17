@@ -21,6 +21,17 @@ limitations under the License.
 
     .mx_SettingsTab_section {
         margin-bottom: 30px;
+
+        > details {
+            > summary {
+                cursor: pointer;
+                color: $primary-content;
+            }
+
+            & + .mx_SettingsFlag {
+                margin-top: 20px;
+            }
+        }
     }
 
     .mx_PreferencesUserSettingsTab_CommunityMigrator {

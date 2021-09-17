@@ -14,53 +14,59 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ChangeEvent } from 'react';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import * as sdk from '../../../index';
-import AccessibleButton from '../elements/AccessibleButton';
+import AccessibleButton, { ButtonEvent } from '../elements/AccessibleButton';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { User } from "matrix-js-sdk/src/models/user";
+import Spinner from "../elements/Spinner";
+
+interface IProps {
+    // js-sdk User object. Not required because it might not exist.
+    user?: User;
+}
+
+interface IState {
+    message: string;
+    waiting: boolean;
+}
 
 @replaceableComponent("views.context_menus.StatusMessageContextMenu")
-export default class StatusMessageContextMenu extends React.Component {
-    static propTypes = {
-        // js-sdk User object. Not required because it might not exist.
-        user: PropTypes.object,
-    };
-
-    constructor(props) {
+export default class StatusMessageContextMenu extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
             message: this.comittedStatusMessage,
+            waiting: false,
         };
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         const { user } = this.props;
         if (!user) {
             return;
         }
-        user.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
+        user.on("User._unstable_statusMessage", this.onStatusMessageCommitted);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         const { user } = this.props;
         if (!user) {
             return;
         }
         user.removeListener(
             "User._unstable_statusMessage",
-            this._onStatusMessageCommitted,
+            this.onStatusMessageCommitted,
         );
     }
 
-    get comittedStatusMessage() {
-        return this.props.user ? this.props.user._unstable_statusMessage : "";
+    get comittedStatusMessage(): string {
+        return this.props.user ? this.props.user.unstable_statusMessage : "";
     }
 
-    _onStatusMessageCommitted = () => {
+    private onStatusMessageCommitted = (): void => {
         // The `User` object has observed a status message change.
         this.setState({
             message: this.comittedStatusMessage,
@@ -68,14 +74,14 @@ export default class StatusMessageContextMenu extends React.Component {
         });
     };
 
-    _onClearClick = (e) => {
+    private onClearClick = (): void=> {
         MatrixClientPeg.get()._unstable_setStatusMessage("");
         this.setState({
             waiting: true,
         });
     };
 
-    _onSubmit = (e) => {
+    private onSubmit = (e: ButtonEvent): void => {
         e.preventDefault();
         MatrixClientPeg.get()._unstable_setStatusMessage(this.state.message);
         this.setState({
@@ -83,27 +89,25 @@ export default class StatusMessageContextMenu extends React.Component {
         });
     };
 
-    _onStatusChange = (e) => {
+    private onStatusChange = (e: ChangeEvent): void => {
         // The input field's value was changed.
         this.setState({
-            message: e.target.value,
+            message: (e.target as HTMLInputElement).value,
         });
     };
 
-    render() {
-        const Spinner = sdk.getComponent('views.elements.Spinner');
-
+    public render(): JSX.Element {
         let actionButton;
         if (this.comittedStatusMessage) {
             if (this.state.message === this.comittedStatusMessage) {
                 actionButton = <AccessibleButton className="mx_StatusMessageContextMenu_clear"
-                    onClick={this._onClearClick}
+                    onClick={this.onClearClick}
                 >
                     <span>{ _t("Clear status") }</span>
                 </AccessibleButton>;
             } else {
                 actionButton = <AccessibleButton className="mx_StatusMessageContextMenu_submit"
-                    onClick={this._onSubmit}
+                    onClick={this.onSubmit}
                 >
                     <span>{ _t("Update status") }</span>
                 </AccessibleButton>;
@@ -112,7 +116,7 @@ export default class StatusMessageContextMenu extends React.Component {
             actionButton = <AccessibleButton
                 className="mx_StatusMessageContextMenu_submit"
                 disabled={!this.state.message}
-                onClick={this._onSubmit}
+                onClick={this.onSubmit}
             >
                 <span>{ _t("Set status") }</span>
             </AccessibleButton>;
@@ -120,13 +124,13 @@ export default class StatusMessageContextMenu extends React.Component {
 
         let spinner = null;
         if (this.state.waiting) {
-            spinner = <Spinner w="24" h="24" />;
+            spinner = <Spinner w={24} h={24} />;
         }
 
         const form = <form
             className="mx_StatusMessageContextMenu_form"
             autoComplete="off"
-            onSubmit={this._onSubmit}
+            onSubmit={this.onSubmit}
         >
             <input
                 type="text"
@@ -134,9 +138,9 @@ export default class StatusMessageContextMenu extends React.Component {
                 key="message"
                 placeholder={_t("Set a new status...")}
                 autoFocus={true}
-                maxLength="60"
+                maxLength={60}
                 value={this.state.message}
-                onChange={this._onStatusChange}
+                onChange={this.onStatusChange}
             />
             <div className="mx_StatusMessageContextMenu_actionContainer">
                 { actionButton }

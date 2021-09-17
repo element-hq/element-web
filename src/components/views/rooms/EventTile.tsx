@@ -21,7 +21,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { Thread } from 'matrix-js-sdk/src/models/thread';
+import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
 
 import ReplyThread from "../elements/ReplyThread";
 import { _t } from '../../../languageHandler';
@@ -464,8 +464,8 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         if (SettingsStore.getValue("feature_thread")) {
-            this.props.mxEvent.once("Thread.ready", this.updateThread);
-            this.props.mxEvent.on("Thread.update", this.updateThread);
+            this.props.mxEvent.once(ThreadEvent.Ready, this.updateThread);
+            this.props.mxEvent.on(ThreadEvent.Update, this.updateThread);
         }
     }
 
@@ -1192,14 +1192,19 @@ export default class EventTile extends React.Component<IProps, IState> {
             }
 
             default: {
-                const thread = ReplyThread.makeThread(
-                    this.props.mxEvent,
-                    this.props.onHeightChanged,
-                    this.props.permalinkCreator,
-                    this.replyThread,
-                    this.props.layout,
-                    this.props.alwaysShowTimestamps || this.state.hover,
-                );
+                let thread;
+                // When the "showHiddenEventsInTimeline" lab is enabled,
+                // avoid showing replies for hidden events (events without tiles)
+                if (haveTileForEvent(this.props.mxEvent)) {
+                    thread = ReplyThread.makeThread(
+                        this.props.mxEvent,
+                        this.props.onHeightChanged,
+                        this.props.permalinkCreator,
+                        this.replyThread,
+                        this.props.layout,
+                        this.props.alwaysShowTimestamps || this.state.hover,
+                    );
+                }
 
                 const isOwnEvent = this.props.mxEvent?.sender?.userId === MatrixClientPeg.get().getUserId();
 

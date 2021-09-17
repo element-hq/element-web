@@ -136,18 +136,6 @@ describe("PosthogAnalytics", () => {
             expect(fakePosthog.capture.mock.calls[0][1]["foo"]).toEqual("bar");
         });
 
-        it("Should pass trackRoomEvent to posthog", async () => {
-            analytics.setAnonymity(Anonymity.Pseudonymous);
-            const roomId = "42";
-            await analytics.trackRoomEvent<IRoomEvent>("jest_test_event", roomId, {
-                foo: "bar",
-            });
-            expect(fakePosthog.capture.mock.calls[0][0]).toBe("jest_test_event");
-            expect(fakePosthog.capture.mock.calls[0][1]["foo"]).toEqual("bar");
-            expect(fakePosthog.capture.mock.calls[0][1]["hashedRoomId"])
-                .toEqual("73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049");
-        });
-
         it("Should pass trackPseudonymousEvent() to posthog", async () => {
             analytics.setAnonymity(Anonymity.Pseudonymous);
             await analytics.trackPseudonymousEvent<ITestEvent>("jest_test_pseudo_event", {
@@ -173,9 +161,6 @@ describe("PosthogAnalytics", () => {
             await analytics.trackAnonymousEvent<ITestEvent>("jest_test_event", {
                 foo: "bar",
             });
-            await analytics.trackRoomEvent<ITestRoomEvent>("room id", "foo", {
-                foo: "bar",
-            });
             await analytics.trackPageView(200);
             expect(fakePosthog.capture.mock.calls.length).toBe(0);
         });
@@ -183,31 +168,25 @@ describe("PosthogAnalytics", () => {
         it("Should pseudonymise a location of a known screen", async () => {
             const location = await getRedactedCurrentLocation(
                 "https://foo.bar", "#/register/some/pii", "/", Anonymity.Pseudonymous);
-            expect(location).toBe(
-                `https://foo.bar/#/register/\
-a6b46dd0d1ae5e86cbc8f37e75ceeb6760230c1ca4ffbcb0c97b96dd7d9c464b/\
-bd75b3e080945674c0351f75e0db33d1e90986fa07b318ea7edf776f5eef38d4`);
+            expect(location).toBe("https://foo.bar/#/register/<redacted>");
         });
 
         it("Should anonymise a location of a known screen", async () => {
             const location = await getRedactedCurrentLocation(
                 "https://foo.bar", "#/register/some/pii", "/", Anonymity.Anonymous);
-            expect(location).toBe("https://foo.bar/#/register/<redacted>/<redacted>");
+            expect(location).toBe("https://foo.bar/#/register/<redacted>");
         });
 
         it("Should pseudonymise a location of an unknown screen", async () => {
             const location = await getRedactedCurrentLocation(
                 "https://foo.bar", "#/not_a_screen_name/some/pii", "/", Anonymity.Pseudonymous);
-            expect(location).toBe(
-                `https://foo.bar/#/<redacted_screen_name>/\
-a6b46dd0d1ae5e86cbc8f37e75ceeb6760230c1ca4ffbcb0c97b96dd7d9c464b/\
-bd75b3e080945674c0351f75e0db33d1e90986fa07b318ea7edf776f5eef38d4`);
+            expect(location).toBe("https://foo.bar/#/<redacted_screen_name>/<redacted>");
         });
 
         it("Should anonymise a location of an unknown screen", async () => {
             const location = await getRedactedCurrentLocation(
                 "https://foo.bar", "#/not_a_screen_name/some/pii", "/", Anonymity.Anonymous);
-            expect(location).toBe("https://foo.bar/#/<redacted_screen_name>/<redacted>/<redacted>");
+            expect(location).toBe("https://foo.bar/#/<redacted_screen_name>/<redacted>");
         });
 
         it("Should handle an empty hash", async () => {
@@ -218,15 +197,28 @@ bd75b3e080945674c0351f75e0db33d1e90986fa07b318ea7edf776f5eef38d4`);
 
         it("Should identify the user to posthog if pseudonymous", async () => {
             analytics.setAnonymity(Anonymity.Pseudonymous);
-            await analytics.identifyUser("foo");
-            expect(fakePosthog.identify.mock.calls[0][0])
-                .toBe("2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae");
+            class FakeClient {
+                getAccountDataFromServer = jest.fn().mockResolvedValue(null);
+                setAccountData = jest.fn().mockResolvedValue({});
+            }
+            await analytics.identifyUser(new FakeClient(), () => "analytics_id" );
+            expect(fakePosthog.identify.mock.calls[0][0]).toBe("analytics_id");
         });
 
         it("Should not identify the user to posthog if anonymous", async () => {
             analytics.setAnonymity(Anonymity.Anonymous);
-            await analytics.identifyUser("foo");
+            await analytics.identifyUser(null);
             expect(fakePosthog.identify.mock.calls.length).toBe(0);
+        });
+
+        it("Should identify using the server's analytics id if present", async () => {
+            analytics.setAnonymity(Anonymity.Pseudonymous);
+            class FakeClient {
+                getAccountDataFromServer = jest.fn().mockResolvedValue({ id: "existing_analytics_id" });
+                setAccountData = jest.fn().mockResolvedValue({});
+            }
+            await analytics.identifyUser(new FakeClient(), () => "new_analytics_id" );
+            expect(fakePosthog.identify.mock.calls[0][0]).toBe("existing_analytics_id");
         });
     });
 });

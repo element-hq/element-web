@@ -103,6 +103,16 @@ $activeBorderColor: $secondary-content;
         }
     }
 
+    .mx_SpaceItem_new {
+        position: relative;
+
+        .mx_BetaDot {
+            position: absolute;
+            left: 33px;
+            top: -5px;
+        }
+    }
+
     .mx_SpaceItem:not(.hasSubSpaces) > .mx_SpaceButton {
         margin-left: $gutterSize;
         min-width: 40px;
@@ -194,22 +204,17 @@ $activeBorderColor: $secondary-content;
         }
 
         &.mx_SpaceButton_new .mx_SpaceButton_icon {
-            background-color: $accent-color;
-            transition: all .1s ease-in-out; // TODO transition
+            background-color: $roomlist-button-bg-color;
 
             &::before {
-                background-color: #ffffff;
+                background-color: $primary-content;
                 mask-image: url('$(res)/img/element-icons/plus.svg');
                 transition: all .2s ease-in-out; // TODO transition
             }
         }
 
-        &.mx_SpaceButton_newCancel .mx_SpaceButton_icon {
-            background-color: $icon-button-color;
-
-            &::before {
-                transform: rotate(45deg);
-            }
+        &.mx_SpaceButton_newCancel .mx_SpaceButton_icon::before {
+            transform: rotate(45deg);
         }
 
         .mx_BaseAvatar_image {

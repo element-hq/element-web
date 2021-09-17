@@ -16,52 +16,60 @@ limitations under the License.
 */
 
 import React from "react";
-import PropTypes from "prop-types";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import * as sdk from "../../index";
 import Modal from '../../Modal';
 import { _t } from '../../languageHandler';
 import HomePage from "./HomePage";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import ErrorDialog from "../views/dialogs/ErrorDialog";
+import MainSplit from "./MainSplit";
+import RightPanel from "./RightPanel";
+import Spinner from "../views/elements/Spinner";
+import ResizeNotifier from "../../utils/ResizeNotifier";
+
+interface IProps {
+    userId?: string;
+    resizeNotifier: ResizeNotifier;
+}
+
+interface IState {
+    loading: boolean;
+    member?: RoomMember;
+}
 
 @replaceableComponent("structures.UserView")
-export default class UserView extends React.Component {
-    static get propTypes() {
-        return {
-            userId: PropTypes.string,
+export default class UserView extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
+        super(props);
+        this.state = {
+            loading: true,
         };
     }
 
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
-
-    componentDidMount() {
+    public componentDidMount(): void {
         if (this.props.userId) {
-            this._loadProfileInfo();
+            this.loadProfileInfo();
         }
     }
 
-    componentDidUpdate(prevProps) {
+    public componentDidUpdate(prevProps: IProps): void {
         // XXX: We shouldn't need to null check the userId here, but we declare
         // it as optional and MatrixChat sometimes fires in a way which results
         // in an NPE when we try to update the profile info.
         if (prevProps.userId !== this.props.userId && this.props.userId) {
-            this._loadProfileInfo();
+            this.loadProfileInfo();
         }
     }
 
-    async _loadProfileInfo() {
+    private async loadProfileInfo(): Promise<void> {
         const cli = MatrixClientPeg.get();
         this.setState({ loading: true });
         let profileInfo;
         try {
             profileInfo = await cli.getProfileInfo(this.props.userId);
         } catch (err) {
-            const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
             Modal.createTrackedDialog(_t('Could not load user profile'), '', ErrorDialog, {
                 title: _t('Could not load user profile'),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
@@ -75,14 +83,11 @@ export default class UserView extends React.Component {
         this.setState({ member, loading: false });
     }
 
-    render() {
+    public render(): JSX.Element {
         if (this.state.loading) {
-            const Spinner = sdk.getComponent("elements.Spinner");
             return <Spinner />;
-        } else if (this.state.member) {
-            const RightPanel = sdk.getComponent('structures.RightPanel');
-            const MainSplit = sdk.getComponent('structures.MainSplit');
-            const panel = <RightPanel user={this.state.member} />;
+        } else if (this.state.member?.user) {
+            const panel = <RightPanel user={this.state.member.user} resizeNotifier={this.props.resizeNotifier} />;
             return (<MainSplit panel={panel} resizeNotifier={this.props.resizeNotifier}>
                 <HomePage />
             </MainSplit>);

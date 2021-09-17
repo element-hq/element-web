@@ -15,95 +15,110 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _t, _td } from '../../languageHandler';
-import { MatrixClientPeg } from '../../MatrixClientPeg';
 import Resend from '../../Resend';
 import dis from '../../dispatcher/dispatcher';
 import { messageForResourceLimitError } from '../../utils/ErrorUtils';
 import { Action } from "../../dispatcher/actions";
 import { replaceableComponent } from "../../utils/replaceableComponent";
-import { EventStatus } from "matrix-js-sdk/src/models/event";
+import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import NotificationBadge from "../views/rooms/NotificationBadge";
 import { StaticNotificationState } from "../../stores/notifications/StaticNotificationState";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import InlineSpinner from "../views/elements/InlineSpinner";
+import { SyncState } from "matrix-js-sdk/src/sync.api";
+import { ISyncStateData } from "matrix-js-sdk/src/sync";
+import { Room } from "matrix-js-sdk/src/models/room";
+import MatrixClientContext from "../../contexts/MatrixClientContext";
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
 const STATUS_BAR_EXPANDED_LARGE = 2;
 
-export function getUnsentMessages(room) {
+export function getUnsentMessages(room: Room): MatrixEvent[] {
     if (!room) { return []; }
     return room.getPendingEvents().filter(function(ev) {
         return ev.status === EventStatus.NOT_SENT;
     });
 }
 
+interface IProps {
+    // the room this statusbar is representing.
+    room: Room;
+
+    // true if the room is being peeked at. This affects components that shouldn't
+    // logically be shown when peeking, such as a prompt to invite people to a room.
+    isPeeking?: boolean;
+    // callback for when the user clicks on the 'resend all' button in the
+    // 'unsent messages' bar
+    onResendAllClick?: () => void;
+
+    // callback for when the user clicks on the 'cancel all' button in the
+    // 'unsent messages' bar
+    onCancelAllClick?: () => void;
+
+    // callback for when the user clicks on the 'invite others' button in the
+    // 'you are alone' bar
+    onInviteClick?: () => void;
+
+    // callback for when we do something that changes the size of the
+    // status bar. This is used to trigger a re-layout in the parent
+    // component.
+    onResize?: () => void;
+
+    // callback for when the status bar can be hidden from view, as it is
+    // not displaying anything
+    onHidden?: () => void;
+
+    // callback for when the status bar is displaying something and should
+    // be visible
+    onVisible?: () => void;
+}
+
+interface IState {
+    syncState: SyncState;
+    syncStateData: ISyncStateData;
+    unsentMessages: MatrixEvent[];
+    isResending: boolean;
+}
+
 @replaceableComponent("structures.RoomStatusBar")
-export default class RoomStatusBar extends React.PureComponent {
-    static propTypes = {
-        // the room this statusbar is representing.
-        room: PropTypes.object.isRequired,
+export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
+    public static contextType = MatrixClientContext;
 
-        // true if the room is being peeked at. This affects components that shouldn't
-        // logically be shown when peeking, such as a prompt to invite people to a room.
-        isPeeking: PropTypes.bool,
+    constructor(props: IProps, context: typeof MatrixClientContext) {
+        super(props, context);
 
-        // callback for when the user clicks on the 'resend all' button in the
-        // 'unsent messages' bar
-        onResendAllClick: PropTypes.func,
-
-        // callback for when the user clicks on the 'cancel all' button in the
-        // 'unsent messages' bar
-        onCancelAllClick: PropTypes.func,
-
-        // callback for when the user clicks on the 'invite others' button in the
-        // 'you are alone' bar
-        onInviteClick: PropTypes.func,
-
-        // callback for when we do something that changes the size of the
-        // status bar. This is used to trigger a re-layout in the parent
-        // component.
-        onResize: PropTypes.func,
-
-        // callback for when the status bar can be hidden from view, as it is
-        // not displaying anything
-        onHidden: PropTypes.func,
-
-        // callback for when the status bar is displaying something and should
-        // be visible
-        onVisible: PropTypes.func,
-    };
-
-    state = {
-        syncState: MatrixClientPeg.get().getSyncState(),
-        syncStateData: MatrixClientPeg.get().getSyncStateData(),
-        unsentMessages: getUnsentMessages(this.props.room),
-        isResending: false,
-    };
-
-    componentDidMount() {
-        MatrixClientPeg.get().on("sync", this.onSyncStateChange);
-        MatrixClientPeg.get().on("Room.localEchoUpdated", this._onRoomLocalEchoUpdated);
-
-        this._checkSize();
+        this.state = {
+            syncState: this.context.getSyncState(),
+            syncStateData: this.context.getSyncStateData(),
+            unsentMessages: getUnsentMessages(this.props.room),
+            isResending: false,
+        };
     }
 
-    componentDidUpdate() {
-        this._checkSize();
+    public componentDidMount(): void {
+        const client = this.context;
+        client.on("sync", this.onSyncStateChange);
+        client.on("Room.localEchoUpdated", this.onRoomLocalEchoUpdated);
+
+        this.checkSize();
     }
 
-    componentWillUnmount() {
+    public componentDidUpdate(): void {
+        this.checkSize();
+    }
+
+    public componentWillUnmount(): void {
         // we may have entirely lost our client as we're logging out before clicking login on the guest bar...
-        const client = MatrixClientPeg.get();
+        const client = this.context;
         if (client) {
             client.removeListener("sync", this.onSyncStateChange);
-            client.removeListener("Room.localEchoUpdated", this._onRoomLocalEchoUpdated);
+            client.removeListener("Room.localEchoUpdated", this.onRoomLocalEchoUpdated);
         }
     }
 
-    onSyncStateChange = (state, prevState, data) => {
+    private onSyncStateChange = (state: SyncState, prevState: SyncState, data: ISyncStateData): void => {
         if (state === "SYNCING" && prevState === "SYNCING") {
             return;
         }
@@ -113,7 +128,7 @@ export default class RoomStatusBar extends React.PureComponent {
         });
     };
 
-    _onResendAllClick = () => {
+    private onResendAllClick = (): void => {
         Resend.resendUnsentEvents(this.props.room).then(() => {
             this.setState({ isResending: false });
         });
@@ -121,12 +136,12 @@ export default class RoomStatusBar extends React.PureComponent {
         dis.fire(Action.FocusSendMessageComposer);
     };
 
-    _onCancelAllClick = () => {
+    private onCancelAllClick = (): void => {
         Resend.cancelUnsentEvents(this.props.room);
         dis.fire(Action.FocusSendMessageComposer);
     };
 
-    _onRoomLocalEchoUpdated = (event, room, oldEventId, oldStatus) => {
+    private onRoomLocalEchoUpdated = (ev: MatrixEvent, room: Room) => {
         if (room.roomId !== this.props.room.roomId) return;
         const messages = getUnsentMessages(this.props.room);
         this.setState({
@@ -136,8 +151,8 @@ export default class RoomStatusBar extends React.PureComponent {
     };
 
     // Check whether current size is greater than 0, if yes call props.onVisible
-    _checkSize() {
-        if (this._getSize()) {
+    private checkSize(): void {
+        if (this.getSize()) {
             if (this.props.onVisible) this.props.onVisible();
         } else {
             if (this.props.onHidden) this.props.onHidden();
@@ -147,8 +162,8 @@ export default class RoomStatusBar extends React.PureComponent {
     // We don't need the actual height - just whether it is likely to have
     // changed - so we use '0' to indicate normal size, and other values to
     // indicate other sizes.
-    _getSize() {
-        if (this._shouldShowConnectionError()) {
+    private getSize(): number {
+        if (this.shouldShowConnectionError()) {
             return STATUS_BAR_EXPANDED;
         } else if (this.state.unsentMessages.length > 0 || this.state.isResending) {
             return STATUS_BAR_EXPANDED_LARGE;
@@ -156,7 +171,7 @@ export default class RoomStatusBar extends React.PureComponent {
         return STATUS_BAR_HIDDEN;
     }
 
-    _shouldShowConnectionError() {
+    private shouldShowConnectionError(): boolean {
         // no conn bar trumps the "some not sent" msg since you can't resend without
         // a connection!
         // There's one situation in which we don't show this 'no connection' bar, and that's
@@ -164,12 +179,12 @@ export default class RoomStatusBar extends React.PureComponent {
         const errorIsMauError = Boolean(
             this.state.syncStateData &&
             this.state.syncStateData.error &&
-            this.state.syncStateData.error.errcode === 'M_RESOURCE_LIMIT_EXCEEDED',
+            this.state.syncStateData.error.name === 'M_RESOURCE_LIMIT_EXCEEDED',
         );
         return this.state.syncState === "ERROR" && !errorIsMauError;
     }
 
-    _getUnsentMessageContent() {
+    private getUnsentMessageContent(): JSX.Element {
         const unsentMessages = this.state.unsentMessages;
 
         let title;
@@ -221,10 +236,10 @@ export default class RoomStatusBar extends React.PureComponent {
         }
 
         let buttonRow = <>
-            <AccessibleButton onClick={this._onCancelAllClick} className="mx_RoomStatusBar_unsentCancelAllBtn">
+            <AccessibleButton onClick={this.onCancelAllClick} className="mx_RoomStatusBar_unsentCancelAllBtn">
                 { _t("Delete all") }
             </AccessibleButton>
-            <AccessibleButton onClick={this._onResendAllClick} className="mx_RoomStatusBar_unsentResendAllBtn">
+            <AccessibleButton onClick={this.onResendAllClick} className="mx_RoomStatusBar_unsentResendAllBtn">
                 { _t("Retry all") }
             </AccessibleButton>
         </>;
@@ -260,8 +275,8 @@ export default class RoomStatusBar extends React.PureComponent {
         </>;
     }
 
-    render() {
-        if (this._shouldShowConnectionError()) {
+    public render(): JSX.Element {
+        if (this.shouldShowConnectionError()) {
             return (
                 <div className="mx_RoomStatusBar">
                     <div role="alert">
@@ -287,7 +302,7 @@ export default class RoomStatusBar extends React.PureComponent {
         }
 
         if (this.state.unsentMessages.length > 0 || this.state.isResending) {
-            return this._getUnsentMessageContent();
+            return this.getUnsentMessageContent();
         }
 
         return null;
