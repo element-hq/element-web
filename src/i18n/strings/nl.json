@@ -3618,5 +3618,8 @@
     "To join a space you'll need an invite.": "Om te kunnen deelnemen aan een ruimte heeft u een uitnodiging nodig.",
     "You can also make Spaces from <a>communities</a>.": "U kunt ook ruimtes maken van uw <a>gemeenschappen</a>.",
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Tijdelijk gemeenschappen tonen in plaats van ruimtes voor deze sessie. Ondersteuning zal worden verwijderd in de nabije toekomst. Dit zal Element herladen.",
-    "Display Communities instead of Spaces": "Gemeenschappen tonen ipv ruimtes"
+    "Display Communities instead of Spaces": "Gemeenschappen tonen ipv ruimtes",
+    "Joining space …": "Deelnemen aan ruimte…",
+    "To join this Space, hide communities in your <a>preferences</a>": "Om deel te nemen aan de ruimte, verberg gemeenschappen in uw <a>instellingen</a>",
+    "To view this Space, hide communities in your <a>preferences</a>": "Om deze ruimte te bekijken, verberg gemeenschappen in uw <a>instellingen</a>"
 }
