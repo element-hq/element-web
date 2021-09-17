@@ -3712,5 +3712,19 @@
     "Change space name": "Tér nevének megváltoztatása",
     "Change space avatar": "Tér profilkép megváltoztatása",
     "Anyone in <spaceName/> can find and join. You can select other spaces too.": "<spaceName/> téren bárki megtalálhatja és beléphet. Kiválaszthat más tereket is.",
-    "Message didn't send. Click for info.": "Az üzenet nincs elküldve. Kattintson az információkért."
+    "Message didn't send. Click for info.": "Az üzenet nincs elküldve. Kattintson az információkért.",
+    "To join %(communityName)s, swap to communities in your <a>preferences</a>": "%(communityName)s csatlakozáshoz álljon át közösségekre a <a>beállításokban</a>",
+    "To view %(communityName)s, swap to communities in your <a>preferences</a>": "%(communityName)s megjelenítéséhez álljon át közösségekre a <a>beállításokban</a>",
+    "This room is in some spaces you’re not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Ez a szoba olyan terekben is benne van amiben ön nem adminisztrátor. Ezekben a terekben a régi szoba jelenik meg és az emberek kapnak egy jelzést, hogy lépjenek be az újba.",
+    "To join this Space, hide communities in your <a>preferences</a>": "A Térbe való belépéshez rejtse el a közösségeket a <a>Beállításokban</a>",
+    "To view this Space, hide communities in your <a>preferences</a>": "A Tér megjelenítéséhez rejtse el a közösségeket a <a>Beállításokban</a>",
+    "Private community": "Zárt közösség",
+    "Public community": "Nyilvános közösség",
+    "Message": "Üzenet",
+    "Upgrade anyway": "Mindenképpen frissít",
+    "Before you upgrade": "Mielőtt frissítene",
+    "To join a space you'll need an invite.": "A térre való belépéshez meghívóra van szükség.",
+    "You can also make Spaces from <a>communities</a>.": "<a>Közösségből</a> is lehet Tereket készíteni.",
+    "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Közösségek megjelenítése átmenetileg a terek helyett ebben a munkamenetben. Ez a lehetőség később kivezetésre kerül. Az Element újratöltődik.",
+    "Display Communities instead of Spaces": "Terek helyett inkább a közösségek megjelenítése"
 }
