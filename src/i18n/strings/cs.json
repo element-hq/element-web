@@ -3651,5 +3651,6 @@
     "You can also make Spaces from <a>communities</a>.": "Můžete také vytvořit prostory ze <a>skupin</a>.",
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Dočasně zobrazit skupiny místo prostorů pro tuto relaci. Podpora bude v blízké budoucnosti odstraněna. Toto provede přenačtení Elementu.",
     "Display Communities instead of Spaces": "Zobrazit skupiny místo prostorů",
-    "Joining space …": "Připojování k prostoru…"
+    "Joining space …": "Připojování k prostoru…",
+    "%(reactors)s reacted with %(content)s": "%(reactors)s reagoval(a) na %(content)s"
 }
