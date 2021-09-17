@@ -28,7 +28,6 @@ import { linkifyElement } from "../../HtmlUtils";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { UserTab } from "../views/dialogs/UserSettingsDialog";
-import MainSplit from './MainSplit';
 
 interface IProps {
     groupId: string;
@@ -49,11 +48,11 @@ const LegacyCommunityPreview = ({ groupId }: IProps) => {
 
     if (!groupSummary) {
         return <main className="mx_SpaceRoomView">
-            <MainSplit>
+            <div className="mx_MainSplit">
                 <div className="mx_SpaceRoomView_preview">
                     <Spinner />
                 </div>
-            </MainSplit>
+            </div>
         </main>;
     }
 
@@ -70,7 +69,7 @@ const LegacyCommunityPreview = ({ groupId }: IProps) => {
 
     return <main className="mx_SpaceRoomView">
         <ErrorBoundary>
-            <MainSplit>
+            <div className="mx_MainSplit">
                 <div className="mx_SpaceRoomView_preview">
                     <GroupAvatar
                         groupId={groupId}
@@ -108,7 +107,7 @@ const LegacyCommunityPreview = ({ groupId }: IProps) => {
                         }
                     </div>
                 </div>
-            </MainSplit>
+            </div>
         </ErrorBoundary>
     </main>;
 };
