@@ -3625,5 +3625,6 @@
     "You can also make Spaces from <a>communities</a>.": "你也可以从 <a>社区</a>创造空间。",
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "在此会话中暂时展示社区而空间。此功能将在不久的将来被移除。这将重新加载 Element。",
     "Display Communities instead of Spaces": "展示社区而非空间",
-    "Joining space …": "正在加入空间…"
+    "Joining space …": "正在加入空间…",
+    "%(reactors)s reacted with %(content)s": "%(reactors)s 人回应了 %(content)s"
 }
