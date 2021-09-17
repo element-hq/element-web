@@ -3722,5 +3722,6 @@
     "To join a space you'll need an invite.": "Që të hyni në një hapësirë, do t’ju duhet një ftesë.",
     "You can also make Spaces from <a>communities</a>.": "Mundeni edhe të krijoni Hapësira që nga <a>bashkësitë</a>.",
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Për këtë sesion shfaq përkohësisht bashkësi, në vend se Hapësira. Mbulimi i kësaj do të hiqet në të ardhmen e afërt. Kjo do të sjellë ringarkim të Element-it.",
-    "Display Communities instead of Spaces": "Shfaq Bashkësi, në vend se Hapësira"
+    "Display Communities instead of Spaces": "Shfaq Bashkësi, në vend se Hapësira",
+    "Joining space …": "Po hyhet në hapësirë…"
 }
