@@ -3723,5 +3723,6 @@
     "You can also make Spaces from <a>communities</a>.": "Mundeni edhe të krijoni Hapësira që nga <a>bashkësitë</a>.",
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Për këtë sesion shfaq përkohësisht bashkësi, në vend se Hapësira. Mbulimi i kësaj do të hiqet në të ardhmen e afërt. Kjo do të sjellë ringarkim të Element-it.",
     "Display Communities instead of Spaces": "Shfaq Bashkësi, në vend se Hapësira",
-    "Joining space …": "Po hyhet në hapësirë…"
+    "Joining space …": "Po hyhet në hapësirë…",
+    "%(reactors)s reacted with %(content)s": "%(reactors)s reagoi me %(content)s"
 }
