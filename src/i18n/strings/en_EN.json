@@ -1977,7 +1977,7 @@
     "Add reaction": "Add reaction",
     "Show all": "Show all",
     "Reactions": "Reactions",
-    "<reactors/><reactedWith> reacted with %(content)s</reactedWith>": "<reactors/><reactedWith> reacted with %(content)s</reactedWith>",
+    "%(reactors)s reacted with %(content)s": "%(reactors)s reacted with %(content)s",
     "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>",
     "Message deleted": "Message deleted",
     "Message deleted by %(name)s": "Message deleted by %(name)s",

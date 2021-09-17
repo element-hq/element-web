@@ -104,7 +104,10 @@ export function getUserNameColorClass(userId: string): string {
  * @returns {string} a string constructed by joining `items` with a comma
  * between each item, but with the last item appended as " and [lastItem]".
  */
-export function formatCommaSeparatedList(items: Array<string | JSX.Element>, itemLimit?: number): string | JSX.Element {
+export function formatCommaSeparatedList(items: string[], itemLimit?: number): string;
+export function formatCommaSeparatedList(items: JSX.Element[], itemLimit?: number): JSX.Element;
+export function formatCommaSeparatedList(items: Array<JSX.Element | string>, itemLimit?: number): JSX.Element | string;
+export function formatCommaSeparatedList(items: Array<JSX.Element | string>, itemLimit?: number): JSX.Element | string {
     const remaining = itemLimit === undefined ? 0 : Math.max(
         items.length - itemLimit, 0,
     );
@@ -112,11 +115,25 @@ export function formatCommaSeparatedList(items: Array<string | JSX.Element>, ite
         return "";
     } else if (items.length === 1) {
         return items[0];
-    } else if (remaining > 0) {
-        items = items.slice(0, itemLimit);
-        return _t("%(items)s and %(count)s others", { items: jsxJoin(items, ', '), count: remaining } );
     } else {
-        const lastItem = items.pop();
-        return _t("%(items)s and %(lastItem)s", { items: jsxJoin(items, ', '), lastItem: lastItem });
+        let lastItem;
+        if (remaining > 0) {
+            items = items.slice(0, itemLimit);
+        } else {
+            lastItem = items.pop();
+        }
+
+        let joinedItems;
+        if (items.every(e => typeof e === "string")) {
+            joinedItems = items.join(", ");
+        } else {
+            joinedItems = jsxJoin(items, ", ");
+        }
+
+        if (remaining > 0) {
+            return _t("%(items)s and %(count)s others", { items: joinedItems, count: remaining } );
+        } else {
+            return _t("%(items)s and %(lastItem)s", { items: joinedItems, lastItem });
+        }
     }
 }
