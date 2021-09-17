@@ -14,8 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixError } from "matrix-js-sdk/src/http-api";
+import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
+import { IJoinRuleEventContent, JoinRule } from "matrix-js-sdk/src/@types/partials";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+
 import * as sdk from '../../../index';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
@@ -27,91 +32,102 @@ import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import InviteReason from "../elements/InviteReason";
+import { IOOBData } from "../../../stores/ThreepidInviteStore";
+import Spinner from "../elements/Spinner";
+import AccessibleButton from "../elements/AccessibleButton";
 
 const MemberEventHtmlReasonField = "io.element.html_reason";
 
-const MessageCase = Object.freeze({
-    NotLoggedIn: "NotLoggedIn",
-    Joining: "Joining",
-    Loading: "Loading",
-    Rejecting: "Rejecting",
-    Kicked: "Kicked",
-    Banned: "Banned",
-    OtherThreePIDError: "OtherThreePIDError",
-    InvitedEmailNotFoundInAccount: "InvitedEmailNotFoundInAccount",
-    InvitedEmailNoIdentityServer: "InvitedEmailNoIdentityServer",
-    InvitedEmailMismatch: "InvitedEmailMismatch",
-    Invite: "Invite",
-    ViewingRoom: "ViewingRoom",
-    RoomNotFound: "RoomNotFound",
-    OtherError: "OtherError",
-});
+enum MessageCase {
+    NotLoggedIn = "NotLoggedIn",
+    Joining = "Joining",
+    Loading = "Loading",
+    Rejecting = "Rejecting",
+    Kicked = "Kicked",
+    Banned = "Banned",
+    OtherThreePIDError = "OtherThreePIDError",
+    InvitedEmailNotFoundInAccount = "InvitedEmailNotFoundInAccount",
+    InvitedEmailNoIdentityServer = "InvitedEmailNoIdentityServer",
+    InvitedEmailMismatch = "InvitedEmailMismatch",
+    Invite = "Invite",
+    ViewingRoom = "ViewingRoom",
+    RoomNotFound = "RoomNotFound",
+    OtherError = "OtherError",
+}
+
+interface IProps {
+    // if inviterName is specified, the preview bar will shown an invite to the room.
+    // You should also specify onRejectClick if specifying inviterName
+    inviterName?: string;
+
+    // If invited by 3rd party invite, the email address the invite was sent to
+    invitedEmail?: string;
+
+    // For third party invites, information passed about the room out-of-band
+    oobData?: IOOBData;
+
+    // For third party invites, a URL for a 3pid invite signing service
+    signUrl?: string;
+
+    // A standard client/server API error object. If supplied, indicates that the
+    // caller was unable to fetch details about the room for the given reason.
+    error?: MatrixError;
+
+    canPreview?: boolean;
+    previewLoading?: boolean;
+    room?: Room;
+
+    loading?: boolean;
+    joining?: boolean;
+    rejecting?: boolean;
+    // The alias that was used to access this room, if appropriate
+    // If given, this will be how the room is referred to (eg.
+    // in error messages).
+    roomAlias?: string;
+
+    onJoinClick?(): void;
+    onRejectClick?(): void;
+    onRejectAndIgnoreClick?(): void;
+    onForgetClick?(): void;
+}
+
+interface IState {
+    busy: boolean;
+    accountEmails?: string[];
+    invitedEmailMxid?: string;
+    threePidFetchError?: MatrixError;
+}
 
 @replaceableComponent("views.rooms.RoomPreviewBar")
-export default class RoomPreviewBar extends React.Component {
-    static propTypes = {
-        onJoinClick: PropTypes.func,
-        onRejectClick: PropTypes.func,
-        onRejectAndIgnoreClick: PropTypes.func,
-        onForgetClick: PropTypes.func,
-        // if inviterName is specified, the preview bar will shown an invite to the room.
-        // You should also specify onRejectClick if specifiying inviterName
-        inviterName: PropTypes.string,
-
-        // If invited by 3rd party invite, the email address the invite was sent to
-        invitedEmail: PropTypes.string,
-
-        // For third party invites, information passed about the room out-of-band
-        oobData: PropTypes.object,
-
-        // For third party invites, a URL for a 3pid invite signing service
-        signUrl: PropTypes.string,
-
-        // A standard client/server API error object. If supplied, indicates that the
-        // caller was unable to fetch details about the room for the given reason.
-        error: PropTypes.object,
-
-        canPreview: PropTypes.bool,
-        previewLoading: PropTypes.bool,
-        room: PropTypes.object,
-
-        // When a spinner is present, a spinnerState can be specified to indicate the
-        // purpose of the spinner.
-        spinner: PropTypes.bool,
-        spinnerState: PropTypes.oneOf(["joining"]),
-        loading: PropTypes.bool,
-        joining: PropTypes.bool,
-        rejecting: PropTypes.bool,
-        // The alias that was used to access this room, if appropriate
-        // If given, this will be how the room is referred to (eg.
-        // in error messages).
-        roomAlias: PropTypes.string,
-    };
-
+export default class RoomPreviewBar extends React.Component<IProps, IState> {
     static defaultProps = {
         onJoinClick() {},
     };
 
-    state = {
-        busy: false,
-    };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            busy: false,
+        };
+    }
 
     componentDidMount() {
-        this._checkInvitedEmail();
-        CommunityPrototypeStore.instance.on(UPDATE_EVENT, this._onCommunityUpdate);
+        this.checkInvitedEmail();
+        CommunityPrototypeStore.instance.on(UPDATE_EVENT, this.onCommunityUpdate);
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (this.props.invitedEmail !== prevProps.invitedEmail || this.props.inviterName !== prevProps.inviterName) {
-            this._checkInvitedEmail();
+            this.checkInvitedEmail();
         }
     }
 
     componentWillUnmount() {
-        CommunityPrototypeStore.instance.off(UPDATE_EVENT, this._onCommunityUpdate);
+        CommunityPrototypeStore.instance.off(UPDATE_EVENT, this.onCommunityUpdate);
     }
 
-    async _checkInvitedEmail() {
+    private async checkInvitedEmail() {
         // If this is an invite and we've been told what email address was
         // invited, fetch the user's account emails and discovery bindings so we
         // can check them against the email that was invited.
@@ -121,8 +137,7 @@ export default class RoomPreviewBar extends React.Component {
                 // Gather the account 3PIDs
                 const account3pids = await MatrixClientPeg.get().getThreePids();
                 this.setState({
-                    accountEmails: account3pids.threepids
-                        .filter(b => b.medium === 'email').map(b => b.address),
+                    accountEmails: account3pids.threepids.filter(b => b.medium === 'email').map(b => b.address),
                 });
                 // If we have an IS connected, use that to lookup the email and
                 // check the bound MXID.
@@ -146,21 +161,21 @@ export default class RoomPreviewBar extends React.Component {
         }
     }
 
-    _onCommunityUpdate = (roomId) => {
+    private onCommunityUpdate = (roomId: string): void => {
         if (this.props.room && this.props.room.roomId !== roomId) {
             return;
         }
         this.forceUpdate(); // we have nothing to update
     };
 
-    _getMessageCase() {
+    private getMessageCase(): MessageCase {
         const isGuest = MatrixClientPeg.get().isGuest();
 
         if (isGuest) {
             return MessageCase.NotLoggedIn;
         }
 
-        const myMember = this._getMyMember();
+        const myMember = this.getMyMember();
 
         if (myMember) {
             if (myMember.isKicked()) {
@@ -195,7 +210,7 @@ export default class RoomPreviewBar extends React.Component {
             }
             return MessageCase.Invite;
         } else if (this.props.error) {
-            if (this.props.error.errcode == 'M_NOT_FOUND') {
+            if ((this.props.error as MatrixError).errcode == 'M_NOT_FOUND') {
                 return MessageCase.RoomNotFound;
             } else {
                 return MessageCase.OtherError;
@@ -205,8 +220,8 @@ export default class RoomPreviewBar extends React.Component {
         }
     }
 
-    _getKickOrBanInfo() {
-        const myMember = this._getMyMember();
+    private getKickOrBanInfo(): { memberName?: string, reason?: string } {
+        const myMember = this.getMyMember();
         if (!myMember) {
             return {};
         }
@@ -219,24 +234,19 @@ export default class RoomPreviewBar extends React.Component {
         return { memberName, reason };
     }
 
-    _joinRule() {
-        const room = this.props.room;
-        if (room) {
-            const joinRules = room.currentState.getStateEvents('m.room.join_rules', '');
-            if (joinRules) {
-                return joinRules.getContent().join_rule;
-            }
-        }
+    private joinRule(): JoinRule {
+        return this.props.room?.currentState
+            .getStateEvents(EventType.RoomJoinRules, "")?.getContent<IJoinRuleEventContent>().join_rule;
     }
 
-    _communityProfile() {
+    private communityProfile(): { displayName?: string, avatarMxc?: string } {
         if (this.props.room) return CommunityPrototypeStore.instance.getInviteProfile(this.props.room.roomId);
         return { displayName: null, avatarMxc: null };
     }
 
-    _roomName(atStart = false) {
+    private roomName(atStart = false): string {
         let name = this.props.room ? this.props.room.name : this.props.roomAlias;
-        const profile = this._communityProfile();
+        const profile = this.communityProfile();
         if (profile.displayName) name = profile.displayName;
         if (name) {
             return name;
@@ -247,14 +257,11 @@ export default class RoomPreviewBar extends React.Component {
         }
     }
 
-    _getMyMember() {
-        return (
-            this.props.room &&
-            this.props.room.getMember(MatrixClientPeg.get().getUserId())
-        );
+    private getMyMember(): RoomMember {
+        return this.props.room?.getMember(MatrixClientPeg.get().getUserId());
     }
 
-    _getInviteMember() {
+    private getInviteMember(): RoomMember {
         const { room } = this.props;
         if (!room) {
             return;
@@ -268,8 +275,8 @@ export default class RoomPreviewBar extends React.Component {
         return room.currentState.getMember(inviterUserId);
     }
 
-    _isDMInvite() {
-        const myMember = this._getMyMember();
+    private isDMInvite(): boolean {
+        const myMember = this.getMyMember();
         if (!myMember) {
             return false;
         }
@@ -278,7 +285,7 @@ export default class RoomPreviewBar extends React.Component {
         return memberContent.membership === "invite" && memberContent.is_direct;
     }
 
-    _makeScreenAfterLogin() {
+    private makeScreenAfterLogin(): { screen: string, params: Record<string, any> } {
         return {
             screen: 'room',
             params: {
@@ -291,18 +298,16 @@ export default class RoomPreviewBar extends React.Component {
         };
     }
 
-    onLoginClick = () => {
-        dis.dispatch({ action: 'start_login', screenAfterLogin: this._makeScreenAfterLogin() });
+    private onLoginClick = () => {
+        dis.dispatch({ action: 'start_login', screenAfterLogin: this.makeScreenAfterLogin() });
     };
 
-    onRegisterClick = () => {
-        dis.dispatch({ action: 'start_registration', screenAfterLogin: this._makeScreenAfterLogin() });
+    private onRegisterClick = () => {
+        dis.dispatch({ action: 'start_registration', screenAfterLogin: this.makeScreenAfterLogin() });
     };
 
     render() {
         const brand = SdkConfig.get().brand;
-        const Spinner = sdk.getComponent('elements.Spinner');
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let showSpinner = false;
         let title;
@@ -315,10 +320,10 @@ export default class RoomPreviewBar extends React.Component {
         let footer;
         const extraComponents = [];
 
-        const messageCase = this._getMessageCase();
+        const messageCase = this.getMessageCase();
         switch (messageCase) {
             case MessageCase.Joining: {
-                title = _t("Joining room …");
+                title = this.props.oobData.roomType === RoomType.Space ? _t("Joining space …") : _t("Joining room …");
                 showSpinner = true;
                 break;
             }
@@ -349,12 +354,12 @@ export default class RoomPreviewBar extends React.Component {
                 break;
             }
             case MessageCase.Kicked: {
-                const { memberName, reason } = this._getKickOrBanInfo();
+                const { memberName, reason } = this.getKickOrBanInfo();
                 title = _t("You were kicked from %(roomName)s by %(memberName)s",
-                    { memberName, roomName: this._roomName() });
+                    { memberName, roomName: this.roomName() });
                 subTitle = reason ? _t("Reason: %(reason)s", { reason }) : null;
 
-                if (this._joinRule() === "invite") {
+                if (this.joinRule() === "invite") {
                     primaryActionLabel = _t("Forget this room");
                     primaryActionHandler = this.props.onForgetClick;
                 } else {
@@ -366,9 +371,9 @@ export default class RoomPreviewBar extends React.Component {
                 break;
             }
             case MessageCase.Banned: {
-                const { memberName, reason } = this._getKickOrBanInfo();
+                const { memberName, reason } = this.getKickOrBanInfo();
                 title = _t("You were banned from %(roomName)s by %(memberName)s",
-                    { memberName, roomName: this._roomName() });
+                    { memberName, roomName: this.roomName() });
                 subTitle = reason ? _t("Reason: %(reason)s", { reason }) : null;
                 primaryActionLabel = _t("Forget this room");
                 primaryActionHandler = this.props.onForgetClick;
@@ -376,8 +381,8 @@ export default class RoomPreviewBar extends React.Component {
             }
             case MessageCase.OtherThreePIDError: {
                 title = _t("Something went wrong with your invite to %(roomName)s",
-                    { roomName: this._roomName() });
-                const joinRule = this._joinRule();
+                    { roomName: this.roomName() });
+                const joinRule = this.joinRule();
                 const errCodeMessage = _t(
                     "An error (%(errcode)s) was returned while trying to validate your " +
                     "invite. You could try to pass this information on to a room admin.",
@@ -410,7 +415,7 @@ export default class RoomPreviewBar extends React.Component {
                     "This invite to %(roomName)s was sent to %(email)s which is not " +
                     "associated with your account",
                     {
-                        roomName: this._roomName(),
+                        roomName: this.roomName(),
                         email: this.props.invitedEmail,
                     },
                 );
@@ -427,7 +432,7 @@ export default class RoomPreviewBar extends React.Component {
                 title = _t(
                     "This invite to %(roomName)s was sent to %(email)s",
                     {
-                        roomName: this._roomName(),
+                        roomName: this.roomName(),
                         email: this.props.invitedEmail,
                     },
                 );
@@ -443,7 +448,7 @@ export default class RoomPreviewBar extends React.Component {
                 title = _t(
                     "This invite to %(roomName)s was sent to %(email)s",
                     {
-                        roomName: this._roomName(),
+                        roomName: this.roomName(),
                         email: this.props.invitedEmail,
                     },
                 );
@@ -458,11 +463,11 @@ export default class RoomPreviewBar extends React.Component {
             case MessageCase.Invite: {
                 const RoomAvatar = sdk.getComponent("views.avatars.RoomAvatar");
                 const oobData = Object.assign({}, this.props.oobData, {
-                    avatarUrl: this._communityProfile().avatarMxc,
+                    avatarUrl: this.communityProfile().avatarMxc,
                 });
                 const avatar = <RoomAvatar room={this.props.room} oobData={oobData} />;
 
-                const inviteMember = this._getInviteMember();
+                const inviteMember = this.getInviteMember();
                 let inviterElement;
                 if (inviteMember) {
                     inviterElement = <span>
@@ -474,7 +479,7 @@ export default class RoomPreviewBar extends React.Component {
                     inviterElement = (<span className="mx_RoomPreviewBar_inviter">{ this.props.inviterName }</span>);
                 }
 
-                const isDM = this._isDMInvite();
+                const isDM = this.isDMInvite();
                 if (isDM) {
                     title = _t("Do you want to chat with %(user)s?",
                         { user: inviteMember.name });
@@ -485,7 +490,7 @@ export default class RoomPreviewBar extends React.Component {
                     primaryActionLabel = _t("Start chatting");
                 } else {
                     title = _t("Do you want to join %(roomName)s?",
-                        { roomName: this._roomName() });
+                        { roomName: this.roomName() });
                     subTitle = [
                         avatar,
                         _t("<userName/> invited you", {}, { userName: () => inviterElement }),
@@ -519,22 +524,22 @@ export default class RoomPreviewBar extends React.Component {
             case MessageCase.ViewingRoom: {
                 if (this.props.canPreview) {
                     title = _t("You're previewing %(roomName)s. Want to join it?",
-                        { roomName: this._roomName() });
+                        { roomName: this.roomName() });
                 } else {
                     title = _t("%(roomName)s can't be previewed. Do you want to join it?",
-                        { roomName: this._roomName(true) });
+                        { roomName: this.roomName(true) });
                 }
                 primaryActionLabel = _t("Join the discussion");
                 primaryActionHandler = this.props.onJoinClick;
                 break;
             }
             case MessageCase.RoomNotFound: {
-                title = _t("%(roomName)s does not exist.", { roomName: this._roomName(true) });
+                title = _t("%(roomName)s does not exist.", { roomName: this.roomName(true) });
                 subTitle = _t("This room doesn't exist. Are you sure you're at the right place?");
                 break;
             }
             case MessageCase.OtherError: {
-                title = _t("%(roomName)s is not accessible at this time.", { roomName: this._roomName(true) });
+                title = _t("%(roomName)s is not accessible at this time.", { roomName: this.roomName(true) });
                 subTitle = [
                     _t("Try again later, or ask a room admin to check if you have access."),
                     _t(
