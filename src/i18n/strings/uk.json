@@ -2314,5 +2314,8 @@
     "Name": "Назва",
     "Delete": "Видалити",
     "Delete avatar": "Видалити аватар",
-    "Your server isn't responding to some <a>requests</a>.": "Ваш сервер не відповідає на деякі <a>запити</a>."
+    "Your server isn't responding to some <a>requests</a>.": "Ваш сервер не відповідає на деякі <a>запити</a>.",
+    "Select room from the room list": "Вибрати кімнату з переліку",
+    "Collapse room list section": "Згорнути розділ з переліком кімнат",
+    "Go to Home View": "Перейти до домівки"
 }
