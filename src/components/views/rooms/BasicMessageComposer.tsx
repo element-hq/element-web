@@ -499,7 +499,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             handled = true;
         } else if (event.key === Key.BACKSPACE || event.key === Key.DELETE) {
             this.formatBarRef.current.hide();
-            if (!event.ctrlKey) {
+            if (!event.ctrlKey && !event.metaKey) {
                 handled = this.fakeDeletion(event.key === Key.BACKSPACE);
             }
         }
