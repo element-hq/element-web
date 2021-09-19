@@ -3657,5 +3657,16 @@
     "Change space avatar": "Cambiar la imagen del espacio",
     "Change space name": "Cambiar el nombre del espacio",
     "Change main address for the space": "Cambiar dirección principal del espacio",
-    "Change description": "Cambiar descripción"
+    "Change description": "Cambiar descripción",
+    "Private community": "Comunidad privada",
+    "Public community": "Comunidad pública",
+    "Message": "Mensaje",
+    "Joining space …": "Uniéndote al espacio…",
+    "Message didn't send. Click for info.": "Mensaje no enviado. Haz clic para más info.",
+    "Upgrade anyway": "Actualizar de todos modos",
+    "Before you upgrade": "Antes de actualizar",
+    "To join a space you'll need an invite.": "Para unirte a un espacio, necesitas que te inviten a él.",
+    "You can also make Spaces from <a>communities</a>.": "También puedes crear espacios a partir de <a>comunidades</a>.",
+    "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Ver temporalmente comunidades en vez de espacios durante esta sesión. Esta opción desaparecerá en el futuro. Element se recargará.",
+    "Display Communities instead of Spaces": "Ver comunidades en vez de espacios"
 }
