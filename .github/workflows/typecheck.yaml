@@ -5,6 +5,8 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
+        env:
+          PR_NUMBER: ${{github.event.number}}
         steps:
             - uses: actions/checkout@v2
             - uses: c-hive/gha-yarn-cache@v2

@@ -499,6 +499,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             handled = true;
         } else if (event.key === Key.BACKSPACE || event.key === Key.DELETE) {
             this.formatBarRef.current.hide();
+            handled = this.fakeDeletion(event.key === Key.BACKSPACE);
         }
 
         if (handled) {
@@ -563,6 +564,29 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             event.stopPropagation();
         }
     };
+
+    /**
+     * TODO: Remove when Debian moves to newer version of Firefox
+     * On Firefox 78 no event emitted when the user tries to delete pills.
+     * Therefore we need to fake what would normally happen
+     * @param direction in which to delete
+     * @returns handled
+     */
+    private fakeDeletion(backward: boolean): boolean {
+        const selection = document.getSelection();
+        // Use the default handling for ranges
+        if (selection.type === "Range") return false;
+
+        this.modifiedFlag = true;
+        const { caret, text } = getCaretOffsetAndText(this.editorRef.current, selection);
+
+        // Do the deletion itself
+        if (backward) caret.offset--;
+        const newText = text.slice(0, caret.offset) + text.slice(caret.offset + 1);
+
+        this.props.model.update(newText, backward ? "deleteContentBackward" : "deleteContentForward", caret);
+        return true;
+    }
 
     private async tabCompleteName(): Promise<void> {
         try {
