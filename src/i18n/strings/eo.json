@@ -1318,7 +1318,7 @@
     "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Vakigo de la memoro de via foliumilo eble korektos la problemon, sed adiaŭigos vin, kaj malebligos legadon de historio de ĉifritaj babiloj.",
     "Missing session data": "Mankas datumoj de salutaĵo",
     "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "Iuj datumoj de salutaĵo, inkluzive viajn ĉifrajn ŝlosilojn, mankas. Por tion korekti, resalutu, kaj rehavu la ŝlosilojn el savkopio.",
-    "Your browser likely removed this data when running low on disk space.": "Via foliumilo probable forigos ĉi tiujn datumojn kiam al ĝi mankos spaco sur disko.",
+    "Your browser likely removed this data when running low on disk space.": "Via foliumilo verŝajne forigos ĉi tiujn datumojn kiam al ĝi mankos spaco sur disko.",
     "Unable to restore backup": "Ne povas rehavi savkopion",
     "Failed to decrypt %(failedCount)s sessions!": "Malsukcesis malĉifri%(failedCount)s salutaĵojn!",
     "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>Averto</b>: vi agordu ŝlosilan savkopion nur per fidata komputilo.",
@@ -2395,7 +2395,7 @@
     "Show message previews for reactions in all rooms": "Montri antaŭrigardojn al mesaĝoj ĉe reagoj en ĉiuj ĉambroj",
     "Your server isn't responding to some <a>requests</a>.": "Via servilo ne respondas al iuj <a>petoj</a>.",
     "Server isn't responding": "Servilo ne respondas",
-    "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "Via servilo ne respondas al iuj el viaj petoj. Vidu sube kelkon de la plej probablaj kialoj.",
+    "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "Via servilo ne respondas al iuj el viaj petoj. Vidu sube kelkon de la plej verŝajnaj kialoj.",
     "The server (%(serverName)s) took too long to respond.": "La servilo (%(serverName)s) tro longe ne respondis.",
     "Your firewall or anti-virus is blocking the request.": "Via fajroŝirmilo aŭ kontraŭvirusilo blokas la peton.",
     "A browser extension is preventing the request.": "Kromprogramo de la foliumilo malhelpas la peton.",
@@ -3319,7 +3319,7 @@
     "Verify other login": "Kontroli alian saluton",
     "Reset event store": "Restarigi deponejon de okazoj",
     "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "Se vi tamen tion faras, sciu ke neniu el viaj mesaĝoj foriĝos, sed via sperto pri serĉado povas malboniĝi momente, dum la indekso estas refarata",
-    "You most likely do not want to reset your event index store": "Plej probable, vi ne volas restarigi vian deponejon de indeksoj de okazoj",
+    "You most likely do not want to reset your event index store": "Plej verŝajne, vi ne volas restarigi vian deponejon de indeksoj de okazoj",
     "Reset event store?": "Ĉu restarigi deponejon de okazoj?",
     "Currently joining %(count)s rooms|one": "Nun aliĝante al %(count)s ĉambro",
     "Currently joining %(count)s rooms|other": "Nun aliĝante al %(count)s ĉambroj",
@@ -3604,5 +3604,6 @@
     "You can change this later.": "Vi povas ŝanĝi ĉi tion poste.",
     "What kind of Space do you want to create?": "Kian aron volas vi krei?",
     "All rooms you're in will appear in Home.": "Ĉiuj ĉambroj, kie vi estas, aperos en la ĉefpaĝo.",
-    "Show all rooms in Home": "Montri ĉiujn ĉambrojn en ĉefpaĝo"
+    "Show all rooms in Home": "Montri ĉiujn ĉambrojn en ĉefpaĝo",
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s fiksis <a>mesaĝon</a> al ĉi tiu ĉambro. Vidu ĉiujn <b>fiksitajn mesaĝojn</b>."
 }
