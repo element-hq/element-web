@@ -104,6 +104,10 @@ export default class PersistedElement extends React.Component<IProps> {
         }
     }
 
+    static isMounted(persistKey) {
+        return Boolean(getContainer('mx_persistedElement_' + persistKey));
+    }
+
     private collectChildContainer = (ref: HTMLDivElement): void => {
         if (this.childContainer) {
             this.resizeObserver.unobserve(this.childContainer);
