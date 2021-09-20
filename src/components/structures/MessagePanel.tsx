@@ -448,7 +448,9 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         // Always show highlighted event
         if (this.props.highlightedEventId === mxEv.getId()) return true;
 
-        if (mxEv.replyInThread
+        // Checking if the message has a "parentEventId" as we do not
+        // want to hide the root event of the thread
+        if (mxEv.replyInThread && mxEv.parentEventId
                 && this.props.hideThreadedMessages
                 && SettingsStore.getValue("feature_thread")) {
             return false;
