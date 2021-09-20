@@ -47,7 +47,7 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) =
         onFinished={onFinished}
         className="mx_UntrustedDeviceDialog"
         title={<>
-            <E2EIcon status={E2E_STATE.WARNING} size={24} hideTooltip={true} />
+            <E2EIcon status={E2E_STATE.Warning} size={24} hideTooltip={true} />
             { _t("Not Trusted") }
         </>}
     >
