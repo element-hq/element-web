@@ -55,7 +55,7 @@ class ItemRange {
     }
 }
 
-interface IProps<T extends unknown> {
+interface IProps<T> {
     // height in pixels of the component returned by `renderItem`
     itemHeight: number;
     // function to turn an element of `items` into a react component
@@ -84,13 +84,13 @@ interface IState {
 }
 
 @replaceableComponent("views.elements.LazyRenderList")
-export default class LazyRenderList extends React.Component<IProps<unknown>, IState> {
+export default class LazyRenderList<T = any> extends React.Component<IProps<T>, IState> {
     public static defaultProps: Partial<IProps<unknown>> = {
         overflowItems: 20,
         overflowMargin: 5,
     };
 
-    constructor(props: IProps<unknown>) {
+    constructor(props: IProps<T>) {
         super(props);
 
         this.state = {
