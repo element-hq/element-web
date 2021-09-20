@@ -807,7 +807,7 @@
     "e.g. %(exampleValue)s": "par ex. %(exampleValue)s",
     "Message visibility in Matrix is similar to email. Our forgetting your messages means that messages you have sent will not be shared with any new or unregistered users, but registered users who already have access to these messages will still have access to their copy.": "La visibilité des messages dans Matrix est la même que celle des e-mails. Quand nous oublions vos messages, cela signifie que les messages que vous avez envoyés ne seront partagés avec aucun nouvel utilisateur ou avec les utilisateurs non enregistrés, mais les utilisateurs enregistrés qui ont déjà eu accès à ces messages en conserveront leur propre copie.",
     "Please forget all messages I have sent when my account is deactivated (<b>Warning:</b> this will cause future users to see an incomplete view of conversations)": "Veuillez oublier tous les messages que j’ai envoyé quand mon compte sera désactivé (<b>Avertissement :</b> les futurs utilisateurs verront des conversations incomplètes)",
-    "Can't leave Server Notices room": "Impossible de quitter le salon des annonces au serveur",
+    "Can't leave Server Notices room": "Impossible de quitter le salon des Annonces du Serveur",
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "Ce salon est utilisé pour les messages importants du serveur d’accueil, vous ne pouvez donc pas en partir.",
     "No Audio Outputs detected": "Aucune sortie audio détectée",
     "Audio Output": "Sortie audio",
