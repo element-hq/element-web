@@ -977,7 +977,7 @@
     "%(names)s and %(count)s others are typing …|one": "%(names)s et un autre sont en train d’écrire…",
     "%(names)s and %(lastPerson)s are typing …": "%(names)s et %(lastPerson)s sont en train d’écrire…",
     "Enable Emoji suggestions while typing": "Activer la suggestion d’émojis lors de la saisie",
-    "Render simple counters in room header": "Afficher des compteurs simples dans l’en-tête des salons",
+    "Render simple counters in room header": "Afficher des compteurs simplifié dans l’en-tête des salons",
     "Show a placeholder for removed messages": "Afficher les messages supprimés",
     "Show join/leave messages (invites/kicks/bans unaffected)": "Afficher les messages d’arrivée et de départ (les invitations/expulsions/bannissements ne sont pas concernés)",
     "Show avatar changes": "Afficher les changements d’avatar",
