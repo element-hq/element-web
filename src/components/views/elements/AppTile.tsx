@@ -88,7 +88,6 @@ interface IState {
 
 @replaceableComponent("views.elements.AppTile")
 export default class AppTile extends React.Component<IProps, IState> {
-    displayName = 'AppTile';
     public static defaultProps: Partial<IProps> = {
         waitForIframeLoad: true,
         showMenubar: true,
