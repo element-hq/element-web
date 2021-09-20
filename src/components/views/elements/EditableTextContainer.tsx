@@ -57,7 +57,7 @@ interface IState {
  */
 @replaceableComponent("views.elements.EditableTextContainer")
 export default class EditableTextContainer extends React.Component<IProps, IState> {
-    private _unmounted = false;
+    private unmounted = false;
     public static defaultProps: Partial<IProps> = {
         initialValue: "",
         placeholder: "",
@@ -82,13 +82,13 @@ export default class EditableTextContainer extends React.Component<IProps, IStat
         this.setState({ busy: true });
         try {
             const initialValue = await this.props.getInitialValue();
-            if (this._unmounted) return;
+            if (this.unmounted) return;
             this.setState({
                 busy: false,
                 value: initialValue,
             });
         } catch (error) {
-            if (this._unmounted) return;
+            if (this.unmounted) return;
             this.setState({
                 errorString: error.toString(),
                 busy: false,
@@ -97,7 +97,7 @@ export default class EditableTextContainer extends React.Component<IProps, IStat
     }
 
     public componentWillUnmount(): void {
-        this._unmounted = true;
+        this.unmounted = true;
     }
 
     private onValueChanged = (value: string, shouldSubmit: boolean): void => {
@@ -112,14 +112,14 @@ export default class EditableTextContainer extends React.Component<IProps, IStat
 
         this.props.onSubmit(value).then(
             () => {
-                if (this._unmounted) { return; }
+                if (this.unmounted) { return; }
                 this.setState({
                     busy: false,
                     value: value,
                 });
             },
             (error) => {
-                if (this._unmounted) { return; }
+                if (this.unmounted) { return; }
                 this.setState({
                     errorString: error.toString(),
                     busy: false,
