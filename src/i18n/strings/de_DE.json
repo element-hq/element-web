@@ -3674,5 +3674,9 @@
     "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s hat eine Nachricht losgelöst. Alle angepinnten Nachrichten anzeigen.",
     "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s hat <a>eine Nachricht</a> losgeheftet. Alle <b>angehefteten Nachrichten anzeigen</b>.",
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s hat eine Nachricht angeheftet. Alle angehefteten Nachrichten anzeigen.",
-    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s hat <a>eine Nachricht</a> angeheftet. <b>Alle angehefteten Nachrichten anzeigen</b>."
+    "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s hat <a>eine Nachricht</a> angeheftet. <b>Alle angehefteten Nachrichten anzeigen</b>.",
+    "Joining space …": "Space beitreten…",
+    "To join a space you'll need an invite.": "Um einem Space beizutreten brauchst du eine Einladung.",
+    "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "In dieser Sitzung temporär Communities statt Spaces anzeigen. Unterstützung hierfür wird in naher Zukunft entfernt. Dies wird Element neu laden.",
+    "Display Communities instead of Spaces": "Communities statt Spaces anzeigen"
 }
