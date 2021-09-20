@@ -16,33 +16,43 @@ limitations under the License.
 */
 
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import classNames from 'classnames';
 
 import { _t, _td } from '../../../languageHandler';
 import AccessibleButton from "../elements/AccessibleButton";
 import Tooltip from "../elements/Tooltip";
+import { E2EStatus } from "../../../utils/ShieldUtils";
 
-export const E2E_STATE = {
-    VERIFIED: "verified",
-    WARNING: "warning",
-    UNKNOWN: "unknown",
-    NORMAL: "normal",
-    UNAUTHENTICATED: "unauthenticated",
-};
+export enum E2E_STATE {
+    VERIFIED = "verified",
+    WARNING = "warning",
+    UNKNOWN = "unknown",
+    NORMAL = "normal",
+    UNAUTHENTICATED = "unauthenticated",
+}
 
-const crossSigningUserTitles = {
+const crossSigningUserTitles: { [key in E2E_STATE]?: string } = {
     [E2E_STATE.WARNING]: _td("This user has not verified all of their sessions."),
     [E2E_STATE.NORMAL]: _td("You have not verified this user."),
     [E2E_STATE.VERIFIED]: _td("You have verified this user. This user has verified all of their sessions."),
 };
-const crossSigningRoomTitles = {
+const crossSigningRoomTitles: { [key in E2E_STATE]?: string } = {
     [E2E_STATE.WARNING]: _td("Someone is using an unknown session"),
     [E2E_STATE.NORMAL]: _td("This room is end-to-end encrypted"),
     [E2E_STATE.VERIFIED]: _td("Everyone in this room is verified"),
 };
 
-const E2EIcon = ({ isUser, status, className, size, onClick, hideTooltip, bordered }) => {
+interface IProps {
+    isUser?: boolean;
+    status?: E2E_STATE | E2EStatus;
+    className?: string;
+    size?: number;
+    onClick?: () => void;
+    hideTooltip?: boolean;
+    bordered?: boolean;
+}
+
+const E2EIcon: React.FC<IProps> = ({ isUser, status, className, size, onClick, hideTooltip, bordered }) => {
     const [hover, setHover] = useState(false);
 
     const classes = classNames({
@@ -90,14 +100,6 @@ const E2EIcon = ({ isUser, status, className, size, onClick, hideTooltip, border
     return <div onMouseOver={onMouseOver} onMouseLeave={onMouseLeave} className={classes} style={style}>
         { tip }
     </div>;
-};
-
-E2EIcon.propTypes = {
-    isUser: PropTypes.bool,
-    status: PropTypes.oneOf(Object.values(E2E_STATE)),
-    className: PropTypes.string,
-    size: PropTypes.number,
-    onClick: PropTypes.func,
 };
 
 export default E2EIcon;
