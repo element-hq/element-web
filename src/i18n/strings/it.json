@@ -3731,5 +3731,7 @@
     "To join a space you'll need an invite.": "Per entrare in uno spazio ti serve un invito.",
     "You can also make Spaces from <a>communities</a>.": "Puoi anche creare spazi dalle <a>comunità</a>.",
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Mostra temporaneamente le comunità invece degli spazi per questa sessione. Il supporto per questa azione verrà rimosso nel breve termine. Element verrà ricaricato.",
-    "Display Communities instead of Spaces": "Mostra le comunità invece degli spazi"
+    "Display Communities instead of Spaces": "Mostra le comunità invece degli spazi",
+    "%(reactors)s reacted with %(content)s": "%(reactors)s ha reagito con %(content)s",
+    "Joining space …": "Ingresso nello spazio …"
 }
