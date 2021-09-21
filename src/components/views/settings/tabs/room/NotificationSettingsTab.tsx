@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-import PropTypes from 'prop-types';
 import { _t } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
@@ -24,16 +23,21 @@ import SettingsStore from '../../../../../settings/SettingsStore';
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
+interface IProps {
+    roomId: string;
+}
+
+interface IState {
+    currentSound: string;
+    uploadedFile: File;
+}
+
 @replaceableComponent("views.settings.tabs.room.NotificationsSettingsTab")
-export default class NotificationsSettingsTab extends React.Component {
-    static propTypes = {
-        roomId: PropTypes.string.isRequired,
-    };
+export default class NotificationsSettingsTab extends React.Component<IProps, IState> {
+    private soundUpload = createRef<HTMLInputElement>();
 
-    _soundUpload = createRef();
-
-    constructor() {
-        super();
+    constructor(props: IProps) {
+        super(props);
 
         this.state = {
             currentSound: "default",
@@ -42,7 +46,8 @@ export default class NotificationsSettingsTab extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount() { // eslint-disable-line camelcase
+    // eslint-disable-next-line @typescript-eslint/naming-convention, camelcase
+    public UNSAFE_componentWillMount(): void {
         const soundData = Notifier.getSoundForRoom(this.props.roomId);
         if (!soundData) {
             return;
@@ -50,14 +55,14 @@ export default class NotificationsSettingsTab extends React.Component {
         this.setState({ currentSound: soundData.name || soundData.url });
     }
 
-    async _triggerUploader(e) {
+    private triggerUploader = async (e: React.MouseEvent): Promise<void> => {
         e.stopPropagation();
         e.preventDefault();
 
-        this._soundUpload.current.click();
-    }
+        this.soundUpload.current.click();
+    };
 
-    async _onSoundUploadChanged(e) {
+    private onSoundUploadChanged = (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
         if (!e.target.files || !e.target.files.length) {
             this.setState({
                 uploadedFile: null,
@@ -69,23 +74,23 @@ export default class NotificationsSettingsTab extends React.Component {
         this.setState({
             uploadedFile: file,
         });
-    }
+    };
 
-    async _onClickSaveSound(e) {
+    private onClickSaveSound = async (e: React.MouseEvent): Promise<void> => {
         e.stopPropagation();
         e.preventDefault();
 
         try {
-            await this._saveSound();
+            await this.saveSound();
         } catch (ex) {
             console.error(
                 `Unable to save notification sound for ${this.props.roomId}`,
             );
             console.error(ex);
         }
-    }
+    };
 
-    async _saveSound() {
+    private async saveSound(): Promise<void> {
         if (!this.state.uploadedFile) {
             return;
         }
@@ -122,7 +127,7 @@ export default class NotificationsSettingsTab extends React.Component {
         });
     }
 
-    _clearSound(e) {
+    private clearSound = (e: React.MouseEvent): void => {
         e.stopPropagation();
         e.preventDefault();
         SettingsStore.setValue(
@@ -135,9 +140,9 @@ export default class NotificationsSettingsTab extends React.Component {
         this.setState({
             currentSound: "default",
         });
-    }
+    };
 
-    render() {
+    public render(): JSX.Element {
         let currentUploadedFile = null;
         if (this.state.uploadedFile) {
             currentUploadedFile = (
@@ -154,23 +159,23 @@ export default class NotificationsSettingsTab extends React.Component {
                     <span className='mx_SettingsTab_subheading'>{ _t("Sounds") }</span>
                     <div>
                         <span>{ _t("Notification sound") }: <code>{ this.state.currentSound }</code></span><br />
-                        <AccessibleButton className="mx_NotificationSound_resetSound" disabled={this.state.currentSound == "default"} onClick={this._clearSound.bind(this)} kind="primary">
+                        <AccessibleButton className="mx_NotificationSound_resetSound" disabled={this.state.currentSound == "default"} onClick={this.clearSound} kind="primary">
                             { _t("Reset") }
                         </AccessibleButton>
                     </div>
                     <div>
                         <h3>{ _t("Set a new custom sound") }</h3>
                         <form autoComplete="off" noValidate={true}>
-                            <input ref={this._soundUpload} className="mx_NotificationSound_soundUpload" type="file" onChange={this._onSoundUploadChanged.bind(this)} accept="audio/*" />
+                            <input ref={this.soundUpload} className="mx_NotificationSound_soundUpload" type="file" onChange={this.onSoundUploadChanged} accept="audio/*" />
                         </form>
 
                         { currentUploadedFile }
 
-                        <AccessibleButton className="mx_NotificationSound_browse" onClick={this._triggerUploader.bind(this)} kind="primary">
+                        <AccessibleButton className="mx_NotificationSound_browse" onClick={this.triggerUploader} kind="primary">
                             { _t("Browse") }
                         </AccessibleButton>
 
-                        <AccessibleButton className="mx_NotificationSound_save" disabled={this.state.uploadedFile == null} onClick={this._onClickSaveSound.bind(this)} kind="primary">
+                        <AccessibleButton className="mx_NotificationSound_save" disabled={this.state.uploadedFile == null} onClick={this.onClickSaveSound} kind="primary">
                             { _t("Save") }
                         </AccessibleButton>
                         <br />
