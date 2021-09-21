@@ -25,7 +25,7 @@ interface IProps {
     policiesAndServicePairs: any[];
     onFinished: (string) => void;
     agreedUrls: string[]; // array of URLs the user has accepted
-    introElement: Node;
+    introElement: React.ReactNode;
 }
 
 interface IState {
