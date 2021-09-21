@@ -183,3 +183,40 @@ limitations under the License.
         padding: 0;
     }
 }
+
+@media screen and (max-width: 700px) {
+    .mx_RoomDirectory_roomMemberCount {
+        padding: 0px;
+    }
+
+    .mx_AccessibleButton_kind_secondary {
+        padding: 0px !important;
+    }
+
+    .mx_RoomDirectory_join {
+        margin-left: 0px;
+    }
+
+    .mx_RoomDirectory_alias {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .mx_RoomDirectory_roomDescription {
+        padding-bottom: 0px;
+    }
+
+    .mx_RoomDirectory_name {
+        margin-bottom: 5px;
+    }
+
+    .mx_RoomDirectory_roomAvatar {
+        margin-top: 10px;
+    }
+
+    .mx_RoomDirectory_table {
+        grid-template-columns: auto;
+        row-gap: 14px;
+        margin-top: 5px;
+    }
+}
