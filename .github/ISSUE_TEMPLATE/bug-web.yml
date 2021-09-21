@@ -35,7 +35,7 @@ body:
     id: os
     attributes:
       label: Operating system
-      placeholder: Windows, macOS, Ubuntu, Arch Linux…
+      placeholder: Windows, macOS, Linux (Distribution, Desktop Environment, Display Server, Compositor)
     validations:
       required: false
   - type: input
