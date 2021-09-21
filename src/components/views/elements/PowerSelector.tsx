@@ -33,7 +33,7 @@ interface IProps {
 
     // should the user be able to change the value? false by default.
     disabled?: boolean;
-    onChange?: (value: string, powerLevelKey: string) => void;
+    onChange?: (value: number, powerLevelKey: string) => void;
 
     // Optional key to pass as the second argument to `onChange`
     powerLevelKey?: string;
@@ -111,8 +111,9 @@ export default class PowerSelector extends React.Component<IProps, IState> {
         if (isCustom) {
             this.setState({ custom: true });
         } else {
-            this.props.onChange(event.target.value, this.props.powerLevelKey);
-            this.setState({ selectValue: parseInt(event.target.value) });
+            const powerLevel = parseInt(event.target.value);
+            this.props.onChange(powerLevel, this.props.powerLevelKey);
+            this.setState({ selectValue: powerLevel });
         }
     };
 
@@ -124,7 +125,7 @@ export default class PowerSelector extends React.Component<IProps, IState> {
         event.preventDefault();
         event.stopPropagation();
 
-        this.props.onChange(String(this.state.customValue), this.props.powerLevelKey);
+        this.props.onChange(this.state.customValue, this.props.powerLevelKey);
     };
 
     private onCustomKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
