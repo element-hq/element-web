@@ -16,41 +16,51 @@ limitations under the License.
 */
 
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import classNames from 'classnames';
 
 import { _t, _td } from '../../../languageHandler';
 import AccessibleButton from "../elements/AccessibleButton";
 import Tooltip from "../elements/Tooltip";
+import { E2EStatus } from "../../../utils/ShieldUtils";
 
-export const E2E_STATE = {
-    VERIFIED: "verified",
-    WARNING: "warning",
-    UNKNOWN: "unknown",
-    NORMAL: "normal",
-    UNAUTHENTICATED: "unauthenticated",
+export enum E2EState {
+    Verified = "verified",
+    Warning = "warning",
+    Unknown = "unknown",
+    Normal = "normal",
+    Unauthenticated = "unauthenticated",
+}
+
+const crossSigningUserTitles: { [key in E2EState]?: string } = {
+    [E2EState.Warning]: _td("This user has not verified all of their sessions."),
+    [E2EState.Normal]: _td("You have not verified this user."),
+    [E2EState.Verified]: _td("You have verified this user. This user has verified all of their sessions."),
+};
+const crossSigningRoomTitles: { [key in E2EState]?: string } = {
+    [E2EState.Warning]: _td("Someone is using an unknown session"),
+    [E2EState.Normal]: _td("This room is end-to-end encrypted"),
+    [E2EState.Verified]: _td("Everyone in this room is verified"),
 };
 
-const crossSigningUserTitles = {
-    [E2E_STATE.WARNING]: _td("This user has not verified all of their sessions."),
-    [E2E_STATE.NORMAL]: _td("You have not verified this user."),
-    [E2E_STATE.VERIFIED]: _td("You have verified this user. This user has verified all of their sessions."),
-};
-const crossSigningRoomTitles = {
-    [E2E_STATE.WARNING]: _td("Someone is using an unknown session"),
-    [E2E_STATE.NORMAL]: _td("This room is end-to-end encrypted"),
-    [E2E_STATE.VERIFIED]: _td("Everyone in this room is verified"),
-};
+interface IProps {
+    isUser?: boolean;
+    status?: E2EState | E2EStatus;
+    className?: string;
+    size?: number;
+    onClick?: () => void;
+    hideTooltip?: boolean;
+    bordered?: boolean;
+}
 
-const E2EIcon = ({ isUser, status, className, size, onClick, hideTooltip, bordered }) => {
+const E2EIcon: React.FC<IProps> = ({ isUser, status, className, size, onClick, hideTooltip, bordered }) => {
     const [hover, setHover] = useState(false);
 
     const classes = classNames({
         mx_E2EIcon: true,
         mx_E2EIcon_bordered: bordered,
-        mx_E2EIcon_warning: status === E2E_STATE.WARNING,
-        mx_E2EIcon_normal: status === E2E_STATE.NORMAL,
-        mx_E2EIcon_verified: status === E2E_STATE.VERIFIED,
+        mx_E2EIcon_warning: status === E2EState.Warning,
+        mx_E2EIcon_normal: status === E2EState.Normal,
+        mx_E2EIcon_verified: status === E2EState.Verified,
     }, className);
 
     let e2eTitle;
@@ -90,14 +100,6 @@ const E2EIcon = ({ isUser, status, className, size, onClick, hideTooltip, border
     return <div onMouseOver={onMouseOver} onMouseLeave={onMouseLeave} className={classes} style={style}>
         { tip }
     </div>;
-};
-
-E2EIcon.propTypes = {
-    isUser: PropTypes.bool,
-    status: PropTypes.oneOf(Object.values(E2E_STATE)),
-    className: PropTypes.string,
-    size: PropTypes.number,
-    onClick: PropTypes.func,
 };
 
 export default E2EIcon;

@@ -33,7 +33,7 @@ import { formatTime } from "../../../DateUtils";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { ALL_RULE_TYPES } from "../../../mjolnir/BanList";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { E2E_STATE } from "./E2EIcon";
+import { E2EState } from "./E2EIcon";
 import { toRem } from "../../../utils/units";
 import { WidgetType } from "../../../widgets/WidgetType";
 import RoomAvatar from "../avatars/RoomAvatar";
@@ -521,7 +521,7 @@ export default class EventTile extends React.Component<IProps, IState> {
 
         const thread = this.state.thread;
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        if (!thread || this.props.showThreadInfo === false) {
+        if (!thread || this.props.showThreadInfo === false || thread.length <= 1) {
             return null;
         }
 
@@ -605,7 +605,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         if (encryptionInfo.mismatchedSender) {
             // something definitely wrong is going on here
             this.setState({
-                verified: E2E_STATE.WARNING,
+                verified: E2EState.Warning,
             }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
@@ -613,7 +613,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         if (!userTrust.isCrossSigningVerified()) {
             // user is not verified, so default to everything is normal
             this.setState({
-                verified: E2E_STATE.NORMAL,
+                verified: E2EState.Normal,
             }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
@@ -623,27 +623,27 @@ export default class EventTile extends React.Component<IProps, IState> {
         );
         if (!eventSenderTrust) {
             this.setState({
-                verified: E2E_STATE.UNKNOWN,
+                verified: E2EState.Unknown,
             }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
 
         if (!eventSenderTrust.isVerified()) {
             this.setState({
-                verified: E2E_STATE.WARNING,
+                verified: E2EState.Warning,
             }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
 
         if (!encryptionInfo.authenticated) {
             this.setState({
-                verified: E2E_STATE.UNAUTHENTICATED,
+                verified: E2EState.Unauthenticated,
             }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
 
         this.setState({
-            verified: E2E_STATE.VERIFIED,
+            verified: E2EState.Verified,
         }, this.props.onHeightChanged); // Decryption may have caused a change in size
     }
 
@@ -850,13 +850,13 @@ export default class EventTile extends React.Component<IProps, IState> {
 
         // event is encrypted, display padlock corresponding to whether or not it is verified
         if (ev.isEncrypted()) {
-            if (this.state.verified === E2E_STATE.NORMAL) {
+            if (this.state.verified === E2EState.Normal) {
                 return; // no icon if we've not even cross-signed the user
-            } else if (this.state.verified === E2E_STATE.VERIFIED) {
+            } else if (this.state.verified === E2EState.Verified) {
                 return; // no icon for verified
-            } else if (this.state.verified === E2E_STATE.UNAUTHENTICATED) {
+            } else if (this.state.verified === E2EState.Unauthenticated) {
                 return (<E2ePadlockUnauthenticated />);
-            } else if (this.state.verified === E2E_STATE.UNKNOWN) {
+            } else if (this.state.verified === E2EState.Unknown) {
                 return (<E2ePadlockUnknown />);
             } else {
                 return (<E2ePadlockUnverified />);
@@ -961,9 +961,9 @@ export default class EventTile extends React.Component<IProps, IState> {
             mx_EventTile_lastInSection: this.props.lastInSection,
             mx_EventTile_contextual: this.props.contextual,
             mx_EventTile_actionBarFocused: this.state.actionBarFocused,
-            mx_EventTile_verified: !isBubbleMessage && this.state.verified === E2E_STATE.VERIFIED,
-            mx_EventTile_unverified: !isBubbleMessage && this.state.verified === E2E_STATE.WARNING,
-            mx_EventTile_unknown: !isBubbleMessage && this.state.verified === E2E_STATE.UNKNOWN,
+            mx_EventTile_verified: !isBubbleMessage && this.state.verified === E2EState.Verified,
+            mx_EventTile_unverified: !isBubbleMessage && this.state.verified === E2EState.Warning,
+            mx_EventTile_unknown: !isBubbleMessage && this.state.verified === E2EState.Unknown,
             mx_EventTile_bad: isEncryptionFailure,
             mx_EventTile_emote: msgtype === 'm.emote',
             mx_EventTile_noSender: this.props.hideSender,

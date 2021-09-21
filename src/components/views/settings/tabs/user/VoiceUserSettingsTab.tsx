@@ -28,6 +28,8 @@ import { replaceableComponent } from "../../../../../utils/replaceableComponent"
 import SettingsFlag from '../../../elements/SettingsFlag';
 import ErrorDialog from '../../../dialogs/ErrorDialog';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const getDefaultDevice = (devices: Array<Partial<MediaDeviceInfo>>) => {
     // Note we're looking for a device with deviceId 'default' but adding a device
     // with deviceId == the empty string: this is because Chrome gives us a device
@@ -101,7 +103,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
             }
         }
         if (error) {
-            console.log("Failed to list userMedia devices", error);
+            logger.log("Failed to list userMedia devices", error);
             const brand = SdkConfig.get().brand;
             Modal.createTrackedDialog('No media permissions', '', ErrorDialog, {
                 title: _t('No media permissions'),

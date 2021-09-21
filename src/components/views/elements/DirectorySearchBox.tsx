@@ -14,71 +14,73 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
+import React, { ChangeEvent, createRef } from 'react';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import AccessibleButton from "./AccessibleButton";
+
+interface IProps {
+    className?: string;
+    onChange?: (value: string) => void;
+    onClear?: () => void;
+    onJoinClick?: (value: string) => void;
+    placeholder?: string;
+    showJoinButton?: boolean;
+    initialText?: string;
+}
+
+interface IState {
+    value: string;
+}
 
 @replaceableComponent("views.elements.DirectorySearchBox")
-export default class DirectorySearchBox extends React.Component {
-    constructor(props) {
-        super(props);
-        this._collectInput = this._collectInput.bind(this);
-        this._onClearClick = this._onClearClick.bind(this);
-        this._onChange = this._onChange.bind(this);
-        this._onKeyUp = this._onKeyUp.bind(this);
-        this._onJoinButtonClick = this._onJoinButtonClick.bind(this);
+export default class DirectorySearchBox extends React.Component<IProps, IState> {
+    private input = createRef<HTMLInputElement>();
 
-        this.input = null;
+    constructor(props: IProps) {
+        super(props);
 
         this.state = {
             value: this.props.initialText || '',
         };
     }
 
-    _collectInput(e) {
-        this.input = e;
-    }
-
-    _onClearClick() {
+    private onClearClick = (): void => {
         this.setState({ value: '' });
 
-        if (this.input) {
-            this.input.focus();
+        if (this.input.current) {
+            this.input.current.focus();
 
             if (this.props.onClear) {
                 this.props.onClear();
             }
         }
-    }
+    };
 
-    _onChange(ev) {
-        if (!this.input) return;
+    private onChange = (ev: ChangeEvent<HTMLInputElement>): void => {
+        if (!this.input.current) return;
         this.setState({ value: ev.target.value });
 
         if (this.props.onChange) {
             this.props.onChange(ev.target.value);
         }
-    }
+    };
 
-    _onKeyUp(ev) {
+    private onKeyUp = (ev: React.KeyboardEvent): void => {
         if (ev.key == 'Enter' && this.props.showJoinButton) {
             if (this.props.onJoinClick) {
                 this.props.onJoinClick(this.state.value);
             }
         }
-    }
+    };
 
-    _onJoinButtonClick() {
+    private onJoinButtonClick = (): void => {
         if (this.props.onJoinClick) {
             this.props.onJoinClick(this.state.value);
         }
-    }
+    };
 
-    render() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
+    public render(): JSX.Element {
         const searchboxClasses = {
             mx_DirectorySearchBox: true,
         };
@@ -87,7 +89,7 @@ export default class DirectorySearchBox extends React.Component {
         let joinButton;
         if (this.props.showJoinButton) {
             joinButton = <AccessibleButton className="mx_DirectorySearchBox_joinButton"
-                onClick={this._onJoinButtonClick}
+                onClick={this.onJoinButtonClick}
             >{ _t("Join") }</AccessibleButton>;
         }
 
@@ -97,24 +99,15 @@ export default class DirectorySearchBox extends React.Component {
                 name="dirsearch"
                 value={this.state.value}
                 className="mx_textinput_icon mx_textinput_search"
-                ref={this._collectInput}
-                onChange={this._onChange}
-                onKeyUp={this._onKeyUp}
+                ref={this.input}
+                onChange={this.onChange}
+                onKeyUp={this.onKeyUp}
                 placeholder={this.props.placeholder}
                 autoFocus
             />
             { joinButton }
-            <AccessibleButton className="mx_DirectorySearchBox_clear" onClick={this._onClearClick} />
+            <AccessibleButton className="mx_DirectorySearchBox_clear" onClick={this.onClearClick} />
         </div>;
     }
 }
 
-DirectorySearchBox.propTypes = {
-    className: PropTypes.string,
-    onChange: PropTypes.func,
-    onClear: PropTypes.func,
-    onJoinClick: PropTypes.func,
-    placeholder: PropTypes.string,
-    showJoinButton: PropTypes.bool,
-    initialText: PropTypes.string,
-};

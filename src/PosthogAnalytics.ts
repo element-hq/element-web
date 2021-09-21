@@ -21,6 +21,8 @@ import SettingsStore from './settings/SettingsStore';
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 /* Posthog analytics tracking.
  *
  * Anonymity behaviour is as follows:
@@ -175,7 +177,7 @@ export class PosthogAnalytics {
         // $redacted_current_url is injected by this class earlier in capture(), as its generation
         // is async and can't be done in this non-async callback.
         if (!properties['$redacted_current_url']) {
-            console.log("$redacted_current_url not set in sanitizeProperties, will drop $current_url entirely");
+            logger.log("$redacted_current_url not set in sanitizeProperties, will drop $current_url entirely");
         }
         properties['$current_url'] = properties['$redacted_current_url'];
         delete properties['$redacted_current_url'];
@@ -291,7 +293,7 @@ export class PosthogAnalytics {
             } catch (e) {
                 // The above could fail due to network requests, but not essential to starting the application,
                 // so swallow it.
-                console.log("Unable to identify user for tracking" + e.toString());
+                logger.log("Unable to identify user for tracking" + e.toString());
             }
         }
     }

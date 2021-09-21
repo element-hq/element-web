@@ -34,18 +34,43 @@ limitations under the License.
     transition: opacity 300ms ease;
 }
 
-
 @keyframes mx--anim-pulse {
     0% { opacity: 1; }
     50% { opacity: 0.7; }
     100% { opacity: 1; }
 }
 
+@keyframes mx_Dialog_lightbox_background_keyframes {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: $lightbox-background-bg-opacity;
+    }
+}
+
+@keyframes mx_ImageView_panel_keyframes {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
 
 @media (prefers-reduced-motion) {
     @keyframes mx--anim-pulse {
         // Override all keyframes in reduced-motion
     }
+
+    @keyframes mx_Dialog_lightbox_background_keyframes {
+        // Override all keyframes in reduced-motion
+    }
+
+    @keyframes mx_ImageView_panel_keyframes {
+        // Override all keyframes in reduced-motion
+    }
+
     .mx_rtg--fade-enter-active {
         transition: none;
     }

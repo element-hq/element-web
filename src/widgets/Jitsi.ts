@@ -17,6 +17,8 @@ limitations under the License.
 import SdkConfig from "../SdkConfig";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const JITSI_WK_PROPERTY = "im.vector.riot.jitsi";
 
 export interface JitsiWidgetData {
@@ -69,7 +71,7 @@ export class Jitsi {
         // Start with a default of the config's domain
         let domain = (SdkConfig.get()['jitsi'] || {})['preferredDomain'] || 'jitsi.riot.im';
 
-        console.log("Attempting to get Jitsi conference information from homeserver");
+        logger.log("Attempting to get Jitsi conference information from homeserver");
         if (discoveryResponse && discoveryResponse[JITSI_WK_PROPERTY]) {
             const wkPreferredDomain = discoveryResponse[JITSI_WK_PROPERTY]['preferredDomain'];
             if (wkPreferredDomain) domain = wkPreferredDomain;
@@ -77,7 +79,7 @@ export class Jitsi {
 
         // Put the result into memory for us to use later
         this.domain = domain;
-        console.log("Jitsi conference domain:", this.preferredDomain);
+        logger.log("Jitsi conference domain:", this.preferredDomain);
     };
 
     /**

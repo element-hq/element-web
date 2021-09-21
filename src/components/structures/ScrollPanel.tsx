@@ -21,6 +21,8 @@ import { replaceableComponent } from "../../utils/replaceableComponent";
 import { getKeyBindingsManager, RoomAction } from "../../KeyBindingsManager";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const DEBUG_SCROLL = false;
 
 // The amount of extra scroll distance to allow prior to unfilling.
@@ -38,7 +40,7 @@ const PAGE_SIZE = 400;
 let debuglog;
 if (DEBUG_SCROLL) {
     // using bind means that we get to keep useful line numbers in the console
-    debuglog = console.log.bind(console, "ScrollPanel debuglog:");
+    debuglog = logger.log.bind(console, "ScrollPanel debuglog:");
 } else {
     debuglog = function() {};
 }

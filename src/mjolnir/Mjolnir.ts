@@ -24,6 +24,8 @@ import { SettingLevel } from "../settings/SettingLevel";
 import { Preset } from "matrix-js-sdk/src/@types/partials";
 import { ActionPayload } from "../dispatcher/payloads";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // TODO: Move this and related files to the js-sdk or something once finalized.
 
 export class Mjolnir {
@@ -54,7 +56,7 @@ export class Mjolnir {
 
     private onAction = (payload: ActionPayload) => {
         if (payload['action'] === 'setup_mjolnir') {
-            console.log("Setting up Mjolnir: after sync");
+            logger.log("Setting up Mjolnir: after sync");
             this.setup();
         }
     };
@@ -147,7 +149,7 @@ export class Mjolnir {
     private updateLists(listRoomIds: string[]) {
         if (!MatrixClientPeg.get()) return;
 
-        console.log("Updating Mjolnir ban lists to: " + listRoomIds);
+        logger.log("Updating Mjolnir ban lists to: " + listRoomIds);
         this._lists = [];
         this._roomIds = listRoomIds || [];
         if (!listRoomIds) return;

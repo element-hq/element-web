@@ -22,6 +22,8 @@ import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const PHASE_START = 0;
 const PHASE_SHOW_SAS = 1;
 const PHASE_WAIT_FOR_PARTNER_TO_CONFIRM = 2;
@@ -39,7 +41,7 @@ export default class IncomingSasDialog extends React.Component {
 
         let phase = PHASE_START;
         if (this.props.verifier.cancelled) {
-            console.log("Verifier was cancelled in the background.");
+            logger.log("Verifier was cancelled in the background.");
             phase = PHASE_CANCELLED;
         }
 
@@ -90,7 +92,7 @@ export default class IncomingSasDialog extends React.Component {
         this.props.verifier.verify().then(() => {
             this.setState({ phase: PHASE_VERIFIED });
         }).catch((e) => {
-            console.log("Verification failed", e);
+            logger.log("Verification failed", e);
         });
     }
 

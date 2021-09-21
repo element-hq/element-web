@@ -26,10 +26,9 @@ import { SettingLevel } from "../../../../settings/SettingLevel";
 import Field from '../../../../components/views/elements/Field';
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
+import { IDialogProps } from "../../../../components/views/dialogs/IDialogProps";
 
-interface IProps {
-    onFinished: (confirmed: boolean) => void;
-}
+interface IProps extends IDialogProps {}
 
 interface IState {
     eventIndexSize: number;

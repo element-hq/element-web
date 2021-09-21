@@ -110,6 +110,8 @@ import { copyPlaintext } from "../../utils/strings";
 import { PosthogAnalytics } from '../../PosthogAnalytics';
 import { initSentry } from "../../sentry";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 /** constants for MatrixChat.state.view */
 export enum Views {
     // a special initial state which is only used at startup, while we are
@@ -893,12 +895,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.focusComposer = true;
 
         if (roomInfo.room_alias) {
-            console.log(
+            logger.log(
                 `Switching to room alias ${roomInfo.room_alias} at event ` +
                 roomInfo.event_id,
             );
         } else {
-            console.log(`Switching to room id ${roomInfo.room_id} at event ` +
+            logger.log(`Switching to room id ${roomInfo.room_id} at event ` +
                 roomInfo.event_id,
             );
         }
@@ -1407,7 +1409,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // such as when laptops unsleep.
         // https://github.com/vector-im/element-web/issues/3307#issuecomment-282895568
         cli.setCanResetTimelineCallback((roomId) => {
-            console.log("Request to reset timeline in room ", roomId, " viewing:", this.state.currentRoomId);
+            logger.log("Request to reset timeline in room ", roomId, " viewing:", this.state.currentRoomId);
             if (roomId !== this.state.currentRoomId) {
                 // It is safe to remove events from rooms we are not viewing.
                 return true;

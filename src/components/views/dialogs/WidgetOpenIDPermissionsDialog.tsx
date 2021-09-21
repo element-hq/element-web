@@ -25,6 +25,8 @@ import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps extends IDialogProps {
     widget: Widget;
     widgetKind: WidgetKind;
@@ -55,7 +57,7 @@ export default class WidgetOpenIDPermissionsDialog extends React.PureComponent<I
 
     private onPermissionSelection(allowed: boolean) {
         if (this.state.rememberSelection) {
-            console.log(`Remembering ${this.props.widget.id} as allowed=${allowed} for OpenID`);
+            logger.log(`Remembering ${this.props.widget.id} as allowed=${allowed} for OpenID`);
 
             WidgetPermissionStore.instance.setOIDCState(
                 this.props.widget, this.props.widgetKind, this.props.inRoomId,

@@ -29,6 +29,8 @@ import webpackLangJsonUrl from "$webapp/i18n/languages.json";
 import { SettingLevel } from "./settings/SettingLevel";
 import { retry } from "./utils/promise";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const i18nFolder = 'i18n/';
 
 // Control whether to also return original, untranslated strings
@@ -308,7 +310,7 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
             // However, not showing count is so common that it's not worth logging. And other commonly unused variables
             // here, if there are any.
             if (regexpString !== '%\\(count\\)s') {
-                console.log(`Could not find ${regexp} in ${text}`);
+                logger.log(`Could not find ${regexp} in ${text}`);
             }
         }
     }
@@ -361,7 +363,7 @@ export function setLanguage(preferredLangs: string | string[]) {
         SettingsStore.setValue("language", null, SettingLevel.DEVICE, langToUse);
         // Adds a lot of noise to test runs, so disable logging there.
         if (process.env.NODE_ENV !== "test") {
-            console.log("set language to " + langToUse);
+            logger.log("set language to " + langToUse);
         }
 
         // Set 'en' as fallback language:
@@ -518,7 +520,7 @@ function weblateToCounterpart(inTrs: object): object {
 
 async function getLanguageRetry(langPath: string, num = 3): Promise<object> {
     return retry(() => getLanguage(langPath), num, e => {
-        console.log("Failed to load i18n", langPath);
+        logger.log("Failed to load i18n", langPath);
         console.error(e);
         return true; // always retry
     });

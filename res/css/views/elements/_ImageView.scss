@@ -18,6 +18,10 @@ $button-size: 32px;
 $icon-size: 22px;
 $button-gap: 24px;
 
+:root {
+    --image-view-panel-height: 68px;
+}
+
 .mx_ImageView {
     display: flex;
     width: 100%;
@@ -36,14 +40,24 @@ $button-gap: 24px;
 
 .mx_ImageView_image {
     flex-shrink: 0;
+
+    &.mx_ImageView_image_animating {
+        transition: transform 200ms ease 0s;
+    }
+
+    &.mx_ImageView_image_animatingLoading {
+        transition: transform 300ms ease 0s;
+    }
 }
 
 .mx_ImageView_panel {
     width: 100%;
-    height: 68px;
+    height: var(--image-view-panel-height);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    animation-name: mx_ImageView_panel_keyframes;
+    animation-duration: 300ms;
 }
 
 .mx_ImageView_info_wrapper {
@@ -122,5 +136,15 @@ $button-gap: 24px;
         height: $button-size;
         mask-image: url('$(res)/img/image-view/close.svg');
         mask-size: 40%;
+    }
+}
+
+@media (prefers-reduced-motion) {
+    .mx_ImageView_image_animating {
+        transition: none !important;
+    }
+
+    .mx_ImageView_image_animatingLoading {
+        transition: none !important;
     }
 }

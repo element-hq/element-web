@@ -32,6 +32,8 @@ import { toRightOf } from "../../../../structures/ContextMenu";
 import BugReportDialog from '../../../dialogs/BugReportDialog';
 import GenericTextContextMenu from "../../../context_menus/GenericTextContextMenu";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     closeSettingsFn: () => void;
 }
@@ -88,7 +90,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
 
         // Dev note: please keep this log line, it's useful when troubleshooting a MatrixClient suddenly
         // stopping in the middle of the logs.
-        console.log("Clear cache & reload clicked");
+        logger.log("Clear cache & reload clicked");
         MatrixClientPeg.get().stopClient();
         MatrixClientPeg.get().store.deleteAllData().then(() => {
             PlatformPeg.get().reload();

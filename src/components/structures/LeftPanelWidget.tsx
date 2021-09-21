@@ -76,7 +76,6 @@ const LeftPanelWidget: React.FC = () => {
             <AppTile
                 app={app}
                 fullWidth
-                show
                 showMenubar={false}
                 userWidget
                 userId={cli.getUserId()}

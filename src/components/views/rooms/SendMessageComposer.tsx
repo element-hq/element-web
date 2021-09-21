@@ -56,6 +56,8 @@ import QuestionDialog from "../dialogs/QuestionDialog";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { decorateStartSendingTime, sendRoundTripMetric } from "../../../sendTimePerformanceMetrics";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 function addReplyToMessageContent(
     content: IContent,
     replyToEvent: MatrixEvent,
@@ -341,7 +343,7 @@ export default class SendMessageComposer extends React.Component<IProps> {
                 description: errText,
             });
         } else {
-            console.log("Command success.");
+            logger.log("Command success.");
             if (messageContent) return messageContent;
         }
     }

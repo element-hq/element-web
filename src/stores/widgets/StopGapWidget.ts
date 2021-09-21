@@ -57,6 +57,8 @@ import { getUserLanguage } from "../../languageHandler";
 import { WidgetVariableCustomisations } from "../../customisations/WidgetVariables";
 import { arrayFastClone } from "../../utils/arrays";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // TODO: Destroy all of this code
 
 interface IAppTileProps {
@@ -67,7 +69,7 @@ interface IAppTileProps {
     userId: string;
     creatorUserId: string;
     waitForIframeLoad: boolean;
-    whitelistCapabilities: string[];
+    whitelistCapabilities?: string[];
     userWidget: boolean;
 }
 
@@ -405,7 +407,7 @@ export class StopGapWidget extends EventEmitter {
 
     public stop(opts = { forceDestroy: false }) {
         if (!opts?.forceDestroy && ActiveWidgetStore.getPersistentWidgetId() === this.mockWidget.id) {
-            console.log("Skipping destroy - persistent widget");
+            logger.log("Skipping destroy - persistent widget");
             return;
         }
         if (!this.started) return;

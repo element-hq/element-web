@@ -43,6 +43,8 @@ interface IState {
     sessionsRemaining: number;
 }
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 @replaceableComponent("views.settings.SecureBackupPanel")
 export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     private unmounted = false;
@@ -109,7 +111,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                 backupSigStatus: trustInfo,
             });
         } catch (e) {
-            console.log("Unable to fetch check backup status", e);
+            logger.log("Unable to fetch check backup status", e);
             if (this.unmounted) return;
             this.setState({
                 loading: false,
@@ -134,7 +136,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                 backupSigStatus,
             });
         } catch (e) {
-            console.log("Unable to fetch key backup status", e);
+            logger.log("Unable to fetch key backup status", e);
             if (this.unmounted) return;
             this.setState({
                 loading: false,

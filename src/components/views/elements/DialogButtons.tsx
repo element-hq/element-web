@@ -17,60 +17,61 @@ limitations under the License.
 */
 
 import React from "react";
-import PropTypes from "prop-types";
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+
+interface IProps {
+    // The primary button which is styled differently and has default focus.
+    primaryButton: React.ReactNode;
+
+    // A node to insert into the cancel button instead of default "Cancel"
+    cancelButton?: React.ReactNode;
+
+    // If true, make the primary button a form submit button (input type="submit")
+    primaryIsSubmit?: boolean;
+
+    // onClick handler for the primary button.
+    onPrimaryButtonClick?: (ev: React.MouseEvent) => void;
+
+    // should there be a cancel button? default: true
+    hasCancel?: boolean;
+
+    // The class of the cancel button, only used if a cancel button is
+    // enabled
+    cancelButtonClass?: string;
+
+    // onClick handler for the cancel button.
+    onCancel?: (...args: any[]) => void;
+
+    focus?: boolean;
+
+    // disables the primary and cancel buttons
+    disabled?: boolean;
+
+    // disables only the primary button
+    primaryDisabled?: boolean;
+
+    // something to stick next to the buttons, optionally
+    additive?: React.ReactNode;
+
+    primaryButtonClass?: string;
+}
 
 /**
  * Basic container for buttons in modal dialogs.
  */
 @replaceableComponent("views.elements.DialogButtons")
-export default class DialogButtons extends React.Component {
-    static propTypes = {
-        // The primary button which is styled differently and has default focus.
-        primaryButton: PropTypes.node.isRequired,
-
-        // A node to insert into the cancel button instead of default "Cancel"
-        cancelButton: PropTypes.node,
-
-        // If true, make the primary button a form submit button (input type="submit")
-        primaryIsSubmit: PropTypes.bool,
-
-        // onClick handler for the primary button.
-        onPrimaryButtonClick: PropTypes.func,
-
-        // should there be a cancel button? default: true
-        hasCancel: PropTypes.bool,
-
-        // The class of the cancel button, only used if a cancel button is
-        // enabled
-        cancelButtonClass: PropTypes.node,
-
-        // onClick handler for the cancel button.
-        onCancel: PropTypes.func,
-
-        focus: PropTypes.bool,
-
-        // disables the primary and cancel buttons
-        disabled: PropTypes.bool,
-
-        // disables only the primary button
-        primaryDisabled: PropTypes.bool,
-
-        // something to stick next to the buttons, optionally
-        additive: PropTypes.element,
-    };
-
-    static defaultProps = {
+export default class DialogButtons extends React.Component<IProps> {
+    public static defaultProps: Partial<IProps> = {
         hasCancel: true,
         disabled: false,
     };
 
-    _onCancelClick = () => {
-        this.props.onCancel();
+    private onCancelClick = (event: React.MouseEvent): void => {
+        this.props.onCancel(event);
     };
 
-    render() {
+    public render(): JSX.Element {
         let primaryButtonClassName = "mx_Dialog_primary";
         if (this.props.primaryButtonClass) {
             primaryButtonClassName += " " + this.props.primaryButtonClass;
@@ -82,7 +83,7 @@ export default class DialogButtons extends React.Component {
                 // important: the default type is 'submit' and this button comes before the
                 // primary in the DOM so will get form submissions unless we make it not a submit.
                 type="button"
-                onClick={this._onCancelClick}
+                onClick={this.onCancelClick}
                 className={this.props.cancelButtonClass}
                 disabled={this.props.disabled}
             >

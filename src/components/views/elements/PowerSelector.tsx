@@ -15,40 +15,52 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import * as Roles from '../../../Roles';
 import { _t } from '../../../languageHandler';
 import Field from "./Field";
 import { Key } from "../../../Keyboard";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+const CUSTOM_VALUE = "SELECT_VALUE_CUSTOM";
+
+interface IProps {
+    value: number;
+    // The maximum value that can be set with the power selector
+    maxValue: number;
+
+    // Default user power level for the room
+    usersDefault: number;
+
+    // should the user be able to change the value? false by default.
+    disabled?: boolean;
+    onChange?: (value: number, powerLevelKey: string) => void;
+
+    // Optional key to pass as the second argument to `onChange`
+    powerLevelKey?: string;
+
+    // The name to annotate the selector with
+    label?: string;
+}
+
+interface IState {
+    levelRoleMap: {};
+    // List of power levels to show in the drop-down
+    options: number[];
+
+    customValue: number;
+    selectValue: number | string;
+    custom?: boolean;
+    customLevel?: number;
+}
+
 @replaceableComponent("views.elements.PowerSelector")
-export default class PowerSelector extends React.Component {
-    static propTypes = {
-        value: PropTypes.number.isRequired,
-        // The maximum value that can be set with the power selector
-        maxValue: PropTypes.number.isRequired,
-
-        // Default user power level for the room
-        usersDefault: PropTypes.number.isRequired,
-
-        // should the user be able to change the value? false by default.
-        disabled: PropTypes.bool,
-        onChange: PropTypes.func,
-
-        // Optional key to pass as the second argument to `onChange`
-        powerLevelKey: PropTypes.string,
-
-        // The name to annotate the selector with
-        label: PropTypes.string,
-    }
-
-    static defaultProps = {
+export default class PowerSelector extends React.Component<IProps, IState> {
+    public static defaultProps: Partial<IProps> = {
         maxValue: Infinity,
         usersDefault: 0,
     };
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -62,26 +74,26 @@ export default class PowerSelector extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase
-    UNSAFE_componentWillMount() {
-        this._initStateFromProps(this.props);
+    // eslint-disable-next-line camelcase, @typescript-eslint/naming-convention
+    public UNSAFE_componentWillMount(): void {
+        this.initStateFromProps(this.props);
     }
 
-    // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps(newProps) {
-        this._initStateFromProps(newProps);
+    // eslint-disable-next-line camelcase, @typescript-eslint/naming-convention
+    public UNSAFE_componentWillReceiveProps(newProps: IProps): void {
+        this.initStateFromProps(newProps);
     }
 
-    _initStateFromProps(newProps) {
+    private initStateFromProps(newProps: IProps): void {
         // This needs to be done now because levelRoleMap has translated strings
         const levelRoleMap = Roles.levelRoleMap(newProps.usersDefault);
         const options = Object.keys(levelRoleMap).filter(level => {
             return (
                 level === undefined ||
-                level <= newProps.maxValue ||
-                level == newProps.value
+                parseInt(level) <= newProps.maxValue ||
+                parseInt(level) == newProps.value
             );
-        });
+        }).map(level => parseInt(level));
 
         const isCustom = levelRoleMap[newProps.value] === undefined;
 
@@ -90,32 +102,33 @@ export default class PowerSelector extends React.Component {
             options,
             custom: isCustom,
             customLevel: newProps.value,
-            selectValue: isCustom ? "SELECT_VALUE_CUSTOM" : newProps.value,
+            selectValue: isCustom ? CUSTOM_VALUE : newProps.value,
         });
     }
 
-    onSelectChange = event => {
-        const isCustom = event.target.value === "SELECT_VALUE_CUSTOM";
+    private onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+        const isCustom = event.target.value === CUSTOM_VALUE;
         if (isCustom) {
             this.setState({ custom: true });
         } else {
-            this.props.onChange(event.target.value, this.props.powerLevelKey);
-            this.setState({ selectValue: event.target.value });
+            const powerLevel = parseInt(event.target.value);
+            this.props.onChange(powerLevel, this.props.powerLevelKey);
+            this.setState({ selectValue: powerLevel });
         }
     };
 
-    onCustomChange = event => {
-        this.setState({ customValue: event.target.value });
+    private onCustomChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+        this.setState({ customValue: parseInt(event.target.value) });
     };
 
-    onCustomBlur = event => {
+    private onCustomBlur = (event: React.FocusEvent): void => {
         event.preventDefault();
         event.stopPropagation();
 
-        this.props.onChange(parseInt(this.state.customValue), this.props.powerLevelKey);
+        this.props.onChange(this.state.customValue, this.props.powerLevelKey);
     };
 
-    onCustomKeyDown = event => {
+    private onCustomKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
         if (event.key === Key.ENTER) {
             event.preventDefault();
             event.stopPropagation();
@@ -125,11 +138,11 @@ export default class PowerSelector extends React.Component {
             // raising a dialog which causes a blur which causes a dialog which causes a blur and
             // so on. By not causing the onChange to be called here, we avoid the loop because we
             // handle the onBlur safely.
-            event.target.blur();
+            (event.target as HTMLInputElement).blur();
         }
     };
 
-    render() {
+    public render(): JSX.Element {
         let picker;
         const label = typeof this.props.label === "undefined" ? _t("Power level") : this.props.label;
         if (this.state.custom) {
@@ -147,14 +160,14 @@ export default class PowerSelector extends React.Component {
             );
         } else {
             // Each level must have a definition in this.state.levelRoleMap
-            let options = this.state.options.map((level) => {
+            const options = this.state.options.map((level) => {
                 return {
-                    value: level,
+                    value: String(level),
                     text: Roles.textualPowerLevel(level, this.props.usersDefault),
                 };
             });
-            options.push({ value: "SELECT_VALUE_CUSTOM", text: _t("Custom level") });
-            options = options.map((op) => {
+            options.push({ value: CUSTOM_VALUE, text: _t("Custom level") });
+            const optionsElements = options.map((op) => {
                 return <option value={op.value} key={op.value}>{ op.text }</option>;
             });
 
@@ -166,7 +179,7 @@ export default class PowerSelector extends React.Component {
                     value={String(this.state.selectValue)}
                     disabled={this.props.disabled}
                 >
-                    { options }
+                    { optionsElements }
                 </Field>
             );
         }
