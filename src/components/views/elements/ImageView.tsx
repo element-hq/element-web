@@ -412,10 +412,10 @@ export default class ImageView extends React.Component<IProps, IState> {
         const showEventMeta = !!this.props.mxEvent;
         const zoomingDisabled = this.state.maxZoom === this.state.minZoom;
 
-        let transition;
-        if (this.animatingLoading) transition = "transform 300ms ease 0s";
-        else if (this.state.moving || !this.imageIsLoaded) transition = null;
-        else transition = "transform 200ms ease 0s";
+        let transitionClassName;
+        if (this.animatingLoading) transitionClassName = "mx_ImageView_image_animatingLoading";
+        else if (this.state.moving || !this.imageIsLoaded) transitionClassName = "";
+        else transitionClassName = "mx_ImageView_image_animating";
 
         let cursor;
         if (this.state.moving) cursor = "grabbing";
@@ -433,7 +433,6 @@ export default class ImageView extends React.Component<IProps, IState> {
         // image causing it translate in the wrong direction.
         const style = {
             cursor: cursor,
-            transition: transition,
             transform: `translateX(${translatePixelsX})
                         translateY(${translatePixelsY})
                         scale(${zoom})
@@ -581,7 +580,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                         style={style}
                         alt={this.props.name}
                         ref={this.image}
-                        className="mx_ImageView_image"
+                        className={`mx_ImageView_image ${transitionClassName}`}
                         draggable={true}
                         onMouseDown={this.onStartMoving}
                     />

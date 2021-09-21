@@ -40,6 +40,14 @@ $button-gap: 24px;
 
 .mx_ImageView_image {
     flex-shrink: 0;
+
+    &.mx_ImageView_image_animating {
+        transition: transform 200ms ease 0s;
+    }
+
+    &.mx_ImageView_image_animatingLoading {
+        transition: transform 300ms ease 0s;
+    }
 }
 
 .mx_ImageView_panel {
@@ -128,5 +136,15 @@ $button-gap: 24px;
         height: $button-size;
         mask-image: url('$(res)/img/image-view/close.svg');
         mask-size: 40%;
+    }
+}
+
+@media (prefers-reduced-motion) {
+    .mx_ImageView_image_animating {
+        transition: none !important;
+    }
+
+    .mx_ImageView_image_animatingLoading {
+        transition: none !important;
     }
 }
