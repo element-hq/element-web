@@ -3724,5 +3724,10 @@
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Për këtë sesion shfaq përkohësisht bashkësi, në vend se Hapësira. Mbulimi i kësaj do të hiqet në të ardhmen e afërt. Kjo do të sjellë ringarkim të Element-it.",
     "Display Communities instead of Spaces": "Shfaq Bashkësi, në vend se Hapësira",
     "Joining space …": "Po hyhet në hapësirë…",
-    "%(reactors)s reacted with %(content)s": "%(reactors)s reagoi me %(content)s"
+    "%(reactors)s reacted with %(content)s": "%(reactors)s reagoi me %(content)s",
+    "Would you like to leave the rooms in this space?": "Doni të braktisen dhomat në këtë hapësirë?",
+    "You are about to leave <spaceName/>.": "Ju ndan një hap nga braktisja e <spaceName/>.",
+    "Leave some rooms": "Braktis disa dhoma",
+    "Leave all rooms": "Braktisi krejt dhomat",
+    "Don't leave any rooms": "Mos braktis ndonjë dhomë"
 }
