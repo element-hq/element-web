@@ -3672,7 +3672,7 @@
     "Are you sure you want to add encryption to this public room?": "A jeni i sigurt se doni të shtohet fshehtëzim në këtë dhomë publike?",
     "Thumbs up": "",
     "Remain on your screen while running": "Rrini në ekran për deri sa është hapur",
-    "Remain on your screen when viewing another room, when running": "Rrini në ekran për deri sa jeni duke shikuar një dhomë tjetër",
+    "Remain on your screen when viewing another room, when running": "Të mbesë në ekranin tuaj, kur shihet një tjetër dhomë dhe widget-i është në punë",
     "<b>It's not recommended to make encrypted rooms public.</b> It will mean anyone can find and join the room, so anyone can read messages. You'll get none of the benefits of encryption. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Nuk rekomandohet të bëhen publike dhoma të fshehtëzuara.</b> Kjo do të thoshte se cilido mund të gjejë dhe hyjë te dhoma, pra cilido mund të lexojë mesazhet. S’do të përfitoni asnjë nga të mirat e fshehtëzimit. Fshehtëzimi i mesazheve në një dhomë publike do ta ngadalësojë marrjen dhe dërgimin e tyre.",
     "Are you sure you want to make this encrypted room public?": "Jeni i sigurt se doni ta bëni publike këtë dhomë të fshehtëzuar?",
     "To avoid these issues, create a <a>new encrypted room</a> for the conversation you plan to have.": "Për të shmangur këto probleme, krijoni një <a>dhomë të re të fshehtëzuar</a> për bisedën që keni në plan të bëni.",
@@ -3724,5 +3724,10 @@
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Për këtë sesion shfaq përkohësisht bashkësi, në vend se Hapësira. Mbulimi i kësaj do të hiqet në të ardhmen e afërt. Kjo do të sjellë ringarkim të Element-it.",
     "Display Communities instead of Spaces": "Shfaq Bashkësi, në vend se Hapësira",
     "Joining space …": "Po hyhet në hapësirë…",
-    "%(reactors)s reacted with %(content)s": "%(reactors)s reagoi me %(content)s"
+    "%(reactors)s reacted with %(content)s": "%(reactors)s reagoi me %(content)s",
+    "Would you like to leave the rooms in this space?": "Doni të braktisen dhomat në këtë hapësirë?",
+    "You are about to leave <spaceName/>.": "Ju ndan një hap nga braktisja e <spaceName/>.",
+    "Leave some rooms": "Braktis disa dhoma",
+    "Leave all rooms": "Braktisi krejt dhomat",
+    "Don't leave any rooms": "Mos braktis ndonjë dhomë"
 }
