@@ -1,16 +1,12 @@
 {
     "Fetching third party location failed": "تطبیق اطلاعات از منابع‌ دسته سوم با شکست مواجه شد",
     "Messages in one-to-one chats": "پیام‌های درون چت‌های یک‌به‌یک",
-    "Advanced notification settings": "تنظیمات پیشرفته برای آگاه‌سازی‌ها",
-    "Uploading report": "در حال بارگذاری گزارش",
     "Sunday": "یکشنبه",
     "Guests can join": "میهمان‌ها می‌توانند بپیوندند",
     "Messages sent by bot": "پیام‌های ارسال شده توسط ربات",
     "Notification targets": "هدف‌های آگاه‌سازی",
     "Failed to set direct chat tag": "تنظیم تگ برای چت مستقیم موفقیت‌آمیز نبود",
     "Today": "امروز",
-    "Files": "فایل‌ها",
-    "You are not receiving desktop notifications": "آگاهی‌های میزکار را دریافت نمی‌کنید",
     "Friday": "آدینه",
     "Update": "به‌روز رسانی",
     "Notifications": "آگاهی‌ها",
@@ -20,26 +16,16 @@
     "Waiting for response from server": "در انتظار پاسخی از سمت سرور",
     "Leave": "خروج",
     "OK": "باشه",
-    "All notifications are currently disabled for all targets.": "همه‌ی آگاه‌سازی‌ها برای تمام هدف‌ها غیرفعال‌اند.",
     "Operation failed": "عملیات شکست خورد",
-    "Forget": "فراموش کن",
     "World readable": "خواندن جهانی",
     "Mute": "سکوت",
-    "You cannot delete this image. (%(code)s)": "شما نمی‌توانید این تصویر را پاک کنید. (%(code)s)",
-    "Cancel Sending": "فرستادن را لغو کن",
     "Warning": "هشدار",
     "This Room": "این گپ",
     "Resend": "بازفرست",
-    "Error saving email notification preferences": "خطا در ذخیره‌سازی ترجیحات آگاهسازی با ایمیل",
     "Downloading update...": "در حال بارگیریِ به‌روزرسانی...",
-    "Remember, you can always set an email address in user settings if you change your mind.": "به خاطر داشته باشید که اگر نظرتان عوض شد می‌توانید از بخش تنظیمات یک ایمیل را به اکانتتان متصل کنید.",
     "Unavailable": "غیرقابل‌دسترسی",
-    "View Decrypted Source": "دیدن منبع رمزگشایی شده",
-    "Failed to update keywords": "به‌روزرسانی کلیدواژه‌ها موفقیت‌آمیز نبود",
     "remove %(name)s from the directory.": "برداشتن %(name)s از فهرست گپ‌ها.",
-    "Please set a password!": "لطفا یک پسورد اختیار کنید!",
     "powered by Matrix": "قدرت‌یافته از ماتریکس",
-    "You have successfully set a password!": "شما با موفقیت رمزتان را انتخاب کردید!",
     "Favourite": "علاقه‌مندی‌ها",
     "All Rooms": "همه‌ی گپ‌ها",
     "Source URL": "آدرس مبدا",
@@ -49,28 +35,18 @@
     "Noisy": "پرسروصدا",
     "Collecting app version information": "درحال جمع‌آوری اطلاعات نسخه‌ی برنامه",
     "Cancel": "لغو",
-    "Enable notifications for this account": "آگاه سازی با رایانامه را برای این اکانت فعال کن",
-    "Messages containing <span>keywords</span>": "پیا‌م‌های دارای <span> این کلیدواژه‌ها </span>",
     "Room not found": "گپ یافت نشد",
     "Tuesday": "سه‌شنبه",
-    "Enter keywords separated by a comma:": "کلیدواژه‌ها را وارد کنید؛ از کاما(,) برای جدا کردن آنها از یکدیگر استفاده کنید:",
-    "Forward Message": "هدایت پیام",
     "Remove %(name)s from the directory?": "آیا مطمئنید می‌خواهید %(name)s را از فهرست گپ‌ها حذف کنید؟",
     "Unnamed room": "گپ نام‌گذاری نشده",
     "Dismiss": "نادیده بگیر",
     "Remove from Directory": "از فهرستِ گپ‌ها حذف کن",
     "Saturday": "شنبه",
-    "I understand the risks and wish to continue": "از خطرات این کار آگاهم و مایلم که ادامه بدهم",
-    "Direct Chat": "چت مستقیم",
     "The server may be unavailable or overloaded": "این سرور ممکن است ناموجود یا بسیار شلوغ باشد",
     "Reject": "پس زدن",
-    "Failed to set Direct Message status of room": "تنظیم حالت پیام مستقیم برای گپ موفقیت‌آمیز نبود",
     "Monday": "دوشنبه",
-    "All messages (noisy)": "همه‌ی پیام‌ها(بلند)",
-    "Enable them now": "اکنون به کار بیفتند",
     "Collecting logs": "درحال جمع‌آوری گزارش‌ها",
     "Search": "جستجو",
-    "(HTTP status %(httpStatus)s)": "(HTTP وضعیت %(httpStatus)s)",
     "Failed to forget room %(errCode)s": "فراموش کردن اتاق با خطا مواجه شد %(errCode)s",
     "Wednesday": "چهارشنبه",
     "Quote": "نقل قول",
@@ -81,47 +57,29 @@
     "unknown error code": "کد خطای ناشناخته",
     "Call invitation": "دعوت به تماس",
     "Messages containing my display name": "پیام‌های حاوی نمای‌نامِ من",
-    "You have successfully set a password and an email address!": "تخصیص ایمیل و پسوردتان با موفقیت انجام شد!",
     "What's new?": "چه خبر؟",
-    "Notify me for anything else": "مرا برای هرچیز دیگری باخبر کن",
     "When I'm invited to a room": "وقتی من به گپی دعوت میشوم",
     "Close": "بستن",
-    "Can't update user notification settings": "امکان به‌روزرسانی تنظیمات آگاه‌سازی کاربر وجود ندارد",
-    "Notify for all other messages/rooms": "برای همه‌ی پیام‌ها/گپ‌های دیگر آگاه‌سازی کن",
     "Couldn't find a matching Matrix room": "گپ‌گاه مورد نظر در ماتریکس یافت نشد",
     "Invite to this room": "دعوت به این گپ",
     "You cannot delete this message. (%(code)s)": "شما نمی‌توانید این پیام را پاک کنید. (%(code)s)",
     "Thursday": "پنج‌شنبه",
     "Search…": "جستجو…",
-    "Unhide Preview": "پیش‌نمایش را نمایان کن",
     "Unable to join network": "خطا در ورود به شبکه",
-    "Uploaded on %(date)s by %(user)s": "آپلود شده در تاریخ %(date)s توسط %(user)s",
     "Messages in group chats": "پیام‌های درون چت‌های گروهی",
     "Yesterday": "دیروز",
     "Error encountered (%(errorDetail)s).": "خطای رخ داده (%(errorDetail)s).",
-    "Keywords": "کلیدواژه‌ها",
     "Low Priority": "کم اهمیت",
-    "Unable to fetch notification target list": "ناتوانی در تطبیق لیست آگاه‌سازی‌های هدف",
-    "Set Password": "تنظیم گذرواژه",
-    "An error occurred whilst saving your email notification preferences.": "خطایی در حین ذخیره‌ی ترجیجات شما درباره‌ی رایانامه رخ داد.",
     "Off": "خاموش",
-    "Mentions only": "فقط نام‌بردن‌ها",
     "Failed to remove tag %(tagName)s from room": "خطا در حذف کلیدواژه‌ی %(tagName)s از گپ",
     "Remove": "حذف کن",
-    "You can now return to your account after signing out, and sign in on other devices.": "اکنون می‌توانید پس از خروج به اکانتتان بازگردید و با دستگاه‌های دیگری وارد شوید.",
     "Continue": "ادامه",
-    "Enable email notifications": "آگاه‌سازی با رایانامه را فعال کن",
     "No rooms to show": "هیچ گپی برای نشان دادن موجود نیست",
-    "Download this file": "بارگیری کن",
-    "Failed to change settings": "تغییر تنظیمات موفقیت‌آمیز نبود",
     "Failed to change password. Is your password correct?": "خطا در تغییر گذرواژه. آیا از درستی گذرواژه‌تان اطمینان دارید؟",
     "View Source": "دیدن منبع",
-    "Custom Server Options": "تنظیمات سفارشی برای سرور",
-    "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "با مرورگر کنونی شما، ظاهر و حس استفاده از برنامه ممکن است کاملا اشتباه باشد و برخی یا همه‌ی ویژگی‌ها ممکن است کار نکنند. می‌توانید به استفاده ادامه دهید اما مسئولیت هر مشکلی که به آن بربخورید بر عهده‌ی خودتان است!",
     "Checking for an update...": "درحال بررسی به‌روزرسانی‌ها...",
     "This email address is already in use": "این آدرس ایمیل در حال حاضر در حال استفاده است",
     "This phone number is already in use": "این شماره تلفن در حال استفاده است",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "لطفا برای تجربه بهتر <chromeLink>کروم</chromeLink>، <firefoxLink>فایرفاکس</firefoxLink>، یا <safariLink>سافاری</safariLink> را نصب کنید.",
     "Use Single Sign On to continue": "برای ادامه، از ورود یکپارچه استفاده کنید",
     "Single Sign On": "ورود یکپارچه",
     "Confirm adding email": "تأیید افزودن رایانامه",
@@ -132,23 +90,16 @@
     "The platform you're on": "بن‌سازه‌ای که رویش هستید",
     "The version of %(brand)s": "نگارش %(brand)s",
     "Your language of choice": "زبان انتخابیتان",
-    "I want to help": "می‌خواهم کمک کنم",
     "No": "خیر",
     "Review": "بازبینی",
     "Later": "بعداً",
     "Contact your <a>server admin</a>.": "تماس با <a>مدیر کارسازتان</a>.",
     "Ok": "تأیید",
-    "Set password": "تنظیم گذرواژه",
-    "To return to your account in future you need to set a password": "برای بازگشت به حسابتان در آینده، نیاز به تنظیم یک گذرواژه دارید",
-    "Set up encryption": "برپایی رمزنگاری",
     "Encryption upgrade available": "ارتقای رمزنگاری ممکن است",
     "Verify this session": "تأیید این نشست",
     "Set up": "برپایی",
     "Upgrade": "ارتقا",
     "Verify": "تأیید",
-    "Restart": "شروع دوباره",
-    "Upgrade your %(brand)s": "ارتقای %(brand)s تان",
-    "A new version of %(brand)s is available!": "نگارشی جدید از %(brand)s موجود است!",
     "Guest": "مهمان",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "برای تأیید هویتتان، این نشانی رایانامه را با ورود یکپارچه تأیید کنید.",
     "Click the button below to confirm adding this email address.": "برای تأیید افزودن این نشانی رایانامه، دکمهٔ زیر را بزنید.",
@@ -170,39 +121,30 @@
     "Failed to join room": "پیوستن به اتاق انجام نشد",
     "Failed to ban user": "کاربر مسدود نشد",
     "Error decrypting attachment": "خطا در رمزگشایی پیوست",
-    "%(senderName)s ended the call.": "%(senderName)s به تماس پایان داد.",
     "Emoji": "شکلک",
     "Email address": "آدرس ایمیل",
     "Email": "ایمیل",
-    "Drop File Here": "پرونده را اینجا رها کنید",
     "Download %(text)s": "دانلود 2%(text)s",
     "Disinvite": "پس‌گرفتن دعوت",
     "Default": "پیشفرض",
     "Deops user with given id": "کاربر را با شناسه داده شده را از بین می برد",
     "Decrypt %(text)s": "رمزگشایی %(text)s",
     "Deactivate Account": "غیرفعال کردن حساب",
-    "/ddg is not a command": "/ddg یک فرمان نیست",
     "Current password": "گذرواژه فعلی",
     "Cryptography": "رمزنگاری",
     "Create Room": "ایجاد اتاق",
     "Confirm password": "تأیید گذرواژه",
     "Commands": "فرمان‌ها",
     "Command error": "خطای فرمان",
-    "Click here to fix": "برای رفع مشکل اینجا کلیک کنید",
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s نام اتاق را حذف کرد.",
-    "%(senderName)s changed their profile picture.": "%(senderName)s عکس پروفایل خود را تغییر داد.",
     "Change Password": "تغییر گذواژه",
     "Banned users": "کاربران مسدود شده",
-    "Autoplay GIFs and videos": "پخش خودکار GIF و فیلم",
     "Attachment": "پیوست",
     "Are you sure you want to reject the invitation?": "آیا مطمئن هستید که می خواهید دعوت را رد کنید؟",
     "Are you sure you want to leave the room '%(roomName)s'?": "آیا مطمئن هستید که می خواهید از اتاق '2%(roomName)s' خارج شوید؟",
     "Are you sure?": "مطمئنی؟",
-    "Anyone who knows the room's link, including guests": "هرکسی که لینک اتاق را می داند و کاربران مهمان",
-    "Anyone who knows the room's link, apart from guests": "هرکسی که لینک اتاق را می‌داند، غیر از کاربران مهمان",
     "Anyone": "هر کس",
     "An error has occurred.": "خطایی رخ داده است.",
-    "%(senderName)s answered the call.": "%(senderName)s تماس را پاسخ داد.",
     "A new password must be entered.": "گذواژه جدید باید وارد شود.",
     "Authentication": "احراز هویت",
     "Always show message timestamps": "همیشه مهر زمان‌های پیام را نشان بده",
@@ -215,7 +157,6 @@
     "No Microphones detected": "هیچ میکروفونی شناسایی نشد",
     "Admin": "ادمین",
     "Add": "افزودن",
-    "Access Token:": "توکن دسترسی:",
     "Account": "حساب کابری",
     "Incorrect verification code": "کد فعال‌سازی اشتباه است",
     "Incorrect username and/or password.": "نام کاربری و یا گذرواژه اشتباه است.",
@@ -278,8 +219,6 @@
     "End conference": "جلسه را پایان بده",
     "You do not have permission to start a conference call in this room": "شما اجازه‌ی شروع جلسه‌ی تصویری در این اتاق را ندارید",
     "Permission Required": "اجازه نیاز است",
-    "A call is currently being placed!": "یک تماس هم‌اکنون برقرار است!",
-    "Call in Progress": "تماس در جریان است",
     "You cannot place a call with yourself.": "امکان برقراری تماس با خودتان وجود ندارد.",
     "You're already in a call with this person.": "شما هم‌اکنون با این فرد در تماس هستید.",
     "Already in call": "هم‌اکنون در تماس هستید",
@@ -287,7 +226,6 @@
     "Too Many Calls": "تعداد زیاد تماس",
     "You cannot place VoIP calls in this browser.": "امکان برقراری تماس بر بستر VoIP در این مرورگر وجود ندارد.",
     "VoIP is unsupported": "قابلیت VoIP پشتیبانی نمی‌شود",
-    "Unable to capture screen": "امکان ضبط صفحه‌ی نمایش وجود ندارد",
     "No other application is using the webcam": "برنامه‌ی دیگری از دوربین استفاده نکند",
     "Permission is granted to use the webcam": "دسترسی مورد نیاز به دوربین داده شده باشد",
     "A microphone and webcam are plugged in and set up correctly": "میکروفون و دوربین به درستی تنظیم شده باشند",
@@ -302,8 +240,6 @@
     "The call was answered on another device.": "تماس بر روی دستگاه دیگری پاسخ داده شد.",
     "Answered Elsewhere": "در جای دیگری پاسخ داده شد",
     "The call could not be established": "امکان برقراری تماس وجود ندارد",
-    "The other party declined the call.": "طرف مقابل تماس را رد کرد.",
-    "Call Declined": "تماس رد شد",
     "Call Failed": "تماس موفقیت‌آمیز نبود",
     "Unable to load! Check your network connectivity and try again.": "امکان بارگیری محتوا وجود ندارد! لطفا وضعیت اتصال خود به اینترنت را بررسی کرده و مجددا اقدام نمائید.",
     "The information being sent to us to help make %(brand)s better includes:": "اطلاعاتی که به ما برای افزایش کیفیت %(brand)s ارسال می‌شوند عبارتند از:",
@@ -330,8 +266,6 @@
     "Error upgrading room": "خطا در ارتقاء نسخه اتاق",
     "You do not have the required permissions to use this command.": "شما مجوزهای لازم را برای استفاده از این دستور ندارید.",
     "Upgrades a room to a new version": "یک اتاق را به نسخه جدید ارتقا دهید",
-    "To use it, just wait for autocomplete results to load and tab through them.": "برای استفاده از آن ، لطفا منتظر بمانید تا نتایج تکمیل خودکار بارگیری شده و آنها را مرور کنید.",
-    "Searches DuckDuckGo for results": "در سایت DuckDuckGo جستجو می‌کند",
     "Sends a message as html, without interpreting it as markdown": "پیام را به صورت html می فرستد ، بدون اینکه آن را به عنوان markdown تفسیر کند",
     "Sends a message as plain text, without interpreting it as markdown": "پیام را به صورت متن ساده و بدون تفسیر آن به عنوان markdown ارسال می کند",
     "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "(͡ ° ͜ʖ ͡ °) را به ابتدای یک پیام متنی ساده اضافه می‌کند",
@@ -359,7 +293,6 @@
     "Unable to create widget.": "ایجاد ابزارک امکان پذیر نیست.",
     "You need to be able to invite users to do that.": "نیاز است که شما قادر به دعوت کاربران به آن باشید.",
     "You need to be logged in.": "شما باید وارد شوید.",
-    "Failed to invite the following users to the %(roomName)s room:": "دعوت کاربران زیر به اتاق %(roomName)s موفقیت‌آمیز نبود:",
     "Failed to invite users to the room:": "دعوت کاربران به اتاق موفقیت‌آمیز نبود:",
     "Failed to invite": "دعوت موفقیت‌آمیز نبود",
     "Custom (%(level)s)": "%(level)s دلخواه",
@@ -628,7 +561,6 @@
     "Whether you're using %(brand)s on a device where touch is the primary input mechanism": "این که شما از %(brand)s روی دستگاهی استفاده می‌کنید که در آن لامسه مکانیزم اصلی ورودی است",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "ما از مرورگر خواستیم تا سروری را که شما برای ورود استفاده می‌کنید به خاطر بسپارد، اما متاسفانه مرورگر شما آن را فراموش کرده‌است. به صفحه‌ی ورود بروید و دوباره امتحان کنید.",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "این اقدام نیاز به دسترسی به سرور هویت‌سنجی پیش‌فرض <server /> برای تایید آدرس ایمیل یا شماره تماس دارد، اما کارگزار هیچ گونه شرایط خدماتی (terms of service) ندارد.",
-    "The remote side failed to pick up": "طرف دیگر قادر به پاسخ‌دادن نیست",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "هرگاه این صفحه شامل اطلاعات قابل شناسایی مانند شناسه‌ی اتاق ، کاربر یا گروه باشد ، این داده‌ها قبل از ارسال به سرور حذف می شوند.",
     "Your user agent": "نماینده کاربری شما",
     "Whether you're using %(brand)s as an installed Progressive Web App": "این که آیا شما از%(brand)s به عنوان یک PWA استفاده می‌کنید یا نه",
@@ -667,15 +599,11 @@
     "Displays list of commands with usages and descriptions": "لیست دستورات را با کاربردها و توضیحات نمایش می دهد",
     "Sends the given message coloured as a rainbow": "پیام داده شده را به صورت رنگین کمان ارسال می کند",
     "Forces the current outbound group session in an encrypted room to be discarded": "جلسه گروه خروجی فعلی را در یک اتاق رمزگذاری شده مجبور می کند که کنار گذاشته شود",
-    "%(targetName)s accepted the invitation for %(displayName)s.": "%(targetName)s دعوتنامه %(displayName)s را پذیرفت.",
     "Reason": "دلیل",
     "Displays action": "عملکرد را نمایش می دهد",
     "Places the call in the current room on hold": "تماس را در اتاق فعلی در حالت تعلیق قرار می دهد",
     "Sends a message to the given user": "برای کاربر داده شده پیامی ارسال می کند",
     "Opens chat with the given user": "گپ با کاربر داده شده را باز می کند",
-    "%(targetName)s accepted an invitation.": "%(targetName)s دعوتنامه را پذیرفت.",
-    "%(senderName)s invited %(targetName)s.": "%(senderName)s %(targetName)s را دعوت کرد.",
-    "%(senderName)s banned %(targetName)s.": "%(senderName)s %(targetName)s را ممنوع کرد.",
     "See when anyone posts a sticker to your active room": "ببینید چه وقتی برچسب به اتاق فعال شما ارسال می شود",
     "Send stickers to your active room as you": "همانطور که هستید ، برچسب ها را به اتاق فعال خود ارسال کنید",
     "See when a sticker is posted in this room": "زمان نصب برچسب در این اتاق را ببینید",
@@ -683,18 +611,6 @@
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s نام اتاق را به %(roomName)s تغییر داد.",
     "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s نام اتاق را از %(oldRoomName)s به %(newRoomName)s تغییر داد.",
     "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s موضوع را به %(topic)s تغییر داد.",
-    "%(senderName)s kicked %(targetName)s.": "%(senderName)s %(targetName)s را اخراج کرد.",
-    "%(senderName)s withdrew %(targetName)s's invitation.": "%(senderName)s دعوت %(targetName)s را پس گرفت.",
-    "%(senderName)s unbanned %(targetName)s.": "%(senderName)s از %(targetName)s رفع مسدودیت کرد.",
-    "%(targetName)s left the room.": "%(targetName)s اتاق را ترک کرد.",
-    "%(targetName)s rejected the invitation.": "%(targetName)s دعوت را رد کرد.",
-    "%(targetName)s joined the room.": "%(targetName)s به اتاق پیوست.",
-    "%(senderName)s made no change.": "%(senderName)s تغییری نداد.",
-    "%(senderName)s set a profile picture.": "%(senderName)s عکس نمایه ای تنظیم کرد.",
-    "%(senderName)s removed their profile picture.": "%(senderName)s عکس نمایه خود را حذف کرد.",
-    "%(senderName)s removed their display name (%(oldDisplayName)s).": "%(senderName)s نام نمایشی خود %(oldDisplayName)s را حذف کرد.",
-    "%(senderName)s set their display name to %(displayName)s.": "%(senderName)s نام نمایشی خود را به %(displayName)s تنظیم کرد.",
-    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s نام نمایشی خود را به %(displayName)s تغییر داد.",
     "Repeats like \"aaa\" are easy to guess": "تکرارهایی مانند بببب به راحتی قابل حدس هستند",
     "with an empty state key": "با یک کلید حالت خالی",
     "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 شرکت همه سرورها ممنوع است! دیگر نمی توان از این اتاق استفاده کرد.",
@@ -727,8 +643,6 @@
     "%(senderName)s placed a video call.": "%(senderName)s تماس تصویری برقرار کرد.",
     "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s تماس صوتی برقرار کرد. (توسط این مرورگر پشتیبانی نمی شود)",
     "%(senderName)s placed a voice call.": "%(senderName)s تماس صوتی برقرار کرد.",
-    "%(senderName)s declined the call.": "%(senderName)s تماس را رد کرد.",
-    "(unknown failure: %(reason)s)": "(خطای ناشناخته: %(reason)s)",
     "%(senderName)s changed the addresses for this room.": "%(senderName)s آدرس های این اتاق را تغییر داد.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s آدرس اصلی و جایگزین این اتاق را تغییر داد.",
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s آدرس های جایگزین این اتاق را تغییر داد.",
@@ -739,12 +653,6 @@
     "%(senderName)s removed the main address for this room.": "%(senderName)s آدرس اصلی این اتاق را حذف کرد.",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s آدرس اصلی این اتاق را روی %(address)s تنظیم کرد.",
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s تصویری ارسال کرد.",
-    "(no answer)": "(بدون پاسخ)",
-    "(an error occurred)": "(خطایی رخ داده است)",
-    "(their device couldn't start the camera / microphone)": "(دستگاه آنها نمی تواند دوربین / میکروفون را راه اندازی کند)",
-    "(connection failed)": "(ارتباط ناموفق بود)",
-    "(could not connect media)": "(امکان اتصال رسانه وجود ندارد)",
-    "(not supported by this browser)": "(توسط این مرورگر پشتیبانی نمی شود)",
     "Someone": "کسی",
     "Your %(brand)s is misconfigured": "%(brand)s‌ی شما به درستی پیکربندی نشده‌است",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "از اتصال اینترنت پایدار اطمینان حاصل‌کرده و سپس با مدیر سرور ارتباط بگیرید",
@@ -829,7 +737,6 @@
     "%(senderDisplayName)s enabled flair for %(newGroups)s and disabled flair for %(oldGroups)s in this room.": "%(senderDisplayName)s قابلیت flair را در این اتاق برای %(newGroups)s فعال و برای %(oldGroups)s غیر فعال کرد.",
     "The server has denied your request.": "سرور درخواست شما را رد کرده است.",
     "Use your Security Key to continue.": "برای ادامه از کلید امنیتی خود استفاده کنید.",
-    "This session, or the other session": "این نشست، یا نشست دیگر",
     "%(creator)s created and configured the room.": "%(creator)s اتاق را ایجاد و پیکربندی کرد.",
     "Report Content to Your Homeserver Administrator": "گزارش محتوا به مدیر سرور خود",
     "Be found by phone or email": "از طریق تلفن یا ایمیل پیدا شوید",
@@ -847,7 +754,6 @@
     "a new cross-signing key signature": "یک کلید امضای متقابل جدید",
     "a new master key signature": "یک شاه‌کلید جدید",
     "Close dialog or context menu": "بستن پنجره یا منو",
-    "Your account is not secure": "حساب کاربری شما امن نیست",
     "Please fill why you're reporting.": "لطفا توضیح دهید که چرا گزارش می‌دهید.",
     "Password is allowed, but unsafe": "گذرواژه مجاز است ، اما ناامن است",
     "Upload files (%(current)s of %(total)s)": "بارگذاری فایل‌ها (%(current)s از %(total)s)",
@@ -856,7 +762,6 @@
     "Link to most recent message": "پیوند به آخرین پیام",
     "Clear Storage and Sign Out": "فضای ذخیره‌سازی را پاک کرده و از حساب کاربری خارج شوید",
     "Error whilst fetching joined communities": "هنگام واکشی اجتماع‌هایی که عضو آن‌ها هستید، خطایی رخ داد",
-    "Make this space private": "این فضای کاری را خصوصی کن",
     "Unable to validate homeserver": "تأیید اعتبار سرور امکان‌پذیر نیست",
     "Sign into your homeserver": "وارد سرور خود شوید",
     "%(creator)s created this DM.": "%(creator)s این گفتگو را ایجاد کرد.",
@@ -886,7 +791,6 @@
     "%(count)s messages deleted.|one": "%(count)s پیام پاک شد.",
     "%(count)s messages deleted.|other": "%(count)s پیام پاک شد.",
     "Invite to %(roomName)s": "دعوت به %(roomName)s",
-    "View dev tools": "مشاهده ابزارهای توسعه",
     "Upgrade to %(hostSignupBrand)s": "ارتقاء به %(hostSignupBrand)s",
     "Enter Security Key": "کلید امنیتی را وارد کنید",
     "Enter Security Phrase": "عبارت امنیتی را وارد کنید",
@@ -905,11 +809,9 @@
     "a key signature": "یک امضای کلیدی",
     "Clear cross-signing keys": "کلیدهای امضای متقابل را پاک کن",
     "Destroy cross-signing keys?": "کلیدهای امضای متقابل نابود شود؟",
-    "This wasn't me": "این من نبودم",
     "Recently Direct Messaged": "گفتگوهای خصوصی اخیر",
     "Upgrade public room": "ارتقاء اتاق عمومی",
     "Upgrade private room": "ارتقاء اتاق خصوصی",
-    "Automatically invite users": "به طور خودکار کاربران را دعوت کن",
     "Resend %(unsentCount)s reaction(s)": "بازارسال %(unsentCount)s واکنش",
     "Missing session data": "داده‌های نشست از دست رفته است",
     "Manually export keys": "کلیدها را به صورت دستی استخراج (Export)کن",
@@ -917,7 +819,6 @@
     "Incompatible local cache": "حافظه‌ی محلی ناسازگار",
     "Upgrade Room Version": "ارتقاء نسخه‌ی اتاق",
     "Share Room Message": "به اشتراک گذاشتن پیام اتاق",
-    "Collapse Reply Thread": "جمع کردن ریسه‌ی پاسخ",
     "Reset everything": "همه چیز را بازراه‌اندازی (reset) کنید",
     "Consult first": "ابتدا مشورت کنید",
     "Save Changes": "ذخیره تغییرات",
@@ -937,16 +838,13 @@
     "Security Phrase": "عبارت امنیتی",
     "Keys restored": "کلیدها بازیابی شدند",
     "Upload completed": "بارگذاری انجام شد",
-    "Your password": "گذرواژه شما",
     "Not Trusted": "قابل اعتماد نیست",
     "Session key": "کلید نشست",
     "Session name": "نام نشست",
     "Verify session": "تائید نشست",
-    "New session": "نشست جدید",
     "Country Dropdown": "لیست کشور",
     "Verification Request": "درخواست تأیید",
     "Send report": "ارسال گزارش",
-    "Integration Manager": "مدیر یکپارچه‌سازی",
     "Command Help": "راهنمای دستور",
     "Message edits": "ویرایش پیام",
     "Upload all": "بارگذاری همه",
@@ -968,12 +866,10 @@
     "We couldn't invite those users. Please check the users you want to invite and try again.": "ما نتوانستیم آن کاربران را دعوت کنیم. لطفاً کاربرانی را که می خواهید دعوت کنید بررسی کرده و دوباره امتحان کنید.",
     "Something went wrong trying to invite the users.": "در تلاش برای دعوت از کاربران مشکلی پیش آمد.",
     "We couldn't create your DM.": "نتوانستیم گفتگوی خصوصی مد نظرتان را ایجاد کنیم.",
-    "Failed to invite the following users to chat: %(csvUsers)s": "دعوت از این کاربران برای شروع گفتگو موفقیت‌آمیز نبود: %(csvUsers)s",
     "Invite by email": "دعوت از طریق ایمیل",
     "Click the button below to confirm your identity.": "برای تأیید هویت خود بر روی دکمه زیر کلیک کنید.",
     "Confirm to continue": "برای ادامه تأیید کنید",
     "To continue, use Single Sign On to prove your identity.": "برای ادامه از احراز هویت یکپارچه جهت اثبات هویت خود استفاده نمائید.",
-    "Your %(brand)s doesn't allow you to use an Integration Manager to do this. Please contact an admin.": "%(brand)s شما اجازه استفاده از سیستم مدیریت ادغام را برای این کار نمی دهد. لطفا با ادمین تماس بگیرید.",
     "Integrations not allowed": "یکپارچه‌سازی‌ها اجازه داده نشده‌اند",
     "Enable 'Manage Integrations' in Settings to do this.": "برای انجام این کار 'مدیریت پکپارچه‌سازی‌ها' را در تنظیمات فعال نمائید.",
     "Integrations are disabled": "پکپارچه‌سازی‌ها غیر فعال هستند",
@@ -1033,9 +929,6 @@
     "There was an error finding this widget.": "هنگام یافتن این ابزارک خطایی روی داد.",
     "Active Widgets": "ابزارک‌های فعال",
     "Search names and descriptions": "جستجوی نام‌ها و توضیحات",
-    "If you can't find the room you're looking for, ask for an invite or <a>create a new room</a>.": "اگر نمی‌توانید اتاقی را که به دنبال آن می‌گردید پیدا کنید ، بخواهید که شما را به آن دعوت کنند یا <a>یک اتاق جدید بسازید</a>.",
-    "To view %(spaceName)s, turn on the <a>Spaces beta</a>": "برای مشاهده %(spaceName)s، قابلیت <a>فضای کاری بتا</a> را فعال نمائید",
-    "To join %(spaceName)s, turn on the <a>Spaces beta</a>": "برای پیوستن به %(spaceName)s، قابلیت <a>فضای کاری بتا</a> را فعال نمائید",
     "Failed to create initial space rooms": "ایجاد اتاق‌های اولیه در فضای کاری موفق نبود",
     "What do you want to organise?": "چه چیزی را می‌خواهید سازماندهی کنید؟",
     "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "اگر اتاق فقط برای همکاری با تیم های داخلی در سرور خانه شما استفاده شود ، ممکن است این قابلیت را فعال کنید. این بعدا نمی تواند تغییر کند.",
@@ -1047,7 +940,6 @@
     "It's just you at the moment, it will be even better with others.": "در حال حاضر فقط شما حضور دارید ، با دیگران حتی بهتر هم خواهد بود.",
     "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone in this community.": "اتاق‌های خصوصی را فقط با دعوت می‌توان یافت و به آن‌ها پیوست. اتاق‌های عمومی را هر کسی در این اجتماع می‌تواند بیابد و به آن بپیوندد.",
     "Go to my first room": "برو به اتاق اول من",
-    "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone.": "اتاق‌های خصوصی را فقط با دعوت می‌توان یافت و به آن‌ها پیوست. اما اتاق‌های عمومی را هر کسی می تواند را پیدا کند و به آن‌ها ملحق شود.",
     "Please enter a name for the room": "لطفاً نامی برای اتاق وارد کنید",
     "Community ID": "شناسه اجتماع",
     "Community Name": "نام اجتماع",
@@ -1102,7 +994,6 @@
     "Download logs": "دانلود گزارش‌ها",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "قبل از ارسال گزارش‌ها، برای توصیف مشکل خود باید <a>یک مسئله در GitHub ایجاد کنید</a>.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "سعی شد یک نقطه‌ی زمانی خاص در پیام‌های این اتاق بارگیری و نمایش داده شود، اما پیداکردن آن میسر نیست.",
-    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "گزارش‌های اشکال زدایی حاوی داده‌های استفاده از برنامه شامل نام کاربری شما، شناسه‌ها یا نام مستعار اتاق‌ها یا گروه‌هایی است که بازدید کرده‌اید و همچنین نام‌ کاربری کاربران دیگر. این گزارش‌ها حاوی پیام‌های شما نمی‌باشند.",
     "Failed to load timeline position": "بارگیری و نمایش پیام‌ها با مشکل مواجه شد",
     "Uploading %(filename)s and %(count)s others|other": "در حال بارگذاری %(filename)s و %(count)s مورد دیگر",
     "Uploading %(filename)s and %(count)s others|zero": "در حال بارگذاری %(filename)s",
@@ -1129,7 +1020,6 @@
     "An email has been sent to %(emailAddress)s. Once you've followed the link it contains, click below.": "یک ایمیل به %(emailAddress)s ارسال شده‌است. بعد از کلیک بر روی لینک داخل آن ایمیل، روی مورد زیر کلیک کنید.",
     "Done": "انجام شد",
     "Thank you for your feedback, we really appreciate it.": "از بازخورد شما متشکریم ، ما واقعاً از آن استقبال می کنیم.",
-    "Beta feedback": "بازخورد بتا",
     "Close dialog": "بستن گفتگو",
     "Invite anyway": "به هر حال دعوت کن",
     "You have been logged out of all sessions and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "شما از همه نشست‌ها خارج شده و دیگر اعلان پیام‌ها را دریافت نخواهید کرد. برای فعال کردن مجدد اعلان‌ها در هر دستگاه، دوباره وارد شوید.",
@@ -1163,7 +1053,6 @@
     "Add existing rooms": "افزودن اتاق‌های موجود",
     "Space selection": "انتخاب فضای کاری",
     "There was a problem communicating with the homeserver, please try again later.": "در برقراری ارتباط با سرور مشکلی پیش آمده، لطفاً چند لحظه‌ی دیگر مجددا امتحان کنید.",
-    "Filter your rooms and spaces": "اتاق‌ها و فضاهای کاری خود را فیلتر کنید",
     "Adding rooms... (%(progress)s out of %(count)s)|one": "در حال افزودن اتاق‌ها...",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "امکان اتصال به سرور از طریق پروتکل‌های HTTP و HTTPS در مروگر شما میسر نیست. یا از HTTPS استفاده کرده و یا <a>حالت اجرای غیرامن اسکریپت‌ها</a> را فعال کنید.",
     "Adding rooms... (%(progress)s out of %(count)s)|other": "در حال افزودن اتاق‌ها... (%(progress)s از %(count)s)",
@@ -1205,15 +1094,12 @@
     "This address is already in use": "این آدرس قبلاً استفاده شده‌است",
     "Warning: Your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "هشدار: داده های شخصی شما (از جمله کلیدهای رمزنگاری) هنوز در این نشست ذخیره می شوند. اگر استفاده از این نشست را به پایان رسانده‌اید یا می‌خواهید وارد حساب کاربری دیگری شوید ، آن را پاک کنید.",
     "This address is available to use": "این آدرس برای استفاده در دسترس است",
-    "Please provide a room address": "لطفاً آدرس اتاق را ارائه تعیین کنید",
     "e.g. my-room": "به عنوان مثال، my-room",
     "Some characters not allowed": "برخی از کاراکترها مجاز نیستند",
     "Command Autocomplete": "تکمیل خودکار دستور",
     "Community Autocomplete": "تکمیل خودکار اجتماع",
     "Room address": "آدرس اتاق",
-    "Results from DuckDuckGo": "نتایج از موتور جستجوی DuckDuckGo",
     "<a>In reply to</a> <pill>": "<a>در پاسخ به</a><pill>",
-    "DuckDuckGo Results": "نتایج موتور جستجوی DuckDuckGo",
     "Emoji Autocomplete": "تکمیل خودکار شکلک",
     "Notify the whole room": "به کل اتاق اطلاع بده",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "بارگیری رویدادی که به آن پاسخ داده شد امکان پذیر نیست، یا وجود ندارد یا شما اجازه مشاهده آن را ندارید.",
@@ -1307,7 +1193,6 @@
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "برای جلوگیری از دست دادن تاریخچه‌ی گفتگوی خود باید قبل از ورود به برنامه ، کلیدهای اتاق خود را استخراج (Export) کنید. برای این کار باید از نسخه جدیدتر %(brand)s استفاده کنید",
     "Sign out": "خروج از حساب کاربری",
     "Block anyone not part of %(serverName)s from ever joining this room.": "از عضوشدن کاربرانی در این اتاق که حساب آن‌ها متعلق به سرور %(serverName)s است، جلوگیری کن.",
-    "Make this room public": "این اتاق را عمومی کنید",
     "Topic (optional)": "موضوع (اختیاری)",
     "Create a room in %(communityName)s": "یک اتاق در %(communityName)s بسازید",
     "Create a private room": "ساختن اتاق خصوصی",
@@ -1331,10 +1216,6 @@
     "This room is suggested as a good one to join": "این اتاق به عنوان یک گزینه‌ی خوب برای عضویت پیشنهاد می شود",
     "Suggested": "پیشنهادی",
     "Your server does not support showing space hierarchies.": "سرور شما از نمایش سلسله مراتبی فضاهای کاری پشتیبانی نمی کند.",
-    "%(count)s rooms and %(numSpaces)s spaces|other": "%(count)s اتاق و %(numSpaces)s فضای کاری",
-    "%(count)s rooms and %(numSpaces)s spaces|one": "%(count)s اتاق و %(numSpaces)s فضای کاری",
-    "%(count)s rooms and 1 space|other": "%(count)s اتاق و یک فضای کاری",
-    "%(count)s rooms and 1 space|one": "%(count)s اتاق و یک فضای‌کاری",
     "Select a room below first": "ابتدا یک اتاق از لیست زیر انتخاب کنید",
     "Failed to remove some rooms. Try again later": "حذف برخی اتاق‌ها با مشکل همراه بود. لطفا بعدا تلاش فرمائید",
     "Mark as not suggested": "علامت‌گذاری به عنوان پیشنهاد‌نشده",
@@ -1372,7 +1253,6 @@
     "Retry": "تلاش مجدد",
     "Edit": "ویرایش",
     "React": "واکنش",
-    "Error decrypting audio": "خطا در رمزگشایی صدا",
     "The encryption used by this room isn't supported.": "رمزگذاری استفاده شده توسط این اتاق پشتیبانی نمی شود.",
     "Encryption not enabled": "رمزگذاری فعال نیست",
     "Ignored attempt to disable encryption": "تلاش برای غیرفعال کردن رمزگذاری نادیده گرفته شد",
@@ -1405,7 +1285,6 @@
     "Security": "امنیت",
     "Edit devices": "ویرایش دستگاه‌ها",
     "This client does not support end-to-end encryption.": "این کلاینت از رمزگذاری سرتاسر پشتیبانی نمی کند.",
-    "Role": "نقش",
     "Failed to deactivate user": "غیرفعال کردن کاربر انجام نشد",
     "Deactivate user": "غیرفعال کردن کاربر",
     "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "با غیرفعال کردن این کاربر، او از سیستم خارج شده و از ورود مجدد وی جلوگیری می‌شود. علاوه بر این، او تمام اتاق هایی را که در آن هست ترک می کند. این عمل قابل برگشت نیست. آیا مطمئن هستید که می خواهید این کاربر را غیرفعال کنید؟",
@@ -1439,7 +1318,6 @@
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "شما نمی توانید این تغییر را لغو کنید زیرا در حال تنزل خود هستید، اگر آخرین کاربر ممتاز در اتاق باشید بازپس گیری امتیازات غیرممکن است.",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.": "شما نمی توانید این تغییر را لغو کنید زیرا در حال تنزل خود هستید، اگر آخرین کاربر ممتاز در فضای کاری باشید، بازپس گیری امتیازات غیرممکن است.",
     "Demote yourself?": "خودتان را تنزل می‌دهید؟",
-    "Direct message": "پیام مستقیم",
     "Share Link to User": "اشتراک لینک برای کاربر",
     "Invite": "دعوت",
     "Mention": "اشاره",
@@ -1481,9 +1359,7 @@
     "Your messages are secured and only you and the recipient have the unique keys to unlock them.": "پیام‌های شما امن هستند و فقط شما و گیرنده کلیدهای منحصر به فرد برای باز کردن قفل آنها را دارید.",
     "Failed to perform homeserver discovery": "جستجوی سرور با موفقیت انجام نشد",
     "Direct Messages": "پیام مستقیم",
-    "You can add existing spaces to a space.": "شما می‌توانید فضاهای کاری موجود را به یک فضای کاری اضافه کنید.",
     "This homeserver doesn't offer any login flows which are supported by this client.": "این سرور هیچ سازوکار ورودی را که توسط این کلاینت پشتیبانی شود، ارائه نمی‌دهد.",
-    "Feeling experimental?": "آیا می‌خواهید قابلیت‌های آزمایشی را تجربه کنید؟",
     "Messages in this room are end-to-end encrypted.": "پیام‌های موجود در این اتاق به صورت سرتاسر رمزگذاری شده‌اند.",
     "Start Verification": "شروع تایید هویت",
     "Accepting…": "پذیرش…",
@@ -1573,7 +1449,6 @@
     "Favourites": "موردعلاقه‌ها",
     "Invites": "دعوت‌ها",
     "Open dial pad": "باز کردن صفحه شماره‌گیری",
-    "Start a Conversation": "شروع مکالمه",
     "Video call": "تماس تصویری",
     "Voice call": "تماس صوتی",
     "Show Widgets": "نمایش ابزارک‌ها",
@@ -1599,11 +1474,7 @@
     "%(duration)sh": "%(duration)s ساعت",
     "%(duration)sm": "%(duration)s دقیقه",
     "%(duration)ss": "%(duration)s ثانیه",
-    "Jump to message": "رفتن به پیام",
-    "Unpin Message": "لغو پین پیام",
-    "Pinned Messages": "پیام‌های پین شده",
     "Loading...": "بارگذاری...",
-    "No pinned messages.": "هیچ پیام پین شده‌ای وجود ندارد.",
     "This is the start of <roomName/>.": "این شروع <roomName/> است.",
     "Add a photo, so people can easily spot your room.": "عکس اضافه کنید تا افراد بتوانند به راحتی اتاق شما را ببینند.",
     "Invite to just this room": "فقط به این اتاق دعوت کنید",
@@ -1637,7 +1508,6 @@
     "and %(count)s others...|other": "و %(count)s مورد دیگر ...",
     "Close preview": "بستن پیش نمایش",
     "Scroll to most recent messages": "به جدیدترین پیام‌ها بروید",
-    "Please select the destination room for this message": "لطفاً اتاق مقصد را برای این پیام انتخاب کنید",
     "Failed to send": "ارسال با خطا مواجه شد",
     "Your message was sent": "پیام شما ارسال شد",
     "Encrypting your message...": "رمزگذاری پیام شما ...",
@@ -1671,10 +1541,7 @@
     "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "لطفا در GitHub <newIssueLink>یک مسئله جدید ایجاد کنید</newIssueLink> تا بتوانیم این اشکال را بررسی کنیم.",
     "No results": "بدون نتیجه",
     "Join": "پیوستن",
-    "Windows": "پنجره‌ها",
     "Enter passphrase": "عبارت امنیتی را وارد کنید",
-    "Screens": "صفحه نمایش‌ها",
-    "Share your screen": "به اشتراک‌گذاری صفحه نمایش",
     "Confirm passphrase": "عبارت امنیتی را تائید کنید",
     "This version of %(brand)s does not support searching encrypted messages": "این نسخه از %(brand)s از جستجوی پیام های رمزگذاری شده پشتیبانی نمی کند",
     "Import room keys": "واردکردن (Import) کلیدهای اتاق",
@@ -1691,7 +1558,6 @@
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "استفاده از این ابزارک ممکن است داده‌هایی <helpIcon /> را با %(widgetDomain)s به اشتراک بگذارد.",
     "New Recovery Method": "روش بازیابی جدید",
     "A new Security Phrase and key for Secure Messages have been detected.": "یک عبارت امنیتی و کلید جدید برای پیام‌رسانی امن شناسایی شد.",
-    "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.": "استفاده از این ابزارک ممکن است داده‌هایی <helpIcon /> را با %(widgetDomain)s و سیستم مدیریت ادغام به اشتراک بگذارد.",
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "اگر روش بازیابی جدیدی را تنظیم نکرده‌اید، ممکن است حمله‌کننده‌ای تلاش کند به حساب کاربری شما دسترسی پیدا کند. لطفا گذرواژه حساب کاربری خود را تغییر داده و فورا یک روش جدیدِ بازیابی در بخش تنظیمات انتخاب کنید.",
     "Widget ID": "شناسه ابزارک",
     "Room ID": "شناسه اتاق",
@@ -1771,7 +1637,6 @@
     "Message deleted by %(name)s": "پیام توسط %(name)s حذف شد",
     "Message deleted": "پیغام پاک شد",
     "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith> واکنش نشان داد با %(shortName)s</reactedWith>",
-    "<reactors/><reactedWith> reacted with %(content)s</reactedWith>": "<reactors/><reactedWith> واکنش نشان داد با %(content)s</reactedWith>",
     "Reactions": "واکنش ها",
     "Show all": "نمایش همه",
     "Add reaction": "افزودن واکنش",
@@ -1792,7 +1657,6 @@
     "Hint: Begin your message with <code>//</code> to start it with a slash.": "نکته: پیام خود را با <code>//</code> شروع کنید تا با یک اسلش شروع شود.",
     "You can use <code>/help</code> to list available commands. Did you mean to send this as a message?": "برای لیست کردن دستورات موجود می توانید از <code>/help</code> استفاده کنید. آیا قصد داشتید این پیام را به عنوان متم ارسال کنید؟",
     "Read Marker off-screen lifetime (ms)": "خواندن نشانگر طول عمر خارج از صفحه نمایش (میلی ثانیه)",
-    "Notifications on the following keywords follow rules which can’t be displayed here:": "اعلان‌های مخصوص کلمات کلیدی زیر از قوانینی پیروی می کنند که نمی توانند در اینجا نمایش داده شوند:",
     "sends space invaders": "ارسال مهاجمان فضایی",
     "Sends the given message with a space themed effect": "پیام داده شده را به صورت مضمون فضای کاری ارسال می کند",
     "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve %(brand)s. This will use a <PolicyLink>cookie</PolicyLink>.": "ارسال <UsageDataLink> داده‌ها به صورت ناشناس </UsageDataLink> به ما در بهبود %(brand)s کمک می‌کند. برای این مورد از <PolicyLink> کوکی </PolicyLink> استفاده می‌شود.",
@@ -1871,7 +1735,6 @@
     "Feeling experimental? Labs are the best way to get things early, test out new features and help shape them before they actually launch. <a>Learn more</a>.": "تمایل به آزمایش‌کردن دارید؟ آزمایشگاه بهترین مکان برای دریافت چیزهای جدید، تست قابلیت‌های نو و کمک به رفع مشکلات آن‌ها قبل از انتشار نهایی است. <a>بیشتر بدانید</a>.",
     "%(brand)s version:": "نسخه‌ی %(brand)s:",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "برای گزارش مشکلات امنیتی مربوط به ماتریکس، لطفا سایت Matrix.org بخش <a>Security Disclosure Policy</a> را مطالعه فرمائید.",
-    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "اگر از طریق گیتهاب مشکلی را ثبت کرده‌اید، لاگ این مشکلات می‌تواند به ما در جهت کشف و حل آن‌ها کمک کند. لاگ مشکلات حاوی داده‌های مورد استفاده برنامه نظیر نام کاربری، شناسه یا نام مستعار اتاق‌ها یا فضاهای کاری که به آن‌ها سر زده‌اید و یا نام کاربری سایر کاربران می‌شود. این داده‌ها حاوی پیام‌های شما نمی‌شوند.",
     "Chat with %(brand)s Bot": "گفتگو با بات %(brand)s",
     "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": "برای گرفتن کمک در استفاده از %(brand)s، <a>اینجا</a> کلید کرده یا با استفاده از دکمه‌ی زیر اقدام به شروع گفتگو با بات ما نمائید.",
     "For help with using %(brand)s, click <a>here</a>.": "برای گرفتن کمک در استفاده از %(brand)s، <a>اینجا</a> کلیک کنید.",
@@ -1882,14 +1745,11 @@
     "Use between %(min)s pt and %(max)s pt": "از عددی بین %(min)s pt و %(max)s pt استفاده کنید",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "اندازه فونت دلخواه تنها می‌تواند عددی بین %(min)s pt و %(max)s pt باشد",
     "New version available. <a>Update now.</a>": "نسخه‌ی جدید موجود است. <a>هم‌اکنون به‌روزرسانی کنید.</a>",
-    "Use an Integration Manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "از یک مدیر پکپارچه‌سازی <b>(%(serverName)s)</b> برای مدیریت بات‌ها، ویجت‌ها و پک‌های استیکر استفاده کنید.",
     "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "استفاده از سرور هویت‌سنجی اختیاری است. اگر تصمیم بگیرید از سرور هویت‌سنجی استفاده نکنید، شما با استفاده از آدرس ایمیل و شماره تلفن قابل یافته‌شدن و دعوت‌شدن توسط سایر کاربران نخواهید بود.",
     "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "قطع ارتباط با سرور هویت‌سنجی به این معناست که شما از طریق ادرس ایمیل و شماره تلفن، بیش از این قابل یافته‌شدن و دعوت‌شدن توسط کاربران دیگر نیستید.",
     "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.": "در حال حاضر از سرور هویت‌سنجی استفاده نمی‌کنید. برای یافتن و یافته‌شدن توسط مخاطبان موجود که شما آن‌ها را می‌شناسید، یک مورد در پایین اضافه کنید.",
-    "Identity Server": "سرور هویت‌سنجی",
     "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "اگر تمایل به استفاده از <server /> برای یافتن و یافته‌شدن توسط مخاطبان خود را ندارید، سرور هویت‌سنجی دیگری را در پایین وارد کنید.",
     "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "در حال حاضر شما از <server></server> برای یافتن و یافته‌شدن توسط مخاطبانی که می‌شناسید، استفاده می‌کنید. می‌توانید سرور هویت‌سنجی خود را در زیر تغییر دهید.",
-    "Identity Server (%(server)s)": "سرور هویت‌سنجی (%(server)s)",
     "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "توصیه می‌کنیم آدرس‌های ایمیل و شماره تلفن‌های خود را پیش از قطع ارتباط با سرور هویت‌سنجی از روی آن پاک کنید.",
     "You are still <b>sharing your personal data</b> on the identity server <idserver />.": "شما هم‌چنان <b>داده‌های شخصی خودتان</b> را بر روی سرور هویت‌سنجی <idserver /> به اشتراک می‌گذارید.",
     "Disconnect anyway": "در هر صورت قطع کن",
@@ -1906,9 +1766,6 @@
     "Disconnect from the identity server <current /> and connect to <new /> instead?": "ارتباط با سرور هویت‌سنجی <current /> قطع شده و در عوض به <new /> متصل شوید؟",
     "Change identity server": "تغییر سرور هویت‌سنجی",
     "Checking server": "در حال بررسی سرور",
-    "Could not connect to Identity Server": "اتصال به سرور هیوت‌سنجی امکان پذیر نیست",
-    "Not a valid Identity Server (status code %(code)s)": "سرور هویت‌سنجی معتبر نیست (کد وضعیت %(code)s)",
-    "Identity Server URL must be HTTPS": "پروتکل آدرس سرور هویت‌سنجی باید HTTPS باشد",
     "not ready": "آماده نیست",
     "ready": "آماده",
     "Secret storage:": "حافظه نهان:",
@@ -1956,9 +1813,6 @@
     "Enable audible notifications for this session": "فعال‌سازی اعلان‌های صدادار برای این نشست",
     "Show message in desktop notification": "پیام‌ها را در اعلان دسکتاپ نشان بده",
     "Enable desktop notifications for this session": "فعال‌سازی اعلان‌های دسکتاپ برای این نشست",
-    "You might have configured them in a client other than %(brand)s. You cannot tune them in %(brand)s but they still apply.": "ممکن است شما آن‌ها را بر روی کلاینت دیگری به غیر از %(brand)s پیکربندی کرده باشید. شما نمی‌توانید آن موارد را بر روی %(brand)s تغییر دهید.",
-    "There are advanced notifications which are not shown here.": "اعلان‌های پیشرفته‌ای وجود دارد که در این‌جا نمایش داده نمی‌شود.",
-    "Add an email address to configure email notifications": "برای راه‌اندازی اعلان‌های ایمیلی یک آدرس ایمیل اضافه کنید",
     "Clear notifications": "پاک‌کردن اعلان‌ها",
     "The integration manager is offline or it cannot reach your homeserver.": "مدیر یکپارچه‌سازی‌ یا آفلاین است و یا نمی‌تواند به سرور شما متصل شود.",
     "Cannot connect to integration manager": "امکان اتصال به مدیر یکپارچه‌سازی‌ها وجود ندارد",
@@ -2020,7 +1874,6 @@
     "New published address (e.g. #alias:server)": "آدرس جدید منتشر شده (به عنوان مثال #alias:server)",
     "No other published addresses yet, add one below": "آدرس دیگری منتشر نشده است، در زیر اضافه کنید",
     "Other published addresses:": "دیگر آدرس‌های منتشر شده:",
-    "Published addresses can be used by anyone on any server to join your room. To publish an address, it needs to be set as a local address first.": "آدرس‌های منتشرشده را می توان در هر سرور برای پیوستن به اتاق شما استفاده کرد. برای انتشار آدرس، ابتدا باید آن را به عنوان آدرس محلی تنظیم کنید.",
     "Published Addresses": "آدرس‌های منتشر شده",
     "Local address": "آدرس محلی",
     "This room has no local addresses": "این اتاق آدرس محلی ندارد",
@@ -2034,9 +1887,6 @@
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "در به روزرسانی آدرس های جایگزین اتاق خطایی روی داد. ممکن است سرور مجاز نباشد و یا اینکه خطایی موقت رخ داده باشد.",
     "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "در به روزرسانی آدرس اصلی اتاق خطایی روی داد. ممکن است سرور مجاز نباشد و یا خطای موقتی رخ داده باشد.",
     "Error updating main address": "خطا در به روزرسانی آدرس اصلی",
-    "Delete recording": "حذف پیام ضبط شده",
-    "Stop the recording": "توقف ضبط",
-    "Record a voice message": "ضبط پیام صوتی",
     "We didn't find a microphone on your device. Please check your settings and try again.": "ما میکروفونی در دستگاه شما پیدا نکردیم. لطفاً تنظیمات خود را بررسی کنید و دوباره امتحان کنید.",
     "No microphone found": "میکروفونی یافت نشد",
     "We were unable to access your microphone. Please check your browser settings and try again.": "ما نتوانستیم به میکروفون شما دسترسی پیدا کنیم. لطفا تنظیمات مرورگر خود را بررسی کنید و دوباره سعی کنید.",
@@ -2099,12 +1949,10 @@
     "in memory": "بر روی حافظه",
     "Cross-signing public keys:": "کلیدهای عمومی امضاء متقابل:",
     "Go back": "بازگشت",
-    "You can change this later": "می‌توانید بعدا این را تغییر دهید",
     "Invite only, best for yourself or teams": "فقط با دعوتنامه، مناسب برای خودتان یا تیم‌ها یا جمع‌های خصوصی",
     "Private": "خصوصی",
     "Open space for anyone, best for communities": "محیط باز برای همه، مناسب برای جمع عمومی",
     "Public": "عمومی",
-    "Spaces are a new way to group rooms and people. To join an existing space you'll need an invite.": "محیط‌ها یک روش جدید برای دسته‌بندی کاربران و اتاق‌ها هستند. برای پیوستن به یک محیط موجود، نیاز به یک دعوتنامه دارید.",
     "Create a space": "ساختن یک محیط",
     "Please enter a name for the space": "لطفا یک نام برای محیط وارد کنید",
     "Description": "توضیحات",
@@ -2205,9 +2053,6 @@
     "Pause": "متوقف‌کردن",
     "Accept": "پذیرفتن",
     "Decline": "رد کردن",
-    "Incoming call": "تماس ورودی",
-    "Incoming video call": "تماس تصویری ورودی",
-    "Incoming voice call": "تماس صوتی ورودی",
     "Unknown caller": "تماس‌گیرنده‌ی ناشناس",
     "Dial pad": "صفحه شماره‌گیری",
     "There was an error looking up the phone number": "هنگام یافتن شماره تلفن خطایی رخ داد",
@@ -2245,7 +2090,6 @@
     "Enable message search in encrypted rooms": "فعال‌سازی قابلیت جستجو در اتاق‌های رمزشده",
     "Show previews/thumbnails for images": "پیش‌نمایش تصاویر را نشان بده",
     "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)": "زمانی که سرور شما پیشنهادی ندارد، از سرور کمکی turn.hivaa.im برای برقراری تماس استفاده کنید (در این صورت آدرس IP شما برای سرور turn.hivaa.im آشکار خواهد شد)",
-    "Low bandwidth mode": "حالت پهنای باند کم",
     "Show hidden events in timeline": "نمایش رخدادهای مخفی در گفتگو‌ها",
     "Show shortcuts to recently viewed rooms above the room list": "نمایش میانبر در بالای لیست اتاق‌ها برای مشاهده‌ی اتاق‌هایی که اخیرا باز کرده‌اید",
     "Show rooms with unread notifications first": "اتاق‌های با پیام‌های خوانده‌نشده را ابتدا نشان بده",
@@ -2253,7 +2097,6 @@
     "Show developer tools": "نمایش ابزار توسعه‌دهندگان",
     "Prompt before sending invites to potentially invalid matrix IDs": "قبل از ارسال دعوت‌نامه برای کاربری که شناسه‌ی او احتمالا معتبر نیست، هشدا بده",
     "Enable widget screenshots on supported widgets": "فعال‌سازی امکان اسکرین‌شات برای ویجت‌های پشتیبانی‌شده",
-    "Room Colour": "رنگ اتاق",
     "Enable URL previews by default for participants in this room": "امکان پیش‌نمایش URL را به صورت پیش‌فرض برای اعضای این اتاق فعال کن",
     "Enable URL previews for this room (only affects you)": "فعال‌سازی پیش‌نمایش URL برای این اتاق (تنها شما را تحت تاثیر قرار می‌دهد)",
     "Enable inline URL previews by default": "فعال‌سازی پیش‌نمایش URL به صورت پیش‌فرض",
@@ -2269,8 +2112,6 @@
     "Automatically replace plain text Emoji": "متن ساده را به صورت خودکار با شکلک جایگزین کن",
     "Use Ctrl + Enter to send a message": "استفاده از Ctrl + Enter برای ارسال پیام",
     "Use Command + Enter to send a message": "استفاده از Command + Enter برای ارسال پیام",
-    "Use Ctrl + F to search": "استفاده از Ctrl + F برای جستجو",
-    "Use Command + F to search": "استفاده از Command + F برای جستجو",
     "Show typing notifications": "نمایش اعلان «در حال نوشتن»",
     "Send typing notifications": "ارسال اعلان «در حال نوشتن»",
     "Enable big emoji in chat": "نمایش شکلک‌های بزرگ در گفتگوها را فعال کن",
@@ -2340,13 +2181,11 @@
     "Use custom size": "از اندازه‌ی دلخواه استفاده کنید",
     "Font size": "اندازه فونت",
     "Show info about bridges in room settings": "اطلاعات پل‌های ارتباطی را در تنظیمات اتاق نمایش بده",
-    "Enable advanced debugging for the room list": "فعال‌سازی قابلیت رفع‌مشکل پیشرفته برای لیست اتاق‌ها",
     "Offline encrypted messaging using dehydrated devices": "ارسال پیام رمزشده به شکل آفلاین با استفاده از دستگاه‌های خاص",
     "Show message previews for reactions in all rooms": "پیش‌نمایش احساسات و شکلک‌ها را برای همه اتاق‌ها نشان بده",
     "Show message previews for reactions in DMs": "پیش‌نمایش احساسات و شکلک‌ها را برای گفتگوهای خصوصی نشان بده",
     "Support adding custom themes": "پشتیبانی از افزودن پوسته‌های ظاهری دلخواه",
     "Try out new ways to ignore people (experimental)": "روش‌های جدید برای نادیده‌گرفتن افراد را امتحان کنید (آزمایشی)",
-    "Multiple integration managers": "چند مدیر پکپارچه‌سازی",
     "Render simple counters in room header": "شمارنده‌های ساده‌ای در سرآیند اتاق نمایش بده",
     "Group & filter rooms by custom tags (refresh to apply changes)": "دسته‌بندی و پالایش اتاق‌ها با استفاده از تگ‌های دلخواه (برای اعمال تغییرات صفحه را رفرش کنید)",
     "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "تکرارهایی مانند \"abcabcabc\" تنها مقداری سخت‌تر از \"abc\" قابل حدس‌زدن هستند",
@@ -2471,8 +2310,6 @@
     "<inviter/> invites you": "<inviter/> شما را دعوت کرد",
     "Private space": "محیط خصوصی",
     "Public space": "محیط عمومی",
-    "Spaces are a beta feature.": "فضای کاری یک قابلیت بتا است.",
-    "Create room": "ساختن اتاق",
     "No results found": "نتیجه‌ای یافت نشد",
     "Removing...": "در حال حذف...",
     "You don't have permission": "شما دسترسی ندارید",
@@ -2498,7 +2335,6 @@
     "delete the address.": "آدرس را حذف کنید.",
     "The homeserver may be unavailable or overloaded.": "احتمالا سرور در دسترس نباشد و یا بار زیادی روی آن قرار گرفته باشد.",
     "You have no visible notifications.": "اعلان قابل مشاهده‌ای ندارید.",
-    "Communities are changing to Spaces": "فضای کاری به محیط تغییر پیدا کرد",
     "Create a community to group together users and rooms! Build a custom homepage to mark out your space in the Matrix universe.": "برای دسته‌بندی اتاق‌ها و کاربران، فضای کاری بسازید!",
     "Create a new community": "ساختن فضای کاری جدید",
     "Your Communities": "فضاهای کاری شما",
@@ -2641,9 +2477,6 @@
     "Update status": "به‌روزرسانی وضعیت",
     "Clear status": "پاک‌کردن وضعیت",
     "Report Content": "گزارش محتوا",
-    "Share Message": "به اشتراک‌گذاری پیام",
-    "Share Permalink": "اشتراک لینک پیام",
-    "Pin Message": "پین‌کردن پیام",
     "Unable to reject invite": "رد کردن دعوت امکان‌پذیر نیست",
     "Reject invitation": "ردکردن دعوت",
     "Hold": "نگه‌داشتن",
@@ -2658,7 +2491,6 @@
     "Your email address hasn't been verified yet": "آدرس ایمیل شما هنوز تائید نشده‌است",
     "Unable to share email address": "به اشتراک‌گذاری آدرس ایمیل ممکن نیست",
     "Unable to revoke sharing for email address": "لغو اشتراک گذاری برای آدرس ایمیل ممکن نیست",
-    "Who can access this room?": "چه افرادی بتوانند به این اتاق دسترسی داشته باشند؟",
     "Encrypted": "رمزشده",
     "Once enabled, encryption cannot be disabled.": "زمانی که رمزنگاری فعال شود، امکان غیرفعال‌کردن آن برای اتاق وجود ندارد.",
     "Security & Privacy": "امنیت و محرمانگی",
@@ -2668,7 +2500,6 @@
     "Members only (since the point in time of selecting this option)": "فقط اعضاء (از زمانی که این تنظیم اعمال می‌شود)",
     "Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.": "تغییر تنظیمات اینکه چه کاربرانی سابقه‌ی پیام‌ها را مشاهده کنند، تنها برای پیام‌های آتی اتاق اعمال میشود. پیام‌های قبلی متناسب با تنظیمات گذشته نمایش داده می‌شوند.",
     "Only people who have been invited": "تنها کاربرانی که دعوت شده‌اند",
-    "Guests cannot join this room even if explicitly invited.": "کاربران مهمان حتی در صورتی که صراحتا به گروه دعوت شوند، امکان پیوستن به اتاق را نخواهند داشت.",
     "Enable encryption?": "رمزنگاری را فعال می‌کنید؟",
     "Select the roles required to change various parts of the room": "برای تغییر هر یک از بخش‌های اتاق، خداقل نقش مورد نیاز را انتخاب کنید",
     "Permissions": "دسترسی‌ها",
@@ -2761,9 +2592,7 @@
     "Copy": "رونوشت",
     "Your access token gives full access to your account. Do not share it with anyone.": "توکن دسترسی شما، دسترسی کامل به حساب کاربری شما را میسر می‌سازد. لطفا آن را در اختیار فرد دیگری قرار ندهید.",
     "Access Token": "توکن دسترسی",
-    "Identity Server is": "سرور هویت‌سنجی شما عبارت است از",
     "Homeserver is": "سرور ما عبارت است از",
-    "olm version:": "نسخه‌ی olm:",
     "Versions": "نسخه‌ها",
     "Keyboard Shortcuts": "کلیدهای میانبر",
     "FAQ": "سوالات پرتکرار",
@@ -2777,22 +2606,13 @@
     "Deactivate account": "غیرفعال‌کردن حساب کاربری",
     "Deactivating your account is a permanent action - be careful!": "غیرفعال‌سازی حساب کاربری یک عمل دائمی و غیرقابل بازگشت است - لطفا مراقب باشید!",
     "Account management": "مدیریت حساب کاربری",
-    "You can leave the beta any time from settings or tapping on a beta badge, like the one above.": "شما می‌توانید هر زمان که خواستید، در قسمت تنظیمات و یا با کلیک بر روی علامت بتا از محیط بتا خارج شوید.",
-    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "اگر ترک کنید، %(brand)s بعد از غیرفعال کردن قابلیت محیط بازراه‌اندازی خواهد شد. قابلیت‌های فضای کاری و تگ‌های دلخواه مجددا قابل مشاهده خواهند بود.",
     "Custom user status messages": "پیام‌های وضعیت کاربر دلخواه",
     "Message Pinning": "پین کردن پیام",
-    "New spinner design": "طرح اسپینر جدید",
     "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.": "نسخه‌ی ۲ فضای کاری. نیاز به سرور سازگار دارد. به شدت ازمایشی و ناپایدار است - با احتباط استفاده کنید.",
     "Render LaTeX maths in messages": "نمایش لاتکس ریاضیات در پیام‌ها",
-    "Send and receive voice messages": "ارسال و دریافت پیام‌های صوتی",
     "Show options to enable 'Do not disturb' mode": "گزینه‌ها را برای فعال‌کردن حالت 'مزاحم نشوید' نشان بده",
-    "Your feedback will help make spaces better. The more detail you can go into, the better.": "بازخورد شما به بهبود قابلیت محیط کمک خواهد کرد. هر چقدر وارد جزئیات بیشتری شوید، بهتر خواهد بود.",
-    "Beta available for web, desktop and Android. Some features may be unavailable on your homeserver.": "نسخه‌ی بتا برای وب، دسکتاپ و اندروید در دسترس است. بعضی از قابلیت‌ها ممکن است بر روی سرور شما در دسترس نباشند.",
-    "%(brand)s will reload with Spaces enabled. Communities and custom tags will be hidden.": "%(brand)s با فعال‌شدن قابلیت محیط‌ها بازراه‌اندازی خواهد شد. فضای کاری و تگ‌های دلخواه ناپدید خواهند شد.",
-    "Beta available for web, desktop and Android. Thank you for trying the beta.": "نسخه‌ی بتا برای کلاینت‌های وب، دسکتاپ و اندروید موجود است. از بابت امتحان‌کردن نسخه‌ی بتا سپاس‌گزاریم.",
     "Spaces are a new way to group rooms and people.": "محیط‌ها روش جدیدی برای دسته‌بندی اتاق‌ها و کاربران است.",
     "Spaces": "محیط‌ها",
-    "Spaces prototype. Incompatible with Communities, Communities v2 and Custom Tags. Requires compatible homeserver for some features.": "نمونه اولیه قابلیت محیط. با نسخه‌های ۱ و ۲ فضای کاری، و تگ‌های دلخواه سازگار نیست. برای برخی از قابلیت‌ها نیاز به سرور سازگار دارد.",
     "Change notification settings": "تنظیمات اعلان را تغییر دهید",
     "%(senderName)s: %(stickerName)s": "%(senderName)s:%(stickerName)s",
     "%(senderName)s: %(reaction)s": "%(senderName)s:%(reaction)s",
@@ -2864,9 +2684,7 @@
     "Size must be a number": "سایز باید یک عدد باشد",
     "Hey you. You're the best!": "سلام. حال شما خوبه؟",
     "Check for update": "بررسی برای به‌روزرسانی جدید",
-    "Integration Managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "مدیرهای یکپارچه‌سازی، داده‌های مربوط به پیکربندی را دریافت کرده و امکان تغییر ویجت‌ها، ارسال دعوتنامه برای اتاق و تنظیم سطح دسترسی از طرف شما را دارا هستند.",
     "Manage integrations": "مدیریت پکپارچه‌سازی‌ها",
-    "Use an Integration Manager to manage bots, widgets, and sticker packs.": "از یک مدیر پکپارچه‌سازی برای مدیریت بات‌ها، ویجت‌ها و پک‌های استیکر مورد نظرتان استفاده نمائید.",
     "Change": "تغییر بده",
     "Enter a new identity server": "یک سرور هویت‌سنجی جدید وارد کنید",
     "Do not use an identity server": "از سرور هویت‌سنجی استفاده نکن",
@@ -2963,7 +2781,6 @@
     "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "به‌روزرسانی اتاق اقدامی پیشرفته بوده و معمولاً در صورتی توصیه می‌شود که اتاق به دلیل اشکالات، فقدان قابلیت‌ها یا آسیب پذیری‌های امنیتی، پایدار و قابل استفاده نباشد.",
     "Did you know: you can use communities to filter your %(brand)s experience!": "آیا می دانید: برای فیلتر کردن تجربیات خود در %(brand)s می توانید از اجتماع‌ها استفاده کنید!",
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "این معمولاً فقط بر نحوه پردازش اتاق در سرور تأثیر می‌گذارد. اگر با %(brand)s خود مشکلی دارید، لطفاً <a>اشکال را گزارش کنید</a>.",
-    "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "برای تنظیم فیلتر، آواتار یک اجتماع را به صفحه فیلتر در سمت چپ صفحه بکشید. همواره می‌توانید با کلیک برر روی آواتار در صفحه فیلتر، فقط اتاق ها و افراد مرتبط با آن انجمن را مشاهده کنید.",
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "این معمولاً فقط بر نحوه پردازش اتاق در سرور تأثیر می‌گذارد. اگر با %(brand)s خود مشکلی دارید ، لطفاً یک اشکال گزارش دهید.",
     "Put a link back to the old room at the start of the new room so people can see old messages": "در ابتدای اتاق جدید پیوندی به اتاق قدیمی قرار دهید تا افراد بتوانند پیام‌های موجود در اتاق قدیمی را ببینند",
     "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "از گفتگوی کاربران در نسخه قدیمی اتاق جلوگیری کرده و با ارسال پیامی به کاربران توصیه کنید به اتاق جدید منتقل شوند",
@@ -2976,12 +2793,8 @@
     "Doesn't look like a valid email address": "به نظر نمی‌رسد یک آدرس ایمیل معتبر باشد",
     "%(brand)s failed to get the protocol list from the homeserver. The homeserver may be too old to support third party networks.": "%(brand)s نتوانست لیست پروتکل را از سرور میزبان دریافت کند. ممکن است سرور برای پشتیبانی از شبکه های شخص ثالث خیلی قدیمی باشد.",
     "If they don't match, the security of your communication may be compromised.": "اگر آنها مطابقت نداشته‌باشند ، ممکن است امنیت ارتباطات شما به خطر افتاده باشد.",
-    "If you didn’t sign in to this session, your account may be compromised.": "اگر وارد این نشست نشده‌اید ، ممکن است حساب کاربری شما به خطر افتاد باشد.",
     "%(brand)s failed to get the public room list.": "%(brand)s نتوانست لیست اتاق‌های عمومی را دریافت کند.",
-    "Use this session to verify your new one, granting it access to encrypted messages:": "از این نشست برای تائید نشست‌های جدید خود و اعطای دسترسی به پیام‌های رمزشده استفاده کنید:",
     "Delete the room address %(alias)s and remove %(name)s from the directory?": "اتاق با آدرس %(alias)s حذف شده و نام %(name)s از فهرست اتاق‌ها نیز پاک شود؟",
-    "We recommend you change your password and Security Key in Settings immediately": "ما به شما توصیه می‌کنیم بلافاصله گذرواژه و کلید امنیتی خود را در تنظیمات تغییر دهید",
-    "The internet connection either session is using": "اتصال اینترنت و یا نشست در حال استفاده است",
     "%(brand)s does not know how to join a room on this network": "%(brand)s نمی‌تواند به اتاقی در این شبکه بپیوندد",
     "Data on this screen is shared with %(widgetDomain)s": "داده‌های این صفحه با %(widgetDomain)s به اشتراک گذاشته می‌شود",
     "Your homeserver doesn't seem to support this feature.": "به نظر نمی‌رسد که سرور شما از این قابلیت پشتیبانی کند.",
