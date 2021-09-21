@@ -46,7 +46,11 @@ const ZOOM_COEFFICIENT = 0.0025;
 const ZOOM_DISTANCE = 10;
 
 // Height of mx_ImageView_panel
-const PANEL_HEIGHT = 68;
+const getPanelHeight = (): number => {
+    const value = getComputedStyle(document.documentElement).getPropertyValue("--image-view-panel-height");
+    // Return the value as a number without the unit
+    return parseInt(value.slice(0, value.length - 2));
+};
 
 interface IProps extends IDialogProps {
     src: string; // the source of the image being displayed
@@ -103,7 +107,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                 thumbnailInfo?.positionY +
                 (thumbnailInfo?.height / 2) -
                 (UIStore.instance.windowHeight / 2) -
-                (PANEL_HEIGHT / 2)
+                (getPanelHeight() / 2)
             ) ?? 0,
             moving: false,
             contextMenuDisplayed: false,
