@@ -16,25 +16,26 @@ limitations under the License.
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
 import { throttle } from "lodash";
-import ResizeObserver from 'resize-observer-polyfill';
 
 import dis from '../../../dispatcher/dispatcher';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { ActionPayload } from "../../../dispatcher/payloads";
+
+export const getPersistKey = (appId: string) => 'widget_' + appId;
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
 // pass in a custom control as the actual body.
 
-function getContainer(containerId) {
-    return document.getElementById(containerId);
+function getContainer(containerId: string): HTMLDivElement {
+    return document.getElementById(containerId) as HTMLDivElement;
 }
 
-function getOrCreateContainer(containerId) {
+function getOrCreateContainer(containerId: string): HTMLDivElement {
     let container = getContainer(containerId);
 
     if (!container) {
@@ -46,7 +47,19 @@ function getOrCreateContainer(containerId) {
     return container;
 }
 
-/*
+interface IProps {
+    // Unique identifier for this PersistedElement instance
+    // Any PersistedElements with the same persistKey will use
+    // the same DOM container.
+    persistKey: string;
+
+    // z-index for the element. Defaults to 9.
+    zIndex?: number;
+
+    style?: React.StyleHTMLAttributes<HTMLDivElement>;
+}
+
+/**
  * Class of component that renders its children in a separate ReactDOM virtual tree
  * in a container element appended to document.body.
  *
@@ -58,42 +71,33 @@ function getOrCreateContainer(containerId) {
  * bounding rect as the parent of PE.
  */
 @replaceableComponent("views.elements.PersistedElement")
-export default class PersistedElement extends React.Component {
-    static propTypes = {
-        // Unique identifier for this PersistedElement instance
-        // Any PersistedElements with the same persistKey will use
-        // the same DOM container.
-        persistKey: PropTypes.string.isRequired,
+export default class PersistedElement extends React.Component<IProps> {
+    private resizeObserver: ResizeObserver;
+    private dispatcherRef: string;
+    private childContainer: HTMLDivElement;
+    private child: HTMLDivElement;
 
-        // z-index for the element. Defaults to 9.
-        zIndex: PropTypes.number,
-    };
+    constructor(props: IProps) {
+        super(props);
 
-    constructor() {
-        super();
-        this.collectChildContainer = this.collectChildContainer.bind(this);
-        this.collectChild = this.collectChild.bind(this);
-        this._repositionChild = this._repositionChild.bind(this);
-        this._onAction = this._onAction.bind(this);
-
-        this.resizeObserver = new ResizeObserver(this._repositionChild);
+        this.resizeObserver = new ResizeObserver(this.repositionChild);
         // Annoyingly, a resize observer is insufficient, since we also care
         // about when the element moves on the screen without changing its
         // dimensions. Doesn't look like there's a ResizeObserver equivalent
         // for this, so we bodge it by listening for document resize and
         // the timeline_resize action.
-        window.addEventListener('resize', this._repositionChild);
-        this._dispatcherRef = dis.register(this._onAction);
+        window.addEventListener('resize', this.repositionChild);
+        this.dispatcherRef = dis.register(this.onAction);
     }
 
     /**
      * Removes the DOM elements created when a PersistedElement with the given
      * persistKey was mounted. The DOM elements will be re-added if another
-     * PeristedElement is mounted in the future.
+     * PersistedElement is mounted in the future.
      *
      * @param {string} persistKey Key used to uniquely identify this PersistedElement
      */
-    static destroyElement(persistKey) {
+    public static destroyElement(persistKey: string): void {
         const container = getContainer('mx_persistedElement_' + persistKey);
         if (container) {
             container.remove();
@@ -104,7 +108,7 @@ export default class PersistedElement extends React.Component {
         return Boolean(getContainer('mx_persistedElement_' + persistKey));
     }
 
-    collectChildContainer(ref) {
+    private collectChildContainer = (ref: HTMLDivElement): void => {
         if (this.childContainer) {
             this.resizeObserver.unobserve(this.childContainer);
         }
@@ -112,48 +116,48 @@ export default class PersistedElement extends React.Component {
         if (ref) {
             this.resizeObserver.observe(ref);
         }
-    }
+    };
 
-    collectChild(ref) {
+    private collectChild = (ref: HTMLDivElement): void => {
         this.child = ref;
         this.updateChild();
-    }
+    };
 
-    componentDidMount() {
+    public componentDidMount(): void {
         this.updateChild();
         this.renderApp();
     }
 
-    componentDidUpdate() {
+    public componentDidUpdate(): void {
         this.updateChild();
         this.renderApp();
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.updateChildVisibility(this.child, false);
         this.resizeObserver.disconnect();
-        window.removeEventListener('resize', this._repositionChild);
-        dis.unregister(this._dispatcherRef);
+        window.removeEventListener('resize', this.repositionChild);
+        dis.unregister(this.dispatcherRef);
     }
 
-    _onAction(payload) {
+    private onAction = (payload: ActionPayload): void => {
         if (payload.action === 'timeline_resize') {
-            this._repositionChild();
+            this.repositionChild();
         } else if (payload.action === 'logout') {
             PersistedElement.destroyElement(this.props.persistKey);
         }
-    }
+    };
 
-    _repositionChild() {
+    private repositionChild = (): void => {
         this.updateChildPosition(this.child, this.childContainer);
-    }
+    };
 
-    updateChild() {
+    private updateChild(): void {
         this.updateChildPosition(this.child, this.childContainer);
         this.updateChildVisibility(this.child, true);
     }
 
-    renderApp() {
+    private renderApp(): void {
         const content = <MatrixClientContext.Provider value={MatrixClientPeg.get()}>
             <div ref={this.collectChild} style={this.props.style}>
                 { this.props.children }
@@ -163,12 +167,12 @@ export default class PersistedElement extends React.Component {
         ReactDOM.render(content, getOrCreateContainer('mx_persistedElement_'+this.props.persistKey));
     }
 
-    updateChildVisibility(child, visible) {
+    private updateChildVisibility(child: HTMLDivElement, visible: boolean): void {
         if (!child) return;
         child.style.display = visible ? 'block' : 'none';
     }
 
-    updateChildPosition = throttle((child, parent) => {
+    private updateChildPosition = throttle((child: HTMLDivElement, parent: HTMLDivElement): void => {
         if (!child || !parent) return;
 
         const parentRect = parent.getBoundingClientRect();
@@ -182,9 +186,8 @@ export default class PersistedElement extends React.Component {
         });
     }, 100, { trailing: true, leading: true });
 
-    render() {
+    public render(): JSX.Element {
         return <div ref={this.collectChildContainer} />;
     }
 }
 
-export const getPersistKey = (appId) => 'widget_' + appId;

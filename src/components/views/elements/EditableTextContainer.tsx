@@ -15,9 +15,34 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import Spinner from "./Spinner";
+import EditableText from "./EditableText";
+
+interface IProps {
+    /* callback to retrieve the initial value. */
+    getInitialValue?: () => Promise<string>;
+
+    /* initial value; used if getInitialValue is not given */
+    initialValue?: string;
+
+    /* placeholder text to use when the value is empty (and not being
+     * edited) */
+    placeholder?: string;
+
+    /* callback to update the value. Called with a single argument: the new
+     * value. */
+    onSubmit?: (value: string) => Promise<{} | void>;
+
+    /* should the input submit when focus is lost? */
+    blurToSubmit?: boolean;
+}
+
+interface IState {
+    busy: boolean;
+    errorString: string;
+    value: string;
+}
 
 /**
  * A component which wraps an EditableText, with a spinner while updates take
@@ -31,50 +56,51 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
  * taken from the 'initialValue' property.
  */
 @replaceableComponent("views.elements.EditableTextContainer")
-export default class EditableTextContainer extends React.Component {
-    constructor(props) {
+export default class EditableTextContainer extends React.Component<IProps, IState> {
+    private unmounted = false;
+    public static defaultProps: Partial<IProps> = {
+        initialValue: "",
+        placeholder: "",
+        blurToSubmit: false,
+        onSubmit: () => { return Promise.resolve(); },
+    };
+
+    constructor(props: IProps) {
         super(props);
 
-        this._unmounted = false;
         this.state = {
             busy: false,
             errorString: null,
             value: props.initialValue,
         };
-        this._onValueChanged = this._onValueChanged.bind(this);
     }
 
-    componentDidMount() {
-        if (this.props.getInitialValue === undefined) {
-            // use whatever was given in the initialValue property.
-            return;
-        }
+    public async componentDidMount(): Promise<void> {
+        // use whatever was given in the initialValue property.
+        if (this.props.getInitialValue === undefined) return;
 
         this.setState({ busy: true });
-
-        this.props.getInitialValue().then(
-            (result) => {
-                if (this._unmounted) { return; }
-                this.setState({
-                    busy: false,
-                    value: result,
-                });
-            },
-            (error) => {
-                if (this._unmounted) { return; }
-                this.setState({
-                    errorString: error.toString(),
-                    busy: false,
-                });
-            },
-        );
+        try {
+            const initialValue = await this.props.getInitialValue();
+            if (this.unmounted) return;
+            this.setState({
+                busy: false,
+                value: initialValue,
+            });
+        } catch (error) {
+            if (this.unmounted) return;
+            this.setState({
+                errorString: error.toString(),
+                busy: false,
+            });
+        }
     }
 
-    componentWillUnmount() {
-        this._unmounted = true;
+    public componentWillUnmount(): void {
+        this.unmounted = true;
     }
 
-    _onValueChanged(value, shouldSubmit) {
+    private onValueChanged = (value: string, shouldSubmit: boolean): void => {
         if (!shouldSubmit) {
             return;
         }
@@ -86,38 +112,36 @@ export default class EditableTextContainer extends React.Component {
 
         this.props.onSubmit(value).then(
             () => {
-                if (this._unmounted) { return; }
+                if (this.unmounted) { return; }
                 this.setState({
                     busy: false,
                     value: value,
                 });
             },
             (error) => {
-                if (this._unmounted) { return; }
+                if (this.unmounted) { return; }
                 this.setState({
                     errorString: error.toString(),
                     busy: false,
                 });
             },
         );
-    }
+    };
 
-    render() {
+    public render(): JSX.Element {
         if (this.state.busy) {
-            const Loader = sdk.getComponent("elements.Spinner");
             return (
-                <Loader />
+                <Spinner />
             );
         } else if (this.state.errorString) {
             return (
                 <div className="error">{ this.state.errorString }</div>
             );
         } else {
-            const EditableText = sdk.getComponent('elements.EditableText');
             return (
                 <EditableText initialValue={this.state.value}
                     placeholder={this.props.placeholder}
-                    onValueChanged={this._onValueChanged}
+                    onValueChanged={this.onValueChanged}
                     blurToSubmit={this.props.blurToSubmit}
                 />
             );
@@ -125,28 +149,3 @@ export default class EditableTextContainer extends React.Component {
     }
 }
 
-EditableTextContainer.propTypes = {
-    /* callback to retrieve the initial value. */
-    getInitialValue: PropTypes.func,
-
-    /* initial value; used if getInitialValue is not given */
-    initialValue: PropTypes.string,
-
-    /* placeholder text to use when the value is empty (and not being
-     * edited) */
-    placeholder: PropTypes.string,
-
-    /* callback to update the value. Called with a single argument: the new
-     * value. */
-    onSubmit: PropTypes.func,
-
-    /* should the input submit when focus is lost? */
-    blurToSubmit: PropTypes.bool,
-};
-
-EditableTextContainer.defaultProps = {
-    initialValue: "",
-    placeholder: "",
-    blurToSubmit: false,
-    onSubmit: function(v) {return Promise.resolve(); },
-};

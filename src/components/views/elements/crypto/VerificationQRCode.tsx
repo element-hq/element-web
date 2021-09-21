@@ -15,20 +15,20 @@ limitations under the License.
 */
 
 import React from "react";
-import PropTypes from "prop-types";
 import { replaceableComponent } from "../../../../utils/replaceableComponent";
 import QRCode from "../QRCode";
+import { QRCodeData } from "matrix-js-sdk/src/crypto/verification/QRCode";
+
+interface IProps {
+    qrCodeData: QRCodeData;
+}
 
 @replaceableComponent("views.elements.crypto.VerificationQRCode")
-export default class VerificationQRCode extends React.PureComponent {
-    static propTypes = {
-        qrCodeData: PropTypes.object.isRequired,
-    };
-
-    render() {
+export default class VerificationQRCode extends React.PureComponent<IProps> {
+    public render(): JSX.Element {
         return (
             <QRCode
-                data={[{ data: this.props.qrCodeData.buffer, mode: 'byte' }]}
+                data={[{ data: this.props.qrCodeData.getBuffer(), mode: 'byte' }]}
                 className="mx_VerificationQRCode"
                 width={196} />
         );

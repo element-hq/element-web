@@ -97,7 +97,6 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
         <AppTile
             app={app}
             fullWidth
-            show
             showMenubar={false}
             room={room}
             userId={cli.getUserId()}
