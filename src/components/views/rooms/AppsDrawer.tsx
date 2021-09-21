@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Resizable } from "re-resizable";
 
@@ -26,8 +25,6 @@ import * as sdk from '../../../index';
 import * as ScalarMessaging from '../../../ScalarMessaging';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import WidgetEchoStore from "../../../stores/WidgetEchoStore";
-import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
-import SettingsStore from "../../../settings/SettingsStore";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 import ResizeHandle from "../elements/ResizeHandle";
 import Resizer from "../../../resizer/resizer";
@@ -37,60 +34,74 @@ import { clamp, percentageOf, percentageWithin } from "../../../utils/numbers";
 import { useStateCallback } from "../../../hooks/useStateCallback";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import UIStore from "../../../stores/UIStore";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { IApp } from "../../../stores/WidgetStore";
+import { ActionPayload } from "../../../dispatcher/payloads";
+
+interface IProps {
+    userId: string;
+    room: Room;
+    resizeNotifier: ResizeNotifier;
+    showApps?: boolean; // Should apps be rendered
+    maxHeight: number;
+}
+
+interface IState {
+    apps: IApp[];
+    resizingVertical: boolean; // true when changing the height of the apps drawer
+    resizingHorizontal: boolean; // true when chagning the distribution of the width between widgets
+    resizing: boolean;
+}
 
 @replaceableComponent("views.rooms.AppsDrawer")
-export default class AppsDrawer extends React.Component {
-    static propTypes = {
-        userId: PropTypes.string.isRequired,
-        room: PropTypes.object.isRequired,
-        resizeNotifier: PropTypes.instanceOf(ResizeNotifier).isRequired,
-        showApps: PropTypes.bool, // Should apps be rendered
-    };
-
-    static defaultProps = {
+export default class AppsDrawer extends React.Component<IProps, IState> {
+    private resizeContainer: HTMLDivElement;
+    private resizer: Resizer;
+    private dispatcherRef: string;
+    public static defaultProps: Partial<IProps> = {
         showApps: true,
     };
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
-            apps: this._getApps(),
-            resizingVertical: false, // true when changing the height of the apps drawer
-            resizingHorizontal: false, // true when chagning the distribution of the width between widgets
+            apps: this.getApps(),
+            resizingVertical: false,
+            resizingHorizontal: false,
+            resizing: false,
         };
 
-        this._resizeContainer = null;
-        this.resizer = this._createResizer();
+        this.resizer = this.createResizer();
 
         this.props.resizeNotifier.on("isResizing", this.onIsResizing);
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         ScalarMessaging.startListening();
-        WidgetLayoutStore.instance.on(WidgetLayoutStore.emissionForRoom(this.props.room), this._updateApps);
+        WidgetLayoutStore.instance.on(WidgetLayoutStore.emissionForRoom(this.props.room), this.updateApps);
         this.dispatcherRef = dis.register(this.onAction);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         ScalarMessaging.stopListening();
-        WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(this.props.room), this._updateApps);
+        WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(this.props.room), this.updateApps);
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
-        if (this._resizeContainer) {
+        if (this.resizeContainer) {
             this.resizer.detach();
         }
         this.props.resizeNotifier.off("isResizing", this.onIsResizing);
     }
 
-    onIsResizing = (resizing) => {
+    private onIsResizing = (resizing: boolean): void => {
         // This one is the vertical, ie. change height of apps drawer
         this.setState({ resizingVertical: resizing });
         if (!resizing) {
-            this._relaxResizer();
+            this.relaxResizer();
         }
     };
 
-    _createResizer() {
+    private createResizer(): Resizer {
         // This is the horizontal one, changing the distribution of the width between the app tiles
         // (ie. a vertical resize handle because, the handle itself is vertical...)
         const classNames = {
@@ -100,11 +111,11 @@ export default class AppsDrawer extends React.Component {
         };
         const collapseConfig = {
             onResizeStart: () => {
-                this._resizeContainer.classList.add("mx_AppsDrawer_resizing");
+                this.resizeContainer.classList.add("mx_AppsDrawer_resizing");
                 this.setState({ resizingHorizontal: true });
             },
             onResizeStop: () => {
-                this._resizeContainer.classList.remove("mx_AppsDrawer_resizing");
+                this.resizeContainer.classList.remove("mx_AppsDrawer_resizing");
                 WidgetLayoutStore.instance.setResizerDistributions(
                     this.props.room, Container.Top,
                     this.state.apps.slice(1).map((_, i) => this.resizer.forHandleAt(i).size),
@@ -113,13 +124,13 @@ export default class AppsDrawer extends React.Component {
             },
         };
         // pass a truthy container for now, we won't call attach until we update it
-        const resizer = new Resizer({}, PercentageDistributor, collapseConfig);
+        const resizer = new Resizer(null, PercentageDistributor, collapseConfig);
         resizer.setClassNames(classNames);
         return resizer;
     }
 
-    _collectResizer = (ref) => {
-        if (this._resizeContainer) {
+    private collectResizer = (ref: HTMLDivElement): void => {
+        if (this.resizeContainer) {
             this.resizer.detach();
         }
 
@@ -127,22 +138,22 @@ export default class AppsDrawer extends React.Component {
             this.resizer.container = ref;
             this.resizer.attach();
         }
-        this._resizeContainer = ref;
-        this._loadResizerPreferences();
+        this.resizeContainer = ref;
+        this.loadResizerPreferences();
     };
 
-    _getAppsHash = (apps) => apps.map(app => app.id).join("~");
+    private getAppsHash = (apps: IApp[]): string => apps.map(app => app.id).join("~");
 
-    componentDidUpdate(prevProps, prevState) {
+    public componentDidUpdate(prevProps: IProps, prevState: IState): void {
         if (prevProps.userId !== this.props.userId || prevProps.room !== this.props.room) {
             // Room has changed, update apps
-            this._updateApps();
-        } else if (this._getAppsHash(this.state.apps) !== this._getAppsHash(prevState.apps)) {
-            this._loadResizerPreferences();
+            this.updateApps();
+        } else if (this.getAppsHash(this.state.apps) !== this.getAppsHash(prevState.apps)) {
+            this.loadResizerPreferences();
         }
     }
 
-    _relaxResizer = () => {
+    private relaxResizer = (): void => {
         const distributors = this.resizer.getDistributors();
 
         // relax all items if they had any overconstrained flexboxes
@@ -150,7 +161,7 @@ export default class AppsDrawer extends React.Component {
         distributors.forEach(d => d.finish());
     };
 
-    _loadResizerPreferences = () => {
+    private loadResizerPreferences = (): void => {
         const distributions = WidgetLayoutStore.instance.getResizerDistributions(this.props.room, Container.Top);
         if (this.state.apps && (this.state.apps.length - 1) === distributions.length) {
             distributions.forEach((size, i) => {
@@ -168,11 +179,11 @@ export default class AppsDrawer extends React.Component {
         }
     };
 
-    isResizing() {
+    private isResizing(): boolean {
         return this.state.resizingVertical || this.state.resizingHorizontal;
     }
 
-    onAction = (action) => {
+    private onAction = (action: ActionPayload): void => {
         const hideWidgetKey = this.props.room.roomId + '_hide_widget_drawer';
         switch (action.action) {
             case 'appsDrawer':
@@ -190,23 +201,15 @@ export default class AppsDrawer extends React.Component {
         }
     };
 
-    _getApps = () => WidgetLayoutStore.instance.getContainerWidgets(this.props.room, Container.Top);
+    private getApps = (): IApp[] => WidgetLayoutStore.instance.getContainerWidgets(this.props.room, Container.Top);
 
-    _updateApps = () => {
+    private updateApps = (): void => {
         this.setState({
-            apps: this._getApps(),
+            apps: this.getApps(),
         });
     };
 
-    _launchManageIntegrations() {
-        if (SettingsStore.getValue("feature_many_integration_managers")) {
-            IntegrationManagers.sharedInstance().openAll();
-        } else {
-            IntegrationManagers.sharedInstance().getPrimaryManager().open(this.props.room, 'add_integ');
-        }
-    }
-
-    render() {
+    public render(): JSX.Element {
         if (!this.props.showApps) return <div />;
 
         const apps = this.state.apps.map((app, index, arr) => {
@@ -257,7 +260,7 @@ export default class AppsDrawer extends React.Component {
                     className="mx_AppsContainer_resizer"
                     resizeNotifier={this.props.resizeNotifier}
                 >
-                    <div className="mx_AppsContainer" ref={this._collectResizer}>
+                    <div className="mx_AppsContainer" ref={this.collectResizer}>
                         { apps.map((app, i) => {
                             if (i < 1) return app;
                             return <React.Fragment key={app.key}>
@@ -273,7 +276,18 @@ export default class AppsDrawer extends React.Component {
     }
 }
 
-const PersistentVResizer = ({
+interface IPersistentResizerProps {
+    room: Room;
+    minHeight: number;
+    maxHeight: number;
+    className: string;
+    handleWrapperClass: string;
+    handleClass: string;
+    resizeNotifier: ResizeNotifier;
+    children: React.ReactNode;
+}
+
+const PersistentVResizer: React.FC<IPersistentResizerProps> = ({
     room,
     minHeight,
     maxHeight,
@@ -303,7 +317,7 @@ const PersistentVResizer = ({
     });
 
     return <Resizable
-        size={{ height: Math.min(height, maxHeight) }}
+        size={{ height: Math.min(height, maxHeight), width: null }}
         minHeight={minHeight}
         maxHeight={maxHeight}
         onResizeStart={() => {
