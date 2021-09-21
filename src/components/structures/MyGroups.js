@@ -25,7 +25,6 @@ import AccessibleButton from '../views/elements/AccessibleButton';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { replaceableComponent } from "../../utils/replaceableComponent";
-import BetaCard from "../views/beta/BetaCard";
 
 @replaceableComponent("structures.MyGroups")
 export default class MyGroups extends React.Component {
@@ -138,7 +137,6 @@ export default class MyGroups extends React.Component {
                     </div>
                 </div>*/ }
             </div>
-            <BetaCard featureId="feature_spaces" title={_t("Communities are changing to Spaces")} />
             <div className="mx_MyGroups_content">
                 { contentHeader }
                 { content }

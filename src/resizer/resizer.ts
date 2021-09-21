@@ -61,10 +61,6 @@ export default class Resizer<C extends IConfig = IConfig> {
         },
         public readonly config?: C,
     ) {
-        if (!container) {
-            throw new Error("Resizer requires a non-null `container` arg");
-        }
-
         this.classNames = {
             handle: "resizer-handle",
             reverse: "resizer-reverse",

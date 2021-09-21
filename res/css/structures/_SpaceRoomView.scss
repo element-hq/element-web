@@ -215,9 +215,10 @@ $SpaceRoomViewInnerWidth: 428px;
             }
         }
 
-        > .mx_BaseAvatar_image,
-        > .mx_BaseAvatar > .mx_BaseAvatar_image {
-            border-radius: 12px;
+        > .mx_RoomAvatar_isSpaceRoom {
+            &.mx_BaseAvatar_image, .mx_BaseAvatar_image {
+                border-radius: 12px;
+            }
         }
 
         h1.mx_SpaceRoomView_preview_name {

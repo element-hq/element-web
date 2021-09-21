@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import { MatrixEvent, Room } from 'matrix-js-sdk/src';
-import { Thread } from 'matrix-js-sdk/src/models/thread';
+import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
 
 import BaseCard from "../views/right_panel/BaseCard";
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
@@ -99,15 +99,15 @@ export default class ThreadView extends React.Component<IProps, IState> {
             thread = new Thread([mxEv], this.props.room, client);
             mxEv.setThread(thread);
         }
-        thread.on("Thread.update", this.updateThread);
-        thread.once("Thread.ready", this.updateThread);
+        thread.on(ThreadEvent.Update, this.updateThread);
+        thread.once(ThreadEvent.Ready, this.updateThread);
         this.updateThread(thread);
     };
 
     private teardownThread = () => {
         if (this.state.thread) {
-            this.state.thread.removeListener("Thread.update", this.updateThread);
-            this.state.thread.removeListener("Thread.ready", this.updateThread);
+            this.state.thread.removeListener(ThreadEvent.Update, this.updateThread);
+            this.state.thread.removeListener(ThreadEvent.Ready, this.updateThread);
         }
     };
 

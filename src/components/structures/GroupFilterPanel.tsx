@@ -146,19 +146,13 @@ class GroupFilterPanel extends React.Component<IGroupFilterPanelProps, IGroupFil
             mx_GroupFilterPanel_items_selected: itemsSelected,
         });
 
-        let betaDot;
-        if (SettingsStore.getBetaInfo("feature_spaces") && !localStorage.getItem("mx_seenSpacesBeta")) {
-            betaDot = <div className="mx_BetaDot" />;
-        }
-
         let createButton = (
             <ActionButton
                 tooltip
                 label={_t("Communities")}
                 action="toggle_my_groups"
-                className="mx_TagTile mx_TagTile_plus">
-                { betaDot }
-            </ActionButton>
+                className="mx_TagTile mx_TagTile_plus"
+            />
         );
 
         if (SettingsStore.getValue("feature_communities_v2_prototypes")) {

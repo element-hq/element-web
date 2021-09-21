@@ -103,6 +103,16 @@ $activeBorderColor: $secondary-content;
         }
     }
 
+    .mx_SpaceItem_new {
+        position: relative;
+
+        .mx_BetaDot {
+            position: absolute;
+            left: 33px;
+            top: -5px;
+        }
+    }
+
     .mx_SpaceItem:not(.hasSubSpaces) > .mx_SpaceButton {
         margin-left: $gutterSize;
         min-width: 40px;
@@ -139,7 +149,6 @@ $activeBorderColor: $secondary-content;
         &:not(.mx_SpaceButton_narrow) {
             .mx_SpaceButton_selectionWrapper {
                 width: 100%;
-                padding-right: 16px;
                 overflow: hidden;
             }
         }
@@ -151,7 +160,6 @@ $activeBorderColor: $secondary-content;
             display: block;
             text-overflow: ellipsis;
             overflow: hidden;
-            padding-right: 8px;
             font-size: $font-14px;
             line-height: $font-18px;
         }
@@ -196,22 +204,17 @@ $activeBorderColor: $secondary-content;
         }
 
         &.mx_SpaceButton_new .mx_SpaceButton_icon {
-            background-color: $accent-color;
-            transition: all .1s ease-in-out; // TODO transition
+            background-color: $roomlist-button-bg-color;
 
             &::before {
-                background-color: #ffffff;
+                background-color: $primary-content;
                 mask-image: url('$(res)/img/element-icons/plus.svg');
                 transition: all .2s ease-in-out; // TODO transition
             }
         }
 
-        &.mx_SpaceButton_newCancel .mx_SpaceButton_icon {
-            background-color: $icon-button-color;
-
-            &::before {
-                transform: rotate(45deg);
-            }
+        &.mx_SpaceButton_newCancel .mx_SpaceButton_icon::before {
+            transform: rotate(45deg);
         }
 
         .mx_BaseAvatar_image {
@@ -225,8 +228,7 @@ $activeBorderColor: $secondary-content;
             margin-top: auto;
             margin-bottom: auto;
             display: none;
-            position: absolute;
-            right: 4px;
+            position: relative;
 
             &::before {
                 top: 2px;
@@ -245,8 +247,6 @@ $activeBorderColor: $secondary-content;
     }
 
     .mx_SpacePanel_badgeContainer {
-        position: absolute;
-
         // Create a flexbox to make aligning dot badges easier
         display: flex;
         align-items: center;
@@ -264,6 +264,7 @@ $activeBorderColor: $secondary-content;
     &.collapsed {
         .mx_SpaceButton {
             .mx_SpacePanel_badgeContainer {
+                position: absolute;
                 right: 0;
                 top: 0;
 
@@ -293,19 +294,12 @@ $activeBorderColor: $secondary-content;
     }
 
     &:not(.collapsed) {
-        .mx_SpacePanel_badgeContainer {
-            position: absolute;
-            right: 4px;
-        }
-
         .mx_SpaceButton:hover,
         .mx_SpaceButton:focus-within,
         .mx_SpaceButton_hasMenuOpen {
             &:not(.mx_SpaceButton_invite) {
                 // Hide the badge container on hover because it'll be a menu button
                 .mx_SpacePanel_badgeContainer {
-                    width: 0;
-                    height: 0;
                     display: none;
                 }
 

@@ -71,7 +71,7 @@ export interface ISuggestedRoom extends IHierarchyRoom {
 const MAX_SUGGESTED_ROOMS = 20;
 
 // This setting causes the page to reload and can be costly if read frequently, so read it here only
-const spacesEnabled = SettingsStore.getValue("feature_spaces");
+const spacesEnabled = !SettingsStore.getValue("showCommunitiesInsteadOfSpaces");
 
 const getSpaceContextKey = (space?: Room) => `mx_space_context_${space?.roomId || "HOME_SPACE"}`;
 
@@ -629,11 +629,18 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     };
 
     private onRoom = (room: Room, newMembership?: string, oldMembership?: string) => {
-        const membership = newMembership || room.getMyMembership();
+        const roomMembership = room.getMyMembership();
+        if (!roomMembership) {
+            // room is still being baked in the js-sdk, we'll process it at Room.myMembership instead
+            return;
+        }
+        const membership = newMembership || roomMembership;
 
         if (!room.isSpaceRoom()) {
             // this.onRoomUpdate(room);
-            this.onRoomsUpdate();
+            // this.onRoomsUpdate();
+            // ideally we only need onRoomsUpdate here but it doesn't rebuild parentMap so always adds new rooms to Home
+            this.rebuild();
 
             if (membership === "join") {
                 // the user just joined a room, remove it from the suggested list if it was there
@@ -845,10 +852,11 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 break;
 
             case Action.SwitchSpace:
-                if (payload.num === 0) {
+                // 1 is Home, 2-9 are the spaces after Home
+                if (payload.num === 1) {
                     this.setActiveSpace(null);
                 } else if (this.spacePanelSpaces.length >= payload.num) {
-                    this.setActiveSpace(this.spacePanelSpaces[payload.num - 1]);
+                    this.setActiveSpace(this.spacePanelSpaces[payload.num - 2]);
                 }
                 break;
 

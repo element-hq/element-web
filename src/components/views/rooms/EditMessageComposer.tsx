@@ -27,7 +27,7 @@ import { findEditableEvent } from '../../../utils/EventUtils';
 import { parseEvent } from '../../../editor/deserialize';
 import { CommandPartCreator, Part, PartCreator, Type } from '../../../editor/parts';
 import EditorStateTransfer from '../../../utils/EditorStateTransfer';
-import BasicMessageComposer from "./BasicMessageComposer";
+import BasicMessageComposer, { REGEX_EMOTICON } from "./BasicMessageComposer";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Command, CommandCategories, getCommand } from '../../../SlashCommands';
 import { Action } from "../../../dispatcher/actions";
@@ -42,6 +42,7 @@ import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import AccessibleButton from '../elements/AccessibleButton';
+import SettingsStore from "../../../settings/SettingsStore";
 
 function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
     const html = mxEvent.getContent().formatted_body;
@@ -315,6 +316,14 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
     private sendEdit = async (): Promise<void> => {
         const startTime = CountlyAnalytics.getTimestamp();
         const editedEvent = this.props.editState.getEvent();
+
+        // Replace emoticon at the end of the message
+        if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
+            const caret = this.editorRef.current?.getCaret();
+            const position = this.model.positionForOffset(caret.offset, caret.atNodeEnd);
+            this.editorRef.current?.replaceEmoticon(position, REGEX_EMOTICON);
+        }
+
         const editContent = createEditContent(this.model, editedEvent);
         const newContent = editContent["m.new_content"];
 

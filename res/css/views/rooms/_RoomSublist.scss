@@ -172,14 +172,12 @@ limitations under the License.
         }
     }
 
-    // In the general case, we leave height of headers alone even if sticky, so
-    // that the sublists below them do not jump. However, that leaves a gap
-    // when scrolled to the top above the first sublist (whose header can only
-    // ever stick to top), so we force height to 0 for only that first header.
-    // See also https://github.com/vector-im/element-web/issues/14429.
-    &:first-child .mx_RoomSublist_headerContainer {
-        height: 0;
-        padding-bottom: 4px;
+    // In the general case, we reserve space for each sublist header to prevent
+    // scroll jumps when they become sticky. However, that leaves a gap when
+    // scrolled to the top above the first sublist (whose header can only ever
+    // stick to top), so we make sure to exclude the first visible sublist.
+    &:not(.mx_RoomSublist_hidden) ~ .mx_RoomSublist .mx_RoomSublist_headerContainer {
+        height: 24px;
     }
 
     .mx_RoomSublist_resizeBox {

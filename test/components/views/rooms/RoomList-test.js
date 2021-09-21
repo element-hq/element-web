@@ -9,21 +9,14 @@ import sdk from '../../../skinned-sdk';
 
 import dis from '../../../../src/dispatcher/dispatcher';
 import DMRoomMap from '../../../../src/utils/DMRoomMap';
-import GroupStore from '../../../../src/stores/GroupStore';
 
 import { MatrixClient, Room, RoomMember } from 'matrix-js-sdk';
 import { DefaultTagID } from "../../../../src/stores/room-list/models";
-import RoomListStore, { LISTS_UPDATE_EVENT, RoomListStoreClass } from "../../../../src/stores/room-list/RoomListStore";
+import RoomListStore, { RoomListStoreClass } from "../../../../src/stores/room-list/RoomListStore";
 import RoomListLayoutStore from "../../../../src/stores/room-list/RoomListLayoutStore";
 
 function generateRoomId() {
     return '!' + Math.random().toString().slice(2, 10) + ':domain';
-}
-
-function waitForRoomListStoreUpdate() {
-    return new Promise((resolve) => {
-        RoomListStore.instance.once(LISTS_UPDATE_EVENT, () => resolve());
-    });
 }
 
 describe('RoomList', () => {
@@ -239,73 +232,6 @@ describe('RoomList', () => {
         });
     }
 
-    describe('when no tags are selected', () => {
-        itDoesCorrectOptimisticUpdatesForDraggedRoomTiles();
-    });
-
-    describe('when tags are selected', () => {
-        function setupSelectedTag() {
-            // Simulate a complete sync BEFORE dispatching anything else
-            dis.dispatch({
-                action: 'MatrixActions.sync',
-                prevState: null,
-                state: 'PREPARED',
-                matrixClient: client,
-            }, true);
-
-            // Simulate joined groups being received
-            dis.dispatch({
-                action: 'GroupActions.fetchJoinedGroups.success',
-                result: {
-                    groups: ['+group:domain'],
-                },
-            }, true);
-
-            // Simulate receiving tag ordering account data
-            dis.dispatch({
-                action: 'MatrixActions.accountData',
-                event_type: 'im.vector.web.tag_ordering',
-                event_content: {
-                    tags: ['+group:domain'],
-                },
-            }, true);
-
-            // GroupStore is not flux, mock and notify
-            GroupStore.getGroupRooms = (groupId) => {
-                return [movingRoom];
-            };
-            GroupStore._notifyListeners();
-
-            // We also have to mock the client's getGroup function for the room list to filter it.
-            // It's not smart enough to tell the difference between a real group and a template though.
-            client.getGroup = (groupId) => {
-                return { groupId };
-            };
-
-            // Select tag
-            dis.dispatch({ action: 'select_tag', tag: '+group:domain' }, true);
-        }
-
-        beforeEach(() => {
-            setupSelectedTag();
-        });
-
-        it('displays the correct rooms when the groups rooms are changed', async () => {
-            GroupStore.getGroupRooms = (groupId) => {
-                return [movingRoom, otherRoom];
-            };
-            GroupStore._notifyListeners();
-
-            await waitForRoomListStoreUpdate();
-
-            // XXX: Even though the store updated, it can take a bit before the update makes
-            // it to the components. This gives it plenty of time to figure out what to do.
-            await (new Promise(resolve => setTimeout(resolve, 500)));
-
-            expectRoomInSubList(otherRoom, (s) => s.props.tagId === DefaultTagID.Untagged);
-        });
-
-        itDoesCorrectOptimisticUpdatesForDraggedRoomTiles();
-    });
+    itDoesCorrectOptimisticUpdatesForDraggedRoomTiles();
 });
 

@@ -78,6 +78,7 @@ import { CreateEventField, IGroupSummary } from "../views/dialogs/CreateSpaceFro
 import { useAsyncMemo } from "../../hooks/useAsyncMemo";
 import Spinner from "../views/elements/Spinner";
 import GroupAvatar from "../views/avatars/GroupAvatar";
+import { useDispatcher } from "../../hooks/useDispatcher";
 
 interface IProps {
     space: Room;
@@ -155,10 +156,10 @@ const SpaceInfo = ({ space }) => {
     </div>;
 };
 
-const onBetaClick = () => {
+const onPreferencesClick = () => {
     defaultDispatcher.dispatch({
         action: Action.ViewUserSettings,
-        initialTabId: UserTab.Labs,
+        initialTabId: UserTab.Preferences,
     });
 };
 
@@ -191,6 +192,11 @@ interface ISpacePreviewProps {
 const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }: ISpacePreviewProps) => {
     const cli = useContext(MatrixClientContext);
     const myMembership = useMyRoomMembership(space);
+    useDispatcher(defaultDispatcher, payload => {
+        if (payload.action === Action.JoinRoomError && payload.roomId === space.roomId) {
+            setBusy(false); // stop the spinner, join failed
+        }
+    });
 
     const [busy, setBusy] = useState(false);
 
@@ -280,15 +286,11 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }: ISp
     if (!spacesEnabled) {
         footer = <div className="mx_SpaceRoomView_preview_spaceBetaPrompt">
             { myMembership === "join"
-                ? _t("To view %(spaceName)s, turn on the <a>Spaces beta</a>", {
-                    spaceName: space.name,
-                }, {
-                    a: sub => <AccessibleButton onClick={onBetaClick} kind="link">{ sub }</AccessibleButton>,
+                ? _t("To view this Space, hide communities in your <a>preferences</a>", {}, {
+                    a: sub => <AccessibleButton onClick={onPreferencesClick} kind="link">{ sub }</AccessibleButton>,
                 })
-                : _t("To join %(spaceName)s, turn on the <a>Spaces beta</a>", {
-                    spaceName: space.name,
-                }, {
-                    a: sub => <AccessibleButton onClick={onBetaClick} kind="link">{ sub }</AccessibleButton>,
+                : _t("To join this Space, hide communities in your <a>preferences</a>", {}, {
+                    a: sub => <AccessibleButton onClick={onPreferencesClick} kind="link">{ sub }</AccessibleButton>,
                 })
             }
         </div>;
@@ -725,7 +727,7 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         </div>
 
         <div className="mx_SpaceRoomView_inviteTeammates_betaDisclaimer">
-            <BetaPill onClick={onBetaClick} />
+            <BetaPill />
             { _t("<b>This is an experimental feature.</b> For now, " +
                 "new users receiving an invite will have to open the invite on <link/> to actually join.", {}, {
                 b: sub => <b>{ sub }</b>,

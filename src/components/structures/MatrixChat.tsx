@@ -143,7 +143,7 @@ export enum Views {
     SOFT_LOGOUT,
 }
 
-const AUTH_SCREENS = ["register", "login", "forgot_password", "start_sso", "start_cas"];
+const AUTH_SCREENS = ["register", "login", "forgot_password", "start_sso", "start_cas", "welcome"];
 
 // Actions that are redirected through the onboarding process prior to being
 // re-dispatched. NOTE: some actions are non-trivial and would require
@@ -1800,11 +1800,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 subAction: params.action,
             });
         } else if (screen.indexOf('group/') === 0) {
-            if (SpaceStore.spacesEnabled) {
-                dis.dispatch({ action: "view_home_page" });
-                return;
-            }
-
             const groupId = screen.substring(6);
 
             // TODO: Check valid group ID
@@ -1897,15 +1892,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     onSendEvent(roomId: string, event: MatrixEvent) {
         const cli = MatrixClientPeg.get();
-        if (!cli) {
-            dis.dispatch({ action: 'message_send_failed' });
-            return;
-        }
+        if (!cli) return;
 
         cli.sendEvent(roomId, event.getType(), event.getContent()).then(() => {
             dis.dispatch({ action: 'message_sent' });
-        }, (err) => {
-            dis.dispatch({ action: 'message_send_failed' });
         });
     }
 
