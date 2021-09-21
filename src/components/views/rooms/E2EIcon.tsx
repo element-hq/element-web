@@ -23,7 +23,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import Tooltip from "../elements/Tooltip";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 
-export enum E2E_STATE {
+export enum E2EState {
     Verified = "verified",
     Warning = "warning",
     Unknown = "unknown",
@@ -31,20 +31,20 @@ export enum E2E_STATE {
     Unauthenticated = "unauthenticated",
 }
 
-const crossSigningUserTitles: { [key in E2E_STATE]?: string } = {
-    [E2E_STATE.Warning]: _td("This user has not verified all of their sessions."),
-    [E2E_STATE.Normal]: _td("You have not verified this user."),
-    [E2E_STATE.Verified]: _td("You have verified this user. This user has verified all of their sessions."),
+const crossSigningUserTitles: { [key in E2EState]?: string } = {
+    [E2EState.Warning]: _td("This user has not verified all of their sessions."),
+    [E2EState.Normal]: _td("You have not verified this user."),
+    [E2EState.Verified]: _td("You have verified this user. This user has verified all of their sessions."),
 };
-const crossSigningRoomTitles: { [key in E2E_STATE]?: string } = {
-    [E2E_STATE.Warning]: _td("Someone is using an unknown session"),
-    [E2E_STATE.Normal]: _td("This room is end-to-end encrypted"),
-    [E2E_STATE.Verified]: _td("Everyone in this room is verified"),
+const crossSigningRoomTitles: { [key in E2EState]?: string } = {
+    [E2EState.Warning]: _td("Someone is using an unknown session"),
+    [E2EState.Normal]: _td("This room is end-to-end encrypted"),
+    [E2EState.Verified]: _td("Everyone in this room is verified"),
 };
 
 interface IProps {
     isUser?: boolean;
-    status?: E2E_STATE | E2EStatus;
+    status?: E2EState | E2EStatus;
     className?: string;
     size?: number;
     onClick?: () => void;
@@ -58,9 +58,9 @@ const E2EIcon: React.FC<IProps> = ({ isUser, status, className, size, onClick, h
     const classes = classNames({
         mx_E2EIcon: true,
         mx_E2EIcon_bordered: bordered,
-        mx_E2EIcon_warning: status === E2E_STATE.Warning,
-        mx_E2EIcon_normal: status === E2E_STATE.Normal,
-        mx_E2EIcon_verified: status === E2E_STATE.Verified,
+        mx_E2EIcon_warning: status === E2EState.Warning,
+        mx_E2EIcon_normal: status === E2EState.Normal,
+        mx_E2EIcon_verified: status === E2EState.Verified,
     }, className);
 
     let e2eTitle;
