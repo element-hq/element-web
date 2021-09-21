@@ -3626,5 +3626,10 @@
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "在此会话中暂时展示社区而空间。此功能将在不久的将来被移除。这将重新加载 Element。",
     "Display Communities instead of Spaces": "展示社区而非空间",
     "Joining space …": "正在加入空间…",
-    "%(reactors)s reacted with %(content)s": "%(reactors)s 人回应了 %(content)s"
+    "%(reactors)s reacted with %(content)s": "%(reactors)s 人回应了 %(content)s",
+    "Would you like to leave the rooms in this space?": "你想俩开此空间内的聊天室吗？",
+    "You are about to leave <spaceName/>.": "你即将离开 <spaceName/>。",
+    "Leave some rooms": "离开一些聊天室",
+    "Leave all rooms": "离开所有聊天室",
+    "Don't leave any rooms": "不离开任何聊天室"
 }

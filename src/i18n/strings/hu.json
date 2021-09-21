@@ -3728,5 +3728,10 @@
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Közösségek megjelenítése átmenetileg a terek helyett ebben a munkamenetben. Ez a lehetőség később kivezetésre kerül. Az Element újratöltődik.",
     "Display Communities instead of Spaces": "Terek helyett inkább a közösségek megjelenítése",
     "%(reactors)s reacted with %(content)s": "%(reactors)s reagált: %(content)s",
-    "Joining space …": "Belépés a térbe…"
+    "Joining space …": "Belépés a térbe…",
+    "Would you like to leave the rooms in this space?": "Ki szeretne lépni ennek a térnek minden szobájából?",
+    "You are about to leave <spaceName/>.": "Éppen el akarja hagyni <spaceName/> teret.",
+    "Leave some rooms": "Kilépés néhány szobából",
+    "Leave all rooms": "Kilépés minden szobából",
+    "Don't leave any rooms": "Ne lépjen ki egy szobából sem"
 }
