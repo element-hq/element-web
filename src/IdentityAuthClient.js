@@ -29,6 +29,8 @@ import {
 } from './utils/IdentityServerUtils';
 import { abbreviateUrl } from './utils/UrlUtils';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export class AbortedIdentityActionError extends Error {}
 
 export default class IdentityAuthClient {
@@ -127,7 +129,7 @@ export default class IdentityAuthClient {
             await this._matrixClient.getIdentityAccount(token);
         } catch (e) {
             if (e.errcode === "M_TERMS_NOT_SIGNED") {
-                console.log("Identity server requires new terms to be agreed to");
+                logger.log("Identity server requires new terms to be agreed to");
                 await startTermsFlow([new Service(
                     SERVICE_TYPES.IS,
                     identityServerUrl,
@@ -141,7 +143,7 @@ export default class IdentityAuthClient {
         if (
             !this.tempClient &&
             !doesAccountDataHaveIdentityServer() &&
-            !await doesIdentityServerHaveTerms(identityServerUrl)
+            !(await doesIdentityServerHaveTerms(identityServerUrl))
         ) {
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             const { finished } = Modal.createTrackedDialog('Default identity server terms warning', '',

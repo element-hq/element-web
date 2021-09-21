@@ -536,7 +536,7 @@ export default class CountlyAnalytics {
 
         // sanitize the error from identifiers
         error = await strReplaceAsync(error, /([!@+#]).+?:[\w:.]+/g, async (substring: string, glyph: string) => {
-            return glyph + await hashHex(substring.substring(1));
+            return glyph + (await hashHex(substring.substring(1)));
         });
 
         const metrics = this.getMetrics();

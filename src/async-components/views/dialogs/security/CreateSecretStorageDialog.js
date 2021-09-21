@@ -34,6 +34,8 @@ import RestoreKeyBackupDialog from "../../../../components/views/dialogs/securit
 import { getSecureBackupSetupMethods, isSecureBackupRequired } from '../../../../utils/WellKnownUtils';
 import SecurityCustomisations from "../../../../customisations/Security";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const PHASE_LOADING = 0;
 const PHASE_LOADERROR = 1;
 const PHASE_CHOOSE_KEY_PASSPHRASE = 2;
@@ -122,7 +124,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     _getInitialPhase() {
         const keyFromCustomisations = SecurityCustomisations.createSecretStorageKey?.();
         if (keyFromCustomisations) {
-            console.log("Created key via customisations, jumping to bootstrap step");
+            logger.log("Created key via customisations, jumping to bootstrap step");
             this._recoveryKey = {
                 privateKey: keyFromCustomisations,
             };
@@ -138,7 +140,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
             const backupSigStatus = (
                 // we may not have started crypto yet, in which case we definitely don't trust the backup
-                MatrixClientPeg.get().isCryptoEnabled() && await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo)
+                MatrixClientPeg.get().isCryptoEnabled() && (await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo))
             );
 
             const { forceReset } = this.props;
@@ -165,10 +167,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             // We should never get here: the server should always require
             // UI auth to upload device signing keys. If we do, we upload
             // no keys which would be a no-op.
-            console.log("uploadDeviceSigningKeys unexpectedly succeeded without UI auth!");
+            logger.log("uploadDeviceSigningKeys unexpectedly succeeded without UI auth!");
         } catch (error) {
             if (!error.data || !error.data.flows) {
-                console.log("uploadDeviceSigningKeys advertised no flows!");
+                logger.log("uploadDeviceSigningKeys advertised no flows!");
                 return;
             }
             const canUploadKeysWithPasswordOnly = error.data.flows.some(f => {
@@ -304,7 +306,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         try {
             if (forceReset) {
-                console.log("Forcing secret storage reset");
+                logger.log("Forcing secret storage reset");
                 await cli.bootstrapSecretStorage({
                     createSecretStorageKey: async () => this._recoveryKey,
                     setupNewKeyBackup: true,

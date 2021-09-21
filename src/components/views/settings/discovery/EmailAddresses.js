@@ -66,7 +66,7 @@ export class EmailAddress extends React.Component {
     }
 
     async changeBinding({ bind, label, errorTitle }) {
-        if (!await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
+        if (!(await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind())) {
             return this.changeBindingTangledAddBind({ bind, label, errorTitle });
         }
 

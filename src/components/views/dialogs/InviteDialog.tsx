@@ -73,6 +73,8 @@ import BaseDialog from "./BaseDialog";
 import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
 import SpaceStore from "../../../stores/SpaceStore";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
 
@@ -775,7 +777,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                             invitedUsers.push(addr);
                         }
                     }
-                    console.log("Sharing history with", invitedUsers);
+                    logger.log("Sharing history with", invitedUsers);
                     cli.sendSharedHistoryKeys(
                         this.props.roomId, invitedUsers,
                     );

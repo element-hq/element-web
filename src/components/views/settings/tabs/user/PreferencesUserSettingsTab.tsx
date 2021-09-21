@@ -233,7 +233,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         const alwaysShowMenuBarSupported = await platform.supportsAutoHideMenuBar();
         let alwaysShowMenuBar = true;
         if (alwaysShowMenuBarSupported) {
-            alwaysShowMenuBar = !await platform.getAutoHideMenuBarEnabled();
+            alwaysShowMenuBar = !(await platform.getAutoHideMenuBarEnabled());
         }
 
         const minimizeToTraySupported = await platform.supportsMinimizeToTray();

@@ -28,6 +28,8 @@ import RestoreKeyBackupDialog from '../dialogs/security/RestoreKeyBackupDialog';
 import { accessSecretStorage } from '../../../SecurityManager';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 @replaceableComponent("views.settings.SecureBackupPanel")
 export default class SecureBackupPanel extends React.PureComponent {
     constructor(props) {
@@ -93,7 +95,7 @@ export default class SecureBackupPanel extends React.PureComponent {
                 backupSigStatus: trustInfo,
             });
         } catch (e) {
-            console.log("Unable to fetch check backup status", e);
+            logger.log("Unable to fetch check backup status", e);
             if (this._unmounted) return;
             this.setState({
                 loading: false,
@@ -118,7 +120,7 @@ export default class SecureBackupPanel extends React.PureComponent {
                 backupSigStatus,
             });
         } catch (e) {
-            console.log("Unable to fetch key backup status", e);
+            logger.log("Unable to fetch key backup status", e);
             if (this._unmounted) return;
             this.setState({
                 loading: false,

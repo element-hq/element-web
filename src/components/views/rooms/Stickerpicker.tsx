@@ -34,6 +34,8 @@ import ScalarAuthClient from '../../../ScalarAuthClient';
 import GenericElementContextMenu from "../context_menus/GenericElementContextMenu";
 import { IApp } from "../../../stores/WidgetStore";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
 // We sit in a context menu, so this should be given to the context menu.
 const STICKERPICKER_Z_INDEX = 3500;
@@ -99,11 +101,11 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
 
     private removeStickerpickerWidgets = async (): Promise<void> => {
         const scalarClient = await this.acquireScalarClient();
-        console.log('Removing Stickerpicker widgets');
+        logger.log('Removing Stickerpicker widgets');
         if (this.state.widgetId) {
             if (scalarClient) {
                 scalarClient.disableWidgetAssets(WidgetType.STICKERPICKER, this.state.widgetId).then(() => {
-                    console.log('Assets disabled');
+                    logger.log('Assets disabled');
                 }).catch((err) => {
                     console.error('Failed to disable assets');
                 });

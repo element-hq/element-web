@@ -18,6 +18,8 @@ limitations under the License.
 import { _t } from '../languageHandler';
 import SdkConfig from '../SdkConfig';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const subtleCrypto = window.crypto.subtle || window.crypto.webkitSubtle;
 
 /**
@@ -227,7 +229,7 @@ async function deriveKeys(salt, iterations, password) {
     }
 
     const now = new Date();
-    console.log("E2e import/export: deriveKeys took " + (now - start) + "ms");
+    logger.log("E2e import/export: deriveKeys took " + (now - start) + "ms");
 
     const aesKey = keybits.slice(0, 32);
     const hmacKey = keybits.slice(32);

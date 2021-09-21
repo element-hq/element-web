@@ -38,6 +38,8 @@ limitations under the License.
 //    purge on startup to prevent logs from accumulating.
 
 // the frequency with which we flush to indexeddb
+import { logger } from "matrix-js-sdk/src/logger";
+
 const FLUSH_RATE_MS = 30 * 1000;
 
 // the length of log data we keep in indexeddb (and include in the reports)
@@ -375,11 +377,11 @@ class IndexedDBLogStore {
             }
         }
         if (removeLogIds.length > 0) {
-            console.log("Removing logs: ", removeLogIds);
+            logger.log("Removing logs: ", removeLogIds);
             // Don't await this because it's non-fatal if we can't clean up
             // logs.
             Promise.all(removeLogIds.map((id) => deleteLogs(id))).then(() => {
-                console.log(`Removed ${removeLogIds.length} old logs.`);
+                logger.log(`Removed ${removeLogIds.length} old logs.`);
             }, (err) => {
                 console.error(err);
             });
@@ -465,7 +467,7 @@ export function tryInitStorage() {
         return global.mx_rage_initStoragePromise;
     }
 
-    console.log("Configuring rageshake persistence...");
+    logger.log("Configuring rageshake persistence...");
 
     // just *accessing* indexedDB throws an exception in firefox with
     // indexeddb disabled.

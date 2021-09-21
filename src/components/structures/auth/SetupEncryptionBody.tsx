@@ -28,6 +28,8 @@ import Spinner from '../../views/elements/Spinner';
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 function keyHasPassphrase(keyInfo: ISecretStorageKeyInfo): boolean {
     return Boolean(
         keyInfo.passphrase &&
@@ -231,7 +233,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         } else if (phase === Phase.Busy || phase === Phase.Loading) {
             return <Spinner />;
         } else {
-            console.log(`SetupEncryptionBody: Unknown phase ${phase}`);
+            logger.log(`SetupEncryptionBody: Unknown phase ${phase}`);
         }
     }
 }

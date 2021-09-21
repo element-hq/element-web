@@ -86,6 +86,8 @@ interface IState {
     widgetPageTitle: string;
 }
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 @replaceableComponent("views.elements.AppTile")
 export default class AppTile extends React.Component<IProps, IState> {
     public static defaultProps: Partial<IProps> = {
@@ -115,7 +117,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             this.sgWidget.on("preparing", this.onWidgetPrepared);
             this.sgWidget.on("ready", this.onWidgetReady);
         } catch (e) {
-            console.log("Failed to construct widget", e);
+            logger.log("Failed to construct widget", e);
             this.sgWidget = null;
         }
 
@@ -218,7 +220,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             this.sgWidget.on("ready", this.onWidgetReady);
             this.startWidget();
         } catch (e) {
-            console.log("Failed to construct widget", e);
+            logger.log("Failed to construct widget", e);
             this.sgWidget = null;
         }
     }
