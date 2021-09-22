@@ -317,7 +317,7 @@ const PersistentVResizer: React.FC<IPersistentResizerProps> = ({
     });
 
     return <Resizable
-        size={{ height: Math.min(height, maxHeight), width: null }}
+        size={{ height: Math.min(height, maxHeight), width: undefined }}
         minHeight={minHeight}
         maxHeight={maxHeight}
         onResizeStart={() => {
