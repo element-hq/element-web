@@ -19,7 +19,6 @@ limitations under the License.
 
 import url from 'url';
 import React, { createRef } from 'react';
-import PropTypes from 'prop-types';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import AccessibleButton from './AccessibleButton';
 import { _t } from '../../../languageHandler';
@@ -39,33 +38,97 @@ import { MatrixCapabilities } from "matrix-widget-api";
 import RoomWidgetContextMenu from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { IApp } from "../../../stores/WidgetStore";
+
+interface IProps {
+    app: IApp;
+    // If room is not specified then it is an account level widget
+    // which bypasses permission prompts as it was added explicitly by that user
+    room: Room;
+    // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
+    // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
+    fullWidth?: boolean;
+    // Optional. If set, renders a smaller view of the widget
+    miniMode?: boolean;
+    // UserId of the current user
+    userId: string;
+    // UserId of the entity that added / modified the widget
+    creatorUserId: string;
+    waitForIframeLoad: boolean;
+    showMenubar?: boolean;
+    // Optional onEditClickHandler (overrides default behaviour)
+    onEditClick?: () => void;
+    // Optional onDeleteClickHandler (overrides default behaviour)
+    onDeleteClick?: () => void;
+    // Optionally hide the tile title
+    showTitle?: boolean;
+    // Optionally handle minimise button pointer events (default false)
+    handleMinimisePointerEvents?: boolean;
+    // Optionally hide the popout widget icon
+    showPopout?: boolean;
+    // Is this an instance of a user widget
+    userWidget: boolean;
+    // sets the pointer-events property on the iframe
+    pointerEvents?: string;
+    widgetPageTitle?: string;
+}
+
+interface IState {
+    initialising: boolean; // True while we are mangling the widget URL
+    // True while the iframe content is loading
+    loading: boolean;
+    // Assume that widget has permission to load if we are the user who
+    // added it to the room, or if explicitly granted by the user
+    hasPermissionToLoad: boolean;
+    error: Error;
+    menuDisplayed: boolean;
+    widgetPageTitle: string;
+}
+
+import { logger } from "matrix-js-sdk/src/logger";
 
 @replaceableComponent("views.elements.AppTile")
-export default class AppTile extends React.Component {
-    constructor(props) {
+export default class AppTile extends React.Component<IProps, IState> {
+    public static defaultProps: Partial<IProps> = {
+        waitForIframeLoad: true,
+        showMenubar: true,
+        showTitle: true,
+        showPopout: true,
+        handleMinimisePointerEvents: false,
+        userWidget: false,
+        miniMode: false,
+    };
+
+    private contextMenuButton = createRef<any>();
+    private iframe: HTMLIFrameElement; // ref to the iframe (callback style)
+    private allowedWidgetsWatchRef: string;
+    private persistKey: string;
+    private sgWidget: StopGapWidget;
+    private dispatcherRef: string;
+
+    constructor(props: IProps) {
         super(props);
 
         // The key used for PersistedElement
-        this._persistKey = getPersistKey(this.props.app.id);
+        this.persistKey = getPersistKey(this.props.app.id);
         try {
-            this._sgWidget = new StopGapWidget(this.props);
-            this._sgWidget.on("preparing", this._onWidgetPrepared);
-            this._sgWidget.on("ready", this._onWidgetReady);
+            this.sgWidget = new StopGapWidget(this.props);
+            this.sgWidget.on("preparing", this.onWidgetPrepared);
+            this.sgWidget.on("ready", this.onWidgetReady);
         } catch (e) {
-            console.log("Failed to construct widget", e);
-            this._sgWidget = null;
+            logger.log("Failed to construct widget", e);
+            this.sgWidget = null;
         }
-        this.iframe = null; // ref to the iframe (callback style)
 
-        this.state = this._getNewState(props);
-        this._contextMenuButton = createRef();
+        this.state = this.getNewState(props);
 
-        this._allowedWidgetsWatchRef = SettingsStore.watchSetting("allowedWidgets", null, this.onAllowedWidgetsChange);
+        this.allowedWidgetsWatchRef = SettingsStore.watchSetting("allowedWidgets", null, this.onAllowedWidgetsChange);
     }
 
     // This is a function to make the impact of calling SettingsStore slightly less
-    hasPermissionToLoad = (props) => {
-        if (this._usingLocalWidget()) return true;
+    private hasPermissionToLoad = (props: IProps): boolean => {
+        if (this.usingLocalWidget()) return true;
         if (!props.room) return true; // user widgets always have permissions
 
         const currentlyAllowedWidgets = SettingsStore.getValue("allowedWidgets", props.room.roomId);
@@ -81,34 +144,34 @@ export default class AppTile extends React.Component {
      * @param  {Object} newProps The new properties of the component
      * @return {Object} Updated component state to be set with setState
      */
-    _getNewState(newProps) {
+    private getNewState(newProps: IProps): IState {
         return {
             initialising: true, // True while we are mangling the widget URL
             // True while the iframe content is loading
-            loading: this.props.waitForIframeLoad && !PersistedElement.isMounted(this._persistKey),
+            loading: this.props.waitForIframeLoad && !PersistedElement.isMounted(this.persistKey),
             // Assume that widget has permission to load if we are the user who
             // added it to the room, or if explicitly granted by the user
             hasPermissionToLoad: this.hasPermissionToLoad(newProps),
             error: null,
-            widgetPageTitle: newProps.widgetPageTitle,
             menuDisplayed: false,
+            widgetPageTitle: this.props.widgetPageTitle,
         };
     }
 
-    onAllowedWidgetsChange = () => {
+    private onAllowedWidgetsChange = (): void => {
         const hasPermissionToLoad = this.hasPermissionToLoad(this.props);
 
         if (this.state.hasPermissionToLoad && !hasPermissionToLoad) {
             // Force the widget to be non-persistent (able to be deleted/forgotten)
             ActiveWidgetStore.destroyPersistentWidget(this.props.app.id);
-            PersistedElement.destroyElement(this._persistKey);
-            if (this._sgWidget) this._sgWidget.stop();
+            PersistedElement.destroyElement(this.persistKey);
+            if (this.sgWidget) this.sgWidget.stop();
         }
 
         this.setState({ hasPermissionToLoad });
     };
 
-    isMixedContent() {
+    private isMixedContent(): boolean {
         const parentContentProtocol = window.location.protocol;
         const u = url.parse(this.props.app.url);
         const childContentProtocol = u.protocol;
@@ -120,69 +183,70 @@ export default class AppTile extends React.Component {
         return false;
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         // Only fetch IM token on mount if we're showing and have permission to load
-        if (this._sgWidget && this.state.hasPermissionToLoad) {
-            this._startWidget();
+        if (this.sgWidget && this.state.hasPermissionToLoad) {
+            this.startWidget();
         }
 
         // Widget action listeners
-        this.dispatcherRef = dis.register(this._onAction);
+        this.dispatcherRef = dis.register(this.onAction);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         // Widget action listeners
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
 
         // if it's not remaining on screen, get rid of the PersistedElement container
         if (!ActiveWidgetStore.getWidgetPersistence(this.props.app.id)) {
             ActiveWidgetStore.destroyPersistentWidget(this.props.app.id);
-            PersistedElement.destroyElement(this._persistKey);
+            PersistedElement.destroyElement(this.persistKey);
         }
 
-        if (this._sgWidget) {
-            this._sgWidget.stop();
+        if (this.sgWidget) {
+            this.sgWidget.stop();
         }
 
-        SettingsStore.unwatchSetting(this._allowedWidgetsWatchRef);
+        SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);
     }
 
-    _resetWidget(newProps) {
-        if (this._sgWidget) {
-            this._sgWidget.stop();
+    private resetWidget(newProps: IProps): void {
+        if (this.sgWidget) {
+            this.sgWidget.stop();
         }
         try {
-            this._sgWidget = new StopGapWidget(newProps);
-            this._sgWidget.on("preparing", this._onWidgetPrepared);
-            this._sgWidget.on("ready", this._onWidgetReady);
-            this._startWidget();
+            this.sgWidget = new StopGapWidget(newProps);
+            this.sgWidget.on("preparing", this.onWidgetPrepared);
+            this.sgWidget.on("ready", this.onWidgetReady);
+            this.startWidget();
         } catch (e) {
-            console.log("Failed to construct widget", e);
-            this._sgWidget = null;
+            logger.log("Failed to construct widget", e);
+            this.sgWidget = null;
         }
     }
 
-    _startWidget() {
-        this._sgWidget.prepare().then(() => {
+    private startWidget(): void {
+        this.sgWidget.prepare().then(() => {
             this.setState({ initialising: false });
         });
     }
 
-    _iframeRefChange = (ref) => {
+    private iframeRefChange = (ref: HTMLIFrameElement): void => {
         this.iframe = ref;
         if (ref) {
-            if (this._sgWidget) this._sgWidget.start(ref);
+            if (this.sgWidget) this.sgWidget.start(ref);
         } else {
-            this._resetWidget(this.props);
+            this.resetWidget(this.props);
         }
     };
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    public UNSAFE_componentWillReceiveProps(nextProps: IProps): void { // eslint-disable-line camelcase
         if (nextProps.app.url !== this.props.app.url) {
-            this._getNewState(nextProps);
+            this.getNewState(nextProps);
             if (this.state.hasPermissionToLoad) {
-                this._resetWidget(nextProps);
+                this.resetWidget(nextProps);
             }
         }
 
@@ -198,7 +262,7 @@ export default class AppTile extends React.Component {
      * @private
      * @returns {Promise<*>} Resolves when the widget is terminated, or timeout passed.
      */
-    async _endWidgetActions() { // widget migration dev note: async to maintain signature
+    private async endWidgetActions(): Promise<void> { // widget migration dev note: async to maintain signature
         // HACK: This is a really dirty way to ensure that Jitsi cleans up
         // its hold on the webcam. Without this, the widget holds a media
         // stream open, even after death. See https://github.com/vector-im/element-web/issues/7351
@@ -217,27 +281,27 @@ export default class AppTile extends React.Component {
         }
 
         // Delete the widget from the persisted store for good measure.
-        PersistedElement.destroyElement(this._persistKey);
+        PersistedElement.destroyElement(this.persistKey);
         ActiveWidgetStore.destroyPersistentWidget(this.props.app.id);
 
-        if (this._sgWidget) this._sgWidget.stop({ forceDestroy: true });
+        if (this.sgWidget) this.sgWidget.stop({ forceDestroy: true });
     }
 
-    _onWidgetPrepared = () => {
+    private onWidgetPrepared = (): void => {
         this.setState({ loading: false });
     };
 
-    _onWidgetReady = () => {
+    private onWidgetReady = (): void => {
         if (WidgetType.JITSI.matches(this.props.app.type)) {
-            this._sgWidget.widgetApi.transport.send(ElementWidgetActions.ClientReady, {});
+            this.sgWidget.widgetApi.transport.send(ElementWidgetActions.ClientReady, {});
         }
     };
 
-    _onAction = payload => {
+    private onAction = (payload): void => {
         if (payload.widgetId === this.props.app.id) {
             switch (payload.action) {
                 case 'm.sticker':
-                    if (this._sgWidget.widgetApi.hasCapability(MatrixCapabilities.StickerSending)) {
+                    if (this.sgWidget.widgetApi.hasCapability(MatrixCapabilities.StickerSending)) {
                         dis.dispatch({ action: 'post_sticker_message', data: payload.data });
                         dis.dispatch({ action: 'stickerpicker_close' });
                     } else {
@@ -248,7 +312,7 @@ export default class AppTile extends React.Component {
         }
     };
 
-    _grantWidgetPermission = () => {
+    private grantWidgetPermission = (): void => {
         const roomId = this.props.room.roomId;
         console.info("Granting permission for widget to load: " + this.props.app.eventId);
         const current = SettingsStore.getValue("allowedWidgets", roomId);
@@ -258,14 +322,14 @@ export default class AppTile extends React.Component {
             this.setState({ hasPermissionToLoad: true });
 
             // Fetch a token for the integration manager, now that we're allowed to
-            this._startWidget();
+            this.startWidget();
         }).catch(err => {
             console.error(err);
             // We don't really need to do anything about this - the user will just hit the button again.
         });
     };
 
-    formatAppTileName() {
+    private formatAppTileName(): string {
         let appTileName = "No name";
         if (this.props.app.name && this.props.app.name.trim()) {
             appTileName = this.props.app.name.trim();
@@ -278,11 +342,11 @@ export default class AppTile extends React.Component {
      * actual widget URL
      * @returns {bool} true If using a local version of the widget
      */
-    _usingLocalWidget() {
+    private usingLocalWidget(): boolean {
         return WidgetType.JITSI.matches(this.props.app.type);
     }
 
-    _getTileTitle() {
+    private getTileTitle(): JSX.Element {
         const name = this.formatAppTileName();
         const titleSpacer = <span>&nbsp;-&nbsp;</span>;
         let title = '';
@@ -300,32 +364,32 @@ export default class AppTile extends React.Component {
     }
 
     // TODO replace with full screen interactions
-    _onPopoutWidgetClick = () => {
+    private onPopoutWidgetClick = (): void => {
         // Ensure Jitsi conferences are closed on pop-out, to not confuse the user to join them
         // twice from the same computer, which Jitsi can have problems with (audio echo/gain-loop).
         if (WidgetType.JITSI.matches(this.props.app.type)) {
-            this._endWidgetActions().then(() => {
+            this.endWidgetActions().then(() => {
                 if (this.iframe) {
                     // Reload iframe
-                    this.iframe.src = this._sgWidget.embedUrl;
+                    this.iframe.src = this.sgWidget.embedUrl;
                 }
             });
         }
         // Using Object.assign workaround as the following opens in a new window instead of a new tab.
         // window.open(this._getPopoutUrl(), '_blank', 'noopener=yes');
         Object.assign(document.createElement('a'),
-            { target: '_blank', href: this._sgWidget.popoutUrl, rel: 'noreferrer noopener' }).click();
+            { target: '_blank', href: this.sgWidget.popoutUrl, rel: 'noreferrer noopener' }).click();
     };
 
-    _onContextMenuClick = () => {
+    private onContextMenuClick = (): void => {
         this.setState({ menuDisplayed: true });
     };
 
-    _closeContextMenu = () => {
+    private closeContextMenu = (): void => {
         this.setState({ menuDisplayed: false });
     };
 
-    render() {
+    public render(): JSX.Element {
         let appTileBody;
 
         // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
@@ -351,7 +415,7 @@ export default class AppTile extends React.Component {
                 <Spinner message={_t("Loading...")} />
             </div>
         );
-        if (this._sgWidget === null) {
+        if (this.sgWidget === null) {
             appTileBody = (
                 <div className={appTileBodyClass} style={appTileBodyStyles}>
                     <AppWarning errorMsg={_t("Error loading Widget")} />
@@ -365,9 +429,9 @@ export default class AppTile extends React.Component {
                     <AppPermission
                         roomId={this.props.room.roomId}
                         creatorUserId={this.props.creatorUserId}
-                        url={this._sgWidget.embedUrl}
+                        url={this.sgWidget.embedUrl}
                         isRoomEncrypted={isEncrypted}
-                        onPermissionGranted={this._grantWidgetPermission}
+                        onPermissionGranted={this.grantWidgetPermission}
                     />
                 </div>
             );
@@ -390,8 +454,8 @@ export default class AppTile extends React.Component {
                         { this.state.loading && loadingElement }
                         <iframe
                             allow={iframeFeatures}
-                            ref={this._iframeRefChange}
-                            src={this._sgWidget.embedUrl}
+                            ref={this.iframeRefChange}
+                            src={this.sgWidget.embedUrl}
                             allowFullScreen={true}
                             sandbox={sandboxFlags}
                         />
@@ -407,7 +471,7 @@ export default class AppTile extends React.Component {
                     // Also wrap the PersistedElement in a div to fix the height, otherwise
                     // AppTile's border is in the wrong place
                     appTileBody = <div className="mx_AppTile_persistedWrapper">
-                        <PersistedElement persistKey={this._persistKey}>
+                        <PersistedElement persistKey={this.persistKey}>
                             { appTileBody }
                         </PersistedElement>
                     </div>;
@@ -429,9 +493,9 @@ export default class AppTile extends React.Component {
         if (this.state.menuDisplayed) {
             contextMenu = (
                 <RoomWidgetContextMenu
-                    {...aboveLeftOf(this._contextMenuButton.current.getBoundingClientRect(), null)}
+                    {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect(), null)}
                     app={this.props.app}
-                    onFinished={this._closeContextMenu}
+                    onFinished={this.closeContextMenu}
                     showUnpin={!this.props.userWidget}
                     userWidget={this.props.userWidget}
                     onEditClick={this.props.onEditClick}
@@ -444,21 +508,21 @@ export default class AppTile extends React.Component {
             <div className={appTileClasses} id={this.props.app.id}>
                 { this.props.showMenubar &&
                     <div className="mx_AppTileMenuBar">
-                        <span className="mx_AppTileMenuBarTitle" style={{ pointerEvents: (this.props.handleMinimisePointerEvents ? 'all' : false) }}>
-                            { this.props.showTitle && this._getTileTitle() }
+                        <span className="mx_AppTileMenuBarTitle" style={{ pointerEvents: (this.props.handleMinimisePointerEvents ? 'all' : "none") }}>
+                            { this.props.showTitle && this.getTileTitle() }
                         </span>
                         <span className="mx_AppTileMenuBarWidgets">
                             { this.props.showPopout && <AccessibleButton
                                 className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_popout"
                                 title={_t('Popout widget')}
-                                onClick={this._onPopoutWidgetClick}
+                                onClick={this.onPopoutWidgetClick}
                             /> }
                             <ContextMenuButton
                                 className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_menu"
                                 label={_t("Options")}
                                 isExpanded={this.state.menuDisplayed}
-                                inputRef={this._contextMenuButton}
-                                onClick={this._onContextMenuClick}
+                                inputRef={this.contextMenuButton}
+                                onClick={this.onContextMenuClick}
                             />
                         </span>
                     </div> }
@@ -469,49 +533,3 @@ export default class AppTile extends React.Component {
         </React.Fragment>;
     }
 }
-
-AppTile.displayName = 'AppTile';
-
-AppTile.propTypes = {
-    app: PropTypes.object.isRequired,
-    // If room is not specified then it is an account level widget
-    // which bypasses permission prompts as it was added explicitly by that user
-    room: PropTypes.object,
-    // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
-    // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
-    fullWidth: PropTypes.bool,
-    // Optional. If set, renders a smaller view of the widget
-    miniMode: PropTypes.bool,
-    // UserId of the current user
-    userId: PropTypes.string.isRequired,
-    // UserId of the entity that added / modified the widget
-    creatorUserId: PropTypes.string,
-    waitForIframeLoad: PropTypes.bool,
-    showMenubar: PropTypes.bool,
-    // Optional onEditClickHandler (overrides default behaviour)
-    onEditClick: PropTypes.func,
-    // Optional onDeleteClickHandler (overrides default behaviour)
-    onDeleteClick: PropTypes.func,
-    // Optional onMinimiseClickHandler
-    onMinimiseClick: PropTypes.func,
-    // Optionally hide the tile title
-    showTitle: PropTypes.bool,
-    // Optionally handle minimise button pointer events (default false)
-    handleMinimisePointerEvents: PropTypes.bool,
-    // Optionally hide the popout widget icon
-    showPopout: PropTypes.bool,
-    // Is this an instance of a user widget
-    userWidget: PropTypes.bool,
-    // sets the pointer-events property on the iframe
-    pointerEvents: PropTypes.string,
-};
-
-AppTile.defaultProps = {
-    waitForIframeLoad: true,
-    showMenubar: true,
-    showTitle: true,
-    showPopout: true,
-    handleMinimisePointerEvents: false,
-    userWidget: false,
-    miniMode: false,
-};

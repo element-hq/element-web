@@ -15,17 +15,16 @@ limitations under the License.
 */
 
 import React from "react";
-import PropTypes from 'prop-types';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 class ItemRange {
-    constructor(topCount, renderCount, bottomCount) {
-        this.topCount = topCount;
-        this.renderCount = renderCount;
-        this.bottomCount = bottomCount;
-    }
+    constructor(
+        public topCount: number,
+        public renderCount: number,
+        public bottomCount: number,
+    ) { }
 
-    contains(range) {
+    public contains(range: ItemRange): boolean {
         // don't contain empty ranges
         // as it will prevent clearing the list
         // once it is scrolled far enough out of view
@@ -36,7 +35,7 @@ class ItemRange {
             (range.topCount + range.renderCount) <= (this.topCount + this.renderCount);
     }
 
-    expand(amount) {
+    public expand(amount: number): ItemRange {
         // don't expand ranges that won't render anything
         if (this.renderCount === 0) {
             return this;
@@ -51,20 +50,55 @@ class ItemRange {
         );
     }
 
-    totalSize() {
+    public totalSize(): number {
         return this.topCount + this.renderCount + this.bottomCount;
     }
 }
 
+interface IProps<T> {
+    // height in pixels of the component returned by `renderItem`
+    itemHeight: number;
+    // function to turn an element of `items` into a react component
+    renderItem: (item: T) => JSX.Element;
+    // scrollTop of the viewport (minus the height of any content above this list like other `LazyRenderList`s)
+    scrollTop: number;
+    // the height of the viewport this content is scrolled in
+    height: number;
+    // all items for the list. These should not be react components, see `renderItem`.
+    items?: T[];
+    // the amount of items to scroll before causing a rerender,
+    // should typically be less than `overflowItems` unless applying
+    // margins in the parent component when using multiple LazyRenderList in one viewport.
+    // use 0 to only rerender when items will come into view.
+    overflowMargin?: number;
+    // the amount of items to add at the top and bottom to render,
+    // so not every scroll of causes a rerender.
+    overflowItems?: number;
+
+    element?: string;
+    className?: string;
+}
+
+interface IState {
+    renderRange: ItemRange;
+}
+
 @replaceableComponent("views.elements.LazyRenderList")
-export default class LazyRenderList extends React.Component {
-    constructor(props) {
+export default class LazyRenderList<T = any> extends React.Component<IProps<T>, IState> {
+    public static defaultProps: Partial<IProps<unknown>> = {
+        overflowItems: 20,
+        overflowMargin: 5,
+    };
+
+    constructor(props: IProps<T>) {
         super(props);
 
-        this.state = {};
+        this.state = {
+            renderRange: null,
+        };
     }
 
-    static getDerivedStateFromProps(props, state) {
+    public static getDerivedStateFromProps(props: IProps<unknown>, state: IState): Partial<IState> {
         const range = LazyRenderList.getVisibleRangeFromProps(props);
         const intersectRange = range.expand(props.overflowMargin);
         const renderRange = range.expand(props.overflowItems);
@@ -77,7 +111,7 @@ export default class LazyRenderList extends React.Component {
         return null;
     }
 
-    static getVisibleRangeFromProps(props) {
+    private static getVisibleRangeFromProps(props: IProps<unknown>): ItemRange {
         const { items, itemHeight, scrollTop, height } = props;
         const length = items ? items.length : 0;
         const topCount = Math.min(Math.max(0, Math.floor(scrollTop / itemHeight)), length);
@@ -88,7 +122,7 @@ export default class LazyRenderList extends React.Component {
         return new ItemRange(topCount, renderCount, bottomCount);
     }
 
-    render() {
+    public render(): JSX.Element {
         const { itemHeight, items, renderItem } = this.props;
         const { renderRange } = this.state;
         const { topCount, renderCount, bottomCount } = renderRange;
@@ -109,28 +143,3 @@ export default class LazyRenderList extends React.Component {
     }
 }
 
-LazyRenderList.defaultProps = {
-    overflowItems: 20,
-    overflowMargin: 5,
-};
-
-LazyRenderList.propTypes = {
-    // height in pixels of the component returned by `renderItem`
-    itemHeight: PropTypes.number.isRequired,
-    // function to turn an element of `items` into a react component
-    renderItem: PropTypes.func.isRequired,
-    // scrollTop of the viewport (minus the height of any content above this list like other `LazyRenderList`s)
-    scrollTop: PropTypes.number.isRequired,
-    // the height of the viewport this content is scrolled in
-    height: PropTypes.number.isRequired,
-    // all items for the list. These should not be react components, see `renderItem`.
-    items: PropTypes.array,
-    // the amount of items to scroll before causing a rerender,
-    // should typically be less than `overflowItems` unless applying
-    // margins in the parent component when using multiple LazyRenderList in one viewport.
-    // use 0 to only rerender when items will come into view.
-    overflowMargin: PropTypes.number,
-    // the amount of items to add at the top and bottom to render,
-    // so not every scroll of causes a rerender.
-    overflowItems: PropTypes.number,
-};

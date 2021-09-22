@@ -16,33 +16,42 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-import PropTypes from 'prop-types';
 import { Key } from "../../../Keyboard";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+enum Phases {
+    Display = "display",
+    Edit = "edit",
+}
+
+interface IProps {
+    onValueChanged?: (value: string, shouldSubmit: boolean) => void;
+    initialValue?: string;
+    label?: string;
+    placeholder?: string;
+    className?: string;
+    labelClassName?: string;
+    placeholderClassName?: string;
+    // Overrides blurToSubmit if true
+    blurToCancel?: boolean;
+    // Will cause onValueChanged(value, true) to fire on blur
+    blurToSubmit?: boolean;
+    editable?: boolean;
+}
+
+interface IState {
+    phase: Phases;
+}
+
 @replaceableComponent("views.elements.EditableText")
-export default class EditableText extends React.Component {
-    static propTypes = {
-        onValueChanged: PropTypes.func,
-        initialValue: PropTypes.string,
-        label: PropTypes.string,
-        placeholder: PropTypes.string,
-        className: PropTypes.string,
-        labelClassName: PropTypes.string,
-        placeholderClassName: PropTypes.string,
-        // Overrides blurToSubmit if true
-        blurToCancel: PropTypes.bool,
-        // Will cause onValueChanged(value, true) to fire on blur
-        blurToSubmit: PropTypes.bool,
-        editable: PropTypes.bool,
-    };
+export default class EditableText extends React.Component<IProps, IState> {
+    // we track value as an JS object field rather than in React state
+    // as React doesn't play nice with contentEditable.
+    public value = '';
+    private placeholder = false;
+    private editableDiv = createRef<HTMLDivElement>();
 
-    static Phases = {
-        Display: "display",
-        Edit: "edit",
-    };
-
-    static defaultProps = {
+    public static defaultProps: Partial<IProps> = {
         onValueChanged() {},
         initialValue: '',
         label: '',
@@ -53,81 +62,61 @@ export default class EditableText extends React.Component {
         blurToSubmit: false,
     };
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
 
-        // we track value as an JS object field rather than in React state
-        // as React doesn't play nice with contentEditable.
-        this.value = '';
-        this.placeholder = false;
-
-        this._editable_div = createRef();
+        this.state = {
+            phase: Phases.Display,
+        };
     }
 
-    state = {
-        phase: EditableText.Phases.Display,
-    };
-
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps(nextProps) {
+    // eslint-disable-next-line @typescript-eslint/naming-convention, camelcase
+    public UNSAFE_componentWillReceiveProps(nextProps: IProps): void {
         if (nextProps.initialValue !== this.props.initialValue) {
             this.value = nextProps.initialValue;
-            if (this._editable_div.current) {
+            if (this.editableDiv.current) {
                 this.showPlaceholder(!this.value);
             }
         }
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         this.value = this.props.initialValue;
-        if (this._editable_div.current) {
+        if (this.editableDiv.current) {
             this.showPlaceholder(!this.value);
         }
     }
 
-    showPlaceholder = show => {
+    private showPlaceholder = (show: boolean): void => {
         if (show) {
-            this._editable_div.current.textContent = this.props.placeholder;
-            this._editable_div.current.setAttribute("class", this.props.className
+            this.editableDiv.current.textContent = this.props.placeholder;
+            this.editableDiv.current.setAttribute("class", this.props.className
                 + " " + this.props.placeholderClassName);
             this.placeholder = true;
             this.value = '';
         } else {
-            this._editable_div.current.textContent = this.value;
-            this._editable_div.current.setAttribute("class", this.props.className);
+            this.editableDiv.current.textContent = this.value;
+            this.editableDiv.current.setAttribute("class", this.props.className);
             this.placeholder = false;
         }
     };
 
-    getValue = () => this.value;
-
-    setValue = value => {
-        this.value = value;
-        this.showPlaceholder(!this.value);
-    };
-
-    edit = () => {
+    private cancelEdit = (): void => {
         this.setState({
-            phase: EditableText.Phases.Edit,
-        });
-    };
-
-    cancelEdit = () => {
-        this.setState({
-            phase: EditableText.Phases.Display,
+            phase: Phases.Display,
         });
         this.value = this.props.initialValue;
         this.showPlaceholder(!this.value);
         this.onValueChanged(false);
-        this._editable_div.current.blur();
+        this.editableDiv.current.blur();
     };
 
-    onValueChanged = shouldSubmit => {
+    private onValueChanged = (shouldSubmit: boolean): void => {
         this.props.onValueChanged(this.value, shouldSubmit);
     };
 
-    onKeyDown = ev => {
+    private onKeyDown = (ev: React.KeyboardEvent<HTMLDivElement>): void => {
         // console.log("keyDown: textContent=" + ev.target.textContent + ", value=" + this.value + ", placeholder=" + this.placeholder);
 
         if (this.placeholder) {
@@ -142,13 +131,13 @@ export default class EditableText extends React.Component {
         // console.log("keyDown: textContent=" + ev.target.textContent + ", value=" + this.value + ", placeholder=" + this.placeholder);
     };
 
-    onKeyUp = ev => {
+    private onKeyUp = (ev: React.KeyboardEvent<HTMLDivElement>): void => {
         // console.log("keyUp: textContent=" + ev.target.textContent + ", value=" + this.value + ", placeholder=" + this.placeholder);
 
-        if (!ev.target.textContent) {
+        if (!(ev.target as HTMLDivElement).textContent) {
             this.showPlaceholder(true);
         } else if (!this.placeholder) {
-            this.value = ev.target.textContent;
+            this.value = (ev.target as HTMLDivElement).textContent;
         }
 
         if (ev.key === Key.ENTER) {
@@ -160,22 +149,22 @@ export default class EditableText extends React.Component {
         // console.log("keyUp: textContent=" + ev.target.textContent + ", value=" + this.value + ", placeholder=" + this.placeholder);
     };
 
-    onClickDiv = ev => {
+    private onClickDiv = (): void => {
         if (!this.props.editable) return;
 
         this.setState({
-            phase: EditableText.Phases.Edit,
+            phase: Phases.Edit,
         });
     };
 
-    onFocus = ev => {
+    private onFocus = (ev: React.FocusEvent<HTMLDivElement>): void => {
         //ev.target.setSelectionRange(0, ev.target.textContent.length);
 
         const node = ev.target.childNodes[0];
         if (node) {
             const range = document.createRange();
             range.setStart(node, 0);
-            range.setEnd(node, node.length);
+            range.setEnd(node, ev.target.childNodes.length);
 
             const sel = window.getSelection();
             sel.removeAllRanges();
@@ -183,11 +172,15 @@ export default class EditableText extends React.Component {
         }
     };
 
-    onFinish = (ev, shouldSubmit) => {
+    private onFinish = (
+        ev: React.KeyboardEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>,
+        shouldSubmit?: boolean,
+    ): void => {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const self = this;
-        const submit = (ev.key === Key.ENTER) || shouldSubmit;
+        const submit = ("key" in ev && ev.key === Key.ENTER) || shouldSubmit;
         this.setState({
-            phase: EditableText.Phases.Display,
+            phase: Phases.Display,
         }, () => {
             if (this.value !== this.props.initialValue) {
                 self.onValueChanged(submit);
@@ -195,7 +188,7 @@ export default class EditableText extends React.Component {
         });
     };
 
-    onBlur = ev => {
+    private onBlur = (ev: React.FocusEvent<HTMLDivElement>): void => {
         const sel = window.getSelection();
         sel.removeAllRanges();
 
@@ -208,11 +201,11 @@ export default class EditableText extends React.Component {
         this.showPlaceholder(!this.value);
     };
 
-    render() {
+    public render(): JSX.Element {
         const { className, editable, initialValue, label, labelClassName } = this.props;
         let editableEl;
 
-        if (!editable || (this.state.phase === EditableText.Phases.Display &&
+        if (!editable || (this.state.phase === Phases.Display &&
             (label || labelClassName) && !this.value)
         ) {
             // show the label
@@ -222,7 +215,7 @@ export default class EditableText extends React.Component {
         } else {
             // show the content editable div, but manually manage its contents as react and contentEditable don't play nice together
             editableEl = <div
-                ref={this._editable_div}
+                ref={this.editableDiv}
                 contentEditable={true}
                 className={className}
                 onKeyDown={this.onKeyDown}

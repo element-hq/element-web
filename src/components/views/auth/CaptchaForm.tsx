@@ -19,6 +19,8 @@ import { _t } from '../../../languageHandler';
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const DIV_ID = 'mx_recaptcha';
 
 interface ICaptchaFormProps {
@@ -60,7 +62,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
             // already loaded
             this.onCaptchaLoaded();
         } else {
-            console.log("Loading recaptcha script...");
+            logger.log("Loading recaptcha script...");
             window.mxOnRecaptchaLoaded = () => { this.onCaptchaLoaded(); };
             const scriptTag = document.createElement('script');
             scriptTag.setAttribute(
@@ -109,7 +111,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
     }
 
     private onCaptchaLoaded() {
-        console.log("Loaded recaptcha script.");
+        logger.log("Loaded recaptcha script.");
         try {
             this.renderRecaptcha(DIV_ID);
             // clear error if re-rendered

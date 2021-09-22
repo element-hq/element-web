@@ -117,6 +117,17 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 params.fileSize = content.info.size;
             }
 
+            if (this.image.current) {
+                const clientRect = this.image.current.getBoundingClientRect();
+
+                params.thumbnailInfo = {
+                    width: clientRect.width,
+                    height: clientRect.height,
+                    positionX: clientRect.x,
+                    positionY: clientRect.y,
+                };
+            }
+
             Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
         }
     };

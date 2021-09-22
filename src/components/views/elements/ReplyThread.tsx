@@ -88,7 +88,13 @@ export default class ReplyThread extends React.Component<IProps, IState> {
         // could be used here for replies as well... However, the helper
         // currently assumes the relation has a `rel_type`, which older replies
         // do not, so this block is left as-is for now.
-        const mRelatesTo = ev.getWireContent()['m.relates_to'];
+        //
+        // We're prefer ev.getContent() over ev.getWireContent() to make sure
+        // we grab the latest edit with potentially new relations. But we also
+        // can't just rely on ev.getContent() by itself because historically we
+        // still show the reply from the original message even though the edit
+        // event does not include the relation reply.
+        const mRelatesTo = ev.getContent()['m.relates_to'] || ev.getWireContent()['m.relates_to'];
         if (mRelatesTo && mRelatesTo['m.in_reply_to']) {
             const mInReplyTo = mRelatesTo['m.in_reply_to'];
             if (mInReplyTo && mInReplyTo['event_id']) return mInReplyTo['event_id'];

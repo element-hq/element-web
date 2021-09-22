@@ -125,14 +125,14 @@ const CreateSpaceFromCommunityDialog: React.FC<IProps> = ({ matrixClient: cli, g
         setBusy(true);
 
         // require & validate the space name field
-        if (!await spaceNameField.current.validate({ allowEmpty: false })) {
+        if (!(await spaceNameField.current.validate({ allowEmpty: false }))) {
             setBusy(false);
             spaceNameField.current.focus();
             spaceNameField.current.validate({ allowEmpty: false, focused: true });
             return;
         }
         // validate the space name alias field but do not require it
-        if (joinRule === JoinRule.Public && !await spaceAliasField.current.validate({ allowEmpty: true })) {
+        if (joinRule === JoinRule.Public && !(await spaceAliasField.current.validate({ allowEmpty: true }))) {
             setBusy(false);
             spaceAliasField.current.focus();
             spaceAliasField.current.validate({ allowEmpty: true, focused: true });

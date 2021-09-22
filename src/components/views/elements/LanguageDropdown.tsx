@@ -16,13 +16,13 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
-import * as sdk from '../../../index';
 import * as languageHandler from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import Spinner from "./Spinner";
+import Dropdown from "./Dropdown";
 
 function languageMatchesSearchQuery(query, language) {
     if (language.label.toUpperCase().includes(query.toUpperCase())) return true;
@@ -30,11 +30,22 @@ function languageMatchesSearchQuery(query, language) {
     return false;
 }
 
+interface IProps {
+    className?: string;
+    onOptionChange: (language: string) => void;
+    value?: string;
+    disabled?: boolean;
+}
+
+interface IState {
+    searchQuery: string;
+    langs: string[];
+}
+
 @replaceableComponent("views.elements.LanguageDropdown")
-export default class LanguageDropdown extends React.Component {
-    constructor(props) {
+export default class LanguageDropdown extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
         super(props);
-        this._onSearchChange = this._onSearchChange.bind(this);
 
         this.state = {
             searchQuery: '',
@@ -42,7 +53,7 @@ export default class LanguageDropdown extends React.Component {
         };
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         languageHandler.getAllLanguagesFromJson().then((langs) => {
             langs.sort(function(a, b) {
                 if (a.label < b.label) return -1;
@@ -63,19 +74,16 @@ export default class LanguageDropdown extends React.Component {
         }
     }
 
-    _onSearchChange(search) {
+    private onSearchChange = (search: string): void => {
         this.setState({
             searchQuery: search,
         });
-    }
+    };
 
-    render() {
+    public render(): JSX.Element {
         if (this.state.langs === null) {
-            const Spinner = sdk.getComponent('elements.Spinner');
             return <Spinner />;
         }
-
-        const Dropdown = sdk.getComponent('elements.Dropdown');
 
         let displayedLanguages;
         if (this.state.searchQuery) {
@@ -107,7 +115,7 @@ export default class LanguageDropdown extends React.Component {
             id="mx_LanguageDropdown"
             className={this.props.className}
             onOptionChange={this.props.onOptionChange}
-            onSearchChange={this._onSearchChange}
+            onSearchChange={this.onSearchChange}
             searchEnabled={true}
             value={value}
             label={_t("Language Dropdown")}
@@ -118,8 +126,3 @@ export default class LanguageDropdown extends React.Component {
     }
 }
 
-LanguageDropdown.propTypes = {
-    className: PropTypes.string,
-    onOptionChange: PropTypes.func.isRequired,
-    value: PropTypes.string,
-};

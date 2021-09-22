@@ -16,6 +16,8 @@ limitations under the License.
 
 import EventEmitter from 'events';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const BULK_REQUEST_DEBOUNCE_MS = 200;
 
 // Does the server support groups? Assume yes until we receive M_UNRECOGNIZED.
@@ -186,14 +188,14 @@ class FlairStore extends EventEmitter {
         }
 
         // No request yet, start one
-        console.log('FlairStore: Request group profile of ' + groupId);
+        logger.log('FlairStore: Request group profile of ' + groupId);
         this._groupProfilesPromise[groupId] = matrixClient.getGroupProfile(groupId);
 
         let profile;
         try {
             profile = await this._groupProfilesPromise[groupId];
         } catch (e) {
-            console.log('FlairStore: Failed to get group profile for ' + groupId, e);
+            logger.log('FlairStore: Failed to get group profile for ' + groupId, e);
             // Don't retry, but allow a retry when the profile is next requested
             delete this._groupProfilesPromise[groupId];
             return null;
@@ -209,7 +211,7 @@ class FlairStore extends EventEmitter {
 
         /// XXX: This is verging on recreating a third "Flux"-looking Store. We really
         /// should replace FlairStore with a Flux store and some async actions.
-        console.log('FlairStore: Emit updateGroupProfile for ' + groupId);
+        logger.log('FlairStore: Emit updateGroupProfile for ' + groupId);
         this.emit('updateGroupProfile');
 
         setTimeout(() => {

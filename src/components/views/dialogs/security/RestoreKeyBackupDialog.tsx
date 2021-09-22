@@ -24,6 +24,7 @@ import { IKeyBackupInfo, IKeyBackupRestoreResult } from "matrix-js-sdk/src/crypt
 import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
 import * as sdk from '../../../../index';
 import { IDialogProps } from "../IDialogProps";
+import { logger } from "matrix-js-sdk/src/logger";
 
 enum RestoreType {
     Passphrase = "passphrase",
@@ -160,7 +161,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                 recoverInfo,
             });
         } catch (e) {
-            console.log("Error restoring backup", e);
+            logger.log("Error restoring backup", e);
             this.setState({
                 loading: false,
                 restoreError: e,
@@ -194,7 +195,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                 recoverInfo,
             });
         } catch (e) {
-            console.log("Error restoring backup", e);
+            logger.log("Error restoring backup", e);
             this.setState({
                 loading: false,
                 restoreError: e,
@@ -226,7 +227,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                 loading: false,
             });
         } catch (e) {
-            console.log("Error restoring backup", e);
+            logger.log("Error restoring backup", e);
             this.setState({
                 restoreError: e,
                 loading: false,
@@ -248,7 +249,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
             });
             return true;
         } catch (e) {
-            console.log("restoreWithCachedKey failed:", e);
+            logger.log("restoreWithCachedKey failed:", e);
             return false;
         }
     }
@@ -262,7 +263,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
             const cli = MatrixClientPeg.get();
             const backupInfo = await cli.getKeyBackupVersion();
             const has4S = await cli.hasSecretStorageKey();
-            const backupKeyStored = has4S && await cli.isKeyBackupKeyStored();
+            const backupKeyStored = has4S && (await cli.isKeyBackupKeyStored());
             this.setState({
                 backupInfo,
                 backupKeyStored,
@@ -270,7 +271,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
 
             const gotCache = await this.restoreWithCachedKey(backupInfo);
             if (gotCache) {
-                console.log("RestoreKeyBackupDialog: found cached backup key");
+                logger.log("RestoreKeyBackupDialog: found cached backup key");
                 this.setState({
                     loading: false,
                 });
@@ -287,7 +288,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                 loading: false,
             });
         } catch (e) {
-            console.log("Error loading backup status", e);
+            logger.log("Error loading backup status", e);
             this.setState({
                 loadError: e,
                 loading: false,

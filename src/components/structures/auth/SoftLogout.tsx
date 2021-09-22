@@ -32,6 +32,8 @@ import Spinner from "../../views/elements/Spinner";
 import AuthHeader from "../../views/auth/AuthHeader";
 import AuthBody from "../../views/auth/AuthBody";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const LOGIN_VIEW = {
     LOADING: 1,
     PASSWORD: 2,
@@ -103,7 +105,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             onFinished: (wipeData) => {
                 if (!wipeData) return;
 
-                console.log("Clearing data from soft-logged-out session");
+                logger.log("Clearing data from soft-logged-out session");
                 Lifecycle.logout();
             },
         });

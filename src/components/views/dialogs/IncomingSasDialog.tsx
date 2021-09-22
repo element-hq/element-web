@@ -30,6 +30,8 @@ import { IDialogProps } from "./IDialogProps";
 import { IGeneratedSas, ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
 import { VerificationBase } from "matrix-js-sdk/src/crypto/verification/Base";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const PHASE_START = 0;
 const PHASE_SHOW_SAS = 1;
 const PHASE_WAIT_FOR_PARTNER_TO_CONFIRM = 2;
@@ -61,7 +63,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
 
         let phase = PHASE_START;
         if (this.props.verifier.hasBeenCancelled) {
-            console.log("Verifier was cancelled in the background.");
+            logger.log("Verifier was cancelled in the background.");
             phase = PHASE_CANCELLED;
         }
 
@@ -113,7 +115,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
         this.props.verifier.verify().then(() => {
             this.setState({ phase: PHASE_VERIFIED });
         }).catch((e) => {
-            console.log("Verification failed", e);
+            logger.log("Verification failed", e);
         });
     };
 

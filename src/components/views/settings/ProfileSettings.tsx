@@ -27,6 +27,8 @@ import { mediaFromMxc } from "../../../customisations/Media";
 import AccessibleButton from '../elements/AccessibleButton';
 import AvatarSetting from './AvatarSetting';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IState {
     userId?: string;
     originalDisplayName?: string;
@@ -104,7 +106,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
             }
 
             if (this.state.avatarFile) {
-                console.log(
+                logger.log(
                     `Uploading new avatar, ${this.state.avatarFile.name} of type ${this.state.avatarFile.type},` +
                     ` (${this.state.avatarFile.size}) bytes`);
                 const uri = await client.uploadContent(this.state.avatarFile);
@@ -116,7 +118,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                 await client.setAvatarUrl(""); // use empty string as Synapse 500s on undefined
             }
         } catch (err) {
-            console.log("Failed to save profile", err);
+            logger.log("Failed to save profile", err);
             Modal.createTrackedDialog('Failed to save profile', '', ErrorDialog, {
                 title: _t("Failed to save your profile"),
                 description: ((err && err.message) ? err.message : _t("The operation could not be completed")),

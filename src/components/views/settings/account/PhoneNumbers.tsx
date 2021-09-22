@@ -16,16 +16,17 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _t } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Field from "../../elements/Field";
 import AccessibleButton from "../../elements/AccessibleButton";
 import AddThreepid from "../../../../AddThreepid";
 import CountryDropdown from "../../auth/CountryDropdown";
-import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
 import { replaceableComponent } from "../../../../utils/replaceableComponent";
+import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
+import ErrorDialog from "../../dialogs/ErrorDialog";
+import { PhoneNumberCountryDefinition } from "../../../../phonenumber";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -34,42 +35,45 @@ This is a copy/paste of EmailAddresses, mostly.
 
 // TODO: Combine EmailAddresses and PhoneNumbers to be 3pid agnostic
 
-export class ExistingPhoneNumber extends React.Component {
-    static propTypes = {
-        msisdn: PropTypes.object.isRequired,
-        onRemoved: PropTypes.func.isRequired,
-    };
+interface IExistingPhoneNumberProps {
+    msisdn: IThreepid;
+    onRemoved: (phoneNumber: IThreepid) => void;
+}
 
-    constructor() {
-        super();
+interface IExistingPhoneNumberState {
+    verifyRemove: boolean;
+}
+
+export class ExistingPhoneNumber extends React.Component<IExistingPhoneNumberProps, IExistingPhoneNumberState> {
+    constructor(props: IExistingPhoneNumberProps) {
+        super(props);
 
         this.state = {
             verifyRemove: false,
         };
     }
 
-    _onRemove = (e) => {
+    private onRemove = (e: React.MouseEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
         this.setState({ verifyRemove: true });
     };
 
-    _onDontRemove = (e) => {
+    private onDontRemove = (e: React.MouseEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
         this.setState({ verifyRemove: false });
     };
 
-    _onActuallyRemove = (e) => {
+    private onActuallyRemove = (e: React.MouseEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
         MatrixClientPeg.get().deleteThreePid(this.props.msisdn.medium, this.props.msisdn.address).then(() => {
             return this.props.onRemoved(this.props.msisdn);
         }).catch((err) => {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Unable to remove contact information: " + err);
             Modal.createTrackedDialog('Remove 3pid failed', '', ErrorDialog, {
                 title: _t("Unable to remove contact information"),
@@ -78,7 +82,7 @@ export class ExistingPhoneNumber extends React.Component {
         });
     };
 
-    render() {
+    public render(): JSX.Element {
         if (this.state.verifyRemove) {
             return (
                 <div className="mx_ExistingPhoneNumber">
@@ -86,14 +90,14 @@ export class ExistingPhoneNumber extends React.Component {
                         { _t("Remove %(phone)s?", { phone: this.props.msisdn.address }) }
                     </span>
                     <AccessibleButton
-                        onClick={this._onActuallyRemove}
+                        onClick={this.onActuallyRemove}
                         kind="danger_sm"
                         className="mx_ExistingPhoneNumber_confirmBtn"
                     >
                         { _t("Remove") }
                     </AccessibleButton>
                     <AccessibleButton
-                        onClick={this._onDontRemove}
+                        onClick={this.onDontRemove}
                         kind="link_sm"
                         className="mx_ExistingPhoneNumber_confirmBtn"
                     >
@@ -106,7 +110,7 @@ export class ExistingPhoneNumber extends React.Component {
         return (
             <div className="mx_ExistingPhoneNumber">
                 <span className="mx_ExistingPhoneNumber_address">+{ this.props.msisdn.address }</span>
-                <AccessibleButton onClick={this._onRemove} kind="danger_sm">
+                <AccessibleButton onClick={this.onRemove} kind="danger_sm">
                     { _t("Remove") }
                 </AccessibleButton>
             </div>
@@ -114,19 +118,30 @@ export class ExistingPhoneNumber extends React.Component {
     }
 }
 
-@replaceableComponent("views.settings.account.PhoneNumbers")
-export default class PhoneNumbers extends React.Component {
-    static propTypes = {
-        msisdns: PropTypes.array.isRequired,
-        onMsisdnsChange: PropTypes.func.isRequired,
-    }
+interface IProps {
+    msisdns: IThreepid[];
+    onMsisdnsChange: (phoneNumbers: Partial<IThreepid>[]) => void;
+}
 
-    constructor(props) {
+interface IState {
+    verifying: boolean;
+    verifyError: string;
+    verifyMsisdn: string;
+    addTask: any; // FIXME: When AddThreepid is TSfied
+    continueDisabled: boolean;
+    phoneCountry: string;
+    newPhoneNumber: string;
+    newPhoneNumberCode: string;
+}
+
+@replaceableComponent("views.settings.account.PhoneNumbers")
+export default class PhoneNumbers extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
             verifying: false,
-            verifyError: false,
+            verifyError: null,
             verifyMsisdn: "",
             addTask: null,
             continueDisabled: false,
@@ -136,30 +151,29 @@ export default class PhoneNumbers extends React.Component {
         };
     }
 
-    _onRemoved = (address) => {
+    private onRemoved = (address: IThreepid): void => {
         const msisdns = this.props.msisdns.filter((e) => e !== address);
         this.props.onMsisdnsChange(msisdns);
     };
 
-    _onChangeNewPhoneNumber = (e) => {
+    private onChangeNewPhoneNumber = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             newPhoneNumber: e.target.value,
         });
     };
 
-    _onChangeNewPhoneNumberCode = (e) => {
+    private onChangeNewPhoneNumberCode = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             newPhoneNumberCode: e.target.value,
         });
     };
 
-    _onAddClick = (e) => {
+    private onAddClick = (e: React.MouseEvent | React.FormEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
         if (!this.state.newPhoneNumber) return;
 
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const phoneNumber = this.state.newPhoneNumber;
         const phoneCountry = this.state.phoneCountry;
 
@@ -178,7 +192,7 @@ export default class PhoneNumbers extends React.Component {
         });
     };
 
-    _onContinueClick = (e) => {
+    private onContinueClick = (e: React.MouseEvent | React.FormEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
@@ -190,7 +204,7 @@ export default class PhoneNumbers extends React.Component {
             if (finished) {
                 const msisdns = [
                     ...this.props.msisdns,
-                    { address, medium: "msisdn" },
+                    { address, medium: ThreepidMedium.Phone },
                 ];
                 this.props.onMsisdnsChange(msisdns);
                 newPhoneNumber = "";
@@ -207,7 +221,6 @@ export default class PhoneNumbers extends React.Component {
         }).catch((err) => {
             this.setState({ continueDisabled: false });
             if (err.errcode !== 'M_THREEPID_AUTH_FAILED') {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 console.error("Unable to verify phone number: " + err);
                 Modal.createTrackedDialog('Unable to verify phone number', '', ErrorDialog, {
                     title: _t("Unable to verify phone number."),
@@ -219,17 +232,17 @@ export default class PhoneNumbers extends React.Component {
         });
     };
 
-    _onCountryChanged = (e) => {
-        this.setState({ phoneCountry: e.iso2 });
+    private onCountryChanged = (country: PhoneNumberCountryDefinition): void => {
+        this.setState({ phoneCountry: country.iso2 });
     };
 
-    render() {
+    public render(): JSX.Element {
         const existingPhoneElements = this.props.msisdns.map((p) => {
-            return <ExistingPhoneNumber msisdn={p} onRemoved={this._onRemoved} key={p.address} />;
+            return <ExistingPhoneNumber msisdn={p} onRemoved={this.onRemoved} key={p.address} />;
         });
 
         let addVerifySection = (
-            <AccessibleButton onClick={this._onAddClick} kind="primary">
+            <AccessibleButton onClick={this.onAddClick} kind="primary">
                 { _t("Add") }
             </AccessibleButton>
         );
@@ -243,17 +256,17 @@ export default class PhoneNumbers extends React.Component {
                         <br />
                         { this.state.verifyError }
                     </div>
-                    <form onSubmit={this._onContinueClick} autoComplete="off" noValidate={true}>
+                    <form onSubmit={this.onContinueClick} autoComplete="off" noValidate={true}>
                         <Field
                             type="text"
                             label={_t("Verification code")}
                             autoComplete="off"
                             disabled={this.state.continueDisabled}
                             value={this.state.newPhoneNumberCode}
-                            onChange={this._onChangeNewPhoneNumberCode}
+                            onChange={this.onChangeNewPhoneNumberCode}
                         />
                         <AccessibleButton
-                            onClick={this._onContinueClick}
+                            onClick={this.onContinueClick}
                             kind="primary"
                             disabled={this.state.continueDisabled}
                         >
@@ -264,7 +277,7 @@ export default class PhoneNumbers extends React.Component {
             );
         }
 
-        const phoneCountry = <CountryDropdown onOptionChange={this._onCountryChanged}
+        const phoneCountry = <CountryDropdown onOptionChange={this.onCountryChanged}
             className="mx_PhoneNumbers_country"
             value={this.state.phoneCountry}
             disabled={this.state.verifying}
@@ -275,7 +288,7 @@ export default class PhoneNumbers extends React.Component {
         return (
             <div className="mx_PhoneNumbers">
                 { existingPhoneElements }
-                <form onSubmit={this._onAddClick} autoComplete="off" noValidate={true} className="mx_PhoneNumbers_new">
+                <form onSubmit={this.onAddClick} autoComplete="off" noValidate={true} className="mx_PhoneNumbers_new">
                     <div className="mx_PhoneNumbers_input">
                         <Field
                             type="text"
@@ -284,7 +297,7 @@ export default class PhoneNumbers extends React.Component {
                             disabled={this.state.verifying}
                             prefixComponent={phoneCountry}
                             value={this.state.newPhoneNumber}
-                            onChange={this._onChangeNewPhoneNumber}
+                            onChange={this.onChangeNewPhoneNumber}
                         />
                     </div>
                 </form>

@@ -23,6 +23,8 @@ import { PHASE_DONE as VERIF_PHASE_DONE } from "matrix-js-sdk/src/crypto/verific
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import { accessSecretStorage, AccessCancelledError } from '../SecurityManager';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export enum Phase {
     Loading = 0,
     Intro = 1,
@@ -153,7 +155,7 @@ export class SetupEncryptionStore extends EventEmitter {
             }
         } catch (e) {
             if (!(e instanceof AccessCancelledError)) {
-                console.log(e);
+                logger.log(e);
             }
             // this will throw if the user hits cancel, so ignore
             this.phase = Phase.Intro;

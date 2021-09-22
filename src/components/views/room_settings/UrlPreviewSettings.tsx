@@ -18,8 +18,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import * as sdk from "../../../index";
 import { _t, _td } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import dis from "../../../dispatcher/dispatcher";
@@ -27,21 +25,22 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { Action } from "../../../dispatcher/actions";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { Room } from "matrix-js-sdk/src/models/room";
+import SettingsFlag from "../elements/SettingsFlag";
+
+interface IProps {
+    room: Room;
+}
 
 @replaceableComponent("views.room_settings.UrlPreviewSettings")
-export default class UrlPreviewSettings extends React.Component {
-    static propTypes = {
-        room: PropTypes.object,
-    };
-
-    _onClickUserSettings = (e) => {
+export default class UrlPreviewSettings extends React.Component<IProps> {
+    private onClickUserSettings = (e: React.MouseEvent): void => {
         e.preventDefault();
         e.stopPropagation();
         dis.fire(Action.ViewUserSettings);
     };
 
-    render() {
-        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
+    public render(): JSX.Element {
         const roomId = this.props.room.roomId;
         const isEncrypted = MatrixClientPeg.get().isRoomEncrypted(roomId);
 
@@ -54,18 +53,18 @@ export default class UrlPreviewSettings extends React.Component {
             if (accountEnabled) {
                 previewsForAccount = (
                     _t("You have <a>enabled</a> URL previews by default.", {}, {
-                        'a': (sub)=><a onClick={this._onClickUserSettings} href=''>{ sub }</a>,
+                        'a': (sub)=><a onClick={this.onClickUserSettings} href=''>{ sub }</a>,
                     })
                 );
             } else {
                 previewsForAccount = (
                     _t("You have <a>disabled</a> URL previews by default.", {}, {
-                        'a': (sub)=><a onClick={this._onClickUserSettings} href=''>{ sub }</a>,
+                        'a': (sub)=><a onClick={this.onClickUserSettings} href=''>{ sub }</a>,
                     })
                 );
             }
 
-            if (SettingsStore.canSetValue("urlPreviewsEnabled", roomId, "room")) {
+            if (SettingsStore.canSetValue("urlPreviewsEnabled", roomId, SettingLevel.ROOM)) {
                 previewsForRoom = (
                     <label>
                         <SettingsFlag

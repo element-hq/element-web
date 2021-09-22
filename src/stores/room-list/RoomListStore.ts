@@ -39,6 +39,8 @@ import SpaceStore from "../SpaceStore";
 import { Action } from "../../dispatcher/actions";
 import { SettingUpdatedPayload } from "../../dispatcher/payloads/SettingUpdatedPayload";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IState {
     tagsEnabled?: boolean;
 }
@@ -129,7 +131,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
 
         // Update any settings here, as some may have happened before we were logically ready.
         // Update any settings here, as some may have happened before we were logically ready.
-        console.log("Regenerating room lists: Startup");
+        logger.log("Regenerating room lists: Startup");
         await this.readAndCacheSettingsFromStore();
         this.regenerateAllLists({ trigger: false });
         this.handleRVSUpdate({ trigger: false }); // fake an RVS update to adjust sticky room, if needed
@@ -205,7 +207,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         if (payload.action === Action.SettingUpdated) {
             const settingUpdatedPayload = payload as SettingUpdatedPayload;
             if (this.watchedSettings.includes(settingUpdatedPayload.settingName)) {
-                console.log("Regenerating room lists: Settings changed");
+                logger.log("Regenerating room lists: Settings changed");
                 await this.readAndCacheSettingsFromStore();
 
                 this.regenerateAllLists({ trigger: false }); // regenerate the lists now

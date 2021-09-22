@@ -28,6 +28,8 @@ import { WidgetType } from "../widgets/WidgetType";
 import { UPDATE_EVENT } from "./AsyncStore";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IState {}
 
 export interface IApp extends IWidget {
@@ -146,7 +148,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
                 ActiveWidgetStore.getRoomId(persistentWidgetId) === room.roomId &&
                 !roomInfo.widgets.some(w => w.id === persistentWidgetId)
             ) {
-                console.log(`Persistent widget ${persistentWidgetId} removed from room ${room.roomId}: destroying.`);
+                logger.log(`Persistent widget ${persistentWidgetId} removed from room ${room.roomId}: destroying.`);
                 ActiveWidgetStore.destroyPersistentWidget(persistentWidgetId);
             }
         }

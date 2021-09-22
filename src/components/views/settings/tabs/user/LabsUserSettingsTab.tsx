@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import { _t } from "../../../../../languageHandler";
-import PropTypes from "prop-types";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
@@ -26,28 +25,32 @@ import BetaCard from "../../../beta/BetaCard";
 import SettingsFlag from '../../../elements/SettingsFlag';
 import { MatrixClientPeg } from '../../../../../MatrixClientPeg';
 
-export class LabsSettingToggle extends React.Component {
-    static propTypes = {
-        featureId: PropTypes.string.isRequired,
-    };
+interface ILabsSettingToggleProps {
+    featureId: string;
+}
 
-    _onChange = async (checked) => {
+export class LabsSettingToggle extends React.Component<ILabsSettingToggleProps> {
+    private onChange = async (checked: boolean): Promise<void> => {
         await SettingsStore.setValue(this.props.featureId, null, SettingLevel.DEVICE, checked);
         this.forceUpdate();
     };
 
-    render() {
+    public render(): JSX.Element {
         const label = SettingsStore.getDisplayName(this.props.featureId);
         const value = SettingsStore.getValue(this.props.featureId);
         const canChange = SettingsStore.canSetValue(this.props.featureId, null, SettingLevel.DEVICE);
-        return <LabelledToggleSwitch value={value} label={label} onChange={this._onChange} disabled={!canChange} />;
+        return <LabelledToggleSwitch value={value} label={label} onChange={this.onChange} disabled={!canChange} />;
     }
 }
 
+interface IState {
+    showHiddenReadReceipts: boolean;
+}
+
 @replaceableComponent("views.settings.tabs.user.LabsUserSettingsTab")
-export default class LabsUserSettingsTab extends React.Component {
-    constructor() {
-        super();
+export default class LabsUserSettingsTab extends React.Component<{}, IState> {
+    constructor(props: {}) {
+        super(props);
 
         MatrixClientPeg.get().doesServerSupportUnstableFeature("org.matrix.msc2285").then((showHiddenReadReceipts) => {
             this.setState({ showHiddenReadReceipts });
@@ -58,7 +61,7 @@ export default class LabsUserSettingsTab extends React.Component {
         };
     }
 
-    render() {
+    public render(): JSX.Element {
         const features = SettingsStore.getFeatureSettingNames();
         const [labs, betas] = features.reduce((arr, f) => {
             arr[SettingsStore.getBetaInfo(f) ? 1 : 0].push(f);

@@ -38,6 +38,8 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AuthBody from "../../views/auth/AuthBody";
 import AuthHeader from "../../views/auth/AuthHeader";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // These are used in several places, and come from the js-sdk's autodiscovery
 // stuff. We define them here so that they'll be picked up by i18n.
 _td("Invalid homeserver discovery response");
@@ -438,7 +440,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         // technically the flow can have multiple steps, but no one does this
         // for login and loginLogic doesn't support it so we can ignore it.
         if (!this.stepRendererMap[flow.type]) {
-            console.log("Skipping flow", flow, "due to unsupported login type", flow.type);
+            logger.log("Skipping flow", flow, "due to unsupported login type", flow.type);
             return false;
         }
         return true;
