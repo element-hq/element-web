@@ -26,9 +26,9 @@ require('highlight.js/styles/github.css');
 require('katex/dist/katex.css');
 
 /**
- * This require is necessary only for purposes of CSS hot reload, as otherwise
- * webpack has some incredibly problems figuring out which css files should be
- * hot reloaded, even with proper hints for the loader.
+ * This require is necessary only for purposes of CSS hot-reload, as otherwise
+ * webpack has some incredible problems figuring out which CSS files should be
+ * hot-reloaded, even with proper hints for the loader.
  *
  * On production build it's going to be an empty module, so don't worry about that.
  */

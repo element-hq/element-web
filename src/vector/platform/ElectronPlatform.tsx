@@ -566,6 +566,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     private navigateForwardBack(back: boolean) {
         this.ipcCall(back ? "navigateBack" : "navigateForward");
     }
+
     private navigateToSpace(num: number) {
         dis.dispatch<SwitchSpacePayload>({
             action: Action.SwitchSpace,
@@ -597,8 +598,9 @@ export default class ElectronPlatform extends VectorBasePlatform {
         if (!handled &&
             // ideally we would use SpaceStore.spacesEnabled here but importing SpaceStore in this platform
             // breaks skinning as the platform is instantiated prior to the skin being loaded
-            SettingsStore.getValue("feature_spaces") &&
+            !SettingsStore.getValue("showCommunitiesInsteadOfSpaces") &&
             ev.code.startsWith("Digit") &&
+            ev.code !== "Digit0" && // this is the shortcut for reset zoom, don't override it
             isOnlyCtrlOrCmdKeyEvent(ev)
         ) {
             const spaceNumber = ev.code.slice(5); // Cut off the first 5 characters - "Digit"

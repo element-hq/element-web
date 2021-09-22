@@ -15,15 +15,16 @@ limitations under the License.
 */
 
 /**
- * This code will be autoremoved on production builds.
- * The purpose of this code is that the webpack's `string-replace-loader`
- * pretty much search for this string in this specific file and replaces it
- * like a macro before any previous compilations, which allows us to inject
- * some css requires statements that are specific to the themes we have turned
- * on by ourselves. Without that very specific workaround, webpack would just
- * import all the CSSes, which would make the whole thing useless, as on my
- * machine with i9 the recompilation for all themes turned ou would take way
- * over 30s, which is definitely too high for nice css reloads speed.
+ * This code is removed on production builds.
+ *
+ * Webpack's `string-replace-loader` searches for the `use theming` string
+ * in this specific file, and replaces it with CSS requires statements that
+ * are specific to the themes we have enabled.
+ *
+ * Without this workaround, webpack would import the CSS of all themes, which
+ * would defeat the purpose of hot-reloading since all themes would be compiled,
+ * which would result in compilation times on the order of 30s, even on a
+ * powerful machine.
  *
  * For more details, see webpack.config.js:184 (string-replace-loader)
  */

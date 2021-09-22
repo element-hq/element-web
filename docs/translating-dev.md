@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- A working [Development Setup](../../#setting-up-a-dev-environment)
+- A working [Development Setup](../README.md#setting-up-a-dev-environment)
   - Including up-to-date versions of matrix-react-sdk and matrix-js-sdk
 - Latest LTS version of Node.js installed
 - Be able to understand English

@@ -38,6 +38,8 @@ import { createClient } from "matrix-js-sdk/src/matrix";
 
 let lastLocationHashSet: string = null;
 
+console.log(`Application is running in ${process.env.NODE_ENV} mode`);
+
 // Parse the given window.location and return parameters that can be used when calling
 // MatrixChat.showScreen(screen, params)
 function getScreenFromLocation(location: Location) {
