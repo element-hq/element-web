@@ -1,3 +1,9 @@
+Changes in [1.8.6-rc.2](https://github.com/vector-im/element-desktop/releases/tag/v1.8.6-rc.2) (2021-09-22)
+===========================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix spacing for message composer buttons ([\#6854](https://github.com/matrix-org/matrix-react-sdk/pull/6854)).
+
 Changes in [1.8.6-rc.1](https://github.com/vector-im/element-desktop/releases/tag/v1.8.6-rc.1) (2021-09-21)
 ===========================================================================================================
 
