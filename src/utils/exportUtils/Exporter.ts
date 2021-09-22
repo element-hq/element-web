@@ -22,9 +22,9 @@ import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay } from "../../DateUtils";
 import { Direction, MatrixClient } from "matrix-js-sdk";
-import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { _t } from "../../languageHandler";
+import SdkConfig from "../../SdkConfig";
 
 type BlobFile = {
     name: string;
@@ -71,7 +71,9 @@ export default abstract class Exporter {
     }
 
     protected async downloadZIP(): Promise<string | void> {
-        const filename = `matrix-export-${formatFullDateNoDay(new Date())}.zip`;
+        const brand = SdkConfig.get().brand;
+        const filename = `${brand} - Chat Export -${formatFullDateNoDay(new Date())}.zip`;
+        const { default: JSZip } = await import('jszip');
 
         const zip = new JSZip();
         // Create a writable stream to the directory

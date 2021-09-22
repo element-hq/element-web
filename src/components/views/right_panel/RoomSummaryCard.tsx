@@ -47,6 +47,7 @@ import { useRoomMemberCount } from "../../../hooks/useRoomMembers";
 import { Container, MAX_PINNED, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import RoomName from "../elements/RoomName";
 import UIStore from "../../../stores/UIStore";
+import ExportDialog from "../dialogs/ExportDialog";
 
 interface IProps {
     room: Room;
@@ -241,7 +242,6 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
     };
 
     const onRoomExportClick = async () => {
-        const { default: ExportDialog } = await import("../../../async-components/views/dialogs/ExportDialog");
         Modal.createTrackedDialog('export room dialog', '', ExportDialog, {
             room,
         });

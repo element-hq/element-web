@@ -17,27 +17,26 @@ limitations under the License.
 import React, { useRef, useState } from "react";
 import { Room } from "matrix-js-sdk/src";
 import { _t } from "../../../languageHandler";
-import { IDialogProps } from "../../../components/views/dialogs/IDialogProps";
-import BaseDialog from "../../../components/views/dialogs/BaseDialog";
-import DialogButtons from "../../../components/views/elements/DialogButtons";
-import Field from "../../../components/views/elements/Field";
-import StyledRadioGroup from "../../../components/views/elements/StyledRadioGroup";
-import StyledCheckbox from "../../../components/views/elements/StyledCheckbox";
+import { IDialogProps } from "./IDialogProps";
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
+import Field from "../elements/Field";
+import StyledRadioGroup from "../elements/StyledRadioGroup";
+import StyledCheckbox from "../elements/StyledCheckbox";
 import {
     ExportFormat,
     ExportType,
     textForFormat,
     textForType,
 } from "../../../utils/exportUtils/exportUtils";
-import withValidation, { IFieldState, IValidationResult } from "../../../components/views/elements/Validation";
+import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
 import HTMLExporter from "../../../utils/exportUtils/HtmlExport";
 import JSONExporter from "../../../utils/exportUtils/JSONExport";
 import PlainTextExporter from "../../../utils/exportUtils/PlainTextExport";
 import { useStateCallback } from "../../../hooks/useStateCallback";
 import Exporter from "../../../utils/exportUtils/Exporter";
-import Spinner from "../../../components/views/elements/Spinner";
-import Modal from "../../../Modal";
-import InfoDialog from "../../../components/views/dialogs/InfoDialog";
+import Spinner from "../elements/Spinner";
+import InfoDialog from "./InfoDialog";
 
 interface IProps extends IDialogProps {
     room: Room;
@@ -215,11 +214,10 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     };
 
     const confirmCanel = async () => {
-        await exporter?.cancelExport().then(() => {
-            setExportCancelled(true);
-            setExporting(false);
-            setExporter(null);
-        });
+        await exporter?.cancelExport();
+        setExportCancelled(true);
+        setExporting(false);
+        setExporter(null);
     };
 
     const exportFormatOptions = Object.keys(ExportFormat).map((format) => ({
@@ -256,26 +254,26 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
 
     if (exportCancelled) {
         // Display successful cancellation message
-        Modal.createTrackedDialog("Export Cancelled", "", InfoDialog, {
-            title: _t("Export Cancelled"),
-            description: <p>{ _t("The export was cancelled successfully") }</p>,
-            hasCloseButton: true,
-            onFinished: () => {
-                setExportCancelled(false);
-            },
-        });
-        return null;
+        return (
+            <InfoDialog
+                title={_t("Export Successful")}
+                description={_t("The export was cancelled successfully")}
+                hasCloseButton={true}
+                onFinished={onFinished}
+            />
+        );
     } else if (exportSuccessful) {
         // Display successful export message
-        Modal.createTrackedDialog("Export Successful", "", InfoDialog, {
-            title: _t("Export Successful"),
-            description: <p>{ _t("Your messages were successfully exported") }</p>,
-            hasCloseButton: true,
-            onFinished: () => {
-                setExportSuccessful(false);
-            },
-        });
-        return null;
+        return (
+            <InfoDialog
+                title={_t("Export Successful")}
+                description={_t(
+                    "Your export was successful. Find it in your Downloads folder.",
+                )}
+                hasCloseButton={true}
+                onFinished={onFinished}
+            />
+        );
     } else if (displayCancel) {
         // Display cancel warning
         return (

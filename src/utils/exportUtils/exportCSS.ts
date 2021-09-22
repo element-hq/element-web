@@ -16,13 +16,12 @@ limitations under the License.
 
 /* eslint-disable max-len, camelcase */
 
-import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
+import customCSS from "!!raw-loader!./exportCustomCSS.css";
 
 const getExportCSS = async (): Promise<string> => {
-    const theme = new ThemeWatcher().getEffectiveTheme();
     const stylesheets: string[] = [];
     document.querySelectorAll('link[rel="stylesheet"]').forEach((e: any) => {
-        if (e.href.endsWith("bundle.css") || e.href.endsWith(`theme-${theme}.css`)) {
+        if (e.href.endsWith("bundle.css") || e.href.endsWith("theme-light.css")) {
             stylesheets.push(e.href);
         }
     });
@@ -44,100 +43,6 @@ const getExportCSS = async (): Promise<string> => {
         /font-family: Inconsolata/g,
         "font-family: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace",
     );
-
-    const customCSS = `
-#snackbar {
-    display: flex;
-    visibility: hidden;
-    min-width: 250px;
-    margin-left: -125px;
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    position: fixed;
-    z-index: 1;
-    left: 50%;
-    bottom: 30px;
-    font-size: 17px;
-    padding: 6px 16px;
-    font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
-    font-weight: 400;
-    line-height: 1.43;
-    border-radius: 4px;
-    letter-spacing: 0.01071em;
-  }
-  
-  #snackbar.mx_show {
-    visibility: visible;
-    -webkit-animation: mx_snackbar_fadein 0.5s, mx_snackbar_fadeout 0.5s 2.5s;
-    animation: mx_snackbar_fadein 0.5s, mx_snackbar_fadeout 0.5s 2.5s;
-  }
-  
-  a.mx_reply_anchor{
-    cursor: pointer;
-    color: #238cf5;
-  }
-  
-  a.mx_reply_anchor:hover{
-    text-decoration: underline;
-  }
-  
-  @-webkit-keyframes mx_snackbar_fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 30px; opacity: 1;}
-  }
-  
-  @keyframes mx_snackbar_fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 30px; opacity: 1;}
-  }
-  
-  @-webkit-keyframes mx_snackbar_fadeout {
-    from {bottom: 30px; opacity: 1;}
-    to {bottom: 0; opacity: 0;}
-  }
-  
-  @keyframes mx_snackbar_fadeout {
-    from {bottom: 30px; opacity: 1;}
-    to {bottom: 0; opacity: 0;}
-  }
-
-  * {
-    scroll-behavior: smooth !important;
-  }
-  
-  .mx_Export_EventWrapper:target {
-    background: ${theme == 'light' ? "white" : "#15191E"};
-    animation: mx_event_highlight_animation 2s linear;
-  }
-  
-  @keyframes mx_event_highlight_animation {
-    0%,100% {
-      background: ${theme == 'light' ? "white" : "#15191E"};
-    }
-    50% {
-      background: ${theme == 'light' ? "#e3e2df" : "#21262c"};
-    }
-  }
-
-  .mx_ReplyThread_Export {
-    margin-top: 0px;
-    margin-bottom: 5px;
-  }
-
-  .mx_RedactedBody {
-    padding-left: unset;
-  }
-
-  img {
-    white-space: nowrap;
-    overflow: hidden;
-  }
-
-  .mx_MatrixChat{
-    max_width: 100%;
-  }
-`;
 
     return CSS + customCSS;
 };
