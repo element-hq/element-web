@@ -130,7 +130,7 @@ export default class Resizer<C extends IConfig = IConfig> {
 
         // mark as currently resizing
         if (this.classNames.resizing) {
-            this.container.classList.add(this.classNames.resizing);
+            this.container?.classList?.add(this.classNames.resizing);
         }
         if (this.config.onResizeStart) {
             this.config.onResizeStart();
@@ -147,7 +147,7 @@ export default class Resizer<C extends IConfig = IConfig> {
         const body = document.body;
         const finishResize = () => {
             if (this.classNames.resizing) {
-                this.container.classList.remove(this.classNames.resizing);
+                this.container?.classList?.remove(this.classNames.resizing);
             }
             distributor.finish();
             if (this.config.onResizeStop) {
@@ -194,7 +194,7 @@ export default class Resizer<C extends IConfig = IConfig> {
         if (this?.config?.handler) {
             return [this.config.handler];
         }
-        if (!this.container.children) return [];
+        if (!this.container?.children) return [];
         return Array.from(this.container.querySelectorAll(`.${this.classNames.handle}`)) as HTMLElement[];
     }
 }
