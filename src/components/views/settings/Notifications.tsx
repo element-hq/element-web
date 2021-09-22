@@ -480,7 +480,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             return masterSwitch;
         }
 
-        const emailSwitches = this.state.threepids.filter(t => t.medium === ThreepidMedium.Email)
+        const emailSwitches = (this.state.threepids || []).filter(t => t.medium === ThreepidMedium.Email)
             .map(e => <LabelledToggleSwitch
                 key={e.address}
                 value={this.state.pushers.some(p => p.kind === "email" && p.pushkey === e.address)}
