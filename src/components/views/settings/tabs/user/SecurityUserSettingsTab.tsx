@@ -173,8 +173,6 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         });
 
         // Execute all acceptances/rejections sequentially
-        // eslint-disable-next-line @typescript-eslint/no-this-alias
-        const self = this;
         const cli = MatrixClientPeg.get();
         const action = accept ? cli.joinRoom.bind(cli) : cli.leave.bind(cli);
         for (let i = 0; i < invitedRoomIds.length; i++) {
@@ -183,7 +181,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             // Accept/reject invite
             await action(roomId).then(() => {
                 // No error, update invited rooms button
-                this.setState({ invitedRoomAmt: self.state.invitedRoomAmt - 1 });
+                this.setState({ invitedRoomAmt: this.state.invitedRoomAmt - 1 });
             }, async (e) => {
                 // Action failure
                 if (e.errcode === "M_LIMIT_EXCEEDED") {
