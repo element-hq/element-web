@@ -151,12 +151,19 @@ const CreateSpaceButton = ({
     }
 
     const onNewClick = menuDisplayed ? closeMenu : () => {
+        // persist that the user has interacted with this, use it to dismiss the beta dot
+        localStorage.setItem("mx_seenSpaces", "1");
         if (!isPanelCollapsed) setPanelCollapsed(true);
         openMenu();
     };
 
+    let betaDot: JSX.Element;
+    if (!localStorage.getItem("mx_seenSpaces") && !SpaceStore.instance.spacePanelSpaces.length) {
+        betaDot = <div className="mx_BetaDot" />;
+    }
+
     return <li
-        className={classNames("mx_SpaceItem", {
+        className={classNames("mx_SpaceItem mx_SpaceItem_new", {
             "collapsed": isPanelCollapsed,
         })}
         role="treeitem"
@@ -169,6 +176,7 @@ const CreateSpaceButton = ({
             onClick={onNewClick}
             isNarrow={isPanelCollapsed}
         />
+        { betaDot }
 
         { contextMenu }
     </li>;
@@ -195,12 +203,10 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({ children, isPanelCo
                 { (provided, snapshot) => (
                     <SpaceItem
                         {...provided.draggableProps}
-                        {...provided.dragHandleProps}
+                        dragHandleProps={provided.dragHandleProps}
                         key={s.roomId}
                         innerRef={provided.innerRef}
-                        className={snapshot.isDragging
-                            ? "mx_SpaceItem_dragging"
-                            : undefined}
+                        className={snapshot.isDragging ? "mx_SpaceItem_dragging" : undefined}
                         space={s}
                         activeSpaces={activeSpaces}
                         isPanelCollapsed={isPanelCollapsed}
@@ -223,6 +229,8 @@ const SpacePanel = () => {
     }, []);
 
     const onKeyDown = (ev: React.KeyboardEvent) => {
+        if (ev.defaultPrevented) return;
+
         let handled = true;
 
         switch (ev.key) {

@@ -34,6 +34,7 @@ import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { normalizeWheelEvent } from "../../../utils/Mouse";
 import { IDialogProps } from '../dialogs/IDialogProps';
+import UIStore from '../../../stores/UIStore';
 
 // Max scale to keep gaps around the image
 const MAX_SCALE = 0.95;
@@ -43,6 +44,13 @@ const ZOOM_STEP = 0.10;
 const ZOOM_COEFFICIENT = 0.0025;
 // If we have moved only this much we can zoom
 const ZOOM_DISTANCE = 10;
+
+// Height of mx_ImageView_panel
+const getPanelHeight = (): number => {
+    const value = getComputedStyle(document.documentElement).getPropertyValue("--image-view-panel-height");
+    // Return the value as a number without the unit
+    return parseInt(value.slice(0, value.length - 2));
+};
 
 interface IProps extends IDialogProps {
     src: string; // the source of the image being displayed
@@ -56,8 +64,15 @@ interface IProps extends IDialogProps {
     // redactions, senders, timestamps etc.  Other descriptors are taken from the explicit
     // properties above, which let us use lightboxes to display images which aren't associated
     // with events.
-    mxEvent: MatrixEvent;
-    permalinkCreator: RoomPermalinkCreator;
+    mxEvent?: MatrixEvent;
+    permalinkCreator?: RoomPermalinkCreator;
+
+    thumbnailInfo?: {
+        positionX: number;
+        positionY: number;
+        width: number;
+        height: number;
+    };
 }
 
 interface IState {
@@ -75,13 +90,25 @@ interface IState {
 export default class ImageView extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
+
+        const { thumbnailInfo } = this.props;
+
         this.state = {
-            zoom: 0,
+            zoom: 0, // We default to 0 and override this in imageLoaded once we have naturalSize
             minZoom: MAX_SCALE,
             maxZoom: MAX_SCALE,
             rotation: 0,
-            translationX: 0,
-            translationY: 0,
+            translationX: (
+                thumbnailInfo?.positionX +
+                (thumbnailInfo?.width / 2) -
+                (UIStore.instance.windowWidth / 2)
+            ) ?? 0,
+            translationY: (
+                thumbnailInfo?.positionY +
+                (thumbnailInfo?.height / 2) -
+                (UIStore.instance.windowHeight / 2) -
+                (getPanelHeight() / 2)
+            ) ?? 0,
             moving: false,
             contextMenuDisplayed: false,
         };
@@ -98,6 +125,9 @@ export default class ImageView extends React.Component<IProps, IState> {
     private previousX = 0;
     private previousY = 0;
 
+    private animatingLoading = false;
+    private imageIsLoaded = false;
+
     componentDidMount() {
         // We have to use addEventListener() because the listener
         // needs to be passive in order to work with Chromium
@@ -105,14 +135,36 @@ export default class ImageView extends React.Component<IProps, IState> {
         // We want to recalculate zoom whenever the window's size changes
         window.addEventListener("resize", this.recalculateZoom);
         // After the image loads for the first time we want to calculate the zoom
-        this.image.current.addEventListener("load", this.recalculateZoom);
+        this.image.current.addEventListener("load", this.imageLoaded);
     }
 
     componentWillUnmount() {
         this.focusLock.current.removeEventListener('wheel', this.onWheel);
         window.removeEventListener("resize", this.recalculateZoom);
-        this.image.current.removeEventListener("load", this.recalculateZoom);
+        this.image.current.removeEventListener("load", this.imageLoaded);
     }
+
+    private imageLoaded = () => {
+        // First, we calculate the zoom, so that the image has the same size as
+        // the thumbnail
+        const { thumbnailInfo } = this.props;
+        if (thumbnailInfo?.width) {
+            this.setState({ zoom: thumbnailInfo.width / this.image.current.naturalWidth });
+        }
+
+        // Once the zoom is set, we the image is considered loaded and we can
+        // start animating it into the center of the screen
+        this.imageIsLoaded = true;
+        this.animatingLoading = true;
+        this.setZoomAndRotation();
+        this.setState({
+            translationX: 0,
+            translationY: 0,
+        });
+
+        // Once the position is set, there is no need to animate anymore
+        this.animatingLoading = false;
+    };
 
     private recalculateZoom = () => {
         this.setZoomAndRotation();
@@ -360,16 +412,17 @@ export default class ImageView extends React.Component<IProps, IState> {
         const showEventMeta = !!this.props.mxEvent;
         const zoomingDisabled = this.state.maxZoom === this.state.minZoom;
 
+        let transitionClassName;
+        if (this.animatingLoading) transitionClassName = "mx_ImageView_image_animatingLoading";
+        else if (this.state.moving || !this.imageIsLoaded) transitionClassName = "";
+        else transitionClassName = "mx_ImageView_image_animating";
+
         let cursor;
-        if (this.state.moving) {
-            cursor= "grabbing";
-        } else if (zoomingDisabled) {
-            cursor = "default";
-        } else if (this.state.zoom === this.state.minZoom) {
-            cursor = "zoom-in";
-        } else {
-            cursor = "zoom-out";
-        }
+        if (this.state.moving) cursor = "grabbing";
+        else if (zoomingDisabled) cursor = "default";
+        else if (this.state.zoom === this.state.minZoom) cursor = "zoom-in";
+        else cursor = "zoom-out";
+
         const rotationDegrees = this.state.rotation + "deg";
         const zoom = this.state.zoom;
         const translatePixelsX = this.state.translationX + "px";
@@ -380,7 +433,6 @@ export default class ImageView extends React.Component<IProps, IState> {
         // image causing it translate in the wrong direction.
         const style = {
             cursor: cursor,
-            transition: this.state.moving ? null : "transform 200ms ease 0s",
             transform: `translateX(${translatePixelsX})
                         translateY(${translatePixelsY})
                         scale(${zoom})
@@ -419,6 +471,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             const avatar = (
                 <MemberAvatar
                     member={mxEvent.sender}
+                    fallbackUserId={mxEvent.getSender()}
                     width={32}
                     height={32}
                     viewUserOnClick={true}
@@ -527,7 +580,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                         style={style}
                         alt={this.props.name}
                         ref={this.image}
-                        className="mx_ImageView_image"
+                        className={`mx_ImageView_image ${transitionClassName}`}
                         draggable={true}
                         onMouseDown={this.onStartMoving}
                     />

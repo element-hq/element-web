@@ -22,6 +22,7 @@ import Modal from "../Modal";
 import { _t } from "../languageHandler";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import SpaceStore from "../stores/SpaceStore";
+import Spinner from "../components/views/elements/Spinner";
 
 export async function upgradeRoom(
     room: Room,
@@ -29,8 +30,10 @@ export async function upgradeRoom(
     inviteUsers = false,
     handleError = true,
     updateSpaces = true,
+    awaitRoom = false,
 ): Promise<string> {
     const cli = room.client;
+    const spinnerModal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
 
     let newRoomId: string;
     try {
@@ -46,27 +49,36 @@ export async function upgradeRoom(
         throw e;
     }
 
-    // We have to wait for the js-sdk to give us the room back so
-    // we can more effectively abuse the MultiInviter behaviour
-    // which heavily relies on the Room object being available.
-    if (inviteUsers) {
-        const checkForUpgradeFn = async (newRoom: Room): Promise<void> => {
-            // The upgradePromise should be done by the time we await it here.
-            if (newRoom.roomId !== newRoomId) return;
-
-            const toInvite = [
-                ...room.getMembersWithMembership("join"),
-                ...room.getMembersWithMembership("invite"),
-            ].map(m => m.userId).filter(m => m !== cli.getUserId());
-
-            if (toInvite.length > 0) {
-                // Errors are handled internally to this function
-                await inviteUsersToRoom(newRoomId, toInvite);
+    if (awaitRoom || inviteUsers) {
+        await new Promise<void>(resolve => {
+            // already have the room
+            if (room.client.getRoom(newRoomId)) {
+                resolve();
+                return;
             }
 
-            cli.removeListener('Room', checkForUpgradeFn);
-        };
-        cli.on('Room', checkForUpgradeFn);
+            // We have to wait for the js-sdk to give us the room back so
+            // we can more effectively abuse the MultiInviter behaviour
+            // which heavily relies on the Room object being available.
+            const checkForRoomFn = (newRoom: Room) => {
+                if (newRoom.roomId !== newRoomId) return;
+                resolve();
+                cli.off("Room", checkForRoomFn);
+            };
+            cli.on("Room", checkForRoomFn);
+        });
+    }
+
+    if (inviteUsers) {
+        const toInvite = [
+            ...room.getMembersWithMembership("join"),
+            ...room.getMembersWithMembership("invite"),
+        ].map(m => m.userId).filter(m => m !== cli.getUserId());
+
+        if (toInvite.length > 0) {
+            // Errors are handled internally to this function
+            await inviteUsersToRoom(newRoomId, toInvite);
+        }
     }
 
     if (updateSpaces) {
@@ -89,5 +101,6 @@ export async function upgradeRoom(
         }
     }
 
+    spinnerModal.close();
     return newRoomId;
 }

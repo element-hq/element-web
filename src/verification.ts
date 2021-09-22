@@ -50,7 +50,7 @@ export async function verifyDevice(user: User, device: IDevice) {
     }
     // if cross-signing is not explicitly disabled, check if it should be enabled first.
     if (cli.getCryptoTrustCrossSignedDevices()) {
-        if (!await enable4SIfNeeded()) {
+        if (!(await enable4SIfNeeded())) {
             return;
         }
     }
@@ -91,7 +91,7 @@ export async function legacyVerifyUser(user: User) {
     }
     // if cross-signing is not explicitly disabled, check if it should be enabled first.
     if (cli.getCryptoTrustCrossSignedDevices()) {
-        if (!await enable4SIfNeeded()) {
+        if (!(await enable4SIfNeeded())) {
             return;
         }
     }
@@ -109,7 +109,7 @@ export async function verifyUser(user: User) {
         dis.dispatch({ action: 'require_registration' });
         return;
     }
-    if (!await enable4SIfNeeded()) {
+    if (!(await enable4SIfNeeded())) {
         return;
     }
     const existingRequest = pendingVerificationRequestForUser(user);

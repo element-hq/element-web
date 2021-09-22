@@ -47,17 +47,22 @@ import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Spinner from "../views/elements/Spinner";
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import ErrorDialog from '../views/dialogs/ErrorDialog';
+import { debounce } from 'lodash';
+
+import { logger } from "matrix-js-sdk/src/logger";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
 const READ_RECEIPT_INTERVAL_MS = 500;
+
+const READ_MARKER_DEBOUNCE_MS = 100;
 
 const DEBUG = false;
 
 let debuglog = function(...s: any[]) {};
 if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
-    debuglog = console.log.bind(console);
+    debuglog = logger.log.bind(console);
 }
 
 interface IProps {
@@ -126,6 +131,8 @@ interface IProps {
 
     // callback which is called when we wish to paginate the timeline window.
     onPaginationRequest?(timelineWindow: TimelineWindow, direction: string, size: number): Promise<boolean>;
+
+    hideThreadedMessages?: boolean;
 }
 
 interface IState {
@@ -214,6 +221,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         timelineCap: Number.MAX_VALUE,
         className: 'mx_RoomView_messagePanel',
         sendReadReceiptOnLoad: true,
+        hideThreadedMessages: true,
     };
 
     private lastRRSentEventId: string = undefined;
@@ -310,7 +318,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const differentEventId = newProps.eventId != this.props.eventId;
         const differentHighlightedEventId = newProps.highlightedEventId != this.props.highlightedEventId;
         if (differentEventId || differentHighlightedEventId) {
-            console.log("TimelinePanel switching to eventId " + newProps.eventId +
+            logger.log("TimelinePanel switching to eventId " + newProps.eventId +
                         " (was " + this.props.eventId + ")");
             return this.initTimeline(newProps);
         }
@@ -472,21 +480,34 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
 
         if (this.props.manageReadMarkers) {
-            const rmPosition = this.getReadMarkerPosition();
-            // we hide the read marker when it first comes onto the screen, but if
-            // it goes back off the top of the screen (presumably because the user
-            // clicks on the 'jump to bottom' button), we need to re-enable it.
-            if (rmPosition < 0) {
-                this.setState({ readMarkerVisible: true });
-            }
-
-            // if read marker position goes between 0 and -1/1,
-            // (and user is active), switch timeout
-            const timeout = this.readMarkerTimeout(rmPosition);
-            // NO-OP when timeout already has set to the given value
-            this.readMarkerActivityTimer.changeTimeout(timeout);
+            this.doManageReadMarkers();
         }
     };
+
+    /*
+     * Debounced function to manage read markers because we don't need to
+     * do this on every tiny scroll update. It also sets state which causes
+     * a component update, which can in turn reset the scroll position, so
+     * it's important we allow the browser to scroll a bit before running this
+     * (hence trailing edge only and debounce rather than throttle because
+     * we really only need to update this once the user has finished scrolling,
+     * not periodically while they scroll).
+     */
+    private doManageReadMarkers = debounce(() => {
+        const rmPosition = this.getReadMarkerPosition();
+        // we hide the read marker when it first comes onto the screen, but if
+        // it goes back off the top of the screen (presumably because the user
+        // clicks on the 'jump to bottom' button), we need to re-enable it.
+        if (rmPosition < 0) {
+            this.setState({ readMarkerVisible: true });
+        }
+
+        // if read marker position goes between 0 and -1/1,
+        // (and user is active), switch timeout
+        const timeout = this.readMarkerTimeout(rmPosition);
+        // NO-OP when timeout already has set to the given value
+        this.readMarkerActivityTimer.changeTimeout(timeout);
+    }, READ_MARKER_DEBOUNCE_MS, { leading: false, trailing: true });
 
     private onAction = (payload: ActionPayload): void => {
         switch (payload.action) {
@@ -1079,7 +1100,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                     // we're in a setState callback, and we know
                     // timelineLoading is now false, so render() should have
                     // mounted the message panel.
-                    console.log("can't initialise scroll state because " +
+                    logger.log("can't initialise scroll state because " +
                                 "messagePanel didn't load");
                     return;
                 }
@@ -1174,6 +1195,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (this.unmounted) return;
 
         this.setState(this.getEvents());
+    }
+
+    // Force refresh the timeline before threads support pending events
+    public refreshTimeline(): void {
+        this.loadTimeline();
+        this.reloadEvents();
     }
 
     // get the list of events from the timeline window and the pending event list
@@ -1511,6 +1538,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 showReactions={this.props.showReactions}
                 layout={this.props.layout}
                 enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+                hideThreadedMessages={this.props.hideThreadedMessages}
             />
         );
     }

@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$groupFilterPanelWidth: 56px; // only applies in this file, used for calculations
 $roomListCollapsedWidth: 68px;
 
 .mx_MatrixChat--with-avatar {
@@ -24,28 +23,38 @@ $roomListCollapsedWidth: 68px;
     }
 }
 
+.mx_LeftPanel_wrapper {
+    display: flex;
+    max-width: 50%;
+    position: relative;
+
+    // Contain the amount of layers rendered by constraining what actually needs re-layering via css
+    contain: layout paint;
+
+    .mx_LeftPanel_wrapper--user {
+        background-color: $roomlist-bg-color;
+        display: flex;
+        overflow: hidden;
+        position: relative;
+
+        &[data-collapsed] {
+            max-width: $roomListCollapsedWidth;
+        }
+    }
+}
+
+
+
 .mx_LeftPanel {
     background-color: $roomlist-bg-color;
     // TODO decrease this once Spaces launches as it'll no longer need to include the 56px Community Panel
-    min-width: 206px;
 
     // Create a row-based flexbox for the GroupFilterPanel and the room list
     display: flex;
     contain: content;
     position: relative;
-
-    .mx_LeftPanel_GroupFilterPanelContainer {
-        flex-grow: 0;
-        flex-shrink: 0;
-        flex-basis: $groupFilterPanelWidth;
-        height: 100%;
-
-        // Create another flexbox so the GroupFilterPanel fills the container
-        display: flex;
-        flex-direction: column;
-
-        // GroupFilterPanel handles its own CSS
-    }
+    flex-grow: 1;
+    overflow: hidden;
 
     // Note: The 'room list' in this context is actually everything that isn't the tag
     // panel, such as the menu options, breadcrumbs, filtering, etc
@@ -137,7 +146,7 @@ $roomListCollapsedWidth: 68px;
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
-                    background: $secondary-fg-color;
+                    background: $secondary-content;
                 }
             }
 
@@ -160,7 +169,7 @@ $roomListCollapsedWidth: 68px;
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
-                    background: $secondary-fg-color;
+                    background: $secondary-content;
                 }
 
                 &.mx_LeftPanel_exploreButton_space::before {
@@ -178,6 +187,8 @@ $roomListCollapsedWidth: 68px;
         }
 
         .mx_LeftPanel_roomListWrapper {
+            // Make the y-scrollbar more responsive
+            padding-right: 2px;
             overflow: hidden;
             margin-top: 10px; // so we're not up against the search/filter
             flex: 1 0 0; // needed in Safari to properly set flex-basis
@@ -199,6 +210,7 @@ $roomListCollapsedWidth: 68px;
 
     // These styles override the defaults for the minimized (66px) layout
     &.mx_LeftPanel_minimized {
+        flex-grow: 0;
         min-width: unset;
         width: unset !important;
 

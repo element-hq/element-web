@@ -19,7 +19,7 @@ import PlatformPeg from "./PlatformPeg";
 import SdkConfig from "./SdkConfig";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
-import { MatrixClient } from "matrix-js-sdk";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 
 /* eslint-disable camelcase */
 
@@ -135,9 +135,9 @@ async function getCryptoContext(client: MatrixClient): Promise<CryptoContext> {
         "cross_signing_privkey_in_secret_storage": String(
             !!(await crossSigning.isStoredInSecretStorage(secretStorage))),
         "cross_signing_master_privkey_cached": String(
-            !!(pkCache && await pkCache.getCrossSigningKeyCache("master"))),
+            !!(pkCache && (await pkCache.getCrossSigningKeyCache("master")))),
         "cross_signing_user_signing_privkey_cached": String(
-            !!(pkCache && await pkCache.getCrossSigningKeyCache("user_signing"))),
+            !!(pkCache && (await pkCache.getCrossSigningKeyCache("user_signing")))),
         "secret_storage_ready": String(await client.isSecretStorageReady()),
         "secret_storage_key_in_account": String(!!(await secretStorage.hasKey())),
         "session_backup_key_in_secret_storage": String(!!(await client.isKeyBackupKeyStored())),

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps, RefObject, SyntheticEvent, useContext, useRef, useState } from "react";
+import React, { ComponentProps, RefObject, SyntheticEvent, KeyboardEvent, useContext, useRef, useState } from "react";
 import classNames from "classnames";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
 import FocusLock from "react-focus-lock";
@@ -38,6 +38,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserSettingsDialog";
+import { Key } from "../../../Keyboard";
 
 export const createSpace = async (
     name: string,
@@ -55,7 +56,7 @@ export const createSpace = async (
             power_level_content_override: {
                 // Only allow Admins to write to the timeline to prevent hidden sync spam
                 events_default: 100,
-                ...isPublic ? { invite: 0 } : {},
+                invite: isPublic ? 0 : 50,
             },
             room_alias_name: isPublic && alias ? alias.substr(1, alias.indexOf(":") - 1) : undefined,
             topic,
@@ -96,9 +97,8 @@ const spaceNameValidator = withValidation({
     ],
 });
 
-const nameToAlias = (name: string, domain: string): string => {
-    const localpart = name.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9_-]+/gi, "");
-    return `#${localpart}:${domain}`;
+const nameToLocalpart = (name: string): string => {
+    return name.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9_-]+/gi, "");
 };
 
 // XXX: Temporary for the Spaces release only
@@ -117,9 +117,7 @@ export const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
                         "Your feedback will help inform the next versions."),
                     rageshakeLabel: "spaces-feedback",
                     rageshakeData: Object.fromEntries([
-                        "feature_spaces.all_rooms",
-                        "feature_spaces.space_member_dms",
-                        "feature_spaces.space_dm_badges",
+                        "Spaces.allRoomsInHome",
                     ].map(k => [k, SettingsStore.getValue(k)])),
                 });
             }}
@@ -159,6 +157,12 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
     const cli = useContext(MatrixClientContext);
     const domain = cli.getDomain();
 
+    const onKeyDown = (ev: KeyboardEvent) => {
+        if (ev.key === Key.ENTER) {
+            onSubmit(ev);
+        }
+    };
+
     return <form className="mx_SpaceBasicSettings" onSubmit={onSubmit}>
         <SpaceAvatar avatarUrl={avatarUrl} setAvatar={setAvatar} avatarDisabled={busy} />
 
@@ -169,14 +173,17 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
             value={name}
             onChange={ev => {
                 const newName = ev.target.value;
-                if (!alias || alias === nameToAlias(name, domain)) {
-                    setAlias(nameToAlias(newName, domain));
+                if (!alias || alias === `#${nameToLocalpart(name)}:${domain}`) {
+                    setAlias(`#${nameToLocalpart(newName)}:${domain}`);
+                    aliasFieldRef.current?.validate({ allowEmpty: true });
                 }
                 setName(newName);
             }}
+            onKeyDown={onKeyDown}
             ref={nameFieldRef}
             onValidate={spaceNameValidator}
             disabled={busy}
+            autoComplete="off"
         />
 
         { showAliasField
@@ -185,9 +192,10 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
                 onChange={setAlias}
                 domain={domain}
                 value={alias}
-                placeholder={name ? nameToAlias(name, domain) : _t("e.g. my-space")}
+                placeholder={name ? nameToLocalpart(name) : _t("e.g. my-space")}
                 label={_t("Address")}
                 disabled={busy}
+                onKeyDown={onKeyDown}
             />
             : null
         }
@@ -207,6 +215,7 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
 };
 
 const SpaceCreateMenu = ({ onFinished }) => {
+    const cli = useContext(MatrixClientContext);
     const [visibility, setVisibility] = useState<Visibility>(null);
     const [busy, setBusy] = useState<boolean>(false);
 
@@ -223,14 +232,18 @@ const SpaceCreateMenu = ({ onFinished }) => {
 
         setBusy(true);
         // require & validate the space name field
-        if (!await spaceNameField.current.validate({ allowEmpty: false })) {
+        if (!(await spaceNameField.current.validate({ allowEmpty: false }))) {
             spaceNameField.current.focus();
             spaceNameField.current.validate({ allowEmpty: false, focused: true });
             setBusy(false);
             return;
         }
-        // validate the space name alias field but do not require it
-        if (visibility === Visibility.Public && !await spaceAliasField.current.validate({ allowEmpty: true })) {
+
+        // validate the space alias field but do not require it
+        const aliasLocalpart = alias.substring(1, alias.length - cli.getDomain().length - 1);
+        if (visibility === Visibility.Public && aliasLocalpart &&
+            (await spaceAliasField.current.validate({ allowEmpty: true })) === false
+        ) {
             spaceAliasField.current.focus();
             spaceAliasField.current.validate({ allowEmpty: true, focused: true });
             setBusy(false);
@@ -238,7 +251,13 @@ const SpaceCreateMenu = ({ onFinished }) => {
         }
 
         try {
-            await createSpace(name, visibility === Visibility.Public, alias, topic, avatar);
+            await createSpace(
+                name,
+                visibility === Visibility.Public,
+                aliasLocalpart ? alias : undefined,
+                topic,
+                avatar,
+            );
 
             onFinished();
         } catch (e) {
@@ -280,13 +299,13 @@ const SpaceCreateMenu = ({ onFinished }) => {
             />
 
             <p>
-                { _t("You can also create a Space from a <a>community</a>.", {}, {
+                { _t("You can also make Spaces from <a>communities</a>.", {}, {
                     a: sub => <AccessibleButton kind="link" onClick={onCreateSpaceFromCommunityClick}>
                         { sub }
                     </AccessibleButton>,
                 }) }
                 <br />
-                { _t("To join an existing space you'll need an invite.") }
+                { _t("To join a space you'll need an invite.") }
             </p>
 
             <SpaceFeedbackPrompt onClick={onFinished} />

@@ -35,6 +35,8 @@ import { isLoggedIn } from './components/structures/MatrixChat';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { ActionPayload } from "./dispatcher/payloads";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
 export default class DeviceListener {
@@ -100,6 +102,7 @@ export default class DeviceListener {
      * @param {String[]} deviceIds List of device IDs to dismiss notifications for
      */
     async dismissUnverifiedSessions(deviceIds: Iterable<string>) {
+        logger.log("Dismissing unverified sessions: " + Array.from(deviceIds).join(','));
         for (const d of deviceIds) {
             this.dismissed.add(d);
         }
@@ -210,7 +213,7 @@ export default class DeviceListener {
     private async recheck() {
         const cli = MatrixClientPeg.get();
 
-        if (!await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) return;
+        if (!(await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing"))) return;
 
         if (!cli.isCryptoEnabled()) return;
         // don't recheck until the initial sync is complete: lots of account data events will fire
@@ -284,6 +287,9 @@ export default class DeviceListener {
                 }
             }
         }
+
+        logger.log("Old unverified sessions: " + Array.from(oldUnverifiedDeviceIds).join(','));
+        logger.log("New unverified sessions: " + Array.from(newUnverifiedDeviceIds).join(','));
 
         // Display or hide the batch toast for old unverified sessions
         if (oldUnverifiedDeviceIds.size > 0) {

@@ -64,7 +64,7 @@ $MiniAppTileHeight: 200px;
     &:hover {
         .mx_AppsContainer_resizerHandle::after {
             opacity: 0.8;
-            background: $primary-fg-color;
+            background: $primary-content;
         }
 
         .mx_ResizeHandle_horizontal::before {
@@ -79,7 +79,7 @@ $MiniAppTileHeight: 200px;
 
             content: '';
 
-            background-color: $primary-fg-color;
+            background-color: $primary-content;
             opacity: 0.8;
         }
     }

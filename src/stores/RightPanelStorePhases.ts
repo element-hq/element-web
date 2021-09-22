@@ -37,6 +37,10 @@ export enum RightPanelPhases {
     SpaceMemberList = "SpaceMemberList",
     SpaceMemberInfo = "SpaceMemberInfo",
     Space3pidMemberInfo = "Space3pidMemberInfo",
+
+    // Thread stuff
+    ThreadView = "ThreadView",
+    ThreadPanel = "ThreadPanel",
 }
 
 // These are the phases that are safe to persist (the ones that don't require additional

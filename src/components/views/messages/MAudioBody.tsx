@@ -24,6 +24,8 @@ import { IMediaEventContent } from "../../../customisations/models/IMediaEventCo
 import MFileBody from "./MFileBody";
 import { IBodyProps } from "./IBodyProps";
 import { PlaybackManager } from "../../../audio/PlaybackManager";
+import { isVoiceMessage } from "../../../utils/EventUtils";
+import { PlaybackQueue } from "../../../audio/PlaybackQueue";
 
 interface IState {
     error?: Error;
@@ -66,6 +68,10 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         const playback = PlaybackManager.instance.createPlaybackInstance(buffer, waveform);
         playback.clockInfo.populatePlaceholdersFrom(this.props.mxEvent);
         this.setState({ playback });
+
+        if (isVoiceMessage(this.props.mxEvent)) {
+            PlaybackQueue.forRoom(this.props.mxEvent.getRoomId()).unsortedEnqueue(this.props.mxEvent, playback);
+        }
 
         // Note: the components later on will handle preparing the Playback class for us.
     }

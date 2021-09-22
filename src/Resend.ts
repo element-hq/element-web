@@ -20,6 +20,8 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export default class Resend {
     static resendUnsentEvents(room: Room): Promise<void[]> {
         return Promise.all(room.getPendingEvents().filter(function(ev: MatrixEvent) {
@@ -47,12 +49,7 @@ export default class Resend {
         }, function(err: Error) {
             // XXX: temporary logging to try to diagnose
             // https://github.com/vector-im/element-web/issues/3148
-            console.log('Resend got send failure: ' + err.name + '(' + err + ')');
-
-            dis.dispatch({
-                action: 'message_send_failed',
-                event: event,
-            });
+            logger.log('Resend got send failure: ' + err.name + '(' + err + ')');
         });
     }
 

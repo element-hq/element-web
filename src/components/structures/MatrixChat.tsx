@@ -110,6 +110,8 @@ import { copyPlaintext } from "../../utils/strings";
 import { PosthogAnalytics } from '../../PosthogAnalytics';
 import { initSentry } from "../../sentry";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 /** constants for MatrixChat.state.view */
 export enum Views {
     // a special initial state which is only used at startup, while we are
@@ -143,7 +145,7 @@ export enum Views {
     SOFT_LOGOUT,
 }
 
-const AUTH_SCREENS = ["register", "login", "forgot_password", "start_sso", "start_cas"];
+const AUTH_SCREENS = ["register", "login", "forgot_password", "start_sso", "start_cas", "welcome"];
 
 // Actions that are redirected through the onboarding process prior to being
 // re-dispatched. NOTE: some actions are non-trivial and would require
@@ -893,12 +895,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.focusComposer = true;
 
         if (roomInfo.room_alias) {
-            console.log(
+            logger.log(
                 `Switching to room alias ${roomInfo.room_alias} at event ` +
                 roomInfo.event_id,
             );
         } else {
-            console.log(`Switching to room id ${roomInfo.room_id} at event ` +
+            logger.log(`Switching to room id ${roomInfo.room_id} at event ` +
                 roomInfo.event_id,
             );
         }
@@ -1016,6 +1018,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setStateForNewView({
             view: Views.LOGGED_IN,
             justRegistered,
+            currentRoomId: null,
         });
         this.setPage(PageTypes.HomePage);
         this.notifyNewScreen('home');
@@ -1406,7 +1409,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // such as when laptops unsleep.
         // https://github.com/vector-im/element-web/issues/3307#issuecomment-282895568
         cli.setCanResetTimelineCallback((roomId) => {
-            console.log("Request to reset timeline in room ", roomId, " viewing:", this.state.currentRoomId);
+            logger.log("Request to reset timeline in room ", roomId, " viewing:", this.state.currentRoomId);
             if (roomId !== this.state.currentRoomId) {
                 // It is safe to remove events from rooms we are not viewing.
                 return true;
@@ -1799,11 +1802,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 subAction: params.action,
             });
         } else if (screen.indexOf('group/') === 0) {
-            if (SpaceStore.spacesEnabled) {
-                dis.dispatch({ action: "view_home_page" });
-                return;
-            }
-
             const groupId = screen.substring(6);
 
             // TODO: Check valid group ID
@@ -1896,15 +1894,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     onSendEvent(roomId: string, event: MatrixEvent) {
         const cli = MatrixClientPeg.get();
-        if (!cli) {
-            dis.dispatch({ action: 'message_send_failed' });
-            return;
-        }
+        if (!cli) return;
 
         cli.sendEvent(roomId, event.getType(), event.getContent()).then(() => {
             dis.dispatch({ action: 'message_sent' });
-        }, (err) => {
-            dis.dispatch({ action: 'message_send_failed' });
         });
     }
 

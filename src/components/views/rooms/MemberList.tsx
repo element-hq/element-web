@@ -185,8 +185,8 @@ export default class MemberList extends React.Component<IProps, IState> {
         return {
             loading: false,
             members: members,
-            filteredJoinedMembers: this.filterMembers(members, 'join'),
-            filteredInvitedMembers: this.filterMembers(members, 'invite'),
+            filteredJoinedMembers: this.filterMembers(members, 'join', searchQuery),
+            filteredInvitedMembers: this.filterMembers(members, 'invite', searchQuery),
             canInvite: this.canInvite,
 
             // ideally we'd size this to the page height, but

@@ -71,6 +71,8 @@ import UIStore from "../../../stores/UIStore";
 import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import SpaceStore from "../../../stores/SpaceStore";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export interface IDevice {
     deviceId: string;
     ambiguous?: boolean;
@@ -428,8 +430,8 @@ const UserOptionsSection: React.FC<{
     let directMessageButton;
     if (!isMe) {
         directMessageButton = (
-            <AccessibleButton onClick={() => openDMForUser(cli, member.userId)} className="mx_UserInfo_field">
-                { _t('Direct message') }
+            <AccessibleButton onClick={() => { openDMForUser(cli, member.userId); }} className="mx_UserInfo_field">
+                { _t("Message") }
             </AccessibleButton>
         );
     }
@@ -557,7 +559,7 @@ const RoomKickButton: React.FC<IBaseProps> = ({ member, startUpdating, stopUpdat
         cli.kick(member.roomId, member.userId, reason || undefined).then(() => {
             // NO-OP; rely on the m.room.member event coming down else we could
             // get out of sync if we force setState here!
-            console.log("Kick success");
+            logger.log("Kick success");
         }, function(err) {
             console.error("Kick error: " + err);
             Modal.createTrackedDialog('Failed to kick', '', ErrorDialog, {
@@ -684,7 +686,7 @@ const BanToggleButton: React.FC<IBaseProps> = ({ member, startUpdating, stopUpda
         promise.then(() => {
             // NO-OP; rely on the m.room.member event coming down else we could
             // get out of sync if we force setState here!
-            console.log("Ban success");
+            logger.log("Ban success");
         }, function(err) {
             console.error("Ban error: " + err);
             Modal.createTrackedDialog('Failed to ban user', '', ErrorDialog, {
@@ -757,7 +759,7 @@ const MuteToggleButton: React.FC<IBaseRoomProps> = ({ member, room, powerLevels,
             cli.setPowerLevel(roomId, target, level, powerLevelEvent).then(() => {
                 // NO-OP; rely on the m.room.member event coming down else we could
                 // get out of sync if we force setState here!
-                console.log("Mute toggle success");
+                logger.log("Mute toggle success");
             }, function(err) {
                 console.error("Mute error: " + err);
                 Modal.createTrackedDialog('Failed to mute user', '', ErrorDialog, {
@@ -826,7 +828,7 @@ const RoomAdminToolsContainer: React.FC<IBaseRoomProps> = ({
     if (canAffectUser && me.powerLevel >= banPowerLevel) {
         banButton = <BanToggleButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
     }
-    if (canAffectUser && me.powerLevel >= editPowerLevel) {
+    if (canAffectUser && me.powerLevel >= editPowerLevel && !room.isSpaceRoom()) {
         muteButton = (
             <MuteToggleButton
                 member={member}
@@ -917,7 +919,7 @@ const GroupAdminToolsSection: React.FC<{
                         _t('Failed to withdraw invitation') :
                         _t('Failed to remove user from community'),
                 });
-                console.log(e);
+                logger.log(e);
             }).finally(() => {
                 stopUpdating();
             });
@@ -1052,8 +1054,7 @@ const PowerLevelEditor: React.FC<{
     const cli = useContext(MatrixClientContext);
 
     const [selectedPowerLevel, setSelectedPowerLevel] = useState(user.powerLevel);
-    const onPowerChange = useCallback(async (powerLevelStr: string) => {
-        const powerLevel = parseInt(powerLevelStr, 10);
+    const onPowerChange = useCallback(async (powerLevel: number) => {
         setSelectedPowerLevel(powerLevel);
 
         const applyPowerChange = (roomId, target, powerLevel, powerLevelEvent) => {
@@ -1061,7 +1062,7 @@ const PowerLevelEditor: React.FC<{
                 function() {
                     // NO-OP; rely on the m.room.member event coming down else we could
                     // get out of sync if we force setState here!
-                    console.log("Power change success");
+                    logger.log("Power change success");
                 }, function(err) {
                     console.error("Failed to change power level " + err);
                     Modal.createTrackedDialog('Failed to change power level', '', ErrorDialog, {
@@ -1278,7 +1279,9 @@ const BasicUserInfo: React.FC<{
         // hide the Roles section for DMs as it doesn't make sense there
         if (!DMRoomMap.shared().getUserIdForRoomId((member as RoomMember).roomId)) {
             memberDetails = <div className="mx_UserInfo_container">
-                <h3>{ _t("Role") }</h3>
+                <h3>{ _t("Role in <RoomName/>", {}, {
+                    RoomName: () => <b>{ room.name }</b>,
+                }) }</h3>
                 <PowerLevelSection
                     powerLevels={powerLevels}
                     user={member as RoomMember}
@@ -1573,11 +1576,12 @@ const UserInfo: React.FC<IProps> = ({
     // We have no previousPhase for when viewing a UserInfo from a Group or without a Room at this time
     if (room && phase === RightPanelPhases.EncryptionPanel) {
         previousPhase = RightPanelPhases.RoomMemberInfo;
-        refireParams = { member: member };
+        refireParams = { member };
+    } else if (room?.isSpaceRoom() && SpaceStore.spacesEnabled) {
+        previousPhase = previousPhase = RightPanelPhases.SpaceMemberList;
+        refireParams = { space: room };
     } else if (room) {
-        previousPhase = previousPhase = SpaceStore.spacesEnabled && room.isSpaceRoom()
-            ? RightPanelPhases.SpaceMemberList
-            : RightPanelPhases.RoomMemberList;
+        previousPhase = RightPanelPhases.RoomMemberList;
     }
 
     const onEncryptionPanelClose = () => {

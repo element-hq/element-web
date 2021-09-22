@@ -29,6 +29,8 @@ import { LocalisedPolicy, Policies } from '../../../Terms';
 import Field from '../elements/Field';
 import CaptchaForm from "./CaptchaForm";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
  * for an auth stage. (The intention is that they could also be used for other
@@ -555,7 +557,7 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
             }
         } catch (e) {
             this.props.fail(e);
-            console.log("Failed to submit msisdn token");
+            logger.log("Failed to submit msisdn token");
         }
     };
 

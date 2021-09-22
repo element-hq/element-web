@@ -62,6 +62,8 @@ export interface IOpts {
     roomType?: RoomType | string;
     historyVisibility?: HistoryVisibility;
     parentSpace?: Room;
+    // contextually only makes sense if parentSpace is specified, if true then will be added to parentSpace as suggested
+    suggested?: boolean;
     joinRule?: JoinRule;
 }
 
@@ -228,7 +230,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         }
     }).then(() => {
         if (opts.parentSpace) {
-            return SpaceStore.instance.addRoomToSpace(opts.parentSpace, roomId, [client.getDomain()], true);
+            return SpaceStore.instance.addRoomToSpace(opts.parentSpace, roomId, [client.getDomain()], opts.suggested);
         }
         if (opts.associatedWithCommunity) {
             return GroupStore.addRoomToGroup(opts.associatedWithCommunity, roomId, false);

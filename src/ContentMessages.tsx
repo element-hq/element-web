@@ -39,6 +39,10 @@ import {
 import { IUpload } from "./models/IUpload";
 import { IAbortablePromise, IImageInfo } from "matrix-js-sdk/src/@types/partials";
 import { BlurhashEncoder } from "./BlurhashEncoder";
+import SettingsStore from "./settings/SettingsStore";
+import { decorateStartSendingTime, sendRoundTripMetric } from "./sendTimePerformanceMetrics";
+
+import { logger } from "matrix-js-sdk/src/logger";
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
@@ -539,6 +543,10 @@ export default class ContentMessages {
             msgtype: "", // set later
         };
 
+        if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
+            decorateStartSendingTime(content);
+        }
+
         // if we have a mime type for the file, add it to the message metadata
         if (file.type) {
             content.info.mimetype = file.type;
@@ -614,6 +622,11 @@ export default class ContentMessages {
         }).then(function() {
             if (upload.canceled) throw new UploadCanceledError();
             const prom = matrixClient.sendMessage(roomId, content);
+            if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
+                prom.then(resp => {
+                    sendRoundTripMetric(matrixClient, roomId, resp.event_id);
+                });
+            }
             CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, false, content);
             return prom;
         }, function(err) {
@@ -667,13 +680,13 @@ export default class ContentMessages {
     private ensureMediaConfigFetched(matrixClient: MatrixClient) {
         if (this.mediaConfig !== null) return;
 
-        console.log("[Media Config] Fetching");
+        logger.log("[Media Config] Fetching");
         return matrixClient.getMediaConfig().then((config) => {
-            console.log("[Media Config] Fetched config:", config);
+            logger.log("[Media Config] Fetched config:", config);
             return config;
         }).catch(() => {
             // Media repo can't or won't report limits, so provide an empty object (no limits).
-            console.log("[Media Config] Could not fetch config, so not limiting uploads.");
+            logger.log("[Media Config] Could not fetch config, so not limiting uploads.");
             return {};
         }).then((config) => {
             this.mediaConfig = config;

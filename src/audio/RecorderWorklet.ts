@@ -45,7 +45,13 @@ class MxVoiceWorklet extends AudioWorkletProcessor {
 
     process(inputs, outputs, parameters) {
         const currentSecond = roundTimeToTargetFreq(currentTime);
-        if (currentSecond === this.nextAmplitudeSecond) {
+        // We special case the first ping because there's a fairly good chance that we'll miss the zeroth
+        // update. Firefox for instance takes 0.06 seconds (roughly) to call this function for the first
+        // time. Edge and Chrome occasionally lag behind too, but for the most part are on time.
+        //
+        // When this doesn't work properly we end up producing a waveform of nulls and no live preview
+        // of the recorded message.
+        if (currentSecond === this.nextAmplitudeSecond || this.nextAmplitudeSecond === 0) {
             // We're expecting exactly one mono input source, so just grab the very first frame of
             // samples for the analysis.
             const monoChan = inputs[0][0];

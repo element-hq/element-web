@@ -31,7 +31,7 @@ export class SpaceNotificationState extends NotificationState {
     }
 
     public get symbol(): string {
-        return null; // This notification state doesn't support symbols
+        return this._color === NotificationColor.Unsent ? "!" : null;
     }
 
     public setRooms(rooms: Room[]) {
@@ -54,7 +54,7 @@ export class SpaceNotificationState extends NotificationState {
     }
 
     public getFirstRoomWithNotifications() {
-        return this.rooms.find((room) => room.getUnreadNotificationCount() > 0).roomId;
+        return Object.values(this.states).find(state => state.color >= this.color)?.room.roomId;
     }
 
     public destroy() {
@@ -83,4 +83,3 @@ export class SpaceNotificationState extends NotificationState {
         this.emitIfUpdated(snapshot);
     }
 }
-

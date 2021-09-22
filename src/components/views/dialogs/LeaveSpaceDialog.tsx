@@ -57,7 +57,6 @@ const SpaceChildPicker = ({ filterPlaceholder, rooms, selected, onChange }) => {
             className="mx_textinput_icon mx_textinput_search"
             placeholder={filterPlaceholder}
             onSearch={setQuery}
-            autoComplete={true}
             autoFocus={true}
         />
         <AutoHideScrollbar className="mx_LeaveSpaceDialog_content">
@@ -80,7 +79,7 @@ const SpaceChildPicker = ({ filterPlaceholder, rooms, selected, onChange }) => {
 
 const LeaveRoomsPicker = ({ space, spaceChildren, roomsToLeave, setRoomsToLeave }) => {
     const selected = useMemo(() => new Set(roomsToLeave), [roomsToLeave]);
-    const [state, setState] = useState<string>(RoomsToLeave.All);
+    const [state, setState] = useState<string>(RoomsToLeave.None);
 
     useEffect(() => {
         if (state === RoomsToLeave.All) {
@@ -97,14 +96,14 @@ const LeaveRoomsPicker = ({ space, spaceChildren, roomsToLeave, setRoomsToLeave 
             onChange={setState}
             definitions={[
                 {
-                    value: RoomsToLeave.All,
-                    label: _t("Leave all rooms and spaces"),
-                }, {
                     value: RoomsToLeave.None,
-                    label: _t("Don't leave any"),
+                    label: _t("Don't leave any rooms"),
+                }, {
+                    value: RoomsToLeave.All,
+                    label: _t("Leave all rooms"),
                 }, {
                     value: RoomsToLeave.Specific,
-                    label: _t("Leave specific rooms and spaces"),
+                    label: _t("Leave some rooms"),
                 },
             ]}
         />
@@ -167,11 +166,13 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
     >
         <div className="mx_Dialog_content" id="mx_LeaveSpaceDialog">
             <p>
-                { _t("Are you sure you want to leave <spaceName/>?", {}, {
+                { _t("You are about to leave <spaceName/>.", {}, {
                     spaceName: () => <b>{ space.name }</b>,
                 }) }
                 &nbsp;
                 { rejoinWarning }
+                { rejoinWarning && (<>&nbsp;</>) }
+                { spaceChildren.length > 0 && _t("Would you like to leave the rooms in this space?") }
             </p>
 
             { spaceChildren.length > 0 && <LeaveRoomsPicker

@@ -27,7 +27,7 @@ import { findEditableEvent } from '../../../utils/EventUtils';
 import { parseEvent } from '../../../editor/deserialize';
 import { CommandPartCreator, Part, PartCreator, Type } from '../../../editor/parts';
 import EditorStateTransfer from '../../../utils/EditorStateTransfer';
-import BasicMessageComposer from "./BasicMessageComposer";
+import BasicMessageComposer, { REGEX_EMOTICON } from "./BasicMessageComposer";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Command, CommandCategories, getCommand } from '../../../SlashCommands';
 import { Action } from "../../../dispatcher/actions";
@@ -42,11 +42,9 @@ import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import AccessibleButton from '../elements/AccessibleButton';
+import SettingsStore from "../../../settings/SettingsStore";
 
-function eventIsReply(mxEvent: MatrixEvent): boolean {
-    const relatesTo = mxEvent.getContent()["m.relates_to"];
-    return !!(relatesTo && relatesTo["m.in_reply_to"]);
-}
+import { logger } from "matrix-js-sdk/src/logger";
 
 function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
     const html = mxEvent.getContent().formatted_body;
@@ -72,7 +70,7 @@ function createEditContent(model: EditorModel, editedEvent: MatrixEvent): IConte
     if (isEmote) {
         model = stripEmoteCommand(model);
     }
-    const isReply = eventIsReply(editedEvent);
+    const isReply = !!editedEvent.replyEventId;
     let plainPrefix = "";
     let htmlPrefix = "";
 
@@ -312,7 +310,7 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
                 description: errText,
             });
         } else {
-            console.log("Command success.");
+            logger.log("Command success.");
             if (messageContent) return messageContent;
         }
     }
@@ -320,6 +318,14 @@ export default class EditMessageComposer extends React.Component<IProps, IState>
     private sendEdit = async (): Promise<void> => {
         const startTime = CountlyAnalytics.getTimestamp();
         const editedEvent = this.props.editState.getEvent();
+
+        // Replace emoticon at the end of the message
+        if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
+            const caret = this.editorRef.current?.getCaret();
+            const position = this.model.positionForOffset(caret.offset, caret.atNodeEnd);
+            this.editorRef.current?.replaceEmoticon(position, REGEX_EMOTICON);
+        }
+
         const editContent = createEditContent(this.model, editedEvent);
         const newContent = editContent["m.new_content"];
 

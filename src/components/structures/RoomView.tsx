@@ -91,6 +91,8 @@ import JumpToBottomButton from "../views/rooms/JumpToBottomButton";
 import TopUnreadMessagesBar from "../views/rooms/TopUnreadMessagesBar";
 import SpaceStore from "../../stores/SpaceStore";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const DEBUG = false;
 let debuglog = function(msg: string) {};
 
@@ -98,7 +100,7 @@ const BROWSER_SUPPORTS_SANDBOX = 'sandbox' in document.createElement('iframe');
 
 if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
-    debuglog = console.log.bind(console);
+    debuglog = logger.log.bind(console);
 }
 
 interface IProps {
@@ -380,7 +382,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         }
 
         // Temporary logging to diagnose https://github.com/vector-im/element-web/issues/4307
-        console.log(
+        logger.log(
             'RVS update:',
             newState.roomId,
             newState.roomAlias,
@@ -1399,7 +1401,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 // As per the spec, an all rooms search can create this condition,
                 // it happens with Seshat but not Synapse.
                 // It will make the result count not match the displayed count.
-                console.log("Hiding search result from an unknown room", roomId);
+                logger.log("Hiding search result from an unknown room", roomId);
                 continue;
             }
 
@@ -1848,6 +1850,19 @@ export default class RoomView extends React.Component<IProps, IState> {
             />;
         }
 
+        const statusBarAreaClass = classNames("mx_RoomView_statusArea", {
+            "mx_RoomView_statusArea_expanded": isStatusAreaExpanded,
+        });
+
+        // if statusBar does not exist then statusBarArea is blank and takes up unnecessary space on the screen
+        // show statusBarArea only if statusBar is present
+        const statusBarArea = statusBar && <div className={statusBarAreaClass}>
+            <div className="mx_RoomView_statusAreaBox">
+                <div className="mx_RoomView_statusAreaBox_line" />
+                { statusBar }
+            </div>
+        </div>;
+
         const roomVersionRecommendation = this.state.upgradeRecommendation;
         const showRoomUpgradeBar = (
             roomVersionRecommendation &&
@@ -1867,7 +1882,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 isRoomEncrypted={this.context.isRoomEncrypted(this.state.room.roomId)}
             />;
         } else if (showRoomUpgradeBar) {
-            aux = <RoomUpgradeWarningBar room={this.state.room} recommendation={roomVersionRecommendation} />;
+            aux = <RoomUpgradeWarningBar room={this.state.room} />;
         } else if (myMembership !== "join") {
             // We do have a room object for this room, but we're not currently in it.
             // We may have a 3rd party invite to it.
@@ -2042,17 +2057,16 @@ export default class RoomView extends React.Component<IProps, IState> {
                 highlight={this.state.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0}
                 numUnreadMessages={this.state.numUnreadMessages}
                 onScrollToBottomClick={this.jumpToLiveTimeline}
-                roomId={this.state.roomId}
             />);
         }
 
-        const statusBarAreaClass = classNames("mx_RoomView_statusArea", {
-            "mx_RoomView_statusArea_expanded": isStatusAreaExpanded,
-        });
-
         const showRightPanel = this.state.room && this.state.showRightPanel;
         const rightPanel = showRightPanel
-            ? <RightPanel room={this.state.room} resizeNotifier={this.props.resizeNotifier} />
+            ? <RightPanel
+                room={this.state.room}
+                resizeNotifier={this.props.resizeNotifier}
+                permalinkCreator={this.getPermalinkCreatorForRoom(this.state.room)}
+                e2eStatus={this.state.e2eStatus} />
             : null;
 
         const timelineClasses = classNames("mx_RoomView_timeline", {
@@ -2095,12 +2109,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                                     { messagePanel }
                                     { searchResultsPanel }
                                 </div>
-                                <div className={statusBarAreaClass}>
-                                    <div className="mx_RoomView_statusAreaBox">
-                                        <div className="mx_RoomView_statusAreaBox_line" />
-                                        { statusBar }
-                                    </div>
-                                </div>
+                                { statusBarArea }
                                 { previewBar }
                                 { messageComposer }
                             </div>

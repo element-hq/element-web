@@ -93,6 +93,26 @@ declare global {
         mxSetupEncryptionStore?: SetupEncryptionStore;
         mxRoomScrollStateStore?: RoomScrollStateStore;
         mxOnRecaptchaLoaded?: () => void;
+        electron?: Electron;
+    }
+
+    interface DesktopCapturerSource {
+        id: string;
+        name: string;
+        thumbnailURL: string;
+    }
+
+    interface GetSourcesOptions {
+        types: Array<string>;
+        thumbnailSize?: {
+            height: number;
+            width: number;
+        };
+        fetchWindowIcons?: boolean;
+    }
+
+    interface Electron {
+        getDesktopCapturerSources(options: GetSourcesOptions): Promise<Array<DesktopCapturerSource>>;
     }
 
     interface Document {

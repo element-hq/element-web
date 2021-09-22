@@ -19,6 +19,7 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { UNSTABLE_ELEMENT_REPLY_IN_THREAD } from "matrix-js-sdk/src/@types/event";
 import { makeUserPermalink, RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
 import { Layout } from "../../../settings/Layout";
@@ -88,7 +89,13 @@ export default class ReplyThread extends React.Component<IProps, IState> {
         // could be used here for replies as well... However, the helper
         // currently assumes the relation has a `rel_type`, which older replies
         // do not, so this block is left as-is for now.
-        const mRelatesTo = ev.getWireContent()['m.relates_to'];
+        //
+        // We're prefer ev.getContent() over ev.getWireContent() to make sure
+        // we grab the latest edit with potentially new relations. But we also
+        // can't just rely on ev.getContent() by itself because historically we
+        // still show the reply from the original message even though the edit
+        // event does not include the relation reply.
+        const mRelatesTo = ev.getContent()['m.relates_to'] || ev.getWireContent()['m.relates_to'];
         if (mRelatesTo && mRelatesTo['m.in_reply_to']) {
             const mInReplyTo = mRelatesTo['m.in_reply_to'];
             if (mInReplyTo && mInReplyTo['event_id']) return mInReplyTo['event_id'];
@@ -207,15 +214,28 @@ export default class ReplyThread extends React.Component<IProps, IState> {
         return { body, html };
     }
 
-    public static makeReplyMixIn(ev: MatrixEvent) {
+    public static makeReplyMixIn(ev: MatrixEvent, replyInThread: boolean) {
         if (!ev) return {};
-        return {
+
+        const replyMixin = {
             'm.relates_to': {
                 'm.in_reply_to': {
                     'event_id': ev.getId(),
                 },
             },
         };
+
+        /**
+         * @experimental
+         * Rendering hint for threads, only attached if true to make
+         * sure that Element does not start sending that property for all events
+         */
+        if (replyInThread) {
+            const inReplyTo = replyMixin['m.relates_to']['m.in_reply_to'];
+            inReplyTo[UNSTABLE_ELEMENT_REPLY_IN_THREAD.name] = replyInThread;
+        }
+
+        return replyMixin;
     }
 
     public static makeThread(

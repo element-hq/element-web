@@ -24,7 +24,11 @@ import SettingsStore from "../SettingsStore";
  * labs flags.
  */
 export default class IncompatibleController extends SettingController {
-    public constructor(private settingName: string, private forcedValue = false) {
+    public constructor(
+        private settingName: string,
+        private forcedValue: any = false,
+        private incompatibleValue: any = true,
+    ) {
         super();
     }
 
@@ -34,13 +38,17 @@ export default class IncompatibleController extends SettingController {
         calculatedValue: any,
         calculatedAtLevel: SettingLevel,
     ): any {
-        if (this.incompatibleSettingEnabled) {
+        if (this.incompatibleSetting) {
             return this.forcedValue;
         }
         return null; // no override
     }
 
-    public get incompatibleSettingEnabled(): boolean {
-        return SettingsStore.getValue(this.settingName);
+    public get settingDisabled(): boolean {
+        return this.incompatibleSetting;
+    }
+
+    public get incompatibleSetting(): boolean {
+        return SettingsStore.getValue(this.settingName) === this.incompatibleValue;
     }
 }

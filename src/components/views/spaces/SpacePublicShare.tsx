@@ -39,7 +39,7 @@ const SpacePublicShare = ({ space, onFinished }: IProps) => {
             onClick={async () => {
                 const permalinkCreator = new RoomPermalinkCreator(space);
                 permalinkCreator.load();
-                const success = await copyPlaintext(permalinkCreator.forRoom());
+                const success = await copyPlaintext(permalinkCreator.forShareableRoom());
                 const text = success ? _t("Copied!") : _t("Failed to copy");
                 setCopiedText(text);
                 await sleep(5000);
@@ -54,8 +54,8 @@ const SpacePublicShare = ({ space, onFinished }: IProps) => {
         { space.canInvite(MatrixClientPeg.get()?.getUserId()) ? <AccessibleButton
             className="mx_SpacePublicShare_inviteButton"
             onClick={() => {
-                showRoomInviteDialog(space.roomId);
                 if (onFinished) onFinished();
+                showRoomInviteDialog(space.roomId);
             }}
         >
             <h3>{ _t("Invite people") }</h3>

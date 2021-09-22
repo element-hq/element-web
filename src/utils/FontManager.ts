@@ -20,9 +20,10 @@ limitations under the License.
  * author Roel Nieskens, https://pixelambacht.nl
  * MIT license
  */
+import { logger } from "matrix-js-sdk/src/logger";
 
 function safariVersionCheck(ua: string): boolean {
-    console.log("Browser is Safari - checking version for COLR support");
+    logger.log("Browser is Safari - checking version for COLR support");
     try {
         const safariVersionMatch = ua.match(/Mac OS X ([\d|_]+).*Version\/([\d|.]+).*Safari/);
         if (safariVersionMatch) {
@@ -32,7 +33,7 @@ function safariVersionCheck(ua: string): boolean {
             const safariVersion = safariVersionStr.split(".").map(n => parseInt(n, 10));
             const colrFontSupported = macOSVersion[0] >= 10 && macOSVersion[1] >= 14 && safariVersion[0] >= 12;
             // https://www.colorfonts.wtf/ states safari supports COLR fonts from this version on
-            console.log(`COLR support on Safari requires macOS 10.14 and Safari 12, ` +
+            logger.log(`COLR support on Safari requires macOS 10.14 and Safari 12, ` +
                 `detected Safari ${safariVersionStr} on macOS ${macOSVersionStr}, ` +
                 `COLR supported: ${colrFontSupported}`);
             return colrFontSupported;
@@ -45,7 +46,7 @@ function safariVersionCheck(ua: string): boolean {
 }
 
 async function isColrFontSupported(): Promise<boolean> {
-    console.log("Checking for COLR support");
+    logger.log("Checking for COLR support");
 
     const { userAgent } = navigator;
     // Firefox has supported COLR fonts since version 26
@@ -53,7 +54,7 @@ async function isColrFontSupported(): Promise<boolean> {
     // "Extract canvas data" permissions
     // when content blocking is enabled.
     if (userAgent.includes("Firefox")) {
-        console.log("Browser is Firefox - assuming COLR is supported");
+        logger.log("Browser is Firefox - assuming COLR is supported");
         return true;
     }
     // Safari doesn't wait for the font to load (if it doesn't have it in cache)
@@ -87,12 +88,12 @@ async function isColrFontSupported(): Promise<boolean> {
 
         img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 
-        console.log("Waiting for COLR SVG to load");
+        logger.log("Waiting for COLR SVG to load");
         await new Promise(resolve => img.onload = resolve);
-        console.log("Drawing canvas to detect COLR support");
+        logger.log("Drawing canvas to detect COLR support");
         context.drawImage(img, 0, 0);
         const colrFontSupported = (context.getImageData(10, 10, 1, 1).data[0] === 200);
-        console.log("Canvas check revealed COLR is supported? " + colrFontSupported);
+        logger.log("Canvas check revealed COLR is supported? " + colrFontSupported);
         return colrFontSupported;
     } catch (e) {
         console.error("Couldn't load COLR font", e);

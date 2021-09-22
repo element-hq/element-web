@@ -243,7 +243,6 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
                 className="mx_textinput_icon mx_textinput_search"
                 placeholder={_t("Search for rooms or people")}
                 onSearch={setQuery}
-                autoComplete={true}
                 autoFocus={true}
             />
             <AutoHideScrollbar className="mx_ForwardList_content">

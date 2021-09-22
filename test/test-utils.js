@@ -85,9 +85,8 @@ export function createTestClient() {
         generateClientSecret: () => "t35tcl1Ent5ECr3T",
         isGuest: () => false,
         isCryptoEnabled: () => false,
-        getSpaceSummary: jest.fn().mockReturnValue({
+        getRoomHierarchy: jest.fn().mockReturnValue({
             rooms: [],
-            events: [],
         }),
 
         // Used by various internal bits we aren't concerned with (yet)

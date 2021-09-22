@@ -23,6 +23,8 @@ import { setTheme } from "../../theme";
 import { ActionPayload } from '../../dispatcher/payloads';
 import { SettingLevel } from "../SettingLevel";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export default class ThemeWatcher {
     private themeWatchRef: string;
     private systemThemeWatchRef: string;
@@ -105,7 +107,7 @@ export default class ThemeWatcher {
         const systemThemeExplicit = SettingsStore.getValueAt(
             SettingLevel.DEVICE, "use_system_theme", null, false, true);
         if (systemThemeExplicit) {
-            console.log("returning explicit system theme");
+            logger.log("returning explicit system theme");
             if (this.preferDark.matches) return 'dark';
             if (this.preferLight.matches) return 'light';
         }
@@ -116,7 +118,7 @@ export default class ThemeWatcher {
         const themeExplicit = SettingsStore.getValueAt(
             SettingLevel.DEVICE, "theme", null, false, true);
         if (themeExplicit) {
-            console.log("returning explicit theme: " + themeExplicit);
+            logger.log("returning explicit theme: " + themeExplicit);
             return themeExplicit;
         }
 
@@ -126,7 +128,7 @@ export default class ThemeWatcher {
             if (this.preferDark.matches) return 'dark';
             if (this.preferLight.matches) return 'light';
         }
-        console.log("returning theme value");
+        logger.log("returning theme value");
         return SettingsStore.getValue('theme');
     }
 

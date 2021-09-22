@@ -47,9 +47,7 @@ limitations under the License.
     display: flex;
 
     flex: 1;
-    flex-grow: 0;
     min-height: 0;
-    max-width: 50%;
 }
 
 .mx_MatrixChat_syncError {
@@ -65,8 +63,8 @@ limitations under the License.
 }
 
 /* not the left panel, and not the resize handle, so the roomview/groupview/... */
-.mx_MatrixChat > :not(.mx_LeftPanel):not(.mx_SpacePanel):not(.mx_ResizeHandle) {
-    background-color: $primary-bg-color;
+.mx_MatrixChat > :not(.mx_LeftPanel):not(.mx_SpacePanel):not(.mx_ResizeHandle):not(.mx_LeftPanel_wrapper) {
+    background-color: $background;
 
     flex: 1 1 0;
     min-width: 0;
@@ -93,7 +91,7 @@ limitations under the License.
 
         content: ' ';
 
-        background-color: $primary-fg-color;
+        background-color: $primary-content;
         opacity: 0.8;
     }
 }

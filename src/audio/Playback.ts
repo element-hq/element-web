@@ -23,6 +23,8 @@ import { PlaybackClock } from "./PlaybackClock";
 import { createAudioContext, decodeOgg } from "./compat";
 import { clamp } from "../utils/numbers";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export enum PlaybackState {
     Decoding = "decoding",
     Stopped = "stopped", // no progress on timeline
@@ -117,6 +119,8 @@ export class Playback extends EventEmitter implements IDestroyable {
     }
 
     public destroy() {
+        // Dev note: It's critical that we call stop() during cleanup to ensure that downstream callers
+        // are aware of the final clock position before the user triggered an unload.
         // noinspection JSIgnoredPromiseFromCall - not concerned about being called async here
         this.stop();
         this.removeAllListeners();
@@ -137,7 +141,7 @@ export class Playback extends EventEmitter implements IDestroyable {
         // audio buffer in memory, as that can balloon to far greater than the input buffer's
         // byte length.
         if (this.buf.byteLength > 5 * 1024 * 1024) { // 5mb
-            console.log("Audio file too large: processing through <audio /> element");
+            logger.log("Audio file too large: processing through <audio /> element");
             this.element = document.createElement("AUDIO") as HTMLAudioElement;
             const prom = new Promise((resolve, reject) => {
                 this.element.onloadeddata = () => resolve(null);
@@ -177,9 +181,12 @@ export class Playback extends EventEmitter implements IDestroyable {
 
         this.waveformObservable.update(this.resampledWaveform);
 
-        this.emit(PlaybackState.Stopped); // signal that we're not decoding anymore
         this.clock.flagLoadTime(); // must happen first because setting the duration fires a clock update
         this.clock.durationSeconds = this.element ? this.element.duration : this.audioBuf.duration;
+
+        // Signal that we're not decoding anymore. This is done last to ensure the clock is updated for
+        // when the downstream callers try to use it.
+        this.emit(PlaybackState.Stopped); // signal that we're not decoding anymore
     }
 
     private onPlaybackEnd = async () => {

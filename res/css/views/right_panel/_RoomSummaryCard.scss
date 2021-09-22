@@ -27,7 +27,7 @@ limitations under the License.
 
         .mx_RoomSummaryCard_alias {
             font-size: $font-13px;
-            color: $secondary-fg-color;
+            color: $secondary-content;
         }
 
         h2, .mx_RoomSummaryCard_alias {
@@ -115,7 +115,7 @@ limitations under the License.
             // as we will be applying it in its children
             padding: 0;
             height: auto;
-            color: $tertiary-fg-color;
+            color: $tertiary-content;
 
             .mx_RoomSummaryCard_icon_app {
                 padding: 10px 48px 10px 12px; // based on typical mx_RoomSummaryCard_Button padding
@@ -128,7 +128,7 @@ limitations under the License.
                 }
 
                 span {
-                    color: $primary-fg-color;
+                    color: $primary-content;
                 }
             }
 
@@ -230,6 +230,10 @@ limitations under the License.
 
 .mx_RoomSummaryCard_icon_files::before {
     mask-image: url('$(res)/img/element-icons/room/files.svg');
+}
+
+.mx_RoomSummaryCard_icon_threads::before {
+    mask-image: url('$(res)/img/element-icons/message/thread.svg');
 }
 
 .mx_RoomSummaryCard_icon_share::before {

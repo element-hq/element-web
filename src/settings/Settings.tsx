@@ -16,9 +16,9 @@ limitations under the License.
 */
 
 import { MatrixClient } from 'matrix-js-sdk/src/client';
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 
-import { _t, _td } from '../languageHandler';
+import { _td } from '../languageHandler';
 import {
     NotificationBodyEnabledController,
     NotificationsEnabledController,
@@ -40,7 +40,6 @@ import { OrderedMultiController } from "./controllers/OrderedMultiController";
 import { Layout } from "./Layout";
 import ReducedMotionController from './controllers/ReducedMotionController';
 import IncompatibleController from "./controllers/IncompatibleController";
-import SdkConfig from "../SdkConfig";
 import PseudonymousAnalyticsController from './controllers/PseudonymousAnalyticsController';
 import NewLayoutSwitcherController from './controllers/NewLayoutSwitcherController';
 
@@ -145,44 +144,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_spaces": {
-        isFeature: true,
-        displayName: _td("Spaces prototype. Incompatible with Communities, Communities v2 and Custom Tags. " +
-            "Requires compatible homeserver for some features."),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-        controller: new ReloadOnChangeController(),
-        betaInfo: {
-            title: _td("Spaces"),
-            caption: _td("Spaces are a new way to group rooms and people."),
-            disclaimer: (enabled) => {
-                if (enabled) {
-                    return <>
-                        <p>{ _t("If you leave, %(brand)s will reload with Spaces disabled. " +
-                            "Communities and custom tags will be visible again.", {
-                            brand: SdkConfig.get().brand,
-                        }) }</p>
-                        <p>{ _t("Beta available for web, desktop and Android. Thank you for trying the beta.") }</p>
-                    </>;
-                }
-
-                return <>
-                    <p>{ _t("%(brand)s will reload with Spaces enabled. " +
-                        "Communities and custom tags will be hidden.", {
-                        brand: SdkConfig.get().brand,
-                    }) }</p>
-                    <b>{ _t("You can leave the beta any time from settings or tapping on a beta badge, " +
-                        "like the one above.") }</b>
-                    <p>{ _t("Beta available for web, desktop and Android. " +
-                        "Some features may be unavailable on your homeserver.") }</p>
-                </>;
-            },
-            image: require("../../res/img/betas/spaces.png"),
-            feedbackSubheading: _td("Your feedback will help make spaces better. " +
-                "The more detail you can go into, the better."),
-            feedbackLabel: "spaces-feedback",
-        },
-    },
     "feature_dnd": {
         isFeature: true,
         displayName: _td("Show options to enable 'Do not disturb' mode"),
@@ -203,11 +164,20 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         ),
         supportedLevels: LEVELS_FEATURE,
         default: false,
-        controller: new IncompatibleController("feature_spaces"),
+        controller: new IncompatibleController("showCommunitiesInsteadOfSpaces", false, false),
     },
     "feature_pinning": {
         isFeature: true,
         displayName: _td("Message Pinning"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_thread": {
+        isFeature: true,
+        // Requires a reload as we change an option flag on the `js-sdk`
+        // And the entire sync history needs to be parsed again
+        controller: new ReloadOnChangeController(),
+        displayName: _td("Threaded messaging"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -223,7 +193,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Group & filter rooms by custom tags (refresh to apply changes)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
-        controller: new IncompatibleController("feature_spaces"),
+        controller: new IncompatibleController("showCommunitiesInsteadOfSpaces", false, false),
     },
     "feature_state_counters": {
         isFeature: true,
@@ -233,7 +203,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "feature_many_integration_managers": {
         isFeature: true,
-        displayName: _td("Multiple integration managers"),
+        displayName: _td("Multiple integration managers (requires manual setup)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -275,12 +245,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Send pseudonymous analytics data'),
         default: false,
         controller: new PseudonymousAnalyticsController(),
-    },
-    "advancedRoomListLogging": {
-        // TODO: Remove flag before launch: https://github.com/vector-im/element-web/issues/14231
-        displayName: _td("Enable advanced debugging for the room list"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: false,
     },
     "doNotDisturb": {
         supportedLevels: [SettingLevel.DEVICE],
@@ -390,9 +354,14 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Always show message timestamps'),
         default: false,
     },
-    "autoplayGifsAndVideos": {
+    "autoplayGifs": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Autoplay GIFs and videos'),
+        displayName: _td('Autoplay GIFs'),
+        default: false,
+    },
+    "autoplayVideo": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Autoplay videos'),
         default: false,
     },
     "enableSyntaxHighlightLanguageDetection": {
@@ -668,7 +637,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "lowBandwidth": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td('Low bandwidth mode'),
+        displayName: _td('Low bandwidth mode (requires compatible homeserver)'),
         default: false,
         controller: new ReloadOnChangeController(),
     },
@@ -751,6 +720,10 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: true,
         controller: new ReducedMotionController(),
     },
+    "Performance.addSendMessageTimingMetadata": {
+        supportedLevels: [SettingLevel.CONFIG],
+        default: false,
+    },
     "Widgets.pinned": { // deprecated
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: {},
@@ -768,6 +741,15 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         description: _td("All rooms you're in will appear in Home."),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: false,
+        controller: new IncompatibleController("showCommunitiesInsteadOfSpaces", null),
+    },
+    "showCommunitiesInsteadOfSpaces": {
+        displayName: _td("Display Communities instead of Spaces"),
+        description: _td("Temporarily show communities instead of Spaces for this session. " +
+            "Support for this will be removed in the near future. This will reload Element."),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        default: false,
+        controller: new ReloadOnChangeController(),
     },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,
@@ -832,7 +814,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     [UIFeature.Communities]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
-        controller: new IncompatibleController("feature_spaces"),
+        controller: new IncompatibleController("showCommunitiesInsteadOfSpaces", false, false),
     },
     [UIFeature.AdvancedSettings]: {
         supportedLevels: LEVELS_UI_FEATURE,

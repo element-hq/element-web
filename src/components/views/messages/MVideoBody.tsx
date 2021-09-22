@@ -27,6 +27,8 @@ import { IMediaEventContent } from "../../../customisations/models/IMediaEventCo
 import { IBodyProps } from "./IBodyProps";
 import MFileBody from "./MFileBody";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IState {
     decryptedUrl?: string;
     decryptedThumbnailUrl?: string;
@@ -151,14 +153,14 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
     }
 
     async componentDidMount() {
-        const autoplay = SettingsStore.getValue("autoplayGifsAndVideos") as boolean;
+        const autoplay = SettingsStore.getValue("autoplayVideo") as boolean;
         this.loadBlurhash();
 
         if (this.props.mediaEventHelper.media.isEncrypted && this.state.decryptedUrl === null) {
             try {
                 const thumbnailUrl = await this.props.mediaEventHelper.thumbnailUrl.value;
                 if (autoplay) {
-                    console.log("Preloading video");
+                    logger.log("Preloading video");
                     this.setState({
                         decryptedUrl: await this.props.mediaEventHelper.sourceUrl.value,
                         decryptedThumbnailUrl: thumbnailUrl,
@@ -166,7 +168,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
                     });
                     this.props.onHeightChanged();
                 } else {
-                    console.log("NOT preloading video");
+                    logger.log("NOT preloading video");
                     const content = this.props.mxEvent.getContent<IMediaEventContent>();
                     this.setState({
                         // For Chrome and Electron, we need to set some non-empty `src` to
@@ -220,7 +222,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
 
     render() {
         const content = this.props.mxEvent.getContent();
-        const autoplay = SettingsStore.getValue("autoplayGifsAndVideos");
+        const autoplay = SettingsStore.getValue("autoplayVideo");
 
         if (this.state.error !== null) {
             return (
