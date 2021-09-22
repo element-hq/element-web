@@ -15,40 +15,36 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
+import BugReportDialog from "./BugReportDialog";
+import { IDialogProps } from "./IDialogProps";
+
+interface IProps extends IDialogProps { }
 
 @replaceableComponent("views.dialogs.StorageEvictedDialog")
-export default class StorageEvictedDialog extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-    };
-
-    _sendBugReport = ev => {
+export default class StorageEvictedDialog extends React.Component<IProps> {
+    private sendBugReport = (ev: React.MouseEvent): void => {
         ev.preventDefault();
-        const BugReportDialog = sdk.getComponent("dialogs.BugReportDialog");
         Modal.createTrackedDialog('Storage evicted', 'Send Bug Report Dialog', BugReportDialog, {});
     };
 
-    _onSignOutClick = () => {
+    private onSignOutClick = (): void => {
         this.props.onFinished(true);
     };
 
-    render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
+    public render(): JSX.Element {
         let logRequest;
         if (SdkConfig.get().bug_report_endpoint_url) {
             logRequest = _t(
                 "To help us prevent this in future, please <a>send us logs</a>.",
                 {},
                 {
-                    a: text => <a href="#" onClick={this._sendBugReport}>{ text }</a>,
+                    a: text => <a href="#" onClick={this.sendBugReport}>{ text }</a>,
                 },
             );
         }
@@ -73,7 +69,7 @@ export default class StorageEvictedDialog extends React.Component {
                     ) } { logRequest }</p>
                 </div>
                 <DialogButtons primaryButton={_t("Sign out")}
-                    onPrimaryButtonClick={this._onSignOutClick}
+                    onPrimaryButtonClick={this.onSignOutClick}
                     focus={true}
                     hasCancel={false}
                 />

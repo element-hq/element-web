@@ -19,30 +19,33 @@ import QuestionDialog from './QuestionDialog';
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
 import AccessibleButton from "../elements/AccessibleButton";
-import CountlyAnalytics from "../../../CountlyAnalytics";
+import CountlyAnalytics, { Rating } from "../../../CountlyAnalytics";
 import SdkConfig from "../../../SdkConfig";
 import Modal from "../../../Modal";
 import BugReportDialog from "./BugReportDialog";
 import InfoDialog from "./InfoDialog";
 import StyledRadioGroup from "../elements/StyledRadioGroup";
+import { IDialogProps } from "./IDialogProps";
 
 const existingIssuesUrl = "https://github.com/vector-im/element-web/issues" +
     "?q=is%3Aopen+is%3Aissue+sort%3Areactions-%2B1-desc";
 const newIssueUrl = "https://github.com/vector-im/element-web/issues/new/choose";
 
-export default (props) => {
-    const [rating, setRating] = useState("");
-    const [comment, setComment] = useState("");
+interface IProps extends IDialogProps {}
 
-    const onDebugLogsLinkClick = () => {
+const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
+    const [rating, setRating] = useState<Rating>();
+    const [comment, setComment] = useState<string>("");
+
+    const onDebugLogsLinkClick = (): void => {
         props.onFinished();
         Modal.createTrackedDialog('Bug Report Dialog', '', BugReportDialog, {});
     };
 
     const hasFeedback = CountlyAnalytics.instance.canEnable();
-    const onFinished = (sendFeedback) => {
+    const onFinished = (sendFeedback: boolean): void => {
         if (hasFeedback && sendFeedback) {
-            CountlyAnalytics.instance.reportFeedback(parseInt(rating, 10), comment);
+            CountlyAnalytics.instance.reportFeedback(rating, comment);
             Modal.createTrackedDialog('Feedback sent', '', InfoDialog, {
                 title: _t('Feedback sent'),
                 description: _t('Thank you!'),
@@ -65,8 +68,8 @@ export default (props) => {
 
                 <StyledRadioGroup
                     name="feedbackRating"
-                    value={rating}
-                    onChange={setRating}
+                    value={String(rating)}
+                    onChange={(r) => setRating(parseInt(r, 10) as Rating)}
                     definitions={[
                         { value: "1", label: "😠" },
                         { value: "2", label: "😞" },
@@ -138,7 +141,9 @@ export default (props) => {
             { countlyFeedbackSection }
         </React.Fragment>}
         button={hasFeedback ? _t("Send feedback") : _t("Go back")}
-        buttonDisabled={hasFeedback && rating === ""}
+        buttonDisabled={hasFeedback && !rating}
         onFinished={onFinished}
     />);
 };
+
+export default FeedbackDialog;

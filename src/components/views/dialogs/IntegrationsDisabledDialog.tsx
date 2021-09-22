@@ -15,32 +15,28 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _t } from "../../../languageHandler";
-import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';
 import { Action } from "../../../dispatcher/actions";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
+import { IDialogProps } from "./IDialogProps";
+
+interface IProps extends IDialogProps {}
 
 @replaceableComponent("views.dialogs.IntegrationsDisabledDialog")
-export default class IntegrationsDisabledDialog extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-    };
-
-    _onAcknowledgeClick = () => {
+export default class IntegrationsDisabledDialog extends React.Component<IProps> {
+    private onAcknowledgeClick = (): void => {
         this.props.onFinished();
     };
 
-    _onOpenSettingsClick = () => {
+    private onOpenSettingsClick = (): void => {
         this.props.onFinished();
         dis.fire(Action.ViewUserSettings);
     };
 
-    render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
+    public render(): JSX.Element {
         return (
             <BaseDialog
                 className='mx_IntegrationsDisabledDialog'
@@ -53,9 +49,9 @@ export default class IntegrationsDisabledDialog extends React.Component {
                 </div>
                 <DialogButtons
                     primaryButton={_t("Settings")}
-                    onPrimaryButtonClick={this._onOpenSettingsClick}
+                    onPrimaryButtonClick={this.onOpenSettingsClick}
                     cancelButton={_t("OK")}
-                    onCancel={this._onAcknowledgeClick}
+                    onCancel={this.onAcknowledgeClick}
                 />
             </BaseDialog>
         );

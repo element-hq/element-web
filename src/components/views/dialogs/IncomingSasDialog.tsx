@@ -15,12 +15,20 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
+import VerificationComplete from "../verification/VerificationComplete";
+import VerificationCancelled from "../verification/VerificationCancelled";
+import BaseAvatar from "../avatars/BaseAvatar";
+import Spinner from "../elements/Spinner";
+import VerificationShowSas from "../verification/VerificationShowSas";
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
+import { IDialogProps } from "./IDialogProps";
+import { IGeneratedSas, ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
+import { VerificationBase } from "matrix-js-sdk/src/crypto/verification/Base";
 
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -30,41 +38,56 @@ const PHASE_WAIT_FOR_PARTNER_TO_CONFIRM = 2;
 const PHASE_VERIFIED = 3;
 const PHASE_CANCELLED = 4;
 
-@replaceableComponent("views.dialogs.IncomingSasDialog")
-export default class IncomingSasDialog extends React.Component {
-    static propTypes = {
-        verifier: PropTypes.object.isRequired,
-    };
+interface IProps extends IDialogProps {
+    verifier: VerificationBase; // TODO types
+}
 
-    constructor(props) {
+interface IState {
+    phase: number;
+    sasVerified: boolean;
+    opponentProfile: {
+        // eslint-disable-next-line camelcase
+        avatar_url?: string;
+        displayname?: string;
+    };
+    opponentProfileError: Error;
+    sas: IGeneratedSas;
+}
+
+@replaceableComponent("views.dialogs.IncomingSasDialog")
+export default class IncomingSasDialog extends React.Component<IProps, IState> {
+    private showSasEvent: ISasEvent;
+
+    constructor(props: IProps) {
         super(props);
 
         let phase = PHASE_START;
-        if (this.props.verifier.cancelled) {
+        if (this.props.verifier.hasBeenCancelled) {
             logger.log("Verifier was cancelled in the background.");
             phase = PHASE_CANCELLED;
         }
 
-        this._showSasEvent = null;
+        this.showSasEvent = null;
         this.state = {
             phase: phase,
             sasVerified: false,
             opponentProfile: null,
             opponentProfileError: null,
+            sas: null,
         };
-        this.props.verifier.on('show_sas', this._onVerifierShowSas);
-        this.props.verifier.on('cancel', this._onVerifierCancel);
-        this._fetchOpponentProfile();
+        this.props.verifier.on('show_sas', this.onVerifierShowSas);
+        this.props.verifier.on('cancel', this.onVerifierCancel);
+        this.fetchOpponentProfile();
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         if (this.state.phase !== PHASE_CANCELLED && this.state.phase !== PHASE_VERIFIED) {
-            this.props.verifier.cancel('User cancel');
+            this.props.verifier.cancel(new Error('User cancel'));
         }
-        this.props.verifier.removeListener('show_sas', this._onVerifierShowSas);
+        this.props.verifier.removeListener('show_sas', this.onVerifierShowSas);
     }
 
-    async _fetchOpponentProfile() {
+    private async fetchOpponentProfile(): Promise<void> {
         try {
             const prof = await MatrixClientPeg.get().getProfileInfo(
                 this.props.verifier.userId,
@@ -79,53 +102,49 @@ export default class IncomingSasDialog extends React.Component {
         }
     }
 
-    _onFinished = () => {
+    private onFinished = (): void => {
         this.props.onFinished(this.state.phase === PHASE_VERIFIED);
-    }
+    };
 
-    _onCancelClick = () => {
+    private onCancelClick = (): void => {
         this.props.onFinished(this.state.phase === PHASE_VERIFIED);
-    }
+    };
 
-    _onContinueClick = () => {
+    private onContinueClick = (): void => {
         this.setState({ phase: PHASE_WAIT_FOR_PARTNER_TO_CONFIRM });
         this.props.verifier.verify().then(() => {
             this.setState({ phase: PHASE_VERIFIED });
         }).catch((e) => {
             logger.log("Verification failed", e);
         });
-    }
+    };
 
-    _onVerifierShowSas = (e) => {
-        this._showSasEvent = e;
+    private onVerifierShowSas = (e: ISasEvent): void => {
+        this.showSasEvent = e;
         this.setState({
             phase: PHASE_SHOW_SAS,
             sas: e.sas,
         });
-    }
+    };
 
-    _onVerifierCancel = (e) => {
+    private onVerifierCancel = (): void => {
         this.setState({
             phase: PHASE_CANCELLED,
         });
-    }
+    };
 
-    _onSasMatchesClick = () => {
-        this._showSasEvent.confirm();
+    private onSasMatchesClick = (): void => {
+        this.showSasEvent.confirm();
         this.setState({
             phase: PHASE_WAIT_FOR_PARTNER_TO_CONFIRM,
         });
-    }
+    };
 
-    _onVerifiedDoneClick = () => {
+    private onVerifiedDoneClick = (): void => {
         this.props.onFinished(true);
-    }
+    };
 
-    _renderPhaseStart() {
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const Spinner = sdk.getComponent("views.elements.Spinner");
-        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
-
+    private renderPhaseStart(): JSX.Element {
         const isSelf = this.props.verifier.userId === MatrixClientPeg.get().getUserId();
 
         let profile;
@@ -192,27 +211,24 @@ export default class IncomingSasDialog extends React.Component {
                 <DialogButtons
                     primaryButton={_t('Continue')}
                     hasCancel={true}
-                    onPrimaryButtonClick={this._onContinueClick}
-                    onCancel={this._onCancelClick}
+                    onPrimaryButtonClick={this.onContinueClick}
+                    onCancel={this.onCancelClick}
                 />
             </div>
         );
     }
 
-    _renderPhaseShowSas() {
-        const VerificationShowSas = sdk.getComponent('views.verification.VerificationShowSas');
+    private renderPhaseShowSas(): JSX.Element {
         return <VerificationShowSas
-            sas={this._showSasEvent.sas}
-            onCancel={this._onCancelClick}
-            onDone={this._onSasMatchesClick}
+            sas={this.showSasEvent.sas}
+            onCancel={this.onCancelClick}
+            onDone={this.onSasMatchesClick}
             isSelf={this.props.verifier.userId === MatrixClientPeg.get().getUserId()}
             inDialog={true}
         />;
     }
 
-    _renderPhaseWaitForPartnerToConfirm() {
-        const Spinner = sdk.getComponent("views.elements.Spinner");
-
+    private renderPhaseWaitForPartnerToConfirm(): JSX.Element {
         return (
             <div>
                 <Spinner />
@@ -221,41 +237,38 @@ export default class IncomingSasDialog extends React.Component {
         );
     }
 
-    _renderPhaseVerified() {
-        const VerificationComplete = sdk.getComponent('views.verification.VerificationComplete');
-        return <VerificationComplete onDone={this._onVerifiedDoneClick} />;
+    private renderPhaseVerified(): JSX.Element {
+        return <VerificationComplete onDone={this.onVerifiedDoneClick} />;
     }
 
-    _renderPhaseCancelled() {
-        const VerificationCancelled = sdk.getComponent('views.verification.VerificationCancelled');
-        return <VerificationCancelled onDone={this._onCancelClick} />;
+    private renderPhaseCancelled(): JSX.Element {
+        return <VerificationCancelled onDone={this.onCancelClick} />;
     }
 
-    render() {
+    public render(): JSX.Element {
         let body;
         switch (this.state.phase) {
             case PHASE_START:
-                body = this._renderPhaseStart();
+                body = this.renderPhaseStart();
                 break;
             case PHASE_SHOW_SAS:
-                body = this._renderPhaseShowSas();
+                body = this.renderPhaseShowSas();
                 break;
             case PHASE_WAIT_FOR_PARTNER_TO_CONFIRM:
-                body = this._renderPhaseWaitForPartnerToConfirm();
+                body = this.renderPhaseWaitForPartnerToConfirm();
                 break;
             case PHASE_VERIFIED:
-                body = this._renderPhaseVerified();
+                body = this.renderPhaseVerified();
                 break;
             case PHASE_CANCELLED:
-                body = this._renderPhaseCancelled();
+                body = this.renderPhaseCancelled();
                 break;
         }
 
-        const BaseDialog = sdk.getComponent("dialogs.BaseDialog");
         return (
             <BaseDialog
                 title={_t("Incoming Verification Request")}
-                onFinished={this._onFinished}
+                onFinished={this.onFinished}
                 fixedWidth={false}
             >
                 { body }

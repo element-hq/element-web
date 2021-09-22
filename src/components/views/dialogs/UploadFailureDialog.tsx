@@ -17,11 +17,18 @@ limitations under the License.
 import filesize from 'filesize';
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
+import { IDialogProps } from "./IDialogProps";
+
+interface IProps extends IDialogProps {
+    badFiles: File[];
+    totalFiles: number;
+    contentMessages: ContentMessages;
+}
 
 /*
  * Tells the user about files we know cannot be uploaded before we even try uploading
@@ -29,26 +36,16 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
  * the size of the file.
  */
 @replaceableComponent("views.dialogs.UploadFailureDialog")
-export default class UploadFailureDialog extends React.Component {
-    static propTypes = {
-        badFiles: PropTypes.arrayOf(PropTypes.object).isRequired,
-        totalFiles: PropTypes.number.isRequired,
-        contentMessages: PropTypes.instanceOf(ContentMessages).isRequired,
-        onFinished: PropTypes.func.isRequired,
-    }
-
-    _onCancelClick = () => {
+export default class UploadFailureDialog extends React.Component<IProps> {
+    private onCancelClick = (): void => {
         this.props.onFinished(false);
-    }
+    };
 
-    _onUploadClick = () => {
+    private onUploadClick = (): void => {
         this.props.onFinished(true);
-    }
+    };
 
-    render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
+    public render(): JSX.Element {
         let message;
         let preview;
         let buttons;
@@ -65,7 +62,7 @@ export default class UploadFailureDialog extends React.Component {
             );
             buttons = <DialogButtons primaryButton={_t('OK')}
                 hasCancel={false}
-                onPrimaryButtonClick={this._onCancelClick}
+                onPrimaryButtonClick={this.onCancelClick}
                 focus={true}
             />;
         } else if (this.props.totalFiles === this.props.badFiles.length) {
@@ -80,7 +77,7 @@ export default class UploadFailureDialog extends React.Component {
             );
             buttons = <DialogButtons primaryButton={_t('OK')}
                 hasCancel={false}
-                onPrimaryButtonClick={this._onCancelClick}
+                onPrimaryButtonClick={this.onCancelClick}
                 focus={true}
             />;
         } else {
@@ -96,17 +93,17 @@ export default class UploadFailureDialog extends React.Component {
             const howManyOthers = this.props.totalFiles - this.props.badFiles.length;
             buttons = <DialogButtons
                 primaryButton={_t('Upload %(count)s other files', { count: howManyOthers })}
-                onPrimaryButtonClick={this._onUploadClick}
+                onPrimaryButtonClick={this.onUploadClick}
                 hasCancel={true}
                 cancelButton={_t("Cancel All")}
-                onCancel={this._onCancelClick}
+                onCancel={this.onCancelClick}
                 focus={true}
             />;
         }
 
         return (
             <BaseDialog className='mx_UploadFailureDialog'
-                onFinished={this._onCancelClick}
+                onFinished={this.onCancelClick}
                 title={_t("Upload Error")}
                 contentId='mx_Dialog_content'
             >

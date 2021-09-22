@@ -15,42 +15,47 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import { Room } from "matrix-js-sdk/src/models/room";
-import * as sdk from '../../../index';
 import { dialogTermsInteractionCallback, TermsNotSignedError } from "../../../Terms";
 import classNames from 'classnames';
 import * as ScalarMessaging from "../../../ScalarMessaging";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { IntegrationManagerInstance } from "../../../integrations/IntegrationManagerInstance";
+import ScalarAuthClient from "../../../ScalarAuthClient";
+import AccessibleButton from "../elements/AccessibleButton";
+import IntegrationManager from "../settings/IntegrationManager";
+import { IDialogProps } from "./IDialogProps";
+
+interface IProps extends IDialogProps {
+    /**
+     * Optional room where the integration manager should be open to
+     */
+    room?: Room;
+
+    /**
+     * Optional screen to open on the integration manager
+     */
+    screen?: string;
+
+    /**
+     * Optional integration ID to open in the integration manager
+     */
+    integrationId?: string;
+}
+
+interface IState {
+    managers: IntegrationManagerInstance[];
+    busy: boolean;
+    currentIndex: number;
+    currentConnected: boolean;
+    currentLoading: boolean;
+    currentScalarClient: ScalarAuthClient;
+}
 
 @replaceableComponent("views.dialogs.TabbedIntegrationManagerDialog")
-export default class TabbedIntegrationManagerDialog extends React.Component {
-    static propTypes = {
-        /**
-         * Called with:
-         *     * success {bool} True if the user accepted any douments, false if cancelled
-         *     * agreedUrls {string[]} List of agreed URLs
-         */
-        onFinished: PropTypes.func.isRequired,
-
-        /**
-         * Optional room where the integration manager should be open to
-         */
-        room: PropTypes.instanceOf(Room),
-
-        /**
-         * Optional screen to open on the integration manager
-         */
-        screen: PropTypes.string,
-
-        /**
-         * Optional integration ID to open in the integration manager
-         */
-        integrationId: PropTypes.string,
-    };
-
-    constructor(props) {
+export default class TabbedIntegrationManagerDialog extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -63,11 +68,11 @@ export default class TabbedIntegrationManagerDialog extends React.Component {
         };
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         this.openManager(0, true);
     }
 
-    openManager = async (i, force = false) => {
+    private openManager = async (i: number, force = false): Promise<void> => {
         if (i === this.state.currentIndex && !force) return;
 
         const manager = this.state.managers[i];
@@ -120,8 +125,7 @@ export default class TabbedIntegrationManagerDialog extends React.Component {
         }
     };
 
-    _renderTabs() {
-        const AccessibleButton = sdk.getComponent("views.elements.AccessibleButton");
+    private renderTabs(): JSX.Element[] {
         return this.state.managers.map((m, i) => {
             const classes = classNames({
                 'mx_TabbedIntegrationManagerDialog_tab': true,
@@ -140,8 +144,7 @@ export default class TabbedIntegrationManagerDialog extends React.Component {
         });
     }
 
-    _renderTab() {
-        const IntegrationManager = sdk.getComponent("views.settings.IntegrationManager");
+    public renderTab(): JSX.Element {
         let uiUrl = null;
         if (this.state.currentScalarClient) {
             uiUrl = this.state.currentScalarClient.getScalarInterfaceUrlForRoom(
@@ -151,7 +154,6 @@ export default class TabbedIntegrationManagerDialog extends React.Component {
             );
         }
         return <IntegrationManager
-            configured={true}
             loading={this.state.currentLoading}
             connected={this.state.currentConnected}
             url={uiUrl}
@@ -159,14 +161,14 @@ export default class TabbedIntegrationManagerDialog extends React.Component {
         />;
     }
 
-    render() {
+    public render(): JSX.Element {
         return (
             <div className='mx_TabbedIntegrationManagerDialog_container'>
                 <div className='mx_TabbedIntegrationManagerDialog_tabs'>
-                    { this._renderTabs() }
+                    { this.renderTabs() }
                 </div>
                 <div className='mx_TabbedIntegrationManagerDialog_currentManager'>
-                    { this._renderTab() }
+                    { this.renderTab() }
                 </div>
             </div>
         );

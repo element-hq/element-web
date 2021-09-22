@@ -16,29 +16,30 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from "classnames";
 
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import { IDialogProps } from "./IDialogProps";
 
-export default class QuestionDialog extends React.Component {
-    static propTypes = {
-        title: PropTypes.string,
-        description: PropTypes.node,
-        extraButtons: PropTypes.node,
-        button: PropTypes.string,
-        buttonDisabled: PropTypes.bool,
-        danger: PropTypes.bool,
-        focus: PropTypes.bool,
-        onFinished: PropTypes.func.isRequired,
-        headerImage: PropTypes.string,
-        quitOnly: PropTypes.bool, // quitOnly doesn't show the cancel button just the quit [x].
-        fixedWidth: PropTypes.bool,
-        className: PropTypes.string,
-    };
+interface IProps extends IDialogProps {
+    title?: string;
+    description?: React.ReactNode;
+    extraButtons?: React.ReactNode;
+    button?: string;
+    buttonDisabled?: boolean;
+    danger?: boolean;
+    focus?: boolean;
+    headerImage?: string;
+    quitOnly?: boolean; // quitOnly doesn't show the cancel button just the quit [x].
+    fixedWidth?: boolean;
+    className?: string;
+    hasCancelButton?: boolean;
+    cancelButton?: React.ReactNode;
+}
 
-    static defaultProps = {
+export default class QuestionDialog extends React.Component<IProps> {
+    public static defaultProps: Partial<IProps> = {
         title: "",
         description: "",
         extraButtons: null,
@@ -48,17 +49,19 @@ export default class QuestionDialog extends React.Component {
         quitOnly: false,
     };
 
-    onOk = () => {
+    private onOk = (): void => {
         this.props.onFinished(true);
     };
 
-    onCancel = () => {
+    private onCancel = (): void => {
         this.props.onFinished(false);
     };
 
-    render() {
+    public render(): JSX.Element {
+        // Converting these to imports breaks wrench tests
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+
         let primaryButtonClass = "";
         if (this.props.danger) {
             primaryButtonClass = "danger";

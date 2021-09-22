@@ -17,69 +17,88 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 import AccessibleButton from '../elements/AccessibleButton';
-import { ERROR_USER_CANCELLED } from "../../structures/InteractiveAuth";
+import InteractiveAuth, { ERROR_USER_CANCELLED } from "../../structures/InteractiveAuth";
 import { SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import BaseDialog from "./BaseDialog";
+import { IAuthData } from "matrix-js-sdk/src/interactive-auth";
+import { IDialogProps } from "./IDialogProps";
+
+interface IDialogAesthetics {
+    [x: string]: {
+        [x: number]: {
+            title: string;
+            body: string;
+            continueText: string;
+            continueKind: string;
+        };
+    };
+}
+
+interface IProps extends IDialogProps {
+    // matrix client to use for UI auth requests
+    matrixClient: MatrixClient;
+
+    // response from initial request. If not supplied, will do a request on
+    // mount.
+    authData?: IAuthData;
+
+    // callback
+    makeRequest: (auth: IAuthData) => Promise<IAuthData>;
+
+    // Optional title and body to show when not showing a particular stage
+    title?: string;
+    body?: string;
+
+    // Optional title and body pairs for particular stages and phases within
+    // those stages. Object structure/example is:
+    // {
+    //     "org.example.stage_type": {
+    //         1: {
+    //             "body": "This is a body for phase 1" of org.example.stage_type,
+    //             "title": "Title for phase 1 of org.example.stage_type"
+    //         },
+    //         2: {
+    //             "body": "This is a body for phase 2 of org.example.stage_type",
+    //             "title": "Title for phase 2 of org.example.stage_type"
+    //             "continueText": "Confirm identity with Example Auth",
+    //             "continueKind": "danger"
+    //         }
+    //     }
+    // }
+    //
+    // Default is defined in _getDefaultDialogAesthetics()
+    aestheticsForStagePhases?: IDialogAesthetics;
+}
+
+interface IState {
+    authError: Error;
+
+    // See _onUpdateStagePhase()
+    uiaStage: number | string;
+    uiaStagePhase: number | string;
+}
 
 @replaceableComponent("views.dialogs.InteractiveAuthDialog")
-export default class InteractiveAuthDialog extends React.Component {
-    static propTypes = {
-        // matrix client to use for UI auth requests
-        matrixClient: PropTypes.object.isRequired,
+export default class InteractiveAuthDialog extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
+        super(props);
 
-        // response from initial request. If not supplied, will do a request on
-        // mount.
-        authData: PropTypes.shape({
-            flows: PropTypes.array,
-            params: PropTypes.object,
-            session: PropTypes.string,
-        }),
+        this.state = {
+            authError: null,
 
-        // callback
-        makeRequest: PropTypes.func.isRequired,
+            // See _onUpdateStagePhase()
+            uiaStage: null,
+            uiaStagePhase: null,
+        };
+    }
 
-        onFinished: PropTypes.func.isRequired,
-
-        // Optional title and body to show when not showing a particular stage
-        title: PropTypes.string,
-        body: PropTypes.string,
-
-        // Optional title and body pairs for particular stages and phases within
-        // those stages. Object structure/example is:
-        // {
-        //     "org.example.stage_type": {
-        //         1: {
-        //             "body": "This is a body for phase 1" of org.example.stage_type,
-        //             "title": "Title for phase 1 of org.example.stage_type"
-        //         },
-        //         2: {
-        //             "body": "This is a body for phase 2 of org.example.stage_type",
-        //             "title": "Title for phase 2 of org.example.stage_type"
-        //             "continueText": "Confirm identity with Example Auth",
-        //             "continueKind": "danger"
-        //         }
-        //     }
-        // }
-        //
-        // Default is defined in _getDefaultDialogAesthetics()
-        aestheticsForStagePhases: PropTypes.object,
-    };
-
-    state = {
-        authError: null,
-
-        // See _onUpdateStagePhase()
-        uiaStage: null,
-        uiaStagePhase: null,
-    };
-
-    _getDefaultDialogAesthetics() {
+    private getDefaultDialogAesthetics(): IDialogAesthetics {
         const ssoAesthetics = {
             [SSOAuthEntry.PHASE_PREAUTH]: {
                 title: _t("Use Single Sign On to continue"),
@@ -101,7 +120,7 @@ export default class InteractiveAuthDialog extends React.Component {
         };
     }
 
-    _onAuthFinished = (success, result) => {
+    private onAuthFinished = (success: boolean, result: Error): void => {
         if (success) {
             this.props.onFinished(true, result);
         } else {
@@ -115,19 +134,16 @@ export default class InteractiveAuthDialog extends React.Component {
         }
     };
 
-    _onUpdateStagePhase = (newStage, newPhase) => {
+    private onUpdateStagePhase = (newStage: string | number, newPhase: string | number): void => {
         // We copy the stage and stage phase params into state for title selection in render()
         this.setState({ uiaStage: newStage, uiaStagePhase: newPhase });
     };
 
-    _onDismissClick = () => {
+    private onDismissClick = (): void => {
         this.props.onFinished(false);
     };
 
-    render() {
-        const InteractiveAuth = sdk.getComponent("structures.InteractiveAuth");
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-
+    public render(): JSX.Element {
         // Let's pick a title, body, and other params text that we'll show to the user. The order
         // is most specific first, so stagePhase > our props > defaults.
 
@@ -135,7 +151,7 @@ export default class InteractiveAuthDialog extends React.Component {
         let body = this.state.authError ? null : this.props.body;
         let continueText = null;
         let continueKind = null;
-        const dialogAesthetics = this.props.aestheticsForStagePhases || this._getDefaultDialogAesthetics();
+        const dialogAesthetics = this.props.aestheticsForStagePhases || this.getDefaultDialogAesthetics();
         if (!this.state.authError && dialogAesthetics) {
             if (dialogAesthetics[this.state.uiaStage]) {
                 const aesthetics = dialogAesthetics[this.state.uiaStage][this.state.uiaStagePhase];
@@ -152,9 +168,9 @@ export default class InteractiveAuthDialog extends React.Component {
                 <div id='mx_Dialog_content'>
                     <div role="alert">{ this.state.authError.message || this.state.authError.toString() }</div>
                     <br />
-                    <AccessibleButton onClick={this._onDismissClick}
+                    <AccessibleButton onClick={this.onDismissClick}
                         className="mx_GeneralButton"
-                        autoFocus="true"
+                        autoFocus={true}
                     >
                         { _t("Dismiss") }
                     </AccessibleButton>
@@ -165,12 +181,11 @@ export default class InteractiveAuthDialog extends React.Component {
                 <div id='mx_Dialog_content'>
                     { body }
                     <InteractiveAuth
-                        ref={this._collectInteractiveAuth}
                         matrixClient={this.props.matrixClient}
                         authData={this.props.authData}
                         makeRequest={this.props.makeRequest}
-                        onAuthFinished={this._onAuthFinished}
-                        onStagePhaseChange={this._onUpdateStagePhase}
+                        onAuthFinished={this.onAuthFinished}
+                        onStagePhaseChange={this.onUpdateStagePhase}
                         continueText={continueText}
                         continueKind={continueKind}
                     />

@@ -17,27 +17,27 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import QuestionDialog from "./QuestionDialog";
+import BugReportDialog from "./BugReportDialog";
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
+import { IDialogProps } from "./IDialogProps";
+
+interface IProps extends IDialogProps {
+    error: string;
+}
 
 @replaceableComponent("views.dialogs.SessionRestoreErrorDialog")
-export default class SessionRestoreErrorDialog extends React.Component {
-    static propTypes = {
-        error: PropTypes.string.isRequired,
-        onFinished: PropTypes.func.isRequired,
-    };
-
-    _sendBugReport = () => {
-        const BugReportDialog = sdk.getComponent("dialogs.BugReportDialog");
+export default class SessionRestoreErrorDialog extends React.Component<IProps> {
+    private sendBugReport = (): void => {
         Modal.createTrackedDialog('Session Restore Error', 'Send Bug Report Dialog', BugReportDialog, {});
     };
 
-    _onClearStorageClick = () => {
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+    private onClearStorageClick = (): void => {
         Modal.createTrackedDialog('Session Restore Confirm Logout', '', QuestionDialog, {
             title: _t("Sign out"),
             description:
@@ -48,19 +48,17 @@ export default class SessionRestoreErrorDialog extends React.Component {
         });
     };
 
-    _onRefreshClick = () => {
+    private onRefreshClick = (): void => {
         // Is this likely to help? Probably not, but giving only one button
         // that clears your storage seems awful.
-        window.location.reload(true);
+        window.location.reload();
     };
 
-    render() {
+    public render(): JSX.Element {
         const brand = SdkConfig.get().brand;
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         const clearStorageButton = (
-            <button onClick={this._onClearStorageClick} className="danger">
+            <button onClick={this.onClearStorageClick} className="danger">
                 { _t("Clear Storage and Sign Out") }
             </button>
         );
@@ -68,7 +66,7 @@ export default class SessionRestoreErrorDialog extends React.Component {
         let dialogButtons;
         if (SdkConfig.get().bug_report_endpoint_url) {
             dialogButtons = <DialogButtons primaryButton={_t("Send Logs")}
-                onPrimaryButtonClick={this._sendBugReport}
+                onPrimaryButtonClick={this.sendBugReport}
                 focus={true}
                 hasCancel={false}
             >
@@ -76,7 +74,7 @@ export default class SessionRestoreErrorDialog extends React.Component {
             </DialogButtons>;
         } else {
             dialogButtons = <DialogButtons primaryButton={_t("Refresh")}
-                onPrimaryButtonClick={this._onRefreshClick}
+                onPrimaryButtonClick={this.onRefreshClick}
                 focus={true}
                 hasCancel={false}
             >

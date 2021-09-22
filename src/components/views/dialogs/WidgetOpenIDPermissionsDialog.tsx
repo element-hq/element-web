@@ -47,15 +47,15 @@ export default class WidgetOpenIDPermissionsDialog extends React.PureComponent<I
         };
     }
 
-    private onAllow = () => {
+    private onAllow = (): void => {
         this.onPermissionSelection(true);
     };
 
-    private onDeny = () => {
+    private onDeny = (): void => {
         this.onPermissionSelection(false);
     };
 
-    private onPermissionSelection(allowed: boolean) {
+    private onPermissionSelection(allowed: boolean): void {
         if (this.state.rememberSelection) {
             logger.log(`Remembering ${this.props.widget.id} as allowed=${allowed} for OpenID`);
 
@@ -68,11 +68,11 @@ export default class WidgetOpenIDPermissionsDialog extends React.PureComponent<I
         this.props.onFinished(allowed);
     }
 
-    private onRememberSelectionChange = (newVal: boolean) => {
+    private onRememberSelectionChange = (newVal: boolean): void => {
         this.setState({ rememberSelection: newVal });
     };
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <BaseDialog
                 className='mx_WidgetOpenIDPermissionsDialog'

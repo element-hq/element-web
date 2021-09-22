@@ -19,37 +19,31 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import * as sdk from '../../../index';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import QuestionDialog from "./QuestionDialog";
+import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
+import { IDialogProps } from "./IDialogProps";
+
+interface IProps extends IDialogProps {
+    userId: string;
+    device: DeviceInfo;
+}
 
 @replaceableComponent("views.dialogs.ManualDeviceKeyVerificationDialog")
-export default class ManualDeviceKeyVerificationDialog extends React.Component {
-    static propTypes = {
-        userId: PropTypes.string.isRequired,
-        device: PropTypes.object.isRequired,
-        onFinished: PropTypes.func.isRequired,
-    };
-
-    _onCancelClick = () => {
-        this.props.onFinished(false);
-    }
-
-    _onLegacyFinished = (confirm) => {
+export default class ManualDeviceKeyVerificationDialog extends React.Component<IProps> {
+    private onLegacyFinished = (confirm: boolean): void => {
         if (confirm) {
             MatrixClientPeg.get().setDeviceVerified(
                 this.props.userId, this.props.device.deviceId, true,
             );
         }
         this.props.onFinished(confirm);
-    }
+    };
 
-    render() {
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-
+    public render(): JSX.Element {
         let text;
         if (MatrixClientPeg.get().getUserId() === this.props.userId) {
             text = _t("Confirm by comparing the following with the User Settings in your other session:");
@@ -81,7 +75,7 @@ export default class ManualDeviceKeyVerificationDialog extends React.Component {
                 title={_t("Verify session")}
                 description={body}
                 button={_t("Verify session")}
-                onFinished={this._onLegacyFinished}
+                onFinished={this.onLegacyFinished}
             />
         );
     }
