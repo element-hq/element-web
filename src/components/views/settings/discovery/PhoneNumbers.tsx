@@ -16,14 +16,16 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { _t } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
-import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
 import AddThreepid from '../../../../AddThreepid';
 import { replaceableComponent } from "../../../../utils/replaceableComponent";
+import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
+import ErrorDialog from "../../dialogs/ErrorDialog";
+import Field from "../../elements/Field";
+import AccessibleButton from "../../elements/AccessibleButton";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -32,12 +34,21 @@ This is a copy/paste of EmailAddresses, mostly.
 
 // TODO: Combine EmailAddresses and PhoneNumbers to be 3pid agnostic
 
-export class PhoneNumber extends React.Component {
-    static propTypes = {
-        msisdn: PropTypes.object.isRequired,
-    };
+interface IPhoneNumberProps {
+    msisdn: IThreepid;
+}
 
-    constructor(props) {
+interface IPhoneNumberState {
+    verifying: boolean;
+    verificationCode: string;
+    addTask: any; // FIXME: When AddThreepid is TSfied
+    continueDisabled: boolean;
+    bound: boolean;
+    verifyError: string;
+}
+
+export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumberState> {
+    constructor(props: IPhoneNumberProps) {
         super(props);
 
         const { bound } = props.msisdn;
@@ -48,21 +59,22 @@ export class PhoneNumber extends React.Component {
             addTask: null,
             continueDisabled: false,
             bound,
+            verifyError: null,
         };
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
+    // eslint-disable-next-line @typescript-eslint/naming-convention, camelcase
+    public UNSAFE_componentWillReceiveProps(nextProps: IPhoneNumberProps): void {
         const { bound } = nextProps.msisdn;
         this.setState({ bound });
     }
 
-    async changeBinding({ bind, label, errorTitle }) {
-        if (!(await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind())) {
+    private async changeBinding({ bind, label, errorTitle }): Promise<void> {
+        if (!await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
             return this.changeBindingTangledAddBind({ bind, label, errorTitle });
         }
 
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const { medium, address } = this.props.msisdn;
 
         try {
@@ -99,8 +111,7 @@ export class PhoneNumber extends React.Component {
         }
     }
 
-    async changeBindingTangledAddBind({ bind, label, errorTitle }) {
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+    private async changeBindingTangledAddBind({ bind, label, errorTitle }): Promise<void> {
         const { medium, address } = this.props.msisdn;
 
         const task = new AddThreepid();
@@ -139,7 +150,7 @@ export class PhoneNumber extends React.Component {
         }
     }
 
-    onRevokeClick = (e) => {
+    private onRevokeClick = (e: React.MouseEvent): void => {
         e.stopPropagation();
         e.preventDefault();
         this.changeBinding({
@@ -147,9 +158,9 @@ export class PhoneNumber extends React.Component {
             label: "revoke",
             errorTitle: _t("Unable to revoke sharing for phone number"),
         });
-    }
+    };
 
-    onShareClick = (e) => {
+    private onShareClick = (e: React.MouseEvent): void => {
         e.stopPropagation();
         e.preventDefault();
         this.changeBinding({
@@ -157,15 +168,15 @@ export class PhoneNumber extends React.Component {
             label: "share",
             errorTitle: _t("Unable to share phone number"),
         });
-    }
+    };
 
-    onVerificationCodeChange = (e) => {
+    private onVerificationCodeChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             verificationCode: e.target.value,
         });
-    }
+    };
 
-    onContinueClick = async (e) => {
+    private onContinueClick = async (e: React.MouseEvent | React.FormEvent): Promise<void> => {
         e.stopPropagation();
         e.preventDefault();
 
@@ -183,7 +194,6 @@ export class PhoneNumber extends React.Component {
         } catch (err) {
             this.setState({ continueDisabled: false });
             if (err.errcode !== 'M_THREEPID_AUTH_FAILED') {
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 console.error("Unable to verify phone number: " + err);
                 Modal.createTrackedDialog('Unable to verify phone number', '', ErrorDialog, {
                     title: _t("Unable to verify phone number."),
@@ -193,11 +203,9 @@ export class PhoneNumber extends React.Component {
                 this.setState({ verifyError: _t("Incorrect verification code") });
             }
         }
-    }
+    };
 
-    render() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const Field = sdk.getComponent('elements.Field');
+    public render(): JSX.Element {
         const { address } = this.props.msisdn;
         const { verifying, bound } = this.state;
 
@@ -247,13 +255,13 @@ export class PhoneNumber extends React.Component {
     }
 }
 
-@replaceableComponent("views.settings.discovery.PhoneNumbers")
-export default class PhoneNumbers extends React.Component {
-    static propTypes = {
-        msisdns: PropTypes.array.isRequired,
-    }
+interface IProps {
+    msisdns: IThreepid[];
+}
 
-    render() {
+@replaceableComponent("views.settings.discovery.PhoneNumbers")
+export default class PhoneNumbers extends React.Component<IProps> {
+    public render(): JSX.Element {
         let content;
         if (this.props.msisdns.length > 0) {
             content = this.props.msisdns.map((e) => {

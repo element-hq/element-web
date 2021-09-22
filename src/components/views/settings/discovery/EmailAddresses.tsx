@@ -16,14 +16,15 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { _t } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
-import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
 import AddThreepid from '../../../../AddThreepid';
 import { replaceableComponent } from "../../../../utils/replaceableComponent";
+import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
+import ErrorDialog from "../../dialogs/ErrorDialog";
+import AccessibleButton from "../../elements/AccessibleButton";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -41,12 +42,19 @@ that is available.
 TODO: Reduce all the copying between account vs. discovery components.
 */
 
-export class EmailAddress extends React.Component {
-    static propTypes = {
-        email: PropTypes.object.isRequired,
-    };
+interface IEmailAddressProps {
+    email: IThreepid;
+}
 
-    constructor(props) {
+interface IEmailAddressState {
+    verifying: boolean;
+    addTask: any; // FIXME: When AddThreepid is TSfied
+    continueDisabled: boolean;
+    bound: boolean;
+}
+
+export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddressState> {
+    constructor(props: IEmailAddressProps) {
         super(props);
 
         const { bound } = props.email;
@@ -60,17 +68,17 @@ export class EmailAddress extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
+    // eslint-disable-next-line @typescript-eslint/naming-convention, camelcase
+    public UNSAFE_componentWillReceiveProps(nextProps: IEmailAddressProps): void {
         const { bound } = nextProps.email;
         this.setState({ bound });
     }
 
-    async changeBinding({ bind, label, errorTitle }) {
-        if (!(await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind())) {
+    private async changeBinding({ bind, label, errorTitle }): Promise<void> {
+        if (!await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
             return this.changeBindingTangledAddBind({ bind, label, errorTitle });
         }
 
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const { medium, address } = this.props.email;
 
         try {
@@ -103,8 +111,7 @@ export class EmailAddress extends React.Component {
         }
     }
 
-    async changeBindingTangledAddBind({ bind, label, errorTitle }) {
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+    private async changeBindingTangledAddBind({ bind, label, errorTitle }): Promise<void> {
         const { medium, address } = this.props.email;
 
         const task = new AddThreepid();
@@ -139,7 +146,7 @@ export class EmailAddress extends React.Component {
         }
     }
 
-    onRevokeClick = (e) => {
+    private onRevokeClick = (e: React.MouseEvent): void => {
         e.stopPropagation();
         e.preventDefault();
         this.changeBinding({
@@ -147,9 +154,9 @@ export class EmailAddress extends React.Component {
             label: "revoke",
             errorTitle: _t("Unable to revoke sharing for email address"),
         });
-    }
+    };
 
-    onShareClick = (e) => {
+    private onShareClick = (e: React.MouseEvent): void => {
         e.stopPropagation();
         e.preventDefault();
         this.changeBinding({
@@ -157,9 +164,9 @@ export class EmailAddress extends React.Component {
             label: "share",
             errorTitle: _t("Unable to share email address"),
         });
-    }
+    };
 
-    onContinueClick = async (e) => {
+    private onContinueClick = async (e: React.MouseEvent): Promise<void> => {
         e.stopPropagation();
         e.preventDefault();
 
@@ -173,7 +180,6 @@ export class EmailAddress extends React.Component {
             });
         } catch (err) {
             this.setState({ continueDisabled: false });
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             if (err.errcode === 'M_THREEPID_AUTH_FAILED') {
                 Modal.createTrackedDialog("E-mail hasn't been verified yet", "", ErrorDialog, {
                     title: _t("Your email address hasn't been verified yet"),
@@ -188,10 +194,9 @@ export class EmailAddress extends React.Component {
                 });
             }
         }
-    }
+    };
 
-    render() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+    public render(): JSX.Element {
         const { address } = this.props.email;
         const { verifying, bound } = this.state;
 
@@ -234,14 +239,13 @@ export class EmailAddress extends React.Component {
         );
     }
 }
+interface IProps {
+    emails: IThreepid[];
+}
 
 @replaceableComponent("views.settings.discovery.EmailAddresses")
-export default class EmailAddresses extends React.Component {
-    static propTypes = {
-        emails: PropTypes.array.isRequired,
-    }
-
-    render() {
+export default class EmailAddresses extends React.Component<IProps> {
+    public render(): JSX.Element {
         let content;
         if (this.props.emails.length > 0) {
             content = this.props.emails.map((e) => {

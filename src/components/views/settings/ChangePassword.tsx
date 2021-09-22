@@ -17,78 +17,81 @@ limitations under the License.
 
 import Field from "../elements/Field";
 import React from 'react';
-import PropTypes from 'prop-types';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AccessibleButton from '../elements/AccessibleButton';
 import Spinner from '../elements/Spinner';
-import withValidation from '../elements/Validation';
+import withValidation, { IFieldState, IValidationResult } from '../elements/Validation';
 import { _t } from '../../../languageHandler';
-import * as sdk from "../../../index";
 import Modal from "../../../Modal";
 import PassphraseField from "../auth/PassphraseField";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { PASSWORD_MIN_SCORE } from '../auth/RegistrationForm';
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import SetEmailDialog from "../dialogs/SetEmailDialog";
+import QuestionDialog from "../dialogs/QuestionDialog";
 
 const FIELD_OLD_PASSWORD = 'field_old_password';
 const FIELD_NEW_PASSWORD = 'field_new_password';
 const FIELD_NEW_PASSWORD_CONFIRM = 'field_new_password_confirm';
 
+enum Phase {
+    Edit = "edit",
+    Uploading = "uploading",
+    Error = "error",
+}
+
+interface IProps {
+    onFinished?: ({ didSetEmail: boolean }?) => void;
+    onError?: (error: {error: string}) => void;
+    rowClassName?: string;
+    buttonClassName?: string;
+    buttonKind?: string;
+    buttonLabel?: string;
+    confirm?: boolean;
+    // Whether to autoFocus the new password input
+    autoFocusNewPasswordInput?: boolean;
+    className?: string;
+    shouldAskForEmail?: boolean;
+}
+
+interface IState {
+    fieldValid: {};
+    phase: Phase;
+    oldPassword: string;
+    newPassword: string;
+    newPasswordConfirm: string;
+}
+
 @replaceableComponent("views.settings.ChangePassword")
-export default class ChangePassword extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func,
-        onError: PropTypes.func,
-        onCheckPassword: PropTypes.func,
-        rowClassName: PropTypes.string,
-        buttonClassName: PropTypes.string,
-        buttonKind: PropTypes.string,
-        buttonLabel: PropTypes.string,
-        confirm: PropTypes.bool,
-        // Whether to autoFocus the new password input
-        autoFocusNewPasswordInput: PropTypes.bool,
-    };
-
-    static Phases = {
-        Edit: "edit",
-        Uploading: "uploading",
-        Error: "error",
-    };
-
-    static defaultProps = {
+export default class ChangePassword extends React.Component<IProps, IState> {
+    public static defaultProps: Partial<IProps> = {
         onFinished() {},
         onError() {},
-        onCheckPassword(oldPass, newPass, confirmPass) {
-            if (newPass !== confirmPass) {
-                return {
-                    error: _t("New passwords don't match"),
-                };
-            } else if (!newPass || newPass.length === 0) {
-                return {
-                    error: _t("Passwords can't be empty"),
-                };
-            }
-        },
-        confirm: true,
-    }
 
-    state = {
-        fieldValid: {},
-        phase: ChangePassword.Phases.Edit,
-        oldPassword: "",
-        newPassword: "",
-        newPasswordConfirm: "",
+        confirm: true,
     };
 
-    changePassword(oldPassword, newPassword) {
+    constructor(props: IProps) {
+        super(props);
+
+        this.state = {
+            fieldValid: {},
+            phase: Phase.Edit,
+            oldPassword: "",
+            newPassword: "",
+            newPasswordConfirm: "",
+        };
+    }
+
+    private onChangePassword(oldPassword: string, newPassword: string): void {
         const cli = MatrixClientPeg.get();
 
         if (!this.props.confirm) {
-            this._changePassword(cli, oldPassword, newPassword);
+            this.changePassword(cli, oldPassword, newPassword);
             return;
         }
 
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createTrackedDialog('Change Password', '', QuestionDialog, {
             title: _t("Warning!"),
             description:
@@ -109,20 +112,20 @@ export default class ChangePassword extends React.Component {
                 <button
                     key="exportRoomKeys"
                     className="mx_Dialog_primary"
-                    onClick={this._onExportE2eKeysClicked}
+                    onClick={this.onExportE2eKeysClicked}
                 >
                     { _t('Export E2E room keys') }
                 </button>,
             ],
             onFinished: (confirmed) => {
                 if (confirmed) {
-                    this._changePassword(cli, oldPassword, newPassword);
+                    this.changePassword(cli, oldPassword, newPassword);
                 }
             },
         });
     }
 
-    _changePassword(cli, oldPassword, newPassword) {
+    private changePassword(cli: MatrixClient, oldPassword: string, newPassword: string): void {
         const authDict = {
             type: 'm.login.password',
             identifier: {
@@ -136,12 +139,12 @@ export default class ChangePassword extends React.Component {
         };
 
         this.setState({
-            phase: ChangePassword.Phases.Uploading,
+            phase: Phase.Uploading,
         });
 
         cli.setPassword(authDict, newPassword).then(() => {
             if (this.props.shouldAskForEmail) {
-                return this._optionallySetEmail().then((confirmed) => {
+                return this.optionallySetEmail().then((confirmed) => {
                     this.props.onFinished({
                         didSetEmail: confirmed,
                     });
@@ -153,7 +156,7 @@ export default class ChangePassword extends React.Component {
             this.props.onError(err);
         }).finally(() => {
             this.setState({
-                phase: ChangePassword.Phases.Edit,
+                phase: Phase.Edit,
                 oldPassword: "",
                 newPassword: "",
                 newPasswordConfirm: "",
@@ -161,16 +164,27 @@ export default class ChangePassword extends React.Component {
         });
     }
 
-    _optionallySetEmail() {
+    private checkPassword(oldPass: string, newPass: string, confirmPass: string): {error: string} {
+        if (newPass !== confirmPass) {
+            return {
+                error: _t("New passwords don't match"),
+            };
+        } else if (!newPass || newPass.length === 0) {
+            return {
+                error: _t("Passwords can't be empty"),
+            };
+        }
+    }
+
+    private optionallySetEmail(): Promise<boolean> {
         // Ask for an email otherwise the user has no way to reset their password
-        const SetEmailDialog = sdk.getComponent("dialogs.SetEmailDialog");
         const modal = Modal.createTrackedDialog('Do you want to set an email address?', '', SetEmailDialog, {
             title: _t('Do you want to set an email address?'),
         });
         return modal.finished.then(([confirmed]) => confirmed);
     }
 
-    _onExportE2eKeysClicked = () => {
+    private onExportE2eKeysClicked = (): void => {
         Modal.createTrackedDialogAsync('Export E2E Keys', 'Change Password',
             import('../../../async-components/views/dialogs/security/ExportE2eKeysDialog'),
             {
@@ -179,7 +193,7 @@ export default class ChangePassword extends React.Component {
         );
     };
 
-    markFieldValid(fieldID, valid) {
+    private markFieldValid(fieldID: string, valid: boolean): void {
         const { fieldValid } = this.state;
         fieldValid[fieldID] = valid;
         this.setState({
@@ -187,19 +201,19 @@ export default class ChangePassword extends React.Component {
         });
     }
 
-    onChangeOldPassword = (ev) => {
+    private onChangeOldPassword = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             oldPassword: ev.target.value,
         });
     };
 
-    onOldPasswordValidate = async fieldState => {
+    private onOldPasswordValidate = async (fieldState: IFieldState): Promise<IValidationResult> => {
         const result = await this.validateOldPasswordRules(fieldState);
         this.markFieldValid(FIELD_OLD_PASSWORD, result.valid);
         return result;
     };
 
-    validateOldPasswordRules = withValidation({
+    private validateOldPasswordRules = withValidation({
         rules: [
             {
                 key: "required",
@@ -209,29 +223,29 @@ export default class ChangePassword extends React.Component {
         ],
     });
 
-    onChangeNewPassword = (ev) => {
+    private onChangeNewPassword = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             newPassword: ev.target.value,
         });
     };
 
-    onNewPasswordValidate = result => {
+    private onNewPasswordValidate = (result: IValidationResult): void => {
         this.markFieldValid(FIELD_NEW_PASSWORD, result.valid);
     };
 
-    onChangeNewPasswordConfirm = (ev) => {
+    private onChangeNewPasswordConfirm = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             newPasswordConfirm: ev.target.value,
         });
     };
 
-    onNewPasswordConfirmValidate = async fieldState => {
+    private onNewPasswordConfirmValidate = async (fieldState: IFieldState): Promise<IValidationResult> => {
         const result = await this.validatePasswordConfirmRules(fieldState);
         this.markFieldValid(FIELD_NEW_PASSWORD_CONFIRM, result.valid);
         return result;
     };
 
-    validatePasswordConfirmRules = withValidation({
+    private validatePasswordConfirmRules = withValidation<this>({
         rules: [
             {
                 key: "required",
@@ -248,7 +262,7 @@ export default class ChangePassword extends React.Component {
         ],
     });
 
-    onClickChange = async (ev) => {
+    private onClickChange = async (ev: React.MouseEvent | React.FormEvent): Promise<void> => {
         ev.preventDefault();
 
         const allFieldsValid = await this.verifyFieldsBeforeSubmit();
@@ -260,20 +274,20 @@ export default class ChangePassword extends React.Component {
         const oldPassword = this.state.oldPassword;
         const newPassword = this.state.newPassword;
         const confirmPassword = this.state.newPasswordConfirm;
-        const err = this.props.onCheckPassword(
+        const err = this.checkPassword(
             oldPassword, newPassword, confirmPassword,
         );
         if (err) {
             this.props.onError(err);
         } else {
-            this.changePassword(oldPassword, newPassword);
+            this.onChangePassword(oldPassword, newPassword);
         }
     };
 
-    async verifyFieldsBeforeSubmit() {
+    private async verifyFieldsBeforeSubmit(): Promise<boolean> {
         // Blur the active element if any, so we first run its blur validation,
         // which is less strict than the pass we're about to do below for all fields.
-        const activeElement = document.activeElement;
+        const activeElement = document.activeElement as HTMLElement;
         if (activeElement) {
             activeElement.blur();
         }
@@ -300,7 +314,7 @@ export default class ChangePassword extends React.Component {
 
         // Validation and state updates are async, so we need to wait for them to complete
         // first. Queue a `setState` callback and wait for it to resolve.
-        await new Promise(resolve => this.setState({}, resolve));
+        await new Promise<void>((resolve) => this.setState({}, resolve));
 
         if (this.allFieldsValid()) {
             return true;
@@ -319,7 +333,7 @@ export default class ChangePassword extends React.Component {
         return false;
     }
 
-    allFieldsValid() {
+    private allFieldsValid(): boolean {
         const keys = Object.keys(this.state.fieldValid);
         for (let i = 0; i < keys.length; ++i) {
             if (!this.state.fieldValid[keys[i]]) {
@@ -329,7 +343,7 @@ export default class ChangePassword extends React.Component {
         return true;
     }
 
-    findFirstInvalidField(fieldIDs) {
+    private findFirstInvalidField(fieldIDs: string[]): Field {
         for (const fieldID of fieldIDs) {
             if (!this.state.fieldValid[fieldID] && this[fieldID]) {
                 return this[fieldID];
@@ -338,12 +352,12 @@ export default class ChangePassword extends React.Component {
         return null;
     }
 
-    render() {
+    public render(): JSX.Element {
         const rowClassName = this.props.rowClassName;
         const buttonClassName = this.props.buttonClassName;
 
         switch (this.state.phase) {
-            case ChangePassword.Phases.Edit:
+            case Phase.Edit:
                 return (
                     <form className={this.props.className} onSubmit={this.onClickChange}>
                         <div className={rowClassName}>
@@ -385,7 +399,7 @@ export default class ChangePassword extends React.Component {
                         </AccessibleButton>
                     </form>
                 );
-            case ChangePassword.Phases.Uploading:
+            case Phase.Uploading:
                 return (
                     <div className="mx_Dialog_content">
                         <Spinner />

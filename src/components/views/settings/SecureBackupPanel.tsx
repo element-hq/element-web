@@ -27,15 +27,31 @@ import QuestionDialog from '../dialogs/QuestionDialog';
 import RestoreKeyBackupDialog from '../dialogs/security/RestoreKeyBackupDialog';
 import { accessSecretStorage } from '../../../SecurityManager';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
+import { TrustInfo } from "matrix-js-sdk/src/crypto/backup";
+
+interface IState {
+    loading: boolean;
+    error: null;
+    backupKeyStored: boolean;
+    backupKeyCached: boolean;
+    backupKeyWellFormed: boolean;
+    secretStorageKeyInAccount: boolean;
+    secretStorageReady: boolean;
+    backupInfo: IKeyBackupInfo;
+    backupSigStatus: TrustInfo;
+    sessionsRemaining: number;
+}
 
 import { logger } from "matrix-js-sdk/src/logger";
 
 @replaceableComponent("views.settings.SecureBackupPanel")
-export default class SecureBackupPanel extends React.PureComponent {
-    constructor(props) {
+export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
+    private unmounted = false;
+
+    constructor(props: {}) {
         super(props);
 
-        this._unmounted = false;
         this.state = {
             loading: true,
             error: null,
@@ -50,42 +66,42 @@ export default class SecureBackupPanel extends React.PureComponent {
         };
     }
 
-    componentDidMount() {
-        this._checkKeyBackupStatus();
+    public componentDidMount(): void {
+        this.checkKeyBackupStatus();
 
-        MatrixClientPeg.get().on('crypto.keyBackupStatus', this._onKeyBackupStatus);
+        MatrixClientPeg.get().on('crypto.keyBackupStatus', this.onKeyBackupStatus);
         MatrixClientPeg.get().on(
             'crypto.keyBackupSessionsRemaining',
-            this._onKeyBackupSessionsRemaining,
+            this.onKeyBackupSessionsRemaining,
         );
     }
 
-    componentWillUnmount() {
-        this._unmounted = true;
+    public componentWillUnmount(): void {
+        this.unmounted = true;
 
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener('crypto.keyBackupStatus', this._onKeyBackupStatus);
+            MatrixClientPeg.get().removeListener('crypto.keyBackupStatus', this.onKeyBackupStatus);
             MatrixClientPeg.get().removeListener(
                 'crypto.keyBackupSessionsRemaining',
-                this._onKeyBackupSessionsRemaining,
+                this.onKeyBackupSessionsRemaining,
             );
         }
     }
 
-    _onKeyBackupSessionsRemaining = (sessionsRemaining) => {
+    private onKeyBackupSessionsRemaining = (sessionsRemaining: number): void => {
         this.setState({
             sessionsRemaining,
         });
-    }
+    };
 
-    _onKeyBackupStatus = () => {
+    private onKeyBackupStatus = (): void => {
         // This just loads the current backup status rather than forcing
         // a re-check otherwise we risk causing infinite loops
-        this._loadBackupStatus();
-    }
+        this.loadBackupStatus();
+    };
 
-    async _checkKeyBackupStatus() {
-        this._getUpdatedDiagnostics();
+    private async checkKeyBackupStatus(): Promise<void> {
+        this.getUpdatedDiagnostics();
         try {
             const { backupInfo, trustInfo } = await MatrixClientPeg.get().checkKeyBackup();
             this.setState({
@@ -96,7 +112,7 @@ export default class SecureBackupPanel extends React.PureComponent {
             });
         } catch (e) {
             logger.log("Unable to fetch check backup status", e);
-            if (this._unmounted) return;
+            if (this.unmounted) return;
             this.setState({
                 loading: false,
                 error: e,
@@ -106,13 +122,13 @@ export default class SecureBackupPanel extends React.PureComponent {
         }
     }
 
-    async _loadBackupStatus() {
+    private async loadBackupStatus(): Promise<void> {
         this.setState({ loading: true });
-        this._getUpdatedDiagnostics();
+        this.getUpdatedDiagnostics();
         try {
             const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
             const backupSigStatus = await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo);
-            if (this._unmounted) return;
+            if (this.unmounted) return;
             this.setState({
                 loading: false,
                 error: null,
@@ -121,7 +137,7 @@ export default class SecureBackupPanel extends React.PureComponent {
             });
         } catch (e) {
             logger.log("Unable to fetch key backup status", e);
-            if (this._unmounted) return;
+            if (this.unmounted) return;
             this.setState({
                 loading: false,
                 error: e,
@@ -131,7 +147,7 @@ export default class SecureBackupPanel extends React.PureComponent {
         }
     }
 
-    async _getUpdatedDiagnostics() {
+    private async getUpdatedDiagnostics(): Promise<void> {
         const cli = MatrixClientPeg.get();
         const secretStorage = cli.crypto.secretStorage;
 
@@ -142,7 +158,7 @@ export default class SecureBackupPanel extends React.PureComponent {
         const secretStorageKeyInAccount = await secretStorage.hasKey();
         const secretStorageReady = await cli.isSecretStorageReady();
 
-        if (this._unmounted) return;
+        if (this.unmounted) return;
         this.setState({
             backupKeyStored,
             backupKeyCached,
@@ -152,18 +168,18 @@ export default class SecureBackupPanel extends React.PureComponent {
         });
     }
 
-    _startNewBackup = () => {
+    private startNewBackup = (): void => {
         Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
             import('../../../async-components/views/dialogs/security/CreateKeyBackupDialog'),
             {
                 onFinished: () => {
-                    this._loadBackupStatus();
+                    this.loadBackupStatus();
                 },
             }, null, /* priority = */ false, /* static = */ true,
         );
-    }
+    };
 
-    _deleteBackup = () => {
+    private deleteBackup = (): void => {
         Modal.createTrackedDialog('Delete Backup', '', QuestionDialog, {
             title: _t('Delete Backup'),
             description: _t(
@@ -176,33 +192,33 @@ export default class SecureBackupPanel extends React.PureComponent {
                 if (!proceed) return;
                 this.setState({ loading: true });
                 MatrixClientPeg.get().deleteKeyBackupVersion(this.state.backupInfo.version).then(() => {
-                    this._loadBackupStatus();
+                    this.loadBackupStatus();
                 });
             },
         });
-    }
+    };
 
-    _restoreBackup = async () => {
+    private restoreBackup = async (): Promise<void> => {
         Modal.createTrackedDialog(
             'Restore Backup', '', RestoreKeyBackupDialog, null, null,
             /* priority = */ false, /* static = */ true,
         );
-    }
+    };
 
-    _resetSecretStorage = async () => {
+    private resetSecretStorage = async (): Promise<void> => {
         this.setState({ error: null });
         try {
-            await accessSecretStorage(() => { }, /* forceReset = */ true);
+            await accessSecretStorage(async () => { }, /* forceReset = */ true);
         } catch (e) {
             console.error("Error resetting secret storage", e);
-            if (this._unmounted) return;
+            if (this.unmounted) return;
             this.setState({ error: e });
         }
-        if (this._unmounted) return;
-        this._loadBackupStatus();
-    }
+        if (this.unmounted) return;
+        this.loadBackupStatus();
+    };
 
-    render() {
+    public render(): JSX.Element {
         const {
             loading,
             error,
@@ -263,7 +279,7 @@ export default class SecureBackupPanel extends React.PureComponent {
                 </div>;
             }
 
-            let backupSigStatuses = backupSigStatus.sigs.map((sig, i) => {
+            let backupSigStatuses: React.ReactNode = backupSigStatus.sigs.map((sig, i) => {
                 const deviceName = sig.device ? (sig.device.getDisplayName() || sig.device.deviceId) : null;
                 const validity = sub =>
                     <span className={sig.valid ? 'mx_SecureBackupPanel_sigValid' : 'mx_SecureBackupPanel_sigInvalid'}>
@@ -371,14 +387,14 @@ export default class SecureBackupPanel extends React.PureComponent {
             </>;
 
             actions.push(
-                <AccessibleButton key="restore" kind="primary" onClick={this._restoreBackup}>
+                <AccessibleButton key="restore" kind="primary" onClick={this.restoreBackup}>
                     { restoreButtonCaption }
                 </AccessibleButton>,
             );
 
             if (!isSecureBackupRequired()) {
                 actions.push(
-                    <AccessibleButton key="delete" kind="danger" onClick={this._deleteBackup}>
+                    <AccessibleButton key="delete" kind="danger" onClick={this.deleteBackup}>
                         { _t("Delete Backup") }
                     </AccessibleButton>,
                 );
@@ -392,7 +408,7 @@ export default class SecureBackupPanel extends React.PureComponent {
                 <p>{ _t("Back up your keys before signing out to avoid losing them.") }</p>
             </>;
             actions.push(
-                <AccessibleButton key="setup" kind="primary" onClick={this._startNewBackup}>
+                <AccessibleButton key="setup" kind="primary" onClick={this.startNewBackup}>
                     { _t("Set up") }
                 </AccessibleButton>,
             );
@@ -400,7 +416,7 @@ export default class SecureBackupPanel extends React.PureComponent {
 
         if (secretStorageKeyInAccount) {
             actions.push(
-                <AccessibleButton key="reset" kind="danger" onClick={this._resetSecretStorage}>
+                <AccessibleButton key="reset" kind="danger" onClick={this.resetSecretStorage}>
                     { _t("Reset") }
                 </AccessibleButton>,
             );

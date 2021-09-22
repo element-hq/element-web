@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { sleep } from "matrix-js-sdk/src/utils";
 
 import { _t } from "../../../../../languageHandler";
@@ -26,34 +25,40 @@ import * as FormattingUtils from "../../../../../utils/FormattingUtils";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Analytics from "../../../../../Analytics";
 import Modal from "../../../../../Modal";
-import * as sdk from "../../../../..";
 import dis from "../../../../../dispatcher/dispatcher";
 import { privateShouldBeEncrypted } from "../../../../../createRoom";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SecureBackupPanel from "../../SecureBackupPanel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
-import { isE2eAdvancedPanelPossible } from "../../E2eAdvancedPanel";
+import E2eAdvancedPanel, { isE2eAdvancedPanelPossible } from "../../E2eAdvancedPanel";
 import CountlyAnalytics from "../../../../../CountlyAnalytics";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
+import { ActionPayload } from "../../../../../dispatcher/payloads";
+import { Room } from "matrix-js-sdk/src/models/room";
+import DevicesPanel from "../../DevicesPanel";
+import SettingsFlag from "../../../elements/SettingsFlag";
+import CrossSigningPanel from "../../CrossSigningPanel";
+import EventIndexPanel from "../../EventIndexPanel";
+import InlineSpinner from "../../../elements/InlineSpinner";
 
-export class IgnoredUser extends React.Component {
-    static propTypes = {
-        userId: PropTypes.string.isRequired,
-        onUnignored: PropTypes.func.isRequired,
-        inProgress: PropTypes.bool.isRequired,
-    };
+interface IIgnoredUserProps {
+    userId: string;
+    onUnignored: (userId: string) => void;
+    inProgress: boolean;
+}
 
-    _onUnignoreClicked = (e) => {
+export class IgnoredUser extends React.Component<IIgnoredUserProps> {
+    private onUnignoreClicked = (): void => {
         this.props.onUnignored(this.props.userId);
     };
 
-    render() {
+    public render(): JSX.Element {
         const id = `mx_SecurityUserSettingsTab_ignoredUser_${this.props.userId}`;
         return (
             <div className='mx_SecurityUserSettingsTab_ignoredUser'>
-                <AccessibleButton onClick={this._onUnignoreClicked} kind='primary_sm' aria-describedby={id} disabled={this.props.inProgress}>
+                <AccessibleButton onClick={this.onUnignoreClicked} kind='primary_sm' aria-describedby={id} disabled={this.props.inProgress}>
                     { _t('Unignore') }
                 </AccessibleButton>
                 <span id={id}>{ this.props.userId }</span>
@@ -62,17 +67,26 @@ export class IgnoredUser extends React.Component {
     }
 }
 
-@replaceableComponent("views.settings.tabs.user.SecurityUserSettingsTab")
-export default class SecurityUserSettingsTab extends React.Component {
-    static propTypes = {
-        closeSettingsFn: PropTypes.func.isRequired,
-    };
+interface IProps {
+    closeSettingsFn: () => void;
+}
 
-    constructor() {
-        super();
+interface IState {
+    ignoredUserIds: string[];
+    waitingUnignored: string[];
+    managingInvites: boolean;
+    invitedRoomAmt: number;
+}
+
+@replaceableComponent("views.settings.tabs.user.SecurityUserSettingsTab")
+export default class SecurityUserSettingsTab extends React.Component<IProps, IState> {
+    private dispatcherRef: string;
+
+    constructor(props: IProps) {
+        super(props);
 
         // Get number of rooms we're invited to
-        const invitedRooms = this._getInvitedRooms();
+        const invitedRooms = this.getInvitedRooms();
 
         this.state = {
             ignoredUserIds: MatrixClientPeg.get().getIgnoredUsers(),
@@ -80,59 +94,57 @@ export default class SecurityUserSettingsTab extends React.Component {
             managingInvites: false,
             invitedRoomAmt: invitedRooms.length,
         };
-
-        this._onAction = this._onAction.bind(this);
     }
 
-    _onAction({ action }) {
+    private onAction = ({ action }: ActionPayload)=> {
         if (action === "ignore_state_changed") {
             const ignoredUserIds = MatrixClientPeg.get().getIgnoredUsers();
             const newWaitingUnignored = this.state.waitingUnignored.filter(e=> ignoredUserIds.includes(e));
             this.setState({ ignoredUserIds, waitingUnignored: newWaitingUnignored });
         }
+    };
+
+    public componentDidMount(): void {
+        this.dispatcherRef = dis.register(this.onAction);
     }
 
-    componentDidMount() {
-        this.dispatcherRef = dis.register(this._onAction);
-    }
-
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         dis.unregister(this.dispatcherRef);
     }
 
-    _updateBlacklistDevicesFlag = (checked) => {
+    private updateBlacklistDevicesFlag = (checked): void => {
         MatrixClientPeg.get().setGlobalBlacklistUnverifiedDevices(checked);
     };
 
-    _updateAnalytics = (checked) => {
+    private updateAnalytics = (checked: boolean): void => {
         checked ? Analytics.enable() : Analytics.disable();
         CountlyAnalytics.instance.enable(/* anonymous = */ !checked);
         PosthogAnalytics.instance.updateAnonymityFromSettings(MatrixClientPeg.get().getUserId());
     };
 
-    _onExportE2eKeysClicked = () => {
+    private onExportE2eKeysClicked = (): void => {
         Modal.createTrackedDialogAsync('Export E2E Keys', '',
             import('../../../../../async-components/views/dialogs/security/ExportE2eKeysDialog'),
             { matrixClient: MatrixClientPeg.get() },
         );
     };
 
-    _onImportE2eKeysClicked = () => {
+    private onImportE2eKeysClicked = (): void => {
         Modal.createTrackedDialogAsync('Import E2E Keys', '',
             import('../../../../../async-components/views/dialogs/security/ImportE2eKeysDialog'),
             { matrixClient: MatrixClientPeg.get() },
         );
     };
 
-    _onGoToUserProfileClick = () => {
+    private onGoToUserProfileClick = (): void => {
         dis.dispatch({
             action: 'view_user_info',
             userId: MatrixClientPeg.get().getUserId(),
         });
         this.props.closeSettingsFn();
-    }
+    };
 
-    _onUserUnignored = async (userId) => {
+    private onUserUnignored = async (userId: string): Promise<void> => {
         const { ignoredUserIds, waitingUnignored } = this.state;
         const currentlyIgnoredUserIds = ignoredUserIds.filter(e => !waitingUnignored.includes(e));
 
@@ -144,24 +156,23 @@ export default class SecurityUserSettingsTab extends React.Component {
         }
     };
 
-    _getInvitedRooms = () => {
+    private getInvitedRooms = (): Room[] => {
         return MatrixClientPeg.get().getRooms().filter((r) => {
             return r.hasMembershipState(MatrixClientPeg.get().getUserId(), "invite");
         });
     };
 
-    _manageInvites = async (accept) => {
+    private manageInvites = async (accept: boolean): Promise<void> => {
         this.setState({
             managingInvites: true,
         });
 
         // Compile array of invitation room ids
-        const invitedRoomIds = this._getInvitedRooms().map((room) => {
+        const invitedRoomIds = this.getInvitedRooms().map((room) => {
             return room.roomId;
         });
 
         // Execute all acceptances/rejections sequentially
-        const self = this;
         const cli = MatrixClientPeg.get();
         const action = accept ? cli.joinRoom.bind(cli) : cli.leave.bind(cli);
         for (let i = 0; i < invitedRoomIds.length; i++) {
@@ -170,7 +181,7 @@ export default class SecurityUserSettingsTab extends React.Component {
             // Accept/reject invite
             await action(roomId).then(() => {
                 // No error, update invited rooms button
-                this.setState({ invitedRoomAmt: self.state.invitedRoomAmt - 1 });
+                this.setState({ invitedRoomAmt: this.state.invitedRoomAmt - 1 });
             }, async (e) => {
                 // Action failure
                 if (e.errcode === "M_LIMIT_EXCEEDED") {
@@ -192,17 +203,15 @@ export default class SecurityUserSettingsTab extends React.Component {
         });
     };
 
-    _onAcceptAllInvitesClicked = (ev) => {
-        this._manageInvites(true);
+    private onAcceptAllInvitesClicked = (): void => {
+        this.manageInvites(true);
     };
 
-    _onRejectAllInvitesClicked = (ev) => {
-        this._manageInvites(false);
+    private onRejectAllInvitesClicked = (): void => {
+        this.manageInvites(false);
     };
 
-    _renderCurrentDeviceInfo() {
-        const SettingsFlag = sdk.getComponent('views.elements.SettingsFlag');
-
+    private renderCurrentDeviceInfo(): JSX.Element {
         const client = MatrixClientPeg.get();
         const deviceId = client.deviceId;
         let identityKey = client.getDeviceEd25519Key();
@@ -216,10 +225,10 @@ export default class SecurityUserSettingsTab extends React.Component {
         if (client.isCryptoEnabled()) {
             importExportButtons = (
                 <div className='mx_SecurityUserSettingsTab_importExportButtons'>
-                    <AccessibleButton kind='primary' onClick={this._onExportE2eKeysClicked}>
+                    <AccessibleButton kind='primary' onClick={this.onExportE2eKeysClicked}>
                         { _t("Export E2E room keys") }
                     </AccessibleButton>
-                    <AccessibleButton kind='primary' onClick={this._onImportE2eKeysClicked}>
+                    <AccessibleButton kind='primary' onClick={this.onImportE2eKeysClicked}>
                         { _t("Import E2E room keys") }
                     </AccessibleButton>
                 </div>
@@ -231,7 +240,7 @@ export default class SecurityUserSettingsTab extends React.Component {
             noSendUnverifiedSetting = <SettingsFlag
                 name='blacklistUnverifiedDevices'
                 level={SettingLevel.DEVICE}
-                onChange={this._updateBlacklistDevicesFlag}
+                onChange={this.updateBlacklistDevicesFlag}
             />;
         }
 
@@ -254,7 +263,7 @@ export default class SecurityUserSettingsTab extends React.Component {
         );
     }
 
-    _renderIgnoredUsers() {
+    private renderIgnoredUsers(): JSX.Element {
         const { waitingUnignored, ignoredUserIds } = this.state;
 
         const userIds = !ignoredUserIds?.length
@@ -263,7 +272,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                 return (
                     <IgnoredUser
                         userId={u}
-                        onUnignored={this._onUserUnignored}
+                        onUnignored={this.onUserUnignored}
                         key={u}
                         inProgress={waitingUnignored.includes(u)}
                     />
@@ -280,15 +289,14 @@ export default class SecurityUserSettingsTab extends React.Component {
         );
     }
 
-    _renderManageInvites() {
+    private renderManageInvites(): JSX.Element {
         if (this.state.invitedRoomAmt === 0) {
             return null;
         }
 
-        const invitedRooms = this._getInvitedRooms();
-        const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
-        const onClickAccept = this._onAcceptAllInvitesClicked.bind(this, invitedRooms);
-        const onClickReject = this._onRejectAllInvitesClicked.bind(this, invitedRooms);
+        const invitedRooms = this.getInvitedRooms();
+        const onClickAccept = this.onAcceptAllInvitesClicked.bind(this, invitedRooms);
+        const onClickReject = this.onRejectAllInvitesClicked.bind(this, invitedRooms);
         return (
             <div className='mx_SettingsTab_section mx_SecurityUserSettingsTab_bulkOptions'>
                 <span className='mx_SettingsTab_subheading'>{ _t('Bulk options') }</span>
@@ -303,11 +311,8 @@ export default class SecurityUserSettingsTab extends React.Component {
         );
     }
 
-    render() {
+    public render(): JSX.Element {
         const brand = SdkConfig.get().brand;
-        const DevicesPanel = sdk.getComponent('views.settings.DevicesPanel');
-        const SettingsFlag = sdk.getComponent('views.elements.SettingsFlag');
-        const EventIndexPanel = sdk.getComponent('views.settings.EventIndexPanel');
 
         const secureBackup = (
             <div className='mx_SettingsTab_section'>
@@ -329,7 +334,6 @@ export default class SecurityUserSettingsTab extends React.Component {
         // it's useful to have for testing the feature. If there's no interest
         // in having advanced details here once all flows are implemented, we
         // can remove this.
-        const CrossSigningPanel = sdk.getComponent('views.settings.CrossSigningPanel');
         const crossSigning = (
             <div className='mx_SettingsTab_section'>
                 <span className="mx_SettingsTab_subheading">{ _t("Cross-signing") }</span>
@@ -365,16 +369,15 @@ export default class SecurityUserSettingsTab extends React.Component {
                             { _t("Learn more about how we use analytics.") }
                         </AccessibleButton>
                     </div>
-                    <SettingsFlag name="analyticsOptIn" level={SettingLevel.DEVICE} onChange={this._updateAnalytics} />
+                    <SettingsFlag name="analyticsOptIn" level={SettingLevel.DEVICE} onChange={this.updateAnalytics} />
                 </div>
             </React.Fragment>;
         }
 
-        const E2eAdvancedPanel = sdk.getComponent('views.settings.E2eAdvancedPanel');
         let advancedSection;
         if (SettingsStore.getValue(UIFeature.AdvancedSettings)) {
-            const ignoreUsersPanel = this._renderIgnoredUsers();
-            const invitesPanel = this._renderManageInvites();
+            const ignoreUsersPanel = this.renderIgnoredUsers();
+            const invitesPanel = this.renderManageInvites();
             const e2ePanel = isE2eAdvancedPanelPossible() ? <E2eAdvancedPanel /> : null;
             // only show the section if there's something to show
             if (ignoreUsersPanel || invitesPanel || e2ePanel) {
@@ -399,7 +402,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                             "Manage the names of and sign out of your sessions below or " +
                             "<a>verify them in your User Profile</a>.", {},
                             {
-                                a: sub => <AccessibleButton kind="link" onClick={this._onGoToUserProfileClick}>
+                                a: sub => <AccessibleButton kind="link" onClick={this.onGoToUserProfileClick}>
                                     { sub }
                                 </AccessibleButton>,
                             },
@@ -415,7 +418,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                     { secureBackup }
                     { eventIndex }
                     { crossSigning }
-                    { this._renderCurrentDeviceInfo() }
+                    { this.renderCurrentDeviceInfo() }
                 </div>
                 { privacySection }
                 { advancedSection }

@@ -15,45 +15,46 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _t } from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
-import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import UrlPreviewSettings from "../../../room_settings/UrlPreviewSettings";
+import RelatedGroupSettings from "../../../room_settings/RelatedGroupSettings";
+import AliasSettings from "../../../room_settings/AliasSettings";
+
+interface IProps {
+    roomId: string;
+}
+
+interface IState {
+    isRoomPublished: boolean;
+}
 
 @replaceableComponent("views.settings.tabs.room.GeneralRoomSettingsTab")
-export default class GeneralRoomSettingsTab extends React.Component {
-    static propTypes = {
-        roomId: PropTypes.string.isRequired,
-    };
+export default class GeneralRoomSettingsTab extends React.Component<IProps, IState> {
+    public static contextType = MatrixClientContext;
 
-    static contextType = MatrixClientContext;
-
-    constructor() {
-        super();
+    constructor(props: IProps) {
+        super(props);
 
         this.state = {
             isRoomPublished: false, // loaded async
         };
     }
 
-    _onLeaveClick = () => {
+    private onLeaveClick = (): void => {
         dis.dispatch({
             action: 'leave_room',
             room_id: this.props.roomId,
         });
     };
 
-    render() {
-        const AliasSettings = sdk.getComponent("room_settings.AliasSettings");
-        const RelatedGroupSettings = sdk.getComponent("room_settings.RelatedGroupSettings");
-        const UrlPreviewSettings = sdk.getComponent("room_settings.UrlPreviewSettings");
-
+    public render(): JSX.Element {
         const client = this.context;
         const room = client.getRoom(this.props.roomId);
 
@@ -110,7 +111,7 @@ export default class GeneralRoomSettingsTab extends React.Component {
 
                 <span className='mx_SettingsTab_subheading'>{ _t("Leave room") }</span>
                 <div className='mx_SettingsTab_section'>
-                    <AccessibleButton kind='danger' onClick={this._onLeaveClick}>
+                    <AccessibleButton kind='danger' onClick={this.onLeaveClick}>
                         { _t('Leave room') }
                     </AccessibleButton>
                 </div>
