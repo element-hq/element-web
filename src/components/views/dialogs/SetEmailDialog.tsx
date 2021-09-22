@@ -132,7 +132,6 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
         const emailInput = this.state.emailBusy ? <Spinner /> : <EditableText
             initialValue={this.state.emailAddress}
             className="mx_SetEmailDialog_email_input"
-            autoFocus="true"
             placeholder={_t("Email address")}
             placeholderClassName="mx_SetEmailDialog_email_input_placeholder"
             blurToCancel={false}
