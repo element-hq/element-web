@@ -933,7 +933,7 @@
     "Show hidden events in timeline": "Pokaż ukryte wydarzenia na linii czasowej",
     "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)": "Pozwól na awaryjny serwer wspomagania połączeń turn.matrix.org, gdy Twój serwer domowy takiego nie oferuje (Twój adres IP będzie udostępniony podczas połączenia)",
     "Messages containing my username": "Wiadomości zawierające moją nazwę użytkownika",
-    "Encrypted messages in one-to-one chats": "Zaszyforwane wiadomości w rozmowach jeden-do-jednego",
+    "Encrypted messages in one-to-one chats": "Zaszyfrowane wiadomości w rozmowach jeden-do-jednego",
     "Encrypted messages in group chats": "Zaszyfrowane wiadomości w rozmowach grupowych",
     "When rooms are upgraded": "Kiedy pokoje są uaktualniane",
     "The other party cancelled the verification.": "Druga strona anulowała weryfikację.",
