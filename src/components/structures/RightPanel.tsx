@@ -143,14 +143,14 @@ export default class RightPanel extends React.Component<IProps, IState> {
         return rps.roomPanelPhase;
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         this.dispatcherRef = dis.register(this.onAction);
         const cli = this.context;
         cli.on("RoomState.members", this.onRoomStateMember);
         this.initGroupStore(this.props.groupId);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         dis.unregister(this.dispatcherRef);
         if (this.context) {
             this.context.removeListener("RoomState.members", this.onRoomStateMember);
@@ -159,7 +159,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(newProps) { // eslint-disable-line
+    public UNSAFE_componentWillReceiveProps(newProps: IProps): void { // eslint-disable-line
         if (newProps.groupId !== this.props.groupId) {
             this.unregisterGroupStore();
             this.initGroupStore(newProps.groupId);
