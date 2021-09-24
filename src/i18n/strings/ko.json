@@ -271,7 +271,7 @@
     "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "이 과정으로 암호화한 방에서 받은 메시지의 키를 로컬 파일로 내보낼 수 있습니다. 그런 다음 나중에 다른 Matrix 클라이언트에서 파일을 가져와서, 해당 클라이언트에서도 이 메시지를 복호화할 수 있도록 할 수 있습니다.",
     "The exported file will allow anyone who can read it to decrypt any encrypted messages that you can see, so you should be careful to keep it secure. To help with this, you should enter a passphrase below, which will be used to encrypt the exported data. It will only be possible to import the data by using the same passphrase.": "내보낸 파일이 있으면 누구든 암호화한 메시지를 복호화해서 읽을 수 있으므로, 보안에 신경을 써야 합니다. 이런 이유로 내보낸 파일을 암호화하도록 아래에 암호를 입력하는 것을 추천합니다. 같은 암호를 사용해야 데이터를 불러올 수 있을 것입니다.",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "이 과정으로 다른 Matrix 클라이언트에서 내보낸 암호화 키를 가져올 수 있습니다. 그런 다음 이전 클라이언트에서 복호화할 수 있는 모든 메시지를 복호화할 수 있습니다.",
-    "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "내보낸 파일이 암호로 보호되어 있습니다.  파일을 복호화하려면, 여기에 암호를 입력해야 합니다.",
+    "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "내보낸 파일이 암호로 보호되어 있습니다. 파일을 복호화하려면, 여기에 암호를 입력해야 합니다.",
     "Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.": "이 이벤트를 감추길(삭제하길) 원하세요? 방 이름을 삭제하거나 주제를 바꾸면, 다시 생길 수도 있습니다.",
     "Unable to restore session": "세션을 복구할 수 없음",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "이전에 최근 버전의 %(brand)s을 썼다면, 세션이 이 버전과 맞지 않을 것입니다. 창을 닫고 최근 버전으로 돌아가세요.",
@@ -840,7 +840,7 @@
     "There was an error joining the room": "방에 참가하는 동안 오류가 발생했습니다",
     "Sorry, your homeserver is too old to participate in this room.": "죄송합니다, 이 방에 참여하기엔 홈서버가 너무 오래됬습니다.",
     "Custom user status messages": "맞춤 사용자 상태 메시지",
-    "Group & filter rooms by custom tags (refresh to apply changes)": "맞춤 태그로 방을 그룹 & 필터\n(변경 사항을 적용하려면 새로고침)",
+    "Group & filter rooms by custom tags (refresh to apply changes)": "맞춤 태그로 방을 그룹 & 필터 (변경 사항을 적용하려면 새로고침)",
     "You do not have the required permissions to use this command.": "이 명령어를 사용하기 위해 필요한 권한이 없습니다.",
     "Render simple counters in room header": "방 헤더에 간단한 카운터 표현",
     "Enable Emoji suggestions while typing": "입력 중 이모지 제안 켜기",
@@ -1414,10 +1414,13 @@
     "Create Account": "계정 만들기",
     "Integration manager": "통합 관리자",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "이 위젯을 사용하면 <helpcon /> %(widgetDomain)s & 통합 관리자와 데이터를 공유합니다.",
-    "Identity server is": "ID 서버:",
+    "Identity server is": "ID 서버는",
     "Identity server": "ID 서버",
     "Identity server (%(server)s)": "ID 서버 (%(server)s)",
     "Could not connect to identity server": "ID 서버에 연결할 수 없음",
     "Not a valid identity server (status code %(code)s)": "올바르지 않은 ID 서버 (상태 코드 %(code)s)",
-    "Identity server URL must be HTTPS": "ID 서버 URL은 HTTPS이어야 함"
+    "Identity server URL must be HTTPS": "ID 서버 URL은 HTTPS이어야 함",
+    "Appearance": "모습",
+    "Appearance Settings only affect this %(brand)s session.": "모습 설정은 이 %(brand)s 세션에만 영향을 끼칩니다.",
+    "Customise your appearance": "모습 개인화하기"
 }
