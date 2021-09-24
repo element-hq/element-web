@@ -165,7 +165,7 @@ export default class SendMessageComposer extends React.Component<IProps> {
     }
 
     public componentDidUpdate(prevProps: IProps): void {
-        const replyToEventChanged = this.props.replyToEvent !== prevProps.replyToEvent;
+        const replyToEventChanged = this.props.replyInThread && (this.props.replyToEvent !== prevProps.replyToEvent);
         if (replyToEventChanged) {
             this.model.reset([]);
         }
