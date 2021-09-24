@@ -18,7 +18,6 @@ limitations under the License.
 import React from 'react';
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomState } from "matrix-js-sdk/src/models/room-state";
-import { User } from "matrix-js-sdk/src/models/user";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
@@ -59,7 +58,7 @@ import { SetRightPanelPhasePayload } from '../../dispatcher/payloads/SetRightPan
 interface IProps {
     room?: Room; // if showing panels for a given room, this is set
     groupId?: string; // if showing panels for a given group, this is set
-    user?: User; // used if we know the user ahead of opening the panel
+    member?: RoomMember; // used if we know the room member ahead of opening the panel
     resizeNotifier: ResizeNotifier;
     permalinkCreator?: RoomPermalinkCreator;
     e2eStatus?: E2EStatus;
@@ -100,10 +99,10 @@ export default class RightPanel extends React.Component<IProps, IState> {
 
     // Helper function to split out the logic for getPhaseFromProps() and the constructor
     // as both are called at the same time in the constructor.
-    private getUserForPanel() {
+    private getUserForPanel(): RoomMember {
         if (this.state && this.state.member) return this.state.member;
         const lastParams = RightPanelStore.getSharedInstance().roomPanelPhaseParams;
-        return this.props.user || lastParams['member'];
+        return this.props.member || lastParams['member'];
     }
 
     // gets the current phase from the props and also maybe the store
@@ -225,7 +224,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
         // XXX: There are three different ways of 'closing' this panel depending on what state
         // things are in... this knows far more than it should do about the state of the rest
         // of the app and is generally a bit silly.
-        if (this.props.user) {
+        if (this.props.member) {
             // If we have a user prop then we're displaying a user from the 'user' page type
             // in LoggedInView, so need to change the page type to close the panel (we switch
             // to the home page which is not obviously the correct thing to do, but I'm not sure
