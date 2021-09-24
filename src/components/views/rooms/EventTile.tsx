@@ -58,6 +58,7 @@ import ReactionsRow from '../messages/ReactionsRow';
 import { getEventDisplayInfo } from '../../../utils/EventUtils';
 import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 import SettingsStore from "../../../settings/SettingsStore";
+import MKeyVerificationConclusion from "../messages/MKeyVerificationConclusion";
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -144,8 +145,7 @@ export function getHandlerTile(ev) {
     // XXX: This is extremely a hack. Possibly these components should have an interface for
     // declining to render?
     if (type === "m.key.verification.cancel" || type === "m.key.verification.done") {
-        const MKeyVerificationConclusion = sdk.getComponent("messages.MKeyVerificationConclusion");
-        if (!MKeyVerificationConclusion.prototype._shouldRender.call(null, ev, ev.request)) {
+        if (!MKeyVerificationConclusion.shouldRender(ev, ev.request)) {
             return;
         }
     }
