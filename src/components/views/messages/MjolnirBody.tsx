@@ -15,22 +15,22 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
+interface IProps {
+    mxEvent: MatrixEvent;
+    onMessageAllowed: () => void;
+}
 
 @replaceableComponent("views.messages.MjolnirBody")
-export default class MjolnirBody extends React.Component {
-    static propTypes = {
-        mxEvent: PropTypes.object.isRequired,
-        onMessageAllowed: PropTypes.func.isRequired,
-    };
-
-    constructor() {
-        super();
+export default class MjolnirBody extends React.Component<IProps> {
+    constructor(props: IProps) {
+        super(props);
     }
 
-    _onAllowClick = (e) => {
+    private onAllowClick = (e: React.MouseEvent): void => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -39,11 +39,11 @@ export default class MjolnirBody extends React.Component {
         this.props.onMessageAllowed();
     };
 
-    render() {
+    public render(): JSX.Element {
         return (
             <div className='mx_MjolnirBody'><i>{ _t(
                 "You have ignored this user, so their message is hidden. <a>Show anyways.</a>",
-                {}, { a: (sub) => <a href="#" onClick={this._onAllowClick}>{ sub }</a> },
+                {}, { a: (sub) => <a href="#" onClick={this.onAllowClick}>{ sub }</a> },
             ) }</i></div>
         );
     }
