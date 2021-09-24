@@ -54,6 +54,7 @@ import { throttle } from 'lodash';
 import SpaceStore from "../../stores/SpaceStore";
 import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
 import { E2EStatus } from '../../utils/ShieldUtils';
+import { SetRightPanelPhasePayload } from '../../dispatcher/payloads/SetRightPanelPhasePayload';
 
 interface IProps {
     room?: Room; // if showing panels for a given room, this is set
@@ -143,14 +144,14 @@ export default class RightPanel extends React.Component<IProps, IState> {
         return rps.roomPanelPhase;
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         this.dispatcherRef = dis.register(this.onAction);
         const cli = this.context;
         cli.on("RoomState.members", this.onRoomStateMember);
         this.initGroupStore(this.props.groupId);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         dis.unregister(this.dispatcherRef);
         if (this.context) {
             this.context.removeListener("RoomState.members", this.onRoomStateMember);
@@ -159,7 +160,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(newProps) { // eslint-disable-line
+    public UNSAFE_componentWillReceiveProps(newProps: IProps): void { // eslint-disable-line
         if (newProps.groupId !== this.props.groupId) {
             this.unregisterGroupStore();
             this.initGroupStore(newProps.groupId);
@@ -196,6 +197,15 @@ export default class RightPanel extends React.Component<IProps, IState> {
     };
 
     private onAction = (payload: ActionPayload) => {
+        const isChangingRoom = payload.action === 'view_room' && payload.room_id !== this.props.room.roomId;
+        const isViewingThread = this.state.phase === RightPanelPhases.ThreadView;
+        if (isChangingRoom && isViewingThread) {
+            dis.dispatch<SetRightPanelPhasePayload>({
+                action: Action.SetRightPanelPhase,
+                phase: RightPanelPhases.ThreadPanel,
+            });
+        }
+
         if (payload.action === Action.AfterRightPanelPhaseChange) {
             this.setState({
                 phase: payload.phase,
