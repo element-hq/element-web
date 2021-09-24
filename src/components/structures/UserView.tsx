@@ -86,8 +86,8 @@ export default class UserView extends React.Component<IProps, IState> {
     public render(): JSX.Element {
         if (this.state.loading) {
             return <Spinner />;
-        } else if (this.state.member?.user) {
-            const panel = <RightPanel user={this.state.member.user} resizeNotifier={this.props.resizeNotifier} />;
+        } else if (this.state.member) {
+            const panel = <RightPanel member={this.state.member} resizeNotifier={this.props.resizeNotifier} />;
             return (<MainSplit panel={panel} resizeNotifier={this.props.resizeNotifier}>
                 <HomePage />
             </MainSplit>);
