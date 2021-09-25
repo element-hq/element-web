@@ -24,16 +24,19 @@ function remoteRender(event: MessageEvent): void {
 
     // Apply image style after so we can steal the anchor's colour.
     // Style copied from a rendered version of mx_MFileBody_download_icon
-    // @ts-ignore
-    img.style = data.imgStyle ?? "";
-    img.style.width = "12px";
-    img.style.height = "12px";
-    img.style.webkitMaskSize = "12px";
-    img.style.webkitMaskPosition = "center";
-    img.style.webkitMaskRepeat = "no-repeat";
-    img.style.display = "inline-block";
-    img.style.webkitMaskImage = `url('${data.imgSrc}')`;
-    img.style.backgroundColor = `${a.style.color}`;
+    if (data.imgStyle) {
+        // @ts-ignore
+        img.style = data.imgStyle;
+    } else {
+        img.style.width = "12px";
+        img.style.height = "12px";
+        img.style.webkitMaskSize = "12px";
+        img.style.webkitMaskPosition = "center";
+        img.style.webkitMaskRepeat = "no-repeat";
+        img.style.display = "inline-block";
+        img.style.webkitMaskImage = `url('${data.imgSrc}')`;
+        img.style.backgroundColor = `${a.style.color}`;
+    }
 
     const body = document.body;
     // Don't display scrollbars if the link takes more than one line to display.
