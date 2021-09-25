@@ -11,7 +11,7 @@ function remoteRender(event: MessageEvent): void {
     const img = document.createElement("span"); // we'll mask it as an image
     img.id = "img";
 
-    const a: HTMLAnchorElement = document.createElement("a");
+    const a = document.createElement("a");
     a.id = "a";
     a.rel = "noreferrer noopener";
     a.download = data.download;
