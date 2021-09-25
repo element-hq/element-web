@@ -8,10 +8,10 @@ function remoteRender(event: MessageEvent): void {
     }
     hasCalled = true;
 
-    const img = document.createElement("span"); // we'll mask it as an image
+    const img: HTMLSpanElement = document.createElement("span"); // we'll mask it as an image
     img.id = "img";
 
-    const a = document.createElement("a");
+    const a: HTMLAnchorElement = document.createElement("a");
     a.id = "a";
     a.rel = "noreferrer noopener";
     a.download = data.download;
