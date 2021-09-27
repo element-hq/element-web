@@ -22,7 +22,14 @@ import {
     tryTransformPermalinkToLocalHref,
 } from "./utils/permalinks/Permalinks";
 
-function matrixLinkify(linkify) {
+enum Type {
+    URL = "url",
+    UserId = "userid",
+    RoomAlias = "roomalias",
+    GroupId = "groupid"
+}
+
+function matrixLinkify(linkify): void {
     // Text tokens
     const TT = linkify.scanner.TOKENS;
     // Multi tokens
@@ -173,11 +180,11 @@ function matrixLinkify(linkify) {
 }
 
 // stubs, overwritten in MatrixChat's componentDidMount
-matrixLinkify.onUserClick = function(e, userId) { e.preventDefault(); };
-matrixLinkify.onAliasClick = function(e, roomAlias) { e.preventDefault(); };
-matrixLinkify.onGroupClick = function(e, groupId) { e.preventDefault(); };
+matrixLinkify.onUserClick = function(e: MouseEvent, userId: string) { e.preventDefault(); };
+matrixLinkify.onAliasClick = function(e: MouseEvent, roomAlias: string) { e.preventDefault(); };
+matrixLinkify.onGroupClick = function(e: MouseEvent, groupId: string) { e.preventDefault(); };
 
-const escapeRegExp = function(string) {
+const escapeRegExp = function(string): string {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 };
 
@@ -196,15 +203,15 @@ matrixLinkify.MATRIXTO_MD_LINK_PATTERN =
 matrixLinkify.MATRIXTO_BASE_URL= baseUrl;
 
 matrixLinkify.options = {
-    events: function(href, type) {
+    events: function(href: string, type: Type | string): Partial<GlobalEventHandlers> {
         switch (type) {
-            case "url": {
+            case Type.URL: {
                 // intercept local permalinks to users and show them like userids (in userinfo of current room)
                 try {
                     const permalink = parsePermalink(href);
                     if (permalink && permalink.userId) {
                         return {
-                            click: function(e) {
+                            onclick: function(e) {
                                 matrixLinkify.onUserClick(e, permalink.userId);
                             },
                         };
@@ -214,32 +221,32 @@ matrixLinkify.options = {
                 }
                 break;
             }
-            case "userid":
+            case Type.UserId:
                 return {
-                    click: function(e) {
+                    onclick: function(e) {
                         matrixLinkify.onUserClick(e, href);
                     },
                 };
-            case "roomalias":
+            case Type.RoomAlias:
                 return {
-                    click: function(e) {
+                    onclick: function(e) {
                         matrixLinkify.onAliasClick(e, href);
                     },
                 };
-            case "groupid":
+            case Type.GroupId:
                 return {
-                    click: function(e) {
+                    onclick: function(e) {
                         matrixLinkify.onGroupClick(e, href);
                     },
                 };
         }
     },
 
-    formatHref: function(href, type) {
+    formatHref: function(href: string, type: Type | string): string {
         switch (type) {
-            case 'roomalias':
-            case 'userid':
-            case 'groupid':
+            case Type.RoomAlias:
+            case Type.UserId:
+            case Type.GroupId:
             default: {
                 return tryTransformEntityToPermalink(href);
             }
@@ -250,8 +257,8 @@ matrixLinkify.options = {
         rel: 'noreferrer noopener',
     },
 
-    target: function(href, type) {
-        if (type === 'url') {
+    target: function(href: string, type: Type | string): string {
+        if (type === Type.URL) {
             try {
                 const transformed = tryTransformPermalinkToLocalHref(href);
                 if (transformed !== href || decodeURIComponent(href).match(matrixLinkify.ELEMENT_URL_PATTERN)) {
