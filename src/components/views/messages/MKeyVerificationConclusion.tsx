@@ -55,7 +55,7 @@ export default class MKeyVerificationConclusion extends React.Component<IProps> 
         }
     }
 
-    private onRequestChanged = () => {
+    private onRequestChanged = (): void => {
         this.forceUpdate();
     };
 
