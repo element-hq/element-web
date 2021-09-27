@@ -17,7 +17,8 @@ limitations under the License.
 */
 
 import React, { useEffect } from 'react';
-import { MatrixEvent, EventStatus } from 'matrix-js-sdk/src/models/event';
+import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import type { Relations } from 'matrix-js-sdk/src/models/relations';
 
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
@@ -35,13 +36,17 @@ import Resend from "../../../Resend";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import DownloadActionButton from "./DownloadActionButton";
+import MessageContextMenu from "../context_menus/MessageContextMenu";
+import classNames from 'classnames';
+
 import SettingsStore from '../../../settings/SettingsStore';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import ReplyThread from '../elements/ReplyThread';
 
 interface IOptionsButtonProps {
     mxEvent: MatrixEvent;
-    getTile: () => any; // TODO: FIXME, haven't figured out what the return type is here
+    // TODO: Types
+    getTile: () => any | null;
     getReplyThread: () => ReplyThread;
     permalinkCreator: RoomPermalinkCreator;
     onFocusChange: (menuDisplayed: boolean) => void;
@@ -57,8 +62,6 @@ const OptionsButton: React.FC<IOptionsButtonProps> =
 
         let contextMenu;
         if (menuDisplayed) {
-            const MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
-
             const tile = getTile && getTile();
             const replyThread = getReplyThread && getReplyThread();
 
@@ -90,7 +93,7 @@ const OptionsButton: React.FC<IOptionsButtonProps> =
 
 interface IReactButtonProps {
     mxEvent: MatrixEvent;
-    reactions: any; // TODO: types
+    reactions: Relations;
     onFocusChange: (menuDisplayed: boolean) => void;
 }
 
@@ -127,12 +130,14 @@ const ReactButton: React.FC<IReactButtonProps> = ({ mxEvent, reactions, onFocusC
 
 interface IMessageActionBarProps {
     mxEvent: MatrixEvent;
-    // The Relations model from the JS SDK for reactions to `mxEvent`
-    reactions?: any;  // TODO: types
+    reactions?: Relations;
+    // TODO: Types
+    getTile: () => any | null;
+    getReplyThread: () => ReplyThread | undefined;
     permalinkCreator?: RoomPermalinkCreator;
-    getTile: () => any; // TODO: FIXME, haven't figured out what the return type is here
-    getReplyThread?: () => ReplyThread;
-    onFocusChange?: (menuDisplayed: boolean) => void;
+    onFocusChange: (menuDisplayed: boolean) => void;
+    isQuoteExpanded?: boolean;
+    toggleThreadExpanded: () => void;
 }
 
 @replaceableComponent("views.messages.MessageActionBar")
@@ -322,6 +327,20 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
 
             if (allowCancel) {
                 toolbarOpts.push(cancelSendingButton);
+            }
+
+            if (this.props.isQuoteExpanded !== undefined && ReplyThread.hasThreadReply(this.props.mxEvent)) {
+                const expandClassName = classNames({
+                    'mx_MessageActionBar_maskButton': true,
+                    'mx_MessageActionBar_expandMessageButton': !this.props.isQuoteExpanded,
+                    'mx_MessageActionBar_collapseMessageButton': this.props.isQuoteExpanded,
+                });
+                toolbarOpts.push(<RovingAccessibleTooltipButton
+                    className={expandClassName}
+                    title={this.props.isQuoteExpanded ? _t("Collapse quotes │ ⇧+click") : _t("Expand quotes │ ⇧+click")}
+                    onClick={this.props.toggleThreadExpanded}
+                    key="expand"
+                />);
             }
 
             // The menu button should be last, so dump it there.

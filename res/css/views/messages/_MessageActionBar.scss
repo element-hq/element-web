@@ -117,6 +117,16 @@ limitations under the License.
     mask-image: url('$(res)/img/download.svg');
 }
 
+.mx_MessageActionBar_expandMessageButton::after {
+    mask-size: 12px;
+    mask-image: url('$(res)/img/element-icons/expand-message.svg');
+}
+
+.mx_MessageActionBar_collapseMessageButton::after {
+    mask-size: 12px;
+    mask-image: url('$(res)/img/element-icons/collapse-message.svg');
+}
+
 .mx_MessageActionBar_downloadButton.mx_MessageActionBar_downloadSpinnerButton::after {
     background-color: transparent; // hide the download icon mask
 }
