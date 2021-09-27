@@ -14,12 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-class Skinner {
-    constructor() {
-        this.components = null;
-    }
+import React from "react";
 
-    getComponent(name) {
+export interface IComponents {
+    [key: string]: React.Component;
+}
+
+export interface ISkinObject {
+    components: IComponents;
+}
+
+export class Skinner {
+    public components: IComponents = null;
+
+    public getComponent(name: string): React.Component {
         if (!name) throw new Error(`Invalid component name: ${name}`);
         if (this.components === null) {
             throw new Error(
@@ -30,7 +38,7 @@ class Skinner {
             );
         }
 
-        const doLookup = (components) => {
+        const doLookup = (components: IComponents): React.Component => {
             if (!components) return null;
             let comp = components[name];
             // XXX: Temporarily also try 'views.' as we're currently
@@ -58,7 +66,7 @@ class Skinner {
         return comp;
     }
 
-    load(skinObject) {
+    public load(skinObject: ISkinObject): void {
         if (this.components !== null) {
             throw new Error(
                 "Attempted to load a skin while a skin is already loaded"+
@@ -72,6 +80,7 @@ class Skinner {
         }
 
         // Now that we have a skin, load our components too
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         const idx = require("./component-index");
         if (!idx || !idx.components) throw new Error("Invalid react-sdk component index");
         for (const c in idx.components) {
@@ -79,7 +88,7 @@ class Skinner {
         }
     }
 
-    addComponent(name, comp) {
+    public addComponent(name: string, comp: any) {
         let slot = name;
         if (comp.replaces !== undefined) {
             if (comp.replaces.indexOf('.') > -1) {
@@ -91,7 +100,7 @@ class Skinner {
         this.components[slot] = comp;
     }
 
-    reset() {
+    public reset(): void {
         this.components = null;
     }
 }
@@ -105,8 +114,8 @@ class Skinner {
 // See https://derickbailey.com/2016/03/09/creating-a-true-singleton-in-node-js-with-es6-symbols/
 // or https://nodejs.org/api/modules.html#modules_module_caching_caveats
 // ("Modules are cached based on their resolved filename")
-if (global.mxSkinner === undefined) {
-    global.mxSkinner = new Skinner();
+if (window.mxSkinner === undefined) {
+    window.mxSkinner = new Skinner();
 }
-export default global.mxSkinner;
+export default window.mxSkinner;
 
