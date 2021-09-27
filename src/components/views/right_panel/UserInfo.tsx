@@ -71,6 +71,8 @@ import UIStore from "../../../stores/UIStore";
 import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import SpaceStore from "../../../stores/SpaceStore";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export interface IDevice {
     deviceId: string;
     ambiguous?: boolean;
@@ -557,7 +559,7 @@ const RoomKickButton: React.FC<IBaseProps> = ({ member, startUpdating, stopUpdat
         cli.kick(member.roomId, member.userId, reason || undefined).then(() => {
             // NO-OP; rely on the m.room.member event coming down else we could
             // get out of sync if we force setState here!
-            console.log("Kick success");
+            logger.log("Kick success");
         }, function(err) {
             console.error("Kick error: " + err);
             Modal.createTrackedDialog('Failed to kick', '', ErrorDialog, {
@@ -684,7 +686,7 @@ const BanToggleButton: React.FC<IBaseProps> = ({ member, startUpdating, stopUpda
         promise.then(() => {
             // NO-OP; rely on the m.room.member event coming down else we could
             // get out of sync if we force setState here!
-            console.log("Ban success");
+            logger.log("Ban success");
         }, function(err) {
             console.error("Ban error: " + err);
             Modal.createTrackedDialog('Failed to ban user', '', ErrorDialog, {
@@ -757,7 +759,7 @@ const MuteToggleButton: React.FC<IBaseRoomProps> = ({ member, room, powerLevels,
             cli.setPowerLevel(roomId, target, level, powerLevelEvent).then(() => {
                 // NO-OP; rely on the m.room.member event coming down else we could
                 // get out of sync if we force setState here!
-                console.log("Mute toggle success");
+                logger.log("Mute toggle success");
             }, function(err) {
                 console.error("Mute error: " + err);
                 Modal.createTrackedDialog('Failed to mute user', '', ErrorDialog, {
@@ -917,7 +919,7 @@ const GroupAdminToolsSection: React.FC<{
                         _t('Failed to withdraw invitation') :
                         _t('Failed to remove user from community'),
                 });
-                console.log(e);
+                logger.log(e);
             }).finally(() => {
                 stopUpdating();
             });
@@ -1052,8 +1054,7 @@ const PowerLevelEditor: React.FC<{
     const cli = useContext(MatrixClientContext);
 
     const [selectedPowerLevel, setSelectedPowerLevel] = useState(user.powerLevel);
-    const onPowerChange = useCallback(async (powerLevelStr: string) => {
-        const powerLevel = parseInt(powerLevelStr, 10);
+    const onPowerChange = useCallback(async (powerLevel: number) => {
         setSelectedPowerLevel(powerLevel);
 
         const applyPowerChange = (roomId, target, powerLevel, powerLevelEvent) => {
@@ -1061,7 +1062,7 @@ const PowerLevelEditor: React.FC<{
                 function() {
                     // NO-OP; rely on the m.room.member event coming down else we could
                     // get out of sync if we force setState here!
-                    console.log("Power change success");
+                    logger.log("Power change success");
                 }, function(err) {
                     console.error("Failed to change power level " + err);
                     Modal.createTrackedDialog('Failed to change power level', '', ErrorDialog, {

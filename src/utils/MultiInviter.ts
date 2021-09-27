@@ -25,6 +25,8 @@ import Modal from "../Modal";
 import SettingsStore from "../settings/SettingsStore";
 import AskInviteAnywayDialog from "../components/views/dialogs/AskInviteAnywayDialog";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export enum InviteState {
     Invited = "invited",
     Error = "error",
@@ -161,7 +163,7 @@ export default class MultiInviter {
 
     private doInvite(address: string, ignoreProfile = false): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`Inviting ${address}`);
+            logger.log(`Inviting ${address}`);
 
             let doInvite;
             if (this.groupId !== null) {
@@ -271,7 +273,7 @@ export default class MultiInviter {
                         return;
                     }
 
-                    console.log("Showing failed to invite dialog...");
+                    logger.log("Showing failed to invite dialog...");
                     Modal.createTrackedDialog('Failed to invite', '', AskInviteAnywayDialog, {
                         unknownProfileUsers: unknownProfileUsers.map(u => ({
                             userId: u,

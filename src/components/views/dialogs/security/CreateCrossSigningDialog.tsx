@@ -28,6 +28,8 @@ import Spinner from '../../elements/Spinner';
 import InteractiveAuthDialog from '../InteractiveAuthDialog';
 import { replaceableComponent } from "../../../../utils/replaceableComponent";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     accountPassword?: string;
     tokenLogin?: boolean;
@@ -77,10 +79,10 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
             // We should never get here: the server should always require
             // UI auth to upload device signing keys. If we do, we upload
             // no keys which would be a no-op.
-            console.log("uploadDeviceSigningKeys unexpectedly succeeded without UI auth!");
+            logger.log("uploadDeviceSigningKeys unexpectedly succeeded without UI auth!");
         } catch (error) {
             if (!error.data || !error.data.flows) {
-                console.log("uploadDeviceSigningKeys advertised no flows!");
+                logger.log("uploadDeviceSigningKeys advertised no flows!");
                 return;
             }
             const canUploadKeysWithPasswordOnly = error.data.flows.some(f => {

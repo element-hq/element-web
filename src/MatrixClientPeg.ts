@@ -36,6 +36,8 @@ import { crossSigningCallbacks, tryToUnlockSecretStorageWithDehydrationKey } fro
 import { SHOW_QR_CODE_METHOD } from "matrix-js-sdk/src/crypto/verification/QRCode";
 import SecurityCustomisations from "./customisations/Security";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export interface IMatrixClientCreds {
     homeserverUrl: string;
     identityServerUrl: string;
@@ -166,7 +168,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         for (const dbType of ['indexeddb', 'memory']) {
             try {
                 const promise = this.matrixClient.store.startup();
-                console.log("MatrixClientPeg: waiting for MatrixClient store to initialise");
+                logger.log("MatrixClientPeg: waiting for MatrixClient store to initialise");
                 await promise;
                 break;
             } catch (err) {
@@ -225,9 +227,9 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     public async start(): Promise<any> {
         const opts = await this.assign();
 
-        console.log(`MatrixClientPeg: really starting MatrixClient`);
+        logger.log(`MatrixClientPeg: really starting MatrixClient`);
         await this.get().startClient(opts);
-        console.log(`MatrixClientPeg: MatrixClient started`);
+        logger.log(`MatrixClientPeg: MatrixClient started`);
     }
 
     public getCredentials(): IMatrixClientCreds {

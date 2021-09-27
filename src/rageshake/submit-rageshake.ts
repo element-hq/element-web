@@ -28,6 +28,8 @@ import * as rageshake from './rageshake';
 import SettingsStore from "../settings/SettingsStore";
 import SdkConfig from "../SdkConfig";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IOpts {
     label?: string;
     userText?: string;
@@ -63,7 +65,7 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
 
     const client = MatrixClientPeg.get();
 
-    console.log("Sending bug report.");
+    logger.log("Sending bug report.");
 
     const body = new FormData();
     body.append('text', opts.userText || "User did not supply any additional text.");
@@ -98,11 +100,11 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
 
             const pkCache = client.getCrossSigningCacheCallbacks();
             body.append("cross_signing_master_privkey_cached",
-                String(!!(pkCache && await pkCache.getCrossSigningKeyCache("master"))));
+                String(!!(pkCache && (await pkCache.getCrossSigningKeyCache("master")))));
             body.append("cross_signing_self_signing_privkey_cached",
-                String(!!(pkCache && await pkCache.getCrossSigningKeyCache("self_signing"))));
+                String(!!(pkCache && (await pkCache.getCrossSigningKeyCache("self_signing")))));
             body.append("cross_signing_user_signing_privkey_cached",
-                String(!!(pkCache && await pkCache.getCrossSigningKeyCache("user_signing"))));
+                String(!!(pkCache && (await pkCache.getCrossSigningKeyCache("user_signing")))));
 
             body.append("secret_storage_ready", String(await client.isSecretStorageReady()));
             body.append("secret_storage_key_in_account", String(!!(await secretStorage.hasKey())));

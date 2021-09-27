@@ -28,7 +28,7 @@ import { SAS } from "matrix-js-sdk/src/crypto/verification/SAS";
 import VerificationQRCode from "../elements/crypto/VerificationQRCode";
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
-import E2EIcon from "../rooms/E2EIcon";
+import E2EIcon, { E2EState } from "../rooms/E2EIcon";
 import { Phase } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import Spinner from "../elements/Spinner";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -189,7 +189,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             // Element Web doesn't support scanning yet, so assume here we're the client being scanned.
             body = <React.Fragment>
                 <p>{ description }</p>
-                <E2EIcon isUser={true} status="verified" size={128} hideTooltip={true} />
+                <E2EIcon isUser={true} status={E2EState.Verified} size={128} hideTooltip={true} />
                 <div className="mx_VerificationPanel_reciprocateButtons">
                     <AccessibleButton
                         kind="danger"
@@ -252,7 +252,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             <div className="mx_UserInfo_container mx_VerificationPanel_verified_section">
                 <h3>{ _t("Verified") }</h3>
                 <p>{ description }</p>
-                <E2EIcon isUser={true} status="verified" size={128} hideTooltip={true} />
+                <E2EIcon isUser={true} status={E2EState.Verified} size={128} hideTooltip={true} />
                 { text ? <p>{ text }</p> : null }
                 <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>
                     { _t("Got it") }

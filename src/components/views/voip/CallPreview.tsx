@@ -30,6 +30,8 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { EventSubscription } from 'fbemitter';
 import PictureInPictureDragger from './PictureInPictureDragger';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
     CallState.InviteSent,
@@ -78,7 +80,7 @@ function getPrimarySecondaryCalls(calls: MatrixCall[]): [MatrixCall, MatrixCall[
 
     if (secondaries.length > 1) {
         // We should never be in more than two calls so this shouldn't happen
-        console.log("Found more than 1 secondary call! Other calls will not be shown.");
+        logger.log("Found more than 1 secondary call! Other calls will not be shown.");
     }
 
     return [primary, secondaries];

@@ -21,7 +21,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { Thread } from 'matrix-js-sdk/src/models/thread';
+import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
 
 import ReplyThread from "../elements/ReplyThread";
 import { _t } from '../../../languageHandler';
@@ -33,7 +33,7 @@ import { formatTime } from "../../../DateUtils";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { ALL_RULE_TYPES } from "../../../mjolnir/BanList";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { E2E_STATE } from "./E2EIcon";
+import { E2EState } from "./E2EIcon";
 import { toRem } from "../../../utils/units";
 import { WidgetType } from "../../../widgets/WidgetType";
 import RoomAvatar from "../avatars/RoomAvatar";
@@ -58,6 +58,7 @@ import ReactionsRow from '../messages/ReactionsRow';
 import { getEventDisplayInfo } from '../../../utils/EventUtils';
 import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 import SettingsStore from "../../../settings/SettingsStore";
+import MKeyVerificationConclusion from "../messages/MKeyVerificationConclusion";
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -144,8 +145,7 @@ export function getHandlerTile(ev) {
     // XXX: This is extremely a hack. Possibly these components should have an interface for
     // declining to render?
     if (type === "m.key.verification.cancel" || type === "m.key.verification.done") {
-        const MKeyVerificationConclusion = sdk.getComponent("messages.MKeyVerificationConclusion");
-        if (!MKeyVerificationConclusion.prototype._shouldRender.call(null, ev, ev.request)) {
+        if (!MKeyVerificationConclusion.shouldRender(ev, ev.request)) {
             return;
         }
     }
@@ -322,7 +322,7 @@ interface IState {
     reactions: Relations;
 
     hover: boolean;
-
+    isQuoteExpanded?: boolean;
     thread?: Thread;
 }
 
@@ -330,7 +330,8 @@ interface IState {
 export default class EventTile extends React.Component<IProps, IState> {
     private suppressReadReceiptAnimation: boolean;
     private isListeningForReceipts: boolean;
-    private tile = React.createRef();
+    // TODO: Types
+    private tile = React.createRef<unknown>();
     private replyThread = React.createRef<ReplyThread>();
 
     public readonly ref = createRef<HTMLElement>();
@@ -464,8 +465,8 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         if (SettingsStore.getValue("feature_thread")) {
-            this.props.mxEvent.once("Thread.ready", this.updateThread);
-            this.props.mxEvent.on("Thread.update", this.updateThread);
+            this.props.mxEvent.once(ThreadEvent.Ready, this.updateThread);
+            this.props.mxEvent.on(ThreadEvent.Update, this.updateThread);
         }
     }
 
@@ -521,7 +522,7 @@ export default class EventTile extends React.Component<IProps, IState> {
 
         const thread = this.state.thread;
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        if (!thread || this.props.showThreadInfo === false) {
+        if (!thread || this.props.showThreadInfo === false || thread.length <= 1) {
             return null;
         }
 
@@ -605,7 +606,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         if (encryptionInfo.mismatchedSender) {
             // something definitely wrong is going on here
             this.setState({
-                verified: E2E_STATE.WARNING,
+                verified: E2EState.Warning,
             }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
@@ -613,7 +614,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         if (!userTrust.isCrossSigningVerified()) {
             // user is not verified, so default to everything is normal
             this.setState({
-                verified: E2E_STATE.NORMAL,
+                verified: E2EState.Normal,
             }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
@@ -623,27 +624,27 @@ export default class EventTile extends React.Component<IProps, IState> {
         );
         if (!eventSenderTrust) {
             this.setState({
-                verified: E2E_STATE.UNKNOWN,
+                verified: E2EState.Unknown,
             }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
 
         if (!eventSenderTrust.isVerified()) {
             this.setState({
-                verified: E2E_STATE.WARNING,
+                verified: E2EState.Warning,
             }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
 
         if (!encryptionInfo.authenticated) {
             this.setState({
-                verified: E2E_STATE.UNAUTHENTICATED,
+                verified: E2EState.Unauthenticated,
             }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
 
         this.setState({
-            verified: E2E_STATE.VERIFIED,
+            verified: E2EState.Verified,
         }, this.props.onHeightChanged); // Decryption may have caused a change in size
     }
 
@@ -850,13 +851,13 @@ export default class EventTile extends React.Component<IProps, IState> {
 
         // event is encrypted, display padlock corresponding to whether or not it is verified
         if (ev.isEncrypted()) {
-            if (this.state.verified === E2E_STATE.NORMAL) {
+            if (this.state.verified === E2EState.Normal) {
                 return; // no icon if we've not even cross-signed the user
-            } else if (this.state.verified === E2E_STATE.VERIFIED) {
+            } else if (this.state.verified === E2EState.Verified) {
                 return; // no icon for verified
-            } else if (this.state.verified === E2E_STATE.UNAUTHENTICATED) {
+            } else if (this.state.verified === E2EState.Unauthenticated) {
                 return (<E2ePadlockUnauthenticated />);
-            } else if (this.state.verified === E2E_STATE.UNKNOWN) {
+            } else if (this.state.verified === E2EState.Unknown) {
                 return (<E2ePadlockUnknown />);
             } else {
                 return (<E2ePadlockUnverified />);
@@ -888,8 +889,8 @@ export default class EventTile extends React.Component<IProps, IState> {
             actionBarFocused: focused,
         });
     };
-
-    getTile = () => this.tile.current;
+    // TODO: Types
+    getTile: () => any | null = () => this.tile.current;
 
     getReplyThread = () => this.replyThread.current;
 
@@ -914,6 +915,11 @@ export default class EventTile extends React.Component<IProps, IState> {
         });
     };
 
+    private setQuoteExpanded = (expanded: boolean) => {
+        this.setState({
+            isQuoteExpanded: expanded,
+        });
+    };
     render() {
         const msgtype = this.props.mxEvent.getContent().msgtype;
         const eventType = this.props.mxEvent.getType() as EventType;
@@ -923,6 +929,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             isInfoMessage,
             isLeftAlignedBubbleMessage,
         } = getEventDisplayInfo(this.props.mxEvent);
+        const { isQuoteExpanded } = this.state;
 
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
@@ -935,6 +942,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                 </div>
             </div>;
         }
+
         const EventTileType = sdk.getComponent(tileHandler);
 
         const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
@@ -961,9 +969,9 @@ export default class EventTile extends React.Component<IProps, IState> {
             mx_EventTile_lastInSection: this.props.lastInSection,
             mx_EventTile_contextual: this.props.contextual,
             mx_EventTile_actionBarFocused: this.state.actionBarFocused,
-            mx_EventTile_verified: !isBubbleMessage && this.state.verified === E2E_STATE.VERIFIED,
-            mx_EventTile_unverified: !isBubbleMessage && this.state.verified === E2E_STATE.WARNING,
-            mx_EventTile_unknown: !isBubbleMessage && this.state.verified === E2E_STATE.UNKNOWN,
+            mx_EventTile_verified: !isBubbleMessage && this.state.verified === E2EState.Verified,
+            mx_EventTile_unverified: !isBubbleMessage && this.state.verified === E2EState.Warning,
+            mx_EventTile_unknown: !isBubbleMessage && this.state.verified === E2EState.Unknown,
             mx_EventTile_bad: isEncryptionFailure,
             mx_EventTile_emote: msgtype === 'm.emote',
             mx_EventTile_noSender: this.props.hideSender,
@@ -1054,6 +1062,8 @@ export default class EventTile extends React.Component<IProps, IState> {
             getTile={this.getTile}
             getReplyThread={this.getReplyThread}
             onFocusChange={this.onActionBarFocusChange}
+            isQuoteExpanded={isQuoteExpanded}
+            toggleThreadExpanded={() => this.setQuoteExpanded(!isQuoteExpanded)}
         /> : undefined;
 
         const showTimestamp = this.props.mxEvent.getTs()
@@ -1192,20 +1202,18 @@ export default class EventTile extends React.Component<IProps, IState> {
             }
 
             default: {
-                let thread;
-                // When the "showHiddenEventsInTimeline" lab is enabled,
-                // avoid showing replies for hidden events (events without tiles)
-                if (haveTileForEvent(this.props.mxEvent)) {
-                    thread = ReplyThread.makeThread(
-                        this.props.mxEvent,
-                        this.props.onHeightChanged,
-                        this.props.permalinkCreator,
-                        this.replyThread,
-                        this.props.layout,
-                        this.props.alwaysShowTimestamps || this.state.hover,
-                    );
-                }
-
+                const thread = haveTileForEvent(this.props.mxEvent) &&
+                    ReplyThread.hasThreadReply(this.props.mxEvent) ? (
+                        <ReplyThread
+                            parentEv={this.props.mxEvent}
+                            onHeightChanged={this.props.onHeightChanged}
+                            ref={this.replyThread}
+                            permalinkCreator={this.props.permalinkCreator}
+                            layout={this.props.layout}
+                            alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.hover}
+                            isQuoteExpanded={isQuoteExpanded}
+                            setQuoteExpanded={this.setQuoteExpanded}
+                        />) : null;
                 const isOwnEvent = this.props.mxEvent?.sender?.userId === MatrixClientPeg.get().getUserId();
 
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers

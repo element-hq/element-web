@@ -262,7 +262,7 @@ const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange, closeSet
         }
 
         if (beforeJoinRule === joinRule && !restrictedAllowRoomIds) return;
-        if (beforeChange && !await beforeChange(joinRule)) return;
+        if (beforeChange && !(await beforeChange(joinRule))) return;
 
         const newContent: IJoinRuleEventContent = {
             join_rule: joinRule,

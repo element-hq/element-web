@@ -214,6 +214,8 @@ export default class CallView extends React.Component<IProps, IState> {
         this.setState({
             primaryFeed: primary,
             secondaryFeeds: secondary,
+            micMuted: this.props.call.isMicrophoneMuted(),
+            vidMuted: this.props.call.isLocalVideoMuted(),
         });
     };
 
@@ -258,18 +260,14 @@ export default class CallView extends React.Component<IProps, IState> {
         return { primary, secondary };
     }
 
-    private onMicMuteClick = (): void => {
+    private onMicMuteClick = async (): Promise<void> => {
         const newVal = !this.state.micMuted;
-
-        this.props.call.setMicrophoneMuted(newVal);
-        this.setState({ micMuted: newVal });
+        this.setState({ micMuted: await this.props.call.setMicrophoneMuted(newVal) });
     };
 
-    private onVidMuteClick = (): void => {
+    private onVidMuteClick = async (): Promise<void> => {
         const newVal = !this.state.vidMuted;
-
-        this.props.call.setLocalVideoMuted(newVal);
-        this.setState({ vidMuted: newVal });
+        this.setState({ vidMuted: await this.props.call.setLocalVideoMuted(newVal) });
     };
 
     private onScreenshareClick = async (): Promise<void> => {

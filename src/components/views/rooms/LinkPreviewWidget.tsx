@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from 'react';
+import React, { ComponentProps, createRef } from 'react';
 import { AllHtmlEntities } from 'html-entities';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { IPreviewUrlResponse } from 'matrix-js-sdk/src/client';
@@ -36,6 +36,7 @@ interface IProps {
 @replaceableComponent("views.rooms.LinkPreviewWidget")
 export default class LinkPreviewWidget extends React.Component<IProps> {
     private readonly description = createRef<HTMLDivElement>();
+    private image = createRef<HTMLImageElement>();
 
     componentDidMount() {
         if (this.description.current) {
@@ -59,7 +60,7 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
             src = mediaFromMxc(src).srcHttp;
         }
 
-        const params = {
+        const params: Omit<ComponentProps<typeof ImageView>, "onFinished"> = {
             src: src,
             width: p["og:image:width"],
             height: p["og:image:height"],
@@ -67,6 +68,17 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
             fileSize: p["matrix:image:size"],
             link: this.props.link,
         };
+
+        if (this.image.current) {
+            const clientRect = this.image.current.getBoundingClientRect();
+
+            params.thumbnailInfo = {
+                width: clientRect.width,
+                height: clientRect.height,
+                positionX: clientRect.x,
+                positionY: clientRect.y,
+            };
+        }
 
         Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
     };
@@ -100,7 +112,7 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
         let img;
         if (image) {
             img = <div className="mx_LinkPreviewWidget_image" style={{ height: thumbHeight }}>
-                <img style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }} src={image} onClick={this.onImageClick} />
+                <img ref={this.image} style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }} src={image} onClick={this.onImageClick} />
             </div>;
         }
 

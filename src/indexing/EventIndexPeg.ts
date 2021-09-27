@@ -25,6 +25,8 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from '../settings/SettingsStore';
 import { SettingLevel } from "../settings/SettingLevel";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const INDEX_VERSION = 1;
 
 export class EventIndexPeg {
@@ -43,19 +45,19 @@ export class EventIndexPeg {
     async init() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         if (!indexManager) {
-            console.log("EventIndex: Platform doesn't support event indexing, not initializing.");
+            logger.log("EventIndex: Platform doesn't support event indexing, not initializing.");
             return false;
         }
 
         this._supportIsInstalled = await indexManager.supportsEventIndexing();
 
         if (!this.supportIsInstalled()) {
-            console.log("EventIndex: Event indexing isn't installed for the platform, not initializing.");
+            logger.log("EventIndex: Event indexing isn't installed for the platform, not initializing.");
             return false;
         }
 
         if (!SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableEventIndexing')) {
-            console.log("EventIndex: Event indexing is disabled, not initializing");
+            logger.log("EventIndex: Event indexing is disabled, not initializing");
             return false;
         }
 
@@ -92,10 +94,10 @@ export class EventIndexPeg {
                 await indexManager.setUserVersion(INDEX_VERSION);
             }
 
-            console.log("EventIndex: Successfully initialized the event index");
+            logger.log("EventIndex: Successfully initialized the event index");
             await index.init();
         } catch (e) {
-            console.log("EventIndex: Error initializing the event index", e);
+            logger.log("EventIndex: Error initializing the event index", e);
             this.error = e;
             return false;
         }
@@ -174,7 +176,7 @@ export class EventIndexPeg {
 
         if (indexManager !== null) {
             await this.unset();
-            console.log("EventIndex: Deleting event index.");
+            logger.log("EventIndex: Deleting event index.");
             await indexManager.deleteEventIndex();
         }
     }

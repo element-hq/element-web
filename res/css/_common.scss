@@ -318,6 +318,8 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 .mx_Dialog_lightbox .mx_Dialog_background {
     opacity: $lightbox-background-bg-opacity;
     background-color: $lightbox-background-bg-color;
+    animation-name: mx_Dialog_lightbox_background_keyframes;
+    animation-duration: 300ms;
 }
 
 .mx_Dialog_lightbox .mx_Dialog {

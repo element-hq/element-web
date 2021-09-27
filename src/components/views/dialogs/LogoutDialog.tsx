@@ -25,6 +25,8 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import RestoreKeyBackupDialog from './security/RestoreKeyBackupDialog';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     onFinished: (success: boolean) => void;
 }
@@ -68,7 +70,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
                 backupInfo,
             });
         } catch (e) {
-            console.log("Unable to fetch key backup status", e);
+            logger.log("Unable to fetch key backup status", e);
             this.setState({
                 loading: false,
                 error: e,

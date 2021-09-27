@@ -59,3 +59,14 @@ limitations under the License.
         border-left-color: $username-variant8-color;
     }
 }
+
+.mx_ReplyThread--expanded {
+    .mx_EventTile_body {
+        display: block;
+        overflow-y: scroll !important;
+    }
+    .mx_EventTile_collapsedCodeBlock {
+        // !important needed due to .mx_ReplyTile .mx_EventTile_content .mx_EventTile_pre_container > pre
+        display: block !important;
+    }
+}
