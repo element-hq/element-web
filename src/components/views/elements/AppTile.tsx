@@ -163,7 +163,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
         if (this.state.hasPermissionToLoad && !hasPermissionToLoad) {
             // Force the widget to be non-persistent (able to be deleted/forgotten)
-            ActiveWidgetStore.destroyPersistentWidget(this.props.app.id);
+            ActiveWidgetStore.instance.destroyPersistentWidget(this.props.app.id);
             PersistedElement.destroyElement(this.persistKey);
             if (this.sgWidget) this.sgWidget.stop();
         }
@@ -198,8 +198,8 @@ export default class AppTile extends React.Component<IProps, IState> {
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
 
         // if it's not remaining on screen, get rid of the PersistedElement container
-        if (!ActiveWidgetStore.getWidgetPersistence(this.props.app.id)) {
-            ActiveWidgetStore.destroyPersistentWidget(this.props.app.id);
+        if (!ActiveWidgetStore.instance.getWidgetPersistence(this.props.app.id)) {
+            ActiveWidgetStore.instance.destroyPersistentWidget(this.props.app.id);
             PersistedElement.destroyElement(this.persistKey);
         }
 
@@ -282,7 +282,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
         // Delete the widget from the persisted store for good measure.
         PersistedElement.destroyElement(this.persistKey);
-        ActiveWidgetStore.destroyPersistentWidget(this.props.app.id);
+        ActiveWidgetStore.instance.destroyPersistentWidget(this.props.app.id);
 
         if (this.sgWidget) this.sgWidget.stop({ forceDestroy: true });
     }
