@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import RoomViewStore from '../../../stores/RoomViewStore';
-import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
+import ActiveWidgetStore, { ActiveWidgetStoreEvent } from '../../../stores/ActiveWidgetStore';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -39,13 +39,13 @@ export default class PersistentApp extends React.Component<{}, IState> {
 
         this.state = {
             roomId: RoomViewStore.getRoomId(),
-            persistentWidgetId: ActiveWidgetStore.getPersistentWidgetId(),
+            persistentWidgetId: ActiveWidgetStore.instance.getPersistentWidgetId(),
         };
     }
 
     public componentDidMount(): void {
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
-        ActiveWidgetStore.on('update', this.onActiveWidgetStoreUpdate);
+        ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Update, this.onActiveWidgetStoreUpdate);
         MatrixClientPeg.get().on("Room.myMembership", this.onMyMembership);
     }
 
@@ -53,7 +53,7 @@ export default class PersistentApp extends React.Component<{}, IState> {
         if (this.roomStoreToken) {
             this.roomStoreToken.remove();
         }
-        ActiveWidgetStore.removeListener('update', this.onActiveWidgetStoreUpdate);
+        ActiveWidgetStore.instance.removeListener(ActiveWidgetStoreEvent.Update, this.onActiveWidgetStoreUpdate);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room.myMembership", this.onMyMembership);
         }
@@ -68,23 +68,23 @@ export default class PersistentApp extends React.Component<{}, IState> {
 
     private onActiveWidgetStoreUpdate = (): void => {
         this.setState({
-            persistentWidgetId: ActiveWidgetStore.getPersistentWidgetId(),
+            persistentWidgetId: ActiveWidgetStore.instance.getPersistentWidgetId(),
         });
     };
 
     private onMyMembership = async (room: Room, membership: string): Promise<void> => {
-        const persistentWidgetInRoomId = ActiveWidgetStore.getRoomId(this.state.persistentWidgetId);
+        const persistentWidgetInRoomId = ActiveWidgetStore.instance.getRoomId(this.state.persistentWidgetId);
         if (membership !== "join") {
             // we're not in the room anymore - delete
             if (room .roomId === persistentWidgetInRoomId) {
-                ActiveWidgetStore.destroyPersistentWidget(this.state.persistentWidgetId);
+                ActiveWidgetStore.instance.destroyPersistentWidget(this.state.persistentWidgetId);
             }
         }
     };
 
     public render(): JSX.Element {
         if (this.state.persistentWidgetId) {
-            const persistentWidgetInRoomId = ActiveWidgetStore.getRoomId(this.state.persistentWidgetId);
+            const persistentWidgetInRoomId = ActiveWidgetStore.instance.getRoomId(this.state.persistentWidgetId);
 
             const persistentWidgetInRoom = MatrixClientPeg.get().getRoom(persistentWidgetInRoomId);
 
@@ -96,7 +96,7 @@ export default class PersistentApp extends React.Component<{}, IState> {
             if (this.state.roomId !== persistentWidgetInRoomId && myMembership === "join") {
                 // get the widget data
                 const appEvent = WidgetUtils.getRoomWidgets(persistentWidgetInRoom).find((ev) => {
-                    return ev.getStateKey() === ActiveWidgetStore.getPersistentWidgetId();
+                    return ev.getStateKey() === ActiveWidgetStore.instance.getPersistentWidgetId();
                 });
                 const app = WidgetUtils.makeAppConfig(
                     appEvent.getStateKey(), appEvent.getContent(), appEvent.getSender(),

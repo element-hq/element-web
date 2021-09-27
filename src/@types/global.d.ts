@@ -50,6 +50,7 @@ import UIStore from "../stores/UIStore";
 import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 import { RoomScrollStateStore } from "../stores/RoomScrollStateStore";
 import { ConsoleLogger, IndexedDBLogStore } from "../rageshake/rageshake";
+import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -93,6 +94,7 @@ declare global {
         mxUIStore: UIStore;
         mxSetupEncryptionStore?: SetupEncryptionStore;
         mxRoomScrollStateStore?: RoomScrollStateStore;
+        mxActiveWidgetStore?: ActiveWidgetStore;
         mxOnRecaptchaLoaded?: () => void;
         electron?: Electron;
     }
