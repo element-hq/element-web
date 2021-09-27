@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import dis from '../../../dispatcher/dispatcher';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
@@ -24,15 +23,16 @@ import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import EventTileBubble from "./EventTileBubble";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
+interface IProps {
+    /* the MatrixEvent to show */
+    mxEvent: MatrixEvent;
+}
 
 @replaceableComponent("views.messages.RoomCreate")
-export default class RoomCreate extends React.Component {
-    static propTypes = {
-        /* the MatrixEvent to show */
-        mxEvent: PropTypes.object.isRequired,
-    };
-
-    _onLinkClicked = e => {
+export default class RoomCreate extends React.Component<IProps> {
+    private onLinkClicked = (e: React.MouseEvent): void => {
         e.preventDefault();
 
         const predecessor = this.props.mxEvent.getContent()['predecessor'];
@@ -45,7 +45,7 @@ export default class RoomCreate extends React.Component {
         });
     };
 
-    render() {
+    public render(): JSX.Element {
         const predecessor = this.props.mxEvent.getContent()['predecessor'];
         if (predecessor === undefined) {
             return <div />; // We should never have been instantiated in this case
@@ -55,7 +55,7 @@ export default class RoomCreate extends React.Component {
         permalinkCreator.load();
         const predecessorPermalink = permalinkCreator.forEvent(predecessor['event_id']);
         const link = (
-            <a href={predecessorPermalink} onClick={this._onLinkClicked}>
+            <a href={predecessorPermalink} onClick={this.onLinkClicked}>
                 { _t("Click here to see older messages.") }
             </a>
         );
