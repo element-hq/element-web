@@ -26,9 +26,6 @@ interface IProps {
 
 @replaceableComponent("views.messages.MjolnirBody")
 export default class MjolnirBody extends React.Component<IProps> {
-    constructor(props: IProps) {
-        super(props);
-    }
 
     private onAllowClick = (e: React.MouseEvent): void => {
         e.preventDefault();
