@@ -2901,7 +2901,7 @@
     "e.g. my-space": "např. můj-prostor",
     "Silence call": "Ztlumit zvonění",
     "Sound on": "Zvuk zapnutý",
-    "Show all rooms in Home": "Zobrazit všechny místnosti na domácí obrazovce",
+    "Show all rooms in Home": "Zobrazit všechny místnosti na úvodní obrazovce",
     "Report to moderators prototype. In rooms that support moderation, the `report` button will let you report abuse to room moderators": "Prototyp Nahlášování moderátorům. V místnostech, které podporují moderování, vám tlačítko `nahlásit` umožní nahlásit zneužití moderátorům místnosti",
     "%(senderName)s changed the <a>pinned messages</a> for the room.": "%(senderName)s změnil(a) <a>připnuté zprávy</a> v místnosti.",
     "%(senderName)s kicked %(targetName)s": "%(senderName)s vykopl(a) uživatele %(targetName)s",
@@ -3056,7 +3056,7 @@
     "Want to add a new space instead?": "Chcete místo toho přidat nový prostor?",
     "Decrypting": "Dešifrování",
     "Show all rooms": "Zobrazit všechny místnosti",
-    "All rooms you're in will appear in Home.": "Všechny místnosti, ve kterých se nacházíte, se zobrazí na domovské obrazovce.",
+    "All rooms you're in will appear in Home.": "Všechny místnosti, ve kterých se nacházíte, se zobrazí na úvodní obrazovce.",
     "Send pseudonymous analytics data": "Odeslat pseudonymní analytická data",
     "Missed call": "Zmeškaný hovor",
     "Call declined": "Hovor odmítnut",
@@ -3162,5 +3162,12 @@
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Dočasně zobrazit skupiny místo prostorů pro tuto relaci. Podpora bude v blízké budoucnosti odstraněna. Toto provede přenačtení Elementu.",
     "Display Communities instead of Spaces": "Zobrazit skupiny místo prostorů",
     "Joining space …": "Připojování k prostoru…",
-    "%(reactors)s reacted with %(content)s": "%(reactors)s reagoval(a) na %(content)s"
+    "%(reactors)s reacted with %(content)s": "%(reactors)s reagoval(a) na %(content)s",
+    "Would you like to leave the rooms in this space?": "Chcete odejít z místností v tomto prostoru?",
+    "You are about to leave <spaceName/>.": "Odcházíte z <spaceName/>.",
+    "Leave some rooms": "Odejít z některých místností",
+    "Don't leave any rooms": "Neodcházet z žádné místnosti",
+    "Leave all rooms": "Odejít ze všech místností",
+    "Expand quotes │ ⇧+click": "Rozbalit uvozovky │ ⇧+kliknutí",
+    "Collapse quotes │ ⇧+click": "Sbalit uvozovky │ ⇧+kliknutí"
 }

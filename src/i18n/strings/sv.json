@@ -3159,5 +3159,10 @@
     "To join a space you'll need an invite.": "För att gå med i ett utrymme så behöver du en inbjudan.",
     "You can also make Spaces from <a>communities</a>.": "Du kan också göra utrymmen av <a>gemenskaper</a>.",
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Visa tillfälligt gemenskaper istället för utrymmen för den här sessionen. Stöd för detta kommer snart att tas bort. Detta kommer att ladda om Element.",
-    "Display Communities instead of Spaces": "Visa gemenskaper istället för utrymmen"
+    "Display Communities instead of Spaces": "Visa gemenskaper istället för utrymmen",
+    "Would you like to leave the rooms in this space?": "Vill du lämna rummen i det här utrymmet?",
+    "You are about to leave <spaceName/>.": "Du kommer att lämna <spaceName/>.",
+    "Leave some rooms": "Lämna vissa rum",
+    "Leave all rooms": "Lämna alla rum",
+    "Don't leave any rooms": "Lämna inga rum"
 }
