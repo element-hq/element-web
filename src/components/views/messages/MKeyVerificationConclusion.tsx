@@ -109,15 +109,18 @@ export default class MKeyVerificationConclusion extends React.Component<IProps> 
         let title;
 
         if (request.done) {
-            title = _t("You verified %(name)s", { name: getNameForEventRoom(request.otherUserId, mxEvent) });
+            title = _t(
+                "You verified %(name)s",
+                { name: getNameForEventRoom(request.otherUserId, mxEvent.getRoomId()) },
+            );
         } else if (request.cancelled) {
             const userId = request.cancellingUserId;
             if (userId === myUserId) {
                 title = _t("You cancelled verifying %(name)s",
-                    { name: getNameForEventRoom(request.otherUserId, mxEvent) });
+                    { name: getNameForEventRoom(request.otherUserId, mxEvent.getRoomId()) });
             } else {
                 title = _t("%(name)s cancelled verifying",
-                    { name: getNameForEventRoom(userId, mxEvent) });
+                    { name: getNameForEventRoom(userId, mxEvent.getRoomId()) });
             }
         }
 
