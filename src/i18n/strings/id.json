@@ -199,7 +199,7 @@
     "The version of %(brand)s": "Versi %(brand)s",
     "Your language of choice": "Pilihan bahasamu",
     "Your homeserver's URL": "URL Homeserver Anda",
-    "e.g. %(exampleValue)s": "",
+    "e.g. %(exampleValue)s": "mis. %(exampleValue)s",
     "Every page you use in the app": "Setiap halaman yang digunakan di app",
     "e.g. <CurrentPageURL>": "e.g. <URLHalamanSaatIni>",
     "Your device resolution": "Resolusi perangkat Anda",
@@ -214,5 +214,5 @@
     "Explore rooms": "Jelajahi ruang",
     "Sign In": "Masuk",
     "Create Account": "Buat Akun",
-    "Identity server": "Server Identitas"
+    "Identity server": "Server identitas"
 }
