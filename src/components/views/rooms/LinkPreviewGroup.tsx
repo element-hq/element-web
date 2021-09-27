@@ -87,7 +87,10 @@ const fetchPreviews = (cli: MatrixClient, links: string[], ts: number):
         Promise<[string, IPreviewUrlResponse][]> => {
     return Promise.all<[string, IPreviewUrlResponse] | void>(links.map(async link => {
         try {
-            return [link, await cli.getUrlPreview(link, ts)];
+            const preview = await cli.getUrlPreview(link, ts);
+            if (preview && Object.keys(preview).length > 0) {
+                return [link, preview];
+            }
         } catch (error) {
             console.error("Failed to get URL preview: " + error);
         }
