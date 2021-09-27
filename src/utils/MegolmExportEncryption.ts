@@ -26,17 +26,17 @@ const subtleCrypto = window.crypto.subtle || window.crypto.webkitSubtle;
  * Make an Error object which has a friendlyText property which is already
  * translated and suitable for showing to the user.
  *
- * @param {string} msg   message for the exception
+ * @param {string} message message for the exception
  * @param {string} friendlyText
- * @returns {Error}
+ * @returns {{message: string, friendlyText: string}}
  */
-function friendlyError(msg, friendlyText) {
-    const e = new Error(msg);
-    e.friendlyText = friendlyText;
-    return e;
+function friendlyError(
+    message: string, friendlyText: string,
+): { message: string, friendlyText: string } {
+    return { message, friendlyText };
 }
 
-function cryptoFailMsg() {
+function cryptoFailMsg(): string {
     return _t('Your browser does not support the required cryptography extensions');
 }
 
@@ -49,7 +49,7 @@ function cryptoFailMsg() {
  *
  *
  */
-export async function decryptMegolmKeyFile(data, password) {
+export async function decryptMegolmKeyFile(data: ArrayBuffer, password: string): Promise<string> {
     const body = unpackMegolmKeyFile(data);
     const brand = SdkConfig.get().brand;
 
@@ -124,7 +124,11 @@ export async function decryptMegolmKeyFile(data, password) {
  *    key-derivation function.
  * @return {Promise<ArrayBuffer>} promise for encrypted output
  */
-export async function encryptMegolmKeyFile(data, password, options) {
+export async function encryptMegolmKeyFile(
+    data: string,
+    password: string,
+    options?: { kdf_rounds?: number }, // eslint-disable-line camelcase
+): Promise<ArrayBuffer> {
     options = options || {};
     const kdfRounds = options.kdf_rounds || 500000;
 
@@ -196,7 +200,7 @@ export async function encryptMegolmKeyFile(data, password, options) {
  * @param {String} password  password
  * @return {Promise<[CryptoKey, CryptoKey]>} promise for [aes key, hmac key]
  */
-async function deriveKeys(salt, iterations, password) {
+async function deriveKeys(salt: Uint8Array, iterations: number, password: string): Promise<[CryptoKey, CryptoKey]> {
     const start = new Date();
 
     let key;
@@ -229,7 +233,7 @@ async function deriveKeys(salt, iterations, password) {
     }
 
     const now = new Date();
-    logger.log("E2e import/export: deriveKeys took " + (now - start) + "ms");
+    logger.log("E2e import/export: deriveKeys took " + (now.getTime() - start.getTime()) + "ms");
 
     const aesKey = keybits.slice(0, 32);
     const hmacKey = keybits.slice(32);
@@ -271,7 +275,7 @@ const TRAILER_LINE = '-----END MEGOLM SESSION DATA-----';
  * @param {ArrayBuffer} data  input file
  * @return {Uint8Array} unbase64ed content
  */
-function unpackMegolmKeyFile(data) {
+function unpackMegolmKeyFile(data: ArrayBuffer): Uint8Array {
     // parse the file as a great big String. This should be safe, because there
     // should be no non-ASCII characters, and it means that we can do string
     // comparisons to find the header and footer, and feed it into window.atob.
@@ -279,6 +283,7 @@ function unpackMegolmKeyFile(data) {
 
     // look for the start line
     let lineStart = 0;
+    // eslint-disable-next-line no-constant-condition
     while (1) {
         const lineEnd = fileStr.indexOf('\n', lineStart);
         if (lineEnd < 0) {
@@ -297,6 +302,7 @@ function unpackMegolmKeyFile(data) {
     const dataStart = lineStart;
 
     // look for the end line
+    // eslint-disable-next-line no-constant-condition
     while (1) {
         const lineEnd = fileStr.indexOf('\n', lineStart);
         const line = fileStr.slice(lineStart, lineEnd < 0 ? undefined : lineEnd).trim();
@@ -324,7 +330,7 @@ function unpackMegolmKeyFile(data) {
  * @param {Uint8Array} data  raw data
  * @return {ArrayBuffer} formatted file
  */
-function packMegolmKeyFile(data) {
+function packMegolmKeyFile(data: Uint8Array): ArrayBuffer {
     // we split into lines before base64ing, because encodeBase64 doesn't deal
     // terribly well with large arrays.
     const LINE_LENGTH = (72 * 4 / 3);
@@ -347,7 +353,7 @@ function packMegolmKeyFile(data) {
  * @param {Uint8Array} uint8Array The data to encode.
  * @return {string} The base64.
  */
-function encodeBase64(uint8Array) {
+function encodeBase64(uint8Array: Uint8Array): string {
     // Misinterpt the Uint8Array as Latin-1.
     // window.btoa expects a unicode string with codepoints in the range 0-255.
     const latin1String = String.fromCharCode.apply(null, uint8Array);
@@ -360,7 +366,7 @@ function encodeBase64(uint8Array) {
  * @param {string} base64 The base64 to decode.
  * @return {Uint8Array} The decoded data.
  */
-function decodeBase64(base64) {
+function decodeBase64(base64: string): Uint8Array {
     // window.atob returns a unicode string with codepoints in the range 0-255.
     const latin1String = window.atob(base64);
     // Encode the string as a Uint8Array
