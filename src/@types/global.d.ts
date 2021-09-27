@@ -49,6 +49,7 @@ import PerformanceMonitor from "../performance";
 import UIStore from "../stores/UIStore";
 import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 import { RoomScrollStateStore } from "../stores/RoomScrollStateStore";
+import { ConsoleLogger, IndexedDBLogStore } from "../rageshake/rageshake";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -225,6 +226,15 @@ declare global {
               ) => string;
               isReady: () => boolean;
           };
+
+    // eslint-disable-next-line no-var, camelcase
+    var mx_rage_logger: ConsoleLogger;
+    // eslint-disable-next-line no-var, camelcase
+    var mx_rage_initPromise: Promise<void>;
+    // eslint-disable-next-line no-var, camelcase
+    var mx_rage_initStoragePromise: Promise<void>;
+    // eslint-disable-next-line no-var, camelcase
+    var mx_rage_store: IndexedDBLogStore;
 }
 
 /* eslint-enable @typescript-eslint/naming-convention */
