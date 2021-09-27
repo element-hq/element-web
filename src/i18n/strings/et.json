@@ -3158,5 +3158,10 @@
     "Before you upgrade": "Enne uuendamist",
     "To join a space you'll need an invite.": "Kogukonnakeskusega liitumiseks vajad kutset.",
     "%(reactors)s reacted with %(content)s": "%(reactors)s kasutajat reageeris järgnevalt: %(content)s",
-    "Joining space …": "Liitun kohukonnakeskusega…"
+    "Joining space …": "Liitun kohukonnakeskusega…",
+    "Would you like to leave the rooms in this space?": "Kas sa soovid lahkuda ka selle kogukonna jututubadest?",
+    "You are about to leave <spaceName/>.": "Sa oled lahkumas <spaceName/> kogukonnast.",
+    "Leave some rooms": "Lahku mõnedest jututubadest",
+    "Leave all rooms": "Lahku kõikidest jututubadest",
+    "Don't leave any rooms": "Ära lahku ühestki jututoast"
 }

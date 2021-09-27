@@ -3164,5 +3164,7 @@
     "You are about to leave <spaceName/>.": "你即将离开 <spaceName/>。",
     "Leave some rooms": "离开一些聊天室",
     "Leave all rooms": "离开所有聊天室",
-    "Don't leave any rooms": "不离开任何聊天室"
+    "Don't leave any rooms": "不离开任何聊天室",
+    "Collapse quotes │ ⇧+click": "折叠引号│ ⇧+click",
+    "Expand quotes │ ⇧+click": "展开引号│ ⇧+click"
 }
