@@ -3161,5 +3161,10 @@
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Mostra temporaneamente le comunità invece degli spazi per questa sessione. Il supporto per questa azione verrà rimosso nel breve termine. Element verrà ricaricato.",
     "Display Communities instead of Spaces": "Mostra le comunità invece degli spazi",
     "%(reactors)s reacted with %(content)s": "%(reactors)s ha reagito con %(content)s",
-    "Joining space …": "Ingresso nello spazio …"
+    "Joining space …": "Ingresso nello spazio …",
+    "Would you like to leave the rooms in this space?": "Vuoi uscire dalle stanze di questo spazio?",
+    "You are about to leave <spaceName/>.": "Stai per uscire da <spaceName/>.",
+    "Leave some rooms": "Esci da alcune stanze",
+    "Leave all rooms": "Esci da tutte le stanze",
+    "Don't leave any rooms": "Non uscire da alcuna stanza"
 }
