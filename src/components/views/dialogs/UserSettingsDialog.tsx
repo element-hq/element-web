@@ -33,6 +33,7 @@ import MjolnirUserSettingsTab from "../settings/tabs/user/MjolnirUserSettingsTab
 import { UIFeature } from "../../../settings/UIFeature";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
+import { IDialogProps } from "./IDialogProps";
 
 export enum UserTab {
     General = "USER_GENERAL_TAB",
@@ -47,8 +48,7 @@ export enum UserTab {
     Help = "USER_HELP_TAB",
 }
 
-interface IProps {
-    onFinished: (success: boolean) => void;
+interface IProps extends IDialogProps {
     initialTabId?: string;
 }
 

@@ -31,6 +31,8 @@ import SettingsStore from "./settings/SettingsStore";
 import SecurityCustomisations from "./customisations/Security";
 import { DeviceTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
 // during the same single operation. Use `accessSecretStorage` below to scope a
@@ -136,7 +138,7 @@ async function getSecretStorageKey(
 
     const keyFromCustomisations = SecurityCustomisations.getSecretStorageKey?.();
     if (keyFromCustomisations) {
-        console.log("Using key from security customisations (secret storage)");
+        logger.log("Using key from security customisations (secret storage)");
         cacheSecretStorageKey(keyId, keyInfo, keyFromCustomisations);
         return [keyId, keyFromCustomisations];
     }
@@ -186,7 +188,7 @@ export async function getDehydrationKey(
 ): Promise<Uint8Array> {
     const keyFromCustomisations = SecurityCustomisations.getSecretStorageKey?.();
     if (keyFromCustomisations) {
-        console.log("Using key from security customisations (dehydration)");
+        logger.log("Using key from security customisations (dehydration)");
         return keyFromCustomisations;
     }
 
@@ -248,13 +250,13 @@ async function onSecretRequested(
     name: string,
     deviceTrust: DeviceTrustLevel,
 ): Promise<string> {
-    console.log("onSecretRequested", userId, deviceId, requestId, name, deviceTrust);
+    logger.log("onSecretRequested", userId, deviceId, requestId, name, deviceTrust);
     const client = MatrixClientPeg.get();
     if (userId !== client.getUserId()) {
         return;
     }
     if (!deviceTrust || !deviceTrust.isVerified()) {
-        console.log(`Ignoring secret request from untrusted device ${deviceId}`);
+        logger.log(`Ignoring secret request from untrusted device ${deviceId}`);
         return;
     }
     if (
@@ -267,7 +269,7 @@ async function onSecretRequested(
         const keyId = name.replace("m.cross_signing.", "");
         const key = await callbacks.getCrossSigningKeyCache(keyId);
         if (!key) {
-            console.log(
+            logger.log(
                 `${keyId} requested by ${deviceId}, but not found in cache`,
             );
         }
@@ -275,7 +277,7 @@ async function onSecretRequested(
     } else if (name === "m.megolm_backup.v1") {
         const key = await client.crypto.getSessionBackupPrivateKey();
         if (!key) {
-            console.log(
+            logger.log(
                 `session backup key requested by ${deviceId}, but not found in cache`,
             );
         }
@@ -329,7 +331,7 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
     const cli = MatrixClientPeg.get();
     secretStorageBeingAccessed = true;
     try {
-        if (!await cli.hasSecretStorageKey() || forceReset) {
+        if (!(await cli.hasSecretStorageKey()) || forceReset) {
             // This dialog calls bootstrap itself after guiding the user through
             // passphrase creation.
             const { finished } = Modal.createTrackedDialogAsync('Create Secret Storage dialog', '',
@@ -383,12 +385,12 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
                 if (secretStorageKeyInfo[keyId] && secretStorageKeyInfo[keyId].passphrase) {
                     dehydrationKeyInfo = { passphrase: secretStorageKeyInfo[keyId].passphrase };
                 }
-                console.log("Setting dehydration key");
+                logger.log("Setting dehydration key");
                 await cli.setDehydrationKey(secretStorageKeys[keyId], dehydrationKeyInfo, "Backup device");
             } else if (!keyId) {
                 console.warn("Not setting dehydration key: no SSSS key found");
             } else {
-                console.log("Not setting dehydration key: feature disabled");
+                logger.log("Not setting dehydration key: feature disabled");
             }
         }
 
@@ -416,8 +418,8 @@ export async function tryToUnlockSecretStorageWithDehydrationKey(
 ): Promise<void> {
     const key = dehydrationCache.key;
     let restoringBackup = false;
-    if (key && await client.isSecretStorageReady()) {
-        console.log("Trying to set up cross-signing using dehydration key");
+    if (key && (await client.isSecretStorageReady())) {
+        logger.log("Trying to set up cross-signing using dehydration key");
         secretStorageBeingAccessed = true;
         nonInteractive = true;
         try {

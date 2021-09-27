@@ -23,6 +23,8 @@ import { PlaybackClock } from "./PlaybackClock";
 import { createAudioContext, decodeOgg } from "./compat";
 import { clamp } from "../utils/numbers";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export enum PlaybackState {
     Decoding = "decoding",
     Stopped = "stopped", // no progress on timeline
@@ -139,7 +141,7 @@ export class Playback extends EventEmitter implements IDestroyable {
         // audio buffer in memory, as that can balloon to far greater than the input buffer's
         // byte length.
         if (this.buf.byteLength > 5 * 1024 * 1024) { // 5mb
-            console.log("Audio file too large: processing through <audio /> element");
+            logger.log("Audio file too large: processing through <audio /> element");
             this.element = document.createElement("AUDIO") as HTMLAudioElement;
             const prom = new Promise((resolve, reject) => {
                 this.element.onloadeddata = () => resolve(null);

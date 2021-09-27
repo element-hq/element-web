@@ -20,6 +20,7 @@ import BaseDialog from '../BaseDialog';
 import { _t } from '../../../../languageHandler';
 import { SetupEncryptionStore, Phase } from '../../../../stores/SetupEncryptionStore';
 import { replaceableComponent } from "../../../../utils/replaceableComponent";
+import { IDialogProps } from "../IDialogProps";
 
 function iconFromPhase(phase: Phase) {
     if (phase === Phase.Done) {
@@ -29,12 +30,9 @@ function iconFromPhase(phase: Phase) {
     }
 }
 
-interface IProps {
-    onFinished: (success: boolean) => void;
-}
-
+interface IProps extends IDialogProps {}
 interface IState {
-    icon: Phase;
+    icon: string;
 }
 
 @replaceableComponent("views.dialogs.security.SetupEncryptionDialog")

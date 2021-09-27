@@ -31,6 +31,8 @@ import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 import { ICrawlerCheckpoint, ILoadArgs, ISearchArgs } from "./BaseEventIndexManager";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // The time in ms that the crawler will wait loop iterations if there
 // have not been any checkpoints to consume in the last iteration.
 const CRAWLER_IDLE_TIME = 5000;
@@ -54,7 +56,7 @@ export default class EventIndex extends EventEmitter {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         this.crawlerCheckpoints = await indexManager.loadCheckpoints();
-        console.log("EventIndex: Loaded checkpoints", this.crawlerCheckpoints);
+        logger.log("EventIndex: Loaded checkpoints", this.crawlerCheckpoints);
 
         this.registerListeners();
     }
@@ -102,7 +104,7 @@ export default class EventIndex extends EventEmitter {
         // rooms can use the search provided by the homeserver.
         const encryptedRooms = rooms.filter(isRoomEncrypted);
 
-        console.log("EventIndex: Adding initial crawler checkpoints");
+        logger.log("EventIndex: Adding initial crawler checkpoints");
 
         // Gather the prev_batch tokens and create checkpoints for
         // our message crawler.
@@ -134,7 +136,7 @@ export default class EventIndex extends EventEmitter {
                     this.crawlerCheckpoints.push(forwardCheckpoint);
                 }
             } catch (e) {
-                console.log(
+                logger.log(
                     "EventIndex: Error adding initial checkpoints for room",
                     room.roomId,
                     backCheckpoint,
@@ -213,8 +215,8 @@ export default class EventIndex extends EventEmitter {
     private onRoomStateEvent = async (ev: MatrixEvent, state: RoomState) => {
         if (!MatrixClientPeg.get().isRoomEncrypted(state.roomId)) return;
 
-        if (ev.getType() === "m.room.encryption" && !await this.isRoomIndexed(state.roomId)) {
-            console.log("EventIndex: Adding a checkpoint for a newly encrypted room", state.roomId);
+        if (ev.getType() === "m.room.encryption" && !(await this.isRoomIndexed(state.roomId))) {
+            logger.log("EventIndex: Adding a checkpoint for a newly encrypted room", state.roomId);
             this.addRoomCheckpoint(state.roomId, true);
         }
     };
@@ -232,7 +234,7 @@ export default class EventIndex extends EventEmitter {
         try {
             await indexManager.deleteEvent(ev.getAssociatedId());
         } catch (e) {
-            console.log("EventIndex: Error deleting event from index", e);
+            logger.log("EventIndex: Error deleting event from index", e);
         }
     };
 
@@ -246,7 +248,7 @@ export default class EventIndex extends EventEmitter {
         if (room === null) return;
         if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
 
-        console.log("EventIndex: Adding a checkpoint because of a limited timeline",
+        logger.log("EventIndex: Adding a checkpoint because of a limited timeline",
             room.roomId);
 
         this.addRoomCheckpoint(room.roomId, false);
@@ -374,12 +376,12 @@ export default class EventIndex extends EventEmitter {
             direction: Direction.Backward,
         };
 
-        console.log("EventIndex: Adding checkpoint", checkpoint);
+        logger.log("EventIndex: Adding checkpoint", checkpoint);
 
         try {
             await indexManager.addCrawlerCheckpoint(checkpoint);
         } catch (e) {
-            console.log(
+            logger.log(
                 "EventIndex: Error adding new checkpoint for room",
                 room.roomId,
                 checkpoint,
@@ -465,12 +467,12 @@ export default class EventIndex extends EventEmitter {
                 );
             } catch (e) {
                 if (e.httpStatus === 403) {
-                    console.log("EventIndex: Removing checkpoint as we don't have ",
+                    logger.log("EventIndex: Removing checkpoint as we don't have ",
                         "permissions to fetch messages from this room.", checkpoint);
                     try {
                         await indexManager.removeCrawlerCheckpoint(checkpoint);
                     } catch (e) {
-                        console.log("EventIndex: Error removing checkpoint", checkpoint, e);
+                        logger.log("EventIndex: Error removing checkpoint", checkpoint, e);
                         // We don't push the checkpoint here back, it will
                         // hopefully be removed after a restart. But let us
                         // ignore it for now as we don't want to hammer the
@@ -479,7 +481,7 @@ export default class EventIndex extends EventEmitter {
                     continue;
                 }
 
-                console.log("EventIndex: Error crawling using checkpoint:", checkpoint, ",", e);
+                logger.log("EventIndex: Error crawling using checkpoint:", checkpoint, ",", e);
                 this.crawlerCheckpoints.push(checkpoint);
                 continue;
             }
@@ -490,13 +492,13 @@ export default class EventIndex extends EventEmitter {
             }
 
             if (res.chunk.length === 0) {
-                console.log("EventIndex: Done with the checkpoint", checkpoint);
+                logger.log("EventIndex: Done with the checkpoint", checkpoint);
                 // We got to the start/end of our timeline, lets just
                 // delete our checkpoint and go back to sleep.
                 try {
                     await indexManager.removeCrawlerCheckpoint(checkpoint);
                 } catch (e) {
-                    console.log("EventIndex: Error removing checkpoint", checkpoint, e);
+                    logger.log("EventIndex: Error removing checkpoint", checkpoint, e);
                 }
                 continue;
             }
@@ -591,7 +593,7 @@ export default class EventIndex extends EventEmitter {
                 // We didn't get a valid new checkpoint from the server, nothing
                 // to do here anymore.
                 if (!newCheckpoint) {
-                    console.log("EventIndex: The server didn't return a valid ",
+                    logger.log("EventIndex: The server didn't return a valid ",
                         "new checkpoint, not continuing the crawl.", checkpoint);
                     continue;
                 }
@@ -601,18 +603,18 @@ export default class EventIndex extends EventEmitter {
                 // Let us delete the checkpoint in that case, otherwise push
                 // the new checkpoint to be used by the crawler.
                 if (eventsAlreadyAdded === true && newCheckpoint.fullCrawl !== true) {
-                    console.log("EventIndex: Checkpoint had already all events",
+                    logger.log("EventIndex: Checkpoint had already all events",
                         "added, stopping the crawl", checkpoint);
                     await indexManager.removeCrawlerCheckpoint(newCheckpoint);
                 } else {
                     if (eventsAlreadyAdded === true) {
-                        console.log("EventIndex: Checkpoint had already all events",
+                        logger.log("EventIndex: Checkpoint had already all events",
                             "added, but continuing due to a full crawl", checkpoint);
                     }
                     this.crawlerCheckpoints.push(newCheckpoint);
                 }
             } catch (e) {
-                console.log("EventIndex: Error durring a crawl", e);
+                logger.log("EventIndex: Error durring a crawl", e);
                 // An error occurred, put the checkpoint back so we
                 // can retry.
                 this.crawlerCheckpoints.push(checkpoint);
@@ -712,7 +714,7 @@ export default class EventIndex extends EventEmitter {
         try {
             events = await indexManager.loadFileEvents(loadArgs);
         } catch (e) {
-            console.log("EventIndex: Error getting file events", e);
+            logger.log("EventIndex: Error getting file events", e);
             return [];
         }
 
@@ -820,7 +822,7 @@ export default class EventIndex extends EventEmitter {
             ret = true;
         }
 
-        console.log("EventIndex: Populating file panel with", matrixEvents.length,
+        logger.log("EventIndex: Populating file panel with", matrixEvents.length,
             "events and setting the pagination token to", paginationToken);
 
         timeline.setPaginationToken(paginationToken, EventTimeline.BACKWARDS);

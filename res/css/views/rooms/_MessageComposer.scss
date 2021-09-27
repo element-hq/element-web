@@ -185,16 +185,26 @@ limitations under the License.
     }
 }
 
+.mx_ContextualMenu {
+    .mx_MessageComposer_button {
+        padding-left: calc(var(--size) + 6px);
+    }
+}
+
 .mx_MessageComposer_button {
     --size: 26px;
     position: relative;
-    margin-right: 6px;
     cursor: pointer;
     height: var(--size);
     line-height: var(--size);
     width: auto;
-    padding-left: calc(var(--size) + 5px);
+    padding-left: var(--size);
     border-radius: 100%;
+    margin-right: 6px;
+
+    &:last-child {
+        margin-right: auto;
+    }
 
     &::before {
         content: '';

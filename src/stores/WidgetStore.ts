@@ -28,6 +28,8 @@ import { WidgetType } from "../widgets/WidgetType";
 import { UPDATE_EVENT } from "./AsyncStore";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IState {}
 
 export interface IApp extends IWidget {
@@ -140,14 +142,14 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
 
         // If a persistent widget is active, check to see if it's just been removed.
         // If it has, it needs to destroyed otherwise unmounting the node won't kill it
-        const persistentWidgetId = ActiveWidgetStore.getPersistentWidgetId();
+        const persistentWidgetId = ActiveWidgetStore.instance.getPersistentWidgetId();
         if (persistentWidgetId) {
             if (
-                ActiveWidgetStore.getRoomId(persistentWidgetId) === room.roomId &&
+                ActiveWidgetStore.instance.getRoomId(persistentWidgetId) === room.roomId &&
                 !roomInfo.widgets.some(w => w.id === persistentWidgetId)
             ) {
-                console.log(`Persistent widget ${persistentWidgetId} removed from room ${room.roomId}: destroying.`);
-                ActiveWidgetStore.destroyPersistentWidget(persistentWidgetId);
+                logger.log(`Persistent widget ${persistentWidgetId} removed from room ${room.roomId}: destroying.`);
+                ActiveWidgetStore.instance.destroyPersistentWidget(persistentWidgetId);
             }
         }
 
@@ -193,7 +195,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
 
         // A persistent conference widget indicates that we're participating
         const widgets = roomInfo.widgets.filter(w => WidgetType.JITSI.matches(w.type));
-        return widgets.some(w => ActiveWidgetStore.getWidgetPersistence(w.id));
+        return widgets.some(w => ActiveWidgetStore.instance.getWidgetPersistence(w.id));
     }
 }
 

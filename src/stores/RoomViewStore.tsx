@@ -31,6 +31,8 @@ import { Action } from "../dispatcher/actions";
 import { retry } from "../utils/promise";
 import CountlyAnalytics from "../CountlyAnalytics";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const NUM_JOIN_RETRY = 5;
 
 const INITIAL_STATE = {
@@ -319,7 +321,7 @@ class RoomViewStore extends Store<ActionPayload> {
         });
         const err = payload.err;
         let msg = err.message ? err.message : JSON.stringify(err);
-        console.log("Failed to join room:", msg);
+        logger.log("Failed to join room:", msg);
 
         if (err.name === "ConnectionError") {
             msg = _t("There was an error joining the room");

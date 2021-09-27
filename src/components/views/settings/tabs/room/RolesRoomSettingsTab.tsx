@@ -137,7 +137,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         }
     }
 
-    private onPowerLevelsChanged = (inputValue: string, powerLevelKey: string) => {
+    private onPowerLevelsChanged = (value: number, powerLevelKey: string) => {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, '');
@@ -147,8 +147,6 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         plContent = Object.assign({}, plContent);
 
         const eventsLevelPrefix = "event_levels_";
-
-        const value = parseInt(inputValue);
 
         if (powerLevelKey.startsWith(eventsLevelPrefix)) {
             // deep copy "events" object, Object.assign itself won't deep copy
@@ -181,7 +179,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         });
     };
 
-    private onUserPowerLevelChanged = (value: string, powerLevelKey: string) => {
+    private onUserPowerLevelChanged = (value: number, powerLevelKey: string) => {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, '');

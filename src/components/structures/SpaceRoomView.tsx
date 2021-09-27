@@ -80,6 +80,8 @@ import Spinner from "../views/elements/Spinner";
 import GroupAvatar from "../views/avatars/GroupAvatar";
 import { useDispatcher } from "../../hooks/useDispatcher";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     space: Room;
     justCreatedOpts?: IOpts;
@@ -696,7 +698,7 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
 
             const failedUsers = Object.keys(result.states).filter(a => result.states[a] === "error");
             if (failedUsers.length > 0) {
-                console.log("Failed to invite users to space: ", result);
+                logger.log("Failed to invite users to space: ", result);
                 setError(_t("Failed to invite the following users to your space: %(csvUsers)s", {
                     csvUsers: failedUsers.join(", "),
                 }));

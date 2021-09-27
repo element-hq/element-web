@@ -25,6 +25,8 @@ import { WidgetType } from "./widgets/WidgetType";
 import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
 import { Room } from "matrix-js-sdk/src/models/room";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // The version of the integration manager API we're intending to work with
 const imApiVersion = "1.1";
 
@@ -136,7 +138,7 @@ export default class ScalarAuthClient {
             return token;
         }).catch((e) => {
             if (e instanceof TermsNotSignedError) {
-                console.log("Integration manager requires new terms to be agreed to");
+                logger.log("Integration manager requires new terms to be agreed to");
                 // The terms endpoints are new and so live on standard _matrix prefixes,
                 // but IM rest urls are currently configured with paths, so remove the
                 // path from the base URL before passing it to the js-sdk

@@ -91,6 +91,8 @@ import JumpToBottomButton from "../views/rooms/JumpToBottomButton";
 import TopUnreadMessagesBar from "../views/rooms/TopUnreadMessagesBar";
 import SpaceStore from "../../stores/SpaceStore";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const DEBUG = false;
 let debuglog = function(msg: string) {};
 
@@ -98,7 +100,7 @@ const BROWSER_SUPPORTS_SANDBOX = 'sandbox' in document.createElement('iframe');
 
 if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
-    debuglog = console.log.bind(console);
+    debuglog = logger.log.bind(console);
 }
 
 interface IProps {
@@ -380,7 +382,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         }
 
         // Temporary logging to diagnose https://github.com/vector-im/element-web/issues/4307
-        console.log(
+        logger.log(
             'RVS update:',
             newState.roomId,
             newState.roomAlias,
@@ -1399,7 +1401,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 // As per the spec, an all rooms search can create this condition,
                 // it happens with Seshat but not Synapse.
                 // It will make the result count not match the displayed count.
-                console.log("Hiding search result from an unknown room", roomId);
+                logger.log("Hiding search result from an unknown room", roomId);
                 continue;
             }
 

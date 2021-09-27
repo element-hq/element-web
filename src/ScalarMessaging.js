@@ -245,6 +245,8 @@ import { IntegrationManagers } from "./integrations/IntegrationManagers";
 import { WidgetType } from "./widgets/WidgetType";
 import { objectClone } from "./utils/objects";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 function sendResponse(event, res) {
     const data = objectClone(event.data);
     data.response = res;
@@ -266,7 +268,7 @@ function sendError(event, msg, nestedError) {
 }
 
 function inviteUser(event, roomId, userId) {
-    console.log(`Received request to invite ${userId} into room ${roomId}`);
+    logger.log(`Received request to invite ${userId} into room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, _t('You need to be logged in.'));
@@ -400,7 +402,7 @@ function setPlumbingState(event, roomId, status) {
     if (typeof status !== 'string') {
         throw new Error('Plumbing state status should be a string');
     }
-    console.log(`Received request to set plumbing state to status "${status}" in room ${roomId}`);
+    logger.log(`Received request to set plumbing state to status "${status}" in room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, _t('You need to be logged in.'));
@@ -416,7 +418,7 @@ function setPlumbingState(event, roomId, status) {
 }
 
 function setBotOptions(event, roomId, userId) {
-    console.log(`Received request to set options for bot ${userId} in room ${roomId}`);
+    logger.log(`Received request to set options for bot ${userId} in room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, _t('You need to be logged in.'));
@@ -437,7 +439,7 @@ function setBotPower(event, roomId, userId, level) {
         return;
     }
 
-    console.log(`Received request to set power level to ${level} for bot ${userId} in room ${roomId}.`);
+    logger.log(`Received request to set power level to ${level} for bot ${userId} in room ${roomId}.`);
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, _t('You need to be logged in.'));
@@ -463,17 +465,17 @@ function setBotPower(event, roomId, userId, level) {
 }
 
 function getMembershipState(event, roomId, userId) {
-    console.log(`membership_state of ${userId} in room ${roomId} requested.`);
+    logger.log(`membership_state of ${userId} in room ${roomId} requested.`);
     returnStateEvent(event, roomId, "m.room.member", userId);
 }
 
 function getJoinRules(event, roomId) {
-    console.log(`join_rules of ${roomId} requested.`);
+    logger.log(`join_rules of ${roomId} requested.`);
     returnStateEvent(event, roomId, "m.room.join_rules", "");
 }
 
 function botOptions(event, roomId, userId) {
-    console.log(`bot_options of ${userId} in room ${roomId} requested.`);
+    logger.log(`bot_options of ${userId} in room ${roomId} requested.`);
     returnStateEvent(event, roomId, "m.room.bot.options", "_" + userId);
 }
 

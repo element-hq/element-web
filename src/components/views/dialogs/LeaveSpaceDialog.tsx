@@ -66,11 +66,13 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
     >
         <div className="mx_Dialog_content" id="mx_LeaveSpaceDialog">
             <p>
-                { _t("Are you sure you want to leave <spaceName/>?", {}, {
+                { _t("You are about to leave <spaceName/>.", {}, {
                     spaceName: () => <b>{ space.name }</b>,
                 }) }
                 &nbsp;
                 { rejoinWarning }
+                { rejoinWarning && (<>&nbsp;</>) }
+                { spaceChildren.length > 0 && _t("Would you like to leave the rooms in this space?") }
             </p>
 
             { spaceChildren.length > 0 && (
@@ -79,9 +81,9 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
                     spaceChildren={spaceChildren}
                     selected={selectedRooms}
                     onChange={setRoomsToLeave}
-                    noneLabel={_t("Don't leave any")}
-                    allLabel={_t("Leave all rooms and spaces")}
-                    specificLabel={_t("Leave specific rooms and spaces")}
+                    noneLabel={_t("Don't leave any rooms")}
+                    allLabel={_t("Leave all rooms")}
+                    specificLabel={_t("Leave some rooms")}
                 />
             ) }
 

@@ -19,6 +19,8 @@ import Analytics from '../Analytics';
 import { IndexedDBStore } from "matrix-js-sdk/src/store/indexeddb";
 import { IndexedDBCryptoStore } from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const localStorage = window.localStorage;
 
 // just *accessing* indexedDB throws an exception in firefox with
@@ -33,7 +35,7 @@ const SYNC_STORE_NAME = "riot-web-sync";
 const CRYPTO_STORE_NAME = "matrix-js-sdk:crypto";
 
 function log(msg: string) {
-    console.log(`StorageManager: ${msg}`);
+    logger.log(`StorageManager: ${msg}`);
 }
 
 function error(msg: string, ...args: string[]) {
@@ -47,15 +49,15 @@ function track(action: string) {
 export function tryPersistStorage() {
     if (navigator.storage && navigator.storage.persist) {
         navigator.storage.persist().then(persistent => {
-            console.log("StorageManager: Persistent?", persistent);
+            logger.log("StorageManager: Persistent?", persistent);
         });
     } else if (document.requestStorageAccess) { // Safari
         document.requestStorageAccess().then(
-            () => console.log("StorageManager: Persistent?", true),
-            () => console.log("StorageManager: Persistent?", false),
+            () => logger.log("StorageManager: Persistent?", true),
+            () => logger.log("StorageManager: Persistent?", false),
         );
     } else {
-        console.log("StorageManager: Persistence unsupported");
+        logger.log("StorageManager: Persistence unsupported");
     }
 }
 

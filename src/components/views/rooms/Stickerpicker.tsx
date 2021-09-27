@@ -32,6 +32,9 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ActionPayload } from '../../../dispatcher/payloads';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import GenericElementContextMenu from "../context_menus/GenericElementContextMenu";
+import { IApp } from "../../../stores/WidgetStore";
+
+import { logger } from "matrix-js-sdk/src/logger";
 
 // This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
 // We sit in a context menu, so this should be given to the context menu.
@@ -98,11 +101,11 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
 
     private removeStickerpickerWidgets = async (): Promise<void> => {
         const scalarClient = await this.acquireScalarClient();
-        console.log('Removing Stickerpicker widgets');
+        logger.log('Removing Stickerpicker widgets');
         if (this.state.widgetId) {
             if (scalarClient) {
                 scalarClient.disableWidgetAssets(WidgetType.STICKERPICKER, this.state.widgetId).then(() => {
-                    console.log('Assets disabled');
+                    logger.log('Assets disabled');
                 }).catch((err) => {
                     console.error('Failed to disable assets');
                 });
@@ -256,12 +259,16 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
             stickerpickerWidget.content.name = stickerpickerWidget.content.name || _t("Stickerpack");
 
             // FIXME: could this use the same code as other apps?
-            const stickerApp = {
+            const stickerApp: IApp = {
                 id: stickerpickerWidget.id,
                 url: stickerpickerWidget.content.url,
                 name: stickerpickerWidget.content.name,
                 type: stickerpickerWidget.content.type,
                 data: stickerpickerWidget.content.data,
+                roomId: stickerpickerWidget.content.roomId,
+                eventId: stickerpickerWidget.content.eventId,
+                avatar_url: stickerpickerWidget.content.avatar_url,
+                creatorUserId: stickerpickerWidget.content.creatorUserId,
             };
 
             stickersContent = (
@@ -287,9 +294,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                                 onEditClick={this.launchManageIntegrations}
                                 onDeleteClick={this.removeStickerpickerWidgets}
                                 showTitle={false}
-                                showCancel={false}
                                 showPopout={false}
-                                onMinimiseClick={this.onHideStickersClick}
                                 handleMinimisePointerEvents={true}
                                 userWidget={true}
                             />
@@ -343,16 +348,6 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
             stickerpickerY: y,
             stickerpickerChevronOffset,
         });
-    };
-
-    /**
-     * Trigger hiding of the sticker picker overlay
-     * @param  {Event} ev Event that triggered the function call
-     */
-    private onHideStickersClick = (ev: React.MouseEvent): void => {
-        if (this.props.showStickers) {
-            this.props.setShowStickers(false);
-        }
     };
 
     /**
