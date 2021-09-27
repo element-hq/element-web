@@ -17,13 +17,14 @@ limitations under the License.
 */
 
 import { MatrixClientPeg } from './MatrixClientPeg';
-import * as sdk from './index';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 import IdentityAuthClient from './IdentityAuthClient';
 import { SSOAuthEntry } from "./components/views/auth/InteractiveAuthEntryComponents";
+import { IRequestMsisdnTokenResponse, IRequestTokenResponse } from "matrix-js-sdk";
+import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
 
-function getIdServerDomain() {
+function getIdServerDomain(): string {
     return MatrixClientPeg.get().idBaseUrl.split("://")[1];
 }
 
@@ -40,10 +41,13 @@ function getIdServerDomain() {
  * https://gist.github.com/jryans/839a09bf0c5a70e2f36ed990d50ed928
  */
 export default class AddThreepid {
+    private sessionId: string;
+    private submitUrl: string;
+    private clientSecret: string;
+    private bind: boolean;
+
     constructor() {
         this.clientSecret = MatrixClientPeg.get().generateClientSecret();
-        this.sessionId = null;
-        this.submitUrl = null;
     }
 
     /**
@@ -52,7 +56,7 @@ export default class AddThreepid {
      * @param {string} emailAddress The email address to add
      * @return {Promise} Resolves when the email has been sent. Then call checkEmailLinkClicked().
      */
-    addEmailAddress(emailAddress) {
+    public addEmailAddress(emailAddress: string): Promise<IRequestTokenResponse> {
         return MatrixClientPeg.get().requestAdd3pidEmailToken(emailAddress, this.clientSecret, 1).then((res) => {
             this.sessionId = res.sid;
             return res;
@@ -72,7 +76,7 @@ export default class AddThreepid {
      * @param {string} emailAddress The email address to add
      * @return {Promise} Resolves when the email has been sent. Then call checkEmailLinkClicked().
      */
-    async bindEmailAddress(emailAddress) {
+    public async bindEmailAddress(emailAddress: string): Promise<IRequestTokenResponse> {
         this.bind = true;
         if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
             // For separate bind, request a token directly from the IS.
@@ -105,7 +109,7 @@ export default class AddThreepid {
      * @param {string} phoneNumber The national or international formatted phone number to add
      * @return {Promise} Resolves when the text message has been sent. Then call haveMsisdnToken().
      */
-    addMsisdn(phoneCountry, phoneNumber) {
+    public addMsisdn(phoneCountry: string, phoneNumber: string): Promise<IRequestMsisdnTokenResponse> {
         return MatrixClientPeg.get().requestAdd3pidMsisdnToken(
             phoneCountry, phoneNumber, this.clientSecret, 1,
         ).then((res) => {
@@ -129,7 +133,7 @@ export default class AddThreepid {
      * @param {string} phoneNumber The national or international formatted phone number to add
      * @return {Promise} Resolves when the text message has been sent. Then call haveMsisdnToken().
      */
-    async bindMsisdn(phoneCountry, phoneNumber) {
+    public async bindMsisdn(phoneCountry: string, phoneNumber: string): Promise<IRequestMsisdnTokenResponse> {
         this.bind = true;
         if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
             // For separate bind, request a token directly from the IS.
@@ -161,7 +165,7 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    async checkEmailLinkClicked() {
+    public async checkEmailLinkClicked(): Promise<any[]> {
         try {
             if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
                 if (this.bind) {
@@ -175,7 +179,7 @@ export default class AddThreepid {
                     });
                 } else {
                     try {
-                        await this._makeAddThreepidOnlyRequest();
+                        await this.makeAddThreepidOnlyRequest();
 
                         // The spec has always required this to use UI auth but synapse briefly
                         // implemented it without, so this may just succeed and that's OK.
@@ -185,9 +189,6 @@ export default class AddThreepid {
                             // doesn't look like an interactive-auth failure
                             throw e;
                         }
-
-                        // pop up an interactive auth dialog
-                        const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
 
                         const dialogAesthetics = {
                             [SSOAuthEntry.PHASE_PREAUTH]: {
@@ -208,7 +209,7 @@ export default class AddThreepid {
                             title: _t("Add Email Address"),
                             matrixClient: MatrixClientPeg.get(),
                             authData: e.data,
-                            makeRequest: this._makeAddThreepidOnlyRequest,
+                            makeRequest: this.makeAddThreepidOnlyRequest,
                             aestheticsForStagePhases: {
                                 [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
                                 [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
@@ -235,16 +236,16 @@ export default class AddThreepid {
     }
 
     /**
-     * @param {Object} auth UI auth object
+     * @param {{type: string, session?: string}} auth UI auth object
      * @return {Promise<Object>} Response from /3pid/add call (in current spec, an empty object)
      */
-    _makeAddThreepidOnlyRequest = (auth) => {
+    private makeAddThreepidOnlyRequest = (auth?: {type: string, session?: string}): Promise<{}> => {
         return MatrixClientPeg.get().addThreePidOnly({
             sid: this.sessionId,
             client_secret: this.clientSecret,
             auth,
         });
-    }
+    };
 
     /**
      * Takes a phone number verification code as entered by the user and validates
@@ -254,7 +255,7 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    async haveMsisdnToken(msisdnToken) {
+    public async haveMsisdnToken(msisdnToken: string): Promise<any[]> {
         const authClient = new IdentityAuthClient();
         const supportsSeparateAddAndBind =
             await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind();
@@ -291,7 +292,7 @@ export default class AddThreepid {
                 });
             } else {
                 try {
-                    await this._makeAddThreepidOnlyRequest();
+                    await this.makeAddThreepidOnlyRequest();
 
                     // The spec has always required this to use UI auth but synapse briefly
                     // implemented it without, so this may just succeed and that's OK.
@@ -301,9 +302,6 @@ export default class AddThreepid {
                         // doesn't look like an interactive-auth failure
                         throw e;
                     }
-
-                    // pop up an interactive auth dialog
-                    const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
 
                     const dialogAesthetics = {
                         [SSOAuthEntry.PHASE_PREAUTH]: {
@@ -324,7 +322,7 @@ export default class AddThreepid {
                         title: _t("Add Phone Number"),
                         matrixClient: MatrixClientPeg.get(),
                         authData: e.data,
-                        makeRequest: this._makeAddThreepidOnlyRequest,
+                        makeRequest: this.makeAddThreepidOnlyRequest,
                         aestheticsForStagePhases: {
                             [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
                             [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
