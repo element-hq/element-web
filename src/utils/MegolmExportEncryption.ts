@@ -28,7 +28,7 @@ const subtleCrypto = window.crypto.subtle || window.crypto.webkitSubtle;
  *
  * @param {string} message message for the exception
  * @param {string} friendlyText
- * @returns {Error}
+ * @returns {{message: string, friendlyText: string}}
  */
 function friendlyError(
     message: string, friendlyText: string,
