@@ -247,13 +247,31 @@ import { objectClone } from "./utils/objects";
 
 import { logger } from "matrix-js-sdk/src/logger";
 
-function sendResponse(event, res) {
+enum Action {
+    CloseScalar = "close_scalar",
+    GetWidgets = "get_widgets",
+    SetWidgets = "set_widgets",
+    SetWidget = "set_widget",
+    JoinRulesState = "join_rules_state",
+    SetPlumbingState = "set_plumbing_state",
+    GetMembershipCount = "get_membership_count",
+    GetRoomEncryptionState = "get_room_enc_state",
+    CanSendEvent = "can_send_event",
+    MembershipState = "membership_state",
+    invite = "invite",
+    BotOptions = "bot_options",
+    SetBotOptions = "set_bot_options",
+    SetBotPower = "set_bot_power",
+}
+
+function sendResponse(event: MessageEvent<any>, res: any): void {
     const data = objectClone(event.data);
     data.response = res;
+    // @ts-ignore
     event.source.postMessage(data, event.origin);
 }
 
-function sendError(event, msg, nestedError) {
+function sendError(event: MessageEvent<any>, msg: string, nestedError?: Error): void {
     console.error("Action:" + event.data.action + " failed with message: " + msg);
     const data = objectClone(event.data);
     data.response = {
@@ -264,10 +282,11 @@ function sendError(event, msg, nestedError) {
     if (nestedError) {
         data.response.error._error = nestedError;
     }
+    // @ts-ignore
     event.source.postMessage(data, event.origin);
 }
 
-function inviteUser(event, roomId, userId) {
+function inviteUser(event: MessageEvent<any>, roomId: string, userId: string): void {
     logger.log(`Received request to invite ${userId} into room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
@@ -295,7 +314,7 @@ function inviteUser(event, roomId, userId) {
     });
 }
 
-function setWidget(event, roomId) {
+function setWidget(event: MessageEvent<any>, roomId: string): void {
     const widgetId = event.data.widget_id;
     let widgetType = event.data.type;
     const widgetUrl = event.data.url;
@@ -356,7 +375,7 @@ function setWidget(event, roomId) {
     }
 }
 
-function getWidgets(event, roomId) {
+function getWidgets(event: MessageEvent<any>, roomId: string): void {
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, _t('You need to be logged in.'));
@@ -382,7 +401,7 @@ function getWidgets(event, roomId) {
     sendResponse(event, widgetStateEvents);
 }
 
-function getRoomEncState(event, roomId) {
+function getRoomEncState(event: MessageEvent<any>, roomId: string): void {
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, _t('You need to be logged in.'));
@@ -398,7 +417,7 @@ function getRoomEncState(event, roomId) {
     sendResponse(event, roomIsEncrypted);
 }
 
-function setPlumbingState(event, roomId, status) {
+function setPlumbingState(event: MessageEvent<any>, roomId: string, status: string): void {
     if (typeof status !== 'string') {
         throw new Error('Plumbing state status should be a string');
     }
@@ -417,7 +436,7 @@ function setPlumbingState(event, roomId, status) {
     });
 }
 
-function setBotOptions(event, roomId, userId) {
+function setBotOptions(event: MessageEvent<any>, roomId: string, userId: string): void {
     logger.log(`Received request to set options for bot ${userId} in room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
@@ -433,7 +452,7 @@ function setBotOptions(event, roomId, userId) {
     });
 }
 
-function setBotPower(event, roomId, userId, level) {
+function setBotPower(event: MessageEvent<any>, roomId: string, userId: string, level: number): void {
     if (!(Number.isInteger(level) && level >= 0)) {
         sendError(event, _t('Power level must be positive integer.'));
         return;
@@ -464,22 +483,22 @@ function setBotPower(event, roomId, userId, level) {
     });
 }
 
-function getMembershipState(event, roomId, userId) {
+function getMembershipState(event: MessageEvent<any>, roomId: string, userId: string): void {
     logger.log(`membership_state of ${userId} in room ${roomId} requested.`);
     returnStateEvent(event, roomId, "m.room.member", userId);
 }
 
-function getJoinRules(event, roomId) {
+function getJoinRules(event: MessageEvent<any>, roomId: string): void {
     logger.log(`join_rules of ${roomId} requested.`);
     returnStateEvent(event, roomId, "m.room.join_rules", "");
 }
 
-function botOptions(event, roomId, userId) {
+function botOptions(event: MessageEvent<any>, roomId: string, userId: string): void {
     logger.log(`bot_options of ${userId} in room ${roomId} requested.`);
     returnStateEvent(event, roomId, "m.room.bot.options", "_" + userId);
 }
 
-function getMembershipCount(event, roomId) {
+function getMembershipCount(event: MessageEvent<any>, roomId: string): void {
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, _t('You need to be logged in.'));
@@ -494,7 +513,7 @@ function getMembershipCount(event, roomId) {
     sendResponse(event, count);
 }
 
-function canSendEvent(event, roomId) {
+function canSendEvent(event: MessageEvent<any>, roomId: string): void {
     const evType = "" + event.data.event_type; // force stringify
     const isState = Boolean(event.data.is_state);
     const client = MatrixClientPeg.get();
@@ -528,7 +547,7 @@ function canSendEvent(event, roomId) {
     sendResponse(event, true);
 }
 
-function returnStateEvent(event, roomId, eventType, stateKey) {
+function returnStateEvent(event: MessageEvent<any>, roomId: string, eventType: string, stateKey: string): void {
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, _t('You need to be logged in.'));
@@ -547,8 +566,9 @@ function returnStateEvent(event, roomId, eventType, stateKey) {
     sendResponse(event, stateEvent.getContent());
 }
 
-const onMessage = function(event) {
+const onMessage = function(event: MessageEvent<any>): void {
     if (!event.origin) { // stupid chrome
+        // @ts-ignore
         event.origin = event.originalEvent.origin;
     }
 
@@ -582,8 +602,8 @@ const onMessage = function(event) {
         return;
     }
 
-    if (event.data.action === "close_scalar") {
-        dis.dispatch({ action: "close_scalar" });
+    if (event.data.action === Action.CloseScalar) {
+        dis.dispatch({ action: Action.CloseScalar });
         sendResponse(event, null);
         return;
     }
@@ -596,10 +616,10 @@ const onMessage = function(event) {
         // Get and set user widgets (not associated with a specific room)
         // If roomId is specified, it must be validated, so room-based widgets agreed
         // handled further down.
-        if (event.data.action === "get_widgets") {
+        if (event.data.action === Action.GetWidgets) {
             getWidgets(event, null);
             return;
-        } else if (event.data.action === "set_widget") {
+        } else if (event.data.action === Action.SetWidgets) {
             setWidget(event, null);
             return;
         } else {
@@ -614,28 +634,28 @@ const onMessage = function(event) {
     }
 
     // Get and set room-based widgets
-    if (event.data.action === "get_widgets") {
+    if (event.data.action === Action.GetWidgets) {
         getWidgets(event, roomId);
         return;
-    } else if (event.data.action === "set_widget") {
+    } else if (event.data.action === Action.SetWidget) {
         setWidget(event, roomId);
         return;
     }
 
     // These APIs don't require userId
-    if (event.data.action === "join_rules_state") {
+    if (event.data.action === Action.JoinRulesState) {
         getJoinRules(event, roomId);
         return;
-    } else if (event.data.action === "set_plumbing_state") {
+    } else if (event.data.action === Action.SetPlumbingState) {
         setPlumbingState(event, roomId, event.data.status);
         return;
-    } else if (event.data.action === "get_membership_count") {
+    } else if (event.data.action === Action.GetMembershipCount) {
         getMembershipCount(event, roomId);
         return;
-    } else if (event.data.action === "get_room_enc_state") {
+    } else if (event.data.action === Action.GetRoomEncryptionState) {
         getRoomEncState(event, roomId);
         return;
-    } else if (event.data.action === "can_send_event") {
+    } else if (event.data.action === Action.CanSendEvent) {
         canSendEvent(event, roomId);
         return;
     }
@@ -645,19 +665,19 @@ const onMessage = function(event) {
         return;
     }
     switch (event.data.action) {
-        case "membership_state":
+        case Action.MembershipState:
             getMembershipState(event, roomId, userId);
             break;
-        case "invite":
+        case Action.invite:
             inviteUser(event, roomId, userId);
             break;
-        case "bot_options":
+        case Action.BotOptions:
             botOptions(event, roomId, userId);
             break;
-        case "set_bot_options":
+        case Action.SetBotOptions:
             setBotOptions(event, roomId, userId);
             break;
-        case "set_bot_power":
+        case Action.SetBotPower:
             setBotPower(event, roomId, userId, event.data.level);
             break;
         default:
@@ -667,16 +687,16 @@ const onMessage = function(event) {
 };
 
 let listenerCount = 0;
-let openManagerUrl = null;
+let openManagerUrl: string = null;
 
-export function startListening() {
+export function startListening(): void {
     if (listenerCount === 0) {
         window.addEventListener("message", onMessage, false);
     }
     listenerCount += 1;
 }
 
-export function stopListening() {
+export function stopListening(): void {
     listenerCount -= 1;
     if (listenerCount === 0) {
         window.removeEventListener("message", onMessage);
@@ -691,6 +711,6 @@ export function stopListening() {
     }
 }
 
-export function setOpenManagerUrl(url) {
+export function setOpenManagerUrl(url: string): void {
     openManagerUrl = url;
 }
