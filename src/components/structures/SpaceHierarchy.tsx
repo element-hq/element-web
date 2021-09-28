@@ -452,7 +452,7 @@ export const useSpaceSummary = (space: Room): {
         await hierarchy.load(pageSize);
         setRooms(hierarchy.rooms);
         setLoading(false);
-    }, [hierarchy]);
+    }, [loading, hierarchy]);
 
     return { loading, rooms, hierarchy, loadMore };
 };
