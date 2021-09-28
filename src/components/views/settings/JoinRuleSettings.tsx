@@ -159,6 +159,7 @@ const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange, closeSet
                             disabled={disabled}
                             onClick={onEditRestrictedClick}
                             kind="link"
+                            className="mx_JoinRuleSettings_linkButton"
                         >
                             { sub }
                         </AccessibleButton>,
@@ -286,6 +287,7 @@ const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange, closeSet
             onChange={onChange}
             definitions={definitions}
             disabled={disabled}
+            className="mx_JoinRuleSettings_radioButton"
         />
     );
 };
