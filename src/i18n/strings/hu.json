@@ -3164,5 +3164,7 @@
     "You are about to leave <spaceName/>.": "Éppen el akarja hagyni <spaceName/> teret.",
     "Leave some rooms": "Kilépés néhány szobából",
     "Leave all rooms": "Kilépés minden szobából",
-    "Don't leave any rooms": "Ne lépjen ki egy szobából sem"
+    "Don't leave any rooms": "Ne lépjen ki egy szobából sem",
+    "Expand quotes │ ⇧+click": "Idézetek megnyitása │ ⇧+kattintás",
+    "Collapse quotes │ ⇧+click": "Idézetek bezárása│ ⇧+kattintás"
 }
