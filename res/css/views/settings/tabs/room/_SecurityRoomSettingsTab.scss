@@ -19,37 +19,6 @@ limitations under the License.
         padding: 0;
         margin-bottom: 16px;
     }
-
-    .mx_SecurityRoomSettingsTab_spacesWithAccess {
-        > h4 {
-            color: $secondary-content;
-            font-weight: $font-semi-bold;
-            font-size: $font-12px;
-            line-height: $font-15px;
-            text-transform: uppercase;
-        }
-
-        > span {
-            font-weight: 500;
-            font-size: $font-14px;
-            line-height: 32px; // matches height of avatar for v-align
-            color: $secondary-content;
-            display: inline-block;
-
-            img.mx_RoomAvatar_isSpaceRoom,
-            .mx_RoomAvatar_isSpaceRoom img {
-                border-radius: 8px;
-            }
-
-            .mx_BaseAvatar {
-                margin-right: 8px;
-            }
-
-            & + span {
-                margin-left: 16px;
-            }
-        }
-    }
 }
 
 .mx_SecurityRoomSettingsTab_warning {
@@ -67,16 +36,6 @@ limitations under the License.
     padding-bottom: 24px;
     border-bottom: 1px solid $menu-border-color;
     margin-bottom: 32px;
-}
-
-.mx_SecurityRoomSettingsTab_upgradeRequired {
-    margin-left: 16px;
-    padding: 4px 16px;
-    border: 1px solid $accent-color;
-    border-radius: 8px;
-    color: $accent-color;
-    font-size: $font-12px;
-    line-height: $font-15px;
 }
 
 .mx_SecurityRoomSettingsTab_joinRule {
