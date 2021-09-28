@@ -93,7 +93,7 @@ const validOrder = (order: string): string | undefined => {
 
 // For sorting space children using a validated `order`, `m.room.create`'s `origin_server_ts`, `room_id`
 export const getChildOrder = (order: string, creationTs: number, roomId: string): Array<Many<ListIteratee<any>>> => {
-    return [validOrder(order), creationTs, roomId];
+    return [validOrder(order) ?? NaN, creationTs, roomId]; // NaN has lodash sort it at the end in asc
 };
 
 const getRoomFn: FetchRoomFn = (room: Room) => {
