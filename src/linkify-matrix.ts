@@ -211,7 +211,8 @@ matrixLinkify.options = {
                     const permalink = parsePermalink(href);
                     if (permalink && permalink.userId) {
                         return {
-                            onclick: function(e) {
+                            // @ts-ignore see https://linkify.js.org/docs/options.html
+                            click: function(e) {
                                 matrixLinkify.onUserClick(e, permalink.userId);
                             },
                         };
@@ -223,19 +224,22 @@ matrixLinkify.options = {
             }
             case Type.UserId:
                 return {
-                    onclick: function(e) {
+                    // @ts-ignore see https://linkify.js.org/docs/options.html
+                    click: function(e) {
                         matrixLinkify.onUserClick(e, href);
                     },
                 };
             case Type.RoomAlias:
                 return {
-                    onclick: function(e) {
+                    // @ts-ignore see https://linkify.js.org/docs/options.html
+                    click: function(e) {
                         matrixLinkify.onAliasClick(e, href);
                     },
                 };
             case Type.GroupId:
                 return {
-                    onclick: function(e) {
+                    // @ts-ignore see https://linkify.js.org/docs/options.html
+                    click: function(e) {
                         matrixLinkify.onGroupClick(e, href);
                     },
                 };
