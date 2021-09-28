@@ -128,6 +128,11 @@ const ReactButton: React.FC<IReactButtonProps> = ({ mxEvent, reactions, onFocusC
     </React.Fragment>;
 };
 
+export enum ActionBarRenderingContext {
+    Room,
+    Thread
+}
+
 interface IMessageActionBarProps {
     mxEvent: MatrixEvent;
     reactions?: Relations;
@@ -137,7 +142,7 @@ interface IMessageActionBarProps {
     permalinkCreator?: RoomPermalinkCreator;
     onFocusChange?: (menuDisplayed: boolean) => void;
     toggleThreadExpanded: () => void;
-    isInThreadTimeline?: boolean;
+    renderingContext?: ActionBarRenderingContext;
     isQuoteExpanded?: boolean;
 }
 
@@ -146,7 +151,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
     public static contextType = RoomContext;
 
     public static defaultProps = {
-        isInThreadTimeline: false,
+        renderingContext: ActionBarRenderingContext.Room,
     };
 
     public componentDidMount(): void {
@@ -293,7 +298,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                 // Like the resend button, the react and reply buttons need to appear before the edit.
                 // The only catch is we do the reply button first so that we can make sure the react
                 // button is the very first button without having to do length checks for `splice()`.
-                if (this.context.canReply && !this.props.isInThreadTimeline) {
+                if (this.context.canReply && this.props.renderingContext === ActionBarRenderingContext.Room) {
                     toolbarOpts.splice(0, 0, <>
                         <RovingAccessibleTooltipButton
                             className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
