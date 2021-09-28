@@ -135,11 +135,10 @@ interface IMessageActionBarProps {
     getTile: () => any | null;
     getReplyThread: () => ReplyThread | undefined;
     permalinkCreator?: RoomPermalinkCreator;
-    getTile: () => any; // TODO: FIXME, haven't figured out what the return type is here
-    getReplyThread?: () => ReplyThread;
     onFocusChange?: (menuDisplayed: boolean) => void;
     toggleThreadExpanded: () => void;
     isInThreadTimeline?: boolean;
+    isQuoteExpanded?: boolean;
 }
 
 @replaceableComponent("views.messages.MessageActionBar")
