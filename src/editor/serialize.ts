@@ -185,7 +185,7 @@ export function startsWith(model: EditorModel, prefix: string, caseSensitive = t
     const firstPart = model.parts[0];
     // part type will be "plain" while editing,
     // and "command" while composing a message.
-    let text = firstPart && firstPart.text;
+    let text = firstPart?.text || '';
     if (!caseSensitive) {
         prefix = prefix.toLowerCase();
         text = text.toLowerCase();
