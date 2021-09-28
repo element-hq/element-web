@@ -35,9 +35,9 @@ import { abbreviateUrl } from "./utils/UrlUtils";
 export class AbortedIdentityActionError extends Error {}
 
 export default class IdentityAuthClient {
-    accessToken: string;
-    tempClient: MatrixClient;
-    authEnabled = true;
+    private accessToken: string;
+    private tempClient: MatrixClient;
+    private authEnabled = true;
 
     /**
      * Creates a new identity auth client

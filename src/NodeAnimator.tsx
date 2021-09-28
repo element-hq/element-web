@@ -27,7 +27,7 @@ interface IProps {
 export default class NodeAnimator extends React.Component<IProps> {
     private nodes = {};
     private children: { [key: string]: React.DetailedReactHTMLElement<any, HTMLElement> };
-    static defaultProps: Partial<IProps> = {
+    public static defaultProps: Partial<IProps> = {
         startStyles: [],
     };
 
