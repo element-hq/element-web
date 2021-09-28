@@ -818,7 +818,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     }
 
     protected async onAction(payload: ActionPayload) {
-        if (!spacesEnabled) return;
+        if (!spacesEnabled || !this.matrixClient) return;
         switch (payload.action) {
             case "view_room": {
                 // Don't auto-switch rooms when reacting to a context-switch

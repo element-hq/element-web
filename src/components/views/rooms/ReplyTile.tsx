@@ -35,6 +35,7 @@ interface IProps {
     highlights?: string[];
     highlightLink?: string;
     onHeightChanged?(): void;
+    toggleExpandedQuote?: () => void;
 }
 
 @replaceableComponent("views.rooms.ReplyTile")
@@ -82,12 +83,17 @@ export default class ReplyTile extends React.PureComponent<IProps> {
             // This allows the permalink to be opened in a new tab/window or copied as
             // matrix.to, but also for it to enable routing within Riot when clicked.
             e.preventDefault();
-            dis.dispatch({
-                action: 'view_room',
-                event_id: this.props.mxEvent.getId(),
-                highlighted: true,
-                room_id: this.props.mxEvent.getRoomId(),
-            });
+            // Expand thread on shift key
+            if (this.props.toggleExpandedQuote && e.shiftKey) {
+                this.props.toggleExpandedQuote();
+            } else {
+                dis.dispatch({
+                    action: 'view_room',
+                    event_id: this.props.mxEvent.getId(),
+                    highlighted: true,
+                    room_id: this.props.mxEvent.getRoomId(),
+                });
+            }
         }
     };
 
