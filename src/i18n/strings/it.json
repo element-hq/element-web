@@ -3166,5 +3166,7 @@
     "You are about to leave <spaceName/>.": "Stai per uscire da <spaceName/>.",
     "Leave some rooms": "Esci da alcune stanze",
     "Leave all rooms": "Esci da tutte le stanze",
-    "Don't leave any rooms": "Non uscire da alcuna stanza"
+    "Don't leave any rooms": "Non uscire da alcuna stanza",
+    "Expand quotes │ ⇧+click": "Espandi le menzioni │ ⇧+clic",
+    "Collapse quotes │ ⇧+click": "Riduci le menzioni │ ⇧+clic"
 }
