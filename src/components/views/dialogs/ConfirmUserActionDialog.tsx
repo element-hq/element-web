@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from 'react';
+import React, { ChangeEvent, ReactNode } from 'react';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import classNames from "classnames";
@@ -27,6 +27,7 @@ import MemberAvatar from '../avatars/MemberAvatar';
 import BaseAvatar from '../avatars/BaseAvatar';
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
+import Field from '../elements/Field';
 
 interface IProps {
     // matrix-js-sdk (room) member object. Supply either this or 'groupMember'
@@ -48,6 +49,10 @@ interface IProps {
     onFinished: (success: boolean, reason?: string) => void;
 }
 
+interface IState {
+    reason: string;
+}
+
 /*
  * A dialog for confirming an operation on another user.
  * Takes a user ID and a verb, displays the target user prominently
@@ -57,20 +62,32 @@ interface IProps {
  * Also tweaks the style for 'dangerous' actions (albeit only with colour)
  */
 @replaceableComponent("views.dialogs.ConfirmUserActionDialog")
-export default class ConfirmUserActionDialog extends React.Component<IProps> {
-    private reasonField: React.RefObject<HTMLInputElement> = React.createRef();
-
+export default class ConfirmUserActionDialog extends React.Component<IProps, IState> {
     static defaultProps = {
         danger: false,
         askReason: false,
     };
 
-    public onOk = (): void => {
-        this.props.onFinished(true, this.reasonField.current?.value);
+    constructor(props: IProps) {
+        super(props);
+
+        this.state = {
+            reason: "",
+        };
+    }
+
+    private onOk = (): void => {
+        this.props.onFinished(true, this.state.reason);
     };
 
-    public onCancel = (): void => {
+    private onCancel = (): void => {
         this.props.onFinished(false);
+    };
+
+    private onReasonChange = (ev: ChangeEvent<HTMLInputElement>) => {
+        this.setState({
+            reason: ev.target.value,
+        });
     };
 
     public render() {
@@ -79,15 +96,16 @@ export default class ConfirmUserActionDialog extends React.Component<IProps> {
         let reasonBox;
         if (this.props.askReason) {
             reasonBox = (
-                <div>
-                    <form onSubmit={this.onOk}>
-                        <input className="mx_ConfirmUserActionDialog_reasonField"
-                            ref={this.reasonField}
-                            placeholder={_t("Reason")}
-                            autoFocus={true}
-                        />
-                    </form>
-                </div>
+                <form onSubmit={this.onOk}>
+                    <Field
+                        type="text"
+                        onChange={this.onReasonChange}
+                        value={this.state.reason}
+                        className="mx_ConfirmUserActionDialog_reasonField"
+                        label={_t("Reason")}
+                        autoFocus={true}
+                    />
+                </form>
             );
         }
 
