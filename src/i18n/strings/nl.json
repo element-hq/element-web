@@ -3035,7 +3035,7 @@
     "Search for rooms or spaces": "Kamers of ruimtes zoeken",
     "Add space": "Ruimte toevoegen",
     "Leave %(spaceName)s": "%(spaceName)s verlaten",
-    "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "U bent de enige beheerder van sommige kamers of spaces die u wilt verlaten. Door deze te verlaten hebben ze geen beheerder meer.",
+    "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "U bent de enige beheerder van sommige kamers of ruimtes die u wilt verlaten. Door deze te verlaten hebben ze geen beheerder meer.",
     "You're the only admin of this space. Leaving it will mean no one has control over it.": "U bent de enige beheerder van deze ruimte. Door het te verlaten zal er niemand meer controle over hebben.",
     "You won't be able to rejoin unless you are re-invited.": "U kunt niet opnieuw deelnemen behalve als u opnieuw wordt uitgenodigd.",
     "Search %(spaceName)s": "Zoek %(spaceName)s",
@@ -3094,7 +3094,7 @@
     "A link to the Space will be put in your community description.": "In de gemeenschapsomschrijving zal een link naar deze ruimte worden geplaatst.",
     "Create Space from community": "Ruimte van gemeenschap maken",
     "Failed to migrate community": "Omzetten van de gemeenschap is mislukt",
-    "To create a Space from another community, just pick the community in Preferences.": "Om een Space te maken van een gemeenschap kiest u de gemeenschap in Instellingen.",
+    "To create a Space from another community, just pick the community in Preferences.": "Om een ruimte te maken van een gemeenschap kiest u de gemeenschap in Instellingen.",
     "<SpaceName/> has been made and everyone who was a part of the community has been invited to it.": "<SpaceName/> is gemaakt en iedereen die lid was van de gemeenschap is ervoor uitgenodigd.",
     "Space created": "Ruimte aangemaakt",
     "To view Spaces, hide communities in <a>Preferences</a>": "Om ruimtes te zien, verberg gemeenschappen in uw <a>Instellingen</a>",
@@ -3164,5 +3164,7 @@
     "You are about to leave <spaceName/>.": "U staat op het punt <spaceName/> te verlaten.",
     "Leave some rooms": "Sommige kamers verlaten",
     "Leave all rooms": "Alle kamers verlaten",
-    "Don't leave any rooms": "Geen kamers verlaten"
+    "Don't leave any rooms": "Geen kamers verlaten",
+    "Expand quotes │ ⇧+click": "Quotes uitvouwen │ ⇧+click",
+    "Collapse quotes │ ⇧+click": "Quotes invouwen │ ⇧+click"
 }
