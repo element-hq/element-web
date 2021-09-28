@@ -18,7 +18,7 @@ a.mx_Pill {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    max-width: calc(100% - 1ch);
+    max-width: 100%;
 }
 
 .mx_Pill {

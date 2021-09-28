@@ -1944,6 +1944,8 @@
     "Edit": "Edit",
     "Reply": "Reply",
     "Thread": "Thread",
+    "Collapse quotes │ ⇧+click": "Collapse quotes │ ⇧+click",
+    "Expand quotes │ ⇧+click": "Expand quotes │ ⇧+click",
     "Message Actions": "Message Actions",
     "Download %(text)s": "Download %(text)s",
     "Error decrypting attachment": "Error decrypting attachment",

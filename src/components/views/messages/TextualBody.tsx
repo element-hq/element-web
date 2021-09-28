@@ -138,6 +138,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         // If it's less than 30% we don't add the expansion button.
         // We also round the number as it sometimes can be 29.99...
         const percentageOfViewport = Math.round(pre.offsetHeight / UIStore.instance.windowHeight * 100);
+        // TODO: additionally show the button if it's an expanded quoted message
         if (percentageOfViewport < 30) return;
 
         const button = document.createElement("span");

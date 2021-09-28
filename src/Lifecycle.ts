@@ -786,7 +786,7 @@ async function startMatrixClient(startSyncing = true): Promise<void> {
     UserActivity.sharedInstance().start();
     DMRoomMap.makeShared().start();
     IntegrationManagers.sharedInstance().startWatching();
-    ActiveWidgetStore.start();
+    ActiveWidgetStore.instance.start();
     CallHandler.sharedInstance().start();
 
     // Start Mjolnir even though we haven't checked the feature flag yet. Starting
@@ -892,7 +892,7 @@ export function stopMatrixClient(unsetClient = true): void {
     UserActivity.sharedInstance().stop();
     TypingStore.sharedInstance().reset();
     Presence.stop();
-    ActiveWidgetStore.stop();
+    ActiveWidgetStore.instance.stop();
     IntegrationManagers.sharedInstance().stopWatching();
     Mjolnir.sharedInstance().stop();
     DeviceListener.sharedInstance().stop();

@@ -266,7 +266,7 @@ export class StopGapWidget extends EventEmitter {
         WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.messaging);
 
         if (!this.appTileProps.userWidget && this.appTileProps.room) {
-            ActiveWidgetStore.setRoomId(this.mockWidget.id, this.appTileProps.room.roomId);
+            ActiveWidgetStore.instance.setRoomId(this.mockWidget.id, this.appTileProps.room.roomId);
         }
 
         // Always attach a handler for ViewRoom, but permission check it internally
@@ -319,7 +319,7 @@ export class StopGapWidget extends EventEmitter {
                     if (WidgetType.JITSI.matches(this.mockWidget.type)) {
                         CountlyAnalytics.instance.trackJoinCall(this.appTileProps.room.roomId, true, true);
                     }
-                    ActiveWidgetStore.setWidgetPersistence(this.mockWidget.id, ev.detail.data.value);
+                    ActiveWidgetStore.instance.setWidgetPersistence(this.mockWidget.id, ev.detail.data.value);
                     ev.preventDefault();
                     this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{}); // ack
                 }
@@ -406,13 +406,13 @@ export class StopGapWidget extends EventEmitter {
     }
 
     public stop(opts = { forceDestroy: false }) {
-        if (!opts?.forceDestroy && ActiveWidgetStore.getPersistentWidgetId() === this.mockWidget.id) {
+        if (!opts?.forceDestroy && ActiveWidgetStore.instance.getPersistentWidgetId() === this.mockWidget.id) {
             logger.log("Skipping destroy - persistent widget");
             return;
         }
         if (!this.started) return;
         WidgetMessagingStore.instance.stopMessaging(this.mockWidget);
-        ActiveWidgetStore.delRoomId(this.mockWidget.id);
+        ActiveWidgetStore.instance.delRoomId(this.mockWidget.id);
 
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().off('event', this.onEvent);

@@ -16,13 +16,18 @@ limitations under the License.
 
 import React, { useContext } from "react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { formatFullDate } from "../../../DateUtils";
 import SettingsStore from "../../../settings/SettingsStore";
 import { IBodyProps } from "./IBodyProps";
 
-const RedactedBody = React.forwardRef<any, IBodyProps>(({ mxEvent }, ref) => {
+interface IProps {
+    mxEvent: MatrixEvent;
+}
+
+const RedactedBody = React.forwardRef<any, IProps | IBodyProps>(({ mxEvent }, ref) => {
     const cli: MatrixClient = useContext(MatrixClientContext);
 
     let text = _t("Message deleted");

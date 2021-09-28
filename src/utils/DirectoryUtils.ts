@@ -14,9 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { IInstance } from "matrix-js-sdk/src/client";
+import { Protocols } from "../components/views/directory/NetworkDropdown";
+
 // Find a protocol 'instance' with a given instance_id
 // in the supplied protocols dict
-export function instanceForInstanceId(protocols, instanceId) {
+export function instanceForInstanceId(protocols: Protocols, instanceId: string): IInstance {
     if (!instanceId) return null;
     for (const proto of Object.keys(protocols)) {
         if (!protocols[proto].instances && protocols[proto].instances instanceof Array) continue;
@@ -28,7 +31,7 @@ export function instanceForInstanceId(protocols, instanceId) {
 
 // given an instance_id, return the name of the protocol for
 // that instance ID in the supplied protocols dict
-export function protocolNameForInstanceId(protocols, instanceId) {
+export function protocolNameForInstanceId(protocols: Protocols, instanceId: string): string {
     if (!instanceId) return null;
     for (const proto of Object.keys(protocols)) {
         if (!protocols[proto].instances && protocols[proto].instances instanceof Array) continue;

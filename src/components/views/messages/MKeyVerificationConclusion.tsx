@@ -16,44 +16,50 @@ limitations under the License.
 
 import React from 'react';
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
-import { getNameForEventRoom, userLabelForEventRoom }
-    from '../../../utils/KeyVerificationStateObserver';
+import { getNameForEventRoom, userLabelForEventRoom } from '../../../utils/KeyVerificationStateObserver';
 import EventTileBubble from "./EventTileBubble";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+
+interface IProps {
+    /* the MatrixEvent to show */
+    mxEvent: MatrixEvent;
+}
 
 @replaceableComponent("views.messages.MKeyVerificationConclusion")
-export default class MKeyVerificationConclusion extends React.Component {
-    constructor(props) {
+export default class MKeyVerificationConclusion extends React.Component<IProps> {
+    constructor(props: IProps) {
         super(props);
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         const request = this.props.mxEvent.verificationRequest;
         if (request) {
-            request.on("change", this._onRequestChanged);
+            request.on("change", this.onRequestChanged);
         }
-        MatrixClientPeg.get().on("userTrustStatusChanged", this._onTrustChanged);
+        MatrixClientPeg.get().on("userTrustStatusChanged", this.onTrustChanged);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         const request = this.props.mxEvent.verificationRequest;
         if (request) {
-            request.off("change", this._onRequestChanged);
+            request.off("change", this.onRequestChanged);
         }
         const cli = MatrixClientPeg.get();
         if (cli) {
-            cli.removeListener("userTrustStatusChanged", this._onTrustChanged);
+            cli.removeListener("userTrustStatusChanged", this.onTrustChanged);
         }
     }
 
-    _onRequestChanged = () => {
+    private onRequestChanged = (): void => {
         this.forceUpdate();
     };
 
-    _onTrustChanged = (userId, status) => {
+    private onTrustChanged = (userId: string): void => {
         const { mxEvent } = this.props;
         const request = mxEvent.verificationRequest;
         if (!request || request.otherUserId !== userId) {
@@ -62,17 +68,17 @@ export default class MKeyVerificationConclusion extends React.Component {
         this.forceUpdate();
     };
 
-    _shouldRender(mxEvent, request) {
+    public static shouldRender(mxEvent: MatrixEvent, request: VerificationRequest): boolean {
         // normally should not happen
         if (!request) {
             return false;
         }
         // .cancel event that was sent after the verification finished, ignore
-        if (mxEvent.getType() === "m.key.verification.cancel" && !request.cancelled) {
+        if (mxEvent.getType() === EventType.KeyVerificationCancel && !request.cancelled) {
             return false;
         }
         // .done event that was sent after the verification cancelled, ignore
-        if (mxEvent.getType() === "m.key.verification.done" && !request.done) {
+        if (mxEvent.getType() === EventType.KeyVerificationDone && !request.done) {
             return false;
         }
 
@@ -89,11 +95,11 @@ export default class MKeyVerificationConclusion extends React.Component {
         return true;
     }
 
-    render() {
+    public render(): JSX.Element {
         const { mxEvent } = this.props;
         const request = mxEvent.verificationRequest;
 
-        if (!this._shouldRender(mxEvent, request)) {
+        if (!MKeyVerificationConclusion.shouldRender(mxEvent, request)) {
             return null;
         }
 
@@ -103,15 +109,18 @@ export default class MKeyVerificationConclusion extends React.Component {
         let title;
 
         if (request.done) {
-            title = _t("You verified %(name)s", { name: getNameForEventRoom(request.otherUserId, mxEvent) });
+            title = _t(
+                "You verified %(name)s",
+                { name: getNameForEventRoom(request.otherUserId, mxEvent.getRoomId()) },
+            );
         } else if (request.cancelled) {
             const userId = request.cancellingUserId;
             if (userId === myUserId) {
                 title = _t("You cancelled verifying %(name)s",
-                    { name: getNameForEventRoom(request.otherUserId, mxEvent) });
+                    { name: getNameForEventRoom(request.otherUserId, mxEvent.getRoomId()) });
             } else {
                 title = _t("%(name)s cancelled verifying",
-                    { name: getNameForEventRoom(userId, mxEvent) });
+                    { name: getNameForEventRoom(userId, mxEvent.getRoomId()) });
             }
         }
 
@@ -129,8 +138,3 @@ export default class MKeyVerificationConclusion extends React.Component {
         return null;
     }
 }
-
-MKeyVerificationConclusion.propTypes = {
-    /* the MatrixEvent to show */
-    mxEvent: PropTypes.object.isRequired,
-};

@@ -46,12 +46,10 @@ const FLUSH_RATE_MS = 30 * 1000;
 const MAX_LOG_SIZE = 1024 * 1024 * 5; // 5 MB
 
 // A class which monkey-patches the global console and stores log lines.
-class ConsoleLogger {
-    constructor() {
-        this.logs = "";
-    }
+export class ConsoleLogger {
+    private logs = "";
 
-    monkeyPatch(consoleObj) {
+    public monkeyPatch(consoleObj: Console): void {
         // Monkey-patch console logging
         const consoleFunctionsToLevels = {
             log: "I",
@@ -69,14 +67,14 @@ class ConsoleLogger {
         });
     }
 
-    log(level, ...args) {
+    private log(level: string, ...args: (Error | DOMException | object | string)[]): void {
         // We don't know what locale the user may be running so use ISO strings
         const ts = new Date().toISOString();
 
         // Convert objects and errors to helpful things
         args = args.map((arg) => {
             if (arg instanceof DOMException) {
-                return arg.message + ` (${arg.name} | ${arg.code}) ` + (arg.stack ? `\n${arg.stack}` : '');
+                return arg.message + ` (${arg.name} | ${arg.code})`;
             } else if (arg instanceof Error) {
                 return arg.message + (arg.stack ? `\n${arg.stack}` : '');
             } else if (typeof (arg) === 'object') {
@@ -118,7 +116,7 @@ class ConsoleLogger {
      * @param {boolean} keepLogs True to not delete logs after flushing.
      * @return {string} \n delimited log lines to flush.
      */
-    flush(keepLogs) {
+    public flush(keepLogs?: boolean): string {
         // The ConsoleLogger doesn't care how these end up on disk, it just
         // flushes them to the caller.
         if (keepLogs) {
@@ -131,27 +129,28 @@ class ConsoleLogger {
 }
 
 // A class which stores log lines in an IndexedDB instance.
-class IndexedDBLogStore {
-    constructor(indexedDB, logger) {
-        this.indexedDB = indexedDB;
-        this.logger = logger;
-        this.id = "instance-" + Math.random() + Date.now();
-        this.index = 0;
-        this.db = null;
+export class IndexedDBLogStore {
+    private id: string;
+    private index = 0;
+    private db = null;
+    private flushPromise = null;
+    private flushAgainPromise = null;
 
-        // these promises are cleared as soon as fulfilled
-        this.flushPromise = null;
-        // set if flush() is called whilst one is ongoing
-        this.flushAgainPromise = null;
+    constructor(
+        private indexedDB: IDBFactory,
+        private logger: ConsoleLogger,
+    ) {
+        this.id = "instance-" + Math.random() + Date.now();
     }
 
     /**
      * @return {Promise} Resolves when the store is ready.
      */
-    connect() {
+    public connect(): Promise<void> {
         const req = this.indexedDB.open("logs");
         return new Promise((resolve, reject) => {
-            req.onsuccess = (event) => {
+            req.onsuccess = (event: Event) => {
+                // @ts-ignore
                 this.db = event.target.result;
                 // Periodically flush logs to local storage / indexeddb
                 setInterval(this.flush.bind(this), FLUSH_RATE_MS);
@@ -160,6 +159,7 @@ class IndexedDBLogStore {
 
             req.onerror = (event) => {
                 const err = (
+                    // @ts-ignore
                     "Failed to open log database: " + event.target.error.name
                 );
                 console.error(err);
@@ -168,6 +168,7 @@ class IndexedDBLogStore {
 
             // First time: Setup the object store
             req.onupgradeneeded = (event) => {
+                // @ts-ignore
                 const db = event.target.result;
                 const logObjStore = db.createObjectStore("logs", {
                     keyPath: ["id", "index"],
@@ -178,7 +179,7 @@ class IndexedDBLogStore {
                 logObjStore.createIndex("id", "id", { unique: false });
 
                 logObjStore.add(
-                    this._generateLogEntry(
+                    this.generateLogEntry(
                         new Date() + " ::: Log database was created.",
                     ),
                 );
@@ -186,7 +187,7 @@ class IndexedDBLogStore {
                 const lastModifiedStore = db.createObjectStore("logslastmod", {
                     keyPath: "id",
                 });
-                lastModifiedStore.add(this._generateLastModifiedTime());
+                lastModifiedStore.add(this.generateLastModifiedTime());
             };
         });
     }
@@ -210,7 +211,7 @@ class IndexedDBLogStore {
      *
      * @return {Promise} Resolved when the logs have been flushed.
      */
-    flush() {
+    public flush(): Promise<void> {
         // check if a flush() operation is ongoing
         if (this.flushPromise) {
             if (this.flushAgainPromise) {
@@ -227,7 +228,7 @@ class IndexedDBLogStore {
         }
         // there is no flush promise or there was but it has finished, so do
         // a brand new one, destroying the chain which may have been built up.
-        this.flushPromise = new Promise((resolve, reject) => {
+        this.flushPromise = new Promise<void>((resolve, reject) => {
             if (!this.db) {
                 // not connected yet or user rejected access for us to r/w to the db.
                 reject(new Error("No connected database"));
@@ -251,9 +252,9 @@ class IndexedDBLogStore {
                     new Error("Failed to write logs: " + event.target.errorCode),
                 );
             };
-            objStore.add(this._generateLogEntry(lines));
+            objStore.add(this.generateLogEntry(lines));
             const lastModStore = txn.objectStore("logslastmod");
-            lastModStore.put(this._generateLastModifiedTime());
+            lastModStore.put(this.generateLastModifiedTime());
         }).then(() => {
             this.flushPromise = null;
         });
@@ -270,12 +271,12 @@ class IndexedDBLogStore {
      * log ID). The objects have said log ID in an "id" field and "lines" which
      * is a big string with all the new-line delimited logs.
      */
-    async consume() {
+    public async consume(): Promise<{lines: string, id: string}[]> {
         const db = this.db;
 
         // Returns: a string representing the concatenated logs for this ID.
         // Stops adding log fragments when the size exceeds maxSize
-        function fetchLogs(id, maxSize) {
+        function fetchLogs(id: string, maxSize: number): Promise<string> {
             const objectStore = db.transaction("logs", "readonly").objectStore("logs");
 
             return new Promise((resolve, reject) => {
@@ -301,7 +302,7 @@ class IndexedDBLogStore {
         }
 
         // Returns: A sorted array of log IDs. (newest first)
-        function fetchLogIds() {
+        function fetchLogIds(): Promise<string[]> {
             // To gather all the log IDs, query for all records in logslastmod.
             const o = db.transaction("logslastmod", "readonly").objectStore(
                 "logslastmod",
@@ -319,8 +320,8 @@ class IndexedDBLogStore {
             });
         }
 
-        function deleteLogs(id) {
-            return new Promise((resolve, reject) => {
+        function deleteLogs(id: number): Promise<void> {
+            return new Promise<void>((resolve, reject) => {
                 const txn = db.transaction(
                     ["logs", "logslastmod"], "readwrite",
                 );
@@ -389,7 +390,7 @@ class IndexedDBLogStore {
         return logs;
     }
 
-    _generateLogEntry(lines) {
+    private generateLogEntry(lines: string): {id: string, lines: string, index: number} {
         return {
             id: this.id,
             lines: lines,
@@ -397,7 +398,7 @@ class IndexedDBLogStore {
         };
     }
 
-    _generateLastModifiedTime() {
+    private generateLastModifiedTime(): {id: string, ts: number} {
         return {
             id: this.id,
             ts: Date.now(),
@@ -415,15 +416,19 @@ class IndexedDBLogStore {
  * @return {Promise<T[]>} Resolves to an array of whatever you returned from
  * resultMapper.
  */
-function selectQuery(store, keyRange, resultMapper) {
+function selectQuery<T>(
+    store: IDBIndex, keyRange: IDBKeyRange, resultMapper: (cursor: IDBCursorWithValue) => T,
+): Promise<T[]> {
     const query = store.openCursor(keyRange);
     return new Promise((resolve, reject) => {
         const results = [];
         query.onerror = (event) => {
+            // @ts-ignore
             reject(new Error("Query failed: " + event.target.errorCode));
         };
         // collect results
         query.onsuccess = (event) => {
+            // @ts-ignore
             const cursor = event.target.result;
             if (!cursor) {
                 resolve(results);
@@ -442,7 +447,7 @@ function selectQuery(store, keyRange, resultMapper) {
  * be set up immediately for the logs.
  * @return {Promise} Resolves when set up.
  */
-export function init(setUpPersistence = true) {
+export function init(setUpPersistence = true): Promise<void> {
     if (global.mx_rage_initPromise) {
         return global.mx_rage_initPromise;
     }
@@ -462,7 +467,7 @@ export function init(setUpPersistence = true) {
  * then this no-ops.
  * @return {Promise} Resolves when complete.
  */
-export function tryInitStorage() {
+export function tryInitStorage(): Promise<void> {
     if (global.mx_rage_initStoragePromise) {
         return global.mx_rage_initStoragePromise;
     }

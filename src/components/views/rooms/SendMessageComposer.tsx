@@ -164,6 +164,20 @@ export default class SendMessageComposer extends React.Component<IProps> {
         window.addEventListener("beforeunload", this.saveStoredEditorState);
     }
 
+    public componentDidUpdate(prevProps: IProps): void {
+        const replyToEventChanged = this.props.replyInThread && (this.props.replyToEvent !== prevProps.replyToEvent);
+        if (replyToEventChanged) {
+            this.model.reset([]);
+        }
+
+        if (this.props.replyInThread && this.props.replyToEvent && (!prevProps.replyToEvent || replyToEventChanged)) {
+            const partCreator = new CommandPartCreator(this.props.room, this.context);
+            const parts = this.restoreStoredEditorState(partCreator) || [];
+            this.model.reset(parts);
+            this.editorRef.current?.focus();
+        }
+    }
+
     private onKeyDown = (event: KeyboardEvent): void => {
         // ignore any keypress while doing IME compositions
         if (this.editorRef.current?.isComposing(event)) {
@@ -484,7 +498,12 @@ export default class SendMessageComposer extends React.Component<IProps> {
     }
 
     private get editorStateKey() {
-        return `mx_cider_state_${this.props.room.roomId}`;
+        let key = `mx_cider_state_${this.props.room.roomId}`;
+        const thread = this.props.replyToEvent?.getThread();
+        if (thread) {
+            key += `_${thread.id}`;
+        }
+        return key;
     }
 
     private clearStoredEditorState(): void {
@@ -492,6 +511,10 @@ export default class SendMessageComposer extends React.Component<IProps> {
     }
 
     private restoreStoredEditorState(partCreator: PartCreator): Part[] {
+        if (this.props.replyInThread && !this.props.replyToEvent) {
+            return null;
+        }
+
         const json = localStorage.getItem(this.editorStateKey);
         if (json) {
             try {

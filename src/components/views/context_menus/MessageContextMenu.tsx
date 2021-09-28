@@ -38,6 +38,7 @@ import ConfirmRedactDialog from '../dialogs/ConfirmRedactDialog';
 import ErrorDialog from '../dialogs/ErrorDialog';
 import ShareDialog from '../dialogs/ShareDialog';
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { IPosition, ChevronFace } from '../../structures/ContextMenu';
 
 export function canCancel(eventStatus: EventStatus): boolean {
     return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;
@@ -52,7 +53,8 @@ export interface IOperableEventTile {
     getEventTileOps(): IEventTileOps;
 }
 
-interface IProps {
+interface IProps extends IPosition {
+    chevronFace: ChevronFace;
     /* the MatrixEvent associated with the context menu */
     mxEvent: MatrixEvent;
     /* an optional EventTileOps implementation that can be used to unhide preview widgets */
