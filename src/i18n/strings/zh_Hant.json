@@ -3167,5 +3167,7 @@
     "Leave all rooms": "離開所有聊天室",
     "Don't leave any rooms": "不要離開任何聊天室",
     "%(reactors)s reacted with %(content)s": "%(reactors)s 使用了 %(content)s 反應",
-    "Joining space …": "正在加入空間……"
+    "Joining space …": "正在加入空間……",
+    "Expand quotes │ ⇧+click": "展開引用 │ ⇧+點擊",
+    "Collapse quotes │ ⇧+click": "折疊引用 │ ⇧+點擊"
 }
