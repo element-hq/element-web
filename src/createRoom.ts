@@ -221,6 +221,14 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
     let roomId;
     return client.createRoom(createOpts).finally(function() {
         if (modal) modal.close();
+    }).catch(function(err) {
+        if (err.httpStatus === 403 && err.errcode == "M_UNKNOWN") {
+            console.warn("Failed to publish room, try again without publishing it");
+            createOpts.visibility = Visibility.Private;
+            return client.createRoom(createOpts);
+        } else {
+            return Promise.reject(err);
+        }
     }).then(function(res) {
         roomId = res.room_id;
         if (opts.dmUserId) {
