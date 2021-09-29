@@ -528,7 +528,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
             // Update NotificationStates
             this.getNotificationState(s).setRooms(visibleRooms.filter(room => {
-                if (!roomIds.has(room.roomId)) return false;
+                if (!roomIds.has(room.roomId) || room.isSpaceRoom()) return false;
 
                 if (DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
                     return s === HOME_SPACE;
