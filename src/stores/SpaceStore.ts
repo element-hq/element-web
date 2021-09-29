@@ -183,7 +183,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
      * should not be done when the space switch is done implicitly due to another event like switching room.
      */
     public setActiveSpace(space: Room | null, contextSwitch = true) {
-        if (space === this.activeSpace || (space && !space.isSpaceRoom())) return;
+        if (!this.matrixClient || space === this.activeSpace || (space && !space.isSpaceRoom())) return;
 
         this._activeSpace = space;
         this.emit(UPDATE_SELECTED_SPACE, this.activeSpace);
@@ -197,7 +197,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             // else if the last viewed room in this space is joined then view that
             // else view space home or home depending on what is being clicked on
             if (space?.getMyMembership() !== "invite" &&
-                this.matrixClient?.getRoom(roomId)?.getMyMembership() === "join" &&
+                this.matrixClient.getRoom(roomId)?.getMyMembership() === "join" &&
                 this.getSpaceFilteredRoomIds(space).has(roomId)
             ) {
                 defaultDispatcher.dispatch({
@@ -230,7 +230,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
     }
 
-    private async loadSuggestedRooms(space) {
+    private async loadSuggestedRooms(space: Room): Promise<void> {
         const suggestedRooms = await this.fetchSuggestedRooms(space);
         if (this._activeSpace === space) {
             this._suggestedRooms = suggestedRooms;
@@ -335,6 +335,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     };
 
     private rebuild = throttle(() => {
+        if (!this.matrixClient) return;
+
         const [visibleSpaces, visibleRooms] = partitionSpacesAndRooms(this.matrixClient.getVisibleRooms());
         const [joinedSpaces, invitedSpaces] = visibleSpaces.reduce((arr, s) => {
             if (s.getMyMembership() === "join") {
@@ -751,7 +753,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     }
 
     protected async onAction(payload: ActionPayload) {
-        if (!spacesEnabled || !this.matrixClient) return;
+        if (!spacesEnabled) return;
         switch (payload.action) {
             case "view_room": {
                 // Don't auto-switch rooms when reacting to a context-switch
