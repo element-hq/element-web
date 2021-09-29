@@ -238,6 +238,11 @@ Element requires the following URLs not to be cached, when/if you are serving El
 /index.html
 ```
 
+We also recommend that you force browsers to re-validate any cached copy of Element on page load by configuring your
+webserver to return `Cache-Control: no-cache` for `/`. This ensures the browser will fetch a new version of Element on
+the next page load after it's been deployed. Note that this is already configured for you in the nginx config of our
+Dockerfile.
+
 Development
 ===========
 
