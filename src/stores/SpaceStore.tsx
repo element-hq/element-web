@@ -233,65 +233,6 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             window.localStorage.removeItem(ACTIVE_SPACE_LS_KEY);
         }
 
-        // New in Spaces beta toast for Restricted Join Rule
-        const lsKey = "mx_SpaceBeta_restrictedJoinRuleToastSeen";
-        if (contextSwitch && space?.getJoinRule() === JoinRule.Invite && shouldShowSpaceSettings(space) &&
-            space.getJoinedMemberCount() > 1 && !localStorage.getItem(lsKey)
-            && this.restrictedJoinRuleSupport?.preferred
-        ) {
-            const toastKey = "restrictedjoinrule";
-            ToastStore.sharedInstance().addOrReplaceToast({
-                key: toastKey,
-                title: _t("New in the Spaces beta"),
-                props: {
-                    description: _t("Help people in spaces to find and join private rooms"),
-                    acceptLabel: _t("Learn more"),
-                    onAccept: () => {
-                        localStorage.setItem(lsKey, "true");
-                        ToastStore.sharedInstance().dismissToast(toastKey);
-
-                        Modal.createTrackedDialog("New in the Spaces beta", "restricted join rule", InfoDialog, {
-                            title: _t("Help space members find private rooms"),
-                            description: <>
-                                <p>{ _t("To help space members find and join a private room, " +
-                                    "go to that room's Security & Privacy settings.") }</p>
-
-                                { /* Reuses classes from TabbedView for simplicity, non-interactive */ }
-                                <div className="mx_TabbedView_tabsOnLeft" style={{ width: "190px", position: "relative" }}>
-                                    <div className="mx_TabbedView_tabLabel">
-                                        <span className="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_settingsIcon" />
-                                        <span className="mx_TabbedView_tabLabel_text">{ _t("General") }</span>
-                                    </div>
-                                    <div className="mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active">
-                                        <span className="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_securityIcon" />
-                                        <span className="mx_TabbedView_tabLabel_text">{ _t("Security & Privacy") }</span>
-                                    </div>
-                                    <div className="mx_TabbedView_tabLabel">
-                                        <span className="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_rolesIcon" />
-                                        <span className="mx_TabbedView_tabLabel_text">{ _t("Roles & Permissions") }</span>
-                                    </div>
-                                </div>
-
-                                <p>{ _t("This makes it easy for rooms to stay private to a space, " +
-                                    "while letting people in the space find and join them. " +
-                                    "All new rooms in a space will have this option available.") }</p>
-                            </>,
-                            button: _t("OK"),
-                            hasCloseButton: false,
-                            fixedWidth: true,
-                        });
-                    },
-                    rejectLabel: _t("Skip"),
-                    onReject: () => {
-                        localStorage.setItem(lsKey, "true");
-                        ToastStore.sharedInstance().dismissToast(toastKey);
-                    },
-                },
-                component: GenericToast,
-                priority: 35,
-            });
-        }
-
         if (space) {
             this.loadSuggestedRooms(space);
         }
