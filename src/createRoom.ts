@@ -222,7 +222,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
     return client.createRoom(createOpts).finally(function() {
         if (modal) modal.close();
     }).catch(function(err) {
-        if (err.httpStatus === 403 && err.errcode == "M_UNKNOWN") {
+        if (err.httpStatus === 403 && err.errcode === "M_UNKNOWN" && err.data.error === "Not allowed to publish room") {
             console.warn("Failed to publish room, try again without publishing it");
             createOpts.visibility = Visibility.Private;
             return client.createRoom(createOpts);
