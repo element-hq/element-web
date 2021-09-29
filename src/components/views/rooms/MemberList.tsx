@@ -44,6 +44,7 @@ import MemberTile from "./MemberTile";
 import BaseAvatar from '../avatars/BaseAvatar';
 import { throttle } from 'lodash';
 import SpaceStore from "../../../stores/SpaceStore";
+import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 const getSearchQueryLSKey = (roomId: string) => `mx_MemberList_searchQuarry_${roomId}`;
 
@@ -169,7 +170,11 @@ export default class MemberList extends React.Component<IProps, IState> {
     private get canInvite(): boolean {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.roomId);
-        return room && room.canInvite(cli.getUserId());
+
+        return (
+            room?.canInvite(cli.getUserId()) ||
+            (room?.isSpaceRoom() && room.getJoinRule() === JoinRule.Public)
+        );
     }
 
     private getMembersState(members: Array<RoomMember>): IState {
