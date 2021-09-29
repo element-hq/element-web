@@ -53,11 +53,12 @@ import SenderProfile from '../messages/SenderProfile';
 import MessageTimestamp from '../messages/MessageTimestamp';
 import TooltipButton from '../elements/TooltipButton';
 import ReadReceiptMarker from "./ReadReceiptMarker";
-import MessageActionBar from "../messages/MessageActionBar";
+import MessageActionBar, { ActionBarRenderingContext } from "../messages/MessageActionBar";
 import ReactionsRow from '../messages/ReactionsRow';
 import { getEventDisplayInfo } from '../../../utils/EventUtils';
 import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 import SettingsStore from "../../../settings/SettingsStore";
+import MKeyVerificationConclusion from "../messages/MKeyVerificationConclusion";
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -144,8 +145,7 @@ export function getHandlerTile(ev) {
     // XXX: This is extremely a hack. Possibly these components should have an interface for
     // declining to render?
     if (type === "m.key.verification.cancel" || type === "m.key.verification.done") {
-        const MKeyVerificationConclusion = sdk.getComponent("messages.MKeyVerificationConclusion");
-        if (!MKeyVerificationConclusion.prototype._shouldRender.call(null, ev, ev.request)) {
+        if (!MKeyVerificationConclusion.shouldRender(ev, ev.request)) {
             return;
         }
     }
@@ -192,6 +192,7 @@ export enum TileShape {
     Notif = "notif",
     FileGrid = "file_grid",
     Pinned = "pinned",
+    Thread = "thread",
 }
 
 interface IProps {
@@ -324,7 +325,7 @@ interface IState {
     reactions: Relations;
 
     hover: boolean;
-
+    isQuoteExpanded?: boolean;
     thread?: Thread;
 }
 
@@ -332,7 +333,8 @@ interface IState {
 export default class EventTile extends React.Component<IProps, IState> {
     private suppressReadReceiptAnimation: boolean;
     private isListeningForReceipts: boolean;
-    private tile = React.createRef();
+    // TODO: Types
+    private tile = React.createRef<unknown>();
     private replyThread = React.createRef<ReplyThread>();
 
     public readonly ref = createRef<HTMLElement>();
@@ -894,8 +896,8 @@ export default class EventTile extends React.Component<IProps, IState> {
             actionBarFocused: focused,
         });
     };
-
-    getTile = () => this.tile.current;
+    // TODO: Types
+    getTile: () => any | null = () => this.tile.current;
 
     getReplyThread = () => this.replyThread.current;
 
@@ -920,6 +922,11 @@ export default class EventTile extends React.Component<IProps, IState> {
         });
     };
 
+    private setQuoteExpanded = (expanded: boolean) => {
+        this.setState({
+            isQuoteExpanded: expanded,
+        });
+    };
     render() {
         const msgtype = this.props.mxEvent.getContent().msgtype;
         const eventType = this.props.mxEvent.getType() as EventType;
@@ -929,6 +936,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             isInfoMessage,
             isLeftAlignedBubbleMessage,
         } = getEventDisplayInfo(this.props.mxEvent);
+        const { isQuoteExpanded } = this.state;
 
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
@@ -941,6 +949,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                 </div>
             </div>;
         }
+
         const EventTileType = sdk.getComponent(tileHandler);
 
         const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
@@ -1054,6 +1063,9 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         const showMessageActionBar = !isEditing && !this.props.forExport;
+        const renderingContext = this.props.tileShape === TileShape.Thread
+            ? ActionBarRenderingContext.Thread
+            : ActionBarRenderingContext.Room;
         const actionBar = showMessageActionBar ? <MessageActionBar
             mxEvent={this.props.mxEvent}
             reactions={this.state.reactions}
@@ -1061,6 +1073,9 @@ export default class EventTile extends React.Component<IProps, IState> {
             getTile={this.getTile}
             getReplyThread={this.getReplyThread}
             onFocusChange={this.onActionBarFocusChange}
+            renderingContext={renderingContext}
+            isQuoteExpanded={isQuoteExpanded}
+            toggleThreadExpanded={() => this.setQuoteExpanded(!isQuoteExpanded)}
         /> : undefined;
 
         const showTimestamp = this.props.mxEvent.getTs()
@@ -1167,6 +1182,40 @@ export default class EventTile extends React.Component<IProps, IState> {
                     </div>,
                 ]);
             }
+            case TileShape.Thread: {
+                const room = this.context.getRoom(this.props.mxEvent.getRoomId());
+                return React.createElement(this.props.as || "li", {
+                    "className": classes,
+                    "aria-live": ariaLive,
+                    "aria-atomic": true,
+                    "data-scroll-tokens": scrollToken,
+                }, [
+                    <div className="mx_EventTile_roomName" key="mx_EventTile_roomName">
+                        <RoomAvatar room={room} width={28} height={28} />
+                        <a href={permalink} onClick={this.onPermalinkClicked}>
+                            { room ? room.name : '' }
+                        </a>
+                    </div>,
+                    <div className="mx_EventTile_senderDetails" key="mx_EventTile_senderDetails">
+                        { avatar }
+                        <a href={permalink} onClick={this.onPermalinkClicked}>
+                            { sender }
+                            { timestamp }
+                        </a>
+                    </div>,
+                    <div className="mx_EventTile_line" key="mx_EventTile_line">
+                        <EventTileType ref={this.tile}
+                            mxEvent={this.props.mxEvent}
+                            highlights={this.props.highlights}
+                            highlightLink={this.props.highlightLink}
+                            showUrlPreview={this.props.showUrlPreview}
+                            onHeightChanged={this.props.onHeightChanged}
+                            tileShape={this.props.tileShape}
+                        />
+                        { actionBar }
+                    </div>,
+                ]);
+            }
             case TileShape.FileGrid: {
                 return React.createElement(this.props.as || "li", {
                     "className": classes,
@@ -1199,21 +1248,19 @@ export default class EventTile extends React.Component<IProps, IState> {
             }
 
             default: {
-                let thread;
-                // When the "showHiddenEventsInTimeline" lab is enabled,
-                // avoid showing replies for hidden events (events without tiles)
-                if (haveTileForEvent(this.props.mxEvent)) {
-                    thread = ReplyThread.makeThread(
-                        this.props.mxEvent,
-                        this.props.onHeightChanged,
-                        this.props.permalinkCreator,
-                        this.replyThread,
-                        this.props.layout,
-                        this.props.forExport,
-                        this.props.alwaysShowTimestamps || this.state.hover,
-                    );
-                }
-
+                const thread = haveTileForEvent(this.props.mxEvent) &&
+                    ReplyThread.hasThreadReply(this.props.mxEvent) ? (
+                        <ReplyThread
+                            parentEv={this.props.mxEvent}
+                            onHeightChanged={this.props.onHeightChanged}
+                            ref={this.replyThread}
+                            forExport={this.props.forExport}
+                            permalinkCreator={this.props.permalinkCreator}
+                            layout={this.props.layout}
+                            alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.hover}
+                            isQuoteExpanded={isQuoteExpanded}
+                            setQuoteExpanded={this.setQuoteExpanded}
+                        />) : null;
                 const isOwnEvent = this.props.mxEvent?.sender?.userId === MatrixClientPeg.get().getUserId();
 
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers

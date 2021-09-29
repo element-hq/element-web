@@ -131,8 +131,13 @@ interface IProps {
 }
 
 const isOnlyAdmin = (room: Room): boolean => {
-    return !room.getJoinedMembers().some(member => {
-        return member.userId !== room.client.credentials.userId && member.powerLevelNorm === 100;
+    const userId = room.client.getUserId();
+    if (room.getMember(userId).powerLevelNorm !== 100) {
+        return false; // user is not an admin
+    }
+    return room.getJoinedMembers().every(member => {
+        // return true if every other member has a lower power level (we are highest)
+        return member.userId === userId || member.powerLevelNorm < 100;
     });
 };
 

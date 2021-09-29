@@ -133,15 +133,22 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 { this.state.thread && (
                     <TimelinePanel
                         ref={this.timelinePanelRef}
-                        manageReadReceipts={false}
-                        manageReadMarkers={false}
+                        showReadReceipts={false} // No RR support in thread's MVP
+                        manageReadReceipts={false} // No RR support in thread's MVP
+                        manageReadMarkers={false} // No RM support in thread's MVP
+                        sendReadReceiptOnLoad={false} // No RR support in thread's MVP
                         timelineSet={this.state?.thread?.timelineSet}
-                        showUrlPreview={false}
-                        tileShape={TileShape.Notif}
+                        showUrlPreview={true}
+                        tileShape={TileShape.Thread}
                         empty={<div>empty</div>}
                         alwaysShowTimestamps={true}
                         layout={Layout.Group}
                         hideThreadedMessages={false}
+                        hidden={false}
+                        showReactions={true}
+                        className="mx_RoomView_messagePanel mx_GroupLayout"
+                        permalinkCreator={this.props.permalinkCreator}
+                        membersLoaded={true}
                     />
                 ) }
                 <MessageComposer

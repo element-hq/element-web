@@ -17,7 +17,7 @@ limitations under the License.
 import SdkConfig from '../SdkConfig';
 import { MatrixClientPeg } from '../MatrixClientPeg';
 
-export function getHostingLink(campaign) {
+export function getHostingLink(campaign: string): string {
     const hostingLink = SdkConfig.get().hosting_signup_link;
     if (!hostingLink) return null;
     if (!campaign) return hostingLink;
@@ -27,7 +27,7 @@ export function getHostingLink(campaign) {
     try {
         const hostingUrl = new URL(hostingLink);
         hostingUrl.searchParams.set("utm_campaign", campaign);
-        return hostingUrl.format();
+        return hostingUrl.toString();
     } catch (e) {
         return hostingLink;
     }

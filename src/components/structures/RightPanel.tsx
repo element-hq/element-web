@@ -18,7 +18,6 @@ limitations under the License.
 import React from 'react';
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomState } from "matrix-js-sdk/src/models/room-state";
-import { User } from "matrix-js-sdk/src/models/user";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
@@ -54,11 +53,12 @@ import { throttle } from 'lodash';
 import SpaceStore from "../../stores/SpaceStore";
 import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
 import { E2EStatus } from '../../utils/ShieldUtils';
+import { SetRightPanelPhasePayload } from '../../dispatcher/payloads/SetRightPanelPhasePayload';
 
 interface IProps {
     room?: Room; // if showing panels for a given room, this is set
     groupId?: string; // if showing panels for a given group, this is set
-    user?: User; // used if we know the user ahead of opening the panel
+    member?: RoomMember; // used if we know the room member ahead of opening the panel
     resizeNotifier: ResizeNotifier;
     permalinkCreator?: RoomPermalinkCreator;
     e2eStatus?: E2EStatus;
@@ -99,10 +99,10 @@ export default class RightPanel extends React.Component<IProps, IState> {
 
     // Helper function to split out the logic for getPhaseFromProps() and the constructor
     // as both are called at the same time in the constructor.
-    private getUserForPanel() {
+    private getUserForPanel(): RoomMember {
         if (this.state && this.state.member) return this.state.member;
         const lastParams = RightPanelStore.getSharedInstance().roomPanelPhaseParams;
-        return this.props.user || lastParams['member'];
+        return this.props.member || lastParams['member'];
     }
 
     // gets the current phase from the props and also maybe the store
@@ -143,14 +143,14 @@ export default class RightPanel extends React.Component<IProps, IState> {
         return rps.roomPanelPhase;
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         this.dispatcherRef = dis.register(this.onAction);
         const cli = this.context;
         cli.on("RoomState.members", this.onRoomStateMember);
         this.initGroupStore(this.props.groupId);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         dis.unregister(this.dispatcherRef);
         if (this.context) {
             this.context.removeListener("RoomState.members", this.onRoomStateMember);
@@ -159,7 +159,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(newProps) { // eslint-disable-line
+    public UNSAFE_componentWillReceiveProps(newProps: IProps): void { // eslint-disable-line
         if (newProps.groupId !== this.props.groupId) {
             this.unregisterGroupStore();
             this.initGroupStore(newProps.groupId);
@@ -196,6 +196,15 @@ export default class RightPanel extends React.Component<IProps, IState> {
     };
 
     private onAction = (payload: ActionPayload) => {
+        const isChangingRoom = payload.action === 'view_room' && payload.room_id !== this.props.room.roomId;
+        const isViewingThread = this.state.phase === RightPanelPhases.ThreadView;
+        if (isChangingRoom && isViewingThread) {
+            dis.dispatch<SetRightPanelPhasePayload>({
+                action: Action.SetRightPanelPhase,
+                phase: RightPanelPhases.ThreadPanel,
+            });
+        }
+
         if (payload.action === Action.AfterRightPanelPhaseChange) {
             this.setState({
                 phase: payload.phase,
@@ -215,7 +224,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
         // XXX: There are three different ways of 'closing' this panel depending on what state
         // things are in... this knows far more than it should do about the state of the rest
         // of the app and is generally a bit silly.
-        if (this.props.user) {
+        if (this.props.member) {
             // If we have a user prop then we're displaying a user from the 'user' page type
             // in LoggedInView, so need to change the page type to close the panel (we switch
             // to the home page which is not obviously the correct thing to do, but I'm not sure

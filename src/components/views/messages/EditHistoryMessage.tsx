@@ -15,107 +15,112 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-import PropTypes from 'prop-types';
 import * as HtmlUtils from '../../../HtmlUtils';
 import { editBodyDiffToHtml } from '../../../utils/MessageDiffUtils';
 import { formatTime } from '../../../DateUtils';
-import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { pillifyLinks, unmountPills } from '../../../utils/pillify';
 import { _t } from '../../../languageHandler';
-import * as sdk from '../../../index';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import classNames from 'classnames';
 import RedactedBody from "./RedactedBody";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import AccessibleButton from "../elements/AccessibleButton";
+import ConfirmAndWaitRedactDialog from "../dialogs/ConfirmAndWaitRedactDialog";
+import ViewSource from "../../structures/ViewSource";
 
 function getReplacedContent(event) {
     const originalContent = event.getOriginalContent();
     return originalContent["m.new_content"] || originalContent;
 }
 
-@replaceableComponent("views.messages.EditHistoryMessage")
-export default class EditHistoryMessage extends React.PureComponent {
-    static propTypes = {
-        // the message event being edited
-        mxEvent: PropTypes.instanceOf(MatrixEvent).isRequired,
-        previousEdit: PropTypes.instanceOf(MatrixEvent),
-        isBaseEvent: PropTypes.bool,
-    };
+interface IProps {
+    // the message event being edited
+    mxEvent: MatrixEvent;
+    previousEdit?: MatrixEvent;
+    isBaseEvent?: boolean;
+    isTwelveHour?: boolean;
+}
 
-    constructor(props) {
+interface IState {
+    canRedact: boolean;
+    sendStatus: EventStatus;
+}
+
+@replaceableComponent("views.messages.EditHistoryMessage")
+export default class EditHistoryMessage extends React.PureComponent<IProps, IState> {
+    private content = createRef<HTMLDivElement>();
+    private pills: Element[] = [];
+
+    constructor(props: IProps) {
         super(props);
+
         const cli = MatrixClientPeg.get();
         const { userId } = cli.credentials;
         const event = this.props.mxEvent;
         const room = cli.getRoom(event.getRoomId());
         if (event.localRedactionEvent()) {
-            event.localRedactionEvent().on("status", this._onAssociatedStatusChanged);
+            event.localRedactionEvent().on("status", this.onAssociatedStatusChanged);
         }
         const canRedact = room.currentState.maySendRedactionForEvent(event, userId);
         this.state = { canRedact, sendStatus: event.getAssociatedStatus() };
-
-        this._content = createRef();
-        this._pills = [];
     }
 
-    _onAssociatedStatusChanged = () => {
+    private onAssociatedStatusChanged = (): void => {
         this.setState({ sendStatus: this.props.mxEvent.getAssociatedStatus() });
     };
 
-    _onRedactClick = async () => {
+    private onRedactClick = async (): Promise<void> => {
         const event = this.props.mxEvent;
         const cli = MatrixClientPeg.get();
-        const ConfirmAndWaitRedactDialog = sdk.getComponent("dialogs.ConfirmAndWaitRedactDialog");
 
         Modal.createTrackedDialog('Confirm Redact Dialog', 'Edit history', ConfirmAndWaitRedactDialog, {
             redact: () => cli.redactEvent(event.getRoomId(), event.getId()),
         }, 'mx_Dialog_confirmredact');
     };
 
-    _onViewSourceClick = () => {
-        const ViewSource = sdk.getComponent('structures.ViewSource');
+    private onViewSourceClick = (): void => {
         Modal.createTrackedDialog('View Event Source', 'Edit history', ViewSource, {
             mxEvent: this.props.mxEvent,
         }, 'mx_Dialog_viewsource');
     };
 
-    pillifyLinks() {
+    private pillifyLinks(): void {
         // not present for redacted events
-        if (this._content.current) {
-            pillifyLinks(this._content.current.children, this.props.mxEvent, this._pills);
+        if (this.content.current) {
+            pillifyLinks(this.content.current.children, this.props.mxEvent, this.pills);
         }
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         this.pillifyLinks();
     }
 
-    componentWillUnmount() {
-        unmountPills(this._pills);
+    public componentWillUnmount(): void {
+        unmountPills(this.pills);
         const event = this.props.mxEvent;
         if (event.localRedactionEvent()) {
-            event.localRedactionEvent().off("status", this._onAssociatedStatusChanged);
+            event.localRedactionEvent().off("status", this.onAssociatedStatusChanged);
         }
     }
 
-    componentDidUpdate() {
+    public componentDidUpdate(): void {
         this.pillifyLinks();
     }
 
-    _renderActionBar() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+    private renderActionBar(): JSX.Element {
         // hide the button when already redacted
         let redactButton;
         if (!this.props.mxEvent.isRedacted() && !this.props.isBaseEvent && this.state.canRedact) {
             redactButton = (
-                <AccessibleButton onClick={this._onRedactClick}>
+                <AccessibleButton onClick={this.onRedactClick}>
                     { _t("Remove") }
                 </AccessibleButton>
             );
         }
         const viewSourceButton = (
-            <AccessibleButton onClick={this._onViewSourceClick}>
+            <AccessibleButton onClick={this.onViewSourceClick}>
                 { _t("View Source") }
             </AccessibleButton>
         );
@@ -128,7 +133,7 @@ export default class EditHistoryMessage extends React.PureComponent {
         );
     }
 
-    render() {
+    public render(): JSX.Element {
         const { mxEvent } = this.props;
         const content = getReplacedContent(mxEvent);
         let contentContainer;
@@ -139,18 +144,22 @@ export default class EditHistoryMessage extends React.PureComponent {
             if (this.props.previousEdit) {
                 contentElements = editBodyDiffToHtml(getReplacedContent(this.props.previousEdit), content);
             } else {
-                contentElements = HtmlUtils.bodyToHtml(content, null, { stripReplyFallback: true });
+                contentElements = HtmlUtils.bodyToHtml(
+                    content,
+                    null,
+                    { stripReplyFallback: true, returnString: false },
+                );
             }
             if (mxEvent.getContent().msgtype === "m.emote") {
                 const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
                 contentContainer = (
-                    <div className="mx_EventTile_content" ref={this._content}>*&nbsp;
+                    <div className="mx_EventTile_content" ref={this.content}>*&nbsp;
                         <span className="mx_MEmoteBody_sender">{ name }</span>
                         &nbsp;{ contentElements }
                     </div>
                 );
             } else {
-                contentContainer = <div className="mx_EventTile_content" ref={this._content}>{ contentElements }</div>;
+                contentContainer = <div className="mx_EventTile_content" ref={this.content}>{ contentElements }</div>;
             }
         }
 
@@ -167,7 +176,7 @@ export default class EditHistoryMessage extends React.PureComponent {
                     <div className="mx_EventTile_line">
                         <span className="mx_MessageTimestamp">{ timestamp }</span>
                         { contentContainer }
-                        { this._renderActionBar() }
+                        { this.renderActionBar() }
                     </div>
                 </div>
             </li>
