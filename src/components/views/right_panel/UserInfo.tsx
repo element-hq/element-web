@@ -541,21 +541,6 @@ const RoomKickButton = ({ room, member, startUpdating, stopUpdating }: Omit<IBas
     if (member.membership !== "invite" && member.membership !== "join") return null;
 
     const onKick = async () => {
-        let title: string;
-        if (room.isSpaceRoom()) {
-            if (member.membership === "invite") {
-                title = _t("Disinvite this user from %(spaceName)s?", { spaceName: room.name });
-            } else {
-                title = _t("Kick this user from %(spaceName)s?", { spaceName: room.name });
-            }
-        } else {
-            if (member.membership === "invite") {
-                title = _t("Disinvite this user?");
-            } else {
-                title = _t("Kick this user?");
-            }
-        }
-
         const { finished } = Modal.createTrackedDialog(
             'Confirm User Action Dialog',
             'onKick',
@@ -563,7 +548,9 @@ const RoomKickButton = ({ room, member, startUpdating, stopUpdating }: Omit<IBas
             {
                 member,
                 action: member.membership === "invite" ? _t("Disinvite") : _t("Kick"),
-                title,
+                title: member.membership === "invite"
+                    ? _t("Disinvite from %(roomName)s", { roomName: room.name })
+                    : _t("Kick from %(roomName)s", { roomName: room.name }),
                 askReason: member.membership === "join",
                 danger: true,
                 // space-specific props
@@ -579,7 +566,7 @@ const RoomKickButton = ({ room, member, startUpdating, stopUpdating }: Omit<IBas
                 allLabel: _t("Kick them from everything I'm able to"),
                 specificLabel: _t("Kick them from specific things I'm able to"),
                 warningMessage: _t("If you're not an admin of a room or space in <SpaceName/>, " +
-                    "they'll still be able to access it after you kick them.", {}, {
+                    "they'll still be able to access whatever you're not an admin of.", {}, {
                     SpaceName: () => <b>{ room.name }</b>,
                 }),
             },
@@ -696,21 +683,6 @@ const BanToggleButton = ({ room, member, startUpdating, stopUpdating }: Omit<IBa
 
     const isBanned = member.membership === "ban";
     const onBanOrUnban = async () => {
-        let title: string;
-        if (room.isSpaceRoom()) {
-            if (isBanned) {
-                title = _t("Unban this user from %(spaceName)s?", { spaceName: room.name });
-            } else {
-                title = _t("Ban this user from %(spaceName)s?", { spaceName: room.name });
-            }
-        } else {
-            if (isBanned) {
-                title = _t("Unban this user?");
-            } else {
-                title = _t("Ban this user?");
-            }
-        }
-
         const { finished } = Modal.createTrackedDialog(
             'Confirm User Action Dialog',
             'onBanOrUnban',
@@ -718,7 +690,9 @@ const BanToggleButton = ({ room, member, startUpdating, stopUpdating }: Omit<IBa
             {
                 member,
                 action: isBanned ? _t("Unban") : _t("Ban"),
-                title,
+                title: isBanned
+                    ? _t("Unban from %(roomName)s", { roomName: room.name })
+                    : _t("Ban from %(roomName)s", { roomName: room.name }),
                 askReason: !isBanned,
                 danger: !isBanned,
                 // space-specific props
@@ -748,11 +722,11 @@ const BanToggleButton = ({ room, member, startUpdating, stopUpdating }: Omit<IBa
                     : _t("Ban them from specific things I'm able to"),
                 warningMessage: isBanned
                     ? _t("If you’re not an admin of a room or space in <SpaceName/>, " +
-                        "they won’t be unbanned from it.", {}, {
+                        "they still won't be able to access whatever you're not an admin of.", {}, {
                         SpaceName: () => <b>{ room.name }</b>,
                     })
                     : _t("If you're not an admin of a room or space in <SpaceName/>, " +
-                        "they'll still be able to access it after you ban them.", {}, {
+                        "they'll still be able to access whatever you're not an admin of.", {}, {
                         SpaceName: () => <b>{ room.name }</b>,
                     }),
             },

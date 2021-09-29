@@ -15,11 +15,11 @@ limitations under the License.
 */
 
 import React, { ComponentProps, useMemo, useState } from 'react';
+
 import ConfirmUserActionDialog from "./ConfirmUserActionDialog";
 import SpaceStore from "../../../stores/SpaceStore";
 import { Room } from "matrix-js-sdk/src/models/room";
 import SpaceChildrenPicker from "../spaces/SpaceChildrenPicker";
-import { _t } from '../../../languageHandler';
 
 type BaseProps = ComponentProps<typeof ConfirmUserActionDialog>;
 interface IProps extends Omit<BaseProps, "groupMember" | "matrixClient" | "children" | "onFinished"> {
@@ -54,14 +54,7 @@ const ConfirmSpaceUserActionDialog: React.FC<IProps> = ({
     const selectedRooms = useMemo(() => new Set(roomsToLeave), [roomsToLeave]);
 
     let warning: JSX.Element;
-    if (!spaceChildren.length) {
-        warning = <div className="mx_ConfirmSpaceUserActionDialog_warning">
-            { _t("You’re not an admin of anything they’re a member of in <SpaceName/>, " +
-                "so banning won’t remove them from any rooms or spaces in <SpaceName/>.", {}, {
-                SpaceName: () => <b>{ space.name }</b>,
-            }) }
-        </div>;
-    } else if (warningMessage) {
+    if (warningMessage) {
         warning = <div className="mx_ConfirmSpaceUserActionDialog_warning">
             { warningMessage }
         </div>;
