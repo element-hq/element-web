@@ -139,7 +139,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                         sendReadReceiptOnLoad={false} // No RR support in thread's MVP
                         timelineSet={this.state?.thread?.timelineSet}
                         showUrlPreview={true}
-                        tileShape={TileShape.Notif}
+                        tileShape={TileShape.Thread}
                         empty={<div>empty</div>}
                         alwaysShowTimestamps={true}
                         layout={Layout.Group}
