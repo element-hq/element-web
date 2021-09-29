@@ -284,7 +284,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         // non-standard DPI settings also seem to have effect here and can
         // actually lead to scrollTop+clientHeight being *larger* than
         // scrollHeight. (observed in element-desktop on Ubuntu 20.04)
-        // 
+        //
         return sn.scrollHeight - (sn.scrollTop + sn.clientHeight) <= 1;
     };
 
