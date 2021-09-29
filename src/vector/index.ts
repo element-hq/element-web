@@ -33,6 +33,7 @@ require('katex/dist/katex.css');
  * On production build it's going to be an empty module, so don't worry about that.
  */
 require('./devcss');
+require('./localstorage-fix');
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
 import { parseQsFromFragment } from "./url_utils";
 import './modernizr';
