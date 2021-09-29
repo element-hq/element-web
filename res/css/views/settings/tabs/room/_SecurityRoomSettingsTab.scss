@@ -19,37 +19,6 @@ limitations under the License.
         padding: 0;
         margin-bottom: 16px;
     }
-
-    .mx_SecurityRoomSettingsTab_spacesWithAccess {
-        > h4 {
-            color: $secondary-content;
-            font-weight: $font-semi-bold;
-            font-size: $font-12px;
-            line-height: $font-15px;
-            text-transform: uppercase;
-        }
-
-        > span {
-            font-weight: 500;
-            font-size: $font-14px;
-            line-height: 32px; // matches height of avatar for v-align
-            color: $secondary-content;
-            display: inline-block;
-
-            img.mx_RoomAvatar_isSpaceRoom,
-            .mx_RoomAvatar_isSpaceRoom img {
-                border-radius: 8px;
-            }
-
-            .mx_BaseAvatar {
-                margin-right: 8px;
-            }
-
-            & + span {
-                margin-left: 16px;
-            }
-        }
-    }
 }
 
 .mx_SecurityRoomSettingsTab_warning {
@@ -67,48 +36,4 @@ limitations under the License.
     padding-bottom: 24px;
     border-bottom: 1px solid $menu-border-color;
     margin-bottom: 32px;
-}
-
-.mx_SecurityRoomSettingsTab_upgradeRequired {
-    margin-left: 16px;
-    padding: 4px 16px;
-    border: 1px solid $accent-color;
-    border-radius: 8px;
-    color: $accent-color;
-    font-size: $font-12px;
-    line-height: $font-15px;
-}
-
-.mx_SecurityRoomSettingsTab_joinRule {
-    .mx_RadioButton {
-        padding-top: 16px;
-        margin-bottom: 8px;
-
-        .mx_RadioButton_content {
-            margin-left: 14px;
-            font-weight: $font-semi-bold;
-            font-size: $font-15px;
-            line-height: $font-24px;
-            color: $primary-content;
-            display: block;
-        }
-    }
-
-    > span {
-        display: inline-block;
-        margin-left: 34px;
-        margin-bottom: 16px;
-        font-size: $font-15px;
-        line-height: $font-24px;
-        color: $secondary-content;
-
-        & + .mx_RadioButton {
-            border-top: 1px solid $menu-border-color;
-        }
-    }
-
-    .mx_AccessibleButton_kind_link {
-        padding: 0;
-        font-size: inherit;
-    }
 }
