@@ -14,13 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
 import { ListIteratee, Many, sortBy, throttle } from "lodash";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
-import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { IRoomCapability } from "matrix-js-sdk/src/client";
 
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
@@ -41,12 +39,6 @@ import { arrayHasDiff, arrayHasOrderChange } from "../utils/arrays";
 import { objectDiff } from "../utils/objects";
 import { reorderLexicographically } from "../utils/stringOrderField";
 import { TAG_ORDER } from "../components/views/rooms/RoomList";
-import { shouldShowSpaceSettings } from "../utils/space";
-import ToastStore from "./ToastStore";
-import { _t } from "../languageHandler";
-import GenericToast from "../components/views/toasts/GenericToast";
-import Modal from "../Modal";
-import InfoDialog from "../components/views/dialogs/InfoDialog";
 import { SettingUpdatedPayload } from "../dispatcher/payloads/SettingUpdatedPayload";
 
 type SpaceKey = string | symbol;
