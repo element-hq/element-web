@@ -3158,7 +3158,7 @@
     "This room is in some spaces you’re not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Tato místnost se nachází v některých prostorech, jejichž nejste správcem. V těchto prostorech bude stará místnost stále zobrazena, ale lidé budou vyzváni, aby se připojili k nové místnosti.",
     "Before you upgrade": "Než provedete aktualizaci",
     "To join a space you'll need an invite.": "Pro připojení k prostoru potřebujete pozvánku.",
-    "You can also make Spaces from <a>communities</a>.": "Můžete také vytvořit prostory ze <a>skupin</a>.",
+    "You can also make Spaces from <a>communities</a>.": "Prostory můžete vytvořit také ze <a>skupin</a>.",
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Dočasně zobrazit skupiny místo prostorů pro tuto relaci. Podpora bude v blízké budoucnosti odstraněna. Toto provede přenačtení Elementu.",
     "Display Communities instead of Spaces": "Zobrazit skupiny místo prostorů",
     "Joining space …": "Připojování k prostoru…",
