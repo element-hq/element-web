@@ -1209,6 +1209,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             onHeightChanged={this.props.onHeightChanged}
                             tileShape={this.props.tileShape}
                             editState={this.props.editState}
+                            replacingEventId={this.props.replacingEventId}
                         />
                         { actionBar }
                     </div>,
