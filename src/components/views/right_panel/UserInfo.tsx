@@ -565,10 +565,7 @@ const RoomKickButton = ({ room, member, startUpdating, stopUpdating }: Omit<IBas
                 },
                 allLabel: _t("Kick them from everything I'm able to"),
                 specificLabel: _t("Kick them from specific things I'm able to"),
-                warningMessage: _t("If you're not an admin of a room or space in <SpaceName/>, " +
-                    "they'll still be able to access whatever you're not an admin of.", {}, {
-                    SpaceName: () => <b>{ room.name }</b>,
-                }),
+                warningMessage: _t("They'll still be able to access whatever you're not an admin of."),
             },
             room.isSpaceRoom() ? "mx_ConfirmSpaceUserActionDialog_wrapper" : undefined,
         );
@@ -721,14 +718,8 @@ const BanToggleButton = ({ room, member, startUpdating, stopUpdating }: Omit<IBa
                     ? _t("Unban them from specific things I'm able to")
                     : _t("Ban them from specific things I'm able to"),
                 warningMessage: isBanned
-                    ? _t("If you’re not an admin of a room or space in <SpaceName/>, " +
-                        "they still won't be able to access whatever you're not an admin of.", {}, {
-                        SpaceName: () => <b>{ room.name }</b>,
-                    })
-                    : _t("If you're not an admin of a room or space in <SpaceName/>, " +
-                        "they'll still be able to access whatever you're not an admin of.", {}, {
-                        SpaceName: () => <b>{ room.name }</b>,
-                    }),
+                    ? _t("They won't be able to access whatever you're not an admin of.")
+                    : _t("They'll still be able to access whatever you're not an admin of."),
             },
             room.isSpaceRoom() ? "mx_ConfirmSpaceUserActionDialog_wrapper" : undefined,
         );
