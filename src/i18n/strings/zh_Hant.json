@@ -3160,5 +3160,14 @@
     "To join a space you'll need an invite.": "若要加入空間，您必須被邀請。",
     "You can also make Spaces from <a>communities</a>.": "您也可以從<a>社群</a>建立空間。",
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "為此工作階段暫時顯示社群而非空間。對此功能的支援將在不久的將來移除。這將會重新載入 Element。",
-    "Display Communities instead of Spaces": "顯示社群而非空間"
+    "Display Communities instead of Spaces": "顯示社群而非空間",
+    "Would you like to leave the rooms in this space?": "您想要離開此空間中的聊天室嗎？",
+    "You are about to leave <spaceName/>.": "您將要離開 <spaceName/>。",
+    "Leave some rooms": "離開部份聊天室",
+    "Leave all rooms": "離開所有聊天室",
+    "Don't leave any rooms": "不要離開任何聊天室",
+    "%(reactors)s reacted with %(content)s": "%(reactors)s 使用了 %(content)s 反應",
+    "Joining space …": "正在加入空間……",
+    "Expand quotes │ ⇧+click": "展開引用 │ ⇧+點擊",
+    "Collapse quotes │ ⇧+click": "折疊引用 │ ⇧+點擊"
 }

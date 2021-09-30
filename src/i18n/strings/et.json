@@ -2705,7 +2705,7 @@
     "Invite by username": "Kutsu kasutajanime alusel",
     "What projects are you working on?": "Mis ettevõtmistega sa tegeled?",
     "Decrypted event source": "Sündmuse dekrüptitud lähtekood",
-    "Original event source": "Algse sündmuse lähtekood",
+    "Original event source": "Sündmuse töötlemata lähtekood",
     "Failed to remove some rooms. Try again later": "Mõnede jututubade eemaldamine ei õnnestunud. Proovi hiljem uuesti",
     "Removing...": "Eemaldan...",
     "Mark as not suggested": "Eemalda soovitus",
@@ -3158,5 +3158,12 @@
     "Before you upgrade": "Enne uuendamist",
     "To join a space you'll need an invite.": "Kogukonnakeskusega liitumiseks vajad kutset.",
     "%(reactors)s reacted with %(content)s": "%(reactors)s kasutajat reageeris järgnevalt: %(content)s",
-    "Joining space …": "Liitun kohukonnakeskusega…"
+    "Joining space …": "Liitun kohukonnakeskusega…",
+    "Would you like to leave the rooms in this space?": "Kas sa soovid lahkuda ka selle kogukonna jututubadest?",
+    "You are about to leave <spaceName/>.": "Sa oled lahkumas <spaceName/> kogukonnast.",
+    "Leave some rooms": "Lahku mõnedest jututubadest",
+    "Leave all rooms": "Lahku kõikidest jututubadest",
+    "Don't leave any rooms": "Ära lahku ühestki jututoast",
+    "Expand quotes │ ⇧+click": "Näita tsitaate │ ⇧+click",
+    "Collapse quotes │ ⇧+click": "Ahenda tsitaadid │ ⇧+click"
 }
