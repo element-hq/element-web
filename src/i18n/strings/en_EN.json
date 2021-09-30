@@ -2280,6 +2280,8 @@
     "<SpaceName/> has been made and everyone who was a part of the community has been invited to it.": "<SpaceName/> has been made and everyone who was a part of the community has been invited to it.",
     "To create a Space from another community, just pick the community in Preferences.": "To create a Space from another community, just pick the community in Preferences.",
     "Failed to migrate community": "Failed to migrate community",
+    "Fetching data...": "Fetching data...",
+    "Creating Space...": "Creating Space...",
     "Create Space from community": "Create Space from community",
     "A link to the Space will be put in your community description.": "A link to the Space will be put in your community description.",
     "All rooms will be added and all community members will be invited.": "All rooms will be added and all community members will be invited.",

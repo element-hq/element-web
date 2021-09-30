@@ -62,8 +62,9 @@ export default class MultiInviter {
 
     /**
      * @param {string} targetId The ID of the room or group to invite to
+     * @param {function} progressCallback optional callback, fired after each invite.
      */
-    constructor(targetId: string) {
+    constructor(targetId: string, private readonly progressCallback?: () => void) {
         if (targetId[0] === '+') {
             this.roomId = null;
             this.groupId = targetId;
@@ -181,6 +182,7 @@ export default class MultiInviter {
                 delete this.errors[address];
 
                 resolve();
+                this.progressCallback?.();
             }).catch((err) => {
                 if (this.canceled) {
                     return;
