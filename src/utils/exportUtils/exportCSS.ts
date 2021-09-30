@@ -25,7 +25,7 @@ const getExportCSS = async (): Promise<string> => {
             stylesheets.push(e.href);
         }
     });
-    let CSS: string;
+    let CSS = "";
     for (const stylesheet of stylesheets) {
         const res = await fetch(stylesheet);
         const innerText = await res.text();
