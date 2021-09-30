@@ -35,7 +35,7 @@ import { getKeyBindingsManager, MessageComposerAction } from '../../../KeyBindin
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SendHistoryManager from '../../../SendHistoryManager';
 import Modal from '../../../Modal';
-import { MsgType } from 'matrix-js-sdk/src/@types/event';
+import { MsgType, UNSTABLE_ELEMENT_REPLY_IN_THREAD } from 'matrix-js-sdk/src/@types/event';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
@@ -46,7 +46,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { withMatrixClientHOC, MatrixClientProps } from '../../../contexts/MatrixClientContext';
-import RoomContext from '../../../contexts/RoomContext';
+import RoomContext, { AppRenderingContext } from '../../../contexts/RoomContext';
 
 function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
     const html = mxEvent.getContent().formatted_body;
@@ -67,7 +67,11 @@ function getTextReplyFallback(mxEvent: MatrixEvent): string {
     return "";
 }
 
-function createEditContent(model: EditorModel, editedEvent: MatrixEvent): IContent {
+function createEditContent(
+    model: EditorModel,
+    editedEvent: MatrixEvent,
+    renderingContext?: AppRenderingContext,
+): IContent {
     const isEmote = containsEmote(model);
     if (isEmote) {
         model = stripEmoteCommand(model);
@@ -100,13 +104,19 @@ function createEditContent(model: EditorModel, editedEvent: MatrixEvent): IConte
         contentBody.formatted_body = `${htmlPrefix} * ${formattedBody}`;
     }
 
-    return Object.assign({
+    const relation = {
         "m.new_content": newContent,
         "m.relates_to": {
             "rel_type": "m.replace",
             "event_id": editedEvent.getId(),
         },
-    }, contentBody);
+    };
+
+    if (renderingContext === AppRenderingContext.Thread) {
+        relation['m.relates_to'][UNSTABLE_ELEMENT_REPLY_IN_THREAD.name] = true;
+    }
+
+    return Object.assign(relation, contentBody);
 }
 
 interface IEditMessageComposerProps extends MatrixClientProps {
@@ -132,8 +142,11 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
 
         const isRestored = this.createEditorModel();
         const ev = this.props.editState.getEvent();
+
+        const renderingContext = this.context.renderingContext;
+        const editContent = createEditContent(this.model, ev, renderingContext);
         this.state = {
-            saveDisabled: !isRestored || !this.isContentModified(createEditContent(this.model, ev)["m.new_content"]),
+            saveDisabled: !isRestored || !this.isContentModified(editContent["m.new_content"]),
         };
 
         window.addEventListener("beforeunload", this.saveStoredEditorState);
@@ -356,8 +369,8 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             const position = this.model.positionForOffset(caret.offset, caret.atNodeEnd);
             this.editorRef.current?.replaceEmoticon(position, REGEX_EMOTICON);
         }
-
-        const editContent = createEditContent(this.model, editedEvent);
+        const renderingContext = this.context.renderingContext;
+        const editContent = createEditContent(this.model, editedEvent, renderingContext);
         const newContent = editContent["m.new_content"];
 
         let shouldSend = true;
