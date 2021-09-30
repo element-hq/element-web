@@ -3161,5 +3161,7 @@
     "You are about to leave <spaceName/>.": "Ju ndan një hap nga braktisja e <spaceName/>.",
     "Leave some rooms": "Braktis disa dhoma",
     "Leave all rooms": "Braktisi krejt dhomat",
-    "Don't leave any rooms": "Mos braktis ndonjë dhomë"
+    "Don't leave any rooms": "Mos braktis ndonjë dhomë",
+    "Expand quotes │ ⇧+click": "Hapi citimet │ ⇧+klikim",
+    "Collapse quotes │ ⇧+click": "Tkurri citimet │ ⇧+klikim"
 }

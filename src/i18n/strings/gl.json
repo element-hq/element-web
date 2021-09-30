@@ -3157,5 +3157,14 @@
     "To join a space you'll need an invite.": "Para unirte a un espazo precisas un convite.",
     "You can also make Spaces from <a>communities</a>.": "Tamén podes crear Espazos a partir de <a>comunidades</a>.",
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "De xeito temporal, mostrar comunidades no lugar de Espazos durante esta sesión. Esta función vai ser eliminada en próximas versións. Reiniciará Element.",
-    "Display Communities instead of Spaces": "Mostrar Comunidades no lugar de Espazos"
+    "Display Communities instead of Spaces": "Mostrar Comunidades no lugar de Espazos",
+    "Would you like to leave the rooms in this space?": "Queres sair destas salas neste espazo?",
+    "You are about to leave <spaceName/>.": "Vas saír de <spaceName/>.",
+    "Leave some rooms": "Sair de algunhas salas",
+    "Leave all rooms": "Sair de tódalas salas",
+    "Don't leave any rooms": "Non saír de ningunha sala",
+    "%(reactors)s reacted with %(content)s": "%(reactors)s reaccionou con %(content)s",
+    "Joining space …": "Uníndote ao espazo…",
+    "Expand quotes │ ⇧+click": "Despregar citas | ⇧+click",
+    "Collapse quotes │ ⇧+click": "Pechar citas | ⇧+click"
 }
