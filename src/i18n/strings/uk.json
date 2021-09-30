@@ -2110,5 +2110,18 @@
     "There was an error finding this widget.": "Сталася помилка під час пошуку розширення.",
     "Active Widgets": "Активні розширення",
     "Verification Requests": "Запит перевірки",
-    "There was a problem communicating with the server. Please try again.": "Виникла проблема зв'язку з сервером. Повторіть спробу."
+    "There was a problem communicating with the server. Please try again.": "Виникла проблема зв'язку з сервером. Повторіть спробу.",
+    "You're not currently a member of any communities.": "Ви не приєдналися до жодної групи.",
+    "Loading...": "Завантаження...",
+    "Failed to load group members": "Не вдалося завантажити учасників групи",
+    "Can't load this message": "Не вдалося завантажити це повідомлення",
+    "Click here to see older messages.": "Клацніть тут, щоб переглянути давніші повідомлення.",
+    "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s вилучає аватар кімнати.",
+    "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith>реагує на %(shortName)s</reactedWith>",
+    "%(reactors)s reacted with %(content)s": "%(reactors)s реагує на %(content)s",
+    "Reactions": "Реакції",
+    "Add reaction": "Додати реакцію",
+    "%(senderDisplayName)s sent a sticker.": "%(senderDisplayName)s надсилає наліпку.",
+    "%(senderDisplayName)s changed the room avatar.": "%(senderDisplayName)s змінює аватар кімнати.",
+    "%(date)s at %(time)s": "%(date)s о %(time)s"
 }
