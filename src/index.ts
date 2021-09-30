@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,12 +15,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/** The types of page which can be shown by the LoggedInView */
-export default {
-    HomePage: "home_page",
-    RoomView: "room_view",
-    RoomDirectory: "room_directory",
-    UserView: "user_view",
-    GroupView: "group_view",
-    MyGroups: "my_groups",
-};
+import Skinner, { ISkinObject } from './Skinner';
+
+export function loadSkin(skinObject: ISkinObject): void {
+    Skinner.load(skinObject);
+}
+
+export function resetSkin(): void {
+    Skinner.reset();
+}
+
+export function getComponent(componentName: string): any {
+    return Skinner.getComponent(componentName);
+}
+
+// Import the js-sdk so the proper `request` object can be set. This does some
+// magic with the browser injection to make all subsequent imports work fine.
+import "matrix-js-sdk";
+

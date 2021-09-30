@@ -16,8 +16,8 @@ limitations under the License.
 
 // Returns a promise which resolves when the input promise resolves with its value
 // or when the timeout of ms is reached with the value of given timeoutValue
-export async function timeout<T>(promise: Promise<T>, timeoutValue: T, ms: number): Promise<T> {
-    const timeoutPromise = new Promise<T>((resolve) => {
+export async function timeout<T, Y>(promise: Promise<T>, timeoutValue: Y, ms: number): Promise<T | Y> {
+    const timeoutPromise = new Promise<T | Y>((resolve) => {
         const timeoutId = setTimeout(resolve, ms, timeoutValue);
         promise.then(() => {
             clearTimeout(timeoutId);
