@@ -123,6 +123,11 @@ export default class MFileBody extends React.Component<IProps, IState> {
         this.state = {};
     }
 
+    private getContentUrl(): string | null {
+        if (this.props.forExport) return null;
+        const media = mediaFromContent(this.props.mxEvent.getContent());
+        return media.srcHttp;
+    }
     private get content(): IMediaEventContent {
         return this.props.mxEvent.getContent<IMediaEventContent>();
     }
@@ -147,11 +152,6 @@ export default class MFileBody extends React.Component<IProps, IState> {
                 textContent: _t("Download %(text)s", { text }),
             },
         });
-    }
-
-    private getContentUrl(): string {
-        const media = mediaFromContent(this.props.mxEvent.getContent());
-        return media.srcHttp;
     }
 
     public componentDidUpdate(prevProps, prevState) {
@@ -211,6 +211,16 @@ export default class MFileBody extends React.Component<IProps, IState> {
                     </TextWithTooltip>
                 </AccessibleButton>
             );
+        }
+
+        if (this.props.forExport) {
+            const content = this.props.mxEvent.getContent();
+            // During export, the content url will point to the MSC, which will later point to a local url
+            return <span className="mx_MFileBody">
+                <a href={content.file?.url || content.url}>
+                    { placeholder }
+                </a>
+            </span>;
         }
 
         const showDownloadLink = this.props.tileShape || !this.props.showGenericPlaceholder;

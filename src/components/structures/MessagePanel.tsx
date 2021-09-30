@@ -60,7 +60,7 @@ const groupedEvents = [
 
 // check if there is a previous event and it has the same sender as this event
 // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
-function shouldFormContinuation(
+export function shouldFormContinuation(
     prevEvent: MatrixEvent,
     mxEvent: MatrixEvent,
     showHiddenEvents: boolean,

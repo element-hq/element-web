@@ -29,7 +29,6 @@ interface IProps {
 
 const RedactedBody = React.forwardRef<any, IProps | IBodyProps>(({ mxEvent }, ref) => {
     const cli: MatrixClient = useContext(MatrixClientContext);
-
     let text = _t("Message deleted");
     const unsigned = mxEvent.getUnsigned();
     const redactedBecauseUserId = unsigned && unsigned.redacted_because && unsigned.redacted_because.sender;

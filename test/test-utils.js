@@ -112,6 +112,7 @@ export function createTestClient() {
  * @param {number=} opts.ts   Optional. Timestamp for the event
  * @param {Object} opts.content The event.content
  * @param {boolean} opts.event True to make a MatrixEvent.
+ * @param {unsigned=} opts.unsigned
  * @return {Object} a JSON object representing this event.
  */
 export function mkEvent(opts) {
@@ -166,12 +167,13 @@ export function mkPresence(opts) {
  * @param {string} opts.room The room ID for the event.
  * @param {string} opts.mship The content.membership for the event.
  * @param {string} opts.prevMship The prev_content.membership for the event.
+ * @param {number=} opts.ts   Optional. Timestamp for the event
  * @param {string} opts.user The user ID for the event.
  * @param {RoomMember} opts.target The target of the event.
- * @param {string} opts.skey The other user ID for the event if applicable
+ * @param {string=} opts.skey The other user ID for the event if applicable
  * e.g. for invites/bans.
  * @param {string} opts.name The content.displayname for the event.
- * @param {string} opts.url The content.avatar_url for the event.
+ * @param {string=} opts.url The content.avatar_url for the event.
  * @param {boolean} opts.event True to make a MatrixEvent.
  * @return {Object|MatrixEvent} The event
  */
@@ -203,8 +205,9 @@ export function mkMembership(opts) {
  * @param {Object} opts Values for the message
  * @param {string} opts.room The room ID for the event.
  * @param {string} opts.user The user ID for the event.
- * @param {string} opts.msg Optional. The content.body for the event.
+ * @param {number} opts.ts The timestamp for the event.
  * @param {boolean} opts.event True to make a MatrixEvent.
+ * @param {string=} opts.msg Optional. The content.body for the event.
  * @return {Object|MatrixEvent} The event
  */
 export function mkMessage(opts) {
