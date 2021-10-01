@@ -31,15 +31,6 @@ $tertiary-fg-color: $primary-fg-color;
 $primary-bg-color: #ffffff;
 $muted-fg-color: #61708b; // Commonly used in headings and relevant alt text
 
-// Legacy theme backports
-$primary-content: $primary-fg-color;
-$secondary-content: $secondary-fg-color;
-$tertiary-content: $tertiary-fg-color;
-$quaternary-content: #C1C6CD;
-$quinary-content: #e3e8f0;
-$background: $primary-bg-color;
-$panel-actions: $roomtile-selected-bg-color;
-
 // used for dialog box text
 $light-fg-color: #747474;
 
@@ -296,6 +287,16 @@ $progressbar-bg-color: rgba(141, 151, 165, 0.2);
 
 $room-warning-bg-color: $yellow-background;
 
+// Legacy theme backports
+$primary-content: $primary-fg-color;
+$secondary-content: $secondary-fg-color;
+$tertiary-content: $tertiary-fg-color;
+$quaternary-content: #6F7882;
+$quinary-content: $quaternary-content;
+$background: $primary-bg-color;
+$panel-actions: $roomtile-selected-bg-color;
+// Legacy theme backports
+
 $memberstatus-placeholder-color: $muted-fg-color;
 
 $authpage-bg-color: #2e3649;
@@ -347,6 +348,15 @@ $eventbubble-others-bg: $system;
 $eventbubble-bg-hover: #FAFBFD;
 $eventbubble-avatar-outline: #fff;
 $eventbubble-reply-color: #C1C6CD;
+
+// Legacy theme backports
+$primary-content: $primary-fg-color;
+$secondary-content: $secondary-fg-color;
+$tertiary-content: $tertiary-fg-color;
+$quaternary-content: #C1C6CD;
+$quinary-content: #e3e8f0;
+$background: $primary-bg-color;
+$panel-actions: $roomtile-selected-bg-color;
 
 // ***** Mixins! *****
 
