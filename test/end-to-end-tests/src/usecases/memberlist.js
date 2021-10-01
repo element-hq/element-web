@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 const assert = require('assert');
-const {openRoomSummaryCard} = require("./rightpanel");
+const { openRoomSummaryCard } = require("./rightpanel");
 
 async function openMemberInfo(session, name) {
     const membersAndNames = await getMembersInMemberlist(session);
@@ -49,7 +49,6 @@ module.exports.verifyDeviceForUser = async function(session, name, expectedDevic
     const sasLabels = await Promise.all(sasLabelElements.map(e => session.innerText(e)));
     console.log("my sas labels", sasLabels);
 
-
     const dialogCodeFields = await session.queryAll(".mx_QuestionDialog code");
     assert.equal(dialogCodeFields.length, 2);
     const deviceId = await session.innerText(dialogCodeFields[0]);
@@ -71,7 +70,7 @@ async function getMembersInMemberlist(session) {
 
     const memberNameElements = await session.queryAll(".mx_MemberList .mx_EntityTile_name");
     return Promise.all(memberNameElements.map(async (el) => {
-        return {label: el, displayName: await session.innerText(el)};
+        return { label: el, displayName: await session.innerText(el) };
     }));
 }
 

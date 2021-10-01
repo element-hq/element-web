@@ -22,10 +22,11 @@ export interface IToast<C extends ComponentClass> {
     key: string;
     // higher priority number will be shown on top of lower priority
     priority: number;
-    title: string;
+    title?: string;
     icon?: string;
     component: C;
     className?: string;
+    bodyClassName?: string;
     props?: Omit<React.ComponentProps<C>, "toastKey">; // toastKey is injected by ToastContainer
 }
 

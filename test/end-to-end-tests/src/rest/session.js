@@ -17,7 +17,7 @@ limitations under the License.
 const request = require('request-promise-native');
 const Logger = require('../logger');
 const RestRoom = require('./room');
-const {approveConsent} = require('./consent');
+const { approveConsent } = require('./consent');
 
 module.exports = class RestSession {
     constructor(credentials) {

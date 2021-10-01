@@ -1,3 +1,6 @@
+// Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A741
+$system: #21262C;
+
 // unified palette
 // try to use these colors when possible
 $bg-color: #181b21;
@@ -19,6 +22,14 @@ $secondary-fg-color: $primary-fg-color;
 $tertiary-fg-color: $primary-fg-color;
 $primary-bg-color: $bg-color;
 $muted-fg-color: $header-panel-text-primary-color;
+
+// Legacy theme backports
+$primary-content: $primary-fg-color;
+$secondary-content: $secondary-fg-color;
+$tertiary-content: $tertiary-fg-color;
+$quaternary-content: #6F7882;
+$quinary-content: $quaternary-content;
+$background: $primary-bg-color;
 
 // used for dialog box text
 $light-fg-color: $header-panel-text-secondary-color;
@@ -108,12 +119,10 @@ $eventtile-meta-color: $roomtopic-color;
 $header-divider-color: $header-panel-text-primary-color;
 $composer-e2e-icon-color: $header-panel-text-primary-color;
 
-// this probably shouldn't have it's own colour
-$voipcall-plinth-color: #394049;
-
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
+
 
 $roomlist-button-bg-color: #1A1D23; // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-filter-active-bg-color: $roomlist-button-bg-color;
@@ -193,22 +202,10 @@ $kbd-border-color: #000000;
 $tooltip-timeline-bg-color: $groupFilterPanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
 
-$interactive-tooltip-bg-color: $base-color;
-$interactive-tooltip-fg-color: #ffffff;
-
 $breadcrumb-placeholder-bg-color: #272c35;
-
-$user-tile-hover-bg-color: $header-panel-bg-color;
-
-$message-body-panel-fg-color: $secondary-fg-color;
-$message-body-panel-bg-color: #394049;
-$message-body-panel-icon-fg-color: $primary-bg-color;
-$message-body-panel-icon-bg-color: $secondary-fg-color;
 
 // See non-legacy dark for variable information
 $voice-record-stop-border-color: #6F7882;
-$voice-record-waveform-bg-color: $message-body-panel-bg-color;
-$voice-record-waveform-fg-color: $message-body-panel-fg-color;
 $voice-record-waveform-incomplete-fg-color: #6F7882;
 $voice-record-icon-color: #6F7882;
 $voice-playback-button-bg-color: $tertiary-fg-color;
@@ -218,6 +215,13 @@ $voice-playback-button-fg-color: #21262C;
 $appearance-tab-border-color: $room-highlight-color;
 
 $composer-shadow-color: tranparent;
+
+// Bubble tiles
+$eventbubble-self-bg: #14322E;
+$eventbubble-others-bg: $event-selected-color;
+$eventbubble-bg-hover: #1C2026;
+$eventbubble-avatar-outline: $bg-color;
+$eventbubble-reply-color: #C1C6CD;
 
 // ***** Mixins! *****
 
@@ -246,7 +250,7 @@ $composer-shadow-color: tranparent;
 @define-mixin mx_DialogButton_secondary {
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color ! important;
+    border: 1px solid $accent-color !important;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
 }
@@ -264,18 +268,7 @@ $composer-shadow-color: tranparent;
 }
 
 // markdown overrides:
-.mx_EventTile_content .markdown-body pre:hover {
-    border-color: #808080 !important; // inverted due to rules below
-}
 .mx_EventTile_content .markdown-body {
-    pre, code {
-        filter: invert(1);
-    }
-
-    pre code {
-        filter: none;
-    }
-
     table {
         tr {
             background-color: #000000;
@@ -287,12 +280,7 @@ $composer-shadow-color: tranparent;
     }
 }
 
-// diff highlight colors
-// intentionally swapped to avoid inversion
-.hljs-addition {
-    background: #fdd;
-}
-
-.hljs-deletion {
-    background: #dfd;
+// highlight.js overrides:
+.hljs-tag {
+    color: inherit; // Without this they'd be weirdly blue which doesn't match the theme
 }

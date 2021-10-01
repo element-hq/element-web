@@ -191,10 +191,10 @@ export default class UserActivity {
             this.lastScreenY = event.screenY;
         }
 
-        dis.dispatch({action: 'user_activity'});
+        dis.dispatch({ action: 'user_activity' });
         if (!this.activeNowTimeout.isRunning()) {
             this.activeNowTimeout.start();
-            dis.dispatch({action: 'user_activity_start'});
+            dis.dispatch({ action: 'user_activity_start' });
 
             UserActivity.runTimersUntilTimeout(this.attachedActiveNowTimers, this.activeNowTimeout);
         } else {

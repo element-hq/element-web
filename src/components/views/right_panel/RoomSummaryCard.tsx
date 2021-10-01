@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useCallback, useState, useEffect, useContext} from "react";
+import React, { useCallback, useState, useEffect, useContext } from "react";
 import classNames from "classnames";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useIsEncrypted } from '../../../hooks/useIsEncrypted';
@@ -25,28 +25,29 @@ import { _t } from '../../../languageHandler';
 import RoomAvatar from "../avatars/RoomAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {Action} from "../../../dispatcher/actions";
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
-import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
+import { Action } from "../../../dispatcher/actions";
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
+import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import Modal from "../../../Modal";
 import ShareDialog from '../dialogs/ShareDialog';
-import {useEventEmitter} from "../../../hooks/useEventEmitter";
+import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import WidgetUtils from "../../../utils/WidgetUtils";
-import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
+import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
 import TextWithTooltip from "../elements/TextWithTooltip";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import WidgetStore, {IApp} from "../../../stores/WidgetStore";
+import WidgetStore, { IApp } from "../../../stores/WidgetStore";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import RoomContext from "../../../contexts/RoomContext";
-import {UIFeature} from "../../../settings/UIFeature";
-import {ChevronFace, ContextMenuTooltipButton, useContextMenu} from "../../structures/ContextMenu";
+import { UIFeature } from "../../../settings/UIFeature";
+import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
-import {useRoomMemberCount} from "../../../hooks/useRoomMembers";
+import { useRoomMemberCount } from "../../../hooks/useRoomMembers";
 import { Container, MAX_PINNED, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import RoomName from "../elements/RoomName";
 import UIStore from "../../../stores/UIStore";
+import ExportDialog from "../dialogs/ExportDialog";
 
 interface IProps {
     room: Room;
@@ -148,7 +149,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
             yOffset={-48}
         >
             <WidgetAvatar app={app} />
-            <span>{name}</span>
+            <span>{ name }</span>
             { subtitle }
         </AccessibleTooltipButton>
 
@@ -220,6 +221,13 @@ const onRoomFilesClick = () => {
     });
 };
 
+const onRoomThreadsClick = () => {
+    defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
+        action: Action.SetRightPanelPhase,
+        phase: RightPanelPhases.ThreadPanel,
+    });
+};
+
 const onRoomSettingsClick = () => {
     defaultDispatcher.dispatch({ action: "open_room_settings" });
 };
@@ -230,6 +238,12 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
     const onShareRoomClick = () => {
         Modal.createTrackedDialog('share room dialog', '', ShareDialog, {
             target: room,
+        });
+    };
+
+    const onRoomExportClick = async () => {
+        Modal.createTrackedDialog('export room dialog', '', ExportDialog, {
+            room,
         });
     };
 
@@ -256,7 +270,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
                 <h2 title={name}>
                     { name }
                 </h2>
-            )}
+            ) }
         </RoomName>
         <div className="mx_RoomSummaryCard_alias" title={alias}>
             { alias }
@@ -268,16 +282,24 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
     return <BaseCard header={header} className="mx_RoomSummaryCard" onClose={onClose}>
         <Group title={_t("About")} className="mx_RoomSummaryCard_aboutGroup">
             <Button className="mx_RoomSummaryCard_icon_people" onClick={onRoomMembersClick}>
-                {_t("%(count)s people", { count: memberCount })}
+                { _t("%(count)s people", { count: memberCount }) }
             </Button>
             <Button className="mx_RoomSummaryCard_icon_files" onClick={onRoomFilesClick}>
-                {_t("Show files")}
+                { _t("Show files") }
             </Button>
+            <Button className="mx_RoomSummaryCard_icon_export" onClick={onRoomExportClick}>
+                { _t("Export chat") }
+            </Button>
+            { SettingsStore.getValue("feature_thread") && (
+                <Button className="mx_RoomSummaryCard_icon_threads" onClick={onRoomThreadsClick}>
+                    { _t("Show threads") }
+                </Button>
+            ) }
             <Button className="mx_RoomSummaryCard_icon_share" onClick={onShareRoomClick}>
-                {_t("Share room")}
+                { _t("Share room") }
             </Button>
             <Button className="mx_RoomSummaryCard_icon_settings" onClick={onRoomSettingsClick}>
-                {_t("Room settings")}
+                { _t("Room settings") }
             </Button>
         </Group>
 

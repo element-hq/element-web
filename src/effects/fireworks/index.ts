@@ -26,7 +26,7 @@ export type FireworksOptions = {
      * gravity value that firework adds to shift from it's start position
      */
     gravity: number;
-}
+};
 
 type FireworksParticle = {
     /**
@@ -52,7 +52,7 @@ type FireworksParticle = {
      */
     w: number;
     h: number;
-}
+};
 
 export const DefaultOptions: FireworksOptions = {
     maxCount: 500,
@@ -63,7 +63,7 @@ export default class Fireworks implements ICanvasEffect {
     private readonly options: FireworksOptions;
 
     constructor(options: { [key: string]: any }) {
-        this.options = {...DefaultOptions, ...options};
+        this.options = { ...DefaultOptions, ...options };
     }
 
     private context: CanvasRenderingContext2D | null = null;
@@ -81,14 +81,14 @@ export default class Fireworks implements ICanvasEffect {
         if (timeout) {
             window.setTimeout(this.stop, timeout);
         }
-    }
+    };
 
     private updateWorld = () => {
         if (!this.isRunning && this.particles.length === 0) return;
         this.update();
         this.paint();
         this.supportsAnimationFrame.call(window, this.updateWorld);
-    }
+    };
 
     private update = () => {
         if (this.particles.length < this.options.maxCount && this.isRunning) {
@@ -101,7 +101,7 @@ export default class Fireworks implements ICanvasEffect {
             }
         }
         this.particles = alive;
-    }
+    };
 
     private paint = () => {
         if (!this.context || !this.context.canvas) return;
@@ -112,7 +112,7 @@ export default class Fireworks implements ICanvasEffect {
         for (let i=0; i<this.particles.length; i++) {
             this.drawParticle(this.particles[i]);
         }
-    }
+    };
 
     private createFirework = () => {
         if (!this.context || !this.context.canvas) return;
@@ -138,11 +138,11 @@ export default class Fireworks implements ICanvasEffect {
             }
             this.particles.push(particle);
         }
-    }
+    };
 
     public stop = async () => {
         this.isRunning = false;
-    }
+    };
 
     private drawParticle = (particle: FireworksParticle): void => {
         if (!this.context || !this.context.canvas) {
@@ -159,8 +159,7 @@ export default class Fireworks implements ICanvasEffect {
         this.context.closePath();
         this.context.fill();
         this.context.restore();
-    }
-
+    };
 
     private move = (particle: FireworksParticle) => {
         particle.x += particle.vx;
@@ -170,5 +169,5 @@ export default class Fireworks implements ICanvasEffect {
         return !(particle.x <= -particle.w || particle.x >= screen.width ||
             particle.y >= screen.height ||
             particle.alpha <= 0);
-    }
+    };
 }

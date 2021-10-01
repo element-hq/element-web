@@ -48,7 +48,7 @@ export default class GroupHeaderButtons extends HeaderButtons {
     protected onAction(payload: ActionPayload) {
         if (payload.action === Action.ViewUser) {
             if ((payload as ViewUserPayload).member) {
-                this.setPhase(RightPanelPhases.RoomMemberInfo, {member: payload.member});
+                this.setPhase(RightPanelPhases.RoomMemberInfo, { member: payload.member });
             } else {
                 this.setPhase(RightPanelPhases.GroupMemberList);
             }
@@ -57,14 +57,14 @@ export default class GroupHeaderButtons extends HeaderButtons {
         } else if (payload.action === "view_group_room") {
             this.setPhase(
                 RightPanelPhases.GroupRoomInfo,
-                {groupRoomId: payload.groupRoomId, groupId: payload.groupId},
+                { groupRoomId: payload.groupRoomId, groupId: payload.groupId },
             );
         } else if (payload.action === "view_group_room_list") {
             this.setPhase(RightPanelPhases.GroupRoomList);
         } else if (payload.action === "view_group_member_list") {
             this.setPhase(RightPanelPhases.GroupMemberList);
         } else if (payload.action === "view_group_user") {
-            this.setPhase(RightPanelPhases.GroupMemberInfo, {member: payload.member});
+            this.setPhase(RightPanelPhases.GroupMemberInfo, { member: payload.member });
         }
     }
 

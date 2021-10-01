@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const {exec} = require('child_process');
+const { exec } = require('child_process');
 const request = require('request-promise-native');
 const RestSession = require('./session');
 const RestMultiSession = require('./multi');
@@ -26,7 +26,7 @@ function execAsync(command, options) {
             if (error) {
                 reject(error);
             } else {
-                resolve({stdout, stderr});
+                resolve({ stdout, stderr });
             }
         });
     });
@@ -67,7 +67,7 @@ module.exports = class RestSessionCreator {
             registerCmd,
         ].join(' && ');
 
-        await execAsync(allCmds, {cwd: this.cwd, encoding: 'utf-8'});
+        await execAsync(allCmds, { cwd: this.cwd, encoding: 'utf-8' });
     }
 
     async _authenticate(username, password) {
@@ -80,7 +80,7 @@ module.exports = class RestSessionCreator {
             "password": password,
         };
         const url = `${this.hsUrl}/_matrix/client/r0/login`;
-        const responseBody = await request.post({url, json: true, body: requestBody});
+        const responseBody = await request.post({ url, json: true, body: requestBody });
         return {
             accessToken: responseBody.access_token,
             homeServer: responseBody.home_server,

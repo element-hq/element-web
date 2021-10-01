@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {clamp, defaultNumber, percentageOf, percentageWithin, sum} from "../../src/utils/numbers";
+import { clamp, defaultNumber, percentageOf, percentageWithin, sum } from "../../src/utils/numbers";
 
 describe('numbers', () => {
     describe('defaultNumber', () => {

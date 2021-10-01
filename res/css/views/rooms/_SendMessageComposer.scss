@@ -29,8 +29,10 @@ limitations under the License.
         display: flex;
         flex-direction: column;
         // min-height at this level so the mx_BasicMessageComposer_input
-        // still stays vertically centered when less than 50px
-        min-height: 50px;
+        // still stays vertically centered when less than 55px.
+        // We also set this to ensure the voice message recording widget
+        // doesn't cause a jump.
+        min-height: 55px;
 
         .mx_BasicMessageComposer_input {
             padding: 3px 0;

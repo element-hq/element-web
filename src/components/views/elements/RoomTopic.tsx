@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useEffect, useState} from "react";
-import {EventType} from "matrix-js-sdk/src/@types/event";
-import {Room} from "matrix-js-sdk/src/models/room";
+import React, { useEffect, useState } from "react";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import { Room } from "matrix-js-sdk/src/models/room";
 
-import {useEventEmitter} from "../../../hooks/useEventEmitter";
-import {linkifyElement} from "../../../HtmlUtils";
+import { useEventEmitter } from "../../../hooks/useEventEmitter";
+import { linkifyElement } from "../../../HtmlUtils";
 
 interface IProps {
     room?: Room;

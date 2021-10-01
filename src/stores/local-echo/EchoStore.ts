@@ -77,10 +77,10 @@ export class EchoStore extends AsyncStoreWithClient<IState> {
 
         if (hasOrHadError && !this.state.toastRef) {
             const ref = NonUrgentToastStore.instance.addToast(NonUrgentEchoFailureToast);
-            await this.updateState({toastRef: ref});
+            await this.updateState({ toastRef: ref });
         } else if (!hasOrHadError && this.state.toastRef) {
             NonUrgentToastStore.instance.removeToast(this.state.toastRef);
-            await this.updateState({toastRef: null});
+            await this.updateState({ toastRef: null });
         }
     }
 

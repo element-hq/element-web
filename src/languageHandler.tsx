@@ -27,7 +27,9 @@ import PlatformPeg from "./PlatformPeg";
 // @ts-ignore - $webapp is a webpack resolve alias pointing to the output directory, see webpack config
 import webpackLangJsonUrl from "$webapp/i18n/languages.json";
 import { SettingLevel } from "./settings/SettingLevel";
-import {retry} from "./utils/promise";
+import { retry } from "./utils/promise";
+
+import { logger } from "matrix-js-sdk/src/logger";
 
 const i18nFolder = 'i18n/';
 
@@ -67,7 +69,7 @@ export function getUserLanguage(): string {
 
 // Function which only purpose is to mark that a string is translatable
 // Does not actually do anything. It's helpful for automatic extraction of translatable strings
-export function _td(s: string): string {
+export function _td(s: string): string { // eslint-disable-line @typescript-eslint/naming-convention
     return s;
 }
 
@@ -100,7 +102,7 @@ function safeCounterpartTranslate(text: string, options?: object) {
     if (translated === undefined && count !== undefined) {
         // counterpart does not do fallback if no pluralisation exists
         // in the preferred language, so do it here
-        translated = counterpart.translate(text, Object.assign({}, options, {locale: 'en'}));
+        translated = counterpart.translate(text, Object.assign({}, options, { locale: 'en' }));
     }
     return translated;
 }
@@ -112,7 +114,7 @@ export interface IVariables {
     [key: string]: SubstitutionValue;
 }
 
-type Tags = Record<string, SubstitutionValue>;
+export type Tags = Record<string, SubstitutionValue>;
 
 export type TranslatedString = string | React.ReactNode;
 
@@ -132,6 +134,8 @@ export type TranslatedString = string | React.ReactNode;
  *
  * @return a React <span> component if any non-strings were used in substitutions, otherwise a string
  */
+// eslint-next-line @typescript-eslint/naming-convention
+// eslint-nexline @typescript-eslint/naming-convention
 export function _t(text: string, variables?: IVariables): string;
 export function _t(text: string, variables: IVariables, tags: Tags): React.ReactNode;
 export function _t(text: string, variables?: IVariables, tags?: Tags): TranslatedString {
@@ -151,11 +155,22 @@ export function _t(text: string, variables?: IVariables, tags?: Tags): Translate
         if (typeof substituted === 'string') {
             return `@@${text}##${substituted}@@`;
         } else {
-            return <span className='translated-string' data-orig-string={text}>{substituted}</span>;
+            return <span className='translated-string' data-orig-string={text}>{ substituted }</span>;
         }
     } else {
         return substituted;
     }
+}
+
+/**
+ * Sanitizes unsafe text for the sanitizer, ensuring references to variables will not be considered
+ * replaceable by the translation functions.
+ * @param {string} text The text to sanitize.
+ * @returns {string} The sanitized text.
+ */
+export function sanitizeForTranslation(text: string): string {
+    // Add a non-breaking space so the regex doesn't trigger when translating.
+    return text.replace(/%\(([^)]*)\)/g, '%\xa0($1)');
 }
 
 /*
@@ -295,7 +310,7 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
             // However, not showing count is so common that it's not worth logging. And other commonly unused variables
             // here, if there are any.
             if (regexpString !== '%\\(count\\)s') {
-                console.log(`Could not find ${regexp} in ${text}`);
+                logger.log(`Could not find ${regexp} in ${text}`);
             }
         }
     }
@@ -348,7 +363,7 @@ export function setLanguage(preferredLangs: string | string[]) {
         SettingsStore.setValue("language", null, SettingLevel.DEVICE, langToUse);
         // Adds a lot of noise to test runs, so disable logging there.
         if (process.env.NODE_ENV !== "test") {
-            console.log("set language to " + langToUse);
+            logger.log("set language to " + langToUse);
         }
 
         // Set 'en' as fallback language:
@@ -505,7 +520,7 @@ function weblateToCounterpart(inTrs: object): object {
 
 async function getLanguageRetry(langPath: string, num = 3): Promise<object> {
     return retry(() => getLanguage(langPath), num, e => {
-        console.log("Failed to load i18n", langPath);
+        logger.log("Failed to load i18n", langPath);
         console.error(e);
         return true; // always retry
     });

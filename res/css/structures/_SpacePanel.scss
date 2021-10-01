@@ -20,18 +20,20 @@ $gutterSize: 16px;
 $activeBorderTransparentGap: 1px;
 
 $activeBackgroundColor: $roomtile-selected-bg-color;
-$activeBorderColor: $secondary-fg-color;
+$activeBorderColor: $secondary-content;
 
 .mx_SpacePanel {
-    flex: 0 0 auto;
     background-color: $groupFilterPanel-bg-color;
+    flex: 0 0 auto;
     padding: 0;
     margin: 0;
+    position: relative;
+    // Fix for the blurred avatar-background
+    z-index: 1;
 
     // Create another flexbox so the Panel fills the container
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
 
     .mx_SpacePanel_spaceTreeWrapper {
         flex: 1;
@@ -69,6 +71,12 @@ $activeBorderColor: $secondary-fg-color;
         cursor: pointer;
     }
 
+    .mx_SpaceItem_dragging {
+        .mx_SpaceButton_toggleCollapse {
+            visibility: hidden;
+        }
+    }
+
     .mx_SpaceTreeLevel {
         display: flex;
         flex-direction: column;
@@ -95,6 +103,16 @@ $activeBorderColor: $secondary-fg-color;
         }
     }
 
+    .mx_SpaceItem_new {
+        position: relative;
+
+        .mx_BetaDot {
+            position: absolute;
+            left: 33px;
+            top: -5px;
+        }
+    }
+
     .mx_SpaceItem:not(.hasSubSpaces) > .mx_SpaceButton {
         margin-left: $gutterSize;
         min-width: 40px;
@@ -106,6 +124,7 @@ $activeBorderColor: $secondary-fg-color;
         align-items: center;
         padding: 4px 4px 4px 0;
         width: 100%;
+        cursor: pointer;
 
         &.mx_SpaceButton_active {
             &:not(.mx_SpaceButton_narrow) .mx_SpaceButton_selectionWrapper {
@@ -130,7 +149,6 @@ $activeBorderColor: $secondary-fg-color;
         &:not(.mx_SpaceButton_narrow) {
             .mx_SpaceButton_selectionWrapper {
                 width: 100%;
-                padding-right: 16px;
                 overflow: hidden;
             }
         }
@@ -142,7 +160,6 @@ $activeBorderColor: $secondary-fg-color;
             display: block;
             text-overflow: ellipsis;
             overflow: hidden;
-            padding-right: 8px;
             font-size: $font-14px;
             line-height: $font-18px;
         }
@@ -187,22 +204,17 @@ $activeBorderColor: $secondary-fg-color;
         }
 
         &.mx_SpaceButton_new .mx_SpaceButton_icon {
-            background-color: $accent-color;
-            transition: all .1s ease-in-out; // TODO transition
+            background-color: $roomlist-button-bg-color;
 
             &::before {
-                background-color: #ffffff;
+                background-color: $primary-content;
                 mask-image: url('$(res)/img/element-icons/plus.svg');
                 transition: all .2s ease-in-out; // TODO transition
             }
         }
 
-        &.mx_SpaceButton_newCancel .mx_SpaceButton_icon {
-            background-color: $icon-button-color;
-
-            &::before {
-                transform: rotate(45deg);
-            }
+        &.mx_SpaceButton_newCancel .mx_SpaceButton_icon::before {
+            transform: rotate(45deg);
         }
 
         .mx_BaseAvatar_image {
@@ -216,8 +228,7 @@ $activeBorderColor: $secondary-fg-color;
             margin-top: auto;
             margin-bottom: auto;
             display: none;
-            position: absolute;
-            right: 4px;
+            position: relative;
 
             &::before {
                 top: 2px;
@@ -230,14 +241,12 @@ $activeBorderColor: $secondary-fg-color;
                 mask-size: contain;
                 mask-repeat: no-repeat;
                 mask-image: url('$(res)/img/element-icons/context-menu.svg');
-                background: $primary-fg-color;
+                background: $primary-content;
             }
         }
     }
 
     .mx_SpacePanel_badgeContainer {
-        position: absolute;
-
         // Create a flexbox to make aligning dot badges easier
         display: flex;
         align-items: center;
@@ -255,6 +264,7 @@ $activeBorderColor: $secondary-fg-color;
     &.collapsed {
         .mx_SpaceButton {
             .mx_SpacePanel_badgeContainer {
+                position: absolute;
                 right: 0;
                 top: 0;
 
@@ -284,19 +294,12 @@ $activeBorderColor: $secondary-fg-color;
     }
 
     &:not(.collapsed) {
-        .mx_SpacePanel_badgeContainer {
-            position: absolute;
-            right: 4px;
-        }
-
         .mx_SpaceButton:hover,
         .mx_SpaceButton:focus-within,
         .mx_SpaceButton_hasMenuOpen {
-            &:not(.mx_SpaceButton_home):not(.mx_SpaceButton_invite) {
+            &:not(.mx_SpaceButton_invite) {
                 // Hide the badge container on hover because it'll be a menu button
                 .mx_SpacePanel_badgeContainer {
-                    width: 0;
-                    height: 0;
                     display: none;
                 }
 
@@ -362,6 +365,14 @@ $activeBorderColor: $secondary-fg-color;
 
     .mx_SpacePanel_iconExplore::before {
         mask-image: url('$(res)/img/element-icons/roomlist/browse.svg');
+    }
+
+    .mx_SpacePanel_noIcon {
+        display: none;
+
+        & + .mx_IconizedContextMenu_label {
+            padding-left: 5px !important; // override default iconized label style to align with header
+        }
     }
 }
 

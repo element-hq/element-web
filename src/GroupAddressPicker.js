@@ -19,7 +19,7 @@ import Modal from './Modal';
 import * as sdk from './';
 import MultiInviter from './utils/MultiInviter';
 import { _t } from './languageHandler';
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { MatrixClientPeg } from './MatrixClientPeg';
 import GroupStore from './stores/GroupStore';
 import StyledCheckbox from './components/views/elements/StyledCheckbox';
 
@@ -103,7 +103,7 @@ function _onGroupInviteFinished(groupId, addrs) {
         if (errorList.length > 0) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to invite the following users to the group', '', ErrorDialog, {
-                title: _t("Failed to invite the following users to %(groupId)s:", {groupId: groupId}),
+                title: _t("Failed to invite the following users to %(groupId)s:", { groupId: groupId }),
                 description: errorList.join(", "),
             });
         }
@@ -111,7 +111,7 @@ function _onGroupInviteFinished(groupId, addrs) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Failed to invite users to group', '', ErrorDialog, {
             title: _t("Failed to invite users to community"),
-            description: _t("Failed to invite users to %(groupId)s", {groupId: groupId}),
+            description: _t("Failed to invite users to %(groupId)s", { groupId: groupId }),
         });
     });
 }
@@ -137,7 +137,7 @@ function _onGroupAddRoomFinished(groupId, addrs, addRoomsPublicly) {
                 // Add this group as related
                 if (!groups.includes(groupId)) {
                     groups.push(groupId);
-                    return MatrixClientPeg.get().sendStateEvent(roomId, 'm.room.related_groups', {groups}, '');
+                    return MatrixClientPeg.get().sendStateEvent(roomId, 'm.room.related_groups', { groups }, '');
                 }
             });
     })).then(() => {
@@ -152,7 +152,7 @@ function _onGroupAddRoomFinished(groupId, addrs, addRoomsPublicly) {
             {
                 title: _t(
                     "Failed to add the following rooms to %(groupId)s:",
-                    {groupId},
+                    { groupId },
                 ),
                 description: errorList.join(", "),
             },

@@ -14,10 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_RoomView_wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    position: relative;
+    justify-content: center;
+    // Contain the amount of layers rendered by constraining what actually needs re-layering via css
+    contain: strict;
+}
+
 .mx_RoomView {
     word-wrap: break-word;
     display: flex;
     flex-direction: column;
+    flex: 1;
+    position: relative;
 }
 
 
@@ -40,7 +52,7 @@ limitations under the License.
 
     pointer-events: none;
 
-    background-color: $primary-bg-color;
+    background-color: $background;
     opacity: 0.95;
 
     position: absolute;
@@ -57,14 +69,15 @@ limitations under the License.
 
 @keyframes mx_RoomView_fileDropTarget_image_animation {
     from {
-        width: 0px;
+        transform: scaleX(0);
     }
     to {
-        width: 32px;
+        transform: scaleX(1);
     }
 }
 
 .mx_RoomView_fileDropTarget_image {
+    width: 32px;
     animation: mx_RoomView_fileDropTarget_image_animation;
     animation-duration: 0.5s;
     margin-bottom: 16px;
@@ -76,7 +89,6 @@ limitations under the License.
     margin: 0px auto;
 
     overflow: auto;
-    flex: 0 0 auto;
 }
 
 .mx_RoomView_auxPanel_fullHeight {
@@ -86,7 +98,7 @@ limitations under the License.
     left: 0;
     right: 0;
     z-index: 3000;
-    background-color: $primary-bg-color;
+    background-color: $background;
 }
 
 .mx_RoomView_auxPanel_hiddenHighlights {
@@ -152,7 +164,6 @@ limitations under the License.
     flex: 1;
     display: flex;
     flex-direction: column;
-    contain: content;
 }
 
 .mx_RoomView_statusArea {
@@ -160,7 +171,7 @@ limitations under the License.
     flex: 0 0 auto;
 
     max-height: 0px;
-    background-color: $primary-bg-color;
+    background-color: $background;
     z-index: 1000;
     overflow: hidden;
 
@@ -245,7 +256,7 @@ hr.mx_RoomView_myReadMarker {
 }
 
 .mx_RoomView_callStatusBar .mx_UploadBar_uploadProgressInner {
-    background-color: $primary-bg-color;
+    background-color: $background;
 }
 
 .mx_RoomView_callStatusBar .mx_UploadBar_uploadFilename {

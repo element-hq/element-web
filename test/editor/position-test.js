@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import "../skinned-sdk"; // Must be first for skinning to work
 import EditorModel from "../../src/editor/model";
-import {createPartCreator} from "./mock";
+import { createPartCreator } from "./mock";
 
 function createRenderer() {
     const render = (c) => {

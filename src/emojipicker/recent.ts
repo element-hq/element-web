@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import SettingsStore from "../settings/SettingsStore";
-import {orderBy} from "lodash";
+import { orderBy } from "lodash";
 import { SettingLevel } from "../settings/SettingLevel";
 
 interface ILegacyFormat {

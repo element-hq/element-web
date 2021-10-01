@@ -77,13 +77,13 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
     protected onAction(payload: ActionPayload) {
         if (payload.action === Action.ViewUser) {
             if (payload.member) {
-                this.setPhase(RightPanelPhases.RoomMemberInfo, {member: payload.member});
+                this.setPhase(RightPanelPhases.RoomMemberInfo, { member: payload.member });
             } else {
                 this.setPhase(RightPanelPhases.RoomMemberList);
             }
         } else if (payload.action === "view_3pid_invite") {
             if (payload.event) {
-                this.setPhase(RightPanelPhases.Room3pidMemberInfo, {event: payload.event});
+                this.setPhase(RightPanelPhases.Room3pidMemberInfo, { event: payload.event });
             } else {
                 this.setPhase(RightPanelPhases.RoomMemberList);
             }

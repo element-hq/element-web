@@ -32,7 +32,7 @@ export class ListNotificationState extends NotificationState {
     }
 
     public get symbol(): string {
-        return null; // This notification state doesn't support symbols
+        return this._color === NotificationColor.Unsent ? "!" : null;
     }
 
     public setRooms(rooms: Room[]) {

@@ -37,17 +37,17 @@ export enum PerformanceEntryNames {
 
     SWITCH_ROOM = "mx_SwithRoom",
     JUMP_TO_ROOM = "mx_JumpToRoom",
-    JOIN_ROOM = "mx_JoinRoom",
-    CREATE_DM = "mx_CreateDM",
+    JOIN_ROOM = "mx_JoinRoom", // ✅
+    CREATE_DM = "mx_CreateDM", // ✅
     PEEK_ROOM = "mx_PeekRoom",
 
     /**
      * User
      */
 
-    VERIFY_E2EE_USER = "mx_VerifyE2EEUser",
-    LOGIN = "mx_Login",
-    REGISTER = "mx_Register",
+    VERIFY_E2EE_USER = "mx_VerifyE2EEUser", // ✅
+    LOGIN = "mx_Login", // ✅
+    REGISTER = "mx_Register", // ✅
 
     /**
      * VoIP

@@ -44,7 +44,7 @@ export class ReactionEventPreview implements IPreview {
         if (isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
             return reaction;
         } else {
-            return _t("%(senderName)s: %(reaction)s", {senderName: getSenderName(event), reaction});
+            return _t("%(senderName)s: %(reaction)s", { senderName: getSenderName(event), reaction });
         }
     }
 }

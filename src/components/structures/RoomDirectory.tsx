@@ -16,6 +16,9 @@ limitations under the License.
 */
 
 import React from "react";
+import { IFieldType, IInstance, IProtocol, IPublicRoomsChunkRoom } from "matrix-js-sdk/src/client";
+import { Visibility } from "matrix-js-sdk/src/@types/partials";
+import { IRoomDirectoryOptions } from "matrix-js-sdk/src/@types/requests";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import dis from "../../dispatcher/dispatcher";
@@ -25,7 +28,7 @@ import { _t } from '../../languageHandler';
 import SdkConfig from '../../SdkConfig';
 import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
 import Analytics from '../../Analytics';
-import {ALL_ROOMS, IFieldType, IInstance, IProtocol, Protocols} from "../views/directory/NetworkDropdown";
+import NetworkDropdown, { ALL_ROOMS, Protocols } from "../views/directory/NetworkDropdown";
 import SettingsStore from "../../settings/SettingsStore";
 import GroupFilterOrderStore from "../../stores/GroupFilterOrderStore";
 import GroupStore from "../../stores/GroupStore";
@@ -34,20 +37,22 @@ import CountlyAnalytics from "../../CountlyAnalytics";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../customisations/Media";
 import { IDialogProps } from "../views/dialogs/IDialogProps";
-import AccessibleButton, {ButtonEvent} from "../views/elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
 import BaseAvatar from "../views/avatars/BaseAvatar";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import QuestionDialog from "../views/dialogs/QuestionDialog";
 import BaseDialog from "../views/dialogs/BaseDialog";
 import DirectorySearchBox from "../views/elements/DirectorySearchBox";
-import NetworkDropdown from "../views/directory/NetworkDropdown";
 import ScrollPanel from "./ScrollPanel";
 import Spinner from "../views/elements/Spinner";
 import { ActionPayload } from "../../dispatcher/payloads";
-
+import { getDisplayAliasForAliasSet } from "../../Rooms";
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 800;
+
+const LAST_SERVER_KEY = "mx_last_room_directory_server";
+const LAST_INSTANCE_KEY = "mx_last_room_directory_instance";
 
 function track(action: string) {
     Analytics.trackEvent('RoomDirectory', action);
@@ -58,46 +63,23 @@ interface IProps extends IDialogProps {
 }
 
 interface IState {
-    publicRooms: IRoom[];
+    publicRooms: IPublicRoomsChunkRoom[];
     loading: boolean;
     protocolsLoading: boolean;
     error?: string;
-    instanceId: string | symbol;
+    instanceId: string;
     roomServer: string;
     filterString: string;
     selectedCommunityId?: string;
     communityName?: string;
 }
 
-/* eslint-disable camelcase */
-interface IRoom {
-    room_id: string;
-    name?: string;
-    avatar_url?: string;
-    topic?: string;
-    canonical_alias?: string;
-    aliases?: string[];
-    world_readable: boolean;
-    guest_can_join: boolean;
-    num_joined_members: number;
-}
-
-interface IPublicRoomsRequest {
-    limit?: number;
-    since?: string;
-    server?: string;
-    filter?: object;
-    include_all_networks?: boolean;
-    third_party_instance_id?: string;
-}
-/* eslint-enable camelcase */
-
 @replaceableComponent("structures.RoomDirectory")
 export default class RoomDirectory extends React.Component<IProps, IState> {
     private readonly startTime: number;
-    private unmounted = false
+    private unmounted = false;
     private nextBatch: string = null;
-    private filterTimeout: NodeJS.Timeout;
+    private filterTimeout: number;
     private protocols: Protocols;
 
     constructor(props) {
@@ -117,6 +99,36 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         } else if (!selectedCommunityId) {
             MatrixClientPeg.get().getThirdpartyProtocols().then((response) => {
                 this.protocols = response;
+                const myHomeserver = MatrixClientPeg.getHomeserverName();
+                const lsRoomServer = localStorage.getItem(LAST_SERVER_KEY);
+                const lsInstanceId = localStorage.getItem(LAST_INSTANCE_KEY);
+
+                let roomServer = myHomeserver;
+                if (
+                    SdkConfig.get().roomDirectory?.servers?.includes(lsRoomServer) ||
+                    SettingsStore.getValue("room_directory_servers")?.includes(lsRoomServer)
+                ) {
+                    roomServer = lsRoomServer;
+                }
+
+                let instanceId: string = null;
+                if (roomServer === myHomeserver && (
+                    lsInstanceId === ALL_ROOMS ||
+                    Object.values(this.protocols).some(p => p.instances.some(i => i.instance_id === lsInstanceId))
+                )) {
+                    instanceId = lsInstanceId;
+                }
+
+                // Refresh the room list only if validation failed and we had to change these
+                if (this.state.instanceId !== instanceId || this.state.roomServer !== roomServer) {
+                    this.setState({
+                        protocolsLoading: false,
+                        instanceId,
+                        roomServer,
+                    });
+                    this.refreshRoomList();
+                    return;
+                }
                 this.setState({ protocolsLoading: false });
             }, (err) => {
                 console.warn(`error loading third party protocols: ${err}`);
@@ -151,8 +163,8 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             publicRooms: [],
             loading: true,
             error: null,
-            instanceId: undefined,
-            roomServer: MatrixClientPeg.getHomeserverName(),
+            instanceId: localStorage.getItem(LAST_INSTANCE_KEY),
+            roomServer: localStorage.getItem(LAST_SERVER_KEY),
             filterString: this.props.initialText || "",
             selectedCommunityId,
             communityName: null,
@@ -207,9 +219,9 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         this.getMoreRooms();
     };
 
-    private getMoreRooms() {
-        if (this.state.selectedCommunityId) return Promise.resolve(); // no more rooms
-        if (!MatrixClientPeg.get()) return Promise.resolve();
+    private getMoreRooms(): Promise<boolean> {
+        if (this.state.selectedCommunityId) return Promise.resolve(false); // no more rooms
+        if (!MatrixClientPeg.get()) return Promise.resolve(false);
 
         this.setState({
             loading: true,
@@ -220,7 +232,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         // remember the next batch token when we sent the request
         // too. If it's changed, appending to the list will corrupt it.
         const nextBatch = this.nextBatch;
-        const opts: IPublicRoomsRequest = { limit: 20 };
+        const opts: IRoomDirectoryOptions = { limit: 20 };
         if (roomServer != MatrixClientPeg.getHomeserverName()) {
             opts.server = roomServer;
         }
@@ -239,12 +251,12 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 // if the filter or server has changed since this request was sent,
                 // throw away the result (don't even clear the busy flag
                 // since we must still have a request in flight)
-                return;
+                return false;
             }
 
             if (this.unmounted) {
                 // if we've been unmounted, we don't care either.
-                return;
+                return false;
             }
 
             if (this.state.filterString) {
@@ -264,14 +276,13 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 filterString != this.state.filterString ||
                 roomServer != this.state.roomServer ||
                 nextBatch != this.nextBatch) {
-                // as above: we don't care about errors for old
-                // requests either
-                return;
+                // as above: we don't care about errors for old requests either
+                return false;
             }
 
             if (this.unmounted) {
                 // if we've been unmounted, we don't care either.
-                return;
+                return false;
             }
 
             console.error("Failed to get publicRooms: %s", JSON.stringify(err));
@@ -294,15 +305,15 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
      * HS admins to do this through the RoomSettings interface, but
      * this needs SPEC-417.
      */
-    private removeFromDirectory(room: IRoom) {
+    private removeFromDirectory(room: IPublicRoomsChunkRoom) {
         const alias = getDisplayAliasForRoom(room);
         const name = room.name || alias || _t('Unnamed room');
 
         let desc;
         if (alias) {
-            desc = _t('Delete the room address %(alias)s and remove %(name)s from the directory?', {alias, name});
+            desc = _t('Delete the room address %(alias)s and remove %(name)s from the directory?', { alias, name });
         } else {
-            desc = _t('Remove %(name)s from the directory?', {name: name});
+            desc = _t('Remove %(name)s from the directory?', { name: name });
         }
 
         Modal.createTrackedDialog('Remove from Directory', '', QuestionDialog, {
@@ -312,9 +323,9 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 if (!shouldDelete) return;
 
                 const modal = Modal.createDialog(Spinner);
-                let step = _t('remove %(name)s from the directory.', {name: name});
+                let step = _t('remove %(name)s from the directory.', { name: name });
 
-                MatrixClientPeg.get().setRoomDirectoryVisibility(room.room_id, 'private').then(() => {
+                MatrixClientPeg.get().setRoomDirectoryVisibility(room.room_id, Visibility.Private).then(() => {
                     if (!alias) return;
                     step = _t('delete the address.');
                     return MatrixClientPeg.get().deleteAlias(alias);
@@ -336,16 +347,15 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         });
     }
 
-    private onRoomClicked = (room: IRoom, ev: ButtonEvent) => {
+    private onRoomClicked = (room: IPublicRoomsChunkRoom, ev: React.MouseEvent) => {
+        // If room was shift-clicked, remove it from the room directory
         if (ev.shiftKey && !this.state.selectedCommunityId) {
             ev.preventDefault();
             this.removeFromDirectory(room);
-        } else {
-            this.showRoom(room);
         }
     };
 
-    private onOptionChange = (server: string, instanceId?: string | symbol) => {
+    private onOptionChange = (server: string, instanceId?: string) => {
         // clear next batch so we don't try to load more rooms
         this.nextBatch = null;
         this.setState({
@@ -363,6 +373,14 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         // find the five gitter ones, at which point we do not want
         // to render all those rooms when switching back to 'all networks'.
         // Easiest to just blow away the state & re-fetch.
+
+        // We have to be careful here so that we don't set instanceId = "undefined"
+        localStorage.setItem(LAST_SERVER_KEY, server);
+        if (instanceId) {
+            localStorage.setItem(LAST_INSTANCE_KEY, instanceId);
+        } else {
+            localStorage.removeItem(LAST_INSTANCE_KEY);
+        }
     };
 
     private onFillRequest = (backwards: boolean) => {
@@ -373,7 +391,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
 
     private onFilterChange = (alias: string) => {
         this.setState({
-            filterString: alias || null,
+            filterString: alias || "",
         });
 
         // don't send the request for a little bit,
@@ -392,7 +410,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
     private onFilterClear = () => {
         // update immediately
         this.setState({
-            filterString: null,
+            filterString: "",
         }, this.refreshRoomList);
 
         if (this.filterTimeout) {
@@ -442,17 +460,17 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         }
     };
 
-    private onPreviewClick = (ev: ButtonEvent, room: IRoom) => {
+    private onPreviewClick = (ev: ButtonEvent, room: IPublicRoomsChunkRoom) => {
         this.showRoom(room, null, false, true);
         ev.stopPropagation();
     };
 
-    private onViewClick = (ev: ButtonEvent, room: IRoom) => {
+    private onViewClick = (ev: ButtonEvent, room: IPublicRoomsChunkRoom) => {
         this.showRoom(room);
         ev.stopPropagation();
     };
 
-    private onJoinClick = (ev: ButtonEvent, room: IRoom) => {
+    private onJoinClick = (ev: ButtonEvent, room: IPublicRoomsChunkRoom) => {
         this.showRoom(room, null, true);
         ev.stopPropagation();
     };
@@ -470,7 +488,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         this.showRoom(null, alias, autoJoin);
     }
 
-    private showRoom(room: IRoom, roomAlias?: string, autoJoin = false, shouldPeek = false) {
+    private showRoom(room: IPublicRoomsChunkRoom, roomAlias?: string, autoJoin = false, shouldPeek = false) {
         this.onFinished();
         const payload: ActionPayload = {
             action: 'view_room',
@@ -484,7 +502,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             // to the directory.
             if (MatrixClientPeg.get().isGuest()) {
                 if (!room.world_readable && !room.guest_can_join) {
-                    dis.dispatch({action: 'require_registration'});
+                    dis.dispatch({ action: 'require_registration' });
                     return;
                 }
             }
@@ -519,7 +537,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         dis.dispatch(payload);
     }
 
-    private createRoomCells(room: IRoom) {
+    private createRoomCells(room: IPublicRoomsChunkRoom) {
         const client = MatrixClientPeg.get();
         const clientRoom = client.getRoom(room.room_id);
         const hasJoinedRoom = clientRoom && clientRoom.getMyMembership() === "join";
@@ -568,11 +586,11 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         let avatarUrl = null;
         if (room.avatar_url) avatarUrl = mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(32);
 
+        // We use onMouseDown instead of onClick, so that we can avoid text getting selected
         return [
-            <div key={ `${room.room_id}_avatar` }
-                onClick={(ev) => this.onRoomClicked(room, ev)}
-                // cancel onMouseDown otherwise shift-clicking highlights text
-                onMouseDown={(ev) => {ev.preventDefault();}}
+            <div
+                key={`${room.room_id}_avatar`}
+                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_roomAvatar"
             >
                 <BaseAvatar
@@ -584,42 +602,50 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                     url={avatarUrl}
                 />
             </div>,
-            <div key={ `${room.room_id}_description` }
-                onClick={(ev) => this.onRoomClicked(room, ev)}
-                // cancel onMouseDown otherwise shift-clicking highlights text
-                onMouseDown={(ev) => {ev.preventDefault();}}
+            <div
+                key={`${room.room_id}_description`}
+                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_roomDescription"
             >
-                <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;
-                <div className="mx_RoomDirectory_topic"
-                    onClick={ (ev) => { ev.stopPropagation(); } }
+                <div
+                    className="mx_RoomDirectory_name"
+                    onMouseDown={(ev) => this.onRoomClicked(room, ev)}
+                >
+                    { name }
+                </div>&nbsp;
+                <div
+                    className="mx_RoomDirectory_topic"
+                    onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                     dangerouslySetInnerHTML={{ __html: topic }}
                 />
-                <div className="mx_RoomDirectory_alias">{ getDisplayAliasForRoom(room) }</div>
+                <div
+                    className="mx_RoomDirectory_alias"
+                    onMouseDown={(ev) => this.onRoomClicked(room, ev)}
+                >
+                    { getDisplayAliasForRoom(room) }
+                </div>
             </div>,
-            <div key={ `${room.room_id}_memberCount` }
-                onClick={(ev) => this.onRoomClicked(room, ev)}
-                // cancel onMouseDown otherwise shift-clicking highlights text
-                onMouseDown={(ev) => {ev.preventDefault();}}
+            <div
+                key={`${room.room_id}_memberCount`}
+                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_roomMemberCount"
             >
                 { room.num_joined_members }
             </div>,
-            <div key={ `${room.room_id}_preview` }
-                onClick={(ev) => this.onRoomClicked(room, ev)}
+            <div
+                key={`${room.room_id}_preview`}
+                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 // cancel onMouseDown otherwise shift-clicking highlights text
-                onMouseDown={(ev) => {ev.preventDefault();}}
                 className="mx_RoomDirectory_preview"
             >
-                {previewButton}
+                { previewButton }
             </div>,
-            <div key={ `${room.room_id}_join` }
-                onClick={(ev) => this.onRoomClicked(room, ev)}
-                // cancel onMouseDown otherwise shift-clicking highlights text
-                onMouseDown={(ev) => {ev.preventDefault();}}
+            <div
+                key={`${room.room_id}_join`}
+                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_join"
             >
-                {joinOrViewButton}
+                { joinOrViewButton }
             </div>,
         ];
     }
@@ -770,16 +796,16 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                     showJoinButton={showJoinButton}
                     initialText={this.props.initialText}
                 />
-                {dropdown}
+                { dropdown }
             </div>;
         }
         const explanation =
             _t("If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.", null,
-                {a: sub => (
+                { a: sub => (
                     <AccessibleButton kind="secondary" onClick={this.onCreateRoomClick}>
                         { sub }
                     </AccessibleButton>
-                )},
+                ) },
             );
 
         const title = this.state.selectedCommunityId
@@ -788,16 +814,16 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             }) : _t("Explore rooms");
         return (
             <BaseDialog
-                className={'mx_RoomDirectory_dialog'}
+                className="mx_RoomDirectory_dialog"
                 hasCancel={true}
                 onFinished={this.onFinished}
                 title={title}
             >
                 <div className="mx_RoomDirectory">
-                    {explanation}
+                    { explanation }
                     <div className="mx_RoomDirectory_list">
-                        {listHeader}
-                        {content}
+                        { listHeader }
+                        { content }
                     </div>
                 </div>
             </BaseDialog>
@@ -807,6 +833,6 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
 
 // Similar to matrix-react-sdk's MatrixTools.getDisplayAliasForRoom
 // but works with the objects we get from the public room list
-function getDisplayAliasForRoom(room: IRoom) {
-    return room.canonical_alias || room.aliases?.[0] || "";
+export function getDisplayAliasForRoom(room: IPublicRoomsChunkRoom) {
+    return getDisplayAliasForAliasSet(room.canonical_alias, room.aliases);
 }

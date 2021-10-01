@@ -16,9 +16,9 @@ limitations under the License.
 
 import React from 'react';
 import SettingsStore from "../../../settings/SettingsStore";
-import Draggable, {ILocationState} from './Draggable';
+import Draggable, { ILocationState } from './Draggable';
 import { SettingLevel } from "../../../settings/SettingLevel";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // Current room

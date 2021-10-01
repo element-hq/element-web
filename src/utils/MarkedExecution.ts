@@ -26,9 +26,11 @@ export class MarkedExecution {
 
     /**
      * Creates a MarkedExecution for the provided function.
-     * @param fn The function to be called upon trigger if marked.
+     * @param {Function} fn The function to be called upon trigger if marked.
+     * @param {Function} onMarkCallback A function that is called when a new mark is made. Not
+     * called if a mark is already flagged.
      */
-    constructor(private fn: () => void) {
+    constructor(private fn: () => void, private onMarkCallback?: () => void) {
     }
 
     /**
@@ -42,6 +44,7 @@ export class MarkedExecution {
      * Marks the function to be called upon trigger().
      */
     public mark() {
+        if (!this.marked) this.onMarkCallback?.();
         this.marked = true;
     }
 

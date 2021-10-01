@@ -17,12 +17,12 @@ limitations under the License.
 
 import dis from '../dispatcher/dispatcher';
 import EventEmitter from 'events';
-import {throttle} from "lodash";
+import { throttle } from "lodash";
 import SettingsStore from "../settings/SettingsStore";
-import RoomListStore, {LISTS_UPDATE_EVENT} from "./room-list/RoomListStore";
-import {RoomNotificationStateStore} from "./notifications/RoomNotificationStateStore";
-import {isCustomTag} from "./room-list/models";
-import {objectHasDiff} from "../utils/objects";
+import RoomListStore, { LISTS_UPDATE_EVENT } from "./room-list/RoomListStore";
+import { RoomNotificationStateStore } from "./notifications/RoomNotificationStateStore";
+import { isCustomTag } from "./room-list/models";
+import { objectHasDiff } from "../utils/objects";
 
 function commonPrefix(a, b) {
     const len = Math.min(a.length, b.length);
@@ -52,7 +52,7 @@ class CustomRoomTagStore extends EventEmitter {
     constructor() {
         super();
         // Initialise state
-        this._state = {tags: {}};
+        this._state = { tags: {} };
 
         // as RoomListStore gets updated by every timeline event
         // throttle this to only run every 500ms
@@ -103,14 +103,14 @@ class CustomRoomTagStore extends EventEmitter {
             }
             const avatarLetter = name.substr(prefixes[i].length, 1);
             const selected = this._state.tags[name];
-            return {name, avatarLetter, badgeNotifState, selected};
+            return { name, avatarLetter, badgeNotifState, selected };
         });
     }
 
     _onListsUpdated = () => {
         const newTags = this._getUpdatedTags();
         if (!this._state.tags || objectHasDiff(this._state.tags, newTags)) {
-            this._setState({tags: newTags});
+            this._setState({ tags: newTags });
         }
     };
 
@@ -122,14 +122,14 @@ class CustomRoomTagStore extends EventEmitter {
                     const tag = {};
                     tag[payload.tag] = !oldTags[payload.tag];
                     const tags = Object.assign({}, oldTags, tag);
-                    this._setState({tags});
+                    this._setState({ tags });
                 }
                 break;
             }
             case 'on_client_not_viable':
             case 'on_logged_out': {
                 // we assume to always have a tags object in the state
-                this._state = {tags: {}};
+                this._state = { tags: {} };
                 RoomListStore.instance.off(LISTS_UPDATE_EVENT, this._onListsUpdated);
                 break;
             }

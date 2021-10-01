@@ -21,7 +21,7 @@ import DeviceListener from '../DeviceListener';
 import ToastStore from "../stores/ToastStore";
 import GenericToast from "../components/views/toasts/GenericToast";
 import { Action } from "../dispatcher/actions";
-import { USER_SECURITY_TAB } from "../components/views/dialogs/UserSettingsDialog";
+import { UserTab } from "../components/views/dialogs/UserSettingsDialog";
 
 function toastKey(deviceId: string) {
     return "unverified_session_" + deviceId;
@@ -34,7 +34,7 @@ export const showToast = async (deviceId: string) => {
         DeviceListener.sharedInstance().dismissUnverifiedSessions([deviceId]);
         dis.dispatch({
             action: Action.ViewUserSettings,
-            initialTabId: USER_SECURITY_TAB,
+            initialTabId: UserTab.Security,
         });
     };
 

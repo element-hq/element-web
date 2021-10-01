@@ -60,7 +60,7 @@ export class MatrixDispatcher extends Dispatcher<ActionPayload> {
      * @see dispatch(action: ActionPayload, sync: boolean)
      */
     fire(action: Action, sync = false) {
-        this.dispatch({action}, sync);
+        this.dispatch({ action }, sync);
     }
 }
 

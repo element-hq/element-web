@@ -8,9 +8,12 @@
 /* Noto Color Emoji contains digits, in fixed-width, therefore causing
    digits in flowed text to stand out.
    TODO: Consider putting all emoji fonts to the end rather than the front. */
-$font-family: Nunito, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', Arial, Helvetica, Sans-Serif, 'Noto Color Emoji';
+$font-family: 'Nunito', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Arial', 'Helvetica', sans-serif, 'Noto Color Emoji';
 
-$monospace-font-family: Inconsolata, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', Courier, monospace, 'Noto Color Emoji';
+$monospace-font-family: 'Inconsolata', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Courier', monospace, 'Noto Color Emoji';
+
+// Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=557%3A0
+$system: #F4F6FA;
 
 // unified palette
 // try to use these colors when possible
@@ -27,6 +30,14 @@ $secondary-fg-color: $primary-fg-color;
 $tertiary-fg-color: $primary-fg-color;
 $primary-bg-color: #ffffff;
 $muted-fg-color: #61708b; // Commonly used in headings and relevant alt text
+
+// Legacy theme backports
+$primary-content: $primary-fg-color;
+$secondary-content: $secondary-fg-color;
+$tertiary-content: $tertiary-fg-color;
+$quaternary-content: #C1C6CD;
+$quinary-content: #e3e8f0;
+$background: $primary-bg-color;
 
 // used for dialog box text
 $light-fg-color: #747474;
@@ -175,8 +186,7 @@ $eventtile-meta-color: $roomtopic-color;
 $composer-e2e-icon-color: #91a1c0;
 $header-divider-color: #91a1c0;
 
-// this probably shouldn't have it's own colour
-$voipcall-plinth-color: #F4F6FA;
+$voipcall-plinth-color: $system;
 
 // ********************
 
@@ -316,33 +326,28 @@ $kbd-border-color: $reaction-row-button-border-color;
 $tooltip-timeline-bg-color: $groupFilterPanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
 
-$interactive-tooltip-bg-color: #27303a;
-$interactive-tooltip-fg-color: #ffffff;
-
 $breadcrumb-placeholder-bg-color: #e8eef5;
-
-$user-tile-hover-bg-color: $header-panel-bg-color;
-
-$message-body-panel-fg-color: $secondary-fg-color;
-$message-body-panel-bg-color: #E3E8F0;
-$message-body-panel-icon-fg-color: $secondary-fg-color;
-$message-body-panel-icon-bg-color: $primary-bg-color;
 
 // See non-legacy _light for variable information
 $voice-record-stop-symbol-color: #ff4b55;
 $voice-record-live-circle-color: #ff4b55;
 $voice-record-stop-border-color: #E3E8F0;
-$voice-record-waveform-bg-color: $message-body-panel-bg-color;
-$voice-record-waveform-fg-color: $message-body-panel-fg-color;
 $voice-record-waveform-incomplete-fg-color: #C1C6CD;
 $voice-record-icon-color: $tertiary-fg-color;
-$voice-playback-button-bg-color: $message-body-panel-icon-bg-color;
-$voice-playback-button-fg-color: $message-body-panel-icon-fg-color;
+$voice-playback-button-bg-color: $system;
+$voice-playback-button-fg-color: $secondary-content;
 
 // FontSlider colors
 $appearance-tab-border-color: $input-darker-bg-color;
 
 $composer-shadow-color: tranparent;
+
+// Bubble tiles
+$eventbubble-self-bg: #F0FBF8;
+$eventbubble-others-bg: $system;
+$eventbubble-bg-hover: #FAFBFD;
+$eventbubble-avatar-outline: #fff;
+$eventbubble-reply-color: #C1C6CD;
 
 // ***** Mixins! *****
 
@@ -380,7 +385,7 @@ $composer-shadow-color: tranparent;
 @define-mixin mx_DialogButton_secondary {
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color ! important;
+    border: 1px solid $accent-color !important;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
 }

@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
-import * as sdk from '../../../index';
 import SyntaxHighlight from '../elements/SyntaxHighlight';
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
@@ -42,6 +41,10 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { SettingLevel } from '../../../settings/SettingLevel';
+import BaseDialog from "./BaseDialog";
+import TruncatedList from "../elements/TruncatedList";
+
+import { logger } from "matrix-js-sdk/src/logger";
 
 interface IGenericEditorProps {
     onBack: () => void;
@@ -62,13 +65,13 @@ abstract class GenericEditor<
         } else {
             this.props.onBack();
         }
-    }
+    };
 
     protected onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         // @ts-ignore: Unsure how to convince TS this is okay when the state
         // type can be extended.
-        this.setState({[e.target.id]: e.target.type === 'checkbox' ? e.target.checked : e.target.value});
-    }
+        this.setState({ [e.target.id]: e.target.type === 'checkbox' ? e.target.checked : e.target.value });
+    };
 
     protected abstract send();
 
@@ -119,7 +122,7 @@ export class SendCustomEvent extends GenericEditor<ISendCustomEventProps, ISendC
     constructor(props) {
         super(props);
 
-        const {eventType, stateKey, evContent} = Object.assign({
+        const { eventType, stateKey, evContent } = Object.assign({
             eventType: '',
             stateKey: '',
             evContent: '{\n\n}',
@@ -158,7 +161,7 @@ export class SendCustomEvent extends GenericEditor<ISendCustomEventProps, ISendC
             message = _t('Failed to send custom event.') + ' (' + e.toString() + ')';
         }
         this.setState({ message });
-    }
+    };
 
     render() {
         if (this.state.message) {
@@ -181,14 +184,23 @@ export class SendCustomEvent extends GenericEditor<ISendCustomEventProps, ISendC
 
                 <br />
 
-                <Field id="evContent" label={_t("Event Content")} type="text" className="mx_DevTools_textarea"
-                    autoComplete="off" value={this.state.evContent} onChange={this.onChange} element="textarea" />
+                <Field
+                    id="evContent"
+                    label={_t("Event Content")}
+                    type="text"
+                    className="mx_DevTools_textarea"
+                    autoComplete="off"
+                    value={this.state.evContent}
+                    onChange={this.onChange}
+                    element="textarea" />
             </div>
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
                 { !this.state.message && <button onClick={this.send}>{ _t('Send') }</button> }
-                { showTglFlip && <div style={{float: "right"}}>
-                    <input id="isStateEvent" className="mx_DevTools_tgl mx_DevTools_tgl-flip"
+                { showTglFlip && <div style={{ float: "right" }}>
+                    <input
+                        id="isStateEvent"
+                        className="mx_DevTools_tgl mx_DevTools_tgl-flip"
                         type="checkbox"
                         checked={this.state.isStateEvent}
                         onChange={this.onChange}
@@ -228,7 +240,7 @@ class SendAccountData extends GenericEditor<ISendAccountDataProps, ISendAccountD
     constructor(props) {
         super(props);
 
-        const {eventType, evContent} = Object.assign({
+        const { eventType, evContent } = Object.assign({
             eventType: '',
             evContent: '{\n\n}',
         }, this.props.inputs);
@@ -264,7 +276,7 @@ class SendAccountData extends GenericEditor<ISendAccountDataProps, ISendAccountD
             message = _t('Failed to send custom event.') + ' (' + e.toString() + ')';
         }
         this.setState({ message });
-    }
+    };
 
     render() {
         if (this.state.message) {
@@ -281,14 +293,24 @@ class SendAccountData extends GenericEditor<ISendAccountDataProps, ISendAccountD
                 { this.textInput('eventType', _t('Event Type')) }
                 <br />
 
-                <Field id="evContent" label={_t("Event Content")} type="text" className="mx_DevTools_textarea"
-                    autoComplete="off" value={this.state.evContent} onChange={this.onChange} element="textarea" />
+                <Field
+                    id="evContent"
+                    label={_t("Event Content")}
+                    type="text"
+                    className="mx_DevTools_textarea"
+                    autoComplete="off"
+                    value={this.state.evContent}
+                    onChange={this.onChange}
+                    element="textarea"
+                />
             </div>
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
                 { !this.state.message && <button onClick={this.send}>{ _t('Send') }</button> }
-                { !this.state.message && <div style={{float: "right"}}>
-                    <input id="isRoomAccountData" className="mx_DevTools_tgl mx_DevTools_tgl-flip"
+                { !this.state.message && <div style={{ float: "right" }}>
+                    <input
+                        id="isRoomAccountData"
+                        className="mx_DevTools_tgl mx_DevTools_tgl-flip"
                         type="checkbox"
                         checked={this.state.isRoomAccountData}
                         disabled={this.props.forceMode}
@@ -336,7 +358,7 @@ class FilteredList extends React.PureComponent<IFilteredListProps, IFilteredList
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
+    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line
         if (this.props.children === nextProps.children && this.props.query === nextProps.query) return;
         this.setState({
             filteredChildren: FilteredList.filterChildren(nextProps.children, nextProps.query),
@@ -369,13 +391,19 @@ class FilteredList extends React.PureComponent<IFilteredListProps, IFilteredList
     };
 
     render() {
-        const TruncatedList = sdk.getComponent("elements.TruncatedList");
         return <div>
-            <Field label={_t('Filter results')} autoFocus={true} size={64}
-                type="text" autoComplete="off" value={this.props.query} onChange={this.onQuery}
+            <Field
+                label={_t('Filter results')}
+                autoFocus={true}
+                size={64}
+                type="text"
+                autoComplete="off"
+                value={this.props.query}
+                onChange={this.onQuery}
                 className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query"
                 // force re-render so that autoFocus is applied when this component is re-used
-                key={this.props.children[0] ? this.props.children[0].key : ''} />
+                key={this.props.children[0] ? this.props.children[0].key : ''}
+            />
 
             <TruncatedList getChildren={this.getChildren}
                 getChildCount={this.getChildCount}
@@ -442,28 +470,33 @@ class RoomStateExplorer extends React.PureComponent<IExplorerProps, IRoomStateEx
         } else {
             this.props.onBack();
         }
-    }
+    };
 
     private editEv = () => {
         this.setState({ editing: true });
-    }
+    };
 
     private onQueryEventType = (filterEventType: string) => {
         this.setState({ queryEventType: filterEventType });
-    }
+    };
 
     private onQueryStateKey = (filterStateKey: string) => {
         this.setState({ queryStateKey: filterStateKey });
-    }
+    };
 
     render() {
         if (this.state.event) {
             if (this.state.editing) {
-                return <SendCustomEvent room={this.props.room} forceStateEvent={true} onBack={this.onBack} inputs={{
-                    eventType: this.state.event.getType(),
-                    evContent: JSON.stringify(this.state.event.getContent(), null, '\t'),
-                    stateKey: this.state.event.getStateKey(),
-                }} />;
+                return <SendCustomEvent
+                    room={this.props.room}
+                    forceStateEvent={true}
+                    onBack={this.onBack}
+                    inputs={{
+                        eventType: this.state.event.getType(),
+                        evContent: JSON.stringify(this.state.event.getContent(), null, '\t'),
+                        stateKey: this.state.event.getStateKey(),
+                    }}
+                />;
             }
 
             return <div className="mx_ViewSource">
@@ -494,7 +527,7 @@ class RoomStateExplorer extends React.PureComponent<IExplorerProps, IRoomStateEx
                         }
 
                         return <button className={classes} key={eventType} onClick={onClickFn}>
-                            {eventType}
+                            { eventType }
                         </button>;
                     })
                 }
@@ -525,11 +558,11 @@ class RoomStateExplorer extends React.PureComponent<IExplorerProps, IRoomStateEx
 }
 
 interface IAccountDataExplorerState {
+    [inputId: string]: boolean | string | any;
     isRoomAccountData: boolean;
     event?: MatrixEvent;
     editing: boolean;
     queryEventType: string;
-    [inputId: string]: boolean | string;
 }
 
 class AccountDataExplorer extends React.PureComponent<IExplorerProps, IAccountDataExplorerState> {
@@ -570,19 +603,19 @@ class AccountDataExplorer extends React.PureComponent<IExplorerProps, IAccountDa
         } else {
             this.props.onBack();
         }
-    }
+    };
 
     private onChange = (e: ChangeEvent<HTMLInputElement>) => {
-        this.setState({[e.target.id]: e.target.type === 'checkbox' ? e.target.checked : e.target.value});
-    }
+        this.setState({ [e.target.id]: e.target.type === 'checkbox' ? e.target.checked : e.target.value });
+    };
 
     private editEv = () => {
         this.setState({ editing: true });
-    }
+    };
 
     private onQueryEventType = (queryEventType: string) => {
         this.setState({ queryEventType });
-    }
+    };
 
     render() {
         if (this.state.event) {
@@ -594,7 +627,9 @@ class AccountDataExplorer extends React.PureComponent<IExplorerProps, IAccountDa
                     inputs={{
                         eventType: this.state.event.getType(),
                         evContent: JSON.stringify(this.state.event.getContent(), null, '\t'),
-                    }} forceMode={true} />;
+                    }}
+                    forceMode={true}
+                />;
             }
 
             return <div className="mx_ViewSource">
@@ -630,8 +665,10 @@ class AccountDataExplorer extends React.PureComponent<IExplorerProps, IAccountDa
             </div>
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
-                <div style={{float: "right"}}>
-                    <input id="isRoomAccountData" className="mx_DevTools_tgl mx_DevTools_tgl-flip"
+                <div style={{ float: "right" }}>
+                    <input
+                        id="isRoomAccountData"
+                        className="mx_DevTools_tgl mx_DevTools_tgl-flip"
                         type="checkbox"
                         checked={this.state.isRoomAccountData}
                         onChange={this.onChange}
@@ -676,7 +713,7 @@ class ServersInRoomList extends React.PureComponent<IExplorerProps, IServersInRo
 
     private onQuery = (query: string) => {
         this.setState({ query });
-    }
+    };
 
     render() {
         return <div>
@@ -704,7 +741,7 @@ const PHASE_MAP = {
 const VerificationRequestExplorer: React.FC<{
     txnId: string;
     request: VerificationRequest;
-}> = ({txnId, request}) => {
+}> = ({ txnId, request }) => {
     const [, updateState] = useState();
     const [timeout, setRequestTimeout] = useState(request.timeout);
 
@@ -726,20 +763,20 @@ const VerificationRequestExplorer: React.FC<{
     return (<div className="mx_DevTools_VerificationRequest">
         <dl>
             <dt>Transaction</dt>
-            <dd>{txnId}</dd>
+            <dd>{ txnId }</dd>
             <dt>Phase</dt>
-            <dd>{PHASE_MAP[request.phase] || request.phase}</dd>
+            <dd>{ PHASE_MAP[request.phase] || request.phase }</dd>
             <dt>Timeout</dt>
-            <dd>{Math.floor(timeout / 1000)}</dd>
+            <dd>{ Math.floor(timeout / 1000) }</dd>
             <dt>Methods</dt>
-            <dd>{request.methods && request.methods.join(", ")}</dd>
+            <dd>{ request.methods && request.methods.join(", ") }</dd>
             <dt>requestingUserId</dt>
-            <dd>{request.requestingUserId}</dd>
+            <dd>{ request.requestingUserId }</dd>
             <dt>observeOnly</dt>
-            <dd>{JSON.stringify(request.observeOnly)}</dd>
+            <dd>{ JSON.stringify(request.observeOnly) }</dd>
         </dl>
     </div>);
-}
+};
 
 class VerificationExplorer extends React.PureComponent<IExplorerProps> {
     static getLabel() {
@@ -751,7 +788,7 @@ class VerificationExplorer extends React.PureComponent<IExplorerProps> {
 
     private onNewRequest = () => {
         this.forceUpdate();
-    }
+    };
 
     componentDidMount() {
         const cli = this.context;
@@ -766,17 +803,17 @@ class VerificationExplorer extends React.PureComponent<IExplorerProps> {
     render() {
         const cli = this.context;
         const room = this.props.room;
-        const inRoomChannel = cli.crypto._inRoomVerificationRequests;
+        const inRoomChannel = cli.crypto.inRoomVerificationRequests;
         const inRoomRequests = (inRoomChannel._requestsByRoomId || new Map()).get(room.roomId) || new Map();
 
         return (<div>
             <div className="mx_Dialog_content">
-                {Array.from(inRoomRequests.entries()).reverse().map(([txnId, request]) =>
+                { Array.from(inRoomRequests.entries()).reverse().map(([txnId, request]) =>
                     <VerificationRequestExplorer txnId={txnId} request={request} key={txnId} />,
-                )}
+                ) }
             </div>
             <div className="mx_Dialog_buttons">
-                <button onClick={this.props.onBack}>{_t("Back")}</button>
+                <button onClick={this.props.onBack}>{ _t("Back") }</button>
             </div>
         </div>);
     }
@@ -806,17 +843,17 @@ class WidgetExplorer extends React.Component<IExplorerProps, IWidgetExplorerStat
     };
 
     private onQueryChange = (query: string) => {
-        this.setState({query});
+        this.setState({ query });
     };
 
     private onEditWidget = (widget: IApp) => {
-        this.setState({editWidget: widget});
+        this.setState({ editWidget: widget });
     };
 
     private onBack = () => {
         const widgets = WidgetStore.instance.getApps(this.props.room.roomId);
         if (this.state.editWidget && widgets.includes(this.state.editWidget)) {
-            this.setState({editWidget: null});
+            this.setState({ editWidget: null });
         } else {
             this.props.onBack();
         }
@@ -844,9 +881,9 @@ class WidgetExplorer extends React.Component<IExplorerProps, IWidgetExplorerStat
             const stateEv = allState.find(ev => ev.getId() === editWidget.eventId);
             if (!stateEv) { // "should never happen"
                 return <div>
-                    {_t("There was an error finding this widget.")}
+                    { _t("There was an error finding this widget.") }
                     <div className="mx_Dialog_buttons">
-                        <button onClick={this.onBack}>{_t("Back")}</button>
+                        <button onClick={this.onBack}>{ _t("Back") }</button>
                     </div>
                 </div>;
             }
@@ -865,17 +902,17 @@ class WidgetExplorer extends React.Component<IExplorerProps, IWidgetExplorerStat
         return (<div>
             <div className="mx_Dialog_content">
                 <FilteredList query={this.state.query} onChange={this.onQueryChange}>
-                    {widgets.map(w => {
+                    { widgets.map(w => {
                         return <button
                             className='mx_DevTools_RoomStateExplorer_button'
                             key={w.url + w.eventId}
                             onClick={() => this.onEditWidget(w)}
-                        >{w.url}</button>;
-                    })}
+                        >{ w.url }</button>;
+                    }) }
                 </FilteredList>
             </div>
             <div className="mx_Dialog_buttons">
-                <button onClick={this.onBack}>{_t("Back")}</button>
+                <button onClick={this.onBack}>{ _t("Back") }</button>
             </div>
         </div>);
     }
@@ -908,22 +945,22 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
     }
 
     private onQueryChange = (ev: ChangeEvent<HTMLInputElement>) => {
-        this.setState({query: ev.target.value});
+        this.setState({ query: ev.target.value });
     };
 
     private onExplValuesEdit = (ev: ChangeEvent<HTMLTextAreaElement>) => {
-        this.setState({explicitValues: ev.target.value});
+        this.setState({ explicitValues: ev.target.value });
     };
 
     private onExplRoomValuesEdit = (ev: ChangeEvent<HTMLTextAreaElement>) => {
-        this.setState({explicitRoomValues: ev.target.value});
+        this.setState({ explicitRoomValues: ev.target.value });
     };
 
     private onBack = () => {
         if (this.state.editSetting) {
-            this.setState({editSetting: null});
+            this.setState({ editSetting: null });
         } else if (this.state.viewSetting) {
-            this.setState({viewSetting: null});
+            this.setState({ viewSetting: null });
         } else {
             this.props.onBack();
         }
@@ -931,7 +968,7 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
 
     private onViewClick = (ev: MouseEvent, settingId: string) => {
         ev.preventDefault();
-        this.setState({viewSetting: settingId});
+        this.setState({ viewSetting: settingId });
     };
 
     private onEditClick = (ev: MouseEvent, settingId: string) => {
@@ -949,7 +986,7 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
             const parsedExplicit = JSON.parse(this.state.explicitValues);
             const parsedExplicitRoom = JSON.parse(this.state.explicitRoomValues);
             for (const level of Object.keys(parsedExplicit)) {
-                console.log(`[Devtools] Setting value of ${settingId} at ${level} from user input`);
+                logger.log(`[Devtools] Setting value of ${settingId} at ${level} from user input`);
                 try {
                     const val = parsedExplicit[level];
                     await SettingsStore.setValue(settingId, null, level as SettingLevel, val);
@@ -959,7 +996,7 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
             }
             const roomId = this.props.room.roomId;
             for (const level of Object.keys(parsedExplicit)) {
-                console.log(`[Devtools] Setting value of ${settingId} at ${level} in ${roomId} from user input`);
+                logger.log(`[Devtools] Setting value of ${settingId} at ${level} in ${roomId} from user input`);
                 try {
                     const val = parsedExplicitRoom[level];
                     await SettingsStore.setValue(settingId, roomId, level as SettingLevel, val);
@@ -1007,7 +1044,7 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
     private renderCanEditLevel(roomId: string, level: SettingLevel): React.ReactNode {
         const canEdit = SettingsStore.canSetValue(this.state.editSetting, roomId, level);
         const className = canEdit ? 'mx_DevTools_SettingsExplorer_mutable' : 'mx_DevTools_SettingsExplorer_immutable';
-        return <td className={className}><code>{canEdit.toString()}</code></td>;
+        return <td className={className}><code>{ canEdit.toString() }</code></td>;
     }
 
     render() {
@@ -1021,46 +1058,53 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
                 <div>
                     <div className="mx_Dialog_content mx_DevTools_SettingsExplorer">
                         <Field
-                            label={_t('Filter results')} autoFocus={true} size={64}
-                            type="text" autoComplete="off" value={this.state.query} onChange={this.onQueryChange}
+                            label={_t('Filter results')}
+                            autoFocus={true}
+                            size={64}
+                            type="text"
+                            autoComplete="off"
+                            value={this.state.query}
+                            onChange={this.onQueryChange}
                             className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query"
                         />
                         <table>
                             <thead>
                                 <tr>
-                                    <th>{_t("Setting ID")}</th>
-                                    <th>{_t("Value")}</th>
-                                    <th>{_t("Value in this room")}</th>
+                                    <th>{ _t("Setting ID") }</th>
+                                    <th>{ _t("Value") }</th>
+                                    <th>{ _t("Value in this room") }</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {allSettings.map(i => (
+                                { allSettings.map(i => (
                                     <tr key={i}>
                                         <td>
                                             <a href="" onClick={(e) => this.onViewClick(e, i)}>
-                                                <code>{i}</code>
+                                                <code>{ i }</code>
                                             </a>
-                                            <a href="" onClick={(e) => this.onEditClick(e, i)}
+                                            <a
+                                                href=""
+                                                onClick={(e) => this.onEditClick(e, i)}
                                                 className='mx_DevTools_SettingsExplorer_edit'
                                             >
                                             ✏
                                             </a>
                                         </td>
                                         <td>
-                                            <code>{this.renderSettingValue(SettingsStore.getValue(i))}</code>
+                                            <code>{ this.renderSettingValue(SettingsStore.getValue(i)) }</code>
                                         </td>
                                         <td>
                                             <code>
-                                                {this.renderSettingValue(SettingsStore.getValue(i, room.roomId))}
+                                                { this.renderSettingValue(SettingsStore.getValue(i, room.roomId)) }
                                             </code>
                                         </td>
                                     </tr>
-                                ))}
+                                )) }
                             </tbody>
                         </table>
                     </div>
                     <div className="mx_Dialog_buttons">
-                        <button onClick={this.onBack}>{_t("Back")}</button>
+                        <button onClick={this.onBack}>{ _t("Back") }</button>
                     </div>
                 </div>
             );
@@ -1068,62 +1112,70 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
             return (
                 <div>
                     <div className="mx_Dialog_content mx_DevTools_SettingsExplorer">
-                        <h3>{_t("Setting:")} <code>{this.state.editSetting}</code></h3>
+                        <h3>{ _t("Setting:") } <code>{ this.state.editSetting }</code></h3>
 
                         <div className='mx_DevTools_SettingsExplorer_warning'>
-                            <b>{_t("Caution:")}</b> {_t(
+                            <b>{ _t("Caution:") }</b> { _t(
                                 "This UI does NOT check the types of the values. Use at your own risk.",
-                            )}
+                            ) }
                         </div>
 
                         <div>
-                            {_t("Setting definition:")}
-                            <pre><code>{JSON.stringify(SETTINGS[this.state.editSetting], null, 4)}</code></pre>
+                            { _t("Setting definition:") }
+                            <pre><code>{ JSON.stringify(SETTINGS[this.state.editSetting], null, 4) }</code></pre>
                         </div>
 
                         <div>
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>{_t("Level")}</th>
-                                        <th>{_t("Settable at global")}</th>
-                                        <th>{_t("Settable at room")}</th>
+                                        <th>{ _t("Level") }</th>
+                                        <th>{ _t("Settable at global") }</th>
+                                        <th>{ _t("Settable at room") }</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {LEVEL_ORDER.map(lvl => (
+                                    { LEVEL_ORDER.map(lvl => (
                                         <tr key={lvl}>
-                                            <td><code>{lvl}</code></td>
-                                            {this.renderCanEditLevel(null, lvl)}
-                                            {this.renderCanEditLevel(room.roomId, lvl)}
+                                            <td><code>{ lvl }</code></td>
+                                            { this.renderCanEditLevel(null, lvl) }
+                                            { this.renderCanEditLevel(room.roomId, lvl) }
                                         </tr>
-                                    ))}
+                                    )) }
                                 </tbody>
                             </table>
                         </div>
 
                         <div>
                             <Field
-                                id="valExpl" label={_t("Values at explicit levels")} type="text"
-                                className="mx_DevTools_textarea" element="textarea"
-                                autoComplete="off" value={this.state.explicitValues}
+                                id="valExpl"
+                                label={_t("Values at explicit levels")}
+                                type="text"
+                                className="mx_DevTools_textarea"
+                                element="textarea"
+                                autoComplete="off"
+                                value={this.state.explicitValues}
                                 onChange={this.onExplValuesEdit}
                             />
                         </div>
 
                         <div>
                             <Field
-                                id="valExpl" label={_t("Values at explicit levels in this room")} type="text"
-                                className="mx_DevTools_textarea" element="textarea"
-                                autoComplete="off" value={this.state.explicitRoomValues}
+                                id="valExpl"
+                                label={_t("Values at explicit levels in this room")}
+                                type="text"
+                                className="mx_DevTools_textarea"
+                                element="textarea"
+                                autoComplete="off"
+                                value={this.state.explicitRoomValues}
                                 onChange={this.onExplRoomValuesEdit}
                             />
                         </div>
 
                     </div>
                     <div className="mx_Dialog_buttons">
-                        <button onClick={this.onSaveClick}>{_t("Save setting values")}</button>
-                        <button onClick={this.onBack}>{_t("Back")}</button>
+                        <button onClick={this.onSaveClick}>{ _t("Save setting values") }</button>
+                        <button onClick={this.onBack}>{ _t("Back") }</button>
                     </div>
                 </div>
             );
@@ -1131,39 +1183,39 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
             return (
                 <div>
                     <div className="mx_Dialog_content mx_DevTools_SettingsExplorer">
-                        <h3>{_t("Setting:")} <code>{this.state.viewSetting}</code></h3>
+                        <h3>{ _t("Setting:") } <code>{ this.state.viewSetting }</code></h3>
 
                         <div>
-                            {_t("Setting definition:")}
-                            <pre><code>{JSON.stringify(SETTINGS[this.state.viewSetting], null, 4)}</code></pre>
+                            { _t("Setting definition:") }
+                            <pre><code>{ JSON.stringify(SETTINGS[this.state.viewSetting], null, 4) }</code></pre>
                         </div>
 
                         <div>
-                            {_t("Value:")}&nbsp;
-                            <code>{this.renderSettingValue(
+                            { _t("Value:") }&nbsp;
+                            <code>{ this.renderSettingValue(
                                 SettingsStore.getValue(this.state.viewSetting),
-                            )}</code>
+                            ) }</code>
                         </div>
 
                         <div>
-                            {_t("Value in this room:")}&nbsp;
-                            <code>{this.renderSettingValue(
+                            { _t("Value in this room:") }&nbsp;
+                            <code>{ this.renderSettingValue(
                                 SettingsStore.getValue(this.state.viewSetting, room.roomId),
-                            )}</code>
+                            ) }</code>
                         </div>
 
                         <div>
-                            {_t("Values at explicit levels:")}
-                            <pre><code>{this.renderExplicitSettingValues(
+                            { _t("Values at explicit levels:") }
+                            <pre><code>{ this.renderExplicitSettingValues(
                                 this.state.viewSetting, null,
-                            )}</code></pre>
+                            ) }</code></pre>
                         </div>
 
                         <div>
-                            {_t("Values at explicit levels in this room:")}
-                            <pre><code>{this.renderExplicitSettingValues(
+                            { _t("Values at explicit levels in this room:") }
+                            <pre><code>{ this.renderExplicitSettingValues(
                                 this.state.viewSetting, room.roomId,
-                            )}</code></pre>
+                            ) }</code></pre>
                         </div>
 
                     </div>
@@ -1171,7 +1223,7 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
                         <button onClick={(e) => this.onEditClick(e, this.state.viewSetting)}>{
                             _t("Edit Values")
                         }</button>
-                        <button onClick={this.onBack}>{_t("Back")}</button>
+                        <button onClick={this.onBack}>{ _t("Back") }</button>
                     </div>
                 </div>
             );
@@ -1221,23 +1273,23 @@ export default class DevtoolsDialog extends React.PureComponent<IProps, IState> 
 
     private onBack = () => {
         this.setState({ mode: null });
-    }
+    };
 
     private onCancel = () => {
         this.props.onFinished(false);
-    }
+    };
 
     render() {
         let body;
 
         if (this.state.mode) {
             body = <MatrixClientContext.Consumer>
-                {(cli) => <React.Fragment>
+                { (cli) => <React.Fragment>
                     <div className="mx_DevTools_label_left">{ this.state.mode.getLabel() }</div>
                     <div className="mx_DevTools_label_right">Room ID: { this.props.roomId }</div>
                     <div className="mx_DevTools_label_bottom" />
                     <this.state.mode onBack={this.onBack} room={cli.getRoom(this.props.roomId)} />
-                </React.Fragment>}
+                </React.Fragment> }
             </MatrixClientContext.Consumer>;
         } else {
             const classes = "mx_DevTools_RoomStateExplorer_button";
@@ -1261,7 +1313,6 @@ export default class DevtoolsDialog extends React.PureComponent<IProps, IState> 
             </React.Fragment>;
         }
 
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished} title={_t('Developer Tools')}>
                 { body }

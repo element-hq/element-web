@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {EnhancedMap} from "./maps";
+import { EnhancedMap } from "./maps";
 
 // Inspired by https://pkg.go.dev/golang.org/x/sync/singleflight
 

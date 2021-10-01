@@ -19,11 +19,11 @@ limitations under the License.
  * TODO: Convert this to a real TypeScript interface
  */
 export default class PermalinkConstructor {
-    forEvent(roomId: string, eventId: string, serverCandidates: string[]): string {
+    forEvent(roomId: string, eventId: string, serverCandidates: string[] = []): string {
         throw new Error("Not implemented");
     }
 
-    forRoom(roomIdOrAlias: string, serverCandidates: string[]): string {
+    forRoom(roomIdOrAlias: string, serverCandidates: string[] = []): string {
         throw new Error("Not implemented");
     }
 
@@ -73,12 +73,12 @@ export class PermalinkParts {
         return new PermalinkParts(null, null, null, groupId, null);
     }
 
-    static forRoom(roomIdOrAlias: string, viaServers: string[]): PermalinkParts {
-        return new PermalinkParts(roomIdOrAlias, null, null, null, viaServers || []);
+    static forRoom(roomIdOrAlias: string, viaServers: string[] = []): PermalinkParts {
+        return new PermalinkParts(roomIdOrAlias, null, null, null, viaServers);
     }
 
-    static forEvent(roomId: string, eventId: string, viaServers: string[]): PermalinkParts {
-        return new PermalinkParts(roomId, eventId, null, null, viaServers || []);
+    static forEvent(roomId: string, eventId: string, viaServers: string[] = []): PermalinkParts {
+        return new PermalinkParts(roomId, eventId, null, null, viaServers);
     }
 
     get primaryEntityId(): string {

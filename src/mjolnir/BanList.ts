@@ -16,8 +16,8 @@ limitations under the License.
 
 // Inspiration largely taken from Mjolnir itself
 
-import {ListRule, RECOMMENDATION_BAN, recommendationToStable} from "./ListRule";
-import {MatrixClientPeg} from "../MatrixClientPeg";
+import { ListRule, RECOMMENDATION_BAN, recommendationToStable } from "./ListRule";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 
 export const RULE_USER = "m.room.rule.user";
 export const RULE_ROOM = "m.room.rule.room";
@@ -92,7 +92,7 @@ export class BanList {
         if (!room) return;
 
         for (const eventType of ALL_RULE_TYPES) {
-            const events = room.currentState.getStateEvents(eventType, undefined);
+            const events = room.currentState.getStateEvents(eventType);
             for (const ev of events) {
                 if (!ev.getStateKey()) continue;
 

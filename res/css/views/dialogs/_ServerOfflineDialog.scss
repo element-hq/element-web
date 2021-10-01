@@ -17,10 +17,10 @@ limitations under the License.
 .mx_ServerOfflineDialog {
     .mx_ServerOfflineDialog_content {
         padding-right: 85px;
-        color: $primary-fg-color;
+        color: $primary-content;
 
         hr {
-            border-color: $primary-fg-color;
+            border-color: $primary-content;
             opacity: 0.1;
             border-bottom: none;
         }

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { MatrixClient } from 'matrix-js-sdk/src/client';
@@ -174,7 +174,10 @@ export default class ImportE2eKeysDialog extends React.Component {
                         </div>
                     </div>
                     <div className='mx_Dialog_buttons'>
-                        <input className='mx_Dialog_primary' type='submit' value={_t('Import')}
+                        <input
+                            className='mx_Dialog_primary'
+                            type='submit'
+                            value={_t('Import')}
                             disabled={!this.state.enableSubmit || disableForm}
                         />
                         <button onClick={this._onCancelClick} disabled={disableForm}>

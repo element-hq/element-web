@@ -15,48 +15,44 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t, _td} from "../../../../../languageHandler";
-import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
-import * as sdk from "../../../../..";
+import { _t, _td } from "../../../../../languageHandler";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
-import {EventType} from "matrix-js-sdk/src/@types/event";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomState } from "matrix-js-sdk/src/models/room-state";
 import { compare } from "../../../../../utils/strings";
+import ErrorDialog from '../../../dialogs/ErrorDialog';
+import PowerSelector from "../../../elements/PowerSelector";
 
-const plEventsToLabels = {
-    // These will be translated for us later.
-    [EventType.RoomAvatar]: _td("Change room avatar"),
-    [EventType.RoomName]: _td("Change room name"),
-    [EventType.RoomCanonicalAlias]: _td("Change main address for the room"),
-    [EventType.RoomHistoryVisibility]: _td("Change history visibility"),
-    [EventType.RoomPowerLevels]: _td("Change permissions"),
-    [EventType.RoomTopic]: _td("Change topic"),
-    [EventType.RoomTombstone]: _td("Upgrade the room"),
-    [EventType.RoomEncryption]: _td("Enable room encryption"),
-    [EventType.RoomServerAcl]: _td("Change server ACLs"),
+interface IEventShowOpts {
+    isState?: boolean;
+    hideForSpace?: boolean;
+}
 
-    // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
-    "im.vector.modular.widgets": _td("Modify widgets"),
-};
+interface IPowerLevelDescriptor {
+    desc: string;
+    defaultValue: number;
+    hideForSpace?: boolean;
+}
 
-const plEventsToShow = {
+const plEventsToShow: Record<string, IEventShowOpts> = {
     // If an event is listed here, it will be shown in the PL settings. Defaults will be calculated.
-    [EventType.RoomAvatar]: {isState: true},
-    [EventType.RoomName]: {isState: true},
-    [EventType.RoomCanonicalAlias]: {isState: true},
-    [EventType.RoomHistoryVisibility]: {isState: true},
-    [EventType.RoomPowerLevels]: {isState: true},
-    [EventType.RoomTopic]: {isState: true},
-    [EventType.RoomTombstone]: {isState: true},
-    [EventType.RoomEncryption]: {isState: true},
-    [EventType.RoomServerAcl]: {isState: true},
+    [EventType.RoomAvatar]: { isState: true },
+    [EventType.RoomName]: { isState: true },
+    [EventType.RoomCanonicalAlias]: { isState: true },
+    [EventType.RoomHistoryVisibility]: { isState: true, hideForSpace: true },
+    [EventType.RoomPowerLevels]: { isState: true },
+    [EventType.RoomTopic]: { isState: true },
+    [EventType.RoomTombstone]: { isState: true, hideForSpace: true },
+    [EventType.RoomEncryption]: { isState: true, hideForSpace: true },
+    [EventType.RoomServerAcl]: { isState: true, hideForSpace: true },
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
-    "im.vector.modular.widgets": {isState: true},
+    "im.vector.modular.widgets": { isState: true, hideForSpace: true },
 };
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
@@ -76,7 +72,6 @@ interface IBannedUserProps {
 export class BannedUser extends React.Component<IBannedUserProps> {
     private onUnbanClick = (e) => {
         MatrixClientPeg.get().unban(this.props.member.roomId, this.props.member.userId).catch((err) => {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to unban: " + err);
             Modal.createTrackedDialog('Failed to unban', '', ErrorDialog, {
                 title: _t('Error'),
@@ -102,10 +97,10 @@ export class BannedUser extends React.Component<IBannedUserProps> {
         const userId = this.props.member.name === this.props.member.userId ? null : this.props.member.userId;
         return (
             <li>
-                {unbanButton}
-                <span title={_t("Banned by %(displayName)s", {displayName: this.props.by})}>
-                    <strong>{ this.props.member.name }</strong> {userId}
-                    {this.props.reason ? " " + _t('Reason') + ": " + this.props.reason : ""}
+                { unbanButton }
+                <span title={_t("Banned by %(displayName)s", { displayName: this.props.by })}>
+                    <strong>{ this.props.member.name }</strong> { userId }
+                    { this.props.reason ? " " + _t('Reason') + ": " + this.props.reason : "" }
                 </span>
             </li>
         );
@@ -142,18 +137,16 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         }
     }
 
-    private onPowerLevelsChanged = (inputValue: string, powerLevelKey: string) => {
+    private onPowerLevelsChanged = (value: number, powerLevelKey: string) => {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
-        const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');
+        const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, '');
         let plContent = plEvent ? (plEvent.getContent() || {}) : {};
 
         // Clone the power levels just in case
         plContent = Object.assign({}, plContent);
 
         const eventsLevelPrefix = "event_levels_";
-
-        const value = parseInt(inputValue);
 
         if (powerLevelKey.startsWith(eventsLevelPrefix)) {
             // deep copy "events" object, Object.assign itself won't deep copy
@@ -173,10 +166,9 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             parentObj[keyPath[keyPath.length - 1]] = value;
         }
 
-        client.sendStateEvent(this.props.roomId, "m.room.power_levels", plContent).catch(e => {
+        client.sendStateEvent(this.props.roomId, EventType.RoomPowerLevels, plContent).catch(e => {
             console.error(e);
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Power level requirement change failed', '', ErrorDialog, {
                 title: _t('Error changing power level requirement'),
                 description: _t(
@@ -187,10 +179,10 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         });
     };
 
-    private onUserPowerLevelChanged = (value: string, powerLevelKey: string) => {
+    private onUserPowerLevelChanged = (value: number, powerLevelKey: string) => {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
-        const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');
+        const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, '');
         let plContent = plEvent ? (plEvent.getContent() || {}) : {};
 
         // Clone the power levels just in case
@@ -200,10 +192,9 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         if (!plContent['users']) plContent['users'] = {};
         plContent['users'][powerLevelKey] = value;
 
-        client.sendStateEvent(this.props.roomId, "m.room.power_levels", plContent).catch(e => {
+        client.sendStateEvent(this.props.roomId, EventType.RoomPowerLevels, plContent).catch(e => {
             console.error(e);
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Power level change failed', '', ErrorDialog, {
                 title: _t('Error changing power level'),
                 description: _t(
@@ -215,15 +206,33 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
     };
 
     render() {
-        const PowerSelector = sdk.getComponent('elements.PowerSelector');
-
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
-        const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');
-        const plContent = plEvent ? (plEvent.getContent() || {}) : {};
-        const canChangeLevels = room.currentState.mayClientSendStateEvent('m.room.power_levels', client);
+        const isSpaceRoom = room.isSpaceRoom();
 
-        const powerLevelDescriptors = {
+        const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, '');
+        const plContent = plEvent ? (plEvent.getContent() || {}) : {};
+        const canChangeLevels = room.currentState.mayClientSendStateEvent(EventType.RoomPowerLevels, client);
+
+        const plEventsToLabels = {
+            // These will be translated for us later.
+            [EventType.RoomAvatar]: isSpaceRoom ? _td("Change space avatar") : _td("Change room avatar"),
+            [EventType.RoomName]: isSpaceRoom ? _td("Change space name") : _td("Change room name"),
+            [EventType.RoomCanonicalAlias]: isSpaceRoom
+                ? _td("Change main address for the space")
+                : _td("Change main address for the room"),
+            [EventType.RoomHistoryVisibility]: _td("Change history visibility"),
+            [EventType.RoomPowerLevels]: _td("Change permissions"),
+            [EventType.RoomTopic]: isSpaceRoom ? _td("Change description") : _td("Change topic"),
+            [EventType.RoomTombstone]: _td("Upgrade the room"),
+            [EventType.RoomEncryption]: _td("Enable room encryption"),
+            [EventType.RoomServerAcl]: _td("Change server ACLs"),
+
+            // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
+            "im.vector.modular.widgets": isSpaceRoom ? null : _td("Modify widgets"),
+        };
+
+        const powerLevelDescriptors: Record<string, IPowerLevelDescriptor> = {
             "users_default": {
                 desc: _t('Default role'),
                 defaultValue: 0,
@@ -231,6 +240,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             "events_default": {
                 desc: _t('Send messages'),
                 defaultValue: 0,
+                hideForSpace: true,
             },
             "invite": {
                 desc: _t('Invite users'),
@@ -251,10 +261,12 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             "redact": {
                 desc: _t('Remove messages sent by others'),
                 defaultValue: 50,
+                hideForSpace: true,
             },
             "notifications.room": {
                 desc: _t('Notify everyone'),
                 defaultValue: 50,
+                hideForSpace: true,
             },
         };
 
@@ -277,13 +289,14 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             parseIntWithDefault(plContent.events_default, powerLevelDescriptors.events_default.defaultValue),
         );
 
-        let privilegedUsersSection = <div>{_t('No users have specific privileges in this room')}</div>;
+        let privilegedUsersSection = <div>{ _t('No users have specific privileges in this room') }</div>;
         let mutedUsersSection;
         if (Object.keys(userLevels).length) {
             const privilegedUsers = [];
             const mutedUsers = [];
 
             Object.keys(userLevels).forEach((user) => {
+                if (!Number.isInteger(userLevels[user])) { return; }
                 const canChange = userLevels[user] < currentUserLevel && canChangeLevels;
                 if (userLevels[user] > defaultUserLevel) { // privileged
                     privilegedUsers.push(
@@ -323,14 +336,14 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                 privilegedUsersSection =
                     <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                         <div className='mx_SettingsTab_subheading'>{ _t('Privileged Users') }</div>
-                        {privilegedUsers}
+                        { privilegedUsers }
                     </div>;
             }
             if (mutedUsers.length) {
                 mutedUsersSection =
                     <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                         <div className='mx_SettingsTab_subheading'>{ _t('Muted Users') }</div>
-                        {mutedUsers}
+                        { mutedUsers }
                     </div>;
             }
         }
@@ -343,24 +356,30 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                     <div className='mx_SettingsTab_subheading'>{ _t('Banned users') }</div>
                     <ul>
-                        {banned.map((member) => {
+                        { banned.map((member) => {
                             const banEvent = member.events.member.getContent();
                             const sender = room.getMember(member.events.member.getSender());
                             let bannedBy = member.events.member.getSender(); // start by falling back to mxid
                             if (sender) bannedBy = sender.name;
                             return (
-                                <BannedUser key={member.userId} canUnban={canBanUsers}
-                                    member={member} reason={banEvent.reason}
+                                <BannedUser
+                                    key={member.userId}
+                                    canUnban={canBanUsers}
+                                    member={member}
+                                    reason={banEvent.reason}
                                     by={bannedBy}
                                 />
                             );
-                        })}
+                        }) }
                     </ul>
                 </div>;
         }
 
         const powerSelectors = Object.keys(powerLevelDescriptors).map((key, index) => {
             const descriptor = powerLevelDescriptors[key];
+            if (isSpaceRoom && descriptor.hideForSpace) {
+                return null;
+            }
 
             const keyPath = key.split('.');
             let currentObj = plContent;
@@ -382,19 +401,23 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                     onChange={this.onPowerLevelsChanged}
                 />
             </div>;
-        });
+        }).filter(Boolean);
 
         // hide the power level selector for enabling E2EE if it the room is already encrypted
         if (client.isRoomEncrypted(this.props.roomId)) {
-            delete eventsLevels["m.room.encryption"];
+            delete eventsLevels[EventType.RoomEncryption];
         }
 
         const eventPowerSelectors = Object.keys(eventsLevels).map((eventType, i) => {
+            if (isSpaceRoom && plEventsToShow[eventType].hideForSpace) {
+                return null;
+            }
+
             let label = plEventsToLabels[eventType];
             if (label) {
                 label = _t(label);
             } else {
-                label = _t("Send %(eventType)s events", {eventType});
+                label = _t("Send %(eventType)s events", { eventType });
             }
             return (
                 <div className="" key={eventType}>
@@ -408,19 +431,22 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                     />
                 </div>
             );
-        });
+        }).filter(Boolean);
 
         return (
             <div className="mx_SettingsTab mx_RolesRoomSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Roles & Permissions")}</div>
-                {privilegedUsersSection}
-                {mutedUsersSection}
-                {bannedUsersSection}
+                <div className="mx_SettingsTab_heading">{ _t("Roles & Permissions") }</div>
+                { privilegedUsersSection }
+                { mutedUsersSection }
+                { bannedUsersSection }
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    <span className='mx_SettingsTab_subheading'>{_t("Permissions")}</span>
-                    <p>{_t('Select the roles required to change various parts of the room')}</p>
-                    {powerSelectors}
-                    {eventPowerSelectors}
+                    <span className='mx_SettingsTab_subheading'>{ _t("Permissions") }</span>
+                    <p>{ isSpaceRoom
+                        ? _t('Select the roles required to change various parts of the space')
+                        : _t('Select the roles required to change various parts of the room')
+                    }</p>
+                    { powerSelectors }
+                    { eventPowerSelectors }
                 </div>
             </div>
         );

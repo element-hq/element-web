@@ -18,12 +18,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from '../languageHandler';
+import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import QueryMatcher from './QueryMatcher';
-import {TextualCompletion} from './Components';
-import {ICompletion, ISelectionRange} from "./Autocompleter";
-import {Command, Commands, CommandMap} from '../SlashCommands';
+import { TextualCompletion } from './Components';
+import { ICompletion, ISelectionRange } from "./Autocompleter";
+import { Command, Commands, CommandMap } from '../SlashCommands';
 
 const COMMAND_RE = /(^\/\w*)(?: .*)?/g;
 
@@ -34,7 +34,7 @@ export default class CommandProvider extends AutocompleteProvider {
         super(COMMAND_RE);
         this.matcher = new QueryMatcher(Commands, {
             keys: ['command', 'args', 'description'],
-            funcs: [({aliases}) => aliases.join(" ")], // aliases
+            funcs: [({ aliases }) => aliases.join(" ")], // aliases
         });
     }
 
@@ -44,7 +44,7 @@ export default class CommandProvider extends AutocompleteProvider {
         force?: boolean,
         limit = -1,
     ): Promise<ICompletion[]> {
-        const {command, range} = this.getCurrentCommand(query, selection);
+        const { command, range } = this.getCurrentCommand(query, selection);
         if (!command) return [];
 
         let matches = [];
@@ -53,7 +53,7 @@ export default class CommandProvider extends AutocompleteProvider {
             // The input looks like a command with arguments, perform exact match
             const name = command[1].substr(1); // strip leading `/`
             if (CommandMap.has(name) && CommandMap.get(name).isEnabled()) {
-                // some commands, namely `me` and `ddg` don't suit having the usage shown whilst typing their arguments
+                // some commands, namely `me` don't suit having the usage shown whilst typing their arguments
                 if (CommandMap.get(name).hideCompletionAfterSpace) return [];
                 matches = [CommandMap.get(name)];
             }
@@ -67,7 +67,6 @@ export default class CommandProvider extends AutocompleteProvider {
                 matches = this.matcher.match(command[1], limit);
             }
         }
-
 
         return matches.filter(cmd => cmd.isEnabled()).map((result) => {
             let completion = result.getCommand() + ' ';
@@ -96,8 +95,8 @@ export default class CommandProvider extends AutocompleteProvider {
     renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
             <div
-                className="mx_Autocomplete_Completion_container_block"
-                role="listbox"
+                className="mx_Autocomplete_Completion_container_pill"
+                role="presentation"
                 aria-label={_t("Command Autocomplete")}
             >
                 { completions }

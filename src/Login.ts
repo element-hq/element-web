@@ -16,10 +16,12 @@ limitations under the License.
 */
 
 // @ts-ignore - XXX: tsc doesn't like this: our js-sdk imports are complex so this isn't surprising
-import {createClient} from "matrix-js-sdk/src/matrix";
+import { createClient } from "matrix-js-sdk/src/matrix";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { IMatrixClientCreds } from "./MatrixClientPeg";
 import SecurityCustomisations from "./customisations/Security";
+
+import { logger } from "matrix-js-sdk/src/logger";
 
 interface ILoginOptions {
     defaultDeviceDisplayName?: string;
@@ -166,7 +168,7 @@ export default class Login {
             return sendLoginRequest(
                 this.fallbackHsUrl, this.isUrl, 'm.login.password', loginParams,
             ).catch((fallbackError) => {
-                console.log("fallback HS login failed", fallbackError);
+                logger.log("fallback HS login failed", fallbackError);
                 // throw the original error
                 throw originalError;
             });
@@ -184,12 +186,11 @@ export default class Login {
             }
             throw originalLoginError;
         }).catch((error) => {
-            console.log("Login failed", error);
+            logger.log("Login failed", error);
             throw error;
         });
     }
 }
-
 
 /**
  * Send a login request to the given server, and format the response
@@ -219,12 +220,12 @@ export async function sendLoginRequest(
     if (wellknown) {
         if (wellknown["m.homeserver"] && wellknown["m.homeserver"]["base_url"]) {
             hsUrl = wellknown["m.homeserver"]["base_url"];
-            console.log(`Overrode homeserver setting with ${hsUrl} from login response`);
+            logger.log(`Overrode homeserver setting with ${hsUrl} from login response`);
         }
         if (wellknown["m.identity_server"] && wellknown["m.identity_server"]["base_url"]) {
             // TODO: should we prompt here?
             isUrl = wellknown["m.identity_server"]["base_url"];
-            console.log(`Overrode IS setting with ${isUrl} from login response`);
+            logger.log(`Overrode IS setting with ${isUrl} from login response`);
         }
     }
 

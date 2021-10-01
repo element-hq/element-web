@@ -17,7 +17,7 @@ limitations under the License.
 import { IPreview } from "./IPreview";
 import { TagID } from "../models";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { _t } from "../../../languageHandler";
+import { _t, sanitizeForTranslation } from "../../../languageHandler";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
 import ReplyThread from "../../../components/views/elements/ReplyThread";
 import { getHtmlText } from "../../../HtmlUtils";
@@ -58,14 +58,16 @@ export class MessageEventPreview implements IPreview {
             body = getHtmlText(body);
         }
 
+        body = sanitizeForTranslation(body);
+
         if (msgtype === 'm.emote') {
-            return _t("* %(senderName)s %(emote)s", {senderName: getSenderName(event), emote: body});
+            return _t("* %(senderName)s %(emote)s", { senderName: getSenderName(event), emote: body });
         }
 
         if (isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
             return body;
         } else {
-            return _t("%(senderName)s: %(message)s", {senderName: getSenderName(event), message: body});
+            return _t("%(senderName)s: %(message)s", { senderName: getSenderName(event), message: body });
         }
     }
 }

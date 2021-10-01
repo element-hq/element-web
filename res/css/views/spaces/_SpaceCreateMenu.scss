@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$spacePanelWidth: 71px;
+$spacePanelWidth: 68px;
 
 .mx_SpaceCreateMenu_wrapper {
     // background blur everything except SpacePanel
@@ -28,7 +28,7 @@ $spacePanelWidth: 71px;
         padding: 24px;
         width: 480px;
         box-sizing: border-box;
-        background-color: $primary-bg-color;
+        background-color: $background;
         position: relative;
 
         > div {
@@ -40,16 +40,14 @@ $spacePanelWidth: 71px;
 
             > p {
                 font-size: $font-15px;
-                color: $secondary-fg-color;
-                margin: 0;
+                color: $secondary-content;
             }
-        }
 
-        // XXX remove this when spaces leaves Beta
-        .mx_BetaCard_betaPill {
-            position: absolute;
-            top: 24px;
-            right: 24px;
+            .mx_SpaceFeedbackPrompt {
+                border-top: 1px solid $input-border-color;
+                padding-top: 12px;
+                margin-top: 16px;
+            }
         }
 
         .mx_SpaceCreateMenuType {
@@ -78,7 +76,7 @@ $spacePanelWidth: 71px;
                 width: 28px;
                 top: 0;
                 left: 0;
-                background-color: $tertiary-fg-color;
+                background-color: $tertiary-content;
                 transform: rotate(90deg);
                 mask-repeat: no-repeat;
                 mask-position: 2px 3px;
@@ -94,8 +92,35 @@ $spacePanelWidth: 71px;
             width: min-content;
         }
 
+        .mx_AccessibleButton_kind_link {
+            padding: 0;
+            font-size: inherit;
+        }
+
         .mx_AccessibleButton_disabled {
             cursor: not-allowed;
         }
+    }
+}
+
+.mx_SpaceFeedbackPrompt {
+    font-size: $font-15px;
+    line-height: $font-24px;
+
+    > span {
+        color: $secondary-content;
+        position: relative;
+        font-size: inherit;
+        line-height: inherit;
+        margin-right: auto;
+    }
+
+    .mx_AccessibleButton_kind_link {
+        color: $accent-color;
+        position: relative;
+        padding: 0;
+        margin-left: 8px;
+        font-size: inherit;
+        line-height: inherit;
     }
 }

@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {useEffect, useState} from "react";
-import {Room} from "matrix-js-sdk/src/models/room";
+import React, { useEffect, useState } from "react";
+import { Room } from "matrix-js-sdk/src/models/room";
 
-import {useEventEmitter} from "../../../hooks/useEventEmitter";
+import { useEventEmitter } from "../../../hooks/useEventEmitter";
 
 interface IProps {
     room: Room;
@@ -34,7 +34,7 @@ const RoomName = ({ room, children }: IProps): JSX.Element => {
     }, [room]);
 
     if (children) return children(name);
-    return name || "";
+    return <>{ name || "" }</>;
 };
 
 export default RoomName;

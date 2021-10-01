@@ -1,0 +1,26 @@
+name: Type Check
+on:
+    pull_request:
+        branches: [develop]
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        env:
+          PR_NUMBER: ${{github.event.number}}
+        steps:
+            - uses: actions/checkout@v2
+            - uses: c-hive/gha-yarn-cache@v2
+            - name: Install Deps
+              run: "./scripts/ci/install-deps.sh --ignore-scripts"
+            - name: Typecheck
+              run: "yarn run lint:types"
+            - name: Switch js-sdk to release mode
+              run: |
+                  scripts/ci/js-sdk-to-release.js
+                  cd node_modules/matrix-js-sdk
+                  yarn install
+                  yarn run build:compile
+                  yarn run build:types
+            - name: Typecheck (release mode)
+              run: "yarn run lint:types"
+

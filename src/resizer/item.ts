@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Resizer, {IConfig} from "./resizer";
+import Resizer, { IConfig } from "./resizer";
 import Sizer from "./sizer";
 
 export default class ResizeItem<C extends IConfig = IConfig> {
@@ -26,15 +26,20 @@ export default class ResizeItem<C extends IConfig = IConfig> {
         handle: HTMLElement,
         public readonly resizer: Resizer<C>,
         public readonly sizer: Sizer,
+        public readonly container?: HTMLElement,
     ) {
         this.reverse = resizer.isReverseResizeHandle(handle);
-        this.domNode = <HTMLElement>(this.reverse ? handle.nextElementSibling : handle.previousElementSibling);
+        if (container) {
+            this.domNode = <HTMLElement>(container);
+        } else {
+            this.domNode = <HTMLElement>(this.reverse ? handle.nextElementSibling : handle.previousElementSibling);
+        }
         this.id = handle.getAttribute("data-id");
     }
 
-    private copyWith(handle: HTMLElement, resizer: Resizer, sizer: Sizer) {
+    private copyWith(handle: HTMLElement, resizer: Resizer, sizer: Sizer, container?: HTMLElement) {
         const Ctor = this.constructor as typeof ResizeItem;
-        return new Ctor(handle, resizer, sizer);
+        return new Ctor(handle, resizer, sizer, container);
     }
 
     private advance(forwards: boolean) {

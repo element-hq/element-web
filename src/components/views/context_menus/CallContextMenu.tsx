@@ -22,7 +22,7 @@ import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import CallHandler from '../../../CallHandler';
 import InviteDialog, { KIND_CALL_TRANSFER } from '../dialogs/InviteDialog';
 import Modal from '../../../Modal';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps extends IContextMenuProps {
     call: MatrixCall;
@@ -42,21 +42,21 @@ export default class CallContextMenu extends React.Component<IProps> {
     onHoldClick = () => {
         this.props.call.setRemoteOnHold(true);
         this.props.onFinished();
-    }
+    };
 
     onUnholdClick = () => {
         CallHandler.sharedInstance().setActiveCallRoomId(this.props.call.roomId);
 
         this.props.onFinished();
-    }
+    };
 
     onTransferClick = () => {
         Modal.createTrackedDialog(
-            'Transfer Call', '', InviteDialog, {kind: KIND_CALL_TRANSFER, call: this.props.call},
-            /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
+            'Transfer Call', '', InviteDialog, { kind: KIND_CALL_TRANSFER, call: this.props.call },
+            /*className=*/"mx_InviteDialog_transferWrapper", /*isPriority=*/false, /*isStatic=*/true,
         );
         this.props.onFinished();
-    }
+    };
 
     render() {
         const holdUnholdCaption = this.props.call.isRemoteOnHold() ? _t("Resume") : _t("Hold");
@@ -65,15 +65,15 @@ export default class CallContextMenu extends React.Component<IProps> {
         let transferItem;
         if (this.props.call.opponentCanBeTransferred()) {
             transferItem = <MenuItem className="mx_CallContextMenu_item" onClick={this.onTransferClick}>
-                {_t("Transfer")}
+                { _t("Transfer") }
             </MenuItem>;
         }
 
         return <ContextMenu {...this.props}>
             <MenuItem className="mx_CallContextMenu_item" onClick={handler}>
-                {holdUnholdCaption}
+                { holdUnholdCaption }
             </MenuItem>
-            {transferItem}
+            { transferItem }
         </ContextMenu>;
     }
 }

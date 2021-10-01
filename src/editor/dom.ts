@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {CARET_NODE_CHAR, isCaretNode} from "./render";
+import { CARET_NODE_CHAR, isCaretNode } from "./render";
 import DocumentOffset from "./offset";
 
 type Predicate = (node: Node) => boolean;
@@ -44,8 +44,8 @@ export function walkDOMDepthFirst(rootNode: Node, enterNodeCallback: Predicate, 
 }
 
 export function getCaretOffsetAndText(editor: HTMLDivElement, sel: Selection) {
-    const {offset, text} = getSelectionOffsetAndText(editor, sel.focusNode, sel.focusOffset);
-    return {caret: offset, text};
+    const { offset, text } = getSelectionOffsetAndText(editor, sel.focusNode, sel.focusOffset);
+    return { caret: offset, text };
 }
 
 function tryReduceSelectionToTextNode(selectionNode: Node, selectionOffset: number) {
@@ -86,10 +86,10 @@ function tryReduceSelectionToTextNode(selectionNode: Node, selectionOffset: numb
 }
 
 function getSelectionOffsetAndText(editor: HTMLDivElement, selectionNode: Node, selectionOffset: number) {
-    const {node, characterOffset} = tryReduceSelectionToTextNode(selectionNode, selectionOffset);
-    const {text, offsetToNode} = getTextAndOffsetToNode(editor, node);
+    const { node, characterOffset } = tryReduceSelectionToTextNode(selectionNode, selectionOffset);
+    const { text, offsetToNode } = getTextAndOffsetToNode(editor, node);
     const offset = getCaret(node, offsetToNode, characterOffset);
-    return {offset, text};
+    return { offset, text };
 }
 
 // gets the caret position details, ignoring and adjusting to
@@ -163,7 +163,7 @@ function getTextAndOffsetToNode(editor: HTMLDivElement, selectionNode: Node) {
 
     walkDOMDepthFirst(editor, enterNodeCallback, leaveNodeCallback);
 
-    return {text, offsetToNode};
+    return { text, offsetToNode };
 }
 
 // get text value of text node, ignoring ZWS if it's a caret node

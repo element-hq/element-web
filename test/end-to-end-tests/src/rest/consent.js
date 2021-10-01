@@ -27,5 +27,5 @@ module.exports.approveConsent = async function(consentUrl) {
     const h = doc("input[name=h]").val();
     const formAction = doc("form").attr("action");
     const absAction = url.resolve(consentUrl, formAction);
-    await request.post(absAction).form({v, u, h});
+    await request.post(absAction).form({ v, u, h });
 };

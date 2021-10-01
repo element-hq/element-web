@@ -25,14 +25,14 @@ export type SpaceInvadersOptions = {
      * The amount of gravity to apply to the invaders
      */
     gravity: number;
-}
+};
 
 type Invader = {
     x: number;
     y: number;
     xCol: number;
     gravity: number;
-}
+};
 
 export const DefaultOptions: SpaceInvadersOptions = {
     maxCount: 50,
@@ -46,7 +46,7 @@ export default class SpaceInvaders implements ICanvasEffect {
     private readonly options: SpaceInvadersOptions;
 
     constructor(options: { [key: string]: any }) {
-        this.options = {...DefaultOptions, ...options};
+        this.options = { ...DefaultOptions, ...options };
     }
 
     private context: CanvasRenderingContext2D | null = null;
@@ -70,11 +70,11 @@ export default class SpaceInvaders implements ICanvasEffect {
         if (timeout) {
             window.setTimeout(this.stop, timeout);
         }
-    }
+    };
 
     public stop = async () => {
         this.isRunning = false;
-    }
+    };
 
     private resetParticle = (particle: Invader, width: number, height: number): Invader => {
         particle.x = Math.random() * width;
@@ -82,7 +82,7 @@ export default class SpaceInvaders implements ICanvasEffect {
         particle.xCol = particle.x;
         particle.gravity = this.options.gravity + (Math.random() * 6) + 4;
         return particle;
-    }
+    };
 
     private renderLoop = (): void => {
         if (!this.context || !this.context.canvas) {

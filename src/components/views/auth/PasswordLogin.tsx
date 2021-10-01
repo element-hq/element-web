@@ -19,14 +19,14 @@ import classNames from 'classnames';
 
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
-import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
 import AccessibleButton from "../elements/AccessibleButton";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import withValidation from "../elements/Validation";
 import * as Email from "../../../email";
 import Field from "../elements/Field";
 import CountryDropdown from "./CountryDropdown";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -52,8 +52,8 @@ interface IProps {
 
 interface IState {
     fieldValid: Partial<Record<LoginField, boolean>>;
-    loginType: LoginField.Email | LoginField.MatrixId | LoginField.Phone,
-    password: "",
+    loginType: LoginField.Email | LoginField.MatrixId | LoginField.Phone;
+    password: "";
 }
 
 enum LoginField {
@@ -166,7 +166,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
     };
 
     private onPasswordChanged = ev => {
-        this.setState({password: ev.target.value});
+        this.setState({ password: ev.target.value });
     };
 
     private async verifyFieldsBeforeSubmit() {
@@ -322,7 +322,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
         const result = await this.validatePasswordRules(fieldState);
         this.markFieldValid(LoginField.Password, result.valid);
         return result;
-    }
+    };
 
     private renderLoginField(loginType: IState["loginType"], autoFocus: boolean) {
         const classes = {
@@ -416,7 +416,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                 kind="link"
                 onClick={this.onForgotPasswordClick}
             >
-                {_t("Forgot password?")}
+                { _t("Forgot password?") }
             </AccessibleButton>;
         }
 
@@ -441,16 +441,16 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                         disabled={this.props.disableSubmit}
                     >
                         <option key={LoginField.MatrixId} value={LoginField.MatrixId}>
-                            {_t('Username')}
+                            { _t('Username') }
                         </option>
                         <option
                             key={LoginField.Email}
                             value={LoginField.Email}
                         >
-                            {_t('Email address')}
+                            { _t('Email address') }
                         </option>
                         <option key={LoginField.Password} value={LoginField.Password}>
-                            {_t('Phone')}
+                            { _t('Phone') }
                         </option>
                     </Field>
                 </div>
@@ -460,8 +460,8 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
         return (
             <div>
                 <form onSubmit={this.onSubmitForm}>
-                    {loginType}
-                    {loginField}
+                    { loginType }
+                    { loginField }
                     <Field
                         className={pwFieldClass}
                         type="password"
@@ -474,7 +474,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                         onValidate={this.onPasswordValidate}
                         ref={field => this[LoginField.Password] = field}
                     />
-                    {forgotPasswordJsx}
+                    { forgotPasswordJsx }
                     { !this.props.busy && <input className="mx_Login_submit"
                         type="submit"
                         value={_t('Sign in')}

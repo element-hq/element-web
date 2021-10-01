@@ -26,7 +26,7 @@ export class CallHangupEvent implements IPreview {
             if (isSelf(event)) {
                 return _t("You ended the call");
             } else {
-                return _t("%(senderName)s ended the call", {senderName: getSenderName(event)});
+                return _t("%(senderName)s ended the call", { senderName: getSenderName(event) });
             }
         } else {
             return _t("Call ended");

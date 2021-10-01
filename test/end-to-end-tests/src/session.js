@@ -18,7 +18,7 @@ limitations under the License.
 const puppeteer = require('puppeteer');
 const Logger = require('./logger');
 const LogBuffer = require('./logbuffer');
-const {delay} = require('./util');
+const { delay } = require('./util');
 
 const DEFAULT_TIMEOUT = 20000;
 
@@ -112,7 +112,7 @@ module.exports = class ElementSession {
 
     async replaceInputText(input, text) {
         // click 3 times to select all text
-        await input.click({clickCount: 3});
+        await input.click({ clickCount: 3 });
         // waiting here solves not having selected all the text by the 3x click above,
         // presumably because of the Field label animation.
         await this.delay(300);
@@ -123,7 +123,7 @@ module.exports = class ElementSession {
     }
 
     query(selector, timeout = DEFAULT_TIMEOUT, hidden = false) {
-        return this.page.waitForSelector(selector, {visible: true, timeout, hidden});
+        return this.page.waitForSelector(selector, { visible: true, timeout, hidden });
     }
 
     async queryAll(selector) {

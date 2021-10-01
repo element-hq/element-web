@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {EnhancedMap, mapDiff, mapKeyChanges} from "../../src/utils/maps";
+import { EnhancedMap, mapDiff, mapKeyChanges } from "../../src/utils/maps";
 
 describe('maps', () => {
     describe('mapDiff', () => {
@@ -187,7 +187,7 @@ describe('maps', () => {
         });
 
         it('should use the provided entries', () => {
-            const obj = {a: 1, b: 2};
+            const obj = { a: 1, b: 2 };
             const result = new EnhancedMap(Object.entries(obj));
             expect(result.size).toBe(2);
             expect(result.get('a')).toBe(1);

@@ -19,9 +19,8 @@ import PropTypes from 'prop-types';
 import FlairStore from '../../../stores/FlairStore';
 import dis from '../../../dispatcher/dispatcher';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
-
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 class FlairAvatar extends React.Component {
     constructor() {

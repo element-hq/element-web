@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {TextEncoder} from "util";
+import { TextEncoder } from "util";
 import nodeCrypto from "crypto";
 import { Crypto } from "@peculiar/webcrypto";
 
@@ -144,7 +144,7 @@ cissyYBxjsfsAn
             const password = 'my super secret passphrase';
 
             return MegolmExportEncryption.encryptMegolmKeyFile(
-                input, password, {kdf_rounds: 1000},
+                input, password, { kdf_rounds: 1000 },
             ).then((ciphertext) => {
                 return MegolmExportEncryption.decryptMegolmKeyFile(
                     ciphertext, password,

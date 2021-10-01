@@ -74,7 +74,6 @@ export function copyNode(ref: Element): boolean {
     return document.execCommand('copy');
 }
 
-
 const collator = new Intl.Collator();
 /**
  * Performant language-sensitive string comparison

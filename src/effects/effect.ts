@@ -40,4 +40,4 @@ export type Effect<TOptions extends { [key: string]: any }> = {
      * animation options
      */
     options: TOptions;
-}
+};

@@ -17,28 +17,24 @@ limitations under the License.
 */
 
 import React from "react";
-import {uniqBy, sortBy} from "lodash";
-import Room from "matrix-js-sdk/src/models/room";
+import { uniqBy, sortBy } from "lodash";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import {MatrixClientPeg} from '../MatrixClientPeg';
+import { MatrixClientPeg } from '../MatrixClientPeg';
 import QueryMatcher from './QueryMatcher';
-import {PillCompletion} from './Components';
-import {makeRoomPermalink} from "../utils/permalinks/Permalinks";
-import {ICompletion, ISelectionRange} from "./Autocompleter";
+import { PillCompletion } from './Components';
+import { makeRoomPermalink } from "../utils/permalinks/Permalinks";
+import { ICompletion, ISelectionRange } from "./Autocompleter";
 import RoomAvatar from '../components/views/avatars/RoomAvatar';
-import SettingsStore from "../settings/SettingsStore";
+import SpaceStore from "../stores/SpaceStore";
 
 const ROOM_REGEX = /\B#\S*/g;
 
-function score(query: string, space: string) {
-    const index = space.indexOf(query);
-    if (index === -1) {
-        return Infinity;
-    } else {
-        return index;
-    }
+// Prefer canonical aliases over non-canonical ones
+function canonicalScore(displayedAlias: string, room: Room): number {
+    return displayedAlias === room.getCanonicalAlias() ? 0 : 1;
 }
 
 function matcherObject(room: Room, displayedAlias: string, matchName = "") {
@@ -63,7 +59,8 @@ export default class RoomProvider extends AutocompleteProvider {
         const cli = MatrixClientPeg.get();
         let rooms = cli.getVisibleRooms();
 
-        if (SettingsStore.getValue("feature_spaces")) {
+        // if spaces are enabled then filter them out here as they get their own autocomplete provider
+        if (SpaceStore.spacesEnabled) {
             rooms = rooms.filter(r => !r.isSpaceRoom());
         }
 
@@ -77,7 +74,7 @@ export default class RoomProvider extends AutocompleteProvider {
         limit = -1,
     ): Promise<ICompletion[]> {
         let completions = [];
-        const {command, range} = this.getCurrentCommand(query, selection, force);
+        const { command, range } = this.getCurrentCommand(query, selection, force);
         if (command) {
             // the only reason we need to do this is because Fuse only matches on properties
             let matcherObjects = this.getRooms().reduce((aliases, room) => {
@@ -106,7 +103,7 @@ export default class RoomProvider extends AutocompleteProvider {
             const matchedString = command[0];
             completions = this.matcher.match(matchedString, limit);
             completions = sortBy(completions, [
-                (c) => score(matchedString, c.displayedAlias),
+                (c) => canonicalScore(c.displayedAlias, c.room),
                 (c) => c.displayedAlias.length,
             ]);
             completions = uniqBy(completions, (match) => match.room);
@@ -137,7 +134,7 @@ export default class RoomProvider extends AutocompleteProvider {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate"
-                role="listbox"
+                role="presentation"
                 aria-label={_t("Room Autocomplete")}
             >
                 { completions }

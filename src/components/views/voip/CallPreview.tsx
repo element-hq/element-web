@@ -26,7 +26,11 @@ import PersistentApp from "../elements/PersistentApp";
 import SettingsStore from "../../../settings/SettingsStore";
 import { CallEvent, CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { EventSubscription } from 'fbemitter';
+import PictureInPictureDragger from './PictureInPictureDragger';
+
+import { logger } from "matrix-js-sdk/src/logger";
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
@@ -76,7 +80,7 @@ function getPrimarySecondaryCalls(calls: MatrixCall[]): [MatrixCall, MatrixCall[
 
     if (secondaries.length > 1) {
         // We should never be in more than two calls so this shouldn't happen
-        console.log("Found more than 1 secondary call! Other calls will not be shown.");
+        logger.log("Found more than 1 secondary call! Other calls will not be shown.");
     }
 
     return [primary, secondaries];
@@ -88,7 +92,7 @@ function getPrimarySecondaryCalls(calls: MatrixCall[]): [MatrixCall, MatrixCall[
  */
 @replaceableComponent("views.voip.CallPreview")
 export default class CallPreview extends React.Component<IProps, IState> {
-    private roomStoreToken: any;
+    private roomStoreToken: EventSubscription;
     private dispatcherRef: string;
     private settingsWatcherRef: string;
 
@@ -125,7 +129,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
         SettingsStore.unwatchSetting(this.settingsWatcherRef);
     }
 
-    private onRoomViewStoreUpdate = (payload) => {
+    private onRoomViewStoreUpdate = () => {
         if (RoomViewStore.getRoomId() === this.state.roomId) return;
 
         const roomId = RoomViewStore.getRoomId();
@@ -142,9 +146,10 @@ export default class CallPreview extends React.Component<IProps, IState> {
 
     private onAction = (payload: ActionPayload) => {
         switch (payload.action) {
-            // listen for call state changes to prod the render method, which
-            // may hide the global CallView if the call it is tracking is dead
             case 'call_state': {
+                // listen for call state changes to prod the render method, which
+                // may hide the global CallView if the call it is tracking is dead
+
                 this.updateCalls();
                 break;
             }
@@ -171,16 +176,28 @@ export default class CallPreview extends React.Component<IProps, IState> {
             primaryCall: primaryCall,
             secondaryCall: secondaryCalls[0],
         });
-    }
+    };
 
     public render() {
+        const pipMode = true;
         if (this.state.primaryCall) {
             return (
-                <CallView call={this.state.primaryCall} secondaryCall={this.state.secondaryCall} pipMode={true} />
+                <PictureInPictureDragger
+                    className="mx_CallPreview"
+                    draggable={pipMode}
+                >
+                    { ({ onStartMoving, onResize }) => <CallView
+                        onMouseDownOnHeader={onStartMoving}
+                        call={this.state.primaryCall}
+                        secondaryCall={this.state.secondaryCall}
+                        pipMode={pipMode}
+                        onResize={onResize}
+                    /> }
+                </PictureInPictureDragger>
+
             );
         }
 
         return <PersistentApp />;
     }
 }
-

@@ -16,6 +16,7 @@ limitations under the License.
 
 import EventEmitter from "events";
 import { base32 } from "rfc4648";
+import { RoomType } from "matrix-js-sdk/src/@types/event";
 
 // Dev note: the interface is split in two so we don't have to disable the
 // linter across the whole project.
@@ -45,6 +46,19 @@ export interface IThreepidInvite {
     inviterName: string;
 }
 
+// Any data about the room that would normally come from the homeserver
+// but has been passed out-of-band, eg. the room name and avatar URL
+// from an email invite (a workaround for the fact that we can't
+// get this information from the HS using an email invite).
+export interface IOOBData {
+    name?: string; // The room's name
+    avatarUrl?: string; // The mxc:// avatar URL for the room
+    inviterName?: string; // The display name of the person who invited us to the room
+    // eslint-disable-next-line camelcase
+    room_name?: string; // The name of the room, to be used until we are told better by the server
+    roomType?: RoomType; // The type of the room, to be used until we are told better by the server
+}
+
 const STORAGE_PREFIX = "mx_threepid_invite_";
 
 export default class ThreepidInviteStore extends EventEmitter {
@@ -58,7 +72,7 @@ export default class ThreepidInviteStore extends EventEmitter {
     }
 
     public storeInvite(roomId: string, wireInvite: IThreepidInviteWireFormat): IThreepidInvite {
-        const invite = <IPersistedThreepidInvite>{roomId, ...wireInvite};
+        const invite = <IPersistedThreepidInvite>{ roomId, ...wireInvite };
         const id = this.generateIdOf(invite);
         localStorage.setItem(`${STORAGE_PREFIX}${id}`, JSON.stringify(invite));
         return this.translateInvite(invite);

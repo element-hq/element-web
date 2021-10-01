@@ -16,11 +16,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import filesize from "filesize";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { getBlobSafeMimeType } from '../../../utils/blobs';
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
 
 interface IProps {
     file: File;
@@ -36,7 +37,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
 
     static defaultProps = {
         totalFiles: 1,
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -56,20 +57,17 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
 
     private onCancelClick = () => {
         this.props.onFinished(false);
-    }
+    };
 
     private onUploadClick = () => {
         this.props.onFinished(true);
-    }
+    };
 
     private onUploadAllClick = () => {
         this.props.onFinished(true, true);
-    }
+    };
 
     render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
         let title;
         if (this.props.totalFiles > 1 && this.props.currentIndex !== undefined) {
             title = _t(
@@ -88,7 +86,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
             preview = <div className="mx_UploadConfirmDialog_previewOuter">
                 <div className="mx_UploadConfirmDialog_previewInner">
                     <div><img className="mx_UploadConfirmDialog_imagePreview" src={this.objectUrl} /></div>
-                    <div>{this.props.file.name} ({filesize(this.props.file.size)})</div>
+                    <div>{ this.props.file.name } ({ filesize(this.props.file.size) })</div>
                 </div>
             </div>;
         } else {
@@ -97,7 +95,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
                     <img className="mx_UploadConfirmDialog_fileIcon"
                         src={require("../../../../res/img/feather-customised/files.svg")}
                     />
-                    {this.props.file.name} ({filesize(this.props.file.size)})
+                    { this.props.file.name } ({ filesize(this.props.file.size) })
                 </div>
             </div>;
         }
@@ -105,7 +103,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
         let uploadAllButton;
         if (this.props.currentIndex + 1 < this.props.totalFiles) {
             uploadAllButton = <button onClick={this.onUploadAllClick}>
-                {_t("Upload all")}
+                { _t("Upload all") }
             </button>;
         }
 
@@ -117,7 +115,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
                 contentId='mx_Dialog_content'
             >
                 <div id='mx_Dialog_content'>
-                    {preview}
+                    { preview }
                 </div>
 
                 <DialogButtons primaryButton={_t('Upload')}
@@ -125,7 +123,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
                     onPrimaryButtonClick={this.onUploadClick}
                     focus={true}
                 >
-                    {uploadAllButton}
+                    { uploadAllButton }
                 </DialogButtons>
             </BaseDialog>
         );

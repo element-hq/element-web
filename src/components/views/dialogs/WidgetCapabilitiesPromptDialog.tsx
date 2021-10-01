@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import { _t } from "../../../languageHandler";
 import { IDialogProps } from "./IDialogProps";
 import {
     Capability,
+    isTimelineCapability,
     Widget,
     WidgetEventCapability,
     WidgetKind,
@@ -29,15 +30,8 @@ import StyledCheckbox from "../elements/StyledCheckbox";
 import DialogButtons from "../elements/DialogButtons";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { CapabilityText } from "../../../widgets/CapabilityText";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-
-export function getRememberedCapabilitiesForWidget(widget: Widget): Capability[] {
-    return JSON.parse(localStorage.getItem(`widget_${widget.id}_approved_caps`) || "[]");
-}
-
-function setRememberedCapabilitiesForWidget(widget: Widget, caps: Capability[]) {
-    localStorage.setItem(`widget_${widget.id}_approved_caps`, JSON.stringify(caps));
-}
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { lexicographicCompare } from "matrix-js-sdk/src/utils";
 
 interface IProps extends IDialogProps {
     requestedCapabilities: Set<Capability>;
@@ -77,11 +71,11 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
     private onToggle = (capability: Capability) => {
         const newStates = objectShallowClone(this.state.booleanStates);
         newStates[capability] = !newStates[capability];
-        this.setState({booleanStates: newStates});
+        this.setState({ booleanStates: newStates });
     };
 
     private onRememberSelectionChange = (newVal: boolean) => {
-        this.setState({rememberSelection: newVal});
+        this.setState({ rememberSelection: newVal });
     };
 
     private onSubmit = async (ev) => {
@@ -95,17 +89,27 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
     };
 
     private closeAndTryRemember(approved: Capability[]) {
-        if (this.state.rememberSelection) {
-            setRememberedCapabilitiesForWidget(this.props.widget, approved);
-        }
-        this.props.onFinished({approved});
+        this.props.onFinished({ approved, remember: this.state.rememberSelection });
     }
 
     public render() {
-        const checkboxRows = Object.entries(this.state.booleanStates).map(([cap, isChecked], i) => {
+        // We specifically order the timeline capabilities down to the bottom. The capability text
+        // generation cares strongly about this.
+        const orderedCapabilities = Object.entries(this.state.booleanStates).sort(([capA], [capB]) => {
+            const isTimelineA = isTimelineCapability(capA);
+            const isTimelineB = isTimelineCapability(capB);
+
+            if (!isTimelineA && !isTimelineB) return lexicographicCompare(capA, capB);
+            if (isTimelineA && !isTimelineB) return 1;
+            if (!isTimelineA && isTimelineB) return -1;
+            if (isTimelineA && isTimelineB) return lexicographicCompare(capA, capB);
+
+            return 0;
+        });
+        const checkboxRows = orderedCapabilities.map(([cap, isChecked], i) => {
             const text = CapabilityText.for(cap, this.props.widgetKind);
             const byline = text.byline
-                ? <span className="mx_WidgetCapabilitiesPromptDialog_byline">{text.byline}</span>
+                ? <span className="mx_WidgetCapabilitiesPromptDialog_byline">{ text.byline }</span>
                 : null;
 
             return (
@@ -113,8 +117,8 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
                     <StyledCheckbox
                         checked={isChecked}
                         onChange={() => this.onToggle(cap)}
-                    >{text.primary}</StyledCheckbox>
-                    {byline}
+                    >{ text.primary }</StyledCheckbox>
+                    { byline }
                 </div>
             );
         });
@@ -127,8 +131,8 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
             >
                 <form onSubmit={this.onSubmit}>
                     <div className="mx_Dialog_content">
-                        <div className="text-muted">{_t("This widget would like to:")}</div>
-                        {checkboxRows}
+                        <div className="text-muted">{ _t("This widget would like to:") }</div>
+                        { checkboxRows }
                         <DialogButtons
                             primaryButton={_t("Approve")}
                             cancelButton={_t("Decline All")}

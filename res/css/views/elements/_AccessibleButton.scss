@@ -72,7 +72,7 @@ limitations under the License.
 
 .mx_AccessibleButton_kind_danger_outline {
     color: $button-danger-bg-color;
-    background-color: $button-secondary-bg-color;
+    background-color: transparent;
     border: 1px solid $button-danger-bg-color;
 }
 

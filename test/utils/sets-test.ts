@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {setHasDiff} from "../../src/utils/sets";
+import { setHasDiff } from "../../src/utils/sets";
 
 describe('sets', () => {
     describe('setHasDiff', () => {

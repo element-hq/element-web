@@ -130,7 +130,7 @@ limitations under the License.
 
 @keyframes visualbell {
     from { background-color: $visual-bell-bg-color; }
-    to { background-color: $primary-bg-color; }
+    to { background-color: $background; }
 }
 
 .mx_MessageComposer_input_error {
@@ -160,13 +160,11 @@ limitations under the License.
     resize: none;
     outline: none;
     box-shadow: none;
-    color: $primary-fg-color;
-    background-color: $primary-bg-color;
+    color: $primary-content;
+    background-color: $background;
     font-size: $font-14px;
     max-height: 120px;
     overflow: auto;
-    /* needed for FF */
-    font-family: $font-family;
 }
 
 /* hack for FF as vertical alignment of custom placeholder text is broken */
@@ -187,13 +185,26 @@ limitations under the License.
     }
 }
 
+.mx_ContextualMenu {
+    .mx_MessageComposer_button {
+        padding-left: calc(var(--size) + 6px);
+    }
+}
+
 .mx_MessageComposer_button {
+    --size: 26px;
     position: relative;
-    margin-right: 6px;
     cursor: pointer;
-    height: 26px;
-    width: 26px;
+    height: var(--size);
+    line-height: var(--size);
+    width: auto;
+    padding-left: var(--size);
     border-radius: 100%;
+    margin-right: 6px;
+
+    &:last-child {
+        margin-right: auto;
+    }
 
     &::before {
         content: '';
@@ -209,8 +220,22 @@ limitations under the License.
         mask-position: center;
     }
 
-    &:hover {
-        background: rgba($accent-color, 0.1);
+    &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 0;
+        width: var(--size);
+        height: var(--size);
+        border-radius: 50%;
+    }
+
+    &:hover,
+    &.mx_MessageComposer_closeButtonMenu {
+        &::after {
+            background: rgba($accent-color, 0.1);
+        }
 
         &::before {
             background-color: $accent-color;
@@ -239,10 +264,18 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/room/composer/sticker.svg');
 }
 
+.mx_MessageComposer_buttonMenu::before {
+    mask-image: url('$(res)/img/image-view/more.svg');
+}
+
+.mx_MessageComposer_closeButtonMenu::before {
+    transform: rotate(90deg);
+    transform-origin: center;
+}
+
 .mx_MessageComposer_sendMessage {
     cursor: pointer;
     position: relative;
-    margin-right: 6px;
     width: 32px;
     height: 32px;
     border-radius: 100%;
@@ -341,4 +374,29 @@ limitations under the License.
     .mx_MessageComposer_noperm_error {
         height: 50px;
     }
+}
+
+/**
+ * Unstable compact mode
+ */
+
+.mx_MessageComposer.mx_MessageComposer--compact {
+    margin-right: 0;
+
+    .mx_MessageComposer_wrapper {
+        padding: 0 0 0 25px;
+    }
+
+    .mx_MessageComposer_button:last-child {
+        margin-right: 0;
+    }
+
+    .mx_MessageComposer_e2eIcon {
+        left: 0;
+    }
+}
+
+.mx_MessageComposer_Menu .mx_CallContextMenu_item {
+    display: flex;
+    align-items: center;
 }

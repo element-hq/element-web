@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
-Copyright 2018, 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2018 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@ limitations under the License.
 */
 
 import { MatrixClient } from 'matrix-js-sdk/src/client';
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 
-import { _t, _td } from '../languageHandler';
+import { _td } from '../languageHandler';
 import {
     NotificationBodyEnabledController,
     NotificationsEnabledController,
@@ -40,7 +40,8 @@ import { OrderedMultiController } from "./controllers/OrderedMultiController";
 import { Layout } from "./Layout";
 import ReducedMotionController from './controllers/ReducedMotionController';
 import IncompatibleController from "./controllers/IncompatibleController";
-import SdkConfig from "../SdkConfig";
+import PseudonymousAnalyticsController from './controllers/PseudonymousAnalyticsController';
+import NewLayoutSwitcherController from './controllers/NewLayoutSwitcherController';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = [
@@ -94,6 +95,9 @@ export interface ISetting {
         [level: SettingLevel]: string;
     };
 
+    // Optional description which will be shown as microCopy under SettingsFlags
+    description?: string;
+
     // The supported levels are required. Preferably, use the preset arrays
     // at the top of this file to define this rather than a custom array.
     supportedLevels?: SettingLevel[];
@@ -120,6 +124,7 @@ export interface ISetting {
     // not use this for new settings.
     invertedSettingName?: string;
 
+    // XXX: Keep this around for re-use in future Betas
     betaInfo?: {
         title: string; // _td
         caption: string; // _td
@@ -127,57 +132,21 @@ export interface ISetting {
         image: string; // require(...)
         feedbackSubheading?: string;
         feedbackLabel?: string;
+        extraSettings?: string[];
     };
 }
 
 export const SETTINGS: {[setting: string]: ISetting} = {
-    "feature_spaces": {
+    "feature_report_to_moderators": {
         isFeature: true,
-        displayName: _td("Spaces prototype. Incompatible with Communities, Communities v2 and Custom Tags. " +
-            "Requires compatible homeserver for some features."),
+        displayName: _td("Report to moderators prototype. " +
+            "In rooms that support moderation, the `report` button will let you report abuse to room moderators"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
-        controller: new ReloadOnChangeController(),
-        betaInfo: {
-            title: _td("Spaces"),
-            caption: _td("Spaces are a new way to group rooms and people."),
-            disclaimer: (enabled) => {
-                if (enabled) {
-                    return <>
-                        <p>{ _t("If you leave, %(brand)s will reload with Spaces disabled. " +
-                            "Communities and custom tags will be visible again.", {
-                            brand: SdkConfig.get().brand,
-                        }) }</p>
-                        <p>{ _t("Beta available for web, desktop and Android. Thank you for trying the beta.") }</p>
-                    </>;
-                }
-
-                return <>
-                    <p>{ _t("%(brand)s will reload with Spaces enabled. " +
-                        "Communities and custom tags will be hidden.", {
-                        brand: SdkConfig.get().brand,
-                    }) }</p>
-                    <b>{ _t("You can leave the beta any time from settings or tapping on a beta badge, " +
-                        "like the one above.") }</b>
-                    <p>{ _t("Beta available for web, desktop and Android. " +
-                        "Some features may be unavailable on your homeserver.") }</p>
-                </>;
-            },
-            image: require("../../res/img/betas/spaces.png"),
-            feedbackSubheading: _td("Your feedback will help make spaces better. " +
-                "The more detail you can go into, the better."),
-            feedbackLabel: "spaces-feedback",
-        },
     },
     "feature_dnd": {
         isFeature: true,
         displayName: _td("Show options to enable 'Do not disturb' mode"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
-    "feature_voice_messages": {
-        isFeature: true,
-        displayName: _td("Send and receive voice messages"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -195,11 +164,20 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         ),
         supportedLevels: LEVELS_FEATURE,
         default: false,
-        controller: new IncompatibleController("feature_spaces"),
+        controller: new IncompatibleController("showCommunitiesInsteadOfSpaces", false, false),
     },
     "feature_pinning": {
         isFeature: true,
         displayName: _td("Message Pinning"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_thread": {
+        isFeature: true,
+        // Requires a reload as we change an option flag on the `js-sdk`
+        // And the entire sync history needs to be parsed again
+        controller: new ReloadOnChangeController(),
+        displayName: _td("Threaded messaging"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -215,7 +193,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Group & filter rooms by custom tags (refresh to apply changes)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
-        controller: new IncompatibleController("feature_spaces"),
+        controller: new IncompatibleController("showCommunitiesInsteadOfSpaces", false, false),
     },
     "feature_state_counters": {
         isFeature: true,
@@ -225,7 +203,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "feature_many_integration_managers": {
         isFeature: true,
-        displayName: _td("Multiple integration managers"),
+        displayName: _td("Multiple integration managers (requires manual setup)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -261,11 +239,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "advancedRoomListLogging": {
-        // TODO: Remove flag before launch: https://github.com/vector-im/element-web/issues/14231
-        displayName: _td("Enable advanced debugging for the room list"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+    "feature_pseudonymous_analytics_opt_in": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td('Send pseudonymous analytics data'),
         default: false,
+        controller: new PseudonymousAnalyticsController(),
     },
     "doNotDisturb": {
         supportedLevels: [SettingLevel.DEVICE],
@@ -285,9 +264,23 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Show info about bridges in room settings"),
         default: false,
     },
+    "feature_new_layout_switcher": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("New layout switcher (with message bubbles)"),
+        default: false,
+        controller: new NewLayoutSwitcherController(),
+    },
     "RoomList.backgroundImage": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: null,
+    },
+    "feature_hidden_read_receipts": {
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td(
+            "Don't send read receipts",
+        ),
+        default: false,
     },
     "baseFontSize": {
         displayName: _td("Font size"),
@@ -361,9 +354,14 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Always show message timestamps'),
         default: false,
     },
-    "autoplayGifsAndVideos": {
+    "autoplayGifs": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Autoplay GIFs and videos'),
+        displayName: _td('Autoplay GIFs'),
+        default: false,
+    },
+    "autoplayVideo": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Autoplay videos'),
         default: false,
     },
     "enableSyntaxHighlightLanguageDetection": {
@@ -419,12 +417,17 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "ctrlFForSearch": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: isMac ? _td("Use Command + F to search") : _td("Use Ctrl + F to search"),
+        displayName: isMac ? _td("Use Command + F to search timeline") : _td("Use Ctrl + F to search timeline"),
         default: false,
     },
     "MessageComposerInput.ctrlEnterToSend": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: isMac ? _td("Use Command + Enter to send a message") : _td("Use Ctrl + Enter to send a message"),
+        default: false,
+    },
+    "MessageComposerInput.surroundWith": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Surround selected text when typing special characters"),
         default: false,
     },
     "MessageComposerInput.autoReplaceEmoji": {
@@ -570,14 +573,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: false,
         controller: new UIFeatureController(UIFeature.URLPreviews),
     },
-    "roomColor": {
-        supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
-        displayName: _td("Room Colour"),
-        default: {
-            primary_color: null, // Hex string, eg: #000000
-            secondary_color: null, // Hex string, eg: #000000
-        },
-    },
     "notificationsEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
@@ -642,7 +637,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "lowBandwidth": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td('Low bandwidth mode'),
+        displayName: _td('Low bandwidth mode (requires compatible homeserver)'),
         default: false,
         controller: new ReloadOnChangeController(),
     },
@@ -725,6 +720,10 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: true,
         controller: new ReducedMotionController(),
     },
+    "Performance.addSendMessageTimingMetadata": {
+        supportedLevels: [SettingLevel.CONFIG],
+        default: false,
+    },
     "Widgets.pinned": { // deprecated
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: {},
@@ -736,6 +735,21 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "Widgets.leftPanel": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: null,
+    },
+    "Spaces.allRoomsInHome": {
+        displayName: _td("Show all rooms in Home"),
+        description: _td("All rooms you're in will appear in Home."),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: false,
+        controller: new IncompatibleController("showCommunitiesInsteadOfSpaces", null),
+    },
+    "showCommunitiesInsteadOfSpaces": {
+        displayName: _td("Display Communities instead of Spaces"),
+        description: _td("Temporarily show communities instead of Spaces for this session. " +
+            "Support for this will be removed in the near future. This will reload Element."),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        default: false,
+        controller: new ReloadOnChangeController(),
     },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,
@@ -784,7 +798,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     [UIFeature.IdentityServer]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
-        // Identity Server (Discovery) Settings make no sense if 3PIDs in general are hidden
+        // Identity server (discovery) settings make no sense if 3PIDs in general are hidden
         controller: new UIFeatureController(UIFeature.ThirdPartyID),
     },
     [UIFeature.ThirdPartyID]: {
@@ -800,7 +814,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     [UIFeature.Communities]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
-        controller: new IncompatibleController("feature_spaces"),
+        controller: new IncompatibleController("showCommunitiesInsteadOfSpaces", false, false),
     },
     [UIFeature.AdvancedSettings]: {
         supportedLevels: LEVELS_UI_FEATURE,

@@ -23,7 +23,7 @@ limitations under the License.
     height: 32px;
     line-height: $font-24px;
     border-radius: 8px;
-    background: $primary-bg-color;
+    background: $background;
     border: 1px solid $input-border-color;
     top: -32px;
     right: 8px;
@@ -77,11 +77,11 @@ limitations under the License.
     mask-size: 18px;
     mask-repeat: no-repeat;
     mask-position: center;
-    background-color: $secondary-fg-color;
+    background-color: $secondary-content;
 }
 
 .mx_MessageActionBar_maskButton:hover::after {
-    background-color: $primary-fg-color;
+    background-color: $primary-content;
 }
 
 .mx_MessageActionBar_reactButton::after {
@@ -90,6 +90,10 @@ limitations under the License.
 
 .mx_MessageActionBar_replyButton::after {
     mask-image: url('$(res)/img/element-icons/room/message-bar/reply.svg');
+}
+
+.mx_MessageActionBar_threadButton::after {
+    mask-image: url('$(res)/img/element-icons/message/thread.svg');
 }
 
 .mx_MessageActionBar_editButton::after {
@@ -106,4 +110,23 @@ limitations under the License.
 
 .mx_MessageActionBar_cancelButton::after {
     mask-image: url('$(res)/img/element-icons/trashcan.svg');
+}
+
+.mx_MessageActionBar_downloadButton::after {
+    mask-size: 14px;
+    mask-image: url('$(res)/img/download.svg');
+}
+
+.mx_MessageActionBar_expandMessageButton::after {
+    mask-size: 12px;
+    mask-image: url('$(res)/img/element-icons/expand-message.svg');
+}
+
+.mx_MessageActionBar_collapseMessageButton::after {
+    mask-size: 12px;
+    mask-image: url('$(res)/img/element-icons/collapse-message.svg');
+}
+
+.mx_MessageActionBar_downloadButton.mx_MessageActionBar_downloadSpinnerButton::after {
+    background-color: transparent; // hide the download icon mask
 }

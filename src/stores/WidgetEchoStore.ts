@@ -16,8 +16,8 @@ limitations under the License.
 
 import EventEmitter from 'events';
 import { IWidget } from 'matrix-widget-api';
-import MatrixEvent from "matrix-js-sdk/src/models/event";
-import {WidgetType} from "../widgets/WidgetType";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { WidgetType } from "../widgets/WidgetType";
 
 /**
  * Acts as a place to get & set widget state, storing local echo state and
@@ -26,8 +26,8 @@ import {WidgetType} from "../widgets/WidgetType";
 class WidgetEchoStore extends EventEmitter {
     private roomWidgetEcho: {
         [roomId: string]: {
-            [widgetId: string]: IWidget,
-        },
+            [widgetId: string]: IWidget;
+        };
     };
 
     constructor() {

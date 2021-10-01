@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import * as React from 'react';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // A callback for the selected value
@@ -86,8 +86,8 @@ export default class Slider extends React.Component<IProps> {
         if (!this.props.disabled) {
             const offset = this.offset(this.props.values, this.props.value);
             selection = <div className="mx_Slider_selection">
-                <div className="mx_Slider_selectionDot" style={{left: "calc(-0.55em + " + offset + "%)"}} />
-                <hr style={{width: offset + "%"}} />
+                <div className="mx_Slider_selectionDot" style={{ left: "calc(-0.55em + " + offset + "%)" }} />
+                <hr style={{ width: offset + "%" }} />
             </div>;
         }
 
@@ -98,7 +98,7 @@ export default class Slider extends React.Component<IProps> {
                     { selection }
                 </div>
                 <div className="mx_Slider_dotContainer">
-                    {dots}
+                    { dots }
                 </div>
             </div>
         </div>;
@@ -139,7 +139,7 @@ class Dot extends React.PureComponent<IDotProps> {
             <div className={className} />
             <div className="mx_Slider_labelContainer">
                 <div className="mx_Slider_label">
-                    {this.props.label}
+                    { this.props.label }
                 </div>
             </div>
         </span>;

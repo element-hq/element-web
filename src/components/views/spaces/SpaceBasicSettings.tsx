@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useRef, useState} from "react";
+import React, { useRef, useState } from "react";
 
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 
 interface IProps {
     avatarUrl?: string;
     avatarDisabled?: boolean;
-    name?: string,
+    name?: string;
     nameDisabled?: boolean;
     topic?: string;
     topicDisabled?: boolean;
@@ -57,18 +57,27 @@ export const SpaceAvatar = ({
                     src={avatar}
                     alt=""
                 />
-                <AccessibleButton onClick={() => {
-                    avatarUploadRef.current.value = "";
-                    setAvatarDataUrl(undefined);
-                    setAvatar(undefined);
-                }} kind="link" className="mx_SpaceBasicSettings_avatar_remove">
+                <AccessibleButton
+                    onClick={() => {
+                        avatarUploadRef.current.value = "";
+                        setAvatarDataUrl(undefined);
+                        setAvatar(undefined);
+                    }}
+                    kind="link"
+                    className="mx_SpaceBasicSettings_avatar_remove"
+                    aria-label={_t("Delete avatar")}
+                >
                     { _t("Delete") }
                 </AccessibleButton>
             </React.Fragment>;
         } else {
             avatarSection = <React.Fragment>
                 <div className="mx_SpaceBasicSettings_avatar" onClick={() => avatarUploadRef.current?.click()} />
-                <AccessibleButton onClick={() => avatarUploadRef.current?.click()} kind="link">
+                <AccessibleButton
+                    onClick={() => avatarUploadRef.current?.click()}
+                    kind="link"
+                    aria-label={_t("Upload avatar")}
+                >
                     { _t("Upload") }
                 </AccessibleButton>
             </React.Fragment>;
@@ -77,16 +86,21 @@ export const SpaceAvatar = ({
 
     return <div className="mx_SpaceBasicSettings_avatarContainer">
         { avatarSection }
-        <input type="file" ref={avatarUploadRef} onChange={(e) => {
-            if (!e.target.files?.length) return;
-            const file = e.target.files[0];
-            setAvatar(file);
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                setAvatarDataUrl(ev.target.result as string);
-            };
-            reader.readAsDataURL(file);
-        }} accept="image/*" />
+        <input
+            type="file"
+            ref={avatarUploadRef}
+            onChange={(e) => {
+                if (!e.target.files?.length) return;
+                const file = e.target.files[0];
+                setAvatar(file);
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    setAvatarDataUrl(ev.target.result as string);
+                };
+                reader.readAsDataURL(file);
+            }}
+            accept="image/*"
+        />
     </div>;
 };
 
