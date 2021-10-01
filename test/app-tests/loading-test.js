@@ -723,7 +723,7 @@ function awaitRoomView(matrixChat, retryLimit?, retryCount?) {
 
     // state looks good, check the rendered output
     ReactTestUtils.findRenderedComponentWithType(
-        matrixChat, sdk.getComponent('structures.RoomView'));
+        matrixChat, RoomViewClass);
     return Promise.resolve();
 }
 
