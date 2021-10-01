@@ -608,6 +608,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         if (membership === "join" && room.roomId === RoomViewStore.getRoomId()) {
             // if the user was looking at the space and then joined: select that space
             this.setActiveSpace(room, false);
+        } else if (membership === "leave" && room.roomId === this.activeSpace?.roomId) {
+            // user's active space has gone away, go back to home
+            this.setActiveSpace(null, true);
         }
     };
 
