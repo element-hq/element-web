@@ -91,6 +91,7 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
     "@principalstudio/html-webpack-inject-preload": "^1.2.7",
     "@types/flux": "^3.1.9",
+    "@types/jest": "^27.0.2",
     "@types/modernizr": "^3.5.3",
     "@types/node": "^14.14.22",
     "@types/react": "17.0.14",
@@ -166,7 +167,7 @@
   "jest": {
     "testEnvironment": "jest-environment-jsdom-sixteen",
     "testMatch": [
-      "<rootDir>/test/**/*-test.[tj]s"
+      "<rootDir>/test/**/*-test.[tj]s[x]"
     ],
     "setupFilesAfterEnv": [
       "<rootDir>/node_modules/matrix-react-sdk/test/setupTests.js"
