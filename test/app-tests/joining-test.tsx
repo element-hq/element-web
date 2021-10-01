@@ -31,12 +31,12 @@ import {sleep} from "../test-utils";
 import * as test_utils from "../test-utils";
 import MockHttpBackend from "matrix-mock-request";
 import "fake-indexeddb/auto";
+import { RoomView as RoomViewClass } from 'matrix-react-sdk/src/components/structures/RoomView';
 
 
 const MatrixChat = sdk.getComponent('structures.MatrixChat');
 const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
 const RoomPreviewBar = sdk.getComponent('rooms.RoomPreviewBar');
-const RoomView = sdk.getComponent('structures.RoomView');
 
 const HS_URL='http://localhost';
 const IS_URL='http://localhost';
@@ -50,7 +50,6 @@ describe('joining a room', function() {
         let matrixChat;
 
         beforeEach(function() {
-            test_utils.beforeEach(this);
             httpBackend = new MockHttpBackend();
             jssdk.request(httpBackend.requestFn);
             parentDiv = document.createElement('div');
@@ -148,7 +147,7 @@ describe('joining a room', function() {
 
                 // enter an alias in the input, and simulate enter
                 const input = ReactTestUtils.findRenderedDOMComponentWithTag(
-                    roomDir, 'input');
+                    roomDir, 'input') as HTMLInputElement;
                 input.value = ROOM_ALIAS;
                 ReactTestUtils.Simulate.change(input);
                 ReactTestUtils.Simulate.keyUp(input, {key: 'Enter'});
@@ -165,7 +164,7 @@ describe('joining a room', function() {
 
                 // we should now have a roomview
                 roomView = ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, RoomView);
+                    matrixChat, RoomViewClass);
 
                 // the preview bar may take a tick to be displayed
                 return sleep(1);
@@ -228,7 +227,7 @@ describe('joining a room', function() {
                 return httpBackend.flush();
             }).then(() => {
                 // now the room should have loaded
-                expect(roomView.state.room).toExist();
+                expect(roomView.state.room).toBeTruthy();
             });
         });
     });
