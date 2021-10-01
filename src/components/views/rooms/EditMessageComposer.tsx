@@ -46,7 +46,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { withMatrixClientHOC, MatrixClientProps } from '../../../contexts/MatrixClientContext';
-import RoomContext, { AppRenderingContext } from '../../../contexts/RoomContext';
+import RoomContext, { TimelineRenderingType } from '../../../contexts/RoomContext';
 
 function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
     const html = mxEvent.getContent().formatted_body;
@@ -70,7 +70,7 @@ function getTextReplyFallback(mxEvent: MatrixEvent): string {
 function createEditContent(
     model: EditorModel,
     editedEvent: MatrixEvent,
-    renderingContext?: AppRenderingContext,
+    renderingContext?: TimelineRenderingType,
 ): IContent {
     const isEmote = containsEmote(model);
     if (isEmote) {
@@ -112,7 +112,7 @@ function createEditContent(
         },
     };
 
-    if (renderingContext === AppRenderingContext.Thread) {
+    if (renderingContext === TimelineRenderingType.Thread) {
         relation['m.relates_to'][UNSTABLE_ELEMENT_REPLY_IN_THREAD.name] = true;
     }
 
