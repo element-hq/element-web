@@ -39,7 +39,6 @@ import {sleep} from "../test-utils";
 import "fake-indexeddb/auto";
 import {cleanLocalstorage} from "../test-utils";
 import {IndexedDBCryptoStore} from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
-import { RoomView as RoomViewClass } from 'matrix-react-sdk/src/components/structures/RoomView';
 
 const DEFAULT_HS_URL='http://my_server';
 const DEFAULT_IS_URL='http://my_is';
@@ -722,7 +721,7 @@ function awaitRoomView(matrixChat, retryLimit, retryCount) {
 
     // state looks good, check the rendered output
     ReactTestUtils.findRenderedComponentWithType(
-        matrixChat, RoomViewClass);
+        matrixChat, sdk.getComponent('structures.RoomView'));
     return Promise.resolve();
 }
 
