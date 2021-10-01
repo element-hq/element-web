@@ -143,7 +143,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         const isRestored = this.createEditorModel();
         const ev = this.props.editState.getEvent();
 
-        const renderingContext = this.context.renderingContext;
+        const renderingContext = this.context.timelineRenderingType;
         const editContent = createEditContent(this.model, ev, renderingContext);
         this.state = {
             saveDisabled: !isRestored || !this.isContentModified(editContent["m.new_content"]),
@@ -369,7 +369,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             const position = this.model.positionForOffset(caret.offset, caret.atNodeEnd);
             this.editorRef.current?.replaceEmoticon(position, REGEX_EMOTICON);
         }
-        const renderingContext = this.context.renderingContext;
+        const renderingContext = this.context.timelineRenderingType;
         const editContent = createEditContent(this.model, editedEvent, renderingContext);
         const newContent = editContent["m.new_content"];
 
