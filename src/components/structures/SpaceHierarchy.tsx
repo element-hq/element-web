@@ -446,13 +446,13 @@ export const useSpaceSummary = (space: Room): {
     }));
 
     const loadMore = useCallback(async (pageSize?: number) => {
-        if (!hierarchy.canLoadMore || hierarchy.noSupport) return;
+        if (loading || !hierarchy.canLoadMore || hierarchy.noSupport) return;
 
         setLoading(true);
         await hierarchy.load(pageSize);
         setRooms(hierarchy.rooms);
         setLoading(false);
-    }, [hierarchy]);
+    }, [loading, hierarchy]);
 
     return { loading, rooms, hierarchy, loadMore };
 };
@@ -648,8 +648,6 @@ const SpaceHierarchy = ({
     return <RovingTabIndexProvider onKeyDown={onKeyDown} handleHomeEnd handleUpDown>
         { ({ onKeyDownHandler }) => {
             let content: JSX.Element;
-            let loader: JSX.Element;
-
             if (loading && !rooms.length) {
                 content = <Spinner />;
             } else {
@@ -671,16 +669,17 @@ const SpaceHierarchy = ({
                             }}
                         />
                     </>;
-
-                    if (hierarchy.canLoadMore) {
-                        loader = <div ref={loaderRef}>
-                            <Spinner />
-                        </div>;
-                    }
-                } else {
+                } else if (!hierarchy.canLoadMore) {
                     results = <div className="mx_SpaceHierarchy_noResults">
                         <h3>{ _t("No results found") }</h3>
                         <div>{ _t("You may want to try a different search or check for typos.") }</div>
+                    </div>;
+                }
+
+                let loader: JSX.Element;
+                if (hierarchy.canLoadMore) {
+                    loader = <div ref={loaderRef}>
+                        <Spinner />
                     </div>;
                 }
 
