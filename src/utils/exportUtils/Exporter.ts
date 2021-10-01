@@ -21,8 +21,10 @@ import { IExportOptions, ExportType } from "./exportUtils";
 import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay } from "../../DateUtils";
+import { isVoiceMessage } from "../EventUtils";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Direction } from "matrix-js-sdk/src/models/event-timeline";
+import { IMediaEventContent } from "../../customisations/models/IMediaEventContent";
 import { saveAs } from "file-saver";
 import { _t } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
@@ -200,13 +202,12 @@ export default abstract class Exporter {
         let blob: Blob;
         try {
             const isEncrypted = event.isEncrypted();
-            const content = event.getContent();
-            const shouldDecrypt = isEncrypted && !content.hasOwnProperty("org.matrix.msc1767.file")
-                && event.getType() !== "m.sticker";
+            const content: IMediaEventContent = event.getContent();
+            const shouldDecrypt = isEncrypted && content.hasOwnProperty("file") && event.getType() !== "m.sticker";
             if (shouldDecrypt) {
                 blob = await decryptFile(content.file);
             } else {
-                const media = mediaFromContent(event.getContent());
+                const media = mediaFromContent(content);
                 const image = await fetch(media.srcHttp);
                 blob = await image.blob();
             }
@@ -242,7 +243,10 @@ export default abstract class Exporter {
         }
         const fileDate = formatFullDateNoDay(new Date(event.getTs()));
         let [fileName, fileExt] = this.splitFileName(event.getContent().body);
+
         if (event.getType() === "m.sticker") fileExt = ".png";
+        if (isVoiceMessage(event)) fileExt = ".ogg";
+
         return fileDirectory + "/" + fileName + '-' + fileDate + fileExt;
     }
 
