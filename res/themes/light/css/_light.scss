@@ -326,17 +326,7 @@ $inverted-bg-color: #27303a;
 $tooltip-timeline-bg-color: $inverted-bg-color;
 $tooltip-timeline-fg-color: $background;
 
-$interactive-tooltip-bg-color: #27303a;
-$interactive-tooltip-fg-color: $background;
-
 $breadcrumb-placeholder-bg-color: #e8eef5;
-
-$user-tile-hover-bg-color: $header-panel-bg-color;
-
-$message-body-panel-fg-color: $secondary-content;
-$message-body-panel-bg-color: $quinary-content;
-$message-body-panel-icon-bg-color: $system;
-$message-body-panel-icon-fg-color: $secondary-content;
 
 // These two don't change between themes. They are the $warning-color, but we don't
 // want custom themes to affect them by accident.
@@ -346,8 +336,8 @@ $voice-record-live-circle-color: #ff4b55;
 $voice-record-stop-border-color: $quinary-content;
 $voice-record-waveform-incomplete-fg-color: $quaternary-content;
 $voice-record-icon-color: $tertiary-content;
-$voice-playback-button-bg-color: $message-body-panel-icon-bg-color;
-$voice-playback-button-fg-color: $message-body-panel-icon-fg-color;
+$voice-playback-button-bg-color: $system;
+$voice-playback-button-fg-color: $secondary-content;
 
 // FontSlider colors
 $appearance-tab-border-color: $input-darker-bg-color;

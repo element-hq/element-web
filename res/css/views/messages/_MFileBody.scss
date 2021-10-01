@@ -63,7 +63,7 @@ limitations under the License.
     cursor: pointer;
 
     .mx_MFileBody_info_icon {
-        background-color: $message-body-panel-icon-bg-color;
+        background-color: $system;
         border-radius: 20px;
         display: inline-block;
         width: 32px;
@@ -78,7 +78,7 @@ limitations under the License.
             mask-position: center;
             mask-size: cover;
             mask-image: url('$(res)/img/element-icons/room/composer/attach.svg');
-            background-color: $message-body-panel-icon-fg-color;
+            background-color: $secondary-content;
             width: 15px;
             height: 15px;
 

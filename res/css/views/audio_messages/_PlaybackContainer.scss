@@ -39,7 +39,7 @@ limitations under the License.
             &.mx_Waveform_bar_100pct {
                 // Small animation to remove the mechanical feel of progress
                 transition: background-color 250ms ease;
-                background-color: $message-body-panel-fg-color;
+                background-color: $secondary-content;
             }
         }
     }
