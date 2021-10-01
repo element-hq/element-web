@@ -222,6 +222,10 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
     return client.createRoom(createOpts).finally(function() {
         if (modal) modal.close();
     }).catch(function(err) {
+        // NB This checks for the Synapse-specific error condition of a room creation
+        // having been denied because the requesting user wanted to publish the room,
+        // but the server denies them that permission (via room_list_publication_rules).
+        // The check below responds by retrying without publishing the room.
         if (err.httpStatus === 403 && err.errcode === "M_UNKNOWN" && err.data.error === "Not allowed to publish room") {
             console.warn("Failed to publish room, try again without publishing it");
             createOpts.visibility = Visibility.Private;
