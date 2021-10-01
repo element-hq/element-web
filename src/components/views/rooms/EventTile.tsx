@@ -53,7 +53,7 @@ import SenderProfile from '../messages/SenderProfile';
 import MessageTimestamp from '../messages/MessageTimestamp';
 import TooltipButton from '../elements/TooltipButton';
 import ReadReceiptMarker from "./ReadReceiptMarker";
-import MessageActionBar, { ActionBarRenderingContext } from "../messages/MessageActionBar";
+import MessageActionBar from "../messages/MessageActionBar";
 import ReactionsRow from '../messages/ReactionsRow';
 import { getEventDisplayInfo } from '../../../utils/EventUtils';
 import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
@@ -1063,9 +1063,6 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         const showMessageActionBar = !isEditing && !this.props.forExport;
-        const renderingContext = this.props.tileShape === TileShape.Thread
-            ? ActionBarRenderingContext.Thread
-            : ActionBarRenderingContext.Room;
         const actionBar = showMessageActionBar ? <MessageActionBar
             mxEvent={this.props.mxEvent}
             reactions={this.state.reactions}
@@ -1073,7 +1070,6 @@ export default class EventTile extends React.Component<IProps, IState> {
             getTile={this.getTile}
             getReplyThread={this.getReplyThread}
             onFocusChange={this.onActionBarFocusChange}
-            renderingContext={renderingContext}
             isQuoteExpanded={isQuoteExpanded}
             toggleThreadExpanded={() => this.setQuoteExpanded(!isQuoteExpanded)}
         /> : undefined;
@@ -1178,6 +1174,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             showUrlPreview={this.props.showUrlPreview}
                             onHeightChanged={this.props.onHeightChanged}
                             tileShape={this.props.tileShape}
+                            editState={this.props.editState}
                         />
                     </div>,
                 ]);
@@ -1211,6 +1208,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             showUrlPreview={this.props.showUrlPreview}
                             onHeightChanged={this.props.onHeightChanged}
                             tileShape={this.props.tileShape}
+                            editState={this.props.editState}
                         />
                         { actionBar }
                     </div>,
@@ -1231,6 +1229,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             showUrlPreview={this.props.showUrlPreview}
                             tileShape={this.props.tileShape}
                             onHeightChanged={this.props.onHeightChanged}
+                            editState={this.props.editState}
                         />
                     </div>,
                     <a
