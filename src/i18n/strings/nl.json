@@ -3166,5 +3166,8 @@
     "Leave all rooms": "Alle kamers verlaten",
     "Don't leave any rooms": "Geen kamers verlaten",
     "Expand quotes │ ⇧+click": "Quotes uitvouwen │ ⇧+click",
-    "Collapse quotes │ ⇧+click": "Quotes invouwen │ ⇧+click"
+    "Collapse quotes │ ⇧+click": "Quotes invouwen │ ⇧+click",
+    "%(senderDisplayName)s sent a sticker.": "%(senderDisplayName)s Verstuurde een sticker.",
+    "%(senderDisplayName)s changed the room avatar.": "%(senderDisplayName)s veranderde de kamerafbeelding.",
+    "%(date)s at %(time)s": "%(date)s om %(time)s"
 }
