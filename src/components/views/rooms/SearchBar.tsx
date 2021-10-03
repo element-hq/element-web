@@ -20,10 +20,10 @@ import classNames from "classnames";
 
 import AccessibleButton from "../elements/AccessibleButton";
 import { _t } from '../../../languageHandler';
-import DesktopBuildsNotice, { WarningKind } from "../elements/DesktopBuildsNotice";
 import { PosthogScreenTracker } from '../../../PosthogTrackers';
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import SearchWarning, { WarningKind } from "../elements/SearchWarning";
 
 interface IProps {
     onCancelClick: () => void;
@@ -127,7 +127,7 @@ export default class SearchBar extends React.Component<IProps, IState> {
                     </div>
                     <AccessibleButton className="mx_SearchBar_cancel" onClick={this.props.onCancelClick} />
                 </div>
-                <DesktopBuildsNotice isRoomEncrypted={this.props.isRoomEncrypted} kind={WarningKind.Search} />
+                <SearchWarning isRoomEncrypted={this.props.isRoomEncrypted} kind={WarningKind.Search} />
             </>
         );
     }
