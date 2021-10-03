@@ -219,9 +219,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
     if (opts.spinner) modal = Modal.createDialog(Spinner, null, 'mx_Dialog_spinner');
 
     let roomId;
-    return client.createRoom(createOpts).finally(function() {
-        if (modal) modal.close();
-    }).catch(function(err) {
+    return client.createRoom(createOpts).catch(function(err) {
         // NB This checks for the Synapse-specific error condition of a room creation
         // having been denied because the requesting user wanted to publish the room,
         // but the server denies them that permission (via room_list_publication_rules).
@@ -233,6 +231,8 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         } else {
             return Promise.reject(err);
         }
+    }).finally(function() {
+        if (modal) modal.close();
     }).then(function(res) {
         roomId = res.room_id;
         if (opts.dmUserId) {
