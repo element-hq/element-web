@@ -3162,5 +3162,12 @@
     "To join a space you'll need an invite.": "Vous avez besoin d’une invitation pour rejoindre un espace.",
     "You can also make Spaces from <a>communities</a>.": "Vous pouvez également créer des espaces à partir de <a>communautés</a>.",
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Montre temporairement les communautés au lieu des espaces pour cette session. Il ne sera plus possible de le faire dans un futur proche. Cela va recharger Element.",
-    "Display Communities instead of Spaces": "Afficher les communautés au lieu des espaces"
+    "Display Communities instead of Spaces": "Afficher les communautés au lieu des espaces",
+    "Would you like to leave the rooms in this space?": "Voulez-vous quitter les salons de cet espace ?",
+    "You are about to leave <spaceName/>.": "Vous êtes sur le point de quitter <spaceName/>.",
+    "Leave some rooms": "Quitter certains salons",
+    "Leave all rooms": "Quitter tous les salons",
+    "Don't leave any rooms": "Ne quitter aucun salon",
+    "Expand quotes │ ⇧+click": "Développer les citations │ ⇧+clic",
+    "Collapse quotes │ ⇧+click": "Réduire les citations │ ⇧+clic"
 }
