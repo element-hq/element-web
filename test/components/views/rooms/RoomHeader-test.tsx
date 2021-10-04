@@ -17,9 +17,9 @@ import { PlaceCallType } from '../../../../src/CallHandler';
 import { mkEvent } from '../../../test-utils';
 
 describe('RoomHeader', () => {
-    test('shows the room avatar in a room with only ourselves', () => {
+    it('shows the room avatar in a room with only ourselves', () => {
         // When we render a non-DM room with 1 person in it
-        const room = createRoom({ name: "X Room", isDm: false, users: [] });
+        const room = createRoom({ name: "X Room", isDm: false, userIds: [] });
         const rendered = render(room);
 
         // Then the room's avatar is the initial of its name
@@ -31,10 +31,10 @@ describe('RoomHeader', () => {
         expect(image.src).toEqual("data:image/png;base64,00");
     });
 
-    test('shows the room avatar in a room with 2 people', () => {
+    it('shows the room avatar in a room with 2 people', () => {
         // When we render a non-DM room with 2 people in it
         const room = createRoom(
-            { name: "Y Room", isDm: false, users: ["other"] });
+            { name: "Y Room", isDm: false, userIds: ["other"] });
         const rendered = render(room);
 
         // Then the room's avatar is the initial of its name
@@ -46,10 +46,10 @@ describe('RoomHeader', () => {
         expect(image.src).toEqual("data:image/png;base64,00");
     });
 
-    test('shows the room avatar in a room with >2 people', () => {
+    it('shows the room avatar in a room with >2 people', () => {
         // When we render a non-DM room with 3 people in it
         const room = createRoom(
-            { name: "Z Room", isDm: false, users: ["other1", "other2"] });
+            { name: "Z Room", isDm: false, userIds: ["other1", "other2"] });
         const rendered = render(room);
 
         // Then the room's avatar is the initial of its name
@@ -61,9 +61,9 @@ describe('RoomHeader', () => {
         expect(image.src).toEqual("data:image/png;base64,00");
     });
 
-    test('shows the room avatar in a DM with only ourselves', () => {
+    it('shows the room avatar in a DM with only ourselves', () => {
         // When we render a non-DM room with 1 person in it
-        const room = createRoom({ name: "Z Room", isDm: true, users: [] });
+        const room = createRoom({ name: "Z Room", isDm: true, userIds: [] });
         const rendered = render(room);
 
         // Then the room's avatar is the initial of its name
@@ -75,13 +75,12 @@ describe('RoomHeader', () => {
         expect(image.src).toEqual("data:image/png;base64,00");
     });
 
-    test('shows the user avatar in a DM with 2 people', () => {
+    it('shows the user avatar in a DM with 2 people', () => {
         // Note: this is the interesting case - this is the ONLY
         //       time we should use the user's avatar.
 
         // When we render a DM room with only 2 people in it
-        const room = createRoom(
-            { name: "Y Room", isDm: true, users: ["other"] });
+        const room = createRoom({ name: "Y Room", isDm: true, userIds: ["other"] });
         const rendered = render(room);
 
         // Then we use the other user's avatar as our room's image avatar
@@ -95,10 +94,10 @@ describe('RoomHeader', () => {
         ).toHaveLength(0);
     });
 
-    test('shows the room avatar in a DM with >2 people', () => {
+    it('shows the room avatar in a DM with >2 people', () => {
         // When we render a DM room with 3 people in it
         const room = createRoom({
-            name: "Z Room", isDm: true, users: ["other1", "other2"] });
+            name: "Z Room", isDm: true, userIds: ["other1", "other2"] });
         const rendered = render(room);
 
         // Then the room's avatar is the initial of its name
@@ -114,7 +113,7 @@ describe('RoomHeader', () => {
 interface IRoomCreationInfo {
     name: string;
     isDm: boolean;
-    users: string[];
+    userIds: string[];
 }
 
 function createRoom(info: IRoomCreationInfo) {
@@ -126,7 +125,7 @@ function createRoom(info: IRoomCreationInfo) {
     if (info.isDm) {
         client.getAccountData = (eventType) => {
             expect(eventType).toEqual("m.direct");
-            return mkDirectEvent(roomId, userId, info.users);
+            return mkDirectEvent(roomId, userId, info.userIds);
         };
     }
 
@@ -137,7 +136,7 @@ function createRoom(info: IRoomCreationInfo) {
     });
 
     const otherJoinEvents = [];
-    for (const otherUserId of info.users) {
+    for (const otherUserId of info.userIds) {
         otherJoinEvents.push(mkJoinEvent(roomId, otherUserId));
     }
 
