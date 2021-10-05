@@ -3195,5 +3195,7 @@
     "Are you sure you want to exit during this export?": "Вы уверены, что хотите выйти во время экспорта?",
     "%(senderDisplayName)s sent a sticker.": "%(senderDisplayName)s отправил(а) стикер.",
     "%(senderDisplayName)s changed the room avatar.": "%(senderDisplayName)s сменил(а) аватар комнаты.",
-    "%(date)s at %(time)s": "%(date)s в %(time)s"
+    "%(date)s at %(time)s": "%(date)s в %(time)s",
+    "Select from the options below to export chats from your timeline": "Выберите один из приведенных ниже вариантов экспорта чатов из вашей временной шкалы",
+    "Current Timeline": "Текущая временная шкала"
 }
