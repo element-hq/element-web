@@ -23,12 +23,12 @@ body:
   - type: textarea
     id: result
     attributes:
-      label: What happened?
+      label: Outcome
       placeholder: Tell us what went wrong
       value: |
-        ### What did you expect?
+        #### What did you expect?
 
-        ### What happened?
+        #### What happened instead?
     validations:
       required: true
   - type: input
