@@ -65,9 +65,9 @@ body:
   - type: dropdown
     id: rageshake
     attributes:
-      label: Have you submitted a rageshake?
+      label: Will you send logs?
       description:  |
-        Did you know that you can send a /rageshake command from the web applicaiton to submit logs for this issue? Trigger the defect, then type /rageshake into the message entry area followed by a description of the problem and send the command. This will automatically submit anonymous logs to the developers.
+        Did you know that you can send a /rageshake command from the web application to submit logs for this issue? Trigger the defect, then type `/rageshake` into the message input area followed by a description of the problem and send the command. You will be able to add a link to this defect report and submit anonymous logs to the developers.
       options:
         - 'Yes'
         - 'No'
