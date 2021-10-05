@@ -17,7 +17,7 @@
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import SettingsStore from "./settings/SettingsStore";
-import { IState } from "./components/structures/RoomView";
+import { IRoomState } from "./components/structures/RoomView";
 
 interface IDiff {
     isMemberEvent: boolean;
@@ -54,7 +54,7 @@ function memberEventDiff(ev: MatrixEvent): IDiff {
  * @param ctx An optional RoomContext to pull cached settings values from to avoid
  *     hitting the settings store
  */
-export default function shouldHideEvent(ev: MatrixEvent, ctx?: IState): boolean {
+export default function shouldHideEvent(ev: MatrixEvent, ctx?: IRoomState): boolean {
     // Accessing the settings store directly can be expensive if done frequently,
     // so we should prefer using cached values if a RoomContext is available
     const isEnabled = ctx ?

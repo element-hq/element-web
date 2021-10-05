@@ -178,6 +178,14 @@ export default class Dropdown extends React.Component<IProps, IState> {
         this.ignoreEvent = ev;
     };
 
+    private onChevronClick = (ev: React.MouseEvent) => {
+        if (this.state.expanded) {
+            this.setState({ expanded: false });
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
+    };
+
     private onAccessibleButtonClick = (ev: ButtonEvent) => {
         if (this.props.disabled) return;
 
@@ -375,7 +383,7 @@ export default class Dropdown extends React.Component<IProps, IState> {
                 onKeyDown={this.onKeyDown}
             >
                 { currentValue }
-                <span className="mx_Dropdown_arrow" />
+                <span onClick={this.onChevronClick} className="mx_Dropdown_arrow" />
                 { menu }
             </AccessibleButton>
         </div>;

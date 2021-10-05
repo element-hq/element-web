@@ -20,10 +20,11 @@ limitations under the License.
  * registration code.
  */
 
+import React from "react";
 import dis from './dispatcher/dispatcher';
-import * as sdk from './index';
 import Modal from './Modal';
 import { _t } from './languageHandler';
+import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 
 // Regex for what a "safe" or "Matrix-looking" localpart would be.
 // TODO: Update as needed for https://github.com/matrix-org/matrix-doc/issues/1514
@@ -41,9 +42,11 @@ export const SAFE_LOCALPART_REGEX = /^[a-z0-9=_\-./]+$/;
  * @param {bool} options.screen_after
  *     If present the screen to redirect to after a successful login or register.
  */
-export async function startAnyRegistrationFlow(options) {
+export async function startAnyRegistrationFlow(
+    // eslint-disable-next-line camelcase
+    options: { go_home_on_cancel?: boolean, go_welcome_on_cancel?: boolean, screen_after?: boolean},
+): Promise<void> {
     if (options === undefined) options = {};
-    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
     const modal = Modal.createTrackedDialog('Registration required', '', QuestionDialog, {
         hasCancelButton: true,
         quitOnly: true,

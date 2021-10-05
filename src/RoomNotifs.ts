@@ -17,27 +17,31 @@ limitations under the License.
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
+import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
+import { IAnnotatedPushRule, PushRuleKind } from "matrix-js-sdk/src/@types/PushRules";
 
-export const ALL_MESSAGES_LOUD = 'all_messages_loud';
-export const ALL_MESSAGES = 'all_messages';
-export const MENTIONS_ONLY = 'mentions_only';
-export const MUTE = 'mute';
+export enum RoomNotifState {
+    AllMessagesLoud = 'all_messages_loud',
+    AllMessages = 'all_messages',
+    MentionsOnly = 'mentions_only',
+    Mute = 'mute',
+}
 
-export const BADGE_STATES = [ALL_MESSAGES, ALL_MESSAGES_LOUD];
-export const MENTION_BADGE_STATES = [...BADGE_STATES, MENTIONS_ONLY];
+export const BADGE_STATES = [RoomNotifState.AllMessages, RoomNotifState.AllMessagesLoud];
+export const MENTION_BADGE_STATES = [...BADGE_STATES, RoomNotifState.MentionsOnly];
 
-export function shouldShowNotifBadge(roomNotifState) {
+export function shouldShowNotifBadge(roomNotifState: RoomNotifState): boolean {
     return BADGE_STATES.includes(roomNotifState);
 }
 
-export function shouldShowMentionBadge(roomNotifState) {
+export function shouldShowMentionBadge(roomNotifState: RoomNotifState): boolean {
     return MENTION_BADGE_STATES.includes(roomNotifState);
 }
 
-export function aggregateNotificationCount(rooms) {
-    return rooms.reduce((result, room) => {
+export function aggregateNotificationCount(rooms: Room[]): {count: number, highlight: boolean} {
+    return rooms.reduce<{count: number, highlight: boolean}>((result, room) => {
         const roomNotifState = getRoomNotifsState(room.roomId);
-        const highlight = room.getUnreadNotificationCount('highlight') > 0;
+        const highlight = room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0;
         // use helper method to include highlights in the previous version of the room
         const notificationCount = getUnreadNotificationCount(room);
 
@@ -55,9 +59,9 @@ export function aggregateNotificationCount(rooms) {
     }, { count: 0, highlight: false });
 }
 
-export function getRoomHasBadge(room) {
+export function getRoomHasBadge(room: Room): boolean {
     const roomNotifState = getRoomNotifsState(room.roomId);
-    const highlight = room.getUnreadNotificationCount('highlight') > 0;
+    const highlight = room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0;
     const notificationCount = room.getUnreadNotificationCount();
 
     const notifBadges = notificationCount > 0 && shouldShowNotifBadge(roomNotifState);
@@ -66,14 +70,14 @@ export function getRoomHasBadge(room) {
     return notifBadges || mentionBadges;
 }
 
-export function getRoomNotifsState(roomId) {
-    if (MatrixClientPeg.get().isGuest()) return ALL_MESSAGES;
+export function getRoomNotifsState(roomId: string): RoomNotifState {
+    if (MatrixClientPeg.get().isGuest()) return RoomNotifState.AllMessages;
 
     // look through the override rules for a rule affecting this room:
     // if one exists, it will take precedence.
     const muteRule = findOverrideMuteRule(roomId);
     if (muteRule) {
-        return MUTE;
+        return RoomNotifState.Mute;
     }
 
     // for everything else, look at the room rule.
@@ -89,27 +93,27 @@ export function getRoomNotifsState(roomId) {
     // XXX: We have to assume the default is to notify for all messages
     // (in particular this will be 'wrong' for one to one rooms because
     // they will notify loudly for all messages)
-    if (!roomRule || !roomRule.enabled) return ALL_MESSAGES;
+    if (!roomRule || !roomRule.enabled) return RoomNotifState.AllMessages;
 
     // a mute at the room level will still allow mentions
     // to notify
-    if (isMuteRule(roomRule)) return MENTIONS_ONLY;
+    if (isMuteRule(roomRule)) return RoomNotifState.MentionsOnly;
 
     const actionsObject = PushProcessor.actionListToActionsObject(roomRule.actions);
-    if (actionsObject.tweaks.sound) return ALL_MESSAGES_LOUD;
+    if (actionsObject.tweaks.sound) return RoomNotifState.AllMessagesLoud;
 
     return null;
 }
 
-export function setRoomNotifsState(roomId, newState) {
-    if (newState === MUTE) {
+export function setRoomNotifsState(roomId: string, newState: RoomNotifState): Promise<void> {
+    if (newState === RoomNotifState.Mute) {
         return setRoomNotifsStateMuted(roomId);
     } else {
         return setRoomNotifsStateUnmuted(roomId, newState);
     }
 }
 
-export function getUnreadNotificationCount(room, type=null) {
+export function getUnreadNotificationCount(room: Room, type: NotificationCountType = null): number {
     let notificationCount = room.getUnreadNotificationCount(type);
 
     // Check notification counts in the old room just in case there's some lost
@@ -124,21 +128,21 @@ export function getUnreadNotificationCount(room, type=null) {
             // notifying the user for unread messages because they would have extreme
             // difficulty changing their notification preferences away from "All Messages"
             // and "Noisy".
-            notificationCount += oldRoom.getUnreadNotificationCount("highlight");
+            notificationCount += oldRoom.getUnreadNotificationCount(NotificationCountType.Highlight);
         }
     }
 
     return notificationCount;
 }
 
-function setRoomNotifsStateMuted(roomId) {
+function setRoomNotifsStateMuted(roomId: string): Promise<any> {
     const cli = MatrixClientPeg.get();
     const promises = [];
 
     // delete the room rule
     const roomRule = cli.getRoomPushRule('global', roomId);
     if (roomRule) {
-        promises.push(cli.deletePushRule('global', 'room', roomRule.rule_id));
+        promises.push(cli.deletePushRule('global', PushRuleKind.RoomSpecific, roomRule.rule_id));
     }
 
     // add/replace an override rule to squelch everything in this room
@@ -146,7 +150,7 @@ function setRoomNotifsStateMuted(roomId) {
     // is an override rule, not a room rule: it still pertains to this room
     // though, so using the room ID as the rule ID is logical and prevents
     // duplicate copies of the rule.
-    promises.push(cli.addPushRule('global', 'override', roomId, {
+    promises.push(cli.addPushRule('global', PushRuleKind.Override, roomId, {
         conditions: [
             {
                 kind: 'event_match',
@@ -162,30 +166,30 @@ function setRoomNotifsStateMuted(roomId) {
     return Promise.all(promises);
 }
 
-function setRoomNotifsStateUnmuted(roomId, newState) {
+function setRoomNotifsStateUnmuted(roomId: string, newState: RoomNotifState): Promise<any> {
     const cli = MatrixClientPeg.get();
     const promises = [];
 
     const overrideMuteRule = findOverrideMuteRule(roomId);
     if (overrideMuteRule) {
-        promises.push(cli.deletePushRule('global', 'override', overrideMuteRule.rule_id));
+        promises.push(cli.deletePushRule('global', PushRuleKind.Override, overrideMuteRule.rule_id));
     }
 
-    if (newState === 'all_messages') {
+    if (newState === RoomNotifState.AllMessages) {
         const roomRule = cli.getRoomPushRule('global', roomId);
         if (roomRule) {
-            promises.push(cli.deletePushRule('global', 'room', roomRule.rule_id));
+            promises.push(cli.deletePushRule('global', PushRuleKind.RoomSpecific, roomRule.rule_id));
         }
-    } else if (newState === 'mentions_only') {
-        promises.push(cli.addPushRule('global', 'room', roomId, {
+    } else if (newState === RoomNotifState.MentionsOnly) {
+        promises.push(cli.addPushRule('global', PushRuleKind.RoomSpecific, roomId, {
             actions: [
                 'dont_notify',
             ],
         }));
         // https://matrix.org/jira/browse/SPEC-400
-        promises.push(cli.setPushRuleEnabled('global', 'room', roomId, true));
-    } else if ('all_messages_loud') {
-        promises.push(cli.addPushRule('global', 'room', roomId, {
+        promises.push(cli.setPushRuleEnabled('global', PushRuleKind.RoomSpecific, roomId, true));
+    } else if (newState === RoomNotifState.AllMessagesLoud) {
+        promises.push(cli.addPushRule('global', PushRuleKind.RoomSpecific, roomId, {
             actions: [
                 'notify',
                 {
@@ -195,13 +199,13 @@ function setRoomNotifsStateUnmuted(roomId, newState) {
             ],
         }));
         // https://matrix.org/jira/browse/SPEC-400
-        promises.push(cli.setPushRuleEnabled('global', 'room', roomId, true));
+        promises.push(cli.setPushRuleEnabled('global', PushRuleKind.RoomSpecific, roomId, true));
     }
 
     return Promise.all(promises);
 }
 
-function findOverrideMuteRule(roomId) {
+function findOverrideMuteRule(roomId: string): IAnnotatedPushRule {
     const cli = MatrixClientPeg.get();
     if (!cli.pushRules ||
         !cli.pushRules['global'] ||
@@ -218,7 +222,7 @@ function findOverrideMuteRule(roomId) {
     return null;
 }
 
-function isRuleForRoom(roomId, rule) {
+function isRuleForRoom(roomId: string, rule: IAnnotatedPushRule): boolean {
     if (rule.conditions.length !== 1) {
         return false;
     }
@@ -226,6 +230,6 @@ function isRuleForRoom(roomId, rule) {
     return (cond.kind === 'event_match' && cond.key === 'room_id' && cond.pattern === roomId);
 }
 
-function isMuteRule(rule) {
+function isMuteRule(rule: IAnnotatedPushRule): boolean {
     return (rule.actions.length === 1 && rule.actions[0] === 'dont_notify');
 }

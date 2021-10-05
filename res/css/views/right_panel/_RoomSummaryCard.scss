@@ -243,3 +243,7 @@ limitations under the License.
 .mx_RoomSummaryCard_icon_settings::before {
     mask-image: url('$(res)/img/element-icons/settings.svg');
 }
+
+.mx_RoomSummaryCard_icon_export::before {
+    mask-image: url('$(res)/img/element-icons/export.svg');
+}

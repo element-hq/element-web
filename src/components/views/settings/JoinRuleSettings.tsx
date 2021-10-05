@@ -97,7 +97,7 @@ const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange, closeSet
     if (roomSupportsRestricted || preferredRestrictionVersion || joinRule === JoinRule.Restricted) {
         let upgradeRequiredPill;
         if (preferredRestrictionVersion) {
-            upgradeRequiredPill = <span className="mx_SecurityRoomSettingsTab_upgradeRequired">
+            upgradeRequiredPill = <span className="mx_JoinRuleSettings_upgradeRequired">
                 { _t("Upgrade required") }
             </span>;
         }
@@ -159,13 +159,14 @@ const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange, closeSet
                             disabled={disabled}
                             onClick={onEditRestrictedClick}
                             kind="link"
+                            className="mx_JoinRuleSettings_linkButton"
                         >
                             { sub }
                         </AccessibleButton>,
                     }) }
                 </span>
 
-                <div className="mx_SecurityRoomSettingsTab_spacesWithAccess">
+                <div className="mx_JoinRuleSettings_spacesWithAccess">
                     <h4>{ _t("Spaces with access") }</h4>
                     { shownSpaces.map(room => {
                         return <span key={room.roomId}>
@@ -286,6 +287,7 @@ const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange, closeSet
             onChange={onChange}
             definitions={definitions}
             disabled={disabled}
+            className="mx_JoinRuleSettings_radioButton"
         />
     );
 };

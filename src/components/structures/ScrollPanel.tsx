@@ -277,8 +277,15 @@ export default class ScrollPanel extends React.Component<IProps> {
         // fractional values (both too big and too small)
         // for scrollTop happen on certain browsers/platforms
         // when scrolled all the way down. E.g. Chrome 72 on debian.
-        // so check difference <= 1;
-        return Math.abs(sn.scrollHeight - (sn.scrollTop + sn.clientHeight)) <= 1;
+        //
+        // We therefore leave a bit of wiggle-room and assume we're at the
+        // bottom if the unscrolled area is less than one pixel high.
+        //
+        // non-standard DPI settings also seem to have effect here and can
+        // actually lead to scrollTop+clientHeight being *larger* than
+        // scrollHeight. (observed in element-desktop on Ubuntu 20.04)
+        //
+        return sn.scrollHeight - (sn.scrollTop + sn.clientHeight) <= 1;
     };
 
     // returns the vertical height in the given direction that can be removed from

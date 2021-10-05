@@ -24,8 +24,10 @@ import { sleep } from "matrix-js-sdk/src/utils";
 import SendMessageComposer, {
     createMessageContent,
     isQuickReaction,
+    SendMessageComposer as SendMessageComposerClass,
 } from "../../../../src/components/views/rooms/SendMessageComposer";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
+import RoomContext, { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import EditorModel from "../../../../src/editor/model";
 import { createPartCreator, createRenderer } from "../../../editor/mock";
 import { createTestClient, mkEvent, mkStubRoom } from "../../../test-utils";
@@ -33,18 +35,58 @@ import BasicMessageComposer from "../../../../src/components/views/rooms/BasicMe
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import SpecPermalinkConstructor from "../../../../src/utils/permalinks/SpecPermalinkConstructor";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
+import DocumentOffset from '../../../../src/editor/offset';
+import { Layout } from '../../../../src/settings/Layout';
 
 jest.mock("../../../../src/stores/RoomViewStore");
 
 configure({ adapter: new Adapter() });
 
 describe('<SendMessageComposer/>', () => {
+    const roomContext = {
+        roomLoading: true,
+        peekLoading: false,
+        shouldPeek: true,
+        membersLoaded: false,
+        numUnreadMessages: 0,
+        draggingFile: false,
+        searching: false,
+        guestsCanJoin: false,
+        canPeek: false,
+        showApps: false,
+        isPeeking: false,
+        showRightPanel: true,
+        joining: false,
+        atEndOfLiveTimeline: true,
+        atEndOfLiveTimelineInit: false,
+        showTopUnreadMessagesBar: false,
+        statusBarVisible: false,
+        canReact: false,
+        canReply: false,
+        layout: Layout.Group,
+        lowBandwidth: false,
+        alwaysShowTimestamps: false,
+        showTwelveHourTimestamps: false,
+        readMarkerInViewThresholdMs: 3000,
+        readMarkerOutOfViewThresholdMs: 30000,
+        showHiddenEventsInTimeline: false,
+        showReadReceipts: true,
+        showRedactions: true,
+        showJoinLeaves: true,
+        showAvatarChanges: true,
+        showDisplaynameChanges: true,
+        matrixClientIsReady: false,
+        dragCounter: 0,
+        timelineRenderingType: TimelineRenderingType.Room,
+        liveTimeline: undefined,
+    };
     describe("createMessageContent", () => {
-        const permalinkCreator = jest.fn();
+        const permalinkCreator = jest.fn() as any;
 
         it("sends plaintext messages correctly", () => {
             const model = new EditorModel([], createPartCreator(), createRenderer());
-            model.update("hello world", "insertText", { offset: 11, atNodeEnd: true });
+            const documentOffset = new DocumentOffset(11, true);
+            model.update("hello world", "insertText", documentOffset);
 
             const content = createMessageContent(model, null, false, permalinkCreator);
 
@@ -56,7 +98,8 @@ describe('<SendMessageComposer/>', () => {
 
         it("sends markdown messages correctly", () => {
             const model = new EditorModel([], createPartCreator(), createRenderer());
-            model.update("hello *world*", "insertText", { offset: 13, atNodeEnd: true });
+            const documentOffset = new DocumentOffset(13, true);
+            model.update("hello *world*", "insertText", documentOffset);
 
             const content = createMessageContent(model, null, false, permalinkCreator);
 
@@ -70,7 +113,8 @@ describe('<SendMessageComposer/>', () => {
 
         it("strips /me from messages and marks them as m.emote accordingly", () => {
             const model = new EditorModel([], createPartCreator(), createRenderer());
-            model.update("/me blinks __quickly__", "insertText", { offset: 22, atNodeEnd: true });
+            const documentOffset = new DocumentOffset(22, true);
+            model.update("/me blinks __quickly__", "insertText", documentOffset);
 
             const content = createMessageContent(model, null, false, permalinkCreator);
 
@@ -84,7 +128,9 @@ describe('<SendMessageComposer/>', () => {
 
         it("allows sending double-slash escaped slash commands correctly", () => {
             const model = new EditorModel([], createPartCreator(), createRenderer());
-            model.update("//dev/null is my favourite place", "insertText", { offset: 32, atNodeEnd: true });
+            const documentOffset = new DocumentOffset(32, true);
+
+            model.update("//dev/null is my favourite place", "insertText", documentOffset);
 
             const content = createMessageContent(model, null, false, permalinkCreator);
 
@@ -97,9 +143,11 @@ describe('<SendMessageComposer/>', () => {
 
     describe("functions correctly mounted", () => {
         const mockClient = MatrixClientPeg.matrixClient = createTestClient();
-        const mockRoom = mkStubRoom();
+        const mockRoom = mkStubRoom('myfakeroom') as any;
         const mockEvent = mkEvent({
             type: "m.room.message",
+            room: 'myfakeroom',
+            user: 'myfakeuser',
             content: "Replying to this",
             event: true,
         });
@@ -116,11 +164,13 @@ describe('<SendMessageComposer/>', () => {
 
         it("renders text and placeholder correctly", () => {
             const wrapper = mount(<MatrixClientContext.Provider value={mockClient}>
-                <SendMessageComposer
-                    room={mockRoom}
-                    placeholder="placeholder string"
-                    permalinkCreator={new SpecPermalinkConstructor()}
-                />
+                <RoomContext.Provider value={roomContext}>
+                    <SendMessageComposer
+                        room={mockRoom as any}
+                        placeholder="placeholder string"
+                        permalinkCreator={new SpecPermalinkConstructor() as any}
+                    />
+                </RoomContext.Provider>
             </MatrixClientContext.Provider>);
 
             expect(wrapper.find('[aria-label="placeholder string"]')).toHaveLength(1);
@@ -135,12 +185,15 @@ describe('<SendMessageComposer/>', () => {
 
         it("correctly persists state to and from localStorage", () => {
             const wrapper = mount(<MatrixClientContext.Provider value={mockClient}>
-                <SendMessageComposer
-                    room={mockRoom}
-                    placeholder=""
-                    permalinkCreator={new SpecPermalinkConstructor()}
-                    replyToEvent={mockEvent}
-                />
+                <RoomContext.Provider value={roomContext}>
+
+                    <SendMessageComposer
+                        room={mockRoom as any}
+                        placeholder=""
+                        permalinkCreator={new SpecPermalinkConstructor() as any}
+                        replyToEvent={mockEvent}
+                    />
+                </RoomContext.Provider>
             </MatrixClientContext.Provider>);
 
             act(() => {
@@ -148,7 +201,7 @@ describe('<SendMessageComposer/>', () => {
                 wrapper.update();
             });
 
-            const key = wrapper.find(SendMessageComposer).instance().editorStateKey;
+            const key = wrapper.find(SendMessageComposerClass).instance().editorStateKey;
 
             expect(wrapper.text()).toBe("Test Text");
             expect(localStorage.getItem(key)).toBeNull();
@@ -177,11 +230,14 @@ describe('<SendMessageComposer/>', () => {
 
         it("persists state correctly without replyToEvent onbeforeunload", () => {
             const wrapper = mount(<MatrixClientContext.Provider value={mockClient}>
-                <SendMessageComposer
-                    room={mockRoom}
-                    placeholder=""
-                    permalinkCreator={new SpecPermalinkConstructor()}
-                />
+                <RoomContext.Provider value={roomContext}>
+
+                    <SendMessageComposer
+                        room={mockRoom as any}
+                        placeholder=""
+                        permalinkCreator={new SpecPermalinkConstructor() as any}
+                    />
+                </RoomContext.Provider>
             </MatrixClientContext.Provider>);
 
             act(() => {
@@ -189,7 +245,7 @@ describe('<SendMessageComposer/>', () => {
                 wrapper.update();
             });
 
-            const key = wrapper.find(SendMessageComposer).instance().editorStateKey;
+            const key = wrapper.find(SendMessageComposerClass).instance().editorStateKey;
 
             expect(wrapper.text()).toBe("Hello World");
             expect(localStorage.getItem(key)).toBeNull();
@@ -203,12 +259,15 @@ describe('<SendMessageComposer/>', () => {
 
         it("persists to session history upon sending", async () => {
             const wrapper = mount(<MatrixClientContext.Provider value={mockClient}>
-                <SendMessageComposer
-                    room={mockRoom}
-                    placeholder="placeholder"
-                    permalinkCreator={new SpecPermalinkConstructor()}
-                    replyToEvent={mockEvent}
-                />
+                <RoomContext.Provider value={roomContext}>
+
+                    <SendMessageComposer
+                        room={mockRoom as any}
+                        placeholder="placeholder"
+                        permalinkCreator={new SpecPermalinkConstructor() as any}
+                        replyToEvent={mockEvent}
+                    />
+                </RoomContext.Provider>
             </MatrixClientContext.Provider>);
 
             act(() => {
@@ -230,12 +289,38 @@ describe('<SendMessageComposer/>', () => {
                 replyEventId: mockEvent.getId(),
             });
         });
+
+        it('correctly sets the editorStateKey for threads', () => {
+            const mockThread ={
+                getThread: () => {
+                    return {
+                        id: 'myFakeThreadId',
+                    };
+                },
+            } as any;
+            const wrapper = mount(<MatrixClientContext.Provider value={mockClient}>
+                <RoomContext.Provider value={roomContext}>
+
+                    <SendMessageComposer
+                        room={mockRoom as any}
+                        placeholder=""
+                        permalinkCreator={new SpecPermalinkConstructor() as any}
+                        replyToEvent={mockThread}
+                    />
+                </RoomContext.Provider>
+            </MatrixClientContext.Provider>);
+
+            const instance = wrapper.find(SendMessageComposerClass).instance();
+            const key = instance.editorStateKey;
+
+            expect(key).toEqual('mx_cider_state_myfakeroom_myFakeThreadId');
+        });
     });
 
     describe("isQuickReaction", () => {
         it("correctly detects quick reaction", () => {
             const model = new EditorModel([], createPartCreator(), createRenderer());
-            model.update("+😊", "insertText", { offset: 3, atNodeEnd: true });
+            model.update("+😊", "insertText", new DocumentOffset(3, true));
 
             const isReaction = isQuickReaction(model);
 
@@ -244,7 +329,7 @@ describe('<SendMessageComposer/>', () => {
 
         it("correctly detects quick reaction with space", () => {
             const model = new EditorModel([], createPartCreator(), createRenderer());
-            model.update("+ 😊", "insertText", { offset: 4, atNodeEnd: true });
+            model.update("+ 😊", "insertText", new DocumentOffset(4, true));
 
             const isReaction = isQuickReaction(model);
 
@@ -256,10 +341,10 @@ describe('<SendMessageComposer/>', () => {
             const model2 = new EditorModel([], createPartCreator(), createRenderer());
             const model3 = new EditorModel([], createPartCreator(), createRenderer());
             const model4 = new EditorModel([], createPartCreator(), createRenderer());
-            model.update("+😊hello", "insertText", { offset: 8, atNodeEnd: true });
-            model2.update(" +😊", "insertText", { offset: 4, atNodeEnd: true });
-            model3.update("+ 😊😊", "insertText", { offset: 6, atNodeEnd: true });
-            model4.update("+smiley", "insertText", { offset: 7, atNodeEnd: true });
+            model.update("+😊hello", "insertText", new DocumentOffset( 8, true));
+            model2.update(" +😊", "insertText", new DocumentOffset( 4, true));
+            model3.update("+ 😊😊", "insertText", new DocumentOffset( 6, true));
+            model4.update("+smiley", "insertText", new DocumentOffset( 7, true));
 
             expect(isQuickReaction(model)).toBeFalsy();
             expect(isQuickReaction(model2)).toBeFalsy();

@@ -28,7 +28,7 @@ limitations under the License.
     .mx_InviteDialog_editor {
         flex: 1;
         width: 100%; // Needed to make the Field inside grow
-        background-color: $user-tile-hover-bg-color;
+        background-color: $header-panel-bg-color;
         border-radius: 4px;
         min-height: 25px;
         padding-left: 8px;
@@ -167,7 +167,7 @@ limitations under the License.
     padding: 5px 10px;
 
     &:hover {
-        background-color: $user-tile-hover-bg-color;
+        background-color: $header-panel-bg-color;
         border-radius: 4px;
     }
 
@@ -395,7 +395,7 @@ limitations under the License.
     left: -24px;
     padding-left: 24px;
     padding-right: 24px;
-    border-top: 1px solid $message-body-panel-bg-color;
+    border-top: 1px solid $quinary-content;
 
     display: flex;
     flex-direction: row;

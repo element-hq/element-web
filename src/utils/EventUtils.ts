@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room } from 'matrix-js-sdk/src/models/room';
 import { MatrixEvent, EventStatus } from 'matrix-js-sdk/src/models/event';
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
@@ -73,9 +72,15 @@ export function canEditOwnEvent(mxEvent: MatrixEvent): boolean {
 }
 
 const MAX_JUMP_DISTANCE = 100;
-export function findEditableEvent(room: Room, isForward: boolean, fromEventId: string = undefined): MatrixEvent {
-    const liveTimeline = room.getLiveTimeline();
-    const events = liveTimeline.getEvents().concat(room.getPendingEvents());
+export function findEditableEvent({
+    events,
+    isForward,
+    fromEventId,
+}: {
+    events: MatrixEvent[];
+    isForward: boolean;
+    fromEventId?: string;
+}): MatrixEvent {
     const maxIdx = events.length - 1;
     const inc = isForward ? 1 : -1;
     const beginIdx = isForward ? 0 : maxIdx;

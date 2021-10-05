@@ -48,6 +48,8 @@ import Spinner from "../views/elements/Spinner";
 import TileErrorBoundary from '../views/messages/TileErrorBoundary';
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
+import { logger } from 'matrix-js-sdk/src/logger';
+import { Action } from '../../dispatcher/actions';
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
@@ -60,7 +62,7 @@ const groupedEvents = [
 
 // check if there is a previous event and it has the same sender as this event
 // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
-function shouldFormContinuation(
+export function shouldFormContinuation(
     prevEvent: MatrixEvent,
     mxEvent: MatrixEvent,
     showHiddenEvents: boolean,
@@ -285,6 +287,15 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             ghostReadMarkers.push(prevProps.readMarkerEventId);
             this.setState({
                 ghostReadMarkers,
+            });
+        }
+
+        const pendingEditItem = this.pendingEditItem;
+        if (!this.props.editState && this.props.room && pendingEditItem) {
+            defaultDispatcher.dispatch({
+                action: Action.EditEvent,
+                event: this.props.room.findEventById(pendingEditItem),
+                timelineRenderingType: this.context.timelineRenderingType,
             });
         }
     }
@@ -550,10 +561,14 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return { nextEvent, nextTile };
     }
 
-    private get roomHasPendingEdit(): string {
-        return this.props.room && localStorage.getItem(`mx_edit_room_${this.props.room.roomId}`);
+    private get pendingEditItem(): string | undefined {
+        try {
+            return localStorage.getItem(`mx_edit_room_${this.props.room.roomId}_${this.context.timelineRenderingType}`);
+        } catch (err) {
+            logger.error(err);
+            return undefined;
+        }
     }
-
     private getEventTiles(): ReactNode[] {
         this.eventNodes = {};
 
@@ -661,13 +676,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 const readMarker = this.readMarkerForEvent(eventId, i >= lastShownNonLocalEchoIndex);
                 if (readMarker) ret.push(readMarker);
             }
-        }
-
-        if (!this.props.editState && this.roomHasPendingEdit) {
-            defaultDispatcher.dispatch({
-                action: "edit_event",
-                event: this.props.room.findEventById(this.roomHasPendingEdit),
-            });
         }
 
         if (grouper) {

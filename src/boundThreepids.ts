@@ -14,9 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 import IdentityAuthClient from './IdentityAuthClient';
 
-export async function getThreepidsWithBindStatus(client, filterMedium) {
+export async function getThreepidsWithBindStatus(
+    client: MatrixClient, filterMedium?: ThreepidMedium,
+): Promise<IThreepid[]> {
     const userId = client.getUserId();
 
     let { threepids } = await client.getThreePids();
@@ -31,7 +35,7 @@ export async function getThreepidsWithBindStatus(client, filterMedium) {
             const identityAccessToken = await authClient.getAccessToken({ check: false });
 
             // Restructure for lookup query
-            const query = threepids.map(({ medium, address }) => [medium, address]);
+            const query = threepids.map(({ medium, address }): [string, string] => [medium, address]);
             const lookupResults = await client.bulkLookupThreePids(query, identityAccessToken);
 
             // Record which are already bound

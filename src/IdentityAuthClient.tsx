@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from "react";
 import { SERVICE_TYPES } from 'matrix-js-sdk/src/service-types';
-import { createClient } from 'matrix-js-sdk/src/matrix';
+import { createClient, MatrixClient } from 'matrix-js-sdk/src/matrix';
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
-import * as sdk from './index';
 import { _t } from './languageHandler';
 import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
 import {
@@ -27,23 +27,25 @@ import {
     doesIdentityServerHaveTerms,
     useDefaultIdentityServer,
 } from './utils/IdentityServerUtils';
-import { abbreviateUrl } from './utils/UrlUtils';
 
 import { logger } from "matrix-js-sdk/src/logger";
+import QuestionDialog from "./components/views/dialogs/QuestionDialog";
+import { abbreviateUrl } from "./utils/UrlUtils";
 
 export class AbortedIdentityActionError extends Error {}
 
 export default class IdentityAuthClient {
+    private accessToken: string;
+    private tempClient: MatrixClient;
+    private authEnabled = true;
+
     /**
      * Creates a new identity auth client
      * @param {string} identityUrl The URL to contact the identity server with.
      * When provided, this class will operate solely within memory, refusing to
      * persist any information such as tokens. Default null (not provided).
      */
-    constructor(identityUrl = null) {
-        this.accessToken = null;
-        this.authEnabled = true;
-
+    constructor(identityUrl?: string) {
         if (identityUrl) {
             // XXX: We shouldn't have to create a whole new MatrixClient just to
             // do identity server auth. The functions don't take an identity URL
@@ -54,32 +56,29 @@ export default class IdentityAuthClient {
                 baseUrl: "", // invalid by design
                 idBaseUrl: identityUrl,
             });
-        } else {
-            // Indicates that we're using the real client, not some workaround.
-            this.tempClient = null;
         }
     }
 
-    get _matrixClient() {
+    private get matrixClient(): MatrixClient {
         return this.tempClient ? this.tempClient : MatrixClientPeg.get();
     }
 
-    _writeToken() {
+    private writeToken(): void {
         if (this.tempClient) return; // temporary client: ignore
         window.localStorage.setItem("mx_is_access_token", this.accessToken);
     }
 
-    _readToken() {
+    private readToken(): string {
         if (this.tempClient) return null; // temporary client: ignore
         return window.localStorage.getItem("mx_is_access_token");
     }
 
-    hasCredentials() {
-        return this.accessToken != null; // undef or null
+    public hasCredentials(): boolean {
+        return Boolean(this.accessToken);
     }
 
     // Returns a promise that resolves to the access_token string from the IS
-    async getAccessToken({ check = true } = {}) {
+    public async getAccessToken({ check = true } = {}): Promise<string> {
         if (!this.authEnabled) {
             // The current IS doesn't support authentication
             return null;
@@ -87,21 +86,21 @@ export default class IdentityAuthClient {
 
         let token = this.accessToken;
         if (!token) {
-            token = this._readToken();
+            token = this.readToken();
         }
 
         if (!token) {
             token = await this.registerForToken(check);
             if (token) {
                 this.accessToken = token;
-                this._writeToken();
+                this.writeToken();
             }
             return token;
         }
 
         if (check) {
             try {
-                await this._checkToken(token);
+                await this.checkToken(token);
             } catch (e) {
                 if (
                     e instanceof TermsNotSignedError ||
@@ -114,7 +113,7 @@ export default class IdentityAuthClient {
                 token = await this.registerForToken();
                 if (token) {
                     this.accessToken = token;
-                    this._writeToken();
+                    this.writeToken();
                 }
             }
         }
@@ -122,11 +121,11 @@ export default class IdentityAuthClient {
         return token;
     }
 
-    async _checkToken(token) {
-        const identityServerUrl = this._matrixClient.getIdentityServerUrl();
+    private async checkToken(token: string): Promise<void> {
+        const identityServerUrl = this.matrixClient.getIdentityServerUrl();
 
         try {
-            await this._matrixClient.getIdentityAccount(token);
+            await this.matrixClient.getIdentityAccount(token);
         } catch (e) {
             if (e.errcode === "M_TERMS_NOT_SIGNED") {
                 logger.log("Identity server requires new terms to be agreed to");
@@ -145,8 +144,8 @@ export default class IdentityAuthClient {
             !doesAccountDataHaveIdentityServer() &&
             !(await doesIdentityServerHaveTerms(identityServerUrl))
         ) {
-            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            const { finished } = Modal.createTrackedDialog('Default identity server terms warning', '',
+            const { finished } = Modal.createTrackedDialog(
+                'Default identity server terms warning', '',
                 QuestionDialog, {
                     title: _t("Identity server has no terms of service"),
                     description: (
@@ -184,13 +183,13 @@ export default class IdentityAuthClient {
         // See also https://github.com/vector-im/element-web/issues/10455.
     }
 
-    async registerForToken(check=true) {
+    public async registerForToken(check = true): Promise<string> {
         const hsOpenIdToken = await MatrixClientPeg.get().getOpenIdToken();
         // XXX: The spec is `token`, but we used `access_token` for a Sydent release.
         const { access_token: accessToken, token } =
-            await this._matrixClient.registerWithIdentityServer(hsOpenIdToken);
+            await this.matrixClient.registerWithIdentityServer(hsOpenIdToken);
         const identityAccessToken = token ? token : accessToken;
-        if (check) await this._checkToken(identityAccessToken);
+        if (check) await this.checkToken(identityAccessToken);
         return identityAccessToken;
     }
 }

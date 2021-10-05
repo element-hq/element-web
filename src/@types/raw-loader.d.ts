@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,20 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Skinner from './Skinner';
-
-export function loadSkin(skinObject) {
-    Skinner.load(skinObject);
+declare module '!!raw-loader!*' {
+    const contents: string;
+    export default contents;
 }
-
-export function resetSkin() {
-    Skinner.reset();
-}
-
-export function getComponent(componentName) {
-    return Skinner.getComponent(componentName);
-}
-
-// Import the js-sdk so the proper `request` object can be set. This does some
-// magic with the browser injection to make all subsequent imports work fine.
-import "matrix-js-sdk";

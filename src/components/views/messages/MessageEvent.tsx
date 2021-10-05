@@ -136,6 +136,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             highlightLink={this.props.highlightLink}
             showUrlPreview={this.props.showUrlPreview}
             tileShape={this.props.tileShape}
+            forExport={this.props.forExport}
             maxImageHeight={this.props.maxImageHeight}
             replacingEventId={this.props.replacingEventId}
             editState={this.props.editState}

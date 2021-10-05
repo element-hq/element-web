@@ -53,6 +53,7 @@ interface IProps {
     layout?: Layout;
     // Whether to always show a timestamp
     alwaysShowTimestamps?: boolean;
+    forExport?: boolean;
     isQuoteExpanded?: boolean;
     setQuoteExpanded: (isExpanded: boolean) => void;
 }
@@ -381,6 +382,17 @@ export default class ReplyThread extends React.Component<IProps, IState> {
                     })
                 }
             </blockquote>;
+        } else if (this.props.forExport) {
+            const eventId = ReplyThread.getParentEventId(this.props.parentEv);
+            header = <p className="mx_ReplyThread_Export">
+                { _t("In reply to <a>this message</a>",
+                    {},
+                    { a: (sub) => (
+                        <a className="mx_reply_anchor" href={`#${eventId}`} scroll-to={eventId}> { sub } </a>
+                    ),
+                    })
+                }
+            </p>;
         } else if (this.state.loading) {
             header = <Spinner w={16} h={16} />;
         }
