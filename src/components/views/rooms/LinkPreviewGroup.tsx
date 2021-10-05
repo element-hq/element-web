@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { useContext, useEffect } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { IPreviewUrlResponse } from "matrix-js-sdk/src/client";
+import { IPreviewUrlResponse, MatrixClient } from "matrix-js-sdk/src/client";
 
 import { useStateToggle } from "../../../hooks/useStateToggle";
 import LinkPreviewWidget from "./LinkPreviewWidget";
@@ -40,13 +40,7 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onH
 
     const ts = mxEvent.getTs();
     const previews = useAsyncMemo<[string, IPreviewUrlResponse][]>(async () => {
-        return Promise.all<[string, IPreviewUrlResponse] | void>(links.map(async link => {
-            try {
-                return [link, await cli.getUrlPreview(link, ts)];
-            } catch (error) {
-                console.error("Failed to get URL preview: " + error);
-            }
-        })).then(a => a.filter(Boolean)) as Promise<[string, IPreviewUrlResponse][]>;
+        return fetchPreviews(cli, links, ts);
     }, [links, ts], []);
 
     useEffect(() => {
@@ -87,6 +81,20 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onH
         )) }
         { toggleButton }
     </div>;
+};
+
+const fetchPreviews = (cli: MatrixClient, links: string[], ts: number):
+        Promise<[string, IPreviewUrlResponse][]> => {
+    return Promise.all<[string, IPreviewUrlResponse] | void>(links.map(async link => {
+        try {
+            const preview = await cli.getUrlPreview(link, ts);
+            if (preview && Object.keys(preview).length > 0) {
+                return [link, preview];
+            }
+        } catch (error) {
+            console.error("Failed to get URL preview: " + error);
+        }
+    })).then(a => a.filter(Boolean)) as Promise<[string, IPreviewUrlResponse][]>;
 };
 
 export default LinkPreviewGroup;

@@ -42,7 +42,7 @@ import linkifyMatrix from "../../linkify-matrix";
 import * as Lifecycle from '../../Lifecycle';
 // LifecycleStore is not used but does listen to and dispatch actions
 import '../../stores/LifecycleStore';
-import PageTypes from '../../PageTypes';
+import PageType from '../../PageTypes';
 
 import createRoom, { IOpts } from "../../createRoom";
 import { _t, _td, getCurrentLanguage } from '../../languageHandler';
@@ -207,7 +207,7 @@ interface IState {
     view: Views;
     // What the LoggedInView would be showing if visible
     // eslint-disable-next-line camelcase
-    page_type?: PageTypes;
+    page_type?: PageType;
     // The ID of the room we're viewing. This is either populated directly
     // in the case where we view a room by ID or by RoomView when it resolves
     // what ID an alias points at.
@@ -723,7 +723,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             }
             case 'view_my_groups':
-                this.setPage(PageTypes.MyGroups);
+                this.setPage(PageType.MyGroups);
                 this.notifyNewScreen('groups');
                 break;
             case 'view_group':
@@ -756,7 +756,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 localStorage.setItem("mx_seenSpacesBeta", "1");
                 // We just dispatch the page change rather than have to worry about
                 // what the logic is for each of these branches.
-                if (this.state.page_type === PageTypes.MyGroups) {
+                if (this.state.page_type === PageType.MyGroups) {
                     dis.dispatch({ action: 'view_last_screen' });
                 } else {
                     dis.dispatch({ action: 'view_my_groups' });
@@ -842,7 +842,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
     };
 
-    private setPage(pageType: string) {
+    private setPage(pageType: PageType) {
         this.setState({
             page_type: pageType,
         });
@@ -949,7 +949,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.setState({
                 view: Views.LOGGED_IN,
                 currentRoomId: roomInfo.room_id || null,
-                page_type: PageTypes.RoomView,
+                page_type: PageType.RoomView,
                 threepidInvite: roomInfo.threepid_invite,
                 roomOobData: roomInfo.oob_data,
                 ready: true,
@@ -977,7 +977,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             currentGroupId: groupId,
             currentGroupIsNew: payload.group_is_new,
         });
-        this.setPage(PageTypes.GroupView);
+        this.setPage(PageType.GroupView);
         this.notifyNewScreen('group/' + groupId);
     }
 
@@ -1020,7 +1020,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             justRegistered,
             currentRoomId: null,
         });
-        this.setPage(PageTypes.HomePage);
+        this.setPage(PageType.HomePage);
         this.notifyNewScreen('home');
         ThemeController.isLogin = false;
         this.themeWatcher.recheck();
@@ -1038,7 +1038,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
             this.notifyNewScreen('user/' + userId);
             this.setState({ currentUserId: userId });
-            this.setPage(PageTypes.UserView);
+            this.setPage(PageType.UserView);
         });
     }
 

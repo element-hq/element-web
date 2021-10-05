@@ -45,7 +45,7 @@ function getOrCreateContainer(): HTMLDivElement {
 
 const ARIA_MENU_ITEM_ROLES = new Set(["menuitem", "menuitemcheckbox", "menuitemradio"]);
 
-interface IPosition {
+export interface IPosition {
     top?: number;
     bottom?: number;
     left?: number;
@@ -226,6 +226,11 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
         }
     };
 
+    private onClick = (ev: React.MouseEvent) => {
+        // Don't allow clicks to escape the context menu wrapper
+        ev.stopPropagation();
+    };
+
     private onKeyDown = (ev: React.KeyboardEvent) => {
         // don't let keyboard handling escape the context menu
         ev.stopPropagation();
@@ -383,6 +388,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
                 className={classNames("mx_ContextualMenu_wrapper", this.props.wrapperClassName)}
                 style={{ ...position, ...wrapperStyle }}
                 onKeyDown={this.onKeyDown}
+                onClick={this.onClick}
                 onContextMenu={this.onContextMenuPreventBubbling}
             >
                 <div
@@ -430,7 +436,11 @@ export type AboveLeftOf = IPosition & {
 
 // Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the left of elementRect,
 // and either above or below: wherever there is more space (maybe this should be aboveOrBelowLeftOf?)
-export const aboveLeftOf = (elementRect: DOMRect, chevronFace = ChevronFace.None, vPadding = 0): AboveLeftOf => {
+export const aboveLeftOf = (
+    elementRect: DOMRect,
+    chevronFace = ChevronFace.None,
+    vPadding = 0,
+): AboveLeftOf => {
     const menuOptions: IPosition & { chevronFace: ChevronFace } = { chevronFace };
 
     const buttonRight = elementRect.right + window.pageXOffset;

@@ -16,6 +16,25 @@ limitations under the License.
 
 $font-family: var(--font-family, $font-family);
 $monospace-font-family: var(--font-family-monospace, $monospace-font-family);
+
+// Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A741
+$accent: var(--accent);
+$alert: var(--alert);
+$links: var(--links);
+$primary-content: var(--primary-content);
+$secondary-content: var(--secondary-content);
+$tertiary-content: var(--tertiary-content);
+$quaternary-content: var(--quaternary-content);
+$quinary-content: var(--quinary-content);
+$system: var(--system);
+$background: var(--background);
+$panels: rgba($system, 0.9);
+$panel-base: var(--panel-base); // This color is not intended for use in the app
+$panel-selected: rgba($panel-base, 0.3);
+$panel-hover: rgba($panel-base, 0.1);
+$panel-actions: rgba($panel-base, 0.2);
+$space-nav: rgba($panel-base, 0.1);
+
 //
 // --accent-color
 $accent-color: var(--accent-color);
@@ -48,7 +67,6 @@ $roomheader-bg-color: var(--timeline-background-color);
 $roomtile-selected-bg-color: var(--roomlist-highlights-color);
 //
 // --sidebar-color
-$interactive-tooltip-bg-color: var(--sidebar-color);
 $groupFilterPanel-bg-color: var(--sidebar-color);
 $tooltip-timeline-bg-color: var(--sidebar-color);
 $dialog-backdrop-color: var(--sidebar-color-50pct);
