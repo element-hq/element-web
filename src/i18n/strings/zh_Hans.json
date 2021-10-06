@@ -3215,5 +3215,7 @@
     "Unable to verify this login": "无法验证此登录",
     "To proceed, please accept the verification request on your other login.": "继续，请接受您其他登录的验证请求。",
     "Waiting for you to verify on your other session…": "等待您验证您的其他会话…",
-    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "等待您验证您的其他会话，%(deviceName)s%(deviceId)s…"
+    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "等待您验证您的其他会话，%(deviceName)s%(deviceId)s…",
+    "Creating Space...": "正在创建空间…",
+    "Fetching data...": "获取数据中…"
 }
