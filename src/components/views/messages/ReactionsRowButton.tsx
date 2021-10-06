@@ -106,31 +106,20 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
         }
 
         const room = this.context.getRoom(mxEvent.getRoomId());
-        let label;
+        let label: string;
         if (room) {
             const senders = [];
             for (const reactionEvent of reactionEvents) {
                 const member = room.getMember(reactionEvent.getSender());
-                const name = member ? member.name : reactionEvent.getSender();
-                senders.push(name);
+                senders.push(member?.name || reactionEvent.getSender());
             }
-            label = _t(
-                "<reactors/><reactedWith> reacted with %(content)s</reactedWith>",
-                {
-                    content,
-                },
-                {
-                    reactors: () => {
-                        return formatCommaSeparatedList(senders, 6);
-                    },
-                    reactedWith: (sub) => {
-                        if (!content) {
-                            return null;
-                        }
-                        return sub;
-                    },
-                },
-            );
+
+            const reactors = formatCommaSeparatedList(senders, 6);
+            if (content) {
+                label = _t("%(reactors)s reacted with %(content)s", { reactors, content });
+            } else {
+                label = reactors;
+            }
         }
         const isPeeking = room.getMyMembership() !== "join";
         return <AccessibleButton
@@ -142,12 +131,12 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
             onMouseLeave={this.onMouseLeave}
         >
             <span className="mx_ReactionsRowButton_content" aria-hidden="true">
-                {content}
+                { content }
             </span>
             <span className="mx_ReactionsRowButton_count" aria-hidden="true">
-                {count}
+                { count }
             </span>
-            {tooltip}
+            { tooltip }
         </AccessibleButton>;
     }
 }

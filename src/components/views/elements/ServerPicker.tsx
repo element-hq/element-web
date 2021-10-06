@@ -63,28 +63,28 @@ const ServerPicker = ({ title, dialogTitle, serverConfig, onServerConfigChange }
             });
         };
         editBtn = <AccessibleButton className="mx_ServerPicker_change" kind="link" onClick={onClick}>
-            {_t("Edit")}
+            { _t("Edit") }
         </AccessibleButton>;
     }
 
     let serverName: React.ReactNode = serverConfig.isNameResolvable ? serverConfig.hsName : serverConfig.hsUrl;
     if (serverConfig.hsNameIsDifferent) {
         serverName = <TextWithTooltip class="mx_Login_underlinedServerName" tooltip={serverConfig.hsUrl}>
-            {serverConfig.hsName}
+            { serverConfig.hsName }
         </TextWithTooltip>;
     }
 
     let desc;
     if (serverConfig.hsName === "matrix.org") {
         desc = <span className="mx_ServerPicker_desc">
-            {_t("Join millions for free on the largest public server")}
+            { _t("Join millions for free on the largest public server") }
         </span>;
     }
 
     return <div className="mx_ServerPicker">
-        <h3>{title || _t("Homeserver")}</h3>
+        <h3>{ title || _t("Homeserver") }</h3>
         <AccessibleButton className="mx_ServerPicker_help" onClick={onHelpClick} />
-        <span className="mx_ServerPicker_server">{serverName}</span>
+        <span className="mx_ServerPicker_server">{ serverName }</span>
         { editBtn }
         { desc }
     </div>;

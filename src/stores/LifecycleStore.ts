@@ -44,7 +44,7 @@ class LifecycleStore extends Store<ActionPayload> {
         this.__emitChange();
     }
 
-    protected __onDispatch(payload: ActionPayload) {
+    protected __onDispatch(payload: ActionPayload) { // eslint-disable-line @typescript-eslint/naming-convention
         switch (payload.action) {
             case 'do_after_sync_prepared':
                 this.setState({
@@ -56,7 +56,7 @@ class LifecycleStore extends Store<ActionPayload> {
                     deferredAction: null,
                 });
                 break;
-            case 'syncstate': {
+            case 'sync_state': {
                 if (payload.state !== 'PREPARED') {
                     break;
                 }

@@ -67,10 +67,10 @@ const RegistrationEmailPromptDialog: React.FC<IProps> = ({ onFinished }) => {
         fixedWidth={false}
     >
         <div className="mx_Dialog_content" id="mx_RegistrationEmailPromptDialog">
-            <p>{_t("Just a heads up, if you don't add an email and forget your password, you could " +
+            <p>{ _t("Just a heads up, if you don't add an email and forget your password, you could " +
                 "<b>permanently lose access to your account</b>.", {}, {
-                b: sub => <b>{sub}</b>,
-            })}</p>
+                b: sub => <b>{ sub }</b>,
+            }) }</p>
             <form onSubmit={onSubmit}>
                 <Field
                     ref={fieldRef}

@@ -23,7 +23,7 @@ import { NOTIFICATION_STATE_UPDATE, NotificationState } from "./NotificationStat
 import { FetchRoomFn } from "./ListNotificationState";
 
 export class SpaceNotificationState extends NotificationState {
-    private rooms: Room[] = [];
+    public rooms: Room[] = []; // exposed only for tests
     private states: { [spaceId: string]: RoomNotificationState } = {};
 
     constructor(private spaceId: string | symbol, private getRoomFn: FetchRoomFn) {
@@ -31,7 +31,7 @@ export class SpaceNotificationState extends NotificationState {
     }
 
     public get symbol(): string {
-        return null; // This notification state doesn't support symbols
+        return this._color === NotificationColor.Unsent ? "!" : null;
     }
 
     public setRooms(rooms: Room[]) {
@@ -51,6 +51,10 @@ export class SpaceNotificationState extends NotificationState {
         }
 
         this.calculateTotalState();
+    }
+
+    public getFirstRoomWithNotifications() {
+        return Object.values(this.states).find(state => state.color >= this.color)?.room.roomId;
     }
 
     public destroy() {
@@ -79,4 +83,3 @@ export class SpaceNotificationState extends NotificationState {
         this.emitIfUpdated(snapshot);
     }
 }
-

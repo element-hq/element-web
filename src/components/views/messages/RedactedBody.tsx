@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,14 +21,14 @@ import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { formatFullDate } from "../../../DateUtils";
 import SettingsStore from "../../../settings/SettingsStore";
+import { IBodyProps } from "./IBodyProps";
 
 interface IProps {
     mxEvent: MatrixEvent;
 }
 
-const RedactedBody = React.forwardRef<any, IProps>(({ mxEvent }, ref) => {
+const RedactedBody = React.forwardRef<any, IProps | IBodyProps>(({ mxEvent }, ref) => {
     const cli: MatrixClient = useContext(MatrixClientContext);
-
     let text = _t("Message deleted");
     const unsigned = mxEvent.getUnsigned();
     const redactedBecauseUserId = unsigned && unsigned.redacted_because && unsigned.redacted_because.sender;

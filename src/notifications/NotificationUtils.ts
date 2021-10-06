@@ -1,6 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2016 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Action, Actions } from "./types";
+import { PushRuleAction, PushRuleActionName, TweakHighlight, TweakSound } from "matrix-js-sdk/src/@types/PushRules";
 
 interface IEncodedActions {
     notify: boolean;
@@ -30,23 +29,23 @@ export class NotificationUtils {
     //   "highlight: true/false,
     // }
     // to a list of push actions.
-    static encodeActions(action: IEncodedActions) {
+    static encodeActions(action: IEncodedActions): PushRuleAction[] {
         const notify = action.notify;
         const sound = action.sound;
         const highlight = action.highlight;
         if (notify) {
-            const actions: Action[] = [Actions.Notify];
+            const actions: PushRuleAction[] = [PushRuleActionName.Notify];
             if (sound) {
-                actions.push({ "set_tweak": "sound", "value": sound });
+                actions.push({ "set_tweak": "sound", "value": sound } as TweakSound);
             }
             if (highlight) {
-                actions.push({ "set_tweak": "highlight" });
+                actions.push({ "set_tweak": "highlight" } as TweakHighlight);
             } else {
-                actions.push({ "set_tweak": "highlight", "value": false });
+                actions.push({ "set_tweak": "highlight", "value": false } as TweakHighlight);
             }
             return actions;
         } else {
-            return [Actions.DontNotify];
+            return [PushRuleActionName.DontNotify];
         }
     }
 
@@ -56,16 +55,16 @@ export class NotificationUtils {
     //   "highlight: true/false,
     // }
     // If the actions couldn't be decoded then returns null.
-    static decodeActions(actions: Action[]): IEncodedActions {
+    static decodeActions(actions: PushRuleAction[]): IEncodedActions {
         let notify = false;
         let sound = null;
         let highlight = false;
 
         for (let i = 0; i < actions.length; ++i) {
             const action = actions[i];
-            if (action === Actions.Notify) {
+            if (action === PushRuleActionName.Notify) {
                 notify = true;
-            } else if (action === Actions.DontNotify) {
+            } else if (action === PushRuleActionName.DontNotify) {
                 notify = false;
             } else if (typeof action === "object") {
                 if (action.set_tweak === "sound") {

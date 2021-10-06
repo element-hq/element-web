@@ -18,10 +18,10 @@ limitations under the License.
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
+import { defer } from "matrix-js-sdk/src/utils";
 
 import Analytics from './Analytics';
 import dis from './dispatcher/dispatcher';
-import { defer } from './utils/promise';
 import AsyncWrapper from './AsyncWrapper';
 
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
@@ -378,7 +378,7 @@ export class ModalManager {
             const dialog = (
                 <div className={classes}>
                     <div className="mx_Dialog">
-                        {modal.elem}
+                        { modal.elem }
                     </div>
                     <div className="mx_Dialog_background" onClick={this.onBackgroundClick} />
                 </div>

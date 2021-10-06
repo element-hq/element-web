@@ -90,7 +90,7 @@ export default class AutoDiscoveryUtils {
                             href="https://github.com/vector-im/element-web/blob/master/docs/config.md"
                             target="_blank"
                             rel="noreferrer noopener"
-                        >{sub}</a>;
+                        >{ sub }</a>;
                     },
                 },
             );
@@ -130,8 +130,8 @@ export default class AutoDiscoveryUtils {
             serverErrorIsFatal: isFatalError,
             serverDeadError: (
                 <div>
-                    <strong>{title}</strong>
-                    <div>{body}</div>
+                    <strong>{ title }</strong>
+                    <div>{ body }</div>
                 </div>
             ),
         };

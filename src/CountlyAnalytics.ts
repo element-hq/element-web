@@ -16,12 +16,12 @@ limitations under the License.
 
 import { randomString } from "matrix-js-sdk/src/randomstring";
 import { IContent } from "matrix-js-sdk/src/models/event";
+import { sleep } from "matrix-js-sdk/src/utils";
 
 import { getCurrentLanguage } from './languageHandler';
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 import { MatrixClientPeg } from "./MatrixClientPeg";
-import { sleep } from "./utils/promise";
 import RoomViewStore from "./stores/RoomViewStore";
 import { Action } from "./dispatcher/actions";
 
@@ -29,6 +29,8 @@ const INACTIVITY_TIME = 20; // seconds
 const HEARTBEAT_INTERVAL = 5_000; // ms
 const SESSION_UPDATE_INTERVAL = 60; // seconds
 const MAX_PENDING_EVENTS = 1000;
+
+export type Rating = 1 | 2 | 3 | 4 | 5;
 
 enum Orientation {
     Landscape = "landscape",
@@ -364,8 +366,8 @@ export default class CountlyAnalytics {
 
     private initTime = CountlyAnalytics.getTimestamp();
     private firstPage = true;
-    private heartbeatIntervalId: NodeJS.Timeout;
-    private activityIntervalId: NodeJS.Timeout;
+    private heartbeatIntervalId: number;
+    private activityIntervalId: number;
     private trackTime = true;
     private lastBeat: number;
     private storedDuration = 0;
@@ -451,7 +453,7 @@ export default class CountlyAnalytics {
         window.removeEventListener("scroll", this.onUserActivity);
     }
 
-    public reportFeedback(rating: 1 | 2 | 3 | 4 | 5, comment: string) {
+    public reportFeedback(rating: Rating, comment: string) {
         this.track<IStarRatingEvent>("[CLY]_star_rating", { rating, comment }, null, {}, true);
     }
 
@@ -536,7 +538,7 @@ export default class CountlyAnalytics {
 
         // sanitize the error from identifiers
         error = await strReplaceAsync(error, /([!@+#]).+?:[\w:.]+/g, async (substring: string, glyph: string) => {
-            return glyph + await hashHex(substring.substring(1));
+            return glyph + (await hashHex(substring.substring(1)));
         });
 
         const metrics = this.getMetrics();

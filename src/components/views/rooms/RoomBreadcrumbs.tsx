@@ -105,11 +105,13 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
             // NOTE: The CSSTransition timeout MUST match the timeout in our CSS!
             return (
                 <CSSTransition
-                    appear={true} in={this.state.doAnimation} timeout={640}
+                    appear={true}
+                    in={this.state.doAnimation}
+                    timeout={640}
                     classNames='mx_RoomBreadcrumbs'
                 >
                     <Toolbar className='mx_RoomBreadcrumbs' aria-label={_t("Recently visited rooms")}>
-                        {tiles.slice(this.state.skipFirst ? 1 : 0)}
+                        { tiles.slice(this.state.skipFirst ? 1 : 0) }
                     </Toolbar>
                 </CSSTransition>
             );
@@ -117,7 +119,7 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
             return (
                 <div className='mx_RoomBreadcrumbs'>
                     <div className="mx_RoomBreadcrumbs_placeholder">
-                        {_t("No recently visited rooms")}
+                        { _t("No recently visited rooms") }
                     </div>
                 </div>
             );

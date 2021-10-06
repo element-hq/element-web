@@ -16,8 +16,9 @@ limitations under the License.
 
 import React from 'react';
 import { _t } from "../../../../languageHandler";
-import * as sdk from "../../../../index";
 import { replaceableComponent } from "../../../../utils/replaceableComponent";
+import BaseDialog from "../BaseDialog";
+import DialogButtons from "../../elements/DialogButtons";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -34,9 +35,6 @@ export default class ConfirmDestroyCrossSigningDialog extends React.Component<IP
     };
 
     render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
         return (
             <BaseDialog
                 className='mx_ConfirmDestroyCrossSigningDialog'
@@ -46,12 +44,12 @@ export default class ConfirmDestroyCrossSigningDialog extends React.Component<IP
             >
                 <div className='mx_ConfirmDestroyCrossSigningDialog_content'>
                     <p>
-                        {_t(
+                        { _t(
                             "Deleting cross-signing keys is permanent. " +
                             "Anyone you have verified with will see security alerts. " +
                             "You almost certainly don't want to do this, unless " +
                             "you've lost every device you can cross-sign from.",
-                        )}
+                        ) }
                     </p>
                 </div>
                 <DialogButtons

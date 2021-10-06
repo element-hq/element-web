@@ -192,7 +192,8 @@ class Pill extends React.Component {
         });
     }
 
-    onUserPillClicked = () => {
+    onUserPillClicked = (e) => {
+        e.preventDefault();
         dis.dispatch({
             action: Action.ViewUser,
             member: this.state.member,
@@ -258,7 +259,10 @@ class Pill extends React.Component {
                     linkText = groupId;
                     if (this.props.shouldShowPillAvatar) {
                         avatar = <BaseAvatar
-                            name={name || groupId} width={16} height={16} aria-hidden="true"
+                            name={name || groupId}
+                            width={16}
+                            height={16}
+                            aria-hidden="true"
                             url={avatarUrl ? mediaFromMxc(avatarUrl).getSquareThumbnailHttp(16) : null} />;
                     }
                     pillClass = 'mx_GroupPill';

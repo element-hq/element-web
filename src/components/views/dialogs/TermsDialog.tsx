@@ -16,11 +16,12 @@ limitations under the License.
 
 import url from 'url';
 import React from 'react';
-import * as sdk from '../../../index';
 import { _t, pickBestLanguage } from '../../../languageHandler';
 
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
+import DialogButtons from "../elements/DialogButtons";
+import BaseDialog from "./BaseDialog";
 
 interface ITermsCheckboxProps {
     onChange: (url: string, checked: boolean) => void;
@@ -89,9 +90,9 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
     private nameForServiceType(serviceType: SERVICE_TYPES, host: string): JSX.Element {
         switch (serviceType) {
             case SERVICE_TYPES.IS:
-                return <div>{_t("Identity Server")}<br />({host})</div>;
+                return <div>{ _t("Identity server") }<br />({ host })</div>;
             case SERVICE_TYPES.IM:
-                return <div>{_t("Integration Manager")}<br />({host})</div>;
+                return <div>{ _t("Integration manager") }<br />({ host })</div>;
         }
     }
 
@@ -99,13 +100,13 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
         switch (serviceType) {
             case SERVICE_TYPES.IS:
                 return <div>
-                    {_t("Find others by phone or email")}
+                    { _t("Find others by phone or email") }
                     <br />
-                    {_t("Be found by phone or email")}
+                    { _t("Be found by phone or email") }
                 </div>;
             case SERVICE_TYPES.IM:
                 return <div>
-                    {_t("Use bots, bridges, widgets and sticker packs")}
+                    { _t("Use bots, bridges, widgets and sticker packs") }
                 </div>;
         }
     }
@@ -117,9 +118,6 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
     };
 
     public render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
         const rows = [];
         for (const policiesAndService of this.props.policiesAndServicePairs) {
             const parsedBaseUrl = url.parse(policiesAndService.service.baseUrl);
@@ -138,10 +136,10 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
                 }
 
                 rows.push(<tr key={termDoc[termsLang].url}>
-                    <td className="mx_TermsDialog_service">{serviceName}</td>
-                    <td className="mx_TermsDialog_summary">{summary}</td>
+                    <td className="mx_TermsDialog_service">{ serviceName }</td>
+                    <td className="mx_TermsDialog_summary">{ summary }</td>
                     <td>
-                        {termDoc[termsLang].name}
+                        { termDoc[termsLang].name }
                         <a rel="noreferrer noopener" target="_blank" href={termDoc[termsLang].url}>
                             <span className="mx_TermsDialog_link" />
                         </a>
@@ -188,16 +186,16 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
                 hasCancel={false}
             >
                 <div id='mx_Dialog_content'>
-                    <p>{_t("To continue you need to accept the terms of this service.")}</p>
+                    <p>{ _t("To continue you need to accept the terms of this service.") }</p>
 
                     <table className="mx_TermsDialog_termsTable"><tbody>
                         <tr className="mx_TermsDialog_termsTableHeader">
-                            <th>{_t("Service")}</th>
-                            <th>{_t("Summary")}</th>
-                            <th>{_t("Document")}</th>
-                            <th>{_t("Accept")}</th>
+                            <th>{ _t("Service") }</th>
+                            <th>{ _t("Summary") }</th>
+                            <th>{ _t("Document") }</th>
+                            <th>{ _t("Accept") }</th>
                         </tr>
-                        {rows}
+                        { rows }
                     </tbody></table>
                 </div>
 

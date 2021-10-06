@@ -14,6 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_InviteDialog_transferWrapper .mx_Dialog {
+    padding-bottom: 16px;
+}
+
 .mx_InviteDialog_addressBar {
     display: flex;
     flex-direction: row;
@@ -24,7 +28,7 @@ limitations under the License.
     .mx_InviteDialog_editor {
         flex: 1;
         width: 100%; // Needed to make the Field inside grow
-        background-color: $user-tile-hover-bg-color;
+        background-color: $header-panel-bg-color;
         border-radius: 4px;
         min-height: 25px;
         padding-left: 8px;
@@ -52,7 +56,7 @@ limitations under the License.
             box-sizing: border-box;
             min-width: 40%;
             flex: 1 !important;
-            color: $primary-fg-color !important;
+            color: $primary-content !important;
         }
     }
 
@@ -90,7 +94,7 @@ limitations under the License.
     }
 
     > span {
-        color: $primary-fg-color;
+        color: $primary-content;
     }
 
     .mx_InviteDialog_subname {
@@ -106,7 +110,7 @@ limitations under the License.
     font-size: $font-14px;
 
     > span {
-        color: $primary-fg-color;
+        color: $primary-content;
         font-weight: 600;
     }
 
@@ -163,7 +167,7 @@ limitations under the License.
     padding: 5px 10px;
 
     &:hover {
-        background-color: $user-tile-hover-bg-color;
+        background-color: $header-panel-bg-color;
         border-radius: 4px;
     }
 
@@ -216,7 +220,7 @@ limitations under the License.
     .mx_InviteDialog_roomTile_name {
         font-weight: 600;
         font-size: $font-14px;
-        color: $primary-fg-color;
+        color: $primary-content;
         margin-left: 7px;
     }
 
@@ -286,16 +290,41 @@ limitations under the License.
     }
 }
 
-.mx_InviteDialog {
+.mx_InviteDialog_other {
     // Prevent the dialog from jumping around randomly when elements change.
     height: 600px;
     padding-left: 20px; // the design wants some padding on the left
-    display: flex;
+
+    .mx_InviteDialog_userSections {
+        height: calc(100% - 115px); // mx_InviteDialog's height minus some for the upper and lower elements
+    }
+}
+
+.mx_InviteDialog_content {
+    height: calc(100% - 36px); // full height minus the size of the header
+    overflow: hidden;
+}
+
+.mx_InviteDialog_transfer {
+    width: 496px;
+    height: 466px;
     flex-direction: column;
 
     .mx_InviteDialog_content {
-        overflow: hidden;
-        height: 100%;
+        flex-direction: column;
+
+        .mx_TabbedView {
+            height: calc(100% - 60px);
+        }
+        overflow: visible;
+    }
+
+    .mx_InviteDialog_addressBar {
+        margin-top: 8px;
+    }
+
+    input[type="checkbox"] {
+        margin-right: 8px;
     }
 }
 
@@ -303,7 +332,6 @@ limitations under the License.
     margin-top: 4px;
     overflow-y: auto;
     padding: 0 45px 4px 0;
-    height: calc(100% - 115px); // mx_InviteDialog's height minus some for the upper and lower elements
 }
 
 .mx_InviteDialog_hasFooter .mx_InviteDialog_userSections {
@@ -318,11 +346,79 @@ limitations under the License.
     padding: 0;
 }
 
+.mx_InviteDialog_dialPad .mx_InviteDialog_dialPadField {
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+    margin-top: 0;
+    border-color: $quaternary-content;
+
+    input {
+        font-size: 18px;
+        font-weight: 600;
+        padding-top: 0;
+    }
+}
+
+.mx_InviteDialog_dialPad .mx_InviteDialog_dialPadField:focus-within {
+    border-color: $accent-color;
+}
+
+.mx_InviteDialog_dialPadField .mx_Field_postfix {
+    /* Remove border separator between postfix and field content */
+    border-left: none;
+}
+
+.mx_InviteDialog_dialPad {
+    width: 224px;
+    margin-top: 16px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mx_InviteDialog_dialPad .mx_DialPad {
+    row-gap: 16px;
+    column-gap: 48px;
+
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mx_InviteDialog_transferConsultConnect {
+    padding-top: 16px;
+    /* This wants a drop shadow the full width of the dialog, so relative-position it
+     * and make it wider, then compensate with padding
+     */
+    position: relative;
+    width: 496px;
+    left: -24px;
+    padding-left: 24px;
+    padding-right: 24px;
+    border-top: 1px solid $quinary-content;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.mx_InviteDialog_transferConsultConnect_pushRight {
+    margin-left: auto;
+}
+
+.mx_InviteDialog_userDirectoryIcon::before {
+    mask-image: url('$(res)/img/voip/tab-userdirectory.svg');
+}
+
+.mx_InviteDialog_dialPadIcon::before {
+    mask-image: url('$(res)/img/voip/tab-dialpad.svg');
+}
+
 .mx_InviteDialog_multiInviterError {
     > h4 {
         font-size: $font-15px;
         line-height: $font-24px;
-        color: $secondary-fg-color;
+        color: $secondary-content;
         font-weight: normal;
     }
 
@@ -336,14 +432,14 @@ limitations under the License.
                     font-size: $font-15px;
                     line-height: $font-24px;
                     font-weight: $font-semi-bold;
-                    color: $primary-fg-color;
+                    color: $primary-content;
                 }
 
                 .mx_InviteDialog_multiInviterError_entry_userId {
                     margin-left: 6px;
                     font-size: $font-12px;
                     line-height: $font-15px;
-                    color: $tertiary-fg-color;
+                    color: $tertiary-content;
                 }
             }
 

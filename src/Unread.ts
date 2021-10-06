@@ -30,7 +30,7 @@ import { haveTileForEvent } from "./components/views/rooms/EventTile";
  * @returns {boolean} True if the given event should affect the unread message count
  */
 export function eventTriggersUnreadCount(ev: MatrixEvent): boolean {
-    if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) {
+    if (ev.getSender() === MatrixClientPeg.get().credentials.userId) {
         return false;
     }
 
@@ -63,9 +63,7 @@ export function doesRoomHaveUnreadMessages(room: Room): boolean {
     //             https://github.com/vector-im/element-web/issues/2427
     // ...and possibly some of the others at
     //             https://github.com/vector-im/element-web/issues/3363
-    if (room.timeline.length &&
-        room.timeline[room.timeline.length - 1].sender &&
-        room.timeline[room.timeline.length - 1].sender.userId === myUserId) {
+    if (room.timeline.length && room.timeline[room.timeline.length - 1].getSender() === myUserId) {
         return false;
     }
 

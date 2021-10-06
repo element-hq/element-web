@@ -69,7 +69,7 @@ class Search extends React.PureComponent<IProps> {
                     onKeyDown={this.onKeyDown}
                     ref={this.inputRef}
                 />
-                {rightButton}
+                { rightButton }
             </div>
         );
     }

@@ -31,6 +31,8 @@ import { Action } from "../dispatcher/actions";
 import { retry } from "../utils/promise";
 import CountlyAnalytics from "../CountlyAnalytics";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const NUM_JOIN_RETRY = 5;
 
 const INITIAL_STATE = {
@@ -96,7 +98,7 @@ class RoomViewStore extends Store<ActionPayload> {
         this.__emitChange();
     }
 
-    __onDispatch(payload) {
+    __onDispatch(payload) { // eslint-disable-line @typescript-eslint/naming-convention
         switch (payload.action) {
             // view_room:
             //      - room_alias:   '#somealias:matrix.org'
@@ -164,6 +166,7 @@ class RoomViewStore extends Store<ActionPayload> {
                 }
                 break;
             case 'open_room_settings': {
+                // FIXME: Using an import will result in test failures
                 const RoomSettingsDialog = sdk.getComponent("dialogs.RoomSettingsDialog");
                 Modal.createTrackedDialog('Room settings', '', RoomSettingsDialog, {
                     roomId: payload.room_id || this.state.roomId,
@@ -318,14 +321,14 @@ class RoomViewStore extends Store<ActionPayload> {
         });
         const err = payload.err;
         let msg = err.message ? err.message : JSON.stringify(err);
-        console.log("Failed to join room:", msg);
+        logger.log("Failed to join room:", msg);
 
         if (err.name === "ConnectionError") {
             msg = _t("There was an error joining the room");
         } else if (err.errcode === 'M_INCOMPATIBLE_ROOM_VERSION') {
             msg = <div>
-                {_t("Sorry, your homeserver is too old to participate in this room.")}<br />
-                {_t("Please contact your homeserver administrator.")}
+                { _t("Sorry, your homeserver is too old to participate in this room.") }<br />
+                { _t("Please contact your homeserver administrator.") }
             </div>;
         } else if (err.httpStatus === 404) {
             const invitingUserId = this.getInvitingUserId(this.state.roomId);
@@ -340,6 +343,7 @@ class RoomViewStore extends Store<ActionPayload> {
             }
         }
 
+        // FIXME: Using an import will result in test failures
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Failed to join room', '', ErrorDialog, {
             title: _t("Failed to join room"),
@@ -427,7 +431,7 @@ class RoomViewStore extends Store<ActionPayload> {
     }
 }
 
-let singletonRoomViewStore = null;
+let singletonRoomViewStore: RoomViewStore = null;
 if (!singletonRoomViewStore) {
     singletonRoomViewStore = new RoomViewStore();
 }

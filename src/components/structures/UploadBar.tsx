@@ -104,7 +104,7 @@ export default class UploadBar extends React.Component<IProps, IState> {
         const uploadSize = filesize(this.state.currentUpload.total);
         return (
             <div className="mx_UploadBar">
-                <div className="mx_UploadBar_filename">{uploadText} ({uploadSize})</div>
+                <div className="mx_UploadBar_filename">{ uploadText } ({ uploadSize })</div>
                 <AccessibleButton onClick={this.onCancelClick} className='mx_UploadBar_cancel' />
                 <ProgressBar value={this.state.currentUpload.loaded} max={this.state.currentUpload.total} />
             </div>

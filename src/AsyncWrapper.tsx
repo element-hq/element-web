@@ -20,6 +20,8 @@ import * as sdk from './index';
 import { _t } from './languageHandler';
 import { IDialogProps } from "./components/views/dialogs/IDialogProps";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 type AsyncImport<T> = { default: T };
 
 interface IProps extends IDialogProps {
@@ -47,7 +49,7 @@ export default class AsyncWrapper extends React.Component<IProps, IState> {
     componentDidMount() {
         // XXX: temporary logging to try to diagnose
         // https://github.com/vector-im/element-web/issues/3148
-        console.log('Starting load of AsyncWrapper for modal');
+        logger.log('Starting load of AsyncWrapper for modal');
         this.props.prom.then((result) => {
             if (this.unmounted) return;
 
@@ -77,6 +79,7 @@ export default class AsyncWrapper extends React.Component<IProps, IState> {
             const Component = this.state.component;
             return <Component {...this.props} />;
         } else if (this.state.error) {
+            // FIXME: Using an import will result in test failures
             const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             return <BaseDialog onFinished={this.props.onFinished} title={_t("Error")}>

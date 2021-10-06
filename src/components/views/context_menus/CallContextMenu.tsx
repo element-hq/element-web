@@ -53,7 +53,7 @@ export default class CallContextMenu extends React.Component<IProps> {
     onTransferClick = () => {
         Modal.createTrackedDialog(
             'Transfer Call', '', InviteDialog, { kind: KIND_CALL_TRANSFER, call: this.props.call },
-            /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
+            /*className=*/"mx_InviteDialog_transferWrapper", /*isPriority=*/false, /*isStatic=*/true,
         );
         this.props.onFinished();
     };
@@ -65,15 +65,15 @@ export default class CallContextMenu extends React.Component<IProps> {
         let transferItem;
         if (this.props.call.opponentCanBeTransferred()) {
             transferItem = <MenuItem className="mx_CallContextMenu_item" onClick={this.onTransferClick}>
-                {_t("Transfer")}
+                { _t("Transfer") }
             </MenuItem>;
         }
 
         return <ContextMenu {...this.props}>
             <MenuItem className="mx_CallContextMenu_item" onClick={handler}>
-                {holdUnholdCaption}
+                { holdUnholdCaption }
             </MenuItem>
-            {transferItem}
+            { transferItem }
         </ContextMenu>;
     }
 }

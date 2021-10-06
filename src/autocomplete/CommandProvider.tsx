@@ -53,7 +53,7 @@ export default class CommandProvider extends AutocompleteProvider {
             // The input looks like a command with arguments, perform exact match
             const name = command[1].substr(1); // strip leading `/`
             if (CommandMap.has(name) && CommandMap.get(name).isEnabled()) {
-                // some commands, namely `me` and `ddg` don't suit having the usage shown whilst typing their arguments
+                // some commands, namely `me` don't suit having the usage shown whilst typing their arguments
                 if (CommandMap.get(name).hideCompletionAfterSpace) return [];
                 matches = [CommandMap.get(name)];
             }
@@ -95,8 +95,8 @@ export default class CommandProvider extends AutocompleteProvider {
     renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
             <div
-                className="mx_Autocomplete_Completion_container_block"
-                role="listbox"
+                className="mx_Autocomplete_Completion_container_pill"
+                role="presentation"
                 aria-label={_t("Command Autocomplete")}
             >
                 { completions }

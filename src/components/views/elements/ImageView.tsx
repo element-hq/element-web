@@ -24,7 +24,7 @@ import FocusLock from "react-focus-lock";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
-import { aboveLeftOf, ContextMenu } from '../../structures/ContextMenu';
+import { aboveLeftOf } from '../../structures/ContextMenu';
 import MessageTimestamp from "../messages/MessageTimestamp";
 import SettingsStore from "../../../settings/SettingsStore";
 import { formatFullDate } from "../../../DateUtils";
@@ -33,6 +33,8 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { normalizeWheelEvent } from "../../../utils/Mouse";
+import { IDialogProps } from '../dialogs/IDialogProps';
+import UIStore from '../../../stores/UIStore';
 
 // Max scale to keep gaps around the image
 const MAX_SCALE = 0.95;
@@ -43,21 +45,34 @@ const ZOOM_COEFFICIENT = 0.0025;
 // If we have moved only this much we can zoom
 const ZOOM_DISTANCE = 10;
 
-interface IProps {
+// Height of mx_ImageView_panel
+const getPanelHeight = (): number => {
+    const value = getComputedStyle(document.documentElement).getPropertyValue("--image-view-panel-height");
+    // Return the value as a number without the unit
+    return parseInt(value.slice(0, value.length - 2));
+};
+
+interface IProps extends IDialogProps {
     src: string; // the source of the image being displayed
     name?: string; // the main title ('name') for the image
     link?: string; // the link (if any) applied to the name of the image
     width?: number; // width of the image src in pixels
     height?: number; // height of the image src in pixels
     fileSize?: number; // size of the image src in bytes
-    onFinished(): void; // callback when the lightbox is dismissed
 
     // the event (if any) that the Image is displaying. Used for event-specific stuff like
     // redactions, senders, timestamps etc.  Other descriptors are taken from the explicit
     // properties above, which let us use lightboxes to display images which aren't associated
     // with events.
-    mxEvent: MatrixEvent;
-    permalinkCreator: RoomPermalinkCreator;
+    mxEvent?: MatrixEvent;
+    permalinkCreator?: RoomPermalinkCreator;
+
+    thumbnailInfo?: {
+        positionX: number;
+        positionY: number;
+        width: number;
+        height: number;
+    };
 }
 
 interface IState {
@@ -75,13 +90,25 @@ interface IState {
 export default class ImageView extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
+
+        const { thumbnailInfo } = this.props;
+
         this.state = {
-            zoom: 0,
+            zoom: 0, // We default to 0 and override this in imageLoaded once we have naturalSize
             minZoom: MAX_SCALE,
             maxZoom: MAX_SCALE,
             rotation: 0,
-            translationX: 0,
-            translationY: 0,
+            translationX: (
+                thumbnailInfo?.positionX +
+                (thumbnailInfo?.width / 2) -
+                (UIStore.instance.windowWidth / 2)
+            ) ?? 0,
+            translationY: (
+                thumbnailInfo?.positionY +
+                (thumbnailInfo?.height / 2) -
+                (UIStore.instance.windowHeight / 2) -
+                (getPanelHeight() / 2)
+            ) ?? 0,
             moving: false,
             contextMenuDisplayed: false,
         };
@@ -98,6 +125,9 @@ export default class ImageView extends React.Component<IProps, IState> {
     private previousX = 0;
     private previousY = 0;
 
+    private animatingLoading = false;
+    private imageIsLoaded = false;
+
     componentDidMount() {
         // We have to use addEventListener() because the listener
         // needs to be passive in order to work with Chromium
@@ -105,14 +135,36 @@ export default class ImageView extends React.Component<IProps, IState> {
         // We want to recalculate zoom whenever the window's size changes
         window.addEventListener("resize", this.recalculateZoom);
         // After the image loads for the first time we want to calculate the zoom
-        this.image.current.addEventListener("load", this.recalculateZoom);
+        this.image.current.addEventListener("load", this.imageLoaded);
     }
 
     componentWillUnmount() {
         this.focusLock.current.removeEventListener('wheel', this.onWheel);
         window.removeEventListener("resize", this.recalculateZoom);
-        this.image.current.removeEventListener("load", this.recalculateZoom);
+        this.image.current.removeEventListener("load", this.imageLoaded);
     }
+
+    private imageLoaded = () => {
+        // First, we calculate the zoom, so that the image has the same size as
+        // the thumbnail
+        const { thumbnailInfo } = this.props;
+        if (thumbnailInfo?.width) {
+            this.setState({ zoom: thumbnailInfo.width / this.image.current.naturalWidth });
+        }
+
+        // Once the zoom is set, we the image is considered loaded and we can
+        // start animating it into the center of the screen
+        this.imageIsLoaded = true;
+        this.animatingLoading = true;
+        this.setZoomAndRotation();
+        this.setState({
+            translationX: 0,
+            translationY: 0,
+        });
+
+        // Once the position is set, there is no need to animate anymore
+        this.animatingLoading = false;
+    };
 
     private recalculateZoom = () => {
         this.setZoomAndRotation();
@@ -122,7 +174,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         const image = this.image.current;
         const imageWrapper = this.imageWrapper.current;
 
-        const rotation = inputRotation || this.state.rotation;
+        const rotation = inputRotation ?? this.state.rotation;
 
         const imageIsNotFlipped = rotation % 180 === 0;
 
@@ -160,41 +212,80 @@ export default class ImageView extends React.Component<IProps, IState> {
         });
     };
 
-    private zoom(delta: number) {
-        const newZoom = this.state.zoom + delta;
+    private zoomDelta(delta: number, anchorX?: number, anchorY?: number) {
+        this.zoom(this.state.zoom + delta, anchorX, anchorY);
+    }
+
+    private zoom(zoomLevel: number, anchorX?: number, anchorY?: number) {
+        const oldZoom = this.state.zoom;
+        const newZoom = Math.min(zoomLevel, this.state.maxZoom);
 
         if (newZoom <= this.state.minZoom) {
+            // Zoom out fully
             this.setState({
                 zoom: this.state.minZoom,
                 translationX: 0,
                 translationY: 0,
             });
-            return;
-        }
-        if (newZoom >= this.state.maxZoom) {
-            this.setState({ zoom: this.state.maxZoom });
-            return;
-        }
+        } else if (typeof anchorX !== "number" && typeof anchorY !== "number") {
+            // Zoom relative to the center of the view
+            this.setState({
+                zoom: newZoom,
+                translationX: this.state.translationX * newZoom / oldZoom,
+                translationY: this.state.translationY * newZoom / oldZoom,
+            });
+        } else {
+            // Zoom relative to the given point on the image.
+            // First we need to figure out the offset of the anchor point
+            // relative to the center of the image, accounting for rotation.
+            let offsetX;
+            let offsetY;
+            // The modulo operator can return negative values for some
+            // rotations, so we have to do some extra work to normalize it
+            switch (((this.state.rotation % 360) + 360) % 360) {
+                case 0:
+                    offsetX = this.image.current.clientWidth / 2 - anchorX;
+                    offsetY = this.image.current.clientHeight / 2 - anchorY;
+                    break;
+                case 90:
+                    offsetX = anchorY - this.image.current.clientHeight / 2;
+                    offsetY = this.image.current.clientWidth / 2 - anchorX;
+                    break;
+                case 180:
+                    offsetX = anchorX - this.image.current.clientWidth / 2;
+                    offsetY = anchorY - this.image.current.clientHeight / 2;
+                    break;
+                case 270:
+                    offsetX = this.image.current.clientHeight / 2 - anchorY;
+                    offsetY = anchorX - this.image.current.clientWidth / 2;
+            }
 
-        this.setState({
-            zoom: newZoom,
-        });
+            // Apply the zoom and offset
+            this.setState({
+                zoom: newZoom,
+                translationX: this.state.translationX + (newZoom - oldZoom) * offsetX,
+                translationY: this.state.translationY + (newZoom - oldZoom) * offsetY,
+            });
+        }
     }
 
     private onWheel = (ev: WheelEvent) => {
-        ev.stopPropagation();
-        ev.preventDefault();
+        if (ev.target === this.image.current) {
+            ev.stopPropagation();
+            ev.preventDefault();
 
-        const { deltaY } = normalizeWheelEvent(ev);
-        this.zoom(-(deltaY * ZOOM_COEFFICIENT));
+            const { deltaY } = normalizeWheelEvent(ev);
+            // Zoom in on the point on the image targeted by the cursor
+            this.zoomDelta(-deltaY * ZOOM_COEFFICIENT, ev.offsetX, ev.offsetY);
+        }
     };
 
     private onZoomInClick = () => {
-        this.zoom(ZOOM_STEP);
+        this.zoomDelta(ZOOM_STEP);
     };
 
     private onZoomOutClick = () => {
-        this.zoom(-ZOOM_STEP);
+        this.zoomDelta(-ZOOM_STEP);
     };
 
     private onKeyDown = (ev: KeyboardEvent) => {
@@ -259,7 +350,7 @@ export default class ImageView extends React.Component<IProps, IState> {
 
         // Zoom in if we are completely zoomed out
         if (this.state.zoom === this.state.minZoom) {
-            this.setState({ zoom: this.state.maxZoom });
+            this.zoom(this.state.maxZoom, ev.nativeEvent.offsetX, ev.nativeEvent.offsetY);
             return;
         }
 
@@ -289,11 +380,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             Math.abs(this.state.translationX - this.previousX) < ZOOM_DISTANCE &&
             Math.abs(this.state.translationY - this.previousY) < ZOOM_DISTANCE
         ) {
-            this.setState({
-                zoom: this.state.minZoom,
-                translationX: 0,
-                translationY: 0,
-            });
+            this.zoom(this.state.minZoom);
             this.initX = 0;
             this.initY = 0;
         }
@@ -304,17 +391,13 @@ export default class ImageView extends React.Component<IProps, IState> {
         let contextMenu = null;
         if (this.state.contextMenuDisplayed) {
             contextMenu = (
-                <ContextMenu
+                <MessageContextMenu
                     {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect())}
+                    mxEvent={this.props.mxEvent}
+                    permalinkCreator={this.props.permalinkCreator}
                     onFinished={this.onCloseContextMenu}
-                >
-                    <MessageContextMenu
-                        mxEvent={this.props.mxEvent}
-                        permalinkCreator={this.props.permalinkCreator}
-                        onFinished={this.onCloseContextMenu}
-                        onCloseDialog={this.props.onFinished}
-                    />
-                </ContextMenu>
+                    onCloseDialog={this.props.onFinished}
+                />
             );
         }
 
@@ -329,16 +412,17 @@ export default class ImageView extends React.Component<IProps, IState> {
         const showEventMeta = !!this.props.mxEvent;
         const zoomingDisabled = this.state.maxZoom === this.state.minZoom;
 
+        let transitionClassName;
+        if (this.animatingLoading) transitionClassName = "mx_ImageView_image_animatingLoading";
+        else if (this.state.moving || !this.imageIsLoaded) transitionClassName = "";
+        else transitionClassName = "mx_ImageView_image_animating";
+
         let cursor;
-        if (this.state.moving) {
-            cursor= "grabbing";
-        } else if (zoomingDisabled) {
-            cursor = "default";
-        } else if (this.state.zoom === this.state.minZoom) {
-            cursor = "zoom-in";
-        } else {
-            cursor = "zoom-out";
-        }
+        if (this.state.moving) cursor = "grabbing";
+        else if (zoomingDisabled) cursor = "default";
+        else if (this.state.zoom === this.state.minZoom) cursor = "zoom-in";
+        else cursor = "zoom-out";
+
         const rotationDegrees = this.state.rotation + "deg";
         const zoom = this.state.zoom;
         const translatePixelsX = this.state.translationX + "px";
@@ -349,7 +433,6 @@ export default class ImageView extends React.Component<IProps, IState> {
         // image causing it translate in the wrong direction.
         const style = {
             cursor: cursor,
-            transition: this.state.moving ? null : "transform 200ms ease 0s",
             transform: `translateX(${translatePixelsX})
                         translateY(${translatePixelsY})
                         scale(${zoom})
@@ -388,7 +471,9 @@ export default class ImageView extends React.Component<IProps, IState> {
             const avatar = (
                 <MemberAvatar
                     member={mxEvent.sender}
-                    width={32} height={32}
+                    fallbackUserId={mxEvent.getSender()}
+                    width={32}
+                    height={32}
                     viewUserOnClick={true}
                 />
             );
@@ -407,7 +492,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             // an empty div here, since the panel uses space-between
             // and we want the same placement of elements
             info = (
-                <div></div>
+                <div />
             );
         }
 
@@ -431,15 +516,15 @@ export default class ImageView extends React.Component<IProps, IState> {
                 <AccessibleTooltipButton
                     className="mx_ImageView_button mx_ImageView_button_zoomOut"
                     title={_t("Zoom out")}
-                    onClick={this.onZoomOutClick}>
-                </AccessibleTooltipButton>
+                    onClick={this.onZoomOutClick}
+                />
             );
             zoomInButton = (
                 <AccessibleTooltipButton
                     className="mx_ImageView_button mx_ImageView_button_zoomIn"
                     title={_t("Zoom in")}
-                    onClick={this.onZoomInClick}>
-                </AccessibleTooltipButton>
+                    onClick={this.onZoomInClick}
+                />
             );
         }
 
@@ -456,29 +541,29 @@ export default class ImageView extends React.Component<IProps, IState> {
                 <div className="mx_ImageView_panel">
                     { info }
                     <div className="mx_ImageView_toolbar">
-                        <AccessibleTooltipButton
-                            className="mx_ImageView_button mx_ImageView_button_rotateCCW"
-                            title={_t("Rotate Left")}
-                            onClick={ this.onRotateCounterClockwiseClick }>
-                        </AccessibleTooltipButton>
-                        <AccessibleTooltipButton
-                            className="mx_ImageView_button mx_ImageView_button_rotateCW"
-                            title={_t("Rotate Right")}
-                            onClick={this.onRotateClockwiseClick}>
-                        </AccessibleTooltipButton>
                         { zoomOutButton }
                         { zoomInButton }
                         <AccessibleTooltipButton
+                            className="mx_ImageView_button mx_ImageView_button_rotateCCW"
+                            title={_t("Rotate Left")}
+                            onClick={this.onRotateCounterClockwiseClick}
+                        />
+                        <AccessibleTooltipButton
+                            className="mx_ImageView_button mx_ImageView_button_rotateCW"
+                            title={_t("Rotate Right")}
+                            onClick={this.onRotateClockwiseClick}
+                        />
+                        <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_download"
                             title={_t("Download")}
-                            onClick={ this.onDownloadClick }>
-                        </AccessibleTooltipButton>
+                            onClick={this.onDownloadClick}
+                        />
                         { contextMenuButton }
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_close"
                             title={_t("Close")}
-                            onClick={ this.props.onFinished }>
-                        </AccessibleTooltipButton>
+                            onClick={this.props.onFinished}
+                        />
                         { this.renderContextMenu() }
                     </div>
                 </div>
@@ -492,10 +577,10 @@ export default class ImageView extends React.Component<IProps, IState> {
                 >
                     <img
                         src={this.props.src}
-                        title={this.props.name}
                         style={style}
+                        alt={this.props.name}
                         ref={this.image}
-                        className="mx_ImageView_image"
+                        className={`mx_ImageView_image ${transitionClassName}`}
                         draggable={true}
                         onMouseDown={this.onStartMoving}
                     />

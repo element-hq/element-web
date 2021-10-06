@@ -166,8 +166,7 @@ export default class Tooltip extends React.Component<IProps> {
     public render() {
         // Render a placeholder
         return (
-            <div className={this.props.className}>
-            </div>
+            <div className={this.props.className} />
         );
     }
 }

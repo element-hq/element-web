@@ -131,7 +131,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         switch (action) {
             case RoomListAction.ClearSearch:
                 this.clearInput();
-                defaultDispatcher.fire(Action.FocusComposer);
+                defaultDispatcher.fire(Action.FocusSendMessageComposer);
                 break;
             case RoomListAction.NextRoom:
             case RoomListAction.PrevRoom:
@@ -209,9 +209,9 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
 
         return (
             <div className={classes}>
-                {icon}
-                {input}
-                {clearButton}
+                { icon }
+                { input }
+                { clearButton }
             </div>
         );
     }

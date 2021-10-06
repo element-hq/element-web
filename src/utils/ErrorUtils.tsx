@@ -44,7 +44,7 @@ export function messageForResourceLimitError(
 
     const linkSub = sub => {
         if (adminContact) {
-            return <a href={adminContact} target="_blank" rel="noreferrer noopener">{sub}</a>;
+            return <a href={adminContact} target="_blank" rel="noreferrer noopener">{ sub }</a>;
         } else {
             return sub;
         }
@@ -76,12 +76,12 @@ export function messageForSyncError(err: MatrixError | Error): ReactNode {
             },
         );
         return <div>
-            <div>{limitError}</div>
-            <div>{adminContact}</div>
+            <div>{ limitError }</div>
+            <div>{ adminContact }</div>
         </div>;
     } else {
         return <div>
-            {_t("Unable to connect to Homeserver. Retrying...")}
+            { _t("Unable to connect to Homeserver. Retrying...") }
         </div>;
     }
 }

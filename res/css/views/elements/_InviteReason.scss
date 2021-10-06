@@ -32,12 +32,12 @@ limitations under the License.
         justify-content: center;
         align-items: center;
         cursor: pointer;
-        color: $secondary-fg-color;
+        color: $secondary-content;
 
         &::before {
             content: "";
             margin-right: 8px;
-            background-color: $secondary-fg-color;
+            background-color: $secondary-content;
             mask-image: url('$(res)/img/feather-customised/eye.svg');
             display: inline-block;
             width: 18px;

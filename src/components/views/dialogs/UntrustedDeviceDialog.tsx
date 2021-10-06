@@ -19,7 +19,7 @@ import { User } from "matrix-js-sdk/src/models/user";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import E2EIcon from "../rooms/E2EIcon";
+import E2EIcon, { E2EState } from "../rooms/E2EIcon";
 import AccessibleButton from "../elements/AccessibleButton";
 import BaseDialog from "./BaseDialog";
 import { IDialogProps } from "./IDialogProps";
@@ -47,14 +47,14 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) =
         onFinished={onFinished}
         className="mx_UntrustedDeviceDialog"
         title={<>
-            <E2EIcon status="warning" size={24} hideTooltip={true} />
-            { _t("Not Trusted")}
+            <E2EIcon status={E2EState.Warning} size={24} hideTooltip={true} />
+            { _t("Not Trusted") }
         </>}
     >
         <div className="mx_Dialog_content" id='mx_Dialog_content'>
-            <p>{newSessionText}</p>
-            <p>{device.getDisplayName()} ({device.deviceId})</p>
-            <p>{askToVerifyText}</p>
+            <p>{ newSessionText }</p>
+            <p>{ device.getDisplayName() } ({ device.deviceId })</p>
+            <p>{ askToVerifyText }</p>
         </div>
         <div className='mx_Dialog_buttons'>
             <AccessibleButton element="button" kind="secondary" onClick={() => onFinished("legacy")}>

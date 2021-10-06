@@ -144,23 +144,25 @@ export default class EditCommunityPrototypeDialog extends React.PureComponent<IP
                         </div>
                         <div className="mx_EditCommunityPrototypeDialog_rowAvatar">
                             <input
-                                type="file" style={{ display: "none" }}
-                                ref={this.avatarUploadRef} accept="image/*"
+                                type="file"
+                                style={{ display: "none" }}
+                                ref={this.avatarUploadRef}
+                                accept="image/*"
                                 onChange={this.onAvatarChanged}
                             />
                             <AccessibleButton
                                 onClick={this.onChangeAvatar}
                                 className="mx_EditCommunityPrototypeDialog_avatarContainer"
-                            >{preview}</AccessibleButton>
+                            >{ preview }</AccessibleButton>
                             <div className="mx_EditCommunityPrototypeDialog_tip">
-                                <b>{_t("Add image (optional)")}</b>
+                                <b>{ _t("Add image (optional)") }</b>
                                 <span>
-                                    {_t("An image will help people identify your community.")}
+                                    { _t("An image will help people identify your community.") }
                                 </span>
                             </div>
                         </div>
                         <AccessibleButton kind="primary" onClick={this.onSubmit} disabled={this.state.busy}>
-                            {_t("Save")}
+                            { _t("Save") }
                         </AccessibleButton>
                     </div>
                 </form>

@@ -36,6 +36,7 @@ import { showSpaceInvite } from "../../../utils/space";
 import { privateShouldBeEncrypted } from "../../../createRoom";
 import EventTileBubble from "../messages/EventTileBubble";
 import { ROOM_SECURITY_TAB } from "../dialogs/RoomSettingsDialog";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room): boolean {
     const isEncrypted: boolean = matrixClient.isRoomEncrypted(room.roomId);
@@ -58,19 +59,24 @@ const NewRoomIntro = () => {
         const member = room?.getMember(dmPartner);
         const displayName = member?.rawDisplayName || dmPartner;
         body = <React.Fragment>
-            <RoomAvatar room={room} width={AVATAR_SIZE} height={AVATAR_SIZE} onClick={() => {
-                defaultDispatcher.dispatch<ViewUserPayload>({
-                    action: Action.ViewUser,
-                    // XXX: We should be using a real member object and not assuming what the receiver wants.
-                    member: member || { userId: dmPartner } as User,
-                });
-            }} />
+            <RoomAvatar
+                room={room}
+                width={AVATAR_SIZE}
+                height={AVATAR_SIZE}
+                onClick={() => {
+                    defaultDispatcher.dispatch<ViewUserPayload>({
+                        action: Action.ViewUser,
+                        // XXX: We should be using a real member object and not assuming what the receiver wants.
+                        member: member || { userId: dmPartner } as User,
+                    });
+                }}
+            />
 
             <h2>{ room.name }</h2>
 
-            <p>{_t("This is the beginning of your direct message history with <displayName/>.", {}, {
+            <p>{ _t("This is the beginning of your direct message history with <displayName/>.", {}, {
                 displayName: () => <b>{ displayName }</b>,
-            })}</p>
+            }) }</p>
             { caption && <p>{ caption }</p> }
         </React.Fragment>;
     } else {
@@ -132,7 +138,7 @@ const NewRoomIntro = () => {
                         showSpaceInvite(parentSpace);
                     }}
                 >
-                    {_t("Invite to %(spaceName)s", { spaceName: parentSpace.name })}
+                    { _t("Invite to %(spaceName)s", { spaceName: parentSpace.name }) }
                 </AccessibleButton>
                 { room.canInvite(cli.getUserId()) && <AccessibleButton
                     className="mx_NewRoomIntro_inviteButton"
@@ -141,7 +147,7 @@ const NewRoomIntro = () => {
                         dis.dispatch({ action: "view_invite", roomId });
                     }}
                 >
-                    {_t("Invite to just this room")}
+                    { _t("Invite to just this room") }
                 </AccessibleButton> }
             </div>;
         } else if (room.canInvite(cli.getUserId())) {
@@ -153,7 +159,7 @@ const NewRoomIntro = () => {
                         dis.dispatch({ action: "view_invite", roomId });
                     }}
                 >
-                    {_t("Invite to this room")}
+                    { _t("Invite to this room") }
                 </AccessibleButton>
             </div>;
         }
@@ -170,10 +176,10 @@ const NewRoomIntro = () => {
 
             <h2>{ room.name }</h2>
 
-            <p>{createdText} {_t("This is the start of <roomName/>.", {}, {
+            <p>{ createdText } { _t("This is the start of <roomName/>.", {}, {
                 roomName: () => <b>{ room.name }</b>,
-            })}</p>
-            <p>{topicText}</p>
+            }) }</p>
+            <p>{ topicText }</p>
             { buttons }
         </React.Fragment>;
     }
@@ -186,11 +192,21 @@ const NewRoomIntro = () => {
         });
     }
 
-    const sub2 = _t(
+    const subText = _t(
         "Your private messages are normally encrypted, but this room isn't. "+
         "Usually this is due to an unsupported device or method being used, " +
-        "like email invites. <a>Enable encryption in settings.</a>", {},
-        { a: sub => <a onClick={openRoomSettings} href="#">{sub}</a> },
+        "like email invites.",
+    );
+
+    let subButton;
+    if (room.currentState.mayClientSendStateEvent(EventType.RoomEncryption, MatrixClientPeg.get())) {
+        subButton = (
+            <a onClick={openRoomSettings} href="#"> { _t("Enable encryption in settings.") }</a>
+        );
+    }
+
+    const subtitle = (
+        <span> { subText } { subButton } </span>
     );
 
     return <div className="mx_NewRoomIntro">
@@ -199,9 +215,9 @@ const NewRoomIntro = () => {
             <EventTileBubble
                 className="mx_cryptoEvent mx_cryptoEvent_icon_warning"
                 title={_t("End-to-end encryption isn't enabled")}
-                subtitle={sub2}
+                subtitle={subtitle}
             />
-        )}
+        ) }
 
         { body }
     </div>;

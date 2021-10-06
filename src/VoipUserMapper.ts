@@ -20,6 +20,8 @@ import DMRoomMap from "./utils/DMRoomMap";
 import CallHandler, { VIRTUAL_ROOM_EVENT_TYPE } from './CallHandler';
 import { Room } from 'matrix-js-sdk/src/models/room';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // Functions for mapping virtual users & rooms. Currently the only lookup
 // is sip virtual: there could be others in the future.
 
@@ -59,7 +61,7 @@ export default class VoipUserMapper {
     public nativeRoomForVirtualRoom(roomId: string): string {
         const cachedNativeRoomId = this.virtualToNativeRoomIdCache.get(roomId);
         if (cachedNativeRoomId) {
-            console.log(
+            logger.log(
                 "Returning native room ID " + cachedNativeRoomId + " for virtual room ID " + roomId + " from cache",
             );
             return cachedNativeRoomId;
@@ -98,7 +100,7 @@ export default class VoipUserMapper {
         if (!CallHandler.sharedInstance().getSupportsVirtualRooms()) return;
 
         const inviterId = invitedRoom.getDMInviter();
-        console.log(`Checking virtual-ness of room ID ${invitedRoom.roomId}, invited by ${inviterId}`);
+        logger.log(`Checking virtual-ness of room ID ${invitedRoom.roomId}, invited by ${inviterId}`);
         const result = await CallHandler.sharedInstance().sipNativeLookup(inviterId);
         if (result.length === 0) {
             return;

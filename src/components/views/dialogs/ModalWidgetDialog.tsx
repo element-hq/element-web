@@ -191,9 +191,9 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                     width="16"
                     alt=""
                 />
-                {_t("Data on this screen is shared with %(widgetDomain)s", {
+                { _t("Data on this screen is shared with %(widgetDomain)s", {
                     widgetDomain: parsed.hostname,
-                })}
+                }) }
             </div>
             <div>
                 <iframe

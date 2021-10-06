@@ -46,8 +46,8 @@ export function getSortingAlgorithmInstance(algorithm: SortAlgorithm): IAlgorith
  * @param {Room[]} rooms The rooms to sort.
  * @param {TagID} tagId The tag in which the sorting is occurring.
  * @param {SortAlgorithm} algorithm The algorithm to use for sorting.
- * @returns {Promise<Room[]>} Resolves to the sorted rooms.
+ * @returns {Room[]} Returns the sorted rooms.
  */
-export function sortRoomsWithAlgorithm(rooms: Room[], tagId: TagID, algorithm: SortAlgorithm): Promise<Room[]> {
+export function sortRoomsWithAlgorithm(rooms: Room[], tagId: TagID, algorithm: SortAlgorithm): Room[] {
     return getSortingAlgorithmInstance(algorithm).sortRooms(rooms, tagId);
 }

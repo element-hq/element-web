@@ -46,7 +46,7 @@ export default class RecoveryMethodRemovedDialog extends React.PureComponent {
         const DialogButtons = sdk.getComponent("views.elements.DialogButtons");
 
         const title = <span className="mx_KeyBackupFailedDialog_title">
-            {_t("Recovery Method Removed")}
+            { _t("Recovery Method Removed") }
         </span>;
 
         return (
@@ -55,21 +55,21 @@ export default class RecoveryMethodRemovedDialog extends React.PureComponent {
                 title={title}
             >
                 <div>
-                    <p>{_t(
+                    <p>{ _t(
                         "This session has detected that your Security Phrase and key " +
                         "for Secure Messages have been removed.",
-                    )}</p>
-                    <p>{_t(
+                    ) }</p>
+                    <p>{ _t(
                         "If you did this accidentally, you can setup Secure Messages on " +
                         "this session which will re-encrypt this session's message " +
                         "history with a new recovery method.",
-                    )}</p>
-                    <p className="warning">{_t(
+                    ) }</p>
+                    <p className="warning">{ _t(
                         "If you didn't remove the recovery method, an " +
                         "attacker may be trying to access your account. " +
                         "Change your account password and set a new recovery " +
                         "method immediately in Settings.",
-                    )}</p>
+                    ) }</p>
                     <DialogButtons
                         primaryButton={_t("Set up Secure Messages")}
                         onPrimaryButtonClick={this.onSetupClick}

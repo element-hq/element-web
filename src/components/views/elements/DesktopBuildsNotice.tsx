@@ -38,7 +38,7 @@ export default function DesktopBuildsNotice({ isRoomEncrypted, kind }: IProps) {
 
     if (EventIndexPeg.error) {
         return <>
-            {_t("Message search initialisation failed, check <a>your settings</a> for more information", {}, {
+            { _t("Message search initialisation failed, check <a>your settings</a> for more information", {}, {
                 a: sub => (<a onClick={(evt) => {
                     evt.preventDefault();
                     dis.dispatch({
@@ -46,9 +46,9 @@ export default function DesktopBuildsNotice({ isRoomEncrypted, kind }: IProps) {
                         initialTabId: UserTab.Security,
                     });
                 }}>
-                    {sub}
+                    { sub }
                 </a>),
-            })}
+            }) }
         </>;
     }
 
@@ -61,12 +61,12 @@ export default function DesktopBuildsNotice({ isRoomEncrypted, kind }: IProps) {
         switch (kind) {
             case WarningKind.Files:
                 text = _t("Use the <a>Desktop app</a> to see all encrypted files", {}, {
-                    a: sub => (<a href={desktopBuilds.url} target="_blank" rel="noreferrer noopener">{sub}</a>),
+                    a: sub => (<a href={desktopBuilds.url} target="_blank" rel="noreferrer noopener">{ sub }</a>),
                 });
                 break;
             case WarningKind.Search:
                 text = _t("Use the <a>Desktop app</a> to search encrypted messages", {}, {
-                    a: sub => (<a href={desktopBuilds.url} target="_blank" rel="noreferrer noopener">{sub}</a>),
+                    a: sub => (<a href={desktopBuilds.url} target="_blank" rel="noreferrer noopener">{ sub }</a>),
                 });
                 break;
         }
@@ -89,8 +89,8 @@ export default function DesktopBuildsNotice({ isRoomEncrypted, kind }: IProps) {
 
     return (
         <div className="mx_DesktopBuildsNotice">
-            {logo}
-            <span>{text}</span>
+            { logo }
+            <span>{ text }</span>
         </div>
     );
 }

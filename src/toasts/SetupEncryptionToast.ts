@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import Modal from "../Modal";
-import * as sdk from "../index";
 import { _t } from "../languageHandler";
 import DeviceListener from "../DeviceListener";
 import SetupEncryptionDialog from "../components/views/dialogs/security/SetupEncryptionDialog";
@@ -23,6 +22,7 @@ import { accessSecretStorage } from "../SecurityManager";
 import ToastStore from "../stores/ToastStore";
 import GenericToast from "../components/views/toasts/GenericToast";
 import SecurityCustomisations from "../customisations/Security";
+import Spinner from "../components/views/elements/Spinner";
 
 const TOAST_KEY = "setupencryption";
 
@@ -88,7 +88,6 @@ export const showToast = (kind: Kind) => {
             Modal.createTrackedDialog("Verify session", "Verify session", SetupEncryptionDialog,
                 {}, null, /* priority = */ false, /* static = */ true);
         } else {
-            const Spinner = sdk.getComponent("elements.Spinner");
             const modal = Modal.createDialog(
                 Spinner, null, "mx_Dialog_spinner", /* priority */ false, /* static */ true,
             );

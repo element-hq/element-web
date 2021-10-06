@@ -14,6 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_SecurityRoomSettingsTab {
+    .mx_SettingsTab_showAdvanced {
+        padding: 0;
+        margin-bottom: 16px;
+    }
+}
+
 .mx_SecurityRoomSettingsTab_warning {
     display: block;
 
@@ -26,5 +33,7 @@ limitations under the License.
 }
 
 .mx_SecurityRoomSettingsTab_encryptionSection {
-    margin-bottom: 25px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid $menu-border-color;
+    margin-bottom: 32px;
 }

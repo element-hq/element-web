@@ -55,22 +55,6 @@ limitations under the License.
     padding-right: 24px;
 }
 
-.mx_DevTools_inputCell {
-    display: table-cell;
-    width: 240px;
-}
-
-.mx_DevTools_inputCell input {
-    display: inline-block;
-    border: 0;
-    border-bottom: 1px solid $input-underline-color;
-    padding: 0;
-    width: 240px;
-    color: $input-fg-color;
-    font-family: $font-family;
-    font-size: $font-16px;
-}
-
 .mx_DevTools_textarea {
     font-size: $font-12px;
     max-width: 684px;
@@ -139,7 +123,6 @@ limitations under the License.
     + .mx_DevTools_tgl-btn {
         padding: 2px;
         transition: all .2s ease;
-        font-family: sans-serif;
         perspective: 100px;
         &::after,
         &::before {

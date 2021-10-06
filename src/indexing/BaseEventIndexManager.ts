@@ -14,47 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { IMatrixProfile, IEventWithRoomId as IMatrixEvent, IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
+import { Direction } from "matrix-js-sdk/src";
+
 // The following interfaces take their names and member names from seshat and the spec
 /* eslint-disable camelcase */
-
-export interface IMatrixEvent {
-    type: string;
-    sender: string;
-    content: {};
-    event_id: string;
-    origin_server_ts: number;
-    unsigned?: {};
-    roomId: string;
-}
-
-export interface IMatrixProfile {
-    avatar_url: string;
-    displayname: string;
-}
-
 export interface ICrawlerCheckpoint {
     roomId: string;
     token: string;
     fullCrawl?: boolean;
-    direction: string;
-}
-
-export interface IResultContext {
-    events_before: [IMatrixEvent];
-    events_after: [IMatrixEvent];
-    profile_info: Map<string, IMatrixProfile>;
-}
-
-export interface IResultsElement {
-    rank: number;
-    result: IMatrixEvent;
-    context: IResultContext;
-}
-
-export interface ISearchResult {
-    count: number;
-    results: [IResultsElement];
-    highlights: [string];
+    direction: Direction;
 }
 
 export interface ISearchArgs {
@@ -63,6 +32,8 @@ export interface ISearchArgs {
     after_limit: number;
     order_by_recency: boolean;
     room_id?: string;
+    limit: number;
+    next_batch?: string;
 }
 
 export interface IEventAndProfile {
@@ -205,10 +176,10 @@ export default abstract class BaseEventIndexManager {
      * @param {ISearchArgs} searchArgs The search configuration for the search,
      * sets the search term and determines the search result contents.
      *
-     * @return {Promise<[ISearchResult]>} A promise that will resolve to an array
+     * @return {Promise<IResultRoomEvents[]>} A promise that will resolve to an array
      * of search results once the search is done.
      */
-    async searchEventIndex(searchArgs: ISearchArgs): Promise<ISearchResult> {
+    async searchEventIndex(searchArgs: ISearchArgs): Promise<IResultRoomEvents> {
         throw new Error("Unimplemented");
     }
 

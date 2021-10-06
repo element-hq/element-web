@@ -76,10 +76,16 @@ export default class GroupRoomList extends React.Component {
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
         const text = _t("and %(count)s others...", { count: overflowCount });
         return (
-            <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
-                <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
-            } name={text} presenceState="online" suppressOnHover={true}
-            onClick={this._showFullRoomList} />
+            <EntityTile
+                className="mx_EntityTile_ellipsis"
+                avatarJsx={
+                    <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
+                }
+                name={text}
+                presenceState="online"
+                suppressOnHover={true}
+                onClick={this._showFullRoomList}
+            />
         );
     };
 
@@ -142,7 +148,8 @@ export default class GroupRoomList extends React.Component {
         }
         const inputBox = (
             <input
-                className="mx_GroupRoomList_query mx_textinput" id="mx_GroupRoomList_query"
+                className="mx_GroupRoomList_query mx_textinput"
+                id="mx_GroupRoomList_query"
                 type="text"
                 onChange={this.onSearchQueryChanged}
                 value={this.state.searchQuery}
@@ -156,8 +163,11 @@ export default class GroupRoomList extends React.Component {
             <div className="mx_GroupRoomList" role="tabpanel">
                 { inviteButton }
                 <AutoHideScrollbar className="mx_GroupRoomList_joined mx_GroupRoomList_outerWrapper">
-                    <TruncatedList className="mx_GroupRoomList_wrapper" truncateAt={this.state.truncateAt}
-                        createOverflowElement={this._createOverflowTile}>
+                    <TruncatedList
+                        className="mx_GroupRoomList_wrapper"
+                        truncateAt={this.state.truncateAt}
+                        createOverflowElement={this._createOverflowTile}
+                    >
                         { this.makeGroupRoomTiles(this.state.searchQuery) }
                     </TruncatedList>
                 </AutoHideScrollbar>

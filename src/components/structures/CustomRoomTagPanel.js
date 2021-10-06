@@ -56,7 +56,7 @@ class CustomRoomTagPanel extends React.Component {
         return (<div className={classes}>
             <div className="mx_CustomRoomTagPanel_divider" />
             <AutoHideScrollbar className="mx_CustomRoomTagPanel_scroller">
-                {tags}
+                { tags }
             </AutoHideScrollbar>
         </div>);
     }
@@ -84,7 +84,7 @@ class CustomRoomTagTile extends React.Component {
                 "mx_TagTile_badge": true,
                 "mx_TagTile_badgeHighlight": badgeNotifState.hasMentions,
             });
-            badgeElement = (<div className={badgeClasses}>{FormattingUtils.formatCount(badgeNotifState.count)}</div>);
+            badgeElement = (<div className={badgeClasses}>{ FormattingUtils.formatCount(badgeNotifState.count) }</div>);
         }
 
         return (
