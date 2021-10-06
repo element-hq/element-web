@@ -283,7 +283,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             const createTs = childRoom?.currentState.getStateEvents(EventType.RoomCreate, "")?.getTs();
             return getChildOrder(ev.getContent().order, createTs, roomId);
         }).map(ev => {
-            return this.matrixClient.getRoom(ev.getStateKey());
+            return this.matrixClient.getRoom(this.findMostUpgradedVersion(ev.getStateKey()));
         }).filter(room => {
             return room?.getMyMembership() === "join" || room?.getMyMembership() === "invite";
         }) || [];
@@ -452,6 +452,28 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         this.onRoomsUpdate();
     };
 
+    // Utility to walk tombstones and find the most updated variant of the given room,
+    // takes a Map to enable caching of the responses given the recursive nature of the function.
+    public findMostUpgradedVersion(
+        roomId: string,
+        upgradedRoomMap?: Map<string, string>,
+        seen= new Set<string>(),
+    ): string {
+        if (seen.has(roomId)) return roomId;
+        if (upgradedRoomMap?.has(roomId)) return upgradedRoomMap.get(roomId);
+        const room = this.matrixClient.getRoom(roomId);
+        const tombstone = room?.currentState.getStateEvents(EventType.RoomTombstone, "");
+        const replacementRoom = tombstone?.getContent().replacement_room;
+        if (replacementRoom && this.matrixClient.getRoom(replacementRoom)?.getMyMembership() === "join") {
+            seen.add(roomId);
+            const result = this.findMostUpgradedVersion(replacementRoom, upgradedRoomMap);
+            upgradedRoomMap?.set(roomId, result);
+            return result;
+        }
+        upgradedRoomMap?.set(roomId, roomId);
+        return roomId;
+    }
+
     private onRoomsUpdate = throttle(() => {
         // TODO resolve some updates as deltas
         const visibleRooms = this.matrixClient.getVisibleRooms();
@@ -479,6 +501,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             });
         });
 
+        const upgradedRoomMap = new Map<string, string>();
         this.rootSpaces.forEach(s => {
             // traverse each space tree in DFS to build up the supersets as you go up,
             // reusing results from like subtrees.
@@ -491,7 +514,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 }
 
                 const [childSpaces, childRooms] = partitionSpacesAndRooms(this.getChildren(spaceId));
-                const roomIds = new Set(childRooms.map(r => r.roomId));
+                const roomIds = new Set(childRooms.map(r => this.findMostUpgradedVersion(r.roomId, upgradedRoomMap)));
                 const space = this.matrixClient?.getRoom(spaceId);
 
                 // Add relevant DMs
@@ -505,11 +528,11 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 const newPath = new Set(parentPath).add(spaceId);
                 childSpaces.forEach(childSpace => {
                     fn(childSpace.roomId, newPath)?.forEach(roomId => {
-                        roomIds.add(roomId);
+                        roomIds.add(this.findMostUpgradedVersion(roomId, upgradedRoomMap));
                     });
                 });
                 hiddenChildren.get(spaceId)?.forEach(roomId => {
-                    roomIds.add(roomId);
+                    roomIds.add(this.findMostUpgradedVersion(roomId, upgradedRoomMap));
                 });
                 this.spaceFilteredRooms.set(spaceId, roomIds);
                 return roomIds;
