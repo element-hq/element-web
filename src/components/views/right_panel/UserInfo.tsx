@@ -535,6 +535,8 @@ interface IBaseProps {
 const RoomKickButton: React.FC<IBaseProps> = ({ member, startUpdating, stopUpdating }) => {
     const cli = useContext(MatrixClientContext);
 
+    // don't render this button on our own profile, we don't want to kick ourselves
+    if (member.userId === cli.getUserId()) return null;
     // check if user can be kicked/disinvited
     if (member.membership !== "invite" && member.membership !== "join") return null;
 
@@ -658,6 +660,9 @@ const RedactMessagesButton: React.FC<IBaseProps> = ({ member }) => {
 
 const BanToggleButton: React.FC<IBaseProps> = ({ member, startUpdating, stopUpdating }) => {
     const cli = useContext(MatrixClientContext);
+
+    // don't render this button on our own profile, we don't want to ban ourselves and can't unban ourselves anyhow
+    if (member.userId === cli.getUserId()) return null;
 
     const onBanOrUnban = async () => {
         const { finished } = Modal.createTrackedDialog(
