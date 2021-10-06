@@ -3204,5 +3204,19 @@
     "Are you sure you want to exit during this export?": "您確定您要從此匯出流程中退出嗎？",
     "%(senderDisplayName)s sent a sticker.": "%(senderDisplayName)s 傳送了貼圖。",
     "%(senderDisplayName)s changed the room avatar.": "%(senderDisplayName)s 變更了聊天室大頭照。",
-    "%(date)s at %(time)s": "%(date)s 於 %(time)s"
+    "%(date)s at %(time)s": "%(date)s 於 %(time)s",
+    "Please only proceed if you're sure you've lost all of your other devices and your security key.": "請僅在您確定您遺失您所有其他裝置與您的安全金鑰時繼續。",
+    "Resetting your verification keys cannot be undone. After resetting, you won't have access to old encrypted messages, and any friends who have previously verified you will see security warnings until you re-verify with them.": "重設您的驗證金鑰將無法復原。重設後，您將無法存取舊的加密訊息，之前任何驗證過您的朋友也會看到安全警告，直到您重新驗證。",
+    "I'll verify later": "我稍後驗證",
+    "Verify with another login": "使用其他登入進行驗證",
+    "Verify with Security Key": "使用安全金鑰進行驗證",
+    "Verify with Security Key or Phrase": "使用安全金鑰或密語進行驗證",
+    "Proceed with reset": "繼續重設",
+    "It looks like you don't have a Security Key or any other devices you can verify against.  This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.": "您似乎沒有安全金鑰或其他可以驗證的裝置。此裝置將無法存取舊的加密訊息。為了在此裝置上驗證您的身份，您必須重設您的驗證金鑰。",
+    "Skip verification for now": "暫時略過驗證",
+    "Really reset verification keys?": "真的要重設驗證金鑰？",
+    "Unable to verify this login": "無法驗證此登入",
+    "To proceed, please accept the verification request on your other login.": "要繼續，請在您的其他裝置上接受驗證請求。",
+    "Waiting for you to verify on your other session…": "正在等待您驗證您的其他工作階段……",
+    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "正在等待您驗證您的其他工作階段，%(deviceName)s (%(deviceId)s)……"
 }
