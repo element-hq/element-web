@@ -793,7 +793,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 // 1 is Home, 2-9 are the spaces after Home
                 if (payload.num === 1) {
                     this.setActiveSpace(null);
-                } else if (this.spacePanelSpaces.length >= payload.num) {
+                } else if (payload.num > 0 && this.spacePanelSpaces.length > payload.num - 2) {
                     this.setActiveSpace(this.spacePanelSpaces[payload.num - 2]);
                 }
                 break;
