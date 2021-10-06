@@ -452,7 +452,7 @@ function setBotOptions(event: MessageEvent<any>, roomId: string, userId: string)
     });
 }
 
-function setBotPower(event: MessageEvent<any>, roomId: string, userId: string, level: number): void {
+function setBotPower(event: MessageEvent<any>, roomId: string, userId: string, level: number, ignoreIfGreater?: boolean): void {
     if (!(Number.isInteger(level) && level >= 0)) {
         sendError(event, _t('Power level must be positive integer.'));
         return;
@@ -472,6 +472,18 @@ function setBotPower(event: MessageEvent<any>, roomId: string, userId: string, l
                 content: powerLevels,
             },
         );
+
+        // If the PL is equal to or greater than the requested PL, ignore.
+        if (ignoreIfGreater) {
+            // As per https://matrix.org/docs/spec/client_server/r0.6.0#m-room-power-levels
+            const currentPl = (powerLevels.content.users && powerLevels.content.users[userId]) || powerLevels.content.users_default || 0;
+
+            if (currentPl >= level) {
+                sendResponse(event, {
+                    success: true,
+                });
+            }
+        }
 
         client.setPowerLevel(roomId, userId, level, powerEvent).then(() => {
             sendResponse(event, {
@@ -678,7 +690,7 @@ const onMessage = function(event: MessageEvent<any>): void {
             setBotOptions(event, roomId, userId);
             break;
         case Action.SetBotPower:
-            setBotPower(event, roomId, userId, event.data.level);
+            setBotPower(event, roomId, userId, event.data.level, event.data.ignoreIfGreater);
             break;
         default:
             console.warn("Unhandled postMessage event with action '" + event.data.action +"'");
