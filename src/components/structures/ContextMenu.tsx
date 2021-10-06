@@ -226,6 +226,11 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
         }
     };
 
+    private onClick = (ev: React.MouseEvent) => {
+        // Don't allow clicks to escape the context menu wrapper
+        ev.stopPropagation();
+    };
+
     private onKeyDown = (ev: React.KeyboardEvent) => {
         // don't let keyboard handling escape the context menu
         ev.stopPropagation();
@@ -383,6 +388,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
                 className={classNames("mx_ContextualMenu_wrapper", this.props.wrapperClassName)}
                 style={{ ...position, ...wrapperStyle }}
                 onKeyDown={this.onKeyDown}
+                onClick={this.onClick}
                 onContextMenu={this.onContextMenuPreventBubbling}
             >
                 <div

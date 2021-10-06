@@ -42,10 +42,15 @@ export interface IInviteResult {
  *
  * @param {string} roomId The ID of the room to invite to
  * @param {string[]} addresses Array of strings of addresses to invite. May be matrix IDs or 3pids.
+ * @param {function} progressCallback optional callback, fired after each invite.
  * @returns {Promise} Promise
  */
-export function inviteMultipleToRoom(roomId: string, addresses: string[]): Promise<IInviteResult> {
-    const inviter = new MultiInviter(roomId);
+export function inviteMultipleToRoom(
+    roomId: string,
+    addresses: string[],
+    progressCallback?: () => void,
+): Promise<IInviteResult> {
+    const inviter = new MultiInviter(roomId, progressCallback);
     return inviter.invite(addresses).then(states => Promise.resolve({ states, inviter }));
 }
 
@@ -104,8 +109,8 @@ export function isValid3pidInvite(event: MatrixEvent): boolean {
     return true;
 }
 
-export function inviteUsersToRoom(roomId: string, userIds: string[]): Promise<void> {
-    return inviteMultipleToRoom(roomId, userIds).then((result) => {
+export function inviteUsersToRoom(roomId: string, userIds: string[], progressCallback?: () => void): Promise<void> {
+    return inviteMultipleToRoom(roomId, userIds, progressCallback).then((result) => {
         const room = MatrixClientPeg.get().getRoom(roomId);
         showAnyInviteErrors(result.states, room, result.inviter);
     }).catch((err) => {

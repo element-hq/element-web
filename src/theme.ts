@@ -176,7 +176,7 @@ export function getCustomTheme(themeName: string): ICustomTheme {
  *
  * @param {string} theme new theme
  */
-export async function setTheme(theme: string): Promise<void> {
+export async function setTheme(theme?: string): Promise<void> {
     if (!theme) {
         const themeWatcher = new ThemeWatcher();
         theme = themeWatcher.getEffectiveTheme();
