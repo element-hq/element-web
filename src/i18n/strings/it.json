@@ -3168,5 +3168,15 @@
     "Leave all rooms": "Esci da tutte le stanze",
     "Don't leave any rooms": "Non uscire da alcuna stanza",
     "Expand quotes │ ⇧+click": "Espandi le menzioni │ ⇧+clic",
-    "Collapse quotes │ ⇧+click": "Riduci le menzioni │ ⇧+clic"
+    "Collapse quotes │ ⇧+click": "Riduci le menzioni │ ⇧+clic",
+    "Current Timeline": "Linea temporale attuale",
+    "Specify a number of messages": "Specifica un numero di messaggi",
+    "From the beginning": "Dall'inizio",
+    "Plain Text": "Testo semplice",
+    "JSON": "JSON",
+    "HTML": "HTML",
+    "Are you sure you want to exit during this export?": "Vuoi davvero uscire durante l'esportazione?",
+    "%(senderDisplayName)s sent a sticker.": "%(senderDisplayName)s ha inviato uno sticker.",
+    "%(senderDisplayName)s changed the room avatar.": "%(senderDisplayName)s ha cambiato l'avatar della stanza.",
+    "%(date)s at %(time)s": "%(date)s alle %(time)s"
 }
