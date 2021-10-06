@@ -118,7 +118,7 @@
     "file-loader": "^5.1.0",
     "fs-extra": "^0.30.0",
     "html-webpack-plugin": "^4.5.2",
-    "jest": "^26.6.3",
+    "jest": "^27.2.4",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "jest-raw-loader": "^1.0.1",
     "json-loader": "^0.5.7",
@@ -165,7 +165,7 @@
     "@types/react": "17.0.14"
   },
   "jest": {
-    "testEnvironment": "jest-environment-jsdom-sixteen",
+    "testEnvironment": "jsdom",
     "testMatch": [
       "<rootDir>/test/**/*-test.[tj]s?(x)"
     ],
