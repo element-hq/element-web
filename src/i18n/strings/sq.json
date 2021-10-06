@@ -3209,5 +3209,7 @@
     "Unable to verify this login": "S’arrihet të verifikohet kjo hyrje",
     "To proceed, please accept the verification request on your other login.": "Që të vazhdohet, ju lutemi, pranoni kërkesën për verifikim në skenën(pajisjen) tuaj tjetër për hyrje.",
     "Waiting for you to verify on your other session…": "Po pritet që ju të bëni verifikimin në sesionin tuaj tjetër…",
-    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "Po pritet që ju të bëni verifikimin në sesionin tuaj tjetër, %(deviceName)s (%(deviceId)s)…"
+    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "Po pritet që ju të bëni verifikimin në sesionin tuaj tjetër, %(deviceName)s (%(deviceId)s)…",
+    "Creating Space...": "Po Krijohet Hapësirë…",
+    "Fetching data...": "Po sillen të dhëna…"
 }
