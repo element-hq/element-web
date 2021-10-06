@@ -410,50 +410,39 @@ export const HierarchyLevel = ({
 
 const INITIAL_PAGE_SIZE = 20;
 
-export const useSpaceSummary = (space: Room): {
+export const useRoomHierarchy = (space: Room): {
     loading: boolean;
     rooms: IHierarchyRoom[];
     hierarchy: RoomHierarchy;
     loadMore(pageSize?: number): Promise <void>;
 } => {
     const [rooms, setRooms] = useState<IHierarchyRoom[]>([]);
-    const [loading, setLoading] = useState(true);
     const [hierarchy, setHierarchy] = useState<RoomHierarchy>();
 
     const resetHierarchy = useCallback(() => {
         const hierarchy = new RoomHierarchy(space, INITIAL_PAGE_SIZE);
-        setHierarchy(hierarchy);
-
-        let discard = false;
         hierarchy.load().then(() => {
-            if (discard) return;
+            if (space !== hierarchy.root) return; // discard stale results
             setRooms(hierarchy.rooms);
-            setLoading(false);
         });
-
-        return () => {
-            discard = true;
-        };
+        setHierarchy(hierarchy);
     }, [space]);
     useEffect(resetHierarchy, [resetHierarchy]);
 
     useDispatcher(defaultDispatcher, (payload => {
         if (payload.action === Action.UpdateSpaceHierarchy) {
-            setLoading(true);
             setRooms([]); // TODO
             resetHierarchy();
         }
     }));
 
     const loadMore = useCallback(async (pageSize?: number) => {
-        if (loading || !hierarchy.canLoadMore || hierarchy.noSupport) return;
-
-        setLoading(true);
+        if (hierarchy.loading || !hierarchy.canLoadMore || hierarchy.noSupport) return;
         await hierarchy.load(pageSize);
         setRooms(hierarchy.rooms);
-        setLoading(false);
-    }, [loading, hierarchy]);
+    }, [hierarchy]);
 
+    const loading = hierarchy?.loading ?? true;
     return { loading, rooms, hierarchy, loadMore };
 };
 
@@ -587,7 +576,7 @@ const SpaceHierarchy = ({
 
     const [selected, setSelected] = useState(new Map<string, Set<string>>()); // Map<parentId, Set<childId>>
 
-    const { loading, rooms, hierarchy, loadMore } = useSpaceSummary(space);
+    const { loading, rooms, hierarchy, loadMore } = useRoomHierarchy(space);
 
     const filteredRoomSet = useMemo<Set<IHierarchyRoom>>(() => {
         if (!rooms?.length) return new Set();
