@@ -74,7 +74,7 @@ export const EMOJI: IEmoji[] = EMOJIBASE.map((emojiData: Omit<IEmoji, "shortcode
     // If there's ever a gap in shortcode coverage, we fudge it by
     // filling it in with the emoji's CLDR annotation
     const shortcodeData = SHORTCODES[emojiData.hexcode] ??
-        [emojiData.annotation.toLowerCase().replace(/ /g, "_")];
+        [emojiData.annotation.toLowerCase().replace(/\W+/g, "_")];
 
     const emoji: IEmoji = {
         ...emojiData,
