@@ -3218,5 +3218,7 @@
     "Unable to verify this login": "Nelze ověřit toto přihlášení",
     "To proceed, please accept the verification request on your other login.": "Pro pokračování, přijměte žádost o ověření na svém dalším zařízení.",
     "Waiting for you to verify on your other session…": "Čekáme, až provedete ověření v jiné relaci…",
-    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "Čekáme, až provedete ověření v jiné relaci, %(deviceName)s (%(deviceId)s)…"
+    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "Čekáme, až provedete ověření v jiné relaci, %(deviceName)s (%(deviceId)s)…",
+    "Creating Space...": "Vytváření prostoru...",
+    "Fetching data...": "Načítání dat..."
 }
