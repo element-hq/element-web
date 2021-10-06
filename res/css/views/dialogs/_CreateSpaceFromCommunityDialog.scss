@@ -74,6 +74,7 @@ limitations under the License.
             font-size: $font-12px;
             line-height: $font-15px;
             color: $secondary-content;
+            margin-top: -13px; // match height of buttons to prevent height changing
 
             .mx_ProgressBar {
                 height: 8px;
