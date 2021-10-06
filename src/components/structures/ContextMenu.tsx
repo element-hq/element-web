@@ -44,9 +44,6 @@ function getOrCreateContainer(): HTMLDivElement {
     return container;
 }
 
-const ARIA_MENU_ITEM_ROLES = new Set(["menuitem", "menuitemcheckbox", "menuitemradio"]);
-const ARIA_MENU_ITEM_SELECTOR = '[role^="menuitem"], [role^="menuitemcheckbox"], [role^="menuitemradio"]';
-
 export interface IPosition {
     top?: number;
     bottom?: number;
@@ -117,7 +114,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
         // We don't need to clean up when unmounting, so ignore
         if (!element) return;
 
-        const first = element.querySelector<HTMLElement>(ARIA_MENU_ITEM_SELECTOR)
+        const first = element.querySelector<HTMLElement>('[role^="menuitem"]')
             || element.querySelector<HTMLElement>('[tab-index]');
 
         if (first) {
@@ -196,7 +193,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
                     descending = true;
                 }
             }
-        } while (element && !ARIA_MENU_ITEM_ROLES.has(element.getAttribute("role")));
+        } while (element && !element.getAttribute("role")?.startsWith("menuitem"));
 
         if (element) {
             (element as HTMLElement).focus();
