@@ -3214,5 +3214,7 @@
     "Unable to verify this login": "Selle seadme verifitseerimine ei õnnestunud",
     "To proceed, please accept the verification request on your other login.": "Jätkamaks palun võta vastu verifitseerimispalve oma teises seadmes.",
     "Waiting for you to verify on your other session…": "Ootan, et sa verifitseeriksid teises sessioonis…",
-    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "Ootan, et sa verifitseerid oma teises sessioonis: %(deviceName)s (%(deviceId)s)…"
+    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "Ootan, et sa verifitseerid oma teises sessioonis: %(deviceName)s (%(deviceId)s)…",
+    "Creating Space...": "Loon kogukonnakeskust…",
+    "Fetching data...": "Laadin andmeid..."
 }
