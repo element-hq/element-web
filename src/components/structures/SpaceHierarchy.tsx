@@ -49,7 +49,7 @@ import { mediaFromMxc } from "../../customisations/Media";
 import InfoTooltip from "../views/elements/InfoTooltip";
 import TextWithTooltip from "../views/elements/TextWithTooltip";
 import { useStateToggle } from "../../hooks/useStateToggle";
-import SpaceStore, { getChildOrder } from "../../stores/SpaceStore";
+import { getChildOrder } from "../../stores/SpaceStore";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { linkifyElement } from "../../HtmlUtils";
 import { useDispatcher } from "../../hooks/useDispatcher";
@@ -334,8 +334,9 @@ interface IHierarchyLevelProps {
     onToggleClick?(parentId: string, childId: string): void;
 }
 
-const toLocalRoom = (cli: MatrixClient, room: IHierarchyRoom, upgradedRoomMap: Map<string, string>): IHierarchyRoom => {
-    const cliRoom = cli.getRoom(SpaceStore.instance.findMostUpgradedVersion(room.room_id, upgradedRoomMap));
+const toLocalRoom = (cli: MatrixClient, room: IHierarchyRoom): IHierarchyRoom => {
+    const history = cli.getRoomUpgradeHistory(room.room_id, true);
+    const cliRoom = history[history.length - 1];
     if (cliRoom) {
         return {
             ...room,
@@ -374,11 +375,10 @@ export const HierarchyLevel = ({
         return getChildOrder(ev.content.order, ev.origin_server_ts, ev.state_key);
     });
 
-    const upgradedRoomMap = new Map<string, string>();
     const [subspaces, childRooms] = sortedChildren.reduce((result, ev: IHierarchyRelation) => {
         const room = hierarchy.roomMap.get(ev.state_key);
         if (room && roomSet.has(room)) {
-            result[room.room_type === RoomType.Space ? 0 : 1].push(toLocalRoom(cli, room, upgradedRoomMap));
+            result[room.room_type === RoomType.Space ? 0 : 1].push(toLocalRoom(cli, room));
         }
         return result;
     }, [[] as IHierarchyRoom[], [] as IHierarchyRoom[]]);
