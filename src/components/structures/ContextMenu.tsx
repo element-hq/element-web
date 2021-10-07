@@ -121,7 +121,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
     }
 
     componentWillUnmount() {
-        // return focus to the thing which had it before us after the unmount
+        // return focus to the thing which had it before us
         this.initialFocus.focus();
     }
 
