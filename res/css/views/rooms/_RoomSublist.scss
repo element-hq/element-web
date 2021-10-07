@@ -180,9 +180,6 @@ limitations under the License.
     // scroll jumps when they become sticky. However, that leaves a gap when
     // scrolled to the top above the first sublist (whose header can only ever
     // stick to top), so we make sure to exclude the first visible sublist.
-    // &:not(.mx_RoomSublist_hidden) ~ .mx_RoomSublist .mx_RoomSublist_headerContainer {
-    //     height: 24px;
-    // }
 
     .mx_RoomSublist_resizeBox {
         position: relative;
