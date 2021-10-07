@@ -90,14 +90,14 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
             avatarFile: null,
             profileFieldsTouched: {
                 ...this.state.profileFieldsTouched,
-                avatar: true
+                avatar: true,
             },
         });
     };
 
     private isSaveEnabled = () => {
-        return Boolean(Object.values(this.state.profileFieldsTouched).length)
-    }
+        return Boolean(Object.values(this.state.profileFieldsTouched).length);
+    };
 
     private cancelProfileChanges = async (e: React.MouseEvent): Promise<void> => {
         e.stopPropagation();
@@ -166,13 +166,14 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
             this.setState({
                 profileFieldsTouched: {
                     ...this.state.profileFieldsTouched,
-                    name: false
-            }, });
+                    name: false,
+                },
+            });
         } else {
             this.setState({
                 profileFieldsTouched: {
                     ...this.state.profileFieldsTouched,
-                    name: true
+                    name: true,
                 },
             });
         }
@@ -184,14 +185,14 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
             this.setState({
                 profileFieldsTouched: {
                     ...this.state.profileFieldsTouched,
-                    topic: false
+                    topic: false,
                 },
             });
         } else {
             this.setState({
                 profileFieldsTouched: {
                     ...this.state.profileFieldsTouched,
-                    topic: true
+                    topic: true,
                 },
             });
         }
@@ -204,7 +205,7 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
                 avatarFile: null,
                 profileFieldsTouched: {
                     ...this.state.profileFieldsTouched,
-                    avatar: false
+                    avatar: false,
                 },
             });
             return;
@@ -218,7 +219,7 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
                 avatarFile: file,
                 profileFieldsTouched: {
                     ...this.state.profileFieldsTouched,
-                    avatar: true
+                    avatar: true,
                 },
             });
         };
