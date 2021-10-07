@@ -176,11 +176,6 @@ limitations under the License.
         }
     }
 
-    // In the general case, we reserve space for each sublist header to prevent
-    // scroll jumps when they become sticky. However, that leaves a gap when
-    // scrolled to the top above the first sublist (whose header can only ever
-    // stick to top), so we make sure to exclude the first visible sublist.
-
     .mx_RoomSublist_resizeBox {
         position: relative;
 
