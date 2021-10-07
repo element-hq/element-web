@@ -83,6 +83,10 @@ export interface IProps extends IPosition {
     // it will be mounted to a container at the root of the DOM.
     mountAsChild?: boolean;
 
+    // If specified, contents will be wrapped in a FocusLock, this is only needed if the context menu is being rendered
+    // within an existing FocusLock e.g inside a modal.
+    focusLock?: boolean;
+
     // Function to be called on menu close
     onFinished();
     // on resize callback
@@ -98,6 +102,8 @@ interface IState {
 // this will allow the ContextMenu to manage its own focus using arrow keys as per the ARIA guidelines.
 @replaceableComponent("structures.ContextMenu")
 export class ContextMenu extends React.PureComponent<IProps, IState> {
+    private readonly initialFocus: HTMLElement;
+
     static defaultProps = {
         hasBackground: true,
         managed: true,
@@ -105,9 +111,18 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
 
     constructor(props, context) {
         super(props, context);
+
         this.state = {
             contextMenuElem: null,
         };
+
+        // persist what had focus when we got initialized so we can return it after
+        this.initialFocus = document.activeElement as HTMLElement;
+    }
+
+    componentWillUnmount() {
+        // return focus to the thing which had it before us after the unmount
+        this.initialFocus.focus();
     }
 
     private collectContextMenuRect = (element: HTMLDivElement) => {
@@ -371,6 +386,17 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
             );
         }
 
+        let body = <>
+            { chevron }
+            { props.children }
+        </>;
+
+        if (props.focusLock) {
+            body = <FocusLock>
+                { body }
+            </FocusLock>;
+        }
+
         return (
             <div
                 className={classNames("mx_ContextualMenu_wrapper", this.props.wrapperClassName)}
@@ -385,10 +411,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
                     ref={this.collectContextMenuRect}
                     role={this.props.managed ? "menu" : undefined}
                 >
-                    <FocusLock returnFocus={true}>
-                        { chevron }
-                        { props.children }
-                    </FocusLock>
+                    { body }
                 </div>
                 { background }
             </div>
