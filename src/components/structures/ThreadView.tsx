@@ -34,6 +34,8 @@ import { SetRightPanelPhasePayload } from '../../dispatcher/payloads/SetRightPan
 import { Action } from '../../dispatcher/actions';
 import { MatrixClientPeg } from '../../MatrixClientPeg';
 import { E2EStatus } from '../../utils/ShieldUtils';
+import EditorStateTransfer from '../../utils/EditorStateTransfer';
+import RoomContext, { TimelineRenderingType } from '../../contexts/RoomContext';
 
 interface IProps {
     room: Room;
@@ -47,10 +49,14 @@ interface IProps {
 interface IState {
     replyToEvent?: MatrixEvent;
     thread?: Thread;
+    editState?: EditorStateTransfer;
+
 }
 
 @replaceableComponent("structures.ThreadView")
 export default class ThreadView extends React.Component<IProps, IState> {
+    static contextType = RoomContext;
+
     private dispatcherRef: string;
     private timelinePanelRef: React.RefObject<TimelinePanel> = React.createRef();
 
@@ -90,6 +96,23 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 this.setupThread(payload.event);
             }
         }
+        switch (payload.action) {
+            case Action.EditEvent: {
+                // Quit early if it's not a thread context
+                if (payload.timelineRenderingType !== TimelineRenderingType.Thread) return;
+                // Quit early if that's not a thread event
+                if (payload.event && !payload.event.getThread()) return;
+                const editState = payload.event ? new EditorStateTransfer(payload.event) : null;
+                this.setState({ editState }, () => {
+                    if (payload.event) {
+                        this.timelinePanelRef.current?.scrollToEventIfNeeded(payload.event.getId());
+                    }
+                });
+                break;
+            }
+            default:
+                break;
+        }
     };
 
     private setupThread = (mxEv: MatrixEvent) => {
@@ -124,44 +147,53 @@ export default class ThreadView extends React.Component<IProps, IState> {
 
     public render(): JSX.Element {
         return (
-            <BaseCard
-                className="mx_ThreadView"
-                onClose={this.props.onClose}
-                previousPhase={RightPanelPhases.RoomSummary}
-                withoutScrollContainer={true}
-            >
-                { this.state.thread && (
-                    <TimelinePanel
-                        ref={this.timelinePanelRef}
-                        showReadReceipts={false} // No RR support in thread's MVP
-                        manageReadReceipts={false} // No RR support in thread's MVP
-                        manageReadMarkers={false} // No RM support in thread's MVP
-                        sendReadReceiptOnLoad={false} // No RR support in thread's MVP
-                        timelineSet={this.state?.thread?.timelineSet}
-                        showUrlPreview={true}
-                        tileShape={TileShape.Thread}
-                        empty={<div>empty</div>}
-                        alwaysShowTimestamps={true}
-                        layout={Layout.Group}
-                        hideThreadedMessages={false}
-                        hidden={false}
-                        showReactions={true}
-                        className="mx_RoomView_messagePanel mx_GroupLayout"
+            <RoomContext.Provider value={{
+                ...this.context,
+                timelineRenderingType: TimelineRenderingType.Thread,
+                liveTimeline: this.state?.thread?.timelineSet?.getLiveTimeline(),
+            }}>
+
+                <BaseCard
+                    className="mx_ThreadView"
+                    onClose={this.props.onClose}
+                    previousPhase={RightPanelPhases.RoomSummary}
+                    withoutScrollContainer={true}
+                >
+                    { this.state.thread && (
+                        <TimelinePanel
+                            ref={this.timelinePanelRef}
+                            showReadReceipts={false} // No RR support in thread's MVP
+                            manageReadReceipts={false} // No RR support in thread's MVP
+                            manageReadMarkers={false} // No RM support in thread's MVP
+                            sendReadReceiptOnLoad={false} // No RR support in thread's MVP
+                            timelineSet={this.state?.thread?.timelineSet}
+                            showUrlPreview={true}
+                            tileShape={TileShape.Thread}
+                            empty={<div>empty</div>}
+                            alwaysShowTimestamps={true}
+                            layout={Layout.Group}
+                            hideThreadedMessages={false}
+                            hidden={false}
+                            showReactions={true}
+                            className="mx_RoomView_messagePanel mx_GroupLayout"
+                            permalinkCreator={this.props.permalinkCreator}
+                            membersLoaded={true}
+                            editState={this.state.editState}
+                        />
+                    ) }
+
+                    { this.state?.thread?.timelineSet && (<MessageComposer
+                        room={this.props.room}
+                        resizeNotifier={this.props.resizeNotifier}
+                        replyInThread={true}
+                        replyToEvent={this.state?.thread?.replyToEvent}
+                        showReplyPreview={false}
                         permalinkCreator={this.props.permalinkCreator}
-                        membersLoaded={true}
-                    />
-                ) }
-                <MessageComposer
-                    room={this.props.room}
-                    resizeNotifier={this.props.resizeNotifier}
-                    replyInThread={true}
-                    replyToEvent={this.state?.thread?.replyToEvent}
-                    showReplyPreview={false}
-                    permalinkCreator={this.props.permalinkCreator}
-                    e2eStatus={this.props.e2eStatus}
-                    compact={true}
-                />
-            </BaseCard>
+                        e2eStatus={this.props.e2eStatus}
+                        compact={true}
+                    />) }
+                </BaseCard>
+            </RoomContext.Provider>
         );
     }
 }

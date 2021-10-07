@@ -19,6 +19,7 @@ import EMOJI_REGEX from 'emojibase-regex';
 import { IContent, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { DebouncedFunc, throttle } from 'lodash';
 import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import dis from '../../../dispatcher/dispatcher';
 import EditorModel from '../../../editor/model';
@@ -40,7 +41,7 @@ import { Command, CommandCategories, getCommand } from '../../../SlashCommands';
 import Modal from '../../../Modal';
 import { _t, _td } from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { withMatrixClientHOC, MatrixClientProps } from "../../../contexts/MatrixClientContext";
 import { Action } from "../../../dispatcher/actions";
 import { containsEmoji } from "../../../effects/utils";
 import { CHAT_EFFECTS } from '../../../effects';
@@ -55,8 +56,7 @@ import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { decorateStartSendingTime, sendRoundTripMetric } from "../../../sendTimePerformanceMetrics";
-
-import { logger } from "matrix-js-sdk/src/logger";
+import RoomContext from '../../../contexts/RoomContext';
 
 function addReplyToMessageContent(
     content: IContent,
@@ -130,7 +130,7 @@ export function isQuickReaction(model: EditorModel): boolean {
     return false;
 }
 
-interface IProps {
+interface ISendMessageComposerProps extends MatrixClientProps {
     room: Room;
     placeholder?: string;
     permalinkCreator: RoomPermalinkCreator;
@@ -141,10 +141,8 @@ interface IProps {
 }
 
 @replaceableComponent("views.rooms.SendMessageComposer")
-export default class SendMessageComposer extends React.Component<IProps> {
-    static contextType = MatrixClientContext;
-    context!: React.ContextType<typeof MatrixClientContext>;
-
+export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
+    static contextType = RoomContext;
     private readonly prepareToEncrypt?: DebouncedFunc<() => void>;
     private readonly editorRef = createRef<BasicMessageComposer>();
     private model: EditorModel = null;
@@ -152,26 +150,25 @@ export default class SendMessageComposer extends React.Component<IProps> {
     private dispatcherRef: string;
     private sendHistoryManager: SendHistoryManager;
 
-    constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
+    constructor(props: ISendMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
         super(props);
-        this.context = context; // otherwise React will only set it prior to render due to type def above
-        if (this.context.isCryptoEnabled() && this.context.isRoomEncrypted(this.props.room.roomId)) {
+        if (this.props.mxClient.isCryptoEnabled() && this.props.mxClient.isRoomEncrypted(this.props.room.roomId)) {
             this.prepareToEncrypt = throttle(() => {
-                this.context.prepareToEncrypt(this.props.room);
+                this.props.mxClient.prepareToEncrypt(this.props.room);
             }, 60000, { leading: true, trailing: false });
         }
 
         window.addEventListener("beforeunload", this.saveStoredEditorState);
     }
 
-    public componentDidUpdate(prevProps: IProps): void {
+    public componentDidUpdate(prevProps: ISendMessageComposerProps): void {
         const replyToEventChanged = this.props.replyInThread && (this.props.replyToEvent !== prevProps.replyToEvent);
         if (replyToEventChanged) {
             this.model.reset([]);
         }
 
         if (this.props.replyInThread && this.props.replyToEvent && (!prevProps.replyToEvent || replyToEventChanged)) {
-            const partCreator = new CommandPartCreator(this.props.room, this.context);
+            const partCreator = new CommandPartCreator(this.props.room, this.props.mxClient);
             const parts = this.restoreStoredEditorState(partCreator) || [];
             this.model.reset(parts);
             this.editorRef.current?.focus();
@@ -202,13 +199,20 @@ export default class SendMessageComposer extends React.Component<IProps> {
             case MessageComposerAction.EditPrevMessage:
                 // selection must be collapsed and caret at start
                 if (this.editorRef.current?.isSelectionCollapsed() && this.editorRef.current?.isCaretAtStart()) {
-                    const editEvent = findEditableEvent(this.props.room, false);
+                    const events =
+                        this.context.liveTimeline.getEvents()
+                            .concat(this.props.replyInThread ? [] : this.props.room.getPendingEvents());
+                    const editEvent = findEditableEvent({
+                        events,
+                        isForward: false,
+                    });
                     if (editEvent) {
                         // We're selecting history, so prevent the key event from doing anything else
                         event.preventDefault();
                         dis.dispatch({
-                            action: 'edit_event',
+                            action: Action.EditEvent,
                             event: editEvent,
+                            timelineRenderingType: this.context.timelineRenderingType,
                         });
                     }
                 }
@@ -275,7 +279,7 @@ export default class SendMessageComposer extends React.Component<IProps> {
     }
 
     private sendQuickReaction(): void {
-        const timeline = this.props.room.getLiveTimeline();
+        const timeline = this.context.liveTimeline();
         const events = timeline.getEvents();
         const reaction = this.model.parts[1].text;
         for (let i = events.length - 1; i >= 0; i--) {
@@ -448,7 +452,7 @@ export default class SendMessageComposer extends React.Component<IProps> {
                 decorateStartSendingTime(content);
             }
 
-            const prom = this.context.sendMessage(roomId, content);
+            const prom = this.props.mxClient.sendMessage(roomId, content);
             if (replyToEvent) {
                 // Clear reply_to_event as we put the message into the queue
                 // if the send fails, retry will handle resending.
@@ -465,7 +469,7 @@ export default class SendMessageComposer extends React.Component<IProps> {
             });
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
                 prom.then(resp => {
-                    sendRoundTripMetric(this.context, roomId, resp.event_id);
+                    sendRoundTripMetric(this.props.mxClient, roomId, resp.event_id);
                 });
             }
             CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, !!replyToEvent, content);
@@ -490,7 +494,7 @@ export default class SendMessageComposer extends React.Component<IProps> {
 
     // TODO: [REACT-WARNING] Move this to constructor
     UNSAFE_componentWillMount() { // eslint-disable-line
-        const partCreator = new CommandPartCreator(this.props.room, this.context);
+        const partCreator = new CommandPartCreator(this.props.room, this.props.mxClient);
         const parts = this.restoreStoredEditorState(partCreator) || [];
         this.model = new EditorModel(parts, partCreator);
         this.dispatcherRef = dis.register(this.onAction);
@@ -577,7 +581,7 @@ export default class SendMessageComposer extends React.Component<IProps> {
         // it puts the filename in as text/plain which we want to ignore.
         if (clipboardData.files.length && !clipboardData.types.includes("text/rtf")) {
             ContentMessages.sharedInstance().sendContentListToRoom(
-                Array.from(clipboardData.files), this.props.room.roomId, this.context,
+                Array.from(clipboardData.files), this.props.room.roomId, this.props.mxClient,
             );
             return true; // to skip internal onPaste handler
         }
@@ -608,3 +612,6 @@ export default class SendMessageComposer extends React.Component<IProps> {
         );
     }
 }
+
+const SendMessageComposerWithMatrixClient = withMatrixClientHOC(SendMessageComposer);
+export default SendMessageComposerWithMatrixClient;

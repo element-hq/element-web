@@ -128,7 +128,7 @@ export enum Action {
      * Start a call transfer to a phone number
      * payload: TransferCallPayload
      */
-     TransferCallToPhoneNumber = "transfer_call_to_phone_number",
+    TransferCallToPhoneNumber = "transfer_call_to_phone_number",
 
     /**
      * Fired when CallHandler has checked for PSTN protocol support
@@ -205,4 +205,9 @@ export enum Action {
      * Should be used with SettingUpdatedPayload.
      */
     SettingUpdated = "setting_updated",
+
+    /**
+     * Fires when a user starts to edit event (e.g. up arrow in compositor)
+     */
+    EditEvent = "edit_event",
 }
