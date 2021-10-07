@@ -44,12 +44,22 @@ interface IProps {
     initialTabId?: string;
 }
 
+interface IState {
+    roomName: string;
+}
+
 @replaceableComponent("views.dialogs.RoomSettingsDialog")
-export default class RoomSettingsDialog extends React.Component<IProps> {
+export default class RoomSettingsDialog extends React.Component<IProps, IState> {
     private dispatcherRef: string;
+
+    constructor(props: IProps) {
+        super(props);
+        this.state = { roomName: '' };
+    }
 
     public componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
+        this.setRoomName();
     }
 
     public componentWillUnmount() {
@@ -64,6 +74,12 @@ export default class RoomSettingsDialog extends React.Component<IProps> {
         if (payload.action === 'view_home_page') {
             this.props.onFinished(true);
         }
+    };
+
+    private setRoomName = (): void => {
+        this.setState({
+            roomName: MatrixClientPeg.get().getRoom(this.props.roomId).name,
+        });
     };
 
     private getTabs(): Tab[] {
@@ -122,7 +138,7 @@ export default class RoomSettingsDialog extends React.Component<IProps> {
     }
 
     render() {
-        const roomName = MatrixClientPeg.get().getRoom(this.props.roomId).name;
+        const roomName = this.state.roomName;
         return (
             <BaseDialog
                 className='mx_RoomSettingsDialog'
