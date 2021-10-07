@@ -22,6 +22,12 @@ limitations under the License.
         display: none;
     }
 
+    &:not(.mx_RoomSublist_minimized) {
+        .mx_RoomSublist_headerContainer {
+            height: auto;
+        }
+    }
+
     .mx_RoomSublist_headerContainer {
         // Create a flexbox to make alignment easy
         display: flex;
@@ -41,9 +47,7 @@ limitations under the License.
         // The combined height must be set in the LeftPanel component for sticky headers
         // to work correctly.
         padding-bottom: 8px;
-        // Allow the container to collapse on itself if its children
-        // are not in the normal document flow
-        max-height: 24px;
+        height: 24px;
         color: $roomlist-header-color;
 
         .mx_RoomSublist_stickable {
@@ -176,9 +180,9 @@ limitations under the License.
     // scroll jumps when they become sticky. However, that leaves a gap when
     // scrolled to the top above the first sublist (whose header can only ever
     // stick to top), so we make sure to exclude the first visible sublist.
-    &:not(.mx_RoomSublist_hidden) ~ .mx_RoomSublist .mx_RoomSublist_headerContainer {
-        height: 24px;
-    }
+    // &:not(.mx_RoomSublist_hidden) ~ .mx_RoomSublist .mx_RoomSublist_headerContainer {
+    //     height: 24px;
+    // }
 
     .mx_RoomSublist_resizeBox {
         position: relative;
