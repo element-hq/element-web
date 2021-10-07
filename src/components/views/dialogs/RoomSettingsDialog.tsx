@@ -59,8 +59,8 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
 
     public componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
-        MatrixClientPeg.get().on("Room.name", this.setRoomName);
-        this.setRoomName();
+        MatrixClientPeg.get().on("Room.name", this.onRoomName);
+        this.onRoomName();
     }
 
     public componentWillUnmount() {
@@ -68,7 +68,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
             dis.unregister(this.dispatcherRef);
         }
 
-        MatrixClientPeg.get().removeListener("Room.name", this.setRoomName);
+        MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
     }
 
     private onAction = (payload): void => {
@@ -79,7 +79,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
         }
     };
 
-    private setRoomName = (): void => {
+    private onRoomName = (): void => {
         this.setState({
             roomName: MatrixClientPeg.get().getRoom(this.props.roomId).name,
         });
