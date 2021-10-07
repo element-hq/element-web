@@ -48,8 +48,8 @@ import { Layout } from "../../settings/Layout";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import RightPanelStore from "../../stores/RightPanelStore";
 import { haveTileForEvent } from "../views/rooms/EventTile";
-import RoomContext from "../../contexts/RoomContext";
-import MatrixClientContext from "../../contexts/MatrixClientContext";
+import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
+import MatrixClientContext, { withMatrixClientHOC, MatrixClientProps } from "../../contexts/MatrixClientContext";
 import { E2EStatus, shieldStatusForRoom } from '../../utils/ShieldUtils';
 import { Action } from "../../dispatcher/actions";
 import { IMatrixClientCreds } from "../../MatrixClientPeg";
@@ -91,6 +91,7 @@ import TopUnreadMessagesBar from "../views/rooms/TopUnreadMessagesBar";
 import SpaceStore from "../../stores/SpaceStore";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -102,7 +103,7 @@ if (DEBUG) {
     debuglog = logger.log.bind(console);
 }
 
-interface IProps {
+interface IRoomProps extends MatrixClientProps {
     threepidInvite: IThreepidInvite;
     oobData?: IOOBData;
 
@@ -113,7 +114,7 @@ interface IProps {
     onRegistered?(credentials: IMatrixClientCreds): void;
 }
 
-export interface IState {
+export interface IRoomState {
     room?: Room;
     roomId?: string;
     roomAlias?: string;
@@ -187,10 +188,12 @@ export interface IState {
     // if it did we don't want the room to be marked as read as soon as it is loaded.
     wasContextSwitch?: boolean;
     editState?: EditorStateTransfer;
+    timelineRenderingType: TimelineRenderingType;
+    liveTimeline?: EventTimeline;
 }
 
 @replaceableComponent("structures.RoomView")
-export default class RoomView extends React.Component<IProps, IState> {
+export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private readonly dispatcherRef: string;
     private readonly roomStoreToken: EventSubscription;
     private readonly rightPanelStoreToken: EventSubscription;
@@ -247,6 +250,8 @@ export default class RoomView extends React.Component<IProps, IState> {
             showDisplaynameChanges: true,
             matrixClientIsReady: this.context && this.context.isInitialSyncComplete(),
             dragCounter: 0,
+            timelineRenderingType: TimelineRenderingType.Room,
+            liveTimeline: undefined,
         };
 
         this.dispatcherRef = dis.register(this.onAction);
@@ -336,7 +341,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         const roomId = RoomViewStore.getRoomId();
 
-        const newState: Pick<IState, any> = {
+        const newState: Pick<IRoomState, any> = {
             roomId,
             roomAlias: RoomViewStore.getRoomAlias(),
             roomLoading: RoomViewStore.isRoomLoading(),
@@ -808,7 +813,9 @@ export default class RoomView extends React.Component<IProps, IState> {
                 this.onSearchClick();
                 break;
 
-            case "edit_event": {
+            case Action.EditEvent: {
+                // Quit early if we're trying to edit events in wrong rendering context
+                if (payload.timelineRenderingType !== this.state.timelineRenderingType) return;
                 const editState = payload.event ? new EditorStateTransfer(payload.event) : null;
                 this.setState({ editState }, () => {
                     if (payload.event) {
@@ -932,6 +939,10 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.updateE2EStatus(room);
         this.updatePermissions(room);
         this.checkWidgets(room);
+
+        this.setState({
+            liveTimeline: room.getLiveTimeline(),
+        });
     };
 
     private async calculateRecommendedVersion(room: Room) {
@@ -2086,3 +2097,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         );
     }
 }
+
+const RoomViewWithMatrixClient = withMatrixClientHOC(RoomView);
+export default RoomViewWithMatrixClient;

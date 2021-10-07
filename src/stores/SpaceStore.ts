@@ -614,6 +614,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         if (membership === "join" && room.roomId === RoomViewStore.getRoomId()) {
             // if the user was looking at the space and then joined: select that space
             this.setActiveSpace(room, false);
+        } else if (membership === "leave" && room.roomId === this.activeSpace?.roomId) {
+            // user's active space has gone away, go back to home
+            this.setActiveSpace(null, true);
         }
     };
 
@@ -796,7 +799,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 // 1 is Home, 2-9 are the spaces after Home
                 if (payload.num === 1) {
                     this.setActiveSpace(null);
-                } else if (this.spacePanelSpaces.length >= payload.num) {
+                } else if (payload.num > 0 && this.spacePanelSpaces.length > payload.num - 2) {
                     this.setActiveSpace(this.spacePanelSpaces[payload.num - 2]);
                 }
                 break;

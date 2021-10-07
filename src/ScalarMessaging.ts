@@ -452,7 +452,9 @@ function setBotOptions(event: MessageEvent<any>, roomId: string, userId: string)
     });
 }
 
-function setBotPower(event: MessageEvent<any>, roomId: string, userId: string, level: number): void {
+async function setBotPower(
+    event: MessageEvent<any>, roomId: string, userId: string, level: number, ignoreIfGreater?: boolean,
+): Promise<void> {
     if (!(Number.isInteger(level) && level >= 0)) {
         sendError(event, _t('Power level must be positive integer.'));
         return;
@@ -465,22 +467,34 @@ function setBotPower(event: MessageEvent<any>, roomId: string, userId: string, l
         return;
     }
 
-    client.getStateEvent(roomId, "m.room.power_levels", "").then((powerLevels) => {
-        const powerEvent = new MatrixEvent(
+    try {
+        const powerLevels = await client.getStateEvent(roomId, "m.room.power_levels", "");
+
+        // If the PL is equal to or greater than the requested PL, ignore.
+        if (ignoreIfGreater === true) {
+            // As per https://matrix.org/docs/spec/client_server/r0.6.0#m-room-power-levels
+            const currentPl = (
+                powerLevels.content.users && powerLevels.content.users[userId]
+            ) || powerLevels.content.users_default || 0;
+
+            if (currentPl >= level) {
+                return sendResponse(event, {
+                    success: true,
+                });
+            }
+        }
+        await client.setPowerLevel(roomId, userId, level, new MatrixEvent(
             {
                 type: "m.room.power_levels",
                 content: powerLevels,
             },
-        );
-
-        client.setPowerLevel(roomId, userId, level, powerEvent).then(() => {
-            sendResponse(event, {
-                success: true,
-            });
-        }, (err) => {
-            sendError(event, err.message ? err.message : _t('Failed to send request.'), err);
+        ));
+        return sendResponse(event, {
+            success: true,
         });
-    });
+    } catch (err) {
+        sendError(event, err.message ? err.message : _t('Failed to send request.'), err);
+    }
 }
 
 function getMembershipState(event: MessageEvent<any>, roomId: string, userId: string): void {
@@ -678,7 +692,7 @@ const onMessage = function(event: MessageEvent<any>): void {
             setBotOptions(event, roomId, userId);
             break;
         case Action.SetBotPower:
-            setBotPower(event, roomId, userId, event.data.level);
+            setBotPower(event, roomId, userId, event.data.level, event.data.ignoreIfGreater);
             break;
         default:
             console.warn("Unhandled postMessage event with action '" + event.data.action +"'");
