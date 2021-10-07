@@ -3218,5 +3218,7 @@
     "Unable to verify this login": "無法驗證此登入",
     "To proceed, please accept the verification request on your other login.": "要繼續，請在您的其他裝置上接受驗證請求。",
     "Waiting for you to verify on your other session…": "正在等待您驗證您的其他工作階段……",
-    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "正在等待您驗證您的其他工作階段，%(deviceName)s (%(deviceId)s)……"
+    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "正在等待您驗證您的其他工作階段，%(deviceName)s (%(deviceId)s)……",
+    "Creating Space...": "正在建立空間……",
+    "Fetching data...": "正在擷取資料……"
 }
