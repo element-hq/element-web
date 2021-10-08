@@ -3195,5 +3195,21 @@
     "Are you sure you want to exit during this export?": "Вы уверены, что хотите выйти во время экспорта?",
     "%(senderDisplayName)s sent a sticker.": "%(senderDisplayName)s отправил(а) стикер.",
     "%(senderDisplayName)s changed the room avatar.": "%(senderDisplayName)s сменил(а) аватар комнаты.",
-    "%(date)s at %(time)s": "%(date)s в %(time)s"
+    "%(date)s at %(time)s": "%(date)s в %(time)s",
+    "Select from the options below to export chats from your timeline": "Выберите один из приведенных ниже вариантов экспорта чатов из вашей временной шкалы",
+    "Current Timeline": "Текущая временная шкала",
+    "Please only proceed if you're sure you've lost all of your other devices and your security key.": "Пожалуйста, действуйте только в том случае, если вы уверены, что потеряли все остальные устройства и ключ безопасности.",
+    "Resetting your verification keys cannot be undone. After resetting, you won't have access to old encrypted messages, and any friends who have previously verified you will see security warnings until you re-verify with them.": "Сброс ключей проверки нельзя отменить. После сброса вы не сможете получить доступ к старым зашифрованным сообщениям, а друзья, которые ранее проверили вас, будут видеть предупреждения о безопасности, пока вы не пройдете повторную проверку.",
+    "Skip verification for now": "Пока пропустить проверку",
+    "I'll verify later": "Я проверю позже",
+    "Verify with another login": "Проверить с помощью другого логина",
+    "Verify with Security Key": "Проверить с помощью ключа безопасности",
+    "Verify with Security Key or Phrase": "Проверка с помощью ключа безопасности или фразы",
+    "Proceed with reset": "Выполнить сброс",
+    "It looks like you don't have a Security Key or any other devices you can verify against.  This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.": "Похоже, что у вас нет Ключа безопасности или других устройств, которые можно проверить.  Это устройство не сможет получить доступ к старым зашифрованным сообщениям. Чтобы подтвердить свою личность на этом устройстве, вам необходимо сбросить ключи проверки.",
+    "Really reset verification keys?": "Действительно сбросить ключи проверки?",
+    "Unable to verify this login": "Невозможно проверить этот логин",
+    "To proceed, please accept the verification request on your other login.": "Чтобы продолжить, пожалуйста, примите запрос на проверку на другом логине.",
+    "Waiting for you to verify on your other session…": "Ожидаем проверки на другом сеансе…",
+    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "Ожидаем проверки на другом сеансе, %(deviceName)s (%(deviceId)s)…"
 }
