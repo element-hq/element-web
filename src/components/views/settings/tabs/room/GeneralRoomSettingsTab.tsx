@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { ContextType } from 'react';
 import { _t } from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
 import AccessibleButton from "../../../elements/AccessibleButton";
@@ -38,9 +38,10 @@ interface IState {
 @replaceableComponent("views.settings.tabs.room.GeneralRoomSettingsTab")
 export default class GeneralRoomSettingsTab extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
+    context: ContextType<typeof MatrixClientContext>;
 
-    constructor(props: IProps) {
-        super(props);
+    constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
+        super(props, context);
 
         this.state = {
             isRoomPublished: false, // loaded async
@@ -111,7 +112,11 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
 
                 <span className='mx_SettingsTab_subheading'>{ _t("Leave room") }</span>
                 <div className='mx_SettingsTab_section'>
-                    <AccessibleButton kind='danger' onClick={this.onLeaveClick}>
+                    <AccessibleButton
+                        kind='danger'
+                        onClick={this.onLeaveClick}
+                        disabled={room.getMyMembership() !== "join"}
+                    >
                         { _t('Leave room') }
                     </AccessibleButton>
                 </div>
