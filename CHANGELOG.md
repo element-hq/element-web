@@ -1,3 +1,9 @@
+Changes in [3.32.0-rc.2](https://github.com/vector-im/element-desktop/releases/tag/v3.32.0-rc.2) (2021-10-08)
+=============================================================================================================
+
+## 🐛 Bug Fixes
+ * [Release] Fix space hierarchy pagination ([\#6910](https://github.com/matrix-org/matrix-react-sdk/pull/6910)).
+
 Changes in [3.32.0-rc.1](https://github.com/vector-im/element-desktop/releases/tag/v3.32.0-rc.1) (2021-10-04)
 =============================================================================================================
 
