@@ -283,7 +283,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             const createTs = childRoom?.currentState.getStateEvents(EventType.RoomCreate, "")?.getTs();
             return getChildOrder(ev.getContent().order, createTs, roomId);
         }).map(ev => {
-            return this.matrixClient.getRoom(ev.getStateKey());
+            const history = this.matrixClient.getRoomUpgradeHistory(ev.getStateKey(), true);
+            return history[history.length - 1];
         }).filter(room => {
             return room?.getMyMembership() === "join" || room?.getMyMembership() === "invite";
         }) || [];
@@ -511,8 +512,13 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 hiddenChildren.get(spaceId)?.forEach(roomId => {
                     roomIds.add(roomId);
                 });
-                this.spaceFilteredRooms.set(spaceId, roomIds);
-                return roomIds;
+
+                // Expand room IDs to all known versions of the given rooms
+                const expandedRoomIds = new Set(Array.from(roomIds).flatMap(roomId => {
+                    return this.matrixClient.getRoomUpgradeHistory(roomId, true).map(r => r.roomId);
+                }));
+                this.spaceFilteredRooms.set(spaceId, expandedRoomIds);
+                return expandedRoomIds;
             };
 
             fn(s.roomId, new Set());

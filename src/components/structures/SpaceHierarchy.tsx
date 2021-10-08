@@ -15,17 +15,17 @@ limitations under the License.
 */
 
 import React, {
+    Dispatch,
+    KeyboardEvent,
+    KeyboardEventHandler,
     ReactNode,
+    SetStateAction,
     useCallback,
+    useContext,
     useEffect,
     useMemo,
     useRef,
     useState,
-    KeyboardEvent,
-    KeyboardEventHandler,
-    useContext,
-    SetStateAction,
-    Dispatch,
 } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
@@ -33,7 +33,8 @@ import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { IHierarchyRelation, IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
-import { sortBy } from "lodash";
+import { sortBy, uniqBy } from "lodash";
+import { GuestAccess, HistoryVisibility } from "matrix-js-sdk/src/@types/partials";
 
 import dis from "../../dispatcher/dispatcher";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -333,6 +334,30 @@ interface IHierarchyLevelProps {
     onToggleClick?(parentId: string, childId: string): void;
 }
 
+const toLocalRoom = (cli: MatrixClient, room: IHierarchyRoom): IHierarchyRoom => {
+    const history = cli.getRoomUpgradeHistory(room.room_id, true);
+    const cliRoom = history[history.length - 1];
+    if (cliRoom) {
+        return {
+            ...room,
+            room_id: cliRoom.roomId,
+            room_type: cliRoom.getType(),
+            name: cliRoom.name,
+            topic: cliRoom.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent().topic,
+            avatar_url: cliRoom.getMxcAvatarUrl(),
+            canonical_alias: cliRoom.getCanonicalAlias(),
+            aliases: cliRoom.getAltAliases(),
+            world_readable: cliRoom.currentState.getStateEvents(EventType.RoomHistoryVisibility, "")?.getContent()
+                .history_visibility === HistoryVisibility.WorldReadable,
+            guest_can_join: cliRoom.currentState.getStateEvents(EventType.RoomGuestAccess, "")?.getContent()
+                .guest_access === GuestAccess.CanJoin,
+            num_joined_members: cliRoom.getJoinedMemberCount(),
+        };
+    }
+
+    return room;
+};
+
 export const HierarchyLevel = ({
     root,
     roomSet,
@@ -353,7 +378,7 @@ export const HierarchyLevel = ({
     const [subspaces, childRooms] = sortedChildren.reduce((result, ev: IHierarchyRelation) => {
         const room = hierarchy.roomMap.get(ev.state_key);
         if (room && roomSet.has(room)) {
-            result[room.room_type === RoomType.Space ? 0 : 1].push(room);
+            result[room.room_type === RoomType.Space ? 0 : 1].push(toLocalRoom(cli, room));
         }
         return result;
     }, [[] as IHierarchyRoom[], [] as IHierarchyRoom[]]);
@@ -361,7 +386,7 @@ export const HierarchyLevel = ({
     const newParents = new Set(parents).add(root.room_id);
     return <React.Fragment>
         {
-            childRooms.map(room => (
+            uniqBy(childRooms, "room_id").map(room => (
                 <Tile
                     key={room.room_id}
                     room={room}
