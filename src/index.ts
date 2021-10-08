@@ -1,4 +1,5 @@
 /*
+Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,9 +15,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { createContext } from "react";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import Skinner, { ISkinObject } from './Skinner';
 
-const MatrixClientContext = createContext<MatrixClient>(undefined);
-MatrixClientContext.displayName = "MatrixClientContext";
-export default MatrixClientContext;
+export function loadSkin(skinObject: ISkinObject): void {
+    Skinner.load(skinObject);
+}
+
+export function resetSkin(): void {
+    Skinner.reset();
+}
+
+export function getComponent(componentName: string): any {
+    return Skinner.getComponent(componentName);
+}
+
+// Import the js-sdk so the proper `request` object can be set. This does some
+// magic with the browser injection to make all subsequent imports work fine.
+import "matrix-js-sdk";
+

@@ -29,10 +29,9 @@ import { ChevronFace, ContextMenuTooltipButton } from "../../structures/ContextM
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
-import { ALL_MESSAGES, ALL_MESSAGES_LOUD, MENTIONS_ONLY, MUTE } from "../../../RoomNotifs";
+import { RoomNotifState } from "../../../RoomNotifs";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import NotificationBadge from "./NotificationBadge";
-import { Volume } from "../../../RoomNotifsTypes";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
 import RoomListActions from "../../../actions/RoomListActions";
 import { ActionPayload } from "../../../dispatcher/payloads";
@@ -364,7 +363,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         this.setState({ generalMenuPosition: null }); // hide the menu
     };
 
-    private async saveNotifState(ev: ButtonEvent, newState: Volume) {
+    private async saveNotifState(ev: ButtonEvent, newState: RoomNotifState) {
         ev.preventDefault();
         ev.stopPropagation();
         if (MatrixClientPeg.get().isGuest()) return;
@@ -378,10 +377,10 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         }
     }
 
-    private onClickAllNotifs = ev => this.saveNotifState(ev, ALL_MESSAGES);
-    private onClickAlertMe = ev => this.saveNotifState(ev, ALL_MESSAGES_LOUD);
-    private onClickMentions = ev => this.saveNotifState(ev, MENTIONS_ONLY);
-    private onClickMute = ev => this.saveNotifState(ev, MUTE);
+    private onClickAllNotifs = ev => this.saveNotifState(ev, RoomNotifState.AllMessages);
+    private onClickAlertMe = ev => this.saveNotifState(ev, RoomNotifState.AllMessagesLoud);
+    private onClickMentions = ev => this.saveNotifState(ev, RoomNotifState.MentionsOnly);
+    private onClickMute = ev => this.saveNotifState(ev, RoomNotifState.Mute);
 
     private renderNotificationsMenu(isActive: boolean): React.ReactElement {
         if (MatrixClientPeg.get().isGuest() || this.props.tag === DefaultTagID.Archived ||
@@ -404,25 +403,25 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 <IconizedContextMenuOptionList first>
                     <IconizedContextMenuRadio
                         label={_t("Use default")}
-                        active={state === ALL_MESSAGES}
+                        active={state === RoomNotifState.AllMessages}
                         iconClassName="mx_RoomTile_iconBell"
                         onClick={this.onClickAllNotifs}
                     />
                     <IconizedContextMenuRadio
                         label={_t("All messages")}
-                        active={state === ALL_MESSAGES_LOUD}
+                        active={state === RoomNotifState.AllMessagesLoud}
                         iconClassName="mx_RoomTile_iconBellDot"
                         onClick={this.onClickAlertMe}
                     />
                     <IconizedContextMenuRadio
                         label={_t("Mentions & Keywords")}
-                        active={state === MENTIONS_ONLY}
+                        active={state === RoomNotifState.MentionsOnly}
                         iconClassName="mx_RoomTile_iconBellMentions"
                         onClick={this.onClickMentions}
                     />
                     <IconizedContextMenuRadio
                         label={_t("None")}
-                        active={state === MUTE}
+                        active={state === RoomNotifState.Mute}
                         iconClassName="mx_RoomTile_iconBellCrossed"
                         onClick={this.onClickMute}
                     />
@@ -432,14 +431,14 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
         const classes = classNames("mx_RoomTile_notificationsButton", {
             // Show bell icon for the default case too.
-            mx_RoomTile_iconBell: state === ALL_MESSAGES,
-            mx_RoomTile_iconBellDot: state === ALL_MESSAGES_LOUD,
-            mx_RoomTile_iconBellMentions: state === MENTIONS_ONLY,
-            mx_RoomTile_iconBellCrossed: state === MUTE,
+            mx_RoomTile_iconBell: state === RoomNotifState.AllMessages,
+            mx_RoomTile_iconBellDot: state === RoomNotifState.AllMessagesLoud,
+            mx_RoomTile_iconBellMentions: state === RoomNotifState.MentionsOnly,
+            mx_RoomTile_iconBellCrossed: state === RoomNotifState.Mute,
 
             // Only show the icon by default if the room is overridden to muted.
             // TODO: [FTUE Notifications] Probably need to detect global mute state
-            mx_RoomTile_notificationsButton_show: state === MUTE,
+            mx_RoomTile_notificationsButton_show: state === RoomNotifState.Mute,
         });
 
         return (

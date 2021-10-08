@@ -49,16 +49,18 @@ const EncryptionInfo: React.FC<IProps> = ({
     isSelfVerification,
 }: IProps) => {
     let content: JSX.Element;
-    if (waitingForOtherParty || waitingForNetwork) {
+    if (waitingForOtherParty && isSelfVerification) {
+        content = (
+            <div>
+                { _t("To proceed, please accept the verification request on your other login.") }
+            </div>
+        );
+    } else if (waitingForOtherParty || waitingForNetwork) {
         let text: string;
         if (waitingForOtherParty) {
-            if (isSelfVerification) {
-                text = _t("Accept on your other login…");
-            } else {
-                text = _t("Waiting for %(displayName)s to accept…", {
-                    displayName: (member as User).displayName || (member as RoomMember).name || member.userId,
-                });
-            }
+            text = _t("Waiting for %(displayName)s to accept…", {
+                displayName: (member as User).displayName || (member as RoomMember).name || member.userId,
+            });
         } else {
             text = _t("Accepting…");
         }

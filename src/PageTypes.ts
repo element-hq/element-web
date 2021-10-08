@@ -1,5 +1,6 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,11 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {
-    ALL_MESSAGES,
-    ALL_MESSAGES_LOUD,
-    MENTIONS_ONLY,
-    MUTE,
-} from "./RoomNotifs";
+/** The types of page which can be shown by the LoggedInView */
+enum PageType {
+    HomePage = "home_page",
+    RoomView = "room_view",
+    RoomDirectory = "room_directory",
+    UserView = "user_view",
+    GroupView = "group_view",
+    MyGroups = "my_groups",
+}
 
-export type Volume = ALL_MESSAGES_LOUD | ALL_MESSAGES | MENTIONS_ONLY | MUTE;
+export default PageType;

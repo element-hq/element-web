@@ -77,6 +77,7 @@ describe("SpaceStore", () => {
 
     const run = async () => {
         client.getRoom.mockImplementation(roomId => rooms.find(room => room.roomId === roomId));
+        client.getRoomUpgradeHistory.mockImplementation(roomId => [rooms.find(room => room.roomId === roomId)]);
         await testUtils.setupAsyncStoreWithClient(store, client);
         jest.runAllTimers();
     };

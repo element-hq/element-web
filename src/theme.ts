@@ -17,11 +17,32 @@ limitations under the License.
 
 import { _t } from "./languageHandler";
 
-export const DEFAULT_THEME = "light";
 import SettingsStore from "./settings/SettingsStore";
 import ThemeWatcher from "./settings/watchers/ThemeWatcher";
 
-export function enumerateThemes() {
+export const DEFAULT_THEME = "light";
+
+interface IFontFaces {
+    src: {
+        format: string;
+        url: string;
+        local: string;
+    }[];
+}
+
+interface ICustomTheme {
+    colors: {
+        [key: string]: string;
+    };
+    fonts: {
+        faces: IFontFaces[];
+        general: string;
+        monospace: string;
+    };
+    is_dark?: boolean; // eslint-disable-line camelcase
+}
+
+export function enumerateThemes(): {[key: string]: string} {
     const BUILTIN_THEMES = {
         "light": _t("Light"),
         "dark": _t("Dark"),
@@ -34,7 +55,7 @@ export function enumerateThemes() {
     return Object.assign({}, customThemeNames, BUILTIN_THEMES);
 }
 
-function clearCustomTheme() {
+function clearCustomTheme(): void {
     // remove all css variables, we assume these are there because of the custom theme
     const inlineStyleProps = Object.values(document.body.style);
     for (const prop of inlineStyleProps) {
@@ -61,7 +82,7 @@ const allowedFontFaceProps = [
     "unicode-range",
 ];
 
-function generateCustomFontFaceCSS(faces) {
+function generateCustomFontFaceCSS(faces: IFontFaces[]): string {
     return faces.map(face => {
         const src = face.src && face.src.map(srcElement => {
             let format;
@@ -91,7 +112,7 @@ function generateCustomFontFaceCSS(faces) {
     }).join("\n");
 }
 
-function setCustomThemeVars(customTheme) {
+function setCustomThemeVars(customTheme: ICustomTheme): void {
     const { style } = document.body;
 
     function setCSSColorVariable(name, hexColor, doPct = true) {
@@ -134,7 +155,7 @@ function setCustomThemeVars(customTheme) {
     }
 }
 
-export function getCustomTheme(themeName) {
+export function getCustomTheme(themeName: string): ICustomTheme {
     // set css variables
     const customThemes = SettingsStore.getValue("custom_themes");
     if (!customThemes) {
@@ -155,7 +176,7 @@ export function getCustomTheme(themeName) {
  *
  * @param {string} theme new theme
  */
-export async function setTheme(theme) {
+export async function setTheme(theme?: string): Promise<void> {
     if (!theme) {
         const themeWatcher = new ThemeWatcher();
         theme = themeWatcher.getEffectiveTheme();
@@ -200,13 +221,14 @@ export async function setTheme(theme) {
             // We could alternatively lock or similar to stop the race, but
             // this is probably good enough for now.
             styleElements[stylesheetName].disabled = false;
-            Object.values(styleElements).forEach((a) => {
+            Object.values(styleElements).forEach((a: HTMLStyleElement) => {
                 if (a == styleElements[stylesheetName]) return;
                 a.disabled = true;
             });
             const bodyStyles = global.getComputedStyle(document.body);
             if (bodyStyles.backgroundColor) {
-                document.querySelector('meta[name="theme-color"]').content = bodyStyles.backgroundColor;
+                const metaElement: HTMLMetaElement = document.querySelector('meta[name="theme-color"]');
+                metaElement.content = bodyStyles.backgroundColor;
             }
             resolve();
         };

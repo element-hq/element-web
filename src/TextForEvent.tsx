@@ -166,6 +166,11 @@ function textForTopicEvent(ev: MatrixEvent): () => string | null {
     });
 }
 
+function textForRoomAvatarEvent(ev: MatrixEvent): () => string | null {
+    const senderDisplayName = ev?.sender?.name || ev.getSender();
+    return () => _t('%(senderDisplayName)s changed the room avatar.', { senderDisplayName });
+}
+
 function textForRoomNameEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
 
@@ -289,11 +294,27 @@ function textForServerACLEvent(ev: MatrixEvent): () => string | null {
 function textForMessageEvent(ev: MatrixEvent): () => string | null {
     return () => {
         const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-        let message = senderDisplayName + ': ' + ev.getContent().body;
+        let message = ev.getContent().body;
+        if (ev.isRedacted()) {
+            message = _t("Message deleted");
+            const unsigned = ev.getUnsigned();
+            const redactedBecauseUserId = unsigned?.redacted_because?.sender;
+            if (redactedBecauseUserId && redactedBecauseUserId !== ev.getSender()) {
+                const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
+                const sender = room?.getMember(redactedBecauseUserId);
+                message = _t("Message deleted by %(name)s", { name: sender?.name
+ || redactedBecauseUserId });
+            }
+        }
         if (ev.getContent().msgtype === "m.emote") {
             message = "* " + senderDisplayName + " " + message;
         } else if (ev.getContent().msgtype === "m.image") {
             message = _t('%(senderDisplayName)s sent an image.', { senderDisplayName });
+        } else if (ev.getType() == "m.sticker") {
+            message = _t('%(senderDisplayName)s sent a sticker.', { senderDisplayName });
+        } else {
+            // in this case, parse it as a plain text message
+            message = senderDisplayName + ': ' + message;
         }
         return message;
     };
@@ -669,6 +690,7 @@ interface IHandlers {
 
 const handlers: IHandlers = {
     'm.room.message': textForMessageEvent,
+    'm.sticker': textForMessageEvent,
     'm.call.invite': textForCallInviteEvent,
 };
 
@@ -677,6 +699,7 @@ const stateHandlers: IHandlers = {
     'm.room.name': textForRoomNameEvent,
     'm.room.topic': textForTopicEvent,
     'm.room.member': textForMemberEvent,
+    "m.room.avatar": textForRoomAvatarEvent,
     'm.room.third_party_invite': textForThreePidInviteEvent,
     'm.room.history_visibility': textForHistoryVisibilityEvent,
     'm.room.power_levels': textForPowerEvent,
