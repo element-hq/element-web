@@ -103,6 +103,7 @@ export function createTestClient() {
         isUserIgnored: jest.fn().mockReturnValue(false),
         getCapabilities: jest.fn().mockResolvedValue({}),
         supportsExperimentalThreads: () => false,
+        getRoomUpgradeHistory: jest.fn().mockReturnValue([]),
     };
 }
 
