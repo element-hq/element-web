@@ -81,6 +81,8 @@ import GroupAvatar from "../views/avatars/GroupAvatar";
 import { useDispatcher } from "../../hooks/useDispatcher";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../settings/UIFeature";
 
 interface IProps {
     space: Room;
@@ -411,7 +413,7 @@ const SpaceLanding = ({ space }) => {
     const userId = cli.getUserId();
 
     let inviteButton;
-    if (myMembership === "join" && space.canInvite(userId)) {
+    if (myMembership === "join" && space.canInvite(userId) && shouldShowComponent(UIComponent.InviteUsers)) {
         inviteButton = (
             <AccessibleButton
                 kind="primary"

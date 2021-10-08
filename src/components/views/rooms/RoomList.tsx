@@ -49,6 +49,8 @@ import { showAddExistingRooms, showCreateNewRoom, showSpaceInvite } from "../../
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import RoomAvatar from "../avatars/RoomAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../settings/UIFeature";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -133,32 +135,38 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
                     MatrixClientPeg.get().getUserId());
 
                 return <IconizedContextMenuOptionList first>
-                    <IconizedContextMenuOption
-                        label={_t("Create new room")}
-                        iconClassName="mx_RoomList_iconPlus"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            onFinished();
-                            showCreateNewRoom(SpaceStore.instance.activeSpace);
-                        }}
-                        disabled={!canAddRooms}
-                        tooltip={canAddRooms ? undefined
-                            : _t("You do not have permissions to create new rooms in this space")}
-                    />
-                    <IconizedContextMenuOption
-                        label={_t("Add existing room")}
-                        iconClassName="mx_RoomList_iconHash"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            onFinished();
-                            showAddExistingRooms(SpaceStore.instance.activeSpace);
-                        }}
-                        disabled={!canAddRooms}
-                        tooltip={canAddRooms ? undefined
-                            : _t("You do not have permissions to add rooms to this space")}
-                    />
+                    {
+                        shouldShowComponent(UIComponent.CreateRooms)
+                            ? (<>
+                                <IconizedContextMenuOption
+                                    label={_t("Create new room")}
+                                    iconClassName="mx_RoomList_iconPlus"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        onFinished();
+                                        showCreateNewRoom(SpaceStore.instance.activeSpace);
+                                    }}
+                                    disabled={!canAddRooms}
+                                    tooltip={canAddRooms ? undefined
+                                        : _t("You do not have permissions to create new rooms in this space")}
+                                />
+                                <IconizedContextMenuOption
+                                    label={_t("Add existing room")}
+                                    iconClassName="mx_RoomList_iconHash"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        onFinished();
+                                        showAddExistingRooms(SpaceStore.instance.activeSpace);
+                                    }}
+                                    disabled={!canAddRooms}
+                                    tooltip={canAddRooms ? undefined
+                                        : _t("You do not have permissions to add rooms to this space")}
+                                />
+                            </>)
+                            : null
+                    }
                     <IconizedContextMenuOption
                         label={_t("Explore rooms")}
                         iconClassName="mx_RoomList_iconBrowse"

@@ -72,6 +72,8 @@ import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInse
 import SpaceStore from "../../../stores/SpaceStore";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../settings/UIFeature";
 
 export interface IDevice {
     deviceId: string;
@@ -393,7 +395,7 @@ const UserOptionsSection: React.FC<{
             );
         }
 
-        if (canInvite && (!member || !member.membership || member.membership === 'leave')) {
+        if (canInvite && (member?.membership ?? 'leave') === 'leave' && shouldShowComponent(UIComponent.InviteUsers)) {
             const roomId = member && member.roomId ? member.roomId : RoomViewStore.getRoomId();
             const onInviteUserButton = async () => {
                 try {
