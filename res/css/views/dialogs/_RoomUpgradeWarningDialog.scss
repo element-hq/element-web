@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,6 +17,22 @@ limitations under the License.
 .mx_RoomUpgradeWarningDialog {
     max-width: 38vw;
     width: 38vw;
+
+    .mx_RoomUpgradeWarningDialog_progress {
+        .mx_ProgressBar {
+            height: 8px;
+            width: 100%;
+
+            @mixin ProgressBarBorderRadius 8px;
+        }
+
+        .mx_RoomUpgradeWarningDialog_progressText {
+            margin-top: 8px;
+            font-size: $font-15px;
+            line-height: $font-24px;
+            color: $primary-content;
+        }
+    }
 }
 
 .mx_RoomUpgradeWarningDialog .mx_SettingsFlag {
