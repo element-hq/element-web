@@ -39,6 +39,8 @@ import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "./UserSettingsDialog";
 import TagOrderActions from "../../../actions/TagOrderActions";
+import { inviteUsersToRoom } from "../../../RoomInvite";
+import ProgressBar from "../elements/ProgressBar";
 
 interface IProps {
     matrixClient: MatrixClient;
@@ -90,10 +92,22 @@ export interface IGroupSummary {
 }
 /* eslint-enable camelcase */
 
+enum Progress {
+    NotStarted,
+    ValidatingInputs,
+    FetchingData,
+    CreatingSpace,
+    InvitingUsers,
+    // anything beyond here is inviting user n - 4
+}
+
 const CreateSpaceFromCommunityDialog: React.FC<IProps> = ({ matrixClient: cli, groupId, onFinished }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>(null);
-    const [busy, setBusy] = useState(false);
+
+    const [progress, setProgress] = useState(Progress.NotStarted);
+    const [numInvites, setNumInvites] = useState(0);
+    const busy = progress > 0;
 
     const [avatar, setAvatar] = useState<File>(null); // undefined means to remove avatar
     const [name, setName] = useState("");
@@ -122,29 +136,33 @@ const CreateSpaceFromCommunityDialog: React.FC<IProps> = ({ matrixClient: cli, g
         if (busy) return;
 
         setError(null);
-        setBusy(true);
+        setProgress(Progress.ValidatingInputs);
 
         // require & validate the space name field
         if (!(await spaceNameField.current.validate({ allowEmpty: false }))) {
-            setBusy(false);
+            setProgress(0);
             spaceNameField.current.focus();
             spaceNameField.current.validate({ allowEmpty: false, focused: true });
             return;
         }
         // validate the space name alias field but do not require it
         if (joinRule === JoinRule.Public && !(await spaceAliasField.current.validate({ allowEmpty: true }))) {
-            setBusy(false);
+            setProgress(0);
             spaceAliasField.current.focus();
             spaceAliasField.current.validate({ allowEmpty: true, focused: true });
             return;
         }
 
         try {
+            setProgress(Progress.FetchingData);
+
             const [rooms, members, invitedMembers] = await Promise.all([
                 cli.getGroupRooms(groupId).then(parseRoomsResponse) as Promise<IGroupRoom[]>,
                 cli.getGroupUsers(groupId).then(parseMembersResponse) as Promise<GroupMember[]>,
                 cli.getGroupInvitedUsers(groupId).then(parseMembersResponse) as Promise<GroupMember[]>,
             ]);
+
+            setNumInvites(members.length + invitedMembers.length);
 
             const viaMap = new Map<string, string[]>();
             for (const { roomId, canonicalAlias } of rooms) {
@@ -167,6 +185,8 @@ const CreateSpaceFromCommunityDialog: React.FC<IProps> = ({ matrixClient: cli, g
                 }
             }
 
+            setProgress(Progress.CreatingSpace);
+
             const spaceAvatar = avatar !== undefined ? avatar : groupSummary.profile.avatar_url;
             const roomId = await createSpace(name, joinRule === JoinRule.Public, alias, topic, spaceAvatar, {
                 creation_content: {
@@ -179,10 +199,15 @@ const CreateSpaceFromCommunityDialog: React.FC<IProps> = ({ matrixClient: cli, g
                         via: viaMap.get(roomId) || [],
                     },
                 })),
-                invite: [...members, ...invitedMembers].map(m => m.userId).filter(m => m !== cli.getUserId()),
+                // we do not specify the inviters here because Synapse applies a limit and this may cause it to trip
             }, {
                 andView: false,
             });
+
+            setProgress(Progress.InvitingUsers);
+
+            const userIds = [...members, ...invitedMembers].map(m => m.userId).filter(m => m !== cli.getUserId());
+            await inviteUsersToRoom(roomId, userIds, () => setProgress(p => p + 1));
 
             // eagerly remove it from the community panel
             dis.dispatch(TagOrderActions.removeTag(cli, groupId));
@@ -250,7 +275,7 @@ const CreateSpaceFromCommunityDialog: React.FC<IProps> = ({ matrixClient: cli, g
             setError(e);
         }
 
-        setBusy(false);
+        setProgress(Progress.NotStarted);
     };
 
     let footer;
@@ -267,13 +292,41 @@ const CreateSpaceFromCommunityDialog: React.FC<IProps> = ({ matrixClient: cli, g
                 { _t("Retry") }
             </AccessibleButton>
         </>;
+    } else if (busy) {
+        let description: string;
+        switch (progress) {
+            case Progress.ValidatingInputs:
+            case Progress.FetchingData:
+                description = _t("Fetching data...");
+                break;
+            case Progress.CreatingSpace:
+                description = _t("Creating Space...");
+                break;
+            case Progress.InvitingUsers:
+            default:
+                description = _t("Adding rooms... (%(progress)s out of %(count)s)", {
+                    count: numInvites,
+                    progress,
+                });
+                break;
+        }
+
+        footer = <span>
+            <ProgressBar
+                value={progress > Progress.FetchingData ? progress : 0}
+                max={numInvites + Progress.InvitingUsers}
+            />
+            <div className="mx_CreateSpaceFromCommunityDialog_progressText">
+                { description }
+            </div>
+        </span>;
     } else {
         footer = <>
-            <AccessibleButton kind="primary_outline" disabled={busy} onClick={() => onFinished()}>
+            <AccessibleButton kind="primary_outline" onClick={() => onFinished()}>
                 { _t("Cancel") }
             </AccessibleButton>
-            <AccessibleButton kind="primary" disabled={busy} onClick={onCreateSpaceClick}>
-                { busy ? _t("Creating...") : _t("Create Space") }
+            <AccessibleButton kind="primary" onClick={onCreateSpaceClick}>
+                { _t("Create Space") }
             </AccessibleButton>
         </>;
     }

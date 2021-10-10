@@ -19,6 +19,7 @@ limitations under the License.
 import React, { CSSProperties, RefObject, SyntheticEvent, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
+import FocusLock from "react-focus-lock";
 
 import { Key } from "../../Keyboard";
 import { Writeable } from "../../@types/common";
@@ -42,8 +43,6 @@ function getOrCreateContainer(): HTMLDivElement {
 
     return container;
 }
-
-const ARIA_MENU_ITEM_ROLES = new Set(["menuitem", "menuitemcheckbox", "menuitemradio"]);
 
 export interface IPosition {
     top?: number;
@@ -84,6 +83,10 @@ export interface IProps extends IPosition {
     // it will be mounted to a container at the root of the DOM.
     mountAsChild?: boolean;
 
+    // If specified, contents will be wrapped in a FocusLock, this is only needed if the context menu is being rendered
+    // within an existing FocusLock e.g inside a modal.
+    focusLock?: boolean;
+
     // Function to be called on menu close
     onFinished();
     // on resize callback
@@ -99,7 +102,7 @@ interface IState {
 // this will allow the ContextMenu to manage its own focus using arrow keys as per the ARIA guidelines.
 @replaceableComponent("structures.ContextMenu")
 export class ContextMenu extends React.PureComponent<IProps, IState> {
-    private initialFocus: HTMLElement;
+    private readonly initialFocus: HTMLElement;
 
     static defaultProps = {
         hasBackground: true,
@@ -108,6 +111,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
 
     constructor(props, context) {
         super(props, context);
+
         this.state = {
             contextMenuElem: null,
         };
@@ -121,14 +125,13 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
         this.initialFocus.focus();
     }
 
-    private collectContextMenuRect = (element) => {
+    private collectContextMenuRect = (element: HTMLDivElement) => {
         // We don't need to clean up when unmounting, so ignore
         if (!element) return;
 
-        let first = element.querySelector('[role^="menuitem"]');
-        if (!first) {
-            first = element.querySelector('[tab-index]');
-        }
+        const first = element.querySelector<HTMLElement>('[role^="menuitem"]')
+            || element.querySelector<HTMLElement>('[tab-index]');
+
         if (first) {
             first.focus();
         }
@@ -205,7 +208,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
                     descending = true;
                 }
             }
-        } while (element && !ARIA_MENU_ITEM_ROLES.has(element.getAttribute("role")));
+        } while (element && !element.getAttribute("role")?.startsWith("menuitem"));
 
         if (element) {
             (element as HTMLElement).focus();
@@ -383,6 +386,17 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
             );
         }
 
+        let body = <>
+            { chevron }
+            { props.children }
+        </>;
+
+        if (props.focusLock) {
+            body = <FocusLock>
+                { body }
+            </FocusLock>;
+        }
+
         return (
             <div
                 className={classNames("mx_ContextualMenu_wrapper", this.props.wrapperClassName)}
@@ -397,8 +411,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
                     ref={this.collectContextMenuRect}
                     role={this.props.managed ? "menu" : undefined}
                 >
-                    { chevron }
-                    { props.children }
+                    { body }
                 </div>
                 { background }
             </div>

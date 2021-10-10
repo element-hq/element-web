@@ -817,7 +817,7 @@ const RoomAdminToolsContainer: React.FC<IBaseRoomProps> = ({
     const isMe = me.userId === member.userId;
     const canAffectUser = member.powerLevel < me.powerLevel || isMe;
 
-    if (canAffectUser && me.powerLevel >= kickPowerLevel) {
+    if (!isMe && canAffectUser && me.powerLevel >= kickPowerLevel) {
         kickButton = <RoomKickButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
     }
     if (me.powerLevel >= redactPowerLevel && (!SpaceStore.spacesEnabled || !room.isSpaceRoom())) {
@@ -825,10 +825,10 @@ const RoomAdminToolsContainer: React.FC<IBaseRoomProps> = ({
             <RedactMessagesButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />
         );
     }
-    if (canAffectUser && me.powerLevel >= banPowerLevel) {
+    if (!isMe && canAffectUser && me.powerLevel >= banPowerLevel) {
         banButton = <BanToggleButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
     }
-    if (canAffectUser && me.powerLevel >= editPowerLevel && !room.isSpaceRoom()) {
+    if (!isMe && canAffectUser && me.powerLevel >= editPowerLevel && !room.isSpaceRoom()) {
         muteButton = (
             <MuteToggleButton
                 member={member}

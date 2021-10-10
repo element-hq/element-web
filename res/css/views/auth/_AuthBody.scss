@@ -58,10 +58,6 @@ limitations under the License.
         background-color: $authpage-body-bg-color;
     }
 
-    .mx_Field label {
-        color: $authpage-primary-color;
-    }
-
     .mx_Field_labelAlwaysTopLeft label,
     .mx_Field select + label /* Always show a select's label on top to not collide with the value */,
     .mx_Field input:focus + label,
