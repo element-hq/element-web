@@ -69,7 +69,7 @@ export default class NotificationPanel extends React.PureComponent<IProps> {
         }}>
             <BaseCard className="mx_NotificationPanel" onClose={this.props.onClose} withoutScrollContainer>
                 { content }
-            </BaseCard>;
+            </BaseCard>
         </RoomContext.Provider>;
     }
 }
