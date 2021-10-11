@@ -391,7 +391,7 @@ limitations under the License.
 .mx_RoomSublist_skeletonUI {
     position: relative;
     margin-left: 4px;
-    height: 288px;
+    height: 240px;
 
     &::before {
         background: $roomsublist-skeleton-ui-bg;
