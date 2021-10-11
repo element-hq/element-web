@@ -449,8 +449,8 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     }
 
     private renderSublists(): React.ReactElement[] {
-        // show a skeleton UI if the user is in no rooms and they are not filtering
-        const showSkeleton = !this.state.isNameFiltering &&
+        // show a skeleton UI if the user is in no rooms and they are not filtering and have no suggested rooms
+        const showSkeleton = !this.state.isNameFiltering && !this.state.suggestedRooms?.length &&
             Object.values(RoomListStore.instance.unfilteredLists).every(list => !list?.length);
 
         return TAG_ORDER.reduce((tags, tagId) => {
