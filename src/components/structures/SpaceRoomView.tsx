@@ -729,7 +729,6 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         </div>
 
         <div className="mx_SpaceRoomView_inviteTeammates_betaDisclaimer">
-            <BetaPill />
             { _t("<b>This is an experimental feature.</b> For now, " +
                 "new users receiving an invite will have to open the invite on <link/> to actually join.", {}, {
                 b: sub => <b>{ sub }</b>,
