@@ -90,6 +90,18 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
             </>;
         }
 
+        let leaveSection;
+        if (room.getMyMembership() === "join") {
+            leaveSection = <>
+                <span className='mx_SettingsTab_subheading'>{ _t("Leave room") }</span>
+                <div className='mx_SettingsTab_section'>
+                    <AccessibleButton kind='danger' onClick={this.onLeaveClick}>
+                        { _t('Leave room') }
+                    </AccessibleButton>
+                </div>
+            </>;
+        }
+
         return (
             <div className="mx_SettingsTab mx_GeneralRoomSettingsTab">
                 <div className="mx_SettingsTab_heading">{ _t("General") }</div>
@@ -109,17 +121,7 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
                 <div className="mx_SettingsTab_heading">{ _t("Other") }</div>
                 { flairSection }
                 { urlPreviewSettings }
-
-                <span className='mx_SettingsTab_subheading'>{ _t("Leave room") }</span>
-                <div className='mx_SettingsTab_section'>
-                    <AccessibleButton
-                        kind='danger'
-                        onClick={this.onLeaveClick}
-                        disabled={room.getMyMembership() !== "join"}
-                    >
-                        { _t('Leave room') }
-                    </AccessibleButton>
-                </div>
+                { leaveSection }
             </div>
         );
     }
