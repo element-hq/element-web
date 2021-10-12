@@ -21,6 +21,8 @@ import { Layout } from "../settings/Layout";
 
 export enum TimelineRenderingType {
     Room,
+    File,
+    Notification,
     Thread
 }
 

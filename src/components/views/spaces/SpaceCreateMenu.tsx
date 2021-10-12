@@ -17,9 +17,8 @@ limitations under the License.
 import React, { ComponentProps, RefObject, SyntheticEvent, KeyboardEvent, useContext, useRef, useState } from "react";
 import classNames from "classnames";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
-import FocusLock from "react-focus-lock";
-import { HistoryVisibility, Preset } from "matrix-js-sdk/src/@types/partials";
 import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
+import { HistoryVisibility, Preset } from "matrix-js-sdk/src/@types/partials";
 
 import { _t } from "../../../languageHandler";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
@@ -361,9 +360,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
         wrapperClassName="mx_SpaceCreateMenu_wrapper"
         managed={false}
     >
-        <FocusLock returnFocus={true}>
-            { body }
-        </FocusLock>
+        { body }
     </ContextMenu>;
 };
 

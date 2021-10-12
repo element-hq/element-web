@@ -268,7 +268,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
                         <AccessibleButton
                             onClick={this.onContinueClick}
                             kind="primary"
-                            disabled={this.state.continueDisabled}
+                            disabled={this.state.continueDisabled || this.state.newPhoneNumberCode.length === 0}
                         >
                             { _t("Continue") }
                         </AccessibleButton>

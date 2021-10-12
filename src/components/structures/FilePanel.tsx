@@ -37,6 +37,7 @@ import TimelinePanel from "./TimelinePanel";
 import Spinner from "../views/elements/Spinner";
 import { TileShape } from '../views/rooms/EventTile';
 import { Layout } from "../../settings/Layout";
+import RoomContext, { TimelineRenderingType } from '../../contexts/RoomContext';
 
 interface IProps {
     roomId: string;
@@ -57,6 +58,7 @@ class FilePanel extends React.Component<IProps, IState> {
     // added to the timeline.
     private decryptingEvents = new Set<string>();
     public noRoom: boolean;
+    static contextType = RoomContext;
 
     state = {
         timelineSet: null,
@@ -249,38 +251,46 @@ class FilePanel extends React.Component<IProps, IState> {
         const isRoomEncrypted = this.noRoom ? false : MatrixClientPeg.get().isRoomEncrypted(this.props.roomId);
 
         if (this.state.timelineSet) {
-            // console.log("rendering TimelinePanel for timelineSet " + this.state.timelineSet.room.roomId + " " +
-            //             "(" + this.state.timelineSet._timelines.join(", ") + ")" + " with key " + this.props.roomId);
             return (
-                <BaseCard
-                    className="mx_FilePanel"
-                    onClose={this.props.onClose}
-                    previousPhase={RightPanelPhases.RoomSummary}
-                    withoutScrollContainer
-                >
-                    <DesktopBuildsNotice isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
-                    <TimelinePanel
-                        manageReadReceipts={false}
-                        manageReadMarkers={false}
-                        timelineSet={this.state.timelineSet}
-                        showUrlPreview={false}
-                        onPaginationRequest={this.onPaginationRequest}
-                        tileShape={TileShape.FileGrid}
-                        resizeNotifier={this.props.resizeNotifier}
-                        empty={emptyState}
-                        layout={Layout.Group}
-                    />
-                </BaseCard>
+                <RoomContext.Provider value={{
+                    ...this.context,
+                    timelineRenderingType: TimelineRenderingType.File,
+                }}>
+                    <BaseCard
+                        className="mx_FilePanel"
+                        onClose={this.props.onClose}
+                        previousPhase={RightPanelPhases.RoomSummary}
+                        withoutScrollContainer
+                    >
+                        <DesktopBuildsNotice isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
+                        <TimelinePanel
+                            manageReadReceipts={false}
+                            manageReadMarkers={false}
+                            timelineSet={this.state.timelineSet}
+                            showUrlPreview={false}
+                            onPaginationRequest={this.onPaginationRequest}
+                            tileShape={TileShape.FileGrid}
+                            resizeNotifier={this.props.resizeNotifier}
+                            empty={emptyState}
+                            layout={Layout.Group}
+                        />
+                    </BaseCard>
+                </RoomContext.Provider>
             );
         } else {
             return (
-                <BaseCard
-                    className="mx_FilePanel"
-                    onClose={this.props.onClose}
-                    previousPhase={RightPanelPhases.RoomSummary}
-                >
-                    <Spinner />
-                </BaseCard>
+                <RoomContext.Provider value={{
+                    ...this.context,
+                    timelineRenderingType: TimelineRenderingType.File,
+                }}>
+                    <BaseCard
+                        className="mx_FilePanel"
+                        onClose={this.props.onClose}
+                        previousPhase={RightPanelPhases.RoomSummary}
+                    >
+                        <Spinner />
+                    </BaseCard>
+                </RoomContext.Provider>
             );
         }
     }
