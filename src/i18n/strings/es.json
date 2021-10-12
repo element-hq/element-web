@@ -3216,5 +3216,6 @@
     "Enter a number between %(min)s and %(max)s": "Escribe un número entre %(min)s y %(max)s",
     "Creating Space...": "Creando el espacio…",
     "Fetching data...": "Pidiendo los datos…",
-    "To proceed, please accept the verification request on your other login.": "Antes de continuar, acepta la solicitud de verificación en algún otro sitio donde tengas tu sesión iniciada, por favor."
+    "To proceed, please accept the verification request on your other login.": "Antes de continuar, acepta la solicitud de verificación en algún otro sitio donde tengas tu sesión iniciada, por favor.",
+    "Number of messages can only be a number between %(min)s and %(max)s": "El número de mensajes solo puede ser de %(min)s a %(max)s"
 }
