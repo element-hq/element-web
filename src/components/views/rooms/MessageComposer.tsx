@@ -461,7 +461,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         if (!this.state.haveRecording) {
             if (SettingsStore.getValue("feature_polls")) {
                 buttons.push(
-                    <PollButton key="polls" />
+                    <PollButton key="polls" />,
                 );
             }
             buttons.push(
