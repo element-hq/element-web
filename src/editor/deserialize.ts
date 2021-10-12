@@ -20,7 +20,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { walkDOMDepthFirst } from "./dom";
 import { checkBlockNode } from "../HtmlUtils";
 import { getPrimaryPermalinkEntity } from "../utils/permalinks/Permalinks";
-import { PartCreator, Type } from "./parts";
+import { Part, PartCreator, Type } from "./parts";
 import SdkConfig from "../SdkConfig";
 
 function parseAtRoomMentions(text: string, partCreator: PartCreator) {
@@ -213,12 +213,12 @@ function prefixQuoteLines(isFirstNode, parts, partCreator) {
     }
 }
 
-function parseHtmlMessage(html: string, partCreator: PartCreator, isQuotedMessage: boolean) {
+function parseHtmlMessage(html: string, partCreator: PartCreator, isQuotedMessage: boolean): Part[] {
     // no nodes from parsing here should be inserted in the document,
     // as scripts in event handlers, etc would be executed then.
     // we're only taking text, so that is fine
     const rootNode = new DOMParser().parseFromString(html, "text/html").body;
-    const parts = [];
+    const parts: Part[] = [];
     let lastNode;
     let inQuote = isQuotedMessage;
     const state: IState = {
@@ -233,7 +233,7 @@ function parseHtmlMessage(html: string, partCreator: PartCreator, isQuotedMessag
             inQuote = true;
         }
 
-        const newParts = [];
+        const newParts: Part[] = [];
         if (lastNode && (checkBlockNode(lastNode) || checkBlockNode(n))) {
             newParts.push(partCreator.newline());
         }
@@ -288,7 +288,7 @@ function parseHtmlMessage(html: string, partCreator: PartCreator, isQuotedMessag
     return parts;
 }
 
-export function parsePlainTextMessage(body: string, partCreator: PartCreator, isQuotedMessage?: boolean) {
+export function parsePlainTextMessage(body: string, partCreator: PartCreator, isQuotedMessage?: boolean): Part[] {
     const lines = body.split(/\r\n|\r|\n/g); // split on any new-line combination not just \n, collapses \r\n
     return lines.reduce((parts, line, i) => {
         if (isQuotedMessage) {
@@ -300,7 +300,7 @@ export function parsePlainTextMessage(body: string, partCreator: PartCreator, is
             parts.push(partCreator.newline());
         }
         return parts;
-    }, []);
+    }, [] as Part[]);
 }
 
 export function parseEvent(event: MatrixEvent, partCreator: PartCreator, { isQuotedMessage = false } = {}) {
