@@ -91,7 +91,8 @@ export default class EditorModel {
     }
 
     public clone(): EditorModel {
-        return new EditorModel(this._parts, this._partCreator, this.updateCallback);
+        const clonedParts = this.parts.map(p => this.partCreator.deserializePart(p.serialize()));
+        return new EditorModel(clonedParts, this._partCreator, this.updateCallback);
     }
 
     private insertPart(index: number, part: Part): void {
