@@ -1,3 +1,10 @@
+Changes in [3.32.1](https://github.com/vector-im/element-desktop/releases/tag/v3.32.1) (2021-10-12)
+===================================================================================================
+
+## 🐛 Bug Fixes
+
+ * Upgrade to matrix-js-sdk#14.0.1
+
 Changes in [3.32.0-rc.1](https://github.com/vector-im/element-desktop/releases/tag/v3.32.0-rc.1) (2021-10-04)
 =============================================================================================================
 
