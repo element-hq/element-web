@@ -4366,9 +4366,9 @@ ee-first@1.1.1:
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
 electron-to-chromium@^1.3.857:
-  version "1.3.864"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.864.tgz#6a993bcc196a2b8b3df84d28d5d4dd912393885f"
-  integrity sha512-v4rbad8GO6/yVI92WOeU9Wgxc4NA0n4f6P1FvZTY+jyY7JHEhw3bduYu60v3Q1h81Cg6eo4ApZrFPuycwd5hGw==
+  version "1.3.866"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.866.tgz#d446338f5ad6948b27a50739760e7b0b5cc5032f"
+  integrity sha512-iYze6TpDXWxk+sfcpUUdTs6Pv/3kG45Pnjer2DxEeFw0N08bZeNLuz97s2lMgy8yObon48o0WHY2Bkg3xuAPOA==
 
 elliptic@^6.5.3:
   version "6.5.4"
@@ -5025,12 +5025,11 @@ extsprintf@^1.2.0:
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
 
 fake-indexeddb@^3.1.2:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/fake-indexeddb/-/fake-indexeddb-3.1.3.tgz#76d59146a6b994b9bb50ac9949cbd96ad6cca760"
-  integrity sha512-kpWYPIUGmxW8Q7xG7ampGL63fU/kYNukrIyy9KFj3+KVlFbE/SmvWebzWXBiCMeR0cPK6ufDoGC7MFkPhPLH9w==
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/fake-indexeddb/-/fake-indexeddb-3.1.4.tgz#39644c3fb4b64e28fca64a6ccf18f265827e18e7"
+  integrity sha512-kweAGUKgo/NLHZpyMcgYk2ihDrWQcpzwZ3Y2Ag6/Wo3h8F/ts0onw0nTEth8YjWzzBY+sxSSKFn69vc7xcK0Qg==
   dependencies:
     realistic-structured-clone "^2.0.1"
-    setimmediate "^1.0.5"
 
 fast-deep-equal@^3.1.1:
   version "3.1.3"
@@ -6815,9 +6814,9 @@ isstream@~0.1.2:
   integrity sha1-R+Y/evVa+m+S4VAOaQ64uFKcCZo=
 
 istanbul-lib-coverage@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/istanbul-lib-coverage/-/istanbul-lib-coverage-3.0.0.tgz#f5944a37c70b550b02a78a5c3b2055b280cec8ec"
-  integrity sha512-UiUIqxMgRDET6eR+o5HbfRYP1l0hqkWOs7vNxC/mggutCMUIhWMm8gAHb8tHlyfD3/l6rlgNA5cKdDzEAf6hEg==
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/istanbul-lib-coverage/-/istanbul-lib-coverage-3.0.2.tgz#36786d4d82aad2ea5911007e255e2da6b5f80d86"
+  integrity sha512-o5+eTUYzCJ11/+JhW5/FUCdfsdoYVdQ/8I/OveE2XsjehYn5DdeSnNQAbjYaO8gQ6hvGTN6GM6ddQqpTVG5j8g==
 
 istanbul-lib-instrument@^4.0.0, istanbul-lib-instrument@^4.0.3:
   version "4.0.3"
@@ -6839,18 +6838,18 @@ istanbul-lib-report@^3.0.0:
     supports-color "^7.1.0"
 
 istanbul-lib-source-maps@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/istanbul-lib-source-maps/-/istanbul-lib-source-maps-4.0.0.tgz#75743ce6d96bb86dc7ee4352cf6366a23f0b1ad9"
-  integrity sha512-c16LpFRkR8vQXyHZ5nLpY35JZtzj1PQY1iZmesUbf1FZHbIupcWfjgOXBY9YHkLEQ6puz1u4Dgj6qmU/DisrZg==
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/istanbul-lib-source-maps/-/istanbul-lib-source-maps-4.0.1.tgz#895f3a709fcfba34c6de5a42939022f3e4358551"
+  integrity sha512-n3s8EwkdFIJCG3BPKBYvskgXGoy88ARzvegkitk60NxRdwltLOTaH7CUiMRXvwYorl0Q712iEjcWB+fK/MrWVw==
   dependencies:
     debug "^4.1.1"
     istanbul-lib-coverage "^3.0.0"
     source-map "^0.6.1"
 
 istanbul-reports@^3.0.2:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/istanbul-reports/-/istanbul-reports-3.0.3.tgz#974d682037f6d12b15dc55f9a2a5f8f1ea923831"
-  integrity sha512-0i77ZFLsb9U3DHi22WzmIngVzfoyxxbQcZRqlF3KoKmCJGq9nhFHoGi8FqBztN2rE8w6hURnZghetn0xpkVb6A==
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/istanbul-reports/-/istanbul-reports-3.0.4.tgz#5c38ce8136edf484c0fcfbf7514aafb0363ed1db"
+  integrity sha512-bFjUnc95rHjdCR63WMHUS7yfJJh8T9IPSWavvR02hhjVwezWALZ5axF9EqjmwZHpXqkzbgAMP8DmAtiyNxrdrQ==
   dependencies:
     html-escaper "^2.0.0"
     istanbul-lib-report "^3.0.0"
@@ -7803,10 +7802,25 @@ mathml-tag-names@^2.1.3:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-matrix-js-sdk@14.0.0:
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-14.0.0.tgz#e04bca71a3dc3e3256171e184ac7614973e00db2"
-  integrity sha512-7OOSYpGUW7iRyNQrl/gdRxFRmbpW/C7L0gEdMbZwbOPqpbcvp6DVgl0eO+ibHoX0C8t0+rGAl/hMdOST9agGWg==
+matrix-js-sdk@14.0.1:
+  version "14.0.1"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-14.0.1.tgz#5984d9fafb2eda435fbe7d04a0daf37b48d595fd"
+  integrity sha512-+x+TaftVUXY8otBBSEHuVQp1B9UACEcHuKxmocFN/cmsjJGlk3z8hmthMbwnyq3HyOX9apme1TdbqqsoC2IlWg==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    another-json "^0.2.0"
+    browser-request "^0.3.3"
+    bs58 "^4.0.1"
+    content-type "^1.0.4"
+    loglevel "^1.7.1"
+    p-retry "^4.5.0"
+    qs "^6.9.6"
+    request "^2.88.2"
+    unhomoglyph "^1.0.6"
+
+"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
+  version "14.0.1"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e7b41fadd0d6eda7423a369c99ec7b94afd48d5d"
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
@@ -7827,10 +7841,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@3.32.0:
-  version "3.32.0"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.32.0.tgz#e4c95cc943dcf984fd8bde3ba375bee93b14912d"
-  integrity sha512-wS1CnGOljr21XNwNvqJsOBG6Xba61qoZ+R8xIiNEJ1tejFQcNTCjOga9/Rt46eG/ju1bQxGkXdELZY2ZteWblg==
+matrix-react-sdk@3.32.1:
+  version "3.32.1"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.32.1.tgz#430ac07a1b51359e4c3dce1c5289afd67392f675"
+  integrity sha512-F2Wr0aEI/3S1naMVk79/nPC1oaEDjj4RaEu+qddhiO430/Te2oICN/r1G6SeZyfdg1ijO2+raNNw2xcszaZZOg==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@sentry/browser" "^6.11.0"
@@ -7861,7 +7875,7 @@ matrix-react-sdk@3.32.0:
     katex "^0.12.0"
     linkifyjs "^2.1.9"
     lodash "^4.17.20"
-    matrix-js-sdk "14.0.0"
+    matrix-js-sdk "14.0.1"
     matrix-widget-api "^0.1.0-beta.16"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
