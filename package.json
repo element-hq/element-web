@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "3.32.0",
+  "version": "3.32.1",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -83,7 +83,7 @@
     "katex": "^0.12.0",
     "linkifyjs": "^2.1.9",
     "lodash": "^4.17.20",
-    "matrix-js-sdk": "14.0.0",
+    "matrix-js-sdk": "14.0.1",
     "matrix-widget-api": "^0.1.0-beta.16",
     "minimist": "^1.2.5",
     "opus-recorder": "^8.0.3",
