@@ -22,6 +22,7 @@ import { checkBlockNode } from "../HtmlUtils";
 import { getPrimaryPermalinkEntity } from "../utils/permalinks/Permalinks";
 import { Part, PartCreator, Type } from "./parts";
 import SdkConfig from "../SdkConfig";
+import { textToHtmlRainbow } from "../utils/colour";
 
 function parseAtRoomMentions(text: string, partCreator: PartCreator) {
     const ATROOM = "@room";
@@ -305,14 +306,26 @@ export function parsePlainTextMessage(body: string, partCreator: PartCreator, is
 
 export function parseEvent(event: MatrixEvent, partCreator: PartCreator, { isQuotedMessage = false } = {}) {
     const content = event.getContent();
-    let parts;
+    let parts: Part[];
+    const isEmote = content.msgtype === "m.emote";
+    let isRainbow = false;
+
     if (content.format === "org.matrix.custom.html") {
         parts = parseHtmlMessage(content.formatted_body || "", partCreator, isQuotedMessage);
+        if (content.body && content.formatted_body && textToHtmlRainbow(content.body) === content.formatted_body) {
+            isRainbow = true;
+        }
     } else {
         parts = parsePlainTextMessage(content.body || "", partCreator, isQuotedMessage);
     }
-    if (content.msgtype === "m.emote") {
+
+    if (isEmote && isRainbow) {
+        parts.unshift(partCreator.plain("/rainbowme "));
+    } else if (isRainbow) {
+        parts.unshift(partCreator.plain("/rainbow "));
+    } else if (isEmote) {
         parts.unshift(partCreator.plain("/me "));
     }
+
     return parts;
 }
