@@ -406,3 +406,8 @@ limitations under the License.
         mask-image: url('$(res)/img/element-icons/roomlist/skeleton-ui.svg');
     }
 }
+
+.mx_RoomSublist_minimized .mx_RoomSublist_skeletonUI {
+    width: 32px; // cut off the horizontal lines in the svg
+    margin-left: 10px; // align with sublist + buttons
+}
