@@ -32,5 +32,7 @@
     "Open": "Ldi",
     "Your browser can't run %(brand)s": "Iminig-inek·inem ur isselkan ara %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s isseqdac timahilin n yiminig leqqayen ur yessefrak ara yiminig-ik·im amiran.",
-    "Powered by Matrix": "Iteddu s lmendad n Matrix"
+    "Powered by Matrix": "Iteddu s lmendad n Matrix",
+    "Use %(brand)s on mobile": "Seqdec %(brand)s deg tiliɣri",
+    "Switch to space by number": "Ddu ɣer space s uṭṭun"
 }
