@@ -1,3 +1,9 @@
+Changes in [1.9.2](https://github.com/vector-im/element-desktop/releases/tag/v1.9.2) (2021-10-12)
+=================================================================================================
+
+## 🐛 Bug Fixes
+ * Upgrade to matrix-js-sdk#14.0.1
+
 Changes in [1.9.1](https://github.com/vector-im/element-desktop/releases/tag/v1.9.1) (2021-10-11)
 =================================================================================================
 
@@ -30,7 +36,6 @@ Changes in [1.9.1-rc.2](https://github.com/vector-im/element-desktop/releases/ta
 ===========================================================================================================
 
 ## 🐛 Bug Fixes
- * [Release] Fix space hierarchy pagination ([\#6910](https://github.com/matrix-org/matrix-react-sdk/pull/6910)).
 
 Changes in [1.9.1-rc.1](https://github.com/vector-im/element-desktop/releases/tag/v1.9.1-rc.1) (2021-10-04)
 ===========================================================================================================
