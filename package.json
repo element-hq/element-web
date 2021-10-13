@@ -134,6 +134,7 @@
     "@types/counterpart": "^0.18.1",
     "@types/css-font-loading-module": "^0.0.6",
     "@types/diff-match-patch": "^1.0.32",
+    "@types/enzyme": "^3.10.9",
     "@types/file-saver": "^2.0.3",
     "@types/flux": "^3.1.9",
     "@types/jest": "^26.0.20",
@@ -158,6 +159,7 @@
     "chokidar": "^3.5.1",
     "concurrently": "^5.3.0",
     "enzyme": "^3.11.0",
+    "enzyme-to-json": "^3.6.2",
     "eslint": "7.18.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-matrix-org": "github:matrix-org/eslint-plugin-matrix-org#2306b3d4da4eba908b256014b979f1d3d43d2945",
@@ -186,6 +188,7 @@
     "@types/react": "17.0.14"
   },
   "jest": {
+    "snapshotSerializers": ["enzyme-to-json/serializer"],
     "testEnvironment": "./__test-utils__/environment.js",
     "testMatch": [
       "<rootDir>/test/**/*-test.[jt]s?(x)"

@@ -16,16 +16,13 @@ limitations under the License.
 
 import '../skinned-sdk'; // Must be first for skinning to work
 import React from "react";
-import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
-import { configure, mount } from "enzyme";
+import { mount } from "enzyme";
 
 import {
     RovingTabIndexProvider,
     RovingTabIndexWrapper,
     useRovingTabIndex,
 } from "../../src/accessibility/RovingTabIndex";
-
-configure({ adapter: new Adapter() });
 
 const Button = (props) => {
     const [onFocus, isActive, ref] = useRovingTabIndex();

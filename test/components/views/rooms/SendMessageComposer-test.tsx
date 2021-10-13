@@ -15,11 +15,10 @@ limitations under the License.
 */
 
 import '../../../skinned-sdk'; // Must be first for skinning to work
-import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
-import { configure, mount } from "enzyme";
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { sleep } from "matrix-js-sdk/src/utils";
+import { mount } from 'enzyme';
 
 import SendMessageComposer, {
     createMessageContent,
@@ -39,8 +38,6 @@ import DocumentOffset from '../../../../src/editor/offset';
 import { Layout } from '../../../../src/settings/Layout';
 
 jest.mock("../../../../src/stores/RoomViewStore");
-
-configure({ adapter: new Adapter() });
 
 describe('<SendMessageComposer/>', () => {
     const roomContext = {
