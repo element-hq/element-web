@@ -52,7 +52,7 @@ const CATEGORY_ORDER = [
  *
  * The importance of a room is defined by the kind of notifications, if any, are
  * present on the room. These are classified internally as Unsent, Red, Grey,
- * Bold, and Idle. 'Unsent' rooms habe unsent messages, Red rooms have mentions,
+ * Bold, and Idle. 'Unsent' rooms have unsent messages, Red rooms have mentions,
  * grey have unread messages, bold is a less noisy version of grey, and idle
  * means all activity has been seen by the user.
  *
