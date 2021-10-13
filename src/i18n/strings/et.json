@@ -3216,5 +3216,7 @@
     "Waiting for you to verify on your other session…": "Ootan, et sa verifitseeriksid teises sessioonis…",
     "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "Ootan, et sa verifitseerid oma teises sessioonis: %(deviceName)s (%(deviceId)s)…",
     "Creating Space...": "Loon kogukonnakeskust…",
-    "Fetching data...": "Laadin andmeid..."
+    "Fetching data...": "Laadin andmeid...",
+    "Polls (under active development)": "Küsitlused (aktiivses arendusjärgus)",
+    "Create poll": "Koosta üks küsitlus"
 }
