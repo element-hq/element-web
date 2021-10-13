@@ -3211,5 +3211,9 @@
     "Unable to verify this login": "Невозможно проверить этот логин",
     "To proceed, please accept the verification request on your other login.": "Чтобы продолжить, пожалуйста, примите запрос на проверку на другом логине.",
     "Waiting for you to verify on your other session…": "Ожидаем проверки на другом сеансе…",
-    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "Ожидаем проверки на другом сеансе, %(deviceName)s (%(deviceId)s)…"
+    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "Ожидаем проверки на другом сеансе, %(deviceName)s (%(deviceId)s)…",
+    "Creating Space...": "Создание пространства…",
+    "Fetching data...": "Получение данных…",
+    "Create poll": "Создать опрос",
+    "Polls (under active development)": "Опросы (в стадии активной разработки)"
 }
