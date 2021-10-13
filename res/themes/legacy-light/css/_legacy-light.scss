@@ -12,9 +12,6 @@ $font-family: 'Nunito', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Arial
 
 $monospace-font-family: 'Inconsolata', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Courier', monospace, 'Noto Color Emoji';
 
-// Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=557%3A0
-$system: #F4F6FA;
-
 // unified palette
 // try to use these colors when possible
 $accent-color: #03b381;
@@ -32,12 +29,22 @@ $primary-bg-color: #ffffff;
 $muted-fg-color: #61708b; // Commonly used in headings and relevant alt text
 
 // Legacy theme backports
+$accent: #0DBD8B;
+$alert: #FF5B55;
+$links: #0086e6;
 $primary-content: $primary-fg-color;
 $secondary-content: $secondary-fg-color;
 $tertiary-content: $tertiary-fg-color;
 $quaternary-content: #C1C6CD;
 $quinary-content: #e3e8f0;
+$system: #F4F6FA;
 $background: $primary-bg-color;
+$panels: rgba($system, 0.9);
+$panel-base: #8D97A5; // This color is not intended for use in the app
+$panel-selected: rgba($tertiary-content, 0.3);
+$panel-hover: rgba($tertiary-content, 0.1);
+$panel-actions: rgba($tertiary-content, 0.2);
+$space-nav: rgba($tertiary-content, 0.15);
 
 // used for dialog box text
 $light-fg-color: #747474;

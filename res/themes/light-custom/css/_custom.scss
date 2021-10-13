@@ -18,18 +18,18 @@ $font-family: var(--font-family, $font-family);
 $monospace-font-family: var(--font-family-monospace, $monospace-font-family);
 
 // Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A741
-$accent: var(--accent);
-$alert: var(--alert);
-$links: var(--links);
-$primary-content: var(--primary-content);
-$secondary-content: var(--secondary-content);
-$tertiary-content: var(--tertiary-content);
-$quaternary-content: var(--quaternary-content);
-$quinary-content: var(--quinary-content);
-$system: var(--system);
-$background: var(--background);
+$accent: var(--accent, $accent);
+$alert: var(--alert, $alert);
+$links: var(--links, $links);
+$primary-content: var(--primary-content, $primary-content);
+$secondary-content: var(--secondary-content, $secondary-content);
+$tertiary-content: var(--tertiary-content, $tertiary-content);
+$quaternary-content: var(--quaternary-content, $quaternary-content);
+$quinary-content: var(--quinary-content, $quinary-content);
+$system: var(--system, $system);
+$background: var(--background, $background);
 $panels: rgba($system, 0.9);
-$panel-base: var(--panel-base); // This color is not intended for use in the app
+$panel-base: var(--panel-base, $tertiary-content); // This color is not intended for use in the app
 $panel-selected: rgba($panel-base, 0.3);
 $panel-hover: rgba($panel-base, 0.1);
 $panel-actions: rgba($panel-base, 0.2);
