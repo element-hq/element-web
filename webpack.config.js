@@ -88,6 +88,7 @@ module.exports = (env, argv) => {
 
         entry: {
             "bundle": "./src/vector/index.ts",
+            "screenshots": "./src/vector/screenshots.tsx",
             "mobileguide": "./src/vector/mobile_guide/index.ts",
             "jitsi": "./src/vector/jitsi/index.ts",
             "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.ts",
@@ -473,6 +474,22 @@ module.exports = (env, argv) => {
             // This is the app's main entry point.
             new HtmlWebpackPlugin({
                 template: './src/vector/index.html',
+
+                // we inject the links ourselves via the template, because
+                // HtmlWebpackPlugin will screw up our formatting like the names
+                // of the themes and which chunks we actually care about.
+                inject: false,
+                excludeChunks: ['mobileguide', 'usercontent', 'jitsi'],
+                minify: false,
+                templateParameters: {
+                    og_image_url: ogImageUrl,
+                },
+            }),
+
+            // This is our screenshots page for testing
+            new HtmlWebpackPlugin({
+                template: './src/vector/screenshots.html',
+                filename: 'screenshots.html',
 
                 // we inject the links ourselves via the template, because
                 // HtmlWebpackPlugin will screw up our formatting like the names
