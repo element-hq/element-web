@@ -52,6 +52,8 @@ import EditorModel from "../../../editor/model";
 import EmojiPicker from '../emojipicker/EmojiPicker';
 import MemberStatusMessageAvatar from "../avatars/MemberStatusMessageAvatar";
 import UIStore, { UI_EVENTS } from '../../../stores/UIStore';
+import Modal from "../../../Modal";
+import InfoDialog from "../dialogs/InfoDialog";
 
 let instanceCount = 0;
 const NARROW_MODE_BREAKPOINT = 500;
@@ -189,6 +191,31 @@ class UploadButton extends React.Component<IUploadButtonProps> {
                     onChange={this.onUploadFileInputChange}
                 />
             </AccessibleTooltipButton>
+        );
+    }
+}
+
+// TODO: [polls] Make this component actually do something
+class PollButton extends React.PureComponent {
+    private onCreateClick = () => {
+        Modal.createTrackedDialog('Polls', 'Not Yet Implemented', InfoDialog, {
+            // XXX: Deliberately not translated given this dialog is meant to be replaced and we don't
+            // want to clutter the language files with short-lived strings.
+            title: "Polls are currently in development",
+            description: "" +
+                "Thanks for testing polls! We haven't quite gotten a chance to write the feature yet " +
+                "though. Check back later for updates.",
+            hasCloseButton: true,
+        });
+    };
+
+    render() {
+        return (
+            <AccessibleTooltipButton
+                className="mx_MessageComposer_button mx_MessageComposer_poll"
+                onClick={this.onCreateClick}
+                title={_t('Create poll')}
+            />
         );
     }
 }
@@ -432,6 +459,11 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     private renderButtons(menuPosition): JSX.Element | JSX.Element[] {
         const buttons: JSX.Element[] = [];
         if (!this.state.haveRecording) {
+            if (SettingsStore.getValue("feature_polls")) {
+                buttons.push(
+                    <PollButton key="polls" />,
+                );
+            }
             buttons.push(
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
             );

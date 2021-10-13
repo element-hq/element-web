@@ -246,6 +246,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: false,
         controller: new PseudonymousAnalyticsController(),
     },
+    "feature_polls": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("Polls (under active development)"),
+        default: false,
+    },
     "doNotDisturb": {
         supportedLevels: [SettingLevel.DEVICE],
         default: false,
