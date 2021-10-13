@@ -3217,5 +3217,7 @@
     "It looks like you don't have a Security Key or any other devices you can verify against.  This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.": "Úgy tűnik nem rendelkezik Biztonsági Kulccsal vagy másik eszközzel amivel ellenőrizni lehetne.  Ezzel az eszközzel nem fér majd hozzá a régi titkosított üzenetekhez. Ahhoz, hogy a személyazonosságát ezen az eszközön ellenőrizni lehessen a kulcsokat alaphelyzetbe kell állítani.",
     "Select from the options below to export chats from your timeline": "Az idővonalon a beszélgetés kimentéséhez tartozó beállítások kiválasztása",
     "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "Várakozás a másik munkamenetből való ellenőrzésre, %(deviceName)s (%(deviceId)s)…",
-    "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.": "Ez az exportálás kezdete ehhez a szobához: <roomName/>. Kimentette: <exporterDetails/>, időpont: %(exportDate)s."
+    "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.": "Ez az exportálás kezdete ehhez a szobához: <roomName/>. Kimentette: <exporterDetails/>, időpont: %(exportDate)s.",
+    "Create poll": "Szavazás létrehozása",
+    "Polls (under active development)": "Szavazások (intenzív fejlesztés alatt)"
 }
