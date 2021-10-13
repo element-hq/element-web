@@ -33,3 +33,8 @@ export enum UIFeature {
     AdvancedSettings = "UIFeature.advancedSettings",
     RoomHistorySettings = "UIFeature.roomHistorySettings",
 }
+
+export enum UIComponent {
+    InviteUsers = "UIComponent.sendInvites",
+    CreateRooms = "UIComponent.roomCreation",
+}
