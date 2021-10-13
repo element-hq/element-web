@@ -241,7 +241,7 @@
     "Noisy": "Högljudd",
     "Room not found": "Rummet hittades inte",
     "Messages containing my display name": "Meddelanden som innehåller mitt visningsnamn",
-    "Messages in one-to-one chats": "Meddelanden i en-till-en chattar",
+    "Messages in one-to-one chats": "Meddelanden i en-till-en-chattar",
     "Unavailable": "Otillgänglig",
     "remove %(name)s from the directory.": "ta bort %(name)s från katalogen.",
     "Explore Room State": "Utforska rumsstatus",
@@ -768,7 +768,7 @@
     "Enable Community Filter Panel": "Aktivera gemenskapsfilterpanel",
     "Messages containing my username": "Meddelanden som innehåller mitt användarnamn",
     "Messages containing @room": "Meddelanden som innehåller @room",
-    "Encrypted messages in one-to-one chats": "Krypterade meddelanden i en-till-en chattar",
+    "Encrypted messages in one-to-one chats": "Krypterade meddelanden i en-till-en-chattar",
     "Encrypted messages in group chats": "Krypterade meddelanden i gruppchattar",
     "Dog": "Hund",
     "Cat": "Katt",
@@ -3164,5 +3164,8 @@
     "You are about to leave <spaceName/>.": "Du kommer att lämna <spaceName/>.",
     "Leave some rooms": "Lämna vissa rum",
     "Leave all rooms": "Lämna alla rum",
-    "Don't leave any rooms": "Lämna inga rum"
+    "Don't leave any rooms": "Lämna inga rum",
+    "%(senderDisplayName)s sent a sticker.": "%(senderDisplayName)s skickade en dekal.",
+    "%(senderDisplayName)s changed the room avatar.": "%(senderDisplayName)s bytte rummets avatar.",
+    "%(date)s at %(time)s": "%(date)s vid %(time)s"
 }
