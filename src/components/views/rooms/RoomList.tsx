@@ -51,6 +51,7 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
+import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -529,19 +530,23 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     </AccessibleButton>
                 </div>;
             } else if (
-                this.props.activeSpace?.canInvite(userId) || this.props.activeSpace?.getMyMembership() === "join"
+                this.props.activeSpace?.canInvite(userId) ||
+                this.props.activeSpace?.getMyMembership() === "join" ||
+                this.props.activeSpace?.getJoinRule() === JoinRule.Public
             ) {
                 const spaceName = this.props.activeSpace.name;
+                const canInvite = this.props.activeSpace?.canInvite(userId) ||
+                    this.props.activeSpace?.getJoinRule() === JoinRule.Public;
                 explorePrompt = <div className="mx_RoomList_explorePrompt">
                     <div>{ _t("Quick actions") }</div>
-                    { this.props.activeSpace.canInvite(userId) && <AccessibleTooltipButton
+                    { canInvite && <AccessibleTooltipButton
                         className="mx_RoomList_explorePrompt_spaceInvite"
                         onClick={this.onSpaceInviteClick}
                         title={_t("Invite to %(spaceName)s", { spaceName })}
                     >
                         { _t("Invite people") }
                     </AccessibleTooltipButton> }
-                    { this.props.activeSpace.getMyMembership() === "join" && <AccessibleTooltipButton
+                    { this.props.activeSpace?.getMyMembership() === "join" && <AccessibleTooltipButton
                         className="mx_RoomList_explorePrompt_spaceExplore"
                         onClick={this.onExplore}
                         title={_t("Explore %(spaceName)s", { spaceName })}
