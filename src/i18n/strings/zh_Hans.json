@@ -3219,5 +3219,11 @@
     "Creating Space...": "正在创建空间…",
     "Fetching data...": "获取数据中…",
     "Create poll": "创建投票",
-    "Polls (under active development)": "投票 (在积极开发中)"
+    "Polls (under active development)": "投票 (在积极开发中)",
+    "Updating spaces... (%(progress)s out of %(count)s)|other": "正在更新聊天室… （%(count)s 中的 %(progress)s）",
+    "Updating spaces... (%(progress)s out of %(count)s)|one": "正在更新空间…",
+    "Sending invites... (%(progress)s out of %(count)s)|one": "正在发送邀请…",
+    "Sending invites... (%(progress)s out of %(count)s)|other": "正在发送邀请… （%(count)s 中的 %(progress)s）",
+    "Loading new room": "正在加载新聊天室",
+    "Upgrading room": "正在升级聊天室"
 }
