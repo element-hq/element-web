@@ -143,6 +143,8 @@ interface ISendMessageComposerProps extends MatrixClientProps {
 @replaceableComponent("views.rooms.SendMessageComposer")
 export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
     static contextType = RoomContext;
+    public context!: React.ContextType<typeof RoomContext>;
+
     private readonly prepareToEncrypt?: DebouncedFunc<() => void>;
     private readonly editorRef = createRef<BasicMessageComposer>();
     private model: EditorModel = null;
@@ -279,7 +281,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     }
 
     private sendQuickReaction(): void {
-        const timeline = this.context.liveTimeline();
+        const timeline = this.context.liveTimeline;
         const events = timeline.getEvents();
         const reaction = this.model.parts[1].text;
         for (let i = events.length - 1; i >= 0; i--) {
