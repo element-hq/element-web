@@ -3220,5 +3220,13 @@
     "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.": "Questo è l'inizio dell'esportazione di <roomName/>. Esportata da <exporterDetails/> il %(exportDate)s.",
     "%(creatorName)s created this room.": "%(creatorName)s ha creato questa stanza.",
     "Media omitted - file size limit exceeded": "File omesso - superata dimensione massima",
-    "Media omitted": "File omesso"
+    "Media omitted": "File omesso",
+    "Create poll": "Crea sondaggio",
+    "Updating spaces... (%(progress)s out of %(count)s)|one": "Aggiornamento spazio...",
+    "Updating spaces... (%(progress)s out of %(count)s)|other": "Aggiornamento spazi... (%(progress)s di %(count)s)",
+    "Sending invites... (%(progress)s out of %(count)s)|one": "Spedizione invito...",
+    "Sending invites... (%(progress)s out of %(count)s)|other": "Spedizione inviti... (%(progress)s di %(count)s)",
+    "Loading new room": "Caricamento nuova stanza",
+    "Upgrading room": "Aggiornamento stanza",
+    "Polls (under active development)": "Sondaggi (in sviluppo)"
 }
