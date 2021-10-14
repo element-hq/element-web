@@ -3218,5 +3218,12 @@
     "Creating Space...": "Loon kogukonnakeskust…",
     "Fetching data...": "Laadin andmeid...",
     "Polls (under active development)": "Küsitlused (aktiivses arendusjärgus)",
-    "Create poll": "Koosta üks küsitlus"
+    "Create poll": "Koosta üks küsitlus",
+    "Space Autocomplete": "Kogukonnakeskuste dünaamiline otsing",
+    "Updating spaces... (%(progress)s out of %(count)s)|one": "Uuendan kogukonnakeskust...",
+    "Updating spaces... (%(progress)s out of %(count)s)|other": "Uuendan kogukonnakeskuseid... (%(progress)s / %(count)s)",
+    "Sending invites... (%(progress)s out of %(count)s)|one": "Saadan kutset...",
+    "Sending invites... (%(progress)s out of %(count)s)|other": "Saadan kutseid... (%(progress)s / %(count)s)",
+    "Loading new room": "Laadin uut jututuba",
+    "Upgrading room": "Uuendan jututoa versiooni"
 }
