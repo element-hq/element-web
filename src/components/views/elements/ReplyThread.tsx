@@ -35,7 +35,6 @@ import Spinner from './Spinner';
 import ReplyTile from "../rooms/ReplyTile";
 import Pill from './Pill';
 import { Room } from 'matrix-js-sdk/src/models/room';
-import { threadId } from 'worker_threads';
 import { RelationType } from 'matrix-js-sdk/src/@types/event';
 
 /**
