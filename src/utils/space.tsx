@@ -155,20 +155,28 @@ export const showCreateNewSubspace = (space: Room): void => {
     );
 };
 
+export const bulkSpaceBehaviour = async (
+    space: Room,
+    children: Room[],
+    fn: (room: Room) => Promise<unknown>,
+): Promise<void> => {
+    const modal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
+    try {
+        for (const room of children) {
+            await fn(room);
+        }
+        await fn(space);
+    } finally {
+        modal.close();
+    }
+};
+
 export const leaveSpace = (space: Room) => {
     Modal.createTrackedDialog("Leave Space", "", LeaveSpaceDialog, {
         space,
         onFinished: async (leave: boolean, rooms: Room[]) => {
             if (!leave) return;
-            const modal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
-            try {
-                for (const room of rooms) {
-                    await leaveRoomBehaviour(room.roomId);
-                }
-                await leaveRoomBehaviour(space.roomId);
-            } finally {
-                modal.close();
-            }
+            await bulkSpaceBehaviour(space, rooms, room => leaveRoomBehaviour(room.roomId));
 
             dis.dispatch({
                 action: "after_leave_room",

@@ -27,32 +27,12 @@ limitations under the License.
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    max-height: 520px;
+    height: 520px;
 
     .mx_Dialog_content {
         flex-grow: 1;
         margin: 0;
         overflow-y: auto;
-
-        .mx_RadioButton + .mx_RadioButton {
-            margin-top: 16px;
-        }
-
-        .mx_SearchBox {
-            // To match the space around the title
-            margin: 0 0 15px 0;
-            flex-grow: 0;
-            border-radius: 8px;
-        }
-
-        .mx_LeaveSpaceDialog_noResults {
-            display: block;
-            margin-top: 24px;
-        }
-
-        .mx_LeaveSpaceDialog_section {
-            margin: 16px 0;
-        }
 
         .mx_LeaveSpaceDialog_section_warning {
             position: relative;

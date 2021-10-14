@@ -74,6 +74,7 @@
 @import "./views/dialogs/_ChangelogDialog.scss";
 @import "./views/dialogs/_ChatCreateOrReuseChatDialog.scss";
 @import "./views/dialogs/_CommunityPrototypeInviteDialog.scss";
+@import "./views/dialogs/_ConfirmSpaceUserActionDialog.scss";
 @import "./views/dialogs/_ConfirmUserActionDialog.scss";
 @import "./views/dialogs/_CreateCommunityPrototypeDialog.scss";
 @import "./views/dialogs/_CreateGroupDialog.scss";
@@ -270,6 +271,7 @@
 @import "./views/settings/tabs/user/_SecurityUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_VoiceUserSettingsTab.scss";
 @import "./views/spaces/_SpaceBasicSettings.scss";
+@import "./views/spaces/_SpaceChildrenPicker.scss";
 @import "./views/spaces/_SpaceCreateMenu.scss";
 @import "./views/spaces/_SpacePublicShare.scss";
 @import "./views/terms/_InlineTermsAgreement.scss";
