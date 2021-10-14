@@ -15,9 +15,8 @@ limitations under the License.
 */
 
 import React from 'react';
-import { shallow, mount, configure } from "enzyme";
+import { shallow, mount } from "enzyme";
 import '../../skinned-sdk';
-import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 
 import {
     ThreadFilterType,
@@ -27,8 +26,6 @@ import {
 import { ContextMenuButton } from '../../../src/accessibility/context_menu/ContextMenuButton';
 import ContextMenu from '../../../src/components/structures/ContextMenu';
 import { _t } from '../../../src/languageHandler';
-
-configure({ adapter: new Adapter() });
 
 describe('ThreadPanel', () => {
     describe('Header', () => {
