@@ -20,7 +20,6 @@ import { DeviceInfo } from "matrix-js-sdk/src//crypto/deviceinfo";
 import { _t, _td } from '../../../languageHandler';
 import { PendingActionSpinner } from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
-import DialogButtons from "../elements/DialogButtons";
 import { fixupColorFonts } from '../../../utils/FontManager';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
@@ -143,25 +142,15 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
                 text = _t("Cancelling…");
             }
             confirm = <PendingActionSpinner text={text} />;
-        } else if (this.props.inDialog) {
-            // FIXME: stop using DialogButtons here once this component is only used in the right panel verification
-            confirm = <DialogButtons
-                primaryButton={_t("They match")}
-                onPrimaryButtonClick={this.onMatchClick}
-                primaryButtonClass="mx_UserInfo_wideButton mx_VerificationShowSas_matchButton"
-                cancelButton={_t("They don't match")}
-                onCancel={this.onDontMatchClick}
-                cancelButtonClass="mx_UserInfo_wideButton mx_VerificationShowSas_noMatchButton"
-            />;
         } else {
-            confirm = <React.Fragment>
+            confirm = <div className="mx_VerificationShowSas_buttonRow">
                 <AccessibleButton onClick={this.onDontMatchClick} kind="danger">
                     { _t("They don't match") }
                 </AccessibleButton>
                 <AccessibleButton onClick={this.onMatchClick} kind="primary">
                     { _t("They match") }
                 </AccessibleButton>
-            </React.Fragment>;
+            </div>;
         }
 
         return <div className="mx_VerificationShowSas">
