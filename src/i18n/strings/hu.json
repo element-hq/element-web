@@ -3219,5 +3219,11 @@
     "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "Várakozás a másik munkamenetből való ellenőrzésre, %(deviceName)s (%(deviceId)s)…",
     "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.": "Ez az exportálás kezdete ehhez a szobához: <roomName/>. Kimentette: <exporterDetails/>, időpont: %(exportDate)s.",
     "Create poll": "Szavazás létrehozása",
-    "Polls (under active development)": "Szavazások (intenzív fejlesztés alatt)"
+    "Polls (under active development)": "Szavazások (intenzív fejlesztés alatt)",
+    "Updating spaces... (%(progress)s out of %(count)s)|one": "Terek frissítése…",
+    "Updating spaces... (%(progress)s out of %(count)s)|other": "Terek frissítése… (%(progress)s / %(count)s)",
+    "Sending invites... (%(progress)s out of %(count)s)|one": "Meghívók küldése…",
+    "Sending invites... (%(progress)s out of %(count)s)|other": "Meghívók küldése… (%(progress)s / %(count)s)",
+    "Loading new room": "Új szoba betöltése",
+    "Upgrading room": "Szoba fejlesztése"
 }
