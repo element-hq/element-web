@@ -3211,5 +3211,7 @@
     "Waiting for you to verify on your other session…": "Po pritet që ju të bëni verifikimin në sesionin tuaj tjetër…",
     "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "Po pritet që ju të bëni verifikimin në sesionin tuaj tjetër, %(deviceName)s (%(deviceId)s)…",
     "Creating Space...": "Po Krijohet Hapësirë…",
-    "Fetching data...": "Po sillen të dhëna…"
+    "Fetching data...": "Po sillen të dhëna…",
+    "Create poll": "Krijoni anketim",
+    "Polls (under active development)": "Anketime (në zhvillim aktiv)"
 }
