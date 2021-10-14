@@ -142,6 +142,8 @@ For a good example, see https://develop.element.io/config.json.
 1. `sentry`: [Sentry](https://sentry.io/) configuration for rageshake data being sent to sentry.
    1. `dsn`: the Sentry [DSN](https://docs.sentry.io/product/sentry-basics/dsn-explainer/)
    2. `environment`: (optional) The [Environment](https://docs.sentry.io/product/sentry-basics/environments/) to pass to sentry
+1. `analyticsOwner`: The entity that analytics data is being sent to. Used in copy
+   when explaining to the user where data is being sent. If not set, defaults to `brand`.
 
 Note that `index.html` also has an og:image meta tag that is set to an image
 hosted on riot.im. This is the image used if links to your copy of Element
