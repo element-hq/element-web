@@ -143,6 +143,10 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
 
     public focus() {
         this.input.focus();
+        // programmatic does not fire onFocus handler
+        this.setState({
+            focused: true,
+        });
     }
 
     private onFocus = (ev) => {

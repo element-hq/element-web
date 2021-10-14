@@ -214,7 +214,6 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
 };
 
 const SpaceCreateMenu = ({ onFinished }) => {
-    const cli = useContext(MatrixClientContext);
     const [visibility, setVisibility] = useState<Visibility>(null);
     const [busy, setBusy] = useState<boolean>(false);
 
@@ -238,13 +237,9 @@ const SpaceCreateMenu = ({ onFinished }) => {
             return;
         }
 
-        // validate the space alias field but do not require it
-        const aliasLocalpart = alias.substring(1, alias.length - cli.getDomain().length - 1);
-        if (visibility === Visibility.Public && aliasLocalpart &&
-            (await spaceAliasField.current.validate({ allowEmpty: true })) === false
-        ) {
+        if (visibility === Visibility.Public && !(await spaceAliasField.current.validate({ allowEmpty: false }))) {
             spaceAliasField.current.focus();
-            spaceAliasField.current.validate({ allowEmpty: true, focused: true });
+            spaceAliasField.current.validate({ allowEmpty: false, focused: true });
             setBusy(false);
             return;
         }
@@ -253,7 +248,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
             await createSpace(
                 name,
                 visibility === Visibility.Public,
-                aliasLocalpart ? alias : undefined,
+                alias,
                 topic,
                 avatar,
             );
