@@ -49,6 +49,8 @@ import { showAddExistingRooms, showCreateNewRoom, showSpaceInvite } from "../../
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import RoomAvatar from "../avatars/RoomAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../settings/UIFeature";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 interface IProps {
@@ -134,32 +136,38 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
                     MatrixClientPeg.get().getUserId());
 
                 return <IconizedContextMenuOptionList first>
-                    <IconizedContextMenuOption
-                        label={_t("Create new room")}
-                        iconClassName="mx_RoomList_iconPlus"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            onFinished();
-                            showCreateNewRoom(SpaceStore.instance.activeSpace);
-                        }}
-                        disabled={!canAddRooms}
-                        tooltip={canAddRooms ? undefined
-                            : _t("You do not have permissions to create new rooms in this space")}
-                    />
-                    <IconizedContextMenuOption
-                        label={_t("Add existing room")}
-                        iconClassName="mx_RoomList_iconHash"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            onFinished();
-                            showAddExistingRooms(SpaceStore.instance.activeSpace);
-                        }}
-                        disabled={!canAddRooms}
-                        tooltip={canAddRooms ? undefined
-                            : _t("You do not have permissions to add rooms to this space")}
-                    />
+                    {
+                        shouldShowComponent(UIComponent.CreateRooms)
+                            ? (<>
+                                <IconizedContextMenuOption
+                                    label={_t("Create new room")}
+                                    iconClassName="mx_RoomList_iconPlus"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        onFinished();
+                                        showCreateNewRoom(SpaceStore.instance.activeSpace);
+                                    }}
+                                    disabled={!canAddRooms}
+                                    tooltip={canAddRooms ? undefined
+                                        : _t("You do not have permissions to create new rooms in this space")}
+                                />
+                                <IconizedContextMenuOption
+                                    label={_t("Add existing room")}
+                                    iconClassName="mx_RoomList_iconHash"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        onFinished();
+                                        showAddExistingRooms(SpaceStore.instance.activeSpace);
+                                    }}
+                                    disabled={!canAddRooms}
+                                    tooltip={canAddRooms ? undefined
+                                        : _t("You do not have permissions to add rooms to this space")}
+                                />
+                            </>)
+                            : null
+                    }
                     <IconizedContextMenuOption
                         label={_t("Explore rooms")}
                         iconClassName="mx_RoomList_iconBrowse"
@@ -450,8 +458,8 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     }
 
     private renderSublists(): React.ReactElement[] {
-        // show a skeleton UI if the user is in no rooms and they are not filtering
-        const showSkeleton = !this.state.isNameFiltering &&
+        // show a skeleton UI if the user is in no rooms and they are not filtering and have no suggested rooms
+        const showSkeleton = !this.state.isNameFiltering && !this.state.suggestedRooms?.length &&
             Object.values(RoomListStore.instance.unfilteredLists).every(list => !list?.length);
 
         return TAG_ORDER.reduce((tags, tagId) => {

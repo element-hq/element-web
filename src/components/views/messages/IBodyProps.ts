@@ -33,6 +33,7 @@ export interface IBodyProps {
     onHeightChanged: () => void;
 
     showUrlPreview?: boolean;
+    forExport?: boolean;
     tileShape: TileShape;
     maxImageHeight?: number;
     replacingEventId?: string;

@@ -20,8 +20,9 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { walkDOMDepthFirst } from "./dom";
 import { checkBlockNode } from "../HtmlUtils";
 import { getPrimaryPermalinkEntity } from "../utils/permalinks/Permalinks";
-import { PartCreator, Type } from "./parts";
+import { Part, PartCreator, Type } from "./parts";
 import SdkConfig from "../SdkConfig";
+import { textToHtmlRainbow } from "../utils/colour";
 
 function parseAtRoomMentions(text: string, partCreator: PartCreator) {
     const ATROOM = "@room";
@@ -213,12 +214,12 @@ function prefixQuoteLines(isFirstNode, parts, partCreator) {
     }
 }
 
-function parseHtmlMessage(html: string, partCreator: PartCreator, isQuotedMessage: boolean) {
+function parseHtmlMessage(html: string, partCreator: PartCreator, isQuotedMessage: boolean): Part[] {
     // no nodes from parsing here should be inserted in the document,
     // as scripts in event handlers, etc would be executed then.
     // we're only taking text, so that is fine
     const rootNode = new DOMParser().parseFromString(html, "text/html").body;
-    const parts = [];
+    const parts: Part[] = [];
     let lastNode;
     let inQuote = isQuotedMessage;
     const state: IState = {
@@ -233,7 +234,7 @@ function parseHtmlMessage(html: string, partCreator: PartCreator, isQuotedMessag
             inQuote = true;
         }
 
-        const newParts = [];
+        const newParts: Part[] = [];
         if (lastNode && (checkBlockNode(lastNode) || checkBlockNode(n))) {
             newParts.push(partCreator.newline());
         }
@@ -288,7 +289,7 @@ function parseHtmlMessage(html: string, partCreator: PartCreator, isQuotedMessag
     return parts;
 }
 
-export function parsePlainTextMessage(body: string, partCreator: PartCreator, isQuotedMessage?: boolean) {
+export function parsePlainTextMessage(body: string, partCreator: PartCreator, isQuotedMessage?: boolean): Part[] {
     const lines = body.split(/\r\n|\r|\n/g); // split on any new-line combination not just \n, collapses \r\n
     return lines.reduce((parts, line, i) => {
         if (isQuotedMessage) {
@@ -300,19 +301,31 @@ export function parsePlainTextMessage(body: string, partCreator: PartCreator, is
             parts.push(partCreator.newline());
         }
         return parts;
-    }, []);
+    }, [] as Part[]);
 }
 
 export function parseEvent(event: MatrixEvent, partCreator: PartCreator, { isQuotedMessage = false } = {}) {
     const content = event.getContent();
-    let parts;
+    let parts: Part[];
+    const isEmote = content.msgtype === "m.emote";
+    let isRainbow = false;
+
     if (content.format === "org.matrix.custom.html") {
         parts = parseHtmlMessage(content.formatted_body || "", partCreator, isQuotedMessage);
+        if (content.body && content.formatted_body && textToHtmlRainbow(content.body) === content.formatted_body) {
+            isRainbow = true;
+        }
     } else {
         parts = parsePlainTextMessage(content.body || "", partCreator, isQuotedMessage);
     }
-    if (content.msgtype === "m.emote") {
+
+    if (isEmote && isRainbow) {
+        parts.unshift(partCreator.plain("/rainbowme "));
+    } else if (isRainbow) {
+        parts.unshift(partCreator.plain("/rainbow "));
+    } else if (isEmote) {
         parts.unshift(partCreator.plain("/me "));
     }
+
     return parts;
 }

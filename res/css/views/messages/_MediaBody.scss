@@ -18,11 +18,11 @@ limitations under the License.
 // have unique styles).
 
 .mx_MediaBody {
-    background-color: $message-body-panel-bg-color;
+    background-color: $quinary-content;
     border-radius: 12px;
     max-width: 243px; // use max-width instead of width so it fits within right panels
 
-    color: $message-body-panel-fg-color;
+    color: $secondary-content;
     font-size: $font-14px;
     line-height: $font-24px;
 

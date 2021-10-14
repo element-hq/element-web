@@ -22,6 +22,12 @@ limitations under the License.
         display: none;
     }
 
+    &:not(.mx_RoomSublist_minimized) {
+        .mx_RoomSublist_headerContainer {
+            height: auto;
+        }
+    }
+
     .mx_RoomSublist_headerContainer {
         // Create a flexbox to make alignment easy
         display: flex;
@@ -41,9 +47,7 @@ limitations under the License.
         // The combined height must be set in the LeftPanel component for sticky headers
         // to work correctly.
         padding-bottom: 8px;
-        // Allow the container to collapse on itself if its children
-        // are not in the normal document flow
-        max-height: 24px;
+        height: 24px;
         color: $roomlist-header-color;
 
         .mx_RoomSublist_stickable {
@@ -170,14 +174,6 @@ limitations under the License.
                 }
             }
         }
-    }
-
-    // In the general case, we reserve space for each sublist header to prevent
-    // scroll jumps when they become sticky. However, that leaves a gap when
-    // scrolled to the top above the first sublist (whose header can only ever
-    // stick to top), so we make sure to exclude the first visible sublist.
-    &:not(.mx_RoomSublist_hidden) ~ .mx_RoomSublist .mx_RoomSublist_headerContainer {
-        height: 24px;
     }
 
     .mx_RoomSublist_resizeBox {
@@ -395,7 +391,7 @@ limitations under the License.
 .mx_RoomSublist_skeletonUI {
     position: relative;
     margin-left: 4px;
-    height: 288px;
+    height: 240px;
 
     &::before {
         background: $roomsublist-skeleton-ui-bg;
@@ -409,4 +405,9 @@ limitations under the License.
         mask-size: auto 48px;
         mask-image: url('$(res)/img/element-icons/roomlist/skeleton-ui.svg');
     }
+}
+
+.mx_RoomSublist_minimized .mx_RoomSublist_skeletonUI {
+    width: 32px; // cut off the horizontal lines in the svg
+    margin-left: 10px; // align with sublist + buttons
 }

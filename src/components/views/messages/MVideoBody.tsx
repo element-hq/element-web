@@ -79,7 +79,10 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
     }
 
     private getContentUrl(): string|null {
-        const media = mediaFromContent(this.props.mxEvent.getContent());
+        const content = this.props.mxEvent.getContent<IMediaEventContent>();
+        // During export, the content url will point to the MSC, which will later point to a local url
+        if (this.props.forExport) return content.file?.url || content.url;
+        const media = mediaFromContent(content);
         if (media.isEncrypted) {
             return this.state.decryptedUrl;
         } else {
@@ -93,6 +96,9 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
     }
 
     private getThumbUrl(): string|null {
+        // there's no need of thumbnail when the content is local
+        if (this.props.forExport) return null;
+
         const content = this.props.mxEvent.getContent<IMediaEventContent>();
         const media = mediaFromContent(content);
 
@@ -209,6 +215,11 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         this.props.onHeightChanged();
     };
 
+    private getFileBody = () => {
+        if (this.props.forExport) return null;
+        return this.props.tileShape && <MFileBody {...this.props} showGenericPlaceholder={false} />;
+    };
+
     render() {
         const content = this.props.mxEvent.getContent();
         const autoplay = SettingsStore.getValue("autoplayVideo");
@@ -222,8 +233,8 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
             );
         }
 
-        // Important: If we aren't autoplaying and we haven't decrypred it yet, show a video with a poster.
-        if (content.file !== undefined && this.state.decryptedUrl === null && autoplay) {
+        // Important: If we aren't autoplaying and we haven't decrypted it yet, show a video with a poster.
+        if (!this.props.forExport && content.file !== undefined && this.state.decryptedUrl === null && autoplay) {
             // Need to decrypt the attachment
             // The attachment is decrypted in componentDidMount.
             // For now add an img tag with a spinner.
@@ -254,6 +265,8 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
                 preload = "none";
             }
         }
+
+        const fileBody = this.getFileBody();
         return (
             <span className="mx_MVideoBody">
                 <video
@@ -270,7 +283,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
                     poster={poster}
                     onPlay={this.videoOnPlay}
                 />
-                { this.props.tileShape && <MFileBody {...this.props} showGenericPlaceholder={false} /> }
+                { fileBody }
             </span>
         );
     }

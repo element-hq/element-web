@@ -252,6 +252,10 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/room/composer/attach.svg');
 }
 
+.mx_MessageComposer_poll::before {
+    mask-image: url('$(res)/img/element-icons/room/composer/poll.svg');
+}
+
 .mx_MessageComposer_voiceMessage::before {
     mask-image: url('$(res)/img/voip/mic-on-mask.svg');
 }

@@ -82,6 +82,8 @@ import GroupAvatar from "../views/avatars/GroupAvatar";
 import { useDispatcher } from "../../hooks/useDispatcher";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../settings/UIFeature";
 
 interface IProps {
     space: Room;
@@ -412,7 +414,9 @@ const SpaceLanding = ({ space }: { space: Room }) => {
     const userId = cli.getUserId();
 
     let inviteButton;
-    if ((myMembership === "join" && space.canInvite(userId)) || space.getJoinRule() === JoinRule.Public) {
+    if (((myMembership === "join" && space.canInvite(userId)) || space.getJoinRule() === JoinRule.Public) &&
+        shouldShowComponent(UIComponent.InviteUsers)
+    ) {
         inviteButton = (
             <AccessibleButton
                 kind="primary"
@@ -730,7 +734,6 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         </div>
 
         <div className="mx_SpaceRoomView_inviteTeammates_betaDisclaimer">
-            <BetaPill />
             { _t("<b>This is an experimental feature.</b> For now, " +
                 "new users receiving an invite will have to open the invite on <link/> to actually join.", {}, {
                 b: sub => <b>{ sub }</b>,

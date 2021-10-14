@@ -44,6 +44,8 @@ import MemberTile from "./MemberTile";
 import BaseAvatar from '../avatars/BaseAvatar';
 import { throttle } from 'lodash';
 import SpaceStore from "../../../stores/SpaceStore";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../settings/UIFeature";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 const getSearchQueryLSKey = (roomId: string) => `mx_MemberList_searchQuarry_${roomId}`;
@@ -535,7 +537,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         const room = cli.getRoom(this.props.roomId);
         let inviteButton;
 
-        if (room && room.getMyMembership() === 'join') {
+        if (room?.getMyMembership() === 'join' && shouldShowComponent(UIComponent.InviteUsers)) {
             let inviteButtonText = _t("Invite to this room");
             const chat = CommunityPrototypeStore.instance.getSelectedCommunityGeneralChat();
             if (chat && chat.roomId === this.props.roomId) {

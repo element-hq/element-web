@@ -51,6 +51,7 @@ import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 import { RoomScrollStateStore } from "../stores/RoomScrollStateStore";
 import { ConsoleLogger, IndexedDBLogStore } from "../rageshake/rageshake";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
+import { Skinner } from "../Skinner";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -95,6 +96,7 @@ declare global {
         mxSetupEncryptionStore?: SetupEncryptionStore;
         mxRoomScrollStateStore?: RoomScrollStateStore;
         mxActiveWidgetStore?: ActiveWidgetStore;
+        mxSkinner?: Skinner;
         mxOnRecaptchaLoaded?: () => void;
         electron?: Electron;
     }
@@ -155,6 +157,10 @@ declare global {
         // sinkId & setSinkId are experimental and typescript doesn't know about them
         sinkId: string;
         setSinkId(outputId: string);
+    }
+
+    interface HTMLStyleElement {
+        disabled?: boolean;
     }
 
     // Add Chrome-specific `instant` ScrollBehaviour

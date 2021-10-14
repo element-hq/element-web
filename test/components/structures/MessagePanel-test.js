@@ -32,14 +32,11 @@ import Matrix from 'matrix-js-sdk';
 const TestUtilsMatrix = require('../../test-utils');
 import FakeTimers from '@sinonjs/fake-timers';
 
-import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
-import { configure, mount } from "enzyme";
+import { mount } from "enzyme";
 
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../src/contexts/RoomContext";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
-
-configure({ adapter: new Adapter() });
 
 let client;
 const room = new Matrix.Room("!roomId:server_name");
