@@ -17,7 +17,7 @@ import React, { createRef } from 'react';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent, IEventRelation } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import dis from '../../../dispatcher/dispatcher';
@@ -54,6 +54,7 @@ import MemberStatusMessageAvatar from "../avatars/MemberStatusMessageAvatar";
 import UIStore, { UI_EVENTS } from '../../../stores/UIStore';
 import Modal from "../../../Modal";
 import InfoDialog from "../dialogs/InfoDialog";
+import { RelationType } from 'matrix-js-sdk/src/@types/event';
 
 let instanceCount = 0;
 const NARROW_MODE_BREAKPOINT = 500;
@@ -225,7 +226,7 @@ interface IProps {
     resizeNotifier: ResizeNotifier;
     permalinkCreator: RoomPermalinkCreator;
     replyToEvent?: MatrixEvent;
-    replyInThread?: boolean;
+    relation?: IEventRelation;
     showReplyPreview?: boolean;
     e2eStatus?: E2EStatus;
     compact?: boolean;
@@ -252,7 +253,6 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     private instanceId: number;
 
     static defaultProps = {
-        replyInThread: false,
         showReplyPreview: true,
         compact: false,
     };
@@ -378,9 +378,10 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
     private renderPlaceholderText = () => {
         if (this.props.replyToEvent) {
-            if (this.props.replyInThread && this.props.e2eStatus) {
+            const replyingToThread = this.props.relation?.rel_type === RelationType.Thread;
+            if (replyingToThread && this.props.e2eStatus) {
                 return _t('Reply to encrypted thread…');
-            } else if (this.props.replyInThread) {
+            } else if (replyingToThread) {
                 return _t('Reply to thread…');
             } else if (this.props.e2eStatus) {
                 return _t('Send an encrypted reply…');
@@ -558,7 +559,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                     room={this.props.room}
                     placeholder={this.renderPlaceholderText()}
                     permalinkCreator={this.props.permalinkCreator}
-                    replyInThread={this.props.replyInThread}
+                    relation={this.props.relation}
                     replyToEvent={this.props.replyToEvent}
                     onChange={this.onChange}
                     disabled={this.state.haveRecording}

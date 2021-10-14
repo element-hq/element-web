@@ -71,7 +71,7 @@ const useFilteredThreadsTimelinePanel = ({
     userId,
     updateTimeline,
 }: {
-    threads: Set<Thread>;
+    threads: Map<string, Thread>;
     room: Room;
     userId: string;
     filterOption: ThreadFilterType;
@@ -85,13 +85,13 @@ const useFilteredThreadsTimelinePanel = ({
     useEffect(() => {
         let filteredThreads = Array.from(threads);
         if (filterOption === ThreadFilterType.My) {
-            filteredThreads = filteredThreads.filter(thread => {
+            filteredThreads = filteredThreads.filter(([id, thread]) => {
                 return thread.rootEvent.getSender() === userId;
             });
         }
         // NOTE: Temporarily reverse the list until https://github.com/vector-im/element-web/issues/19393 gets properly resolved
         // The proper list order should be top-to-bottom, like in social-media newsfeeds.
-        filteredThreads.reverse().forEach(thread => {
+        filteredThreads.reverse().forEach(([id, thread]) => {
             const event = thread.rootEvent;
             if (timelineSet.findEventById(event.getId()) || event.status !== null) return;
             timelineSet.addEventToTimeline(

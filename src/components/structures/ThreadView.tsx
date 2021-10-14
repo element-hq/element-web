@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import { MatrixEvent, Room } from 'matrix-js-sdk/src';
 import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
+import { RelationType } from 'matrix-js-sdk/src/@types/event';
 
 import BaseCard from "../views/right_panel/BaseCard";
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
@@ -185,8 +186,10 @@ export default class ThreadView extends React.Component<IProps, IState> {
                     { this.state?.thread?.timelineSet && (<MessageComposer
                         room={this.props.room}
                         resizeNotifier={this.props.resizeNotifier}
-                        replyInThread={true}
-                        replyToEvent={this.state?.thread?.replyToEvent}
+                        relation={{
+                            rel_type: RelationType.Thread,
+                            event_id: this.state.thread.id,
+                        }}
                         showReplyPreview={false}
                         permalinkCreator={this.props.permalinkCreator}
                         e2eStatus={this.props.e2eStatus}

@@ -271,9 +271,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     componentDidMount() {
         this.calculateRoomMembersCount();
         this.props.room?.on("RoomState.members", this.calculateRoomMembersCount);
-        if (SettingsStore.getValue("feature_thread")) {
-            this.props.room?.getThreads().forEach(thread => thread.fetchReplyChain());
-        }
         this.isMounted = true;
     }
 
@@ -463,8 +460,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         // Checking if the message has a "parentEventId" as we do not
         // want to hide the root event of the thread
-        if (mxEv.replyInThread && mxEv.parentEventId
-                && this.props.hideThreadedMessages
+        if (mxEv.isThreadRoot && this.props.hideThreadedMessages
                 && SettingsStore.getValue("feature_thread")) {
             return false;
         }

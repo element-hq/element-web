@@ -35,7 +35,7 @@ import { getKeyBindingsManager, MessageComposerAction } from '../../../KeyBindin
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SendHistoryManager from '../../../SendHistoryManager';
 import Modal from '../../../Modal';
-import { MsgType, UNSTABLE_ELEMENT_REPLY_IN_THREAD } from 'matrix-js-sdk/src/@types/event';
+import { MsgType } from 'matrix-js-sdk/src/@types/event';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
@@ -46,7 +46,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { withMatrixClientHOC, MatrixClientProps } from '../../../contexts/MatrixClientContext';
-import RoomContext, { TimelineRenderingType } from '../../../contexts/RoomContext';
+import RoomContext from '../../../contexts/RoomContext';
 
 function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
     const html = mxEvent.getContent().formatted_body;
@@ -70,7 +70,6 @@ function getTextReplyFallback(mxEvent: MatrixEvent): string {
 function createEditContent(
     model: EditorModel,
     editedEvent: MatrixEvent,
-    renderingContext?: TimelineRenderingType,
 ): IContent {
     const isEmote = containsEmote(model);
     if (isEmote) {
@@ -112,10 +111,6 @@ function createEditContent(
         },
     };
 
-    if (renderingContext === TimelineRenderingType.Thread) {
-        relation['m.relates_to'][UNSTABLE_ELEMENT_REPLY_IN_THREAD.name] = true;
-    }
-
     return Object.assign(relation, contentBody);
 }
 
@@ -143,8 +138,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         const isRestored = this.createEditorModel();
         const ev = this.props.editState.getEvent();
 
-        const renderingContext = this.context.timelineRenderingType;
-        const editContent = createEditContent(this.model, ev, renderingContext);
+        const editContent = createEditContent(this.model, ev);
         this.state = {
             saveDisabled: !isRestored || !this.isContentModified(editContent["m.new_content"]),
         };
@@ -369,8 +363,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             const position = this.model.positionForOffset(caret.offset, caret.atNodeEnd);
             this.editorRef.current?.replaceEmoticon(position, REGEX_EMOTICON);
         }
-        const renderingContext = this.context.timelineRenderingType;
-        const editContent = createEditContent(this.model, editedEvent, renderingContext);
+        const editContent = createEditContent(this.model, editedEvent);
         const newContent = editContent["m.new_content"];
 
         let shouldSend = true;
