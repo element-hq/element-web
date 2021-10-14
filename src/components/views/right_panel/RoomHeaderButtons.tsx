@@ -31,6 +31,8 @@ import RightPanelStore from "../../../stores/RightPanelStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { useReadPinnedEvents, usePinnedEvents } from './PinnedMessagesCard';
+import { dispatchShowThreadsPanelEvent } from "../../../dispatcher/dispatch-actions/threads";
+import SettingsStore from "../../../settings/SettingsStore";
 
 const ROOM_INFO_PHASES = [
     RightPanelPhases.RoomSummary,
@@ -122,6 +124,13 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
                 isHighlighted={this.isPhase(RightPanelPhases.PinnedMessages)}
                 onClick={this.onPinnedMessagesClicked}
             />
+            { SettingsStore.getValue("feature_thread") && <HeaderButton
+                name="threadsButton"
+                title={_t("Threads")}
+                onClick={dispatchShowThreadsPanelEvent}
+                isHighlighted={this.isPhase(RightPanelPhases.ThreadPanel)}
+                analytics={['Right Panel', 'Threads List Button', 'click']}
+            /> }
             <HeaderButton
                 name="notifsButton"
                 title={_t('Notifications')}

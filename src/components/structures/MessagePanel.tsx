@@ -26,7 +26,7 @@ import shouldHideEvent from '../../shouldHideEvent';
 import { wantsDateSeparator } from '../../DateUtils';
 import { MatrixClientPeg } from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
-import RoomContext from "../../contexts/RoomContext";
+import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import { Layout } from "../../settings/Layout";
 import { _t } from "../../languageHandler";
 import EventTile, { haveTileForEvent, IReadReceiptProps, TileShape } from "../views/rooms/EventTile";
@@ -66,7 +66,9 @@ export function shouldFormContinuation(
     prevEvent: MatrixEvent,
     mxEvent: MatrixEvent,
     showHiddenEvents: boolean,
+    timelineRenderingType?: TimelineRenderingType,
 ): boolean {
+    if (timelineRenderingType === TimelineRenderingType.ThreadsList) return false;
     // sanity check inputs
     if (!prevEvent || !prevEvent.sender || !mxEvent.sender) return false;
     // check if within the max continuation period
@@ -722,7 +724,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         // is this a continuation of the previous message?
         const continuation = !wantsDateSeparator &&
-            shouldFormContinuation(prevEvent, mxEv, this.showHiddenEvents);
+            shouldFormContinuation(prevEvent, mxEv, this.showHiddenEvents, this.context.timelineRenderingType);
 
         const eventId = mxEv.getId();
         const highlight = (eventId === this.props.highlightedEventId);
@@ -794,6 +796,9 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 
     public wantsDateSeparator(prevEvent: MatrixEvent, nextEventDate: Date): boolean {
+        if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) {
+            return false;
+        }
         if (prevEvent == null) {
             // first event in the panel: depends if we could back-paginate from
             // here.

@@ -53,7 +53,7 @@ import { throttle } from 'lodash';
 import SpaceStore from "../../stores/SpaceStore";
 import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
 import { E2EStatus } from '../../utils/ShieldUtils';
-import { SetRightPanelPhasePayload } from '../../dispatcher/payloads/SetRightPanelPhasePayload';
+import { dispatchShowThreadsPanelEvent } from '../../dispatcher/dispatch-actions/threads';
 
 interface IProps {
     room?: Room; // if showing panels for a given room, this is set
@@ -199,10 +199,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
         const isChangingRoom = payload.action === 'view_room' && payload.room_id !== this.props.room.roomId;
         const isViewingThread = this.state.phase === RightPanelPhases.ThreadView;
         if (isChangingRoom && isViewingThread) {
-            dis.dispatch<SetRightPanelPhasePayload>({
-                action: Action.SetRightPanelPhase,
-                phase: RightPanelPhases.ThreadPanel,
-            });
+            dispatchShowThreadsPanelEvent();
         }
 
         if (payload.action === Action.AfterRightPanelPhaseChange) {

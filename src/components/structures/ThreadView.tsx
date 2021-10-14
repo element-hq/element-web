@@ -156,7 +156,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 <BaseCard
                     className="mx_ThreadView"
                     onClose={this.props.onClose}
-                    previousPhase={RightPanelPhases.RoomSummary}
+                    previousPhase={RightPanelPhases.ThreadPanel}
                     withoutScrollContainer={true}
                 >
                     { this.state.thread && (
