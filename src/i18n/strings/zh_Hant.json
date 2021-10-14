@@ -3220,5 +3220,7 @@
     "Waiting for you to verify on your other session…": "正在等待您驗證您的其他工作階段……",
     "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "正在等待您驗證您的其他工作階段，%(deviceName)s (%(deviceId)s)……",
     "Creating Space...": "正在建立空間……",
-    "Fetching data...": "正在擷取資料……"
+    "Fetching data...": "正在擷取資料……",
+    "Create poll": "建立投票",
+    "Polls (under active development)": "投票（正在積極開發中）"
 }
