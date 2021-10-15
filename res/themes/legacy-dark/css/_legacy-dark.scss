@@ -23,13 +23,7 @@ $tertiary-fg-color: $primary-fg-color;
 $primary-bg-color: $bg-color;
 $muted-fg-color: $header-panel-text-primary-color;
 
-// Legacy theme backports
-$primary-content: $primary-fg-color;
-$secondary-content: $secondary-fg-color;
-$tertiary-content: $tertiary-fg-color;
-$quaternary-content: #6F7882;
-$quinary-content: $quaternary-content;
-$background: $primary-bg-color;
+
 
 // used for dialog box text
 $light-fg-color: $header-panel-text-secondary-color;
@@ -99,7 +93,6 @@ $lightbox-background-bg-color: #000;
 $lightbox-background-bg-opacity: 0.85;
 
 $settings-grey-fg-color: #a2a2a2;
-$settings-profile-placeholder-bg-color: #e7e7e7;
 $settings-profile-overlay-placeholder-fg-color: #454545;
 $settings-profile-button-bg-color: #e7e7e7;
 $settings-profile-button-fg-color: $settings-profile-overlay-placeholder-fg-color;
@@ -114,7 +107,6 @@ $groupheader-button-color: $header-panel-text-primary-color;
 $rightpanel-button-color: $header-panel-text-primary-color;
 $icon-button-color: $header-panel-text-primary-color;
 $roomtopic-color: $text-secondary-color;
-$eventtile-meta-color: $roomtopic-color;
 
 $header-divider-color: $header-panel-text-primary-color;
 $composer-e2e-icon-color: $header-panel-text-primary-color;
@@ -222,6 +214,16 @@ $eventbubble-others-bg: $event-selected-color;
 $eventbubble-bg-hover: #1C2026;
 $eventbubble-avatar-outline: $bg-color;
 $eventbubble-reply-color: #C1C6CD;
+
+// Legacy theme backports
+$primary-content: $primary-fg-color;
+$secondary-content: $secondary-fg-color;
+$tertiary-content: $tertiary-fg-color;
+$quaternary-content: #6F7882;
+$quinary-content: $quaternary-content;
+$background: $primary-bg-color;
+$panel-actions: $roomtile-selected-bg-color;
+// Legacy theme backports
 
 // ***** Mixins! *****
 

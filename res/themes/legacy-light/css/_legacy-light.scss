@@ -28,24 +28,6 @@ $tertiary-fg-color: $primary-fg-color;
 $primary-bg-color: #ffffff;
 $muted-fg-color: #61708b; // Commonly used in headings and relevant alt text
 
-// Legacy theme backports
-$accent: #0DBD8B;
-$alert: #FF5B55;
-$links: #0086e6;
-$primary-content: $primary-fg-color;
-$secondary-content: $secondary-fg-color;
-$tertiary-content: $tertiary-fg-color;
-$quaternary-content: #C1C6CD;
-$quinary-content: #e3e8f0;
-$system: #F4F6FA;
-$background: $primary-bg-color;
-$panels: rgba($system, 0.9);
-$panel-base: #8D97A5; // This color is not intended for use in the app
-$panel-selected: rgba($tertiary-content, 0.3);
-$panel-hover: rgba($tertiary-content, 0.1);
-$panel-actions: rgba($tertiary-content, 0.2);
-$space-nav: rgba($tertiary-content, 0.15);
-
 // used for dialog box text
 $light-fg-color: #747474;
 
@@ -164,7 +146,6 @@ $blockquote-bar-color: #ddd;
 $blockquote-fg-color: #777;
 
 $settings-grey-fg-color: #a2a2a2;
-$settings-profile-placeholder-bg-color: #e7e7e7;
 $settings-profile-overlay-placeholder-fg-color: #2e2f32;
 $settings-profile-button-bg-color: #e7e7e7;
 $settings-profile-button-fg-color: $settings-profile-overlay-placeholder-fg-color;
@@ -188,12 +169,9 @@ $groupheader-button-color: #91a1c0;
 $rightpanel-button-color: #91a1c0;
 $icon-button-color: #91a1c0;
 $roomtopic-color: #9e9e9e;
-$eventtile-meta-color: $roomtopic-color;
 
 $composer-e2e-icon-color: #91a1c0;
 $header-divider-color: #91a1c0;
-
-$voipcall-plinth-color: $system;
 
 // ********************
 
@@ -216,7 +194,28 @@ $presence-online: $accent-color;
 $presence-away: #d9b072;
 $presence-offline: #e3e8f0;
 
+// Legacy theme backports
+$accent: #0DBD8B;
+$alert: #FF5B55;
+$links: #0086e6;
+$primary-content: $primary-fg-color;
+$secondary-content: $secondary-fg-color;
+$tertiary-content: $tertiary-fg-color;
+$quaternary-content: #6F7882;
+$quinary-content: $quaternary-content;
+$system: #F4F6FA;
+$background: $primary-bg-color;
+$panels: rgba($system, 0.9);
+$panel-base: #8D97A5; // This color is not intended for use in the app
+$panel-selected: rgba($tertiary-content, 0.3);
+$panel-hover: rgba($tertiary-content, 0.1);
+$panel-actions: $roomtile-selected-bg-color;
+$space-nav: rgba($tertiary-content, 0.15);
+// Legacy theme backports
+
 // ********************
+
+$voipcall-plinth-color: $system;
 
 $username-variant1-color: #368bd6;
 $username-variant2-color: #ac3ba8;

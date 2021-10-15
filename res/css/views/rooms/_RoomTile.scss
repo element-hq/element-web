@@ -30,7 +30,7 @@ limitations under the License.
     &:hover,
     &:focus-within,
     &.mx_RoomTile_hasMenuOpen {
-        background-color: $roomtile-selected-bg-color;
+        background-color: $panel-actions;
         border-radius: 8px;
     }
 
