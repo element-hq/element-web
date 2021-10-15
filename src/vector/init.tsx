@@ -56,7 +56,7 @@ export function setupLogStorage() {
     if (SdkConfig.get().bug_report_endpoint_url) {
         return initRageshakeStore();
     }
-    console.warn("No bug report endpoint set - logs will not be persisted");
+    logger.warn("No bug report endpoint set - logs will not be persisted");
     return Promise.resolve();
 }
 
