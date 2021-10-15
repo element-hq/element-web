@@ -3241,7 +3241,8 @@
     "Unban them from everything I'm able to": "解除我权限范围内对这些人的所有禁令",
     "Ban from %(roomName)s": "禁止进入 %(roomName)s",
     "Unban from %(roomName)s": "解除 %(roomName)s 禁令",
-    "They'll still be able to access whatever you're not an admin of.": "他们仍然可以访问任何你不是管理员的一切东西。",
+    "They'll still be able to access whatever you're not an admin of.": "这些人仍然可以访问你不是管理员的一切东西。",
     "Kick them from specific things I'm able to": "禁止这些人做某些我有权决定的事",
-    "Kick them from everything I'm able to": "禁止这些人做任何我有权决定的事"
+    "Kick them from everything I'm able to": "禁止这些人做任何我有权决定的事",
+    "Downloading": "下载中"
 }
