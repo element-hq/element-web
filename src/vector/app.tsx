@@ -31,16 +31,17 @@ import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
 import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
 import type MatrixChatType from "matrix-react-sdk/src/components/structures/MatrixChat";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { parseQs, parseQsFromFragment } from './url_utils';
 import VectorBasePlatform from "./platform/VectorBasePlatform";
 import { createClient } from "matrix-js-sdk/src/matrix";
 
-import { logger } from "matrix-js-sdk/src/logger";
-
 let lastLocationHashSet: string = null;
 
 logger.log(`Application is running in ${process.env.NODE_ENV} mode`);
+
+window.matrixLogger = logger;
 
 // Parse the given window.location and return parameters that can be used when calling
 // MatrixChat.showScreen(screen, params)
