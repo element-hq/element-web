@@ -1,16 +1,18 @@
 .mx_CryptographyPanel_sessionInfo {
-    display: table;
-    padding-left: 0;
+    padding: 0em;
+    border-spacing: 0px;
+}
+.mx_CryptographyPanel_sessionInfo > tr {
+    vertical-align: baseline;
+    padding: 0em;
 }
 
-.mx_CryptographyPanel_sessionInfo > li {
-    display: table-row;
-}
-
-.mx_CryptographyPanel_sessionInfo > li > label,
-.mx_CryptographyPanel_sessionInfo > li > span {
-    display: table-cell;
+.mx_CryptographyPanel_sessionInfo > tr > td,
+.mx_CryptographyPanel_sessionInfo > tr > td {
+    padding-bottom: 0em;
+    padding-left: 0em;
     padding-right: 1em;
+    padding-top: 0em;
 }
 
 .mx_CryptographyPanel_importExportButtons .mx_AccessibleButton {
