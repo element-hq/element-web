@@ -489,10 +489,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     reload() {
-        // we used to remote to the main process to get it to
-        // reload the webcontents, but in practice this is unnecessary:
-        // the normal way works fine.
-        window.location.reload(false);
+        window.location.reload();
     }
 
     private async ipcCall(name: string, ...args: any[]): Promise<any> {
