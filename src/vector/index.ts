@@ -181,7 +181,7 @@ async function start() {
                     if (window.localStorage) {
                         window.localStorage.setItem('mx_accepts_unsupported_browser', String(true));
                     }
-                    console.log("User accepts the compatibility risks.");
+                    logger.log("User accepts the compatibility risks.");
                     resolve();
                 });
             });
