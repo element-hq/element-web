@@ -29,6 +29,8 @@ import { saveAs } from "file-saver";
 import { _t } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 type BlobFile = {
     name: string;
     blob: Blob;
@@ -61,7 +63,7 @@ export default abstract class Exporter {
     }
 
     protected updateProgress(progress: string, log = true, show = true): void {
-        if (log) console.log(progress);
+        if (log) logger.log(progress);
         if (show) this.setProgressText(progress);
     }
 
@@ -91,13 +93,13 @@ export default abstract class Exporter {
     }
 
     protected cleanUp(): string {
-        console.log("Cleaning up...");
+        logger.log("Cleaning up...");
         window.removeEventListener("beforeunload", this.onBeforeUnload);
         return "";
     }
 
     public async cancelExport(): Promise<void> {
-        console.log("Cancelling export...");
+        logger.log("Cancelling export...");
         this.cancelled = true;
     }
 
@@ -212,7 +214,7 @@ export default abstract class Exporter {
                 blob = await image.blob();
             }
         } catch (err) {
-            console.log("Error decrypting media");
+            logger.log("Error decrypting media");
         }
         return blob;
     }

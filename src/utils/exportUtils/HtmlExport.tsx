@@ -38,6 +38,8 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import getExportCSS from "./exportCSS";
 import { textForEvent } from "../../TextForEvent";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export default class HTMLExporter extends Exporter {
     protected avatars: Map<string, boolean>;
     protected permalinkCreator: RoomPermalinkCreator;
@@ -70,7 +72,7 @@ export default class HTMLExporter extends Exporter {
                 this.totalSize += blob.size;
                 this.addFile(avatarPath, blob);
             } catch (err) {
-                console.log("Failed to fetch room's avatar" + err);
+                logger.log("Failed to fetch room's avatar" + err);
             }
         }
         const avatar = (
@@ -238,7 +240,7 @@ export default class HTMLExporter extends Exporter {
                 const blob = await image.blob();
                 this.addFile(`users/${member.userId.replace(/:/g, '-')}.png`, blob);
             } catch (err) {
-                console.log("Failed to fetch user's avatar" + err);
+                logger.log("Failed to fetch user's avatar" + err);
             }
         }
     }
@@ -362,7 +364,7 @@ export default class HTMLExporter extends Exporter {
                             this.addFile(filePath, blob);
                         }
                     } catch (e) {
-                        console.log("Error while fetching file" + e);
+                        logger.log("Error while fetching file" + e);
                         eventTile = await this.getEventTileMarkup(
                             this.createModifiedEvent(_t("Error fetching file"), mxEv),
                             joined,

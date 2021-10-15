@@ -24,6 +24,8 @@ import { ExportType } from "./exportUtils";
 import { IExportOptions } from "./exportUtils";
 import { textForEvent } from "../../TextForEvent";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export default class PlainTextExporter extends Exporter {
     protected totalSize: number;
     protected mediaOmitText: string;
@@ -94,7 +96,7 @@ export default class PlainTextExporter extends Exporter {
                     }
                 } catch (error) {
                     mediaText = " (" + _t("Error fetching file") + ")";
-                    console.log("Error fetching file " + error);
+                    logger.log("Error fetching file " + error);
                 }
             } else mediaText = ` (${this.mediaOmitText})`;
         }
@@ -123,7 +125,7 @@ export default class PlainTextExporter extends Exporter {
         const res = await this.getRequiredEvents();
         const fetchEnd = performance.now();
 
-        console.log(`Fetched ${res.length} events in ${(fetchEnd - fetchStart)/1000}s`);
+        logger.log(`Fetched ${res.length} events in ${(fetchEnd - fetchStart)/1000}s`);
 
         this.updateProgress("Creating output...");
         const text = await this.createOutput(res);
@@ -142,7 +144,7 @@ export default class PlainTextExporter extends Exporter {
             console.info("Export cancelled successfully");
         } else {
             console.info("Export successful!");
-            console.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
+            logger.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
         }
 
         this.cleanUp();
