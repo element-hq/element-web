@@ -531,8 +531,13 @@ export default class EventTile extends React.Component<IProps, IState> {
             return null;
         }
 
-        const thread = this.state.thread;
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        const thread = room.threads.get(this.props.mxEvent.getId());
+
+        if (thread && !thread.ready) {
+            thread.addEvent(this.props.mxEvent, true);
+        }
+
         if (!thread || this.props.showThreadInfo === false || thread.length <= 1) {
             return null;
         }
