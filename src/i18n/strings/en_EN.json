@@ -1551,6 +1551,8 @@
     "Send as message": "Send as message",
     "Edit message": "Edit message",
     "Mod": "Mod",
+    "%(count)s reply|other": "%(count)s replies",
+    "%(count)s reply|one": "%(count)s reply",
     "This event could not be displayed": "This event could not be displayed",
     "Your key share request has been sent - please check your other sessions for key share requests.": "Your key share request has been sent - please check your other sessions for key share requests.",
     "Key share requests are sent to your other sessions automatically. If you rejected or dismissed the key share request on your other sessions, click here to request the keys for this session again.": "Key share requests are sent to your other sessions automatically. If you rejected or dismissed the key share request on your other sessions, click here to request the keys for this session again.",

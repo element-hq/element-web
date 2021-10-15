@@ -23,7 +23,7 @@ import ReplyThread from "../../../components/views/elements/ReplyThread";
 import { getHtmlText } from "../../../HtmlUtils";
 
 export class MessageEventPreview implements IPreview {
-    public getTextFor(event: MatrixEvent, tagId?: TagID): string {
+    public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string {
         let eventContent = event.getContent();
 
         if (event.isRelation("m.replace")) {
@@ -64,7 +64,7 @@ export class MessageEventPreview implements IPreview {
             return _t("* %(senderName)s %(emote)s", { senderName: getSenderName(event), emote: body });
         }
 
-        if (isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
+        if (isThread || isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
             return body;
         } else {
             return _t("%(senderName)s: %(message)s", { senderName: getSenderName(event), message: body });
