@@ -34,7 +34,7 @@ import * as ReactDOM from "react-dom";
 import React, { ChangeEvent, ReactElement } from 'react';
 import * as sdk from 'matrix-react-sdk';
 import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
-import { PushProcessor } from '../../../matrix-js-sdk/src/pushprocessor';
+import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
 
 let widthInput: HTMLInputElement;
 let heightInput: HTMLInputElement;
