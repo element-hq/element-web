@@ -117,7 +117,7 @@ let meetApi: any; // JitsiMeetExternalAPI
             if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
                 // Request credentials, give callback to continue when received
                 openIdToken = await widgetApi.requestOpenIDConnectToken();
-                console.log("Got OpenID Connect token");
+                logger.log("Got OpenID Connect token");
             }
 
             // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/element-web/issues/12795)

@@ -247,7 +247,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
         // try to flush the rageshake logs to indexeddb before quit.
         electron.on('before-quit', function() {
-            console.log('element-desktop closing');
+            logger.log('element-desktop closing');
             rageshake.flush();
         });
 
@@ -533,7 +533,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     setSpellCheckLanguages(preferredLangs: string[]) {
         this.ipcCall('setSpellCheckLanguages', preferredLangs).catch(error => {
-            console.log("Failed to send setSpellCheckLanguages IPC to Electron");
+            logger.log("Failed to send setSpellCheckLanguages IPC to Electron");
             logger.error(error);
         });
     }

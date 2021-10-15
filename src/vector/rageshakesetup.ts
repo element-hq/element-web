@@ -36,12 +36,12 @@ export function initRageshake() {
     // we manually check persistence for rageshakes ourselves
     const prom = rageshake.init(/*setUpPersistence=*/false);
     prom.then(() => {
-        console.log("Initialised rageshake.");
-        console.log("To fix line numbers in Chrome: " +
+        logger.log("Initialised rageshake.");
+        logger.log("To fix line numbers in Chrome: " +
             "Meatball menu → Settings → Ignore list → Add /rageshake\\.js$");
 
         window.addEventListener('beforeunload', (e) => {
-            console.log('element-web closing');
+            logger.log('element-web closing');
             // try to flush the logs to indexeddb
             rageshake.flush();
         });
@@ -72,9 +72,9 @@ window.mxSendRageshake = function(text: string, withLogs?: boolean) {
     sendBugReport(url, {
         userText: text,
         sendLogs: withLogs,
-        progressCallback: console.log.bind(console),
+        progressCallback: logger.log.bind(console),
     }).then(() => {
-        console.log("Bug report sent!");
+        logger.log("Bug report sent!");
     }, (err) => {
         logger.error(err);
     });
