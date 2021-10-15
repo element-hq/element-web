@@ -476,6 +476,9 @@ export default class EventTile extends React.Component<IProps, IState> {
             this.props.mxEvent.once(ThreadEvent.Ready, this.updateThread);
             this.props.mxEvent.on(ThreadEvent.Update, this.updateThread);
         }
+
+        const room = this.context.getRoom(this.props.mxEvent.getRoomId());
+        room.on(ThreadEvent.New, this.onNewThread);
     }
 
     private updateThread = (thread) => {
@@ -517,6 +520,9 @@ export default class EventTile extends React.Component<IProps, IState> {
             this.props.mxEvent.off(ThreadEvent.Ready, this.updateThread);
             this.props.mxEvent.off(ThreadEvent.Update, this.updateThread);
         }
+
+        const room = this.context.getRoom(this.props.mxEvent.getRoomId());
+        room.off(ThreadEvent.New, this.onNewThread);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -527,12 +533,32 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
     }
 
+    private onNewThread = (thread: Thread) => {
+        if (thread.id === this.props.mxEvent.getId()) {
+            this.updateThread(thread);
+            const room = this.context.getRoom(this.props.mxEvent.getRoomId());
+            room.off(ThreadEvent.New, this.onNewThread);
+        }
+    };
+
     private renderThreadInfo(): React.ReactNode {
         if (!SettingsStore.getValue("feature_thread")) {
             return null;
         }
 
-        const thread = this.state.thread;
+        /**
+         * Accessing the threads value through the room due to a race condition
+         * that will be solved when there are proper backend support for threads
+         * We currently have no reliable way to discover than an event is a thread
+         * when we are at the sync stage
+         */
+        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        const thread = room.threads.get(this.props.mxEvent.getId());
+
+        if (thread && !thread.ready) {
+            thread.addEvent(this.props.mxEvent, true);
+        }
+
         if (!thread || this.props.showThreadInfo === false || thread.length <= 1) {
             return null;
         }
