@@ -175,11 +175,11 @@ export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswor
                         value={this.state.password}
                         onChange={this.onPasswordFieldChange}
                     />
+                    { errorSection }
                     <div className="mx_button_row">
                         { submitButtonOrSpinner }
                     </div>
                 </form>
-                { errorSection }
             </div>
         );
     }
