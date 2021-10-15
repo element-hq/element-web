@@ -72,9 +72,9 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
         }
 
         return (
-            <div className='mx_SettingsTab_section'>
+            <div className='mx_SettingsTab_section mx_CryptographyPanel'>
                 <span className='mx_SettingsTab_subheading'>{ _t("Cryptography") }</span>
-                <ul className='mx_SettingsTab_subsectionText mx_CryptographyPanel'>
+                <ul className='mx_SettingsTab_subsectionText mx_CryptographyPanel_sessionInfo'>
                     <li>
                         <label>{ _t("Session ID:") }</label>
                         <span><code>{ deviceId }</code></span>

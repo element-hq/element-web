@@ -1,14 +1,14 @@
-.mx_CryptographyPanel {
+.mx_CryptographyPanel_sessionInfo {
     display: table;
     padding-left: 0;
 }
 
-.mx_CryptographyPanel > li {
+.mx_CryptographyPanel_sessionInfo > li {
     display: table-row;
 }
 
-.mx_CryptographyPanel > li > label,
-.mx_CryptographyPanel > li > span {
+.mx_CryptographyPanel_sessionInfo > li > label,
+.mx_CryptographyPanel_sessionInfo > li > span {
     display: table-cell;
     padding-right: 1em;
 }
