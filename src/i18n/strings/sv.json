@@ -3167,5 +3167,18 @@
     "Don't leave any rooms": "Lämna inga rum",
     "%(senderDisplayName)s sent a sticker.": "%(senderDisplayName)s skickade en dekal.",
     "%(senderDisplayName)s changed the room avatar.": "%(senderDisplayName)s bytte rummets avatar.",
-    "%(date)s at %(time)s": "%(date)s vid %(time)s"
+    "%(date)s at %(time)s": "%(date)s vid %(time)s",
+    "Error fetching file": "Fel vid hämtning av fil",
+    "Topic: %(topic)s": "Ämne: %(topic)s",
+    "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.": "Det här är början på exporten av <roomName/>. Exporterad av <exporterDetails/> vid %(exportDate)s.",
+    "%(creatorName)s created this room.": "%(creatorName)s skapade det här rummet.",
+    "Media omitted - file size limit exceeded": "Media uteslutet - filstorleksgräns överskriden",
+    "Media omitted": "Media uteslutet",
+    "Current Timeline": "Nuvarande tidslinje",
+    "Specify a number of messages": "Specificera ett antal meddelanden",
+    "From the beginning": "Från början",
+    "Plain Text": "Vanlig text",
+    "JSON": "JSON",
+    "HTML": "HTML",
+    "Are you sure you want to exit during this export?": "Är du säker på att du vill avsluta under den här exporten?"
 }
