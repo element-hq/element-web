@@ -35,6 +35,7 @@ import Spinner from './Spinner';
 import ReplyTile from "../rooms/ReplyTile";
 import Pill from './Pill';
 import { Room } from 'matrix-js-sdk/src/models/room';
+import { RelationType } from 'matrix-js-sdk/src/@types/event';
 
 /**
  * This number is based on the previous behavior - if we have message of height
@@ -226,13 +227,30 @@ export default class ReplyThread extends React.Component<IProps, IState> {
 
     public static makeReplyMixIn(ev: MatrixEvent) {
         if (!ev) return {};
-        return {
+
+        const mixin: any = {
             'm.relates_to': {
                 'm.in_reply_to': {
                     'event_id': ev.getId(),
                 },
             },
         };
+
+        /**
+         * If the event replied is part of a thread
+         * Add the `m.thread` relation so that clients
+         * that know how to handle that relation will
+         * be able to render them more accurately
+         */
+        if (ev.isThreadRelation) {
+            mixin['m.relates_to'] = {
+                ...mixin['m.relates_to'],
+                rel_type: RelationType.Thread,
+                event_id: ev.threadRootId,
+            };
+        }
+
+        return mixin;
     }
 
     public static hasThreadReply(event: MatrixEvent) {
