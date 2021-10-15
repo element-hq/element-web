@@ -29,6 +29,7 @@ limitations under the License.
 
 .mx_DevicesPanel_header .mx_DevicesPanel_deviceButtons {
     height: 48px; // make this tall so the table doesn't move down when the delete button appears
+    width: 20%;
 }
 
 .mx_DevicesPanel_header th {
@@ -43,10 +44,6 @@ limitations under the License.
 
 .mx_DevicesPanel_header .mx_DevicesPanel_deviceLastSeen {
     width: 30%;
-}
-
-.mx_DevicesPanel_header .mx_DevicesPanel_deviceButtons {
-    width: 20%;
 }
 
 .mx_DevicesPanel_device td {
