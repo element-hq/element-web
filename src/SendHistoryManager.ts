@@ -20,6 +20,8 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { SerializedPart } from "./editor/parts";
 import EditorModel from "./editor/model";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IHistoryItem {
     parts: SerializedPart[];
     replyEventId?: string;
@@ -42,7 +44,7 @@ export default class SendHistoryManager {
             try {
                 this.history.push(JSON.parse(itemJSON));
             } catch (e) {
-                console.warn("Throwing away unserialisable history", e);
+                logger.warn("Throwing away unserialisable history", e);
                 break;
             }
             ++index;

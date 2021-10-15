@@ -28,6 +28,8 @@ import ElementPermalinkConstructor from "./ElementPermalinkConstructor";
 import matrixLinkify from "../../linkify-matrix";
 import SdkConfig from "../../SdkConfig";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // The maximum number of servers to pick when working out which servers
 // to add to permalinks. The servers are appended as ?via=example.org
 const MAX_SERVER_CANDIDATES = 3;
@@ -109,7 +111,7 @@ export class RoomPermalinkCreator {
             // currentState, at least potentially at the early stages of joining a room.
             // To avoid breaking everything, we'll just warn rather than throw as well as
             // not bother updating the various aspects of the share link.
-            console.warn("Tried to load a permalink creator with no room state");
+            logger.warn("Tried to load a permalink creator with no room state");
             return;
         }
         this.updateAllowedServers();

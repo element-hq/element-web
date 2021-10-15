@@ -23,6 +23,8 @@ import { OrderingAlgorithm } from "./OrderingAlgorithm";
 import { NotificationColor } from "../../../notifications/NotificationColor";
 import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface ICategorizedRoomMap {
     // @ts-ignore - TS wants this to be a string, but we know better
     [category: NotificationColor]: Room[];
@@ -130,7 +132,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         } else if (cause === RoomUpdateCause.RoomRemoved) {
             const roomIdx = this.getRoomIndex(room);
             if (roomIdx === -1) {
-                console.warn(`Tried to remove unknown room from ${this.tagId}: ${room.roomId}`);
+                logger.warn(`Tried to remove unknown room from ${this.tagId}: ${room.roomId}`);
                 return false; // no change
             }
             const oldCategory = this.getCategoryFromIndices(roomIdx, this.indices);
@@ -263,7 +265,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
 
             if (indices[lastCat] > indices[thisCat]) {
                 // "should never happen" disclaimer goes here
-                console.warn(
+                logger.warn(
                     `!! Room list index corruption: ${lastCat} (i:${indices[lastCat]}) is greater ` +
                     `than ${thisCat} (i:${indices[thisCat]}) - category indices are likely desynced from reality`);
 

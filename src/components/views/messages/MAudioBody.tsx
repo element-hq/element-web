@@ -27,6 +27,8 @@ import { PlaybackManager } from "../../../audio/PlaybackManager";
 import { isVoiceMessage } from "../../../utils/EventUtils";
 import { PlaybackQueue } from "../../../audio/PlaybackQueue";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IState {
     error?: Error;
     playback?: Playback;
@@ -49,12 +51,12 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
                 buffer = await blob.arrayBuffer();
             } catch (e) {
                 this.setState({ error: e });
-                console.warn("Unable to decrypt audio message", e);
+                logger.warn("Unable to decrypt audio message", e);
                 return; // stop processing the audio file
             }
         } catch (e) {
             this.setState({ error: e });
-            console.warn("Unable to decrypt/download audio message", e);
+            logger.warn("Unable to decrypt/download audio message", e);
             return; // stop processing the audio file
         }
 

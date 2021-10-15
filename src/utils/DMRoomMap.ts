@@ -20,6 +20,8 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 /**
  * Class that takes a Matrix Client and flips the m.direct map
  * so the operation of mapping a room ID to which user it's a DM
@@ -196,7 +198,7 @@ export default class DMRoomMap {
                 // to avoid multiple devices fighting to correct
                 // the account data, only try to send the corrected
                 // version once.
-                console.warn(`Invalid m.direct account data detected ` +
+                logger.warn(`Invalid m.direct account data detected ` +
                     `(self-chats that shouldn't be), patching it up.`);
                 if (neededPatching && !this.hasSentOutPatchDirectAccountDataPatch) {
                     this.hasSentOutPatchDirectAccountDataPatch = true;

@@ -917,7 +917,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         let waitFor = Promise.resolve(null);
         if (!this.firstSyncComplete) {
             if (!this.firstSyncPromise) {
-                console.warn('Cannot view a room before first sync. room_id:', roomInfo.room_id);
+                logger.warn('Cannot view a room before first sync. room_id:', roomInfo.room_id);
                 return;
             }
             waitFor = this.firstSyncPromise.promise;
@@ -973,7 +973,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // Wait for the first sync to complete
         if (!this.firstSyncComplete) {
             if (!this.firstSyncPromise) {
-                console.warn('Cannot view a group before first sync. group_id:', groupId);
+                logger.warn('Cannot view a group before first sync. group_id:', groupId);
                 return;
             }
             await this.firstSyncPromise.promise;
@@ -1475,7 +1475,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             Modal.closeCurrentModal('Session.logged_out');
 
             if (errObj.httpStatus === 401 && errObj.data && errObj.data['soft_logout']) {
-                console.warn("Soft logout issued by server - avoiding data deletion");
+                logger.warn("Soft logout issued by server - avoiding data deletion");
                 Lifecycle.softLogout();
                 return;
             }

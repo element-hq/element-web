@@ -42,6 +42,8 @@ import CrossSigningPanel from "../../CrossSigningPanel";
 import EventIndexPanel from "../../EventIndexPanel";
 import InlineSpinner from "../../../elements/InlineSpinner";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IIgnoredUserProps {
     userId: string;
     onUnignored: (userId: string) => void;
@@ -174,7 +176,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     i--;
                 } else {
                     // Print out error with joining/leaving room
-                    console.warn(e);
+                    logger.warn(e);
                 }
             });
         }

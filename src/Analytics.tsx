@@ -33,7 +33,7 @@ function getRedactedHash(hash: string): string {
     // Don't leak URLs we aren't expecting - they could contain tokens/PII
     const match = hashRegex.exec(hash);
     if (!match) {
-        console.warn(`Unexpected hash location "${hash}"`);
+        logger.warn(`Unexpected hash location "${hash}"`);
         return '#/<unexpected hash location>';
     }
 
@@ -322,7 +322,7 @@ export class Analytics {
         }
 
         if (typeof generationTimeMs !== 'number') {
-            console.warn('Analytics.trackPageChange: expected generationTimeMs to be a number');
+            logger.warn('Analytics.trackPageChange: expected generationTimeMs to be a number');
             // But continue anyway because we still want to track the change
         }
 

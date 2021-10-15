@@ -138,7 +138,7 @@ export async function upgradeRoom(
             }
         } catch (e) {
             // These errors are not critical to the room upgrade itself
-            console.warn("Failed to update parent spaces during room upgrade", e);
+            logger.warn("Failed to update parent spaces during room upgrade", e);
         }
     }
 

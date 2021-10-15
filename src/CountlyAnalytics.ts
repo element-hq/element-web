@@ -429,7 +429,7 @@ export default class CountlyAnalytics {
         try {
             this.appVersion = await platform.getAppVersion();
         } catch (e) {
-            console.warn("Failed to get app version, using 'unknown'");
+            logger.warn("Failed to get app version, using 'unknown'");
         }
 
         // start heartbeat

@@ -180,7 +180,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
                     });
                 }
             } catch (err) {
-                console.warn("Unable to decrypt attachment: ", err);
+                logger.warn("Unable to decrypt attachment: ", err);
                 // Set a placeholder image when we can't decrypt the image.
                 this.setState({
                     error: err,

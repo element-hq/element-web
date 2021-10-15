@@ -111,7 +111,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
         const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
 
         if (enableGuest && !guestHsUrl) {
-            console.warn("Cannot enable guest access: can't determine HS URL to use");
+            logger.warn("Cannot enable guest access: can't determine HS URL to use");
             enableGuest = false;
         }
 
@@ -188,7 +188,7 @@ export function attemptTokenLogin(
     const homeserver = localStorage.getItem(SSO_HOMESERVER_URL_KEY);
     const identityServer = localStorage.getItem(SSO_ID_SERVER_URL_KEY);
     if (!homeserver) {
-        console.warn("Cannot log in with token: can't determine HS URL to use");
+        logger.warn("Cannot log in with token: can't determine HS URL to use");
         Modal.createTrackedDialog("SSO", "Unknown HS", ErrorDialog, {
             title: _t("We couldn't log you in"),
             description: _t("We asked the browser to remember which homeserver you use to let you sign in, " +
@@ -523,7 +523,7 @@ export function hydrateSession(credentials: IMatrixClientCreds): Promise<MatrixC
 
     const overwrite = credentials.userId !== oldUserId || credentials.deviceId !== oldDeviceId;
     if (overwrite) {
-        console.warn("Clearing all data: Old session belongs to a different user/session");
+        logger.warn("Clearing all data: Old session belongs to a different user/session");
     }
 
     return doSetLoggedIn(credentials, overwrite);
@@ -602,10 +602,10 @@ async function doSetLoggedIn(
             // make sure we don't think that it's a fresh login any more
             sessionStorage.removeItem("mx_fresh_login");
         } catch (e) {
-            console.warn("Error using local storage: can't persist session!", e);
+            logger.warn("Error using local storage: can't persist session!", e);
         }
     } else {
-        console.warn("No local storage available: can't persist session!");
+        logger.warn("No local storage available: can't persist session!");
     }
 
     dis.dispatch({ action: 'on_logged_in' });
@@ -650,7 +650,7 @@ async function persistCredentials(credentials: IMatrixClientCreds): Promise<void
             encryptedAccessToken = await encryptAES(credentials.accessToken, encrKey, "access_token");
             encrKey.fill(0);
         } catch (e) {
-            console.warn("Could not encrypt access token", e);
+            logger.warn("Could not encrypt access token", e);
         }
         try {
             // save either the encrypted access token, or the plain access
@@ -801,7 +801,7 @@ async function startMatrixClient(startSyncing = true): Promise<void> {
         await EventIndexPeg.init();
         await MatrixClientPeg.start();
     } else {
-        console.warn("Caller requested only auxiliary services be started");
+        logger.warn("Caller requested only auxiliary services be started");
         await MatrixClientPeg.assign();
     }
 

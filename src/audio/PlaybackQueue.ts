@@ -26,6 +26,8 @@ import { isVoiceMessage } from "../utils/EventUtils";
 import RoomViewStore from "../stores/RoomViewStore";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 /**
  * Audio playback queue management for a given room. This keeps track of where the user
  * was at for each playback, what order the playbacks were played in, and triggers subsequent
@@ -114,7 +116,7 @@ export class PlaybackQueue {
                     if (next) {
                         const instance = this.playbacks.get(next);
                         if (!instance) {
-                            console.warn(
+                            logger.warn(
                                 "Voice message queue desync: Missing playback for next message: "
                                 + `Current=${this.currentPlaybackId} Last=${last} Next=${next}`,
                             );
@@ -173,7 +175,7 @@ export class PlaybackQueue {
                         }
                     }
                 } else {
-                    console.warn(
+                    logger.warn(
                         "Voice message queue desync: Expected playback stop to be last in order. "
                         + `Current=${this.currentPlaybackId} Last=${last} EventID=${mxEvent.getId()}`,
                     );

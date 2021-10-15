@@ -20,6 +20,8 @@ import ICanvasEffect from '../../../effects/ICanvasEffect';
 import { CHAT_EFFECTS } from '../../../effects';
 import UIStore, { UI_EVENTS } from "../../../stores/UIStore";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     roomWidth: number;
 }
@@ -38,7 +40,7 @@ const EffectsOverlay: FunctionComponent<IProps> = ({ roomWidth }) => {
                 effect = new Effect(options);
                 effectsRef.current[name] = effect;
             } catch (err) {
-                console.warn(`Unable to load effect module at '../../../effects/${name}.`, err);
+                logger.warn(`Unable to load effect module at '../../../effects/${name}.`, err);
             }
         }
         return effect;

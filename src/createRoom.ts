@@ -227,7 +227,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         // but the server denies them that permission (via room_list_publication_rules).
         // The check below responds by retrying without publishing the room.
         if (err.httpStatus === 403 && err.errcode === "M_UNKNOWN" && err.data.error === "Not allowed to publish room") {
-            console.warn("Failed to publish room, try again without publishing it");
+            logger.warn("Failed to publish room, try again without publishing it");
             createOpts.visibility = Visibility.Private;
             return client.createRoom(createOpts);
         } else {

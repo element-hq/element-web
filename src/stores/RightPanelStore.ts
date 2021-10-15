@@ -23,6 +23,8 @@ import { ActionPayload } from "../dispatcher/payloads";
 import { Action } from '../dispatcher/actions';
 import { SettingLevel } from "../settings/SettingLevel";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface RightPanelStoreState {
     // Whether or not to show the right panel at all. We split out rooms and groups
     // because they're different flows for the user to follow.
@@ -180,7 +182,7 @@ export default class RightPanelStore extends Store<ActionPayload> {
                     }
                 }
                 if (!RightPanelPhases[targetPhase]) {
-                    console.warn(`Tried to switch right panel to unknown phase: ${targetPhase}`);
+                    logger.warn(`Tried to switch right panel to unknown phase: ${targetPhase}`);
                     return;
                 }
 

@@ -270,11 +270,11 @@ export default class SetIdServer extends React.Component<IProps, IState> {
             );
         } catch (e) {
             currentServerReachable = false;
-            console.warn(
+            logger.warn(
                 `Unable to reach identity server at ${currentClientIdServer} to check ` +
                 `for 3PIDs during IS change flow`,
             );
-            console.warn(e);
+            logger.warn(e);
         }
         const boundThreepids = threepids.filter(tp => tp.bound);
         let message;

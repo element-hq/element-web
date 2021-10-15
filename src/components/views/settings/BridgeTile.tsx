@@ -27,6 +27,8 @@ import { isUrlPermitted } from '../../../HtmlUtils';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     ev: MatrixEvent;
     room: Room;
@@ -75,13 +77,13 @@ export default class BridgeTile extends React.PureComponent<IProps> {
         const content: IBridgeStateEvent = this.props.ev.getContent();
         // Validate
         if (!content.channel?.id || !content.protocol?.id) {
-            console.warn(`Bridge info event ${this.props.ev.getId()} has missing content. Tile will not render`);
+            logger.warn(`Bridge info event ${this.props.ev.getId()} has missing content. Tile will not render`);
             return null;
         }
         if (!content.bridgebot) {
             // Bridgebot was not required previously, so in order to not break rooms we are allowing
             // the sender to be used in place. When the proposal is merged, this should be removed.
-            console.warn(`Bridge info event ${this.props.ev.getId()} does not provide a 'bridgebot' key which`
+            logger.warn(`Bridge info event ${this.props.ev.getId()} does not provide a 'bridgebot' key which`
              + "is deprecated behaviour. Using sender for now.");
             content.bridgebot = this.props.ev.getSender();
         }

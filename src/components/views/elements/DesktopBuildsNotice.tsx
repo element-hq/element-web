@@ -22,6 +22,8 @@ import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserSettingsDialog";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export enum WarningKind {
     Files,
     Search,
@@ -83,7 +85,7 @@ export default function DesktopBuildsNotice({ isRoomEncrypted, kind }: IProps) {
 
     // for safety
     if (!text) {
-        console.warn("Unknown desktop builds warning kind: ", kind);
+        logger.warn("Unknown desktop builds warning kind: ", kind);
         return null;
     }
 

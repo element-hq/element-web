@@ -27,6 +27,8 @@ import { SetRightPanelPhasePayload } from './dispatcher/payloads/SetRightPanelPh
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // These functions are frequently used just to check whether an event has
 // any text to display at all. For this reason they return deferred values
 // to avoid the expense of looking up translations when they're not needed.
@@ -122,7 +124,7 @@ function textForMemberEvent(ev: MatrixEvent, allowJSX: boolean, showHiddenEvents
                     return null;
                 }
             } else {
-                if (!ev.target) console.warn("Join message has no target! -- " + ev.getContent().state_key);
+                if (!ev.target) logger.warn("Join message has no target! -- " + ev.getContent().state_key);
                 return () => _t('%(targetName)s joined the room', { targetName });
             }
         case 'leave':

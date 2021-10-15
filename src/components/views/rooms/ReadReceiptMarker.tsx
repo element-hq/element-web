@@ -26,6 +26,8 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 import MemberAvatar from '../avatars/MemberAvatar';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     // the RoomMember to show the RR for
     member?: RoomMember;
@@ -145,7 +147,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
             // this seems to happen sometimes for reasons I don't understand
             // the docs for `offsetParent` say it may be null if `display` is
             // `none`, but I can't see why that would happen.
-            console.warn(
+            logger.warn(
                 `ReadReceiptMarker for ${this.props.fallbackUserId} in has no offsetParent`,
             );
             startTopOffset = 0;

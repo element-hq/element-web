@@ -89,11 +89,11 @@ function safeCounterpartTranslate(text: string, options?: object) {
         count = options['count'];
         Object.keys(options).forEach((k) => {
             if (options[k] === undefined) {
-                console.warn("safeCounterpartTranslate called with undefined interpolation name: " + k);
+                logger.warn("safeCounterpartTranslate called with undefined interpolation name: " + k);
                 options[k] = 'undefined';
             }
             if (options[k] === null) {
-                console.warn("safeCounterpartTranslate called with null interpolation name: " + k);
+                logger.warn("safeCounterpartTranslate called with null interpolation name: " + k);
                 options[k] = 'null';
             }
         });

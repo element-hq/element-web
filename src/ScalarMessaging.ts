@@ -695,7 +695,7 @@ const onMessage = function(event: MessageEvent<any>): void {
             setBotPower(event, roomId, userId, event.data.level, event.data.ignoreIfGreater);
             break;
         default:
-            console.warn("Unhandled postMessage event with action '" + event.data.action +"'");
+            logger.warn("Unhandled postMessage event with action '" + event.data.action +"'");
             break;
     }
 };

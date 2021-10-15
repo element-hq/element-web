@@ -182,7 +182,7 @@ export default class SettingsStore {
      */
     public static unwatchSetting(watcherReference: string) {
         if (!SettingsStore.watchers.has(watcherReference)) {
-            console.warn(`Ending non-existent watcher ID ${watcherReference}`);
+            logger.warn(`Ending non-existent watcher ID ${watcherReference}`);
             return;
         }
 

@@ -113,7 +113,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                 logger.error("Cannot disable assets: no scalar client");
             }
         } else {
-            console.warn('No widget ID specified, not disabling assets');
+            logger.warn('No widget ID specified, not disabling assets');
         }
 
         this.props.setShowStickers(false);

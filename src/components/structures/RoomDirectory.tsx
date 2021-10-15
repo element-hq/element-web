@@ -133,7 +133,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 }
                 this.setState({ protocolsLoading: false });
             }, (err) => {
-                console.warn(`error loading third party protocols: ${err}`);
+                logger.warn(`error loading third party protocols: ${err}`);
                 this.setState({ protocolsLoading: false });
                 if (MatrixClientPeg.get().isGuest()) {
                     // Guests currently aren't allowed to use this API, so

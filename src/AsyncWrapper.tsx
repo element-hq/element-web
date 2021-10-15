@@ -61,7 +61,7 @@ export default class AsyncWrapper extends React.Component<IProps, IState> {
                 : result as ComponentType;
             this.setState({ component });
         }).catch((e) => {
-            console.warn('AsyncWrapper promise failed', e);
+            logger.warn('AsyncWrapper promise failed', e);
             this.setState({ error: e });
         });
     }

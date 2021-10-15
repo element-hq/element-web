@@ -50,6 +50,8 @@ import IconizedContextMenu, {
 import { CommunityPrototypeStore, IRoomProfile } from "../../../stores/CommunityPrototypeStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     room: Room;
     showMessagePreview: boolean;
@@ -299,7 +301,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 0,
             ));
         } else {
-            console.warn(`Unexpected tag ${tagId} applied to ${this.props.room.roomId}`);
+            logger.warn(`Unexpected tag ${tagId} applied to ${this.props.room.roomId}`);
         }
 
         if ((ev as React.KeyboardEvent).key === Key.ENTER) {

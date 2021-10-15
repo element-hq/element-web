@@ -34,6 +34,8 @@ import { IBodyProps } from "./IBodyProps";
 import classNames from 'classnames';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IState {
     decryptedUrl?: string;
     decryptedThumbnailUrl?: string;
@@ -275,7 +277,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 });
             } catch (err) {
                 if (this.unmounted) return;
-                console.warn("Unable to decrypt attachment: ", err);
+                logger.warn("Unable to decrypt attachment: ", err);
                 // Set a placeholder image when we can't decrypt the image.
                 this.setState({
                     error: err,

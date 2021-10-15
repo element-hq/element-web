@@ -28,6 +28,8 @@ import GroupStore from "./GroupStore";
 import dis from "../dispatcher/dispatcher";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IState {
     // nothing of value - we use account data
 }
@@ -134,7 +136,7 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
                     // we use global account data because per-room account data on invites is unreliable
                     await this.matrixClient.setAccountData("im.vector.group_info." + room.roomId, profile);
                 } catch (e) {
-                    console.warn("Non-fatal error getting group information for invite:", e);
+                    logger.warn("Non-fatal error getting group information for invite:", e);
                 }
             }
         } else if (payload.action === "MatrixActions.accountData") {

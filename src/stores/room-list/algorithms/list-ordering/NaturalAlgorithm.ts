@@ -20,6 +20,8 @@ import { OrderingAlgorithm } from "./OrderingAlgorithm";
 import { RoomUpdateCause, TagID } from "../../models";
 import { Room } from "matrix-js-sdk/src/models/room";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 /**
  * Uses the natural tag sorting algorithm order to determine tag ordering. No
  * additional behavioural changes are present.
@@ -47,7 +49,7 @@ export class NaturalAlgorithm extends OrderingAlgorithm {
             if (idx >= 0) {
                 this.cachedOrderedRooms.splice(idx, 1);
             } else {
-                console.warn(`Tried to remove unknown room from ${this.tagId}: ${room.roomId}`);
+                logger.warn(`Tried to remove unknown room from ${this.tagId}: ${room.roomId}`);
             }
         }
 

@@ -207,7 +207,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             }
             // this can happen for a number of reasons, the most likely being
             // that the olm library was missing. It's not fatal.
-            console.warn("Unable to initialise e2e", e);
+            logger.warn("Unable to initialise e2e", e);
         }
 
         const opts = utils.deepCopy(this.opts);

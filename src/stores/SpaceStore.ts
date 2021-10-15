@@ -867,7 +867,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         try {
             await this.matrixClient.setRoomAccountData(space.roomId, EventType.SpaceOrder, { order });
         } catch (e) {
-            console.warn("Failed to set root space order", e);
+            logger.warn("Failed to set root space order", e);
             if (this.spaceOrderLocalEchoMap.get(space.roomId) === order) {
                 this.spaceOrderLocalEchoMap.delete(space.roomId);
             }

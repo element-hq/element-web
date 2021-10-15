@@ -157,7 +157,7 @@ export class Playback extends EventEmitter implements IDestroyable {
                         // This error handler is largely for Safari as well, which doesn't support Opus/Ogg
                         // very well.
                         logger.error("Error decoding recording: ", e);
-                        console.warn("Trying to re-encode to WAV instead...");
+                        logger.warn("Trying to re-encode to WAV instead...");
 
                         const wav = await decodeOgg(this.buf);
 

@@ -20,6 +20,8 @@ import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ActionPayload } from "../../dispatcher/payloads";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IState {}
 
 export default class RoomListLayoutStore extends AsyncStoreWithClient<IState> {
@@ -53,7 +55,7 @@ export default class RoomListLayoutStore extends AsyncStoreWithClient<IState> {
 
     // Note: this primarily exists for debugging, and isn't really intended to be used by anything.
     public async resetLayouts() {
-        console.warn("Resetting layouts for room list");
+        logger.warn("Resetting layouts for room list");
         for (const layout of this.layoutMap.values()) {
             layout.reset();
         }

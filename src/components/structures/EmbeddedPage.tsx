@@ -27,6 +27,8 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { ActionPayload } from "../../dispatcher/payloads";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     // URL to request embedded page content from
     url?: string;
@@ -79,7 +81,7 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
                 }
 
                 if (err || response.status < 200 || response.status >= 300) {
-                    console.warn(`Error loading page: ${err}`);
+                    logger.warn(`Error loading page: ${err}`);
                     this.setState({ page: _t("Couldn't load page") });
                     return;
                 }

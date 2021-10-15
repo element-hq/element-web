@@ -22,6 +22,8 @@ import { IContent } from "matrix-js-sdk/src/models/event";
 
 import { bodyToHtml, checkBlockNode, IOptsReturnString } from "../HtmlUtils";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const decodeEntities = (function() {
     let textarea = null;
     return function(str: string): string {
@@ -218,7 +220,7 @@ function renderDifferenceInDOM(originalRootNode: Node, diff: IDiff, diffMathPatc
         }
         default:
             // Should not happen (modifyComment, ???)
-            console.warn("MessageDiffUtils::editBodyDiffToHtml: diff action not supported atm", diff);
+            logger.warn("MessageDiffUtils::editBodyDiffToHtml: diff action not supported atm", diff);
     }
 }
 

@@ -176,7 +176,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         const u = url.parse(this.props.app.url);
         const childContentProtocol = u.protocol;
         if (parentContentProtocol === 'https:' && childContentProtocol !== 'https:') {
-            console.warn("Refusing to load mixed-content app:",
+            logger.warn("Refusing to load mixed-content app:",
                 parentContentProtocol, childContentProtocol, window.location, this.props.app.url);
             return true;
         }
@@ -305,7 +305,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                         dis.dispatch({ action: 'post_sticker_message', data: payload.data });
                         dis.dispatch({ action: 'stickerpicker_close' });
                     } else {
-                        console.warn('Ignoring sticker message. Invalid capability');
+                        logger.warn('Ignoring sticker message. Invalid capability');
                     }
                     break;
             }

@@ -170,7 +170,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
                 decryptedBlob: await this.props.mediaEventHelper.sourceBlob.value,
             });
         } catch (err) {
-            console.warn("Unable to decrypt attachment: ", err);
+            logger.warn("Unable to decrypt attachment: ", err);
             Modal.createTrackedDialog('Error decrypting attachment', '', ErrorDialog, {
                 title: _t("Error"),
                 description: _t("Error decrypting attachment"),

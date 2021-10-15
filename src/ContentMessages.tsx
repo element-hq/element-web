@@ -419,7 +419,7 @@ export default class ContentMessages {
     sendStickerContentToRoom(url: string, roomId: string, info: IImageInfo, text: string, matrixClient: MatrixClient) {
         const startTime = CountlyAnalytics.getTimestamp();
         const prom = matrixClient.sendStickerMessage(roomId, url, info, text).catch((e) => {
-            console.warn(`Failed to send content with URL ${url} to room ${roomId}`, e);
+            logger.warn(`Failed to send content with URL ${url} to room ${roomId}`, e);
             throw e;
         });
         CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, false, { msgtype: "m.sticker" });

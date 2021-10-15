@@ -158,7 +158,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
             // Our application lifecycle will catch the error and do the logout bits.
             // We'll try to log something in an vain attempt to record what happened (storage
             // is also obliterated on logout).
-            console.warn("User's account got deactivated without confirmation: Server had no auth");
+            logger.warn("User's account got deactivated without confirmation: Server had no auth");
             this.setState({ errStr: _t("Server did not require any authentication") });
         }).catch(e => {
             if (e && e.httpStatus === 401 && e.data) {

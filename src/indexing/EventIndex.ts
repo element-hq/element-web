@@ -583,7 +583,7 @@ export default class EventIndex extends EventEmitter {
                     if (eventId) {
                         await indexManager.deleteEvent(eventId);
                     } else {
-                        console.warn("EventIndex: Redaction event doesn't contain a valid associated event id", ev);
+                        logger.warn("EventIndex: Redaction event doesn't contain a valid associated event id", ev);
                     }
                 }
 

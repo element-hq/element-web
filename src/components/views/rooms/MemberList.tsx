@@ -48,6 +48,8 @@ import { shouldShowComponent } from "../../../customisations/helpers/UIComponent
 import { UIComponent } from "../../../settings/UIFeature";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const getSearchQueryLSKey = (roomId: string) => `mx_MemberList_searchQuarry_${roomId}`;
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
@@ -184,7 +186,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         try {
             searchQuery = window.localStorage.getItem(getSearchQueryLSKey(this.props.roomId));
         } catch (error) {
-            console.warn("Failed to get last the MemberList search query", error);
+            logger.warn("Failed to get last the MemberList search query", error);
         }
 
         // set the state after determining showPresence to make sure it's
@@ -433,7 +435,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         try {
             window.localStorage.setItem(getSearchQueryLSKey(this.props.roomId), searchQuery);
         } catch (error) {
-            console.warn("Failed to set the last MemberList search query", error);
+            logger.warn("Failed to set the last MemberList search query", error);
         }
 
         this.setState({

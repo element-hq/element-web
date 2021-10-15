@@ -236,7 +236,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             if (!device) {
                 // This can happen if the device is logged out while we're still showing verification
                 // UI for it.
-                console.warn("Verified device we don't know about: " + this.props.request.channel.deviceId);
+                logger.warn("Verified device we don't know about: " + this.props.request.channel.deviceId);
                 description = _t("You've successfully verified your device!");
             } else {
                 description = _t("You've successfully verified %(deviceName)s (%(deviceId)s)!", {

@@ -33,6 +33,8 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // A class for a child of GroupFilterPanel (possibly wrapped in a DNDTagTile) that represents
 // a thing to click on for the user to filter the visible rooms in the RoomList to:
 //  - Rooms that are part of the group
@@ -85,7 +87,7 @@ export default class TagTile extends React.Component {
             if (this.unmounted) return;
             this.setState({ profile });
         }).catch((err) => {
-            console.warn('Could not fetch group profile for ' + this.props.tag, err);
+            logger.warn('Could not fetch group profile for ' + this.props.tag, err);
         });
     };
 

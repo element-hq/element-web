@@ -991,7 +991,7 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
                     const val = parsedExplicit[level];
                     await SettingsStore.setValue(settingId, null, level as SettingLevel, val);
                 } catch (e) {
-                    console.warn(e);
+                    logger.warn(e);
                 }
             }
             const roomId = this.props.room.roomId;
@@ -1001,7 +1001,7 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
                     const val = parsedExplicitRoom[level];
                     await SettingsStore.setValue(settingId, roomId, level as SettingLevel, val);
                 } catch (e) {
-                    console.warn(e);
+                    logger.warn(e);
                 }
             }
             this.setState({
@@ -1035,7 +1035,7 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
                     vals[level] = null;
                 }
             } catch (e) {
-                console.warn(e);
+                logger.warn(e);
             }
         }
         return JSON.stringify(vals, null, 4);

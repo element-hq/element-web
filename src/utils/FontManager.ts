@@ -41,7 +41,7 @@ function safariVersionCheck(ua: string): boolean {
     } catch (err) {
         logger.error("Error in Safari COLR version check", err);
     }
-    console.warn("Couldn't determine Safari version to check COLR font support, assuming no.");
+    logger.warn("Couldn't determine Safari version to check COLR font support, assuming no.");
     return false;
 }
 

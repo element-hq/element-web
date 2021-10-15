@@ -18,6 +18,8 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomUpdateCause, TagID } from "../../models";
 import { SortAlgorithm } from "../models";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 /**
  * Represents a list ordering algorithm. Subclasses should populate the
  * `cachedOrderedRooms` field.
@@ -71,7 +73,7 @@ export abstract class OrderingAlgorithm {
     protected getRoomIndex(room: Room): number {
         let roomIdx = this.cachedOrderedRooms.indexOf(room);
         if (roomIdx === -1) { // can only happen if the js-sdk's store goes sideways.
-            console.warn(`Degrading performance to find missing room in "${this.tagId}": ${room.roomId}`);
+            logger.warn(`Degrading performance to find missing room in "${this.tagId}": ${room.roomId}`);
             roomIdx = this.cachedOrderedRooms.findIndex(r => r.roomId === room.roomId);
         }
         return roomIdx;

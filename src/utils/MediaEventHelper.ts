@@ -22,6 +22,8 @@ import { IMediaEventContent } from "../customisations/models/IMediaEventContent"
 import { IDestroyable } from "./IDestroyable";
 import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // TODO: We should consider caching the blobs. https://github.com/vector-im/element-web/issues/17192
 
 export class MediaEventHelper implements IDestroyable {
@@ -91,7 +93,7 @@ export class MediaEventHelper implements IDestroyable {
                 return decryptFile(content.info.thumbnail_file, content.info.thumbnail_info);
             } else {
                 // "Should never happen"
-                console.warn("Media claims to have thumbnail and is encrypted, but no thumbnail_file found");
+                logger.warn("Media claims to have thumbnail and is encrypted, but no thumbnail_file found");
                 return Promise.resolve(null);
             }
         }

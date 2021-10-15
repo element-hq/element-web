@@ -168,11 +168,11 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             threepids = await getThreepidsWithBindStatus(cli);
         } catch (e) {
             const idServerUrl = MatrixClientPeg.get().getIdentityServerUrl();
-            console.warn(
+            logger.warn(
                 `Unable to reach identity server at ${idServerUrl} to check ` +
                 `for 3PIDs bindings in Settings`,
             );
-            console.warn(e);
+            logger.warn(e);
         }
         this.setState({
             emails: threepids.filter((a) => a.medium === 'email'),
@@ -218,11 +218,11 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
                 },
             });
         } catch (e) {
-            console.warn(
+            logger.warn(
                 `Unable to reach identity server at ${idServerUrl} to check ` +
                 `for terms in Settings`,
             );
-            console.warn(e);
+            logger.warn(e);
         }
     }
 
