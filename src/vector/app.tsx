@@ -222,7 +222,7 @@ async function verifyServerConfig() {
 
         if (hsUrl) {
             logger.log("Config uses a default_hs_url - constructing a default_server_config using this information");
-            console.warn(
+            logger.warn(
                 "DEPRECATED CONFIG OPTION: In the future, default_hs_url will not be accepted. Please use " +
                 "default_server_config instead.",
             );
@@ -247,7 +247,7 @@ async function verifyServerConfig() {
 
         if (serverName) {
             logger.log("Config uses a default_server_name - doing .well-known lookup");
-            console.warn(
+            logger.warn(
                 "DEPRECATED CONFIG OPTION: In the future, default_server_name will not be accepted. Please " +
                 "use default_server_config instead.",
             );
@@ -259,7 +259,7 @@ async function verifyServerConfig() {
         const { hsUrl, isUrl, userId } = await Lifecycle.getStoredSessionVars();
         if (hsUrl && userId) {
             logger.error(e);
-            console.warn("A session was found - suppressing config error and using the session's homeserver");
+            logger.warn("A session was found - suppressing config error and using the session's homeserver");
 
             logger.log("Using pre-existing hsUrl and isUrl: ", { hsUrl, isUrl });
             validatedConfig = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl, true);

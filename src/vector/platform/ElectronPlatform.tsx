@@ -126,12 +126,12 @@ class SeshatIndexManager extends BaseEventIndexManager {
 
     private onIpcReply = (ev: {}, payload: IPCPayload) => {
         if (payload.id === undefined) {
-            console.warn("Ignoring IPC reply with no ID");
+            logger.warn("Ignoring IPC reply with no ID");
             return;
         }
 
         if (this.pendingIpcCalls[payload.id] === undefined) {
-            console.warn("Unknown IPC payload ID: " + payload.id);
+            logger.warn("Unknown IPC payload ID: " + payload.id);
             return;
         }
 
@@ -505,12 +505,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     private onIpcReply = (ev, payload) => {
         if (payload.id === undefined) {
-            console.warn("Ignoring IPC reply with no ID");
+            logger.warn("Ignoring IPC reply with no ID");
             return;
         }
 
         if (this.pendingIpcCalls[payload.id] === undefined) {
-            console.warn("Unknown IPC payload ID: " + payload.id);
+            logger.warn("Unknown IPC payload ID: " + payload.id);
             return;
         }
 
