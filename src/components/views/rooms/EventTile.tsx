@@ -475,6 +475,9 @@ export default class EventTile extends React.Component<IProps, IState> {
             this.props.mxEvent.once(ThreadEvent.Ready, this.updateThread);
             this.props.mxEvent.on(ThreadEvent.Update, this.updateThread);
         }
+
+        const room = this.context.getRoom(this.props.mxEvent.getRoomId());
+        room.on(ThreadEvent.New, this.onNewThread);
     }
 
     private updateThread = (thread) => {
@@ -516,6 +519,9 @@ export default class EventTile extends React.Component<IProps, IState> {
             this.props.mxEvent.off(ThreadEvent.Ready, this.updateThread);
             this.props.mxEvent.off(ThreadEvent.Update, this.updateThread);
         }
+
+        const room = this.context.getRoom(this.props.mxEvent.getRoomId());
+        room.off(ThreadEvent.New, this.onNewThread);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -525,6 +531,14 @@ export default class EventTile extends React.Component<IProps, IState> {
             this.isListeningForReceipts = true;
         }
     }
+
+    private onNewThread = (thread: Thread) => {
+        if (thread.id === this.props.mxEvent.getId()) {
+            this.updateThread(thread);
+            const room = this.context.getRoom(this.props.mxEvent.getRoomId());
+            room.off(ThreadEvent.New, this.onNewThread);
+        }
+    };
 
     private renderThreadInfo(): React.ReactNode {
         if (!SettingsStore.getValue("feature_thread")) {
