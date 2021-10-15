@@ -23,7 +23,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import DMRoomMap from "../../../utils/DMRoomMap";
 
 export class ReactionEventPreview implements IPreview {
-    public getTextFor(event: MatrixEvent, tagId?: TagID): string {
+    public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string {
         const showDms = SettingsStore.getValue("feature_roomlist_preview_reactions_dms");
         const showAll = SettingsStore.getValue("feature_roomlist_preview_reactions_all");
 
@@ -41,7 +41,7 @@ export class ReactionEventPreview implements IPreview {
         const reaction = relation.key;
         if (!reaction) return null; // invalid reaction (unknown format)
 
-        if (isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
+        if (isThread || isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
             return reaction;
         } else {
             return _t("%(senderName)s: %(reaction)s", { senderName: getSenderName(event), reaction });

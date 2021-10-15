@@ -676,9 +676,56 @@ $hover-select-border: 4px;
     }
 }
 
-.mx_ThreadInfo:hover {
-    cursor: pointer;
+.mx_ThreadInfo {
+    height: 35px;
+    position: relative;
+    background-color: $system;
+    padding-left: 12px;
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    padding-right: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 12px;
+    color: $secondary-content;
+    box-sizing: border-box;
+    justify-content: flex-start;
+
+    &:hover, &-active {
+        cursor: pointer;
+        border: 1px solid $quinary-content;
+        padding-top: 7px;
+        padding-bottom: 7px;
+        padding-left: 11px;
+        padding-right: 15px;
+    }
+
+    .mx_ThreadInfo_content {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        padding-left: 8px;
+    }
+
+    .mx_ThreadInfo_thread-icon {
+        mask-image: url('$(res)/img/element-icons/thread-summary.svg');
+        mask-position: center;
+        height: 16px;
+        min-width: 16px;
+        background-color: $secondary-content;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+    }
+    .mx_ThreadInfo_threads-amount {
+        font-weight: 600;
+        position: relative;
+        padding: 0 8px;
+        white-space: nowrap;
+    }
 }
+
+
 
 .mx_ThreadView {
     display: flex;

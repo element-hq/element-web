@@ -66,23 +66,23 @@ export default class DevicesPanelEntry extends React.Component<IProps> {
         }
 
         return (
-            <div className={"mx_DevicesPanel_device" + myDeviceClass}>
-                <div className="mx_DevicesPanel_deviceId">
+            <tr className={"mx_DevicesPanel_device" + myDeviceClass}>
+                <td className="mx_DevicesPanel_deviceId">
                     { device.device_id }
-                </div>
-                <div className="mx_DevicesPanel_deviceName">
+                </td>
+                <td className="mx_DevicesPanel_deviceName">
                     <EditableTextContainer initialValue={device.display_name}
                         onSubmit={this.onDisplayNameChanged}
                         placeholder={device.device_id}
                     />
-                </div>
-                <div className="mx_DevicesPanel_lastSeen">
+                </td>
+                <td className="mx_DevicesPanel_lastSeen">
                     { lastSeen }
-                </div>
-                <div className="mx_DevicesPanel_deviceButtons">
+                </td>
+                <td className="mx_DevicesPanel_deviceButtons">
                     <StyledCheckbox onChange={this.onDeviceToggled} checked={this.props.selected} />
-                </div>
-            </div>
+                </td>
+            </tr>
         );
     }
 }

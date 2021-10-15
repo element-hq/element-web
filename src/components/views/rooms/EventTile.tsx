@@ -59,6 +59,7 @@ import { getEventDisplayInfo } from '../../../utils/EventUtils';
 import SettingsStore from "../../../settings/SettingsStore";
 import MKeyVerificationConclusion from "../messages/MKeyVerificationConclusion";
 import { dispatchShowThreadEvent } from '../../../dispatcher/dispatch-actions/threads';
+import { MessagePreviewStore } from '../../../stores/room-list/MessagePreviewStore';
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -556,10 +557,9 @@ export default class EventTile extends React.Component<IProps, IState> {
             return null;
         }
 
-        const avatars = Array.from(thread.participants).map((mxId: string) => {
-            const member = room.getMember(mxId);
-            return <MemberAvatar key={member.userId} member={member} width={14} height={14} />;
-        });
+        const threadMessagePreview = MessagePreviewStore.instance.generateThreadPreview(this.state.thread);
+
+        if (!threadMessagePreview) return null;
 
         return (
             <div
@@ -568,10 +568,18 @@ export default class EventTile extends React.Component<IProps, IState> {
                     dispatchShowThreadEvent(this.props.mxEvent);
                 }}
             >
-                <span className="mx_EventListSummary_avatars">
-                    { avatars }
+                <span className="mx_ThreadInfo_thread-icon" />
+                <span className="mx_ThreadInfo_threads-amount">
+                    { _t("%(count)s reply", {
+                        count: thread.length - 1,
+                    }) }
                 </span>
-                { thread.length - 1 } { thread.length === 2 ? 'reply' : 'replies' }
+                <MemberAvatar member={thread.replyToEvent.sender} width={24} height={24} />
+                <div className="mx_ThreadInfo_content">
+                    <span className="mx_ThreadInfo_message-preview">
+                        { threadMessagePreview }
+                    </span>
+                </div>
             </div>
         );
     }

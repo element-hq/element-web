@@ -218,17 +218,21 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
 
         const classes = classNames(this.props.className, "mx_DevicesPanel");
         return (
-            <div className={classes}>
-                <div className="mx_DevicesPanel_header">
-                    <div className="mx_DevicesPanel_deviceId">{ _t("ID") }</div>
-                    <div className="mx_DevicesPanel_deviceName">{ _t("Public Name") }</div>
-                    <div className="mx_DevicesPanel_deviceLastSeen">{ _t("Last seen") }</div>
-                    <div className="mx_DevicesPanel_deviceButtons">
-                        { this.state.selectedDevices.length > 0 ? deleteButton : null }
-                    </div>
-                </div>
-                { devices.map(this.renderDevice) }
-            </div>
+            <table className={classes}>
+                <thead className="mx_DevicesPanel_header">
+                    <tr>
+                        <th className="mx_DevicesPanel_deviceId">{ _t("ID") }</th>
+                        <th className="mx_DevicesPanel_deviceName">{ _t("Public Name") }</th>
+                        <th className="mx_DevicesPanel_deviceLastSeen">{ _t("Last seen") }</th>
+                        <th className="mx_DevicesPanel_deviceButtons">
+                            { this.state.selectedDevices.length > 0 ? deleteButton : null }
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    { devices.map(this.renderDevice) }
+                </tbody>
+            </table>
         );
     }
 }
