@@ -3246,5 +3246,6 @@
     "Sending invites... (%(progress)s out of %(count)s)|other": "Odesílání pozvánek... (%(progress)s z %(count)s)",
     "Loading new room": "Načítání nové místnosti",
     "Upgrading room": "Upgrade místnosti",
-    "Polls (under active development)": "Ankety (v aktivním vývoji)"
+    "Polls (under active development)": "Ankety (v aktivním vývoji)",
+    "Downloading": "Stahování"
 }
