@@ -24,11 +24,6 @@ limitations under the License.
 // (using code in matrix-react-sdk/tests/end-to-end-tests/screenshots.js)
 // and compare for any changes against previous versions.
 
-require('gfm.css/gfm.css');
-require('highlight.js/styles/github.css');
-require('katex/dist/katex.css');
-
-require('./devcss');
 import './modernizr';
 import * as ReactDOM from "react-dom";
 import React, { ChangeEvent, ReactElement } from 'react';
