@@ -14,31 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_SecurityUserSettingsTab_deviceInfo {
-    display: table;
-    padding-left: 0;
-}
-
-.mx_SecurityUserSettingsTab_deviceInfo > li {
-    display: table-row;
-}
-
-.mx_SecurityUserSettingsTab_deviceInfo > li > label,
-.mx_SecurityUserSettingsTab_deviceInfo > li > span {
-    display: table-cell;
-    padding-right: 1em;
-}
-
-.mx_SecurityUserSettingsTab_importExportButtons .mx_AccessibleButton {
-    margin-right: 10px;
-}
-
 .mx_SecurityUserSettingsTab_bulkOptions .mx_AccessibleButton {
     margin-right: 10px;
-}
-
-.mx_SecurityUserSettingsTab_importExportButtons {
-    margin-bottom: 15px;
 }
 
 .mx_SecurityUserSettingsTab_ignoredUser {
