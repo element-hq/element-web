@@ -3243,5 +3243,6 @@
     "Disinvite from %(roomName)s": "Võta tagasi %(roomName)s jututoa kutse",
     "Kick them from everything I'm able to": "Müksa kasutaja välja kõikjalt, kust ma saan",
     "Kick from %(roomName)s": "Müksa %(roomName)s jututoast välja",
-    "Threads": "Jutulõngad"
+    "Threads": "Jutulõngad",
+    "Downloading": "Laadin alla"
 }
