@@ -658,7 +658,7 @@ const RedactMessagesButton: React.FC<IBaseProps> = ({ member }) => {
             // so first yield to allow to rerender after closing the dialog.
             await Promise.resolve();
 
-            console.info(`Started redacting recent ${count} messages for ${user} in ${roomId}`);
+            logger.info(`Started redacting recent ${count} messages for ${user} in ${roomId}`);
             await Promise.all(eventsToRedact.map(async event => {
                 try {
                     await cli.redactEvent(roomId, event.getId());
@@ -668,7 +668,7 @@ const RedactMessagesButton: React.FC<IBaseProps> = ({ member }) => {
                     logger.error(err);
                 }
             }));
-            console.info(`Finished redacting recent ${count} messages for ${user} in ${roomId}`);
+            logger.info(`Finished redacting recent ${count} messages for ${user} in ${roomId}`);
         }
     };
 

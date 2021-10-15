@@ -162,7 +162,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
     let revokeButton;
     if (!userWidget && !isLocalWidget && isAllowedWidget) {
         const onRevokeClick = () => {
-            console.info("Revoking permission for widget to load: " + app.eventId);
+            logger.info("Revoking permission for widget to load: " + app.eventId);
             const current = SettingsStore.getValue("allowedWidgets", roomId);
             current[app.eventId] = false;
             const level = SettingsStore.firstSupportedLevel("allowedWidgets");

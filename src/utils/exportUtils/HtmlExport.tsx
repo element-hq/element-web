@@ -432,7 +432,7 @@ export default class HTMLExporter extends Exporter {
         const exportEnd = performance.now();
 
         if (this.cancelled) {
-            console.info("Export cancelled successfully");
+            logger.info("Export cancelled successfully");
         } else {
             this.updateProgress("Export successful!");
             this.updateProgress(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);

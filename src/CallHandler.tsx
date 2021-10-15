@@ -825,7 +825,7 @@ export default class CallHandler extends EventEmitter {
                         });
                         return;
                     } else if (members.length === 2) {
-                        console.info(`Place ${payload.type} call in ${payload.room_id}`);
+                        logger.info(`Place ${payload.type} call in ${payload.room_id}`);
 
                         this.placeCall(payload.room_id, payload.type, payload.transferee);
                     } else { // > 2
@@ -838,17 +838,17 @@ export default class CallHandler extends EventEmitter {
                 }
                 break;
             case 'place_conference_call':
-                console.info("Place conference call in " + payload.room_id);
+                logger.info("Place conference call in " + payload.room_id);
                 Analytics.trackEvent('voip', 'placeConferenceCall');
                 CountlyAnalytics.instance.trackStartCall(payload.room_id, payload.type === PlaceCallType.Video, true);
                 this.startCallApp(payload.room_id, payload.type);
                 break;
             case 'end_conference':
-                console.info("Terminating conference call in " + payload.room_id);
+                logger.info("Terminating conference call in " + payload.room_id);
                 this.terminateCallApp(payload.room_id);
                 break;
             case 'hangup_conference':
-                console.info("Leaving conference call in "+ payload.room_id);
+                logger.info("Leaving conference call in "+ payload.room_id);
                 this.hangupCallApp(payload.room_id);
                 break;
             case 'incoming_call':

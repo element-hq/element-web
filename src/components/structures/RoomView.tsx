@@ -498,7 +498,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // making it impossible to indicate a newly joined room.
         if (!joining && roomId) {
             if (!room && shouldPeek) {
-                console.info("Attempting to peek into room %s", roomId);
+                logger.info("Attempting to peek into room %s", roomId);
                 this.setState({
                     peekLoading: true,
                     isPeeking: true, // this will change to false if peeking fails

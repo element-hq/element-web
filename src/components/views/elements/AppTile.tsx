@@ -314,7 +314,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private grantWidgetPermission = (): void => {
         const roomId = this.props.room.roomId;
-        console.info("Granting permission for widget to load: " + this.props.app.eventId);
+        logger.info("Granting permission for widget to load: " + this.props.app.eventId);
         const current = SettingsStore.getValue("allowedWidgets", roomId);
         current[this.props.app.eventId] = true;
         const level = SettingsStore.firstSupportedLevel("allowedWidgets");

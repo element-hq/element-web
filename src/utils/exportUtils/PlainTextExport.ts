@@ -141,9 +141,9 @@ export default class PlainTextExporter extends Exporter {
         const exportEnd = performance.now();
 
         if (this.cancelled) {
-            console.info("Export cancelled successfully");
+            logger.info("Export cancelled successfully");
         } else {
-            console.info("Export successful!");
+            logger.info("Export successful!");
             logger.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
         }
 

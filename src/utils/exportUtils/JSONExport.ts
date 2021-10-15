@@ -89,8 +89,8 @@ export default class JSONExporter extends Exporter {
     }
 
     public async export() {
-        console.info("Starting export process...");
-        console.info("Fetching events...");
+        logger.info("Starting export process...");
+        logger.info("Fetching events...");
 
         const fetchStart = performance.now();
         const res = await this.getRequiredEvents();
@@ -98,7 +98,7 @@ export default class JSONExporter extends Exporter {
 
         logger.log(`Fetched ${res.length} events in ${(fetchEnd - fetchStart)/1000}s`);
 
-        console.info("Creating output...");
+        logger.info("Creating output...");
         const text = await this.createOutput(res);
 
         if (this.files.length) {
@@ -112,9 +112,9 @@ export default class JSONExporter extends Exporter {
         const exportEnd = performance.now();
 
         if (this.cancelled) {
-            console.info("Export cancelled successfully");
+            logger.info("Export cancelled successfully");
         } else {
-            console.info("Export successful!");
+            logger.info("Export successful!");
             logger.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
         }
 

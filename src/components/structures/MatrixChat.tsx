@@ -1452,7 +1452,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             if (state === "SYNCING" && prevState === "SYNCING") {
                 return;
             }
-            console.info("MatrixClient sync state => %s", state);
+            logger.info("MatrixClient sync state => %s", state);
             if (state !== "PREPARED") { return; }
 
             this.firstSyncComplete = true;
@@ -1818,7 +1818,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 group_id: groupId,
             });
         } else {
-            console.info("Ignoring showScreen for '%s'", screen);
+            logger.info("Ignoring showScreen for '%s'", screen);
         }
     }
 
