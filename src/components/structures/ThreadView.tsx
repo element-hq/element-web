@@ -48,10 +48,8 @@ interface IProps {
 }
 
 interface IState {
-    replyToEvent?: MatrixEvent;
     thread?: Thread;
     editState?: EditorStateTransfer;
-
 }
 
 @replaceableComponent("structures.ThreadView")
@@ -69,11 +67,16 @@ export default class ThreadView extends React.Component<IProps, IState> {
     public componentDidMount(): void {
         this.setupThread(this.props.mxEvent);
         this.dispatcherRef = dis.register(this.onAction);
+
+        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        room.on(ThreadEvent.New, this.onNewThread);
     }
 
     public componentWillUnmount(): void {
         this.teardownThread();
         dis.unregister(this.dispatcherRef);
+        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        room.on(ThreadEvent.New, this.onNewThread);
     }
 
     public componentDidUpdate(prevProps) {
@@ -135,11 +138,17 @@ export default class ThreadView extends React.Component<IProps, IState> {
         }
     };
 
+    private onNewThread = (thread: Thread) => {
+        if (thread.id === this.props.mxEvent.getId()) {
+            this.teardownThread();
+            this.setupThread(this.props.mxEvent);
+        }
+    };
+
     private updateThread = (thread?: Thread) => {
         if (thread) {
             this.setState({
                 thread,
-                replyToEvent: thread.replyToEvent,
             });
         }
 
