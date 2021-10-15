@@ -41,19 +41,19 @@ import classNames from 'classnames';
 
 import SettingsStore from '../../../settings/SettingsStore';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
-import ReplyThread from '../elements/ReplyThread';
+import ReplyChain from '../elements/ReplyChain';
 
 interface IOptionsButtonProps {
     mxEvent: MatrixEvent;
     // TODO: Types
     getTile: () => any | null;
-    getReplyThread: () => ReplyThread;
+    getReplyChain: () => ReplyChain;
     permalinkCreator: RoomPermalinkCreator;
     onFocusChange: (menuDisplayed: boolean) => void;
 }
 
 const OptionsButton: React.FC<IOptionsButtonProps> =
-    ({ mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange }) => {
+    ({ mxEvent, getTile, getReplyChain, permalinkCreator, onFocusChange }) => {
         const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
         const [onFocus, isActive, ref] = useRovingTabIndex(button);
         useEffect(() => {
@@ -63,7 +63,7 @@ const OptionsButton: React.FC<IOptionsButtonProps> =
         let contextMenu;
         if (menuDisplayed) {
             const tile = getTile && getTile();
-            const replyThread = getReplyThread && getReplyThread();
+            const replyThread = getReplyChain && getReplyChain();
 
             const buttonRect = button.current.getBoundingClientRect();
             contextMenu = <MessageContextMenu
@@ -71,7 +71,7 @@ const OptionsButton: React.FC<IOptionsButtonProps> =
                 mxEvent={mxEvent}
                 permalinkCreator={permalinkCreator}
                 eventTileOps={tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined}
-                collapseReplyThread={replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined}
+                collapseReplyChain={replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined}
                 onFinished={closeMenu}
             />;
         }
@@ -133,7 +133,7 @@ interface IMessageActionBarProps {
     reactions?: Relations;
     // TODO: Types
     getTile: () => any | null;
-    getReplyThread: () => ReplyThread | undefined;
+    getReplyChain: () => ReplyChain | undefined;
     permalinkCreator?: RoomPermalinkCreator;
     onFocusChange?: (menuDisplayed: boolean) => void;
     toggleThreadExpanded: () => void;
@@ -343,7 +343,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                 toolbarOpts.push(cancelSendingButton);
             }
 
-            if (this.props.isQuoteExpanded !== undefined && ReplyThread.hasThreadReply(this.props.mxEvent)) {
+            if (this.props.isQuoteExpanded !== undefined && ReplyChain.hasReply(this.props.mxEvent)) {
                 const expandClassName = classNames({
                     'mx_MessageActionBar_maskButton': true,
                     'mx_MessageActionBar_expandMessageButton': !this.props.isQuoteExpanded,
@@ -360,7 +360,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
             // The menu button should be last, so dump it there.
             toolbarOpts.push(<OptionsButton
                 mxEvent={this.props.mxEvent}
-                getReplyThread={this.props.getReplyThread}
+                getReplyChain={this.props.getReplyChain}
                 getTile={this.props.getTile}
                 permalinkCreator={this.props.permalinkCreator}
                 onFocusChange={this.onFocusChange}

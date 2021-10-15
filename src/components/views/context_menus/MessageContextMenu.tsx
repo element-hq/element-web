@@ -60,7 +60,7 @@ interface IProps extends IPosition {
     eventTileOps?: IEventTileOps;
     permalinkCreator?: RoomPermalinkCreator;
     /* an optional function to be called when the user clicks collapse thread, if not provided hide button */
-    collapseReplyThread?(): void;
+    collapseReplyChain?(): void;
     /* callback called when the menu is dismissed */
     onFinished(): void;
     /* if the menu is inside a dialog, we sometimes need to close that dialog after click (forwarding) */
@@ -203,8 +203,8 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         this.closeMenu();
     };
 
-    private onCollapseReplyThreadClick = (): void => {
-        this.props.collapseReplyThread();
+    private onCollapseReplyChainClick = (): void => {
+        this.props.collapseReplyChain();
         this.closeMenu();
     };
 
@@ -240,7 +240,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         let unhidePreviewButton: JSX.Element;
         let externalURLButton: JSX.Element;
         let quoteButton: JSX.Element;
-        let collapseReplyThread: JSX.Element;
+        let collapseReplyChain: JSX.Element;
         let redactItemList: JSX.Element;
 
         // status is SENT before remote-echo, null after
@@ -360,12 +360,12 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        if (this.props.collapseReplyThread) {
-            collapseReplyThread = (
+        if (this.props.collapseReplyChain) {
+            collapseReplyChain = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconCollapse"
                     label={_t("Collapse reply thread")}
-                    onClick={this.onCollapseReplyThreadClick}
+                    onClick={this.onCollapseReplyChainClick}
                 />
             );
         }
@@ -392,7 +392,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                 { unhidePreviewButton }
                 { viewSourceButton }
                 { resendReactionsButton }
-                { collapseReplyThread }
+                { collapseReplyChain }
             </IconizedContextMenuOptionList>
         );
 

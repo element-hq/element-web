@@ -192,11 +192,11 @@ limitations under the License.
             flex-direction: column;
         }
 
-        .mx_ReplyThread_show {
+        .mx_ReplyChain_show {
             order: 99999;
         }
 
-        .mx_ReplyThread {
+        .mx_ReplyChain {
             .mx_EventTile_reply {
                 max-width: 90%;
                 padding: 0;
@@ -247,7 +247,7 @@ limitations under the License.
         .mx_EventTile_keyRequestInfo {
             grid-area: link;
         }
-        .mx_ReplyThread_wrapper {
+        .mx_ReplyChain_wrapper {
             grid-area: reply;
         }
     }

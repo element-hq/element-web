@@ -34,7 +34,7 @@ import {
 } from '../../../editor/serialize';
 import BasicMessageComposer, { REGEX_EMOTICON } from "./BasicMessageComposer";
 import { CommandPartCreator, Part, PartCreator, SerializedPart, Type } from '../../../editor/parts';
-import ReplyThread from "../elements/ReplyThread";
+import ReplyChain from "../elements/ReplyChain";
 import { findEditableEvent } from '../../../utils/EventUtils';
 import SendHistoryManager from "../../../SendHistoryManager";
 import { Command, CommandCategories, getCommand } from '../../../SlashCommands';
@@ -64,12 +64,12 @@ function addReplyToMessageContent(
     permalinkCreator: RoomPermalinkCreator,
     relation?: IEventRelation,
 ): void {
-    const replyContent = ReplyThread.makeReplyMixIn(replyToEvent);
+    const replyContent = ReplyChain.makeReplyMixIn(replyToEvent);
     Object.assign(content, replyContent);
 
     // Part of Replies fallback support - prepend the text we're sending
     // with the text we're replying to
-    const nestedReply = ReplyThread.getNestedReplyText(replyToEvent, permalinkCreator);
+    const nestedReply = ReplyChain.getNestedReplyText(replyToEvent, permalinkCreator);
     if (nestedReply) {
         if (content.formatted_body) {
             content.formatted_body = nestedReply.html + content.formatted_body;

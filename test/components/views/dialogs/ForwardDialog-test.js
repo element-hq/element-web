@@ -142,7 +142,7 @@ describe("ForwardDialog", () => {
         });
 
         const wrapper = await mountForwardDialog(replyMessage);
-        expect(wrapper.find("ReplyThread")).toBeTruthy();
+        expect(wrapper.find("ReplyChain")).toBeTruthy();
     });
 
     it("disables buttons for rooms without send permissions", async () => {
