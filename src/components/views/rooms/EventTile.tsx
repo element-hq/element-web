@@ -478,7 +478,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         const room = this.context.getRoom(this.props.mxEvent.getRoomId());
-        room.on(ThreadEvent.New, this.onNewThread);
+        room?.on(ThreadEvent.New, this.onNewThread);
     }
 
     private updateThread = (thread) => {
@@ -522,7 +522,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         const room = this.context.getRoom(this.props.mxEvent.getRoomId());
-        room.off(ThreadEvent.New, this.onNewThread);
+        room?.off(ThreadEvent.New, this.onNewThread);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -553,7 +553,7 @@ export default class EventTile extends React.Component<IProps, IState> {
          * when we are at the sync stage
          */
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        const thread = room.threads.get(this.props.mxEvent.getId());
+        const thread = room?.threads.get(this.props.mxEvent.getId());
 
         if (thread && !thread.ready) {
             thread.addEvent(this.props.mxEvent, true);
