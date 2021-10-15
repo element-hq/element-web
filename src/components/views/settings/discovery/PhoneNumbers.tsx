@@ -71,7 +71,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
     }
 
     private async changeBinding({ bind, label, errorTitle }): Promise<void> {
-        if (!await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
+        if (!(await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind())) {
             return this.changeBindingTangledAddBind({ bind, label, errorTitle });
         }
 
