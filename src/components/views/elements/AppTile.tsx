@@ -324,7 +324,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             // Fetch a token for the integration manager, now that we're allowed to
             this.startWidget();
         }).catch(err => {
-            console.error(err);
+            logger.error(err);
             // We don't really need to do anything about this - the user will just hit the button again.
         });
     };

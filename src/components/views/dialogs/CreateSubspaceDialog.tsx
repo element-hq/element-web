@@ -30,6 +30,8 @@ import { createSpace, SpaceCreateForm } from "../spaces/SpaceCreateMenu";
 import { SubspaceSelector } from "./AddExistingToSpaceDialog";
 import JoinRuleDropdown from "../elements/JoinRuleDropdown";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     space: Room;
     onAddExistingSpaceClick(): void;
@@ -83,7 +85,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
 
             onFinished(true);
         } catch (e) {
-            console.error(e);
+            logger.error(e);
         }
     };
 

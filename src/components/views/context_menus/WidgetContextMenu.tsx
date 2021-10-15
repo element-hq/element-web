@@ -34,6 +34,8 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../../Livestream";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps extends React.ComponentProps<typeof IconizedContextMenu> {
     app: IApp;
     userWidget?: boolean;
@@ -65,7 +67,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
             try {
                 await startJitsiAudioLivestream(widgetMessaging, roomId);
             } catch (err) {
-                console.error("Failed to start livestream", err);
+                logger.error("Failed to start livestream", err);
                 // XXX: won't i18n well, but looks like widget api only support 'message'?
                 const message = err.message || _t("Unable to start audio streaming.");
                 Modal.createTrackedDialog('WidgetContext Menu', 'Livestream failed', ErrorDialog, {
@@ -114,7 +116,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
                     file: data.screenshot,
                 });
             }).catch(err => {
-                console.error("Failed to take screenshot: ", err);
+                logger.error("Failed to take screenshot: ", err);
             });
             onFinished();
         };
@@ -165,7 +167,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
             current[app.eventId] = false;
             const level = SettingsStore.firstSupportedLevel("allowedWidgets");
             SettingsStore.setValue("allowedWidgets", roomId, level, current).catch(err => {
-                console.error(err);
+                logger.error(err);
                 // We don't really need to do anything about this - the user will just hit the button again.
             });
             onFinished();

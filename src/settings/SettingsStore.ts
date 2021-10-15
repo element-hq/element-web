@@ -550,7 +550,7 @@ export default class SettingsStore {
                     logger.log(`---     ${handlerName}@${roomId || '<no_room>'} = ${JSON.stringify(value)}`);
                 } catch (e) {
                     logger.log(`---     ${handler}@${roomId || '<no_room>'} THREW ERROR: ${e.message}`);
-                    console.error(e);
+                    logger.error(e);
                 }
 
                 if (roomId) {
@@ -559,7 +559,7 @@ export default class SettingsStore {
                         logger.log(`---     ${handlerName}@<no_room> = ${JSON.stringify(value)}`);
                     } catch (e) {
                         logger.log(`---     ${handler}@<no_room> THREW ERROR: ${e.message}`);
-                        console.error(e);
+                        logger.error(e);
                     }
                 }
             }
@@ -572,7 +572,7 @@ export default class SettingsStore {
                 logger.log(`---     SettingsStore#generic@${roomId || '<no_room>'}  = ${JSON.stringify(value)}`);
             } catch (e) {
                 logger.log(`---     SettingsStore#generic@${roomId || '<no_room>'} THREW ERROR: ${e.message}`);
-                console.error(e);
+                logger.error(e);
             }
 
             if (roomId) {
@@ -581,7 +581,7 @@ export default class SettingsStore {
                     logger.log(`---     SettingsStore#generic@<no_room>  = ${JSON.stringify(value)}`);
                 } catch (e) {
                     logger.log(`---     SettingsStore#generic@$<no_room> THREW ERROR: ${e.message}`);
-                    console.error(e);
+                    logger.error(e);
                 }
             }
 
@@ -591,7 +591,7 @@ export default class SettingsStore {
                     logger.log(`---     SettingsStore#${level}@${roomId || '<no_room>'} = ${JSON.stringify(value)}`);
                 } catch (e) {
                     logger.log(`---     SettingsStore#${level}@${roomId || '<no_room>'} THREW ERROR: ${e.message}`);
-                    console.error(e);
+                    logger.error(e);
                 }
 
                 if (roomId) {
@@ -600,7 +600,7 @@ export default class SettingsStore {
                         logger.log(`---     SettingsStore#${level}@<no_room> = ${JSON.stringify(value)}`);
                     } catch (e) {
                         logger.log(`---     SettingsStore#${level}@$<no_room> THREW ERROR: ${e.message}`);
-                        console.error(e);
+                        logger.error(e);
                     }
                 }
             }

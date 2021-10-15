@@ -58,10 +58,10 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
 
     componentDidMount(): void {
         PlatformPeg.get().getAppVersion().then((ver) => this.setState({ appVersion: ver })).catch((e) => {
-            console.error("Error getting vector version: ", e);
+            logger.error("Error getting vector version: ", e);
         });
         PlatformPeg.get().canSelfUpdate().then((v) => this.setState({ canUpdate: v })).catch((e) => {
-            console.error("Error getting self updatability: ", e);
+            logger.error("Error getting self updatability: ", e);
         });
     }
 

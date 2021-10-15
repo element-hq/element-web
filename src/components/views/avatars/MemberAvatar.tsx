@@ -25,6 +25,8 @@ import BaseAvatar from "./BaseAvatar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url"> {
     member: RoomMember;
     fallbackUserId?: string;
@@ -85,7 +87,7 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
                 title: props.fallbackUserId,
             };
         } else {
-            console.error("MemberAvatar called somehow with null member or fallbackUserId");
+            logger.error("MemberAvatar called somehow with null member or fallbackUserId");
         }
     }
 

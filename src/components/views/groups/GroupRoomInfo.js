@@ -27,6 +27,8 @@ import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 @replaceableComponent("views.groups.GroupRoomInfo")
 export default class GroupRoomInfo extends React.Component {
     static contextType = MatrixClientContext;
@@ -103,7 +105,7 @@ export default class GroupRoomInfo extends React.Component {
                         action: "view_group_room_list",
                     });
                 }).catch((err) => {
-                    console.error(`Error whilst removing ${roomId} from ${groupId}`, err);
+                    logger.error(`Error whilst removing ${roomId} from ${groupId}`, err);
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createTrackedDialog('Failed to remove room from group', '', ErrorDialog, {
                         title: _t("Failed to remove room from community"),
@@ -133,7 +135,7 @@ export default class GroupRoomInfo extends React.Component {
         const roomId = this.props.groupRoomId;
         const roomName = this.state.groupRoom.displayname;
         GroupStore.updateGroupRoomVisibility(this.props.groupId, roomId, isPublic).catch((err) => {
-            console.error(`Error whilst changing visibility of ${roomId} in ${groupId} to ${isPublic}`, err);
+            logger.error(`Error whilst changing visibility of ${roomId} in ${groupId} to ${isPublic}`, err);
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to remove room from group', '', ErrorDialog, {
                 title: _t("Something went wrong!"),

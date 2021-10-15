@@ -28,6 +28,8 @@ import BaseDialog from "./BaseDialog";
 import EditableText from "../elements/EditableText";
 import { IDialogProps } from "./IDialogProps";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps extends IDialogProps {
     title: string;
 }
@@ -83,7 +85,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
             });
         }, (err) => {
             this.setState({ emailBusy: false });
-            console.error("Unable to add email address " + emailAddress + " " + err);
+            logger.error("Unable to add email address " + emailAddress + " " + err);
             Modal.createTrackedDialog('Unable to add email address', '', ErrorDialog, {
                 title: _t("Unable to add email address"),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
@@ -119,7 +121,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
                     onFinished: this.onEmailDialogFinished,
                 });
             } else {
-                console.error("Unable to verify email address: " + err);
+                logger.error("Unable to verify email address: " + err);
                 Modal.createTrackedDialog('Unable to verify email address', '', ErrorDialog, {
                     title: _t("Unable to verify email address."),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),

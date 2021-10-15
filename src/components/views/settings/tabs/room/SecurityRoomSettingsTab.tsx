@@ -36,6 +36,8 @@ import CreateRoomDialog from '../../../dialogs/CreateRoomDialog';
 import JoinRuleSettings from "../../JoinRuleSettings";
 import ErrorDialog from "../../../dialogs/ErrorDialog";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     roomId: string;
     closeSettingsFn: () => void;
@@ -180,7 +182,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     this.props.roomId, EventType.RoomEncryption,
                     { algorithm: "m.megolm.v1.aes-sha2" },
                 ).catch((e) => {
-                    console.error(e);
+                    logger.error(e);
                     this.setState({ encrypted: beforeEncrypted });
                 });
             },
@@ -198,7 +200,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         client.sendStateEvent(this.props.roomId, EventType.RoomGuestAccess, {
             guest_access: guestAccess,
         }, "").catch((e) => {
-            console.error(e);
+            logger.error(e);
             this.setState({ guestAccess: beforeGuestAccess });
         });
     };
@@ -225,7 +227,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         MatrixClientPeg.get().sendStateEvent(this.props.roomId, EventType.RoomHistoryVisibility, {
             history_visibility: history,
         }, "").catch((e) => {
-            console.error(e);
+            logger.error(e);
             this.setState({ history: beforeHistory });
         });
     };

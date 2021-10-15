@@ -210,7 +210,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
         try {
             await accessSecretStorage(async () => { }, /* forceReset = */ true);
         } catch (e) {
-            console.error("Error resetting secret storage", e);
+            logger.error("Error resetting secret storage", e);
             if (this.unmounted) return;
             this.setState({ error: e });
         }

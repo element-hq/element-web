@@ -251,7 +251,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                 const parts: Part[] = serializedParts.map(p => partCreator.deserializePart(p));
                 return parts;
             } catch (e) {
-                console.error("Error parsing editing state: ", e);
+                logger.error("Error parsing editing state: ", e);
             }
         }
     }
@@ -329,7 +329,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             }
         }
         if (error) {
-            console.error("Command failure: %s", error);
+            logger.error("Command failure: %s", error);
             // assume the error is a server error when the command is async
             const isServerError = !!result.promise;
             const title = isServerError ? _td("Server error") : _td("Command error");

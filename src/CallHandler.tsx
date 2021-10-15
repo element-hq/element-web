@@ -444,7 +444,7 @@ export default class CallHandler extends EventEmitter {
             if (!this.matchesCallForThisRoom(call)) return;
 
             Analytics.trackEvent('voip', 'callError', 'error', err.toString());
-            console.error("Call error:", err);
+            logger.error("Call error:", err);
 
             if (err.code === CallErrorCode.NoUserMedia) {
                 this.showMediaCaptureError(call);
@@ -777,7 +777,7 @@ export default class CallHandler extends EventEmitter {
         } else if (type === 'video') {
             call.placeVideoCall();
         } else {
-            console.error("Unknown conf call type: " + type);
+            logger.error("Unknown conf call type: " + type);
         }
     }
 
@@ -811,7 +811,7 @@ export default class CallHandler extends EventEmitter {
 
                     const room = MatrixClientPeg.get().getRoom(payload.room_id);
                     if (!room) {
-                        console.error(`Room ${payload.room_id} does not exist.`);
+                        logger.error(`Room ${payload.room_id} does not exist.`);
                         return;
                     }
 
@@ -1112,7 +1112,7 @@ export default class CallHandler extends EventEmitter {
                     description: _t("You do not have permission to start a conference call in this room"),
                 });
             }
-            console.error(e);
+            logger.error(e);
         });
     }
 

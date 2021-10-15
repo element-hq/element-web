@@ -36,6 +36,8 @@ import { NotificationColor } from "../../../stores/notifications/NotificationCol
 import InlineSpinner from "../elements/InlineSpinner";
 import { PlaybackManager } from "../../../audio/PlaybackManager";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     room: Room;
 }
@@ -75,7 +77,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         try {
             upload = await this.state.recorder.upload(this.props.room.roomId);
         } catch (e) {
-            console.error("Error uploading voice message:", e);
+            logger.error("Error uploading voice message:", e);
 
             // Flag error and move on. The recording phase will be reset by the upload function.
             this.setState({ didUploadFail: true });
@@ -116,7 +118,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 "org.matrix.msc3245.voice": {}, // No content, this is a rendering hint
             });
         } catch (e) {
-            console.error("Error sending voice message:", e);
+            logger.error("Error sending voice message:", e);
 
             // Voice message should be in the timeline at this point, so let other things take care
             // of error handling. We also shouldn't need the recording anymore, so fall through to
@@ -171,7 +173,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             }
             // else we probably have a device that is good enough
         } catch (e) {
-            console.error("Error getting devices: ", e);
+            logger.error("Error getting devices: ", e);
             accessError();
             return;
         }
@@ -191,7 +193,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
 
             this.setState({ recorder, recordingPhase: RecordingState.Started });
         } catch (e) {
-            console.error("Error starting recording: ", e);
+            logger.error("Error starting recording: ", e);
             accessError();
 
             // noinspection ES6MissingAwait - if this goes wrong we don't want it to affect the call stack

@@ -23,6 +23,8 @@ import WidgetEchoStore from "../stores/WidgetEchoStore";
 import WidgetStore from "../stores/WidgetStore";
 import SdkConfig from "../SdkConfig";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 /* eslint-disable camelcase */
 interface IManagedHybridWidgetData {
     widget_id: string;
@@ -52,7 +54,7 @@ export async function addManagedHybridWidget(roomId: string) {
 
     // Check for permission
     if (!WidgetUtils.canUserModifyWidgets(roomId)) {
-        console.error(`User not allowed to modify widgets in ${roomId}`);
+        logger.error(`User not allowed to modify widgets in ${roomId}`);
         return;
     }
 
@@ -67,7 +69,7 @@ export async function addManagedHybridWidget(roomId: string) {
         const response = await fetch(`${widgetBuildUrl}?roomId=${roomId}`);
         widgetData = await response.json();
     } catch (e) {
-        console.error(`Managed hybrid widget builder failed for room ${roomId}`, e);
+        logger.error(`Managed hybrid widget builder failed for room ${roomId}`, e);
         return;
     }
     if (!widgetData) {
@@ -82,7 +84,7 @@ export async function addManagedHybridWidget(roomId: string) {
         WidgetEchoStore.roomHasPendingWidgets(roomId, [])
     );
     if (existing) {
-        console.error(`Managed hybrid widget already present in room ${roomId}`);
+        logger.error(`Managed hybrid widget already present in room ${roomId}`);
         return;
     }
 
@@ -90,7 +92,7 @@ export async function addManagedHybridWidget(roomId: string) {
     try {
         await WidgetUtils.setRoomWidgetContent(roomId, widgetId, widgetContent);
     } catch (e) {
-        console.error(`Unable to add managed hybrid widget in room ${roomId}`, e);
+        logger.error(`Unable to add managed hybrid widget in room ${roomId}`, e);
         return;
     }
 

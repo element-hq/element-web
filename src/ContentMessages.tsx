@@ -559,7 +559,7 @@ export default class ContentMessages {
                     Object.assign(content.info, imageInfo);
                     resolve();
                 }, (e) => {
-                    console.error(e);
+                    logger.error(e);
                     content.msgtype = 'm.file';
                     resolve();
                 });

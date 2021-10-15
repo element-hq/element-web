@@ -39,6 +39,8 @@ import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserSettingsDialog";
 import { Key } from "../../../Keyboard";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export const createSpace = async (
     name: string,
     isPublic: boolean,
@@ -255,7 +257,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
 
             onFinished();
         } catch (e) {
-            console.error(e);
+            logger.error(e);
         }
     };
 

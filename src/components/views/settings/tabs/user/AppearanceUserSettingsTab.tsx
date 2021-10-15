@@ -41,6 +41,8 @@ import { replaceableComponent } from "../../../../../utils/replaceableComponent"
 import { compare } from "../../../../../utils/strings";
 import LayoutSwitcher from "../../LayoutSwitcher";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
 }
 
@@ -225,7 +227,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             }
             currentThemes.push(themeInfo);
         } catch (e) {
-            console.error(e);
+            logger.error(e);
             this.setState({ customThemeMessage: { text: _t("Error downloading theme information."), isError: true } });
             return; // Don't continue on error
         }

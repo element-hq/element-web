@@ -28,6 +28,8 @@ import TextWithTooltip from "../elements/TextWithTooltip";
 import withValidation, { IFieldState } from "../elements/Validation";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     title?: string;
     serverConfig: ValidatedServerConfig;
@@ -93,7 +95,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                     this.validatedConf = AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(hsUrl, discoveryResult);
                     return {}; // we have a validated config, we don't need to try the other paths
                 } catch (e) {
-                    console.error(`Attempted ${hsUrl} as a server_name but it failed`, e);
+                    logger.error(`Attempted ${hsUrl} as a server_name but it failed`, e);
                 }
             }
 
@@ -107,7 +109,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                 this.validatedConf = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl);
                 return {};
             } catch (e) {
-                console.error(e);
+                logger.error(e);
 
                 const stateForError = AutoDiscoveryUtils.authComponentStateForError(e);
                 if (stateForError.serverErrorIsFatal) {
@@ -123,7 +125,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                     this.validatedConf = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, null, true);
                     return {};
                 } catch (e) {
-                    console.error(e);
+                    logger.error(e);
                     return { error: _t("Invalid URL") };
                 }
             }

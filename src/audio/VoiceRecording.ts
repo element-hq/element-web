@@ -32,6 +32,8 @@ import { FixedRollingArray } from "../utils/FixedRollingArray";
 import { clamp } from "../utils/numbers";
 import mxRecorderWorkletPath from "./RecorderWorklet";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const CHANNELS = 1; // stereo isn't important
 export const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
 const BITRATE = 24000; // 24kbps is pretty high quality for our use case in opus.
@@ -171,9 +173,9 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
                 this.buffer = newBuf;
             };
         } catch (e) {
-            console.error("Error starting recording: ", e);
+            logger.error("Error starting recording: ", e);
             if (e instanceof DOMException) { // Unhelpful DOMExceptions are common - parse them sanely
-                console.error(`${e.name} (${e.code}): ${e.message}`);
+                logger.error(`${e.name} (${e.code}): ${e.message}`);
             }
 
             // Clean up as best as possible

@@ -379,7 +379,7 @@ export default class HTMLExporter extends Exporter {
             } else eventTile = await this.getEventTileMarkup(mxEv, joined);
         } catch (e) {
             // TODO: Handle callEvent errors
-            console.error(e);
+            logger.error(e);
             eventTile = await this.getEventTileMarkup(
                 this.createModifiedEvent(textForEvent(mxEv), mxEv, false),
                 joined,

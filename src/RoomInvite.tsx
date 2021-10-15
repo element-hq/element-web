@@ -30,6 +30,8 @@ import BaseAvatar from "./components/views/avatars/BaseAvatar";
 import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export interface IInviteResult {
     states: CompletionStates;
     inviter: MultiInviter;
@@ -114,7 +116,7 @@ export function inviteUsersToRoom(roomId: string, userIds: string[], progressCal
         const room = MatrixClientPeg.get().getRoom(roomId);
         showAnyInviteErrors(result.states, room, result.inviter);
     }).catch((err) => {
-        console.error(err.stack);
+        logger.error(err.stack);
         Modal.createTrackedDialog('Failed to invite', '', ErrorDialog, {
             title: _t("Failed to invite"),
             description: ((err && err.message) ? err.message : _t("Operation failed")),

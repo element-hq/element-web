@@ -39,6 +39,8 @@ import { TileShape } from '../views/rooms/EventTile';
 import { Layout } from "../../settings/Layout";
 import RoomContext, { TimelineRenderingType } from '../../contexts/RoomContext';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     roomId: string;
     onClose: () => void;
@@ -210,10 +212,10 @@ class FilePanel extends React.Component<IProps, IState> {
 
                 this.setState({ timelineSet: timelineSet });
             } catch (error) {
-                console.error("Failed to get or create file panel filter", error);
+                logger.error("Failed to get or create file panel filter", error);
             }
         } else {
-            console.error("Failed to add filtered timelineSet for FilePanel as no room!");
+            logger.error("Failed to add filtered timelineSet for FilePanel as no room!");
         }
     }
 

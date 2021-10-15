@@ -29,6 +29,8 @@ import { mediaFromMxc } from "../../../customisations/Media";
 import Tooltip from './Tooltip';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 @replaceableComponent("views.elements.Pill")
 class Pill extends React.Component {
     static roomNotifPos(text) {
@@ -188,7 +190,7 @@ class Pill extends React.Component {
             };
             this.setState({ member });
         }).catch((err) => {
-            console.error('Could not retrieve profile data for ' + userId + ':', err);
+            logger.error('Could not retrieve profile data for ' + userId + ':', err);
         });
     }
 

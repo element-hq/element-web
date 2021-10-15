@@ -50,6 +50,8 @@ import InlineTermsAgreement from "../../../terms/InlineTermsAgreement";
 import SetIdServer from "../../SetIdServer";
 import SetIntegrationManager from "../../SetIntegrationManager";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     closeSettingsFn: () => void;
 }
@@ -253,7 +255,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         } else if (!errMsg) {
             errMsg += ` (HTTP status ${err.httpStatus})`;
         }
-        console.error("Failed to change password: " + errMsg);
+        logger.error("Failed to change password: " + errMsg);
         Modal.createTrackedDialog('Failed to change password', '', ErrorDialog, {
             title: _t("Error"),
             description: errMsg,

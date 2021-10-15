@@ -85,13 +85,13 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
 
     private renderRecaptcha(divId: string) {
         if (!this.isRecaptchaReady()) {
-            console.error("grecaptcha not loaded!");
+            logger.error("grecaptcha not loaded!");
             throw new Error("Recaptcha did not load successfully");
         }
 
         const publicKey = this.props.sitePublicKey;
         if (!publicKey) {
-            console.error("No public key for recaptcha!");
+            logger.error("No public key for recaptcha!");
             throw new Error(
                 "This server has not supplied enough information for Recaptcha "
                 + "authentication");

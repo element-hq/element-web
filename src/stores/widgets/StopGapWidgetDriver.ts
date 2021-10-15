@@ -46,6 +46,8 @@ import { tryTransformPermalinkToLocalHref } from "../../utils/permalinks/Permali
 import { IEvent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // TODO: Purge this from the universe
 
 function getRememberedCapabilitiesForWidget(widget: Widget): Capability[] {
@@ -122,7 +124,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 (result.approved || []).forEach(cap => allowedSoFar.add(cap));
                 rememberApproved = result.remember;
             } catch (e) {
-                console.error("Non-fatal error getting capabilities: ", e);
+                logger.error("Non-fatal error getting capabilities: ", e);
             }
         }
 

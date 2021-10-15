@@ -28,6 +28,8 @@ import { IDialogProps } from "../IDialogProps";
 import { accessSecretStorage } from "../../../../SecurityManager";
 import Modal from "../../../../Modal";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // Maximum acceptable size of a key file. It's 59 characters including the spaces we encode,
 // so this should be plenty and allow for people putting extra whitespace in the file because
 // maybe that's a thing people would do?
@@ -252,7 +254,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
                 this.props.onFinished(true);
             }, true);
         } catch (e) {
-            console.error(e);
+            logger.error(e);
             this.props.onFinished(false);
         }
     };

@@ -22,6 +22,8 @@ import ModalWidgetDialog from "../components/views/dialogs/ModalWidgetDialog";
 import { WidgetMessagingStore } from "./widgets/WidgetMessagingStore";
 import { IModalWidgetOpenRequestData, IModalWidgetReturnData, Widget } from "matrix-widget-api";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IState {
     modal?: IModal<any>;
     openedFromId?: string;
@@ -81,7 +83,7 @@ export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
 
             const sourceMessaging = WidgetMessagingStore.instance.getMessaging(sourceWidget);
             if (!sourceMessaging) {
-                console.error("No source widget messaging for modal widget");
+                logger.error("No source widget messaging for modal widget");
                 return;
             }
             sourceMessaging.notifyModalWidgetClose(data);

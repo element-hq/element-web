@@ -195,7 +195,7 @@ export default class Registration extends React.Component<IProps, IState> {
             const loginFlows = await this.loginLogic.getFlows();
             ssoFlow = loginFlows.find(f => f.type === "m.login.sso" || f.type === "m.login.cas") as ISSOFlow;
         } catch (e) {
-            console.error("Failed to get login flows to check for SSO support", e);
+            logger.error("Failed to get login flows to check for SSO support", e);
         }
 
         this.setState({
@@ -370,12 +370,12 @@ export default class Registration extends React.Component<IProps, IState> {
                     matrixClient.setPusher(emailPusher).then(() => {
                         logger.log("Set email branding to " + this.props.brand);
                     }, (error) => {
-                        console.error("Couldn't set email branding: " + error);
+                        logger.error("Couldn't set email branding: " + error);
                     });
                 }
             }
         }, (error) => {
-            console.error("Couldn't get pushers: " + error);
+            logger.error("Couldn't get pushers: " + error);
         });
     }
 

@@ -23,6 +23,8 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
 
 }
@@ -48,8 +50,8 @@ export default class SetIntegrationManager extends React.Component<IProps, IStat
     private onProvisioningToggled = (): void => {
         const current = this.state.provisioningEnabled;
         SettingsStore.setValue("integrationProvisioning", null, SettingLevel.ACCOUNT, !current).catch(err => {
-            console.error("Error changing integration manager provisioning");
-            console.error(err);
+            logger.error("Error changing integration manager provisioning");
+            logger.error(err);
 
             this.setState({ provisioningEnabled: current });
         });

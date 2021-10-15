@@ -29,6 +29,8 @@ import getEntryComponentForLoginType, { IStageComponent } from '../views/auth/In
 import Spinner from "../views/elements/Spinner";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export const ERROR_USER_CANCELLED = new Error("User cancelled auth session");
 
 interface IProps {
@@ -137,7 +139,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
             this.props.onAuthFinished(true, result, extra);
         }).catch((error) => {
             this.props.onAuthFinished(false, error);
-            console.error("Error during user-interactive auth:", error);
+            logger.error("Error during user-interactive auth:", error);
             if (this.unmounted) {
                 return;
             }

@@ -37,6 +37,8 @@ import AddressTile from '../elements/AddressTile';
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
 
@@ -225,7 +227,7 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
                         this.doRoomSearch(query);
                     }
                 } else {
-                    console.error('Unknown pickerType', this.props.pickerType);
+                    logger.error('Unknown pickerType', this.props.pickerType);
                 }
             }, QUERY_USER_DIRECTORY_DEBOUNCE_MS);
         } else {
@@ -282,7 +284,7 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
             });
             this.processResults(results, query);
         }).catch((err) => {
-            console.error('Error whilst searching group rooms: ', err);
+            logger.error('Error whilst searching group rooms: ', err);
             this.setState({
                 searchError: err.errcode ? err.message : _t('Something went wrong!'),
             });
@@ -388,7 +390,7 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
             }
             this.processResults(resp.results, query);
         }).catch((err) => {
-            console.error('Error whilst searching user directory: ', err);
+            logger.error('Error whilst searching user directory: ', err);
             this.setState({
                 searchError: err.errcode ? err.message : _t('Something went wrong!'),
             });
@@ -582,7 +584,7 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
                 }],
             });
         } catch (e) {
-            console.error(e);
+            logger.error(e);
             this.setState({
                 searchError: _t('Something went wrong!'),
             });

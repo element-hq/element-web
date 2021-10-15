@@ -31,6 +31,8 @@ import { Action } from "../../../dispatcher/actions";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import VerificationRequestDialog from "../dialogs/VerificationRequestDialog";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     toastKey: string;
     request: VerificationRequest;
@@ -98,7 +100,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         try {
             this.props.request.cancel();
         } catch (err) {
-            console.error("Error while cancelling verification request", err);
+            logger.error("Error while cancelling verification request", err);
         }
     };
 
@@ -132,7 +134,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
             }
             await request.accept();
         } catch (err) {
-            console.error(err.message);
+            logger.error(err.message);
         }
     };
 

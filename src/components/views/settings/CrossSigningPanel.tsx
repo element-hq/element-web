@@ -28,6 +28,8 @@ import { MatrixEvent } from 'matrix-js-sdk/src';
 import SetupEncryptionDialog from '../dialogs/security/SetupEncryptionDialog';
 import { accessSecretStorage } from '../../../SecurityManager';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IState {
     error?: Error;
     crossSigningPublicKeysOnDevice?: boolean;
@@ -147,7 +149,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
             });
         } catch (e) {
             this.setState({ error: e });
-            console.error("Error bootstrapping cross-signing", e);
+            logger.error("Error bootstrapping cross-signing", e);
         }
         if (this.unmounted) return;
         this.getUpdatedStatus();

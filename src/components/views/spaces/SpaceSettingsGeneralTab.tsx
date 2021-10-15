@@ -27,6 +27,8 @@ import { IDialogProps } from "../dialogs/IDialogProps";
 import { getTopic } from "../elements/RoomTopic";
 import { leaveSpace } from "../../../utils/space";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps extends IDialogProps {
     matrixClient: MatrixClient;
     space: Room;
@@ -83,7 +85,7 @@ const SpaceSettingsGeneralTab = ({ matrixClient: cli, space, onFinished }: IProp
         setBusy(false);
         const failures = results.filter(r => r.status === "rejected");
         if (failures.length > 0) {
-            console.error("Failed to save space settings: ", failures);
+            logger.error("Failed to save space settings: ", failures);
             setError(_t("Failed to save space settings."));
         }
     };

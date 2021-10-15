@@ -25,6 +25,8 @@ import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const INITIAL_NUM_PREVIEWS = 2;
 
 interface IProps {
@@ -92,7 +94,7 @@ const fetchPreviews = (cli: MatrixClient, links: string[], ts: number):
                 return [link, preview];
             }
         } catch (error) {
-            console.error("Failed to get URL preview: " + error);
+            logger.error("Failed to get URL preview: " + error);
         }
     })).then(a => a.filter(Boolean)) as Promise<[string, IPreviewUrlResponse][]>;
 };

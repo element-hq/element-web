@@ -165,7 +165,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
             }
 
             this.setState({ error: e });
-            console.error("Error bootstrapping cross-signing", e);
+            logger.error("Error bootstrapping cross-signing", e);
         }
     };
 

@@ -27,6 +27,8 @@ import AccessibleButton from "../elements/AccessibleButton";
 import IntegrationManager from "../settings/IntegrationManager";
 import { IDialogProps } from "./IDialogProps";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps extends IDialogProps {
     /**
      * Optional room where the integration manager should be open to
@@ -116,7 +118,7 @@ export default class TabbedIntegrationManagerDialog extends React.Component<IPro
                 return;
             }
 
-            console.error(e);
+            logger.error(e);
             this.setState({
                 busy: false,
                 currentLoading: false,

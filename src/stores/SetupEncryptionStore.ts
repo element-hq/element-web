@@ -248,7 +248,7 @@ export class SetupEncryptionStore extends EventEmitter {
                 this.phase = Phase.Finished;
             }, true);
         } catch (e) {
-            console.error("Error resetting cross-signing", e);
+            logger.error("Error resetting cross-signing", e);
             this.phase = Phase.Intro;
         }
         this.emit("update");

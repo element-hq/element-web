@@ -23,6 +23,8 @@ import SdkConfig from './SdkConfig';
 import Modal from './Modal';
 import * as sdk from './index';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const hashRegex = /#\/(groups?|room|user|settings|register|login|forgot_password|home|directory)/;
 const hashVarRegex = /#\/(group|room|user)\/.*$/;
 
@@ -156,7 +158,7 @@ function getUid(): string {
         }
         return data;
     } catch (e) {
-        console.error("Analytics error: ", e);
+        logger.error("Analytics error: ", e);
         return "";
     }
 }
@@ -299,7 +301,7 @@ export class Analytics {
                 redirect: "follow",
             });
         } catch (e) {
-            console.error("Analytics error: ", e);
+            logger.error("Analytics error: ", e);
         }
     }
 

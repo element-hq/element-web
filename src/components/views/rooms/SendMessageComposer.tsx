@@ -358,7 +358,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             }
         }
         if (error) {
-            console.error("Command failure: %s", error);
+            logger.error("Command failure: %s", error);
             // assume the error is a server error when the command is async
             const isServerError = !!result.promise;
             const title = isServerError ? _td("Server error") : _td("Command error");
@@ -549,7 +549,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                 }
                 return parts;
             } catch (e) {
-                console.error(e);
+                logger.error(e);
             }
         }
     }

@@ -28,6 +28,8 @@ import { compare } from "../../../../../utils/strings";
 import ErrorDialog from '../../../dialogs/ErrorDialog';
 import PowerSelector from "../../../elements/PowerSelector";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IEventShowOpts {
     isState?: boolean;
     hideForSpace?: boolean;
@@ -72,7 +74,7 @@ interface IBannedUserProps {
 export class BannedUser extends React.Component<IBannedUserProps> {
     private onUnbanClick = (e) => {
         MatrixClientPeg.get().unban(this.props.member.roomId, this.props.member.userId).catch((err) => {
-            console.error("Failed to unban: " + err);
+            logger.error("Failed to unban: " + err);
             Modal.createTrackedDialog('Failed to unban', '', ErrorDialog, {
                 title: _t('Error'),
                 description: _t('Failed to unban'),
@@ -167,7 +169,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         }
 
         client.sendStateEvent(this.props.roomId, EventType.RoomPowerLevels, plContent).catch(e => {
-            console.error(e);
+            logger.error(e);
 
             Modal.createTrackedDialog('Power level requirement change failed', '', ErrorDialog, {
                 title: _t('Error changing power level requirement'),
@@ -193,7 +195,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         plContent['users'][powerLevelKey] = value;
 
         client.sendStateEvent(this.props.roomId, EventType.RoomPowerLevels, plContent).catch(e => {
-            console.error(e);
+            logger.error(e);
 
             Modal.createTrackedDialog('Power level change failed', '', ErrorDialog, {
                 title: _t('Error changing power level'),

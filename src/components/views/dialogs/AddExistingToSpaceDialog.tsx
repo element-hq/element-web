@@ -41,6 +41,8 @@ import TruncatedList from "../elements/TruncatedList";
 import EntityTile from "../rooms/EntityTile";
 import BaseAvatar from "../avatars/BaseAvatar";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     space: Room;
     onCreateRoomClick(): void;
@@ -160,7 +162,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
                 });
                 setProgress(i => i + 1);
             } catch (e) {
-                console.error("Failed to add rooms to space", e);
+                logger.error("Failed to add rooms to space", e);
                 setError(error = e);
                 break;
             }

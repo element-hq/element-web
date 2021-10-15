@@ -22,6 +22,8 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 class FlairAvatar extends React.Component {
     constructor() {
         super();
@@ -92,7 +94,7 @@ export default class Flair extends React.Component {
             try {
                 groupProfile = await FlairStore.getGroupProfileCached(this.context, groupId);
             } catch (err) {
-                console.error('Could not get profile for group', groupId, err);
+                logger.error('Could not get profile for group', groupId, err);
             }
             profiles.push(groupProfile);
         }

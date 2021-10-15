@@ -188,7 +188,7 @@ export default class MultiInviter {
                     return;
                 }
 
-                console.error(err);
+                logger.error(err);
 
                 let errorText;
                 let fatal = false;

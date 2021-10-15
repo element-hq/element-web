@@ -25,6 +25,8 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BugReportDialog from '../dialogs/BugReportDialog';
 import AccessibleButton from './AccessibleButton';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IState {
     error: Error;
 }
@@ -52,8 +54,8 @@ export default class ErrorBoundary extends React.PureComponent<{}, IState> {
     componentDidCatch(error: Error, { componentStack }: ErrorInfo): void {
         // Browser consoles are better at formatting output when native errors are passed
         // in their own `console.error` invocation.
-        console.error(error);
-        console.error(
+        logger.error(error);
+        logger.error(
             "The above error occured while React was rendering the following components:",
             componentStack,
         );

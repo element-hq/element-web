@@ -39,7 +39,7 @@ function safariVersionCheck(ua: string): boolean {
             return colrFontSupported;
         }
     } catch (err) {
-        console.error("Error in Safari COLR version check", err);
+        logger.error("Error in Safari COLR version check", err);
     }
     console.warn("Couldn't determine Safari version to check COLR font support, assuming no.");
     return false;
@@ -96,7 +96,7 @@ async function isColrFontSupported(): Promise<boolean> {
         logger.log("Canvas check revealed COLR is supported? " + colrFontSupported);
         return colrFontSupported;
     } catch (e) {
-        console.error("Couldn't load COLR font", e);
+        logger.error("Couldn't load COLR font", e);
         return false;
     }
 }

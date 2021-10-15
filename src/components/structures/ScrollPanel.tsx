@@ -408,7 +408,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             try {
                 await Promise.all(fillPromises);
             } catch (err) {
-                console.error(err);
+                logger.error(err);
             }
         }
         if (isFirstCall) {

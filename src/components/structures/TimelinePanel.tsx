@@ -799,11 +799,11 @@ class TimelinePanel extends React.Component<IProps, IState> {
                         lastReadEvent,
                         {},
                     ).catch((e) => {
-                        console.error(e);
+                        logger.error(e);
                         this.lastRRSentEventId = undefined;
                     });
                 } else {
-                    console.error(e);
+                    logger.error(e);
                 }
                 // it failed, so allow retries next time the user is active
                 this.lastRRSentEventId = undefined;
@@ -1121,7 +1121,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             if (this.unmounted) return;
 
             this.setState({ timelineLoading: false });
-            console.error(
+            logger.error(
                 `Error loading timeline panel at ${eventId}: ${error}`,
             );
 

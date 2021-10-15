@@ -234,8 +234,8 @@ export function attemptTokenLogin(
                 }
             },
         });
-        console.error("Failed to log in with login token:");
-        console.error(err);
+        logger.error("Failed to log in with login token:");
+        logger.error(err);
         return false;
     });
 }
@@ -297,7 +297,7 @@ function registerAsGuest(
             guest: true,
         }, true).then(() => true);
     }, (err) => {
-        console.error("Failed to register as guest", err);
+        logger.error("Failed to register as guest", err);
         return false;
     });
 }
@@ -452,7 +452,7 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
 }
 
 async function handleLoadSessionFailure(e: Error): Promise<boolean> {
-    console.error("Unable to load session", e);
+    logger.error("Unable to load session", e);
 
     const modal = Modal.createTrackedDialog('Session Restore Error', '', SessionRestoreErrorDialog, {
         error: e.message,
@@ -676,7 +676,7 @@ async function persistCredentials(credentials: IMatrixClientCreds): Promise<void
             localStorage.setItem("mx_access_token", credentials.accessToken);
         }
         if (localStorage.getItem("mx_has_pickle_key")) {
-            console.error("Expected a pickle key, but none provided.  Encryption may not work.");
+            logger.error("Expected a pickle key, but none provided.  Encryption may not work.");
         }
     }
 

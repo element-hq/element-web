@@ -39,6 +39,8 @@ import TagComposer from "../elements/TagComposer";
 import { objectClone } from "../../../utils/objects";
 import { arrayDiff } from "../../../utils/arrays";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
 
@@ -139,7 +141,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
                 phase: Phase.Ready,
             });
         } catch (e) {
-            console.error("Error setting up notifications for settings: ", e);
+            logger.error("Error setting up notifications for settings: ", e);
             this.setState({ phase: Phase.Error });
         }
     }
@@ -264,7 +266,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             await this.refreshFromServer();
         } catch (e) {
             this.setState({ phase: Phase.Error });
-            console.error("Error updating master push rule:", e);
+            logger.error("Error updating master push rule:", e);
             this.showSaveError();
         }
     };
@@ -298,7 +300,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             await this.refreshFromServer();
         } catch (e) {
             this.setState({ phase: Phase.Error });
-            console.error("Error updating email pusher:", e);
+            logger.error("Error updating email pusher:", e);
             this.showSaveError();
         }
     };
@@ -367,7 +369,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             await this.refreshFromServer();
         } catch (e) {
             this.setState({ phase: Phase.Error });
-            console.error("Error updating push rule:", e);
+            logger.error("Error updating push rule:", e);
             this.showSaveError();
         }
     };
@@ -427,7 +429,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             await this.refreshFromServer();
         } catch (e) {
             this.setState({ phase: Phase.Error });
-            console.error("Error updating keyword push rules:", e);
+            logger.error("Error updating keyword push rules:", e);
             this.showSaveError();
         }
     }

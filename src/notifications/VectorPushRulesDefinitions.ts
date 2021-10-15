@@ -20,6 +20,8 @@ import { PushRuleVectorState, VectorState } from "./PushRuleVectorState";
 import { NotificationUtils } from "./NotificationUtils";
 import { PushRuleAction, PushRuleKind } from "matrix-js-sdk/src/@types/PushRules";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 type StateToActionsMap = {
     [state in VectorState]?: PushRuleAction[];
 };
@@ -70,7 +72,7 @@ class VectorPushRuleDefinition {
             }
         }
 
-        console.error(`Cannot translate rule actions into Vector rule state. ` +
+        logger.error(`Cannot translate rule actions into Vector rule state. ` +
             `Rule: ${JSON.stringify(rule)}, ` +
             `Expected: ${JSON.stringify(this.vectorStateToActions)}`);
         return undefined;

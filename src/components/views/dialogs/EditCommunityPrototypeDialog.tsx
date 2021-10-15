@@ -26,6 +26,8 @@ import FlairStore from "../../../stores/FlairStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps extends IDialogProps {
     communityId: string;
 }
@@ -89,7 +91,7 @@ export default class EditCommunityPrototypeDialog extends React.PureComponent<IP
             // we did it, so close the dialog
             this.props.onFinished(true);
         } catch (e) {
-            console.error(e);
+            logger.error(e);
             this.setState({
                 busy: false,
                 error: _t("There was an error updating your community. The server is unable to process your request."),

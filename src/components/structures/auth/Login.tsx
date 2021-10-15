@@ -309,7 +309,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                     busy: false,
                 });
             } catch (e) {
-                console.error("Problem parsing URL or unhandled error doing .well-known discovery:", e);
+                logger.error("Problem parsing URL or unhandled error doing .well-known discovery:", e);
 
                 let message = _t("Failed to perform homeserver discovery");
                 if (e.translatedMessage) {

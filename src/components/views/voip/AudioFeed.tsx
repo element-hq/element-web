@@ -66,7 +66,7 @@ export default class AudioFeed extends React.Component<IProps, IState> {
                 // back to the default after the call is over - Dave
                 element.setSinkId(audioOutput);
             } catch (e) {
-                console.error("Couldn't set requested audio output device: using default", e);
+                logger.error("Couldn't set requested audio output device: using default", e);
                 logger.warn("Couldn't set requested audio output device: using default", e);
             }
         }

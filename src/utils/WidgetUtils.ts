@@ -31,6 +31,8 @@ import { objectClone } from "./objects";
 import { _t } from "../languageHandler";
 import { IApp } from "../stores/WidgetStore";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // How long we wait for the state event echo to come back from the server
 // before waitFor[Room/User]Widget rejects its promise
 const WIDGET_WAIT_TIME = 20000;
@@ -92,7 +94,7 @@ export default class WidgetUtils {
      */
     static isScalarUrl(testUrlString: string): boolean {
         if (!testUrlString) {
-            console.error('Scalar URL check failed. No URL specified');
+            logger.error('Scalar URL check failed. No URL specified');
             return false;
         }
 
@@ -246,7 +248,7 @@ export default class WidgetUtils {
         try {
             delete userWidgets[widgetId];
         } catch (e) {
-            console.error(`$widgetId is non-configurable`);
+            logger.error(`$widgetId is non-configurable`);
         }
 
         const addingWidget = Boolean(widgetUrl);

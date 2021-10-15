@@ -26,6 +26,8 @@ import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
 import ErrorDialog from "../../dialogs/ErrorDialog";
 import AccessibleButton from "../../elements/AccessibleButton";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 /*
 TODO: Improve the UX for everything in here.
 It's very much placeholder, but it gets the job done. The old way of handling
@@ -98,7 +100,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
             }
             this.setState({ bound: bind });
         } catch (err) {
-            console.error(`Unable to ${label} email address ${address} ${err}`);
+            logger.error(`Unable to ${label} email address ${address} ${err}`);
             this.setState({
                 verifying: false,
                 continueDisabled: false,
@@ -133,7 +135,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
                 bound: bind,
             });
         } catch (err) {
-            console.error(`Unable to ${label} email address ${address} ${err}`);
+            logger.error(`Unable to ${label} email address ${address} ${err}`);
             this.setState({
                 verifying: false,
                 continueDisabled: false,
@@ -187,7 +189,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
                         "and then click continue again."),
                 });
             } else {
-                console.error("Unable to verify email address: " + err);
+                logger.error("Unable to verify email address: " + err);
                 Modal.createTrackedDialog('Unable to verify email address', '', ErrorDialog, {
                     title: _t("Unable to verify email address."),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),

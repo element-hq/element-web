@@ -42,6 +42,8 @@ import TagOrderActions from "../../../actions/TagOrderActions";
 import { inviteUsersToRoom } from "../../../RoomInvite";
 import ProgressBar from "../elements/ProgressBar";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     matrixClient: MatrixClient;
     groupId: string;
@@ -271,7 +273,7 @@ const CreateSpaceFromCommunityDialog: React.FC<IProps> = ({ matrixClient: cli, g
                 },
             }, "mx_CreateSpaceFromCommunityDialog_SuccessInfoDialog");
         } catch (e) {
-            console.error(e);
+            logger.error(e);
             setError(e);
         }
 

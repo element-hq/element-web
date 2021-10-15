@@ -399,7 +399,7 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
         return await func();
     } catch (e) {
         SecurityCustomisations.catchAccessSecretStorageError?.(e);
-        console.error(e);
+        logger.error(e);
         // Re-throw so that higher level logic can abort as needed
         throw e;
     } finally {

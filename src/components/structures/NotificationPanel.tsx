@@ -26,6 +26,8 @@ import { TileShape } from "../views/rooms/EventTile";
 import { Layout } from "../../settings/Layout";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     onClose(): void;
 }
@@ -59,7 +61,7 @@ export default class NotificationPanel extends React.PureComponent<IProps> {
                 />
             );
         } else {
-            console.error("No notifTimelineSet available!");
+            logger.error("No notifTimelineSet available!");
             content = <Spinner />;
         }
 

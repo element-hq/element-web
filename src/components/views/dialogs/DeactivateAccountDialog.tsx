@@ -28,6 +28,8 @@ import StyledCheckbox from "../elements/StyledCheckbox";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     onFinished: (success: boolean) => void;
 }
@@ -112,7 +114,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
             return;
         }
 
-        console.error("Error during UI Auth:", { result });
+        logger.error("Error during UI Auth:", { result });
         this.setState({ errStr: _t("There was a problem communicating with the server. Please try again.") });
     };
 
@@ -126,7 +128,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
             Lifecycle.onLoggedOut();
             this.props.onFinished(true);
         }).catch(e => {
-            console.error(e);
+            logger.error(e);
             this.setState({ errStr: _t("There was a problem communicating with the server. Please try again.") });
         });
     };

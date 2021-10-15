@@ -25,6 +25,8 @@ import GroupStore from "../../../stores/GroupStore";
 import { MenuItem } from "../../structures/ContextMenu";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 @replaceableComponent("views.context_menus.GroupInviteTileContextMenu")
 export default class GroupInviteTileContextMenu extends React.Component {
     static propTypes = {
@@ -62,7 +64,7 @@ export default class GroupInviteTileContextMenu extends React.Component {
                 try {
                     await GroupStore.leaveGroup(this.props.group.groupId);
                 } catch (e) {
-                    console.error("Error rejecting community invite: ", e);
+                    logger.error("Error rejecting community invite: ", e);
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createTrackedDialog('Error rejecting invite', '', ErrorDialog, {
                         title: _t("Error"),

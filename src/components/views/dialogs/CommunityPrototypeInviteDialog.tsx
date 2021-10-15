@@ -33,6 +33,8 @@ import ErrorDialog from "./ErrorDialog";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps extends IDialogProps {
     roomId: string;
     communityName: string;
@@ -99,7 +101,7 @@ export default class CommunityPrototypeInviteDialog extends React.PureComponent<
             }
         } catch (e) {
             this.setState({ busy: false });
-            console.error(e);
+            logger.error(e);
             Modal.createTrackedDialog('Failed to invite', '', ErrorDialog, {
                 title: _t("Failed to invite"),
                 description: ((e && e.message) ? e.message : _t("Operation failed")),

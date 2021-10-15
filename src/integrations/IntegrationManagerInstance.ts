@@ -24,6 +24,8 @@ import SettingsStore from "../settings/SettingsStore";
 import IntegrationManager from "../components/views/settings/IntegrationManager";
 import { IntegrationManagers } from "./IntegrationManagers";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export enum Kind {
     Account = "account",
     Config = "config",
@@ -94,7 +96,7 @@ export class IntegrationManagerInstance {
                 return;
             }
 
-            console.error(e);
+            logger.error(e);
             newProps["connected"] = false;
         }
 

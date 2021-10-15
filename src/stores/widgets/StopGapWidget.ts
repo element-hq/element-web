@@ -401,7 +401,7 @@ export class StopGapWidget extends EventEmitter {
             }
         } catch (e) {
             // All errors are non-fatal
-            console.error("Error preparing widget communications: ", e);
+            logger.error("Error preparing widget communications: ", e);
         }
     }
 
@@ -473,7 +473,7 @@ export class StopGapWidget extends EventEmitter {
 
         const raw = ev.getEffectiveEvent();
         this.messaging.feedEvent(raw, this.eventListenerRoomId).catch(e => {
-            console.error("Error sending event to widget: ", e);
+            logger.error("Error sending event to widget: ", e);
         });
     }
 }

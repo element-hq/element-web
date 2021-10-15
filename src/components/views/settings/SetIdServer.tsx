@@ -32,6 +32,8 @@ import AccessibleButton from '../elements/AccessibleButton';
 import Field from '../elements/Field';
 import QuestionDialog from "../dialogs/QuestionDialog";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // We'll wait up to this long when checking for 3PID bindings on the IS.
 const REACHABILITY_TIMEOUT = 10000; // ms
 
@@ -206,7 +208,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                     this.saveIdServer(fullUrl);
                 }
             } catch (e) {
-                console.error(e);
+                logger.error(e);
                 errStr = _t("Terms of service not accepted or the identity server is invalid.");
             }
         }

@@ -28,6 +28,8 @@ import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
 import ErrorDialog from "../../dialogs/ErrorDialog";
 import { PhoneNumberCountryDefinition } from "../../../../phonenumber";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 /*
 TODO: Improve the UX for everything in here.
 This is a copy/paste of EmailAddresses, mostly.
@@ -74,7 +76,7 @@ export class ExistingPhoneNumber extends React.Component<IExistingPhoneNumberPro
         MatrixClientPeg.get().deleteThreePid(this.props.msisdn.medium, this.props.msisdn.address).then(() => {
             return this.props.onRemoved(this.props.msisdn);
         }).catch((err) => {
-            console.error("Unable to remove contact information: " + err);
+            logger.error("Unable to remove contact information: " + err);
             Modal.createTrackedDialog('Remove 3pid failed', '', ErrorDialog, {
                 title: _t("Unable to remove contact information"),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
@@ -183,7 +185,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
         task.addMsisdn(phoneCountry, phoneNumber).then((response) => {
             this.setState({ continueDisabled: false, verifyMsisdn: response.msisdn });
         }).catch((err) => {
-            console.error("Unable to add phone number " + phoneNumber + " " + err);
+            logger.error("Unable to add phone number " + phoneNumber + " " + err);
             this.setState({ verifying: false, continueDisabled: false, addTask: null });
             Modal.createTrackedDialog('Add Phone Number Error', '', ErrorDialog, {
                 title: _t("Error"),
@@ -221,7 +223,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
         }).catch((err) => {
             this.setState({ continueDisabled: false });
             if (err.errcode !== 'M_THREEPID_AUTH_FAILED') {
-                console.error("Unable to verify phone number: " + err);
+                logger.error("Unable to verify phone number: " + err);
                 Modal.createTrackedDialog('Unable to verify phone number', '', ErrorDialog, {
                     title: _t("Unable to verify phone number."),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),

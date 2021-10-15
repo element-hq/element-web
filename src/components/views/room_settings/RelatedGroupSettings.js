@@ -24,6 +24,8 @@ import ErrorDialog from "../dialogs/ErrorDialog";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const GROUP_ID_REGEX = /\+\S+:\S+/;
 
 @replaceableComponent("views.room_settings.RelatedGroupSettings")
@@ -53,7 +55,7 @@ export default class RelatedGroupSettings extends React.Component {
         this.context.sendStateEvent(this.props.roomId, 'm.room.related_groups', {
             groups: newGroupsList,
         }, '').catch((err) => {
-            console.error(err);
+            logger.error(err);
             Modal.createTrackedDialog('Error updating flair', '', ErrorDialog, {
                 title: _t("Error updating flair"),
                 description: _t(

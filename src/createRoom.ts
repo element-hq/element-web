@@ -46,6 +46,8 @@ import { Action } from "./dispatcher/actions";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import Spinner from "./components/views/elements/Spinner";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
 
@@ -278,7 +280,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
             action: Action.JoinRoomError,
             roomId,
         });
-        console.error("Failed to create room " + roomId + " " + err);
+        logger.error("Failed to create room " + roomId + " " + err);
         let description = _t("Server may be unavailable, overloaded, or you hit a bug.");
         if (err.errcode === "M_UNSUPPORTED_ROOM_VERSION") {
             // Technically not possible with the UI as of April 2019 because there's no
@@ -356,7 +358,7 @@ export async function canEncryptToAllUsers(client: MatrixClient, userIds: string
             Object.keys(userDevices).length > 0,
         );
     } catch (e) {
-        console.error("Error determining if it's possible to encrypt to all users: ", e);
+        logger.error("Error determining if it's possible to encrypt to all users: ", e);
         return false; // assume not
     }
 }

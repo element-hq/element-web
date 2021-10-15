@@ -21,6 +21,8 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { _t } from "../../../languageHandler";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     // Playback instance to render. Cannot change during component lifecycle: create
     // an all-new component instead.
@@ -50,7 +52,7 @@ export default abstract class AudioPlayerBase extends React.PureComponent<IProps
         // Don't wait for the promise to complete - it will emit a progress update when it
         // is done, and it's not meant to take long anyhow.
         this.props.playback.prepare().catch(e => {
-            console.error("Error processing audio file:", e);
+            logger.error("Error processing audio file:", e);
             this.setState({ error: true });
         });
     }

@@ -30,6 +30,8 @@ import { IDialogProps } from "./IDialogProps";
 import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { defer } from "matrix-js-sdk/src/utils";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps extends IDialogProps {
     mxEvent: MatrixEvent;
 }
@@ -78,7 +80,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
         } catch (error) {
             // log if the server returned an error
             if (error.errcode) {
-                console.error("fetching /relations failed with error", error);
+                logger.error("fetching /relations failed with error", error);
             }
             this.setState({ error }, () => reject(error));
             return promise;

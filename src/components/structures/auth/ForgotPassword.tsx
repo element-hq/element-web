@@ -33,6 +33,8 @@ import { PASSWORD_MIN_SCORE } from '../../views/auth/RegistrationForm';
 import { IValidationResult } from "../../views/elements/Validation";
 import InlineSpinner from '../../views/elements/InlineSpinner';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 enum Phase {
     // Show the forgot password inputs
     Forgot = 1,
@@ -147,7 +149,7 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
     private onVerify = async (ev: React.MouseEvent): Promise<void> => {
         ev.preventDefault();
         if (!this.reset) {
-            console.error("onVerify called before submitPasswordReset!");
+            logger.error("onVerify called before submitPasswordReset!");
             return;
         }
         if (this.state.currentHttpRequest) return;

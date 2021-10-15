@@ -1580,7 +1580,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     newVersionInfo = await MatrixClientPeg.get().getKeyBackupVersion();
                     if (newVersionInfo !== null) haveNewVersion = true;
                 } catch (e) {
-                    console.error("Saw key backup error but failed to check backup version!", e);
+                    logger.error("Saw key backup error but failed to check backup version!", e);
                     return;
                 }
             }
@@ -2121,7 +2121,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 />
             );
         } else {
-            console.error(`Unknown view ${this.state.view}`);
+            logger.error(`Unknown view ${this.state.view}`);
         }
 
         return <ErrorBoundary>

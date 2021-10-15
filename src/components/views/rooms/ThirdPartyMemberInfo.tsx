@@ -29,6 +29,8 @@ import ErrorDialog from '../dialogs/ErrorDialog';
 import AccessibleButton from '../elements/AccessibleButton';
 import SpaceStore from "../../../stores/SpaceStore";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     event: MatrixEvent;
 }
@@ -100,7 +102,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
     onKickClick = () => {
         MatrixClientPeg.get().sendStateEvent(this.state.roomId, "m.room.third_party_invite", {}, this.state.stateKey)
             .catch((err) => {
-                console.error(err);
+                logger.error(err);
 
                 // Revert echo because of error
                 this.setState({ invited: true });

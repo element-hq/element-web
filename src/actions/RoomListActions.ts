@@ -27,6 +27,8 @@ import { SortAlgorithm } from "../stores/room-list/algorithms/models";
 import { DefaultTagID } from "../stores/room-list/models";
 import ErrorDialog from '../components/views/dialogs/ErrorDialog';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export default class RoomListActions {
     /**
      * Creates an action thunk that will do an asynchronous request to
@@ -88,7 +90,7 @@ export default class RoomListActions {
                 return Rooms.guessAndSetDMRoom(
                     room, newTag === DefaultTagID.DM,
                 ).catch((err) => {
-                    console.error("Failed to set direct chat tag " + err);
+                    logger.error("Failed to set direct chat tag " + err);
                     Modal.createTrackedDialog('Failed to set direct chat tag', '', ErrorDialog, {
                         title: _t('Failed to set direct chat tag'),
                         description: ((err && err.message) ? err.message : _t('Operation failed')),
@@ -108,7 +110,7 @@ export default class RoomListActions {
                 const promiseToDelete = matrixClient.deleteRoomTag(
                     roomId, oldTag,
                 ).catch(function(err) {
-                    console.error("Failed to remove tag " + oldTag + " from room: " + err);
+                    logger.error("Failed to remove tag " + oldTag + " from room: " + err);
                     Modal.createTrackedDialog('Failed to remove tag from room', '', ErrorDialog, {
                         title: _t('Failed to remove tag %(tagName)s from room', { tagName: oldTag }),
                         description: ((err && err.message) ? err.message : _t('Operation failed')),
@@ -127,7 +129,7 @@ export default class RoomListActions {
                 metaData = metaData || {};
 
                 const promiseToAdd = matrixClient.setRoomTag(roomId, newTag, metaData).catch(function(err) {
-                    console.error("Failed to add tag " + newTag + " to room: " + err);
+                    logger.error("Failed to add tag " + newTag + " to room: " + err);
                     Modal.createTrackedDialog('Failed to add tag to room', '', ErrorDialog, {
                         title: _t('Failed to add tag %(tagName)s to room', { tagName: newTag }),
                         description: ((err && err.message) ? err.message : _t('Operation failed')),

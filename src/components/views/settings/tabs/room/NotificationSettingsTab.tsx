@@ -23,6 +23,8 @@ import SettingsStore from '../../../../../settings/SettingsStore';
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     roomId: string;
 }
@@ -83,10 +85,10 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
         try {
             await this.saveSound();
         } catch (ex) {
-            console.error(
+            logger.error(
                 `Unable to save notification sound for ${this.props.roomId}`,
             );
-            console.error(ex);
+            logger.error(ex);
         }
     };
 

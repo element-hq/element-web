@@ -41,6 +41,8 @@ import { reorderLexicographically } from "../utils/stringOrderField";
 import { TAG_ORDER } from "../components/views/rooms/RoomList";
 import { SettingUpdatedPayload } from "../dispatcher/payloads/SettingUpdatedPayload";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 type SpaceKey = string | symbol;
 
 interface IState {}
@@ -261,7 +263,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 viaServers: Array.from(viaMap.get(roomInfo.room_id) || []),
             }));
         } catch (e) {
-            console.error(e);
+            logger.error(e);
         }
         return [];
     };

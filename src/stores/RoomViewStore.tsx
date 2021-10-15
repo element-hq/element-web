@@ -235,7 +235,7 @@ class RoomViewStore extends Store<ActionPayload> {
                     storeRoomAliasInCache(payload.room_alias, result.room_id);
                     roomId = result.room_id;
                 } catch (err) {
-                    console.error("RVS failed to get room id for alias: ", err);
+                    logger.error("RVS failed to get room id for alias: ", err);
                     dis.dispatch({
                         action: 'view_room_error',
                         room_id: null,

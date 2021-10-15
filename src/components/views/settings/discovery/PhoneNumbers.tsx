@@ -27,6 +27,8 @@ import ErrorDialog from "../../dialogs/ErrorDialog";
 import Field from "../../elements/Field";
 import AccessibleButton from "../../elements/AccessibleButton";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 /*
 TODO: Improve the UX for everything in here.
 This is a copy/paste of EmailAddresses, mostly.
@@ -98,7 +100,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
             }
             this.setState({ bound: bind });
         } catch (err) {
-            console.error(`Unable to ${label} phone number ${address} ${err}`);
+            logger.error(`Unable to ${label} phone number ${address} ${err}`);
             this.setState({
                 verifying: false,
                 continueDisabled: false,
@@ -137,7 +139,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
                 bound: bind,
             });
         } catch (err) {
-            console.error(`Unable to ${label} phone number ${address} ${err}`);
+            logger.error(`Unable to ${label} phone number ${address} ${err}`);
             this.setState({
                 verifying: false,
                 continueDisabled: false,
@@ -194,7 +196,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
         } catch (err) {
             this.setState({ continueDisabled: false });
             if (err.errcode !== 'M_THREEPID_AUTH_FAILED') {
-                console.error("Unable to verify phone number: " + err);
+                logger.error("Unable to verify phone number: " + err);
                 Modal.createTrackedDialog('Unable to verify phone number', '', ErrorDialog, {
                     title: _t("Unable to verify phone number."),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),

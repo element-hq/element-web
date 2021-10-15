@@ -39,7 +39,7 @@ function log(msg: string) {
 }
 
 function error(msg: string, ...args: string[]) {
-    console.error(`StorageManager: ${msg}`, ...args);
+    logger.error(`StorageManager: ${msg}`, ...args);
 }
 
 function track(action: string) {

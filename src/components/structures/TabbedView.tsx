@@ -23,6 +23,8 @@ import { replaceableComponent } from "../../utils/replaceableComponent";
 import classNames from "classnames";
 import AccessibleButton from "../views/elements/AccessibleButton";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 /**
  * Represents a tab for the TabbedView.
  */
@@ -90,7 +92,7 @@ export default class TabbedView extends React.Component<IProps, IState> {
             if (this.props.onChange) this.props.onChange(tab.id);
             this.setState({ activeTabIndex: idx });
         } else {
-            console.error("Could not find tab " + tab.label + " in tabs");
+            logger.error("Could not find tab " + tab.label + " in tabs");
         }
     }
 

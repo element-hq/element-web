@@ -173,7 +173,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         }
 
         Lifecycle.hydrateSession(credentials).catch((e) => {
-            console.error(e);
+            logger.error(e);
             this.setState({ busy: false, errorText: _t("Failed to re-authenticate") });
         });
     };
@@ -193,7 +193,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         try {
             credentials = await sendLoginRequest(hsUrl, isUrl, loginType, loginParams);
         } catch (e) {
-            console.error(e);
+            logger.error(e);
             this.setState({ busy: false, loginView: LOGIN_VIEW.UNSUPPORTED });
             return;
         }
@@ -201,7 +201,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         Lifecycle.hydrateSession(credentials).then(() => {
             if (this.props.onTokenLoginCompleted) this.props.onTokenLoginCompleted();
         }).catch((e) => {
-            console.error(e);
+            logger.error(e);
             this.setState({ busy: false, loginView: LOGIN_VIEW.UNSUPPORTED });
         });
     }

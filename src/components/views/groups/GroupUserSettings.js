@@ -20,6 +20,8 @@ import { _t } from '../../../languageHandler';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 @replaceableComponent("views.groups.GroupUserSettings")
 export default class GroupUserSettings extends React.Component {
     static contextType = MatrixClientContext;
@@ -33,7 +35,7 @@ export default class GroupUserSettings extends React.Component {
         this.context.getJoinedGroups().then((result) => {
             this.setState({ groups: result.groups || [], error: null });
         }, (err) => {
-            console.error(err);
+            logger.error(err);
             this.setState({ groups: null, error: err });
         });
     }

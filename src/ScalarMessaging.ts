@@ -272,7 +272,7 @@ function sendResponse(event: MessageEvent<any>, res: any): void {
 }
 
 function sendError(event: MessageEvent<any>, msg: string, nestedError?: Error): void {
-    console.error("Action:" + event.data.action + " failed with message: " + msg);
+    logger.error("Action:" + event.data.action + " failed with message: " + msg);
     const data = objectClone(event.data);
     data.response = {
         error: {
@@ -721,7 +721,7 @@ export function stopListening(): void {
             "ScalarMessaging: mismatched startListening / stopListening detected." +
             " Negative count",
         );
-        console.error(e);
+        logger.error(e);
     }
 }
 

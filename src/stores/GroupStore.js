@@ -20,6 +20,8 @@ import FlairStore from './FlairStore';
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import dis from '../dispatcher/dispatcher';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export function parseMembersResponse(response) {
     return response.chunk.map((apiMember) => groupMemberFromApiObject(apiMember));
 }
@@ -144,7 +146,7 @@ class GroupStore extends EventEmitter {
                 return;
             }
 
-            console.error(`Failed to get resource ${stateKey} for ${groupId}`, err);
+            logger.error(`Failed to get resource ${stateKey} for ${groupId}`, err);
             this.emit('error', err, groupId, stateKey);
         }).finally(() => {
             // Indicate finished request, allow for future fetches

@@ -26,6 +26,8 @@ import { _t } from "../../../languageHandler";
 import TagOrderActions from "../../../actions/TagOrderActions";
 import GroupFilterOrderStore from "../../../stores/GroupFilterOrderStore";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 @replaceableComponent("views.groups.GroupTile")
 class GroupTile extends React.Component {
     static propTypes = {
@@ -51,7 +53,7 @@ class GroupTile extends React.Component {
         FlairStore.getGroupProfileCached(this.context, this.props.groupId).then((profile) => {
             this.setState({ profile });
         }).catch((err) => {
-            console.error('Error whilst getting cached profile for GroupTile', err);
+            logger.error('Error whilst getting cached profile for GroupTile', err);
         });
     }
 

@@ -38,6 +38,8 @@ import Exporter from "../../../utils/exportUtils/Exporter";
 import Spinner from "../elements/Spinner";
 import InfoDialog from "./InfoDialog";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps extends IDialogProps {
     room: Room;
 }
@@ -102,7 +104,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 );
                 break;
             default:
-                console.error("Unknown export format");
+                logger.error("Unknown export format");
                 return;
         }
     };

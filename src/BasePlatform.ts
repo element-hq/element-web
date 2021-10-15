@@ -28,6 +28,8 @@ import { hideToast as hideUpdateToast } from "./toasts/UpdateToast";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { idbLoad, idbSave, idbDelete } from "./utils/StorageManager";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
 export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
 export const SSO_IDP_ID_KEY = "mx_sso_idp_id";
@@ -320,7 +322,7 @@ export default abstract class BasePlatform {
             return null;
         }
         if (!data.encrypted || !data.iv || !data.cryptoKey) {
-            console.error("Badly formatted pickle key");
+            logger.error("Badly formatted pickle key");
             return null;
         }
 
@@ -340,7 +342,7 @@ export default abstract class BasePlatform {
             );
             return encodeUnpaddedBase64(key);
         } catch (e) {
-            console.error("Error decrypting pickle key");
+            logger.error("Error decrypting pickle key");
             return null;
         }
     }

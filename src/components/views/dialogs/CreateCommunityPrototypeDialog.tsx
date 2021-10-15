@@ -27,6 +27,8 @@ import { showCommunityRoomInviteDialog } from "../../../RoomInvite";
 import GroupStore from "../../../stores/GroupStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps extends IDialogProps {
 }
 
@@ -110,7 +112,7 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
                 });
             }
         } catch (e) {
-            console.error(e);
+            logger.error(e);
             this.setState({
                 busy: false,
                 error: _t(

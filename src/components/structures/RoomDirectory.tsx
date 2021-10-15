@@ -48,6 +48,8 @@ import Spinner from "../views/elements/Spinner";
 import { ActionPayload } from "../../dispatcher/payloads";
 import { getDisplayAliasForAliasSet } from "../../Rooms";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 800;
 
@@ -285,7 +287,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 return false;
             }
 
-            console.error("Failed to get publicRooms: %s", JSON.stringify(err));
+            logger.error("Failed to get publicRooms: %s", JSON.stringify(err));
             track('Failed to get public room list');
             const brand = SdkConfig.get().brand;
             this.setState({
@@ -335,7 +337,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 }, (err) => {
                     modal.close();
                     this.refreshRoomList();
-                    console.error("Failed to " + step + ": " + err);
+                    logger.error("Failed to " + step + ": " + err);
                     Modal.createTrackedDialog('Remove from Directory Error', '', ErrorDialog, {
                         title: _t('Error'),
                         description: (err && err.message)

@@ -353,7 +353,7 @@ export function setLanguage(preferredLangs: string | string[]) {
         if (!langToUse) {
             // Fallback to en_EN if none is found
             langToUse = 'en';
-            console.error("Unable to find an appropriate language");
+            logger.error("Unable to find an appropriate language");
         }
 
         return getLanguageRetry(i18nFolder + availLangs[langToUse].fileName);
@@ -521,7 +521,7 @@ function weblateToCounterpart(inTrs: object): object {
 async function getLanguageRetry(langPath: string, num = 3): Promise<object> {
     return retry(() => getLanguage(langPath), num, e => {
         logger.log("Failed to load i18n", langPath);
-        console.error(e);
+        logger.error(e);
         return true; // always retry
     });
 }

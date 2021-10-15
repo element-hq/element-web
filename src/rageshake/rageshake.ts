@@ -162,7 +162,7 @@ export class IndexedDBLogStore {
                     // @ts-ignore
                     "Failed to open log database: " + event.target.error.name
                 );
-                console.error(err);
+                logger.error(err);
                 reject(new Error(err));
             };
 
@@ -245,7 +245,7 @@ export class IndexedDBLogStore {
                 resolve();
             };
             txn.onerror = (event) => {
-                console.error(
+                logger.error(
                     "Failed to flush logs : ", event,
                 );
                 reject(
@@ -384,7 +384,7 @@ export class IndexedDBLogStore {
             Promise.all(removeLogIds.map((id) => deleteLogs(id))).then(() => {
                 logger.log(`Removed ${removeLogIds.length} old logs.`);
             }, (err) => {
-                console.error(err);
+                logger.error(err);
             });
         }
         return logs;

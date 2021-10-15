@@ -170,7 +170,7 @@ export const Notifier = {
             let audioElement = selector;
             if (!selector) {
                 if (!sound) {
-                    console.error("No audio element or sound to play for notification");
+                    logger.error("No audio element or sound to play for notification");
                     return;
                 }
                 audioElement = new Audio(sound.url);

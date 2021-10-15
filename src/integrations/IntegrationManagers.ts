@@ -224,7 +224,7 @@ export class IntegrationManagers {
             const result = await fetch(`https://${domainName}/.well-known/matrix/integrations`);
             wkConfig = await result.json();
         } catch (e) {
-            console.error(e);
+            logger.error(e);
             console.warn("Failed to locate integration manager");
             return null;
         }

@@ -24,6 +24,8 @@ import StyledCheckbox from '../elements/StyledCheckbox';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import EditableTextContainer from "../elements/EditableTextContainer";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     device?: IMyDevice;
     onDeviceToggled?: (device: IMyDevice) => void;
@@ -41,7 +43,7 @@ export default class DevicesPanelEntry extends React.Component<IProps> {
         return MatrixClientPeg.get().setDeviceDetails(device.device_id, {
             display_name: value,
         }).catch((e) => {
-            console.error("Error setting session display name", e);
+            logger.error("Error setting session display name", e);
             throw new Error(_t("Failed to set display name"));
         });
     };

@@ -349,7 +349,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             } else {
                 this.setState({ error: e });
             }
-            console.error("Error bootstrapping secret storage", e);
+            logger.error("Error bootstrapping secret storage", e);
         }
     }
 

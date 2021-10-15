@@ -26,6 +26,8 @@ import AccessibleButton from "../../../../components/views/elements/AccessibleBu
 import { copyNode } from "../../../../utils/strings";
 import PassphraseField from "../../../../components/views/auth/PassphraseField";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const PHASE_PASSPHRASE = 0;
 const PHASE_PASSPHRASE_CONFIRM = 1;
 const PHASE_SHOWKEY = 2;
@@ -129,7 +131,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
                 phase: PHASE_DONE,
             });
         } catch (e) {
-            console.error("Error creating key backup", e);
+            logger.error("Error creating key backup", e);
             // TODO: If creating a version succeeds, but backup fails, should we
             // delete the version, disable backup, or do nothing?  If we just
             // disable without deleting, we'll enable on next app reload since

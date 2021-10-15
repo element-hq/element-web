@@ -29,6 +29,8 @@ import RoomPublishSetting from "./RoomPublishSetting";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import RoomAliasField from "../elements/RoomAliasField";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IEditableAliasesListProps {
     domain?: string;
 }
@@ -171,7 +173,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
 
         MatrixClientPeg.get().sendStateEvent(this.props.roomId, "m.room.canonical_alias",
             eventContent, "").catch((err) => {
-            console.error(err);
+            logger.error(err);
             Modal.createTrackedDialog('Error updating main address', '', ErrorDialog, {
                 title: _t("Error updating main address"),
                 description: _t(
@@ -204,7 +206,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
 
         MatrixClientPeg.get().sendStateEvent(this.props.roomId, "m.room.canonical_alias",
             eventContent, "").catch((err) => {
-            console.error(err);
+            logger.error(err);
             Modal.createTrackedDialog('Error updating alternative addresses', '', ErrorDialog, {
                 title: _t("Error updating main address"),
                 description: _t(
@@ -236,7 +238,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                 this.changeCanonicalAlias(alias);
             }
         }).catch((err) => {
-            console.error(err);
+            logger.error(err);
             Modal.createTrackedDialog('Error creating address', '', ErrorDialog, {
                 title: _t("Error creating address"),
                 description: _t(
@@ -259,7 +261,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                 this.changeCanonicalAlias(null);
             }
         }).catch((err) => {
-            console.error(err);
+            logger.error(err);
             let description;
             if (err.errcode === "M_FORBIDDEN") {
                 description = _t("You don't have permission to delete the address.");

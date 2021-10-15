@@ -24,6 +24,8 @@ import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import SpaceStore from "../stores/SpaceStore";
 import Spinner from "../components/views/elements/Spinner";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProgress {
     roomUpgraded: boolean;
     roomSynced?: boolean;
@@ -78,7 +80,7 @@ export async function upgradeRoom(
         ({ replacement_room: newRoomId } = await cli.upgradeRoom(room.roomId, targetVersion));
     } catch (e) {
         if (!handleError) throw e;
-        console.error(e);
+        logger.error(e);
 
         Modal.createTrackedDialog("Room Upgrade Error", "", ErrorDialog, {
             title: _t('Error upgrading room'),
