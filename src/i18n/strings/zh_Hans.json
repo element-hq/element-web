@@ -3244,5 +3244,7 @@
     "They'll still be able to access whatever you're not an admin of.": "这些人仍然可以访问你不是管理员的一切东西。",
     "Kick them from specific things I'm able to": "禁止这些人做某些我有权决定的事",
     "Kick them from everything I'm able to": "禁止这些人做任何我有权决定的事",
-    "Downloading": "下载中"
+    "Downloading": "下载中",
+    "%(count)s reply|one": "%(count)s 条回复",
+    "%(count)s reply|other": "%(count)s 条回复"
 }
