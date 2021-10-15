@@ -38,19 +38,21 @@ require('./localstorage-fix');
 import { parseQsFromFragment } from "./url_utils";
 import './modernizr';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 async function settled(...promises: Array<Promise<any>>) {
     for (const prom of promises) {
         try {
             await prom;
         } catch (e) {
-            console.error(e);
+            logger.error(e);
         }
     }
 }
 
 function checkBrowserFeatures() {
     if (!window.Modernizr) {
-        console.error("Cannot check features - Modernizr global is missing.");
+        logger.error("Cannot check features - Modernizr global is missing.");
         return false;
     }
 
@@ -77,14 +79,14 @@ function checkBrowserFeatures() {
     let featureComplete = true;
     for (let i = 0; i < featureList.length; i++) {
         if (window.Modernizr[featureList[i]] === undefined) {
-            console.error(
+            logger.error(
                 "Looked for feature '%s' but Modernizr has no results for this. " +
                 "Has it been configured correctly?", featureList[i],
             );
             return false;
         }
         if (window.Modernizr[featureList[i]] === false) {
-            console.error("Browser missing feature: '%s'", featureList[i]);
+            logger.error("Browser missing feature: '%s'", featureList[i]);
             // toggle flag rather than return early so we log all missing features rather than just the first.
             featureComplete = false;
         }
@@ -173,7 +175,7 @@ async function start() {
         // ##########################
         if (!acceptBrowser) {
             await new Promise<void>(resolve => {
-                console.error("Browser is missing required features.");
+                logger.error("Browser is missing required features.");
                 // take to a different landing page to AWOOOOOGA at the user
                 showIncompatibleBrowser(() => {
                     if (window.localStorage) {
@@ -222,7 +224,7 @@ async function start() {
         // run on the components.
         await loadApp(fragparts.params);
     } catch (err) {
-        console.error(err);
+        logger.error(err);
         // Like the compatibility page, AWOOOOOGA at the user
         // This uses the default brand since the app config is unavailable.
         await showError(_t("Your Element is misconfigured"), [
@@ -232,7 +234,7 @@ async function start() {
 }
 
 start().catch(err => {
-    console.error(err);
+    logger.error(err);
     // show the static error in an iframe to not lose any context / console data
     // with some basic styling to make the iframe full page
     delete document.body.style.height;

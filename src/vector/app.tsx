@@ -36,6 +36,8 @@ import { parseQs, parseQsFromFragment } from './url_utils';
 import VectorBasePlatform from "./platform/VectorBasePlatform";
 import { createClient } from "matrix-js-sdk/src/matrix";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 let lastLocationHashSet: string = null;
 
 console.log(`Application is running in ${process.env.NODE_ENV} mode`);
@@ -256,7 +258,7 @@ async function verifyServerConfig() {
     } catch (e) {
         const { hsUrl, isUrl, userId } = await Lifecycle.getStoredSessionVars();
         if (hsUrl && userId) {
-            console.error(e);
+            logger.error(e);
             console.warn("A session was found - suppressing config error and using the session's homeserver");
 
             console.log("Using pre-existing hsUrl and isUrl: ", { hsUrl, isUrl });

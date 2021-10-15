@@ -26,6 +26,8 @@ import {
 } from "matrix-widget-api";
 import { ElementWidgetActions } from "matrix-react-sdk/src/stores/widgets/ElementWidgetActions";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const JITSI_OPENIDTOKEN_JWT_AUTH = 'openidtoken-jwt';
 
 // Dev note: we use raw JS without many dependencies to reduce bundle size.
@@ -146,7 +148,7 @@ let meetApi: any; // JitsiMeetExternalAPI
 
         enableJoinButton(); // always enable the button
     } catch (e) {
-        console.error("Error setting up Jitsi widget", e);
+        logger.error("Error setting up Jitsi widget", e);
         document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
     }
 })();

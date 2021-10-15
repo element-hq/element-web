@@ -55,6 +55,8 @@ import { IMatrixProfile, IEventWithRoomId as IMatrixEvent, IResultRoomEvents } f
 
 import VectorBasePlatform from './VectorBasePlatform';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const electron = window.electron;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
 
@@ -532,7 +534,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     setSpellCheckLanguages(preferredLangs: string[]) {
         this.ipcCall('setSpellCheckLanguages', preferredLangs).catch(error => {
             console.log("Failed to send setSpellCheckLanguages IPC to Electron");
-            console.error(error);
+            logger.error(error);
         });
     }
 
