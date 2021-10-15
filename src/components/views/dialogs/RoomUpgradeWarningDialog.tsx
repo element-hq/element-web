@@ -28,15 +28,25 @@ import { IDialogProps } from "./IDialogProps";
 import BugReportDialog from './BugReportDialog';
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
+import ProgressBar from "../elements/ProgressBar";
+
+export interface IFinishedOpts {
+    continue: boolean;
+    invite: boolean;
+}
 
 interface IProps extends IDialogProps {
     roomId: string;
     targetVersion: string;
     description?: ReactNode;
+    doUpgrade?(opts: IFinishedOpts, fn: (progressText: string, progress: number, total: number) => void): Promise<void>;
 }
 
 interface IState {
     inviteUsersToNewRoom: boolean;
+    progressText?: string;
+    progress?: number;
+    total?: number;
 }
 
 @replaceableComponent("views.dialogs.RoomUpgradeWarningDialog")
@@ -50,15 +60,30 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
         const joinRules = room?.currentState.getStateEvents(EventType.RoomJoinRules, "");
         this.isPrivate = joinRules?.getContent()['join_rule'] !== JoinRule.Public ?? true;
-        this.currentVersion = room?.getVersion() || "1";
+        this.currentVersion = room?.getVersion();
 
         this.state = {
             inviteUsersToNewRoom: true,
         };
     }
 
+    private onProgressCallback = (progressText: string, progress: number, total: number): void => {
+        this.setState({ progressText, progress, total });
+    };
+
     private onContinue = () => {
-        this.props.onFinished({ continue: true, invite: this.isPrivate && this.state.inviteUsersToNewRoom });
+        const opts = {
+            continue: true,
+            invite: this.isPrivate && this.state.inviteUsersToNewRoom,
+        };
+
+        if (this.props.doUpgrade) {
+            this.props.doUpgrade(opts, this.onProgressCallback).then(() => {
+                this.props.onFinished(opts);
+            });
+        } else {
+            this.props.onFinished(opts);
+        }
     };
 
     private onCancel = () => {
@@ -118,6 +143,23 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
             );
         }
 
+        let footer: JSX.Element;
+        if (this.state.progressText) {
+            footer = <span className="mx_RoomUpgradeWarningDialog_progress">
+                <ProgressBar value={this.state.progress} max={this.state.total} />
+                <div className="mx_RoomUpgradeWarningDialog_progressText">
+                    { this.state.progressText }
+                </div>
+            </span>;
+        } else {
+            footer = <DialogButtons
+                primaryButton={_t("Upgrade")}
+                onPrimaryButtonClick={this.onContinue}
+                cancelButton={_t("Cancel")}
+                onCancel={this.onCancel}
+            />;
+        }
+
         return (
             <BaseDialog
                 className='mx_RoomUpgradeWarningDialog'
@@ -154,12 +196,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
                     </p>
                     { inviteToggle }
                 </div>
-                <DialogButtons
-                    primaryButton={_t("Upgrade")}
-                    onPrimaryButtonClick={this.onContinue}
-                    cancelButton={_t("Cancel")}
-                    onCancel={this.onCancel}
-                />
+                { footer }
             </BaseDialog>
         );
     }

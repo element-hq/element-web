@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { ClipboardEvent, createRef, KeyboardEvent } from 'react';
 import EMOJI_REGEX from 'emojibase-regex';
-import { IContent, MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { IContent, MatrixEvent, IEventRelation } from 'matrix-js-sdk/src/models/event';
 import { DebouncedFunc, throttle } from 'lodash';
 import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -61,10 +61,10 @@ import RoomContext from '../../../contexts/RoomContext';
 function addReplyToMessageContent(
     content: IContent,
     replyToEvent: MatrixEvent,
-    replyInThread: boolean,
     permalinkCreator: RoomPermalinkCreator,
+    relation?: IEventRelation,
 ): void {
-    const replyContent = ReplyThread.makeReplyMixIn(replyToEvent, replyInThread);
+    const replyContent = ReplyThread.makeReplyMixIn(replyToEvent);
     Object.assign(content, replyContent);
 
     // Part of Replies fallback support - prepend the text we're sending
@@ -76,13 +76,20 @@ function addReplyToMessageContent(
         }
         content.body = nestedReply.body + content.body;
     }
+
+    if (relation) {
+        content['m.relates_to'] = {
+            ...relation, // the composer can have a default
+            ...content['m.relates_to'],
+        };
+    }
 }
 
 // exported for tests
 export function createMessageContent(
     model: EditorModel,
     replyToEvent: MatrixEvent,
-    replyInThread: boolean,
+    relation: IEventRelation,
     permalinkCreator: RoomPermalinkCreator,
 ): IContent {
     const isEmote = containsEmote(model);
@@ -106,7 +113,14 @@ export function createMessageContent(
     }
 
     if (replyToEvent) {
-        addReplyToMessageContent(content, replyToEvent, replyInThread, permalinkCreator);
+        addReplyToMessageContent(content, replyToEvent, permalinkCreator);
+    }
+
+    if (relation) {
+        content['m.relates_to'] = {
+            ...relation,
+            ...content['m.relates_to'],
+        };
     }
 
     return content;
@@ -134,7 +148,7 @@ interface ISendMessageComposerProps extends MatrixClientProps {
     room: Room;
     placeholder?: string;
     permalinkCreator: RoomPermalinkCreator;
-    replyInThread?: boolean;
+    relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
     disabled?: boolean;
     onChange?(model: EditorModel): void;
@@ -143,6 +157,8 @@ interface ISendMessageComposerProps extends MatrixClientProps {
 @replaceableComponent("views.rooms.SendMessageComposer")
 export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
     static contextType = RoomContext;
+    public context!: React.ContextType<typeof RoomContext>;
+
     private readonly prepareToEncrypt?: DebouncedFunc<() => void>;
     private readonly editorRef = createRef<BasicMessageComposer>();
     private model: EditorModel = null;
@@ -162,12 +178,11 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     }
 
     public componentDidUpdate(prevProps: ISendMessageComposerProps): void {
-        const replyToEventChanged = this.props.replyInThread && (this.props.replyToEvent !== prevProps.replyToEvent);
-        if (replyToEventChanged) {
-            this.model.reset([]);
-        }
+        const replyingToThread = this.props.relation?.key === RelationType.Thread;
+        const differentEventTarget = this.props.relation?.event_id !== prevProps.relation?.event_id;
 
-        if (this.props.replyInThread && this.props.replyToEvent && (!prevProps.replyToEvent || replyToEventChanged)) {
+        const threadChanged = replyingToThread && (differentEventTarget);
+        if (threadChanged) {
             const partCreator = new CommandPartCreator(this.props.room, this.props.mxClient);
             const parts = this.restoreStoredEditorState(partCreator) || [];
             this.model.reset(parts);
@@ -180,6 +195,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         if (this.editorRef.current?.isComposing(event)) {
             return;
         }
+        const replyingToThread = this.props.relation?.key === RelationType.Thread;
         const action = getKeyBindingsManager().getMessageComposerAction(event);
         switch (action) {
             case MessageComposerAction.Send:
@@ -201,7 +217,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                 if (this.editorRef.current?.isSelectionCollapsed() && this.editorRef.current?.isCaretAtStart()) {
                     const events =
                         this.context.liveTimeline.getEvents()
-                            .concat(this.props.replyInThread ? [] : this.props.room.getPendingEvents());
+                            .concat(replyingToThread ? [] : this.props.room.getPendingEvents());
                     const editEvent = findEditableEvent({
                         events,
                         isForward: false,
@@ -279,7 +295,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     }
 
     private sendQuickReaction(): void {
-        const timeline = this.context.liveTimeline();
+        const timeline = this.context.liveTimeline;
         const events = timeline.getEvents();
         const reaction = this.model.parts[1].text;
         for (let i = events.length - 1; i >= 0; i--) {
@@ -393,8 +409,8 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                         addReplyToMessageContent(
                             content,
                             replyToEvent,
-                            this.props.replyInThread,
                             this.props.permalinkCreator,
+                            this.props.relation,
                         );
                     }
                 } else {
@@ -441,7 +457,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                 content = createMessageContent(
                     model,
                     replyToEvent,
-                    this.props.replyInThread,
+                    this.props.relation,
                     this.props.permalinkCreator,
                 );
             }
@@ -515,7 +531,8 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     }
 
     private restoreStoredEditorState(partCreator: PartCreator): Part[] {
-        if (this.props.replyInThread && !this.props.replyToEvent) {
+        const replyingToThread = this.props.relation?.key === RelationType.Thread;
+        if (replyingToThread) {
             return null;
         }
 

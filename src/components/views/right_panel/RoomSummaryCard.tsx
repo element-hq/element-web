@@ -48,6 +48,7 @@ import { Container, MAX_PINNED, WidgetLayoutStore } from "../../../stores/widget
 import RoomName from "../elements/RoomName";
 import UIStore from "../../../stores/UIStore";
 import ExportDialog from "../dialogs/ExportDialog";
+import { dispatchShowThreadsPanelEvent } from "../../../dispatcher/dispatch-actions/threads";
 
 interface IProps {
     room: Room;
@@ -221,13 +222,6 @@ const onRoomFilesClick = () => {
     });
 };
 
-const onRoomThreadsClick = () => {
-    defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
-        action: Action.SetRightPanelPhase,
-        phase: RightPanelPhases.ThreadPanel,
-    });
-};
-
 const onRoomSettingsClick = () => {
     defaultDispatcher.dispatch({ action: "open_room_settings" });
 };
@@ -291,7 +285,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
                 { _t("Export chat") }
             </Button>
             { SettingsStore.getValue("feature_thread") && (
-                <Button className="mx_RoomSummaryCard_icon_threads" onClick={onRoomThreadsClick}>
+                <Button className="mx_RoomSummaryCard_icon_threads" onClick={dispatchShowThreadsPanelEvent}>
                     { _t("Show threads") }
                 </Button>
             ) }

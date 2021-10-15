@@ -70,8 +70,12 @@ import { mediaFromMxc } from "../../../customisations/Media";
 import UIStore from "../../../stores/UIStore";
 import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import SpaceStore from "../../../stores/SpaceStore";
+import ConfirmSpaceUserActionDialog from "../dialogs/ConfirmSpaceUserActionDialog";
+import { bulkSpaceBehaviour } from "../../../utils/space";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../settings/UIFeature";
 
 export interface IDevice {
     deviceId: string;
@@ -393,7 +397,7 @@ const UserOptionsSection: React.FC<{
             );
         }
 
-        if (canInvite && (!member || !member.membership || member.membership === 'leave')) {
+        if (canInvite && (member?.membership ?? 'leave') === 'leave' && shouldShowComponent(UIComponent.InviteUsers)) {
             const roomId = member && member.roomId ? member.roomId : RoomViewStore.getRoomId();
             const onInviteUserButton = async () => {
                 try {
@@ -532,7 +536,7 @@ interface IBaseProps {
     stopUpdating(): void;
 }
 
-const RoomKickButton: React.FC<IBaseProps> = ({ member, startUpdating, stopUpdating }) => {
+const RoomKickButton = ({ room, member, startUpdating, stopUpdating }: Omit<IBaseRoomProps, "powerLevels">) => {
     const cli = useContext(MatrixClientContext);
 
     // check if user can be kicked/disinvited
@@ -542,21 +546,38 @@ const RoomKickButton: React.FC<IBaseProps> = ({ member, startUpdating, stopUpdat
         const { finished } = Modal.createTrackedDialog(
             'Confirm User Action Dialog',
             'onKick',
-            ConfirmUserActionDialog,
+            room.isSpaceRoom() ? ConfirmSpaceUserActionDialog : ConfirmUserActionDialog,
             {
                 member,
                 action: member.membership === "invite" ? _t("Disinvite") : _t("Kick"),
-                title: member.membership === "invite" ? _t("Disinvite this user?") : _t("Kick this user?"),
+                title: member.membership === "invite"
+                    ? _t("Disinvite from %(roomName)s", { roomName: room.name })
+                    : _t("Kick from %(roomName)s", { roomName: room.name }),
                 askReason: member.membership === "join",
                 danger: true,
+                // space-specific props
+                space: room,
+                spaceChildFilter: (child: Room) => {
+                    // Return true if the target member is not banned and we have sufficient PL to ban them
+                    const myMember = child.getMember(cli.credentials.userId);
+                    const theirMember = child.getMember(member.userId);
+                    return myMember && theirMember && theirMember.membership === member.membership &&
+                        myMember.powerLevel > theirMember.powerLevel &&
+                        child.currentState.hasSufficientPowerLevelFor("kick", myMember.powerLevel);
+                },
+                allLabel: _t("Kick them from everything I'm able to"),
+                specificLabel: _t("Kick them from specific things I'm able to"),
+                warningMessage: _t("They'll still be able to access whatever you're not an admin of."),
             },
+            room.isSpaceRoom() ? "mx_ConfirmSpaceUserActionDialog_wrapper" : undefined,
         );
 
-        const [proceed, reason] = await finished;
+        const [proceed, reason, rooms = []] = await finished;
         if (!proceed) return;
 
         startUpdating();
-        cli.kick(member.roomId, member.userId, reason || undefined).then(() => {
+
+        bulkSpaceBehaviour(room, rooms, room => cli.kick(room.roomId, member.userId, reason || undefined)).then(() => {
             // NO-OP; rely on the m.room.member event coming down else we could
             // get out of sync if we force setState here!
             logger.log("Kick success");
@@ -656,34 +677,69 @@ const RedactMessagesButton: React.FC<IBaseProps> = ({ member }) => {
     </AccessibleButton>;
 };
 
-const BanToggleButton: React.FC<IBaseProps> = ({ member, startUpdating, stopUpdating }) => {
+const BanToggleButton = ({ room, member, startUpdating, stopUpdating }: Omit<IBaseRoomProps, "powerLevels">) => {
     const cli = useContext(MatrixClientContext);
 
+    const isBanned = member.membership === "ban";
     const onBanOrUnban = async () => {
         const { finished } = Modal.createTrackedDialog(
             'Confirm User Action Dialog',
             'onBanOrUnban',
-            ConfirmUserActionDialog,
+            room.isSpaceRoom() ? ConfirmSpaceUserActionDialog : ConfirmUserActionDialog,
             {
                 member,
-                action: member.membership === 'ban' ? _t("Unban") : _t("Ban"),
-                title: member.membership === 'ban' ? _t("Unban this user?") : _t("Ban this user?"),
-                askReason: member.membership !== 'ban',
-                danger: member.membership !== 'ban',
+                action: isBanned ? _t("Unban") : _t("Ban"),
+                title: isBanned
+                    ? _t("Unban from %(roomName)s", { roomName: room.name })
+                    : _t("Ban from %(roomName)s", { roomName: room.name }),
+                askReason: !isBanned,
+                danger: !isBanned,
+                // space-specific props
+                space: room,
+                spaceChildFilter: isBanned
+                    ? (child: Room) => {
+                        // Return true if the target member is banned and we have sufficient PL to unban
+                        const myMember = child.getMember(cli.credentials.userId);
+                        const theirMember = child.getMember(member.userId);
+                        return myMember && theirMember && theirMember.membership === "ban" &&
+                            myMember.powerLevel > theirMember.powerLevel &&
+                            child.currentState.hasSufficientPowerLevelFor("ban", myMember.powerLevel);
+                    }
+                    : (child: Room) => {
+                        // Return true if the target member isn't banned and we have sufficient PL to ban
+                        const myMember = child.getMember(cli.credentials.userId);
+                        const theirMember = child.getMember(member.userId);
+                        return myMember && theirMember && theirMember.membership !== "ban" &&
+                            myMember.powerLevel > theirMember.powerLevel &&
+                            child.currentState.hasSufficientPowerLevelFor("ban", myMember.powerLevel);
+                    },
+                allLabel: isBanned
+                    ? _t("Unban them from everything I'm able to")
+                    : _t("Ban them from everything I'm able to"),
+                specificLabel: isBanned
+                    ? _t("Unban them from specific things I'm able to")
+                    : _t("Ban them from specific things I'm able to"),
+                warningMessage: isBanned
+                    ? _t("They won't be able to access whatever you're not an admin of.")
+                    : _t("They'll still be able to access whatever you're not an admin of."),
             },
+            room.isSpaceRoom() ? "mx_ConfirmSpaceUserActionDialog_wrapper" : undefined,
         );
 
-        const [proceed, reason] = await finished;
+        const [proceed, reason, rooms = []] = await finished;
         if (!proceed) return;
 
         startUpdating();
-        let promise;
-        if (member.membership === 'ban') {
-            promise = cli.unban(member.roomId, member.userId);
-        } else {
-            promise = cli.ban(member.roomId, member.userId, reason || undefined);
-        }
-        promise.then(() => {
+
+        const fn = (roomId: string) => {
+            if (isBanned) {
+                return cli.unban(roomId, member.userId);
+            } else {
+                return cli.ban(roomId, member.userId, reason || undefined);
+            }
+        };
+
+        bulkSpaceBehaviour(room, rooms, room => fn(room.roomId)).then(() => {
             // NO-OP; rely on the m.room.member event coming down else we could
             // get out of sync if we force setState here!
             logger.log("Ban success");
@@ -699,12 +755,12 @@ const BanToggleButton: React.FC<IBaseProps> = ({ member, startUpdating, stopUpda
     };
 
     let label = _t("Ban");
-    if (member.membership === 'ban') {
+    if (isBanned) {
         label = _t("Unban");
     }
 
     const classes = classNames("mx_UserInfo_field", {
-        mx_UserInfo_destructive: member.membership !== 'ban',
+        mx_UserInfo_destructive: !isBanned,
     });
 
     return <AccessibleButton className={classes} onClick={onBanOrUnban}>
@@ -817,18 +873,28 @@ const RoomAdminToolsContainer: React.FC<IBaseRoomProps> = ({
     const isMe = me.userId === member.userId;
     const canAffectUser = member.powerLevel < me.powerLevel || isMe;
 
-    if (canAffectUser && me.powerLevel >= kickPowerLevel) {
-        kickButton = <RoomKickButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
+    if (!isMe && canAffectUser && me.powerLevel >= kickPowerLevel) {
+        kickButton = <RoomKickButton
+            room={room}
+            member={member}
+            startUpdating={startUpdating}
+            stopUpdating={stopUpdating}
+        />;
     }
     if (me.powerLevel >= redactPowerLevel && (!SpaceStore.spacesEnabled || !room.isSpaceRoom())) {
         redactButton = (
             <RedactMessagesButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />
         );
     }
-    if (canAffectUser && me.powerLevel >= banPowerLevel) {
-        banButton = <BanToggleButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
+    if (!isMe && canAffectUser && me.powerLevel >= banPowerLevel) {
+        banButton = <BanToggleButton
+            room={room}
+            member={member}
+            startUpdating={startUpdating}
+            stopUpdating={stopUpdating}
+        />;
     }
-    if (canAffectUser && me.powerLevel >= editPowerLevel && !room.isSpaceRoom()) {
+    if (!isMe && canAffectUser && me.powerLevel >= editPowerLevel && !room.isSpaceRoom()) {
         muteButton = (
             <MuteToggleButton
                 member={member}

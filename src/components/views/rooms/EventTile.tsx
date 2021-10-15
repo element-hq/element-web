@@ -56,9 +56,9 @@ import ReadReceiptMarker from "./ReadReceiptMarker";
 import MessageActionBar from "../messages/MessageActionBar";
 import ReactionsRow from '../messages/ReactionsRow';
 import { getEventDisplayInfo } from '../../../utils/EventUtils';
-import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 import SettingsStore from "../../../settings/SettingsStore";
 import MKeyVerificationConclusion from "../messages/MKeyVerificationConclusion";
+import { dispatchShowThreadEvent } from '../../../dispatcher/dispatch-actions/threads';
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -193,6 +193,7 @@ export enum TileShape {
     FileGrid = "file_grid",
     Pinned = "pinned",
     Thread = "thread",
+    ThreadPanel = "thread_list"
 }
 
 interface IProps {
@@ -511,6 +512,10 @@ export default class EventTile extends React.Component<IProps, IState> {
         if (this.props.showReactions) {
             this.props.mxEvent.removeListener("Event.relationsCreated", this.onReactionsCreated);
         }
+        if (SettingsStore.getValue("feature_thread")) {
+            this.props.mxEvent.off(ThreadEvent.Ready, this.updateThread);
+            this.props.mxEvent.off(ThreadEvent.Update, this.updateThread);
+        }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -541,13 +546,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             <div
                 className="mx_ThreadInfo"
                 onClick={() => {
-                    dis.dispatch({
-                        action: Action.SetRightPanelPhase,
-                        phase: RightPanelPhases.ThreadView,
-                        refireParams: {
-                            event: this.props.mxEvent,
-                        },
-                    });
+                    dispatchShowThreadEvent(this.props.mxEvent);
                 }}
             >
                 <span className="mx_EventListSummary_avatars">

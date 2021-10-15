@@ -111,6 +111,7 @@ import { PosthogAnalytics } from '../../PosthogAnalytics';
 import { initSentry } from "../../sentry";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { showSpaceInvite } from "../../utils/space";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -741,9 +742,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case 'view_create_chat':
                 showStartChatInviteDialog(payload.initialText || "");
                 break;
-            case 'view_invite':
-                showRoomInviteDialog(payload.roomId);
+            case 'view_invite': {
+                const room = MatrixClientPeg.get().getRoom(payload.roomId);
+                if (room?.isSpaceRoom()) {
+                    showSpaceInvite(room);
+                } else {
+                    showRoomInviteDialog(payload.roomId);
+                }
                 break;
+            }
             case 'view_last_screen':
                 // This function does what we want, despite the name. The idea is that it shows
                 // the last room we were looking at or some reasonable default/guess. We don't

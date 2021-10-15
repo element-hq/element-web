@@ -118,8 +118,10 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             if (value === null || value === undefined) {
                 const oldCombinedValue = settings["autoplayGifsAndVideos"];
                 // Write, so that we can remove this in the future
-                this.setValue("autoplayGifs", roomId, oldCombinedValue);
-                this.setValue("autoplayVideo", roomId, oldCombinedValue);
+                if (oldCombinedValue !== null && oldCombinedValue !== undefined) {
+                    this.setValue("autoplayGifs", roomId, oldCombinedValue);
+                    this.setValue("autoplayVideo", roomId, oldCombinedValue);
+                }
                 return oldCombinedValue;
             }
             return value;

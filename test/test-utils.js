@@ -47,6 +47,8 @@ export function createTestClient() {
         getIdentityServerUrl: jest.fn(),
         getDomain: jest.fn().mockReturnValue("matrix.rog"),
         getUserId: jest.fn().mockReturnValue("@userId:matrix.rog"),
+        getUser: jest.fn().mockReturnValue({ on: jest.fn() }),
+        credentials: { userId: "@userId:matrix.rog" },
 
         getPushActionsForEvent: jest.fn(),
         getRoom: jest.fn().mockImplementation(mkStubRoom),
@@ -76,7 +78,7 @@ export function createTestClient() {
                 content: {},
             });
         },
-        mxcUrlToHttp: (mxc) => 'http://this.is.a.url/',
+        mxcUrlToHttp: (mxc) => `http://this.is.a.url/${mxc.substring(6)}`,
         setAccountData: jest.fn(),
         setRoomAccountData: jest.fn(),
         sendTyping: jest.fn().mockResolvedValue({}),
@@ -93,12 +95,15 @@ export function createTestClient() {
         sessionStore: {
             store: {
                 getItem: jest.fn(),
+                setItem: jest.fn(),
             },
         },
         pushRules: {},
         decryptEventIfNeeded: () => Promise.resolve(),
         isUserIgnored: jest.fn().mockReturnValue(false),
         getCapabilities: jest.fn().mockResolvedValue({}),
+        supportsExperimentalThreads: () => false,
+        getRoomUpgradeHistory: jest.fn().mockReturnValue([]),
     };
 }
 
@@ -130,9 +135,11 @@ export function mkEvent(opts) {
     };
     if (opts.skey) {
         event.state_key = opts.skey;
-    } else if (["m.room.name", "m.room.topic", "m.room.create", "m.room.join_rules",
-        "m.room.power_levels", "m.room.topic", "m.room.history_visibility", "m.room.encryption",
-        "com.example.state"].indexOf(opts.type) !== -1) {
+    } else if ([
+        "m.room.name", "m.room.topic", "m.room.create", "m.room.join_rules",
+        "m.room.power_levels", "m.room.topic", "m.room.history_visibility",
+        "m.room.encryption", "m.room.member", "com.example.state",
+    ].indexOf(opts.type) !== -1) {
         event.state_key = "";
     }
     return opts.event ? new MatrixEvent(event) : event;

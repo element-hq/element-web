@@ -422,7 +422,7 @@ $SpaceRoomViewInnerWidth: 428px;
     .mx_SpaceRoomView_inviteTeammates {
         // XXX remove this when spaces leaves Beta
         .mx_SpaceRoomView_inviteTeammates_betaDisclaimer {
-            padding: 58px 16px 16px;
+            padding: 16px;
             position: relative;
             border-radius: 8px;
             background-color: $header-panel-bg-color;
@@ -465,8 +465,13 @@ $SpaceRoomViewInnerWidth: 428px;
                 }
             }
 
-            .mx_SpaceRoomView_inviteTeammates_inviteDialogButton::before {
-                mask-image: url('$(res)/img/element-icons/room/invite.svg');
+            .mx_SpaceRoomView_inviteTeammates_inviteDialogButton {
+                color: $accent-color;
+
+                &::before {
+                    mask-image: url('$(res)/img/element-icons/room/invite.svg');
+                    background-color: $accent-color;
+                }
             }
         }
     }

@@ -18,11 +18,20 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { inviteUsersToRoom } from "../RoomInvite";
-import Modal from "../Modal";
+import Modal, { IHandle } from "../Modal";
 import { _t } from "../languageHandler";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import SpaceStore from "../stores/SpaceStore";
 import Spinner from "../components/views/elements/Spinner";
+
+interface IProgress {
+    roomUpgraded: boolean;
+    roomSynced?: boolean;
+    inviteUsersProgress?: number;
+    inviteUsersTotal: number;
+    updateSpacesProgress?: number;
+    updateSpacesTotal: number;
+}
 
 export async function upgradeRoom(
     room: Room,
@@ -31,9 +40,38 @@ export async function upgradeRoom(
     handleError = true,
     updateSpaces = true,
     awaitRoom = false,
+    progressCallback?: (progress: IProgress) => void,
 ): Promise<string> {
     const cli = room.client;
-    const spinnerModal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
+    let spinnerModal: IHandle<any>;
+    if (!progressCallback) {
+        spinnerModal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
+    }
+
+    let toInvite: string[];
+    if (inviteUsers) {
+        toInvite = [
+            ...room.getMembersWithMembership("join"),
+            ...room.getMembersWithMembership("invite"),
+        ].map(m => m.userId).filter(m => m !== cli.getUserId());
+    }
+
+    let parentsToRelink: Room[];
+    if (updateSpaces) {
+        parentsToRelink = Array.from(SpaceStore.instance.getKnownParents(room.roomId))
+            .map(roomId => cli.getRoom(roomId))
+            .filter(parent => parent?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId()));
+    }
+
+    const progress: IProgress = {
+        roomUpgraded: false,
+        roomSynced: (awaitRoom || inviteUsers) ? false : undefined,
+        inviteUsersProgress: inviteUsers ? 0 : undefined,
+        inviteUsersTotal: toInvite.length,
+        updateSpacesProgress: updateSpaces ? 0 : undefined,
+        updateSpacesTotal: parentsToRelink.length,
+    };
+    progressCallback?.(progress);
 
     let newRoomId: string;
     try {
@@ -48,6 +86,9 @@ export async function upgradeRoom(
         });
         throw e;
     }
+
+    progress.roomUpgraded = true;
+    progressCallback?.(progress);
 
     if (awaitRoom || inviteUsers) {
         await new Promise<void>(resolve => {
@@ -67,33 +108,31 @@ export async function upgradeRoom(
             };
             cli.on("Room", checkForRoomFn);
         });
+
+        progress.roomSynced = true;
+        progressCallback?.(progress);
     }
 
-    if (inviteUsers) {
-        const toInvite = [
-            ...room.getMembersWithMembership("join"),
-            ...room.getMembersWithMembership("invite"),
-        ].map(m => m.userId).filter(m => m !== cli.getUserId());
-
-        if (toInvite.length > 0) {
-            // Errors are handled internally to this function
-            await inviteUsersToRoom(newRoomId, toInvite);
-        }
+    if (toInvite.length > 0) {
+        // Errors are handled internally to this function
+        await inviteUsersToRoom(newRoomId, toInvite, () => {
+            progress.inviteUsersProgress++;
+            progressCallback?.(progress);
+        });
     }
 
-    if (updateSpaces) {
-        const parents = SpaceStore.instance.getKnownParents(room.roomId);
+    if (parentsToRelink.length > 0) {
         try {
-            for (const parentId of parents) {
-                const parent = cli.getRoom(parentId);
-                if (!parent?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId())) continue;
-
+            for (const parent of parentsToRelink) {
                 const currentEv = parent.currentState.getStateEvents(EventType.SpaceChild, room.roomId);
-                await cli.sendStateEvent(parentId, EventType.SpaceChild, {
+                await cli.sendStateEvent(parent.roomId, EventType.SpaceChild, {
                     ...(currentEv?.getContent() || {}), // copy existing attributes like suggested
                     via: [cli.getDomain()],
                 }, newRoomId);
-                await cli.sendStateEvent(parentId, EventType.SpaceChild, {}, room.roomId);
+                await cli.sendStateEvent(parent.roomId, EventType.SpaceChild, {}, room.roomId);
+
+                progress.updateSpacesProgress++;
+                progressCallback?.(progress);
             }
         } catch (e) {
             // These errors are not critical to the room upgrade itself
@@ -101,6 +140,6 @@ export async function upgradeRoom(
         }
     }
 
-    spinnerModal.close();
+    spinnerModal?.close();
     return newRoomId;
 }

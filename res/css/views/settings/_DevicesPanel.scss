@@ -15,23 +15,26 @@ limitations under the License.
 */
 
 .mx_DevicesPanel {
-    display: table;
     table-layout: fixed;
-    width: 880px;
+    // Normally the panel is 880px, however this can easily overflow the container.
+    // TODO: Fix the table to not be squishy
+    width: auto;
+    max-width: 880px;
     border-spacing: 10px;
 }
 
 .mx_DevicesPanel_header {
-    display: table-header-group;
     font-weight: bold;
 }
 
-.mx_DevicesPanel_header > .mx_DevicesPanel_deviceButtons {
+.mx_DevicesPanel_header .mx_DevicesPanel_deviceButtons {
     height: 48px; // make this tall so the table doesn't move down when the delete button appears
+    width: 20%;
 }
 
-.mx_DevicesPanel_header > div {
-    display: table-cell;
+.mx_DevicesPanel_header th {
+    padding: 0px;
+    text-align: left;
     vertical-align: middle;
 }
 
@@ -43,16 +46,9 @@ limitations under the License.
     width: 30%;
 }
 
-.mx_DevicesPanel_header .mx_DevicesPanel_deviceButtons {
-    width: 20%;
-}
-
-.mx_DevicesPanel_device {
-    display: table-row;
-}
-
-.mx_DevicesPanel_device > div {
-    display: table-cell;
+.mx_DevicesPanel_device td {
+    vertical-align: baseline;
+    padding: 0px;
 }
 
 .mx_DevicesPanel_myDevice {

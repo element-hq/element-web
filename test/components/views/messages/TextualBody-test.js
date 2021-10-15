@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
-import { configure, mount } from "enzyme";
+import { mount } from "enzyme";
 
 import sdk from "../../../skinned-sdk";
 import { mkEvent, mkStubRoom } from "../../../test-utils";
@@ -27,8 +26,6 @@ import DMRoomMap from "../../../../src/utils/DMRoomMap";
 
 const _TextualBody = sdk.getComponent("views.messages.TextualBody");
 const TextualBody = TestUtils.wrapInMatrixClientContext(_TextualBody);
-
-configure({ adapter: new Adapter() });
 
 describe("<TextualBody />", () => {
     afterEach(() => {

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import EventEmitter from 'events';
-import { MatrixEvent } from "matrix-js-sdk";
+import { MatrixEvent } from "matrix-js-sdk/src";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import { WidgetMessagingStore } from "./widgets/WidgetMessagingStore";

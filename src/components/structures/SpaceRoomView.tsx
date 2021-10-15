@@ -52,6 +52,7 @@ import {
     showAddExistingRooms,
     showCreateNewRoom,
     showCreateNewSubspace,
+    showSpaceInvite,
     showSpaceSettings,
 } from "../../utils/space";
 import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
@@ -79,8 +80,11 @@ import { useAsyncMemo } from "../../hooks/useAsyncMemo";
 import Spinner from "../views/elements/Spinner";
 import GroupAvatar from "../views/avatars/GroupAvatar";
 import { useDispatcher } from "../../hooks/useDispatcher";
+import { useRoomState } from "../../hooks/useRoomState";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../settings/UIFeature";
 
 interface IProps {
     space: Room;
@@ -124,7 +128,7 @@ const useMyRoomMembership = (room: Room) => {
 };
 
 const SpaceInfo = ({ space }) => {
-    const joinRule = space.getJoinRule();
+    const joinRule = useRoomState(space, state => state.getJoinRule());
 
     let visibilitySection;
     if (joinRule === "public") {
@@ -204,8 +208,9 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }: ISp
 
     const spacesEnabled = SpaceStore.spacesEnabled;
 
+    const joinRule = useRoomState(space, state => state.getJoinRule());
     const cannotJoin = getEffectiveMembership(myMembership) === EffectiveMembership.Leave
-        && space.getJoinRule() !== JoinRule.Public;
+        && joinRule !== JoinRule.Public;
 
     let inviterSection;
     let joinButtons;
@@ -405,19 +410,21 @@ const SpaceLandingAddButton = ({ space }) => {
     </>;
 };
 
-const SpaceLanding = ({ space }) => {
+const SpaceLanding = ({ space }: { space: Room }) => {
     const cli = useContext(MatrixClientContext);
     const myMembership = useMyRoomMembership(space);
     const userId = cli.getUserId();
 
     let inviteButton;
-    if (myMembership === "join" && space.canInvite(userId)) {
+    if (((myMembership === "join" && space.canInvite(userId)) || space.getJoinRule() === JoinRule.Public) &&
+        shouldShowComponent(UIComponent.InviteUsers)
+    ) {
         inviteButton = (
             <AccessibleButton
                 kind="primary"
                 className="mx_SpaceRoomView_landing_inviteButton"
                 onClick={() => {
-                    showRoomInviteDialog(space.roomId);
+                    showSpaceInvite(space);
                 }}
             >
                 { _t("Invite") }
@@ -729,7 +736,6 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         </div>
 
         <div className="mx_SpaceRoomView_inviteTeammates_betaDisclaimer">
-            <BetaPill />
             { _t("<b>This is an experimental feature.</b> For now, " +
                 "new users receiving an invite will have to open the invite on <link/> to actually join.", {}, {
                 b: sub => <b>{ sub }</b>,

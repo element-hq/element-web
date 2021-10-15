@@ -162,9 +162,10 @@ export default class SettingsStore {
 
         const watcherId = `${new Date().getTime()}_${SettingsStore.watcherCount++}_${settingName}_${roomId}`;
 
-        const localizedCallback = (changedInRoomId, atLevel, newValAtLevel) => {
+        const localizedCallback = (changedInRoomId: string | null, atLevel: SettingLevel, newValAtLevel: any) => {
             const newValue = SettingsStore.getValue(originalSettingName);
-            callbackFn(originalSettingName, changedInRoomId, atLevel, newValAtLevel, newValue);
+            const newValueAtLevel = SettingsStore.getValueAt(atLevel, originalSettingName) ?? newValAtLevel;
+            callbackFn(originalSettingName, changedInRoomId, atLevel, newValueAtLevel, newValue);
         };
 
         SettingsStore.watchers.set(watcherId, localizedCallback);

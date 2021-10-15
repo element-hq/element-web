@@ -1,0 +1,152 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+
+.mx_ThreadPanel {
+    display: flex;
+    flex-direction: column;
+
+    .mx_BaseCard_header {
+        padding: 6px 0;
+
+        .mx_BaseCard_close {
+            margin-top: 15px;
+        }
+    }
+
+    .mx_AccessibleButton.mx_BaseCard_back {
+        display: none;
+    }
+
+    &__header {
+        width: calc(100% - 40px);
+        display: flex;
+        flex: 1;
+        justify-content: space-between;
+
+        span:first-of-type {
+            font-weight: 600;
+            font-size: 15px;
+            line-height: 18px;
+            color: $secondary-content;
+        }
+
+        .mx_AccessibleButton {
+            font-size: 12px;
+            color: $secondary-content;
+        }
+
+        .mx_ContextualMenu_wrapper {
+            // It's added here due to some weird error if I pass it directly in the style, even though it's a numeric value, so it's being passed 0 instead.
+            // The error: react_devtools_backend.js:2526 Warning: `NaN` is an invalid value for the `top` css style property.
+            top: 43px;
+        }
+
+        .mx_ContextualMenu {
+            position: initial;
+            span:first-of-type {
+                font-weight: 600;
+                font-size: 12px;
+                color: $primary-content;
+            }
+
+            font-size: 12px;
+            color: $secondary-content;
+        }
+
+        .mx_ThreadPanel_Header_FilterOptionItem {
+            display: flex;
+            flex-grow: 1;
+            justify-content: space-between;
+            flex-direction: column;
+            overflow: visible;
+            width: 100%;
+            padding: 20px;
+            padding-left: 30px;
+            position: relative;
+
+            &:hover {
+                background-color: $event-selected-color;
+            }
+            &[aria-selected="true"] {
+                &::before {
+                    content: "";
+                    width: 12px;
+                    height: 12px;
+                    grid-column: 1;
+                    grid-row: 1;
+                    mask-image: url("$(res)/img/feather-customised/check.svg");
+                    mask-size: 100%;
+                    mask-repeat: no-repeat;
+                    position: absolute;
+                    top: 22px;
+                    left: 10px;
+                    background-color: $primary-content;
+                }
+            }
+        }
+    }
+
+    .mx_RoomView_messageListWrapper {
+        background-color: $background;
+        border-radius: 8px;
+        padding-top: 8px;
+        padding-bottom: 12px;
+    }
+
+    .mx_ScrollPanel {
+        .mx_RoomView_MessageList {
+            padding: 0;
+        }
+    }
+
+    .mx_EventTile, .mx_EventListSummary {
+        // Account for scrollbar when hovering
+        width: calc(100% - 3px);
+        margin: 0 2px;
+
+        .mx_MessageTimestamp {
+            // We need to add !important here due to some enormous selectors overriding it anyways
+            // See: _EventTile.scss:241
+            left: unset !important;
+            right: 0 !important;
+            top: 16px;
+        }
+
+        .mx_EventTile_line.mx_EventTile_line {
+            position: unset;
+        }
+
+        .mx_ThreadInfo {
+            position: relative;
+            padding-right: 11px;
+            &::after {
+                content: '';
+                display: block;
+                position: absolute;
+                left: 0;
+                bottom: -16px;
+                height: 1px;
+                width: 100%;
+                border-bottom: 1px solid $message-action-bar-border-color;
+            }
+        }
+
+        .mx_DateSeparator {
+            display: none;
+        }
+    }
+}

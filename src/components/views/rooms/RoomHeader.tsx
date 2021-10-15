@@ -155,58 +155,55 @@ export default class RoomHeader extends React.Component<IProps> {
             />;
         }
 
-        let forgetButton;
-        if (this.props.onForgetClick) {
-            forgetButton =
-                <AccessibleTooltipButton
-                    className="mx_RoomHeader_button mx_RoomHeader_forgetButton"
-                    onClick={this.props.onForgetClick}
-                    title={_t("Forget room")} />;
-        }
+        const buttons: JSX.Element[] = [];
 
-        let appsButton;
-        if (this.props.onAppsClick) {
-            appsButton =
-                <AccessibleTooltipButton
-                    className={classNames("mx_RoomHeader_button mx_RoomHeader_appsButton", {
-                        mx_RoomHeader_appsButton_highlight: this.props.appsShown,
-                    })}
-                    onClick={this.props.onAppsClick}
-                    title={this.props.appsShown ? _t("Hide Widgets") : _t("Show Widgets")} />;
-        }
-
-        let searchButton;
-        if (this.props.onSearchClick && this.props.inRoom) {
-            searchButton =
-                <AccessibleTooltipButton
-                    className="mx_RoomHeader_button mx_RoomHeader_searchButton"
-                    onClick={this.props.onSearchClick}
-                    title={_t("Search")} />;
-        }
-
-        let voiceCallButton;
-        let videoCallButton;
         if (this.props.inRoom && SettingsStore.getValue("showCallButtonsInComposer")) {
-            voiceCallButton =
-                <AccessibleTooltipButton
-                    className="mx_RoomHeader_button mx_RoomHeader_voiceCallButton"
-                    onClick={() => this.props.onCallPlaced(PlaceCallType.Voice)}
-                    title={_t("Voice call")} />;
-            videoCallButton =
-                <AccessibleTooltipButton
-                    className="mx_RoomHeader_button mx_RoomHeader_videoCallButton"
-                    onClick={(ev: React.MouseEvent<Element>) => ev.shiftKey ?
-                        this.displayInfoDialogAboutScreensharing() : this.props.onCallPlaced(PlaceCallType.Video)}
-                    title={_t("Video call")} />;
+            const voiceCallButton = <AccessibleTooltipButton
+                className="mx_RoomHeader_button mx_RoomHeader_voiceCallButton"
+                onClick={() => this.props.onCallPlaced(PlaceCallType.Voice)}
+                title={_t("Voice call")}
+            />;
+            const videoCallButton = <AccessibleTooltipButton
+                className="mx_RoomHeader_button mx_RoomHeader_videoCallButton"
+                onClick={(ev: React.MouseEvent<Element>) => ev.shiftKey ?
+                    this.displayInfoDialogAboutScreensharing() : this.props.onCallPlaced(PlaceCallType.Video)}
+                title={_t("Video call")}
+            />;
+            buttons.push(voiceCallButton, videoCallButton);
+        }
+
+        if (this.props.onForgetClick) {
+            const forgetButton = <AccessibleTooltipButton
+                className="mx_RoomHeader_button mx_RoomHeader_forgetButton"
+                onClick={this.props.onForgetClick}
+                title={_t("Forget room")}
+            />;
+            buttons.push(forgetButton);
+        }
+
+        if (this.props.onAppsClick) {
+            const appsButton = <AccessibleTooltipButton
+                className={classNames("mx_RoomHeader_button mx_RoomHeader_appsButton", {
+                    mx_RoomHeader_appsButton_highlight: this.props.appsShown,
+                })}
+                onClick={this.props.onAppsClick}
+                title={this.props.appsShown ? _t("Hide Widgets") : _t("Show Widgets")}
+            />;
+            buttons.push(appsButton);
+        }
+
+        if (this.props.onSearchClick && this.props.inRoom) {
+            const searchButton = <AccessibleTooltipButton
+                className="mx_RoomHeader_button mx_RoomHeader_searchButton"
+                onClick={this.props.onSearchClick}
+                title={_t("Search")}
+            />;
+            buttons.push(searchButton);
         }
 
         const rightRow =
             <div className="mx_RoomHeader_buttons">
-                { videoCallButton }
-                { voiceCallButton }
-                { forgetButton }
-                { appsButton }
-                { searchButton }
+                { buttons }
             </div>;
 
         const e2eIcon = this.props.e2eStatus ? <E2EIcon status={this.props.e2eStatus} /> : undefined;

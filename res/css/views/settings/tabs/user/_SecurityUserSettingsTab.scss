@@ -14,13 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_SecurityUserSettingsTab .mx_DevicesPanel {
-    // Normally the panel is 880px, however this can easily overflow the container.
-    // TODO: Fix the table to not be squishy
-    width: auto;
-    max-width: 880px;
-}
-
 .mx_SecurityUserSettingsTab_deviceInfo {
     display: table;
     padding-left: 0;

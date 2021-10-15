@@ -44,7 +44,7 @@ import { Action } from "./dispatcher/actions";
 import { EffectiveMembership, getEffectiveMembership, leaveRoomBehaviour } from "./utils/membership";
 import SdkConfig from "./SdkConfig";
 import SettingsStore from "./settings/SettingsStore";
-import { UIFeature } from "./settings/UIFeature";
+import { UIComponent, UIFeature } from "./settings/UIFeature";
 import { CHAT_EFFECTS } from "./effects";
 import CallHandler from "./CallHandler";
 import { guessAndSetDMRoom } from "./Rooms";
@@ -56,6 +56,7 @@ import InfoDialog from "./components/views/dialogs/InfoDialog";
 import SlashCommandHelpDialog from "./components/views/dialogs/SlashCommandHelpDialog";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { shouldShowComponent } from "./customisations/helpers/UIComponents";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -403,6 +404,7 @@ export const Commands = [
         command: 'invite',
         args: '<user-id> [<reason>]',
         description: _td('Invites user with given id to current room'),
+        isEnabled: () => shouldShowComponent(UIComponent.InviteUsers),
         runFn: function(roomId, args) {
             if (args) {
                 const [address, reason] = args.split(/\s+(.+)/);

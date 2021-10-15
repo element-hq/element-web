@@ -12,9 +12,6 @@ $font-family: 'Nunito', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Arial
 
 $monospace-font-family: 'Inconsolata', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Courier', monospace, 'Noto Color Emoji';
 
-// Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=557%3A0
-$system: #F4F6FA;
-
 // unified palette
 // try to use these colors when possible
 $accent-color: #03b381;
@@ -288,13 +285,24 @@ $progressbar-bg-color: rgba(141, 151, 165, 0.2);
 $room-warning-bg-color: $yellow-background;
 
 // Legacy theme backports
+
+// Legacy theme backports
+$accent: #0DBD8B;
+$alert: #FF5B55;
+$links: #0086e6;
 $primary-content: $primary-fg-color;
 $secondary-content: $secondary-fg-color;
 $tertiary-content: $tertiary-fg-color;
 $quaternary-content: #6F7882;
 $quinary-content: $quaternary-content;
+$system: #F4F6FA;
 $background: $primary-bg-color;
+$panels: rgba($system, 0.9);
+$panel-base: #8D97A5; // This color is not intended for use in the app
+$panel-selected: rgba($tertiary-content, 0.3);
+$panel-hover: rgba($tertiary-content, 0.1);
 $panel-actions: $roomtile-selected-bg-color;
+$space-nav: rgba($tertiary-content, 0.15);
 // Legacy theme backports
 
 $memberstatus-placeholder-color: $muted-fg-color;

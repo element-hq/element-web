@@ -24,6 +24,8 @@ import { copyPlaintext } from "../../../utils/strings";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { showRoomInviteDialog } from "../../../RoomInvite";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../settings/UIFeature";
 
 interface IProps {
     space: Room;
@@ -51,16 +53,18 @@ const SpacePublicShare = ({ space, onFinished }: IProps) => {
             <h3>{ _t("Share invite link") }</h3>
             <span>{ copiedText }</span>
         </AccessibleButton>
-        { space.canInvite(MatrixClientPeg.get()?.getUserId()) ? <AccessibleButton
-            className="mx_SpacePublicShare_inviteButton"
-            onClick={() => {
-                if (onFinished) onFinished();
-                showRoomInviteDialog(space.roomId);
-            }}
-        >
-            <h3>{ _t("Invite people") }</h3>
-            <span>{ _t("Invite with email or username") }</span>
-        </AccessibleButton> : null }
+        { space.canInvite(MatrixClientPeg.get()?.getUserId()) && shouldShowComponent(UIComponent.InviteUsers)
+            ? <AccessibleButton
+                className="mx_SpacePublicShare_inviteButton"
+                onClick={() => {
+                    if (onFinished) onFinished();
+                    showRoomInviteDialog(space.roomId);
+                }}
+            >
+                <h3>{ _t("Invite people") }</h3>
+                <span>{ _t("Invite with email or username") }</span>
+            </AccessibleButton>
+            : null }
     </div>;
 };
 

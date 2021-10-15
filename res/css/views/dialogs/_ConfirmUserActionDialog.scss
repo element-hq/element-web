@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ConfirmUserActionDialog .mx_Dialog_content {
+.mx_ConfirmUserActionDialog .mx_Dialog_content .mx_ConfirmUserActionDialog_user {
     min-height: 48px;
     margin-bottom: 24px;
 }
@@ -22,10 +22,10 @@ limitations under the License.
 .mx_ConfirmUserActionDialog_avatar {
     float: left;
     margin-right: 20px;
-    margin-top: -2px;
 }
 
 .mx_ConfirmUserActionDialog_name {
+    padding-top: 2px;
     font-size: $font-18px;
 }
 
@@ -37,16 +37,4 @@ limitations under the License.
     font-size: $font-14px;
     color: $primary-content;
     background-color: $background;
-
-    border-radius: 3px;
-    border: solid 1px $input-border-color;
-    line-height: $font-36px;
-    padding-left: 16px;
-    padding-right: 16px;
-    padding-top: 1px;
-    padding-bottom: 1px;
-
-    margin-bottom: 24px;
-
-    width: 90%;
 }
