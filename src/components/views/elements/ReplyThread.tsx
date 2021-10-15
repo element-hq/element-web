@@ -21,7 +21,6 @@ import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import { UNSTABLE_ELEMENT_REPLY_IN_THREAD } from "matrix-js-sdk/src/@types/event";
 import { makeUserPermalink, RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
 import { Layout } from "../../../settings/Layout";
@@ -225,28 +224,15 @@ export default class ReplyThread extends React.Component<IProps, IState> {
         return { body, html };
     }
 
-    public static makeReplyMixIn(ev: MatrixEvent, replyInThread: boolean) {
+    public static makeReplyMixIn(ev: MatrixEvent) {
         if (!ev) return {};
-
-        const replyMixin = {
+        return {
             'm.relates_to': {
                 'm.in_reply_to': {
                     'event_id': ev.getId(),
                 },
             },
         };
-
-        /**
-         * @experimental
-         * Rendering hint for threads, only attached if true to make
-         * sure that Element does not start sending that property for all events
-         */
-        if (replyInThread) {
-            const inReplyTo = replyMixin['m.relates_to']['m.in_reply_to'];
-            inReplyTo[UNSTABLE_ELEMENT_REPLY_IN_THREAD.name] = replyInThread;
-        }
-
-        return replyMixin;
     }
 
     public static hasThreadReply(event: MatrixEvent) {
