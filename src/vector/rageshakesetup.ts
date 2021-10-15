@@ -30,6 +30,8 @@ import * as rageshake from "matrix-react-sdk/src/rageshake/rageshake";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import sendBugReport from "matrix-react-sdk/src/rageshake/submit-rageshake";
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 export function initRageshake() {
     // we manually check persistence for rageshakes ourselves
     const prom = rageshake.init(/*setUpPersistence=*/false);
@@ -46,7 +48,7 @@ export function initRageshake() {
 
         rageshake.cleanup();
     }, (err) => {
-        console.error("Failed to initialise rageshake: " + err);
+        logger.error("Failed to initialise rageshake: " + err);
     });
     return prom;
 }
@@ -58,13 +60,13 @@ export function initRageshakeStore() {
 window.mxSendRageshake = function(text: string, withLogs?: boolean) {
     const url = SdkConfig.get().bug_report_endpoint_url;
     if (!url) {
-        console.error("Cannot send a rageshake - no bug_report_endpoint_url configured");
+        logger.error("Cannot send a rageshake - no bug_report_endpoint_url configured");
         return;
     }
 
     if (withLogs === undefined) withLogs = true;
     if (!text || !text.trim()) {
-        console.error("Cannot send a rageshake without a message - please tell us what went wrong");
+        logger.error("Cannot send a rageshake without a message - please tell us what went wrong");
         return;
     }
     sendBugReport(url, {
@@ -74,6 +76,6 @@ window.mxSendRageshake = function(text: string, withLogs?: boolean) {
     }).then(() => {
         console.log("Bug report sent!");
     }, (err) => {
-        console.error(err);
+        logger.error(err);
     });
 };
