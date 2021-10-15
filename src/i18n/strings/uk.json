@@ -1724,7 +1724,7 @@
     "Start a new chat": "Почати нову бесіду",
     "This is the start of <roomName/>.": "Це початок <roomName/>.",
     "Start sharing your screen": "Почати показ екрана",
-    "Start the camera": "Запустити камеру",
+    "Start the camera": "Увімкнути камеру",
     "Scan this unique code": "Скануйте цей унікальний код",
     "Verify this session by completing one of the following:": "Звірте цей сеанс одним із запропонованих способів:",
     "Leave %(groupName)s?": "Вийти з %(groupName)s?",
@@ -2136,5 +2136,13 @@
     "Upload completed": "Вивантаження виконано",
     "Search %(spaceName)s": "Пошук %(spaceName)s",
     "Leave some rooms": "Вийте з кількох кімнат",
-    "Leave all rooms": "Вийти з кімнати"
+    "Leave all rooms": "Вийти з кімнати",
+    "More": "Більше",
+    "Show sidebar": "Показати бічну панель",
+    "Hide sidebar": "Сховати бічну панель",
+    "Stop sharing your screen": "Вимкнути показ екрана",
+    "Stop the camera": "Вимкнути камеру",
+    "Your camera is still enabled": "Ваша камера досі увімкнена",
+    "Your camera is turned off": "Вашу камеру вимкнено",
+    "sends snowfall": "надсилає снігопад"
 }
