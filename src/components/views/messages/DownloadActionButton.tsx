@@ -20,7 +20,7 @@ import React from "react";
 import { RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
 import Spinner from "../elements/Spinner";
 import classNames from "classnames";
-import { _t } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { FileDownloader } from "../../../utils/FileDownloader";
 
@@ -36,6 +36,7 @@ interface IProps {
 interface IState {
     loading: boolean;
     blob?: Blob;
+    tooltip: string;
 }
 
 @replaceableComponent("views.messages.DownloadActionButton")
@@ -47,11 +48,16 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
 
         this.state = {
             loading: false,
+            tooltip: _td("Downloading"),
         };
     }
 
     private onDownloadClick = async () => {
         if (this.state.loading) return;
+
+        if (this.props.mediaEventHelperGet().media.isEncrypted) {
+            this.setState({ tooltip: _td("Decrypting") });
+        }
 
         this.setState({ loading: true });
 
@@ -87,7 +93,7 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
 
         return <RovingAccessibleTooltipButton
             className={classes}
-            title={spinner ? _t("Decrypting") : _t("Download")}
+            title={spinner ? _t(this.state.tooltip) : _t("Download")}
             onClick={this.onDownloadClick}
             disabled={!!spinner}
         >
