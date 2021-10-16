@@ -64,8 +64,6 @@ $input-focused-border-color: #238cf5;
 $input-valid-border-color: $accent-color;
 $input-invalid-border-color: $warning-color;
 
-$background: $bg-color;
-
 $resend-button-divider-color: $muted-fg-color;
 
 // scrollbars
@@ -120,7 +118,6 @@ $roomlist-button-bg-color: #1A1D23; // Buttons include the filter box, explore b
 $roomlist-filter-active-bg-color: $roomlist-button-bg-color;
 $roomlist-bg-color: $header-panel-bg-color;
 
-$roomsublist-divider-color: $primary-fg-color;
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #3e444c 0%, #3e444c00 100%);
 
 $groupFilterPanel-divider-color: $roomlist-header-color;
