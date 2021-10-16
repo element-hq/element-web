@@ -109,6 +109,16 @@ $roomtopic-color: $text-secondary-color;
 $header-divider-color: $header-panel-text-primary-color;
 $composer-e2e-icon-color: $header-panel-text-primary-color;
 
+// Legacy theme backports
+$primary-content: $primary-fg-color;
+$secondary-content: $secondary-fg-color;
+$tertiary-content: $tertiary-fg-color;
+$quaternary-content: #6F7882;
+$quinary-content: $quaternary-content;
+$background: $primary-bg-color;
+$panel-actions: $roomtile-selected-bg-color;
+// Legacy theme backports
+
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
@@ -207,16 +217,6 @@ $eventbubble-others-bg: $event-selected-color;
 $eventbubble-bg-hover: #1C2026;
 $eventbubble-avatar-outline: $bg-color;
 $eventbubble-reply-color: #C1C6CD;
-
-// Legacy theme backports
-$primary-content: $primary-fg-color;
-$secondary-content: $secondary-fg-color;
-$tertiary-content: $tertiary-fg-color;
-$quaternary-content: #6F7882;
-$quinary-content: $quaternary-content;
-$background: $primary-bg-color;
-$panel-actions: $roomtile-selected-bg-color;
-// Legacy theme backports
 
 // ***** Mixins! *****
 

@@ -52,10 +52,6 @@ $info-bg-color: #2a9edf;
 $mention-user-pill-bg-color: $warning-color;
 $other-user-pill-bg-color: rgba(0, 0, 0, 0.1);
 
-// pinned events indicator
-$pinned-unread-color: $notice-primary-color;
-$pinned-color: $tertiary-content;
-
 // informational plinth
 $info-plinth-bg-color: #f7f7f7;
 $info-plinth-fg-color: #888;
@@ -179,8 +175,6 @@ $roomlist-filter-active-bg-color: $roomlist-button-bg-color;
 $roomlist-bg-color: $header-panel-bg-color;
 $roomlist-header-color: $primary-fg-color;
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%);
-
-$groupFilterPanel-divider-color: $tertiary-content;
 
 $roomtile-default-badge-bg-color: #61708b;
 $roomtile-selected-bg-color: #fff;
@@ -346,6 +340,12 @@ $eventbubble-others-bg: $system;
 $eventbubble-bg-hover: #FAFBFD;
 $eventbubble-avatar-outline: #fff;
 $eventbubble-reply-color: #C1C6CD;
+
+// pinned events indicator
+$pinned-unread-color: $notice-primary-color;
+$pinned-color: $tertiary-content;
+
+$groupFilterPanel-divider-color: $tertiary-content;
 
 // ***** Mixins! *****
 
