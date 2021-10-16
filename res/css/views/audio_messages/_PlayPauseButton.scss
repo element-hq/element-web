@@ -21,7 +21,7 @@ limitations under the License.
     min-width: 32px; // for when the button is used in a flexbox
     min-height: 32px; // for when the button is used in a flexbox
     border-radius: 32px;
-    background-color: $voice-playback-button-bg-color;
+    background-color: $system;
 
     &::before {
         content: '';
