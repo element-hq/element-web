@@ -18,7 +18,6 @@ $accent-color: #03b381;
 $accent-bg-color: rgba(3, 179, 129, 0.16);
 $notice-primary-color: #ff4b55;
 $notice-primary-bg-color: rgba(255, 75, 85, 0.16);
-$notice-secondary-color: #61708b;
 $header-panel-bg-color: #f3f8fd;
 
 // typical text (dark-on-white in light skin)
@@ -55,7 +54,7 @@ $other-user-pill-bg-color: rgba(0, 0, 0, 0.1);
 
 // pinned events indicator
 $pinned-unread-color: $notice-primary-color;
-$pinned-color: $notice-secondary-color;
+$pinned-color: $tertiary-content;
 
 // informational plinth
 $info-plinth-bg-color: #f7f7f7;

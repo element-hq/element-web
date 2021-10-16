@@ -205,13 +205,11 @@ $username-variant6-color: #2dc2c5;
 $username-variant7-color: #5c56f5;
 $username-variant8-color: #74d12c;
 
-$notice-secondary-color: $tertiary-content;
-
 $panel-divider-color: transparent;
 
 // pinned events indicator
 $pinned-unread-color: $notice-primary-color;
-$pinned-color: $notice-secondary-color;
+$pinned-color: $tertiary-content;
 
 // ********************
 
