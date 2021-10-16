@@ -3244,5 +3244,7 @@
     "Kick them from everything I'm able to": "Müksa kasutaja välja kõikjalt, kust ma saan",
     "Kick from %(roomName)s": "Müksa %(roomName)s jututoast välja",
     "Threads": "Jutulõngad",
-    "Downloading": "Laadin alla"
+    "Downloading": "Laadin alla",
+    "%(count)s reply|one": "%(count)s vastus",
+    "%(count)s reply|other": "%(count)s vastust"
 }
