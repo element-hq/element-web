@@ -158,7 +158,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                     <span className='mx_SettingsTab_subheading'>{ _t("Sounds") }</span>
                     <div>
-                        <div class="mx_SettingsTab_subsectionText">
+                        <div className="mx_SettingsTab_subsectionText">
                             <span>{ _t("Notification sound") }: <code>{ this.state.currentSound }</code></span>
                         </div>
                         <AccessibleButton className="mx_NotificationSound_resetSound" disabled={this.state.currentSound == "default"} onClick={this.clearSound} kind="primary">
@@ -167,11 +167,11 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                     </div>
                     <div>
                         <h3>{ _t("Set a new custom sound") }</h3>
-                        <div class="mx_SettingsFlag">
+                        <div className="mx_SettingsFlag">
                             <form autoComplete="off" noValidate={true}>
                                 <input ref={this.soundUpload} className="mx_NotificationSound_soundUpload" type="file" onChange={this.onSoundUploadChanged} accept="audio/*" />
                             </form>
-                        
+
                             { currentUploadedFile }
                         </div>
 
