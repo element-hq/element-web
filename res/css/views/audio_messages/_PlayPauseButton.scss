@@ -26,7 +26,7 @@ limitations under the License.
     &::before {
         content: '';
         position: absolute; // sizing varies by icon
-        background-color: $voice-playback-button-fg-color;
+        background-color: $secondary-content;
         mask-repeat: no-repeat;
         mask-size: contain;
     }
