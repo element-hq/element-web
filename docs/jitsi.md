@@ -64,10 +64,3 @@ The domain used is the one specified by the `/.well-known/matrix/client` endpoin
 For active Jitsi widgets in the room, a native Jitsi widget UI is created and points to the instance specified in the `domain` key of the widget content data.
 
 Element Android manages allowed native widgets permissions a bit differently than web widgets (as the data shared are different and never shared with the widget URL). For Jitsi widgets, permissions are requested only once per domain (consent saved in account data).
-
-## Element iOS
-
-Currently the Element mobile apps do not support custom Jitsi servers and will instead
-use the default `jitsi.riot.im` server. When users on the mobile apps join the call,
-they will be joining a different conference which has the same name, but not the same
-participants. This is a known bug and which needs to be fixed.

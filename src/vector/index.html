@@ -43,7 +43,7 @@
         if (match) {
             var title = match[1].charAt(0).toUpperCase() + match[1].slice(1);
         %>
-           <link rel="stylesheet" disabled="disabled" title="<%= title %>" href="<%= file %>">
+           <link rel="stylesheet" disabled="disabled" data-mx-theme="<%= title %>" title="<%= title %>" href="<%= file %>">
         <% } else { %>
            <link rel="stylesheet" href="<%= file %>">
         <% }
@@ -58,10 +58,7 @@
     } %>
 
   </head>
-  <body
-      style="height: 100%; margin: 0;"
-      data-vector-recorder-worklet-script="<%= htmlWebpackPlugin.files.js.find(entry => entry.includes("recorder-worklet.js")) %>"
-  >
+  <body style="height: 100%; margin: 0;">
     <noscript>Sorry, Element requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
     <section id="matrixchat" style="height: 100%;" class="notranslate"></section>
     <script src="<%= htmlWebpackPlugin.files.js.find(entry => entry.includes("bundle.js")) %>"></script>

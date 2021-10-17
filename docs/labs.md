@@ -12,14 +12,6 @@ dropped. Ask in the room if you are unclear about any details here.**
 A new version of the "Report" dialog that lets users send abuse reports directly to room moderators,
 if the room supports it.
 
-## Matrix Spaces [MSC1772](https://github.com/matrix-org/matrix-doc/pull/1772) support (`feature_spaces`)
-
-Enables showing, using, creating, and managing spaces. Create Spaces from the all new Space Panel (to left of Room List).
-
-Incompatible with (will disable) `feature_custom_tags`, `feature_communities_v2_prototypes` and stable Communities/Groups support.
-
-Still in heavy development.
-
 ## Render LaTeX maths in messages (`feature_latex_maths`)
 
 Enables rendering of LaTeX maths in messages using [KaTeX](https://katex.org/). LaTeX between single dollar-signs is interpreted as inline maths and double dollar-signs as display maths (i.e. centred on its own line).
@@ -125,15 +117,28 @@ or feedback for this functionality at this time.
 Allows users to receive encrypted messages by creating a device that is stored
 encrypted on the server, as described in [MSC2697](https://github.com/matrix-org/matrix-doc/pull/2697).
 
-## Voice messages (`feature_voice_messages`)
-
-Offers a way to send more time-sensitive information through the power of voice. When enabled, use the microphone
-icon on the lower right to start recording your message. You will have a chance to review after you're done recording,
-and if it sounds fine then send it off for the rest of the room to hear.
-
-Voice messages are automatically downloaded to ensure they are ready for playback as soon as possible.
-
 ## Do not disturb (`feature_dnd`)
 
 Enables UI for turning on "do not disturb" mode for the current device. When DND mode is engaged, popups
 and notification noises are suppressed. Not perfect, but can help reduce noise.
+
+## Hidden read receipts (`feature_hidden_read_receipts`)
+
+Enables sending hidden read receipts as per [MSC2285](https://github.com/matrix-org/matrix-doc/pull/2285)
+
+## New layout switcher (with message bubbles) (`feature_new_layout_switcher`)
+
+Adds a "Message layout" section under `Settings -> Appearance`, where the user can select their preferred message layout (e.g. IRC or Modern). Additionally, adds a new "Message bubbles" layout.
+
+## Pseudonymous Analytics opt-in (`feature_pseudonymous_analytics_opt_in`)
+
+Opts in to collection of pseudonymous analytics data via Posthog. See https://github.com/matrix-org/matrix-react-sdk/pull/6495
+
+## Polls (`feature_polls`) [In Development]
+
+Polls are a way to gauge interest from your community about a certain topic with a simple voting mechanic
+within the message timeline. Note that this feature is currently under active development and therefore is
+entirely incomplete and may not work at all - it is not recommended for general use at this time.
+
+Bug reports, feature requests, etc are not currently accepted for this feature flag. A later stage of
+development will provide opportunities for feedback.

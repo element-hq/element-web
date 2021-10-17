@@ -1,0 +1,25 @@
+name: Move labelled issues into the Priority bugs column for the Web App Team
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  Move_high_priority_issues_to_team_workboard:
+    runs-on: ubuntu-latest
+    if: >
+        contains(github.event.issue.labels.*.name, 'T-Defect') &&
+        contains(github.event.issue.labels.*.name, 'S-Critical') &&
+        (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
+         contains(github.event.issue.labels.*.name, 'O-Occasional')) ||
+        contains(github.event.issue.labels.*.name, 'S-Major') &&
+        contains(github.event.issue.labels.*.name, 'O-Frequent') ||
+        contains(github.event.issue.labels.*.name, 'A11y') &&
+        contains(github.event.issue.labels.*.name, 'O-Frequent')
+    steps:
+      - uses: alex-page/github-project-automation-plus@v0.8.1
+        with:
+          project: Web App Team
+          column: P1
+          repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+

@@ -39,6 +39,8 @@ import {sleep} from "../test-utils";
 import "fake-indexeddb/auto";
 import {cleanLocalstorage} from "../test-utils";
 import {IndexedDBCryptoStore} from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
+import { RoomView as RoomViewClass } from 'matrix-react-sdk/src/components/structures/RoomView';
+import LoginComponent from 'matrix-react-sdk/src/components/structures/auth/Login';
 
 const DEFAULT_HS_URL='http://my_server';
 const DEFAULT_IS_URL='http://my_is';
@@ -94,7 +96,7 @@ describe('loading:', function() {
      * TODO: it would be nice to factor some of this stuff out of index.js so
      * that we can test it rather than our own implementation of it.
      */
-    function loadApp(opts) {
+    function loadApp(opts?) {
         opts = opts || {};
         const queryString = opts.queryString || "";
         const uriFragment = opts.uriFragment || "";
@@ -164,7 +166,7 @@ describe('loading:', function() {
     // http requests until we do.
     //
     // returns a promise resolving to the received request
-    async function expectAndAwaitSync(opts) {
+    async function expectAndAwaitSync(opts?) {
         let syncRequest = null;
         const isGuest = opts && opts.isGuest;
         if (!isGuest) {
@@ -633,7 +635,7 @@ describe('loading:', function() {
     async function completeLogin(matrixChat) {
         // we expect a single <Login> component
         const login = ReactTestUtils.findRenderedComponentWithType(
-            matrixChat, sdk.getComponent('structures.auth.Login'));
+            matrixChat, LoginComponent);
 
         // When we switch to the login component, it'll hit the login endpoint
         // for proof of life and to get flows. We'll only give it one option.
@@ -673,7 +675,7 @@ describe('loading:', function() {
 
 // assert that we are on the loading page
 function assertAtLoadingSpinner(matrixChat) {
-    const domComponent = ReactDOM.findDOMNode(matrixChat);
+    const domComponent = ReactDOM.findDOMNode(matrixChat) as Element;
     expect(domComponent.className).toEqual("mx_MatrixChat_splash");
 
     // just the spinner
@@ -691,14 +693,14 @@ function awaitLoggedIn(matrixChat) {
             }
             console.log(Date.now() + ": Received on_logged_in action");
             dis.unregister(dispatcherRef);
-            resolve();
+            resolve(undefined);
         };
         const dispatcherRef = dis.register(onAction);
         console.log(Date.now() + ": Waiting for on_logged_in action");
     });
 }
 
-function awaitRoomView(matrixChat, retryLimit, retryCount) {
+function awaitRoomView(matrixChat, retryLimit?, retryCount?) {
     if (retryLimit === undefined) {
         retryLimit = 5;
     }
@@ -721,17 +723,17 @@ function awaitRoomView(matrixChat, retryLimit, retryCount) {
 
     // state looks good, check the rendered output
     ReactTestUtils.findRenderedComponentWithType(
-        matrixChat, sdk.getComponent('structures.RoomView'));
+        matrixChat, RoomViewClass);
     return Promise.resolve();
 }
 
-function awaitLoginComponent(matrixChat, attempts) {
+function awaitLoginComponent(matrixChat, attempts?) {
     return MatrixReactTestUtils.waitForRenderedComponentWithType(
         matrixChat, sdk.getComponent('structures.auth.Login'), attempts,
     );
 }
 
-function awaitWelcomeComponent(matrixChat, attempts) {
+function awaitWelcomeComponent(matrixChat, attempts?) {
     return MatrixReactTestUtils.waitForRenderedComponentWithType(
         matrixChat, sdk.getComponent('auth.Welcome'), attempts,
     );
