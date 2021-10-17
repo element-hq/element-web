@@ -57,6 +57,7 @@ import QuestionDialog from "../dialogs/QuestionDialog";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { decorateStartSendingTime, sendRoundTripMetric } from "../../../sendTimePerformanceMetrics";
 import RoomContext from '../../../contexts/RoomContext';
+import DocumentPosition from "../../../editor/position";
 
 function addReplyToMessageContent(
     content: IContent,
@@ -391,9 +392,12 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
 
         // Replace emoticon at the end of the message
         if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
-            const caret = this.editorRef.current?.getCaret();
-            const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
-            this.editorRef.current?.replaceEmoticon(position, REGEX_EMOTICON);
+            const indexOfLastPart = model.parts.length - 1;
+            const positionInLastPart = model.parts[indexOfLastPart].text.length;
+            this.editorRef.current?.replaceEmoticon(
+                new DocumentPosition(indexOfLastPart, positionInLastPart),
+                REGEX_EMOTICON,
+            );
         }
 
         const replyToEvent = this.props.replyToEvent;
