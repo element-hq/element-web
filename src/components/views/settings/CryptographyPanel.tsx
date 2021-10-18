@@ -74,16 +74,16 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
         return (
             <div className='mx_SettingsTab_section mx_CryptographyPanel'>
                 <span className='mx_SettingsTab_subheading'>{ _t("Cryptography") }</span>
-                <ul className='mx_SettingsTab_subsectionText mx_CryptographyPanel_sessionInfo'>
-                    <li>
-                        <label>{ _t("Session ID:") }</label>
-                        <span><code>{ deviceId }</code></span>
-                    </li>
-                    <li>
-                        <label>{ _t("Session key:") }</label>
-                        <span><code><b>{ identityKey }</b></code></span>
-                    </li>
-                </ul>
+                <table className='mx_SettingsTab_subsectionText mx_CryptographyPanel_sessionInfo'>
+                    <tr>
+                        <td>{ _t("Session ID:") }</td>
+                        <td><code>{ deviceId }</code></td>
+                    </tr>
+                    <tr>
+                        <td>{ _t("Session key:") }</td>
+                        <td><code><b>{ identityKey }</b></code></td>
+                    </tr>
+                </table>
                 { importExportButtons }
                 { noSendUnverifiedSetting }
             </div>
