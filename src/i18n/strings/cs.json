@@ -1429,8 +1429,8 @@
     "Upgrade private room": "Upgradovat soukromou místnost",
     "Upgrade public room": "Upgradovat veřejnou místnost",
     "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "Upgradování místnosti je pokročilá operace a je doporučeno jí provést pokud je místnost nestabilní kvůli chybám, chybějícím funkcím nebo zranitelnostem.",
-    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "Toto běžně ovlivňuje pouze zpracovávání místnosti na serveru. Pokud máte problém s %(brand)sem, <a>nahlaste nám ho prosím</a>.",
-    "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Upgradujeme tuto místnost z <oldVersion /> na <newVersion />.",
+    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "Toto obvykle ovlivňuje pouze zpracovávání místnosti na serveru. Pokud máte problém s %(brand)sem, <a>nahlaste nám ho prosím</a>.",
+    "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Místnost bude upgradována z verze <oldVersion /> na verzi <newVersion />.",
     "Upgrade": "Upgradovat",
     "<b>Warning</b>: You should only set up key backup from a trusted computer.": "<b>Varování</b>: Nastavujte zálohu jen z důvěryhodných počítačů.",
     "Notification settings": "Nastavení oznámení",
@@ -2951,7 +2951,7 @@
     "Not a valid identity server (status code %(code)s)": "Toto není platný server identit (stavový kód %(code)s)",
     "Identity server URL must be HTTPS": "Adresa serveru identit musí být na HTTPS",
     "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Upozorňujeme, že aktualizací vznikne nová verze místnosti</b>. Všechny aktuální zprávy zůstanou v této archivované místnosti.",
-    "Automatically invite members from this room to the new one": "Automaticky pozve členy této místnosti do nové místnosti",
+    "Automatically invite members from this room to the new one": "Automaticky pozvat členy této místnosti do nové místnosti",
     "These are likely ones other room admins are a part of.": "Pravděpodobně se jedná o ty, kterých se účastní i ostatní správci místností.",
     "Other spaces or rooms you might not know": "Další prostory nebo místnosti, které možná neznáte",
     "Spaces you know that contain this room": "Prostory, které znáte a které obsahují tuto místnost",
@@ -3250,5 +3250,6 @@
     "Downloading": "Stahování",
     "%(count)s reply|one": "%(count)s odpověď",
     "%(count)s reply|other": "%(count)s odpovědí",
-    "View in room": "Zobrazit v místnosti"
+    "View in room": "Zobrazit v místnosti",
+    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Zadejte bezpečnostní frázi nebo <button>použijte bezpečnostní klíč</button> pro pokračování."
 }
