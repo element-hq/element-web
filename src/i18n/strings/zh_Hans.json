@@ -3246,5 +3246,6 @@
     "Kick them from everything I'm able to": "禁止这些人做任何我有权决定的事",
     "Downloading": "下载中",
     "%(count)s reply|one": "%(count)s 条回复",
-    "%(count)s reply|other": "%(count)s 条回复"
+    "%(count)s reply|other": "%(count)s 条回复",
+    "View in room": "在聊天室内查看"
 }
