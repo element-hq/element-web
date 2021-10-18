@@ -28,6 +28,12 @@ limitations under the License.
     margin-left: 49px;
     margin-right: 100px;
     font-size: $font-14px;
+    flex-direction: column;
+    display: flex;
+
+    .mx_ThreadInfo {
+        max-width: 100%;
+    }
 
     &.mx_EventTile_continuation {
         margin-top: 2px;
@@ -85,6 +91,8 @@ limitations under the License.
     }
 
     &[data-self=false] {
+        align-items: flex-start;
+
         .mx_EventTile_line {
             border-bottom-right-radius: var(--cornerRadius);
         }
@@ -98,11 +106,18 @@ limitations under the License.
         }
 
         --backgroundColor: $eventbubble-others-bg;
+
+        .mx_ThreadInfo {
+            align-self: flex-start;
+            margin-top: 8px;
+            margin-left: -10px;
+            margin-bottom: 8px;
+        }
     }
     &[data-self=true] {
+        align-items: flex-end;
         .mx_EventTile_line {
             border-bottom-left-radius: var(--cornerRadius);
-            float: right;
             > a {
                 left: auto;
                 right: -68px;
@@ -132,6 +147,13 @@ limitations under the License.
         }
 
         --backgroundColor: $eventbubble-self-bg;
+
+        .mx_ThreadInfo {
+            align-self: flex-end;
+            margin-right: -14px;
+            margin-top: 8px;
+            margin-bottom: 4px;
+        }
     }
 
     .mx_EventTile_line {
