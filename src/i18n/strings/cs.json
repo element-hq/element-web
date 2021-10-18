@@ -3249,5 +3249,6 @@
     "Polls (under active development)": "Ankety (v aktivním vývoji)",
     "Downloading": "Stahování",
     "%(count)s reply|one": "%(count)s odpověď",
-    "%(count)s reply|other": "%(count)s odpovědí"
+    "%(count)s reply|other": "%(count)s odpovědí",
+    "View in room": "Zobrazit v místnosti"
 }
