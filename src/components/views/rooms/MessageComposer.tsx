@@ -116,7 +116,7 @@ const EmojiButton: React.FC<IEmojiButtonProps> = ({ addEmoji, menuPosition, narr
             className={className}
             onClick={openMenu}
             title={!narrowMode && _t('Emoji picker')}
-            label={(narrowMode && _t("Add emoji")) || null}
+            label={narrowMode ? _t("Add emoji") : null}
         />
 
         { contextMenu }
@@ -485,7 +485,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                     className="mx_MessageComposer_button mx_MessageComposer_stickers"
                     onClick={() => this.showStickers(!this.state.showStickers)}
                     title={title}
-                    label={(this.state.narrowMode && _t("Send a sticker")) || null}
+                    label={this.state.narrowMode ? _t("Send a sticker") : null}
                 />,
             );
         }
