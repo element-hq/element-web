@@ -3228,5 +3228,17 @@
     "Sending invites... (%(progress)s out of %(count)s)|other": "Spedizione inviti... (%(progress)s di %(count)s)",
     "Loading new room": "Caricamento nuova stanza",
     "Upgrading room": "Aggiornamento stanza",
-    "Polls (under active development)": "Sondaggi (in sviluppo)"
+    "Polls (under active development)": "Sondaggi (in sviluppo)",
+    "Ban them from everything I'm able to": "Bandiscilo ovunque io possa farlo",
+    "Unban them from everything I'm able to": "Riammettilo ovunque io possa farlo",
+    "Ban from %(roomName)s": "Bandisci da %(roomName)s",
+    "Unban from %(roomName)s": "Riammetti in %(roomName)s",
+    "They'll still be able to access whatever you're not an admin of.": "Potrà ancora accedere dove non sei amministratore.",
+    "Kick them from specific things I'm able to": "Buttalo fuori da cose specifiche dove posso farlo",
+    "Kick them from everything I'm able to": "Buttalo fuori da ovunque io possa farlo",
+    "Kick from %(roomName)s": "Butta fuori da %(roomName)s",
+    "Disinvite from %(roomName)s": "Annulla l'invito da %(roomName)s",
+    "Threads": "Conversazioni",
+    "%(count)s reply|one": "%(count)s risposta",
+    "%(count)s reply|other": "%(count)s risposte"
 }
