@@ -500,12 +500,11 @@ $hover-select-border: 4px;
     float: left;
     margin: 0 0.5em 0 -1.5em;
     color: gray;
-}
-
-.mx_EventTile_lineNumber {
-    text-align: right;
-    display: block;
-    padding-left: 1em;
+    & span {
+        text-align: right;
+        display: block;
+        padding-left: 1em;
+    }
 }
 
 .mx_EventTile_collapsedCodeBlock {
