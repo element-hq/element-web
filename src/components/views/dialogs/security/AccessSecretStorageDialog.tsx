@@ -334,7 +334,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
 
             content = <div>
                 <p>{ _t(
-                    "Enter your Security Phrase or <button>Use your Security Key</button> to continue.", {},
+                    "Enter your Security Phrase or <button>use your Security Key</button> to continue.", {},
                     {
                         button: s => <AccessibleButton className="mx_linkButton"
                             element="span"

@@ -2658,7 +2658,7 @@
     "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.",
     "Security Phrase": "Security Phrase",
     "Unable to access secret storage. Please verify that you entered the correct Security Phrase.": "Unable to access secret storage. Please verify that you entered the correct Security Phrase.",
-    "Enter your Security Phrase or <button>Use your Security Key</button> to continue.": "Enter your Security Phrase or <button>Use your Security Key</button> to continue.",
+    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Enter your Security Phrase or <button>use your Security Key</button> to continue.",
     "Security Key": "Security Key",
     "Use your Security Key to continue.": "Use your Security Key to continue.",
     "Destroy cross-signing keys?": "Destroy cross-signing keys?",
