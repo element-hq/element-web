@@ -21,10 +21,8 @@ import { sleep } from "matrix-js-sdk/src/utils";
 import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
-import * as FormattingUtils from "../../../../../utils/FormattingUtils";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Analytics from "../../../../../Analytics";
-import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
 import { privateShouldBeEncrypted } from "../../../../../createRoom";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
@@ -37,6 +35,7 @@ import { replaceableComponent } from "../../../../../utils/replaceableComponent"
 import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
 import { ActionPayload } from "../../../../../dispatcher/payloads";
 import { Room } from "matrix-js-sdk/src/models/room";
+import CryptographyPanel from "../../CryptographyPanel";
 import DevicesPanel from "../../DevicesPanel";
 import SettingsFlag from "../../../elements/SettingsFlag";
 import CrossSigningPanel from "../../CrossSigningPanel";
@@ -112,28 +111,10 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         dis.unregister(this.dispatcherRef);
     }
 
-    private updateBlacklistDevicesFlag = (checked): void => {
-        MatrixClientPeg.get().setGlobalBlacklistUnverifiedDevices(checked);
-    };
-
     private updateAnalytics = (checked: boolean): void => {
         checked ? Analytics.enable() : Analytics.disable();
         CountlyAnalytics.instance.enable(/* anonymous = */ !checked);
         PosthogAnalytics.instance.updateAnonymityFromSettings(MatrixClientPeg.get().getUserId());
-    };
-
-    private onExportE2eKeysClicked = (): void => {
-        Modal.createTrackedDialogAsync('Export E2E Keys', '',
-            import('../../../../../async-components/views/dialogs/security/ExportE2eKeysDialog'),
-            { matrixClient: MatrixClientPeg.get() },
-        );
-    };
-
-    private onImportE2eKeysClicked = (): void => {
-        Modal.createTrackedDialogAsync('Import E2E Keys', '',
-            import('../../../../../async-components/views/dialogs/security/ImportE2eKeysDialog'),
-            { matrixClient: MatrixClientPeg.get() },
-        );
     };
 
     private onGoToUserProfileClick = (): void => {
@@ -210,58 +191,6 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
     private onRejectAllInvitesClicked = (): void => {
         this.manageInvites(false);
     };
-
-    private renderCurrentDeviceInfo(): JSX.Element {
-        const client = MatrixClientPeg.get();
-        const deviceId = client.deviceId;
-        let identityKey = client.getDeviceEd25519Key();
-        if (!identityKey) {
-            identityKey = _t("<not supported>");
-        } else {
-            identityKey = FormattingUtils.formatCryptoKey(identityKey);
-        }
-
-        let importExportButtons = null;
-        if (client.isCryptoEnabled()) {
-            importExportButtons = (
-                <div className='mx_SecurityUserSettingsTab_importExportButtons'>
-                    <AccessibleButton kind='primary' onClick={this.onExportE2eKeysClicked}>
-                        { _t("Export E2E room keys") }
-                    </AccessibleButton>
-                    <AccessibleButton kind='primary' onClick={this.onImportE2eKeysClicked}>
-                        { _t("Import E2E room keys") }
-                    </AccessibleButton>
-                </div>
-            );
-        }
-
-        let noSendUnverifiedSetting;
-        if (SettingsStore.isEnabled("blacklistUnverifiedDevices")) {
-            noSendUnverifiedSetting = <SettingsFlag
-                name='blacklistUnverifiedDevices'
-                level={SettingLevel.DEVICE}
-                onChange={this.updateBlacklistDevicesFlag}
-            />;
-        }
-
-        return (
-            <div className='mx_SettingsTab_section'>
-                <span className='mx_SettingsTab_subheading'>{ _t("Cryptography") }</span>
-                <ul className='mx_SettingsTab_subsectionText mx_SecurityUserSettingsTab_deviceInfo'>
-                    <li>
-                        <label>{ _t("Session ID:") }</label>
-                        <span><code>{ deviceId }</code></span>
-                    </li>
-                    <li>
-                        <label>{ _t("Session key:") }</label>
-                        <span><code><b>{ identityKey }</b></code></span>
-                    </li>
-                </ul>
-                { importExportButtons }
-                { noSendUnverifiedSetting }
-            </div>
-        );
-    }
 
     private renderIgnoredUsers(): JSX.Element {
         const { waitingUnignored, ignoredUserIds } = this.state;
@@ -418,7 +347,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     { secureBackup }
                     { eventIndex }
                     { crossSigning }
-                    { this.renderCurrentDeviceInfo() }
+                    <CryptographyPanel />
                 </div>
                 { privacySection }
                 { advancedSection }

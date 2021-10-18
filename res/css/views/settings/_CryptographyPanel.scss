@@ -1,0 +1,22 @@
+.mx_CryptographyPanel_sessionInfo {
+    display: table;
+    padding-left: 0;
+}
+
+.mx_CryptographyPanel_sessionInfo > li {
+    display: table-row;
+}
+
+.mx_CryptographyPanel_sessionInfo > li > label,
+.mx_CryptographyPanel_sessionInfo > li > span {
+    display: table-cell;
+    padding-right: 1em;
+}
+
+.mx_CryptographyPanel_importExportButtons .mx_AccessibleButton {
+    margin-right: 10px;
+}
+
+.mx_CryptographyPanel_importExportButtons {
+    margin-bottom: 15px;
+}

@@ -44,7 +44,7 @@ module.exports.enableLazyLoading = async function(session) {
 module.exports.getE2EDeviceFromSettings = async function(session) {
     session.log.step(`gets e2e device/key from settings`);
     await openSettings(session, "security");
-    const deviceAndKey = await session.queryAll(".mx_SettingsTab_section .mx_SecurityUserSettingsTab_deviceInfo code");
+    const deviceAndKey = await session.queryAll(".mx_SettingsTab_section .mx_CryptographyPanel code");
     assert.equal(deviceAndKey.length, 2);
     const id = await (await deviceAndKey[0].getProperty("innerText")).jsonValue();
     const key = await (await deviceAndKey[1].getProperty("innerText")).jsonValue();
