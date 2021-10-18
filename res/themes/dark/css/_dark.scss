@@ -71,8 +71,6 @@ $input-focused-border-color: #238cf5;
 $input-valid-border-color: $accent-color;
 $input-invalid-border-color: $warning-color;
 
-$field-focused-label-bg-color: $background;
-
 $resend-button-divider-color: #b9bec64a; // muted-text with a 4A opacity.
 
 // scrollbars
@@ -124,18 +122,11 @@ $theme-button-bg-color: #e3e8f0;
 
 $roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-bg-color: rgba(33, 38, 44, 0.90);
-$roomlist-header-color: $tertiary-content;
-$roomsublist-divider-color: $primary-content;
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #3e444c 0%, #3e444c00 100%);
 
-$groupFilterPanel-divider-color: $roomlist-header-color;
-
-$roomtile-preview-color: $secondary-content;
 $roomtile-default-badge-bg-color: #61708b;
 
 // ********************
-
-$notice-secondary-color: $roomlist-header-color;
 
 $panel-divider-color: transparent;
 
@@ -206,10 +197,7 @@ $tooltip-timeline-fg-color: $primary-content;
 $breadcrumb-placeholder-bg-color: #272c35;
 
 $voice-record-stop-border-color: $quaternary-content;
-$voice-record-waveform-incomplete-fg-color: $quaternary-content;
 $voice-record-icon-color: $quaternary-content;
-$voice-playback-button-bg-color: $system;
-$voice-playback-button-fg-color: $secondary-content;
 
 // Appearance tab colors
 $appearance-tab-border-color: $room-highlight-color;

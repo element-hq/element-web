@@ -128,7 +128,7 @@ limitations under the License.
     font-size: $font-10px;
     transform: translateY(-13px);
     padding: 0 2px;
-    background-color: $field-focused-label-bg-color;
+    background-color: $background;
     pointer-events: initial;
 }
 
@@ -144,7 +144,7 @@ limitations under the License.
 .mx_Field input:disabled + label,
 .mx_Field textarea:disabled,
 .mx_Field textarea:disabled + label {
-    background-color: $field-focused-label-bg-color;
+    background-color: $background;
     color: $greyed-fg-color;
 }
 

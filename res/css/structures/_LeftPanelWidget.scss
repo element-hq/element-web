@@ -24,7 +24,7 @@ limitations under the License.
         align-items: center;
 
         height: 24px;
-        color: $roomlist-header-color;
+        color: $tertiary-content;
         margin-top: 4px;
 
         .mx_LeftPanelWidget_stickable {
@@ -62,7 +62,7 @@ limitations under the License.
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
-                    background-color: $roomlist-header-color;
+                    background-color: $tertiary-content;
                     mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
                 }
 

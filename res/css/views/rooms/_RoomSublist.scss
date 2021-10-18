@@ -48,7 +48,7 @@ limitations under the License.
         // to work correctly.
         padding-bottom: 8px;
         height: 24px;
-        color: $roomlist-header-color;
+        color: $tertiary-content;
 
         .mx_RoomSublist_stickable {
             flex: 1;
@@ -165,7 +165,7 @@ limitations under the License.
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
-                    background-color: $roomlist-header-color;
+                    background-color: $tertiary-content;
                     mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
                 }
 
@@ -236,7 +236,7 @@ limitations under the License.
         cursor: pointer;
         font-size: $font-13px;
         line-height: $font-18px;
-        color: $roomtile-preview-color;
+        color: $secondary-content;
 
         // Update the render() function for RoomSublist if these change
         // Update the ListLayout class for minVisibleTiles if these change.
@@ -256,7 +256,7 @@ limitations under the License.
             mask-position: center;
             mask-size: contain;
             mask-repeat: no-repeat;
-            background: $roomlist-header-color;
+            background: $tertiary-content;
             left: -1px; // adjust for image position
         }
 
@@ -368,7 +368,7 @@ limitations under the License.
         margin-top: 16px;
         margin-bottom: 16px;
         margin-right: 16px; // additional 16px
-        border: 1px solid $roomsublist-divider-color;
+        border: 1px solid $primary-content;
         opacity: 0.1;
     }
 

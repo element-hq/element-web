@@ -52,7 +52,6 @@ $accent-color-50pct: var(--accent-color-50pct); //still needs alpha at .5
 // --timeline-background-color
 $authpage-body-bg-color: var(--timeline-background-color);
 $button-secondary-bg-color: var(--timeline-background-color);
-$field-focused-label-bg-color: var(--timeline-background-color);
 $lightbox-border-color: var(--timeline-background-color);
 $menu-bg-color: var(--timeline-background-color);
 $avatar-bg-color: var(--timeline-background-color);
@@ -103,8 +102,6 @@ $roomheader-color: var(--timeline-text-color);
 // was #232f32
 $authpage-primary-color: var(--timeline-text-color);
 // --roomlist-text-secondary-color
-$roomtile-preview-color: var(--roomlist-text-secondary-color);
-$roomlist-header-color: var(--roomlist-text-secondary-color);
 $roomtile-default-badge-bg-color: var(--roomlist-text-secondary-color);
 
 //
@@ -112,12 +109,10 @@ $roomtile-default-badge-bg-color: var(--roomlist-text-secondary-color);
 $input-darker-bg-color: var(--roomlist-separator-color);
 $panel-divider-color: var(--roomlist-separator-color);// originally #dee1f3, but close enough
 $primary-hairline-color: var(--roomlist-separator-color);// originally #e5e5e5, but close enough
-$roomsublist-divider-color: var(--roomlist-separator-color);
 //
 // --timeline-text-secondary-color
 $authpage-secondary-color: var(--timeline-text-secondary-color);
 $memberstatus-placeholder-color: var(--timeline-text-secondary-color);
-$notice-secondary-color: var(--timeline-text-secondary-color);
 $pinned-color: var(--timeline-text-secondary-color);
 $settings-subsection-fg-color: var(--timeline-text-secondary-color);
 $roomheader-addroom-bg-color: var(--timeline-text-secondary-color);
