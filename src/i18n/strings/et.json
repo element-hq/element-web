@@ -3246,5 +3246,7 @@
     "Threads": "Jutulõngad",
     "Downloading": "Laadin alla",
     "%(count)s reply|one": "%(count)s vastus",
-    "%(count)s reply|other": "%(count)s vastust"
+    "%(count)s reply|other": "%(count)s vastust",
+    "View in room": "Vaata jututoas",
+    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Jätkamiseks sisesta oma turvafraas või <button>kasuta oma turvavõtit</button>."
 }
