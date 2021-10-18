@@ -3247,5 +3247,7 @@
     "Loading new room": "Načítání nové místnosti",
     "Upgrading room": "Upgrade místnosti",
     "Polls (under active development)": "Ankety (v aktivním vývoji)",
-    "Downloading": "Stahování"
+    "Downloading": "Stahování",
+    "%(count)s reply|one": "%(count)s odpověď",
+    "%(count)s reply|other": "%(count)s odpovědí"
 }
