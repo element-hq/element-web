@@ -1,0 +1,65 @@
+on:
+  push:
+    branches:
+      - ci-package
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+          with:
+            node-version: '14'
+            cache: 'yarn'
+      - run: ./scripts/fetch-develop.deps.sh --depth 1
+      - run: yarn install
+      - run: yarn lint:js
+      - run: yarn lint:types
+      - run: yarn lint:style
+  build-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'yarn'
+      - run: yarn install
+      - run: yarn build-stats
+      - uses: actions/upload-artifact@v2
+        with:
+          path: webpack-stats.json
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'yarn'
+      - run: yarn install
+      - run: yarn build:genfiles
+      - run: yarn test
+  i18n:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'yarn'
+      - run: yarn install
+      - run: yarn diff-i18n
+  package:
+    needs: [lint, build-stats, tests, i18n]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'yarn'
+      - run: ./scripts/ci_package.sh
+      - uses: actions/upload-artifact@v2
+        with:
+          path: dist/*.tar.gz
