@@ -3246,5 +3246,8 @@
     "Sending invites... (%(progress)s out of %(count)s)|one": "正在傳送邀請……",
     "Sending invites... (%(progress)s out of %(count)s)|other": "正在傳送邀請……（%(count)s 中的第 %(progress)s 個）",
     "Loading new room": "正在載入新的聊天室",
-    "Upgrading room": "正在升級聊天室"
+    "Upgrading room": "正在升級聊天室",
+    "Downloading": "正在下載",
+    "%(count)s reply|one": "%(count)s 回覆",
+    "%(count)s reply|other": "%(count)s 回覆"
 }
