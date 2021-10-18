@@ -2791,7 +2791,7 @@
     "Move down": "Опустить",
     "Move up": "Поднять",
     "Manage & explore rooms": "Управление и список комнат",
-    "Add space": "Добавить простанство",
+    "Add space": "Добавить пространство",
     "Report": "Сообщить",
     "Collapse reply thread": "Свернуть ответы ветки",
     "Show preview": "Предпросмотр",
@@ -3247,5 +3247,7 @@
     "Disinvite from %(roomName)s": "Отменить приглашение из %(roomName)s",
     "Threads": "Ветки",
     "%(count)s reply|one": "%(count)s ответ",
-    "%(count)s reply|other": "%(count)s ответов"
+    "%(count)s reply|other": "%(count)s ответов",
+    "View in room": "Просмотреть в комнате",
+    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Введите свою секретную фразу или <button> используйте секретный ключ </button> для продолжения."
 }
