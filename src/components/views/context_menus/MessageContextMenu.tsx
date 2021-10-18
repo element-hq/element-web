@@ -38,6 +38,7 @@ import { createRedactEventDialog } from '../dialogs/ConfirmRedactDialog';
 import ShareDialog from '../dialogs/ShareDialog';
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { IPosition, ChevronFace } from '../../structures/ContextMenu';
+import RoomContext, { TimelineRenderingType } from '../../../contexts/RoomContext';
 
 export function canCancel(eventStatus: EventStatus): boolean {
     return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;
@@ -74,6 +75,8 @@ interface IState {
 
 @replaceableComponent("views.context_menus.MessageContextMenu")
 export default class MessageContextMenu extends React.Component<IProps, IState> {
+    static contextType = RoomContext;
+
     state = {
         canRedact: false,
         canPin: false,
@@ -225,6 +228,16 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     private getUnsentReactions(): MatrixEvent[] {
         return this.getReactions(e => e.status === EventStatus.NOT_SENT);
     }
+
+    private viewInRoom = () => {
+        dis.dispatch({
+            action: 'view_room',
+            event_id: this.props.mxEvent.getId(),
+            highlighted: true,
+            room_id: this.props.mxEvent.getRoomId(),
+        });
+        this.closeMenu();
+    };
 
     render() {
         const cli = MatrixClientPeg.get();
@@ -381,8 +394,20 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
+        const { timelineRenderingType } = this.context;
+        const isThread = (
+            timelineRenderingType === TimelineRenderingType.Thread ||
+            timelineRenderingType === TimelineRenderingType.ThreadsList
+        );
+        const isThreadRootEvent = isThread && this.props.mxEvent?.getThread()?.rootEvent === this.props.mxEvent;
+
         const commonItemsList = (
             <IconizedContextMenuOptionList>
+                { isThreadRootEvent && <IconizedContextMenuOption
+                    iconClassName="mx_MessageContextMenu_iconViewInRoom"
+                    label={_t("View in room")}
+                    onClick={this.viewInRoom}
+                /> }
                 { quoteButton }
                 { forwardButton }
                 { pinButton }
@@ -403,7 +428,6 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                 </IconizedContextMenuOptionList>
             );
         }
-
         return (
             <IconizedContextMenu
                 {...this.props}
