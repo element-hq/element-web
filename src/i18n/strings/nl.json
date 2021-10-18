@@ -3201,5 +3201,10 @@
     "Plain Text": "Platte tekst",
     "JSON": "JSON",
     "HTML": "HTML",
-    "Are you sure you want to exit during this export?": "Weet u zeker dat u wilt afsluiten tijdens een export?"
+    "Are you sure you want to exit during this export?": "Weet u zeker dat u wilt afsluiten tijdens een export?",
+    "Creating Space...": "Ruimte aanmaken...",
+    "Fetching data...": "Gegevens ophalen...",
+    "To proceed, please accept the verification request on your other login.": "Om door te gaan, accepteer het verificatieverzoek op uw andere login.",
+    "Waiting for you to verify on your other session…": "Wachten op uw verificatie op uw andere sessie…",
+    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "Wachten op uw verificatie op uw andere sessie, %(deviceName)s (%(deviceId)s)…"
 }
