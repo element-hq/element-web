@@ -19,7 +19,7 @@ import { TagID } from "../models";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t, sanitizeForTranslation } from "../../../languageHandler";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
-import ReplyThread from "../../../components/views/elements/ReplyThread";
+import ReplyChain from "../../../components/views/elements/ReplyChain";
 import { getHtmlText } from "../../../HtmlUtils";
 
 export class MessageEventPreview implements IPreview {
@@ -47,9 +47,9 @@ export class MessageEventPreview implements IPreview {
         if (mRelatesTo && mRelatesTo['m.in_reply_to']) {
             // If this is a reply, get the real reply and use that
             if (hasHtml) {
-                body = (ReplyThread.stripHTMLReply(body) || '').trim();
+                body = (ReplyChain.stripHTMLReply(body) || '').trim();
             } else {
-                body = (ReplyThread.stripPlainReply(body) || '').trim();
+                body = (ReplyChain.stripPlainReply(body) || '').trim();
             }
             if (!body) return null; // invalid event, no preview
         }

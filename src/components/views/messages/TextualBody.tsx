@@ -27,7 +27,7 @@ import { _t } from '../../../languageHandler';
 import * as ContextMenu from '../../structures/ContextMenu';
 import { toRightOf } from '../../structures/ContextMenu';
 import SettingsStore from "../../../settings/SettingsStore";
-import ReplyThread from "../elements/ReplyThread";
+import ReplyChain from "../elements/ReplyChain";
 import { pillifyLinks, unmountPills } from '../../../utils/pillify';
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import { isPermalinkHost } from "../../../utils/permalinks/Permalinks";
@@ -479,7 +479,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         const content = mxEvent.getContent();
 
         // only strip reply if this is the original replying event, edits thereafter do not have the fallback
-        const stripReply = !mxEvent.replacingEvent() && !!ReplyThread.getParentEventId(mxEvent);
+        const stripReply = !mxEvent.replacingEvent() && !!ReplyChain.getParentEventId(mxEvent);
         let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
             disableBigEmoji: content.msgtype === MsgType.Emote
                 || !SettingsStore.getValue<boolean>('TextualBody.enableBigEmoji'),

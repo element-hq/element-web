@@ -46,7 +46,7 @@ const SHOW_EXPAND_QUOTE_PIXELS = 60;
 interface IProps {
     // the latest event in this chain of replies
     parentEv?: MatrixEvent;
-    // called when the ReplyThread contents has changed, including EventTiles thereof
+    // called when the ReplyChain contents has changed, including EventTiles thereof
     onHeightChanged: () => void;
     permalinkCreator: RoomPermalinkCreator;
     // Specifies which layout to use.
@@ -72,8 +72,8 @@ interface IState {
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
 // be low as each event being loaded (after the first) is triggered by an explicit user action.
-@replaceableComponent("views.elements.ReplyThread")
-export default class ReplyThread extends React.Component<IProps, IState> {
+@replaceableComponent("views.elements.ReplyChain")
+export default class ReplyChain extends React.Component<IProps, IState> {
     static contextType = MatrixClientContext;
     private unmounted = false;
     private room: Room;
@@ -253,8 +253,8 @@ export default class ReplyThread extends React.Component<IProps, IState> {
         return mixin;
     }
 
-    public static hasThreadReply(event: MatrixEvent) {
-        return Boolean(ReplyThread.getParentEventId(event));
+    public static hasReply(event: MatrixEvent) {
+        return Boolean(ReplyChain.getParentEventId(event));
     }
 
     componentDidMount() {
@@ -288,7 +288,7 @@ export default class ReplyThread extends React.Component<IProps, IState> {
     private async initialize(): Promise<void> {
         const { parentEv } = this.props;
         // at time of making this component we checked that props.parentEv has a parentEventId
-        const ev = await this.getEvent(ReplyThread.getParentEventId(parentEv));
+        const ev = await this.getEvent(ReplyChain.getParentEventId(parentEv));
 
         if (this.unmounted) return;
 
@@ -306,7 +306,7 @@ export default class ReplyThread extends React.Component<IProps, IState> {
 
     private async getNextEvent(ev: MatrixEvent): Promise<MatrixEvent> {
         try {
-            const inReplyToEventId = ReplyThread.getParentEventId(ev);
+            const inReplyToEventId = ReplyChain.getParentEventId(ev);
             return await this.getEvent(inReplyToEventId);
         } catch (e) {
             return null;
@@ -354,15 +354,15 @@ export default class ReplyThread extends React.Component<IProps, IState> {
         dis.fire(Action.FocusSendMessageComposer);
     };
 
-    private getReplyThreadColorClass(ev: MatrixEvent): string {
-        return getUserNameColorClass(ev.getSender()).replace("Username", "ReplyThread");
+    private getReplyChainColorClass(ev: MatrixEvent): string {
+        return getUserNameColorClass(ev.getSender()).replace("Username", "ReplyChain");
     }
 
     render() {
         let header = null;
 
         if (this.state.err) {
-            header = <blockquote className="mx_ReplyThread mx_ReplyThread_error">
+            header = <blockquote className="mx_ReplyChain mx_ReplyChain_error">
                 {
                     _t('Unable to load event that was replied to, ' +
                         'it either does not exist or you do not have permission to view it.')
@@ -371,10 +371,10 @@ export default class ReplyThread extends React.Component<IProps, IState> {
         } else if (this.state.loadedEv) {
             const ev = this.state.loadedEv;
             const room = this.context.getRoom(ev.getRoomId());
-            header = <blockquote className={`mx_ReplyThread ${this.getReplyThreadColorClass(ev)}`}>
+            header = <blockquote className={`mx_ReplyChain ${this.getReplyChainColorClass(ev)}`}>
                 {
                     _t('<a>In reply to</a> <pill>', {}, {
-                        'a': (sub) => <a onClick={this.onQuoteClick} className="mx_ReplyThread_show">{ sub }</a>,
+                        'a': (sub) => <a onClick={this.onQuoteClick} className="mx_ReplyChain_show">{ sub }</a>,
                         'pill': (
                             <Pill
                                 type={Pill.TYPE_USER_MENTION}
@@ -387,8 +387,8 @@ export default class ReplyThread extends React.Component<IProps, IState> {
                 }
             </blockquote>;
         } else if (this.props.forExport) {
-            const eventId = ReplyThread.getParentEventId(this.props.parentEv);
-            header = <p className="mx_ReplyThread_Export">
+            const eventId = ReplyChain.getParentEventId(this.props.parentEv);
+            header = <p className="mx_ReplyChain_Export">
                 { _t("In reply to <a>this message</a>",
                     {},
                     { a: (sub) => (
@@ -404,12 +404,12 @@ export default class ReplyThread extends React.Component<IProps, IState> {
         const { isQuoteExpanded } = this.props;
         const evTiles = this.state.events.map((ev) => {
             const classname = classNames({
-                'mx_ReplyThread': true,
-                [this.getReplyThreadColorClass(ev)]: true,
+                'mx_ReplyChain': true,
+                [this.getReplyChainColorClass(ev)]: true,
                 // We don't want to add the class if it's undefined, it should only be expanded/collapsed when it's true/false
-                'mx_ReplyThread--expanded': isQuoteExpanded === true,
+                'mx_ReplyChain--expanded': isQuoteExpanded === true,
                 // We don't want to add the class if it's undefined, it should only be expanded/collapsed when it's true/false
-                'mx_ReplyThread--collapsed': isQuoteExpanded === false,
+                'mx_ReplyChain--collapsed': isQuoteExpanded === false,
             });
             return (
                 <blockquote ref={this.blockquoteRef} className={classname} key={ev.getId()}>
@@ -423,7 +423,7 @@ export default class ReplyThread extends React.Component<IProps, IState> {
             );
         });
 
-        return <div className="mx_ReplyThread_wrapper">
+        return <div className="mx_ReplyChain_wrapper">
             <div>{ header }</div>
             <div>{ evTiles }</div>
         </div>;

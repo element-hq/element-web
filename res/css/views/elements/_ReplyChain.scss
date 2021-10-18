@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ReplyThread {
+.mx_ReplyChain {
     margin-top: 0;
     margin-left: 0;
     margin-right: 0;
@@ -23,44 +23,44 @@ limitations under the License.
     border-left: 2px solid $button-bg-color;
     border-radius: 2px;
 
-    .mx_ReplyThread_show {
+    .mx_ReplyChain_show {
         cursor: pointer;
     }
 
-    &.mx_ReplyThread_color1 {
+    &.mx_ReplyChain_color1 {
         border-left-color: $username-variant1-color;
     }
 
-    &.mx_ReplyThread_color2 {
+    &.mx_ReplyChain_color2 {
         border-left-color: $username-variant2-color;
     }
 
-    &.mx_ReplyThread_color3 {
+    &.mx_ReplyChain_color3 {
         border-left-color: $username-variant3-color;
     }
 
-    &.mx_ReplyThread_color4 {
+    &.mx_ReplyChain_color4 {
         border-left-color: $username-variant4-color;
     }
 
-    &.mx_ReplyThread_color5 {
+    &.mx_ReplyChain_color5 {
         border-left-color: $username-variant5-color;
     }
 
-    &.mx_ReplyThread_color6 {
+    &.mx_ReplyChain_color6 {
         border-left-color: $username-variant6-color;
     }
 
-    &.mx_ReplyThread_color7 {
+    &.mx_ReplyChain_color7 {
         border-left-color: $username-variant7-color;
     }
 
-    &.mx_ReplyThread_color8 {
+    &.mx_ReplyChain_color8 {
         border-left-color: $username-variant8-color;
     }
 }
 
-.mx_ReplyThread--expanded {
+.mx_ReplyChain--expanded {
     .mx_EventTile_body {
         display: block;
         overflow-y: scroll !important;

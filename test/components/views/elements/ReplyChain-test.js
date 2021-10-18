@@ -1,8 +1,8 @@
 import "../../../skinned-sdk";
 import * as testUtils from '../../../test-utils';
-import ReplyThread from '../../../../src/components/views/elements/ReplyThread';
+import ReplyChain from '../../../../src/components/views/elements/ReplyChain';
 
-describe("ReplyThread", () => {
+describe("ReplyChain", () => {
     describe('getParentEventId', () => {
         it('retrieves relation reply from unedited event', () => {
             const originalEventWithRelation = testUtils.mkEvent({
@@ -21,7 +21,7 @@ describe("ReplyThread", () => {
                 room: "room_id",
             });
 
-            expect(ReplyThread.getParentEventId(originalEventWithRelation))
+            expect(ReplyChain.getParentEventId(originalEventWithRelation))
                 .toStrictEqual('$qkjmFBTEc0VvfVyzq1CJuh1QZi_xDIgNEFjZ4Pq34og');
         });
 
@@ -65,7 +65,7 @@ describe("ReplyThread", () => {
             originalEventWithRelation.makeReplaced(editEvent);
 
             // The relation should be pulled from the original event
-            expect(ReplyThread.getParentEventId(originalEventWithRelation))
+            expect(ReplyChain.getParentEventId(originalEventWithRelation))
                 .toStrictEqual('$qkjmFBTEc0VvfVyzq1CJuh1QZi_xDIgNEFjZ4Pq34og');
         });
 
@@ -109,7 +109,7 @@ describe("ReplyThread", () => {
             originalEvent.makeReplaced(editEvent);
 
             // The relation should be pulled from the edit event
-            expect(ReplyThread.getParentEventId(originalEvent))
+            expect(ReplyChain.getParentEventId(originalEvent))
                 .toStrictEqual('$qkjmFBTEc0VvfVyzq1CJuh1QZi_xDIgNEFjZ4Pq34og');
         });
 
@@ -158,7 +158,7 @@ describe("ReplyThread", () => {
             originalEventWithRelation.makeReplaced(editEvent);
 
             // The relation should be pulled from the edit event
-            expect(ReplyThread.getParentEventId(originalEventWithRelation)).toStrictEqual('$999');
+            expect(ReplyChain.getParentEventId(originalEventWithRelation)).toStrictEqual('$999');
         });
 
         it('able to clear relation reply from original event by providing empty relation field', () => {
@@ -203,7 +203,7 @@ describe("ReplyThread", () => {
             originalEventWithRelation.makeReplaced(editEvent);
 
             // The relation should be pulled from the edit event
-            expect(ReplyThread.getParentEventId(originalEventWithRelation)).toStrictEqual(undefined);
+            expect(ReplyChain.getParentEventId(originalEventWithRelation)).toStrictEqual(undefined);
         });
     });
 });
