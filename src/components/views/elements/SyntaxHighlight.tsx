@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import { highlightBlock } from 'highlight.js';
+import highlight from 'highlight.js';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
@@ -33,7 +33,7 @@ export default class SyntaxHighlight extends React.Component<IProps> {
 
     // componentDidUpdate used here for reusability
     public componentDidUpdate(): void {
-        if (this.el) highlightBlock(this.el);
+        if (this.el) highlight.highlightElement(this.el);
     }
 
     // call componentDidUpdate because _ref is fired on initial render

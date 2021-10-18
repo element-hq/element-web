@@ -76,7 +76,7 @@
     "focus-visible": "^5.2.0",
     "gfm.css": "^1.1.2",
     "glob-to-regexp": "^0.4.1",
-    "highlight.js": "^10.5.0",
+    "highlight.js": "^11.3.1",
     "html-entities": "^1.4.0",
     "is-ip": "^3.1.0",
     "jszip": "^3.7.0",
@@ -188,7 +188,9 @@
     "@types/react": "17.0.14"
   },
   "jest": {
-    "snapshotSerializers": ["enzyme-to-json/serializer"],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
     "testEnvironment": "./__test-utils__/environment.js",
     "testMatch": [
       "<rootDir>/test/**/*-test.[jt]s?(x)"
