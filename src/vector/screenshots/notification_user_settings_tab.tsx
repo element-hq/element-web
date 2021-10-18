@@ -1,3 +1,4 @@
+import { IPushRules } from "matrix-js-sdk/src/@types/PushRules";
 import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
 import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
 import React, { ReactElement } from 'react';
@@ -5,8 +6,7 @@ import * as sdk from 'matrix-react-sdk';
 
 export function screenshotNotificationUserSettingsTab(): ReactElement {
     MatrixClientPeg.get().getPushRules = async () => {
-        // @ts-expect-error I (andyb) think rewriteDefaultRules has the wrong type sig
-        return PushProcessor.rewriteDefaultRules(pushRulesJson());
+        return PushProcessor.rewriteDefaultRules(pushRulesJson() as IPushRules);
     };
 
     MatrixClientPeg.get().getPushers = async () => {
