@@ -3240,5 +3240,16 @@
     "Disinvite from %(roomName)s": "Annulla l'invito da %(roomName)s",
     "Threads": "Conversazioni",
     "%(count)s reply|one": "%(count)s risposta",
-    "%(count)s reply|other": "%(count)s risposte"
+    "%(count)s reply|other": "%(count)s risposte",
+    "Show:": "Mostra:",
+    "Shows all threads from current room": "Mostra tutte le conversazioni dalla stanza attuale",
+    "All threads": "Tutte le conversazioni",
+    "Shows all threads you’ve participated in": "Mostra tutte le conversazioni a cui hai partecipato",
+    "My threads": "Le mie conversazioni",
+    "View in room": "Vedi nella stanza",
+    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Inserisci la tua frase di sicurezza o <button>usa la tua chiave di sicurezza</button> per continuare.",
+    "Downloading": "Scaricamento",
+    "They won't be able to access whatever you're not an admin of.": "Non potrà più accedere anche dove non sei amministratore.",
+    "Ban them from specific things I'm able to": "Bandiscilo da cose specifiche dove posso farlo",
+    "Unban them from specific things I'm able to": "Riammettilo in cose specifiche dove posso farlo"
 }
