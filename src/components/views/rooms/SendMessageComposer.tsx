@@ -502,7 +502,10 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         this.editorRef.current?.focus();
         this.clearStoredEditorState();
         if (SettingsStore.getValue("scrollToBottomOnMessageSent")) {
-            dis.dispatch({ action: "scroll_to_bottom" });
+            dis.dispatch({
+                action: "scroll_to_bottom",
+                timelineRenderingType: this.context.timelineRenderingType,
+            });
         }
     }
 

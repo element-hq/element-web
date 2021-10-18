@@ -841,7 +841,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             }
 
             case "scroll_to_bottom":
-                this.messagePanel?.jumpToLiveTimeline();
+                if (payload.timelineRenderingType === this.context.timelineRenderingType) {
+                    this.messagePanel?.jumpToLiveTimeline();
+                }
                 break;
         }
     };
