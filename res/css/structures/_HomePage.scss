@@ -56,6 +56,7 @@ limitations under the License.
     }
 
     .mx_HomePage_default_buttons {
+        display: flex;
         margin: 60px auto 0;
         width: fit-content;
 
@@ -63,7 +64,7 @@ limitations under the License.
             padding: 73px 8px 15px; // top: 20px top padding + 40px icon + 13px margin
 
             width: 160px;
-            height: 132px;
+            min-height: 132px;
             margin: 20px;
             position: relative;
             display: inline-block;
