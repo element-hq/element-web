@@ -3246,5 +3246,7 @@
     "Kick them from everything I'm able to": "Kirúgni őket mindenhonnan ahonnan joga van hozzá",
     "Threads": "Üzenetszálak",
     "%(count)s reply|one": "%(count)s válasz",
-    "%(count)s reply|other": "%(count)s válasz"
+    "%(count)s reply|other": "%(count)s válasz",
+    "View in room": "Megjelenítés szobában",
+    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Add meg a Biztonsági jelmondatot vagy <button>használd a Biztonsági Kulcsot</button> a folytatáshoz."
 }
