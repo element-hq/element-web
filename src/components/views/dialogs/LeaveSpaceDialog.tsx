@@ -100,7 +100,7 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
             primaryButton={_t("Leave space")}
             onPrimaryButtonClick={() => onFinished(true, roomsToLeave)}
             hasCancel={true}
-            onCancel={onFinished}
+            onCancel={() => onFinished(false)}
         />
     </BaseDialog>;
 };
