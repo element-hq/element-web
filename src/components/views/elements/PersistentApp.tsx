@@ -25,17 +25,21 @@ import { EventSubscription } from 'fbemitter';
 import AppTile from "./AppTile";
 import { Room } from "matrix-js-sdk/src/models/room";
 
+interface IProps {
+    // none
+}
+
 interface IState {
     roomId: string;
     persistentWidgetId: string;
 }
 
 @replaceableComponent("views.elements.PersistentApp")
-export default class PersistentApp extends React.Component<{}, IState> {
+export default class PersistentApp extends React.Component<IProps, IState> {
     private roomStoreToken: EventSubscription;
 
-    constructor() {
-        super({});
+    constructor(props: IProps) {
+        super(props);
 
         this.state = {
             roomId: RoomViewStore.getRoomId(),
