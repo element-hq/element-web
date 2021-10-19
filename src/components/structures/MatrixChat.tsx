@@ -872,6 +872,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 params.hs_url, params.is_url,
             );
 
+            // If the hs url matches then take the hs name we know locally as it is likely prettier
+            const defaultConfig = SdkConfig.get()["validated_server_config"] as ValidatedServerConfig;
+            if (defaultConfig && defaultConfig.hsUrl === newState.serverConfig.hsUrl) {
+                newState.serverConfig.hsName = defaultConfig.hsName;
+                newState.serverConfig.hsNameIsDifferent = defaultConfig.hsNameIsDifferent;
+                newState.serverConfig.isDefault = defaultConfig.isDefault;
+                newState.serverConfig.isNameResolvable = defaultConfig.isNameResolvable;
+            }
+
             newState.register_client_secret = params.client_secret;
             newState.register_session_id = params.session_id;
             newState.register_id_sid = params.sid;
