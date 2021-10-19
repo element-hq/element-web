@@ -50,6 +50,7 @@ interface IProps {
 interface IState {
     thread?: Thread;
     editState?: EditorStateTransfer;
+    replyToEvent?: MatrixEvent;
 }
 
 @replaceableComponent("structures.ThreadView")
@@ -114,6 +115,13 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 });
                 break;
             }
+            case 'reply_to_event':
+                if (payload.context === TimelineRenderingType.Thread) {
+                    this.setState({
+                        replyToEvent: payload.event,
+                    });
+                }
+                break;
             default:
                 break;
         }
@@ -199,7 +207,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                             rel_type: RelationType.Thread,
                             event_id: this.state.thread.id,
                         }}
-                        showReplyPreview={false}
+                        replyToEvent={this.state.replyToEvent}
                         permalinkCreator={this.props.permalinkCreator}
                         e2eStatus={this.props.e2eStatus}
                         compact={true}

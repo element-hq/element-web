@@ -55,6 +55,7 @@ import UIStore, { UI_EVENTS } from '../../../stores/UIStore';
 import Modal from "../../../Modal";
 import InfoDialog from "../dialogs/InfoDialog";
 import { RelationType } from 'matrix-js-sdk/src/@types/event';
+import RoomContext from '../../../contexts/RoomContext';
 
 let instanceCount = 0;
 const NARROW_MODE_BREAKPOINT = 500;
@@ -227,7 +228,6 @@ interface IProps {
     permalinkCreator: RoomPermalinkCreator;
     replyToEvent?: MatrixEvent;
     relation?: IEventRelation;
-    showReplyPreview?: boolean;
     e2eStatus?: E2EStatus;
     compact?: boolean;
 }
@@ -252,8 +252,9 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     private ref: React.RefObject<HTMLDivElement> = createRef();
     private instanceId: number;
 
+    public static contextType = RoomContext;
+
     static defaultProps = {
-        showReplyPreview: true,
         compact: false,
     };
 
@@ -294,7 +295,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     };
 
     private onAction = (payload: ActionPayload) => {
-        if (payload.action === 'reply_to_event') {
+        if (payload.action === 'reply_to_event' && payload.context === this.context.timelineRenderingType) {
             // add a timeout for the reply preview to be rendered, so
             // that the ScrollPanel listening to the resizeNotifier can
             // correctly measure it's new height and scroll down to keep
@@ -633,9 +634,9 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             <div className={classes} ref={this.ref}>
                 { recordingTooltip }
                 <div className="mx_MessageComposer_wrapper">
-                    { this.props.showReplyPreview && (
-                        <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
-                    ) }
+                    <ReplyPreview
+                        replyToEvent={this.props.replyToEvent}
+                        permalinkCreator={this.props.permalinkCreator} />
                     <div className="mx_MessageComposer_row">
                         { controls }
                         { this.renderButtons(menuPosition) }

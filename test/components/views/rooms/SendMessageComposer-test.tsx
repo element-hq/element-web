@@ -216,6 +216,7 @@ describe('<SendMessageComposer/>', () => {
             expect(spyDispatcher).toHaveBeenCalledWith({
                 action: "reply_to_event",
                 event: mockEvent,
+                context: TimelineRenderingType.Room,
             });
 
             // now try with localStorage wiped out
@@ -277,6 +278,7 @@ describe('<SendMessageComposer/>', () => {
             expect(spyDispatcher).toHaveBeenCalledWith({
                 action: "reply_to_event",
                 event: null,
+                context: TimelineRenderingType.Room,
             });
 
             expect(wrapper.text()).toBe("");
