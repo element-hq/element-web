@@ -3251,5 +3251,6 @@
     "%(count)s reply|one": "%(count)s odpověď",
     "%(count)s reply|other": "%(count)s odpovědí",
     "View in room": "Zobrazit v místnosti",
-    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Zadejte bezpečnostní frázi nebo <button>použijte bezpečnostní klíč</button> pro pokračování."
+    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Zadejte bezpečnostní frázi nebo <button>použijte bezpečnostní klíč</button> pro pokračování.",
+    "What projects are your team working on?": "Na jakých projektech váš tým pracuje?"
 }
