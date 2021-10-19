@@ -54,7 +54,7 @@ jobs:
       - run: yarn install
       - run: yarn diff-i18n
   package:
-    needs: [lint, build-stats, tests, i18n]
+    needs: [lint, build, tests, i18n]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
