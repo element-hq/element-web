@@ -690,8 +690,7 @@ $hover-select-border: 4px;
     color: $secondary-content;
     box-sizing: border-box;
     justify-content: flex-start;
-    margin-right: 110px;
-    margin-left: 64px;
+    clear: both;
 
     &:hover, &-active {
         cursor: pointer;
