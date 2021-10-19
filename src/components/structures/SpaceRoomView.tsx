@@ -128,7 +128,7 @@ const useMyRoomMembership = (room: Room) => {
 };
 
 const SpaceInfo = ({ space }: { space: Room }) => {
-    const summary = useAsyncMemo(() => {
+    const summary = useAsyncMemo(async () => {
         if (space.getMyMembership() !== "invite") return;
         try {
             return space.client.getRoomSummary(space.roomId);

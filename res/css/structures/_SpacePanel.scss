@@ -146,13 +146,6 @@ $activeBorderColor: $secondary-content;
             padding: 4px;
         }
 
-        &:not(.mx_SpaceButton_narrow) {
-            .mx_SpaceButton_selectionWrapper {
-                width: 100%;
-                overflow: hidden;
-            }
-        }
-
         .mx_SpaceButton_name {
             flex: 1;
             margin-left: 8px;
