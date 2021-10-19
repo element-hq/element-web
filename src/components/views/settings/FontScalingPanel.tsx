@@ -31,19 +31,12 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 interface IProps {
 }
 
-export interface CustomThemeMessage {
-    isError: boolean;
-    text: string;
-}
-
 interface IState {
     // String displaying the current selected fontSize.
     // Needs to be string for things like '17.' without
     // trailing 0s.
     fontSize: string;
     useCustomFontSize: boolean;
-    useSystemFont: boolean;
-    systemFont: string;
     layout: Layout;
     // User profile data for the message preview
     userId?: string;
@@ -63,8 +56,6 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
         this.state = {
             fontSize: (SettingsStore.getValue("baseFontSize", null) + FontWatcher.SIZE_DIFF).toString(),
             useCustomFontSize: SettingsStore.getValue("useCustomFontSize"),
-            useSystemFont: SettingsStore.getValue("useSystemFont"),
-            systemFont: SettingsStore.getValue("systemFont"),
             layout: SettingsStore.getValue("layout"),
             userId: null,
             displayName: null,
