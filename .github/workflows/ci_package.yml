@@ -16,7 +16,7 @@ jobs:
       - run: yarn lint:js
       - run: yarn lint:types
       - run: yarn lint:style
-  build-stats:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -24,6 +24,7 @@ jobs:
         with:
           node-version: '14'
           cache: 'yarn'
+      - run: ./scripts/fetch-develop.deps.sh --depth 1
       - run: yarn install
       - run: yarn build-stats
       - uses: actions/upload-artifact@v2
@@ -37,6 +38,7 @@ jobs:
         with:
           node-version: '14'
           cache: 'yarn'
+      - run: ./scripts/fetch-develop.deps.sh --depth 1
       - run: yarn install
       - run: yarn build:genfiles
       - run: yarn test
@@ -48,6 +50,7 @@ jobs:
         with:
           node-version: '14'
           cache: 'yarn'
+      - run: ./scripts/fetch-develop.deps.sh --depth 1
       - run: yarn install
       - run: yarn diff-i18n
   package:
@@ -59,6 +62,8 @@ jobs:
         with:
           node-version: '14'
           cache: 'yarn'
+      - run: ./scripts/fetch-develop.deps.sh --depth 1
+      - run: yarn install
       - run: ./scripts/ci_package.sh
       - uses: actions/upload-artifact@v2
         with:
