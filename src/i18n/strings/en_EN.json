@@ -3056,6 +3056,7 @@
     "Registration has been disabled on this homeserver.": "Registration has been disabled on this homeserver.",
     "This server does not support authentication with a phone number.": "This server does not support authentication with a phone number.",
     "That username already exists, please try another.": "That username already exists, please try another.",
+    "That e-mail address is already in use.": "That e-mail address is already in use.",
     "Continue with %(ssoButtons)s": "Continue with %(ssoButtons)s",
     "%(ssoButtons)s Or %(usernamePassword)s": "%(ssoButtons)s Or %(usernamePassword)s",
     "Already have an account? <a>Sign in here</a>": "Already have an account? <a>Sign in here</a>",
