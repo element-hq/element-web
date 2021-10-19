@@ -34,6 +34,7 @@ For a good example, see https://develop.element.io/config.json.
    * `on_welcome_page`: When `true` (default `false`), Element will automatically redirect all unauthenticated
      users to the SSO to log in if the user lands on the welcome page or no specific page. For example,
      https://app.element.io/#/welcome and https://app.element.io would redirect if set up to use this option.
+     This can be useful to maintain guest experience until an account is needed.
 1. `features`: Lookup of optional features that may be force-enabled (`true`) or force-disabled (`false`).
    When features are not listed here, their defaults will be used, and users can turn them on/off if `showLabsSettings`
    allows them to. The available optional experimental features vary from release to release and are
