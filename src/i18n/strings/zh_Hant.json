@@ -3249,5 +3249,7 @@
     "Upgrading room": "正在升級聊天室",
     "Downloading": "正在下載",
     "%(count)s reply|one": "%(count)s 回覆",
-    "%(count)s reply|other": "%(count)s 回覆"
+    "%(count)s reply|other": "%(count)s 回覆",
+    "View in room": "在聊天室中檢視",
+    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "輸入您的安全密語或<button>使用您的安全金鑰</button>以繼續。"
 }
