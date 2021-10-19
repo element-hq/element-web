@@ -116,7 +116,7 @@ const EmojiButton: React.FC<IEmojiButtonProps> = ({ addEmoji, menuPosition, narr
             className={className}
             onClick={openMenu}
             title={!narrowMode && _t('Emoji picker')}
-            label={narrowMode && _t("Add emoji")}
+            label={narrowMode ? _t("Add emoji") : null}
         />
 
         { contextMenu }
@@ -485,13 +485,14 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                     className="mx_MessageComposer_button mx_MessageComposer_stickers"
                     onClick={() => this.showStickers(!this.state.showStickers)}
                     title={title}
-                    label={this.state.narrowMode && _t("Send a sticker")}
+                    label={this.state.narrowMode ? _t("Send a sticker") : null}
                 />,
             );
         }
         if (!this.state.haveRecording && !this.state.narrowMode) {
             buttons.push(
                 <AccessibleTooltipButton
+                    key="voice_message_send"
                     className="mx_MessageComposer_button mx_MessageComposer_voiceMessage"
                     onClick={() => this.voiceRecordingButton.current?.onRecordStartEndClick()}
                     title={_t("Send voice message")}
@@ -615,7 +616,9 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 room={this.props.room}
                 showStickers={this.state.showStickers}
                 setShowStickers={this.showStickers}
-                menuPosition={menuPosition} />,
+                menuPosition={menuPosition}
+                key="stickers"
+            />,
         );
 
         const showSendButton = !this.state.isComposerEmpty || this.state.haveRecording;
