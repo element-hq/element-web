@@ -3247,5 +3247,6 @@
     "Downloading": "下载中",
     "%(count)s reply|one": "%(count)s 条回复",
     "%(count)s reply|other": "%(count)s 条回复",
-    "View in room": "在聊天室内查看"
+    "View in room": "在聊天室内查看",
+    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "输入安全短语或<button>使用安全密钥</button>以继续。"
 }
