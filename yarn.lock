@@ -1308,6 +1308,7 @@
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.3.tgz":
   version "3.2.3"
+  uid cc332fdd25c08ef0e40f4d33fc3f822a0f98b6f4
   resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.3.tgz#cc332fdd25c08ef0e40f4d33fc3f822a0f98b6f4"
 
 "@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3":
@@ -2052,10 +2053,10 @@ ajv@^8.0.1:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-allchange@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/allchange/-/allchange-1.0.3.tgz#f8814ddfbcfe39a01bf4570778ee7e6d9ff0ebb3"
-  integrity sha512-UZkfz5SkNEMFQFLr8vZcXHaph2EbJxmkVNF5Nt6D9RIa5pmAar7oAMfNdda714jg7IQijvaFty5PYazXLgd5WA==
+allchange@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/allchange/-/allchange-1.0.4.tgz#c540d9344e7e5bf4187be823ad5d858bed365d82"
+  integrity sha512-9V2PPRj2UtkqFIx1DFPS5ubadTpu59fMrIteA3JUVpv6UrVCFeFRELWrOwUBHlQmsG4ud82ru34k8yJ3VKeqHg==
   dependencies:
     "@actions/core" "^1.4.0"
     "@actions/github" "^5.0.0"
