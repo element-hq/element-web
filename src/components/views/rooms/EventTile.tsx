@@ -1335,8 +1335,8 @@ export default class EventTile extends React.Component<IProps, IState> {
                             { keyRequestInfo }
                             { actionBar }
                             { this.props.layout === Layout.IRC && (reactionsRow) }
-                            { this.renderThreadInfo() }
                         </div>
+                        { this.renderThreadInfo() }
                         { this.props.layout !== Layout.IRC && (reactionsRow) }
                         { msgOption }
                     </>)
