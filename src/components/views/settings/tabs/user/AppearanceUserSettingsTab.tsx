@@ -22,17 +22,13 @@ import { MatrixClientPeg } from '../../../../../MatrixClientPeg';
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { enumerateThemes } from "../../../../../theme";
 import ThemeWatcher from "../../../../../settings/watchers/ThemeWatcher";
-import Slider from "../../../elements/Slider";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
-import { FontWatcher } from "../../../../../settings/watchers/FontWatcher";
 import { RecheckThemePayload } from '../../../../../dispatcher/payloads/RecheckThemePayload';
 import { Action } from '../../../../../dispatcher/actions';
-import { IValidationResult, IFieldState } from '../../../elements/Validation';
 import StyledCheckbox from '../../../elements/StyledCheckbox';
 import SettingsFlag from '../../../elements/SettingsFlag';
 import Field from '../../../elements/Field';
-import EventTilePreview from '../../../elements/EventTilePreview';
 import StyledRadioGroup from "../../../elements/StyledRadioGroup";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { UIFeature } from "../../../../../settings/UIFeature";
@@ -42,6 +38,7 @@ import { compare } from "../../../../../utils/strings";
 import LayoutSwitcher from "../../LayoutSwitcher";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import FontScalingPanel from '../../FontScalingPanel';
 
 interface IProps {
 }
@@ -57,13 +54,8 @@ export interface CustomThemeMessage {
 }
 
 interface IState extends IThemeState {
-    // String displaying the current selected fontSize.
-    // Needs to be string for things like '17.' without
-    // trailing 0s.
-    fontSize: string;
     customThemeUrl: string;
     customThemeMessage: CustomThemeMessage;
-    useCustomFontSize: boolean;
     useSystemFont: boolean;
     systemFont: string;
     showAdvanced: boolean;
@@ -85,11 +77,9 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         super(props);
 
         this.state = {
-            fontSize: (SettingsStore.getValue("baseFontSize", null) + FontWatcher.SIZE_DIFF).toString(),
             ...this.calculateThemeState(),
             customThemeUrl: "",
             customThemeMessage: { isError: false, text: "" },
-            useCustomFontSize: SettingsStore.getValue("useCustomFontSize"),
             useSystemFont: SettingsStore.getValue("useSystemFont"),
             systemFont: SettingsStore.getValue("systemFont"),
             showAdvanced: false,
@@ -175,37 +165,6 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         this.setState({ useSystemTheme: checked });
         SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, checked);
         dis.dispatch<RecheckThemePayload>({ action: Action.RecheckTheme });
-    };
-
-    private onFontSizeChanged = (size: number): void => {
-        this.setState({ fontSize: size.toString() });
-        SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, size - FontWatcher.SIZE_DIFF);
-    };
-
-    private onValidateFontSize = async ({ value }: Pick<IFieldState, "value">): Promise<IValidationResult> => {
-        const parsedSize = parseFloat(value);
-        const min = FontWatcher.MIN_SIZE + FontWatcher.SIZE_DIFF;
-        const max = FontWatcher.MAX_SIZE + FontWatcher.SIZE_DIFF;
-
-        if (isNaN(parsedSize)) {
-            return { valid: false, feedback: _t("Size must be a number") };
-        }
-
-        if (!(min <= parsedSize && parsedSize <= max)) {
-            return {
-                valid: false,
-                feedback: _t('Custom font size can only be between %(min)s pt and %(max)s pt', { min, max }),
-            };
-        }
-
-        SettingsStore.setValue(
-            "baseFontSize",
-            null,
-            SettingLevel.DEVICE,
-            parseInt(value, 10) - FontWatcher.SIZE_DIFF,
-        );
-
-        return { valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', { min, max }) };
     };
 
     private onAddCustomTheme = async (): Promise<void> => {
@@ -337,52 +296,6 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         );
     }
 
-    private renderFontSection() {
-        return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
-
-            <span className="mx_SettingsTab_subheading">{ _t("Font size") }</span>
-            <EventTilePreview
-                className="mx_AppearanceUserSettingsTab_fontSlider_preview"
-                message={this.MESSAGE_PREVIEW_TEXT}
-                layout={this.state.layout}
-                userId={this.state.userId}
-                displayName={this.state.displayName}
-                avatarUrl={this.state.avatarUrl}
-            />
-            <div className="mx_AppearanceUserSettingsTab_fontSlider">
-                <div className="mx_AppearanceUserSettingsTab_fontSlider_smallText">Aa</div>
-                <Slider
-                    values={[13, 14, 15, 16, 18]}
-                    value={parseInt(this.state.fontSize, 10)}
-                    onSelectionChange={this.onFontSizeChanged}
-                    displayFunc={_ => ""}
-                    disabled={this.state.useCustomFontSize}
-                />
-                <div className="mx_AppearanceUserSettingsTab_fontSlider_largeText">Aa</div>
-            </div>
-
-            <SettingsFlag
-                name="useCustomFontSize"
-                level={SettingLevel.ACCOUNT}
-                onChange={(checked) => this.setState({ useCustomFontSize: checked })}
-                useCheckbox={true}
-            />
-
-            <Field
-                type="number"
-                label={_t("Font size")}
-                autoComplete="off"
-                placeholder={this.state.fontSize.toString()}
-                value={this.state.fontSize.toString()}
-                id="font_size_field"
-                onValidate={this.onValidateFontSize}
-                onChange={(value) => this.setState({ fontSize: value.target.value })}
-                disabled={!this.state.useCustomFontSize}
-                className="mx_SettingsTab_customFontSizeField"
-            />
-        </div>;
-    }
-
     private renderAdvancedSection() {
         if (!SettingsStore.getValue(UIFeature.AdvancedSettings)) return null;
 
@@ -471,7 +384,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 </div>
                 { this.renderThemeSection() }
                 { layoutSection }
-                { this.renderFontSection() }
+                <FontScalingPanel />
                 { this.renderAdvancedSection() }
             </div>
         );

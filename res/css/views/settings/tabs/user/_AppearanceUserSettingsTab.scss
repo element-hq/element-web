@@ -14,63 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_AppearanceUserSettingsTab_fontSlider,
-.mx_AppearanceUserSettingsTab_fontSlider_preview {
-    @mixin mx_Settings_fullWidthField;
-}
-
 .mx_AppearanceUserSettingsTab .mx_Field {
     width: 256px;
-}
-
-.mx_AppearanceUserSettingsTab_fontScaling {
-    color: $primary-content;
-}
-
-.mx_AppearanceUserSettingsTab_fontSlider {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 15px;
-    background: rgba($appearance-tab-border-color, 0.2);
-    border-radius: 10px;
-    font-size: 10px;
-    margin-top: 24px;
-    margin-bottom: 24px;
-}
-
-.mx_AppearanceUserSettingsTab_fontSlider_preview {
-    border: 1px solid $appearance-tab-border-color;
-    border-radius: 10px;
-    padding: 0 16px 9px 16px;
-    pointer-events: none;
-    display: flow-root;
-
-    .mx_EventTile[data-layout=bubble] {
-        margin-top: 30px;
-    }
-
-    .mx_EventTile_msgOption {
-        display: none;
-    }
-
-    &.mx_IRCLayout {
-        padding-top: 9px;
-    }
-}
-
-.mx_AppearanceUserSettingsTab_fontSlider_smallText {
-    font-size: 15px;
-    padding-right: 20px;
-    padding-left: 5px;
-    font-weight: 500;
-}
-
-.mx_AppearanceUserSettingsTab_fontSlider_largeText {
-    font-size: 18px;
-    padding-left: 20px;
-    padding-right: 5px;
-    font-weight: 500;
 }
 
 .mx_AppearanceUserSettingsTab {
@@ -149,10 +94,6 @@ limitations under the License.
             }
         }
     }
-}
-
-.mx_SettingsTab_customFontSizeField {
-    margin-left: calc($font-16px + 10px);
 }
 
 .mx_AppearanceUserSettingsTab_Advanced {
