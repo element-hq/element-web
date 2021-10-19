@@ -125,9 +125,11 @@ export const SpaceButton: React.FC<IButtonProps> = ({
         >
             { children }
             <div className="mx_SpaceButton_selectionWrapper">
-                { avatar }
+                <div className="mx_SpaceButton_avatarWrapper">
+                    { avatar }
+                    { notifBadge }
+                </div>
                 { !isNarrow && <span className="mx_SpaceButton_name">{ label }</span> }
-                { notifBadge }
 
                 { ContextMenuComponent && <ContextMenuTooltipButton
                     className="mx_SpaceButton_menuButton"
