@@ -3246,5 +3246,7 @@
     "Sending invites... (%(progress)s out of %(count)s)|other": "Enviando convites... (%(progress)s de %(count)s)",
     "Loading new room": "Cargando nova sala",
     "Upgrading room": "Actualizando sala",
-    "Polls (under active development)": "Enquisas (en desenvolvemento activo)"
+    "Polls (under active development)": "Enquisas (en desenvolvemento activo)",
+    "View in room": "Ver na sala",
+    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Escribe a túa Frase de Seguridade ou <button>usa a túa Chave de Seguridade</button> para continuar."
 }
