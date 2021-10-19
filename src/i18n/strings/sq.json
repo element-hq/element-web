@@ -3243,5 +3243,8 @@
     "Disinvite from %(roomName)s": "Hiqja ftesën për %(roomName)s",
     "Threads": "Rrjedha",
     "%(count)s reply|one": "%(count)s përgjigje",
-    "%(count)s reply|other": "%(count)s përgjigje"
+    "%(count)s reply|other": "%(count)s përgjigje",
+    "What projects are your team working on?": "Me cilat projekte po merret ekipi juaj?",
+    "View in room": "Shiheni në dhomë",
+    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Që të vazhdohet, jepni Frazën tuaj të Sigurisë, ose <button>përdorni Kyçin tuaj të Sigurisë</button>."
 }
