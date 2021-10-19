@@ -23,9 +23,15 @@ import _FontScalingPanel from '../../../../src/components/views/settings/FontSca
 
 const FontScalingPanel = TestUtils.wrapInMatrixClientContext(_FontScalingPanel);
 
-import * as randomstring from "matrix-js-sdk/src/randomstring";
-// @ts-expect-error: override random function to make results predictable
-randomstring.randomString = () => "abdefghi";
+// Fake random strings to give a predictable snapshot
+jest.mock(
+    'matrix-js-sdk/src/randomstring',
+    () => {
+        return {
+            randomString: () => "abdefghi",
+        };
+    },
+);
 
 describe('FontScalingPanel', () => {
     it('renders the font scaling UI', () => {
