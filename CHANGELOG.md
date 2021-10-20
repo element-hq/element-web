@@ -1,3 +1,9 @@
+Changes in [3.33.0-rc.2](https://github.com/vector-im/element-desktop/releases/tag/v3.33.0-rc.2) (2021-10-20)
+=============================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix conflicting CSS on syntax highlighted blocks ([\#6991](https://github.com/matrix-org/matrix-react-sdk/pull/6991)). Fixes vector-im/element-web#19445
+
 Changes in [3.33.0-rc.1](https://github.com/vector-im/element-desktop/releases/tag/v3.33.0-rc.1) (2021-10-19)
 =============================================================================================================
 
