@@ -560,6 +560,9 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 
     private get pendingEditItem(): string | undefined {
+        if (!this.props.room) {
+            return undefined;
+        }
         try {
             return localStorage.getItem(`mx_edit_room_${this.props.room.roomId}_${this.context.timelineRenderingType}`);
         } catch (err) {

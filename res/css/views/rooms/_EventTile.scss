@@ -24,6 +24,11 @@ $left-gutter: 64px;
     font-size: $font-14px;
     position: relative;
 
+    .mx_ThreadInfo {
+        margin-right: 110px;
+        margin-left: 64px;
+    }
+
     &.mx_EventTile_info {
         padding-top: 1px;
     }
@@ -693,7 +698,7 @@ $left-gutter: 64px;
     justify-content: flex-start;
     clear: both;
 
-    &:hover, &-active {
+    &:hover {
         cursor: pointer;
         border: 1px solid $quinary-content;
         padding-top: 7px;
@@ -784,6 +789,12 @@ $left-gutter: 64px;
         .mx_MessageTimestamp {
             left: auto;
             right: 0;
+        }
+
+        .mx_ReactionsRow {
+            order: 999;
+            padding-left: 0;
+            padding-right: 0;
         }
     }
 

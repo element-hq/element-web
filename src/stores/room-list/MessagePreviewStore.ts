@@ -27,7 +27,7 @@ import { CallHangupEvent } from "./previews/CallHangupEvent";
 import { StickerEventPreview } from "./previews/StickerEventPreview";
 import { ReactionEventPreview } from "./previews/ReactionEventPreview";
 import { UPDATE_EVENT } from "../AsyncStore";
-import { Thread } from "matrix-js-sdk/src/models/thread";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 // Emitted event for when a room's preview has changed. First argument will the room for which
 // the change happened.
@@ -109,12 +109,11 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
         return previews.get(inTagId);
     }
 
-    public generateThreadPreview(thread: Thread): string {
-        const lastEvent = thread.replyToEvent;
-        const previewDef = PREVIEWS[lastEvent.getType()];
+    public generatePreviewForEvent(event: MatrixEvent): string {
+        const previewDef = PREVIEWS[event.getType()];
         // TODO: Handle case where we don't have
         if (!previewDef) return '';
-        const previewText = previewDef.previewer.getTextFor(lastEvent, null, true);
+        const previewText = previewDef.previewer.getTextFor(event, null, true);
         return previewText ?? '';
     }
 
