@@ -3252,5 +3252,9 @@
     "%(count)s reply|other": "%(count)s odpovědí",
     "View in room": "Zobrazit v místnosti",
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Zadejte bezpečnostní frázi nebo <button>použijte bezpečnostní klíč</button> pro pokračování.",
-    "What projects are your team working on?": "Na jakých projektech váš tým pracuje?"
+    "What projects are your team working on?": "Na jakých projektech váš tým pracuje?",
+    "That e-mail address is already in use.": "Tato e-mailová adresa je již použita.",
+    "The email address doesn't appear to be valid.": "E-mailová adresa se nezdá být platná.",
+    "See room timeline (devtools)": "Viz časová osa místnosti (devtools)",
+    "Developer mode": "Vývojářský režim"
 }
