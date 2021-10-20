@@ -1,5 +1,7 @@
 import { getVectorConfig } from '../getconfig';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 function onBackToElementClick(): void {
     // Cookie should expire in 4 hours
     document.cookie = 'element_mobile_redirect_to_guide=false;path=/;max-age=14400';
@@ -76,7 +78,7 @@ async function initPage(): Promise<void> {
                 }
             }
         } catch (e) {
-            console.error(e);
+            logger.error(e);
             return renderConfigError("Unable to fetch homeserver configuration");
         }
     }

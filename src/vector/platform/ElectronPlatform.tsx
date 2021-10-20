@@ -55,6 +55,8 @@ import { IMatrixProfile, IEventWithRoomId as IMatrixEvent, IResultRoomEvents } f
 
 import VectorBasePlatform from './VectorBasePlatform';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const electron = window.electron;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
 
@@ -124,12 +126,12 @@ class SeshatIndexManager extends BaseEventIndexManager {
 
     private onIpcReply = (ev: {}, payload: IPCPayload) => {
         if (payload.id === undefined) {
-            console.warn("Ignoring IPC reply with no ID");
+            logger.warn("Ignoring IPC reply with no ID");
             return;
         }
 
         if (this.pendingIpcCalls[payload.id] === undefined) {
-            console.warn("Unknown IPC payload ID: " + payload.id);
+            logger.warn("Unknown IPC payload ID: " + payload.id);
             return;
         }
 
@@ -245,7 +247,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
         // try to flush the rageshake logs to indexeddb before quit.
         electron.on('before-quit', function() {
-            console.log('element-desktop closing');
+            logger.log('element-desktop closing');
             rageshake.flush();
         });
 
@@ -489,10 +491,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     reload() {
-        // we used to remote to the main process to get it to
-        // reload the webcontents, but in practice this is unnecessary:
-        // the normal way works fine.
-        window.location.reload(false);
+        window.location.reload();
     }
 
     private async ipcCall(name: string, ...args: any[]): Promise<any> {
@@ -506,12 +505,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     private onIpcReply = (ev, payload) => {
         if (payload.id === undefined) {
-            console.warn("Ignoring IPC reply with no ID");
+            logger.warn("Ignoring IPC reply with no ID");
             return;
         }
 
         if (this.pendingIpcCalls[payload.id] === undefined) {
-            console.warn("Unknown IPC payload ID: " + payload.id);
+            logger.warn("Unknown IPC payload ID: " + payload.id);
             return;
         }
 
@@ -534,8 +533,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     setSpellCheckLanguages(preferredLangs: string[]) {
         this.ipcCall('setSpellCheckLanguages', preferredLangs).catch(error => {
-            console.log("Failed to send setSpellCheckLanguages IPC to Electron");
-            console.error(error);
+            logger.log("Failed to send setSpellCheckLanguages IPC to Electron");
+            logger.error(error);
         });
     }
 
