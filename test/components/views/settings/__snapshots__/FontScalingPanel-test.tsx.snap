@@ -83,10 +83,16 @@ exports[`FontScalingPanel renders the font scaling UI 1`] = `
                     className="mx_Slider_selectionDot"
                     style={
                       Object {
-                        "left": "calc(-0.55em + 50%)",
+                        "left": "calc(-1.195em + 50%)",
                       }
                     }
-                  />
+                  >
+                    <div
+                      className="mx_Slider_selectionText"
+                    >
+                      15
+                    </div>
+                  </div>
                   <hr
                     style={
                       Object {

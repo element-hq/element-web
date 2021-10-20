@@ -27,6 +27,9 @@ $EventTile_e2e_state_indicator_width: 4px;
 $MessageTimestamp_width: 46px; /* 8 + 30 (avatar) + 8 */
 $MessageTimestamp_width_hover: calc($MessageTimestamp_width - 2 * $EventTile_e2e_state_indicator_width);
 
+$slider-dot-size: 1em;
+$slider-selection-dot-size: 2.4em;
+
 :root {
     font-size: 10px;
 
