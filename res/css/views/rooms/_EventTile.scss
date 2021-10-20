@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 $left-gutter: 64px;
-$hover-select-border: 4px;
 
 .mx_EventTile:not([data-layout=bubble]) {
     max-width: 100%;
@@ -110,15 +109,15 @@ $hover-select-border: 4px;
     }
 
     &.mx_EventTile_selected > div > a > .mx_MessageTimestamp {
-        left: calc(-$hover-select-border);
+        left: calc(-$selected-message-border-width);
     }
 
     /* this is used for the tile for the event which is selected via the URL.
      * TODO: ultimately we probably want some transition on here.
      */
     &.mx_EventTile_selected > .mx_EventTile_line {
-        border-left: $accent-color 4px solid;
-        padding-left: calc($left-gutter - $hover-select-border);
+        border-left: $accent-color $selected-message-border-width solid;
+        padding-left: calc($left-gutter - $selected-message-border-width);
         background-color: $event-selected-color;
     }
 
@@ -132,7 +131,7 @@ $hover-select-border: 4px;
     }
 
     &.mx_EventTile_selected.mx_EventTile_info .mx_EventTile_line {
-        padding-left: calc($left-gutter + 18px - $hover-select-border);
+        padding-left: calc($left-gutter + 18px - $selected-message-border-width);
     }
 
     &.mx_EventTile:hover .mx_EventTile_line,
@@ -208,28 +207,34 @@ $hover-select-border: 4px;
         overflow-y: hidden;
     }
 
+    &.mx_EventTile_selected .mx_EventTile_line,
+    &:hover .mx_EventTile_line {
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+
     &:hover.mx_EventTile_verified .mx_EventTile_line,
     &:hover.mx_EventTile_unverified .mx_EventTile_line,
     &:hover.mx_EventTile_unknown .mx_EventTile_line {
-        padding-left: calc($left-gutter - $hover-select-border);
+        padding-left: calc($left-gutter - $selected-message-border-width);
     }
 
     &:hover.mx_EventTile_verified .mx_EventTile_line {
-        border-left: $e2e-verified-color $EventTile_e2e_state_indicator_width solid;
+        border-left: $e2e-verified-color $selected-message-border-width solid;
     }
 
     &:hover.mx_EventTile_unverified .mx_EventTile_line {
-        border-left: $e2e-unverified-color $EventTile_e2e_state_indicator_width solid;
+        border-left: $e2e-unverified-color $selected-message-border-width solid;
     }
 
     &:hover.mx_EventTile_unknown .mx_EventTile_line {
-        border-left: $e2e-unknown-color $EventTile_e2e_state_indicator_width solid;
+        border-left: $e2e-unknown-color $selected-message-border-width solid;
     }
 
     &:hover.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
     &:hover.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
     &:hover.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
-        padding-left: calc($left-gutter + 18px - $hover-select-border);
+        padding-left: calc($left-gutter + 18px - $selected-message-border-width);
     }
 
     /* End to end encryption stuff */
@@ -241,7 +246,7 @@ $hover-select-border: 4px;
     &:hover.mx_EventTile_verified .mx_EventTile_line > a > .mx_MessageTimestamp,
     &:hover.mx_EventTile_unverified .mx_EventTile_line > a > .mx_MessageTimestamp,
     &:hover.mx_EventTile_unknown .mx_EventTile_line > a > .mx_MessageTimestamp {
-        left: calc(-$hover-select-border);
+        left: calc(-$selected-message-border-width);
     }
 
     // Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
