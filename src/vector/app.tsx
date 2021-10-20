@@ -31,6 +31,7 @@ import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
 import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
 import type MatrixChatType from "matrix-react-sdk/src/components/structures/MatrixChat";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { parseQs, parseQsFromFragment } from './url_utils';
 import VectorBasePlatform from "./platform/VectorBasePlatform";
@@ -38,7 +39,9 @@ import { createClient } from "matrix-js-sdk/src/matrix";
 
 let lastLocationHashSet: string = null;
 
-console.log(`Application is running in ${process.env.NODE_ENV} mode`);
+logger.log(`Application is running in ${process.env.NODE_ENV} mode`);
+
+window.matrixLogger = logger;
 
 // Parse the given window.location and return parameters that can be used when calling
 // MatrixChat.showScreen(screen, params)
@@ -55,7 +58,7 @@ function getScreenFromLocation(location: Location) {
 function routeUrl(location: Location) {
     if (!window.matrixChat) return;
 
-    console.log("Routing URL ", location.href);
+    logger.log("Routing URL ", location.href);
     const s = getScreenFromLocation(location);
     (window.matrixChat as MatrixChatType).showScreen(s.screen, s.params);
 }
@@ -71,7 +74,7 @@ function onHashChange(ev: HashChangeEvent) {
 // This will be called whenever the SDK changes screens,
 // so a web page can update the URL bar appropriately.
 function onNewScreen(screen: string, replaceLast = false) {
-    console.log("newscreen " + screen);
+    logger.log("newscreen " + screen);
     const hash = '#/' + screen;
     lastLocationHashSet = hash;
 
@@ -133,7 +136,7 @@ function onTokenLoginCompleted() {
 
     url.searchParams.delete("loginToken");
 
-    console.log(`Redirecting to ${url.href} to drop loginToken from queryparams`);
+    logger.log(`Redirecting to ${url.href} to drop loginToken from queryparams`);
     window.history.replaceState(null, "", url.href);
 }
 
@@ -145,7 +148,7 @@ export async function loadApp(fragParams: {}) {
     const params = parseQs(window.location);
 
     const urlWithoutQuery = window.location.protocol + '//' + window.location.host + window.location.pathname;
-    console.log("Vector starting at " + urlWithoutQuery);
+    logger.log("Vector starting at " + urlWithoutQuery);
 
     (platform as VectorBasePlatform).startUpdater();
 
@@ -158,7 +161,7 @@ export async function loadApp(fragParams: {}) {
     const isReturningFromSso = !!params.loginToken;
     const autoRedirect = config['sso_immediate_redirect'] === true;
     if (!hasPossibleToken && !isReturningFromSso && autoRedirect) {
-        console.log("Bypassing app load to redirect to SSO");
+        logger.log("Bypassing app load to redirect to SSO");
         const tempCli = createClient({
             baseUrl: config['validated_server_config'].hsUrl,
             idBaseUrl: config['validated_server_config'].isUrl,
@@ -188,7 +191,7 @@ export async function loadApp(fragParams: {}) {
 async function verifyServerConfig() {
     let validatedConfig;
     try {
-        console.log("Verifying homeserver configuration");
+        logger.log("Verifying homeserver configuration");
 
         // Note: the query string may include is_url and hs_url - we only respect these in the
         // context of email validation. Because we don't respect them otherwise, we do not need
@@ -219,8 +222,8 @@ async function verifyServerConfig() {
         }
 
         if (hsUrl) {
-            console.log("Config uses a default_hs_url - constructing a default_server_config using this information");
-            console.warn(
+            logger.log("Config uses a default_hs_url - constructing a default_server_config using this information");
+            logger.warn(
                 "DEPRECATED CONFIG OPTION: In the future, default_hs_url will not be accepted. Please use " +
                 "default_server_config instead.",
             );
@@ -239,13 +242,13 @@ async function verifyServerConfig() {
 
         let discoveryResult = null;
         if (wkConfig) {
-            console.log("Config uses a default_server_config - validating object");
+            logger.log("Config uses a default_server_config - validating object");
             discoveryResult = await AutoDiscovery.fromDiscoveryConfig(wkConfig);
         }
 
         if (serverName) {
-            console.log("Config uses a default_server_name - doing .well-known lookup");
-            console.warn(
+            logger.log("Config uses a default_server_name - doing .well-known lookup");
+            logger.warn(
                 "DEPRECATED CONFIG OPTION: In the future, default_server_name will not be accepted. Please " +
                 "use default_server_config instead.",
             );
@@ -256,10 +259,10 @@ async function verifyServerConfig() {
     } catch (e) {
         const { hsUrl, isUrl, userId } = await Lifecycle.getStoredSessionVars();
         if (hsUrl && userId) {
-            console.error(e);
-            console.warn("A session was found - suppressing config error and using the session's homeserver");
+            logger.error(e);
+            logger.warn("A session was found - suppressing config error and using the session's homeserver");
 
-            console.log("Using pre-existing hsUrl and isUrl: ", { hsUrl, isUrl });
+            logger.log("Using pre-existing hsUrl and isUrl: ", { hsUrl, isUrl });
             validatedConfig = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl, true);
         } else {
             // the user is not logged in, so scream
@@ -270,10 +273,10 @@ async function verifyServerConfig() {
     validatedConfig.isDefault = true;
 
     // Just in case we ever have to debug this
-    console.log("Using homeserver config:", validatedConfig);
+    logger.log("Using homeserver config:", validatedConfig);
 
     // Add the newly built config to the actual config for use by the app
-    console.log("Updating SdkConfig with validated discovery information");
+    logger.log("Updating SdkConfig with validated discovery information");
     SdkConfig.add({ "validated_server_config": validatedConfig });
 
     return SdkConfig.get();
