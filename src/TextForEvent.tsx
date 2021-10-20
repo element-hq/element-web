@@ -28,6 +28,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { removeDirectionOverrideChars } from 'matrix-js-sdk/src/utils';
 
 // These functions are frequently used just to check whether an event has
 // any text to display at all. For this reason they return deferred values
@@ -97,18 +98,21 @@ function textForMemberEvent(ev: MatrixEvent, allowJSX: boolean, showHiddenEvents
             if (prevContent && prevContent.membership === 'join') {
                 if (prevContent.displayname && content.displayname && prevContent.displayname !== content.displayname) {
                     return () => _t('%(oldDisplayName)s changed their display name to %(displayName)s', {
-                        oldDisplayName: prevContent.displayname,
-                        displayName: content.displayname,
+                        // We're taking the display namke directly from the event content here so we need
+                        // to strip direction override chars which the js-sdk would normally do when
+                        // calculating the display name
+                        oldDisplayName: removeDirectionOverrideChars(prevContent.displayname),
+                        displayName: removeDirectionOverrideChars(content.displayname),
                     });
                 } else if (!prevContent.displayname && content.displayname) {
                     return () => _t('%(senderName)s set their display name to %(displayName)s', {
                         senderName: ev.getSender(),
-                        displayName: content.displayname,
+                        displayName: removeDirectionOverrideChars(content.displayname),
                     });
                 } else if (prevContent.displayname && !content.displayname) {
                     return () => _t('%(senderName)s removed their display name (%(oldDisplayName)s)', {
                         senderName,
-                        oldDisplayName: prevContent.displayname,
+                        oldDisplayName: removeDirectionOverrideChars(prevContent.displayname),
                     });
                 } else if (prevContent.avatar_url && !content.avatar_url) {
                     return () => _t('%(senderName)s removed their profile picture', { senderName });
