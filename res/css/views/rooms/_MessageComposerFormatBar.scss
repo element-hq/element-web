@@ -21,7 +21,7 @@ limitations under the License.
     position: absolute;
     cursor: pointer;
     border-radius: 8px;
-    background-color: $primary-bg-color;
+    background-color: $background;
     border: 1px solid $input-border-color;
     user-select: none;
     // equal to z-index of mx_ReplyPreview and mx_RoomView_statusArea (1000)
@@ -61,11 +61,11 @@ limitations under the License.
         width: 100%;
         mask-repeat: no-repeat;
         mask-position: center;
-        background-color: $secondary-fg-color;
+        background-color: $secondary-content;
     }
 
     .mx_MessageComposerFormatBar_button:hover::after {
-        background-color: $primary-fg-color;
+        background-color: $primary-content;
     }
 
     .mx_MessageComposerFormatBar_buttonIconBold::after {
