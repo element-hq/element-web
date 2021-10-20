@@ -110,6 +110,8 @@ interface IRoomProps extends MatrixClientProps {
     resizeNotifier: ResizeNotifier;
     justCreatedOpts?: IOpts;
 
+    forceTimeline?: boolean; // should we force access to the timeline, overriding (for eg) spaces
+
     // Called with the credentials of a registered user (if they were a ROU that transitioned to PWLU)
     onRegistered?(credentials: IMatrixClientCreds): void;
 }
@@ -1911,7 +1913,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             );
         }
 
-        if (this.state.room?.isSpaceRoom()) {
+        if (this.state.room?.isSpaceRoom() && !this.props.forceTimeline) {
             return <SpaceRoomView
                 space={this.state.room}
                 justCreatedOpts={this.props.justCreatedOpts}

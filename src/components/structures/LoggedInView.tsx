@@ -108,6 +108,7 @@ interface IProps {
     currentGroupIsNew?: boolean;
     justRegistered?: boolean;
     roomJustCreatedOpts?: IOpts;
+    forceTimeline?: boolean; // see props on MatrixChat
 }
 
 interface IUsageLimit {
@@ -611,6 +612,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                     key={this.props.currentRoomId || 'roomview'}
                     resizeNotifier={this.props.resizeNotifier}
                     justCreatedOpts={this.props.roomJustCreatedOpts}
+                    forceTimeline={this.props.forceTimeline}
                 />;
                 break;
 

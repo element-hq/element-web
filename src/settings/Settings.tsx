@@ -757,6 +757,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: false,
         controller: new ReloadOnChangeController(),
     },
+    "developerMode": {
+        displayName: _td("Developer mode"),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: false,
+    },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,

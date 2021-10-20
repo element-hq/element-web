@@ -176,6 +176,9 @@ interface IRoomInfo {
     threepid_invite?: IThreepidInvite;
 
     justCreatedOpts?: IOpts;
+
+    // Whether or not to override default behaviour to end up at a timeline
+    forceTimeline?: boolean;
 }
 /* eslint-enable camelcase */
 
@@ -238,6 +241,7 @@ interface IState {
     pendingInitialSync?: boolean;
     justRegistered?: boolean;
     roomJustCreatedOpts?: IOpts;
+    forceTimeline?: boolean; // see props
 }
 
 @replaceableComponent("structures.MatrixChat")
@@ -968,6 +972,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 page_type: PageType.RoomView,
                 threepidInvite: roomInfo.threepid_invite,
                 roomOobData: roomInfo.oob_data,
+                forceTimeline: roomInfo.forceTimeline,
                 ready: true,
                 roomJustCreatedOpts: roomInfo.justCreatedOpts,
             }, () => {
