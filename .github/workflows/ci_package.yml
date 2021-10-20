@@ -71,7 +71,6 @@ jobs:
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
           SENTRY_ORG: sentry
           SENTRY_PROJECT: riot-webs
-
       - uses: actions/upload-artifact@v2
         with:
           path: dist/*.tar.gz
