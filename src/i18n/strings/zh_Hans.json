@@ -3251,5 +3251,7 @@
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "输入安全短语或<button>使用安全密钥</button>以继续。",
     "What projects are your team working on?": "你的团队正在进行什么项目?",
     "The email address doesn't appear to be valid.": "电子邮件地址似乎无效。",
-    "That e-mail address is already in use.": "电子邮件地址已被占用。"
+    "That e-mail address is already in use.": "电子邮件地址已被占用。",
+    "See room timeline (devtools)": "查看聊天室时间轴（开发工具）",
+    "Developer mode": "开发者模式"
 }
