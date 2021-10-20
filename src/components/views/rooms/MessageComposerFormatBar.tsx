@@ -66,8 +66,8 @@ export default class MessageComposerFormatBar extends React.PureComponent<IProps
         this.setState({ visible: true });
         const parentRect = this.formatBarRef.current.parentElement.getBoundingClientRect();
         this.formatBarRef.current.style.left = `${selectionRect.left - parentRect.left}px`;
-        // 12 is half the height of the bar (e.g. to center it) and 16 is an offset that felt ok.
-        this.formatBarRef.current.style.top = `${selectionRect.top - parentRect.top - 16 - 12}px`;
+        // 16 is half the height of the bar (e.g. to center it) and 18 is an offset that felt ok.
+        this.formatBarRef.current.style.top = `${selectionRect.top - parentRect.top - 16 - 18}px`;
     }
 
     public hide(): void {
@@ -103,8 +103,6 @@ class FormatButton extends React.PureComponent<IFormatButtonProps> {
 
         return (
             <AccessibleTooltipButton
-                element="button"
-                type="button"
                 onClick={this.props.onClick}
                 title={this.props.label}
                 tooltip={tooltip}
