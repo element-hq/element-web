@@ -20,25 +20,17 @@ import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
 import { MatrixClientPeg } from '../../../../../MatrixClientPeg';
 import SettingsStore from "../../../../../settings/SettingsStore";
-import { enumerateThemes } from "../../../../../theme";
-import ThemeWatcher from "../../../../../settings/watchers/ThemeWatcher";
-import AccessibleButton from "../../../elements/AccessibleButton";
-import dis from "../../../../../dispatcher/dispatcher";
-import { RecheckThemePayload } from '../../../../../dispatcher/payloads/RecheckThemePayload';
-import { Action } from '../../../../../dispatcher/actions';
 import StyledCheckbox from '../../../elements/StyledCheckbox';
 import SettingsFlag from '../../../elements/SettingsFlag';
 import Field from '../../../elements/Field';
-import StyledRadioGroup from "../../../elements/StyledRadioGroup";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { Layout } from "../../../../../settings/Layout";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
-import { compare } from "../../../../../utils/strings";
 import LayoutSwitcher from "../../LayoutSwitcher";
 
-import { logger } from "matrix-js-sdk/src/logger";
 import FontScalingPanel from '../../FontScalingPanel';
+import ThemeChoicePanel from '../../ThemeChoicePanel';
 
 interface IProps {
 }
@@ -70,7 +62,6 @@ interface IState extends IThemeState {
 export default class AppearanceUserSettingsTab extends React.Component<IProps, IState> {
     private readonly MESSAGE_PREVIEW_TEXT = _t("Hey you. You're the best!");
 
-    private themeTimer: number;
     private unmounted = false;
 
     constructor(props: IProps) {
@@ -141,68 +132,6 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         };
     }
 
-    private onThemeChange = (newTheme: string): void => {
-        if (this.state.theme === newTheme) return;
-
-        // doing getValue in the .catch will still return the value we failed to set,
-        // so remember what the value was before we tried to set it so we can revert
-        const oldTheme: string = SettingsStore.getValue('theme');
-        SettingsStore.setValue("theme", null, SettingLevel.DEVICE, newTheme).catch(() => {
-            dis.dispatch<RecheckThemePayload>({ action: Action.RecheckTheme });
-            this.setState({ theme: oldTheme });
-        });
-        this.setState({ theme: newTheme });
-        // The settings watcher doesn't fire until the echo comes back from the
-        // server, so to make the theme change immediately we need to manually
-        // do the dispatch now
-        // XXX: The local echoed value appears to be unreliable, in particular
-        // when settings custom themes(!) so adding forceTheme to override
-        // the value from settings.
-        dis.dispatch<RecheckThemePayload>({ action: Action.RecheckTheme, forceTheme: newTheme });
-    };
-
-    private onUseSystemThemeChanged = (checked: boolean): void => {
-        this.setState({ useSystemTheme: checked });
-        SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, checked);
-        dis.dispatch<RecheckThemePayload>({ action: Action.RecheckTheme });
-    };
-
-    private onAddCustomTheme = async (): Promise<void> => {
-        let currentThemes: string[] = SettingsStore.getValue("custom_themes");
-        if (!currentThemes) currentThemes = [];
-        currentThemes = currentThemes.map(c => c); // cheap clone
-
-        if (this.themeTimer) {
-            clearTimeout(this.themeTimer);
-        }
-
-        try {
-            const r = await fetch(this.state.customThemeUrl);
-            // XXX: need some schema for this
-            const themeInfo = await r.json();
-            if (!themeInfo || typeof(themeInfo['name']) !== 'string' || typeof(themeInfo['colors']) !== 'object') {
-                this.setState({ customThemeMessage: { text: _t("Invalid theme schema."), isError: true } });
-                return;
-            }
-            currentThemes.push(themeInfo);
-        } catch (e) {
-            logger.error(e);
-            this.setState({ customThemeMessage: { text: _t("Error downloading theme information."), isError: true } });
-            return; // Don't continue on error
-        }
-
-        await SettingsStore.setValue("custom_themes", null, SettingLevel.ACCOUNT, currentThemes);
-        this.setState({ customThemeUrl: "", customThemeMessage: { text: _t("Theme added!"), isError: false } });
-
-        this.themeTimer = setTimeout(() => {
-            this.setState({ customThemeMessage: { text: "", isError: false } });
-        }, 3000);
-    };
-
-    private onCustomThemeChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>): void => {
-        this.setState({ customThemeUrl: e.target.value });
-    };
-
     private onLayoutChanged = (layout: Layout): void => {
         this.setState({ layout: layout });
     };
@@ -216,85 +145,6 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
         }
     };
-
-    private renderThemeSection() {
-        const themeWatcher = new ThemeWatcher();
-        let systemThemeSection: JSX.Element;
-        if (themeWatcher.isSystemThemeSupported()) {
-            systemThemeSection = <div>
-                <StyledCheckbox
-                    checked={this.state.useSystemTheme}
-                    onChange={(e) => this.onUseSystemThemeChanged(e.target.checked)}
-                >
-                    { SettingsStore.getDisplayName("use_system_theme") }
-                </StyledCheckbox>
-            </div>;
-        }
-
-        let customThemeForm: JSX.Element;
-        if (SettingsStore.getValue("feature_custom_themes")) {
-            let messageElement = null;
-            if (this.state.customThemeMessage.text) {
-                if (this.state.customThemeMessage.isError) {
-                    messageElement = <div className='text-error'>{ this.state.customThemeMessage.text }</div>;
-                } else {
-                    messageElement = <div className='text-success'>{ this.state.customThemeMessage.text }</div>;
-                }
-            }
-            customThemeForm = (
-                <div className='mx_SettingsTab_section'>
-                    <form onSubmit={this.onAddCustomTheme}>
-                        <Field
-                            label={_t("Custom theme URL")}
-                            type='text'
-                            id='mx_GeneralUserSettingsTab_customThemeInput'
-                            autoComplete="off"
-                            onChange={this.onCustomThemeChange}
-                            value={this.state.customThemeUrl}
-                        />
-                        <AccessibleButton
-                            onClick={this.onAddCustomTheme}
-                            type="submit"
-                            kind="primary_sm"
-                            disabled={!this.state.customThemeUrl.trim()}
-                        >
-                            { _t("Add theme") }
-                        </AccessibleButton>
-                        { messageElement }
-                    </form>
-                </div>
-            );
-        }
-
-        // XXX: replace any type here
-        const themes = Object.entries<any>(enumerateThemes())
-            .map(p => ({ id: p[0], name: p[1] })); // convert pairs to objects for code readability
-        const builtInThemes = themes.filter(p => !p.id.startsWith("custom-"));
-        const customThemes = themes.filter(p => !builtInThemes.includes(p))
-            .sort((a, b) => compare(a.name, b.name));
-        const orderedThemes = [...builtInThemes, ...customThemes];
-        return (
-            <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_themeSection">
-                <span className="mx_SettingsTab_subheading">{ _t("Theme") }</span>
-                { systemThemeSection }
-                <div className="mx_ThemeSelectors">
-                    <StyledRadioGroup
-                        name="theme"
-                        definitions={orderedThemes.map(t => ({
-                            value: t.id,
-                            label: t.name,
-                            disabled: this.state.useSystemTheme,
-                            className: "mx_ThemeSelector_" + t.id,
-                        }))}
-                        onChange={this.onThemeChange}
-                        value={this.state.useSystemTheme ? undefined : this.state.theme}
-                        outlined
-                    />
-                </div>
-                { customThemeForm }
-            </div>
-        );
-    }
 
     private renderAdvancedSection() {
         if (!SettingsStore.getValue(UIFeature.AdvancedSettings)) return null;
@@ -382,7 +232,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 <div className="mx_SettingsTab_SubHeading">
                     { _t("Appearance Settings only affect this %(brand)s session.", { brand }) }
                 </div>
-                { this.renderThemeSection() }
+                <ThemeChoicePanel />
                 { layoutSection }
                 <FontScalingPanel />
                 { this.renderAdvancedSection() }
