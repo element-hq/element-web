@@ -3248,5 +3248,7 @@
     "View in room": "Shiheni në dhomë",
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Që të vazhdohet, jepni Frazën tuaj të Sigurisë, ose <button>përdorni Kyçin tuaj të Sigurisë</button>.",
     "That e-mail address is already in use.": "Ajo adresë email është tashmë në përdorim.",
-    "The email address doesn't appear to be valid.": "Adresa email s’duket të jetë e vlefshme."
+    "The email address doesn't appear to be valid.": "Adresa email s’duket të jetë e vlefshme.",
+    "See room timeline (devtools)": "Shihni rrjedhë kohore të dhomës (mjete zhvilluesi)",
+    "Developer mode": "Mënyra zhvillues"
 }
