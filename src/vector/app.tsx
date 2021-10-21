@@ -30,7 +30,7 @@ import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
 import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
 import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
 import type MatrixChatType from "matrix-react-sdk/src/components/structures/MatrixChat";
-import SdkConfig from "matrix-react-sdk/src/SdkConfig";
+import SdkConfig, { parseSsoRedirectOptions } from "matrix-react-sdk/src/SdkConfig";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { parseQs, parseQsFromFragment } from './url_utils';
@@ -159,7 +159,13 @@ export async function loadApp(fragParams: {}) {
     const [userId] = await Lifecycle.getStoredSessionOwner();
     const hasPossibleToken = !!userId;
     const isReturningFromSso = !!params.loginToken;
-    const autoRedirect = config['sso_immediate_redirect'] === true;
+    const ssoRedirects = parseSsoRedirectOptions(config);
+    let autoRedirect = ssoRedirects.immediate === true;
+    // XXX: This path matching is a bit brittle, but better to do it early instead of in the app code.
+    const isWelcomeOrLanding = window.location.hash === '#/welcome' || window.location.hash === '#';
+    if (!autoRedirect && ssoRedirects.on_welcome_page && isWelcomeOrLanding) {
+        autoRedirect = true;
+    }
     if (!hasPossibleToken && !isReturningFromSso && autoRedirect) {
         logger.log("Bypassing app load to redirect to SSO");
         const tempCli = createClient({
