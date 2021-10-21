@@ -35,19 +35,7 @@ import ThemeChoicePanel from '../../ThemeChoicePanel';
 interface IProps {
 }
 
-interface IThemeState {
-    theme: string;
-    useSystemTheme: boolean;
-}
-
-export interface CustomThemeMessage {
-    isError: boolean;
-    text: string;
-}
-
-interface IState extends IThemeState {
-    customThemeUrl: string;
-    customThemeMessage: CustomThemeMessage;
+interface IState {
     useSystemFont: boolean;
     systemFont: string;
     showAdvanced: boolean;
@@ -68,9 +56,6 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         super(props);
 
         this.state = {
-            ...this.calculateThemeState(),
-            customThemeUrl: "",
-            customThemeMessage: { isError: false, text: "" },
             useSystemFont: SettingsStore.getValue("useSystemFont"),
             systemFont: SettingsStore.getValue("systemFont"),
             showAdvanced: false,
@@ -97,39 +82,6 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
     componentWillUnmount() {
         this.unmounted = true;
-    }
-
-    private calculateThemeState(): IThemeState {
-        // We have to mirror the logic from ThemeWatcher.getEffectiveTheme so we
-        // show the right values for things.
-
-        const themeChoice: string = SettingsStore.getValue("theme");
-        const systemThemeExplicit: boolean = SettingsStore.getValueAt(
-            SettingLevel.DEVICE, "use_system_theme", null, false, true);
-        const themeExplicit: string = SettingsStore.getValueAt(
-            SettingLevel.DEVICE, "theme", null, false, true);
-
-        // If the user has enabled system theme matching, use that.
-        if (systemThemeExplicit) {
-            return {
-                theme: themeChoice,
-                useSystemTheme: true,
-            };
-        }
-
-        // If the user has set a theme explicitly, use that (no system theme matching)
-        if (themeExplicit) {
-            return {
-                theme: themeChoice,
-                useSystemTheme: false,
-            };
-        }
-
-        // Otherwise assume the defaults for the settings
-        return {
-            theme: themeChoice,
-            useSystemTheme: SettingsStore.getValueAt(SettingLevel.DEVICE, "use_system_theme"),
-        };
     }
 
     private onLayoutChanged = (layout: Layout): void => {
