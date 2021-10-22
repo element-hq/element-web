@@ -9,7 +9,7 @@ else
 fi
 
 yarn clean
-yarn build
+VERSION=$version yarn build
 
 # include the sample config in the tarball. Arguably this should be done by
 # `yarn build`, but it's just too painful.
