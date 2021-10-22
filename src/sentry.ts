@@ -205,7 +205,6 @@ export async function initSentry(sentryConfig: ISentryConfig): Promise<void> {
         environment: sentryConfig.environment,
         defaultIntegrations: false,
         autoSessionTracking: false,
-        debug: true,
         integrations: [
             // specifically disable Integrations.GlobalHandlers, which hooks uncaught exceptions - we don't
             // want to capture those at this stage, just explicit rageshakes
