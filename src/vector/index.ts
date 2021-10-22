@@ -22,7 +22,6 @@ limitations under the License.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
 require('gfm.css/gfm.css');
-require('highlight.js/styles/github.css');
 require('katex/dist/katex.css');
 
 /**
