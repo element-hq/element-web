@@ -24,10 +24,10 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsStore from "./settings/SettingsStore";
 import PlatformPeg from "./PlatformPeg";
-// @ts-ignore - $webapp is a webpack resolve alias pointing to the output directory, see webpack config
 import { SettingLevel } from "./settings/SettingLevel";
 import { retry } from "./utils/promise";
 
+// @ts-ignore - $webapp is a webpack resolve alias pointing to the output directory, see webpack config
 import webpackLangJsonUrl from "$webapp/i18n/languages.json";
 
 const i18nFolder = 'i18n/';
