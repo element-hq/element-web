@@ -574,7 +574,9 @@ export default class EventTile extends React.Component<IProps, IState> {
             <div
                 className="mx_ThreadInfo"
                 onClick={() => {
-                    dispatchShowThreadEvent(this.props.mxEvent);
+                    dispatchShowThreadEvent(
+                        this.props.mxEvent,
+                    );
                 }}
             >
                 <span className="mx_ThreadInfo_thread-icon" />

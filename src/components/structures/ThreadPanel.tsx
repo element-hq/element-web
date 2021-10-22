@@ -67,6 +67,7 @@ const useFilteredThreadsTimelinePanel = ({
     const timelineSet = useMemo(() => new EventTimelineSet(null, {
         timelineSupport: true,
         unstableClientRelationAggregation: true,
+        pendingEvents: false,
     }), []);
 
     useEffect(() => {

@@ -45,6 +45,8 @@ interface IProps {
     mxEvent: MatrixEvent;
     permalinkCreator?: RoomPermalinkCreator;
     e2eStatus?: E2EStatus;
+    initialEvent?: MatrixEvent;
+    initialEventHighlighted?: boolean;
 }
 
 interface IState {
@@ -102,19 +104,19 @@ export default class ThreadView extends React.Component<IProps, IState> {
             }
         }
         switch (payload.action) {
-            case Action.EditEvent: {
+            case Action.EditEvent:
                 // Quit early if it's not a thread context
                 if (payload.timelineRenderingType !== TimelineRenderingType.Thread) return;
                 // Quit early if that's not a thread event
                 if (payload.event && !payload.event.getThread()) return;
-                const editState = payload.event ? new EditorStateTransfer(payload.event) : null;
-                this.setState({ editState }, () => {
+                this.setState({
+                    editState: payload.event ? new EditorStateTransfer(payload.event) : null,
+                }, () => {
                     if (payload.event) {
                         this.timelinePanelRef.current?.scrollToEventIfNeeded(payload.event.getId());
                     }
                 });
                 break;
-            }
             case 'reply_to_event':
                 if (payload.context === TimelineRenderingType.Thread) {
                     this.setState({
@@ -131,7 +133,11 @@ export default class ThreadView extends React.Component<IProps, IState> {
         let thread = mxEv.getThread();
         if (!thread) {
             const client = MatrixClientPeg.get();
-            thread = new Thread([mxEv], this.props.room, client);
+            thread = new Thread(
+                [mxEv],
+                this.props.room,
+                client,
+            );
             mxEv.setThread(thread);
         }
         thread.on(ThreadEvent.Update, this.updateThread);
@@ -163,7 +169,22 @@ export default class ThreadView extends React.Component<IProps, IState> {
         this.timelinePanelRef.current?.refreshTimeline();
     };
 
+    private onScroll = (): void => {
+        if (this.props.initialEvent && this.props.initialEventHighlighted) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: this.props.room.roomId,
+                event_id: this.props.initialEvent?.getId(),
+                highlighted: false,
+                replyingToEvent: this.state.replyToEvent,
+            });
+        }
+    };
+
     public render(): JSX.Element {
+        const highlightedEventId = this.props.initialEventHighlighted
+            ? this.props.initialEvent?.getId()
+            : null;
         return (
             <RoomContext.Provider value={{
                 ...this.context,
@@ -197,6 +218,9 @@ export default class ThreadView extends React.Component<IProps, IState> {
                             permalinkCreator={this.props.permalinkCreator}
                             membersLoaded={true}
                             editState={this.state.editState}
+                            eventId={this.props.initialEvent?.getId()}
+                            highlightedEventId={highlightedEventId}
+                            onUserScroll={this.onScroll}
                         />
                     ) }
 
