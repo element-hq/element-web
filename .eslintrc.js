@@ -1,5 +1,5 @@
 module.exports = {
-    plugins: ["matrix-org"],
+    plugins: ["matrix-org", "import"],
     extends: [
         "plugin:matrix-org/babel",
         "plugin:matrix-org/react",
@@ -36,6 +36,16 @@ module.exports = {
                 "Use Media helper instead to centralise access for customisation.",
             ),
         ],
+
+        "import/order": [
+            "error", {
+                "groups": [["builtin", "external"], ["internal", "parent", "sibling", "index", "object", "type"]],
+                "newlines-between": "always",
+            },
+        ],
+        "import/first": "error",
+        "import/newline-after-import": "error",
+        "import/no-duplicates": "error",
     },
     overrides: [{
         files: [
@@ -66,8 +76,8 @@ module.exports = {
     settings: {
         react: {
             version: "detect",
-        }
-    }
+        },
+    },
 };
 
 function buildRestrictedPropertiesOptions(properties, message) {
