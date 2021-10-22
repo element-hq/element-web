@@ -532,9 +532,10 @@ module.exports = (env, argv) => {
             // upload to sentry if sentry env is present
             process.env.SENTRY_DSN &&
                 new SentryCliPlugin({
-                    release: process.env.RELEASE,
+                    release: process.env.VERSION,
                     include: "./webapp",
                 }),
+            new webpack.EnvironmentPlugin(['VERSION']),
         ].filter(Boolean),
 
         output: {
