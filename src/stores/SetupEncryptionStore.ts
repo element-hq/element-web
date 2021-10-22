@@ -15,7 +15,10 @@ limitations under the License.
 */
 
 import EventEmitter from 'events';
-import { VerificationRequest, PHASE_DONE as VERIF_PHASE_DONE } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import {
+    VerificationRequest,
+    PHASE_DONE as VERIF_PHASE_DONE,
+} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
 import { logger } from "matrix-js-sdk/src/logger";

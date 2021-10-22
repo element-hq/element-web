@@ -20,6 +20,7 @@ import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { sleep, defer, IDeferred, QueryDict } from "matrix-js-sdk/src/utils";
+import { logger } from "matrix-js-sdk/src/logger";
 
 // focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
 import 'focus-visible';
@@ -106,9 +107,6 @@ import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../utils/strings";
 import { PosthogAnalytics } from '../../PosthogAnalytics';
 import { initSentry } from "../../sentry";
-
-import { logger } from "matrix-js-sdk/src/logger";
-
 import { showSpaceInvite } from "../../utils/space";
 
 /** constants for MatrixChat.state.view */

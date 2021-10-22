@@ -56,7 +56,15 @@ limitations under the License.
 
 import React from 'react';
 import { base32 } from "rfc4648";
-import { MatrixCall, CallErrorCode, CallState, CallEvent, CallParty, CallType, CallError } from "matrix-js-sdk/src/webrtc/call";
+import {
+    MatrixCall,
+    CallErrorCode,
+    CallState,
+    CallEvent,
+    CallParty,
+    CallType,
+    CallError,
+} from "matrix-js-sdk/src/webrtc/call";
 import { logger } from 'matrix-js-sdk/src/logger';
 import { randomUppercaseString, randomLowercaseString } from "matrix-js-sdk/src/randomstring";
 import EventEmitter from 'events';

@@ -21,7 +21,7 @@ import ResizeObserverEntry from 'resize-observer-polyfill/src/ResizeObserverEntr
 // own DOM types: https://github.com/que-etc/resize-observer-polyfill/issues/80
 // Using require here rather than import is a horrenous workaround. We should
 // be able to remove the polyfill once Safari 14 is released.
-const ResizeObserverPolyfill = require('resize-observer-polyfill');
+const ResizeObserverPolyfill = require('resize-observer-polyfill'); // eslint-disable-line @typescript-eslint/no-var-requires
 
 export enum UI_EVENTS {
     Resize = "resize"

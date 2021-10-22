@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import "../../../skinned-sdk";
-
 import { Room, PendingEventOrdering, MatrixEvent, MatrixClient } from 'matrix-js-sdk';
 
+import "../../../skinned-sdk";
 import * as TestUtils from '../../../test-utils';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import DMRoomMap from '../../../../src/utils/DMRoomMap';
