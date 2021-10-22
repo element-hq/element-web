@@ -16,6 +16,8 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import FlairStore from '../../../stores/FlairStore';
@@ -25,8 +27,6 @@ import { mediaFromMxc } from "../../../customisations/Media";
 import { _t } from "../../../languageHandler";
 import TagOrderActions from "../../../actions/TagOrderActions";
 import GroupFilterOrderStore from "../../../stores/GroupFilterOrderStore";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 @replaceableComponent("views.groups.GroupTile")
 class GroupTile extends React.Component {

@@ -15,12 +15,14 @@ limitations under the License.
 */
 
 import React from "react";
+import classNames from "classnames";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import AccessibleButton from "../elements/AccessibleButton";
 import Modal from "../../../Modal";
 import PersistedElement from "../elements/PersistedElement";
 import QuestionDialog from './QuestionDialog';
 import SdkConfig from "../../../SdkConfig";
-import classNames from "classnames";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { HostSignupStore } from "../../../stores/HostSignupStore";
@@ -32,8 +34,6 @@ import {
     PostmessageAction,
 } from "./HostSignupDialogTypes";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const HOST_SIGNUP_KEY = "host_signup";
 

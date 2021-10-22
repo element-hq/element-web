@@ -17,16 +17,16 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import FileSaver from 'file-saver';
+import PropTypes from 'prop-types';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import * as sdk from '../../../../index';
 import { MatrixClientPeg } from '../../../../MatrixClientPeg';
-import PropTypes from 'prop-types';
 import { _t, _td } from '../../../../languageHandler';
 import { accessSecretStorage } from '../../../../SecurityManager';
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 import { copyNode } from "../../../../utils/strings";
 import PassphraseField from "../../../../components/views/auth/PassphraseField";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const PHASE_PASSPHRASE = 0;
 const PHASE_PASSPHRASE_CONFIRM = 1;

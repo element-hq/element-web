@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import { IWidget } from "matrix-widget-api";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { getCallBehaviourWellKnown } from "../utils/WellKnownUtils";
 import WidgetUtils from "../utils/WidgetUtils";
@@ -22,8 +24,6 @@ import { IStoredLayout, WidgetLayoutStore } from "../stores/widgets/WidgetLayout
 import WidgetEchoStore from "../stores/WidgetEchoStore";
 import WidgetStore from "../stores/WidgetStore";
 import SdkConfig from "../SdkConfig";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 /* eslint-disable camelcase */
 interface IManagedHybridWidgetData {

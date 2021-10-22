@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { createRef, ReactNode, RefObject } from "react";
+
 import PlayPauseButton from "./PlayPauseButton";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { formatBytes } from "../../../utils/FormattingUtils";

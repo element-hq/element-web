@@ -15,9 +15,12 @@ limitations under the License.
 */
 
 import React from "react";
+import { IAnnotatedPushRule, IPusher, PushRuleAction, PushRuleKind, RuleId } from "matrix-js-sdk/src/@types/PushRules";
+import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import Spinner from "../elements/Spinner";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { IAnnotatedPushRule, IPusher, PushRuleAction, PushRuleKind, RuleId } from "matrix-js-sdk/src/@types/PushRules";
 import {
     ContentRules,
     IContentRules,
@@ -26,7 +29,6 @@ import {
     VectorState,
 } from "../../../notifications";
 import { _t, TranslatedString } from "../../../languageHandler";
-import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import SettingsStore from "../../../settings/SettingsStore";
 import StyledRadioButton from "../elements/StyledRadioButton";
@@ -38,8 +40,6 @@ import AccessibleButton from "../elements/AccessibleButton";
 import TagComposer from "../elements/TagComposer";
 import { objectClone } from "../../../utils/objects";
 import { arrayDiff } from "../../../utils/arrays";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.

@@ -17,6 +17,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import type { ICompletion, ISelectionRange } from './Autocompleter';
 
 export interface ICommand {

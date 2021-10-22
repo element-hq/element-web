@@ -18,14 +18,13 @@ limitations under the License.
 import React from 'react';
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import BaseAvatar from "./BaseAvatar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url"> {
     member: RoomMember;

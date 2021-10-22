@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 const assert = require('assert');
+
 const { openRoomSummaryCard } = require("./rightpanel");
 
 async function openMemberInfo(session, name) {

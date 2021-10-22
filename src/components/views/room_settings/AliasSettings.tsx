@@ -16,6 +16,7 @@ limitations under the License.
 
 import React, { ChangeEvent, createRef } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import EditableItemList from "../elements/EditableItemList";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -28,8 +29,6 @@ import Modal from "../../../Modal";
 import RoomPublishSetting from "./RoomPublishSetting";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import RoomAliasField from "../elements/RoomAliasField";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IEditableAliasesListProps {
     domain?: string;

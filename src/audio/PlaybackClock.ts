@@ -15,8 +15,9 @@ limitations under the License.
 */
 
 import { SimpleObservable } from "matrix-widget-api";
-import { IDestroyable } from "../utils/IDestroyable";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
+import { IDestroyable } from "../utils/IDestroyable";
 
 /**
  * Tracks accurate human-perceptible time for an audio clip, as informed

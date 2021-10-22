@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";

@@ -16,15 +16,16 @@ limitations under the License.
 */
 
 import React from 'react';
-import { MatrixClientPeg } from '../../../../MatrixClientPeg';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
-import { _t } from '../../../../languageHandler';
-import { accessSecretStorage } from '../../../../SecurityManager';
 import { IKeyBackupInfo, IKeyBackupRestoreResult } from "matrix-js-sdk/src/crypto/keybackup";
 import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
+import { logger } from "matrix-js-sdk/src/logger";
+
+import { MatrixClientPeg } from '../../../../MatrixClientPeg';
+import { _t } from '../../../../languageHandler';
+import { accessSecretStorage } from '../../../../SecurityManager';
 import * as sdk from '../../../../index';
 import { IDialogProps } from "../IDialogProps";
-import { logger } from "matrix-js-sdk/src/logger";
 
 enum RestoreType {
     Passphrase = "passphrase",

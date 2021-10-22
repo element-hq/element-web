@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from 'react';
+
 import SdkConfig from "../../../SdkConfig";
 import { getCurrentLanguage } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 import PlatformPeg from "../../../PlatformPeg";
-import React from 'react';
 import { SettingLevel } from "../../../settings/SettingLevel";
 import LanguageDropdown from "../elements/LanguageDropdown";
 

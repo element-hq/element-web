@@ -18,6 +18,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import QueryMatcher from './QueryMatcher';

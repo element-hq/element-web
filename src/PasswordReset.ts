@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import { createClient, IRequestTokenResponse, MatrixClient } from 'matrix-js-sdk/src/matrix';
+
 import { _t } from './languageHandler';
 
 /**

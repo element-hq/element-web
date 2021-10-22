@@ -15,13 +15,14 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import { TagID } from "../../models";
 import { IAlgorithm } from "./IAlgorithm";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import * as Unread from "../../../../Unread";
 import { EffectiveMembership, getEffectiveMembership } from "../../../../utils/membership";
-import { EventType } from "matrix-js-sdk/src/@types/event";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 export function shouldCauseReorder(event: MatrixEvent): boolean {
     const type = event.getType();

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { IInstance } from "matrix-js-sdk/src/client";
+
 import { Protocols } from "../components/views/directory/NetworkDropdown";
 
 // Find a protocol 'instance' with a given instance_id

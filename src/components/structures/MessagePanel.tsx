@@ -21,6 +21,7 @@ import { EventType } from 'matrix-js-sdk/src/@types/event';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
+import { logger } from 'matrix-js-sdk/src/logger';
 
 import shouldHideEvent from '../../shouldHideEvent';
 import { wantsDateSeparator } from '../../DateUtils';
@@ -48,7 +49,6 @@ import Spinner from "../views/elements/Spinner";
 import TileErrorBoundary from '../views/messages/TileErrorBoundary';
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
-import { logger } from 'matrix-js-sdk/src/logger';
 import { Action } from '../../dispatcher/actions';
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes

@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import dis from '../../../dispatcher/dispatcher';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
@@ -23,7 +24,6 @@ import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import EventTileBubble from "./EventTileBubble";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 interface IProps {
     /* the MatrixEvent to show */

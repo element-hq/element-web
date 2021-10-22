@@ -24,12 +24,11 @@ import {
 } from "matrix-js-sdk/src/interactive-auth";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import React, { createRef } from 'react';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import getEntryComponentForLoginType, { IStageComponent } from '../views/auth/InteractiveAuthEntryComponents';
 import Spinner from "../views/elements/Spinner";
 import { replaceableComponent } from "../../utils/replaceableComponent";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 export const ERROR_USER_CANCELLED = new Error("User cancelled auth session");
 

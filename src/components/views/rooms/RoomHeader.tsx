@@ -17,9 +17,11 @@ limitations under the License.
 
 import React from 'react';
 import classNames from 'classnames';
+import { throttle } from 'lodash';
+import { MatrixEvent, Room, RoomState } from 'matrix-js-sdk/src';
+
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
 import E2EIcon from './E2EIcon';
@@ -31,8 +33,6 @@ import { PlaceCallType } from "../../../CallHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Modal from '../../../Modal';
 import InfoDialog from "../dialogs/InfoDialog";
-import { throttle } from 'lodash';
-import { MatrixEvent, Room, RoomState } from 'matrix-js-sdk/src';
 import { E2EStatus } from '../../../utils/ShieldUtils';
 import { IOOBData } from '../../../stores/ThreepidInviteStore';
 import { SearchScope } from './SearchBar';

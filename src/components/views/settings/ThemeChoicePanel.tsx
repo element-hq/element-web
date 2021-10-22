@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import React from 'react';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 import { enumerateThemes } from "../../../theme";
@@ -29,8 +31,6 @@ import StyledRadioGroup from "../elements/StyledRadioGroup";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { compare } from "../../../utils/strings";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
 }

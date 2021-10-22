@@ -16,13 +16,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import FlairStore from '../../../stores/FlairStore';
 import dis from '../../../dispatcher/dispatcher';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 class FlairAvatar extends React.Component {
     constructor() {

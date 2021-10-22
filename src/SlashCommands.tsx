@@ -19,8 +19,10 @@ limitations under the License.
 
 import * as React from 'react';
 import { User } from "matrix-js-sdk/src/models/user";
-
 import * as ContentHelpers from 'matrix-js-sdk/src/content-helpers';
+import { parseFragment as parseHtml, Element as ChildElement } from "parse5";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';
 import { _t, _td } from './languageHandler';
@@ -36,7 +38,6 @@ import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from './utils/I
 import { isPermalinkHost, parsePermalink } from "./utils/permalinks/Permalinks";
 import { WidgetType } from "./widgets/WidgetType";
 import { Jitsi } from "./widgets/Jitsi";
-import { parseFragment as parseHtml, Element as ChildElement } from "parse5";
 import BugReportDialog from "./components/views/dialogs/BugReportDialog";
 import { ensureDMExists } from "./createRoom";
 import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
@@ -54,8 +55,6 @@ import DevtoolsDialog from './components/views/dialogs/DevtoolsDialog';
 import RoomUpgradeWarningDialog from "./components/views/dialogs/RoomUpgradeWarningDialog";
 import InfoDialog from "./components/views/dialogs/InfoDialog";
 import SlashCommandHelpDialog from "./components/views/dialogs/SlashCommandHelpDialog";
-
-import { logger } from "matrix-js-sdk/src/logger";
 import { shouldShowComponent } from "./customisations/helpers/UIComponents";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816

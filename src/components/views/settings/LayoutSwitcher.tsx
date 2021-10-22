@@ -18,6 +18,7 @@ limitations under the License.
 
 import React from "react";
 import classNames from "classnames";
+
 import SettingsStore from "../../../settings/SettingsStore";
 import EventTilePreview from "../elements/EventTilePreview";
 import StyledRadioButton from "../elements/StyledRadioButton";

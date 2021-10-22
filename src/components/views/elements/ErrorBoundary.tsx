@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { ErrorInfo } from 'react';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
@@ -24,8 +25,6 @@ import SdkConfig from "../../../SdkConfig";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BugReportDialog from '../dialogs/BugReportDialog';
 import AccessibleButton from './AccessibleButton';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IState {
     error: Error;

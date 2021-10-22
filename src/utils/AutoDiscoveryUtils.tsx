@@ -16,11 +16,11 @@ limitations under the License.
 
 import React, { ReactNode } from 'react';
 import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _t, _td, newTranslatableError } from "../languageHandler";
 import { makeType } from "./TypeUtils";
 import SdkConfig from '../SdkConfig';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const LIVELINESS_DISCOVERY_ERRORS: string[] = [
     AutoDiscovery.ERROR_INVALID_HOMESERVER,

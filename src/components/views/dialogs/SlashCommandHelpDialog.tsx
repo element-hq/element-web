@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import { _t } from "../../../languageHandler";
 import { CommandCategories, Commands } from "../../../SlashCommands";
 import { IDialogProps } from "./IDialogProps";

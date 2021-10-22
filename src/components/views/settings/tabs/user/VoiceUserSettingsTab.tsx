@@ -16,6 +16,8 @@ limitations under the License.
 */
 
 import React from 'react';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
 import MediaDeviceHandler, { IMediaDevices, MediaDeviceKindEnum } from "../../../../../MediaDeviceHandler";
@@ -27,8 +29,6 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import SettingsFlag from '../../../elements/SettingsFlag';
 import ErrorDialog from '../../../dialogs/ErrorDialog';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const getDefaultDevice = (devices: Array<Partial<MediaDeviceInfo>>) => {
     // Note we're looking for a device with deviceId 'default' but adding a device

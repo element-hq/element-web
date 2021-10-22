@@ -15,9 +15,10 @@ limitations under the License.
 */
 
 import React from 'react';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 interface IProps {
     mxEvent: MatrixEvent;

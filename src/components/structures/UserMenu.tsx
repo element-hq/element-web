@@ -18,6 +18,7 @@ import React, { createRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from "classnames";
 import * as fbEmitter from "fbemitter";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -59,7 +60,7 @@ import RoomName from "../views/elements/RoomName";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import InlineSpinner from "../views/elements/InlineSpinner";
 import TooltipButton from "../views/elements/TooltipButton";
-import { logger } from "matrix-js-sdk/src/logger";
+
 interface IProps {
     isMinimized: boolean;
 }

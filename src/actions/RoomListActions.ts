@@ -15,19 +15,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { asyncAction } from './actionCreators';
 import Modal from '../Modal';
 import * as Rooms from '../Rooms';
 import { _t } from '../languageHandler';
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { Room } from "matrix-js-sdk/src/models/room";
 import { AsyncActionPayload } from "../dispatcher/payloads";
 import RoomListStore from "../stores/room-list/RoomListStore";
 import { SortAlgorithm } from "../stores/room-list/algorithms/models";
 import { DefaultTagID } from "../stores/room-list/models";
 import ErrorDialog from '../components/views/dialogs/ErrorDialog';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 export default class RoomListActions {
     /**

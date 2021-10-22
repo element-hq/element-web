@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 const puppeteer = require('puppeteer');
+
 const Logger = require('./logger');
 const LogBuffer = require('./logbuffer');
 const { delay } = require('./util');

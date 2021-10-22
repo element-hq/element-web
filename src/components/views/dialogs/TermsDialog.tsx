@@ -16,10 +16,10 @@ limitations under the License.
 
 import url from 'url';
 import React from 'react';
-import { _t, pickBestLanguage } from '../../../languageHandler';
-
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
+
+import { _t, pickBestLanguage } from '../../../languageHandler';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "./BaseDialog";
 

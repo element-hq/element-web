@@ -17,6 +17,7 @@ limitations under the License.
 import { EventEmitter } from 'events';
 import AwaitLock from 'await-lock';
 import { Dispatcher } from "flux";
+
 import { ActionPayload } from "../dispatcher/payloads";
 
 /**

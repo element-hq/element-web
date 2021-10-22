@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import React from 'react';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
 import { Mjolnir } from "../../../../../mjolnir/Mjolnir";
@@ -27,8 +29,6 @@ import ErrorDialog from "../../../dialogs/ErrorDialog";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Field from "../../../elements/Field";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IState {
     busy: boolean;

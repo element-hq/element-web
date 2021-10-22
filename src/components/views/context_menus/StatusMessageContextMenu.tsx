@@ -15,11 +15,12 @@ limitations under the License.
 */
 
 import React, { ChangeEvent } from 'react';
+import { User } from "matrix-js-sdk/src/models/user";
+
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import AccessibleButton, { ButtonEvent } from '../elements/AccessibleButton';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { User } from "matrix-js-sdk/src/models/user";
 import Spinner from "../elements/Spinner";
 
 interface IProps {

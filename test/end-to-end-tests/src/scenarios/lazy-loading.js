@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+const assert = require('assert');
+
 const { delay } = require('../util');
 const join = require('../usecases/join');
 const sendMessage = require('../usecases/send-message');
@@ -25,7 +27,6 @@ const {
 const { createRoom } = require('../usecases/create-room');
 const { getMembersInMemberlist } = require('../usecases/memberlist');
 const { changeRoomSettings } = require('../usecases/room-settings');
-const assert = require('assert');
 
 module.exports = async function lazyLoadingScenarios(alice, bob, charlies) {
     console.log(" creating a room for lazy loading member scenarios:");

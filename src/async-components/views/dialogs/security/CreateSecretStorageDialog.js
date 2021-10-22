@@ -17,9 +17,11 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
+import FileSaver from 'file-saver';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import * as sdk from '../../../../index';
 import { MatrixClientPeg } from '../../../../MatrixClientPeg';
-import FileSaver from 'file-saver';
 import { _t, _td } from '../../../../languageHandler';
 import Modal from '../../../../Modal';
 import { promptForBackupPassphrase } from '../../../../SecurityManager';
@@ -33,8 +35,6 @@ import InlineSpinner from "../../../../components/views/elements/InlineSpinner";
 import RestoreKeyBackupDialog from "../../../../components/views/dialogs/security/RestoreKeyBackupDialog";
 import { getSecureBackupSetupMethods, isSecureBackupRequired } from '../../../../utils/WellKnownUtils';
 import SecurityCustomisations from "../../../../customisations/Security";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const PHASE_LOADING = 0;
 const PHASE_LOADERROR = 1;

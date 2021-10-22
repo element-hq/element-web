@@ -26,6 +26,8 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
@@ -62,7 +64,6 @@ import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import ConfirmUserActionDialog from "../dialogs/ConfirmUserActionDialog";
 import InfoDialog from "../dialogs/InfoDialog";
-import { EventType } from "matrix-js-sdk/src/@types/event";
 import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
@@ -72,8 +73,6 @@ import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInse
 import SpaceStore from "../../../stores/SpaceStore";
 import ConfirmSpaceUserActionDialog from "../dialogs/ConfirmSpaceUserActionDialog";
 import { bulkSpaceBehaviour } from "../../../utils/space";
-
-import { logger } from "matrix-js-sdk/src/logger";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
 

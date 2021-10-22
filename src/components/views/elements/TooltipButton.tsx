@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Tooltip from './Tooltip';
 

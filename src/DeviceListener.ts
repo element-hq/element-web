@@ -14,6 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from "./dispatcher/dispatcher";
 import {
@@ -32,10 +35,7 @@ import {
 import { isSecretStorageBeingAccessed, accessSecretStorage } from "./SecurityManager";
 import { isSecureBackupRequired } from './utils/WellKnownUtils';
 import { isLoggedIn } from './components/structures/MatrixChat';
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { ActionPayload } from "./dispatcher/payloads";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 

@@ -17,12 +17,14 @@ limitations under the License.
 */
 
 import React from 'react';
+import classNames from 'classnames';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _t, _td } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import Modal from "../../../Modal";
 import PasswordReset from "../../../PasswordReset";
 import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
-import classNames from 'classnames';
 import AuthPage from "../../views/auth/AuthPage";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import ServerPicker from "../../views/elements/ServerPicker";
@@ -32,8 +34,6 @@ import { PASSWORD_MIN_SCORE } from '../../views/auth/RegistrationForm';
 import withValidation, { IValidationResult } from "../../views/elements/Validation";
 import * as Email from "../../../email";
 import InlineSpinner from '../../views/elements/InlineSpinner';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 enum Phase {
     // Show the forgot password inputs

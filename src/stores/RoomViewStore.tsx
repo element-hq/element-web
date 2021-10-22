@@ -19,6 +19,7 @@ limitations under the License.
 import React from "react";
 import { Store } from 'flux/utils';
 import { MatrixError } from "matrix-js-sdk/src/http-api";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import dis from '../dispatcher/dispatcher';
 import { MatrixClientPeg } from '../MatrixClientPeg';
@@ -30,8 +31,6 @@ import { ActionPayload } from "../dispatcher/payloads";
 import { Action } from "../dispatcher/actions";
 import { retry } from "../utils/promise";
 import CountlyAnalytics from "../CountlyAnalytics";
-
-import { logger } from "matrix-js-sdk/src/logger";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 
 const NUM_JOIN_RETRY = 5;

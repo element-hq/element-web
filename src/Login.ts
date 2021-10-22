@@ -18,10 +18,10 @@ limitations under the License.
 // @ts-ignore - XXX: tsc doesn't like this: our js-sdk imports are complex so this isn't surprising
 import { createClient } from "matrix-js-sdk/src/matrix";
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { IMatrixClientCreds } from "./MatrixClientPeg";
 import SecurityCustomisations from "./customisations/Security";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface ILoginOptions {
     defaultDeviceDisplayName?: string;

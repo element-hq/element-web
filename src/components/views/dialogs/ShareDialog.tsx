@@ -22,6 +22,7 @@ import { User } from "matrix-js-sdk/src/models/user";
 import { Group } from "matrix-js-sdk/src/models/group";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import { _t } from '../../../languageHandler';
 import QRCode from "../elements/QRCode";
 import { RoomPermalinkCreator, makeGroupPermalink, makeUserPermalink } from "../../../utils/permalinks/Permalinks";

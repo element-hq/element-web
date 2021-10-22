@@ -18,18 +18,18 @@ limitations under the License.
 */
 
 import React from 'react';
-import { _t } from '../languageHandler';
-import AutocompleteProvider from './AutocompleteProvider';
-import { PillCompletion } from './Components';
-import QueryMatcher from './QueryMatcher';
 import { sortBy } from 'lodash';
-import { MatrixClientPeg } from '../MatrixClientPeg';
-
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { RoomState } from "matrix-js-sdk/src/models/room-state";
 import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
+
+import { MatrixClientPeg } from '../MatrixClientPeg';
+import QueryMatcher from './QueryMatcher';
+import { PillCompletion } from './Components';
+import AutocompleteProvider from './AutocompleteProvider';
+import { _t } from '../languageHandler';
 import { makeUserPermalink } from "../utils/permalinks/Permalinks";
 import { ICompletion, ISelectionRange } from "./Autocompleter";
 import MemberAvatar from '../components/views/avatars/MemberAvatar';

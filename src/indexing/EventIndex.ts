@@ -24,14 +24,13 @@ import { RoomState } from 'matrix-js-sdk/src/models/room-state';
 import { TimelineIndex, TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
 import { sleep } from "matrix-js-sdk/src/utils";
 import { IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import PlatformPeg from "../PlatformPeg";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 import { ICrawlerCheckpoint, ILoadArgs, ISearchArgs } from "./BaseEventIndexManager";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 // The time in ms that the crawler will wait loop iterations if there
 // have not been any checkpoints to consume in the last iteration.

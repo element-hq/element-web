@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { GenericEchoChamber } from "./GenericEchoChamber";
 import { Room } from "matrix-js-sdk/src/models/room";
+
+import { GenericEchoChamber } from "./GenericEchoChamber";
 import { RoomEchoChamber } from "./RoomEchoChamber";
 import { RoomEchoContext } from "./RoomEchoContext";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";

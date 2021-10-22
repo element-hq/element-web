@@ -15,10 +15,11 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
-import { FILTER_CHANGED, FilterKind, IFilterCondition } from "./IFilterCondition";
 import { EventEmitter } from "events";
 import { normalize } from "matrix-js-sdk/src/utils";
 import { throttle } from "lodash";
+
+import { FILTER_CHANGED, FilterKind, IFilterCondition } from "./IFilterCondition";
 
 /**
  * A filter condition for the room list which reveals rooms of a particular

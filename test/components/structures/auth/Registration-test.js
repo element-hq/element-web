@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
+
 import sdk from '../../../skinned-sdk';
 import SdkConfig from '../../../../src/SdkConfig';
 import { mkServerConfig } from "../../../test-utils";

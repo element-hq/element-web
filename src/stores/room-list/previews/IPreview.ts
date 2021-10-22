@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import { TagID } from "../models";
 
 /**

@@ -22,7 +22,6 @@ import { RelationType } from 'matrix-js-sdk/src/@types/event';
 import BaseCard from "../views/right_panel/BaseCard";
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import { replaceableComponent } from "../../utils/replaceableComponent";
-
 import ResizeNotifier from '../../utils/ResizeNotifier';
 import { TileShape } from '../views/rooms/EventTile';
 import MessageComposer from '../views/rooms/MessageComposer';

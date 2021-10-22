@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 import SdkConfig from "../SdkConfig";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const JITSI_WK_PROPERTY = "im.vector.riot.jitsi";
 

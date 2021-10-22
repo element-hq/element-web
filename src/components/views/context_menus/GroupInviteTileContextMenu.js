@@ -17,15 +17,15 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Group } from 'matrix-js-sdk/src/models/group';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
-import { Group } from 'matrix-js-sdk/src/models/group';
 import GroupStore from "../../../stores/GroupStore";
 import { MenuItem } from "../../structures/ContextMenu";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 @replaceableComponent("views.context_menus.GroupInviteTileContextMenu")
 export default class GroupInviteTileContextMenu extends React.Component {

@@ -14,13 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import SettingsStore from "../settings/SettingsStore";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
+
+import SettingsStore from "../settings/SettingsStore";
 import { ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { arrayHasDiff } from "../utils/arrays";
-import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { SettingLevel } from "../settings/SettingLevel";
 import SpaceStore from "./SpaceStore";
 import { Action } from "../dispatcher/actions";

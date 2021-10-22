@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import React from 'react';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import AccessibleButton, { ButtonEvent } from "../../../elements/AccessibleButton";
 import { _t, getCurrentLanguage } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
@@ -31,8 +33,6 @@ import * as ContextMenu from "../../../../structures/ContextMenu";
 import { toRightOf } from "../../../../structures/ContextMenu";
 import BugReportDialog from '../../../dialogs/BugReportDialog';
 import GenericTextContextMenu from "../../../context_menus/GenericTextContextMenu";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     closeSettingsFn: () => void;

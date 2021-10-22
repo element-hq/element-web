@@ -14,17 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import type { Room } from "matrix-js-sdk/src/models/room";
+import url from 'url';
+import { logger } from "matrix-js-sdk/src/logger";
 
+import type { Room } from "matrix-js-sdk/src/models/room";
 import ScalarAuthClient from "../ScalarAuthClient";
 import { dialogTermsInteractionCallback, TermsNotSignedError } from "../Terms";
 import Modal from '../Modal';
-import url from 'url';
 import SettingsStore from "../settings/SettingsStore";
 import IntegrationManager from "../components/views/settings/IntegrationManager";
 import { IntegrationManagers } from "./IntegrationManagers";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 export enum Kind {
     Account = "account",

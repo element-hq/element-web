@@ -20,6 +20,7 @@ limitations under the License.
 
 import React from 'react';
 import classNames from 'classnames';
+
 import Analytics from '../../../Analytics';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { replaceableComponent } from "../../../utils/replaceableComponent";

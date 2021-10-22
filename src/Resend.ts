@@ -16,11 +16,10 @@ limitations under the License.
 
 import { MatrixEvent, EventStatus } from 'matrix-js-sdk/src/models/event';
 import { Room } from 'matrix-js-sdk/src/models/room';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 export default class Resend {
     static resendUnsentEvents(room: Room): Promise<void[]> {

@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import filesize from 'filesize';
-
 import React from 'react';
+
 import { _t } from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
 import { replaceableComponent } from "../../../utils/replaceableComponent";

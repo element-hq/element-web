@@ -15,15 +15,15 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { CallErrorCode, CallState } from 'matrix-js-sdk/src/webrtc/call';
+import classNames from 'classnames';
+
 import { _t } from '../../../languageHandler';
 import MemberAvatar from '../avatars/MemberAvatar';
 import CallEventGrouper, { CallEventGrouperEvent, CustomCallState } from '../../structures/CallEventGrouper';
 import AccessibleButton from '../elements/AccessibleButton';
-import { CallErrorCode, CallState } from 'matrix-js-sdk/src/webrtc/call';
 import InfoTooltip, { InfoTooltipKind } from '../elements/InfoTooltip';
-import classNames from 'classnames';
 import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
 import { formatCallTime } from "../../../DateUtils";
 import Clock from "../audio_messages/Clock";

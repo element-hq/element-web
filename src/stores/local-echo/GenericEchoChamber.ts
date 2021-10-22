@@ -14,10 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EchoContext } from "./EchoContext";
-import { EchoTransaction, RunFn, TransactionStatus } from "./EchoTransaction";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { EventEmitter } from "events";
+
+import { EchoContext } from "./EchoContext";
+import { EchoTransaction, RunFn, TransactionStatus } from "./EchoTransaction";
 
 export async function implicitlyReverted() {
     // do nothing :D

@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import SettingsStore from "../../settings/SettingsStore";
 import { Widget, WidgetKind } from "matrix-widget-api";
+
+import SettingsStore from "../../settings/SettingsStore";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { SettingLevel } from "../../settings/SettingLevel";
 

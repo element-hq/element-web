@@ -19,12 +19,12 @@ import "../../../skinned-sdk";
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
-
-import * as TestUtils from '../../../test-utils';
-import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { User } from "matrix-js-sdk/src/models/user";
+
+import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
+import * as TestUtils from '../../../test-utils';
 import { compare } from "../../../../src/utils/strings";
 import MemberList from "../../../../src/components/views/rooms/MemberList";
 import MemberTile from '../../../../src/components/views/rooms/MemberTile';

@@ -15,11 +15,13 @@ limitations under the License.
 */
 import React, { createRef } from 'react';
 import classNames from 'classnames';
-import { _t } from '../../../languageHandler';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { MatrixEvent, IEventRelation } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { RelationType } from 'matrix-js-sdk/src/@types/event';
+
+import { _t } from '../../../languageHandler';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
 import { ActionPayload } from "../../../dispatcher/payloads";
 import Stickerpicker from './Stickerpicker';
@@ -54,7 +56,6 @@ import MemberStatusMessageAvatar from "../avatars/MemberStatusMessageAvatar";
 import UIStore, { UI_EVENTS } from '../../../stores/UIStore';
 import Modal from "../../../Modal";
 import InfoDialog from "../dialogs/InfoDialog";
-import { RelationType } from 'matrix-js-sdk/src/@types/event';
 import RoomContext from '../../../contexts/RoomContext';
 
 let instanceCount = 0;

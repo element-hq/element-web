@@ -15,6 +15,7 @@ limitations under the License.
 */
 import { Store } from 'flux/utils';
 import { EventType } from "matrix-js-sdk/src/@types/event";
+
 import dis from '../dispatcher/dispatcher';
 import GroupStore from './GroupStore';
 import Analytics from '../Analytics';

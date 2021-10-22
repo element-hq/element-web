@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import AuthPage from '../../views/auth/AuthPage';
 import CompleteSecurityBody from '../../views/auth/CompleteSecurityBody';
 import CreateCrossSigningDialog from '../../views/dialogs/security/CreateCrossSigningDialog';

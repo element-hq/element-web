@@ -14,14 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { SAMPLE_RATE } from "./VoiceRecording";
-
 // @ts-ignore - we know that this is not a module. We're looking for a path.
 import decoderWasmPath from 'opus-recorder/dist/decoderWorker.min.wasm';
 import wavEncoderPath from 'opus-recorder/dist/waveWorker.min.js';
 import decoderPath from 'opus-recorder/dist/decoderWorker.min.js';
-
 import { logger } from "matrix-js-sdk/src/logger";
+
+import { SAMPLE_RATE } from "./VoiceRecording";
 
 export function createAudioContext(opts?: AudioContextOptions): AudioContext {
     if (window.AudioContext) {

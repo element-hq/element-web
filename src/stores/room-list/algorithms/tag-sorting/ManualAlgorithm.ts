@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
+
 import { TagID } from "../../models";
 import { IAlgorithm } from "./IAlgorithm";
 

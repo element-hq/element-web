@@ -16,20 +16,20 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import classNames from 'classnames';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { EventType, MsgType } from 'matrix-js-sdk/src/@types/event';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import SenderProfile from "../messages/SenderProfile";
 import MImageReplyBody from "../messages/MImageReplyBody";
 import * as sdk from '../../../index';
-import { EventType, MsgType } from 'matrix-js-sdk/src/@types/event';
 import { replaceableComponent } from '../../../utils/replaceableComponent';
 import { getEventDisplayInfo, isVoiceMessage } from '../../../utils/EventUtils';
 import MFileBody from "../messages/MFileBody";
 import MVoiceMessageBody from "../messages/MVoiceMessageBody";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     mxEvent: MatrixEvent;

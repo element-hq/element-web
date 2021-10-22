@@ -15,9 +15,10 @@ limitations under the License.
 */
 
 import React, { useState } from "react";
+import classNames from "classnames";
+
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
-import classNames from "classnames";
 
 interface IProps {
     avatarUrl?: string;

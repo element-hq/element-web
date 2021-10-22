@@ -17,8 +17,9 @@ limitations under the License.
 import React from "react";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
-import VideoFeed from "./VideoFeed";
 import classNames from "classnames";
+
+import VideoFeed from "./VideoFeed";
 
 interface IProps {
     feeds: Array<CallFeed>;

@@ -15,10 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _t } from '../languageHandler';
 import SdkConfig from '../SdkConfig';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const subtleCrypto = window.crypto.subtle || window.crypto.webkitSubtle;
 

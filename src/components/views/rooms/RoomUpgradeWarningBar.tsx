@@ -20,7 +20,6 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 import { RoomState } from 'matrix-js-sdk/src/models/room-state';
 
 import Modal from '../../../Modal';
-
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { replaceableComponent } from "../../../utils/replaceableComponent";

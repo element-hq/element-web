@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 const assert = require('assert');
+
 const { openMemberInfo } = require("./memberlist");
 
 async function startVerification(session, name) {

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
+
 import { _t, pickBestLanguage } from "../../../languageHandler";
 import * as sdk from "../../..";
 import { objectClone } from "../../../utils/objects";

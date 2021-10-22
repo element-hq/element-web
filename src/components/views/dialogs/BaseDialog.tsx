@@ -19,6 +19,7 @@ limitations under the License.
 import React from 'react';
 import FocusLock from 'react-focus-lock';
 import classNames from 'classnames';
+import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import { Key } from '../../../Keyboard';
 import AccessibleButton, { ButtonEvent } from '../elements/AccessibleButton';
@@ -26,7 +27,6 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { MatrixClient } from "matrix-js-sdk/src/client";
 import { IDialogProps } from "./IDialogProps";
 
 interface IProps extends IDialogProps {

@@ -17,6 +17,8 @@ limitations under the License.
 
 import React from 'react';
 import { sleep } from "matrix-js-sdk/src/utils";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
@@ -34,15 +36,12 @@ import CountlyAnalytics from "../../../../../CountlyAnalytics";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
 import { ActionPayload } from "../../../../../dispatcher/payloads";
-import { Room } from "matrix-js-sdk/src/models/room";
 import CryptographyPanel from "../../CryptographyPanel";
 import DevicesPanel from "../../DevicesPanel";
 import SettingsFlag from "../../../elements/SettingsFlag";
 import CrossSigningPanel from "../../CrossSigningPanel";
 import EventIndexPanel from "../../EventIndexPanel";
 import InlineSpinner from "../../../elements/InlineSpinner";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IIgnoredUserProps {
     userId: string;

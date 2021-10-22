@@ -19,13 +19,13 @@ limitations under the License.
  * platform supports event indexing.
  */
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 import PlatformPeg from "../PlatformPeg";
 import EventIndex from "../indexing/EventIndex";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from '../settings/SettingsStore';
 import { SettingLevel } from "../settings/SettingLevel";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const INDEX_VERSION = 1;
 

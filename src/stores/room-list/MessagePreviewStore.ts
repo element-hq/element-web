@@ -15,19 +15,20 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
+import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import { ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { MessageEventPreview } from "./previews/MessageEventPreview";
 import { TagID } from "./models";
-import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { CallInviteEventPreview } from "./previews/CallInviteEventPreview";
 import { CallAnswerEventPreview } from "./previews/CallAnswerEventPreview";
 import { CallHangupEvent } from "./previews/CallHangupEvent";
 import { StickerEventPreview } from "./previews/StickerEventPreview";
 import { ReactionEventPreview } from "./previews/ReactionEventPreview";
 import { UPDATE_EVENT } from "../AsyncStore";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 // Emitted event for when a room's preview has changed. First argument will the room for which
 // the change happened.

@@ -20,6 +20,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
 import { IRoomCapability } from "matrix-js-sdk/src/client";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
@@ -40,8 +41,6 @@ import { objectDiff } from "../utils/objects";
 import { reorderLexicographically } from "../utils/stringOrderField";
 import { TAG_ORDER } from "../components/views/rooms/RoomList";
 import { SettingUpdatedPayload } from "../dispatcher/payloads/SettingUpdatedPayload";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 type SpaceKey = string | symbol;
 

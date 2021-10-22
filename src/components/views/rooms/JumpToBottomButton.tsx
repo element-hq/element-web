@@ -15,9 +15,10 @@ limitations under the License.
 */
 
 import React from "react";
+import classNames from 'classnames';
+
 import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
-import classNames from 'classnames';
 
 interface IProps {
     numUnreadMessages: number;

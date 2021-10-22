@@ -20,11 +20,11 @@ import { MatrixError } from "matrix-js-sdk/src/http-api";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { IJoinRuleEventContent, JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import classNames from 'classnames';
 
 import * as sdk from '../../../index';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
-import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import SdkConfig from "../../../SdkConfig";
 import IdentityAuthClient from '../../../IdentityAuthClient';

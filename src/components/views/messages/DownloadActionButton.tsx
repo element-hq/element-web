@@ -15,11 +15,12 @@ limitations under the License.
 */
 
 import { MatrixEvent } from "matrix-js-sdk/src";
-import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import React from "react";
+import classNames from "classnames";
+
+import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
 import Spinner from "../elements/Spinner";
-import classNames from "classnames";
 import { _t, _td } from "../../../languageHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { FileDownloader } from "../../../utils/FileDownloader";

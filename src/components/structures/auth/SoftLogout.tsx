@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import React from 'react';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
 import * as Lifecycle from '../../../Lifecycle';
@@ -31,8 +33,6 @@ import AccessibleButton from '../../views/elements/AccessibleButton';
 import Spinner from "../../views/elements/Spinner";
 import AuthHeader from "../../views/auth/AuthHeader";
 import AuthBody from "../../views/auth/AuthBody";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const LOGIN_VIEW = {
     LOADING: 1,

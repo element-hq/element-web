@@ -17,9 +17,9 @@ limitations under the License.
 import { useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { throttle } from "lodash";
 
 import { useEventEmitter } from "./useEventEmitter";
-import { throttle } from "lodash";
 
 // Hook to simplify watching Matrix Room joined members
 export const useRoomMembers = (room: Room, throttleWait = 250) => {

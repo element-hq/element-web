@@ -17,11 +17,12 @@ limitations under the License.
 import { createClient } from 'matrix-js-sdk/src/matrix';
 import React, { ReactNode } from 'react';
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import classNames from "classnames";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, _td } from '../../../languageHandler';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
-import classNames from "classnames";
 import * as Lifecycle from '../../../Lifecycle';
 import { IMatrixClientCreds, MatrixClientPeg } from "../../../MatrixClientPeg";
 import AuthPage from "../../views/auth/AuthPage";
@@ -36,8 +37,6 @@ import AuthBody from "../../views/auth/AuthBody";
 import AuthHeader from "../../views/auth/AuthHeader";
 import InteractiveAuth from "../InteractiveAuth";
 import Spinner from "../../views/elements/Spinner";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     serverConfig: ValidatedServerConfig;

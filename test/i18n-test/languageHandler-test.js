@@ -1,6 +1,7 @@
+import * as languageHandler from '../../src/languageHandler';
+
 const React = require('react');
 const expect = require('expect');
-import * as languageHandler from '../../src/languageHandler';
 
 const testUtils = require('../test-utils');
 

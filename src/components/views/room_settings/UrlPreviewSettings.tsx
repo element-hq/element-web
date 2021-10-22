@@ -18,6 +18,8 @@ limitations under the License.
 */
 
 import React from 'react';
+import { Room } from "matrix-js-sdk/src/models/room";
+
 import { _t, _td } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import dis from "../../../dispatcher/dispatcher";
@@ -25,7 +27,6 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { Action } from "../../../dispatcher/actions";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { Room } from "matrix-js-sdk/src/models/room";
 import SettingsFlag from "../elements/SettingsFlag";
 
 interface IProps {

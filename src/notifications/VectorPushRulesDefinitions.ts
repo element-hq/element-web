@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { PushRuleAction, PushRuleKind } from "matrix-js-sdk/src/@types/PushRules";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _td } from '../languageHandler';
 import { StandardActions } from "./StandardActions";
 import { PushRuleVectorState, VectorState } from "./PushRuleVectorState";
 import { NotificationUtils } from "./NotificationUtils";
-import { PushRuleAction, PushRuleKind } from "matrix-js-sdk/src/@types/PushRules";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 type StateToActionsMap = {
     [state in VectorState]?: PushRuleAction[];

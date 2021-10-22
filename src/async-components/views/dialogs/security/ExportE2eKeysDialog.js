@@ -17,13 +17,12 @@ limitations under the License.
 import FileSaver from 'file-saver';
 import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
-import { _t } from '../../../../languageHandler';
-
 import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { logger } from "matrix-js-sdk/src/logger";
+
+import { _t } from '../../../../languageHandler';
 import * as MegolmExportEncryption from '../../../../utils/MegolmExportEncryption';
 import * as sdk from '../../../../index';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const PHASE_EDIT = 1;
 const PHASE_EXPORTING = 2;

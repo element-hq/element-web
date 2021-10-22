@@ -19,6 +19,7 @@ import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from '../../../languageHandler';
 import BaseDialog from "./BaseDialog";
@@ -40,8 +41,6 @@ import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import TruncatedList from "../elements/TruncatedList";
 import EntityTile from "../rooms/EntityTile";
 import BaseAvatar from "../avatars/BaseAvatar";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     space: Room;

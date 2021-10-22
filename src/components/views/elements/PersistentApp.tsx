@@ -16,14 +16,15 @@ limitations under the License.
 */
 
 import React from 'react';
+import { EventSubscription } from 'fbemitter';
+import { Room } from "matrix-js-sdk/src/models/room";
+
 import RoomViewStore from '../../../stores/RoomViewStore';
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from '../../../stores/ActiveWidgetStore';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { EventSubscription } from 'fbemitter';
 import AppTile from "./AppTile";
-import { Room } from "matrix-js-sdk/src/models/room";
 
 interface IProps {
     // none

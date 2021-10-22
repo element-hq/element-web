@@ -15,6 +15,10 @@ limitations under the License.
 */
 
 import React from 'react';
+import { IGeneratedSas, ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
+import { VerificationBase } from "matrix-js-sdk/src/crypto/verification/Base";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -27,10 +31,6 @@ import VerificationShowSas from "../verification/VerificationShowSas";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import { IDialogProps } from "./IDialogProps";
-import { IGeneratedSas, ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
-import { VerificationBase } from "matrix-js-sdk/src/crypto/verification/Base";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const PHASE_START = 0;
 const PHASE_SHOW_SAS = 1;

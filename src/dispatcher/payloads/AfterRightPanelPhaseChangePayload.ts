@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import { SetRightPanelPhaseRefireParams } from "./SetRightPanelPhasePayload";
 import { ActionPayload } from "../payloads";
 import { Action } from "../actions";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
 interface AfterRightPanelPhaseChangeAction extends ActionPayload {
     action: Action.AfterRightPanelPhaseChange;

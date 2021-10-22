@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import classNames from 'classnames';
+
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";

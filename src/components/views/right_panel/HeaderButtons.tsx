@@ -19,6 +19,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import dis from '../../../dispatcher/dispatcher';
 import RightPanelStore from "../../../stores/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";

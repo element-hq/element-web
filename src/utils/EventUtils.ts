@@ -15,15 +15,15 @@ limitations under the License.
 */
 
 import { MatrixEvent, EventStatus } from 'matrix-js-sdk/src/models/event';
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { Thread } from 'matrix-js-sdk/src/models/thread';
+import { logger } from 'matrix-js-sdk/src/logger';
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import shouldHideEvent from "../shouldHideEvent";
 import { getHandlerTile, haveTileForEvent } from "../components/views/rooms/EventTile";
 import SettingsStore from "../settings/SettingsStore";
-import { EventType } from "matrix-js-sdk/src/@types/event";
-import { MatrixClient } from 'matrix-js-sdk/src/client';
-import { Thread } from 'matrix-js-sdk/src/models/thread';
-import { logger } from 'matrix-js-sdk/src/logger';
 
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.

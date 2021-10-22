@@ -17,6 +17,7 @@ limitations under the License.
 import React, { useContext, useEffect } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { IPreviewUrlResponse, MatrixClient } from "matrix-js-sdk/src/client";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { useStateToggle } from "../../../hooks/useStateToggle";
 import LinkPreviewWidget from "./LinkPreviewWidget";
@@ -24,8 +25,6 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const INITIAL_NUM_PREVIEWS = 2;
 

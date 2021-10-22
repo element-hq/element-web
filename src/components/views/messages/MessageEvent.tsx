@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
+import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
+
 import * as sdk from '../../../index';
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
@@ -25,7 +27,6 @@ import { IMediaBody } from "./IMediaBody";
 import { IOperableEventTile } from "../context_menus/MessageContextMenu";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { ReactAnyComponent } from "../../../@types/common";
-import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { IBodyProps } from "./IBodyProps";
 
 // onMessageAllowed is handled internally

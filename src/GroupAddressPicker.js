@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import Modal from './Modal';
 import * as sdk from './';
 import MultiInviter from './utils/MultiInviter';

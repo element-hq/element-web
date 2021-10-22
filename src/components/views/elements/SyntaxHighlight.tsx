@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import highlight from 'highlight.js';
+
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {

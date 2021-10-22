@@ -20,6 +20,7 @@ limitations under the License.
 import React, { Component, CSSProperties } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
+
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import UIStore from "../../../stores/UIStore";
 

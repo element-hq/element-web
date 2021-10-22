@@ -18,6 +18,7 @@ import React from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { User } from "matrix-js-sdk/src/models/user";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import MultiInviter, { CompletionStates } from './utils/MultiInviter';
@@ -29,8 +30,6 @@ import { CommunityPrototypeStore } from "./stores/CommunityPrototypeStore";
 import BaseAvatar from "./components/views/avatars/BaseAvatar";
 import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 export interface IInviteResult {
     states: CompletionStates;

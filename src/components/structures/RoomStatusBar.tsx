@@ -15,20 +15,21 @@ limitations under the License.
 */
 
 import React from 'react';
+import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { SyncState } from "matrix-js-sdk/src/sync.api";
+import { ISyncStateData } from "matrix-js-sdk/src/sync";
+import { Room } from "matrix-js-sdk/src/models/room";
+
 import { _t, _td } from '../../languageHandler';
 import Resend from '../../Resend';
 import dis from '../../dispatcher/dispatcher';
 import { messageForResourceLimitError } from '../../utils/ErrorUtils';
 import { Action } from "../../dispatcher/actions";
 import { replaceableComponent } from "../../utils/replaceableComponent";
-import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import NotificationBadge from "../views/rooms/NotificationBadge";
 import { StaticNotificationState } from "../../stores/notifications/StaticNotificationState";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import InlineSpinner from "../views/elements/InlineSpinner";
-import { SyncState } from "matrix-js-sdk/src/sync.api";
-import { ISyncStateData } from "matrix-js-sdk/src/sync";
-import { Room } from "matrix-js-sdk/src/models/room";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 
 const STATUS_BAR_HIDDEN = 0;

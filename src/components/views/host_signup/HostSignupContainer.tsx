@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { useState } from 'react';
+
 import HostSignupDialog from "../dialogs/HostSignupDialog";
 import { HostSignupStore } from "../../../stores/HostSignupStore";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";

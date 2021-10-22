@@ -17,6 +17,8 @@ limitations under the License.
 
 import React from 'react';
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
@@ -24,8 +26,6 @@ import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import RestoreKeyBackupDialog from './security/RestoreKeyBackupDialog';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     onFinished: (success: boolean) => void;

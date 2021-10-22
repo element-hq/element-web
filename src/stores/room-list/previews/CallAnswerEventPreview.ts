@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import { IPreview } from "./IPreview";
 import { TagID } from "../models";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
 import { _t } from "../../../languageHandler";
 

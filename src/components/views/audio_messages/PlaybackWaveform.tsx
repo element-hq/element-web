@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
+
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { arraySeed, arrayTrimFill } from "../../../utils/arrays";
 import Waveform from "./Waveform";

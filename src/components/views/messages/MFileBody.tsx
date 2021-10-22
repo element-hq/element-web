@@ -16,6 +16,8 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import filesize from 'filesize';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import AccessibleButton from "../elements/AccessibleButton";
@@ -28,8 +30,6 @@ import { IMediaEventContent } from "../../../customisations/models/IMediaEventCo
 import { IBodyProps } from "./IBodyProps";
 import { FileDownloader } from "../../../utils/FileDownloader";
 import TextWithTooltip from "../elements/TextWithTooltip";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 export let DOWNLOAD_ICON_URL; // cached copy of the download.svg asset for the sandboxed iframe later on
 

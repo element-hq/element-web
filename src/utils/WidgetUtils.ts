@@ -19,6 +19,7 @@ import * as url from "url";
 import { Capability, IWidget, IWidgetData, MatrixCapabilities } from "matrix-widget-api";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import SdkConfig from "../SdkConfig";
@@ -30,8 +31,6 @@ import { WidgetType } from "../widgets/WidgetType";
 import { objectClone } from "./objects";
 import { _t } from "../languageHandler";
 import { IApp } from "../stores/WidgetStore";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 // How long we wait for the state event echo to come back from the server
 // before waitFor[Room/User]Widget rejects its promise

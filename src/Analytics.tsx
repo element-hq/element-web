@@ -16,14 +16,13 @@ limitations under the License.
 */
 
 import React from 'react';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { getCurrentLanguage, _t, _td, IVariables } from './languageHandler';
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 import Modal from './Modal';
 import * as sdk from './index';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const hashRegex = /#\/(groups?|room|user|settings|register|login|forgot_password|home|directory)/;
 const hashVarRegex = /#\/(group|room|user)\/.*$/;

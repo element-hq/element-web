@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+
 import { ActionPayload } from "../payloads";
 import { Action } from "../actions";
-import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 
 export interface TransferCallPayload extends ActionPayload {
     action: Action.TransferCallToMatrixID | Action.TransferCallToPhoneNumber;

@@ -16,8 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { _t } from '../../../languageHandler';
 import React from 'react';
+
+import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.auth.AuthFooter")

@@ -16,6 +16,7 @@ limitations under the License.
 
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import React from 'react';
+
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';

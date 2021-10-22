@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { useRef, useEffect, useState, useCallback } from "react";
+
 import type { EventEmitter } from "events";
 
 type Handler = (...args: any[]) => void;

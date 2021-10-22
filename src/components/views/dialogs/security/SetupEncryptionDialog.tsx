@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import SetupEncryptionBody from '../../../structures/auth/SetupEncryptionBody';
 import BaseDialog from '../BaseDialog';
 import { _t } from '../../../../languageHandler';

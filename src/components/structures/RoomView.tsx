@@ -27,6 +27,10 @@ import { IRecommendedVersion, NotificationCountType, Room } from "matrix-js-sdk/
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventSubscription } from "fbemitter";
 import { ISearchResults } from 'matrix-js-sdk/src/@types/search';
+import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { throttle } from "lodash";
+import { logger } from "matrix-js-sdk/src/logger";
+import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
 
 import shouldHideEvent from '../../shouldHideEvent';
 import { _t } from '../../languageHandler';
@@ -66,7 +70,6 @@ import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import EffectsOverlay from "../views/elements/EffectsOverlay";
 import { containsEmoji } from '../../effects/utils';
 import { CHAT_EFFECTS } from '../../effects';
-import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import WidgetStore from "../../stores/WidgetStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import Notifier from "../../Notifier";
@@ -79,7 +82,6 @@ import SpaceRoomView from "./SpaceRoomView";
 import { IOpts } from "../../createRoom";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
-import { throttle } from "lodash";
 import ErrorDialog from '../views/dialogs/ErrorDialog';
 import SearchResultTile from '../views/rooms/SearchResultTile';
 import Spinner from "../views/elements/Spinner";
@@ -89,9 +91,6 @@ import MessageComposer from '../views/rooms/MessageComposer';
 import JumpToBottomButton from "../views/rooms/JumpToBottomButton";
 import TopUnreadMessagesBar from "../views/rooms/TopUnreadMessagesBar";
 import SpaceStore from "../../stores/SpaceStore";
-
-import { logger } from "matrix-js-sdk/src/logger";
-import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
 import { dispatchShowThreadEvent } from '../../dispatcher/dispatch-actions/threads';
 import { fetchInitialEvent } from "../../utils/EventUtils";
 

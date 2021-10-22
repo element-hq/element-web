@@ -15,9 +15,10 @@ limitations under the License.
 */
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import { Dispatcher } from "flux";
+
 import { AsyncStore } from "./AsyncStore";
 import { ActionPayload } from "../dispatcher/payloads";
-import { Dispatcher } from "flux";
 import { ReadyWatchingStore } from "./ReadyWatchingStore";
 
 export abstract class AsyncStoreWithClient<T extends Object> extends AsyncStore<T> {

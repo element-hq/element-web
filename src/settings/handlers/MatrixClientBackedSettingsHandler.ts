@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import SettingsHandler from "./SettingsHandler";
 import { MatrixClient } from "matrix-js-sdk/src/client";
-
 import { logger } from "matrix-js-sdk/src/logger";
+
+import SettingsHandler from "./SettingsHandler";
 
 // Dev note: This whole class exists in the event someone logs out and back in - we want
 // to make sure the right MatrixClient is listening for changes.

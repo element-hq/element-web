@@ -17,6 +17,7 @@ limitations under the License.
 */
 
 import { Dispatcher } from "flux";
+
 import { Action } from "./actions";
 import { ActionPayload, AsyncActionPayload } from "./payloads";
 

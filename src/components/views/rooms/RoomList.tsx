@@ -19,6 +19,7 @@ import { Dispatcher } from "flux";
 import { Room } from "matrix-js-sdk/src/models/room";
 import * as fbEmitter from "fbemitter";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 import { _t, _td } from "../../../languageHandler";
 import { RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
@@ -51,7 +52,6 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
-import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;

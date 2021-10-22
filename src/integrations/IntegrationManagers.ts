@@ -14,10 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import url from 'url';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import type { MatrixClient } from "matrix-js-sdk/src/client";
 import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import type { Room } from "matrix-js-sdk/src/models/room";
-
 import SdkConfig from '../SdkConfig';
 import Modal from '../Modal';
 import { IntegrationManagerInstance, Kind } from "./IntegrationManagerInstance";
@@ -27,10 +29,7 @@ import IntegrationsDisabledDialog from "../components/views/dialogs/Integrations
 import WidgetUtils from "../utils/WidgetUtils";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
-import url from 'url';
 import { compare } from "../utils/strings";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const KIND_PREFERENCE = [
     // Ordered: first is most preferred, last is least preferred.

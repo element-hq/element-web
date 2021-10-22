@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { ensureVirtualRoomExists, findDMForUser } from './createRoom';
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import DMRoomMap from "./utils/DMRoomMap";
 import CallHandler, { VIRTUAL_ROOM_EVENT_TYPE } from './CallHandler';
-import { Room } from 'matrix-js-sdk/src/models/room';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 // Functions for mapping virtual users & rooms. Currently the only lookup
 // is sip virtual: there could be others in the future.

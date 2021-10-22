@@ -21,11 +21,11 @@ import Spinner from "../../../../components/views/elements/Spinner";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import dis from "../../../../dispatcher/dispatcher";
 import { _t } from '../../../../languageHandler';
-
 import SettingsStore from "../../../../settings/SettingsStore";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
 import { Action } from "../../../../dispatcher/actions";
 import { SettingLevel } from "../../../../settings/SettingLevel";
+
 interface IProps {
     onFinished: (success: boolean) => void;
 }

@@ -24,10 +24,11 @@ import {
     WidgetEventCapability,
     WidgetKind,
 } from "matrix-widget-api";
-import { _t, _td, TranslatedString } from "../languageHandler";
 import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
-import { ElementWidgetCapabilities } from "../stores/widgets/ElementWidgetCapabilities";
 import React from "react";
+
+import { _t, _td, TranslatedString } from "../languageHandler";
+import { ElementWidgetCapabilities } from "../stores/widgets/ElementWidgetCapabilities";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import TextWithTooltip from "../components/views/elements/TextWithTooltip";
 

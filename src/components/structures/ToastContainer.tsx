@@ -15,8 +15,9 @@ limitations under the License.
 */
 
 import * as React from "react";
-import ToastStore, { IToast } from "../../stores/ToastStore";
 import classNames from "classnames";
+
+import ToastStore, { IToast } from "../../stores/ToastStore";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 
 interface IState {

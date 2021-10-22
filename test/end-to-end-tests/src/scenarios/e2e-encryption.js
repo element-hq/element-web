@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+const assert = require('assert');
+
 const sendMessage = require('../usecases/send-message');
 const acceptInvite = require('../usecases/accept-invite');
 const { receiveMessage } = require('../usecases/timeline');
@@ -22,7 +24,6 @@ const { createDm } = require('../usecases/create-room');
 const { checkRoomSettings } = require('../usecases/room-settings');
 const { startSasVerification, acceptSasVerification } = require('../usecases/verify');
 const { setupSecureBackup } = require('../usecases/security');
-const assert = require('assert');
 const { measureStart, measureStop } = require('../util');
 
 module.exports = async function e2eEncryptionScenarios(alice, bob) {

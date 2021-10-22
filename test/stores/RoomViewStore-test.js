@@ -1,7 +1,5 @@
 import RoomViewStore from '../../src/stores/RoomViewStore';
-
 import { MatrixClientPeg as peg } from '../../src/MatrixClientPeg';
-
 import * as testUtils from '../test-utils';
 
 const dispatch = testUtils.getDispatchForStore(RoomViewStore);

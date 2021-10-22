@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import TabbedView, { Tab } from "../../structures/TabbedView";
 import { _t, _td } from "../../../languageHandler";
 import AdvancedRoomSettingsTab from "../settings/tabs/room/AdvancedRoomSettingsTab";

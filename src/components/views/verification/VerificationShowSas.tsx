@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import { IGeneratedSas } from "matrix-js-sdk/src/crypto/verification/SAS";
 import { DeviceInfo } from "matrix-js-sdk/src//crypto/deviceinfo";
+
 import { _t, _td } from '../../../languageHandler';
 import { PendingActionSpinner } from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";

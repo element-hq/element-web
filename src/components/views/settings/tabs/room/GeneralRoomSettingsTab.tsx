@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { ContextType } from 'react';
+
 import { _t } from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
 import AccessibleButton from "../../../elements/AccessibleButton";

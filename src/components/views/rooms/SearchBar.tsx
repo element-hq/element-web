@@ -16,8 +16,9 @@ limitations under the License.
 */
 
 import React, { createRef, RefObject } from 'react';
-import AccessibleButton from "../elements/AccessibleButton";
 import classNames from "classnames";
+
+import AccessibleButton from "../elements/AccessibleButton";
 import { _t } from '../../../languageHandler';
 import { Key } from "../../../Keyboard";
 import DesktopBuildsNotice, { WarningKind } from "../elements/DesktopBuildsNotice";

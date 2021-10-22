@@ -18,8 +18,9 @@ limitations under the License.
 
 import React, { useEffect } from 'react';
 import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import type { Relations } from 'matrix-js-sdk/src/models/relations';
+import classNames from 'classnames';
 
+import type { Relations } from 'matrix-js-sdk/src/models/relations';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
@@ -31,14 +32,11 @@ import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContex
 import Toolbar from "../../../accessibility/Toolbar";
 import { RovingAccessibleTooltipButton, useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { canCancel } from "../context_menus/MessageContextMenu";
+import MessageContextMenu, { canCancel } from "../context_menus/MessageContextMenu";
 import Resend from "../../../Resend";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import DownloadActionButton from "./DownloadActionButton";
-import MessageContextMenu from "../context_menus/MessageContextMenu";
-import classNames from 'classnames';
-
 import SettingsStore from '../../../settings/SettingsStore';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import ReplyChain from '../elements/ReplyChain';

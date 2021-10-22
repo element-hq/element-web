@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import * as Email from '../../../email';
 import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
@@ -31,8 +32,6 @@ import Field from '../elements/Field';
 import RegistrationEmailPromptDialog from '../dialogs/RegistrationEmailPromptDialog';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import CountryDropdown from "./CountryDropdown";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 enum RegistrationField {
     Email = "field_email",

@@ -16,14 +16,14 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { RoomUpdateCause, TagID } from "../../models";
 import { SortAlgorithm } from "../models";
 import { sortRoomsWithAlgorithm } from "../tag-sorting";
 import { OrderingAlgorithm } from "./OrderingAlgorithm";
 import { NotificationColor } from "../../../notifications/NotificationColor";
 import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface ICategorizedRoomMap {
     // @ts-ignore - TS wants this to be a string, but we know better

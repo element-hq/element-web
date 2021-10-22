@@ -16,6 +16,8 @@ limitations under the License.
 */
 
 import React from 'react';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import * as Email from '../../../email';
 import AddThreepid from '../../../AddThreepid';
 import { _t } from '../../../languageHandler';
@@ -27,8 +29,6 @@ import QuestionDialog from "./QuestionDialog";
 import BaseDialog from "./BaseDialog";
 import EditableText from "../elements/EditableText";
 import { IDialogProps } from "./IDialogProps";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps extends IDialogProps {
     title: string;

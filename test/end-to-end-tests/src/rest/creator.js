@@ -17,6 +17,7 @@ limitations under the License.
 
 const { exec } = require('child_process');
 const request = require('request-promise-native');
+
 const RestSession = require('./session');
 const RestMultiSession = require('./multi');
 

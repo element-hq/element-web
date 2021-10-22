@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import MImageBody from './MImageBody';
 import * as sdk from '../../../index';
 import { replaceableComponent } from "../../../utils/replaceableComponent";

@@ -14,11 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React, { ReactNode } from "react";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MsgType } from "matrix-js-sdk/src/@types/event";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { _t } from "../../../languageHandler";
-import React, { ReactNode } from "react";
 import { IUpload, RecordingState, VoiceRecording } from "../../../audio/VoiceRecording";
-import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import LiveRecordingWaveform from "../audio_messages/LiveRecordingWaveform";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -26,7 +29,6 @@ import LiveRecordingClock from "../audio_messages/LiveRecordingClock";
 import { VoiceRecordingStore } from "../../../stores/VoiceRecordingStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import RecordingPlayback from "../audio_messages/RecordingPlayback";
-import { MsgType } from "matrix-js-sdk/src/@types/event";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../MediaDeviceHandler";
@@ -35,8 +37,6 @@ import { StaticNotificationState } from "../../../stores/notifications/StaticNot
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 import InlineSpinner from "../elements/InlineSpinner";
 import { PlaybackManager } from "../../../audio/PlaybackManager";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     room: Room;

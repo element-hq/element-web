@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import { _t } from "../../../languageHandler";
 import WidgetStore from "../../../stores/WidgetStore";
 import EventTileBubble from "./EventTileBubble";

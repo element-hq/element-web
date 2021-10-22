@@ -16,6 +16,9 @@ limitations under the License.
 */
 
 import React from 'react';
+import { CallEvent, CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
+import { EventSubscription } from 'fbemitter';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import CallView from "./CallView";
 import RoomViewStore from '../../../stores/RoomViewStore';
@@ -24,13 +27,9 @@ import dis from '../../../dispatcher/dispatcher';
 import { ActionPayload } from '../../../dispatcher/payloads';
 import PersistentApp from "../elements/PersistentApp";
 import SettingsStore from "../../../settings/SettingsStore";
-import { CallEvent, CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { EventSubscription } from 'fbemitter';
 import PictureInPictureDragger from './PictureInPictureDragger';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,

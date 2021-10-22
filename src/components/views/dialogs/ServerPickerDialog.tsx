@@ -16,6 +16,7 @@ limitations under the License.
 
 import React, { createRef } from "react";
 import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
 import BaseDialog from './BaseDialog';
@@ -27,8 +28,6 @@ import StyledRadioButton from "../elements/StyledRadioButton";
 import TextWithTooltip from "../elements/TextWithTooltip";
 import withValidation, { IFieldState } from "../elements/Validation";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     title?: string;

@@ -19,6 +19,7 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import { sleep } from "matrix-js-sdk/src/utils";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, _td } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
@@ -36,8 +37,6 @@ import AddressSelector from '../elements/AddressSelector';
 import AddressTile from '../elements/AddressTile';
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;

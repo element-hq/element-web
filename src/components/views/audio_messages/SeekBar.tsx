@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Playback, PlaybackState } from "../../../audio/Playback";
 import React, { ChangeEvent, CSSProperties, ReactNode } from "react";
+
+import { Playback, PlaybackState } from "../../../audio/Playback";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { MarkedExecution } from "../../../utils/MarkedExecution";
 import { percentageOf } from "../../../utils/numbers";

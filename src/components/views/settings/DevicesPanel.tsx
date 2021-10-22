@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 import { IMyDevice } from "matrix-js-sdk/src/client";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
@@ -27,8 +28,6 @@ import InteractiveAuthDialog from "../dialogs/InteractiveAuthDialog";
 import DevicesPanelEntry from "./DevicesPanelEntry";
 import Spinner from "../elements/Spinner";
 import AccessibleButton from "../elements/AccessibleButton";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     className?: string;

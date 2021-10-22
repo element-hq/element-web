@@ -15,11 +15,12 @@ limitations under the License.
 */
 
 // @ts-ignore - `.ts` is needed here to make TS happy
-import IndexedDBWorker from "../workers/indexeddb.worker.ts";
 import { createClient, ICreateClientOpts } from "matrix-js-sdk/src/matrix";
 import { IndexedDBCryptoStore } from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
 import { WebStorageSessionStore } from "matrix-js-sdk/src/store/session/webstorage";
 import { IndexedDBStore } from "matrix-js-sdk/src/store/indexeddb";
+
+import IndexedDBWorker from "../workers/indexeddb.worker.ts";
 
 const localStorage = window.localStorage;
 

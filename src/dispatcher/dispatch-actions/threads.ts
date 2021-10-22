@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import { Action } from "../actions";
 import dis from '../dispatcher';

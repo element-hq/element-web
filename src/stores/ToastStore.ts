@@ -16,6 +16,7 @@ limitations under the License.
 
 import EventEmitter from "events";
 import React from "react";
+
 import { ComponentClass } from "../@types/common";
 
 export interface IToast<C extends ComponentClass> {

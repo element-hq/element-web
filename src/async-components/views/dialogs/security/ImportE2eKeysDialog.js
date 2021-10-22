@@ -16,13 +16,12 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
-
 import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import * as MegolmExportEncryption from '../../../../utils/MegolmExportEncryption';
 import * as sdk from '../../../../index';
 import { _t } from '../../../../languageHandler';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 function readFileAsArrayBuffer(file) {
     return new Promise((resolve, reject) => {

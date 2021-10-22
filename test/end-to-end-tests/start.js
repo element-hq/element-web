@@ -14,12 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+const fs = require("fs");
+const program = require('commander');
+
 const ElementSession = require('./src/session');
 const scenario = require('./src/scenario');
 const RestSessionCreator = require('./src/rest/creator');
-const fs = require("fs");
 
-const program = require('commander');
 program
     .option('--no-logs', "don't output logs, document html on error", false)
     .option('--app-url [url]', "url to test", "http://localhost:5000")

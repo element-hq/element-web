@@ -17,12 +17,13 @@ limitations under the License.
 import classnames from 'classnames';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import React from 'react';
-import SettingsStore from "../../../settings/SettingsStore";
 import { CallFeed, CallFeedEvent } from 'matrix-js-sdk/src/webrtc/callFeed';
 import { logger } from 'matrix-js-sdk/src/logger';
+import { SDPStreamMetadataPurpose } from 'matrix-js-sdk/src/webrtc/callEventTypes';
+
+import SettingsStore from "../../../settings/SettingsStore";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { SDPStreamMetadataPurpose } from 'matrix-js-sdk/src/webrtc/callEventTypes';
 
 interface IProps {
     call: MatrixCall;

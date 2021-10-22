@@ -15,6 +15,9 @@ limitations under the License.
 */
 
 import React, { ChangeEvent, FormEvent } from 'react';
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import BaseDialog from "./BaseDialog";
 import { _t } from "../../../languageHandler";
 import { IDialogProps } from "./IDialogProps";
@@ -23,7 +26,6 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { arrayFastClone } from "../../../utils/arrays";
 import SdkConfig from "../../../SdkConfig";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import InviteDialog from "./InviteDialog";
 import BaseAvatar from "../avatars/BaseAvatar";
 import { inviteMultipleToRoom, showAnyInviteErrors } from "../../../RoomInvite";
@@ -32,8 +34,6 @@ import Modal from "../../../Modal";
 import ErrorDialog from "./ErrorDialog";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps extends IDialogProps {
     roomId: string;

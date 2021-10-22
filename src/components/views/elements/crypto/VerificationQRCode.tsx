@@ -15,9 +15,10 @@ limitations under the License.
 */
 
 import React from "react";
+import { QRCodeData } from "matrix-js-sdk/src/crypto/verification/QRCode";
+
 import { replaceableComponent } from "../../../../utils/replaceableComponent";
 import QRCode from "../QRCode";
-import { QRCodeData } from "matrix-js-sdk/src/crypto/verification/QRCode";
 
 interface IProps {
     qrCodeData: QRCodeData;

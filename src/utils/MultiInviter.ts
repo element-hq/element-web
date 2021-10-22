@@ -16,6 +16,7 @@ limitations under the License.
 
 import { MatrixError } from "matrix-js-sdk/src/http-api";
 import { defer, IDeferred } from "matrix-js-sdk/src/utils";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import { AddressType, getAddressType } from '../UserAddress';
@@ -24,8 +25,6 @@ import { _t } from "../languageHandler";
 import Modal from "../Modal";
 import SettingsStore from "../settings/SettingsStore";
 import AskInviteAnywayDialog from "../components/views/dialogs/AskInviteAnywayDialog";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 export enum InviteState {
     Invited = "invited",

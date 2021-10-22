@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import SettingsStore from "../../../settings/SettingsStore";
 import Draggable, { ILocationState } from './Draggable';
 import { SettingLevel } from "../../../settings/SettingLevel";

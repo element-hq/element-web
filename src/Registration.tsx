@@ -21,6 +21,7 @@ limitations under the License.
  */
 
 import React from "react";
+
 import dis from './dispatcher/dispatcher';
 import Modal from './Modal';
 import { _t } from './languageHandler';

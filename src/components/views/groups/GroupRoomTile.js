@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { GroupRoomType } from '../../../groups';

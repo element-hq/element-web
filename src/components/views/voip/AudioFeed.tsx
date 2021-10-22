@@ -17,6 +17,7 @@ limitations under the License.
 import React, { createRef } from 'react';
 import { CallFeed, CallFeedEvent } from 'matrix-js-sdk/src/webrtc/callFeed';
 import { logger } from 'matrix-js-sdk/src/logger';
+
 import MediaDeviceHandler, { MediaDeviceHandlerEvent } from "../../../MediaDeviceHandler";
 
 interface IProps {

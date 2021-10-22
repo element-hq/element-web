@@ -15,13 +15,14 @@ limitations under the License.
 */
 
 import React from 'react';
+import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { User } from 'matrix-js-sdk/src/models/user';
+
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import BaseDialog from "./BaseDialog";
 import EncryptionPanel from "../right_panel/EncryptionPanel";
-import { User } from 'matrix-js-sdk/src/models/user';
 
 interface IProps {
     verificationRequest: VerificationRequest;

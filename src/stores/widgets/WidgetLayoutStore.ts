@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-import SettingsStore from "../../settings/SettingsStore";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
+import SettingsStore from "../../settings/SettingsStore";
 import WidgetStore, { IApp } from "../WidgetStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import { clamp, defaultNumber, sum } from "../../utils/numbers";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ReadyWatchingStore } from "../ReadyWatchingStore";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { arrayFastClone } from "../../utils/arrays";
 import { UPDATE_EVENT } from "../AsyncStore";

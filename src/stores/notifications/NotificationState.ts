@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { EventEmitter } from "events";
+
 import { NotificationColor } from "./NotificationColor";
 import { IDestroyable } from "../../utils/IDestroyable";
 

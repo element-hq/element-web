@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import filesize from 'filesize';
+
 import { IMediaEventContent } from '../customisations/models/IMediaEventContent';
 import { _t } from '../languageHandler';
 

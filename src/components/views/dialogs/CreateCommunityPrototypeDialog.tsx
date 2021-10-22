@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import React, { ChangeEvent } from 'react';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import BaseDialog from "./BaseDialog";
 import { _t } from "../../../languageHandler";
 import { IDialogProps } from "./IDialogProps";
@@ -26,8 +28,6 @@ import dis from "../../../dispatcher/dispatcher";
 import { showCommunityRoomInviteDialog } from "../../../RoomInvite";
 import GroupStore from "../../../stores/GroupStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps extends IDialogProps {
 }
