@@ -9,6 +9,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackInjectPreload = require('@principalstudio/html-webpack-inject-preload');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const SentryCliPlugin = require("@sentry/webpack-plugin");
 
 dotenv.config();
 let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
@@ -528,6 +529,13 @@ module.exports = (env, argv) => {
             }),
             useHMR && new ReactRefreshWebpackPlugin(fullPageErrors ? undefined : { overlay: { entry: false } }),
 
+            // upload to sentry if sentry env is present
+            process.env.SENTRY_DSN &&
+                new SentryCliPlugin({
+                    release: process.env.VERSION,
+                    include: "./webapp",
+                }),
+            new webpack.EnvironmentPlugin(['VERSION']),
         ].filter(Boolean),
 
         output: {
