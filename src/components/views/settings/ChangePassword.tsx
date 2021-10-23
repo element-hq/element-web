@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import Field from "../elements/Field";
-import React from 'react';
+import React, { ComponentType } from 'react';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AccessibleButton from '../elements/AccessibleButton';
 import Spinner from '../elements/Spinner';
@@ -186,7 +186,9 @@ export default class ChangePassword extends React.Component<IProps, IState> {
 
     private onExportE2eKeysClicked = (): void => {
         Modal.createTrackedDialogAsync('Export E2E Keys', 'Change Password',
-            import('../../../async-components/views/dialogs/security/ExportE2eKeysDialog'),
+            import(
+                '../../../async-components/views/dialogs/security/ExportE2eKeysDialog'
+            ) as unknown as Promise<ComponentType<{}>>,
             {
                 matrixClient: MatrixClientPeg.get(),
             },

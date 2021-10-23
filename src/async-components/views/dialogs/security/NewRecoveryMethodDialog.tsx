@@ -16,43 +16,40 @@ limitations under the License.
 */
 
 import React from "react";
-import PropTypes from "prop-types";
-import * as sdk from "../../../../index";
 import { MatrixClientPeg } from '../../../../MatrixClientPeg';
 import dis from "../../../../dispatcher/dispatcher";
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
 import RestoreKeyBackupDialog from "../../../../components/views/dialogs/security/RestoreKeyBackupDialog";
 import { Action } from "../../../../dispatcher/actions";
+import { IDialogProps } from "../../../../components/views/dialogs/IDialogProps";
+import DialogButtons from "../../../../components/views/elements/DialogButtons";
+import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
+import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 
-export default class NewRecoveryMethodDialog extends React.PureComponent {
-    static propTypes = {
-        // As returned by js-sdk getKeyBackupVersion()
-        newVersionInfo: PropTypes.object,
-        onFinished: PropTypes.func.isRequired,
-    }
+interface IProps extends IDialogProps {
+    newVersionInfo: IKeyBackupInfo;
+}
 
-    onOkClick = () => {
+export default class NewRecoveryMethodDialog extends React.PureComponent<IProps> {
+    private onOkClick = (): void => {
         this.props.onFinished();
-    }
+    };
 
-    onGoToSettingsClick = () => {
+    private onGoToSettingsClick = (): void => {
         this.props.onFinished();
         dis.fire(Action.ViewUserSettings);
-    }
+    };
 
-    onSetupClick = async () => {
+    private onSetupClick = async (): Promise<void> => {
         Modal.createTrackedDialog(
             'Restore Backup', '', RestoreKeyBackupDialog, {
                 onFinished: this.props.onFinished,
             }, null, /* priority = */ false, /* static = */ true,
         );
-    }
+    };
 
-    render() {
-        const BaseDialog = sdk.getComponent("views.dialogs.BaseDialog");
-        const DialogButtons = sdk.getComponent("views.elements.DialogButtons");
-
+    public render(): JSX.Element {
         const title = <span className="mx_KeyBackupFailedDialog_title">
             { _t("New Recovery Method") }
         </span>;
