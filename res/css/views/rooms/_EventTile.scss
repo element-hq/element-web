@@ -486,7 +486,7 @@ $left-gutter: 64px;
 
     pre, code {
         font-family: $monospace-font-family !important;
-        background-color: $header-panel-bg-color;
+        background-color: $codeblock-background-color;
     }
 
     pre code > * {
