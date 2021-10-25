@@ -55,6 +55,14 @@ body:
     validations:
       required: false
   - type: input
+    id: version
+    attributes:
+      label: Application version
+      description: You can find the version information in Settings -> Help & About.
+      placeholder: e.g. Element version 1.7.34, olm version 3.2.3
+    validations:
+      required: false
+  - type: input
     id: homeserver
     attributes:
       label: Homeserver
