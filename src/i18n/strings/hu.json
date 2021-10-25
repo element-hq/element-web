@@ -3253,5 +3253,7 @@
     "That e-mail address is already in use.": "Az e-mail cím már használatban van.",
     "The email address doesn't appear to be valid.": "Az e-mail cím nem tűnik érvényesnek.",
     "See room timeline (devtools)": "Szoba idővonal megjelenítése (fejlesztői eszközök)",
-    "Developer mode": "Fejlesztői mód"
+    "Developer mode": "Fejlesztői mód",
+    "Joined": "Csatlakozott",
+    "Insert link": "Link beillesztése"
 }
