@@ -1014,14 +1014,14 @@ export const Commands = [
     new Command({
         command: "msg",
         description: _td("Sends a message to the given user"),
-        args: "<user-id> <message>",
+        args: "<user-id> [<message>]",
         runFn: function(roomId, args) {
             if (args) {
                 // matches the first whitespace delimited group and then the rest of the string
                 const matches = args.match(/^(\S+?)(?: +(.*))?$/s);
                 if (matches) {
                     const [userId, msg] = matches.slice(1);
-                    if (msg && userId && userId.startsWith("@") && userId.includes(":")) {
+                    if (userId && userId.startsWith("@") && userId.includes(":")) {
                         return success((async () => {
                             const cli = MatrixClientPeg.get();
                             const roomId = await ensureDMExists(cli, userId);
@@ -1029,7 +1029,9 @@ export const Commands = [
                                 action: 'view_room',
                                 room_id: roomId,
                             });
-                            cli.sendTextMessage(roomId, msg);
+                            if (msg) {
+                                cli.sendTextMessage(roomId, msg);
+                            }
                         })());
                     }
                 }
