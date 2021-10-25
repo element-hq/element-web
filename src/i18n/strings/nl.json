@@ -3234,5 +3234,9 @@
     "Loading new room": "Nieuwe kamer laden",
     "Upgrading room": "Kamer aan het bijwerken",
     "Developer mode": "Ontwikkelaar mode",
-    "Polls (under active development)": "Polls (in ontwikkeling)"
+    "Polls (under active development)": "Polls (in ontwikkeling)",
+    "Shows all threads from current room": "Toon alle draden van huidige kamer",
+    "All threads": "Alle draden",
+    "Shows all threads you’ve participated in": "Toon alle draden waarin ik heb bijgedragen",
+    "My threads": "Mijn draden"
 }
