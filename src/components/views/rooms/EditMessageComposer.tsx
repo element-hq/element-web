@@ -47,6 +47,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { logger } from "matrix-js-sdk/src/logger";
 import { withMatrixClientHOC, MatrixClientProps } from '../../../contexts/MatrixClientContext';
 import RoomContext from '../../../contexts/RoomContext';
+import { ComposerType } from "../../../dispatcher/payloads/ComposerInsertPayload";
 
 function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
     const html = mxEvent.getContent().formatted_body;
@@ -499,7 +500,12 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     };
 
     private onAction = (payload: ActionPayload) => {
-        if (payload.action === "edit_composer_insert" && this.editorRef.current) {
+        if (!this.editorRef.current) return;
+
+        if (payload.action === Action.ComposerInsert) {
+            if (payload.timelineRenderingType !== this.context.timelineRenderingType) return;
+            if (payload.composerType !== ComposerType.Edit) return;
+
             if (payload.userId) {
                 this.editorRef.current?.insertMention(payload.userId);
             } else if (payload.event) {
@@ -507,7 +513,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             } else if (payload.text) {
                 this.editorRef.current?.insertPlaintext(payload.text);
             }
-        } else if (payload.action === Action.FocusEditMessageComposer && this.editorRef.current) {
+        } else if (payload.action === Action.FocusEditMessageComposer) {
             this.editorRef.current.focus();
         }
     };

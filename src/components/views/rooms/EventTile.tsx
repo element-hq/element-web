@@ -62,6 +62,7 @@ import { dispatchShowThreadEvent } from '../../../dispatcher/dispatch-actions/th
 import { MessagePreviewStore } from '../../../stores/room-list/MessagePreviewStore';
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { TimelineRenderingType } from "../../../contexts/RoomContext";
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -313,6 +314,8 @@ interface IProps {
 
     // whether or not to display thread info
     showThreadInfo?: boolean;
+
+    timelineRenderingType?: TimelineRenderingType;
 }
 
 interface IState {
@@ -855,10 +858,11 @@ export default class EventTile extends React.Component<IProps, IState> {
     }
 
     onSenderProfileClick = () => {
-        const mxEvent = this.props.mxEvent;
+        if (!this.props.timelineRenderingType) return;
         dis.dispatch<ComposerInsertPayload>({
             action: Action.ComposerInsert,
-            userId: mxEvent.getSender(),
+            userId: this.props.mxEvent.getSender(),
+            timelineRenderingType: this.props.timelineRenderingType,
         });
     };
 
@@ -1091,7 +1095,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         if (needsSenderProfile && this.props.hideSender !== true) {
-            if (!this.props.tileShape) {
+            if (!this.props.tileShape || this.props.tileShape === TileShape.Thread) {
                 sender = <SenderProfile onClick={this.onSenderProfileClick}
                     mxEvent={this.props.mxEvent}
                     enableFlair={this.props.enableFlair}

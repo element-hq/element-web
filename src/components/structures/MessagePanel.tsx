@@ -196,6 +196,7 @@ interface IReadReceiptForUser {
 @replaceableComponent("structures.MessagePanel")
 export default class MessagePanel extends React.Component<IProps, IState> {
     static contextType = RoomContext;
+    public context!: React.ContextType<typeof RoomContext>;
 
     // opaque readreceipt info for each userId; used by ReadReceiptMarker
     // to manage its animations
@@ -787,6 +788,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     showReadReceipts={this.props.showReadReceipts}
                     callEventGrouper={callEventGrouper}
                     hideSender={this.membersCount <= 2 && this.props.layout === Layout.Bubble}
+                    timelineRenderingType={this.context.timelineRenderingType}
                 />
             </TileErrorBoundary>,
         );

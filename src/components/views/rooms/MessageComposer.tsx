@@ -252,7 +252,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     private ref: React.RefObject<HTMLDivElement> = createRef();
     private instanceId: number;
 
-    public static contextType = RoomContext;
+    static contextType = RoomContext;
+    public context!: React.ContextType<typeof RoomContext>;
 
     static defaultProps = {
         compact: false,
@@ -398,13 +399,14 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         }
     };
 
-    private addEmoji(emoji: string): boolean {
+    private addEmoji = (emoji: string): boolean => {
         dis.dispatch<ComposerInsertPayload>({
             action: Action.ComposerInsert,
             text: emoji,
+            timelineRenderingType: this.context.timelineRenderingType,
         });
         return true;
-    }
+    };
 
     private sendMessage = async () => {
         if (this.state.haveRecording && this.voiceRecordingButton.current) {
