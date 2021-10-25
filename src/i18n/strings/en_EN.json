@@ -1606,6 +1606,7 @@
     "Strikethrough": "Strikethrough",
     "Code block": "Code block",
     "Quote": "Quote",
+    "Insert link": "Insert link",
     "Only the two of you are in this conversation, unless either of you invites anyone to join.": "Only the two of you are in this conversation, unless either of you invites anyone to join.",
     "This is the beginning of your direct message history with <displayName/>.": "This is the beginning of your direct message history with <displayName/>.",
     "Topic: %(topic)s (<a>edit</a>)": "Topic: %(topic)s (<a>edit</a>)",
