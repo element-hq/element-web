@@ -307,16 +307,23 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         return room?.currentState.getStateEvents(EventType.SpaceParent)
             .map(ev => {
                 const content = ev.getContent();
-                if (Array.isArray(content?.via) && (!canonicalOnly || content?.canonical)) {
-                    const parent = this.matrixClient.getRoom(ev.getStateKey());
-                    // only respect the relationship if the sender has sufficient permissions in the parent to set
-                    // child relations, as per MSC1772.
-                    // https://github.com/matrix-org/matrix-doc/blob/main/proposals/1772-groups-as-rooms.md#relationship-between-rooms-and-spaces
-                    if (parent?.currentState.maySendStateEvent(EventType.SpaceChild, userId)) {
-                        return parent;
-                    }
+                if (!Array.isArray(content.via) || (canonicalOnly && !content.canonical)) {
+                    return; // skip
                 }
-                // else implicit undefined which causes this element to be filtered out
+
+                // only respect the relationship if the sender has sufficient permissions in the parent to set
+                // child relations, as per MSC1772.
+                // https://github.com/matrix-org/matrix-doc/blob/main/proposals/1772-groups-as-rooms.md#relationship-between-rooms-and-spaces
+                const parent = this.matrixClient.getRoom(ev.getStateKey());
+                const relation = parent.currentState.getStateEvents(EventType.SpaceChild, roomId);
+                if (!parent?.currentState.maySendStateEvent(EventType.SpaceChild, userId) ||
+                    // also skip this relation if the parent had this child added but then since removed it
+                    (relation && !Array.isArray(relation.getContent().via))
+                ) {
+                    return; // skip
+                }
+
+                return parent;
             })
             .filter(Boolean) || [];
     }

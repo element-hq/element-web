@@ -281,7 +281,7 @@ describe("SpaceStore", () => {
                 mkSpace(space1, [fav1, room1]);
                 mkSpace(space2, [fav1, fav2, fav3, room1]);
                 mkSpace(space3, [invite2]);
-                // client.getRoom.mockImplementation(roomId => rooms.find(room => room.roomId === roomId));
+                client.getRoom.mockImplementation(roomId => rooms.find(room => room.roomId === roomId));
 
                 [fav1, fav2, fav3].forEach(roomId => {
                     client.getRoom(roomId).tags = {

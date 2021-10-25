@@ -545,8 +545,18 @@ const ManageButtons = ({ hierarchy, selected, setSelected, setError }: IManageBu
             onClick={async () => {
                 setRemoving(true);
                 try {
+                    const userId = cli.getUserId();
                     for (const [parentId, childId] of selectedRelations) {
                         await cli.sendStateEvent(parentId, EventType.SpaceChild, {}, childId);
+
+                        // remove the child->parent relation too, if we have permission to.
+                        const childRoom = cli.getRoom(childId);
+                        const parentRelation = childRoom?.currentState.getStateEvents(EventType.SpaceParent, parentId);
+                        if (childRoom?.currentState.maySendStateEvent(EventType.SpaceParent, userId) &&
+                            Array.isArray(parentRelation?.getContent().via)
+                        ) {
+                            await cli.sendStateEvent(childId, EventType.SpaceParent, {}, parentId);
+                        }
 
                         hierarchy.removeRelation(parentId, childId);
                     }
