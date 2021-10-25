@@ -3253,5 +3253,7 @@
     "That e-mail address is already in use.": "See e-posti aadress on juba kasutusel.",
     "The email address doesn't appear to be valid.": "See e-posti aadress ei tundu olema korrektne.",
     "See room timeline (devtools)": "Vaata jututoa ajajoont (arendusvaade)",
-    "Developer mode": "Arendusrežiim"
+    "Developer mode": "Arendusrežiim",
+    "Joined": "Liitunud",
+    "Insert link": "Lisa link"
 }
