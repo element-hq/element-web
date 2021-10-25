@@ -3254,5 +3254,6 @@
     "That e-mail address is already in use.": "电子邮件地址已被占用。",
     "See room timeline (devtools)": "查看聊天室时间轴（开发工具）",
     "Developer mode": "开发者模式",
-    "Insert link": "插入链接"
+    "Insert link": "插入链接",
+    "Joined": "已加入"
 }
