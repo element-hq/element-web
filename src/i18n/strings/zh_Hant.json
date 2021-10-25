@@ -3251,5 +3251,10 @@
     "%(count)s reply|one": "%(count)s 回覆",
     "%(count)s reply|other": "%(count)s 回覆",
     "View in room": "在聊天室中檢視",
-    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "輸入您的安全密語或<button>使用您的安全金鑰</button>以繼續。"
+    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "輸入您的安全密語或<button>使用您的安全金鑰</button>以繼續。",
+    "The email address doesn't appear to be valid.": "電子郵件地址似乎無效。",
+    "What projects are your team working on?": "您的團隊正在從事哪些專案？",
+    "That e-mail address is already in use.": "該電子郵件地址已在使用中。",
+    "See room timeline (devtools)": "檢視聊天室時間軸（開發者工具）",
+    "Developer mode": "開發者模式"
 }
