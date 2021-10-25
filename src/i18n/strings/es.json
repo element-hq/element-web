@@ -3246,5 +3246,12 @@
     "Sending invites... (%(progress)s out of %(count)s)|other": "Enviando invitaciones… (%(progress)s de %(count)s)",
     "Loading new room": "Cargando la nueva sala",
     "Upgrading room": "Actualizar sala",
-    "Polls (under active development)": "Encuestas (en construcción)"
+    "Polls (under active development)": "Encuestas (en construcción)",
+    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Escribe tu frase de seguridad o <button>usa tu llave de seguridad</button> para continuar.",
+    "See room timeline (devtools)": "Ver línea de tiempo de la sala (herramientas de desarrollo)",
+    "That e-mail address is already in use.": "Esa dirección de correo ya está en uso.",
+    "The email address doesn't appear to be valid.": "La dirección de correo no parece ser válida.",
+    "What projects are your team working on?": "¿En qué proyectos está trabajando tu equipo?",
+    "View in room": "Ver en la sala",
+    "Developer mode": "Modo de desarrollo"
 }
