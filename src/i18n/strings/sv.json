@@ -3253,5 +3253,7 @@
     "Shows all threads from current room": "Visar alla trådar från nuvarande rum",
     "All threads": "Alla trådar",
     "Shows all threads you’ve participated in": "Visar alla trådar du har deltagit i",
-    "My threads": "Mina trådar"
+    "My threads": "Mina trådar",
+    "Joined": "Gick med",
+    "Insert link": "Infoga länk"
 }
