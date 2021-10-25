@@ -172,8 +172,15 @@ const Tile: React.FC<ITileProps> = ({
         description += " · " + topic;
     }
 
+    let joinedSection;
+    if (joinedRoom) {
+        joinedSection = <div className="mx_SpaceHierarchy_roomTile_joined">
+            { _t("Joined") }
+        </div>;
+    }
+
     let suggestedSection;
-    if (suggested) {
+    if (suggested && (!joinedRoom || hasPermissions)) {
         suggestedSection = <InfoTooltip tooltip={_t("This room is suggested as a good one to join")}>
             { _t("Suggested") }
         </InfoTooltip>;
@@ -183,6 +190,7 @@ const Tile: React.FC<ITileProps> = ({
         { avatar }
         <div className="mx_SpaceHierarchy_roomTile_name">
             { name }
+            { joinedSection }
             { suggestedSection }
         </div>
 
