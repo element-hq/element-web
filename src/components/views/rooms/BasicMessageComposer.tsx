@@ -478,6 +478,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             switch (autocompleteAction) {
                 case AutocompleteAction.ForceComplete:
                 case AutocompleteAction.Complete:
+                    this.historyManager.ensureLastChangesPushed(this.props.model);
+                    this.modifiedFlag = true;
                     autoComplete.confirmCompletion();
                     handled = true;
                     break;
