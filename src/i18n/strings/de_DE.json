@@ -3155,5 +3155,7 @@
     "Upgrade anyway": "Trotzdem upgraden",
     "This room is in some spaces you’re not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Dieser Raum ist in einigen Spaces, in denen du nicht Admin bist. Daher wird dort noch der alte Raum angezeigt, die Leute werden aber auf den neuen Raum hingewiesen.",
     "Before you upgrade": "Bevor du upgradest",
-    "You can also make Spaces from <a>communities</a>.": "Du kannst Spaces auch aus <a>Communities</a> erstellen."
+    "You can also make Spaces from <a>communities</a>.": "Du kannst Spaces auch aus <a>Communities</a> erstellen.",
+    "%(count)s reply|one": "%(count)s Antwort",
+    "%(count)s reply|other": "%(count)s Antworten"
 }
