@@ -141,12 +141,6 @@ input[type=search]::-webkit-search-results-decoration {
 input::placeholder,
 textarea::placeholder {
     opacity: initial;
-    font-weight: 400;
-}
-input::-moz-placeholder,
-textarea::-moz-placeholder {
-    opacity: .6;
-    font-weight: 400;
 }
 
 input[type=text], input[type=password], textarea {
