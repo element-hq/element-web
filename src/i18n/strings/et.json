@@ -3248,5 +3248,10 @@
     "%(count)s reply|one": "%(count)s vastus",
     "%(count)s reply|other": "%(count)s vastust",
     "View in room": "Vaata jututoas",
-    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Jätkamiseks sisesta oma turvafraas või <button>kasuta oma turvavõtit</button>."
+    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Jätkamiseks sisesta oma turvafraas või <button>kasuta oma turvavõtit</button>.",
+    "What projects are your team working on?": "Missuguste projektidega sinu tiim tegeleb?",
+    "That e-mail address is already in use.": "See e-posti aadress on juba kasutusel.",
+    "The email address doesn't appear to be valid.": "See e-posti aadress ei tundu olema korrektne.",
+    "See room timeline (devtools)": "Vaata jututoa ajajoont (arendusvaade)",
+    "Developer mode": "Arendusrežiim"
 }
