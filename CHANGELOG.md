@@ -1,3 +1,10 @@
+Changes in [1.9.3-rc.3](https://github.com/vector-im/element-desktop/releases/tag/v1.9.3-rc.3) (2021-10-25)
+===========================================================================================================
+
+## 🐛 Bug Fixes
+ * Remove highlightjs CSS ([\#19483](https://github.com/vector-im/element-web/pull/19483)). Fixes vector-im/element-web#19476
+
+
 Changes in [1.9.3-rc.2](https://github.com/vector-im/element-desktop/releases/tag/v1.9.3-rc.2) (2021-10-20)
 ===========================================================================================================
 
