@@ -3253,5 +3253,6 @@
     "The email address doesn't appear to be valid.": "电子邮件地址似乎无效。",
     "That e-mail address is already in use.": "电子邮件地址已被占用。",
     "See room timeline (devtools)": "查看聊天室时间轴（开发工具）",
-    "Developer mode": "开发者模式"
+    "Developer mode": "开发者模式",
+    "Insert link": "插入链接"
 }
