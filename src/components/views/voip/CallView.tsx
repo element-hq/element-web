@@ -278,6 +278,8 @@ export default class CallView extends React.Component<IProps, IState> {
             if (window.electron?.getDesktopCapturerSources) {
                 const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
                 const [source] = await finished;
+                if (!source) return;
+
                 isScreensharing = await this.props.call.setScreensharingEnabled(true, source);
             } else {
                 isScreensharing = await this.props.call.setScreensharingEnabled(true);
