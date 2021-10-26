@@ -2968,8 +2968,6 @@
     "A private space to organise your rooms": "A private space to organise your rooms",
     "Me and my teammates": "Me and my teammates",
     "A private space for you and your teammates": "A private space for you and your teammates",
-    "Teammates might not be able to view or join any private rooms you make.": "Teammates might not be able to view or join any private rooms you make.",
-    "We're working on this, but just want to let you know.": "We're working on this, but just want to let you know.",
     "Failed to invite the following users to your space: %(csvUsers)s": "Failed to invite the following users to your space: %(csvUsers)s",
     "Inviting...": "Inviting...",
     "Invite your teammates": "Invite your teammates",
