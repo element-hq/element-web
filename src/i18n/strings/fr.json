@@ -3247,5 +3247,14 @@
     "Loading new room": "Chargement du nouveau salon",
     "Upgrading room": "Mise-à-jour du salon",
     "Waiting for you to verify on your other session…": "En attente de votre vérification sur votre autre session…",
-    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "En attente de votre vérification sur votre autre session, %(deviceName)s (%(deviceId)s)…"
+    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "En attente de votre vérification sur votre autre session, %(deviceName)s (%(deviceId)s)…",
+    "That e-mail address is already in use.": "Cette adresse e-mail est déjà utilisée.",
+    "The email address doesn't appear to be valid.": "L’adresse de courriel semble être invalide.",
+    "What projects are your team working on?": "Sur quels projets travaille votre équipe ?",
+    "See room timeline (devtools)": "Voir l’historique du salon (outils développeurs)",
+    "View in room": "Voir dans le salon",
+    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Saisissez votre phrase de sécurité ou <button>utilisez votre clé de sécurité</button> pour continuer.",
+    "%(count)s reply|one": "%(count)s réponse",
+    "%(count)s reply|other": "%(count)s réponses",
+    "Developer mode": "Mode développeur"
 }
