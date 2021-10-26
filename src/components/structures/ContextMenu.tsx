@@ -249,6 +249,8 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
         let handled = true;
 
         switch (ev.key) {
+            // XXX: this is imitating roving behaviour, it should really use the RovingTabIndex utils
+            // to inherit proper handling of unmount edge cases
             case Key.TAB:
             case Key.ESCAPE:
             case Key.ARROW_LEFT: // close on left and right arrows too for when it is a context menu on a <Toolbar />

@@ -43,7 +43,6 @@ import SpaceStore, {
 } from "../../../stores/SpaceStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
-import { Key } from "../../../Keyboard";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import IconizedContextMenu, {
@@ -228,75 +227,12 @@ const SpacePanel = () => {
         return () => UIStore.instance.stopTrackingElementDimensions("SpacePanel");
     }, []);
 
-    const onKeyDown = (ev: React.KeyboardEvent) => {
-        if (ev.defaultPrevented) return;
-
-        let handled = true;
-
-        switch (ev.key) {
-            case Key.ARROW_UP:
-                onMoveFocus(ev.target as Element, true);
-                break;
-            case Key.ARROW_DOWN:
-                onMoveFocus(ev.target as Element, false);
-                break;
-            default:
-                handled = false;
-        }
-
-        if (handled) {
-            // consume all other keys in context menu
-            ev.stopPropagation();
-            ev.preventDefault();
-        }
-    };
-
-    const onMoveFocus = (element: Element, up: boolean) => {
-        let descending = false; // are we currently descending or ascending through the DOM tree?
-        let classes: DOMTokenList;
-
-        do {
-            const child = up ? element.lastElementChild : element.firstElementChild;
-            const sibling = up ? element.previousElementSibling : element.nextElementSibling;
-
-            if (descending) {
-                if (child) {
-                    element = child;
-                } else if (sibling) {
-                    element = sibling;
-                } else {
-                    descending = false;
-                    element = element.parentElement;
-                }
-            } else {
-                if (sibling) {
-                    element = sibling;
-                    descending = true;
-                } else {
-                    element = element.parentElement;
-                }
-            }
-
-            if (element) {
-                if (element.classList.contains("mx_ContextualMenu")) { // we hit the top
-                    element = up ? element.lastElementChild : element.firstElementChild;
-                    descending = true;
-                }
-                classes = element.classList;
-            }
-        } while (element && !classes.contains("mx_SpaceButton"));
-
-        if (element) {
-            (element as HTMLElement).focus();
-        }
-    };
-
     return (
         <DragDropContext onDragEnd={result => {
             if (!result.destination) return; // dropped outside the list
             SpaceStore.instance.moveRootSpace(result.source.index, result.destination.index);
         }}>
-            <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={onKeyDown}>
+            <RovingTabIndexProvider handleHomeEnd handleUpDown>
                 { ({ onKeyDownHandler }) => (
                     <ul
                         className={classNames("mx_SpacePanel", { collapsed: isPanelCollapsed })}

@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactComponentElement } from "react";
+import React, { createRef, ReactComponentElement } from "react";
 import { Dispatcher } from "flux";
 import { Room } from "matrix-js-sdk/src/models/room";
 import * as fbEmitter from "fbemitter";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { _t, _td } from "../../../languageHandler";
-import { RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
+import { RovingTabIndexProvider, IState as IRovingTabIndexState } from "../../../accessibility/RovingTabIndex";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import RoomViewStore from "../../../stores/RoomViewStore";
@@ -54,7 +54,7 @@ import { UIComponent } from "../../../settings/UIFeature";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 interface IProps {
-    onKeyDown: (ev: React.KeyboardEvent) => void;
+    onKeyDown: (ev: React.KeyboardEvent, state: IRovingTabIndexState) => void;
     onFocus: (ev: React.FocusEvent) => void;
     onBlur: (ev: React.FocusEvent) => void;
     onResize: () => void;
@@ -249,6 +249,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     private dispatcherRef;
     private customTagStoreRef;
     private roomStoreToken: fbEmitter.EventSubscription;
+    private treeRef = createRef<HTMLDivElement>();
 
     constructor(props: IProps) {
         super(props);
@@ -505,6 +506,12 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             });
     }
 
+    public focus(): void {
+        // focus the first focusable element in this aria treeview widget
+        [...this.treeRef.current?.querySelectorAll<HTMLElement>('[role="treeitem"]')]
+            .find(e => e.offsetParent !== null)?.focus();
+    }
+
     public render() {
         const cli = MatrixClientPeg.get();
         const userId = cli.getUserId();
@@ -584,7 +591,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
         const sublists = this.renderSublists();
         return (
-            <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={this.props.onKeyDown}>
+            <RovingTabIndexProvider handleHomeEnd handleUpDown onKeyDown={this.props.onKeyDown}>
                 { ({ onKeyDownHandler }) => (
                     <div
                         onFocus={this.props.onFocus}
@@ -593,6 +600,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                         className="mx_RoomList"
                         role="tree"
                         aria-label={_t("Rooms")}
+                        ref={this.treeRef}
                     >
                         { sublists }
                         { explorePrompt }
