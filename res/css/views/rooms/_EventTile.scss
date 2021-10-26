@@ -401,7 +401,6 @@ $left-gutter: 64px;
     cursor: pointer;
 }
 
-
 .mx_EventTile_e2eIcon {
     position: relative;
     width: 14px;
@@ -581,7 +580,6 @@ $left-gutter: 64px;
     color: inherit;
 }
 
-
 /* Make h1 and h2 the same size as h3. */
 .mx_EventTile_content .markdown-body h1,
 .mx_EventTile_content .markdown-body h2 {
@@ -612,7 +610,6 @@ $left-gutter: 64px;
 */
 
 /* end of overrides */
-
 
 .mx_EventTile_keyRequestInfo {
     font-size: $font-12px;
@@ -730,8 +727,6 @@ $left-gutter: 64px;
         white-space: nowrap;
     }
 }
-
-
 
 .mx_ThreadView {
     display: flex;

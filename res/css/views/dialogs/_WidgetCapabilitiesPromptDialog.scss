@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 .mx_WidgetCapabilitiesPromptDialog {
     .text-muted {
         font-size: $font-12px;
@@ -54,7 +53,6 @@ limitations under the License.
             // downsize the switch + ball
             width: $font-32px;
             height: $font-15px;
-
 
             &.mx_ToggleSwitch_on > .mx_ToggleSwitch_ball {
                 left: calc(100% - $font-15px);

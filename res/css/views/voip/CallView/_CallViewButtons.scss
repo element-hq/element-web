@@ -35,7 +35,6 @@ limitations under the License.
         margin-left: 2px;
         margin-right: 2px;
 
-
         &::before {
             content: '';
             display: inline-block;
@@ -47,7 +46,6 @@ limitations under the License.
             background-size: contain;
             background-position: center;
         }
-
 
         &.mx_CallViewButtons_dialpad::before {
             background-image: url('$(res)/img/voip/dialpad.svg');
