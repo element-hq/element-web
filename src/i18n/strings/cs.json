@@ -1967,7 +1967,7 @@
     "Backup version:": "Verze zálohy:",
     "Algorithm:": "Algoritmus:",
     "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "Tuto možnost můžete povolit, pokud bude místnost použita pouze pro spolupráci s interními týmy na vašem domovském serveru. Toto nelze později změnit.",
-    "Block anyone not part of %(serverName)s from ever joining this room.": "Blokovat komukoli, kdo není součástí serveru %(serverName)s, aby se připojil do této místnosti.",
+    "Block anyone not part of %(serverName)s from ever joining this room.": "Blokovat komukoli, kdo není součástí serveru %(serverName)s, aby vstoupil do této místnosti.",
     "Manage the names of and sign out of your sessions below or <a>verify them in your User Profile</a>.": "Níže můžete spravovat názvy a odhlásit se ze svých relací nebo <a>je ověřit v uživatelském profilu</a>.",
     "Cross-signing is not set up.": "Cross-signing není nastaveno.",
     "Cross-signing is ready for use.": "Cross-signing je připraveno k použití.",
@@ -3258,5 +3258,7 @@
     "See room timeline (devtools)": "Viz časová osa místnosti (devtools)",
     "Developer mode": "Vývojářský režim",
     "Insert link": "Vložit odkaz",
-    "Joined": "Připojeno"
+    "Joined": "Připojeno",
+    "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s změnil, kdo může vstoupit do této místnosti.",
+    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s změnil, kdo se může vstoupit do této místnosti. <a>Zobrazit nastavení</a>."
 }
