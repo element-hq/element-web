@@ -50,7 +50,7 @@ export async function upgradeRoom(
         spinnerModal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
     }
 
-    let toInvite: string[];
+    let toInvite: string[] = [];
     if (inviteUsers) {
         toInvite = [
             ...room.getMembersWithMembership("join"),
@@ -58,7 +58,7 @@ export async function upgradeRoom(
         ].map(m => m.userId).filter(m => m !== cli.getUserId());
     }
 
-    let parentsToRelink: Room[];
+    let parentsToRelink: Room[] = [];
     if (updateSpaces) {
         parentsToRelink = Array.from(SpaceStore.instance.getKnownParents(room.roomId))
             .map(roomId => cli.getRoom(roomId))
