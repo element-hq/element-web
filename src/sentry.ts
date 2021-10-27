@@ -219,3 +219,5 @@ export async function initSentry(sentryConfig: ISentryConfig): Promise<void> {
         tracesSampleRate: 1.0,
     });
 }
+
+window.mxSendSentryReport = sendSentryReport;

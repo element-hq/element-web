@@ -99,6 +99,7 @@ declare global {
         mxSkinner?: Skinner;
         mxOnRecaptchaLoaded?: () => void;
         electron?: Electron;
+        mxSendSentryReport: (userText: string, issueUrl: string, error: Error) => Promise<void>;
     }
 
     interface DesktopCapturerSource {
