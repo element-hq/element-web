@@ -3253,5 +3253,8 @@
     "The email address doesn't appear to be valid.": "O enderezo de email non semella ser válido.",
     "What projects are your team working on?": "En que proxectos está a traballar o teu equipo?",
     "See room timeline (devtools)": "Ver cronoloxía da sala (devtools)",
-    "Developer mode": "Modo desenvolvemento"
+    "Developer mode": "Modo desenvolvemento",
+    "Insert link": "Escribir ligazón",
+    "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s cambiou quen pode unirse a esta sala.",
+    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s cambiou quen pode unirse a esta sala. <a>Ver axustes</a>."
 }
