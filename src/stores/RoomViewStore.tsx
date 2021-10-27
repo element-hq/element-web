@@ -308,7 +308,7 @@ class RoomViewStore extends Store<ActionPayload> {
         }
     }
 
-    private getInvitingUserId(roomId: string): string {
+    private static getInvitingUserId(roomId: string): string {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(roomId);
         if (room && room.getMyMembership() === "invite") {
@@ -318,12 +318,7 @@ class RoomViewStore extends Store<ActionPayload> {
         }
     }
 
-    private joinRoomError(payload: ActionPayload) {
-        this.setState({
-            joining: false,
-            joinError: payload.err,
-        });
-        const err = payload.err;
+    public showJoinRoomError(err: Error | MatrixError, roomId: string) {
         let msg = err.message ? err.message : JSON.stringify(err);
         logger.log("Failed to join room:", msg);
 
@@ -335,7 +330,7 @@ class RoomViewStore extends Store<ActionPayload> {
                 { _t("Please contact your homeserver administrator.") }
             </div>;
         } else if (err.httpStatus === 404) {
-            const invitingUserId = this.getInvitingUserId(this.state.roomId);
+            const invitingUserId = RoomViewStore.getInvitingUserId(roomId);
             // only provide a better error message for invites
             if (invitingUserId) {
                 // if the inviting user is on the same HS, there can only be one cause: they left.
@@ -353,6 +348,14 @@ class RoomViewStore extends Store<ActionPayload> {
             title: _t("Failed to join room"),
             description: msg,
         });
+    }
+
+    private joinRoomError(payload: ActionPayload) {
+        this.setState({
+            joining: false,
+            joinError: payload.err,
+        });
+        this.showJoinRoomError(payload.err, this.state.roomId);
     }
 
     public reset() {

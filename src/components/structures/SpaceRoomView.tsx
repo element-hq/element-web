@@ -55,7 +55,7 @@ import {
     showSpaceInvite,
     showSpaceSettings,
 } from "../../utils/space";
-import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
+import SpaceHierarchy, { joinRoom, showRoom } from "./SpaceHierarchy";
 import MemberAvatar from "../views/avatars/MemberAvatar";
 import SpaceStore from "../../stores/SpaceStore";
 import FacePile from "../views/elements/FacePile";
@@ -508,7 +508,7 @@ const SpaceLanding = ({ space }: { space: Room }) => {
             ) }
         </RoomTopic>
 
-        <SpaceHierarchy space={space} showRoom={showRoom} additionalButtons={addRoomButton} />
+        <SpaceHierarchy space={space} showRoom={showRoom} joinRoom={joinRoom} additionalButtons={addRoomButton} />
     </div>;
 };
 

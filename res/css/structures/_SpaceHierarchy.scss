@@ -288,6 +288,11 @@ limitations under the License.
                 visibility: visible;
             }
         }
+
+        &.mx_SpaceHierarchy_joining .mx_AccessibleButton {
+            visibility: visible;
+            padding: 4px 18px;
+        }
     }
 
     li.mx_SpaceHierarchy_roomTileWrapper {
