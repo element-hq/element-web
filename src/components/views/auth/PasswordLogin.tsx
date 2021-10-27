@@ -22,11 +22,11 @@ import SdkConfig from '../../../SdkConfig';
 import { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
 import AccessibleButton from "../elements/AccessibleButton";
 import CountlyAnalytics from "../../../CountlyAnalytics";
-import withValidation from "../elements/Validation";
-import * as Email from "../../../email";
+import withValidation, { IValidationResult } from "../elements/Validation";
 import Field from "../elements/Field";
 import CountryDropdown from "./CountryDropdown";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import EmailField from "./EmailField";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -262,26 +262,8 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
         return result;
     };
 
-    private validateEmailRules = withValidation({
-        rules: [
-            {
-                key: "required",
-                test({ value, allowEmpty }) {
-                    return allowEmpty || !!value;
-                },
-                invalid: () => _t("Enter email address"),
-            }, {
-                key: "email",
-                test: ({ value }) => !value || Email.looksValid(value),
-                invalid: () => _t("Doesn't look like a valid email address"),
-            },
-        ],
-    });
-
-    private onEmailValidate = async (fieldState) => {
-        const result = await this.validateEmailRules(fieldState);
+    private onEmailValidate = (result: IValidationResult) => {
         this.markFieldValid(LoginField.Email, result.valid);
-        return result;
     };
 
     private validatePhoneNumberRules = withValidation({
@@ -332,12 +314,10 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
         switch (loginType) {
             case LoginField.Email:
                 classes.error = this.props.loginIncorrect && !this.props.username;
-                return <Field
+                return <EmailField
                     className={classNames(classes)}
                     name="username" // make it a little easier for browser's remember-password
                     key="email_input"
-                    type="text"
-                    label={_t("Email")}
                     placeholder="joe@example.com"
                     value={this.props.username}
                     onChange={this.onUsernameChanged}
@@ -346,7 +326,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                     disabled={this.props.disableSubmit}
                     autoFocus={autoFocus}
                     onValidate={this.onEmailValidate}
-                    ref={field => this[LoginField.Email] = field}
+                    fieldRef={field => this[LoginField.Email] = field}
                 />;
             case LoginField.MatrixId:
                 classes.error = this.props.loginIncorrect && !this.props.username;

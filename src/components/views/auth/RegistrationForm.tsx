@@ -23,8 +23,9 @@ import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import { SAFE_LOCALPART_REGEX } from '../../../Registration';
-import withValidation from '../elements/Validation';
+import withValidation, { IValidationResult } from '../elements/Validation';
 import { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
+import EmailField from "./EmailField";
 import PassphraseField from "./PassphraseField";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import Field from '../elements/Field';
@@ -253,10 +254,8 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         });
     };
 
-    private onEmailValidate = async fieldState => {
-        const result = await this.validateEmailRules(fieldState);
+    private onEmailValidate = (result: IValidationResult) => {
         this.markFieldValid(RegistrationField.Email, result.valid);
-        return result;
     };
 
     private validateEmailRules = withValidation({
@@ -426,14 +425,14 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         if (!this.showEmail()) {
             return null;
         }
-        const emailPlaceholder = this.authStepIsRequired('m.login.email.identity') ?
+        const emailLabel = this.authStepIsRequired('m.login.email.identity') ?
             _t("Email") :
             _t("Email (optional)");
-        return <Field
-            ref={field => this[RegistrationField.Email] = field}
-            type="text"
-            label={emailPlaceholder}
+        return <EmailField
+            fieldRef={field => this[RegistrationField.Email] = field}
+            label={emailLabel}
             value={this.state.email}
+            validationRules={this.validateEmailRules.bind(this)}
             onChange={this.onEmailChange}
             onValidate={this.onEmailValidate}
             onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_email_focus")}
