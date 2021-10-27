@@ -21,6 +21,9 @@ import SettingsStore from "./settings/SettingsStore";
 import ThemeWatcher from "./settings/watchers/ThemeWatcher";
 
 export const DEFAULT_THEME = "light";
+const HIGH_CONTRAST_THEMES = {
+    "light": "light-high-contrast",
+};
 
 interface IFontFaces {
     src: {
@@ -42,9 +45,37 @@ interface ICustomTheme {
     is_dark?: boolean; // eslint-disable-line camelcase
 }
 
+/**
+ * Given a non-high-contrast theme, find the corresponding high-contrast one
+ * if it exists, or return undefined if not.
+ */
+export function findHighContrastTheme(theme: string) {
+    return HIGH_CONTRAST_THEMES[theme];
+}
+
+/**
+ * Given a high-contrast theme, find the corresponding non-high-contrast one
+ * if it exists, or return undefined if not.
+ */
+export function findNonHighContrastTheme(hcTheme: string) {
+    for (const theme in HIGH_CONTRAST_THEMES) {
+        if (HIGH_CONTRAST_THEMES[theme] === hcTheme) {
+            return theme;
+        }
+    }
+}
+
+/**
+ * Decide whether the supplied theme is high contrast.
+ */
+export function isHighContrastTheme(theme: string) {
+    return Object.values(HIGH_CONTRAST_THEMES).includes(theme);
+}
+
 export function enumerateThemes(): {[key: string]: string} {
     const BUILTIN_THEMES = {
         "light": _t("Light"),
+        "light-high-contrast": _t("Light high contrast"),
         "dark": _t("Dark"),
     };
     const customThemes = SettingsStore.getValue("custom_themes");
