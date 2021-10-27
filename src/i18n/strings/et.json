@@ -3257,5 +3257,8 @@
     "Joined": "Liitunud",
     "Insert link": "Lisa link",
     "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s muutis selle jututoaga liitumise õigusi.",
-    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s muutis selle jututoaga liitumise õigusi. <a>Vaata seadistusi</a>."
+    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s muutis selle jututoaga liitumise õigusi. <a>Vaata seadistusi</a>.",
+    "Joining": "Liitun",
+    "Use high contrast": "Kasuta kontrastset välimust",
+    "Light high contrast": "Hele ja väga kontrastne"
 }
