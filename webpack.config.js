@@ -15,6 +15,11 @@ dotenv.config();
 let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
 if (!ogImageUrl) ogImageUrl = 'https://app.element.io/themes/element/img/logos/opengraph.png';
 
+if (!process.env.VERSION) {
+    console.warn("Unset VERSION variable - this may affect build output");
+    process.env.VERSION = "!!UNSET!!";
+}
+
 const cssThemes = {
     // CSS themes
     "theme-legacy-light": "./node_modules/matrix-react-sdk/res/themes/legacy-light/css/legacy-light.scss",
