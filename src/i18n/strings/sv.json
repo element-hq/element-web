@@ -3255,5 +3255,10 @@
     "Shows all threads you’ve participated in": "Visar alla trådar du har deltagit i",
     "My threads": "Mina trådar",
     "Joined": "Gick med",
-    "Insert link": "Infoga länk"
+    "Insert link": "Infoga länk",
+    "Joining": "Går med",
+    "Use high contrast": "Använd högkontrast",
+    "Light high contrast": "Ljust högkontrast",
+    "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s ändrade vilka som kan gå med i det här rummet.",
+    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s ändrade vilka som kan gå med i det här rummet. <a>Se inställningar</a>."
 }
