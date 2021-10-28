@@ -22,8 +22,6 @@ import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 import { encodeBase64 } from "matrix-js-sdk/src/crypto/olmlib";
 import { DeviceTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
 import { logger } from "matrix-js-sdk/src/logger";
-import { DeviceTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
-import { logger } from "matrix-js-sdk/src/logger";
 import { ComponentType } from "react";
 
 import Modal from './Modal';

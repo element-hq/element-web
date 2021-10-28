@@ -18,7 +18,6 @@ import React from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
 import { removeDirectionOverrideChars } from 'matrix-js-sdk/src/utils';
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { GuestAccess, HistoryVisibility, JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 
