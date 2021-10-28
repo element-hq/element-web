@@ -63,6 +63,7 @@ import { MessagePreviewStore } from '../../../stores/room-list/MessagePreviewSto
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { TimelineRenderingType } from "../../../contexts/RoomContext";
+import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -994,6 +995,12 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         const EventTileType = sdk.getComponent(tileHandler);
+        const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
+
+        const lineClasses = classNames({
+            mx_EventTile_line: true,
+            mx_EventTile_mediaLine: isProbablyMedia,
+        });
 
         const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
@@ -1209,7 +1216,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             { timestamp }
                         </a>
                     </div>,
-                    <div className="mx_EventTile_line" key="mx_EventTile_line">
+                    <div className={lineClasses} key="mx_EventTile_line">
                         <EventTileType ref={this.tile}
                             mxEvent={this.props.mxEvent}
                             highlights={this.props.highlights}
@@ -1257,7 +1264,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             { timestamp }
                         </a>
                     </div>,
-                    <div className="mx_EventTile_line" key="mx_EventTile_line">
+                    <div className={lineClasses} key="mx_EventTile_line">
                         { replyChain }
                         <EventTileType ref={this.tile}
                             mxEvent={this.props.mxEvent}
@@ -1281,7 +1288,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                     "aria-atomic": true,
                     "data-scroll-tokens": scrollToken,
                 }, [
-                    <div className="mx_EventTile_line" key="mx_EventTile_line">
+                    <div className={lineClasses} key="mx_EventTile_line">
                         <EventTileType ref={this.tile}
                             mxEvent={this.props.mxEvent}
                             highlights={this.props.highlights}
@@ -1341,7 +1348,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                         { sender }
                         { ircPadlock }
                         { avatar }
-                        <div className="mx_EventTile_line" key="mx_EventTile_line">
+                        <div className={lineClasses} key="mx_EventTile_line">
                             { groupTimestamp }
                             { groupPadlock }
                             { replyChain }
