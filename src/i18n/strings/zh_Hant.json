@@ -3260,5 +3260,8 @@
     "Joined": "已加入",
     "Insert link": "插入連結",
     "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s 變更了誰可以加入此聊天室。",
-    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s 變更了誰可以加入此聊天室。<a>檢視設定</a>。"
+    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s 變更了誰可以加入此聊天室。<a>檢視設定</a>。",
+    "Joining": "正在加入",
+    "Use high contrast": "使用高對比",
+    "Light high contrast": "淺色高對比"
 }
