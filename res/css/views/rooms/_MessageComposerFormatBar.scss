@@ -16,7 +16,7 @@ limitations under the License.
 
 .mx_MessageComposerFormatBar {
     display: none;
-    width: calc(32px * 5);
+    width: calc(32px * 6);
     height: 32px;
     position: absolute;
     cursor: pointer;
@@ -86,6 +86,11 @@ limitations under the License.
 
     .mx_MessageComposerFormatBar_buttonIconCode::after {
         mask-image: url('$(res)/img/element-icons/room/format-bar/code.svg');
+    }
+
+    .mx_MessageComposerFormatBar_buttonIconInsertLink::after {
+        mask-image: url('$(res)/img/element-icons/link.svg');
+        mask-size: 18px;
     }
 }
 

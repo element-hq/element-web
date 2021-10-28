@@ -60,18 +60,15 @@ import { getDisplayAliasForRoom } from "./RoomDirectory";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { useEventEmitterState } from "../../hooks/useEventEmitter";
 import { IOOBData } from "../../stores/ThreepidInviteStore";
+import { awaitRoomDownSync } from "../../utils/RoomUpgrade";
+import RoomViewStore from "../../stores/RoomViewStore";
 
 interface IProps {
     space: Room;
     initialText?: string;
     additionalButtons?: ReactNode;
-    showRoom(
-        cli: MatrixClient,
-        hierarchy: RoomHierarchy,
-        roomId: string,
-        autoJoin?: boolean,
-        roomType?: RoomType,
-    ): void;
+    showRoom(cli: MatrixClient, hierarchy: RoomHierarchy, roomId: string, roomType?: RoomType): void;
+    joinRoom(cli: MatrixClient, hierarchy: RoomHierarchy, roomId: string): void;
 }
 
 interface ITileProps {
@@ -80,7 +77,8 @@ interface ITileProps {
     selected?: boolean;
     numChildRooms?: number;
     hasPermissions?: boolean;
-    onViewRoomClick(autoJoin: boolean, roomType: RoomType): void;
+    onViewRoomClick(): void;
+    onJoinRoomClick(): void;
     onToggleClick?(): void;
 }
 
@@ -91,31 +89,50 @@ const Tile: React.FC<ITileProps> = ({
     hasPermissions,
     onToggleClick,
     onViewRoomClick,
+    onJoinRoomClick,
     numChildRooms,
     children,
 }) => {
     const cli = useContext(MatrixClientContext);
-    const joinedRoom = cli.getRoom(room.room_id)?.getMyMembership() === "join" ? cli.getRoom(room.room_id) : null;
+    const [joinedRoom, setJoinedRoom] = useState<Room>(() => {
+        const cliRoom = cli.getRoom(room.room_id);
+        return cliRoom?.getMyMembership() === "join" ? cliRoom : null;
+    });
     const joinedRoomName = useEventEmitterState(joinedRoom, "Room.name", room => room?.name);
     const name = joinedRoomName || room.name || room.canonical_alias || room.aliases?.[0]
         || (room.room_type === RoomType.Space ? _t("Unnamed Space") : _t("Unnamed Room"));
 
     const [showChildren, toggleShowChildren] = useStateToggle(true);
     const [onFocus, isActive, ref] = useRovingTabIndex();
+    const [busy, setBusy] = useState(false);
 
     const onPreviewClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
-        onViewRoomClick(false, room.room_type as RoomType);
+        onViewRoomClick();
     };
-    const onJoinClick = (ev: ButtonEvent) => {
+    const onJoinClick = async (ev: ButtonEvent) => {
+        setBusy(true);
         ev.preventDefault();
         ev.stopPropagation();
-        onViewRoomClick(true, room.room_type as RoomType);
+        onJoinRoomClick();
+        setJoinedRoom(await awaitRoomDownSync(cli, room.room_id));
+        setBusy(false);
     };
 
     let button;
-    if (joinedRoom) {
+    if (busy) {
+        button = <AccessibleTooltipButton
+            disabled={true}
+            onClick={onJoinClick}
+            kind="primary_outline"
+            onFocus={onFocus}
+            tabIndex={isActive ? 0 : -1}
+            title={_t("Joining")}
+        >
+            <Spinner w={24} h={24} />
+        </AccessibleTooltipButton>;
+    } else if (joinedRoom) {
         button = <AccessibleButton
             onClick={onPreviewClick}
             kind="primary_outline"
@@ -172,8 +189,15 @@ const Tile: React.FC<ITileProps> = ({
         description += " · " + topic;
     }
 
+    let joinedSection;
+    if (joinedRoom) {
+        joinedSection = <div className="mx_SpaceHierarchy_roomTile_joined">
+            { _t("Joined") }
+        </div>;
+    }
+
     let suggestedSection;
-    if (suggested) {
+    if (suggested && (!joinedRoom || hasPermissions)) {
         suggestedSection = <InfoTooltip tooltip={_t("This room is suggested as a good one to join")}>
             { _t("Suggested") }
         </InfoTooltip>;
@@ -183,6 +207,7 @@ const Tile: React.FC<ITileProps> = ({
         { avatar }
         <div className="mx_SpaceHierarchy_roomTile_name">
             { name }
+            { joinedSection }
             { suggestedSection }
         </div>
 
@@ -274,6 +299,7 @@ const Tile: React.FC<ITileProps> = ({
         <AccessibleButton
             className={classNames("mx_SpaceHierarchy_roomTile", {
                 mx_SpaceHierarchy_subspace: room.room_type === RoomType.Space,
+                mx_SpaceHierarchy_joining: busy,
             })}
             onClick={(hasPermissions && onToggleClick) ? onToggleClick : onPreviewClick}
             onKeyDown={onKeyDown}
@@ -288,13 +314,7 @@ const Tile: React.FC<ITileProps> = ({
     </li>;
 };
 
-export const showRoom = (
-    cli: MatrixClient,
-    hierarchy: RoomHierarchy,
-    roomId: string,
-    autoJoin = false,
-    roomType?: RoomType,
-) => {
+export const showRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: string, roomType?: RoomType): void => {
     const room = hierarchy.roomMap.get(roomId);
 
     // Don't let the user view a room they won't be able to either peek or join:
@@ -309,7 +329,6 @@ export const showRoom = (
     const roomAlias = getDisplayAliasForRoom(room) || undefined;
     dis.dispatch({
         action: "view_room",
-        auto_join: autoJoin,
         should_peek: true,
         _type: "room_directory", // instrumentation
         room_alias: roomAlias,
@@ -324,13 +343,29 @@ export const showRoom = (
     });
 };
 
+export const joinRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: string): void => {
+    // Don't let the user view a room they won't be able to either peek or join:
+    // fail earlier so they don't have to click back to the directory.
+    if (cli.isGuest()) {
+        dis.dispatch({ action: "require_registration" });
+        return;
+    }
+
+    cli.joinRoom(roomId, {
+        viaServers: Array.from(hierarchy.viaMap.get(roomId) || []),
+    }).catch(err => {
+        RoomViewStore.showJoinRoomError(err, roomId);
+    });
+};
+
 interface IHierarchyLevelProps {
     root: IHierarchyRoom;
     roomSet: Set<IHierarchyRoom>;
     hierarchy: RoomHierarchy;
     parents: Set<string>;
     selectedMap?: Map<string, Set<string>>;
-    onViewRoomClick(roomId: string, autoJoin: boolean, roomType?: RoomType): void;
+    onViewRoomClick(roomId: string, roomType?: RoomType): void;
+    onJoinRoomClick(roomId: string): void;
     onToggleClick?(parentId: string, childId: string): void;
 }
 
@@ -365,6 +400,7 @@ export const HierarchyLevel = ({
     parents,
     selectedMap,
     onViewRoomClick,
+    onJoinRoomClick,
     onToggleClick,
 }: IHierarchyLevelProps) => {
     const cli = useContext(MatrixClientContext);
@@ -392,9 +428,8 @@ export const HierarchyLevel = ({
                     room={room}
                     suggested={hierarchy.isSuggested(root.room_id, room.room_id)}
                     selected={selectedMap?.get(root.room_id)?.has(room.room_id)}
-                    onViewRoomClick={(autoJoin, roomType) => {
-                        onViewRoomClick(room.room_id, autoJoin, roomType);
-                    }}
+                    onViewRoomClick={() => onViewRoomClick(room.room_id, room.room_type as RoomType)}
+                    onJoinRoomClick={() => onJoinRoomClick(room.room_id)}
                     hasPermissions={hasPermissions}
                     onToggleClick={onToggleClick ? () => onToggleClick(root.room_id, room.room_id) : undefined}
                 />
@@ -412,9 +447,8 @@ export const HierarchyLevel = ({
                     }).length}
                     suggested={hierarchy.isSuggested(root.room_id, space.room_id)}
                     selected={selectedMap?.get(root.room_id)?.has(space.room_id)}
-                    onViewRoomClick={(autoJoin, roomType) => {
-                        onViewRoomClick(space.room_id, autoJoin, roomType);
-                    }}
+                    onViewRoomClick={() => onViewRoomClick(space.room_id, RoomType.Space)}
+                    onJoinRoomClick={() => onJoinRoomClick(space.room_id)}
                     hasPermissions={hasPermissions}
                     onToggleClick={onToggleClick ? () => onToggleClick(root.room_id, space.room_id) : undefined}
                 >
@@ -425,6 +459,7 @@ export const HierarchyLevel = ({
                         parents={newParents}
                         selectedMap={selectedMap}
                         onViewRoomClick={onViewRoomClick}
+                        onJoinRoomClick={onJoinRoomClick}
                         onToggleClick={onToggleClick}
                     />
                 </Tile>
@@ -537,8 +572,18 @@ const ManageButtons = ({ hierarchy, selected, setSelected, setError }: IManageBu
             onClick={async () => {
                 setRemoving(true);
                 try {
+                    const userId = cli.getUserId();
                     for (const [parentId, childId] of selectedRelations) {
                         await cli.sendStateEvent(parentId, EventType.SpaceChild, {}, childId);
+
+                        // remove the child->parent relation too, if we have permission to.
+                        const childRoom = cli.getRoom(childId);
+                        const parentRelation = childRoom?.currentState.getStateEvents(EventType.SpaceParent, parentId);
+                        if (childRoom?.currentState.maySendStateEvent(EventType.SpaceParent, userId) &&
+                            Array.isArray(parentRelation?.getContent().via)
+                        ) {
+                            await cli.sendStateEvent(childId, EventType.SpaceParent, {}, parentId);
+                        }
 
                         hierarchy.removeRelation(parentId, childId);
                     }
@@ -678,9 +723,8 @@ const SpaceHierarchy = ({
                             parents={new Set()}
                             selectedMap={selected}
                             onToggleClick={hasPermissions ? onToggleClick : undefined}
-                            onViewRoomClick={(roomId, autoJoin, roomType) => {
-                                showRoom(cli, hierarchy, roomId, autoJoin, roomType);
-                            }}
+                            onViewRoomClick={(roomId, roomType) => showRoom(cli, hierarchy, roomId, roomType)}
+                            onJoinRoomClick={(roomId) => joinRoom(cli, hierarchy, roomId)}
                         />
                     </>;
                 } else if (!hierarchy.canLoadMore) {

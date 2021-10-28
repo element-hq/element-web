@@ -44,6 +44,7 @@ import MessageEditHistoryDialog from "../dialogs/MessageEditHistoryDialog";
 import EditMessageComposer from '../rooms/EditMessageComposer';
 import LinkPreviewGroup from '../rooms/LinkPreviewGroup';
 import { IBodyProps } from "./IBodyProps";
+import RoomContext from "../../../contexts/RoomContext";
 
 const MAX_HIGHLIGHT_LENGTH = 4096;
 
@@ -61,6 +62,9 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
     private unmounted = false;
     private pills: Element[] = [];
+
+    static contextType = RoomContext;
+    public context!: React.ContextType<typeof RoomContext>;
 
     constructor(props) {
         super(props);
@@ -406,6 +410,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         dis.dispatch<ComposerInsertPayload>({
             action: Action.ComposerInsert,
             userId: mxEvent.getSender(),
+            timelineRenderingType: this.context.timelineRenderingType,
         });
     };
 

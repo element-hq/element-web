@@ -15,10 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { MatrixClient } from "matrix-js-sdk/src/client";
-
 import Field from "../elements/Field";
+import React, { ComponentType } from 'react';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AccessibleButton from '../elements/AccessibleButton';
 import Spinner from '../elements/Spinner';
@@ -29,6 +27,7 @@ import PassphraseField from "../auth/PassphraseField";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { PASSWORD_MIN_SCORE } from '../auth/RegistrationForm';
+import { MatrixClient } from "matrix-js-sdk/src/client";
 import SetEmailDialog from "../dialogs/SetEmailDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 
@@ -187,7 +186,9 @@ export default class ChangePassword extends React.Component<IProps, IState> {
 
     private onExportE2eKeysClicked = (): void => {
         Modal.createTrackedDialogAsync('Export E2E Keys', 'Change Password',
-            import('../../../async-components/views/dialogs/security/ExportE2eKeysDialog'),
+            import(
+                '../../../async-components/views/dialogs/security/ExportE2eKeysDialog'
+            ) as unknown as Promise<ComponentType<{}>>,
             {
                 matrixClient: MatrixClientPeg.get(),
             },

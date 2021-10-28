@@ -27,6 +27,7 @@ export enum Formatting {
     Strikethrough = "strikethrough",
     Code = "code",
     Quote = "quote",
+    InsertLink = "insert_link",
 }
 
 interface IProps {
@@ -57,6 +58,7 @@ export default class MessageComposerFormatBar extends React.PureComponent<IProps
             <FormatButton label={_t("Strikethrough")} onClick={() => this.props.onAction(Formatting.Strikethrough)} icon="Strikethrough" visible={this.state.visible} />
             <FormatButton label={_t("Code block")} onClick={() => this.props.onAction(Formatting.Code)} icon="Code" visible={this.state.visible} />
             <FormatButton label={_t("Quote")} onClick={() => this.props.onAction(Formatting.Quote)} icon="Quote" shortcut={this.props.shortcuts.quote} visible={this.state.visible} />
+            <FormatButton label={_t("Insert link")} onClick={() => this.props.onAction(Formatting.InsertLink)} icon="InsertLink" visible={this.state.visible} />
         </div>);
     }
 

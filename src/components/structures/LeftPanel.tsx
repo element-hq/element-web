@@ -40,6 +40,7 @@ import { replaceableComponent } from "../../utils/replaceableComponent";
 import SpaceStore, { UPDATE_SELECTED_SPACE } from "../../stores/SpaceStore";
 import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager";
 import UIStore from "../../stores/UIStore";
+import { findSiblingElement, IState as IRovingTabIndexState } from "../../accessibility/RovingTabIndex";
 
 interface IProps {
     isMinimized: boolean;
@@ -51,19 +52,12 @@ interface IState {
     activeSpace?: Room;
 }
 
-// List of CSS classes which should be included in keyboard navigation within the room list
-const cssClasses = [
-    "mx_RoomSearch_input",
-    "mx_RoomSearch_minimizedHandle", // minimized <RoomSearch />
-    "mx_RoomSublist_headerText",
-    "mx_RoomTile",
-    "mx_RoomSublist_showNButton",
-];
-
 @replaceableComponent("structures.LeftPanel")
 export default class LeftPanel extends React.Component<IProps, IState> {
-    private ref: React.RefObject<HTMLDivElement> = createRef();
-    private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
+    private ref = createRef<HTMLDivElement>();
+    private listContainerRef = createRef<HTMLDivElement>();
+    private roomSearchRef = createRef<RoomSearch>();
+    private roomListRef = createRef<RoomList>();
     private focusedElement = null;
     private isDoingStickyHeaders = false;
 
@@ -283,16 +277,25 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         this.focusedElement = null;
     };
 
-    private onKeyDown = (ev: React.KeyboardEvent) => {
+    private onKeyDown = (ev: React.KeyboardEvent, state?: IRovingTabIndexState) => {
         if (!this.focusedElement) return;
 
         const action = getKeyBindingsManager().getRoomListAction(ev);
         switch (action) {
             case RoomListAction.NextRoom:
+                if (!state) {
+                    ev.stopPropagation();
+                    ev.preventDefault();
+                    this.roomListRef.current?.focus();
+                }
+                break;
+
             case RoomListAction.PrevRoom:
-                ev.stopPropagation();
-                ev.preventDefault();
-                this.onMoveFocus(action === RoomListAction.PrevRoom);
+                if (state && state.activeRef === findSiblingElement(state.refs, 0)) {
+                    ev.stopPropagation();
+                    ev.preventDefault();
+                    this.roomSearchRef.current?.focus();
+                }
                 break;
         }
     };
@@ -302,45 +305,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         if (firstRoom) {
             firstRoom.click();
             return true; // to get the field to clear
-        }
-    };
-
-    private onMoveFocus = (up: boolean) => {
-        let element = this.focusedElement;
-
-        let descending = false; // are we currently descending or ascending through the DOM tree?
-        let classes: DOMTokenList;
-
-        do {
-            const child = up ? element.lastElementChild : element.firstElementChild;
-            const sibling = up ? element.previousElementSibling : element.nextElementSibling;
-
-            if (descending) {
-                if (child) {
-                    element = child;
-                } else if (sibling) {
-                    element = sibling;
-                } else {
-                    descending = false;
-                    element = element.parentElement;
-                }
-            } else {
-                if (sibling) {
-                    element = sibling;
-                    descending = true;
-                } else {
-                    element = element.parentElement;
-                }
-            }
-
-            if (element) {
-                classes = element.classList;
-            }
-        } while (element && (!cssClasses.some(c => classes.contains(c)) || element.offsetParent === null));
-
-        if (element) {
-            element.focus();
-            this.focusedElement = element;
         }
     };
 
@@ -388,7 +352,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             >
                 <RoomSearch
                     isMinimized={this.props.isMinimized}
-                    onKeyDown={this.onKeyDown}
+                    ref={this.roomSearchRef}
                     onSelectRoom={this.selectRoom}
                 />
 
@@ -417,6 +381,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             activeSpace={this.state.activeSpace}
             onResize={this.refreshStickyHeaders}
             onListCollapse={this.refreshStickyHeaders}
+            ref={this.roomListRef}
         />;
 
         const containerClasses = classNames({

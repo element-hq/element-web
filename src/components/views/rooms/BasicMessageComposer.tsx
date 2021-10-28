@@ -29,6 +29,7 @@ import {
     formatRangeAsCode,
     toggleInlineFormat,
     replaceRangeAndMoveCaret,
+    formatRangeAsLink,
 } from '../../../editor/operations';
 import { getCaretOffsetAndText, getRangeForSelection } from '../../../editor/dom';
 import Autocomplete, { generateCompletionDomId } from '../rooms/Autocomplete';
@@ -476,6 +477,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             switch (autocompleteAction) {
                 case AutocompleteAction.ForceComplete:
                 case AutocompleteAction.Complete:
+                    this.historyManager.ensureLastChangesPushed(this.props.model);
+                    this.modifiedFlag = true;
                     autoComplete.confirmCompletion();
                     handled = true;
                     break;
@@ -704,6 +707,9 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 break;
             case Formatting.Quote:
                 formatRangeAsQuote(range);
+                break;
+            case Formatting.InsertLink:
+                formatRangeAsLink(range);
                 break;
         }
     };

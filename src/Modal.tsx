@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
-import { defer } from "matrix-js-sdk/src/utils";
+import { defer, sleep } from "matrix-js-sdk/src/utils";
 
 import Analytics from './Analytics';
 import dis from './dispatcher/dispatcher';
@@ -332,7 +332,10 @@ export class ModalManager {
         return this.priorityModal ? this.priorityModal : (this.modals[0] || this.staticModal);
     }
 
-    private reRender() {
+    private async reRender() {
+        // await next tick because sometimes ReactDOM can race with itself and cause the modal to wrongly stick around
+        await sleep(0);
+
         if (this.modals.length === 0 && !this.priorityModal && !this.staticModal) {
             // If there is no modal to render, make all of Element available
             // to screen reader users again

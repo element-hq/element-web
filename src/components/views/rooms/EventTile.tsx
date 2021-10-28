@@ -22,7 +22,6 @@ import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
-import { logger } from "matrix-js-sdk/src/logger";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from '../../../languageHandler';
@@ -61,6 +60,9 @@ import SettingsStore from "../../../settings/SettingsStore";
 import MKeyVerificationConclusion from "../messages/MKeyVerificationConclusion";
 import { dispatchShowThreadEvent } from '../../../dispatcher/dispatch-actions/threads';
 import { MessagePreviewStore } from '../../../stores/room-list/MessagePreviewStore';
+
+import { logger } from "matrix-js-sdk/src/logger";
+import { TimelineRenderingType } from "../../../contexts/RoomContext";
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -312,6 +314,8 @@ interface IProps {
 
     // whether or not to display thread info
     showThreadInfo?: boolean;
+
+    timelineRenderingType?: TimelineRenderingType;
 }
 
 interface IState {
@@ -854,10 +858,11 @@ export default class EventTile extends React.Component<IProps, IState> {
     }
 
     onSenderProfileClick = () => {
-        const mxEvent = this.props.mxEvent;
+        if (!this.props.timelineRenderingType) return;
         dis.dispatch<ComposerInsertPayload>({
             action: Action.ComposerInsert,
-            userId: mxEvent.getSender(),
+            userId: this.props.mxEvent.getSender(),
+            timelineRenderingType: this.props.timelineRenderingType,
         });
     };
 
@@ -1090,7 +1095,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         if (needsSenderProfile && this.props.hideSender !== true) {
-            if (!this.props.tileShape) {
+            if (!this.props.tileShape || this.props.tileShape === TileShape.Thread) {
                 sender = <SenderProfile onClick={this.onSenderProfileClick}
                     mxEvent={this.props.mxEvent}
                     enableFlair={this.props.enableFlair}

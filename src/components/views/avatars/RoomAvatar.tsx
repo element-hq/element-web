@@ -17,6 +17,7 @@ limitations under the License.
 import React, { ComponentProps } from 'react';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import classNames from "classnames";
 
 import BaseAvatar from './BaseAvatar';
@@ -83,8 +84,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
         };
     }
 
-    // TODO: type when js-sdk has types
-    private onRoomStateEvents = (ev: any) => {
+    private onRoomStateEvents = (ev: MatrixEvent) => {
         if (!this.props.room ||
             ev.getRoomId() !== this.props.room.roomId ||
             ev.getType() !== 'm.room.avatar'

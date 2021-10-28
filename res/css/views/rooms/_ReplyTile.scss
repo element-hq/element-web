@@ -78,7 +78,8 @@ limitations under the License.
 
         // Hack to cut content in <pre> tags too
         .mx_EventTile_pre_container > pre {
-            overflow: hidden;
+            overflow-x: scroll;
+            overflow-y: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
             -webkit-box-orient: vertical;

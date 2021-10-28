@@ -75,6 +75,7 @@ import ConfirmSpaceUserActionDialog from "../dialogs/ConfirmSpaceUserActionDialo
 import { bulkSpaceBehaviour } from "../../../utils/space";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
+import { TimelineRenderingType } from "../../../contexts/RoomContext";
 
 export interface IDevice {
     deviceId: string;
@@ -377,6 +378,7 @@ const UserOptionsSection: React.FC<{
                 dis.dispatch<ComposerInsertPayload>({
                     action: Action.ComposerInsert,
                     userId: member.userId,
+                    timelineRenderingType: TimelineRenderingType.Room,
                 });
             };
 
