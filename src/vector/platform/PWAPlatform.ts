@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import WebPlatform from "./WebPlatform";
-
 import { logger } from "matrix-js-sdk/src/logger";
+
+import WebPlatform from "./WebPlatform";
 
 export default class PWAPlatform extends WebPlatform {
     setNotificationCount(count: number) {

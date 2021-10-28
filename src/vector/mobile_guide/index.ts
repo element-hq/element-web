@@ -1,6 +1,6 @@
-import { getVectorConfig } from '../getconfig';
-
 import { logger } from "matrix-js-sdk/src/logger";
+
+import { getVectorConfig } from '../getconfig';
 
 function onBackToElementClick(): void {
     // Cookie should expire in 4 hours
