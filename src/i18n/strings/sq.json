@@ -3254,5 +3254,7 @@
     "Joined": "Hyri",
     "Insert link": "Futni lidhje",
     "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s ndryshoi cilët mund të hyjnë në këtë dhomë.",
-    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s ndryshoi cilët mund të hyjnë në këtë dhomë. <a>Shihni rregullimet</a>."
+    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s ndryshoi cilët mund të hyjnë në këtë dhomë. <a>Shihni rregullimet</a>.",
+    "Use high contrast": "Përdor kontrast të lartë",
+    "Light high contrast": "Kontrast i fortë drite"
 }
