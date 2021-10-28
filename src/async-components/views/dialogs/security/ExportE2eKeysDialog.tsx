@@ -16,13 +16,13 @@ limitations under the License.
 
 import FileSaver from 'file-saver';
 import React, { createRef } from 'react';
-import { _t } from '../../../../languageHandler';
-
 import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { logger } from "matrix-js-sdk/src/logger";
+
+import { _t } from '../../../../languageHandler';
 import * as MegolmExportEncryption from '../../../../utils/MegolmExportEncryption';
 import { IDialogProps } from "../../../../components/views/dialogs/IDialogProps";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
-import { logger } from "matrix-js-sdk/src/logger";
 
 enum Phase {
     Edit = "edit",

@@ -22,6 +22,9 @@ import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 import { encodeBase64 } from "matrix-js-sdk/src/crypto/olmlib";
 import { DeviceTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
 import { logger } from "matrix-js-sdk/src/logger";
+import { DeviceTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
+import { logger } from "matrix-js-sdk/src/logger";
+import { ComponentType } from "react";
 
 import Modal from './Modal';
 import * as sdk from './index';
@@ -32,10 +35,6 @@ import AccessSecretStorageDialog from './components/views/dialogs/security/Acces
 import RestoreKeyBackupDialog from './components/views/dialogs/security/RestoreKeyBackupDialog';
 import SettingsStore from "./settings/SettingsStore";
 import SecurityCustomisations from "./customisations/Security";
-import { DeviceTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
-
-import { logger } from "matrix-js-sdk/src/logger";
-import { ComponentType } from "react";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times

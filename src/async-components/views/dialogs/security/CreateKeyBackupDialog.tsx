@@ -17,6 +17,9 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import FileSaver from 'file-saver';
+import { IPreparedKeyBackupVersion } from "matrix-js-sdk/src/crypto/backup";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { MatrixClientPeg } from '../../../../MatrixClientPeg';
 import { _t, _td } from '../../../../languageHandler';
 import { accessSecretStorage } from '../../../../SecurityManager';
@@ -29,8 +32,6 @@ import Spinner from "../../../../components/views/elements/Spinner";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import { IValidationResult } from "../../../../components/views/elements/Validation";
-import { IPreparedKeyBackupVersion } from "matrix-js-sdk/src/crypto/backup";
-import { logger } from "matrix-js-sdk/src/logger";
 
 enum Phase {
     Passphrase = "passphrase",
