@@ -1074,7 +1074,7 @@
     "When rooms are upgraded": "Wanneer kamers geüpgraded worden",
     "this room": "deze kamer",
     "View older messages in %(roomName)s.": "Bekijk oudere berichten in %(roomName)s.",
-    "Joining room …": "Deelnemen aan kamer…",
+    "Joining room …": "Toetreden tot kamer…",
     "Loading …": "Bezig met laden…",
     "Rejecting invite …": "Uitnodiging wordt geweigerd…",
     "Join the conversation with an account": "Neem deel aan de kamer met een account",
@@ -2119,7 +2119,7 @@
     "Update %(brand)s": "%(brand)s updaten",
     "%(senderName)s has updated the widget layout": "%(senderName)s heeft de widget-indeling bijgewerkt",
     "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "U heeft eerder een nieuwere versie van %(brand)s in deze sessie gebruikt. Om deze versie opnieuw met eind-tot-eind-versleuteling te gebruiken, zult u moeten uitloggen en opnieuw inloggen.",
-    "Block anyone not part of %(serverName)s from ever joining this room.": "Weiger iedereen die geen deel uitmaakt van %(serverName)s aan deze kamer deel te nemen.",
+    "Block anyone not part of %(serverName)s from ever joining this room.": "Weiger iedereen die geen deel uitmaakt van %(serverName)s om toe te treden tot deze kamer.",
     "Create a room in %(communityName)s": "Een kamer aanmaken in %(communityName)s",
     "Enable end-to-end encryption": "Eind-tot-eind-versleuteling inschakelen",
     "Your server requires encryption to be enabled in private rooms.": "Uw server vereist dat versleuteling in een privékamer is ingeschakeld.",
@@ -3257,5 +3257,8 @@
     "Joined": "Toegetreden",
     "Insert link": "Koppeling invoegen",
     "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s veranderde wie lid kan worden van deze kamer.",
-    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s veranderde wie lid kan worden van deze kamer. <a>Bekijk instellingen</a>."
+    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s veranderde wie lid kan worden van deze kamer. <a>Bekijk instellingen</a>.",
+    "Joining": "Toetreden",
+    "Use high contrast": "Hoog contrast inschakelen",
+    "Light high contrast": "Lichte hoog contrast"
 }
