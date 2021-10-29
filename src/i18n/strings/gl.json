@@ -3256,5 +3256,9 @@
     "Developer mode": "Modo desenvolvemento",
     "Insert link": "Escribir ligazón",
     "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s cambiou quen pode unirse a esta sala.",
-    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s cambiou quen pode unirse a esta sala. <a>Ver axustes</a>."
+    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s cambiou quen pode unirse a esta sala. <a>Ver axustes</a>.",
+    "Joined": "Unícheste",
+    "Joining": "Uníndote",
+    "Use high contrast": "Usar alto contraste",
+    "Light high contrast": "Alto contraste claro"
 }
