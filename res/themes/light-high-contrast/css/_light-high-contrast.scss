@@ -2,6 +2,7 @@
 $accent: #268075;
 $alert: #D62C25;
 $links: #0A6ECA;
+$primary-content: #17191C;
 $secondary-content: #5E6266;
 $tertiary-content: $secondary-content;
 $quaternary-content: $secondary-content;
@@ -105,4 +106,12 @@ $roomtopic-color: $secondary-content;
 
 .mx_FontScalingPanel_fontSlider {
     background-color: $roomlist-button-bg-color !important;
+}
+
+.mx_ThemeChoicePanel > .mx_ThemeSelectors > .mx_RadioButton input[type="radio"]:disabled + div {
+    border-color: $primary-content;
+}
+
+.mx_ThemeChoicePanel > .mx_ThemeSelectors > .mx_RadioButton.mx_RadioButton_disabled {
+    color: $primary-content;
 }

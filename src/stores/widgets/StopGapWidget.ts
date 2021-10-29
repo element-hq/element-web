@@ -135,7 +135,7 @@ export class ElementWidget extends Widget {
         };
     }
 
-    public getCompleteUrl(params: ITemplateParams, asPopout=false): string {
+    public getCompleteUrl(params: ITemplateParams, asPopout = false): string {
         return runTemplate(asPopout ? this.popoutTemplateUrl : this.templateUrl, {
             ...this.rawDefinition,
             data: this.rawData,
@@ -149,7 +149,7 @@ export class StopGapWidget extends EventEmitter {
     private scalarToken: string;
     private roomId?: string;
     private kind: WidgetKind;
-    private readUpToMap: {[roomId: string]: string} = {}; // room ID to event ID
+    private readUpToMap: { [roomId: string]: string } = {}; // room ID to event ID
 
     constructor(private appTileProps: IAppTileProps) {
         super();
@@ -262,6 +262,7 @@ export class StopGapWidget extends EventEmitter {
         this.messaging = new ClientWidgetApi(this.mockWidget, iframe, driver);
         this.messaging.on("preparing", () => this.emit("preparing"));
         this.messaging.on("ready", () => this.emit("ready"));
+        this.messaging.on("capabilitiesNotified", () => this.emit("capabilitiesNotified"));
         this.messaging.on(`action:${WidgetApiFromWidgetAction.OpenModalWidget}`, this.onOpenModal);
         WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.messaging);
 
