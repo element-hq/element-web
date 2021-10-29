@@ -3249,5 +3249,16 @@
     "%(count)s reply|other": "%(count)s 条回复",
     "View in room": "在聊天室内查看",
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "输入安全短语或<button>使用安全密钥</button>以继续。",
-    "What projects are your team working on?": "你的团队正在进行什么项目?"
+    "What projects are your team working on?": "你的团队正在进行什么项目?",
+    "The email address doesn't appear to be valid.": "电子邮件地址似乎无效。",
+    "That e-mail address is already in use.": "电子邮件地址已被占用。",
+    "See room timeline (devtools)": "查看聊天室时间轴（开发工具）",
+    "Developer mode": "开发者模式",
+    "Insert link": "插入链接",
+    "Joined": "已加入",
+    "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s 更改了谁能加入这个聊天室。",
+    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s 更改了谁能加入这个聊天室。<a>查看设置</a>。",
+    "Use high contrast": "使用高对比度",
+    "Light high contrast": "浅色高对比",
+    "Joining": "加入中"
 }
