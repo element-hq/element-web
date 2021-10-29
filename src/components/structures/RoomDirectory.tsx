@@ -589,9 +589,12 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         if (room.avatar_url) avatarUrl = mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(32);
 
         // We use onMouseDown instead of onClick, so that we can avoid text getting selected
-        return [
+        return <div
+            key={room.room_id}
+            role="listitem"
+            className="mx_RoomDirectory_listItem"
+        >
             <div
-                key={`${room.room_id}_avatar`}
                 onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_roomAvatar"
             >
@@ -603,9 +606,8 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                     idName={name}
                     url={avatarUrl}
                 />
-            </div>,
+            </div>
             <div
-                key={`${room.room_id}_description`}
                 onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_roomDescription"
             >
@@ -626,30 +628,27 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 >
                     { getDisplayAliasForRoom(room) }
                 </div>
-            </div>,
+            </div>
             <div
-                key={`${room.room_id}_memberCount`}
                 onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_roomMemberCount"
             >
                 { room.num_joined_members }
-            </div>,
+            </div>
             <div
-                key={`${room.room_id}_preview`}
                 onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 // cancel onMouseDown otherwise shift-clicking highlights text
                 className="mx_RoomDirectory_preview"
             >
                 { previewButton }
-            </div>,
+            </div>
             <div
-                key={`${room.room_id}_join`}
                 onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_join"
             >
                 { joinOrViewButton }
-            </div>,
-        ];
+            </div>
+        </div>;
     }
 
     private stringLooksLikeId(s: string, fieldType: IFieldType) {
