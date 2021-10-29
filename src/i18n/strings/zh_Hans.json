@@ -3260,5 +3260,6 @@
     "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s 更改了谁能加入这个聊天室。<a>查看设置</a>。",
     "Use high contrast": "使用高对比度",
     "Light high contrast": "浅色高对比",
-    "Joining": "加入中"
+    "Joining": "加入中",
+    "Automatically send debug logs on any error": "遇到任何错误自动发送调试日志"
 }
