@@ -762,6 +762,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: false,
     },
+    "automaticErrorReporting": {
+        displayName: _td("Automatically send debug logs on any error"),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: false,
+        controller: new ReloadOnChangeController(),
+    },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
