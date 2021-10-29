@@ -3260,5 +3260,6 @@
     "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s megváltoztatta, hogy ki léphet be ebbe a szobába. <a>Beállítások megtekintése</a>.",
     "Joining": "Belépés",
     "Use high contrast": "Nagy kontraszt használata",
-    "Light high contrast": "Világos nagy kontraszt"
+    "Light high contrast": "Világos nagy kontraszt",
+    "Automatically send debug logs on any error": "Hibakeresési napló automatikus küldése bármilyen hiba esetén"
 }
