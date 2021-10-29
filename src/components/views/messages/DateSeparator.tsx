@@ -65,9 +65,9 @@ export default class DateSeparator extends React.Component<IProps> {
     render() {
         // ARIA treats <hr/>s as separators, here we abuse them slightly so manually treat this entire thing as one
         // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
-        return <h2 className="mx_DateSeparator" role="separator" tabIndex={-1}>
+        return <h2 className="mx_DateSeparator" role="separator" tabIndex={-1} aria-label={this.getLabel()}>
             <hr role="none" />
-            <div>{ this.getLabel() }</div>
+            <div aria-hidden="true">{ this.getLabel() }</div>
             <hr role="none" />
         </h2>;
     }
