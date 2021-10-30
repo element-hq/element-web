@@ -183,7 +183,7 @@ Response:
             name: "dashboard",
             data: {key: "val"}
         }
-        room_id: “!foo:bar”,
+        room_id: "!foo:bar",
         sender: "@alice:localhost"
     }
 ]
@@ -202,7 +202,7 @@ Example:
                 name: "dashboard",
                 data: {key: "val"}
             }
-            room_id: “!foo:bar”,
+            room_id: "!foo:bar",
             sender: "@alice:localhost"
         }
     ]

@@ -141,7 +141,7 @@ export const ThreadPanelHeader = ({ filterOption, setFilterOption }: {
     const options: readonly ThreadPanelHeaderOption[] = [
         {
             label: _t("My threads"),
-            description: _t("Shows all threads you’ve participated in"),
+            description: _t("Shows all threads you've participated in"),
             key: ThreadFilterType.My,
         },
         {

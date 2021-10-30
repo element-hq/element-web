@@ -520,7 +520,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         if (!this.props.isMinimized) {
             if (this.state.isNameFiltering) {
                 explorePrompt = <div className="mx_RoomList_explorePrompt">
-                    <div>{ _t("Can't see what you’re looking for?") }</div>
+                    <div>{ _t("Can't see what you're looking for?") }</div>
                     <AccessibleButton
                         className="mx_RoomList_explorePrompt_startChat"
                         kind="link"

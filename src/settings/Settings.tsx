@@ -317,7 +317,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "useCompactLayout": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td('Use a more compact ‘Modern’ layout'),
+        displayName: _td("Use a more compact 'Modern' layout"),
         default: false,
     },
     "showRedactions": {

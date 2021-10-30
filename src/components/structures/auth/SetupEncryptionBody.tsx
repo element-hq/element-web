@@ -253,7 +253,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             return (
                 <div>
                     <p>{ _t(
-                        "Without verifying, you won’t have access to all your messages " +
+                        "Without verifying, you won't have access to all your messages " +
                         "and may appear as untrusted to others.",
                     ) }</p>
                     <div className="mx_CompleteSecurity_actionRow">

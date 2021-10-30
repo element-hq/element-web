@@ -215,7 +215,7 @@ const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange, closeSet
                     .some(roomId => !cli.getRoom(roomId)?.currentState.maySendStateEvent(EventType.SpaceChild, userId));
                 if (unableToUpdateSomeParents) {
                     warning = <b>
-                        { _t("This room is in some spaces you’re not an admin of. " +
+                        { _t("This room is in some spaces you're not an admin of. " +
                             "In those spaces, the old room will still be shown, " +
                             "but people will be prompted to join the new one.") }
                     </b>;

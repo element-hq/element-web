@@ -326,7 +326,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         return (
             <div className="mx_SettingsTab mx_SecurityUserSettingsTab">
                 { warning }
-                <div className="mx_SettingsTab_heading">{ _t("Where you’re signed in") }</div>
+                <div className="mx_SettingsTab_heading">{ _t("Where you're signed in") }</div>
                 <div className="mx_SettingsTab_section">
                     <span>
                         { _t(
