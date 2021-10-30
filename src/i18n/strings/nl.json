@@ -3260,5 +3260,17 @@
     "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s veranderde wie lid kan worden van deze kamer. <a>Bekijk instellingen</a>.",
     "Joining": "Toetreden",
     "Use high contrast": "Hoog contrast inschakelen",
-    "Light high contrast": "Lichte hoog contrast"
+    "Light high contrast": "Lichte hoog contrast",
+    "Select all": "Allemaal selecteren",
+    "Deselect all": "Allemaal deselecteren",
+    "Sign out devices|one": "Apparaat uitloggen",
+    "Sign out devices|other": "Apparaten uitloggen",
+    "Click the button below to confirm signing out these devices.|one": "Klik op onderstaande knop om het uitloggen van dit apparaat te bevestigen.",
+    "Click the button below to confirm signing out these devices.|other": "Klik op onderstaande knop om het uitloggen van deze apparaten te bevestigen.",
+    "Confirm signing out these devices": "Bevestig het uitloggen van deze apparaten",
+    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "Bevestig uw identiteit met eenmalig inloggen om dit apparaat uit te loggen.",
+    "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Bevestig uw identiteit met eenmalig inloggen om deze apparaten uit te loggen.",
+    "Unable to load device list": "Kan apparatenlijst niet laden",
+    "Your homeserver does not support device management.": "Uw server ondersteunt geen apparaatbeheer.",
+    "Use a more compact 'Modern' layout": "Compacte 'Moderne'-indeling gebruiken"
 }
