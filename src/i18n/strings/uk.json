@@ -2321,5 +2321,11 @@
     "Developer options": "Параметри розробника",
     "Room version": "Версія кімнати",
     "Space information": "Відомості про простір",
-    "View older messages in %(roomName)s.": "Перегляд давніших повідомлень у %(roomName)s."
+    "View older messages in %(roomName)s.": "Перегляд давніших повідомлень у %(roomName)s.",
+    "The <b>%(capability)s</b> capability": "<b>%(capability)s</b> можливості",
+    "with state key %(stateKey)s": "з ключем стану %(stateKey)s",
+    "with an empty state key": "з порожнім ключем стану",
+    "Light high contrast": "Контрастна світла",
+    "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s змінює, хто може приєднатися до цієї кімнати.",
+    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s змінює, хто може приєднатися до цієї кімнати. <a>Переглянути налаштування</a>."
 }
