@@ -21,6 +21,7 @@ import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { formatDate } from '../../../DateUtils';
 import StyledCheckbox from '../elements/StyledCheckbox';
+import { CheckboxStyle } from '../elements/StyledCheckbox';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleButton from "../elements/AccessibleButton";
 import Field from "../elements/Field";
@@ -153,7 +154,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
                 <span className={"mx_DevicesPanel_icon mx_E2EIcon " + iconClass} />
             </div> :
             <div className="mx_DevicesPanel_checkbox">
-                <StyledCheckbox onChange={this.onDeviceToggled} checked={this.props.selected} />
+                <StyledCheckbox kind={CheckboxStyle.Outline} onChange={this.onDeviceToggled} checked={this.props.selected} />
             </div>;
 
         const buttons = this.state.renaming ?
