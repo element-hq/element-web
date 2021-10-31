@@ -3261,5 +3261,9 @@
     "Joining": "Belépés",
     "Use high contrast": "Nagy kontraszt használata",
     "Light high contrast": "Világos nagy kontraszt",
-    "Automatically send debug logs on any error": "Hibakeresési napló automatikus küldése bármilyen hiba esetén"
+    "Automatically send debug logs on any error": "Hibakeresési napló automatikus küldése bármilyen hiba esetén",
+    "Click the button below to confirm signing out these devices.|other": "Ezeknek a eszközöknek törlésének a megerősítéséhez kattintson a gombra lent.",
+    "Unable to load device list": "Az eszköz listát nem lehet betölteni",
+    "Your homeserver does not support device management.": "A matrix szervered nem támogatja a eszközök kezelését.",
+    "Use a more compact 'Modern' layout": "Egyszerűbb „Modern” kinézet használata"
 }
