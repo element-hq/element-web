@@ -3248,5 +3248,17 @@
     "Upgrading room": "Actualizando sala",
     "Polls (under active development)": "Enquisas (en desenvolvemento activo)",
     "View in room": "Ver na sala",
-    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Escribe a túa Frase de Seguridade ou <button>usa a túa Chave de Seguridade</button> para continuar."
+    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Escribe a túa Frase de Seguridade ou <button>usa a túa Chave de Seguridade</button> para continuar.",
+    "That e-mail address is already in use.": "Ese enderezo de email xa está en uso.",
+    "The email address doesn't appear to be valid.": "O enderezo de email non semella ser válido.",
+    "What projects are your team working on?": "En que proxectos está a traballar o teu equipo?",
+    "See room timeline (devtools)": "Ver cronoloxía da sala (devtools)",
+    "Developer mode": "Modo desenvolvemento",
+    "Insert link": "Escribir ligazón",
+    "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s cambiou quen pode unirse a esta sala.",
+    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s cambiou quen pode unirse a esta sala. <a>Ver axustes</a>.",
+    "Joined": "Unícheste",
+    "Joining": "Uníndote",
+    "Use high contrast": "Usar alto contraste",
+    "Light high contrast": "Alto contraste claro"
 }
