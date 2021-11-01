@@ -1,8 +1,8 @@
 name: Upload Sentry Sourcemaps
 on:
-  push:
-    branches:
-      - develop
+    push:
+        branches:
+            - develop
 
 jobs:
     runs-on: ubuntu-latest
