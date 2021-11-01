@@ -183,6 +183,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
                     height={24}
                     resizeMethod="crop"
                     viewUserOnClick={true}
+                    aria-live="off"
                 />
             );
         });

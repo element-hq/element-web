@@ -843,7 +843,8 @@ export default class EventTile extends React.Component<IProps, IState> {
             if (remainder > 0) {
                 remText = <span className="mx_EventTile_readAvatarRemainder"
                     onClick={this.toggleAllReadAvatars}
-                    style={{ right: "calc(" + toRem(-left) + " + " + receiptOffset + "px)" }}>{ remainder }+
+                    style={{ right: "calc(" + toRem(-left) + " + " + receiptOffset + "px)" }}
+                    aria-live="off">{ remainder }+
                 </span>;
             }
         }
