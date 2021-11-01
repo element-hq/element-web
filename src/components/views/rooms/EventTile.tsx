@@ -1405,25 +1405,25 @@ export function haveTileForEvent(e: MatrixEvent, showHiddenEvents?: boolean) {
 
 function E2ePadlockUndecryptable(props) {
     return (
-        <E2ePadlock title={_t("This message cannot be decrypted")} icon="undecryptable" {...props} />
+        <E2ePadlock title={_t("This message cannot be decrypted")} icon="warning" {...props} />
     );
 }
 
 function E2ePadlockUnverified(props) {
     return (
-        <E2ePadlock title={_t("Encrypted by an unverified session")} icon="unverified" {...props} />
+        <E2ePadlock title={_t("Encrypted by an unverified session")} icon="warning" {...props} />
     );
 }
 
 function E2ePadlockUnencrypted(props) {
     return (
-        <E2ePadlock title={_t("Unencrypted")} icon="unencrypted" {...props} />
+        <E2ePadlock title={_t("Unencrypted")} icon="warning" {...props} />
     );
 }
 
 function E2ePadlockUnknown(props) {
     return (
-        <E2ePadlock title={_t("Encrypted by a deleted session")} icon="unknown" {...props} />
+        <E2ePadlock title={_t("Encrypted by a deleted session")} icon="normal" {...props} />
     );
 }
 
