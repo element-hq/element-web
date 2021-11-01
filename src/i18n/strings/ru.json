@@ -3249,5 +3249,13 @@
     "%(count)s reply|one": "%(count)s ответ",
     "%(count)s reply|other": "%(count)s ответов",
     "View in room": "Просмотреть в комнате",
-    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Введите свою секретную фразу или <button> используйте секретный ключ </button> для продолжения."
+    "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Введите свою секретную фразу или <button> используйте секретный ключ </button> для продолжения.",
+    "That e-mail address is already in use.": "Этот адрес электронной почты уже используется.",
+    "The email address doesn't appear to be valid.": "Адрес электронной почты не является действительным.",
+    "What projects are your team working on?": "Над какими проектами ваша команда работает?",
+    "Joined": "Присоединился",
+    "Insert link": "Вставить ссылку",
+    "Developer mode": "Режим разработчика",
+    "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s изменил(а), кто может присоединиться к этой комнате.",
+    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s изменил(а), кто может присоединиться к этой комнате. <a>Просмотр настроек</a>."
 }
