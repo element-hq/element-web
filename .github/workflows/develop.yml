@@ -10,7 +10,7 @@ on:
 jobs:
     end-to-end:
         runs-on: ubuntu-latest
-        env: 
+        env:
           PR_NUMBER: ${{github.event.number}}
         container: vectorim/element-web-ci-e2etests-env:latest
         steps:
