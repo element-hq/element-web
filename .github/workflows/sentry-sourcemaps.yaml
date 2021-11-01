@@ -3,7 +3,8 @@ on:
     push:
         branches:
             - develop
-
+    repository_dispatch:
+        types: [ element-web-notify ]
 jobs:
     runs-on: ubuntu-latest
     environment: develop
