@@ -3,6 +3,8 @@ on:
     push:
         branches:
             - develop
+    repository_dispatch:
+        types: [ element-web-notify ]
 jobs:
     upload-sentry-sourcemaps:
         runs-on: ubuntu-latest
