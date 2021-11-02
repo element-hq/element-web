@@ -42,10 +42,6 @@ function getActiveThemes() {
 module.exports = (env, argv) => {
     let nodeEnv;
     if (process.env.CI_PACKAGE) {
-        // Don't run minification for CI builds (this is only set for runs on develop)
-        // We override this via environment variable to avoid duplicating the scripts
-        // in `package.json` just for a different mode.
-        argv.mode = "development";
         // More and more people are using nightly build as their main client
         // Libraries like React have a development build that is useful
         // when working on the app but adds significant runtime overhead
@@ -58,8 +54,8 @@ module.exports = (env, argv) => {
     const devMode = nodeEnv !== 'production';
     const useHMR = process.env.CSS_HOT_RELOAD === '1' && devMode;
     const fullPageErrors = process.env.FULL_PAGE_ERRORS === '1' && devMode;
-    const enableMinification = argv.mode === "production";
-    const enableSourceMaps = argv.mode === "production";
+    const enableMinification = argv.mode === "production" && !process.env.CI_PACKAGE;
+    const enableSourceMaps = argv.mode === "production" && !process.env.CI_PACKAGE;
 
     const development = {};
     if (enableSourceMaps) {
