@@ -207,7 +207,10 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                         event: null,
                         timelineRenderingType: this.context.timelineRenderingType,
                     });
-                    dis.fire(Action.FocusSendMessageComposer);
+                    dis.dispatch({
+                        action: Action.FocusSendMessageComposer,
+                        context: this.context.timelineRenderingType,
+                    });
                 }
                 event.preventDefault();
                 break;
@@ -237,7 +240,10 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             event: null,
             timelineRenderingType: this.context.timelineRenderingType,
         });
-        dis.fire(Action.FocusSendMessageComposer);
+        dis.dispatch({
+            action: Action.FocusSendMessageComposer,
+            context: this.context.timelineRenderingType,
+        });
     };
 
     private get shouldSaveStoredEditorState(): boolean {
@@ -431,7 +437,10 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             event: null,
             timelineRenderingType: this.context.timelineRenderingType,
         });
-        dis.fire(Action.FocusSendMessageComposer);
+        dis.dispatch({
+            action: Action.FocusSendMessageComposer,
+            context: this.context.timelineRenderingType,
+        });
     };
 
     private cancelPreviousPendingEdit(): void {
