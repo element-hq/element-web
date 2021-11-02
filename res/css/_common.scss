@@ -404,7 +404,10 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
  * We should go through and have one consistent set of styles for buttons throughout the app.
  * For now, I am duplicating the selectors here for mx_Dialog and mx_DialogButtons.
  */
-.mx_Dialog button, .mx_Dialog input[type="submit"], .mx_Dialog_buttons button, .mx_Dialog_buttons input[type="submit"] {
+.mx_Dialog button:not(.mx_Dialog_nonDialogButton),
+.mx_Dialog input[type="submit"],
+.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton),
+.mx_Dialog_buttons input[type="submit"] {
     @mixin mx_DialogButton;
     margin-left: 0px;
     margin-right: 8px;
@@ -417,36 +420,52 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     font-family: inherit;
 }
 
-.mx_Dialog button:last-child {
+.mx_Dialog button:not(.mx_Dialog_nonDialogButton):last-child {
     margin-right: 0px;
 }
 
-.mx_Dialog button:hover, .mx_Dialog input[type="submit"]:hover, .mx_Dialog_buttons button:hover, .mx_Dialog_buttons input[type="submit"]:hover {
+.mx_Dialog button:not(.mx_Dialog_nonDialogButton):hover,
+.mx_Dialog input[type="submit"]:hover,
+.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):hover,
+.mx_Dialog_buttons input[type="submit"]:hover {
     @mixin mx_DialogButton_hover;
 }
 
-.mx_Dialog button:focus, .mx_Dialog input[type="submit"]:focus, .mx_Dialog_buttons button:focus, .mx_Dialog_buttons input[type="submit"]:focus {
+.mx_Dialog button:not(.mx_Dialog_nonDialogButton):focus,
+.mx_Dialog input[type="submit"]:focus,
+.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):focus,
+.mx_Dialog_buttons input[type="submit"]:focus {
     filter: brightness($focus-brightness);
 }
 
-.mx_Dialog button.mx_Dialog_primary, .mx_Dialog input[type="submit"].mx_Dialog_primary, .mx_Dialog_buttons button.mx_Dialog_primary, .mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
+.mx_Dialog button.mx_Dialog_primary,
+.mx_Dialog input[type="submit"].mx_Dialog_primary,
+.mx_Dialog_buttons button.mx_Dialog_primary,
+.mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
     color: $accent-fg-color;
     background-color: $accent-color;
     min-width: 156px;
 }
 
-.mx_Dialog button.danger, .mx_Dialog input[type="submit"].danger, .mx_Dialog_buttons button.danger, .mx_Dialog_buttons input[type="submit"].danger {
+.mx_Dialog button.danger,
+.mx_Dialog input[type="submit"].danger,
+.mx_Dialog_buttons button.danger,
+.mx_Dialog_buttons input[type="submit"].danger {
     background-color: $warning-color;
     border: solid 1px $warning-color;
     color: $accent-fg-color;
 }
 
-.mx_Dialog button.warning, .mx_Dialog input[type="submit"].warning {
+.mx_Dialog button.warning,
+.mx_Dialog input[type="submit"].warning {
     border: solid 1px $warning-color;
     color: $warning-color;
 }
 
-.mx_Dialog button:disabled, .mx_Dialog input[type="submit"]:disabled, .mx_Dialog_buttons button:disabled, .mx_Dialog_buttons input[type="submit"]:disabled {
+.mx_Dialog button:not(.mx_Dialog_nonDialogButton):disabled,
+.mx_Dialog input[type="submit"]:disabled,
+.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):disabled,
+.mx_Dialog_buttons input[type="submit"]:disabled {
     background-color: $light-fg-color;
     border: solid 1px $light-fg-color;
     opacity: 0.7;

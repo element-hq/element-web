@@ -89,7 +89,8 @@ limitations under the License.
 }
 
 .mx_Field input:placeholder-shown:focus::placeholder,
-.mx_Field textarea:placeholder-shown:focus::placeholder {
+.mx_Field textarea:placeholder-shown:focus::placeholder,
+.mx_Field.mx_Field_placeholderIsHint input::placeholder {
     transition: color 0.25s ease-in 0.1s;
     color: $greyed-fg-color;
 }

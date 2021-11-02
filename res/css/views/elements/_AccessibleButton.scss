@@ -30,11 +30,13 @@ limitations under the License.
     align-items: center;
     justify-content: center;
     font-size: $font-14px;
+    border: none; // override default <button /> styles
 }
 
 .mx_AccessibleButton_kind_primary {
     color: $button-primary-fg-color;
     background-color: $button-primary-bg-color;
+    border: 1px solid $button-primary-bg-color; // account for size loss of no border
     font-weight: 600;
 }
 
