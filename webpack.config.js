@@ -53,15 +53,21 @@ module.exports = (env, argv) => {
     const useHMR = process.env.CSS_HOT_RELOAD === '1' && devMode;
     const fullPageErrors = process.env.FULL_PAGE_ERRORS === '1' && devMode;
     const enableMinification = argv.mode === "production";
-    const disableSourceMaps = argv.mode === "production" && !process.env.CI_PACKAGE;
 
     const development = {};
-    if (disableSourceMaps) {
-        development['devtool'] = 'nosources-source-map';
+    if (devMode) {
+        // High quality, embedded source maps for dev builds
+        development['devtool'] = "eval-source-map";
     } else {
-        // This makes the sourcemaps human readable for developers. We use eval-source-map
-        // because the plain source-map devtool ruins the alignment.
-        development['devtool'] = 'eval-source-map';
+        if (process.env.CI_PACKAGE) {
+            // High quality source maps in separate .map files which include the source. This doesn't bulk up the .js
+            // payload file size, which is nice for performance but also necessary to get the bundle to a small enough
+            // size that sentry will accept the upload.
+            development['devtool'] = 'source-map';
+        } else {
+            // High quality source maps in separate .map files which don't include the source
+            development['devtool'] = 'nosources-source-map';
+        }
     }
 
     // Resolve the directories for the react-sdk and js-sdk for later use. We resolve these early so we
