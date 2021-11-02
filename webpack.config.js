@@ -55,10 +55,10 @@ module.exports = (env, argv) => {
     const useHMR = process.env.CSS_HOT_RELOAD === '1' && devMode;
     const fullPageErrors = process.env.FULL_PAGE_ERRORS === '1' && devMode;
     const enableMinification = argv.mode === "production" && !process.env.CI_PACKAGE;
-    const enableSourceMaps = argv.mode === "production" && !process.env.CI_PACKAGE;
+    const disableSourceMaps = argv.mode === "production" && !process.env.CI_PACKAGE;
 
     const development = {};
-    if (enableSourceMaps) {
+    if (disableSourceMaps) {
         development['devtool'] = 'nosources-source-map';
     } else {
         // This makes the sourcemaps human readable for developers. We use eval-source-map
