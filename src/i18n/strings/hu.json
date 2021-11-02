@@ -3249,5 +3249,21 @@
     "%(count)s reply|other": "%(count)s válasz",
     "View in room": "Megjelenítés szobában",
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Add meg a Biztonsági jelmondatot vagy <button>használd a Biztonsági Kulcsot</button> a folytatáshoz.",
-    "What projects are your team working on?": "Milyen projekteken dolgozik a csoportja?"
+    "What projects are your team working on?": "Milyen projekteken dolgozik a csoportja?",
+    "That e-mail address is already in use.": "Az e-mail cím már használatban van.",
+    "The email address doesn't appear to be valid.": "Az e-mail cím nem tűnik érvényesnek.",
+    "See room timeline (devtools)": "Szoba idővonal megjelenítése (fejlesztői eszközök)",
+    "Developer mode": "Fejlesztői mód",
+    "Joined": "Csatlakozott",
+    "Insert link": "Link beillesztése",
+    "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s megváltoztatta, hogy ki léphet be ebbe a szobába.",
+    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s megváltoztatta, hogy ki léphet be ebbe a szobába. <a>Beállítások megtekintése</a>.",
+    "Joining": "Belépés",
+    "Use high contrast": "Nagy kontraszt használata",
+    "Light high contrast": "Világos nagy kontraszt",
+    "Automatically send debug logs on any error": "Hibakeresési napló automatikus küldése bármilyen hiba esetén",
+    "Click the button below to confirm signing out these devices.|other": "Ezeknek a eszközöknek törlésének a megerősítéséhez kattintson a gombra lent.",
+    "Unable to load device list": "Az eszköz listát nem lehet betölteni",
+    "Your homeserver does not support device management.": "A matrix szervered nem támogatja a eszközök kezelését.",
+    "Use a more compact 'Modern' layout": "Egyszerűbb „Modern” kinézet használata"
 }
