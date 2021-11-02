@@ -40,17 +40,7 @@ function getActiveThemes() {
 }
 
 module.exports = (env, argv) => {
-    let nodeEnv;
-    if (process.env.CI_PACKAGE) {
-        // More and more people are using nightly build as their main client
-        // Libraries like React have a development build that is useful
-        // when working on the app but adds significant runtime overhead
-        // We want to use the React production build but not compile the whole
-        // application to productions standards
-        nodeEnv = "production";
-    } else {
-        nodeEnv = argv.mode;
-    }
+    const nodeEnv = argv.mode;
     const devMode = nodeEnv !== 'production';
     const useHMR = process.env.CSS_HOT_RELOAD === '1' && devMode;
     const fullPageErrors = process.env.FULL_PAGE_ERRORS === '1' && devMode;
