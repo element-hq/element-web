@@ -3304,5 +3304,14 @@
     "This room isn't bridging messages to any platforms. <a>Learn more.</a>": "这个聊天室不会将消息桥接到任何平台。<a>了解更多</a>",
     "Where you're signed in": "登录地点",
     "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "这个聊天室位于您不是管理员的某些空间中。 在这些空间中，旧聊天室仍将显示，但系统会提示人们加入新聊天室。",
-    "Use a more compact 'Modern' layout": "使用更紧凑的“现代”布局"
+    "Use a more compact 'Modern' layout": "使用更紧凑的“现代”布局",
+    "Add option": "添加选项",
+    "Write an option": "写个选项",
+    "Option %(number)s": "选项 %(number)s",
+    "Create options": "创建选项",
+    "Write something...": "写些东西…",
+    "Question or topic": "问题或主题",
+    "What is your poll question or topic?": "你的投票问题或主题是什么?",
+    "Create Poll": "创建投票",
+    "You do not have permission to start polls in this room.": "你无权在此聊天室启动投票。"
 }
