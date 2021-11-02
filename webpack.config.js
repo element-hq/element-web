@@ -46,7 +46,6 @@ module.exports = (env, argv) => {
         // We override this via environment variable to avoid duplicating the scripts
         // in `package.json` just for a different mode.
         argv.mode = "development";
-
         // More and more people are using nightly build as their main client
         // Libraries like React have a development build that is useful
         // when working on the app but adds significant runtime overhead
@@ -57,9 +56,11 @@ module.exports = (env, argv) => {
     const devMode = nodeEnv !== 'production';
     const useHMR = process.env.CSS_HOT_RELOAD === '1' && devMode;
     const fullPageErrors = process.env.FULL_PAGE_ERRORS === '1' && devMode;
+    const enableMinification = argv.mode === "production";
+    const enableSourceMaps = argv.mode === "production";
 
     const development = {};
-    if (argv.mode === "production") {
+    if (enableSourceMaps) {
         development['devtool'] = 'nosources-source-map';
     } else {
         // This makes the sourcemaps human readable for developers. We use eval-source-map
@@ -126,8 +127,8 @@ module.exports = (env, argv) => {
 
             // Minification is normally enabled by default for webpack in production mode, but
             // we use a CSS optimizer too and need to manage it ourselves.
-            minimize: argv.mode === 'production',
-            minimizer: argv.mode === 'production' ? [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})] : [],
+            minimize: enableMinification,
+            minimizer: enableMinification ? [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})] : [],
 
             // Set the value of `process.env.NODE_ENV` for libraries like React
             // See also https://v4.webpack.js.org/configuration/optimization/#optimizationnodeenv
@@ -540,7 +541,7 @@ module.exports = (env, argv) => {
             process.env.SENTRY_DSN &&
                 new SentryCliPlugin({
                     release: process.env.VERSION,
-                    include: "./webapp",
+                    include: "./webapp/bundles",
                 }),
             new webpack.EnvironmentPlugin(['VERSION']),
         ].filter(Boolean),
