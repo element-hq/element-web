@@ -3300,5 +3300,14 @@
     "Unable to load device list": "S’arrihet të ngarkohet listë pajisjesh",
     "Your homeserver does not support device management.": "Shërbyesi juaj Home nuk mbulon administrim pajisjesh.",
     "Automatically send debug logs on any error": "Me çdo gabim, dërgo automatikisht regjistra diagnostikimi",
-    "Use a more compact 'Modern' layout": "Përdorni një skemë “Moderne” më kompakte"
+    "Use a more compact 'Modern' layout": "Përdorni një skemë “Moderne” më kompakte",
+    "Add option": "Shtoni mundësi",
+    "Write an option": "Shkruani një mundësi",
+    "Option %(number)s": "Mundësia %(number)s",
+    "Create options": "Krijoni mundësi",
+    "Write something...": "Shkruani diçka…",
+    "Question or topic": "Pyetje ose temë",
+    "What is your poll question or topic?": "Cila është pyetja, ose tema e pyetësorit tuaj?",
+    "Create Poll": "Krijoni Pyetësor",
+    "You do not have permission to start polls in this room.": "S’keni leje të nisni anketime në këtë dhomë."
 }
