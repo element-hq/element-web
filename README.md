@@ -158,6 +158,9 @@ cd matrix-react-sdk
 git checkout develop
 yarn link matrix-js-sdk
 yarn install
+
+# Generate the `component-index.js` file.
+yarn reskindex
 ```
 
 See the [help for `yarn link`](https://classic.yarnpkg.com/docs/cli/link) for
