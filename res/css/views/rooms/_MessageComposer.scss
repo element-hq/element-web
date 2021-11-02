@@ -390,6 +390,12 @@ limitations under the License.
         padding: 0 0 0 25px;
     }
 
+    &:not(.mx_MessageComposer_e2eStatus) {
+        .mx_MessageComposer_wrapper {
+            padding: 0;
+        }
+    }
+
     .mx_MessageComposer_button:last-child {
         margin-right: 0;
     }

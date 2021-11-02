@@ -49,6 +49,8 @@ export interface IPosition {
     bottom?: number;
     left?: number;
     right?: number;
+    rightAligned?: boolean;
+    bottomAligned?: boolean;
 }
 
 export enum ChevronFace {
@@ -346,6 +348,8 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
             'mx_ContextualMenu_withChevron_right': chevronFace === ChevronFace.Right,
             'mx_ContextualMenu_withChevron_top': chevronFace === ChevronFace.Top,
             'mx_ContextualMenu_withChevron_bottom': chevronFace === ChevronFace.Bottom,
+            'mx_ContextualMenu_rightAligned': this.props.rightAligned === true,
+            'mx_ContextualMenu_bottomAligned': this.props.bottomAligned === true,
         });
 
         const menuStyle: CSSProperties = {};

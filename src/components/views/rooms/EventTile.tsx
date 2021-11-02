@@ -1251,6 +1251,8 @@ export default class EventTile extends React.Component<IProps, IState> {
                     "aria-atomic": true,
                     "data-scroll-tokens": scrollToken,
                     "data-has-reply": !!replyChain,
+                    "onMouseEnter": () => this.setState({ hover: true }),
+                    "onMouseLeave": () => this.setState({ hover: false }),
                 }, [
                     <div className="mx_EventTile_roomName" key="mx_EventTile_roomName">
                         <RoomAvatar room={room} width={28} height={28} />
@@ -1262,7 +1264,6 @@ export default class EventTile extends React.Component<IProps, IState> {
                         { avatar }
                         <a href={permalink} onClick={this.onPermalinkClicked}>
                             { sender }
-                            { timestamp }
                         </a>
                     </div>,
                     <div className={lineClasses} key="mx_EventTile_line">
@@ -1278,6 +1279,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             replacingEventId={this.props.replacingEventId}
                         />
                         { actionBar }
+                        { timestamp }
                     </div>,
                     reactionsRow,
                 ]);
