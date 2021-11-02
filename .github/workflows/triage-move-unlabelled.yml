@@ -1,0 +1,22 @@
+name: Move unlabelled from needs info columns to triaged
+
+on:
+  issues:
+    types: [unlabeled]
+    
+jobs:
+  Move_Unabeled_Issue_On_Project_Board:
+    name: Move no longer X-Needs-Info issues to Triaged
+    runs-on: ubuntu-latest
+    if: >
+        ${{
+        (github.event.project_card.project_card.column_id == 15439170 ||
+        github.event.project_card.project_card.column_id == 16669396 ||
+        github.event.project_card.project_card.column_id == 16669398) &&
+        !contains(github.event.issue.labels.*.name, 'X-Needs-Info') }}
+    steps:
+      - uses: alex-page/github-project-automation-plus@v0.8.1
+        with:
+          project: Issue triage
+          column: Triaged
+          repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
