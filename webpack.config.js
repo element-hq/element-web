@@ -40,6 +40,14 @@ function getActiveThemes() {
 }
 
 module.exports = (env, argv) => {
+    // Establish settings based on the environment and args.
+    //
+    // argv.mode is always set to "production" by yarn build
+    //      (called to build prod, nightly and develop.element.io)
+    // arg.mode is set to "delopment" by yarn start
+    //      (called by developers, runs the continuous reload script)
+    // process.env.CI_PACKAGE is set when yarn build is called from scripts/ci_package.sh
+    //      (called to build nightly and develop.element.io)
     const nodeEnv = argv.mode;
     const devMode = nodeEnv !== 'production';
     const useHMR = process.env.CSS_HOT_RELOAD === '1' && devMode;
