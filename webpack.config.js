@@ -40,7 +40,7 @@ function getActiveThemes() {
 }
 
 module.exports = (env, argv) => {
-    let nodeEnv = argv.mode;
+    let nodeEnv;
     if (process.env.CI_PACKAGE) {
         // Don't run minification for CI builds (this is only set for runs on develop)
         // We override this via environment variable to avoid duplicating the scripts
@@ -52,6 +52,8 @@ module.exports = (env, argv) => {
         // We want to use the React production build but not compile the whole
         // application to productions standards
         nodeEnv = "production";
+    } else {
+        nodeEnv = argv.mode;
     }
     const devMode = nodeEnv !== 'production';
     const useHMR = process.env.CSS_HOT_RELOAD === '1' && devMode;
