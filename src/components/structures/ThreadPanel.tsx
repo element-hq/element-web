@@ -81,7 +81,7 @@ const useFilteredThreadsTimelinePanel = ({
         // The proper list order should be top-to-bottom, like in social-media newsfeeds.
         filteredThreads.reverse().forEach(([id, thread]) => {
             const event = thread.rootEvent;
-            if (timelineSet.findEventById(event.getId()) || event.status !== null) return;
+            if (!event || timelineSet.findEventById(event.getId()) || event.status !== null) return;
             timelineSet.addEventToTimeline(
                 event,
                 timelineSet.getLiveTimeline(),
