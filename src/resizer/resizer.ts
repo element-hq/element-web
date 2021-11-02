@@ -122,9 +122,14 @@ export default class Resizer<C extends IConfig = IConfig> {
         // child dom nodes that can be the target
         const resizeHandle = event.target && (<HTMLDivElement>event.target).closest(`.${this.classNames.handle}`);
         const hasHandler = this?.config?.handler;
-        if (!resizeHandle || (!hasHandler && resizeHandle.parentElement !== this.container)) {
+        // prevent that stacked resizer's are both activated with one mouse event
+        // (this is possible because the mouse events are connected to the containers not the handles)
+        if (!resizeHandle || // if no resizeHandle exist / mouse event hit the container not the handle
+            (!hasHandler && resizeHandle.parentElement !== this.container) || // no handler from config -> check if the containers match
+            (hasHandler && resizeHandle !== hasHandler)) { // handler from config -> check if the handlers match
             return;
         }
+
         // prevent starting a drag operation
         event.preventDefault();
 
