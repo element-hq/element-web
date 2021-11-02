@@ -3306,5 +3306,14 @@
     "Your homeserver does not support device management.": "Váš domovský server nepodporuje správu zařízení.",
     "Automatically send debug logs on any error": "Automaticky odesílat ladící protokoly při jakékoli chybě",
     "Use a more compact 'Modern' layout": "Použít kompaktnější \"moderní\" rozložení",
-    "Light high contrast": "Světlý vysoký kontrast"
+    "Light high contrast": "Světlý vysoký kontrast",
+    "Add option": "Přidat volbu",
+    "Write an option": "Napište volbu",
+    "Create options": "Vytvořit volby",
+    "Option %(number)s": "Volba %(number)s",
+    "Write something...": "Napište něco...",
+    "Question or topic": "Otázka nebo téma",
+    "What is your poll question or topic?": "Jaká je vaše otázka nebo téma hlasování?",
+    "Create Poll": "Vytvořit hlasování",
+    "You do not have permission to start polls in this room.": "Nemáte oprávnění zahajovat hlasování v této místnosti."
 }
