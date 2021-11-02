@@ -722,7 +722,8 @@ export class Algorithm extends EventEmitter {
                 cause = RoomUpdateCause.Timeline;
                 didTagChange = true;
             } else {
-                cause = RoomUpdateCause.Timeline;
+                // This is a tag change update and no tags were changed, nothing to do!
+                return false;
             }
 
             if (didTagChange && isSticky) {
