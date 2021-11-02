@@ -44,7 +44,7 @@ module.exports = (env, argv) => {
     const devMode = nodeEnv !== 'production';
     const useHMR = process.env.CSS_HOT_RELOAD === '1' && devMode;
     const fullPageErrors = process.env.FULL_PAGE_ERRORS === '1' && devMode;
-    const enableMinification = argv.mode === "production" && !process.env.CI_PACKAGE;
+    const enableMinification = argv.mode === "production";
     const disableSourceMaps = argv.mode === "production" && !process.env.CI_PACKAGE;
 
     const development = {};
