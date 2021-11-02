@@ -3303,5 +3303,14 @@
     "Unable to load device list": "Seadmete loendi laadimine ei ole võimalik",
     "Your homeserver does not support device management.": "Sinu koduserver ei toeta seadmete haldust.",
     "Automatically send debug logs on any error": "Iga vea puhul saada silumislogid automaatselt arendajatele",
-    "Use a more compact 'Modern' layout": "Kasuta kompaktsemat moodsat kasutajaliidest"
+    "Use a more compact 'Modern' layout": "Kasuta kompaktsemat moodsat kasutajaliidest",
+    "Add option": "Lisa valik",
+    "Write an option": "Sisesta valik",
+    "Option %(number)s": "Valik %(number)s",
+    "Create options": "Koosta valikud",
+    "Write something...": "Kirjuta midagi...",
+    "Question or topic": "Küsimus või teema",
+    "What is your poll question or topic?": "Mis on küsitluse teema?",
+    "Create Poll": "Koosta üks küsitlus",
+    "You do not have permission to start polls in this room.": "Sul ei ole õigusi küsitluste korraldamiseks siin jututoas."
 }
