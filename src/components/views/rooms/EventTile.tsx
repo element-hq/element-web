@@ -1132,7 +1132,11 @@ export default class EventTile extends React.Component<IProps, IState> {
             || this.state.actionBarFocused);
 
         const timestamp = showTimestamp ?
-            <MessageTimestamp showTwelveHour={this.props.isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
+            <MessageTimestamp
+                showRelative={this.props.tileShape === TileShape.ThreadPanel}
+                showTwelveHour={this.props.isTwelveHour}
+                ts={this.props.mxEvent.getTs()}
+            /> : null;
 
         const keyRequestHelpText =
             <div className="mx_EventTile_keyRequestInfo_tooltip_contents">

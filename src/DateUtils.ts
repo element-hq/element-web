@@ -149,12 +149,20 @@ export function formatSeconds(inSeconds: number): string {
 }
 
 const MILLIS_IN_DAY = 86400000;
+function withinPast24Hours(prevDate: Date, nextDate: Date): boolean {
+    return Math.abs(prevDate.getTime() - nextDate.getTime()) <= MILLIS_IN_DAY;
+}
+
+function withinCurrentYear(prevDate: Date, nextDate: Date): boolean {
+    return prevDate.getFullYear() === nextDate.getFullYear();
+}
+
 export function wantsDateSeparator(prevEventDate: Date, nextEventDate: Date): boolean {
     if (!nextEventDate || !prevEventDate) {
         return false;
     }
     // Return early for events that are > 24h apart
-    if (Math.abs(prevEventDate.getTime() - nextEventDate.getTime()) > MILLIS_IN_DAY) {
+    if (!withinPast24Hours(prevEventDate, nextEventDate)) {
         return true;
     }
 
@@ -177,4 +185,19 @@ export function formatFullDateNoDayNoTime(date: Date) {
         "/" +
         pad(date.getDate())
     );
+}
+
+export function formatRelativeTime(date: Date, showTwelveHour = false): string {
+    const now = new Date(Date.now());
+    if (withinPast24Hours(date, now)) {
+        return formatTime(date, showTwelveHour);
+    } else {
+        const months = getMonthsArray();
+        let relativeDate = `${months[date.getMonth()]} ${date.getDate()}`;
+
+        if (!withinCurrentYear(date, now)) {
+            relativeDate += `, ${date.getFullYear()}`;
+        }
+        return relativeDate;
+    }
 }
