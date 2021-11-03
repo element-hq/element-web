@@ -142,3 +142,10 @@ entirely incomplete and may not work at all - it is not recommended for general 
 
 Bug reports, feature requests, etc are not currently accepted for this feature flag. A later stage of
 development will provide opportunities for feedback.
+
+## Full frame widgets (`feature_full_frame_widgets`) [In Development]
+
+Full frame widgets provide a room layout where a widget is (temporary) the primary focus of the room by using the whole chat area for the widget (Moving the chat into the right panel).
+
+Note that this feature is currently under active development and therefore is
+entirely incomplete and may not work at all - it is not recommended for general use at this time.
