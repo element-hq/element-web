@@ -9,7 +9,7 @@ jobs:
     name: Move X-Needs-Info issues to Need info on triage board
     runs-on: ubuntu-latest
     steps:
-    - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
+    - uses: konradpabjan/move-labeled-or-milestoned-issue@219d384e03fa4b6460cd24f9f37d19eb033a4338
       with:
         action-token: ${{ secrets.GITHUB_TOKEN }}
         project-url: "https://github.com/vector-im/element-web/projects/27"
@@ -27,7 +27,7 @@ jobs:
          contains(github.event.issue.labels.*.name, 'S-Major') ||
          contains(github.event.issue.labels.*.name, 'S-Minor'))
     steps:
-      - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
+      - uses: konradpabjan/move-labeled-or-milestoned-issue@219d384e03fa4b6460cd24f9f37d19eb033a4338
         with:
           action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
           project-url: "https://github.com/orgs/vector-im/projects/14"
@@ -42,7 +42,7 @@ jobs:
         contains(github.event.issue.labels.*.name, 'A-Space-Settings') ||
         contains(github.event.issue.labels.*.name, 'A-Subspaces')
     steps:
-      - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
+      - uses: konradpabjan/move-labeled-or-milestoned-issue@219d384e03fa4b6460cd24f9f37d19eb033a4338
         with:
           action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
           project-url: "https://github.com/orgs/vector-im/projects/6"
