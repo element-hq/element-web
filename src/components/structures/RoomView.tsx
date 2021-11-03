@@ -786,7 +786,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 break;
             case 'picture_snapshot':
                 ContentMessages.sharedInstance().sendContentListToRoom(
-                    [payload.file], this.state.room.roomId, this.context);
+                    [payload.file], this.state.room.roomId, null, this.context);
                 break;
             case 'notifier_enabled':
             case Action.UploadStarted:
@@ -1292,7 +1292,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         ev.stopPropagation();
         ev.preventDefault();
         ContentMessages.sharedInstance().sendContentListToRoom(
-            ev.dataTransfer.files, this.state.room.roomId, this.context,
+            ev.dataTransfer.files, this.state.room.roomId, null, this.context,
         );
         dis.fire(Action.FocusSendMessageComposer);
 

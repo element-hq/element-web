@@ -14,11 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { IEventRelation } from "matrix-js-sdk/src";
 import { IAbortablePromise } from "matrix-js-sdk/src/@types/partials";
 
 export interface IUpload {
     fileName: string;
     roomId: string;
+    relation?: IEventRelation;
     total: number;
     loaded: number;
     promise: IAbortablePromise<any>;

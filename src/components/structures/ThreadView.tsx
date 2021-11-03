@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import { MatrixEvent, Room } from 'matrix-js-sdk/src';
+import { IEventRelation, MatrixEvent, Room } from 'matrix-js-sdk/src';
 import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
 import { RelationType } from 'matrix-js-sdk/src/@types/event';
 
@@ -37,6 +37,8 @@ import { MatrixClientPeg } from '../../MatrixClientPeg';
 import { E2EStatus } from '../../utils/ShieldUtils';
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import RoomContext, { TimelineRenderingType } from '../../contexts/RoomContext';
+import ContentMessages from '../../ContentMessages';
+import UploadBar from './UploadBar';
 import { ChevronFace, ContextMenuTooltipButton } from './ContextMenu';
 import { _t } from '../../languageHandler';
 import IconizedContextMenu, {
@@ -304,6 +306,12 @@ export default class ThreadView extends React.Component<IProps, IState> {
         const highlightedEventId = this.props.initialEventHighlighted
             ? this.props.initialEvent?.getId()
             : null;
+
+        const threadRelation: IEventRelation = {
+            rel_type: RelationType.Thread,
+            event_id: this.state.thread?.id,
+        };
+
         return (
             <RoomContext.Provider value={{
                 ...this.context,
@@ -343,13 +351,14 @@ export default class ThreadView extends React.Component<IProps, IState> {
                         />
                     ) }
 
+                    { ContentMessages.sharedInstance().getCurrentUploads(threadRelation).length > 0 && (
+                        <UploadBar room={this.props.room} relation={threadRelation} />
+                    ) }
+
                     { this.state?.thread?.timelineSet && (<MessageComposer
                         room={this.props.room}
                         resizeNotifier={this.props.resizeNotifier}
-                        relation={{
-                            rel_type: RelationType.Thread,
-                            event_id: this.state.thread.id,
-                        }}
+                        relation={threadRelation}
                         replyToEvent={this.state.replyToEvent}
                         permalinkCreator={this.props.permalinkCreator}
                         e2eStatus={this.props.e2eStatus}

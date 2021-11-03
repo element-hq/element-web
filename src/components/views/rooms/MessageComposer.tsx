@@ -128,6 +128,7 @@ const EmojiButton: React.FC<IEmojiButtonProps> = ({ addEmoji, menuPosition, narr
 
 interface IUploadButtonProps {
     roomId: string;
+    relation?: IEventRelation | null;
 }
 
 class UploadButton extends React.Component<IUploadButtonProps> {
@@ -169,7 +170,7 @@ class UploadButton extends React.Component<IUploadButtonProps> {
         }
 
         ContentMessages.sharedInstance().sendContentListToRoom(
-            tfiles, this.props.roomId, MatrixClientPeg.get(),
+            tfiles, this.props.roomId, this.props.relation, MatrixClientPeg.get(),
         );
 
         // This is the onChange handler for a file form control, but we're
@@ -479,7 +480,11 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 );
             }
             buttons.push(
-                <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
+                <UploadButton
+                    key="controls_upload"
+                    roomId={this.props.room.roomId}
+                    relation={this.props.relation}
+                />,
             );
             buttons.push(
                 <EmojiButton key="emoji_button" addEmoji={this.addEmoji} menuPosition={menuPosition} narrowMode={this.state.narrowMode} />,

@@ -23,6 +23,12 @@ limitations under the License.
     }
 }
 
+.mx_ThreadView {
+    .mx_UploadBar {
+        padding-left: 0;
+    }
+}
+
 .mx_UploadBar_filename {
     margin-top: 5px;
     color: $muted-fg-color;

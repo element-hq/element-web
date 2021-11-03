@@ -46,6 +46,7 @@ import SettingsStore from "./settings/SettingsStore";
 import { decorateStartSendingTime, sendRoundTripMetric } from "./sendTimePerformanceMetrics";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { IEventRelation } from "matrix-js-sdk/src";
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
@@ -436,7 +437,12 @@ export default class ContentMessages {
         }
     }
 
-    async sendContentListToRoom(files: File[], roomId: string, matrixClient: MatrixClient) {
+    async sendContentListToRoom(
+        files: File[],
+        roomId: string,
+        relation: IEventRelation | null,
+        matrixClient: MatrixClient,
+    ) {
         if (matrixClient.isGuest()) {
             dis.dispatch({ action: 'require_registration' });
             return;
@@ -512,11 +518,20 @@ export default class ContentMessages {
                     uploadAll = true;
                 }
             }
-            promBefore = this.sendContentToRoom(file, roomId, matrixClient, promBefore);
+            promBefore = this.sendContentToRoom(file, roomId, relation, matrixClient, promBefore);
         }
     }
 
-    getCurrentUploads() {
+    getCurrentUploads(relation?: IEventRelation) {
+        return this.inprogress.filter(upload => {
+            const noRelation = !relation && !upload.relation;
+            const matchingRelation = relation && upload.relation
+                && relation.rel_type === upload.relation.rel_type
+                && relation.event_id === upload.relation.event_id;
+
+            return (noRelation || matchingRelation) && !upload.canceled;
+        });
+
         return this.inprogress.filter(u => !u.canceled);
     }
 
@@ -535,7 +550,13 @@ export default class ContentMessages {
         }
     }
 
-    private sendContentToRoom(file: File, roomId: string, matrixClient: MatrixClient, promBefore: Promise<any>) {
+    private sendContentToRoom(
+        file: File,
+        roomId: string,
+        relation: IEventRelation,
+        matrixClient: MatrixClient,
+        promBefore: Promise<any>,
+    ) {
         const startTime = CountlyAnalytics.getTimestamp();
         const content: IContent = {
             body: file.name || 'Attachment',
@@ -544,6 +565,10 @@ export default class ContentMessages {
             },
             msgtype: "", // set later
         };
+
+        if (relation) {
+            content["m.relates_to"] = relation;
+        }
 
         if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
             decorateStartSendingTime(content);
@@ -590,7 +615,8 @@ export default class ContentMessages {
 
         const upload: IUpload = {
             fileName: file.name || 'Attachment',
-            roomId: roomId,
+            roomId,
+            relation,
             total: file.size,
             loaded: 0,
             promise: prom,

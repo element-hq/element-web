@@ -27,9 +27,11 @@ import AccessibleButton from "../views/elements/AccessibleButton";
 import { IUpload } from "../../models/IUpload";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
+import { IEventRelation } from 'matrix-js-sdk/src';
 
 interface IProps {
     room: Room;
+    relation?: IEventRelation;
 }
 
 interface IState {
@@ -64,7 +66,7 @@ export default class UploadBar extends React.Component<IProps, IState> {
     }
 
     private getUploadsInRoom(): IUpload[] {
-        const uploads = ContentMessages.sharedInstance().getCurrentUploads();
+        const uploads = ContentMessages.sharedInstance().getCurrentUploads(this.props.relation);
         return uploads.filter(u => u.roomId === this.props.room.roomId);
     }
 

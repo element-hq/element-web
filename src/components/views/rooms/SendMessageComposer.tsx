@@ -615,7 +615,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         // it puts the filename in as text/plain which we want to ignore.
         if (clipboardData.files.length && !clipboardData.types.includes("text/rtf")) {
             ContentMessages.sharedInstance().sendContentListToRoom(
-                Array.from(clipboardData.files), this.props.room.roomId, this.props.mxClient,
+                Array.from(clipboardData.files), this.props.room.roomId, this.props.relation, this.props.mxClient,
             );
             return true; // to skip internal onPaste handler
         }
