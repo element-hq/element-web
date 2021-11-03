@@ -8,6 +8,7 @@ exports[`ThreadPanel Header expect that All filter for ThreadPanelHeader properl
     Threads
   </span>
   <ContextMenuButton
+    className="mx_ThreadPanel_dropdown"
     inputRef={
       Object {
         "current": null,
@@ -29,6 +30,7 @@ exports[`ThreadPanel Header expect that My filter for ThreadPanelHeader properly
     Threads
   </span>
   <ContextMenuButton
+    className="mx_ThreadPanel_dropdown"
     inputRef={
       Object {
         "current": null,

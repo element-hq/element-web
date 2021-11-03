@@ -21,13 +21,10 @@ limitations under the License.
     padding-right: 0;
 
     .mx_BaseCard_header {
-        padding: 6px 8px 6px 0;
-
         .mx_BaseCard_close,
         .mx_BaseCard_back {
             margin-top: 15px;
         }
-
         .mx_BaseCard_close {
             right: -8px;
         }
@@ -39,6 +36,7 @@ limitations under the License.
         display: flex;
         flex: 1;
         justify-content: space-between;
+        align-items: center;
 
         span:first-of-type {
             font-weight: 600;
@@ -49,7 +47,11 @@ limitations under the License.
 
         .mx_AccessibleButton {
             font-size: 12px;
-            color: $secondary-content;
+            color: $primary-content;
+        }
+
+        .mx_MessageActionBar_optionsButton {
+            position: relative;
         }
 
         .mx_ContextualMenu_wrapper {
@@ -177,6 +179,33 @@ limitations under the License.
         width: calc(100% - 8px);
         padding: 0 8px;
         box-sizing: border-box;
+    }
+
+    .mx_ThreadPanel_dropdown {
+        padding: 4px 8px;
+        border-radius: 4px;
+        line-height: 1.5;
+        user-select: none;
+    }
+
+    .mx_ThreadPanel_dropdown:hover,
+    .mx_ThreadPanel_dropdown[aria-expanded=true] {
+        background: $quinary-content;
+    }
+
+    .mx_ThreadPanel_dropdown::before {
+        content: "";
+        width: 18px;
+        height: 18px;
+        background: currentColor;
+        mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
+        mask-size: 100%;
+        mask-repeat: no-repeat;
+        float: right;
+    }
+
+    .mx_ThreadPanel_dropdown[aria-expanded=true]::before {
+        transform: rotate(180deg);
     }
 }
 

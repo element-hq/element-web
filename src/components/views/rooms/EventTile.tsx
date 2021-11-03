@@ -64,6 +64,9 @@ import { MessagePreviewStore } from '../../../stores/room-list/MessagePreviewSto
 import { logger } from "matrix-js-sdk/src/logger";
 import { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
+import Toolbar from '../../../accessibility/Toolbar';
+import { RovingAccessibleTooltipButton } from '../../../accessibility/roving/RovingAccessibleTooltipButton';
+import { ThreadListContextMenu } from '../context_menus/ThreadListContextMenu';
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -547,6 +550,43 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
     };
 
+    private renderThreadLastMessagePreview(): JSX.Element | null {
+        if (!SettingsStore.getValue("feature_thread")) {
+            return null;
+        }
+
+        /**
+         * Accessing the threads value through the room due to a race condition
+         * that will be solved when there are proper backend support for threads
+         * We currently have no reliable way to discover than an event is a thread
+         * when we are at the sync stage
+         */
+        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        const thread = room?.threads.get(this.props.mxEvent.getId());
+
+        if (!thread || thread.length === 0) {
+            return null;
+        }
+
+        const [lastEvent] = thread.events
+            .filter(event => event.isThreadRelation)
+            .slice(-1);
+        const threadMessagePreview = MessagePreviewStore.instance.generatePreviewForEvent(lastEvent);
+
+        if (!threadMessagePreview || !lastEvent.sender) {
+            return null;
+        }
+
+        return <>
+            <MemberAvatar member={lastEvent.sender} style={{ float: "left", width: "24px", height: "24px" }} />
+            <div className="mx_ThreadInfo_content">
+                <span className="mx_ThreadInfo_message-preview">
+                    { threadMessagePreview }
+                </span>
+            </div>
+        </>;
+    }
+
     private renderThreadInfo(): React.ReactNode {
         if (!SettingsStore.getValue("feature_thread")) {
             return null;
@@ -569,11 +609,6 @@ export default class EventTile extends React.Component<IProps, IState> {
             return null;
         }
 
-        const [lastEvent] = thread.events
-            .filter(event => event.isThreadRelation)
-            .slice(-1);
-        const threadMessagePreview = MessagePreviewStore.instance.generatePreviewForEvent(lastEvent);
-
         return (
             <div
                 className="mx_ThreadInfo"
@@ -589,14 +624,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                         count: thread.length,
                     }) }
                 </span>
-                { (threadMessagePreview && lastEvent.sender) && <>
-                    <MemberAvatar member={lastEvent.sender} width={24} height={24} />
-                    <div className="mx_ThreadInfo_content">
-                        <span className="mx_ThreadInfo_message-preview">
-                            { threadMessagePreview }
-                        </span>
-                    </div>
-                </> }
+                { this.renderThreadLastMessagePreview() }
             </div>
         );
     }
@@ -1199,6 +1227,20 @@ export default class EventTile extends React.Component<IProps, IState> {
             msgOption = readAvatars;
         }
 
+        const replyChain = haveTileForEvent(this.props.mxEvent) &&
+                    ReplyChain.hasReply(this.props.mxEvent) ? (
+                <ReplyChain
+                    parentEv={this.props.mxEvent}
+                    onHeightChanged={this.props.onHeightChanged}
+                    ref={this.replyChain}
+                    forExport={this.props.forExport}
+                    permalinkCreator={this.props.permalinkCreator}
+                    layout={this.props.layout}
+                    alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.hover}
+                    isQuoteExpanded={isQuoteExpanded}
+                    setQuoteExpanded={this.setQuoteExpanded}
+                />) : null;
+
         switch (this.props.tileShape) {
             case TileShape.Notif: {
                 const room = this.context.getRoom(this.props.mxEvent.getRoomId());
@@ -1235,19 +1277,6 @@ export default class EventTile extends React.Component<IProps, IState> {
                 ]);
             }
             case TileShape.Thread: {
-                const replyChain = haveTileForEvent(this.props.mxEvent) &&
-                    ReplyChain.hasReply(this.props.mxEvent) ? (
-                        <ReplyChain
-                            parentEv={this.props.mxEvent}
-                            onHeightChanged={this.props.onHeightChanged}
-                            ref={this.replyChain}
-                            forExport={this.props.forExport}
-                            permalinkCreator={this.props.permalinkCreator}
-                            layout={this.props.layout}
-                            alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.hover}
-                            isQuoteExpanded={isQuoteExpanded}
-                            setQuoteExpanded={this.setQuoteExpanded}
-                        />) : null;
                 const room = this.context.getRoom(this.props.mxEvent.getRoomId());
                 return React.createElement(this.props.as || "li", {
                     "className": classes,
@@ -1288,6 +1317,63 @@ export default class EventTile extends React.Component<IProps, IState> {
                     reactionsRow,
                 ]);
             }
+            case TileShape.ThreadPanel: {
+                const isOwnEvent = this.props.mxEvent?.sender?.userId === MatrixClientPeg.get().getUserId();
+
+                // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
+                return (
+                    React.createElement(this.props.as || "li", {
+                        "ref": this.ref,
+                        "className": classes,
+                        "tabIndex": -1,
+                        "aria-live": ariaLive,
+                        "aria-atomic": "true",
+                        "data-scroll-tokens": scrollToken,
+                        "data-layout": this.props.layout,
+                        "data-shape": this.props.tileShape,
+                        "data-self": isOwnEvent,
+                        "data-has-reply": !!replyChain,
+                        "onMouseEnter": () => this.setState({ hover: true }),
+                        "onMouseLeave": () => this.setState({ hover: false }),
+                        "onClick": () => dispatchShowThreadEvent(this.props.mxEvent),
+                    }, <>
+                        { sender }
+                        { avatar }
+                        <div className={lineClasses} key="mx_EventTile_line">
+                            { linkedTimestamp }
+                            { this.renderE2EPadlock() }
+                            { replyChain }
+                            <EventTileType ref={this.tile}
+                                mxEvent={this.props.mxEvent}
+                                forExport={this.props.forExport}
+                                replacingEventId={this.props.replacingEventId}
+                                editState={this.props.editState}
+                                highlights={this.props.highlights}
+                                highlightLink={this.props.highlightLink}
+                                showUrlPreview={this.props.showUrlPreview}
+                                permalinkCreator={this.props.permalinkCreator}
+                                onHeightChanged={this.props.onHeightChanged}
+                                callEventGrouper={this.props.callEventGrouper}
+                                tileShape={this.props.tileShape}
+                            />
+                            { keyRequestInfo }
+                            <Toolbar className="mx_MessageActionBar" aria-label={_t("Message Actions")} aria-live="off">
+                                <RovingAccessibleTooltipButton
+                                    className="mx_MessageActionBar_maskButton mx_MessageActionBar_threadButton"
+                                    title={_t("Thread")}
+                                    onClick={() => dispatchShowThreadEvent(this.props.mxEvent)}
+                                    key="thread"
+                                />
+                                <ThreadListContextMenu
+                                    mxEvent={this.props.mxEvent}
+                                    permalinkCreator={this.props.permalinkCreator} />
+                            </Toolbar>
+                            { this.renderThreadLastMessagePreview() }
+                        </div>
+                        { msgOption }
+                    </>)
+                );
+            }
             case TileShape.FileGrid: {
                 return React.createElement(this.props.as || "li", {
                     "className": classes,
@@ -1321,19 +1407,6 @@ export default class EventTile extends React.Component<IProps, IState> {
             }
 
             default: {
-                const replyChain = haveTileForEvent(this.props.mxEvent) &&
-                    ReplyChain.hasReply(this.props.mxEvent) ? (
-                        <ReplyChain
-                            parentEv={this.props.mxEvent}
-                            onHeightChanged={this.props.onHeightChanged}
-                            ref={this.replyChain}
-                            forExport={this.props.forExport}
-                            permalinkCreator={this.props.permalinkCreator}
-                            layout={this.props.layout}
-                            alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.hover}
-                            isQuoteExpanded={isQuoteExpanded}
-                            setQuoteExpanded={this.setQuoteExpanded}
-                        />) : null;
                 const isOwnEvent = this.props.mxEvent?.sender?.userId === MatrixClientPeg.get().getUserId();
 
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers

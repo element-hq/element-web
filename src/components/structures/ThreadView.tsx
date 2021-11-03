@@ -39,15 +39,8 @@ import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import RoomContext, { TimelineRenderingType } from '../../contexts/RoomContext';
 import ContentMessages from '../../ContentMessages';
 import UploadBar from './UploadBar';
-import { ChevronFace, ContextMenuTooltipButton } from './ContextMenu';
 import { _t } from '../../languageHandler';
-import IconizedContextMenu, {
-    IconizedContextMenuOption,
-    IconizedContextMenuOptionList,
-} from '../views/context_menus/IconizedContextMenu';
-import { ButtonEvent } from '../views/elements/AccessibleButton';
-import { copyPlaintext } from '../../utils/strings';
-import { sleep } from 'matrix-js-sdk/src/utils';
+import { ThreadListContextMenu } from '../views/context_menus/ThreadListContextMenu';
 
 interface IProps {
     room: Room;
@@ -63,23 +56,7 @@ interface IState {
     thread?: Thread;
     editState?: EditorStateTransfer;
     replyToEvent?: MatrixEvent;
-    threadOptionsPosition: DOMRect | null;
-    copyingPhase: CopyingPhase;
 }
-
-enum CopyingPhase {
-    Idle,
-    Copying,
-    Failed,
-}
-
-const contextMenuBelow = (elementRect: DOMRect) => {
-    // align the context menu's icons with the icon which opened the context menu
-    const left = elementRect.left + window.pageXOffset + elementRect.width;
-    const top = elementRect.bottom + window.pageYOffset + 17;
-    const chevronFace = ChevronFace.None;
-    return { left, top, chevronFace };
-};
 
 @replaceableComponent("structures.ThreadView")
 export default class ThreadView extends React.Component<IProps, IState> {
@@ -90,12 +67,8 @@ export default class ThreadView extends React.Component<IProps, IState> {
 
     constructor(props: IProps) {
         super(props);
-        this.state = {
-            threadOptionsPosition: null,
-            copyingPhase: CopyingPhase.Idle,
-        };
+        this.state = {};
     }
-
     public componentDidMount(): void {
         this.setupThread(this.props.mxEvent);
         this.dispatcherRef = dis.register(this.onAction);
@@ -210,95 +183,12 @@ export default class ThreadView extends React.Component<IProps, IState> {
         }
     };
 
-    private onThreadOptionsClick = (ev: ButtonEvent): void => {
-        if (this.isThreadOptionsVisible) {
-            this.closeThreadOptions();
-        } else {
-            const position = ev.currentTarget.getBoundingClientRect();
-            this.setState({
-                threadOptionsPosition: position,
-            });
-        }
-    };
-
-    private closeThreadOptions = (): void => {
-        this.setState({
-            threadOptionsPosition: null,
-        });
-    };
-
-    private get isThreadOptionsVisible(): boolean {
-        return !!this.state.threadOptionsPosition;
-    }
-
-    private viewInRoom = (evt: ButtonEvent): void => {
-        evt.preventDefault();
-        evt.stopPropagation();
-        dis.dispatch({
-            action: 'view_room',
-            event_id: this.props.mxEvent.getId(),
-            highlighted: true,
-            room_id: this.props.mxEvent.getRoomId(),
-        });
-        this.closeThreadOptions();
-    };
-
-    private copyLinkToThread = async (evt: ButtonEvent): Promise<void> => {
-        evt.preventDefault();
-        evt.stopPropagation();
-
-        const matrixToUrl = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
-
-        this.setState({
-            copyingPhase: CopyingPhase.Copying,
-        });
-
-        const hasSuccessfullyCopied = await copyPlaintext(matrixToUrl);
-
-        if (hasSuccessfullyCopied) {
-            await sleep(500);
-        } else {
-            this.setState({ copyingPhase: CopyingPhase.Failed });
-            await sleep(2500);
-        }
-
-        this.setState({ copyingPhase: CopyingPhase.Idle });
-
-        if (hasSuccessfullyCopied) {
-            this.closeThreadOptions();
-        }
-    };
-
     private renderThreadViewHeader = (): JSX.Element => {
         return <div className="mx_ThreadPanel__header">
             <span>{ _t("Thread") }</span>
-            <ContextMenuTooltipButton
-                className="mx_ThreadPanel_button mx_ThreadPanel_OptionsButton"
-                onClick={this.onThreadOptionsClick}
-                title={_t("Thread options")}
-                isExpanded={this.isThreadOptionsVisible}
-            />
-            { this.isThreadOptionsVisible && (<IconizedContextMenu
-                onFinished={this.closeThreadOptions}
-                className="mx_RoomTile_contextMenu"
-                compact
-                rightAligned
-                {...contextMenuBelow(this.state.threadOptionsPosition)}
-            >
-                <IconizedContextMenuOptionList>
-                    <IconizedContextMenuOption
-                        onClick={(e) => this.viewInRoom(e)}
-                        label={_t("View in room")}
-                        iconClassName="mx_ThreadPanel_viewInRoom"
-                    />
-                    <IconizedContextMenuOption
-                        onClick={(e) => this.copyLinkToThread(e)}
-                        label={_t("Copy link to thread")}
-                        iconClassName="mx_ThreadPanel_copyLinkToThread"
-                    />
-                </IconizedContextMenuOptionList>
-            </IconizedContextMenu>) }
-
+            <ThreadListContextMenu
+                mxEvent={this.props.mxEvent}
+                permalinkCreator={this.props.permalinkCreator} />
         </div>;
     };
 

@@ -687,28 +687,82 @@ $left-gutter: 64px;
         padding-left: 11px;
         padding-right: 15px;
     }
+}
 
-    .mx_ThreadInfo_content {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        padding-left: 8px;
+.mx_ThreadInfo_content {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    padding-left: 8px;
+}
+
+.mx_ThreadInfo_thread-icon {
+    mask-image: url('$(res)/img/element-icons/thread-summary.svg');
+    mask-position: center;
+    height: 16px;
+    min-width: 16px;
+    background-color: $secondary-content;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+}
+.mx_ThreadInfo_threads-amount {
+    font-weight: 600;
+    position: relative;
+    padding: 0 8px;
+    white-space: nowrap;
+}
+
+.mx_EventTile[data-shape=thread_list] {
+    --topOffset: 24px;
+    --leftOffset: 46px;
+
+    margin: var(--topOffset) 0;
+    border-radius: 8px;
+
+    &:hover {
+        background-color: $system;
     }
 
-    .mx_ThreadInfo_thread-icon {
-        mask-image: url('$(res)/img/element-icons/thread-summary.svg');
-        mask-position: center;
-        height: 16px;
-        min-width: 16px;
-        background-color: $secondary-content;
-        mask-repeat: no-repeat;
-        mask-size: contain;
+    &::after {
+        content: "";
+        position: absolute;
+        left: var(--leftOffset);
+        right: 0;
+        height: 1px;
+        bottom: calc(-1 * var(--topOffset));
+        background-color: $quinary-content;
     }
-    .mx_ThreadInfo_threads-amount {
-        font-weight: 600;
-        position: relative;
-        padding: 0 8px;
-        white-space: nowrap;
+
+    &:last-child {
+        &::after {
+            content: unset;
+        }
+        margin-bottom: 0;
+    }
+
+    &:first-child {
+        margin-top: 0;
+    }
+
+    padding-top: 0;
+
+    .mx_EventTile_avatar {
+        top: -4px;
+        left: 0;
+    }
+
+    .mx_SenderProfile {
+        margin-left: var(--leftOffset) !important;
+    }
+
+    .mx_EventTile_line {
+        padding-left: var(--leftOffset) !important;
+        padding-bottom: 0;
+    }
+    .mx_MessageTimestamp {
+        right: 0;
+        left: auto;
+        top: -23px;
     }
 }
 
