@@ -3309,5 +3309,7 @@
     "Question or topic": "Pyetje ose temë",
     "What is your poll question or topic?": "Cila është pyetja, ose tema e pyetësorit tuaj?",
     "Create Poll": "Krijoni Pyetësor",
-    "You do not have permission to start polls in this room.": "S’keni leje të nisni anketime në këtë dhomë."
+    "You do not have permission to start polls in this room.": "S’keni leje të nisni anketime në këtë dhomë.",
+    "Copy link to thread": "Kopjoje lidhjen te rrjedha",
+    "Thread options": "Mundësi rrjedhe"
 }

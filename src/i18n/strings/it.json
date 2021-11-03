@@ -3306,5 +3306,14 @@
     "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Conferma la disconnessione da questi dispositivi usando Single Sign On per dare prova della tua identità.",
     "Unable to load device list": "Impossibile caricare l'elenco di dispositivi",
     "Your homeserver does not support device management.": "Il tuo homeserver non supporta la gestione dei dispositivi.",
-    "Use a more compact 'Modern' layout": "Usa una disposizione \"Moderna\" più compatta"
+    "Use a more compact 'Modern' layout": "Usa una disposizione \"Moderna\" più compatta",
+    "Add option": "Aggiungi opzione",
+    "Write an option": "Scrivi un'opzione",
+    "Option %(number)s": "Opzione %(number)s",
+    "Create options": "Crea opzioni",
+    "Write something...": "Scrivi qualcosa...",
+    "Question or topic": "Domanda o argomento",
+    "What is your poll question or topic?": "Qual è la domanda o l'argomento del sondaggio?",
+    "Create Poll": "Crea sondaggio",
+    "You do not have permission to start polls in this room.": "Non hai i permessi per creare sondaggi in questa stanza."
 }
