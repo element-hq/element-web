@@ -3312,5 +3312,7 @@
     "Question or topic": "Küsimus või teema",
     "What is your poll question or topic?": "Mis on küsitluse teema?",
     "Create Poll": "Koosta üks küsitlus",
-    "You do not have permission to start polls in this room.": "Sul ei ole õigusi küsitluste korraldamiseks siin jututoas."
+    "You do not have permission to start polls in this room.": "Sul ei ole õigusi küsitluste korraldamiseks siin jututoas.",
+    "Copy link to thread": "Kopeeri jutulõnga link",
+    "Thread options": "Jutulõnga valikud"
 }
