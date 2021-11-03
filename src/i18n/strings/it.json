@@ -3315,5 +3315,7 @@
     "Question or topic": "Domanda o argomento",
     "What is your poll question or topic?": "Qual è la domanda o l'argomento del sondaggio?",
     "Create Poll": "Crea sondaggio",
-    "You do not have permission to start polls in this room.": "Non hai i permessi per creare sondaggi in questa stanza."
+    "You do not have permission to start polls in this room.": "Non hai i permessi per creare sondaggi in questa stanza.",
+    "Copy link to thread": "Copia link nell'argomento",
+    "Thread options": "Opzioni argomento"
 }
