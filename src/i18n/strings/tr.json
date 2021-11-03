@@ -2268,5 +2268,6 @@
     "Could not connect to identity server": "Kimlik Sunucusuna bağlanılamadı",
     "Not a valid identity server (status code %(code)s)": "Geçerli bir Kimlik Sunucu değil ( durum kodu %(code)s )",
     "Identity server URL must be HTTPS": "Kimlik Sunucu URL adresi HTTPS olmak zorunda",
-    "Sends the given message as a spoiler": "Mesajı sürprizbozan olarak gönder"
+    "Sends the given message as a spoiler": "Mesajı sürprizbozan olarak gönder",
+    "Already in call": "Bu kişi zaten çağrıda"
 }
