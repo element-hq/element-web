@@ -100,10 +100,8 @@ export default class ThreadView extends React.Component<IProps, IState> {
 
     private onAction = (payload: ActionPayload): void => {
         if (payload.phase == RightPanelPhases.ThreadView && payload.event) {
-            if (payload.event !== this.props.mxEvent) {
-                this.teardownThread();
-                this.setupThread(payload.event);
-            }
+            this.teardownThread();
+            this.setupThread(payload.event);
         }
         switch (payload.action) {
             case Action.EditEvent:
@@ -135,12 +133,15 @@ export default class ThreadView extends React.Component<IProps, IState> {
         let thread = mxEv.getThread();
         if (!thread) {
             const client = MatrixClientPeg.get();
+            // Do not attach this thread object to the event for now
+            // TODO: When local echo gets reintroduced it will be important
+            // to add that back in, and the threads model should go through the
+            // same reconciliation algorithm as events
             thread = new Thread(
                 [mxEv],
                 this.props.room,
                 client,
             );
-            mxEv.setThread(thread);
         }
         thread.on(ThreadEvent.Update, this.updateThread);
         thread.once(ThreadEvent.Ready, this.updateThread);
@@ -226,7 +227,6 @@ export default class ThreadView extends React.Component<IProps, IState> {
                             timelineSet={this.state?.thread?.timelineSet}
                             showUrlPreview={true}
                             tileShape={TileShape.Thread}
-                            empty={<div>empty</div>}
                             layout={Layout.Group}
                             hideThreadedMessages={false}
                             hidden={false}
