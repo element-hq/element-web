@@ -40,31 +40,34 @@ function getActiveThemes() {
 }
 
 module.exports = (env, argv) => {
-    let nodeEnv = argv.mode;
-    if (process.env.CI_PACKAGE) {
-        // Don't run minification for CI builds (this is only set for runs on develop)
-        // We override this via environment variable to avoid duplicating the scripts
-        // in `package.json` just for a different mode.
-        argv.mode = "development";
-
-        // More and more people are using nightly build as their main client
-        // Libraries like React have a development build that is useful
-        // when working on the app but adds significant runtime overhead
-        // We want to use the React production build but not compile the whole
-        // application to productions standards
-        nodeEnv = "production";
-    }
+    // Establish settings based on the environment and args.
+    //
+    // argv.mode is always set to "production" by yarn build
+    //      (called to build prod, nightly and develop.element.io)
+    // arg.mode is set to "delopment" by yarn start
+    //      (called by developers, runs the continuous reload script)
+    // process.env.CI_PACKAGE is set when yarn build is called from scripts/ci_package.sh
+    //      (called to build nightly and develop.element.io)
+    const nodeEnv = argv.mode;
     const devMode = nodeEnv !== 'production';
     const useHMR = process.env.CSS_HOT_RELOAD === '1' && devMode;
     const fullPageErrors = process.env.FULL_PAGE_ERRORS === '1' && devMode;
+    const enableMinification = !devMode && !process.env.CI_PACKAGE;
 
     const development = {};
-    if (argv.mode === "production") {
-        development['devtool'] = 'nosources-source-map';
+    if (devMode) {
+        // High quality, embedded source maps for dev builds
+        development['devtool'] = "eval-source-map";
     } else {
-        // This makes the sourcemaps human readable for developers. We use eval-source-map
-        // because the plain source-map devtool ruins the alignment.
-        development['devtool'] = 'eval-source-map';
+        if (process.env.CI_PACKAGE) {
+            // High quality source maps in separate .map files which include the source. This doesn't bulk up the .js
+            // payload file size, which is nice for performance but also necessary to get the bundle to a small enough
+            // size that sentry will accept the upload.
+            development['devtool'] = 'source-map';
+        } else {
+            // High quality source maps in separate .map files which don't include the source
+            development['devtool'] = 'nosources-source-map';
+        }
     }
 
     // Resolve the directories for the react-sdk and js-sdk for later use. We resolve these early so we
@@ -126,8 +129,8 @@ module.exports = (env, argv) => {
 
             // Minification is normally enabled by default for webpack in production mode, but
             // we use a CSS optimizer too and need to manage it ourselves.
-            minimize: argv.mode === 'production',
-            minimizer: argv.mode === 'production' ? [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})] : [],
+            minimize: enableMinification,
+            minimizer: enableMinification ? [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})] : [],
 
             // Set the value of `process.env.NODE_ENV` for libraries like React
             // See also https://v4.webpack.js.org/configuration/optimization/#optimizationnodeenv
@@ -540,7 +543,7 @@ module.exports = (env, argv) => {
             process.env.SENTRY_DSN &&
                 new SentryCliPlugin({
                     release: process.env.VERSION,
-                    include: "./webapp",
+                    include: "./webapp/bundles",
                 }),
             new webpack.EnvironmentPlugin(['VERSION']),
         ].filter(Boolean),
