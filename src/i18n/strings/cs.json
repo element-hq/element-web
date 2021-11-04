@@ -3315,5 +3315,9 @@
     "Question or topic": "Otázka nebo téma",
     "What is your poll question or topic?": "Jaká je vaše otázka nebo téma hlasování?",
     "Create Poll": "Vytvořit hlasování",
-    "You do not have permission to start polls in this room.": "Nemáte oprávnění zahajovat hlasování v této místnosti."
+    "You do not have permission to start polls in this room.": "Nemáte oprávnění zahajovat hlasování v této místnosti.",
+    "Copy link to thread": "Kopírovat odkaz na vlákno",
+    "Thread options": "Možnosti vláken",
+    "Someone already has that username, please try another.": "Toto uživatelské jméno už někdo má, zkuste prosím jiné.",
+    "Someone already has that username. Try another or if it is you, sign in below.": "Tohle uživatelské jméno už někdo má. Zkuste jiné, nebo pokud jste to vy, přihlaste se níže."
 }
