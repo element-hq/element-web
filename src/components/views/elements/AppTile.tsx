@@ -227,7 +227,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             this.sgWidget.on("ready", this.onWidgetReady);
             this.startWidget();
         } catch (e) {
-            logger.log("Failed to construct widget", e);
+            logger.error("Failed to construct widget", e);
             this.sgWidget = null;
         }
     }
@@ -241,7 +241,13 @@ export default class AppTile extends React.Component<IProps, IState> {
     private iframeRefChange = (ref: HTMLIFrameElement): void => {
         this.iframe = ref;
         if (ref) {
-            if (this.sgWidget) this.sgWidget.start(ref);
+            try {
+                if (this.sgWidget) {
+                    this.sgWidget.start(ref);
+                }
+            } catch (e) {
+                logger.error("Failed to start widget", e);
+            }
         } else {
             this.resetWidget(this.props);
         }
