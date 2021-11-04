@@ -673,7 +673,7 @@ $left-gutter: 64px;
     padding-right: 16px;
     padding-top: 8px;
     padding-bottom: 8px;
-    font-size: 12px;
+    font-size: $font-12px;
     color: $secondary-content;
     box-sizing: border-box;
     justify-content: flex-start;
@@ -694,6 +694,13 @@ $left-gutter: 64px;
     overflow: hidden;
     white-space: nowrap;
     padding-left: 8px;
+    font-size: $font-12px;
+    line-height: calc(2 * $font-12px);
+    color: $secondary-content;
+}
+
+.mx_ThreadInfo_avatar {
+    float: left;
 }
 
 .mx_ThreadInfo_thread-icon {

@@ -578,7 +578,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         return <>
-            <MemberAvatar member={lastEvent.sender} style={{ float: "left", width: "24px", height: "24px" }} />
+            <MemberAvatar member={lastEvent.sender} width={24} height={24} className="mx_ThreadInfo_avatar" />
             <div className="mx_ThreadInfo_content">
                 <span className="mx_ThreadInfo_message-preview">
                     { threadMessagePreview }

@@ -317,6 +317,8 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                 return <EmailField
                     className={classNames(classes)}
                     name="username" // make it a little easier for browser's remember-password
+                    autoComplete="email"
+                    type="email"
                     key="email_input"
                     placeholder="joe@example.com"
                     value={this.props.username}
@@ -333,6 +335,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                 return <Field
                     className={classNames(classes)}
                     name="username" // make it a little easier for browser's remember-password
+                    autoComplete="username"
                     key="username_input"
                     type="text"
                     label={_t("Username")}
@@ -359,6 +362,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                 return <Field
                     className={classNames(classes)}
                     name="phoneNumber"
+                    autoComplete="tel-national"
                     key="phone_input"
                     type="text"
                     label={_t("Phone")}
@@ -444,6 +448,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                     { loginField }
                     <Field
                         className={pwFieldClass}
+                        autoComplete="password"
                         type="password"
                         name="password"
                         label={_t('Password')}
