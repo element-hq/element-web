@@ -3314,5 +3314,8 @@
     "In encrypted rooms, verify all users to ensure it's secure.": "Titkosított szobákban ellenőrizd a szoba összes tagját, hogy meggyőződhess a biztonságról.",
     "Yours, or the other users' session": "Az ön vagy a másik felhasználó munkamenete",
     "Yours, or the other users' internet connection": "Az ön vagy a másik felhasználó Internet kapcsolata",
-    "The homeserver the user you're verifying is connected to": "Az ellenőrizendő felhasználó ehhez a matrix kiszolgálóhoz kapcsolódik:"
+    "The homeserver the user you're verifying is connected to": "Az ellenőrizendő felhasználó ehhez a matrix kiszolgálóhoz kapcsolódik:",
+    "Someone already has that username, please try another.": "Ezt a felhasználói nevet másvalaki használja, próbáljon ki másikat.",
+    "Someone already has that username. Try another or if it is you, sign in below.": "Valaki már használja ezt a felhasználói nevet. Próbáljon ki másikat, illetve ha ön az jelentkezzen be alább.",
+    "Maximised widgets": "Maximalizált kisalkalmazás"
 }
