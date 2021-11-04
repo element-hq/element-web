@@ -145,7 +145,7 @@ development will provide opportunities for feedback.
 
 ## Maximised widgets (`feature_maximised_widgets`) [In Development]
 
-Maximised widgets provide a room layout in which a widget is (temporarly) the primary focus of the room. The whole chat area is than used for the widget. The chat is moved into the right panel.
+Maximised widgets provide a room layout in which a widget is (temporarily) the primary focus of the room. The whole chat area is then used for the widget. The chat is moved into the right panel.
 
 Note that this feature is currently under active development and therefore is
 entirely incomplete and may not work at all - it is not recommended for general use at this time.
