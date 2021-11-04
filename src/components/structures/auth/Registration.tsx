@@ -304,7 +304,7 @@ export default class Registration extends React.Component<IProps, IState> {
                     errorText = _t('This server does not support authentication with a phone number.');
                 }
             } else if (response.errcode === "M_USER_IN_USE") {
-                errorText = _t("That username already exists, please try another.");
+                errorText = _t("Someone already has that username, please try another.");
             } else if (response.errcode === "M_THREEPID_IN_USE") {
                 errorText = _t("That e-mail address is already in use.");
             }
@@ -510,6 +510,7 @@ export default class Registration extends React.Component<IProps, IState> {
                     flows={this.state.flows}
                     serverConfig={this.props.serverConfig}
                     canSubmit={!this.state.serverErrorIsFatal}
+                    matrixClient={this.state.matrixClient}
                 />
             </React.Fragment>;
         }

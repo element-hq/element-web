@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import { MatrixClient } from 'matrix-js-sdk/src/client';
 
 import * as Email from '../../../email';
 import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
@@ -57,6 +58,7 @@ interface IProps {
     }[];
     serverConfig: ValidatedServerConfig;
     canSubmit?: boolean;
+    matrixClient: MatrixClient;
 
     onRegisterClick(params: {
         username: string;
@@ -366,7 +368,11 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
     };
 
     private validateUsernameRules = withValidation({
-        description: () => _t("Use lowercase letters, numbers, dashes and underscores only"),
+        description: (_, results) => {
+            // omit the description if the only failing result is the `available` one as it makes no sense for it.
+            if (results.every(({ key, valid }) => key === "available" || valid)) return;
+            return _t("Use lowercase letters, numbers, dashes and underscores only");
+        },
         hideDescriptionIfValid: true,
         rules: [
             {
@@ -378,6 +384,23 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 key: "safeLocalpart",
                 test: ({ value }) => !value || SAFE_LOCALPART_REGEX.test(value),
                 invalid: () => _t("Some characters not allowed"),
+            },
+            {
+                key: "available",
+                final: true,
+                test: async ({ value }) => {
+                    if (!value) {
+                        return true;
+                    }
+
+                    try {
+                        await this.props.matrixClient.isUsernameAvailable(value);
+                        return true;
+                    } catch (err) {
+                        return false;
+                    }
+                },
+                invalid: () => _t("Someone already has that username. Try another or if it is you, sign in below."),
             },
         ],
     });
