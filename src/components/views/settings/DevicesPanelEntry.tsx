@@ -157,6 +157,16 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
                 <StyledCheckbox kind={CheckboxStyle.Outline} onChange={this.onDeviceToggled} checked={this.props.selected} />
             </div>;
 
+        const deviceName = device.display_name ?
+            <React.Fragment>
+                <TextWithTooltip tooltip={device.display_name + " (" + device.device_id + ")"}>
+                    { device.display_name }
+                </TextWithTooltip>
+            </React.Fragment> :
+            <React.Fragment>
+                { device.device_id }
+            </React.Fragment>;
+
         const buttons = this.state.renaming ?
             <form className="mx_DevicesPanel_renameForm" onSubmit={this.onRenameSubmit}>
                 <Field
@@ -182,9 +192,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
                 { left }
                 <div className="mx_DevicesPanel_deviceInfo">
                     <div className="mx_DevicesPanel_deviceName">
-                        <TextWithTooltip tooltip={device.display_name + " (" + device.device_id + ")"}>
-                            { device.display_name }
-                        </TextWithTooltip>
+                        { deviceName }
                     </div>
                     <div className="mx_DevicesPanel_lastSeen">
                         { lastSeen }
