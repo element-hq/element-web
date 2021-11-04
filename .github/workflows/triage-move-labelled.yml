@@ -9,12 +9,12 @@ jobs:
     name: Move X-Needs-Info issues to Need info on triage board
     runs-on: ubuntu-latest
     steps:
-    - uses: konradpabjan/move-labeled-or-milestoned-issue@219d384e03fa4b6460cd24f9f37d19eb033a4338
-      with:
-        action-token: ${{ secrets.GITHUB_TOKEN }}
-        project-url: "https://github.com/vector-im/element-web/projects/27"
-        column-name: "Need info"
-        label-name: "X-Needs-Info"
+      - uses: konradpabjan/move-labeled-or-milestoned-issue@219d384e03fa4b6460cd24f9f37d19eb033a4338
+        with:
+          action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
+          project-url: "https://github.com/vector-im/element-web/projects/27"
+          column-name: "Need info"
+          label-name: "X-Needs-Info"
 
   move_priority_design_issues:
     name: Move priority X-Needs-Design issues to Design project board
