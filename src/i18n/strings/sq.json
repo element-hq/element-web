@@ -3311,5 +3311,8 @@
     "Create Poll": "Krijoni Pyetësor",
     "You do not have permission to start polls in this room.": "S’keni leje të nisni anketime në këtë dhomë.",
     "Copy link to thread": "Kopjoje lidhjen te rrjedha",
-    "Thread options": "Mundësi rrjedhe"
+    "Thread options": "Mundësi rrjedhe",
+    "Someone already has that username, please try another.": "Dikush e ka atë emër përdoruesi, ju lutemi, provoni tjetër.",
+    "Someone already has that username. Try another or if it is you, sign in below.": "Dikush e ka tashmë këtë emër përdoruesi. Provoni një tjetër, ose nëse jeni ju, bëni hyrjen më poshtë.",
+    "Maximised widgets": "Widget-e të maksimizuar"
 }
