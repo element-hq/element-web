@@ -1,4 +1,4 @@
-name: Move X-Needs-Info into Need info column in the Issue triage board
+name: Move labelled issues to correct boards and columns
 
 on:
   issues:
