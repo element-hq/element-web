@@ -34,11 +34,11 @@ limitations under the License.
             display: none;
         }
 
-        .mx_RadioButton input[type="radio"]:checked + div > div {
+        .mx_StyledRadioButton input[type="radio"]:checked + div > div {
             background: $greyed-fg-color;
         }
 
-        .mx_RadioButton input[type=radio]:checked + div {
+        .mx_StyledRadioButton input[type=radio]:checked + div {
             border-color: unset;
         }
 
@@ -76,7 +76,7 @@ limitations under the License.
         align-items: center;
     }
 
-    .mx_RadioButton > .mx_RadioButton_content {
+    .mx_StyledRadioButton > .mx_StyledRadioButton_content {
         margin-top: 5px;
         margin-bottom: 5px;
     }

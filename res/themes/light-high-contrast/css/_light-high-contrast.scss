@@ -108,10 +108,10 @@ $roomtopic-color: $secondary-content;
     background-color: $roomlist-button-bg-color !important;
 }
 
-.mx_ThemeChoicePanel > .mx_ThemeSelectors > .mx_RadioButton input[type="radio"]:disabled + div {
+.mx_ThemeChoicePanel > .mx_ThemeSelectors > .mx_StyledRadioButton input[type="radio"]:disabled + div {
     border-color: $primary-content;
 }
 
-.mx_ThemeChoicePanel > .mx_ThemeSelectors > .mx_RadioButton.mx_RadioButton_disabled {
+.mx_ThemeChoicePanel > .mx_ThemeSelectors > .mx_StyledRadioButton.mx_StyledRadioButton_disabled {
     color: $primary-content;
 }

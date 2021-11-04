@@ -43,11 +43,11 @@ limitations under the License.
             padding-top: 24px;
         }
 
-        .mx_RadioButton {
+        .mx_StyledRadioButton {
             margin-top: 8px;
             margin-bottom: 4px;
 
-            .mx_RadioButton_content {
+            .mx_StyledRadioButton_content {
                 font-weight: $font-semi-bold;
                 line-height: $font-18px;
                 color: $primary-content;

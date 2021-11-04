@@ -46,7 +46,7 @@ exports[`ThemeChoicePanel renders the theme choice UI 1`] = `
             value="light"
           >
             <label
-              className="mx_RadioButton mx_ThemeSelector_light mx_RadioButton_disabled mx_RadioButton_outlined"
+              className="mx_StyledRadioButton mx_ThemeSelector_light mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
             >
               <input
                 checked={false}
@@ -60,12 +60,12 @@ exports[`ThemeChoicePanel renders the theme choice UI 1`] = `
                 <div />
               </div>
               <div
-                className="mx_RadioButton_content"
+                className="mx_StyledRadioButton_content"
               >
                 Light
               </div>
               <div
-                className="mx_RadioButton_spacer"
+                className="mx_StyledRadioButton_spacer"
               />
             </label>
           </StyledRadioButton>
@@ -80,7 +80,7 @@ exports[`ThemeChoicePanel renders the theme choice UI 1`] = `
             value="dark"
           >
             <label
-              className="mx_RadioButton mx_ThemeSelector_dark mx_RadioButton_disabled mx_RadioButton_outlined"
+              className="mx_StyledRadioButton mx_ThemeSelector_dark mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
             >
               <input
                 checked={false}
@@ -94,12 +94,12 @@ exports[`ThemeChoicePanel renders the theme choice UI 1`] = `
                 <div />
               </div>
               <div
-                className="mx_RadioButton_content"
+                className="mx_StyledRadioButton_content"
               >
                 Dark
               </div>
               <div
-                className="mx_RadioButton_spacer"
+                className="mx_StyledRadioButton_spacer"
               />
             </label>
           </StyledRadioButton>

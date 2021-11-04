@@ -47,7 +47,7 @@ limitations under the License.
                 pointer-events: none;
             }
 
-            .mx_RadioButton {
+            .mx_StyledRadioButton {
                 flex-grow: 0;
                 padding: 10px;
             }
@@ -61,7 +61,7 @@ limitations under the License.
             }
         }
 
-        .mx_RadioButton {
+        .mx_StyledRadioButton {
             border-top: 1px solid $appearance-tab-border-color;
 
             > input + div {
@@ -69,7 +69,7 @@ limitations under the License.
             }
         }
 
-        .mx_RadioButton_checked {
+        .mx_StyledRadioButton_checked {
             background-color: rgba($accent-color, 0.08);
         }
 
