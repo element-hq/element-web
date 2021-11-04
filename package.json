@@ -195,6 +195,7 @@
     "testMatch": [
       "<rootDir>/test/**/*-test.[jt]s?(x)"
     ],
+    "globalSetup":  "<rootDir>/test/globalSetup.js",
     "setupFiles": [
       "jest-canvas-mock"
     ],
