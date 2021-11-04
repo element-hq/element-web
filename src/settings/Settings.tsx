@@ -172,6 +172,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_maximised_widgets": {
+        isFeature: true,
+        displayName: _td("Maximised widgets"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_thread": {
         isFeature: true,
         // Requires a reload as we change an option flag on the `js-sdk`
