@@ -221,25 +221,25 @@ $left-gutter: 64px;
     &:hover.mx_EventTile_verified .mx_EventTile_line,
     &:hover.mx_EventTile_unverified .mx_EventTile_line,
     &:hover.mx_EventTile_unknown .mx_EventTile_line {
-        padding-left: calc($left-gutter - $selected-message-border-width);
+        padding-left: calc($left-gutter);
     }
 
     &:hover.mx_EventTile_verified .mx_EventTile_line {
-        border-left: $e2e-verified-color $selected-message-border-width solid;
+        box-shadow: inset $selected-message-border-width 0 0 0 $e2e-verified-color;
     }
 
     &:hover.mx_EventTile_unverified .mx_EventTile_line {
-        border-left: $e2e-unverified-color $selected-message-border-width solid;
+        box-shadow: inset $selected-message-border-width 0 0 0 $e2e-verified-color;
     }
 
     &:hover.mx_EventTile_unknown .mx_EventTile_line {
-        border-left: $e2e-unknown-color $selected-message-border-width solid;
+        box-shadow: inset $selected-message-border-width 0 0 0 $e2e-verified-color;
     }
 
     &:hover.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
     &:hover.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
     &:hover.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
-        padding-left: calc($left-gutter + 18px - $selected-message-border-width);
+        padding-left: calc($left-gutter + 18px);
     }
 
     /* End to end encryption stuff */
