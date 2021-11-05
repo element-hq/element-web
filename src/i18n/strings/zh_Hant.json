@@ -3318,5 +3318,8 @@
     "Question or topic": "問題或主題",
     "What is your poll question or topic?": "您的投票問題或主題是什麼？",
     "Create Poll": "建立投票",
-    "You do not have permission to start polls in this room.": "您無權在此聊天室啟動投票。"
+    "You do not have permission to start polls in this room.": "您無權在此聊天室啟動投票。",
+    "Someone already has that username, please try another.": "某人已使用該使用者名稱，請嘗試使用另一個。",
+    "Someone already has that username. Try another or if it is you, sign in below.": "某人已使用該使用者名稱。請嘗試使用另一個，或著如果是您，請在下方登入。",
+    "Maximised widgets": "最大化的小工具"
 }
