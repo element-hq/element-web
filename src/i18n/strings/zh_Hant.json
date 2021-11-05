@@ -3307,5 +3307,19 @@
     "This room isn't bridging messages to any platforms. <a>Learn more.</a>": "此聊天室不會將訊息橋接至任何平台。<a>取得更多資訊。</a>",
     "Where you're signed in": "您登入的位置",
     "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "這個聊天室位於您不是管理員的某些空間中。在那些空間中，舊的聊天室仍將會顯示，但系統會提示人們加入新的。",
-    "Use a more compact 'Modern' layout": "使用更簡潔的「現代」佈局"
+    "Use a more compact 'Modern' layout": "使用更簡潔的「現代」佈局",
+    "Copy link to thread": "複製討論串連結",
+    "Thread options": "討論串選項",
+    "Add option": "新增選項",
+    "Write an option": "編寫選項",
+    "Option %(number)s": "選項 %(number)s",
+    "Create options": "建立選項",
+    "Write something...": "寫一些東西……",
+    "Question or topic": "問題或主題",
+    "What is your poll question or topic?": "您的投票問題或主題是什麼？",
+    "Create Poll": "建立投票",
+    "You do not have permission to start polls in this room.": "您無權在此聊天室啟動投票。",
+    "Someone already has that username, please try another.": "某人已使用該使用者名稱，請嘗試使用另一個。",
+    "Someone already has that username. Try another or if it is you, sign in below.": "某人已使用該使用者名稱。請嘗試使用另一個，或著如果是您，請在下方登入。",
+    "Maximised widgets": "最大化的小工具"
 }
