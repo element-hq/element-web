@@ -3294,5 +3294,7 @@
     "Automatically send debug logs on any error": "Automatisch Log-Dateien bei einem Fehler senden",
     "Use a more compact 'Modern' layout": "Modernes kompaktes Layout verwenden",
     "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s hat geändert, wer diesen Raum betreten darf.",
-    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s hat geändert, wer diesen Raum betreten darf. <a>Einstellungen anzeigen</a>."
+    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s hat geändert, wer diesen Raum betreten darf. <a>Einstellungen anzeigen</a>.",
+    "Verify with another login": "Mit anderer Sitzung verifizieren",
+    "To proceed, please accept the verification request on your other login.": "Um fortzufahren, akzeptiere bitte die Verifizierungsanfrage in deiner anderen Sitzung."
 }
