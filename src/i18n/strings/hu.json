@@ -3317,5 +3317,6 @@
     "The homeserver the user you're verifying is connected to": "Az ellenőrizendő felhasználó ehhez a matrix kiszolgálóhoz kapcsolódik:",
     "Someone already has that username, please try another.": "Ezt a felhasználói nevet másvalaki használja, próbáljon ki másikat.",
     "Someone already has that username. Try another or if it is you, sign in below.": "Valaki már használja ezt a felhasználói nevet. Próbáljon ki másikat, illetve ha ön az jelentkezzen be alább.",
-    "Maximised widgets": "Maximalizált kisalkalmazás"
+    "Maximised widgets": "Maximalizált kisalkalmazás",
+    "Own your conversations.": "Az ön beszélgetései csak az öné."
 }
