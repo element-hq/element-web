@@ -214,7 +214,7 @@ async function verifyServerConfig(fragParams) {
         let wkConfig = config['default_server_config']; // overwritten later under some conditions
 
         let serverName = null;
-        if (fragParams.serverName) {
+        if (fragParams.serverName && !config['disable_custom_urls']) {
             serverName = fragParams.serverName;
             console.log("Using server_name from fragParams, ignoring config options.");
         } else {
