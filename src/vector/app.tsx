@@ -245,13 +245,13 @@ async function verifyServerConfig(fragParams) {
                 );
 
                 wkConfig = {
-                   "m.homeserver": {
-                       "base_url": hsUrl,
-                   },
+                    "m.homeserver": {
+                        "base_url": hsUrl,
+                    },
                 };
                 if (isUrl) {
                     wkConfig["m.identity_server"] = {
-                       "base_url": isUrl,
+                        "base_url": isUrl,
                     };
                 }
             }
