@@ -22,9 +22,19 @@ For a good example, see https://develop.element.io/config.json.
      `default_hs_url` is specified. When multiple sources are specified, it is unclear
      which should take priority and therefore the application cannot continue.
    * As of Element 1.4.0, identity servers are optional. See [Identity servers](#identity-servers) below.
-1. `sso_immediate_redirect`: When `true`, Element will assume the default server supports SSO
-   and attempt to send the user there to continue (if they aren't already logged in). Default
-   `false`. Note that this disables all usage of the welcome page.
+1. `sso_redirect_options`: Optionally defines how Element will behave with a server which supports
+   Single Sign On (SSO). By default, Element will do nothing special and simply show a button where
+   needed for the user to click to navigate to the SSO system. This behaviour can be tuned with the
+   config options below (as properties of the `sso_redirect_options` object). None of the options apply
+   if Element thinks the user is already logged in, and similarly Element will assume the default server
+   supports SSO if these redirect options are used.
+   * `immediate`: When `true` (default `false`), Element will automatically redirect all unauthenticated
+     users to the SSO system to log in regardless of how they reached the app. This overrides the use of
+     other redirect options.
+   * `on_welcome_page`: When `true` (default `false`), Element will automatically redirect all unauthenticated
+     users to the SSO to log in if the user lands on the welcome page or no specific page. For example,
+     https://app.element.io/#/welcome and https://app.element.io would redirect if set up to use this option.
+     This can be useful to maintain guest experience until an account is needed.
 1. `features`: Lookup of optional features that may be force-enabled (`true`) or force-disabled (`false`).
    When features are not listed here, their defaults will be used, and users can turn them on/off if `showLabsSettings`
    allows them to. The available optional experimental features vary from release to release and are
@@ -136,6 +146,12 @@ For a good example, see https://develop.element.io/config.json.
    1. `obeyAssertedIdentity`: If set, MSC3086 asserted identity messages sent
       on VoIP calls will cause the call to appear in the room corresponding to the
       asserted identity. This *must* only be set in trusted environments.
+1. `posthog`: [Posthog](https://posthog.com/) integration config. If not set, Posthog analytics are disabled.
+   1. `projectApiKey`: The Posthog project API key
+   2. `apiHost`: The Posthog API host
+1. `sentry`: [Sentry](https://sentry.io/) configuration for rageshake data being sent to sentry.
+   1. `dsn`: the Sentry [DSN](https://docs.sentry.io/product/sentry-basics/dsn-explainer/)
+   2. `environment`: (optional) The [Environment](https://docs.sentry.io/product/sentry-basics/environments/) to pass to sentry
 
 Note that `index.html` also has an og:image meta tag that is set to an image
 hosted on riot.im. This is the image used if links to your copy of Element

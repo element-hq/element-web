@@ -28,6 +28,8 @@ import { CheckUpdatesPayload } from 'matrix-react-sdk/src/dispatcher/payloads/Ch
 
 import UAParser from 'ua-parser-js';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
 export default class WebPlatform extends VectorBasePlatform {
@@ -159,7 +161,7 @@ export default class WebPlatform extends VectorBasePlatform {
 
             return { status: UpdateCheckStatus.NotAvailable };
         }, (err) => {
-            console.error("Failed to poll for update", err);
+            logger.error("Failed to poll for update", err);
             return {
                 status: UpdateCheckStatus.Error,
                 detail: err.message || err.status ? err.status.toString() : 'Unknown Error',
@@ -178,7 +180,7 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     installUpdate() {
-        window.location.reload(true);
+        window.location.reload();
     }
 
     getDefaultDeviceDisplayName(): string {
@@ -212,8 +214,6 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     reload() {
-        // forceReload=false since we don't really need new HTML/JS files
-        // we just need to restart the JS runtime.
-        window.location.reload(false);
+        window.location.reload();
     }
 }

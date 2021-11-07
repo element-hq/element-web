@@ -21,3 +21,4 @@ electron/pub
 /webpack-stats.json
 .vscode
 .vscode/
+.env

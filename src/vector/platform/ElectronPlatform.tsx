@@ -55,6 +55,8 @@ import { IMatrixProfile, IEventWithRoomId as IMatrixEvent, IResultRoomEvents } f
 
 import VectorBasePlatform from './VectorBasePlatform';
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 const electron = window.electron;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
 
@@ -124,12 +126,12 @@ class SeshatIndexManager extends BaseEventIndexManager {
 
     private onIpcReply = (ev: {}, payload: IPCPayload) => {
         if (payload.id === undefined) {
-            console.warn("Ignoring IPC reply with no ID");
+            logger.warn("Ignoring IPC reply with no ID");
             return;
         }
 
         if (this.pendingIpcCalls[payload.id] === undefined) {
-            console.warn("Unknown IPC payload ID: " + payload.id);
+            logger.warn("Unknown IPC payload ID: " + payload.id);
             return;
         }
 
@@ -245,7 +247,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
         // try to flush the rageshake logs to indexeddb before quit.
         electron.on('before-quit', function() {
-            console.log('element-desktop closing');
+            logger.log('element-desktop closing');
             rageshake.flush();
         });
 
@@ -257,12 +259,15 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
 
         electron.on('userDownloadCompleted', (ev, { path, name }) => {
+            const key = `DOWNLOAD_TOAST_${path}`;
+
             const onAccept = () => {
                 electron.send('userDownloadOpen', { path });
+                ToastStore.sharedInstance().dismissToast(key);
             };
 
             ToastStore.sharedInstance().addOrReplaceToast({
-                key: `DOWNLOAD_TOAST_${path}`,
+                key,
                 title: _t("Download Completed"),
                 props: {
                     description: name,
@@ -486,10 +491,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     reload() {
-        // we used to remote to the main process to get it to
-        // reload the webcontents, but in practice this is unnecessary:
-        // the normal way works fine.
-        window.location.reload(false);
+        window.location.reload();
     }
 
     private async ipcCall(name: string, ...args: any[]): Promise<any> {
@@ -503,12 +505,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     private onIpcReply = (ev, payload) => {
         if (payload.id === undefined) {
-            console.warn("Ignoring IPC reply with no ID");
+            logger.warn("Ignoring IPC reply with no ID");
             return;
         }
 
         if (this.pendingIpcCalls[payload.id] === undefined) {
-            console.warn("Unknown IPC payload ID: " + payload.id);
+            logger.warn("Unknown IPC payload ID: " + payload.id);
             return;
         }
 
@@ -531,8 +533,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     setSpellCheckLanguages(preferredLangs: string[]) {
         this.ipcCall('setSpellCheckLanguages', preferredLangs).catch(error => {
-            console.log("Failed to send setSpellCheckLanguages IPC to Electron");
-            console.error(error);
+            logger.log("Failed to send setSpellCheckLanguages IPC to Electron");
+            logger.error(error);
         });
     }
 
@@ -563,6 +565,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     private navigateForwardBack(back: boolean) {
         this.ipcCall(back ? "navigateBack" : "navigateForward");
     }
+
     private navigateToSpace(num: number) {
         dis.dispatch<SwitchSpacePayload>({
             action: Action.SwitchSpace,
@@ -594,8 +597,9 @@ export default class ElectronPlatform extends VectorBasePlatform {
         if (!handled &&
             // ideally we would use SpaceStore.spacesEnabled here but importing SpaceStore in this platform
             // breaks skinning as the platform is instantiated prior to the skin being loaded
-            SettingsStore.getValue("feature_spaces") &&
+            !SettingsStore.getValue("showCommunitiesInsteadOfSpaces") &&
             ev.code.startsWith("Digit") &&
+            ev.code !== "Digit0" && // this is the shortcut for reset zoom, don't override it
             isOnlyCtrlOrCmdKeyEvent(ev)
         ) {
             const spaceNumber = ev.code.slice(5); // Cut off the first 5 characters - "Digit"
