@@ -1,5 +1,5 @@
-Changes in [1.9.4-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.9.4-rc.1) (2021-11-02)
-=======================================================================================================
+Changes in [1.9.4](https://github.com/vector-im/element-web/releases/tag/v1.9.4) (2021-11-08)
+=============================================================================================
 
 ## ✨ Features
  * Improve the look of tooltips ([\#7049](https://github.com/matrix-org/matrix-react-sdk/pull/7049)). Contributed by @SimonBrandner.
