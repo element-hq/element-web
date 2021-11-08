@@ -76,7 +76,7 @@ export default class BridgeSettingsTab extends React.Component<IProps> {
             </div>;
         } else {
             content = <p>{ _t(
-                "This room isn’t bridging messages to any platforms. " +
+                "This room isn't bridging messages to any platforms. " +
                 "<a>Learn more.</a>", {},
                 {
                     // TODO: We don't have this link yet: this will prevent the translators

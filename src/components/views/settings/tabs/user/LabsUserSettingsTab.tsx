@@ -87,10 +87,12 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
             }
 
             labsSection = <div className="mx_SettingsTab_section">
+                <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />
                 { flags }
                 <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />
                 <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
                 <SettingsFlag name="lowBandwidth" level={SettingLevel.DEVICE} />
+                <SettingsFlag name="automaticErrorReporting" level={SettingLevel.DEVICE} />
                 { hiddenReadReceipts }
             </div>;
         }

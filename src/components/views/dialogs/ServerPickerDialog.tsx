@@ -167,7 +167,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
     public render() {
         let text;
         if (this.defaultServer.hsName === "matrix.org") {
-            text = _t("Matrix.org is the biggest public homeserver in the world, so it’s a good place for many.");
+            text = _t("Matrix.org is the biggest public homeserver in the world, so it's a good place for many.");
         }
 
         let defaultServerName: React.ReactNode = this.defaultServer.hsName;
@@ -189,7 +189,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
         >
             <form className="mx_Dialog_content" id="mx_ServerPickerDialog" onSubmit={this.onSubmit}>
                 <p>
-                    { _t("We call the places where you can host your account ‘homeservers’.") } { text }
+                    { _t("We call the places where you can host your account 'homeservers'.") } { text }
                 </p>
 
                 <StyledRadioButton

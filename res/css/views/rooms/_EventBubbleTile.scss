@@ -92,6 +92,10 @@ limitations under the License.
     &[data-self=false] {
         .mx_EventTile_line {
             border-bottom-right-radius: var(--cornerRadius);
+
+            .mx_MImageBody .mx_MImageBody_thumbnail {
+                border-bottom-right-radius: var(--cornerRadius);
+            }
         }
         .mx_EventTile_avatar {
             left: -34px;
@@ -106,11 +110,15 @@ limitations under the License.
     }
     &[data-self=true] {
         .mx_EventTile_line {
-            border-bottom-left-radius: var(--cornerRadius);
             float: right;
+            border-bottom-left-radius: var(--cornerRadius);
             > a {
                 left: auto;
                 right: -68px;
+            }
+
+            .mx_MImageBody .mx_MImageBody_thumbnail {
+                border-bottom-left-radius: var(--cornerRadius);
             }
         }
 
@@ -147,33 +155,62 @@ limitations under the License.
 
     .mx_EventTile_line {
         position: relative;
-        padding: var(--gutterSize);
-        border-top-left-radius: var(--cornerRadius);
-        border-top-right-radius: var(--cornerRadius);
-        background: var(--backgroundColor);
         display: flex;
         gap: 5px;
         margin: 0 -12px 0 -9px;
+        border-top-left-radius: var(--cornerRadius);
+        border-top-right-radius: var(--cornerRadius);
         > a {
             position: absolute;
             padding: 10px 20px;
             top: 0;
             left: -68px;
         }
+
+        //noinspection CssReplaceWithShorthandSafely
+        .mx_MImageBody .mx_MImageBody_thumbnail {
+            // Note: This is intentionally not compressed because the browser gets confused
+            // when it is all combined. We're effectively unsetting the border radius then
+            // setting the two corners we care about manually.
+            border-radius: unset;
+            border-top-left-radius: var(--cornerRadius);
+            border-top-right-radius: var(--cornerRadius);
+        }
+    }
+
+    .mx_EventTile_line:not(.mx_EventTile_mediaLine) {
+        padding: var(--gutterSize);
+        background: var(--backgroundColor);
     }
 
     &.mx_EventTile_continuation[data-self=false] .mx_EventTile_line {
         border-top-left-radius: 0;
+
+        .mx_MImageBody .mx_MImageBody_thumbnail {
+            border-top-left-radius: 0;
+        }
     }
     &.mx_EventTile_lastInSection[data-self=false] .mx_EventTile_line {
         border-bottom-left-radius: var(--cornerRadius);
+
+        .mx_MImageBody .mx_MImageBody_thumbnail {
+            border-bottom-left-radius: var(--cornerRadius);
+        }
     }
 
     &.mx_EventTile_continuation[data-self=true] .mx_EventTile_line {
         border-top-right-radius: 0;
+
+        .mx_MImageBody .mx_MImageBody_thumbnail {
+            border-top-right-radius: 0;
+        }
     }
     &.mx_EventTile_lastInSection[data-self=true] .mx_EventTile_line {
         border-bottom-right-radius: var(--cornerRadius);
+
+        .mx_MImageBody .mx_MImageBody_thumbnail {
+            border-bottom-right-radius: var(--cornerRadius);
+        }
     }
 
     .mx_EventTile_avatar {
@@ -232,7 +269,7 @@ limitations under the License.
     .mx_EditMessageComposer_buttons {
         position: static;
         padding: 0;
-        margin: 0;
+        margin: 8px 0 0;
         background: transparent;
     }
 
@@ -262,7 +299,6 @@ limitations under the License.
             grid-area: reply;
         }
     }
-
 
     .mx_EventTile_readAvatars {
         position: absolute;

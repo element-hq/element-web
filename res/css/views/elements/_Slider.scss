@@ -54,12 +54,20 @@ limitations under the License.
 
 .mx_Slider_selectionDot {
     position: absolute;
-    width: 1.1em;
-    height: 1.1em;
+    width: $slider-selection-dot-size;
+    height: $slider-selection-dot-size;
     background-color: $slider-selection-color;
     border-radius: 50%;
-    box-shadow: 0 0 6px lightgrey;
     z-index: 10;
+}
+
+.mx_Slider_selectionText {
+    color: $muted-fg-color;
+    font-size: $font-14px;
+    position: relative;
+    text-align: center;
+    top: 30px;
+    width: 100%;
 }
 
 .mx_Slider_selection > hr {
@@ -68,8 +76,8 @@ limitations under the License.
 }
 
 .mx_Slider_dot {
-    height: 1em;
-    width: 1em;
+    height: $slider-dot-size;
+    width: $slider-dot-size;
     border-radius: 50%;
     background-color: $slider-background-color;
     z-index: 0;

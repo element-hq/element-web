@@ -15,42 +15,81 @@ limitations under the License.
 */
 
 .mx_DevicesPanel {
-    table-layout: fixed;
-    // Normally the panel is 880px, however this can easily overflow the container.
-    // TODO: Fix the table to not be squishy
     width: auto;
     max-width: 880px;
-    border-spacing: 10px;
+
+    hr {
+        opacity: 0.2;
+        border: none;
+        border-bottom: 1px solid $primary-content;
+    }
 }
 
 .mx_DevicesPanel_header {
-    font-weight: bold;
+    display: flex;
+    align-items: center;
+    margin-block: 10px;
+
+    .mx_DevicesPanel_header_title {
+        font-size: $font-18px;
+        font-weight: 600;
+        color: $primary-content;
+    }
+
+    .mx_DevicesPanel_selectButton {
+        padding-top: 9px;
+    }
+
+    .mx_E2EIcon {
+        width: 24px;
+        height: 24px;
+        margin-left: 0;
+        margin-right: 5px;
+    }
 }
 
-.mx_DevicesPanel_header .mx_DevicesPanel_deviceButtons {
-    height: 48px; // make this tall so the table doesn't move down when the delete button appears
-    width: 20%;
+.mx_DevicesPanel_deleteButton {
+    margin-top: 10px;
 }
 
-.mx_DevicesPanel_header th {
-    padding: 0px;
-    text-align: left;
-    vertical-align: middle;
+.mx_DevicesPanel_device {
+    display: flex;
+    align-items: flex-start;
+    margin-block: 10px;
+    min-height: 35px;
 }
 
-.mx_DevicesPanel_header .mx_DevicesPanel_deviceName {
-    width: 50%;
+.mx_DevicesPanel_icon, .mx_DevicesPanel_checkbox {
+    margin-left: 9px;
+    margin-top: 2px;
 }
 
-.mx_DevicesPanel_header .mx_DevicesPanel_deviceLastSeen {
-    width: 30%;
+.mx_DevicesPanel_deviceInfo {
+    flex-grow: 1;
 }
 
-.mx_DevicesPanel_device td {
-    vertical-align: baseline;
-    padding: 0px;
+.mx_DevicesPanel_deviceName {
+    color: $primary-content;
 }
 
-.mx_DevicesPanel_myDevice {
-    font-weight: bold;
+.mx_DevicesPanel_lastSeen {
+    font-size: $font-12px;
+}
+
+.mx_DevicesPanel_deviceButtons {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.mx_DevicesPanel_renameForm {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    .mx_Field_input {
+        width: 240px;
+        margin: 0;
+    }
 }

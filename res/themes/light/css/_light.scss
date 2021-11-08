@@ -35,7 +35,7 @@ $space-nav: rgba($tertiary-content, 0.15);
 // try to use these colors when possible
 $accent-color: $accent;
 $accent-bg-color: rgba(3, 179, 129, 0.16);
-$notice-primary-color: #ff4b55;
+$notice-primary-color: $alert;
 $notice-primary-bg-color: rgba(255, 75, 85, 0.16);
 $header-panel-bg-color: #f3f8fd;
 
@@ -318,8 +318,8 @@ $breadcrumb-placeholder-bg-color: #e8eef5;
 
 // These two don't change between themes. They are the $warning-color, but we don't
 // want custom themes to affect them by accident.
-$voice-record-stop-symbol-color: #ff4b55;
-$voice-record-live-circle-color: #ff4b55;
+$voice-record-stop-symbol-color: #ff5b55;
+$voice-record-live-circle-color: #ff5b55;
 
 $voice-record-stop-border-color: $quinary-content;
 $voice-record-icon-color: $tertiary-content;
@@ -332,6 +332,8 @@ $appearance-tab-border-color: $input-darker-bg-color;
     --lp-background-blur: 40px;
 }
 $composer-shadow-color: rgba(0, 0, 0, 0.04);
+
+$codeblock-background-color: $header-panel-bg-color;
 
 // Bubble tiles
 $eventbubble-self-bg: #F0FBF8;

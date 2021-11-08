@@ -24,6 +24,7 @@ import React, {
     useReducer,
     Reducer,
     Dispatch,
+    RefObject,
 } from "react";
 
 import { Key } from "../Keyboard";
@@ -63,7 +64,7 @@ const RovingTabIndexContext = createContext<IContext>({
 });
 RovingTabIndexContext.displayName = "RovingTabIndexContext";
 
-enum Type {
+export enum Type {
     Register = "REGISTER",
     Unregister = "UNREGISTER",
     SetFocus = "SET_FOCUS",
@@ -76,73 +77,67 @@ interface IAction {
     };
 }
 
-const reducer = (state: IState, action: IAction) => {
+export const reducer = (state: IState, action: IAction) => {
     switch (action.type) {
         case Type.Register: {
-            if (state.refs.length === 0) {
+            let left = 0;
+            let right = state.refs.length - 1;
+            let index = state.refs.length; // by default append to the end
+
+            // do a binary search to find the right slot
+            while (left <= right) {
+                index = Math.floor((left + right) / 2);
+                const ref = state.refs[index];
+
+                if (ref === action.payload.ref) {
+                    return state; // already in refs, this should not happen
+                }
+
+                if (action.payload.ref.current.compareDocumentPosition(ref.current) & DOCUMENT_POSITION_PRECEDING) {
+                    left = ++index;
+                } else {
+                    right = index - 1;
+                }
+            }
+
+            if (!state.activeRef) {
                 // Our list of refs was empty, set activeRef to this first item
-                return {
-                    ...state,
-                    activeRef: action.payload.ref,
-                    refs: [action.payload.ref],
-                };
-            }
-
-            if (state.refs.includes(action.payload.ref)) {
-                return state; // already in refs, this should not happen
-            }
-
-            // find the index of the first ref which is not preceding this one in DOM order
-            let newIndex = state.refs.findIndex(ref => {
-                return ref.current.compareDocumentPosition(action.payload.ref.current) & DOCUMENT_POSITION_PRECEDING;
-            });
-
-            if (newIndex < 0) {
-                newIndex = state.refs.length; // append to the end
+                state.activeRef = action.payload.ref;
             }
 
             // update the refs list
-            return {
-                ...state,
-                refs: [
-                    ...state.refs.slice(0, newIndex),
-                    action.payload.ref,
-                    ...state.refs.slice(newIndex),
-                ],
-            };
+            if (index < state.refs.length) {
+                state.refs.splice(index, 0, action.payload.ref);
+            } else {
+                state.refs.push(action.payload.ref);
+            }
+            return { ...state };
         }
-        case Type.Unregister: {
-            // filter out the ref which we are removing
-            const refs = state.refs.filter(r => r !== action.payload.ref);
 
-            if (refs.length === state.refs.length) {
+        case Type.Unregister: {
+            const oldIndex = state.refs.findIndex(r => r === action.payload.ref);
+
+            if (oldIndex === -1) {
                 return state; // already removed, this should not happen
             }
 
-            if (state.activeRef === action.payload.ref) {
+            if (state.refs.splice(oldIndex, 1)[0] === state.activeRef) {
                 // we just removed the active ref, need to replace it
                 // pick the ref which is now in the index the old ref was in
-                const oldIndex = state.refs.findIndex(r => r === action.payload.ref);
-                return {
-                    ...state,
-                    activeRef: oldIndex >= refs.length ? refs[refs.length - 1] : refs[oldIndex],
-                    refs,
-                };
+                const len = state.refs.length;
+                state.activeRef = oldIndex >= len ? state.refs[len - 1] : state.refs[oldIndex];
             }
 
             // update the refs list
-            return {
-                ...state,
-                refs,
-            };
+            return { ...state };
         }
+
         case Type.SetFocus: {
             // update active ref
-            return {
-                ...state,
-                activeRef: action.payload.ref,
-            };
+            state.activeRef = action.payload.ref;
+            return { ...state };
         }
+
         default:
             return state;
     }
@@ -151,13 +146,40 @@ const reducer = (state: IState, action: IAction) => {
 interface IProps {
     handleHomeEnd?: boolean;
     handleUpDown?: boolean;
+    handleLeftRight?: boolean;
     children(renderProps: {
         onKeyDownHandler(ev: React.KeyboardEvent);
     });
     onKeyDown?(ev: React.KeyboardEvent, state: IState);
 }
 
-export const RovingTabIndexProvider: React.FC<IProps> = ({ children, handleHomeEnd, handleUpDown, onKeyDown }) => {
+export const findSiblingElement = (
+    refs: RefObject<HTMLElement>[],
+    startIndex: number,
+    backwards = false,
+): RefObject<HTMLElement> => {
+    if (backwards) {
+        for (let i = startIndex; i < refs.length && i >= 0; i--) {
+            if (refs[i].current.offsetParent !== null) {
+                return refs[i];
+            }
+        }
+    } else {
+        for (let i = startIndex; i < refs.length && i >= 0; i++) {
+            if (refs[i].current.offsetParent !== null) {
+                return refs[i];
+            }
+        }
+    }
+};
+
+export const RovingTabIndexProvider: React.FC<IProps> = ({
+    children,
+    handleHomeEnd,
+    handleUpDown,
+    handleLeftRight,
+    onKeyDown,
+}) => {
     const [state, dispatch] = useReducer<Reducer<IState, IAction>>(reducer, {
         activeRef: null,
         refs: [],
@@ -166,6 +188,13 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({ children, handleHomeE
     const context = useMemo<IContext>(() => ({ state, dispatch }), [state]);
 
     const onKeyDownHandler = useCallback((ev) => {
+        if (onKeyDown) {
+            onKeyDown(ev, context.state);
+            if (ev.defaultPrevented) {
+                return;
+            }
+        }
+
         let handled = false;
         // Don't interfere with input default keydown behaviour
         if (ev.target.tagName !== "INPUT" && ev.target.tagName !== "TEXTAREA") {
@@ -174,43 +203,37 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({ children, handleHomeE
                 case Key.HOME:
                     if (handleHomeEnd) {
                         handled = true;
-                        // move focus to first item
-                        if (context.state.refs.length > 0) {
-                            context.state.refs[0].current.focus();
-                        }
+                        // move focus to first (visible) item
+                        findSiblingElement(context.state.refs, 0)?.current?.focus();
                     }
                     break;
 
                 case Key.END:
                     if (handleHomeEnd) {
                         handled = true;
-                        // move focus to last item
-                        if (context.state.refs.length > 0) {
-                            context.state.refs[context.state.refs.length - 1].current.focus();
-                        }
+                        // move focus to last (visible) item
+                        findSiblingElement(context.state.refs, context.state.refs.length - 1, true)?.current?.focus();
                     }
                     break;
 
                 case Key.ARROW_UP:
-                    if (handleUpDown) {
+                case Key.ARROW_RIGHT:
+                    if ((ev.key === Key.ARROW_UP && handleUpDown) || (ev.key === Key.ARROW_RIGHT && handleLeftRight)) {
                         handled = true;
                         if (context.state.refs.length > 0) {
                             const idx = context.state.refs.indexOf(context.state.activeRef);
-                            if (idx > 0) {
-                                context.state.refs[idx - 1].current.focus();
-                            }
+                            findSiblingElement(context.state.refs, idx - 1)?.current?.focus();
                         }
                     }
                     break;
 
                 case Key.ARROW_DOWN:
-                    if (handleUpDown) {
+                case Key.ARROW_LEFT:
+                    if ((ev.key === Key.ARROW_DOWN && handleUpDown) || (ev.key === Key.ARROW_LEFT && handleLeftRight)) {
                         handled = true;
                         if (context.state.refs.length > 0) {
                             const idx = context.state.refs.indexOf(context.state.activeRef);
-                            if (idx < context.state.refs.length - 1) {
-                                context.state.refs[idx + 1].current.focus();
-                            }
+                            findSiblingElement(context.state.refs, idx + 1, true)?.current?.focus();
                         }
                     }
                     break;
@@ -220,10 +243,8 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({ children, handleHomeE
         if (handled) {
             ev.preventDefault();
             ev.stopPropagation();
-        } else if (onKeyDown) {
-            return onKeyDown(ev, context.state);
         }
-    }, [context.state, onKeyDown, handleHomeEnd, handleUpDown]);
+    }, [context.state, onKeyDown, handleHomeEnd, handleUpDown, handleLeftRight]);
 
     return <RovingTabIndexContext.Provider value={context}>
         { children({ onKeyDownHandler }) }

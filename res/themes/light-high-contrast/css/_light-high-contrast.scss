@@ -1,0 +1,117 @@
+//// Reference: https://www.figma.com/file/RnLKnv09glhxGIZtn8zfmh/UI-Themes-%26-Accessibility?node-id=321%3A65847
+$accent: #268075;
+$alert: #D62C25;
+$links: #0A6ECA;
+$primary-content: #17191C;
+$secondary-content: #5E6266;
+$tertiary-content: $secondary-content;
+$quaternary-content: $secondary-content;
+$quinary-content: $secondary-content;
+$roomlist-button-bg-color: rgba(141, 151, 165, 0.2);
+
+$username-variant1-color: #0A6ECA;
+$username-variant2-color: #AC3BA8;
+$username-variant3-color: #078662;
+$username-variant4-color: #CC1449;
+$username-variant5-color: #BE4C00;
+$username-variant6-color: #1C7274;
+$username-variant7-color: #5C56F5;
+$username-variant8-color: #3E810A;
+
+$accent-color: $accent;
+$accent-color-50pct: rgba($accent-color, 0.5);
+$accent-color-alt: $links;
+$input-border-color: $secondary-content;
+$input-darker-bg-color: $quinary-content;
+$input-darker-fg-color: $secondary-content;
+$input-lighter-fg-color: $input-darker-fg-color;
+$input-valid-border-color: $accent-color;
+$input-focused-border-color: $accent-color;
+$button-bg-color: $accent-color;
+$resend-button-divider-color: $input-darker-bg-color;
+$icon-button-color: $quaternary-content;
+$theme-button-bg-color: $quinary-content;
+$presence-online: $accent-color;
+$presence-offline: $quinary-content;
+$pinned-color: $tertiary-content;
+$tab-label-active-bg-color: $accent-color;
+$button-primary-bg-color: $accent-color;
+$button-secondary-bg-color: $accent-fg-color;
+$button-link-fg-color: $accent-color;
+$togglesw-on-color: $accent-color;
+$slider-selection-color: $accent-color;
+$progressbar-fg-color: $accent-color;
+$message-action-bar-fg-color: $primary-content;
+$reaction-row-button-selected-border-color: $accent-color;
+$voice-record-stop-border-color: $quinary-content;
+$voice-record-icon-color: $tertiary-content;
+$appearance-tab-border-color: $input-darker-bg-color;
+$eventbubble-reply-color: $quaternary-content;
+$notice-primary-color: $alert;
+$warning-color: $notice-primary-color; // red
+$pinned-unread-color: $notice-primary-color;
+$button-danger-bg-color: $notice-primary-color;
+$mention-user-pill-bg-color: $warning-color;
+$input-invalid-border-color: $warning-color;
+$event-highlight-fg-color: $warning-color;
+$roomtopic-color: $secondary-content;
+
+@define-mixin mx_DialogButton_danger {
+    background-color: $accent-color;
+}
+
+@define-mixin mx_DialogButton_secondary {
+    // flip colours for the secondary ones
+    font-weight: 600;
+    border: 1px solid $accent-color !important;
+    color: $accent-color;
+    background-color: $button-secondary-bg-color;
+}
+
+@define-mixin mx_Dialog_link {
+    color: $accent-color;
+    text-decoration: none;
+}
+
+.mx_AccessibleButton {
+    margin-left: 4px;
+}
+
+.mx_AccessibleButton:focus {
+    outline: 2px solid $accent-color;
+    outline-offset: 2px;
+}
+
+.mx_BasicMessageComposer .mx_BasicMessageComposer_inputEmpty > :first-child::before {
+    color: $secondary-content;
+    opacity: 1 !important;
+}
+
+.mx_TextualEvent {
+    color: $secondary-content;
+    opacity: 1 !important;
+}
+
+.mx_Dialog, .mx_MatrixChat_wrapper {
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text]::placeholder,
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search]::placeholder,
+    .mx_textinput input::placeholder {
+        color: $input-darker-fg-color !important;
+    }
+}
+
+.mx_UserMenu_contextMenu .mx_UserMenu_contextMenu_header .mx_UserMenu_contextMenu_themeButton {
+    background-color: $roomlist-button-bg-color !important;
+}
+
+.mx_FontScalingPanel_fontSlider {
+    background-color: $roomlist-button-bg-color !important;
+}
+
+.mx_ThemeChoicePanel > .mx_ThemeSelectors > .mx_RadioButton input[type="radio"]:disabled + div {
+    border-color: $primary-content;
+}
+
+.mx_ThemeChoicePanel > .mx_ThemeSelectors > .mx_RadioButton.mx_RadioButton_disabled {
+    color: $primary-content;
+}

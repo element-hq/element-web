@@ -73,7 +73,9 @@ export class StopGapWidgetDriver extends WidgetDriver {
         // Always allow screenshots to be taken because it's a client-induced flow. The widget can't
         // spew screenshots at us and can't request screenshots of us, so it's up to us to provide the
         // button if the widget says it supports screenshots.
-        this.allowedCapabilities = new Set([...allowedCapabilities, MatrixCapabilities.Screenshots]);
+        this.allowedCapabilities = new Set([...allowedCapabilities,
+            MatrixCapabilities.Screenshots,
+            MatrixCapabilities.RequiresClient]);
 
         // Grant the permissions that are specific to given widget types
         if (WidgetType.JITSI.matches(this.forWidget.type) && forWidgetKind === WidgetKind.Room) {

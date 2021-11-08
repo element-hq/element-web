@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 .mx_Checkbox {
     $size: $font-16px;
     $border-size: $font-1-5px;
@@ -49,22 +48,20 @@ limitations under the License.
             box-sizing: border-box;
             border-radius: $border-radius;
 
-            img {
+            .mx_Checkbox_checkmark {
                 display: none;
 
                 height: 100%;
                 width: 100%;
-                filter: invert(100%);
+                mask-image: url('$(res)/img/feather-customised/check.svg');
+                mask-position: center;
+                mask-size: 100%;
+                mask-repeat: no-repeat;
             }
         }
 
-        &:checked + label > .mx_Checkbox_background {
-            background: $accent-color;
-            border-color: $accent-color;
-
-            img {
-                display: block;
-            }
+        &:checked + label > .mx_Checkbox_background .mx_Checkbox_checkmark {
+            display: block;
         }
 
         & + label > *:not(.mx_Checkbox_background) {
@@ -76,15 +73,32 @@ limitations under the License.
             cursor: not-allowed;
         }
 
-        &:checked:disabled + label > .mx_Checkbox_background {
-            background-color: $accent-color;
-            border-color: $accent-color;
-        }
-
         &.focus-visible {
             & + label .mx_Checkbox_background {
                 @mixin unreal-focus;
             }
         }
+    }
+}
+
+.mx_Checkbox.mx_Checkbox_kind_solid input[type=checkbox] {
+    & + label > .mx_Checkbox_background .mx_Checkbox_checkmark {
+        background: #ffffff;
+    }
+
+    &:checked + label > .mx_Checkbox_background {
+        background: $accent-color;
+        border-color: $accent-color;
+    }
+}
+
+.mx_Checkbox.mx_Checkbox_kind_outline input[type=checkbox] {
+    & + label > .mx_Checkbox_background .mx_Checkbox_checkmark {
+        background: $accent-color;
+    }
+
+    &:checked + label > .mx_Checkbox_background {
+        background: transparent;
+        border-color: $accent-color;
     }
 }

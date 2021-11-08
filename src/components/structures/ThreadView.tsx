@@ -37,6 +37,15 @@ import { MatrixClientPeg } from '../../MatrixClientPeg';
 import { E2EStatus } from '../../utils/ShieldUtils';
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import RoomContext, { TimelineRenderingType } from '../../contexts/RoomContext';
+import { ChevronFace, ContextMenuTooltipButton } from './ContextMenu';
+import { _t } from '../../languageHandler';
+import IconizedContextMenu, {
+    IconizedContextMenuOption,
+    IconizedContextMenuOptionList,
+} from '../views/context_menus/IconizedContextMenu';
+import { ButtonEvent } from '../views/elements/AccessibleButton';
+import { copyPlaintext } from '../../utils/strings';
+import { sleep } from 'matrix-js-sdk/src/utils';
 
 interface IProps {
     room: Room;
@@ -45,12 +54,30 @@ interface IProps {
     mxEvent: MatrixEvent;
     permalinkCreator?: RoomPermalinkCreator;
     e2eStatus?: E2EStatus;
+    initialEvent?: MatrixEvent;
+    initialEventHighlighted?: boolean;
 }
-
 interface IState {
     thread?: Thread;
     editState?: EditorStateTransfer;
+    replyToEvent?: MatrixEvent;
+    threadOptionsPosition: DOMRect | null;
+    copyingPhase: CopyingPhase;
 }
+
+enum CopyingPhase {
+    Idle,
+    Copying,
+    Failed,
+}
+
+const contextMenuBelow = (elementRect: DOMRect) => {
+    // align the context menu's icons with the icon which opened the context menu
+    const left = elementRect.left + window.pageXOffset + elementRect.width;
+    const top = elementRect.bottom + window.pageYOffset + 17;
+    const chevronFace = ChevronFace.None;
+    return { left, top, chevronFace };
+};
 
 @replaceableComponent("structures.ThreadView")
 export default class ThreadView extends React.Component<IProps, IState> {
@@ -61,7 +88,10 @@ export default class ThreadView extends React.Component<IProps, IState> {
 
     constructor(props: IProps) {
         super(props);
-        this.state = {};
+        this.state = {
+            threadOptionsPosition: null,
+            copyingPhase: CopyingPhase.Idle,
+        };
     }
 
     public componentDidMount(): void {
@@ -101,19 +131,26 @@ export default class ThreadView extends React.Component<IProps, IState> {
             }
         }
         switch (payload.action) {
-            case Action.EditEvent: {
+            case Action.EditEvent:
                 // Quit early if it's not a thread context
                 if (payload.timelineRenderingType !== TimelineRenderingType.Thread) return;
                 // Quit early if that's not a thread event
                 if (payload.event && !payload.event.getThread()) return;
-                const editState = payload.event ? new EditorStateTransfer(payload.event) : null;
-                this.setState({ editState }, () => {
+                this.setState({
+                    editState: payload.event ? new EditorStateTransfer(payload.event) : null,
+                }, () => {
                     if (payload.event) {
                         this.timelinePanelRef.current?.scrollToEventIfNeeded(payload.event.getId());
                     }
                 });
                 break;
-            }
+            case 'reply_to_event':
+                if (payload.context === TimelineRenderingType.Thread) {
+                    this.setState({
+                        replyToEvent: payload.event,
+                    });
+                }
+                break;
             default:
                 break;
         }
@@ -123,7 +160,11 @@ export default class ThreadView extends React.Component<IProps, IState> {
         let thread = mxEv.getThread();
         if (!thread) {
             const client = MatrixClientPeg.get();
-            thread = new Thread([mxEv], this.props.room, client);
+            thread = new Thread(
+                [mxEv],
+                this.props.room,
+                client,
+            );
             mxEv.setThread(thread);
         }
         thread.on(ThreadEvent.Update, this.updateThread);
@@ -155,7 +196,114 @@ export default class ThreadView extends React.Component<IProps, IState> {
         this.timelinePanelRef.current?.refreshTimeline();
     };
 
+    private onScroll = (): void => {
+        if (this.props.initialEvent && this.props.initialEventHighlighted) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: this.props.room.roomId,
+                event_id: this.props.initialEvent?.getId(),
+                highlighted: false,
+                replyingToEvent: this.state.replyToEvent,
+            });
+        }
+    };
+
+    private onThreadOptionsClick = (ev: ButtonEvent): void => {
+        if (this.isThreadOptionsVisible) {
+            this.closeThreadOptions();
+        } else {
+            const position = ev.currentTarget.getBoundingClientRect();
+            this.setState({
+                threadOptionsPosition: position,
+            });
+        }
+    };
+
+    private closeThreadOptions = (): void => {
+        this.setState({
+            threadOptionsPosition: null,
+        });
+    };
+
+    private get isThreadOptionsVisible(): boolean {
+        return !!this.state.threadOptionsPosition;
+    }
+
+    private viewInRoom = (evt: ButtonEvent): void => {
+        evt.preventDefault();
+        evt.stopPropagation();
+        dis.dispatch({
+            action: 'view_room',
+            event_id: this.props.mxEvent.getId(),
+            highlighted: true,
+            room_id: this.props.mxEvent.getRoomId(),
+        });
+        this.closeThreadOptions();
+    };
+
+    private copyLinkToThread = async (evt: ButtonEvent): Promise<void> => {
+        evt.preventDefault();
+        evt.stopPropagation();
+
+        const matrixToUrl = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
+
+        this.setState({
+            copyingPhase: CopyingPhase.Copying,
+        });
+
+        const hasSuccessfullyCopied = await copyPlaintext(matrixToUrl);
+
+        if (hasSuccessfullyCopied) {
+            await sleep(500);
+        } else {
+            this.setState({ copyingPhase: CopyingPhase.Failed });
+            await sleep(2500);
+        }
+
+        this.setState({ copyingPhase: CopyingPhase.Idle });
+
+        if (hasSuccessfullyCopied) {
+            this.closeThreadOptions();
+        }
+    };
+
+    private renderThreadViewHeader = (): JSX.Element => {
+        return <div className="mx_ThreadPanel__header">
+            <span>{ _t("Thread") }</span>
+            <ContextMenuTooltipButton
+                className="mx_ThreadPanel_button mx_ThreadPanel_OptionsButton"
+                onClick={this.onThreadOptionsClick}
+                title={_t("Thread options")}
+                isExpanded={this.isThreadOptionsVisible}
+            />
+            { this.isThreadOptionsVisible && (<IconizedContextMenu
+                onFinished={this.closeThreadOptions}
+                className="mx_RoomTile_contextMenu"
+                compact
+                rightAligned
+                {...contextMenuBelow(this.state.threadOptionsPosition)}
+            >
+                <IconizedContextMenuOptionList>
+                    <IconizedContextMenuOption
+                        onClick={(e) => this.viewInRoom(e)}
+                        label={_t("View in room")}
+                        iconClassName="mx_ThreadPanel_viewInRoom"
+                    />
+                    <IconizedContextMenuOption
+                        onClick={(e) => this.copyLinkToThread(e)}
+                        label={_t("Copy link to thread")}
+                        iconClassName="mx_ThreadPanel_copyLinkToThread"
+                    />
+                </IconizedContextMenuOptionList>
+            </IconizedContextMenu>) }
+
+        </div>;
+    };
+
     public render(): JSX.Element {
+        const highlightedEventId = this.props.initialEventHighlighted
+            ? this.props.initialEvent?.getId()
+            : null;
         return (
             <RoomContext.Provider value={{
                 ...this.context,
@@ -164,10 +312,11 @@ export default class ThreadView extends React.Component<IProps, IState> {
             }}>
 
                 <BaseCard
-                    className="mx_ThreadView"
+                    className="mx_ThreadView mx_ThreadPanel"
                     onClose={this.props.onClose}
                     previousPhase={RightPanelPhases.ThreadPanel}
                     withoutScrollContainer={true}
+                    header={this.renderThreadViewHeader()}
                 >
                     { this.state.thread && (
                         <TimelinePanel
@@ -180,7 +329,6 @@ export default class ThreadView extends React.Component<IProps, IState> {
                             showUrlPreview={true}
                             tileShape={TileShape.Thread}
                             empty={<div>empty</div>}
-                            alwaysShowTimestamps={true}
                             layout={Layout.Group}
                             hideThreadedMessages={false}
                             hidden={false}
@@ -189,6 +337,9 @@ export default class ThreadView extends React.Component<IProps, IState> {
                             permalinkCreator={this.props.permalinkCreator}
                             membersLoaded={true}
                             editState={this.state.editState}
+                            eventId={this.props.initialEvent?.getId()}
+                            highlightedEventId={highlightedEventId}
+                            onUserScroll={this.onScroll}
                         />
                     ) }
 
@@ -199,7 +350,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                             rel_type: RelationType.Thread,
                             event_id: this.state.thread.id,
                         }}
-                        showReplyPreview={false}
+                        replyToEvent={this.state.replyToEvent}
                         permalinkCreator={this.props.permalinkCreator}
                         e2eStatus={this.props.e2eStatus}
                         compact={true}

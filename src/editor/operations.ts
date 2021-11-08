@@ -32,13 +32,13 @@ export function replaceRangeAndExpandSelection(range: Range, newParts: Part[]): 
     });
 }
 
-export function replaceRangeAndMoveCaret(range: Range, newParts: Part[]): void {
+export function replaceRangeAndMoveCaret(range: Range, newParts: Part[], offset = 0): void {
     const { model } = range;
     model.transform(() => {
         const oldLen = range.length;
         const addedLen = range.replace(newParts);
         const firstOffset = range.start.asOffset(model);
-        const lastOffset = firstOffset.add(oldLen + addedLen);
+        const lastOffset = firstOffset.add(oldLen + addedLen + offset);
         return lastOffset.asPosition(model);
     });
 }
@@ -101,6 +101,15 @@ export function formatRangeAsCode(range: Range): void {
         parts.push(partCreator.plain("`"));
     }
     replaceRangeAndExpandSelection(range, parts);
+}
+
+export function formatRangeAsLink(range: Range) {
+    const { model, parts } = range;
+    const { partCreator } = model;
+    parts.unshift(partCreator.plain("["));
+    parts.push(partCreator.plain("]()"));
+    // We set offset to -1 here so that the caret lands between the brackets
+    replaceRangeAndMoveCaret(range, parts, -1);
 }
 
 // parts helper methods

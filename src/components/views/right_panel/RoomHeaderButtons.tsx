@@ -128,7 +128,10 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
                 name="threadsButton"
                 title={_t("Threads")}
                 onClick={dispatchShowThreadsPanelEvent}
-                isHighlighted={this.isPhase(RightPanelPhases.ThreadPanel)}
+                isHighlighted={this.isPhase([
+                    RightPanelPhases.ThreadPanel,
+                    RightPanelPhases.ThreadView,
+                ])}
                 analytics={['Right Panel', 'Threads List Button', 'click']}
             /> }
             <HeaderButton

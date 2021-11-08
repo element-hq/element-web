@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,8 +38,28 @@ limitations under the License.
 }
 
 .mx_Spinner_icon {
-    background-color: $primary-content;
-    mask: url('$(res)/img/spinner.svg');
-    mask-size: contain;
-    animation: 1.1s steps(12, end) infinite spin;
+    background-color: $quinary-content;
+    mask: url('$(res)/img/spinner/spinner-background.svg');
+    mask-size: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+
+    &::before {
+        background-color: $secondary-content;
+        mask: url('$(res)/img/spinner/spinner-foreground.svg');
+        mask-size: 100%;
+
+        width: 100%;
+        height: 100%;
+
+        content: "";
+        display: flex;
+
+        animation: 1s linear spin infinite;
+    }
 }

@@ -14,25 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 .mx_ThreadPanel {
     display: flex;
     flex-direction: column;
 
+    padding-right: 0;
+
     .mx_BaseCard_header {
-        padding: 6px 0;
+        padding: 6px 8px 6px 0;
+
+        .mx_BaseCard_close,
+        .mx_BaseCard_back {
+            margin-top: 15px;
+        }
 
         .mx_BaseCard_close {
-            margin-top: 15px;
+            right: -8px;
         }
     }
 
-    .mx_AccessibleButton.mx_BaseCard_back {
-        display: none;
-    }
-
-    &__header {
-        width: calc(100% - 40px);
+    .mx_ThreadPanel__header {
+        width: calc(100% - 60px);
+        margin-left: 30px;
         display: flex;
         flex: 1;
         justify-content: space-between;
@@ -100,11 +103,39 @@ limitations under the License.
         }
     }
 
+    .mx_ThreadPanel_button {
+        width: 20px;
+        height: 20px;
+        margin-top: -3px;
+        margin-bottom: auto;
+        position: relative;
+
+        &::before {
+            top: 2px;
+            left: 2px;
+            content: '';
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background: $primary-content;
+        }
+
+        &.mx_ThreadPanel_OptionsButton::before {
+            mask-image: url('$(res)/img/element-icons/context-menu.svg');
+        }
+    }
+
+    .mx_AutoHideScrollbar {
+        border-radius: 8px;
+    }
+
     .mx_RoomView_messageListWrapper {
         background-color: $background;
-        border-radius: 8px;
-        padding-top: 8px;
-        padding-bottom: 12px;
+        padding: 8px;
+        border-radius: inherit;
     }
 
     .mx_ScrollPanel {
@@ -117,18 +148,7 @@ limitations under the License.
         // Account for scrollbar when hovering
         width: calc(100% - 3px);
         margin: 0 2px;
-
-        .mx_MessageTimestamp {
-            // We need to add !important here due to some enormous selectors overriding it anyways
-            // See: _EventTile.scss:241
-            left: unset !important;
-            right: 0 !important;
-            top: 16px;
-        }
-
-        .mx_EventTile_line.mx_EventTile_line {
-            position: unset;
-        }
+        padding-top: 0;
 
         .mx_ThreadInfo {
             position: relative;
@@ -149,4 +169,21 @@ limitations under the License.
             display: none;
         }
     }
+
+    .mx_MessageComposer {
+        background-color: $background;
+        border-radius: 8px;
+        margin-top: 8px;
+        width: calc(100% - 8px);
+        padding: 0 8px;
+        box-sizing: border-box;
+    }
+}
+
+.mx_ThreadPanel_viewInRoom::before {
+    mask-image: url('$(res)/img/element-icons/view-in-room.svg');
+}
+
+.mx_ThreadPanel_copyLinkToThread::before {
+    mask-image: url('$(res)/img/element-icons/link.svg');
 }

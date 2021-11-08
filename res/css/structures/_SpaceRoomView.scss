@@ -380,45 +380,6 @@ $SpaceRoomViewInnerWidth: 428px;
         }
     }
 
-    .mx_SpaceRoomView_betaWarning {
-        padding: 12px 12px 12px 54px;
-        position: relative;
-        font-size: $font-15px;
-        line-height: $font-24px;
-        width: 432px;
-        border-radius: 8px;
-        background-color: $info-plinth-bg-color;
-        color: $secondary-content;
-        box-sizing: border-box;
-
-        > h3 {
-            font-weight: $font-semi-bold;
-            font-size: inherit;
-            line-height: inherit;
-            margin: 0;
-        }
-
-        > p {
-            font-size: inherit;
-            line-height: inherit;
-            margin: 0;
-        }
-
-        &::before {
-            mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
-            mask-position: center;
-            mask-repeat: no-repeat;
-            mask-size: contain;
-            content: '';
-            width: 20px;
-            height: 20px;
-            position: absolute;
-            top: 14px;
-            left: 14px;
-            background-color: $secondary-content;
-        }
-    }
-
     .mx_SpaceRoomView_inviteTeammates {
         // XXX remove this when spaces leaves Beta
         .mx_SpaceRoomView_inviteTeammates_betaDisclaimer {
@@ -511,10 +472,11 @@ $SpaceRoomViewInnerWidth: 428px;
         mask-image: url("$(res)/img/element-icons/lock.svg");
     }
 
-    .mx_AccessibleButton_kind_link {
+    .mx_SpaceRoomView_info_memberCount {
         color: inherit;
         position: relative;
-        padding-left: 16px;
+        padding: 0 0 0 16px;
+        font-size: $font-15px;
 
         &::before {
             content: "·"; // visual separator

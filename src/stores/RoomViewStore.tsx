@@ -32,6 +32,7 @@ import { retry } from "../utils/promise";
 import CountlyAnalytics from "../CountlyAnalytics";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { TimelineRenderingType } from "../contexts/RoomContext";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -153,16 +154,19 @@ class RoomViewStore extends Store<ActionPayload> {
             case 'reply_to_event':
                 // If currently viewed room does not match the room in which we wish to reply then change rooms
                 // this can happen when performing a search across all rooms
-                if (payload.event && payload.event.getRoomId() !== this.state.roomId) {
-                    dis.dispatch({
-                        action: 'view_room',
-                        room_id: payload.event.getRoomId(),
-                        replyingToEvent: payload.event,
-                    });
-                } else {
-                    this.setState({
-                        replyingToEvent: payload.event,
-                    });
+                if (payload.context === TimelineRenderingType.Room) {
+                    if (payload.event
+                        && payload.event.getRoomId() !== this.state.roomId) {
+                        dis.dispatch({
+                            action: 'view_room',
+                            room_id: payload.event.getRoomId(),
+                            replyingToEvent: payload.event,
+                        });
+                    } else {
+                        this.setState({
+                            replyingToEvent: payload.event,
+                        });
+                    }
                 }
                 break;
             case 'open_room_settings': {
@@ -304,7 +308,7 @@ class RoomViewStore extends Store<ActionPayload> {
         }
     }
 
-    private getInvitingUserId(roomId: string): string {
+    private static getInvitingUserId(roomId: string): string {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(roomId);
         if (room && room.getMyMembership() === "invite") {
@@ -314,12 +318,7 @@ class RoomViewStore extends Store<ActionPayload> {
         }
     }
 
-    private joinRoomError(payload: ActionPayload) {
-        this.setState({
-            joining: false,
-            joinError: payload.err,
-        });
-        const err = payload.err;
+    public showJoinRoomError(err: Error | MatrixError, roomId: string) {
         let msg = err.message ? err.message : JSON.stringify(err);
         logger.log("Failed to join room:", msg);
 
@@ -331,7 +330,7 @@ class RoomViewStore extends Store<ActionPayload> {
                 { _t("Please contact your homeserver administrator.") }
             </div>;
         } else if (err.httpStatus === 404) {
-            const invitingUserId = this.getInvitingUserId(this.state.roomId);
+            const invitingUserId = RoomViewStore.getInvitingUserId(roomId);
             // only provide a better error message for invites
             if (invitingUserId) {
                 // if the inviting user is on the same HS, there can only be one cause: they left.
@@ -349,6 +348,14 @@ class RoomViewStore extends Store<ActionPayload> {
             title: _t("Failed to join room"),
             description: msg,
         });
+    }
+
+    private joinRoomError(payload: ActionPayload) {
+        this.setState({
+            joining: false,
+            joinError: payload.err,
+        });
+        this.showJoinRoomError(payload.err, this.state.roomId);
     }
 
     public reset() {

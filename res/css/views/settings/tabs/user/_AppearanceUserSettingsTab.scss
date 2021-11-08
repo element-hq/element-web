@@ -14,145 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_AppearanceUserSettingsTab_fontSlider,
-.mx_AppearanceUserSettingsTab_fontSlider_preview {
-    @mixin mx_Settings_fullWidthField;
-}
-
 .mx_AppearanceUserSettingsTab .mx_Field {
     width: 256px;
-}
-
-.mx_AppearanceUserSettingsTab_fontScaling {
-    color: $primary-content;
-}
-
-.mx_AppearanceUserSettingsTab_fontSlider {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 15px;
-    background: rgba($appearance-tab-border-color, 0.2);
-    border-radius: 10px;
-    font-size: 10px;
-    margin-top: 24px;
-    margin-bottom: 24px;
-}
-
-.mx_AppearanceUserSettingsTab_fontSlider_preview {
-    border: 1px solid $appearance-tab-border-color;
-    border-radius: 10px;
-    padding: 0 16px 9px 16px;
-    pointer-events: none;
-    display: flow-root;
-
-    .mx_EventTile[data-layout=bubble] {
-        margin-top: 30px;
-    }
-
-    .mx_EventTile_msgOption {
-        display: none;
-    }
-
-    &.mx_IRCLayout {
-        padding-top: 9px;
-    }
-}
-
-.mx_AppearanceUserSettingsTab_fontSlider_smallText {
-    font-size: 15px;
-    padding-right: 20px;
-    padding-left: 5px;
-    font-weight: 500;
-}
-
-.mx_AppearanceUserSettingsTab_fontSlider_largeText {
-    font-size: 18px;
-    padding-left: 20px;
-    padding-right: 5px;
-    font-weight: 500;
 }
 
 .mx_AppearanceUserSettingsTab {
     > .mx_SettingsTab_SubHeading {
         margin-bottom: 32px;
     }
-}
-
-.mx_AppearanceUserSettingsTab_themeSection {
-    $radio-bg-color: $input-darker-bg-color;
-    color: $primary-content;
-
-    > .mx_ThemeSelectors {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-
-        margin-top: 4px;
-        margin-bottom: 30px;
-
-        > .mx_RadioButton {
-            padding: $font-16px;
-            box-sizing: border-box;
-            border-radius: 10px;
-            width: 180px;
-
-            background: $radio-bg-color;
-            opacity: 0.4;
-
-            flex-shrink: 1;
-            flex-grow: 0;
-
-            margin-right: 15px;
-            margin-top: 10px;
-
-            font-weight: 600;
-            color: $muted-fg-color;
-
-            > span {
-                justify-content: center;
-            }
-        }
-
-        > .mx_RadioButton_enabled {
-            opacity: 1;
-
-            // These colors need to be hardcoded because they don't change with the theme
-            &.mx_ThemeSelector_light {
-                background-color: #f3f8fd;
-                color: #2e2f32;
-            }
-
-            &.mx_ThemeSelector_dark {
-                // 5% lightened version of 181b21
-                background-color: #25282e;
-                color: #f3f8fd;
-
-                > input > div {
-                    border-color: $input-darker-bg-color;
-                    > div {
-                        border-color: $input-darker-bg-color;
-                    }
-                }
-            }
-
-            &.mx_ThemeSelector_black {
-                background-color: #000000;
-                color: #f3f8fd;
-
-                > input > div {
-                    border-color: $input-darker-bg-color;
-                    > div {
-                        border-color: $input-darker-bg-color;
-                    }
-                }
-            }
-        }
-    }
-}
-
-.mx_SettingsTab_customFontSizeField {
-    margin-left: calc($font-16px + 10px);
 }
 
 .mx_AppearanceUserSettingsTab_Advanced {

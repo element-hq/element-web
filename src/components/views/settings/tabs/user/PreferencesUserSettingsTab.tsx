@@ -288,14 +288,10 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
     private renderGroup(
         settingIds: string[],
         level = SettingLevel.ACCOUNT,
-        includeDisabled = false,
     ): React.ReactNodeArray {
-        if (!includeDisabled) {
-            settingIds = settingIds.filter(SettingsStore.isEnabled);
-        }
-
         return settingIds.map(i => {
-            return <SettingsFlag key={i} name={i} level={level} />;
+            const disabled = !SettingsStore.isEnabled(i);
+            return <SettingsFlag key={i} name={i} level={level} disabled={disabled} />;
         });
     }
 
@@ -343,7 +339,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{ _t("Spaces") }</span>
-                    { this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS, SettingLevel.ACCOUNT, true) }
+                    { this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS, SettingLevel.ACCOUNT) }
                 </div>
 
                 <div className="mx_SettingsTab_section">

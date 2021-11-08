@@ -272,7 +272,7 @@ export default class Registration extends React.Component<IProps, IState> {
 
     private onUIAuthFinished = async (success: boolean, response: any) => {
         if (!success) {
-            let msg = response.message || response.toString();
+            let errorText = response.message || response.toString();
             // can we give a better error message?
             if (response.errcode === 'M_RESOURCE_LIMIT_EXCEEDED') {
                 const errorTop = messageForResourceLimitError(
@@ -291,7 +291,7 @@ export default class Registration extends React.Component<IProps, IState> {
                         '': _td("Please <a>contact your service administrator</a> to continue using this service."),
                     },
                 );
-                msg = <div>
+                errorText = <div>
                     <p>{ errorTop }</p>
                     <p>{ errorDetail }</p>
                 </div>;
@@ -301,15 +301,18 @@ export default class Registration extends React.Component<IProps, IState> {
                     msisdnAvailable = msisdnAvailable || flow.stages.includes('m.login.msisdn');
                 }
                 if (!msisdnAvailable) {
-                    msg = _t('This server does not support authentication with a phone number.');
+                    errorText = _t('This server does not support authentication with a phone number.');
                 }
             } else if (response.errcode === "M_USER_IN_USE") {
-                msg = _t("That username already exists, please try another.");
+                errorText = _t("That username already exists, please try another.");
+            } else if (response.errcode === "M_THREEPID_IN_USE") {
+                errorText = _t("That e-mail address is already in use.");
             }
+
             this.setState({
                 busy: false,
                 doingUIAuth: false,
-                errorText: msg,
+                errorText,
             });
             return;
         }

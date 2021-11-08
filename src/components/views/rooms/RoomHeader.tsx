@@ -162,12 +162,14 @@ export default class RoomHeader extends React.Component<IProps> {
                 className="mx_RoomHeader_button mx_RoomHeader_voiceCallButton"
                 onClick={() => this.props.onCallPlaced(PlaceCallType.Voice)}
                 title={_t("Voice call")}
+                key="voice"
             />;
             const videoCallButton = <AccessibleTooltipButton
                 className="mx_RoomHeader_button mx_RoomHeader_videoCallButton"
                 onClick={(ev: React.MouseEvent<Element>) => ev.shiftKey ?
                     this.displayInfoDialogAboutScreensharing() : this.props.onCallPlaced(PlaceCallType.Video)}
                 title={_t("Video call")}
+                key="video"
             />;
             buttons.push(voiceCallButton, videoCallButton);
         }
@@ -177,6 +179,7 @@ export default class RoomHeader extends React.Component<IProps> {
                 className="mx_RoomHeader_button mx_RoomHeader_forgetButton"
                 onClick={this.props.onForgetClick}
                 title={_t("Forget room")}
+                key="forget"
             />;
             buttons.push(forgetButton);
         }
@@ -188,6 +191,7 @@ export default class RoomHeader extends React.Component<IProps> {
                 })}
                 onClick={this.props.onAppsClick}
                 title={this.props.appsShown ? _t("Hide Widgets") : _t("Show Widgets")}
+                key="apps"
             />;
             buttons.push(appsButton);
         }
@@ -197,6 +201,7 @@ export default class RoomHeader extends React.Component<IProps> {
                 className="mx_RoomHeader_button mx_RoomHeader_searchButton"
                 onClick={this.props.onSearchClick}
                 title={_t("Search")}
+                key="search"
             />;
             buttons.push(searchButton);
         }

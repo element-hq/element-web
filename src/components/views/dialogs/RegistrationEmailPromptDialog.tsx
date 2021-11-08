@@ -21,24 +21,13 @@ import { IDialogProps } from "./IDialogProps";
 import { useRef, useState } from "react";
 import Field from "../elements/Field";
 import CountlyAnalytics from "../../../CountlyAnalytics";
-import withValidation from "../elements/Validation";
-import * as Email from "../../../email";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
+import EmailField from "../auth/EmailField";
 
 interface IProps extends IDialogProps {
     onFinished(continued: boolean, email?: string): void;
 }
-
-const validation = withValidation({
-    rules: [
-        {
-            key: "email",
-            test: ({ value }) => !value || Email.looksValid(value),
-            invalid: () => _t("Doesn't look like a valid email address"),
-        },
-    ],
-});
 
 const RegistrationEmailPromptDialog: React.FC<IProps> = ({ onFinished }) => {
     const [email, setEmail] = useState("");
@@ -47,11 +36,11 @@ const RegistrationEmailPromptDialog: React.FC<IProps> = ({ onFinished }) => {
     const onSubmit = async (e) => {
         e.preventDefault();
         if (email) {
-            const valid = await fieldRef.current.validate({ allowEmpty: false });
+            const valid = await fieldRef.current.validate({});
 
             if (!valid) {
                 fieldRef.current.focus();
-                fieldRef.current.validate({ allowEmpty: false, focused: true });
+                fieldRef.current.validate({ focused: true });
                 return;
             }
         }
@@ -72,16 +61,15 @@ const RegistrationEmailPromptDialog: React.FC<IProps> = ({ onFinished }) => {
                 b: sub => <b>{ sub }</b>,
             }) }</p>
             <form onSubmit={onSubmit}>
-                <Field
-                    ref={fieldRef}
+                <EmailField
+                    fieldRef={fieldRef}
                     autoFocus={true}
-                    type="text"
                     label={_t("Email (optional)")}
                     value={email}
                     onChange={ev => {
-                        setEmail(ev.target.value);
+                        const target = ev.target as HTMLInputElement;
+                        setEmail(target.value);
                     }}
-                    onValidate={async fieldState => await validation(fieldState)}
                     onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_email2_focus")}
                     onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_email2_blur")}
                 />

@@ -40,6 +40,7 @@ import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRight
 import { Action } from "../../../dispatcher/actions";
 import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 import { BetaPill } from "../beta/BetaCard";
+import SettingsStore from "../../../settings/SettingsStore";
 
 interface IProps extends IContextMenuProps {
     space: Room;
@@ -101,6 +102,29 @@ const SpaceContextMenu = ({ space, onFinished, ...props }: IProps) => {
                 iconClassName="mx_SpacePanel_iconLeave"
                 label={_t("Leave space")}
                 onClick={onLeaveClick}
+            />
+        </IconizedContextMenuOptionList>;
+    }
+
+    let devtoolsSection;
+    if (SettingsStore.getValue("developerMode")) {
+        const onViewTimelineClick = (ev: ButtonEvent) => {
+            ev.preventDefault();
+            ev.stopPropagation();
+
+            defaultDispatcher.dispatch({
+                action: 'view_room',
+                room_id: space.roomId,
+                forceTimeline: true,
+            });
+            onFinished();
+        };
+
+        devtoolsSection = <IconizedContextMenuOptionList first>
+            <IconizedContextMenuOption
+                iconClassName="mx_SpacePanel_iconSettings"
+                label={_t("See room timeline (devtools)")}
+                onClick={onViewTimelineClick}
             />
         </IconizedContextMenuOptionList>;
     }
@@ -209,6 +233,7 @@ const SpaceContextMenu = ({ space, onFinished, ...props }: IProps) => {
         </IconizedContextMenuOptionList>
         { newRoomSection }
         { leaveSection }
+        { devtoolsSection }
     </IconizedContextMenu>;
 };
 

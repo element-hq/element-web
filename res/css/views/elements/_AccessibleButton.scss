@@ -30,11 +30,13 @@ limitations under the License.
     align-items: center;
     justify-content: center;
     font-size: $font-14px;
+    border: none; // override default <button /> styles
 }
 
 .mx_AccessibleButton_kind_primary {
     color: $button-primary-fg-color;
     background-color: $button-primary-bg-color;
+    border: 1px solid $button-primary-bg-color; // account for size loss of no border
     font-weight: 600;
 }
 
@@ -114,4 +116,44 @@ limitations under the License.
 
 .mx_AccessibleButton_kind_link_sm.mx_AccessibleButton_disabled {
     opacity: 0.4;
+}
+
+.mx_AccessibleButton_hasKind.mx_AccessibleButton_kind_confirm_sm {
+    background-color: $button-primary-bg-color;
+
+    &::before {
+        mask-image: url('$(res)/img/feather-customised/check.svg');
+    }
+}
+
+.mx_AccessibleButton_hasKind.mx_AccessibleButton_kind_cancel_sm {
+    background-color: $button-danger-bg-color;
+
+    &::before {
+        mask-image: url('$(res)/img/feather-customised/x.svg');
+    }
+}
+
+.mx_AccessibleButton_kind_confirm_sm,
+.mx_AccessibleButton_kind_cancel_sm {
+    padding: 0px;
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+    position: relative;
+    display: block;
+
+    &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #ffffff;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 80%;
+    }
 }

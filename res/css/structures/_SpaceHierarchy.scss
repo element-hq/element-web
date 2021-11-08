@@ -203,7 +203,8 @@ limitations under the License.
             grid-row: 1;
             grid-column: 2;
 
-            .mx_InfoTooltip {
+            .mx_InfoTooltip,
+            .mx_SpaceHierarchy_roomTile_joined {
                 display: inline;
                 margin-left: 12px;
                 color: $tertiary-content;
@@ -220,6 +221,25 @@ limitations under the License.
                         top: 0;
                         left: 0;
                     }
+                }
+            }
+
+            .mx_SpaceHierarchy_roomTile_joined {
+                position: relative;
+                padding-left: 16px;
+
+                &::before {
+                    content: '';
+                    width: 20px;
+                    height: 20px;
+                    top: -2px;
+                    left: -4px;
+                    position: absolute;
+                    mask-position: center;
+                    mask-size: contain;
+                    mask-repeat: no-repeat;
+                    background-color: $accent-color;
+                    mask-image: url('$(res)/img/element-icons/roomlist/checkmark.svg');
                 }
             }
         }
@@ -267,6 +287,11 @@ limitations under the License.
             .mx_AccessibleButton {
                 visibility: visible;
             }
+        }
+
+        &.mx_SpaceHierarchy_joining .mx_AccessibleButton {
+            visibility: visible;
+            padding: 4px 18px;
         }
     }
 

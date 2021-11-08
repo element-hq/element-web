@@ -40,7 +40,7 @@ export default class NotificationPanel extends React.PureComponent<IProps> {
     static contextType = RoomContext;
     render() {
         const emptyState = (<div className="mx_RightPanel_empty mx_NotificationPanel_empty">
-            <h2>{ _t('You’re all caught up') }</h2>
+            <h2>{ _t("You're all caught up") }</h2>
             <p>{ _t('You have no visible notifications.') }</p>
         </div>);
 

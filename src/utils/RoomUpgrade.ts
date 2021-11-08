@@ -25,6 +25,7 @@ import SpaceStore from "../stores/SpaceStore";
 import Spinner from "../components/views/elements/Spinner";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 
 interface IProgress {
     roomUpgraded: boolean;
@@ -33,6 +34,23 @@ interface IProgress {
     inviteUsersTotal: number;
     updateSpacesProgress?: number;
     updateSpacesTotal: number;
+}
+
+export async function awaitRoomDownSync(cli: MatrixClient, roomId: string): Promise<Room> {
+    const room = cli.getRoom(roomId);
+    if (room) return room; // already have the room
+
+    return new Promise<Room>(resolve => {
+        // We have to wait for the js-sdk to give us the room back so
+        // we can more effectively abuse the MultiInviter behaviour
+        // which heavily relies on the Room object being available.
+        const checkForRoomFn = (room: Room) => {
+            if (room.roomId !== roomId) return;
+            resolve(room);
+            cli.off("Room", checkForRoomFn);
+        };
+        cli.on("Room", checkForRoomFn);
+    });
 }
 
 export async function upgradeRoom(
@@ -50,7 +68,7 @@ export async function upgradeRoom(
         spinnerModal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
     }
 
-    let toInvite: string[];
+    let toInvite: string[] = [];
     if (inviteUsers) {
         toInvite = [
             ...room.getMembersWithMembership("join"),
@@ -58,7 +76,7 @@ export async function upgradeRoom(
         ].map(m => m.userId).filter(m => m !== cli.getUserId());
     }
 
-    let parentsToRelink: Room[];
+    let parentsToRelink: Room[] = [];
     if (updateSpaces) {
         parentsToRelink = Array.from(SpaceStore.instance.getKnownParents(room.roomId))
             .map(roomId => cli.getRoom(roomId))
@@ -93,24 +111,7 @@ export async function upgradeRoom(
     progressCallback?.(progress);
 
     if (awaitRoom || inviteUsers) {
-        await new Promise<void>(resolve => {
-            // already have the room
-            if (room.client.getRoom(newRoomId)) {
-                resolve();
-                return;
-            }
-
-            // We have to wait for the js-sdk to give us the room back so
-            // we can more effectively abuse the MultiInviter behaviour
-            // which heavily relies on the Room object being available.
-            const checkForRoomFn = (newRoom: Room) => {
-                if (newRoom.roomId !== newRoomId) return;
-                resolve();
-                cli.off("Room", checkForRoomFn);
-            };
-            cli.on("Room", checkForRoomFn);
-        });
-
+        await awaitRoomDownSync(room.client, newRoomId);
         progress.roomSynced = true;
         progressCallback?.(progress);
     }

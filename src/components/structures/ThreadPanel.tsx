@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
 import { EventTimelineSet } from 'matrix-js-sdk/src/models/event-timeline-set';
 import { Room } from 'matrix-js-sdk/src/models/room';
@@ -24,7 +23,6 @@ import BaseCard from "../views/right_panel/BaseCard";
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 
 import ResizeNotifier from '../../utils/ResizeNotifier';
-import EventTile, { TileShape } from '../views/rooms/EventTile';
 import MatrixClientContext from '../../contexts/MatrixClientContext';
 import { _t } from '../../languageHandler';
 import { ContextMenuButton } from '../../accessibility/context_menu/ContextMenuButton';
@@ -34,24 +32,13 @@ import TimelinePanel from './TimelinePanel';
 import { Layout } from '../../settings/Layout';
 import { useEventEmitter } from '../../hooks/useEventEmitter';
 import AccessibleButton from '../views/elements/AccessibleButton';
+import { TileShape } from '../views/rooms/EventTile';
 
 interface IProps {
     roomId: string;
     onClose: () => void;
     resizeNotifier: ResizeNotifier;
 }
-
-export const ThreadPanelItem: React.FC<{ event: MatrixEvent }> = ({ event }) => {
-    return <EventTile
-        key={event.getId()}
-        mxEvent={event}
-        enableFlair={false}
-        showReadReceipts={false}
-        as="div"
-        tileShape={TileShape.Thread}
-        alwaysShowTimestamps={true}
-    />;
-};
 
 export enum ThreadFilterType {
     "My",
@@ -77,10 +64,11 @@ const useFilteredThreadsTimelinePanel = ({
     filterOption: ThreadFilterType;
     updateTimeline: () => void;
 }) => {
-    const timelineSet = useMemo(() => new EventTimelineSet(room, {
-        unstableClientRelationAggregation: true,
+    const timelineSet = useMemo(() => new EventTimelineSet(null, {
         timelineSupport: true,
-    }), [room]);
+        unstableClientRelationAggregation: true,
+        pendingEvents: false,
+    }), []);
 
     useEffect(() => {
         let filteredThreads = Array.from(threads);
@@ -93,7 +81,7 @@ const useFilteredThreadsTimelinePanel = ({
         // The proper list order should be top-to-bottom, like in social-media newsfeeds.
         filteredThreads.reverse().forEach(([id, thread]) => {
             const event = thread.rootEvent;
-            if (timelineSet.findEventById(event.getId()) || event.status !== null) return;
+            if (!event || timelineSet.findEventById(event.getId()) || event.status !== null) return;
             timelineSet.addEventToTimeline(
                 event,
                 timelineSet.getLiveTimeline(),
@@ -153,7 +141,7 @@ export const ThreadPanelHeader = ({ filterOption, setFilterOption }: {
     const options: readonly ThreadPanelHeaderOption[] = [
         {
             label: _t("My threads"),
-            description: _t("Shows all threads you’ve participated in"),
+            description: _t("Shows all threads you've participated in"),
             key: ThreadFilterType.My,
         },
         {

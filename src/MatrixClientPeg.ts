@@ -295,6 +295,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
 
         const notifTimelineSet = new EventTimelineSet(null, {
             timelineSupport: true,
+            pendingEvents: false,
         });
         // XXX: what is our initial pagination token?! it somehow needs to be synchronised with /sync.
         notifTimelineSet.getLiveTimeline().setPaginationToken("", EventTimeline.BACKWARDS);

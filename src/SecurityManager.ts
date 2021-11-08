@@ -32,6 +32,7 @@ import SecurityCustomisations from "./customisations/Security";
 import { DeviceTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { ComponentType } from "react";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
@@ -335,7 +336,9 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
             // This dialog calls bootstrap itself after guiding the user through
             // passphrase creation.
             const { finished } = Modal.createTrackedDialogAsync('Create Secret Storage dialog', '',
-                import("./async-components/views/dialogs/security/CreateSecretStorageDialog"),
+                import(
+                    "./async-components/views/dialogs/security/CreateSecretStorageDialog"
+                ) as unknown as Promise<ComponentType<{}>>,
                 {
                     forceReset,
                 },

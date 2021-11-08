@@ -15,36 +15,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
-import PropTypes from "prop-types";
-import * as sdk from "../../../../index";
+import React, { ComponentType } from "react";
 import dis from "../../../../dispatcher/dispatcher";
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
 import { Action } from "../../../../dispatcher/actions";
+import { IDialogProps } from "../../../../components/views/dialogs/IDialogProps";
+import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
+import DialogButtons from "../../../../components/views/elements/DialogButtons";
 
-export default class RecoveryMethodRemovedDialog extends React.PureComponent {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-    }
+interface IProps extends IDialogProps {}
 
-    onGoToSettingsClick = () => {
+export default class RecoveryMethodRemovedDialog extends React.PureComponent<IProps> {
+    private onGoToSettingsClick = (): void => {
         this.props.onFinished();
         dis.fire(Action.ViewUserSettings);
-    }
+    };
 
-    onSetupClick = () => {
+    private onSetupClick = (): void => {
         this.props.onFinished();
         Modal.createTrackedDialogAsync("Key Backup", "Key Backup",
-            import("./CreateKeyBackupDialog"),
+            import("./CreateKeyBackupDialog") as unknown as Promise<ComponentType<{}>>,
             null, null, /* priority = */ false, /* static = */ true,
         );
-    }
+    };
 
-    render() {
-        const BaseDialog = sdk.getComponent("views.dialogs.BaseDialog");
-        const DialogButtons = sdk.getComponent("views.elements.DialogButtons");
-
+    public render(): JSX.Element {
         const title = <span className="mx_KeyBackupFailedDialog_title">
             { _t("Recovery Method Removed") }
         </span>;

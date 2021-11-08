@@ -26,13 +26,12 @@ import classNames from 'classnames';
 import AuthPage from "../../views/auth/AuthPage";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import ServerPicker from "../../views/elements/ServerPicker";
+import EmailField from "../../views/auth/EmailField";
 import PassphraseField from '../../views/auth/PassphraseField';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { PASSWORD_MIN_SCORE } from '../../views/auth/RegistrationForm';
-
 import { IValidationResult } from "../../views/elements/Validation";
 import InlineSpinner from '../../views/elements/InlineSpinner';
-
 import { logger } from "matrix-js-sdk/src/logger";
 
 enum Phase {
@@ -68,6 +67,7 @@ interface IState {
     serverErrorIsFatal: boolean;
     serverDeadError: string;
 
+    emailFieldValid: boolean;
     passwordFieldValid: boolean;
     currentHttpRequest?: Promise<any>;
 }
@@ -90,6 +90,7 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
         serverIsAlive: true,
         serverErrorIsFatal: false,
         serverDeadError: "",
+        emailFieldValid: false,
         passwordFieldValid: false,
     };
 
@@ -169,10 +170,13 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
         // refresh the server errors, just in case the server came back online
         await this.handleHttpRequest(this.checkServerLiveliness(this.props.serverConfig));
 
+        await this['email_field'].validate({ allowEmpty: false });
         await this['password_field'].validate({ allowEmpty: false });
 
         if (!this.state.email) {
             this.showErrorDialog(_t('The email address linked to your account must be entered.'));
+        } else if (!this.state.emailFieldValid) {
+            this.showErrorDialog(_t("The email address doesn't appear to be valid."));
         } else if (!this.state.password || !this.state.password2) {
             this.showErrorDialog(_t('A new password must be entered.'));
         } else if (!this.state.passwordFieldValid) {
@@ -221,6 +225,12 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
             description,
         });
     }
+
+    private onEmailValidate = (result: IValidationResult) => {
+        this.setState({
+            emailFieldValid: result.valid,
+        });
+    };
 
     private onPasswordValidate(result: IValidationResult) {
         this.setState({
@@ -271,13 +281,13 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
             />
             <form onSubmit={this.onSubmitForm}>
                 <div className="mx_AuthBody_fieldRow">
-                    <Field
+                    <EmailField
                         name="reset_email" // define a name so browser's password autofill gets less confused
-                        type="text"
-                        label={_t('Email')}
                         value={this.state.email}
+                        fieldRef={field => this['email_field'] = field}
+                        autoFocus={true}
                         onChange={this.onInputChanged.bind(this, "email")}
-                        autoFocus
+                        onValidate={this.onEmailValidate}
                         onFocus={() => CountlyAnalytics.instance.track("onboarding_forgot_password_email_focus")}
                         onBlur={() => CountlyAnalytics.instance.track("onboarding_forgot_password_email_blur")}
                     />

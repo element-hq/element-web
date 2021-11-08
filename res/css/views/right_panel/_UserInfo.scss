@@ -223,7 +223,6 @@ limitations under the License.
             display: flex;
             margin: 8px 0;
 
-
             &.mx_UserInfo_device_verified {
                 .mx_UserInfo_device_trusted {
                     color: $accent-color;
@@ -266,7 +265,6 @@ limitations under the License.
         display: block;
         margin: 16px 0 8px;
     }
-
 
     .mx_VerificationShowSas {
         .mx_AccessibleButton + .mx_AccessibleButton {

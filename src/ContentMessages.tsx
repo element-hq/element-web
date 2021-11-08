@@ -18,6 +18,9 @@ limitations under the License.
 
 import React from "react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import { IEncryptedFile, IMediaEventInfo } from "./customisations/models/IMediaEventContent";
+import { IUploadOpts } from "matrix-js-sdk/src/@types/requests";
+import { MsgType } from "matrix-js-sdk/src/@types/event";
 
 import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
@@ -307,7 +310,7 @@ function loadVideoElement(videoFile): Promise<HTMLVideoElement> {
 function infoForVideoFile(matrixClient, roomId, videoFile) {
     const thumbnailType = "image/jpeg";
 
-    let videoInfo;
+    let videoInfo: Partial<IMediaEventInfo>;
     return loadVideoElement(videoFile).then((video) => {
         return createThumbnail(video, video.videoWidth, video.videoHeight, thumbnailType);
     }).then((result) => {
@@ -356,49 +359,48 @@ export function uploadFile(
     matrixClient: MatrixClient,
     roomId: string,
     file: File | Blob,
-    progressHandler?: any, // TODO: Types
-): IAbortablePromise<{url?: string, file?: any}> { // TODO: Types
+    progressHandler?: IUploadOpts["progressHandler"],
+): IAbortablePromise<{ url?: string, file?: IEncryptedFile }> {
     let canceled = false;
     if (matrixClient.isRoomEncrypted(roomId)) {
         // If the room is encrypted then encrypt the file before uploading it.
         // First read the file into memory.
-        let uploadPromise;
-        let encryptInfo;
+        let uploadPromise: IAbortablePromise<string>;
         const prom = readFileAsArrayBuffer(file).then(function(data) {
             if (canceled) throw new UploadCanceledError();
             // Then encrypt the file.
             return encrypt.encryptAttachment(data);
         }).then(function(encryptResult) {
             if (canceled) throw new UploadCanceledError();
-            // Record the information needed to decrypt the attachment.
-            encryptInfo = encryptResult.info;
+
             // Pass the encrypted data as a Blob to the uploader.
             const blob = new Blob([encryptResult.data]);
             uploadPromise = matrixClient.uploadContent(blob, {
-                progressHandler: progressHandler,
+                progressHandler,
                 includeFilename: false,
             });
-            return uploadPromise;
-        }).then(function(url) {
-            if (canceled) throw new UploadCanceledError();
-            // If the attachment is encrypted then bundle the URL along
-            // with the information needed to decrypt the attachment and
-            // add it under a file key.
-            encryptInfo.url = url;
-            if (file.type) {
-                encryptInfo.mimetype = file.type;
-            }
-            return { "file": encryptInfo };
-        }) as IAbortablePromise<{ file: any }>;
+
+            return uploadPromise.then(url => {
+                if (canceled) throw new UploadCanceledError();
+
+                // If the attachment is encrypted then bundle the URL along
+                // with the information needed to decrypt the attachment and
+                // add it under a file key.
+                return {
+                    file: {
+                        ...encryptResult.info,
+                        url,
+                    },
+                };
+            });
+        }) as IAbortablePromise<{ file: IEncryptedFile }>;
         prom.abort = () => {
             canceled = true;
             if (uploadPromise) matrixClient.cancelUpload(uploadPromise);
         };
         return prom;
     } else {
-        const basePromise = matrixClient.uploadContent(file, {
-            progressHandler: progressHandler,
-        });
+        const basePromise = matrixClient.uploadContent(file, { progressHandler });
         const promise1 = basePromise.then(function(url) {
             if (canceled) throw new UploadCanceledError();
             // If the attachment isn't encrypted then include the URL directly.
@@ -554,29 +556,29 @@ export default class ContentMessages {
 
         const prom = new Promise<void>((resolve) => {
             if (file.type.indexOf('image/') === 0) {
-                content.msgtype = 'm.image';
+                content.msgtype = MsgType.Image;
                 infoForImageFile(matrixClient, roomId, file).then((imageInfo) => {
                     Object.assign(content.info, imageInfo);
                     resolve();
                 }, (e) => {
                     logger.error(e);
-                    content.msgtype = 'm.file';
+                    content.msgtype = MsgType.File;
                     resolve();
                 });
             } else if (file.type.indexOf('audio/') === 0) {
-                content.msgtype = 'm.audio';
+                content.msgtype = MsgType.Audio;
                 resolve();
             } else if (file.type.indexOf('video/') === 0) {
-                content.msgtype = 'm.video';
+                content.msgtype = MsgType.Video;
                 infoForVideoFile(matrixClient, roomId, file).then((videoInfo) => {
                     Object.assign(content.info, videoInfo);
                     resolve();
                 }, (e) => {
-                    content.msgtype = 'm.file';
+                    content.msgtype = MsgType.File;
                     resolve();
                 });
             } else {
-                content.msgtype = 'm.file';
+                content.msgtype = MsgType.File;
                 resolve();
             }
         }) as IAbortablePromise<void>;

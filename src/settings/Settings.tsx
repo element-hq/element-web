@@ -317,7 +317,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "useCompactLayout": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td('Use a more compact ‘Modern’ layout'),
+        displayName: _td("Use a more compact 'Modern' layout"),
         default: false,
     },
     "showRedactions": {
@@ -754,6 +754,17 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         description: _td("Temporarily show communities instead of Spaces for this session. " +
             "Support for this will be removed in the near future. This will reload Element."),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        default: false,
+        controller: new ReloadOnChangeController(),
+    },
+    "developerMode": {
+        displayName: _td("Developer mode"),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: false,
+    },
+    "automaticErrorReporting": {
+        displayName: _td("Automatically send debug logs on any error"),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: false,
         controller: new ReloadOnChangeController(),
     },

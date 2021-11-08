@@ -16,12 +16,13 @@ limitations under the License.
 
 .mx_MessageComposerFormatBar {
     display: none;
-    width: calc(26px * 5);
-    height: 24px;
+    width: calc(32px * 6);
+    height: 32px;
     position: absolute;
     cursor: pointer;
-    border-radius: 4px;
-    background-color: $message-action-bar-bg-color;
+    border-radius: 8px;
+    background-color: $background;
+    border: 1px solid $input-border-color;
     user-select: none;
     // equal to z-index of mx_ReplyPreview and mx_RoomView_statusArea (1000)
     // but as it appears after them in the DOM, will appear on top.
@@ -35,32 +36,19 @@ limitations under the License.
         white-space: nowrap;
         display: inline-block;
         position: relative;
-        border: 1px solid $message-action-bar-border-color;
-        margin-left: -1px;
+        margin: 2px;
 
         &:hover {
-            border-color: $message-action-bar-hover-border-color;
+            background: $roomlist-button-bg-color;
+            border-radius: 6px;
             z-index: 1;
-        }
-
-        &:first-child {
-            border-radius: 3px 0 0 3px;
-        }
-
-        &:last-child {
-            border-radius: 0 3px 3px 0;
-        }
-
-        &:only-child {
-            border-radius: 3px;
         }
     }
 
     .mx_MessageComposerFormatBar_button {
-        width: 27px;
-        height: 24px;
+        width: 28px;
+        height: 28px;
         box-sizing: border-box;
-        background: none;
         vertical-align: middle;
     }
 
@@ -73,7 +61,11 @@ limitations under the License.
         width: 100%;
         mask-repeat: no-repeat;
         mask-position: center;
-        background-color: $message-action-bar-fg-color;
+        background-color: $secondary-content;
+    }
+
+    .mx_MessageComposerFormatBar_button:hover::after {
+        background-color: $primary-content;
     }
 
     .mx_MessageComposerFormatBar_buttonIconBold::after {
@@ -94,6 +86,11 @@ limitations under the License.
 
     .mx_MessageComposerFormatBar_buttonIconCode::after {
         mask-image: url('$(res)/img/element-icons/room/format-bar/code.svg');
+    }
+
+    .mx_MessageComposerFormatBar_buttonIconInsertLink::after {
+        mask-image: url('$(res)/img/element-icons/link.svg');
+        mask-size: 18px;
     }
 }
 

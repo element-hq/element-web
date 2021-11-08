@@ -16,47 +16,51 @@ limitations under the License.
 
 import FileSaver from 'file-saver';
 import React, { createRef } from 'react';
-import PropTypes from 'prop-types';
 import { _t } from '../../../../languageHandler';
 
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import * as MegolmExportEncryption from '../../../../utils/MegolmExportEncryption';
-import * as sdk from '../../../../index';
-
+import { IDialogProps } from "../../../../components/views/dialogs/IDialogProps";
+import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import { logger } from "matrix-js-sdk/src/logger";
 
-const PHASE_EDIT = 1;
-const PHASE_EXPORTING = 2;
+enum Phase {
+    Edit = "edit",
+    Exporting = "exporting",
+}
 
-export default class ExportE2eKeysDialog extends React.Component {
-    static propTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
-        onFinished: PropTypes.func.isRequired,
-    };
+interface IProps extends IDialogProps {
+    matrixClient: MatrixClient;
+}
 
-    constructor(props) {
+interface IState {
+    phase: Phase;
+    errStr: string;
+}
+
+export default class ExportE2eKeysDialog extends React.Component<IProps, IState> {
+    private unmounted = false;
+    private passphrase1 = createRef<HTMLInputElement>();
+    private passphrase2 = createRef<HTMLInputElement>();
+
+    constructor(props: IProps) {
         super(props);
 
-        this._unmounted = false;
-
-        this._passphrase1 = createRef();
-        this._passphrase2 = createRef();
-
         this.state = {
-            phase: PHASE_EDIT,
+            phase: Phase.Edit,
             errStr: null,
         };
     }
 
-    componentWillUnmount() {
-        this._unmounted = true;
+    public componentWillUnmount(): void {
+        this.unmounted = true;
     }
 
-    _onPassphraseFormSubmit = (ev) => {
+    private onPassphraseFormSubmit = (ev: React.FormEvent): boolean => {
         ev.preventDefault();
 
-        const passphrase = this._passphrase1.current.value;
-        if (passphrase !== this._passphrase2.current.value) {
+        const passphrase = this.passphrase1.current.value;
+        if (passphrase !== this.passphrase2.current.value) {
             this.setState({ errStr: _t('Passphrases must match') });
             return false;
         }
@@ -65,11 +69,11 @@ export default class ExportE2eKeysDialog extends React.Component {
             return false;
         }
 
-        this._startExport(passphrase);
+        this.startExport(passphrase);
         return false;
     };
 
-    _startExport(passphrase) {
+    private startExport(passphrase: string): void {
         // extra Promise.resolve() to turn synchronous exceptions into
         // asynchronous ones.
         Promise.resolve().then(() => {
@@ -86,39 +90,37 @@ export default class ExportE2eKeysDialog extends React.Component {
             this.props.onFinished(true);
         }).catch((e) => {
             logger.error("Error exporting e2e keys:", e);
-            if (this._unmounted) {
+            if (this.unmounted) {
                 return;
             }
             const msg = e.friendlyText || _t('Unknown error');
             this.setState({
                 errStr: msg,
-                phase: PHASE_EDIT,
+                phase: Phase.Edit,
             });
         });
 
         this.setState({
             errStr: null,
-            phase: PHASE_EXPORTING,
+            phase: Phase.Exporting,
         });
     }
 
-    _onCancelClick = (ev) => {
+    private onCancelClick = (ev: React.MouseEvent): boolean => {
         ev.preventDefault();
         this.props.onFinished(false);
         return false;
     };
 
-    render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-
-        const disableForm = (this.state.phase === PHASE_EXPORTING);
+    public render(): JSX.Element {
+        const disableForm = (this.state.phase === Phase.Exporting);
 
         return (
             <BaseDialog className='mx_exportE2eKeysDialog'
                 onFinished={this.props.onFinished}
                 title={_t("Export room keys")}
             >
-                <form onSubmit={this._onPassphraseFormSubmit}>
+                <form onSubmit={this.onPassphraseFormSubmit}>
                     <div className="mx_Dialog_content">
                         <p>
                             { _t(
@@ -151,10 +153,10 @@ export default class ExportE2eKeysDialog extends React.Component {
                                 </div>
                                 <div className='mx_E2eKeysDialog_inputCell'>
                                     <input
-                                        ref={this._passphrase1}
+                                        ref={this.passphrase1}
                                         id='passphrase1'
                                         autoFocus={true}
-                                        size='64'
+                                        size={64}
                                         type='password'
                                         disabled={disableForm}
                                     />
@@ -167,9 +169,9 @@ export default class ExportE2eKeysDialog extends React.Component {
                                     </label>
                                 </div>
                                 <div className='mx_E2eKeysDialog_inputCell'>
-                                    <input ref={this._passphrase2}
+                                    <input ref={this.passphrase2}
                                         id='passphrase2'
-                                        size='64'
+                                        size={64}
                                         type='password'
                                         disabled={disableForm}
                                     />
@@ -184,7 +186,7 @@ export default class ExportE2eKeysDialog extends React.Component {
                             value={_t('Export')}
                             disabled={disableForm}
                         />
-                        <button onClick={this._onCancelClick} disabled={disableForm}>
+                        <button onClick={this.onCancelClick} disabled={disableForm}>
                             { _t("Cancel") }
                         </button>
                     </div>

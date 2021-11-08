@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 import React from 'react';
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
@@ -25,9 +26,13 @@ import { Action } from './dispatcher/actions';
 import defaultDispatcher from './dispatcher/dispatcher';
 import { SetRightPanelPhasePayload } from './dispatcher/payloads/SetRightPanelPhasePayload';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { GuestAccess, HistoryVisibility, JoinRule } from "matrix-js-sdk/src/@types/partials";
+import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClientPeg } from "./MatrixClientPeg";
+import { ROOM_SECURITY_TAB } from "./components/views/dialogs/RoomSettingsDialog";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { removeDirectionOverrideChars } from 'matrix-js-sdk/src/utils';
 
 // These functions are frequently used just to check whether an event has
 // any text to display at all. For this reason they return deferred values
@@ -97,18 +102,21 @@ function textForMemberEvent(ev: MatrixEvent, allowJSX: boolean, showHiddenEvents
             if (prevContent && prevContent.membership === 'join') {
                 if (prevContent.displayname && content.displayname && prevContent.displayname !== content.displayname) {
                     return () => _t('%(oldDisplayName)s changed their display name to %(displayName)s', {
-                        oldDisplayName: prevContent.displayname,
-                        displayName: content.displayname,
+                        // We're taking the display namke directly from the event content here so we need
+                        // to strip direction override chars which the js-sdk would normally do when
+                        // calculating the display name
+                        oldDisplayName: removeDirectionOverrideChars(prevContent.displayname),
+                        displayName: removeDirectionOverrideChars(content.displayname),
                     });
                 } else if (!prevContent.displayname && content.displayname) {
                     return () => _t('%(senderName)s set their display name to %(displayName)s', {
                         senderName: ev.getSender(),
-                        displayName: content.displayname,
+                        displayName: removeDirectionOverrideChars(content.displayname),
                     });
                 } else if (prevContent.displayname && !content.displayname) {
                     return () => _t('%(senderName)s removed their display name (%(oldDisplayName)s)', {
                         senderName,
-                        oldDisplayName: prevContent.displayname,
+                        oldDisplayName: removeDirectionOverrideChars(prevContent.displayname),
                     });
                 } else if (prevContent.avatar_url && !content.avatar_url) {
                     return () => _t('%(senderName)s removed their profile picture', { senderName });
@@ -197,17 +205,38 @@ function textForTombstoneEvent(ev: MatrixEvent): () => string | null {
     return () => _t('%(senderDisplayName)s upgraded this room.', { senderDisplayName });
 }
 
-function textForJoinRulesEvent(ev: MatrixEvent): () => string | null {
+const onViewJoinRuleSettingsClick = () => {
+    defaultDispatcher.dispatch({
+        action: "open_room_settings",
+        initial_tab_id: ROOM_SECURITY_TAB,
+    });
+};
+
+function textForJoinRulesEvent(ev: MatrixEvent, allowJSX: boolean): () => string | JSX.Element | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     switch (ev.getContent().join_rule) {
-        case "public":
+        case JoinRule.Public:
             return () => _t('%(senderDisplayName)s made the room public to whoever knows the link.', {
                 senderDisplayName,
             });
-        case "invite":
+        case JoinRule.Invite:
             return () => _t('%(senderDisplayName)s made the room invite only.', {
                 senderDisplayName,
             });
+        case JoinRule.Restricted:
+            if (allowJSX) {
+                return () => <span>
+                    { _t('%(senderDisplayName)s changed who can join this room. <a>View settings</a>.', {
+                        senderDisplayName,
+                    }, {
+                        "a": (sub) => <a onClick={onViewJoinRuleSettingsClick}>
+                            { sub }
+                        </a>,
+                    }) }
+                </span>;
+            }
+
+            return () => _t('%(senderDisplayName)s changed who can join this room.', { senderDisplayName });
         default:
             // The spec supports "knock" and "private", however nothing implements these.
             return () => _t('%(senderDisplayName)s changed the join rule to %(rule)s', {
@@ -220,9 +249,9 @@ function textForJoinRulesEvent(ev: MatrixEvent): () => string | null {
 function textForGuestAccessEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     switch (ev.getContent().guest_access) {
-        case "can_join":
+        case GuestAccess.CanJoin:
             return () => _t('%(senderDisplayName)s has allowed guests to join the room.', { senderDisplayName });
-        case "forbidden":
+        case GuestAccess.Forbidden:
             return () => _t('%(senderDisplayName)s has prevented guests from joining the room.', { senderDisplayName });
         default:
             // There's no other options we can expect, however just for safety's sake we'll do this.
@@ -308,11 +337,11 @@ function textForMessageEvent(ev: MatrixEvent): () => string | null {
  || redactedBecauseUserId });
             }
         }
-        if (ev.getContent().msgtype === "m.emote") {
+        if (ev.getContent().msgtype === MsgType.Emote) {
             message = "* " + senderDisplayName + " " + message;
-        } else if (ev.getContent().msgtype === "m.image") {
+        } else if (ev.getContent().msgtype === MsgType.Image) {
             message = _t('%(senderDisplayName)s sent an image.', { senderDisplayName });
-        } else if (ev.getType() == "m.sticker") {
+        } else if (ev.getType() == EventType.Sticker) {
             message = _t('%(senderDisplayName)s sent a sticker.', { senderDisplayName });
         } else {
             // in this case, parse it as a plain text message
@@ -392,15 +421,15 @@ function textForThreePidInviteEvent(event: MatrixEvent): () => string | null {
 function textForHistoryVisibilityEvent(event: MatrixEvent): () => string | null {
     const senderName = event.sender ? event.sender.name : event.getSender();
     switch (event.getContent().history_visibility) {
-        case 'invited':
+        case HistoryVisibility.Invited:
             return () => _t('%(senderName)s made future room history visible to all room members, '
                 + 'from the point they are invited.', { senderName });
-        case 'joined':
+        case HistoryVisibility.Joined:
             return () => _t('%(senderName)s made future room history visible to all room members, '
                 + 'from the point they joined.', { senderName });
-        case 'shared':
+        case HistoryVisibility.Shared:
             return () => _t('%(senderName)s made future room history visible to all room members.', { senderName });
-        case 'world_readable':
+        case HistoryVisibility.WorldReadable:
             return () => _t('%(senderName)s made future room history visible to anyone.', { senderName });
         default:
             return () => _t('%(senderName)s made future room history visible to unknown (%(visibility)s).', {
@@ -691,25 +720,25 @@ interface IHandlers {
 }
 
 const handlers: IHandlers = {
-    'm.room.message': textForMessageEvent,
-    'm.sticker': textForMessageEvent,
-    'm.call.invite': textForCallInviteEvent,
+    [EventType.RoomMessage]: textForMessageEvent,
+    [EventType.Sticker]: textForMessageEvent,
+    [EventType.CallInvite]: textForCallInviteEvent,
 };
 
 const stateHandlers: IHandlers = {
-    'm.room.canonical_alias': textForCanonicalAliasEvent,
-    'm.room.name': textForRoomNameEvent,
-    'm.room.topic': textForTopicEvent,
-    'm.room.member': textForMemberEvent,
-    "m.room.avatar": textForRoomAvatarEvent,
-    'm.room.third_party_invite': textForThreePidInviteEvent,
-    'm.room.history_visibility': textForHistoryVisibilityEvent,
-    'm.room.power_levels': textForPowerEvent,
-    'm.room.pinned_events': textForPinnedEvent,
-    'm.room.server_acl': textForServerACLEvent,
-    'm.room.tombstone': textForTombstoneEvent,
-    'm.room.join_rules': textForJoinRulesEvent,
-    'm.room.guest_access': textForGuestAccessEvent,
+    [EventType.RoomCanonicalAlias]: textForCanonicalAliasEvent,
+    [EventType.RoomName]: textForRoomNameEvent,
+    [EventType.RoomTopic]: textForTopicEvent,
+    [EventType.RoomMember]: textForMemberEvent,
+    [EventType.RoomAvatar]: textForRoomAvatarEvent,
+    [EventType.RoomThirdPartyInvite]: textForThreePidInviteEvent,
+    [EventType.RoomHistoryVisibility]: textForHistoryVisibilityEvent,
+    [EventType.RoomPowerLevels]: textForPowerEvent,
+    [EventType.RoomPinnedEvents]: textForPinnedEvent,
+    [EventType.RoomServerAcl]: textForServerACLEvent,
+    [EventType.RoomTombstone]: textForTombstoneEvent,
+    [EventType.RoomJoinRules]: textForJoinRulesEvent,
+    [EventType.RoomGuestAccess]: textForGuestAccessEvent,
     'm.room.related_groups': textForRelatedGroupsEvent,
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)

@@ -278,6 +278,8 @@ export default class CallView extends React.Component<IProps, IState> {
             if (window.electron?.getDesktopCapturerSources) {
                 const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
                 const [source] = await finished;
+                if (!source) return;
+
                 isScreensharing = await this.props.call.setScreensharingEnabled(true, source);
             } else {
                 isScreensharing = await this.props.call.setScreensharingEnabled(true);
@@ -544,6 +546,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 <div
                     className={classes}
                     onMouseMove={this.onMouseMove}
+                    ref={this.contentRef}
                 >
                     { sidebar }
                     <div className="mx_CallView_voice_avatarsContainer">

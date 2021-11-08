@@ -28,13 +28,15 @@ import DialogButtons from "../elements/DialogButtons";
 import { IDialogProps } from "./IDialogProps";
 
 interface IProps extends IDialogProps {
-    error: string;
+    error: Error;
 }
 
 @replaceableComponent("views.dialogs.SessionRestoreErrorDialog")
 export default class SessionRestoreErrorDialog extends React.Component<IProps> {
     private sendBugReport = (): void => {
-        Modal.createTrackedDialog('Session Restore Error', 'Send Bug Report Dialog', BugReportDialog, {});
+        Modal.createTrackedDialog('Session Restore Error', 'Send Bug Report Dialog', BugReportDialog, {
+            error: this.props.error,
+        });
     };
 
     private onClearStorageClick = (): void => {
