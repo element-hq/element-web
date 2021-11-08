@@ -3313,5 +3313,11 @@
     "Question or topic": "问题或主题",
     "What is your poll question or topic?": "你的投票问题或主题是什么?",
     "Create Poll": "创建投票",
-    "You do not have permission to start polls in this room.": "你无权在此聊天室启动投票。"
+    "You do not have permission to start polls in this room.": "你无权在此聊天室启动投票。",
+    "Copy link to thread": "复制帖子链接",
+    "Thread options": "帖子选项",
+    "Someone already has that username, please try another.": "用户名已被占用，请尝试使用其他用户名。",
+    "Someone already has that username. Try another or if it is you, sign in below.": "该名称已被占用。 尝试另一个，或者如果是您，请在下面登录。",
+    "Maximised widgets": "最大化的小部件",
+    "Own your conversations.": "拥有您的对话。"
 }
