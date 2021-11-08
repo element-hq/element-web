@@ -101,3 +101,5 @@ export const ThreadListContextMenu: React.FC<IProps> = ({ mxEvent, permalinkCrea
         </IconizedContextMenu>) }
     </React.Fragment>;
 };
+
+export default ThreadListContextMenu;
