@@ -3272,5 +3272,6 @@
     "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Bevestig uw identiteit met eenmalig inloggen om deze apparaten uit te loggen.",
     "Unable to load device list": "Kan apparatenlijst niet laden",
     "Your homeserver does not support device management.": "Uw server ondersteunt geen apparaatbeheer.",
-    "Use a more compact 'Modern' layout": "Compacte 'Moderne'-indeling gebruiken"
+    "Use a more compact 'Modern' layout": "Compacte 'Moderne'-indeling gebruiken",
+    "Maximised widgets": "Widgets maximaliseren"
 }

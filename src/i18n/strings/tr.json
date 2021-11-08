@@ -1795,9 +1795,9 @@
     "Delete sessions|other": "Oturumları sil",
     "Click the button below to confirm deleting these sessions.|one": "Bu oturumları silmeyi onaylamak için aşağıdaki butona tıklayın.",
     "See when the name changes in your active room": "Aktif odanızın isim değişikliklerini görün",
-    "See when the name changes in this room": "Bu odanın isim değişikliklerini görün",
+    "See when the name changes in this room": "Bu odadaki isim değişikliklerini görün",
     "See when the topic changes in this room": "Bu odada konu değişikliğini görün",
-    "See when the topic changes in your active room": "Aktif odanızda konu değiştiğinde görün",
+    "See when the topic changes in your active room": "Bu odada konu başlığı değişince değişiklikleri görün",
     "Remain on your screen when viewing another room, when running": "a",
     "Unknown caller": "Bilinmeyen arayan",
     "%(name)s on hold": "%(name)s beklemede",
@@ -2267,5 +2267,7 @@
     "Identity server (%(server)s)": "(%(server)s) Kimlik Sunucusu",
     "Could not connect to identity server": "Kimlik Sunucusuna bağlanılamadı",
     "Not a valid identity server (status code %(code)s)": "Geçerli bir Kimlik Sunucu değil ( durum kodu %(code)s )",
-    "Identity server URL must be HTTPS": "Kimlik Sunucu URL adresi HTTPS olmak zorunda"
+    "Identity server URL must be HTTPS": "Kimlik Sunucu URL adresi HTTPS olmak zorunda",
+    "Sends the given message as a spoiler": "Mesajı sürprizbozan olarak gönder",
+    "Already in call": "Bu kişi zaten çağrıda"
 }
