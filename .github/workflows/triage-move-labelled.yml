@@ -60,6 +60,23 @@ jobs:
           project-url: "https://github.com/orgs/vector-im/projects/6"
           column-name: "📥 Inbox"
           label-name: "A-Spaces"
+      - uses: octokit/graphql-action@v2.x
+        id: add_to_delight2
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:String!,$contentid:String!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc1HvQ"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   move_voice-message_issues:
     name: Move A-Voice Messages to Voice message board
