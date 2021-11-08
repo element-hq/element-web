@@ -18,7 +18,6 @@ limitations under the License.
 
 import React from 'react';
 import { _t, _td } from '../../../languageHandler';
-import * as sdk from '../../../index';
 import Modal from "../../../Modal";
 import PasswordReset from "../../../PasswordReset";
 import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
@@ -33,6 +32,12 @@ import { PASSWORD_MIN_SCORE } from '../../views/auth/RegistrationForm';
 import { IValidationResult } from "../../views/elements/Validation";
 import InlineSpinner from '../../views/elements/InlineSpinner';
 import { logger } from "matrix-js-sdk/src/logger";
+import Spinner from "../../views/elements/Spinner";
+import QuestionDialog from "../../views/dialogs/QuestionDialog";
+import ErrorDialog from "../../views/dialogs/ErrorDialog";
+import Field from "../../views/elements/Field";
+import AuthHeader from "../../views/auth/AuthHeader";
+import AuthBody from "../../views/auth/AuthBody";
 
 enum Phase {
     // Show the forgot password inputs
@@ -184,7 +189,6 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
         } else if (this.state.password !== this.state.password2) {
             this.showErrorDialog(_t('New passwords must match each other.'));
         } else {
-            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             Modal.createTrackedDialog('Forgot Password Warning', '', QuestionDialog, {
                 title: _t('Warning!'),
                 description:
@@ -219,7 +223,6 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
     };
 
     public showErrorDialog(description: string, title?: string) {
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Forgot Password Error', '', ErrorDialog, {
             title,
             description,
@@ -250,8 +253,6 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
     }
 
     renderForgot() {
-        const Field = sdk.getComponent('elements.Field');
-
         let errorText = null;
         const err = this.state.errorText;
         if (err) {
@@ -334,7 +335,6 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
     }
 
     renderSendingEmail() {
-        const Spinner = sdk.getComponent("elements.Spinner");
         return <Spinner />;
     }
 
@@ -371,9 +371,6 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
     }
 
     render() {
-        const AuthHeader = sdk.getComponent("auth.AuthHeader");
-        const AuthBody = sdk.getComponent("auth.AuthBody");
-
         let resetPasswordJsx;
         switch (this.state.phase) {
             case Phase.Forgot:

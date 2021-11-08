@@ -21,7 +21,6 @@ import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import type { Relations } from 'matrix-js-sdk/src/models/relations';
 
 import { _t } from '../../../languageHandler';
-import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { Action } from '../../../dispatcher/actions';
 import { aboveLeftOf, ContextMenu, ContextMenuTooltipButton, useContextMenu } from '../../structures/ContextMenu';
@@ -42,6 +41,7 @@ import SettingsStore from '../../../settings/SettingsStore';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import ReplyChain from '../elements/ReplyChain';
 import { dispatchShowThreadEvent } from '../../../dispatcher/dispatch-actions/threads';
+import ReactionPicker from "../emojipicker/ReactionPicker";
 
 interface IOptionsButtonProps {
     mxEvent: MatrixEvent;
@@ -107,7 +107,6 @@ const ReactButton: React.FC<IReactButtonProps> = ({ mxEvent, reactions, onFocusC
     let contextMenu;
     if (menuDisplayed) {
         const buttonRect = button.current.getBoundingClientRect();
-        const ReactionPicker = sdk.getComponent('emojipicker.ReactionPicker');
         contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false}>
             <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeMenu} />
         </ContextMenu>;

@@ -33,6 +33,7 @@ import { DeviceTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { ComponentType } from "react";
+import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
@@ -72,7 +73,6 @@ export class AccessCancelledError extends Error {
 }
 
 async function confirmToDismiss(): Promise<boolean> {
-    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
     const [sure] = await Modal.createDialog(QuestionDialog, {
         title: _t("Cancel entering passphrase?"),
         description: _t("Are you sure you want to cancel entering passphrase?"),

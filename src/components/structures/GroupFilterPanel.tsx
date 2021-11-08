@@ -21,7 +21,6 @@ import GroupFilterOrderStore from '../../stores/GroupFilterOrderStore';
 
 import GroupActions from '../../actions/GroupActions';
 
-import * as sdk from '../../index';
 import dis from '../../dispatcher/dispatcher';
 import { _t } from '../../languageHandler';
 
@@ -32,6 +31,8 @@ import SettingsStore from "../../settings/SettingsStore";
 import UserTagTile from "../views/elements/UserTagTile";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import UIStore from "../../stores/UIStore";
+import DNDTagTile from "../views/elements/DNDTagTile";
+import ActionButton from "../views/elements/ActionButton";
 
 interface IGroupFilterPanelProps {
 
@@ -129,9 +130,6 @@ class GroupFilterPanel extends React.Component<IGroupFilterPanelProps, IGroupFil
     }
 
     public render() {
-        const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
-        const ActionButton = sdk.getComponent('elements.ActionButton');
-
         const tags = this.state.orderedTags.map((tag, index) => {
             return <DNDTagTile
                 key={tag}

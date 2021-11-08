@@ -21,7 +21,6 @@ import { Resizable } from "re-resizable";
 
 import AppTile from '../elements/AppTile';
 import dis from '../../../dispatcher/dispatcher';
-import * as sdk from '../../../index';
 import * as ScalarMessaging from '../../../ScalarMessaging';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import WidgetEchoStore from "../../../stores/WidgetEchoStore";
@@ -37,6 +36,7 @@ import UIStore from "../../../stores/UIStore";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { IApp } from "../../../stores/WidgetStore";
 import { ActionPayload } from "../../../dispatcher/payloads";
+import Spinner from "../elements/Spinner";
 
 interface IProps {
     userId: string;
@@ -237,8 +237,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
                 WidgetUtils.getRoomWidgets(this.props.room),
             )
         ) {
-            const Loader = sdk.getComponent("elements.Spinner");
-            spinner = <Loader />;
+            spinner = <Spinner />;
         }
 
         const classes = classNames({

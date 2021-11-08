@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import DialogButtons from "../elements/DialogButtons";
 
 interface IProps {
     onDone: () => void;
@@ -26,7 +26,6 @@ interface IProps {
 @replaceableComponent("views.verification.VerificationComplete")
 export default class VerificationComplete extends React.Component<IProps> {
     public render(): React.ReactNode {
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             <h2>{ _t("Verified!") }</h2>
             <p>{ _t("You've successfully verified this user.") }</p>

@@ -44,6 +44,7 @@ export default class InfoDialog extends React.Component<IProps> {
     };
 
     render() {
+        // FIXME: Using a regular import will break the app
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return (
