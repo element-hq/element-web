@@ -77,6 +77,7 @@ interface IState {
     event: MatrixEvent;
     initialEvent?: MatrixEvent;
     initialEventHighlighted?: boolean;
+    searchQuery: string;
 }
 
 @replaceableComponent("structures.RightPanel")
@@ -92,6 +93,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
             phase: this.getPhaseFromProps(),
             isUserPrivilegedInGroup: null,
             member: this.getUserForPanel(),
+            searchQuery: "",
         };
     }
 
@@ -248,6 +250,10 @@ export default class RightPanel extends React.Component<IProps, IState> {
         }
     };
 
+    private onSearchQueryChanged = (searchQuery: string): void => {
+        this.setState({ searchQuery });
+    };
+
     public render(): JSX.Element {
         let panel = <div />;
         const roomId = this.props.room ? this.props.room.roomId : undefined;
@@ -255,7 +261,13 @@ export default class RightPanel extends React.Component<IProps, IState> {
         switch (this.state.phase) {
             case RightPanelPhases.RoomMemberList:
                 if (roomId) {
-                    panel = <MemberList roomId={roomId} key={roomId} onClose={this.onClose} />;
+                    panel = <MemberList
+                        roomId={roomId}
+                        key={roomId}
+                        onClose={this.onClose}
+                        searchQuery={this.state.searchQuery}
+                        onSearchQueryChanged={this.onSearchQueryChanged}
+                    />;
                 }
                 break;
             case RightPanelPhases.SpaceMemberList:
@@ -263,6 +275,8 @@ export default class RightPanel extends React.Component<IProps, IState> {
                     roomId={this.state.space ? this.state.space.roomId : roomId}
                     key={this.state.space ? this.state.space.roomId : roomId}
                     onClose={this.onClose}
+                    searchQuery={this.state.searchQuery}
+                    onSearchQueryChanged={this.onSearchQueryChanged}
                 />;
                 break;
 

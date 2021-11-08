@@ -48,10 +48,6 @@ import { shouldShowComponent } from "../../../customisations/helpers/UIComponent
 import { UIComponent } from "../../../settings/UIFeature";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
-import { logger } from "matrix-js-sdk/src/logger";
-
-const getSearchQueryLSKey = (roomId: string) => `mx_MemberList_searchQuarry_${roomId}`;
-
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
 const SHOW_MORE_INCREMENT = 100;
@@ -62,7 +58,9 @@ const SORT_REGEX = /[\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]+/g;
 
 interface IProps {
     roomId: string;
+    searchQuery: string;
     onClose(): void;
+    onSearchQueryChanged: (query: string) => void;
 }
 
 interface IState {
@@ -73,7 +71,6 @@ interface IState {
     canInvite: boolean;
     truncateAtJoined: number;
     truncateAtInvited: number;
-    searchQuery: string;
 }
 
 @replaceableComponent("views.rooms.MemberList")
@@ -182,27 +179,19 @@ export default class MemberList extends React.Component<IProps, IState> {
     }
 
     private getMembersState(members: Array<RoomMember>): IState {
-        let searchQuery;
-        try {
-            searchQuery = window.localStorage.getItem(getSearchQueryLSKey(this.props.roomId));
-        } catch (error) {
-            logger.warn("Failed to get last the MemberList search query", error);
-        }
-
         // set the state after determining showPresence to make sure it's
         // taken into account while rendering
         return {
             loading: false,
             members: members,
-            filteredJoinedMembers: this.filterMembers(members, 'join', searchQuery),
-            filteredInvitedMembers: this.filterMembers(members, 'invite', searchQuery),
+            filteredJoinedMembers: this.filterMembers(members, 'join', this.props.searchQuery),
+            filteredInvitedMembers: this.filterMembers(members, 'invite', this.props.searchQuery),
             canInvite: this.canInvite,
 
             // ideally we'd size this to the page height, but
             // in practice I find that a little constraining
             truncateAtJoined: INITIAL_LOAD_NUM_MEMBERS,
             truncateAtInvited: INITIAL_LOAD_NUM_INVITED,
-            searchQuery: searchQuery ?? "",
         };
     }
 
@@ -266,8 +255,8 @@ export default class MemberList extends React.Component<IProps, IState> {
         this.setState({
             loading: false,
             members: members,
-            filteredJoinedMembers: this.filterMembers(members, 'join', this.state.searchQuery),
-            filteredInvitedMembers: this.filterMembers(members, 'invite', this.state.searchQuery),
+            filteredJoinedMembers: this.filterMembers(members, 'join', this.props.searchQuery),
+            filteredInvitedMembers: this.filterMembers(members, 'invite', this.props.searchQuery),
         });
     }
 
@@ -432,14 +421,8 @@ export default class MemberList extends React.Component<IProps, IState> {
     };
 
     private onSearchQueryChanged = (searchQuery: string): void => {
-        try {
-            window.localStorage.setItem(getSearchQueryLSKey(this.props.roomId), searchQuery);
-        } catch (error) {
-            logger.warn("Failed to set the last MemberList search query", error);
-        }
-
+        this.props.onSearchQueryChanged(searchQuery);
         this.setState({
-            searchQuery,
             filteredJoinedMembers: this.filterMembers(this.state.members, 'join', searchQuery),
             filteredInvitedMembers: this.filterMembers(this.state.members, 'invite', searchQuery),
         });
@@ -579,7 +562,7 @@ export default class MemberList extends React.Component<IProps, IState> {
                 className="mx_MemberList_query mx_textinput_icon mx_textinput_search"
                 placeholder={_t('Filter room members')}
                 onSearch={this.onSearchQueryChanged}
-                initialValue={this.state.searchQuery}
+                initialValue={this.props.searchQuery}
             />
         );
 
