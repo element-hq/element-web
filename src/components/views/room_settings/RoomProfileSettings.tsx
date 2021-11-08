@@ -121,43 +121,32 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
         this.setState({ profileFieldsTouched: {} });
 
         const client = MatrixClientPeg.get();
-
-        let originalDisplayName: string;
-        let avatarUrl: string;
-        let originalAvatarUrl: string;
-        let originalTopic: string;
-        let avatarFile: File;
+        const newState: Partial<IState> = {};
 
         // TODO: What do we do about errors?
         const displayName = this.state.displayName.trim();
         if (this.state.originalDisplayName !== this.state.displayName) {
             await client.setRoomName(this.props.roomId, displayName);
-            originalDisplayName = displayName;
+            newState.originalDisplayName = displayName;
+            newState.displayName = displayName;
         }
 
         if (this.state.avatarFile) {
             const uri = await client.uploadContent(this.state.avatarFile);
             await client.sendStateEvent(this.props.roomId, 'm.room.avatar', { url: uri }, '');
-            avatarUrl = mediaFromMxc(uri).getSquareThumbnailHttp(96);
-            originalAvatarUrl = avatarUrl;
-            avatarFile = null;
+            newState.avatarUrl = mediaFromMxc(uri).getSquareThumbnailHttp(96);
+            newState.originalAvatarUrl = newState.avatarUrl;
+            newState.avatarFile = null;
         } else if (this.state.originalAvatarUrl !== this.state.avatarUrl) {
             await client.sendStateEvent(this.props.roomId, 'm.room.avatar', {}, '');
         }
 
         if (this.state.originalTopic !== this.state.topic) {
             await client.setRoomTopic(this.props.roomId, this.state.topic);
-            originalTopic = this.state.topic;
+            newState.originalTopic = this.state.topic;
         }
 
-        this.setState({
-            originalAvatarUrl,
-            avatarUrl,
-            originalDisplayName,
-            originalTopic,
-            displayName,
-            avatarFile,
-        });
+        this.setState(newState as IState);
     };
 
     private onDisplayNameChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
