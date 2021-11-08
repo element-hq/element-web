@@ -23,15 +23,12 @@ $tertiary-fg-color: $primary-fg-color;
 $primary-bg-color: $bg-color;
 $muted-fg-color: $header-panel-text-primary-color;
 
-
-
 // used for dialog box text
 $light-fg-color: $header-panel-text-secondary-color;
 
 // used for focusing form controls
 $focus-bg-color: $room-highlight-color;
 
-$mention-user-pill-bg-color: $warning-color;
 $other-user-pill-bg-color: $room-highlight-color;
 $rte-room-pill-color: $room-highlight-color;
 $rte-group-pill-color: $room-highlight-color;
@@ -59,10 +56,7 @@ $input-border-color: #e7e7e7;
 $input-darker-bg-color: $search-bg-color;
 $input-darker-fg-color: $search-placeholder-color;
 $input-lighter-bg-color: #f2f5f8;
-$input-lighter-fg-color: $input-darker-fg-color;
 $input-focused-border-color: #238cf5;
-$input-valid-border-color: $accent-color;
-$input-invalid-border-color: $warning-color;
 
 $resend-button-divider-color: $muted-fg-color;
 
@@ -77,7 +71,6 @@ $menu-box-shadow-color: $bg-color;
 $menu-selected-color: $room-highlight-color;
 
 $avatar-initial-color: #ffffff;
-$avatar-bg-color: $bg-color;
 
 $h3-color: $primary-fg-color;
 
@@ -86,14 +79,12 @@ $dialog-backdrop-color: #000;
 $dialog-shadow-color: rgba(0, 0, 0, 0.48);
 $dialog-close-fg-color: #9fa9ba;
 
-$dialog-background-bg-color: $header-panel-bg-color;
 $lightbox-background-bg-color: #000;
 $lightbox-background-bg-opacity: 0.85;
 
 $settings-grey-fg-color: #a2a2a2;
 $settings-profile-overlay-placeholder-fg-color: #454545;
 $settings-profile-button-bg-color: #e7e7e7;
-$settings-profile-button-fg-color: $settings-profile-overlay-placeholder-fg-color;
 $settings-subsection-fg-color: $text-secondary-color;
 
 $topleftmenu-color: $text-primary-color;
@@ -133,7 +124,6 @@ $space-nav: rgba($panel-base, 0.1);
 
 $theme-button-bg-color: #e3e8f0;
 
-
 $roomlist-button-bg-color: #1A1D23; // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-filter-active-bg-color: $roomlist-button-bg-color;
 $roomlist-bg-color: $header-panel-bg-color;
@@ -156,7 +146,6 @@ $widget-body-bg-color: #1A1D23;
 $event-redacted-fg-color: #606060;
 $event-redacted-border-color: #000000;
 
-$event-highlight-fg-color: $warning-color;
 $event-highlight-bg-color: #25271F;
 
 // event timestamp
@@ -166,25 +155,20 @@ $event-timestamp-color: $text-secondary-color;
 $tab-label-fg-color: $text-primary-color;
 $tab-label-active-fg-color: $text-primary-color;
 $tab-label-bg-color: transparent;
-$tab-label-active-bg-color: $accent-color;
 $tab-label-icon-bg-color: $text-primary-color;
 $tab-label-active-icon-bg-color: $text-primary-color;
 
 // Buttons
 $button-primary-fg-color: #ffffff;
-$button-primary-bg-color: $accent-color;
 $button-secondary-bg-color: transparent;
 $button-danger-fg-color: #ffffff;
-$button-danger-bg-color: $notice-primary-color;
 $button-danger-disabled-fg-color: #ffffff;
 $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
-$button-link-fg-color: $accent-color;
 $button-link-bg-color: transparent;
 
 // Toggle switch
 $togglesw-off-color: $room-highlight-color;
 
-$progressbar-fg-color: $accent-color;
 $progressbar-bg-color: #21262c;
 
 $visual-bell-bg-color: #800;
@@ -240,7 +224,7 @@ $eventbubble-reply-color: #C1C6CD;
     font-family: $font-family;
     font-size: $font-14px;
     color: $button-fg-color;
-    background-color: $button-bg-color;
+    background-color: $accent-color;
     width: auto;
     padding: 7px;
     padding-left: 1.5em;

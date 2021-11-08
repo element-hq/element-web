@@ -50,20 +50,20 @@ limitations under the License.
     }
 
     &.mx_Validation_valid {
-        color: $input-valid-border-color;
+        color: $accent-color;
 
         &::before {
             mask-image: url('$(res)/img/feather-customised/check.svg');
-            background-color: $input-valid-border-color;
+            background-color: $accent-color;
         }
     }
 
     &.mx_Validation_invalid {
-        color: $input-invalid-border-color;
+        color: $warning-color;
 
         &::before {
             mask-image: url('$(res)/img/feather-customised/x.svg');
-            background-color: $input-invalid-border-color;
+            background-color: $warning-color;
         }
     }
 }
