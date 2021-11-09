@@ -144,7 +144,7 @@ $activeBorderColor: $secondary-content;
             align-items: center;
             border-radius: 12px;
             padding: 4px;
-            width: 100%;
+            width: calc(100% - 32px);
         }
 
         .mx_SpaceButton_name {
@@ -160,6 +160,7 @@ $activeBorderColor: $secondary-content;
 
         .mx_SpaceButton_toggleCollapse {
             width: $gutterSize;
+            min-width: $gutterSize;
             height: 20px;
             mask-position: center;
             mask-size: 20px;
@@ -221,7 +222,7 @@ $activeBorderColor: $secondary-content;
             height: 20px;
             margin-top: auto;
             margin-bottom: auto;
-            visibility: hidden;
+            display: none;
             position: relative;
 
             &::before {
@@ -270,15 +271,11 @@ $activeBorderColor: $secondary-content;
         }
     }
 
-    .mx_SpaceButton_narrow .mx_SpaceButton_menuButton {
-        display: none;
-    }
-
     .mx_SpaceButton:hover,
     .mx_SpaceButton:focus-within,
     .mx_SpaceButton_hasMenuOpen {
-        &:not(.mx_SpaceButton_invite) .mx_SpaceButton_menuButton {
-            visibility: visible;
+        &:not(.mx_SpaceButton_narrow):not(.mx_SpaceButton_invite) .mx_SpaceButton_menuButton {
+            display: block;
         }
     }
 
