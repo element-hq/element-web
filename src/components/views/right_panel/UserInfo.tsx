@@ -1122,6 +1122,10 @@ const PowerLevelEditor: React.FC<{
     const cli = useContext(MatrixClientContext);
 
     const [selectedPowerLevel, setSelectedPowerLevel] = useState(user.powerLevel);
+    useEffect(() => {
+        setSelectedPowerLevel(user.powerLevel);
+    }, [user]);
+
     const onPowerChange = useCallback(async (powerLevel: number) => {
         setSelectedPowerLevel(powerLevel);
 
