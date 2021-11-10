@@ -149,3 +149,7 @@ Maximised widgets provide a room layout in which a widget is (temporarily) the p
 
 Note that this feature is currently under active development and therefore is
 entirely incomplete and may not work at all - it is not recommended for general use at this time.
+
+## Spotlight search (`feature_spotlight`) [In Development]
+
+Switches to a new room search experience.
