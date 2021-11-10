@@ -101,7 +101,6 @@ limitations under the License.
 
 .mx_AccessibleButton_kind_link {
     color: $accent-color;
-    background-color: $button-link-bg-color;
 }
 
 .mx_AccessibleButton_kind_link.mx_AccessibleButton_disabled {
@@ -111,7 +110,6 @@ limitations under the License.
 .mx_AccessibleButton_hasKind.mx_AccessibleButton_kind_link_sm {
     padding: 5px 12px;
     color: $accent-color;
-    background-color: $button-link-bg-color;
 }
 
 .mx_AccessibleButton_kind_link_sm.mx_AccessibleButton_disabled {

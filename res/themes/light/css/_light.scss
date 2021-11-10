@@ -106,7 +106,6 @@ $input-underline-color: rgba(151, 151, 151, 0.5);
 $input-fg-color: rgba(74, 74, 74, 0.9);
 // scrollbars
 $scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
-$scrollbar-track-color: transparent;
 // context menus
 $menu-border-color: #e7e7e7;
 $menu-bg-color: #fff;
@@ -187,8 +186,6 @@ $username-variant6-color: #2dc2c5;
 $username-variant7-color: #5c56f5;
 $username-variant8-color: #74d12c;
 
-$panel-divider-color: transparent;
-
 // pinned events indicator
 $pinned-color: $tertiary-content;
 
@@ -199,7 +196,7 @@ $widget-body-bg-color: #FFF;
 
 // ********************
 
-// both $event-highlight-bg-color and $room-warning-bg-color share this value,
+// $event-highlight-bg-color shares this value,
 // so to not make their order dependent on who depends on who, have a shared value
 // defined before both
 $yellow-background: #fff8e3;
@@ -208,10 +205,6 @@ $yellow-background: #fff8e3;
 $event-notsent-color: #f44;
 
 $event-highlight-bg-color: $yellow-background;
-
-// event redaction
-$event-redacted-fg-color: #e2e2e2;
-$event-redacted-border-color: #cccccc;
 
 // event timestamp
 $event-timestamp-color: #acacac;
@@ -234,8 +227,6 @@ $lightbox-border-color: #ffffff;
 // Tabbed views
 $tab-label-fg-color: #45474a;
 $tab-label-active-fg-color: $background;
-$tab-label-bg-color: transparent;
-$tab-label-icon-bg-color: #454545;
 $tab-label-active-icon-bg-color: $tab-label-active-fg-color;
 
 // Buttons
@@ -244,7 +235,6 @@ $button-secondary-bg-color: $accent-fg-color;
 $button-danger-fg-color: $background;
 $button-danger-disabled-fg-color: $background;
 $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
-$button-link-bg-color: transparent;
 
 $visual-bell-bg-color: #faa;
 
@@ -256,8 +246,6 @@ $togglesw-ball-color: #fff;
 $slider-background-color: #c1c9d6;
 
 $progressbar-bg-color: rgba(141, 151, 165, 0.2);
-
-$room-warning-bg-color: $yellow-background;
 
 $memberstatus-placeholder-color: $muted-fg-color;
 
@@ -276,11 +264,9 @@ $message-action-bar-fg-color: $primary-content;
 $message-action-bar-border-color: #e9edf1;
 $message-action-bar-hover-border-color: $focus-bg-color;
 
-$reaction-row-button-bg-color: $header-panel-bg-color;
 $reaction-row-button-border-color: #e9edf1;
 $reaction-row-button-hover-border-color: $focus-bg-color;
 $reaction-row-button-selected-bg-color: #e9fff9;
-$reaction-row-button-selected-border-color: $accent-color;
 
 $kbd-border-color: $reaction-row-button-border-color;
 
@@ -313,7 +299,6 @@ $codeblock-background-color: $header-panel-bg-color;
 $eventbubble-self-bg: #F0FBF8;
 $eventbubble-others-bg: $system;
 $eventbubble-bg-hover: #FAFBFD;
-$eventbubble-avatar-outline: $background;
 $eventbubble-reply-color: $quaternary-content;
 
 // ***** Mixins! *****

@@ -21,12 +21,9 @@ $space-nav: rgba($panel-base, 0.1);
 // unified palette
 // try to use these colors when possible
 $header-panel-bg-color: #20252B;
-$header-panel-border-color: #000000;
 $header-panel-text-primary-color: #B9BEC6;
 $header-panel-text-secondary-color: #c8c8cd;
 $text-secondary-color: #B9BEC6;
-$search-bg-color: #181b21;
-$search-placeholder-color: #61708b;
 $room-highlight-color: #343a46;
 
 // typical text (dark-on-white in light skin)
@@ -62,8 +59,8 @@ $primary-hairline-color: transparent;
 
 // used for the border of input text fields
 $input-border-color: rgba(231, 231, 231, 0.2);
-$input-darker-bg-color: $search-bg-color;
-$input-darker-fg-color: $search-placeholder-color;
+$input-darker-bg-color: #181b21;
+$input-darker-fg-color: #61708b;
 $input-lighter-bg-color: #f2f5f8;
 $input-focused-border-color: #238cf5;
 
@@ -71,10 +68,9 @@ $resend-button-divider-color: #b9bec64a; // muted-text with a 4A opacity.
 
 // scrollbars
 $scrollbar-thumb-color: rgba(255, 255, 255, 0.2);
-$scrollbar-track-color: transparent;
 
 // context menus
-$menu-border-color: $header-panel-border-color;
+$menu-border-color: #000000;
 $menu-bg-color: $header-panel-bg-color;
 $menu-box-shadow-color: $background;
 $menu-selected-color: $room-highlight-color;
@@ -121,14 +117,8 @@ $roomtile-default-badge-bg-color: #61708b;
 
 // ********************
 
-$panel-divider-color: transparent;
-
 $widget-menu-bar-bg-color: $header-panel-bg-color;
 $widget-body-bg-color: rgba(141, 151, 165, 0.2);
-
-// event redaction
-$event-redacted-fg-color: #606060;
-$event-redacted-border-color: #000000;
 
 $event-highlight-bg-color: #25271F;
 
@@ -138,8 +128,6 @@ $event-timestamp-color: $text-secondary-color;
 // Tabbed views
 $tab-label-fg-color: $primary-content;
 $tab-label-active-fg-color: $primary-content;
-$tab-label-bg-color: transparent;
-$tab-label-icon-bg-color: $primary-content;
 $tab-label-active-icon-bg-color: $primary-content;
 
 // Buttons
@@ -148,7 +136,6 @@ $button-secondary-bg-color: transparent;
 $button-danger-fg-color: $primary-content;
 $button-danger-disabled-fg-color: $primary-content;
 $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
-$button-link-bg-color: transparent;
 
 // Toggle switch
 $togglesw-off-color: $room-highlight-color;
@@ -160,8 +147,6 @@ $progressbar-bg-color: $system;
 
 $visual-bell-bg-color: #800;
 
-$room-warning-bg-color: $header-panel-bg-color;
-
 $authpage-primary-color: $primary-content;
 
 $dark-panel-bg-color: $header-panel-bg-color;
@@ -172,11 +157,9 @@ $message-action-bar-fg-color: $header-panel-text-primary-color;
 $message-action-bar-border-color: #616b7f;
 $message-action-bar-hover-border-color: $header-panel-text-primary-color;
 
-$reaction-row-button-bg-color: $header-panel-bg-color;
 $reaction-row-button-border-color: #616b7f;
 $reaction-row-button-hover-border-color: $header-panel-text-primary-color;
 $reaction-row-button-selected-bg-color: #1f6954;
-$reaction-row-button-selected-border-color: $accent-color;
 
 $kbd-border-color: #000000;
 
@@ -204,7 +187,6 @@ $codeblock-background-color: #2a3039;
 $eventbubble-self-bg: #14322E;
 $eventbubble-others-bg: $event-selected-color;
 $eventbubble-bg-hover: #1C2026;
-$eventbubble-avatar-outline: $background;
 $eventbubble-reply-color: #C1C6CD;
 
 // ***** Mixins! *****

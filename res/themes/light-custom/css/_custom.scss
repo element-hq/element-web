@@ -39,7 +39,6 @@ $space-nav: rgba($panel-base, 0.1);
 // --accent-color
 $accent-color: var(--accent-color);
 $accent-bg-color: var(--accent-color-15pct);
-$reaction-row-button-selected-border-color: var(--accent-color);
 $username-variant3-color: var(--accent-color);
 $accent-color-50pct: var(--accent-color-50pct); //still needs alpha at .5
 //
@@ -65,7 +64,6 @@ $roomlist-button-bg-color: var(--sidebar-color-15pct);
 //
 // --roomlist-background-color
 $header-panel-bg-color: var(--roomlist-background-color);
-$reaction-row-button-bg-color: var(--roomlist-background-color);
 $panel-gradient: var(--roomlist-background-color-0pct), var(--roomlist-background-color);
 // these were #f2f5f8 instead of #f3f8fd, but close enough
 $dark-panel-bg-color: var(--roomlist-background-color);
@@ -81,7 +79,6 @@ $primary-content: var(--timeline-text-color);
 $settings-profile-overlay-placeholder-fg-color: var(--timeline-text-color);
 $roomtopic-color: var(--timeline-text-color-50pct);
 $tab-label-fg-color: var(--timeline-text-color);
-$tab-label-icon-bg-color: var(--timeline-text-color);   //was #454545
 // was #212121
 $topleftmenu-color: var(--timeline-text-color);
 // was #45474a
@@ -98,7 +95,6 @@ $roomtile-default-badge-bg-color: var(--roomlist-text-secondary-color);
 //
 // --roomlist-separator-color
 $input-darker-bg-color: var(--roomlist-separator-color);
-$panel-divider-color: var(--roomlist-separator-color);// originally #dee1f3, but close enough
 $primary-hairline-color: var(--roomlist-separator-color);// originally #e5e5e5, but close enough
 //
 // --timeline-text-secondary-color
@@ -146,5 +142,4 @@ $settings-grey-fg-color: $primary-content;
 $eventbubble-self-bg: var(--eventbubble-self-bg, $eventbubble-self-bg);
 $eventbubble-others-bg: var(--eventbubble-others-bg, $eventbubble-others-bg);
 $eventbubble-bg-hover: var(--eventbubble-bg-hover, $eventbubble-bg-hover);
-$eventbubble-avatar-outline: var(--eventbubble-avatar-outline, $eventbubble-avatar-outline);
 $eventbubble-reply-color: var(--eventbubble-reply-color, $eventbubble-reply-color);

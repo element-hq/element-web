@@ -37,10 +37,6 @@ limitations under the License.
     padding: 0 8px 0 0;
 }
 
-.mx_ResizeHandle > div {
-    background: $panel-divider-color;
-}
-
 .mx_ResizeHandle.mx_ResizeHandle_horizontal > div {
     width: 1px;
     height: 100%;

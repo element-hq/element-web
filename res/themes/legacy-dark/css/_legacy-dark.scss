@@ -7,13 +7,10 @@ $bg-color: #181b21;
 $base-color: #15171b;
 $base-text-color: #edf3ff;
 $header-panel-bg-color: #22262e;
-$header-panel-border-color: #000000;
 $header-panel-text-primary-color: #a1b2d1;
 $header-panel-text-secondary-color: #c8c8cd;
 $text-primary-color: #edf3ff;
 $text-secondary-color: #a1b2d1;
-$search-bg-color: #181b21;
-$search-placeholder-color: #61708b;
 $room-highlight-color: #343a46;
 
 // typical text (dark-on-white in light skin)
@@ -49,12 +46,12 @@ $selected-color: $room-highlight-color;
 $event-selected-color: $header-panel-bg-color;
 
 // used for the hairline dividers in RoomView
-$primary-hairline-color: $header-panel-border-color;
+$primary-hairline-color: #000000;
 
 // used for the border of input text fields
 $input-border-color: #e7e7e7;
-$input-darker-bg-color: $search-bg-color;
-$input-darker-fg-color: $search-placeholder-color;
+$input-darker-bg-color: #181b21;
+$input-darker-fg-color: #61708b;
 $input-lighter-bg-color: #f2f5f8;
 $input-focused-border-color: #238cf5;
 
@@ -62,10 +59,9 @@ $resend-button-divider-color: $muted-fg-color;
 
 // scrollbars
 $scrollbar-thumb-color: rgba(255, 255, 255, 0.2);
-$scrollbar-track-color: transparent;
 
 // context menus
-$menu-border-color: $header-panel-border-color;
+$menu-border-color: #000000;
 $menu-bg-color: $header-panel-bg-color;
 $menu-box-shadow-color: $bg-color;
 $menu-selected-color: $room-highlight-color;
@@ -89,7 +85,7 @@ $settings-subsection-fg-color: $text-secondary-color;
 
 $topleftmenu-color: $text-primary-color;
 $roomheader-color: $text-primary-color;
-$roomheader-addroom-bg-color: #3c4556; // $search-placeholder-color at 0.5 opacity
+$roomheader-addroom-bg-color: #3c4556;
 $roomheader-addroom-fg-color: $text-primary-color;
 $groupFilterPanel-button-color: $header-panel-text-primary-color;
 $groupheader-button-color: $header-panel-text-primary-color;
@@ -137,14 +133,8 @@ $roomtile-selected-bg-color: #1A1D23;
 
 // ********************
 
-$panel-divider-color: $header-panel-border-color;
-
 $widget-menu-bar-bg-color: $header-panel-bg-color;
 $widget-body-bg-color: #1A1D23;
-
-// event redaction
-$event-redacted-fg-color: #606060;
-$event-redacted-border-color: #000000;
 
 $event-highlight-bg-color: #25271F;
 
@@ -154,8 +144,6 @@ $event-timestamp-color: $text-secondary-color;
 // Tabbed views
 $tab-label-fg-color: $text-primary-color;
 $tab-label-active-fg-color: $text-primary-color;
-$tab-label-bg-color: transparent;
-$tab-label-icon-bg-color: $text-primary-color;
 $tab-label-active-icon-bg-color: $text-primary-color;
 
 // Buttons
@@ -164,7 +152,6 @@ $button-secondary-bg-color: transparent;
 $button-danger-fg-color: #ffffff;
 $button-danger-disabled-fg-color: #ffffff;
 $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
-$button-link-bg-color: transparent;
 
 // Toggle switch
 $togglesw-off-color: $room-highlight-color;
@@ -172,8 +159,6 @@ $togglesw-off-color: $room-highlight-color;
 $progressbar-bg-color: #21262c;
 
 $visual-bell-bg-color: #800;
-
-$room-warning-bg-color: $header-panel-bg-color;
 
 $dark-panel-bg-color: $header-panel-bg-color;
 $panel-gradient: rgba(34, 38, 46, 0), rgba(34, 38, 46, 1);
@@ -183,11 +168,9 @@ $message-action-bar-fg-color: $header-panel-text-primary-color;
 $message-action-bar-border-color: #616b7f;
 $message-action-bar-hover-border-color: $header-panel-text-primary-color;
 
-$reaction-row-button-bg-color: $header-panel-bg-color;
 $reaction-row-button-border-color: #616b7f;
 $reaction-row-button-hover-border-color: $header-panel-text-primary-color;
 $reaction-row-button-selected-bg-color: #1f6954;
-$reaction-row-button-selected-border-color: $accent-color;
 
 $kbd-border-color: #000000;
 
@@ -211,7 +194,6 @@ $codeblock-background-color: #2a3039;
 $eventbubble-self-bg: #14322E;
 $eventbubble-others-bg: $event-selected-color;
 $eventbubble-bg-hover: #1C2026;
-$eventbubble-avatar-outline: $bg-color;
 $eventbubble-reply-color: #C1C6CD;
 
 // ***** Mixins! *****
