@@ -3318,5 +3318,10 @@
     "Someone already has that username. Try another or if it is you, sign in below.": "Keegi juba pruugib sellist kasutajanime. Katseta mõne muuga või kui oled sina ise, siis logi sisse.",
     "Someone already has that username, please try another.": "Keegi juba pruugib sellist kasutajanime. Palun katseta mõne muuga.",
     "Maximised widgets": "Täisvaates vidinad",
-    "Own your conversations.": "Vestlused, mida sa tegelikult ka omad."
+    "Own your conversations.": "Vestlused, mida sa tegelikult ka omad.",
+    "Minimise dialog": "Tee aken väikeseks",
+    "Maximise dialog": "Tee aken suureks",
+    "Based on %(total)s votes": "Kokku %(total)s häälest",
+    "%(number)s votes": "%(number)s häält",
+    "Show tray icon and minimise window to it on close": "Näita süsteemisalve ikooni ja Element'i akna sulgemisel minimeeri ta salve"
 }
