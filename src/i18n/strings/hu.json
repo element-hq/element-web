@@ -3318,5 +3318,10 @@
     "Someone already has that username, please try another.": "Ezt a felhasználói nevet másvalaki használja, próbáljon ki másikat.",
     "Someone already has that username. Try another or if it is you, sign in below.": "Valaki már használja ezt a felhasználói nevet. Próbáljon ki másikat, illetve ha ön az jelentkezzen be alább.",
     "Maximised widgets": "Maximalizált kisalkalmazás",
-    "Own your conversations.": "Az ön beszélgetései csak az öné."
+    "Own your conversations.": "Az ön beszélgetései csak az öné.",
+    "Minimise dialog": "Dialógus ablak kicsinyítés",
+    "Maximise dialog": "Dialógus ablak nagyítás",
+    "Based on %(total)s votes": "%(total)s szavazatot alapul véve",
+    "%(number)s votes": "%(number)s szavazat",
+    "Show tray icon and minimise window to it on close": "Tálcaikon mutatása és az ablak összecsukása bezáráskor"
 }
