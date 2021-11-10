@@ -35,6 +35,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import CountryDropdown from "./CountryDropdown";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import PassphraseConfirmField from "./PassphraseConfirmField";
 
 enum RegistrationField {
     Email = "field_email",
@@ -295,28 +296,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         });
     };
 
-    private onPasswordConfirmValidate = async fieldState => {
-        const result = await this.validatePasswordConfirmRules(fieldState);
+    private onPasswordConfirmValidate = (result: IValidationResult) => {
         this.markFieldValid(RegistrationField.PasswordConfirm, result.valid);
-        return result;
     };
-
-    private validatePasswordConfirmRules = withValidation({
-        rules: [
-            {
-                key: "required",
-                test: ({ value, allowEmpty }) => allowEmpty || !!value,
-                invalid: () => _t("Confirm password"),
-            },
-            {
-                key: "match",
-                test(this: RegistrationForm, { value }) {
-                    return !value || value === this.state.password;
-                },
-                invalid: () => _t("Passwords don't match"),
-            },
-        ],
-    });
 
     private onPhoneCountryChange = newVal => {
         this.setState({
@@ -477,13 +459,12 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
     }
 
     renderPasswordConfirm() {
-        return <Field
+        return <PassphraseConfirmField
             id="mx_RegistrationForm_passwordConfirm"
-            ref={field => this[RegistrationField.PasswordConfirm] = field}
-            type="password"
+            fieldRef={field => this[RegistrationField.PasswordConfirm] = field}
             autoComplete="new-password"
-            label={_t("Confirm password")}
             value={this.state.passwordConfirm}
+            password={this.state.password}
             onChange={this.onPasswordConfirmChange}
             onValidate={this.onPasswordConfirmValidate}
             onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_passwordConfirm_focus")}
