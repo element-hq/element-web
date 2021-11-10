@@ -24,16 +24,18 @@ export const POLL_KIND_UNDISCLOSED = new UnstableValue("m.poll.undisclosed", "or
 // TODO: [TravisR] Use extensible events library when ready
 const TEXT_NODE_TYPE = "org.matrix.msc1767.text";
 
+export interface IPollAnswer extends IContent {
+    id: string;
+    [TEXT_NODE_TYPE]: string;
+}
+
 export interface IPollContent extends IContent {
     [POLL_START_EVENT_TYPE.name]: {
         kind: string; // disclosed or undisclosed (untypeable for now)
         question: {
             [TEXT_NODE_TYPE]: string;
         };
-        answers: {
-            id: string;
-            [TEXT_NODE_TYPE]: string;
-        }[];
+        answers: IPollAnswer[];
     };
     [TEXT_NODE_TYPE]: string;
 }

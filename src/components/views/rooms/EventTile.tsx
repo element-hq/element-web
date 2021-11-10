@@ -65,12 +65,14 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import Toolbar from '../../../accessibility/Toolbar';
+import { POLL_START_EVENT_TYPE } from '../../../polls/consts';
 import { RovingAccessibleTooltipButton } from '../../../accessibility/roving/RovingAccessibleTooltipButton';
 import { ThreadListContextMenu } from '../context_menus/ThreadListContextMenu';
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
     [EventType.Sticker]: 'messages.MessageEvent',
+    [POLL_START_EVENT_TYPE.name]: 'messages.MessageEvent',
     [EventType.KeyVerificationCancel]: 'messages.MKeyVerificationConclusion',
     [EventType.KeyVerificationDone]: 'messages.MKeyVerificationConclusion',
     [EventType.CallInvite]: 'messages.CallEvent',

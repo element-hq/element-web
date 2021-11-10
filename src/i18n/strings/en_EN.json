@@ -2021,6 +2021,8 @@
     "Declining …": "Declining …",
     "%(name)s wants to verify": "%(name)s wants to verify",
     "You sent a verification request": "You sent a verification request",
+    "%(number)s votes": "%(number)s votes",
+    "Based on %(total)s votes": "Based on %(total)s votes",
     "Error decrypting video": "Error decrypting video",
     "Error processing voice message": "Error processing voice message",
     "Add reaction": "Add reaction",

@@ -27,6 +27,7 @@ import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { ReactAnyComponent } from "../../../@types/common";
 import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { IBodyProps } from "./IBodyProps";
+import { POLL_START_EVENT_TYPE } from '../../../polls/consts';
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed"> {
@@ -110,6 +111,15 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             } else {
                 // Fallback to UnknownBody otherwise if not redacted
                 BodyType = UnknownBody;
+            }
+
+            if (type && type === POLL_START_EVENT_TYPE.name) {
+                // TODO: this can all disappear when Polls comes out of labs -
+                // instead, add something like this into this.evTypes:
+                // [EventType.Poll]: "messages.MPollBody"
+                if (SettingsStore.getValue("feature_polls")) {
+                    BodyType = sdk.getComponent('messages.MPollBody');
+                }
             }
         }
 

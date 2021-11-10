@@ -24,6 +24,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { Thread } from 'matrix-js-sdk/src/models/thread';
 import { logger } from 'matrix-js-sdk/src/logger';
+import { POLL_START_EVENT_TYPE } from '../polls/consts';
 
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
@@ -136,7 +137,8 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent): {
         !isLeftAlignedBubbleMessage &&
         eventType !== EventType.RoomMessage &&
         eventType !== EventType.Sticker &&
-        eventType !== EventType.RoomCreate
+        eventType !== EventType.RoomCreate &&
+        eventType !== POLL_START_EVENT_TYPE.name
     );
 
     // If we're showing hidden events in the timeline, we should use the
