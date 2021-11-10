@@ -56,5 +56,8 @@
     "posthog": {
         "projectApiKey": "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
         "apiHost": "https://posthog.hss.element.io"
+    },
+    "features": {
+        "feature_spaces_metaspaces": true
     }
 }
