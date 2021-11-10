@@ -3314,5 +3314,11 @@
     "Thread options": "Mundësi rrjedhe",
     "Someone already has that username, please try another.": "Dikush e ka atë emër përdoruesi, ju lutemi, provoni tjetër.",
     "Someone already has that username. Try another or if it is you, sign in below.": "Dikush e ka tashmë këtë emër përdoruesi. Provoni një tjetër, ose nëse jeni ju, bëni hyrjen më poshtë.",
-    "Maximised widgets": "Widget-e të maksimizuar"
+    "Maximised widgets": "Widget-e të maksimizuar",
+    "Own your conversations.": "Jini zot i bisedave tuaja.",
+    "Minimise dialog": "Minimizoje dialogun",
+    "Maximise dialog": "Maksimizoje dialogun",
+    "Based on %(total)s votes": "Bazuar në %(total)s vota",
+    "%(number)s votes": "%(number)s vota",
+    "Show tray icon and minimise window to it on close": "Shfaq ikonë paneli dhe minimizo dritaren në të, kur bëhet mbyllje"
 }
