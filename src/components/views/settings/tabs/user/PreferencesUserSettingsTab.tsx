@@ -325,7 +325,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
             minimizeToTrayOption = <LabelledToggleSwitch
                 value={this.state.minimizeToTray}
                 onChange={this.onMinimizeToTrayChange}
-                label={_t('Show tray icon and minimize window to it on close')} />;
+                label={_t('Show tray icon and minimise window to it on close')} />;
         }
 
         return (
