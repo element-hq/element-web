@@ -83,8 +83,7 @@ jobs:
     name: Move A-Voice Messages to Voice message board
     runs-on: ubuntu-latest
     if: >
-        ${{
-        contains(github.event.issue.labels.*.name, 'A-Voice Messages') }}
+        contains(github.event.issue.labels.*.name, 'A-Voice Messages')
     steps:
       - uses: konradpabjan/move-labeled-or-milestoned-issue@219d384e03fa4b6460cd24f9f37d19eb033a4338
         with:
