@@ -153,4 +153,4 @@ entirely incomplete and may not work at all - it is not recommended for general 
 ## Metaspaces (`feature_spaces_metaspaces`) [In Development]
 
 Metaspaces are automatically populated spaces you can enable in your Space panel.
-By default, you'll have Home or All rooms, but you can opt in to a People, Favourites, and Orphans metaspace too.
+By default, you'll have Home or All rooms, but you can opt in to a People, Favourites, and Other Rooms metaspace too.
