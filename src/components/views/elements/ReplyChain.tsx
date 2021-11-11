@@ -110,6 +110,8 @@ export default class ReplyChain extends React.Component<IProps, IState> {
         if (mRelatesTo && mRelatesTo['m.in_reply_to']) {
             const mInReplyTo = mRelatesTo['m.in_reply_to'];
             if (mInReplyTo && mInReplyTo['event_id']) return mInReplyTo['event_id'];
+        } else if (!SettingsStore.getValue("feature_thread") && ev.isThreadRelation) {
+            return ev.threadRootId;
         }
     }
 
