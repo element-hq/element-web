@@ -3342,5 +3342,7 @@
     "Automatically group all your favourite rooms and people together in one place.": "Automaticky seskupit všechny oblíbené místnosti a osoby na jednom místě.",
     "Show all your rooms in Home, even if they're in a space.": "Zobrazit všechny místnosti v Úvodu, i když jsou v prostoru.",
     "Automatically group all your rooms that aren't part of a space in one place.": "Automaticky seskupit všechny místnosti, které nejsou součástí prostoru, na jedno místo.",
-    "Rooms outside of a space": "Místnosti mimo prostor"
+    "Rooms outside of a space": "Místnosti mimo prostor",
+    "Threads help you keep conversations on-topic and easily track them over time. Create the first one by using the \"Reply in thread\" button on a message.": "Vlákna vám pomohou udržet konverzace k tématu a snadno je sledovat v průběhu času. První vlákno vytvoříte pomocí tlačítka \"Odpovědět ve vlákně\" na zprávě.",
+    "Manage rooms in this space": "Spravovat místnosti v tomto prostoru"
 }
