@@ -3306,5 +3306,20 @@
     "Use a more compact 'Modern' layout": "Utiliser une mise en page « moderne » plus compacte",
     "Light high contrast": "Contraste élevé clair",
     "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s a modifié la liste des utilisateurs pouvant rejoindre ce salon. <a>Voir les paramètres</a>.",
-    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s a modifié la liste des utilisateurs pouvant rejoindre ce salon. <a>Voir les paramètres</a>."
+    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s a modifié la liste des utilisateurs pouvant rejoindre ce salon. <a>Voir les paramètres</a>.",
+    "Someone already has that username, please try another.": "Quelqu’un possède déjà ce nom d’utilisateur, veuillez en essayer un autre.",
+    "Own your conversations.": "Contrôlez vos conversations.",
+    "Someone already has that username. Try another or if it is you, sign in below.": "Quelqu’un d’autre a déjà ce nom d’utilisateur. Essayez-en un autre ou bien, si c’est vous, connecter vous ci-dessous.",
+    "Copy link to thread": "Copier le lien dans le fil",
+    "Thread options": "Options des fils de discussion",
+    "Add option": "Ajouter un choix",
+    "Option %(number)s": "Choix %(number)s",
+    "Create options": "Créer des choix",
+    "Write an option": "Écrivez un choix",
+    "Write something...": "Écrivez quelque chose…",
+    "Question or topic": "Question ou sujet",
+    "What is your poll question or topic?": "Quelle est la question ou le sujet de votre sondage ?",
+    "Create Poll": "Créer un sondage",
+    "You do not have permission to start polls in this room.": "Vous n’avez pas la permission de démarrer un sondage dans ce salon.",
+    "Maximised widgets": "Widgets maximisés"
 }
