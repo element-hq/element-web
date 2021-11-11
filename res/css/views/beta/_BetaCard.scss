@@ -85,7 +85,7 @@ limitations under the License.
 }
 
 .mx_BetaCard_betaPill {
-    background-color: $accent-color-alt;
+    background-color: $accent-alt;
     padding: 4px 10px;
     border-radius: 8px;
     text-transform: uppercase;
@@ -100,7 +100,7 @@ limitations under the License.
     }
 }
 
-$pulse-color: $accent-color-alt;
+$pulse-color: $accent-alt;
 $dot-size: 12px;
 
 .mx_BetaDot {

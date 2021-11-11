@@ -138,7 +138,7 @@ limitations under the License.
                     }
 
                     &.mx_ForwardList_sending .mx_ForwardList_sendIcon {
-                        background-color: $accent-color;
+                        background-color: $accent;
                         mask-image: url('$(res)/img/element-icons/circle-sending.svg');
                         mask-position: center;
                         mask-repeat: no-repeat;
@@ -148,7 +148,7 @@ limitations under the License.
                     }
 
                     &.mx_ForwardList_sent .mx_ForwardList_sendIcon {
-                        background-color: $accent-color;
+                        background-color: $accent;
                         mask-image: url('$(res)/img/element-icons/circle-sent.svg');
                         mask-position: center;
                         mask-repeat: no-repeat;

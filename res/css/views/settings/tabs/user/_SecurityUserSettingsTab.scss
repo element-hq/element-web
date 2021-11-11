@@ -35,7 +35,7 @@ limitations under the License.
     }
 
     .mx_SecurityUserSettingsTab_warning {
-        color: $notice-primary-color;
+        color: $alert;
         position: relative;
         padding-left: 40px;
         margin-top: 30px;
@@ -50,7 +50,7 @@ limitations under the License.
             content: "";
             top: 0;
             left: 0;
-            background-color: $notice-primary-color;
+            background-color: $alert;
             mask-image: url('$(res)/img/feather-customised/alert-triangle.svg');
         }
     }

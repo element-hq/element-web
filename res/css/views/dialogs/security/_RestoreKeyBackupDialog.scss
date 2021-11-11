@@ -20,14 +20,14 @@ limitations under the License.
 }
 
 .mx_RestoreKeyBackupDialog_primaryContainer {
-    /* FIXME: plinth colour in new theme(s). background-color: $accent-color; */
+    /* FIXME: plinth colour in new theme(s). background-color: $accent; */
     padding: 20px;
 }
 
 .mx_RestoreKeyBackupDialog_passPhraseInput,
 .mx_RestoreKeyBackupDialog_recoveryKeyInput {
     width: 300px;
-    border: 1px solid $accent-color;
+    border: 1px solid $accent;
     border-radius: 5px;
     padding: 10px;
 }

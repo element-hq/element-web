@@ -152,7 +152,7 @@ $groupFilterPanelWidth: 56px; // only applies in this file, used for calculation
 .mx_GroupFilterPanel .mx_TagTile.mx_TagTile_selected::before {
     content: '';
     height: 100%;
-    background-color: $accent-color;
+    background-color: $accent;
     width: 4px;
     position: absolute;
     left: -12px;
@@ -203,5 +203,5 @@ $groupFilterPanelWidth: 56px; // only applies in this file, used for calculation
 }
 
 .mx_TagTile_badgeHighlight {
-    background-color: $warning-color;
+    background-color: $alert;
 }

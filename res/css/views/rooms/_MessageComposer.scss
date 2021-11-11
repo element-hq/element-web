@@ -170,18 +170,18 @@ limitations under the License.
 /* hack for FF as vertical alignment of custom placeholder text is broken */
 .mx_MessageComposer_input textarea::-moz-placeholder {
     line-height: 100%;
-    color: $accent-color;
+    color: $accent;
     opacity: 1.0;
 }
 .mx_MessageComposer_input textarea::-webkit-input-placeholder {
-    color: $accent-color;
+    color: $accent;
 }
 
 .mx_MessageComposer_button_highlight {
-    background: rgba($accent-color, 0.25);
+    background: rgba($accent, 0.25);
     // make the icon the accent color too
     &::before {
-        background-color: $accent-color !important;
+        background-color: $accent !important;
     }
 }
 
@@ -234,16 +234,16 @@ limitations under the License.
     &:hover,
     &.mx_MessageComposer_closeButtonMenu {
         &::after {
-            background: rgba($accent-color, 0.1);
+            background: rgba($accent, 0.1);
         }
 
         &::before {
-            background-color: $accent-color;
+            background-color: $accent;
         }
     }
 
     &.mx_MessageComposer_hangup:not(.mx_AccessibleButton_disabled)::before {
-        background-color: $warning-color;
+        background-color: $alert;
     }
 }
 
@@ -282,7 +282,7 @@ limitations under the License.
     width: 32px;
     height: 32px;
     border-radius: 100%;
-    background-color: $accent-color;
+    background-color: $accent;
 
     &::before {
         position: absolute;

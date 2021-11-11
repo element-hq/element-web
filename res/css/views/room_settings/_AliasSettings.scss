@@ -22,7 +22,7 @@ limitations under the License.
 }
 
 .mx_AliasSettings_editable:focus {
-    border-bottom: 1px solid $accent-color;
+    border-bottom: 1px solid $accent;
     outline: none;
     box-shadow: none;
 }
@@ -30,7 +30,7 @@ limitations under the License.
 .mx_AliasSettings {
     summary {
         cursor: pointer;
-        color: $accent-color;
+        color: $accent;
         font-weight: 600;
         list-style: none;
 

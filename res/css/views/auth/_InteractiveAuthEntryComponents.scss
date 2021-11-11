@@ -56,7 +56,7 @@ limitations under the License.
 }
 
 .mx_InteractiveAuthEntryComponents_msisdnEntry:focus {
-    border: 1px solid $accent-color;
+    border: 1px solid $accent;
 }
 
 .mx_InteractiveAuthEntryComponents_msisdnSubmit {
@@ -78,7 +78,7 @@ limitations under the License.
 }
 
 .mx_InteractiveAuthEntryComponents_termsSubmit:disabled {
-    background-color: $accent-color-darker;
+    background-color: #92caad; // Only used here
     cursor: default;
 }
 

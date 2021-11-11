@@ -32,7 +32,7 @@ limitations under the License.
         padding: 3px 6px;
 
         &:focus {
-            border-color: $accent-color-50pct;
+            border-color: rgba($accent, 0.5); // Only ever used here
         }
     }
 

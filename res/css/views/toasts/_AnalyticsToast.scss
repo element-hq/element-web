@@ -17,11 +17,11 @@ limitations under the License.
 .mx_AnalyticsToast {
     .mx_AccessibleButton_kind_danger {
         background: none;
-        color: $accent-color;
+        color: $accent;
     }
 
     .mx_AccessibleButton_kind_primary {
-        background: $accent-color;
+        background: $accent;
         color: #ffffff;
     }
 }

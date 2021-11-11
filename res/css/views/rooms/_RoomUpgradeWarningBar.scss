@@ -34,16 +34,16 @@ limitations under the License.
 }
 
 .mx_RoomUpgradeWarningBar_header {
-    color: $warning-color;
+    color: $alert;
     font-weight: bold;
 }
 
 .mx_RoomUpgradeWarningBar_body {
-    color: $warning-color;
+    color: $alert;
 }
 
 .mx_RoomUpgradeWarningBar_upgradelink {
-    color: $warning-color;
+    color: $alert;
     text-decoration: underline;
 }
 

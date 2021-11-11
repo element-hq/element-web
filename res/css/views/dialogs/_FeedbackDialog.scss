@@ -42,7 +42,7 @@ limitations under the License.
         }
 
         a, .mx_AccessibleButton_kind_link {
-            color: $accent-color;
+            color: $accent;
             text-decoration: underline;
         }
 
@@ -111,7 +111,7 @@ limitations under the License.
 
         .mx_StyledRadioButton_checked {
             font-size: 24px;
-            border-color: $accent-color;
+            border-color: $accent;
         }
 
         &::after {

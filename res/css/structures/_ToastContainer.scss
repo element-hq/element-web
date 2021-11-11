@@ -76,7 +76,7 @@ limitations under the License.
 
                 &::after {
                     mask-image: url("$(res)/img/e2e/warning.svg");
-                    background-color: $notice-primary-color;
+                    background-color: $alert;
                 }
             }
 

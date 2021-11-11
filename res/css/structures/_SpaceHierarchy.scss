@@ -99,7 +99,7 @@ limitations under the License.
     .mx_SpaceHierarchy_error {
         position: relative;
         font-weight: $font-semi-bold;
-        color: $notice-primary-color;
+        color: $alert;
         font-size: $font-15px;
         line-height: $font-18px;
         margin: 20px auto 12px;
@@ -238,7 +238,7 @@ limitations under the License.
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
-                    background-color: $accent-color;
+                    background-color: $accent;
                     mask-image: url('$(res)/img/element-icons/roomlist/checkmark.svg');
                 }
             }

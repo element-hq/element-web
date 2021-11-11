@@ -21,7 +21,7 @@ limitations under the License.
 
 .mx_StyledRadioButton {
     $radio-circle-color: $quaternary-content;
-    $active-radio-circle-color: $accent-color;
+    $active-radio-circle-color: $accent;
     position: relative;
 
     display: flex;
@@ -126,5 +126,5 @@ limitations under the License.
 }
 
 .mx_StyledRadioButton_checked {
-    border-color: $accent-color;
+    border-color: $accent;
 }

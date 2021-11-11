@@ -63,7 +63,7 @@ limitations under the License.
 }
 
 .mx_RoomHeader_textButton_danger {
-    background-color: $warning-color;
+    background-color: $alert;
 }
 
 .mx_RoomHeader_cancelButton {
@@ -145,7 +145,7 @@ limitations under the License.
 }
 
 .mx_RoomHeader_name:hover div:not(.mx_RoomHeader_editable) {
-    color: $accent-color;
+    color: $accent;
 }
 
 .mx_RoomHeader_placeholder {
@@ -159,7 +159,7 @@ limitations under the License.
 }
 
 .mx_RoomHeader_editable:focus {
-    border-bottom: 1px solid $accent-color !important;
+    border-bottom: 1px solid $accent !important;
     outline: none;
     box-shadow: none;
 }
@@ -228,10 +228,10 @@ limitations under the License.
     }
 
     &:hover {
-        background: rgba($accent-color, 0.1);
+        background: rgba($accent, 0.1);
 
         &::before {
-            background-color: $accent-color;
+            background-color: $accent;
         }
     }
 }
@@ -245,7 +245,7 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/room/apps.svg');
 }
 .mx_RoomHeader_appsButton_highlight::before {
-    background-color: $accent-color;
+    background-color: $accent;
 }
 
 .mx_RoomHeader_searchButton::before {

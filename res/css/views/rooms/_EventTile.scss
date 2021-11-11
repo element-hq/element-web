@@ -121,14 +121,14 @@ $left-gutter: 64px;
      * TODO: ultimately we probably want some transition on here.
      */
     &.mx_EventTile_selected > .mx_EventTile_line {
-        border-left: $accent-color $selected-message-border-width solid;
+        border-left: $accent $selected-message-border-width solid;
         padding-left: calc($left-gutter - $selected-message-border-width);
         background-color: $event-selected-color;
     }
 
     &.mx_EventTile_highlight,
     &.mx_EventTile_highlight .markdown-body {
-        color: $warning-color;
+        color: $alert;
 
         .mx_EventTile_line {
             background-color: $event-highlight-bg-color;
@@ -146,7 +146,7 @@ $left-gutter: 64px;
     }
 
     .mx_EventTile_searchHighlight {
-        background-color: $accent-color;
+        background-color: $accent;
         color: $accent-fg-color;
         border-radius: 5px;
         padding-left: 2px;
@@ -155,7 +155,7 @@ $left-gutter: 64px;
     }
 
     .mx_EventTile_searchHighlight a {
-        background-color: $accent-color;
+        background-color: $accent;
         color: $accent-fg-color;
     }
 
@@ -435,7 +435,7 @@ $left-gutter: 64px;
 .mx_EventTile_e2eIcon_warning {
     &::after {
         mask-image: url('$(res)/img/e2e/warning.svg');
-        background-color: $notice-primary-color;
+        background-color: $alert;
     }
     opacity: 1;
 }
@@ -582,7 +582,7 @@ $left-gutter: 64px;
 }
 
 .mx_EventTile_content .markdown-body a {
-    color: $accent-color-alt;
+    color: $accent-alt;
 }
 
 .mx_EventTile_content .markdown-body blockquote {

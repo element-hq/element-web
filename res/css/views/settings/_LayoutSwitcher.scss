@@ -57,7 +57,7 @@ limitations under the License.
             }
 
             &.mx_LayoutSwitcher_RadioButton_selected {
-                border-color: $accent-color;
+                border-color: $accent;
             }
         }
 
@@ -70,7 +70,7 @@ limitations under the License.
         }
 
         .mx_StyledRadioButton_checked {
-            background-color: rgba($accent-color, 0.08);
+            background-color: rgba($accent, 0.08);
         }
 
         .mx_EventTile {

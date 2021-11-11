@@ -57,7 +57,7 @@ limitations under the License.
 
 .mx_RoomStatusBar_unreadMessagesBar {
     padding-top: 10px;
-    color: $warning-color;
+    color: $alert;
     cursor: pointer;
 }
 
@@ -96,7 +96,7 @@ limitations under the License.
     }
 
     .mx_RoomStatusBar_unsentTitle {
-        color: $warning-color;
+        color: $alert;
         font-size: $font-15px;
     }
 
@@ -167,7 +167,7 @@ limitations under the License.
 }
 
 .mx_RoomStatusBar_connectionLostBar_title {
-    color: $warning-color;
+    color: $alert;
 }
 
 .mx_RoomStatusBar_connectionLostBar_desc {

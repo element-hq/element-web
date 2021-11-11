@@ -74,11 +74,11 @@ pre, code {
 
 .error, .warning,
 .text-error, .text-warning {
-    color: $warning-color;
+    color: $alert;
 }
 
 .text-success {
-    color: $accent-color;
+    color: $accent;
 }
 
 .text-muted {
@@ -102,7 +102,7 @@ h2 {
 a:hover,
 a:link,
 a:visited {
-    color: $accent-color-alt;
+    color: $accent-alt;
 }
 
 input[type=text],
@@ -238,7 +238,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 //
 // They are not used for layout!!
 #mx_theme_accentColor {
-    color: $accent-color;
+    color: $accent;
 }
 
 #mx_theme_secondaryAccentColor {
@@ -364,7 +364,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 }
 
 .mx_Dialog_title.danger {
-    color: $warning-color;
+    color: $alert;
 }
 
 .mx_Dialog_cancelButton {
@@ -414,8 +414,8 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color;
-    color: $accent-color;
+    border: 1px solid $accent;
+    color: $accent;
     background-color: $button-secondary-bg-color;
     font-family: inherit;
 }
@@ -443,7 +443,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 .mx_Dialog_buttons button.mx_Dialog_primary,
 .mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
     color: $accent-fg-color;
-    background-color: $accent-color;
+    background-color: $accent;
     min-width: 156px;
 }
 
@@ -451,15 +451,15 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 .mx_Dialog input[type="submit"].danger,
 .mx_Dialog_buttons button.danger,
 .mx_Dialog_buttons input[type="submit"].danger {
-    background-color: $warning-color;
-    border: solid 1px $warning-color;
+    background-color: $alert;
+    border: solid 1px $alert;
     color: $accent-fg-color;
 }
 
 .mx_Dialog button.warning,
 .mx_Dialog input[type="submit"].warning {
-    border: solid 1px $warning-color;
-    color: $warning-color;
+    border: solid 1px $alert;
+    color: $alert;
 }
 
 .mx_Dialog button:not(.mx_Dialog_nonDialogButton):disabled,
@@ -499,7 +499,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 .mx_linkButton {
     cursor: pointer;
-    color: $accent-color;
+    color: $accent;
 }
 
 .mx_TextInputDialog_label {

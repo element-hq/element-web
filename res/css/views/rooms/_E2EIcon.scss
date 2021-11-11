@@ -65,7 +65,7 @@ limitations under the License.
 
 .mx_E2EIcon_warning::after {
     mask-image: url('$(res)/img/e2e/warning.svg');
-    background-color: $notice-primary-color;
+    background-color: $alert;
 }
 
 .mx_E2EIcon_normal::after {
@@ -75,5 +75,5 @@ limitations under the License.
 
 .mx_E2EIcon_verified::after {
     mask-image: url('$(res)/img/e2e/verified.svg');
-    background-color: $accent-color;
+    background-color: $accent;
 }

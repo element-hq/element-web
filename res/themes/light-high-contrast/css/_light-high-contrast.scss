@@ -18,13 +18,11 @@ $username-variant6-color: #1C7274;
 $username-variant7-color: #5C56F5;
 $username-variant8-color: #3E810A;
 
-$accent-color: $accent;
-$accent-color-50pct: rgba($accent-color, 0.5);
-$accent-color-alt: $links;
+$accent-alt: $links;
 $input-border-color: $secondary-content;
 $input-darker-bg-color: $quinary-content;
 $input-darker-fg-color: $secondary-content;
-$input-focused-border-color: $accent-color;
+$input-focused-border-color: $accent;
 $resend-button-divider-color: $input-darker-bg-color;
 $icon-button-color: $quaternary-content;
 $theme-button-bg-color: $quinary-content;
@@ -36,30 +34,28 @@ $voice-record-stop-border-color: $quinary-content;
 $voice-record-icon-color: $tertiary-content;
 $appearance-tab-border-color: $input-darker-bg-color;
 $eventbubble-reply-color: $quaternary-content;
-$notice-primary-color: $alert;
-$warning-color: $notice-primary-color; // red
 $roomtopic-color: $secondary-content;
 
 @define-mixin mx_DialogButton_danger {
-    background-color: $accent-color;
+    background-color: $accent;
 }
 
 @define-mixin mx_DialogButton_secondary {
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color !important;
-    color: $accent-color;
+    border: 1px solid $accent !important;
+    color: $accent;
     background-color: $button-secondary-bg-color;
 }
 
 @define-mixin mx_Dialog_link {
-    color: $accent-color;
+    color: $accent;
     text-decoration: none;
 }
 
 // Draw an outline on buttons with focus
 .mx_AccessibleButton:focus {
-    outline: 2px solid $accent-color;
+    outline: 2px solid $accent;
     outline-offset: 2px;
 }
 
@@ -77,7 +73,6 @@ $roomtopic-color: $secondary-content;
 .mx_BaseCard_Group {
     padding-left: 4px !important;
 }
-
 
 .mx_BasicMessageComposer .mx_BasicMessageComposer_inputEmpty > :first-child::before {
     color: $secondary-content;

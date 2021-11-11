@@ -38,7 +38,7 @@ limitations under the License.
 }
 
 .mx_DirectorySearchBox_clear {
-    background-color: $warning-color;
+    background-color: $alert;
     mask: url('$(res)/img/cancel.svg');
     mask-repeat: no-repeat;
     mask-position: center;

@@ -71,10 +71,10 @@ limitations under the License.
     }
 
     &:hover {
-        background: rgba($accent-color, 0.1);
+        background: rgba($accent, 0.1);
 
         &::before {
-            background-color: $accent-color;
+            background-color: $accent;
         }
     }
 }
@@ -104,7 +104,7 @@ limitations under the License.
 }
 
 $dot-size: 8px;
-$pulse-color: $notice-primary-color;
+$pulse-color: $alert;
 
 .mx_RightPanel_pinnedMessagesButton {
     &::before {
@@ -175,7 +175,7 @@ $pulse-color: $notice-primary-color;
 
 .mx_RightPanel_headerButton_highlight {
     &::before {
-        background-color: $accent-color !important;
+        background-color: $accent !important;
     }
 }
 
@@ -183,7 +183,7 @@ $pulse-color: $notice-primary-color;
     font-size: $font-8px;
     border-radius: 8px;
     color: $accent-fg-color;
-    background-color: $accent-color;
+    background-color: $accent;
     font-weight: bold;
     position: absolute;
     top: -4px;

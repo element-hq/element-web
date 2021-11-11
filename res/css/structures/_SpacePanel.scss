@@ -324,10 +324,10 @@ $activeBorderColor: $secondary-content;
     }
 
     .mx_IconizedContextMenu_optionList .mx_AccessibleButton.mx_SpacePanel_contextMenu_inviteButton {
-        color: $accent-color;
+        color: $accent;
 
         .mx_SpacePanel_iconInvite::before {
-            background-color: $accent-color;
+            background-color: $accent;
             mask-image: url('$(res)/img/element-icons/room/invite.svg');
         }
     }

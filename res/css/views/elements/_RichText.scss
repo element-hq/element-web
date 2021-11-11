@@ -48,7 +48,7 @@ a.mx_Pill {
 }
 
 .mx_UserPill_selected {
-    background-color: $accent-color !important;
+    background-color: $accent !important;
 }
 
 /* More specific to override `.markdown-body a` color */
@@ -57,7 +57,7 @@ a.mx_Pill {
 .mx_EventTile_content .mx_AtRoomPill,
 .mx_MessageComposer_input .mx_AtRoomPill {
     color: $accent-fg-color;
-    background-color: $warning-color;
+    background-color: $alert;
 }
 
 /* More specific to override `.markdown-body a` color */

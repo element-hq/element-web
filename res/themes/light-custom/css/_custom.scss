@@ -37,10 +37,7 @@ $space-nav: rgba($panel-base, 0.1);
 
 //
 // --accent-color
-$accent-color: var(--accent-color);
-$accent-bg-color: var(--accent-color-15pct);
 $username-variant3-color: var(--accent-color);
-$accent-color-50pct: var(--accent-color-50pct); //still needs alpha at .5
 //
 // --timeline-background-color
 $button-secondary-bg-color: var(--timeline-background-color);
@@ -112,13 +109,10 @@ $greyed-fg-color: var(--timeline-text-secondary-color);
 $info-plinth-fg-color: var(--timeline-text-secondary-color);
 //
 // --primary-color
-$accent-color-alt: var(--primary-color);
+$accent-alt: var(--primary-color);
 $input-focused-border-color: var(--primary-color);
 //
 // --warning-color
-$warning-color: var(--warning-color);
-$notice-primary-color: var(--warning-color);
-$warning-color: var(--warning-color);
 $button-danger-disabled-bg-color: var(--warning-color-50pct); // still needs alpha at 0.5
 //
 // --username colors (which use a 0-based index)

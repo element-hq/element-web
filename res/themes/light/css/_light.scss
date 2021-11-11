@@ -33,10 +33,6 @@ $space-nav: rgba($tertiary-content, 0.15);
 
 // unified palette
 // try to use these colors when possible
-$accent-color: $accent;
-$accent-bg-color: rgba(3, 179, 129, 0.16);
-$notice-primary-color: $alert;
-$notice-primary-bg-color: rgba(255, 75, 85, 0.16);
 $header-panel-bg-color: #f3f8fd;
 
 // typical text (dark-on-white in light skin)
@@ -50,20 +46,12 @@ $focus-bg-color: #dddddd;
 
 // button UI (white-on-green in light skin)
 $accent-fg-color: $background;
-$accent-color-50pct: rgba($accent-color, 0.5);
-$accent-color-darker: #92caad;
-$accent-color-alt: #238CF5;
+$accent-alt: #238CF5;
 
 $selection-fg-color: $background;
 
 $focus-brightness: 105%;
 
-// warning colours
-$warning-color: $notice-primary-color; // red
-$orange-warning-color: #ff8d13; // used for true warnings
-// background colour for warnings
-$warning-bg-color: #DF2A8B;
-$info-bg-color: #2A9EDF;
 $other-user-pill-bg-color: rgba(0, 0, 0, 0.1);
 
 // informational plinth
@@ -214,7 +202,7 @@ $collapse-button-url: "$(res)/img/feather-customised/minimise.svg";
 $expand-button-url: "$(res)/img/feather-customised/maximise.svg";
 
 // e2e
-$e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color
+$e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent
 $e2e-unknown-color: #e8bf37;
 $e2e-unverified-color: #e8bf37;
 $e2e-warning-color: #ba6363;
@@ -276,7 +264,7 @@ $tooltip-timeline-fg-color: $background;
 
 $breadcrumb-placeholder-bg-color: #e8eef5;
 
-// These two don't change between themes. They are the $warning-color, but we don't
+// These two don't change between themes. They are the $alert, but we don't
 // want custom themes to affect them by accident.
 $voice-record-stop-symbol-color: #ff5b55;
 $voice-record-live-circle-color: #ff5b55;
@@ -311,7 +299,7 @@ $eventbubble-reply-color: $quaternary-content;
     font-family: $font-family;
     font-size: $font-14px;
     color: $button-fg-color;
-    background-color: $accent-color;
+    background-color: $accent;
     width: auto;
     padding: 7px;
     padding-left: 1.5em;
@@ -325,7 +313,7 @@ $eventbubble-reply-color: $quaternary-content;
 }
 
 @define-mixin mx_DialogButton_danger {
-    background-color: $accent-color;
+    background-color: $accent;
 }
 
 @define-mixin mx_DialogButton_small {
@@ -337,13 +325,13 @@ $eventbubble-reply-color: $quaternary-content;
 @define-mixin mx_DialogButton_secondary {
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color !important;
-    color: $accent-color;
+    border: 1px solid $accent !important;
+    color: $accent;
     background-color: $button-secondary-bg-color;
 }
 
 @define-mixin mx_Dialog_link {
-    color: $accent-color;
+    color: $accent;
     text-decoration: none;
 }
 

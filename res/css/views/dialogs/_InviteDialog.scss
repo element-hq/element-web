@@ -362,7 +362,7 @@ limitations under the License.
 }
 
 .mx_InviteDialog_dialPad .mx_InviteDialog_dialPadField:focus-within {
-    border-color: $accent-color;
+    border-color: $accent;
 }
 
 .mx_InviteDialog_dialPadField .mx_Field_postfix {
@@ -447,7 +447,7 @@ limitations under the License.
                 margin-left: 32px;
                 font-size: $font-15px;
                 line-height: $font-24px;
-                color: $notice-primary-color;
+                color: $alert;
             }
         }
     }

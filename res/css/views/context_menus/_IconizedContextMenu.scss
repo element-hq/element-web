@@ -125,21 +125,21 @@ limitations under the License.
 
     .mx_IconizedContextMenu_optionList_red {
         .mx_AccessibleButton {
-            color: $warning-color !important;
+            color: $alert !important;
         }
 
         .mx_IconizedContextMenu_icon::before {
-            background-color: $warning-color;
+            background-color: $alert;
         }
     }
 
     .mx_IconizedContextMenu_active {
         &.mx_AccessibleButton, .mx_AccessibleButton {
-            color: $accent-color !important;
+            color: $accent !important;
         }
 
         .mx_IconizedContextMenu_icon::before {
-            background-color: $accent-color;
+            background-color: $accent;
         }
     }
 

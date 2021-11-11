@@ -87,18 +87,18 @@ limitations under the License.
     }
 
     &:checked + label > .mx_Checkbox_background {
-        background: $accent-color;
-        border-color: $accent-color;
+        background: $accent;
+        border-color: $accent;
     }
 }
 
 .mx_Checkbox.mx_Checkbox_kind_outline input[type=checkbox] {
     & + label > .mx_Checkbox_background .mx_Checkbox_checkmark {
-        background: $accent-color;
+        background: $accent;
     }
 
     &:checked + label > .mx_Checkbox_background {
         background: transparent;
-        border-color: $accent-color;
+        border-color: $accent;
     }
 }

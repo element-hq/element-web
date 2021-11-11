@@ -55,9 +55,9 @@ input.mx_StatusMessageContextMenu_message {
 }
 
 .mx_StatusMessageContextMenu_clear {
-    color: $warning-color;
+    color: $alert;
     background-color: transparent;
-    border: 1px solid $warning-color;
+    border: 1px solid $alert;
 }
 
 .mx_StatusMessageContextMenu_actionContainer .mx_Spinner {

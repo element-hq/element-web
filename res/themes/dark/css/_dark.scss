@@ -199,7 +199,7 @@ $eventbubble-reply-color: #C1C6CD;
     font-family: $font-family;
     font-size: $font-14px;
     color: $button-fg-color;
-    background-color: $accent-color;
+    background-color: $accent;
     width: auto;
     padding: 7px;
     padding-left: 1.5em;
@@ -210,19 +210,19 @@ $eventbubble-reply-color: #C1C6CD;
 }
 
 @define-mixin mx_DialogButton_danger {
-    background-color: $accent-color;
+    background-color: $accent;
 }
 
 @define-mixin mx_DialogButton_secondary {
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color !important;
-    color: $accent-color;
+    border: 1px solid $accent !important;
+    color: $accent;
     background-color: $button-secondary-bg-color;
 }
 
 @define-mixin mx_Dialog_link {
-    color: $accent-color;
+    color: $accent;
     text-decoration: none;
 }
 

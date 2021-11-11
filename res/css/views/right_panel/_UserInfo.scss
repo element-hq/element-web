@@ -188,12 +188,12 @@ limitations under the License.
 
     .mx_UserInfo_field {
         cursor: pointer;
-        color: $accent-color;
+        color: $accent;
         line-height: $font-16px;
         margin: 8px 0;
 
         &.mx_UserInfo_destructive {
-            color: $warning-color;
+            color: $alert;
         }
     }
 
@@ -225,12 +225,12 @@ limitations under the License.
 
             &.mx_UserInfo_device_verified {
                 .mx_UserInfo_device_trusted {
-                    color: $accent-color;
+                    color: $accent;
                 }
             }
             &.mx_UserInfo_device_unverified {
                 .mx_UserInfo_device_trusted {
-                    color: $warning-color;
+                    color: $alert;
                 }
             }
 

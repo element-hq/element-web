@@ -19,7 +19,7 @@ limitations under the License.
     font-size: $font-14px;
 
     a {
-        color: $accent-color;
+        color: $accent;
         text-decoration: none;
     }
 
@@ -35,7 +35,7 @@ limitations under the License.
 .mx_InlineTermsAgreement_link {
     display: inline-block;
     mask-image: url('$(res)/img/external-link.svg');
-    background-color: $accent-color;
+    background-color: $accent;
     mask-repeat: no-repeat;
     mask-size: contain;
     width: 12px;
