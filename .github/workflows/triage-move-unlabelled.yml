@@ -1,0 +1,35 @@
+name: Move unlabelled from needs info columns to triaged
+
+on:
+  issues:
+    types: [unlabeled]
+    
+jobs:
+  Move_Unabeled_Issue_On_Project_Board:
+    name: Move no longer X-Needs-Info issues to Triaged
+    runs-on: ubuntu-latest
+    if: >
+        ${{
+        !contains(github.event.issue.labels.*.name, 'X-Needs-Info') }}
+    env:
+      BOARD_NAME: "Issue triage"
+      OWNER: ${{ github.repository_owner }}
+      REPO: ${{ github.event.repository.name }}
+      ISSUE: ${{ github.event.issue.number }}
+    steps:
+      - name: Check if issue is already in "${{ env.BOARD_NAME }}"
+        run: |
+          if curl -i -H 'Content-Type: application/json' -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" -X POST -d '{"query": "query($issue: Int!, $owner: String!, $repo: String!) { repository(owner: $owner, name: $repo) { issue(number: $issue) { projectCards { nodes { project { name } } } } } } ", "variables" : "{ \"issue\": '${ISSUE}', \"owner\": \"'${OWNER}'\", \"repo\": \"'${REPO}'\" }" }' https://api.github.com/graphql | grep "\b$BOARD_NAME\b"; then
+            echo "Issue is already in Project '$BOARD_NAME', proceeding";
+            echo "ALREADY_IN_BOARD=true" >> $GITHUB_ENV
+          else
+            echo "Issue is not in project '$BOARD_NAME', cancelling this workflow"
+            echo "ALREADY_IN_BOARD=false" >> $GITHUB_ENV
+          fi
+      - name: Move issue
+        uses: alex-page/github-project-automation-plus@bb266ff4dde9242060e2d5418e120a133586d488
+        if: ${{ env.ALREADY_IN_BOARD == 'true' }}
+        with:
+          project: Issue triage
+          column: Triaged
+          repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
