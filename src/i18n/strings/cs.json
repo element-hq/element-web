@@ -3321,5 +3321,10 @@
     "Someone already has that username, please try another.": "Toto uživatelské jméno už někdo má, zkuste prosím jiné.",
     "Someone already has that username. Try another or if it is you, sign in below.": "Tohle uživatelské jméno už někdo má. Zkuste jiné, nebo pokud jste to vy, přihlaste se níže.",
     "Maximised widgets": "Maximalizované widgety",
-    "Own your conversations.": "Vlastněte svoje konverzace."
+    "Own your conversations.": "Vlastněte svoje konverzace.",
+    "Minimise dialog": "Minimalizovat dialog",
+    "Maximise dialog": "Maximalizovat dialog",
+    "Based on %(total)s votes": "Na základě %(total)s hlasů",
+    "%(number)s votes": "%(number)s hlasů",
+    "Show tray icon and minimise window to it on close": "Zobrazit ikonu v oznamovací oblasti a minimalizivat při zavření okna"
 }
