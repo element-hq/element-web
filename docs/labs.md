@@ -149,3 +149,8 @@ Maximised widgets provide a room layout in which a widget is (temporarily) the p
 
 Note that this feature is currently under active development and therefore is
 entirely incomplete and may not work at all - it is not recommended for general use at this time.
+
+## Metaspaces (`feature_spaces_metaspaces`) [In Development]
+
+Metaspaces are automatically populated spaces you can enable in your Space panel.
+By default, you'll have Home or All rooms, but you can opt in to a People, Favourites, and Other Rooms metaspace too.
