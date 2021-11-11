@@ -3322,5 +3322,10 @@
     "Someone already has that username, please try another.": "某人已使用該使用者名稱，請嘗試使用另一個。",
     "Someone already has that username. Try another or if it is you, sign in below.": "某人已使用該使用者名稱。請嘗試使用另一個，或著如果是您，請在下方登入。",
     "Maximised widgets": "最大化的小工具",
-    "Own your conversations.": "擁有您的對話。"
+    "Own your conversations.": "擁有您的對話。",
+    "Minimise dialog": "最小化對話方塊",
+    "Maximise dialog": "最大化對話方塊",
+    "Based on %(total)s votes": "基於 %(total)s 個投票",
+    "%(number)s votes": "%(number)s 個投票",
+    "Show tray icon and minimise window to it on close": "顯示系統匣圖示並於關閉時最小化"
 }
