@@ -3204,7 +3204,7 @@
     "Verify with another login": "Verifikoje nga tjetër skenë hyrjesh",
     "Verify with Security Key": "Verifikoje me Kyç Sigurie",
     "Verify with Security Key or Phrase": "Verifikojeni me Kyç ose Frazë Sigurie",
-    "It looks like you don't have a Security Key or any other devices you can verify against.  This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.": "Duket sikur s’keni Kyç Sigurie ose ndonjë pajisje tjetër nga e cila mund të bëni verifikimin.  Kjo pajisje s’do të jetë në gjendje të hyjë te mesazhe të dikurshëm të fshehtëzuar. Që të mund të verifikohet identiteti juaj në këtë pajisje, you'll need to reset your verification keys.",
+    "It looks like you don't have a Security Key or any other devices you can verify against.  This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.": "Duket sikur s’keni Kyç Sigurie ose ndonjë pajisje tjetër nga e cila mund të bëni verifikimin. Kjo pajisje s’do të jetë në gjendje të hyjë te mesazhe të dikurshëm të fshehtëzuar. Që të mund të verifikohet identiteti juaj në këtë pajisje, ju duhet të riujdisni kyçet tuaj të verifikimit.",
     "Skip verification for now": "Anashkaloje verifikimin hëpërhë",
     "Unable to verify this login": "S’arrihet të verifikohet kjo hyrje",
     "To proceed, please accept the verification request on your other login.": "Që të vazhdohet, ju lutemi, pranoni kërkesën për verifikim në skenën(pajisjen) tuaj tjetër për hyrje.",
@@ -3309,5 +3309,16 @@
     "Question or topic": "Pyetje ose temë",
     "What is your poll question or topic?": "Cila është pyetja, ose tema e pyetësorit tuaj?",
     "Create Poll": "Krijoni Pyetësor",
-    "You do not have permission to start polls in this room.": "S’keni leje të nisni anketime në këtë dhomë."
+    "You do not have permission to start polls in this room.": "S’keni leje të nisni anketime në këtë dhomë.",
+    "Copy link to thread": "Kopjoje lidhjen te rrjedha",
+    "Thread options": "Mundësi rrjedhe",
+    "Someone already has that username, please try another.": "Dikush e ka atë emër përdoruesi, ju lutemi, provoni tjetër.",
+    "Someone already has that username. Try another or if it is you, sign in below.": "Dikush e ka tashmë këtë emër përdoruesi. Provoni një tjetër, ose nëse jeni ju, bëni hyrjen më poshtë.",
+    "Maximised widgets": "Widget-e të maksimizuar",
+    "Own your conversations.": "Jini zot i bisedave tuaja.",
+    "Minimise dialog": "Minimizoje dialogun",
+    "Maximise dialog": "Maksimizoje dialogun",
+    "Based on %(total)s votes": "Bazuar në %(total)s vota",
+    "%(number)s votes": "%(number)s vota",
+    "Show tray icon and minimise window to it on close": "Shfaq ikonë paneli dhe minimizo dritaren në të, kur bëhet mbyllje"
 }
