@@ -2901,7 +2901,7 @@
     "e.g. my-space": "např. můj-prostor",
     "Silence call": "Ztlumit zvonění",
     "Sound on": "Zvuk zapnutý",
-    "Show all rooms in Home": "Zobrazit všechny místnosti na úvodní obrazovce",
+    "Show all rooms in Home": "Zobrazit všechny místnosti v Úvodu",
     "Report to moderators prototype. In rooms that support moderation, the `report` button will let you report abuse to room moderators": "Prototyp Nahlášování moderátorům. V místnostech, které podporují moderování, vám tlačítko `nahlásit` umožní nahlásit zneužití moderátorům místnosti",
     "%(senderName)s changed the <a>pinned messages</a> for the room.": "%(senderName)s změnil(a) <a>připnuté zprávy</a> v místnosti.",
     "%(senderName)s kicked %(targetName)s": "%(senderName)s vykopl(a) uživatele %(targetName)s",
@@ -3056,7 +3056,7 @@
     "Want to add a new space instead?": "Chcete místo toho přidat nový prostor?",
     "Decrypting": "Dešifrování",
     "Show all rooms": "Zobrazit všechny místnosti",
-    "All rooms you're in will appear in Home.": "Všechny místnosti, ve kterých se nacházíte, se zobrazí na úvodní obrazovce.",
+    "All rooms you're in will appear in Home.": "Všechny místnosti, ve kterých se nacházíte, se zobrazí v Úvodu.",
     "Send pseudonymous analytics data": "Odeslat pseudonymní analytická data",
     "Missed call": "Zmeškaný hovor",
     "Call declined": "Hovor odmítnut",
@@ -3334,5 +3334,13 @@
     "Spaces are ways to group rooms and people.": "Prostory jsou způsob seskupování místností a osob.",
     "Sidebar": "Postranní panel",
     "Other rooms": "Ostatní místnosti",
-    "Meta Spaces": "Cílové prostory"
+    "Meta Spaces": "Cílové prostory",
+    "Show all threads": "Zobrazit všechna vlákna",
+    "Threads help you keep conversations on-topic and easilytrack them over time. Create the first one by using the\"Reply in thread\" button on a message.": "Vlákna vám pomohou udržet konverzace k tématu a snadno je sledovat v průběhu času. První vlákno vytvoříte pomocí tlačítka \"Odpovědět ve vlákně\" na zprávě.",
+    "Keep discussions organised with threads": "Udržujte diskuse organizované pomocí vláken",
+    "Automatically group all your people together in one place.": "Automaticky seskupit všechny lidi na jednom místě.",
+    "Automatically group all your favourite rooms and people together in one place.": "Automaticky seskupit všechny oblíbené místnosti a osoby na jednom místě.",
+    "Show all your rooms in Home, even if they're in a space.": "Zobrazit všechny místnosti v Úvodu, i když jsou v prostoru.",
+    "Automatically group all your rooms that aren't part of a space in one place.": "Automaticky seskupit všechny místnosti, které nejsou součástí prostoru, na jedno místo.",
+    "Rooms outside of a space": "Místnosti mimo prostor"
 }
