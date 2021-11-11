@@ -27,7 +27,7 @@ import NotifProvider from './NotifProvider';
 import { timeout } from "../utils/promise";
 import AutocompleteProvider, { ICommand } from "./AutocompleteProvider";
 import SpaceProvider from "./SpaceProvider";
-import SpaceStore from "../stores/SpaceStore";
+import SpaceStore from "../stores/spaces/SpaceStore";
 
 export interface ISelectionRange {
     beginning?: boolean; // whether the selection is in the first block of the editor or not

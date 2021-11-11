@@ -54,7 +54,8 @@ import EditCommunityPrototypeDialog from "../views/dialogs/EditCommunityPrototyp
 import { UIFeature } from "../../settings/UIFeature";
 import HostSignupAction from "./HostSignupAction";
 import { IHostSignupConfig } from "../views/dialogs/HostSignupDialogTypes";
-import SpaceStore, { UPDATE_SELECTED_SPACE } from "../../stores/SpaceStore";
+import SpaceStore from "../../stores/spaces/SpaceStore";
+import { UPDATE_SELECTED_SPACE } from "../../stores/spaces";
 import RoomName from "../views/elements/RoomName";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import InlineSpinner from "../views/elements/InlineSpinner";
@@ -90,6 +91,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
             isDarkTheme: this.isUserOnDarkTheme(),
             isHighContrast: this.isUserOnHighContrastTheme(),
             pendingRoomJoin: new Set<string>(),
+            selectedSpace: SpaceStore.instance.activeSpaceRoom,
         };
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
@@ -162,8 +164,10 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.forceUpdate();
     };
 
-    private onSelectedSpaceUpdate = async (selectedSpace?: Room) => {
-        this.setState({ selectedSpace });
+    private onSelectedSpaceUpdate = async () => {
+        this.setState({
+            selectedSpace: SpaceStore.instance.activeSpaceRoom,
+        });
     };
 
     private onThemeChanged = () => {

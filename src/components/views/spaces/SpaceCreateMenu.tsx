@@ -119,6 +119,7 @@ export const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
                     rageshakeLabel: "spaces-feedback",
                     rageshakeData: Object.fromEntries([
                         "Spaces.allRoomsInHome",
+                        "Spaces.enabledMetaSpaces",
                     ].map(k => [k, SettingsStore.getValue(k)])),
                 });
             }}

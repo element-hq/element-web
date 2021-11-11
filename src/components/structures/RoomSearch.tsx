@@ -28,7 +28,8 @@ import RoomListStore from "../../stores/room-list/RoomListStore";
 import { NameFilterCondition } from "../../stores/room-list/filters/NameFilterCondition";
 import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager";
 import { replaceableComponent } from "../../utils/replaceableComponent";
-import SpaceStore, { UPDATE_SELECTED_SPACE, UPDATE_TOP_LEVEL_SPACES } from "../../stores/SpaceStore";
+import SpaceStore from "../../stores/spaces/SpaceStore";
+import { UPDATE_SELECTED_SPACE, UPDATE_TOP_LEVEL_SPACES } from "../../stores/spaces";
 
 interface IProps {
     isMinimized: boolean;

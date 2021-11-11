@@ -17,7 +17,6 @@ limitations under the License.
 import * as React from "react";
 import { createRef } from "react";
 import classNames from "classnames";
-import { Room } from "matrix-js-sdk/src/models/room";
 
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
@@ -37,10 +36,12 @@ import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import RoomListNumResults from "../views/rooms/RoomListNumResults";
 import LeftPanelWidget from "./LeftPanelWidget";
 import { replaceableComponent } from "../../utils/replaceableComponent";
-import SpaceStore, { UPDATE_SELECTED_SPACE } from "../../stores/SpaceStore";
+import SpaceStore from "../../stores/spaces/SpaceStore";
+import { SpaceKey, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
 import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager";
 import UIStore from "../../stores/UIStore";
 import { findSiblingElement, IState as IRovingTabIndexState } from "../../accessibility/RovingTabIndex";
+import MatrixClientContext from "../../contexts/MatrixClientContext";
 
 interface IProps {
     isMinimized: boolean;
@@ -49,7 +50,7 @@ interface IProps {
 
 interface IState {
     showBreadcrumbs: boolean;
-    activeSpace?: Room;
+    activeSpace: SpaceKey;
 }
 
 @replaceableComponent("structures.LeftPanel")
@@ -60,6 +61,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     private roomListRef = createRef<RoomList>();
     private focusedElement = null;
     private isDoingStickyHeaders = false;
+
+    static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
 
     constructor(props: IProps) {
         super(props);
@@ -98,7 +102,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         }
     }
 
-    private updateActiveSpace = (activeSpace: Room) => {
+    private updateActiveSpace = (activeSpace: SpaceKey) => {
         this.setState({ activeSpace });
     };
 
@@ -343,6 +347,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 />;
         }
 
+        const space = this.state.activeSpace[0] === "!" ? this.context.getRoom(this.state.activeSpace) : null;
         return (
             <div
                 className="mx_LeftPanel_filterContainer"
@@ -363,9 +368,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                         mx_LeftPanel_exploreButton_space: !!this.state.activeSpace,
                     })}
                     onClick={this.onExplore}
-                    title={this.state.activeSpace
-                        ? _t("Explore %(spaceName)s", { spaceName: this.state.activeSpace.name })
-                        : _t("Explore rooms")}
+                    title={space ? _t("Explore %(spaceName)s", { spaceName: space.name }) : _t("Explore rooms")}
                 />
             </div>
         );

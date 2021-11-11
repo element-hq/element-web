@@ -22,7 +22,7 @@ import { split } from "lodash";
 
 import DMRoomMap from './utils/DMRoomMap';
 import { mediaFromMxc } from "./customisations/Media";
-import SpaceStore from "./stores/SpaceStore";
+import SpaceStore from "./stores/spaces/SpaceStore";
 
 // Not to be used for BaseAvatar urls as that has similar default avatar fallback already
 export function avatarUrlForMember(

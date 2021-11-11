@@ -17,7 +17,7 @@ limitations under the License.
 import React, { ComponentProps, useMemo, useState } from 'react';
 
 import ConfirmUserActionDialog from "./ConfirmUserActionDialog";
-import SpaceStore from "../../../stores/SpaceStore";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
 import { Room } from "matrix-js-sdk/src/models/room";
 import SpaceChildrenPicker from "../spaces/SpaceChildrenPicker";
 

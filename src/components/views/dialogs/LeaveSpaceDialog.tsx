@@ -21,7 +21,7 @@ import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { _t } from '../../../languageHandler';
 import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "../dialogs/BaseDialog";
-import SpaceStore from "../../../stores/SpaceStore";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
 import SpaceChildrenPicker from "../spaces/SpaceChildrenPicker";
 
 interface IProps {

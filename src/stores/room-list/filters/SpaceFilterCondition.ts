@@ -19,7 +19,8 @@ import { Room } from "matrix-js-sdk/src/models/room";
 
 import { FILTER_CHANGED, FilterKind, IFilterCondition } from "./IFilterCondition";
 import { IDestroyable } from "../../../utils/IDestroyable";
-import SpaceStore, { HOME_SPACE } from "../../SpaceStore";
+import SpaceStore from "../../spaces/SpaceStore";
+import { MetaSpace, SpaceKey } from "../../spaces";
 import { setHasDiff } from "../../../utils/sets";
 
 /**
@@ -30,7 +31,7 @@ import { setHasDiff } from "../../../utils/sets";
  */
 export class SpaceFilterCondition extends EventEmitter implements IFilterCondition, IDestroyable {
     private roomIds = new Set<string>();
-    private space: Room = null;
+    private space: SpaceKey = MetaSpace.Home;
 
     public get kind(): FilterKind {
         return FilterKind.Prefilter;
@@ -55,15 +56,13 @@ export class SpaceFilterCondition extends EventEmitter implements IFilterConditi
         }
     };
 
-    private getSpaceEventKey = (space: Room | null) => space ? space.roomId : HOME_SPACE;
-
-    public updateSpace(space: Room) {
-        SpaceStore.instance.off(this.getSpaceEventKey(this.space), this.onStoreUpdate);
-        SpaceStore.instance.on(this.getSpaceEventKey(this.space = space), this.onStoreUpdate);
+    public updateSpace(space: SpaceKey) {
+        SpaceStore.instance.off(this.space, this.onStoreUpdate);
+        SpaceStore.instance.on(this.space = space, this.onStoreUpdate);
         this.onStoreUpdate(); // initial update from the change to the space
     }
 
     public destroy(): void {
-        SpaceStore.instance.off(this.getSpaceEventKey(this.space), this.onStoreUpdate);
+        SpaceStore.instance.off(this.space, this.onStoreUpdate);
     }
 }

@@ -78,7 +78,7 @@ import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from '../../toasts/MobileGuideToast';
 import { shouldUseLoginForWelcome } from "../../utils/pages";
-import SpaceStore from "../../stores/SpaceStore";
+import SpaceStore from "../../stores/spaces/SpaceStore";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import { RoomUpdateCause } from "../../stores/room-list/models";
@@ -712,10 +712,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             }
             case Action.ViewRoomDirectory: {
-                if (SpaceStore.instance.activeSpace) {
+                if (SpaceStore.instance.activeSpace[0] === "!") {
                     defaultDispatcher.dispatch({
                         action: "view_room",
-                        room_id: SpaceStore.instance.activeSpace.roomId,
+                        room_id: SpaceStore.instance.activeSpace,
                     });
                 } else {
                     Modal.createTrackedDialog('Room directory', '', RoomDirectory, {

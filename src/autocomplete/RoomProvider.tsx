@@ -28,7 +28,7 @@ import { PillCompletion } from './Components';
 import { makeRoomPermalink } from "../utils/permalinks/Permalinks";
 import { ICompletion, ISelectionRange } from "./Autocompleter";
 import RoomAvatar from '../components/views/avatars/RoomAvatar';
-import SpaceStore from "../stores/SpaceStore";
+import SpaceStore from "../stores/spaces/SpaceStore";
 
 const ROOM_REGEX = /\B#\S*/g;
 

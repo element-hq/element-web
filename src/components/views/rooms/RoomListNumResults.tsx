@@ -19,7 +19,7 @@ import React, { useEffect, useState } from "react";
 import { _t } from "../../../languageHandler";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
-import SpaceStore from "../../../stores/SpaceStore";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
 
 interface IProps {
     onVisibilityChange?: () => void;

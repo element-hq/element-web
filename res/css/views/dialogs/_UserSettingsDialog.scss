@@ -37,6 +37,10 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/settings/preference.svg');
 }
 
+.mx_UserSettingsDialog_sidebarIcon::before {
+    mask-image: url('$(res)/img/element-icons/settings/sidebar.svg');
+}
+
 .mx_UserSettingsDialog_securityIcon::before {
     mask-image: url('$(res)/img/element-icons/security.svg');
 }

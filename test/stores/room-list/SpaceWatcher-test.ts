@@ -14,17 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import "../enable-metaspaces-labs";
 import "../../skinned-sdk"; // Must be first for skinning to work
 import { SpaceWatcher } from "../../../src/stores/room-list/SpaceWatcher";
 import type { RoomListStoreClass } from "../../../src/stores/room-list/RoomListStore";
 import SettingsStore from "../../../src/settings/SettingsStore";
-import SpaceStore, { UPDATE_HOME_BEHAVIOUR } from "../../../src/stores/SpaceStore";
+import SpaceStore from "../../../src/stores/spaces/SpaceStore";
+import { MetaSpace, UPDATE_HOME_BEHAVIOUR } from "../../../src/stores/spaces";
 import { stubClient } from "../../test-utils";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
+import * as testUtils from "../../utils/test-utils";
 import { setupAsyncStoreWithClient } from "../../utils/test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import * as testUtils from "../../utils/test-utils";
 import { SpaceFilterCondition } from "../../../src/stores/room-list/filters/SpaceFilterCondition";
+import DMRoomMap from "../../../src/utils/DMRoomMap";
 
 let filter: SpaceFilterCondition = null;
 
@@ -33,8 +36,13 @@ const mockRoomListStore = {
     removeFilter: () => filter = null,
 } as unknown as RoomListStoreClass;
 
-const space1Id = "!space1:server";
-const space2Id = "!space2:server";
+const getUserIdForRoomId = jest.fn();
+const getDMRoomsForUserId = jest.fn();
+// @ts-ignore
+DMRoomMap.sharedInstance = { getUserIdForRoomId, getDMRoomsForUserId };
+
+const space1 = "!space1:server";
+const space2 = "!space2:server";
 
 describe("SpaceWatcher", () => {
     stubClient();
@@ -50,17 +58,21 @@ describe("SpaceWatcher", () => {
         await testUtils.emitPromise(store, UPDATE_HOME_BEHAVIOUR);
     };
 
-    let space1;
-    let space2;
-
     beforeEach(async () => {
         filter = null;
         store.removeAllListeners();
-        store.setActiveSpace(null);
+        store.setActiveSpace(MetaSpace.Home);
         client.getVisibleRooms.mockReturnValue(rooms = []);
 
-        space1 = mkSpace(space1Id);
-        space2 = mkSpace(space2Id);
+        mkSpace(space1);
+        mkSpace(space2);
+
+        await SettingsStore.setValue("Spaces.enabledMetaSpaces", null, SettingLevel.DEVICE, {
+            [MetaSpace.Home]: true,
+            [MetaSpace.Favourites]: true,
+            [MetaSpace.People]: true,
+            [MetaSpace.Orphans]: true,
+        });
 
         client.getRoom.mockImplementation(roomId => rooms.find(room => room.roomId === roomId));
         await setupAsyncStoreWithClient(store, client);
@@ -80,14 +92,14 @@ describe("SpaceWatcher", () => {
         expect(filter).toBeNull();
     });
 
-    it("sets space=null filter for all -> home transition", async () => {
+    it("sets space=Home filter for all -> home transition", async () => {
         await setShowAllRooms(true);
         new SpaceWatcher(mockRoomListStore);
 
         await setShowAllRooms(false);
 
         expect(filter).toBeInstanceOf(SpaceFilterCondition);
-        expect(filter["space"]).toBeNull();
+        expect(filter["space"]).toBe(MetaSpace.Home);
     });
 
     it("sets filter correctly for all -> space transition", async () => {
@@ -126,7 +138,43 @@ describe("SpaceWatcher", () => {
         SpaceStore.instance.setActiveSpace(space1);
         expect(filter).toBeInstanceOf(SpaceFilterCondition);
         expect(filter["space"]).toBe(space1);
-        SpaceStore.instance.setActiveSpace(null);
+        SpaceStore.instance.setActiveSpace(MetaSpace.Home);
+
+        expect(filter).toBeNull();
+    });
+
+    it("removes filter for favourites -> all transition", async () => {
+        await setShowAllRooms(true);
+        new SpaceWatcher(mockRoomListStore);
+
+        SpaceStore.instance.setActiveSpace(MetaSpace.Favourites);
+        expect(filter).toBeInstanceOf(SpaceFilterCondition);
+        expect(filter["space"]).toBe(MetaSpace.Favourites);
+        SpaceStore.instance.setActiveSpace(MetaSpace.Home);
+
+        expect(filter).toBeNull();
+    });
+
+    it("removes filter for people -> all transition", async () => {
+        await setShowAllRooms(true);
+        new SpaceWatcher(mockRoomListStore);
+
+        SpaceStore.instance.setActiveSpace(MetaSpace.People);
+        expect(filter).toBeInstanceOf(SpaceFilterCondition);
+        expect(filter["space"]).toBe(MetaSpace.People);
+        SpaceStore.instance.setActiveSpace(MetaSpace.Home);
+
+        expect(filter).toBeNull();
+    });
+
+    it("removes filter for orphans -> all transition", async () => {
+        await setShowAllRooms(true);
+        new SpaceWatcher(mockRoomListStore);
+
+        SpaceStore.instance.setActiveSpace(MetaSpace.Orphans);
+        expect(filter).toBeInstanceOf(SpaceFilterCondition);
+        expect(filter["space"]).toBe(MetaSpace.Orphans);
+        SpaceStore.instance.setActiveSpace(MetaSpace.Home);
 
         expect(filter).toBeNull();
     });
@@ -138,10 +186,36 @@ describe("SpaceWatcher", () => {
         new SpaceWatcher(mockRoomListStore);
         expect(filter).toBeInstanceOf(SpaceFilterCondition);
         expect(filter["space"]).toBe(space1);
-        SpaceStore.instance.setActiveSpace(null);
+        SpaceStore.instance.setActiveSpace(MetaSpace.Home);
 
         expect(filter).toBeInstanceOf(SpaceFilterCondition);
-        expect(filter["space"]).toBe(null);
+        expect(filter["space"]).toBe(MetaSpace.Home);
+    });
+
+    it("updates filter correctly for space -> orphans transition", async () => {
+        await setShowAllRooms(false);
+        SpaceStore.instance.setActiveSpace(space1);
+
+        new SpaceWatcher(mockRoomListStore);
+        expect(filter).toBeInstanceOf(SpaceFilterCondition);
+        expect(filter["space"]).toBe(space1);
+        SpaceStore.instance.setActiveSpace(MetaSpace.Orphans);
+
+        expect(filter).toBeInstanceOf(SpaceFilterCondition);
+        expect(filter["space"]).toBe(MetaSpace.Orphans);
+    });
+
+    it("updates filter correctly for orphans -> people transition", async () => {
+        await setShowAllRooms(false);
+        SpaceStore.instance.setActiveSpace(MetaSpace.Orphans);
+
+        new SpaceWatcher(mockRoomListStore);
+        expect(filter).toBeInstanceOf(SpaceFilterCondition);
+        expect(filter["space"]).toBe(MetaSpace.Orphans);
+        SpaceStore.instance.setActiveSpace(MetaSpace.People);
+
+        expect(filter).toBeInstanceOf(SpaceFilterCondition);
+        expect(filter["space"]).toBe(MetaSpace.People);
     });
 
     it("updates filter correctly for space -> space transition", async () => {

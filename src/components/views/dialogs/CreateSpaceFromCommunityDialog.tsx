@@ -32,7 +32,7 @@ import { calculateRoomVia, makeRoomPermalink } from "../../../utils/permalinks/P
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 import Spinner from "../elements/Spinner";
 import { mediaFromMxc } from "../../../customisations/Media";
-import SpaceStore from "../../../stores/SpaceStore";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
 import Modal from "../../../Modal";
 import InfoDialog from "./InfoDialog";
 import dis from "../../../dispatcher/dispatcher";

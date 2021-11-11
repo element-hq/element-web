@@ -21,7 +21,7 @@ import { _t } from '../../../languageHandler';
 import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
 import SearchBox from "../../structures/SearchBox";
-import SpaceStore from "../../../stores/SpaceStore";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
 import RoomAvatar from "../avatars/RoomAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
@@ -75,7 +75,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
     const [spacesContainingRoom, otherEntries] = useMemo(() => {
         const spaces = cli.getVisibleRooms().filter(r => r.getMyMembership() === "join" && r.isSpaceRoom());
         return [
-            spaces.filter(r => SpaceStore.instance.getSpaceFilteredRoomIds(r).has(room.roomId)),
+            spaces.filter(r => SpaceStore.instance.getSpaceFilteredRoomIds(r.roomId).has(room.roomId)),
             selected.map(roomId => {
                 const room = cli.getRoom(roomId);
                 if (!room) {
