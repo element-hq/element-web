@@ -3325,5 +3325,11 @@
     "Based on %(total)s votes": "基于 %(total)s 票",
     "%(number)s votes": "%(number)s 票",
     "Show tray icon and minimise window to it on close": "显示托盘图标并在关闭时最小化窗口至托盘",
-    "Reply in thread": "在帖子中回复"
+    "Reply in thread": "在帖子中回复",
+    "Along with the spaces you're in, you can use some pre-built ones too.": "除了你所在的空间，你也可以使用一些预先建造的空间。",
+    "Spaces to show": "要显示的空间",
+    "Spaces are ways to group rooms and people.": "空间是将聊天室和人分组的方式。",
+    "Sidebar": "侧边栏",
+    "Other rooms": "其他聊天室",
+    "Meta Spaces": "元空间"
 }
