@@ -294,7 +294,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                             && this.context.timelineRenderingType !== TimelineRenderingType.Thread) && (
                             <RovingAccessibleTooltipButton
                                 className="mx_MessageActionBar_maskButton mx_MessageActionBar_threadButton"
-                                title={_t("Thread")}
+                                title={_t("Reply in thread")}
                                 onClick={this.onThreadClick}
                                 key="thread"
                             />
@@ -327,7 +327,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
             ) {
                 toolbarOpts.unshift(<RovingAccessibleTooltipButton
                     className="mx_MessageActionBar_maskButton mx_MessageActionBar_threadButton"
-                    title={_t("Thread")}
+                    title={_t("Reply in thread")}
                     onClick={this.onThreadClick}
                     key="thread"
                 />);

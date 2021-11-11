@@ -48,7 +48,6 @@ import { Container, MAX_PINNED, WidgetLayoutStore } from "../../../stores/widget
 import RoomName from "../elements/RoomName";
 import UIStore from "../../../stores/UIStore";
 import ExportDialog from "../dialogs/ExportDialog";
-import { dispatchShowThreadsPanelEvent } from "../../../dispatcher/dispatch-actions/threads";
 
 interface IProps {
     room: Room;
@@ -284,11 +283,6 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
             <Button className="mx_RoomSummaryCard_icon_export" onClick={onRoomExportClick}>
                 { _t("Export chat") }
             </Button>
-            { SettingsStore.getValue("feature_thread") && (
-                <Button className="mx_RoomSummaryCard_icon_threads" onClick={dispatchShowThreadsPanelEvent}>
-                    { _t("Show threads") }
-                </Button>
-            ) }
             <Button className="mx_RoomSummaryCard_icon_share" onClick={onShareRoomClick}>
                 { _t("Share room") }
             </Button>

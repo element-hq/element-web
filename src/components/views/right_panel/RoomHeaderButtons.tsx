@@ -33,6 +33,7 @@ import { useSettingValue } from "../../../hooks/useSettings";
 import { useReadPinnedEvents, usePinnedEvents } from './PinnedMessagesCard';
 import { dispatchShowThreadsPanelEvent } from "../../../dispatcher/dispatch-actions/threads";
 import SettingsStore from "../../../settings/SettingsStore";
+import dis from "../../../dispatcher/dispatcher";
 
 const ROOM_INFO_PHASES = [
     RightPanelPhases.RoomSummary,
@@ -72,6 +73,11 @@ interface IProps {
 
 @replaceableComponent("views.right_panel.RoomHeaderButtons")
 export default class RoomHeaderButtons extends HeaderButtons<IProps> {
+    private static readonly THREAD_PHASES = [
+        RightPanelPhases.ThreadPanel,
+        RightPanelPhases.ThreadView,
+    ];
+
     constructor(props: IProps) {
         super(props, HeaderKind.Room);
     }
@@ -117,6 +123,17 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
         this.setPhase(RightPanelPhases.PinnedMessages);
     };
 
+    private onThreadsPanelClicked = () => {
+        if (RoomHeaderButtons.THREAD_PHASES.includes(this.state.phase)) {
+            dis.dispatch({
+                action: Action.ToggleRightPanel,
+                type: "room",
+            });
+        } else {
+            dispatchShowThreadsPanelEvent();
+        }
+    };
+
     public renderButtons() {
         return <>
             <PinnedMessagesHeaderButton
@@ -127,11 +144,8 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
             { SettingsStore.getValue("feature_thread") && <HeaderButton
                 name="threadsButton"
                 title={_t("Threads")}
-                onClick={dispatchShowThreadsPanelEvent}
-                isHighlighted={this.isPhase([
-                    RightPanelPhases.ThreadPanel,
-                    RightPanelPhases.ThreadView,
-                ])}
+                onClick={this.onThreadsPanelClicked}
+                isHighlighted={this.isPhase(RoomHeaderButtons.THREAD_PHASES)}
                 analytics={['Right Panel', 'Threads List Button', 'click']}
             /> }
             <HeaderButton

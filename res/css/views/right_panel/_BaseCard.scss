@@ -22,7 +22,7 @@ limitations under the License.
     flex: 1;
 
     .mx_BaseCard_header {
-        margin: 8px 0;
+        margin: 4px 0;
 
         > h2 {
             margin: 0 44px;
@@ -40,13 +40,13 @@ limitations under the License.
             width: 20px;
             margin: 12px;
             top: 0;
-            border-radius: 10px;
+            border-radius: 50%;
 
             &::before {
                 content: "";
                 position: absolute;
-                height: 20px;
-                width: 20px;
+                height: inherit;
+                width: inherit;
                 top: 0;
                 left: 0;
                 mask-repeat: no-repeat;

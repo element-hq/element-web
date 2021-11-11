@@ -40,7 +40,7 @@ import RoomContext, { TimelineRenderingType } from '../../contexts/RoomContext';
 import ContentMessages from '../../ContentMessages';
 import UploadBar from './UploadBar';
 import { _t } from '../../languageHandler';
-import { ThreadListContextMenu } from '../views/context_menus/ThreadListContextMenu';
+import ThreadListContextMenu from '../views/context_menus/ThreadListContextMenu';
 
 interface IProps {
     room: Room;
@@ -214,6 +214,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                     className="mx_ThreadView mx_ThreadPanel"
                     onClose={this.props.onClose}
                     previousPhase={RightPanelPhases.ThreadPanel}
+                    previousPhaseLabel={_t("All threads")}
                     withoutScrollContainer={true}
                     header={this.renderThreadViewHeader()}
                 >

@@ -18,21 +18,29 @@ limitations under the License.
     display: flex;
     flex-direction: column;
 
-    padding-right: 0;
-
     .mx_BaseCard_header {
+        margin-bottom: 12px;
         .mx_BaseCard_close,
         .mx_BaseCard_back {
-            margin-top: 15px;
+            width: 24px;
+            height: 24px;
+        }
+        .mx_BaseCard_back {
+            left: -4px;
         }
         .mx_BaseCard_close {
-            right: -8px;
+            right: -4px;
         }
     }
 
-    .mx_ThreadPanel__header {
+    .mx_BaseCard_back ~ .mx_ThreadPanel__header {
         width: calc(100% - 60px);
         margin-left: 30px;
+    }
+
+    .mx_ThreadPanel__header {
+        width: calc(100% - 30px);
+        height: 24px;
         display: flex;
         flex: 1;
         justify-content: space-between;
@@ -47,11 +55,21 @@ limitations under the License.
 
         .mx_AccessibleButton {
             font-size: 12px;
-            color: $primary-content;
+            color: $secondary-content;
         }
 
         .mx_MessageActionBar_optionsButton {
             position: relative;
+        }
+
+        .mx_MessageActionBar_maskButton {
+            --size: 24px;
+            width: var(--size);
+            height: var(--size);
+            &::after {
+                mask-size: var(--size);
+                mask-image: url("$(res)/img/element-icons/message/overflow-large.svg");
+            }
         }
 
         .mx_ContextualMenu_wrapper {
@@ -70,6 +88,25 @@ limitations under the License.
 
             font-size: 12px;
             color: $secondary-content;
+            padding-top: 10px;
+            padding-bottom: 10px;
+
+            border: 1px solid $quinary-content;
+            box-shadow: 0px 1px 3px rgba(23, 25, 28, 0.05);
+        }
+
+        .mx_ContextualMenu_chevron_top {
+            left: auto;
+            right: 22px;
+            border-bottom-color: $quinary-content;
+            &::after {
+                content: "";
+                border: inherit;
+                border-bottom-color: $background;
+                position: absolute;
+                top: 1px;
+                left: -8px;
+            }
         }
 
         .mx_ThreadPanel_Header_FilterOptionItem {
@@ -77,30 +114,32 @@ limitations under the License.
             flex-grow: 1;
             justify-content: space-between;
             flex-direction: column;
-            overflow: visible;
-            width: 100%;
-            padding: 20px;
-            padding-left: 30px;
+            padding: 10px 20px 10px 30px;
             position: relative;
 
             &:hover {
                 background-color: $event-selected-color;
             }
             &[aria-selected="true"] {
-                &::before {
+                :first-child {
+                    margin-left: -20px;
+                }
+                :first-child::before {
                     content: "";
                     width: 12px;
                     height: 12px;
-                    grid-column: 1;
-                    grid-row: 1;
+                    margin-right: 8px;
                     mask-image: url("$(res)/img/feather-customised/check.svg");
                     mask-size: 100%;
                     mask-repeat: no-repeat;
-                    position: absolute;
-                    top: 22px;
-                    left: 10px;
                     background-color: $primary-content;
+                    display: inline-block;
+                    vertical-align: middle;
                 }
+            }
+
+            :last-child {
+                color: $secondary-content;
             }
         }
     }
@@ -131,24 +170,20 @@ limitations under the License.
     }
 
     .mx_AutoHideScrollbar {
-        border-radius: 8px;
-    }
-
-    .mx_RoomView_messageListWrapper {
+        background: #fff;
         background-color: $background;
-        padding: 8px;
-        border-radius: inherit;
+        border-radius: 8px;
+        width: calc(100% - 16px);
+        padding-right: 16px;
     }
 
-    .mx_ScrollPanel {
-        .mx_RoomView_MessageList {
-            padding: 0;
-        }
+    .mx_RoomView_MessageList {
+        padding-left: 12px;
+        padding-right: 0;
     }
 
     .mx_EventTile, .mx_EventListSummary {
         // Account for scrollbar when hovering
-        width: calc(100% - 3px);
         margin: 0 2px;
         padding-top: 0;
 
@@ -170,19 +205,28 @@ limitations under the License.
         .mx_DateSeparator {
             display: none;
         }
+
+        &.mx_EventTile_clamp:hover {
+            cursor: pointer;
+        }
+    }
+
+    .mx_EventTile:not([data-layout=bubble]) {
+        .mx_EventTile_e2eIcon {
+            left: 8px;
+        }
     }
 
     .mx_MessageComposer {
         background-color: $background;
         border-radius: 8px;
         margin-top: 8px;
-        width: calc(100% - 8px);
         padding: 0 8px;
         box-sizing: border-box;
     }
 
     .mx_ThreadPanel_dropdown {
-        padding: 4px 8px;
+        padding: 3px 8px;
         border-radius: 4px;
         line-height: 1.5;
         user-select: none;
@@ -207,6 +251,36 @@ limitations under the License.
     .mx_ThreadPanel_dropdown[aria-expanded=true]::before {
         transform: rotate(180deg);
     }
+
+    .mx_MessageTimestamp {
+        font-size: $font-12px;
+    }
+}
+
+.mx_ThreadPanel_replies {
+    margin-top: 8px;
+}
+
+.mx_ThreadPanel_repliesSummary {
+    &::before {
+        content: "";
+        mask-image: url('$(res)/img/element-icons/thread-summary.svg');
+        mask-position: center;
+        display: inline-block;
+        height: 18px;
+        min-width: 18px;
+        background-color: currentColor;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        margin-right: 8px;
+        vertical-align: middle;
+    }
+
+    color: $secondary-content;
+    font-weight: 600;
+    float: left;
+    margin-right: 12px;
+    font-size: $font-12px;
 }
 
 .mx_ThreadPanel_viewInRoom::before {

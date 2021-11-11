@@ -355,7 +355,9 @@ export default class RightPanel extends React.Component<IProps, IState> {
                 panel = <ThreadPanel
                     roomId={roomId}
                     resizeNotifier={this.props.resizeNotifier}
-                    onClose={this.onClose} />;
+                    onClose={this.onClose}
+                    permalinkCreator={this.props.permalinkCreator}
+                />;
                 break;
 
             case RightPanelPhases.RoomSummary:
