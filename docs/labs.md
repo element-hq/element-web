@@ -142,3 +142,8 @@ entirely incomplete and may not work at all - it is not recommended for general 
 
 Bug reports, feature requests, etc are not currently accepted for this feature flag. A later stage of
 development will provide opportunities for feedback.
+
+## Breadcrumbs v2 (`feature_breadcrumbs_v2`)
+
+Instead of showing the horizontal list of breadcrumbs under the filter field, the new UX is an interactive context menu
+triggered by the button to the right of the filter field.
