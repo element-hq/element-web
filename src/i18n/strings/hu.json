@@ -3132,8 +3132,8 @@
     "Role in <RoomName/>": "Szerep itt: <RoomName/>",
     "Explore %(spaceName)s": "%(spaceName)s feltérképezése",
     "Send a sticker": "Matrica küldése",
-    "Reply to thread…": "Válasz az üzenetszálra…",
-    "Reply to encrypted thread…": "Válasz a titkosított üzenetszálra…",
+    "Reply to thread…": "Válasz az üzenetszálban…",
+    "Reply to encrypted thread…": "Válasz a titkosított üzenetszálban…",
     "Add emoji": "Emodzsi hozzáadás",
     "Unknown failure": "Ismeretlen hiba",
     "Failed to update the join rules": "A csatlakozási szabályokat nem sikerült frissíteni",
@@ -3323,5 +3323,6 @@
     "Maximise dialog": "Dialógus ablak nagyítás",
     "Based on %(total)s votes": "%(total)s szavazatot alapul véve",
     "%(number)s votes": "%(number)s szavazat",
-    "Show tray icon and minimise window to it on close": "Tálcaikon mutatása és az ablak összecsukása bezáráskor"
+    "Show tray icon and minimise window to it on close": "Tálcaikon mutatása és az ablak összecsukása bezáráskor",
+    "Reply in thread": "Válasz az üzenetszálban"
 }
