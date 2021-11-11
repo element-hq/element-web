@@ -3326,5 +3326,6 @@
     "Maximise dialog": "Maximalizovat dialog",
     "Based on %(total)s votes": "Na základě %(total)s hlasů",
     "%(number)s votes": "%(number)s hlasů",
-    "Show tray icon and minimise window to it on close": "Zobrazit ikonu v oznamovací oblasti a minimalizivat při zavření okna"
+    "Show tray icon and minimise window to it on close": "Zobrazit ikonu v oznamovací oblasti a minimalizivat při zavření okna",
+    "Reply in thread": "Odpovědět ve vlákně"
 }
