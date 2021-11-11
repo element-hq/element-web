@@ -3327,5 +3327,12 @@
     "Based on %(total)s votes": "Na základě %(total)s hlasů",
     "%(number)s votes": "%(number)s hlasů",
     "Show tray icon and minimise window to it on close": "Zobrazit ikonu v oznamovací oblasti a minimalizivat při zavření okna",
-    "Reply in thread": "Odpovědět ve vlákně"
+    "Reply in thread": "Odpovědět ve vlákně",
+    "Home is useful for getting an overview of everything.": "Úvod je užitečný pro získání přehledu o všem.",
+    "Along with the spaces you're in, you can use some pre-built ones too.": "Spolu s prostory, ve kterých se nacházíte, můžete použít i některé předpřipravené.",
+    "Spaces to show": "Prostory pro zobrazení",
+    "Spaces are ways to group rooms and people.": "Prostory jsou způsob seskupování místností a osob.",
+    "Sidebar": "Postranní panel",
+    "Other rooms": "Ostatní místnosti",
+    "Meta Spaces": "Cílové prostory"
 }
