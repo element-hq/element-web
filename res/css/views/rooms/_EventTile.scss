@@ -221,25 +221,25 @@ $left-gutter: 64px;
     &:hover.mx_EventTile_verified .mx_EventTile_line,
     &:hover.mx_EventTile_unverified .mx_EventTile_line,
     &:hover.mx_EventTile_unknown .mx_EventTile_line {
-        padding-left: calc($left-gutter);
+        padding-left: calc($left-gutter - $selected-message-border-width);
     }
 
     &:hover.mx_EventTile_verified .mx_EventTile_line {
-        box-shadow: inset $selected-message-border-width 0 0 0 $e2e-verified-color;
+        border-left: $e2e-verified-color $selected-message-border-width solid;
     }
 
     &:hover.mx_EventTile_unverified .mx_EventTile_line {
-        box-shadow: inset $selected-message-border-width 0 0 0 $e2e-verified-color;
+        border-left: $e2e-unverified-color $selected-message-border-width solid;
     }
 
     &:hover.mx_EventTile_unknown .mx_EventTile_line {
-        box-shadow: inset $selected-message-border-width 0 0 0 $e2e-verified-color;
+        border-left: $e2e-unknown-color $selected-message-border-width solid;
     }
 
     &:hover.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
     &:hover.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
     &:hover.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
-        padding-left: calc($left-gutter + 18px);
+        padding-left: calc($left-gutter + 18px - $selected-message-border-width);
     }
 
     /* End to end encryption stuff */
@@ -822,7 +822,7 @@ $left-gutter: 64px;
     .mx_EventTile_senderDetails {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: calc(6px + $selected-message-border-width);
 
         a {
             flex: 1;
@@ -846,16 +846,20 @@ $left-gutter: 64px;
         display: none;
     }
 
-    .mx_EventTile_line {
-        padding-left: 0 !important;
-        order: 10 !important;
-    }
-
     .mx_EventTile {
         width: 100%;
         display: flex;
         flex-direction: column;
         padding-top: 0;
+
+        .mx_EventTile_line {
+            padding-left: $selected-message-border-width !important;
+            order: 10 !important;
+        }
+
+        &:hover .mx_EventTile_line {
+            padding-left: 0 !important;
+        }
 
         .mx_MessageTimestamp {
             left: auto;
