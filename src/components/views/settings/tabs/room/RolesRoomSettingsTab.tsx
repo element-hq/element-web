@@ -33,6 +33,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 interface IEventShowOpts {
     isState?: boolean;
     hideForSpace?: boolean;
+    hideForRoom?: boolean;
 }
 
 interface IPowerLevelDescriptor {
@@ -46,6 +47,7 @@ const plEventsToShow: Record<string, IEventShowOpts> = {
     [EventType.RoomAvatar]: { isState: true },
     [EventType.RoomName]: { isState: true },
     [EventType.RoomCanonicalAlias]: { isState: true },
+    [EventType.SpaceChild]: { isState: true, hideForRoom: true },
     [EventType.RoomHistoryVisibility]: { isState: true, hideForSpace: true },
     [EventType.RoomPowerLevels]: { isState: true },
     [EventType.RoomTopic]: { isState: true },
@@ -223,6 +225,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             [EventType.RoomCanonicalAlias]: isSpaceRoom
                 ? _td("Change main address for the space")
                 : _td("Change main address for the room"),
+            [EventType.SpaceChild]: _td("Manage rooms in this space"),
             [EventType.RoomHistoryVisibility]: _td("Change history visibility"),
             [EventType.RoomPowerLevels]: _td("Change permissions"),
             [EventType.RoomTopic]: isSpaceRoom ? _td("Change description") : _td("Change topic"),
@@ -412,6 +415,8 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
 
         const eventPowerSelectors = Object.keys(eventsLevels).map((eventType, i) => {
             if (isSpaceRoom && plEventsToShow[eventType].hideForSpace) {
+                return null;
+            } else if (!isSpaceRoom && plEventsToShow[eventType].hideForRoom) {
                 return null;
             }
 
