@@ -180,6 +180,30 @@ export const ThreadPanelHeader = ({ filterOption, setFilterOption }: {
     </div>;
 };
 
+interface EmptyThreadIProps {
+    filterOption: ThreadFilterType;
+    showAllThreadsCallback: () => void;
+}
+
+const EmptyThread: React.FC<EmptyThreadIProps> = ({ filterOption, showAllThreadsCallback }) => {
+    return <aside className="mx_ThreadPanel_empty">
+        <div className="mx_ThreadPanel_largeIcon" />
+        <h2>{ _t("Keep discussions organised with threads") }</h2>
+        <p>{ _t("Threads help you keep conversations on-topic and easily"
+              + "track them over time. Create the first one by using the"
+              + "\"Reply in thread\" button on a message.") }
+        </p>
+        <p>
+            { /* Always display that paragraph to prevent layout shift
+                When hiding the button */ }
+            { filterOption === ThreadFilterType.My
+                ? <button onClick={showAllThreadsCallback}>{ _t("Show all threads") }</button>
+                : <>&nbsp;</>
+            }
+        </p>
+    </aside>;
+};
+
 const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) => {
     const mxClient = useContext(MatrixClientContext);
     const roomContext = useContext(RoomContext);
@@ -216,7 +240,10 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
                     sendReadReceiptOnLoad={false} // No RR support in thread's MVP
                     timelineSet={filteredTimelineSet}
                     showUrlPreview={true}
-                    empty={<div>empty</div>}
+                    empty={<EmptyThread
+                        filterOption={filterOption}
+                        showAllThreadsCallback={() => setFilterOption(ThreadFilterType.All)}
+                    />}
                     alwaysShowTimestamps={true}
                     layout={Layout.Group}
                     hideThreadedMessages={false}

@@ -290,3 +290,61 @@ limitations under the License.
 .mx_ThreadPanel_copyLinkToThread::before {
     mask-image: url('$(res)/img/element-icons/link.svg');
 }
+
+.mx_ThreadPanel_empty {
+    border-radius: 8px;
+    background: $background;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 48px;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    padding: 20px;
+
+    h2 {
+        color: $primary-content;
+        font-weight: 600;
+        font-size: $font-18px;
+    }
+
+    p {
+        font-size: $font-15px;
+        color: $secondary-content;
+    }
+
+    button {
+        border: none;
+        background: none;
+        color: $accent;
+
+        &:hover,
+        &:active {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+}
+
+.mx_ThreadPanel_largeIcon {
+    width: 28px;
+    height: 28px;
+    padding: 18px;
+    background: $system;
+    border-radius: 50%;
+
+    &::after {
+        content: "";
+        width: inherit;
+        height: inherit;
+        mask-image: url('$(res)/img/element-icons/thread-summary.svg');
+        mask-position: center;
+        display: inline-block;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        background-color: $secondary-content;
+    }
+}
