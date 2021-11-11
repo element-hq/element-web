@@ -3331,5 +3331,14 @@
     "Spaces are ways to group rooms and people.": "Kogukonnakeskused lahendus jututubade ja inimeste ühendamiseks.",
     "Sidebar": "Külgpaan",
     "Other rooms": "Muud jututoad",
-    "Meta Spaces": "Metakogukonnad"
+    "Meta Spaces": "Metakogukonnad",
+    "Show all threads": "Näita kõiki jutulõngasid",
+    "Threads help you keep conversations on-topic and easily track them over time. Create the first one by using the \"Reply in thread\" button on a message.": "Jutulõngana püsivad vestlused teemas ja neid on ka hiljem mugav lugeda. Esimese jutulõnga loomiseks klõpsi sõnumi juurest „Vasta jutulõngas“ nuppu.",
+    "Keep discussions organised with threads": "Halda vestlusi jutulõngadena",
+    "Reply in thread": "Vasta jutulõngas",
+    "Manage rooms in this space": "Halda selle kogukonnakeskuse jututube",
+    "Automatically group all your rooms that aren't part of a space in one place.": "Automaatselt koonda ühte kohta kõik oma jututoad, mis ei kuulu mõnda kogukonda.",
+    "Rooms outside of a space": "Jututoad väljaspool seda kogukonda",
+    "Automatically group all your people together in one place.": "Automaatselt koonda kõik oma lemmikinimesed ühte kohta.",
+    "Automatically group all your favourite rooms and people together in one place.": "Automaatselt koonda kõik oma lemmikjututoad ja -inimesed ühte kohta."
 }
