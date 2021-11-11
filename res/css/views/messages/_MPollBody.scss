@@ -85,13 +85,13 @@ limitations under the License.
     }
 
     .mx_MPollBody_option_checked {
-        border-color: $accent-color;
+        border-color: $accent;
     }
 
     .mx_StyledRadioButton_checked input[type="radio"] + div {
         border-width: 2px;
-        border-color: $accent-color;
-        background-color: $accent-color;
+        border-color: $accent;
+        background-color: $accent;
         background-image: url('$(res)/img/element-icons/check-white.svg');
         background-size: 12px;
         background-repeat: no-repeat;
