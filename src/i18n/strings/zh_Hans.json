@@ -3324,5 +3324,6 @@
     "Maximise dialog": "最大化对话框",
     "Based on %(total)s votes": "基于 %(total)s 票",
     "%(number)s votes": "%(number)s 票",
-    "Show tray icon and minimise window to it on close": "显示托盘图标并在关闭时最小化窗口至托盘"
+    "Show tray icon and minimise window to it on close": "显示托盘图标并在关闭时最小化窗口至托盘",
+    "Reply in thread": "在帖子中回复"
 }
