@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
 import { EventTimelineSet } from 'matrix-js-sdk/src/models/event-timeline-set';
 import { Room } from 'matrix-js-sdk/src/models/room';
@@ -70,46 +70,23 @@ const useFilteredThreadsTimelinePanel = ({
         pendingEvents: false,
     }), []);
 
-    useEffect(() => {
-        let filteredThreads = Array.from(threads);
-        if (filterOption === ThreadFilterType.My) {
-            filteredThreads = filteredThreads.filter(([id, thread]) => {
-                return thread.rootEvent.getSender() === userId;
+    const buildThreadList = useCallback(function(timelineSet: EventTimelineSet) {
+        timelineSet.resetLiveTimeline("");
+        Array.from(threads)
+            .map(([, thread]) => thread)
+            .forEach(thread => {
+                const ownEvent = thread.rootEvent.getSender() === userId;
+                if (filterOption !== ThreadFilterType.My || ownEvent) {
+                    timelineSet.addLiveEvent(thread.rootEvent);
+                }
             });
-        }
-        // NOTE: Temporarily reverse the list until https://github.com/vector-im/element-web/issues/19393 gets properly resolved
-        // The proper list order should be top-to-bottom, like in social-media newsfeeds.
-        filteredThreads.reverse().forEach(([id, thread]) => {
-            const event = thread.rootEvent;
-            if (!event || timelineSet.findEventById(event.getId()) || event.status !== null) return;
-            timelineSet.addEventToTimeline(
-                event,
-                timelineSet.getLiveTimeline(),
-                true,
-            );
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [room, timelineSet]);
-
-    useEventEmitter(room, ThreadEvent.Update, (thread) => {
-        const event = thread.rootEvent;
-        if (
-            // If that's a reply and not an event
-            event !== thread.replyToEvent &&
-            timelineSet.findEventById(event.getId()) ||
-            event.status !== null
-        ) return;
-        if (event !== thread.events[thread.events.length - 1]) {
-            timelineSet.removeEvent(thread.events[thread.events.length - 1]);
-            timelineSet.removeEvent(event);
-        }
-        timelineSet.addEventToTimeline(
-            event,
-            timelineSet.getLiveTimeline(),
-            false,
-        );
         updateTimeline();
-    });
+    }, [filterOption, threads, updateTimeline, userId]);
+
+    useEffect(() => { buildThreadList(timelineSet); }, [timelineSet, buildThreadList]);
+
+    useEventEmitter(room, ThreadEvent.Update, () => { buildThreadList(timelineSet); });
+    useEventEmitter(room, ThreadEvent.New, () => { buildThreadList(timelineSet); });
 
     return timelineSet;
 };
