@@ -3327,5 +3327,21 @@
     "Maximise dialog": "最大化對話方塊",
     "Based on %(total)s votes": "基於 %(total)s 個投票",
     "%(number)s votes": "%(number)s 個投票",
-    "Show tray icon and minimise window to it on close": "顯示系統匣圖示並於關閉時最小化"
+    "Show tray icon and minimise window to it on close": "顯示系統匣圖示並於關閉時最小化",
+    "Show all threads": "顯示所有討論串",
+    "Keep discussions organised with threads": "使用討論串讓討論井井有條",
+    "Reply in thread": "在討論串中回覆",
+    "Manage rooms in this space": "管理此空間中的聊天室",
+    "Automatically group all your rooms that aren't part of a space in one place.": "自動將不屬於某一個空間的所有聊天室都放到某一個地方。",
+    "Rooms outside of a space": "空間外的聊天室",
+    "Automatically group all your people together in one place.": "自動將所有人們聚集在同一個地方。",
+    "Automatically group all your favourite rooms and people together in one place.": "自動將您喜愛的所有聊天室與人們集中在同一個地方。",
+    "Show all your rooms in Home, even if they're in a space.": "將您所有的聊天室顯示在首頁，即便它們位於同一個空間。",
+    "Home is useful for getting an overview of everything.": "首頁對於取得所有內容的概覽很有用。",
+    "Along with the spaces you're in, you can use some pre-built ones too.": "除了您所在的空間以外，您也可以使用一些預先建構的空間。",
+    "Spaces to show": "要顯示的空間",
+    "Spaces are ways to group rooms and people.": "空間是將聊天室與人們分組的方式。",
+    "Sidebar": "側邊欄",
+    "Other rooms": "其他聊天室",
+    "Meta Spaces": "架空空間"
 }
