@@ -1166,7 +1166,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             || this.state.actionBarFocused);
 
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        const thread = room.findThreadForEvent?.(this.props.mxEvent);
+        const thread = room?.findThreadForEvent?.(this.props.mxEvent);
 
         // Thread panel shows the timestamp of the last reply in that thread
         const ts = this.props.tileShape !== TileShape.ThreadPanel
