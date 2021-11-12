@@ -29,15 +29,14 @@ import EmailField from "../../views/auth/EmailField";
 import PassphraseField from '../../views/auth/PassphraseField';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { PASSWORD_MIN_SCORE } from '../../views/auth/RegistrationForm';
-import { IValidationResult } from "../../views/elements/Validation";
 import InlineSpinner from '../../views/elements/InlineSpinner';
 import { logger } from "matrix-js-sdk/src/logger";
 import Spinner from "../../views/elements/Spinner";
 import QuestionDialog from "../../views/dialogs/QuestionDialog";
 import ErrorDialog from "../../views/dialogs/ErrorDialog";
-import Field from "../../views/elements/Field";
 import AuthHeader from "../../views/auth/AuthHeader";
 import AuthBody from "../../views/auth/AuthBody";
+import PassphraseConfirmField from "../../views/auth/PassphraseConfirmField";
 
 enum Phase {
     // Show the forgot password inputs
@@ -72,9 +71,13 @@ interface IState {
     serverErrorIsFatal: boolean;
     serverDeadError: string;
 
-    emailFieldValid: boolean;
-    passwordFieldValid: boolean;
     currentHttpRequest?: Promise<any>;
+}
+
+enum ForgotPasswordField {
+    Email = 'field_email',
+    Password = 'field_password',
+    PasswordConfirm = 'field_password_confirm',
 }
 
 @replaceableComponent("structures.auth.ForgotPassword")
@@ -95,8 +98,6 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
         serverIsAlive: true,
         serverErrorIsFatal: false,
         serverDeadError: "",
-        emailFieldValid: false,
-        passwordFieldValid: false,
     };
 
     constructor(props: IProps) {
@@ -175,40 +176,57 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
         // refresh the server errors, just in case the server came back online
         await this.handleHttpRequest(this.checkServerLiveliness(this.props.serverConfig));
 
-        await this['email_field'].validate({ allowEmpty: false });
-        await this['password_field'].validate({ allowEmpty: false });
-
-        if (!this.state.email) {
-            this.showErrorDialog(_t('The email address linked to your account must be entered.'));
-        } else if (!this.state.emailFieldValid) {
-            this.showErrorDialog(_t("The email address doesn't appear to be valid."));
-        } else if (!this.state.password || !this.state.password2) {
-            this.showErrorDialog(_t('A new password must be entered.'));
-        } else if (!this.state.passwordFieldValid) {
-            this.showErrorDialog(_t('Please choose a strong password'));
-        } else if (this.state.password !== this.state.password2) {
-            this.showErrorDialog(_t('New passwords must match each other.'));
-        } else {
-            Modal.createTrackedDialog('Forgot Password Warning', '', QuestionDialog, {
-                title: _t('Warning!'),
-                description:
-                    <div>
-                        { _t(
-                            "Changing your password will reset any end-to-end encryption keys " +
-                            "on all of your sessions, making encrypted chat history unreadable. Set up " +
-                            "Key Backup or export your room keys from another session before resetting your " +
-                            "password.",
-                        ) }
-                    </div>,
-                button: _t('Continue'),
-                onFinished: (confirmed) => {
-                    if (confirmed) {
-                        this.submitPasswordReset(this.state.email, this.state.password);
-                    }
-                },
-            });
+        const allFieldsValid = await this.verifyFieldsBeforeSubmit();
+        if (!allFieldsValid) {
+            return;
         }
+
+        Modal.createTrackedDialog('Forgot Password Warning', '', QuestionDialog, {
+            title: _t('Warning!'),
+            description:
+                <div>
+                    { _t(
+                        "Changing your password will reset any end-to-end encryption keys " +
+                        "on all of your sessions, making encrypted chat history unreadable. Set up " +
+                        "Key Backup or export your room keys from another session before resetting your " +
+                        "password.",
+                    ) }
+                </div>,
+            button: _t('Continue'),
+            onFinished: (confirmed) => {
+                if (confirmed) {
+                    this.submitPasswordReset(this.state.email, this.state.password);
+                }
+            },
+        });
     };
+
+    private async verifyFieldsBeforeSubmit() {
+        const fieldIdsInDisplayOrder = [
+            ForgotPasswordField.Email,
+            ForgotPasswordField.Password,
+            ForgotPasswordField.PasswordConfirm,
+        ];
+
+        const invalidFields = [];
+        for (const fieldId of fieldIdsInDisplayOrder) {
+            const valid = await this[fieldId].validate({ allowEmpty: false });
+            if (!valid) {
+                invalidFields.push(this[fieldId]);
+            }
+        }
+
+        if (invalidFields.length === 0) {
+            return true;
+        }
+
+        // Focus on the first invalid field, then re-validate,
+        // which will result in the error tooltip being displayed for that field.
+        invalidFields[0].focus();
+        invalidFields[0].validate({ allowEmpty: false, focused: true });
+
+        return false;
+    }
 
     private onInputChanged = (stateKey: string, ev: React.FormEvent<HTMLInputElement>) => {
         this.setState({
@@ -226,18 +244,6 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
         Modal.createTrackedDialog('Forgot Password Error', '', ErrorDialog, {
             title,
             description,
-        });
-    }
-
-    private onEmailValidate = (result: IValidationResult) => {
-        this.setState({
-            emailFieldValid: result.valid,
-        });
-    };
-
-    private onPasswordValidate(result: IValidationResult) {
-        this.setState({
-            passwordFieldValid: result.valid,
         });
     }
 
@@ -284,11 +290,12 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
                 <div className="mx_AuthBody_fieldRow">
                     <EmailField
                         name="reset_email" // define a name so browser's password autofill gets less confused
+                        labelRequired={_t('The email address linked to your account must be entered.')}
+                        labelInvalid={_t("The email address doesn't appear to be valid.")}
                         value={this.state.email}
-                        fieldRef={field => this['email_field'] = field}
+                        fieldRef={field => this[ForgotPasswordField.Email] = field}
                         autoFocus={true}
                         onChange={this.onInputChanged.bind(this, "email")}
-                        onValidate={this.onEmailValidate}
                         onFocus={() => CountlyAnalytics.instance.track("onboarding_forgot_password_email_focus")}
                         onBlur={() => CountlyAnalytics.instance.track("onboarding_forgot_password_email_blur")}
                     />
@@ -300,18 +307,20 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
                         label={_td('New Password')}
                         value={this.state.password}
                         minScore={PASSWORD_MIN_SCORE}
+                        fieldRef={field => this[ForgotPasswordField.Password] = field}
                         onChange={this.onInputChanged.bind(this, "password")}
-                        fieldRef={field => this['password_field'] = field}
-                        onValidate={(result) => this.onPasswordValidate(result)}
                         onFocus={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword_focus")}
                         onBlur={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword_blur")}
                         autoComplete="new-password"
                     />
-                    <Field
+                    <PassphraseConfirmField
                         name="reset_password_confirm"
-                        type="password"
                         label={_t('Confirm')}
+                        labelRequired={_t("A new password must be entered.")}
+                        labelInvalid={_t("New passwords must match each other.")}
                         value={this.state.password2}
+                        password={this.state.password}
+                        fieldRef={field => this[ForgotPasswordField.PasswordConfirm] = field}
                         onChange={this.onInputChanged.bind(this, "password2")}
                         onFocus={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword2_focus")}
                         onBlur={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword2_blur")}

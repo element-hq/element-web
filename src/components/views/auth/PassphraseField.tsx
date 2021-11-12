@@ -38,7 +38,7 @@ interface IProps extends Omit<IInputProps, "onValidate"> {
     labelAllowedButUnsafe?: string;
 
     onChange(ev: React.FormEvent<HTMLElement>);
-    onValidate(result: IValidationResult);
+    onValidate?(result: IValidationResult);
 }
 
 @replaceableComponent("views.auth.PassphraseField")
@@ -98,7 +98,9 @@ class PassphraseField extends PureComponent<IProps> {
 
     onValidate = async (fieldState: IFieldState) => {
         const result = await this.validate(fieldState);
-        this.props.onValidate(result);
+        if (this.props.onValidate) {
+            this.props.onValidate(result);
+        }
         return result;
     };
 
