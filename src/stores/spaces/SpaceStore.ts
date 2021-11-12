@@ -748,9 +748,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
     };
 
-    private onAccountData = (ev: MatrixEvent, lastEvent: MatrixEvent) => {
+    private onAccountData = (ev: MatrixEvent, prevEvent?: MatrixEvent) => {
         if (!this.allRoomsInHome && ev.getType() === EventType.Direct) {
-            const lastContent = lastEvent.getContent();
+            const lastContent = prevEvent?.getContent() ?? {};
             const content = ev.getContent();
 
             const diff = objectDiff<Record<string, string[]>>(lastContent, content);
