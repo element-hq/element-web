@@ -3312,5 +3312,13 @@
     "Surround selected text when typing special characters": "Bei der Eingabe von Sonderzeichen selektierten Text damit umgeben",
     "Light high contrast": "Hell kontrastreich",
     "Can't see what you're looking for?": "Nicht das Gewünschte gefunden?",
-    "Maximised widgets": "Maximierte Widgets"
+    "Maximised widgets": "Maximierte Widgets",
+    "Show all threads": "Alle Threads anzeigen",
+    "Minimise dialog": "Dialog minimieren",
+    "Maximise dialog": "Dialog maximieren",
+    "%(number)s votes": "%(number)s Stimmen",
+    "Reply in thread": "In Thread antworten",
+    "Sidebar": "Seitenleiste",
+    "Other rooms": "Andere Räume",
+    "Meta Spaces": "Meta Spaces"
 }
