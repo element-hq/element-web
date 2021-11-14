@@ -1375,7 +1375,7 @@
     "Report Content": "Inhalt melden",
     "%(creator)s created and configured the room.": "%(creator)s hat den Raum erstellt und konfiguriert.",
     "Keep a copy of it somewhere secure, like a password manager or even a safe.": "Bewahre eine Kopie an einem sicheren Ort, wie einem Passwort-Manager oder in einem Safe auf.",
-    "Copy": "In Zwischenablage kopieren",
+    "Copy": "Kopieren",
     "Sends a message as html, without interpreting it as markdown": "Verschickt eine Nachricht im HTML-Format, ohne sie als Markdown zu darzustellen",
     "Show rooms with unread notifications first": "Räume mit ungelesenen Benachrichtigungen zuerst zeigen",
     "Show shortcuts to recently viewed rooms above the room list": "Kürzlich besuchte Räume anzeigen",
