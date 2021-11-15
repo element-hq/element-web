@@ -77,7 +77,8 @@ export default abstract class Exporter {
 
     protected async downloadZIP(): Promise<string | void> {
         const brand = SdkConfig.get().brand;
-        const filename = `${brand} - Chat Export - ${formatFullDateNoDay(new Date())}.zip`;
+        const filenameWithoutExt = `${brand} - Chat Export - ${formatFullDateNoDay(new Date())}`;
+        const filename = `${filenameWithoutExt}.zip`;
         const { default: JSZip } = await import('jszip');
 
         const zip = new JSZip();
@@ -85,7 +86,7 @@ export default abstract class Exporter {
         if (!this.cancelled) this.updateProgress("Generating a ZIP");
         else return this.cleanUp();
 
-        for (const file of this.files) zip.file(file.name, file.blob);
+        for (const file of this.files) zip.file(filenameWithoutExt + "/" + file.name, file.blob);
 
         const content = await zip.generateAsync({ type: "blob" });
 
