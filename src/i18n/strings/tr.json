@@ -2275,10 +2275,11 @@
     "Light high contrast": "Yüksek ışık kontrastı",
     "Transfer Failed": "Aktarma Başarısız",
     "Unable to transfer call": "Arama Karşıdaki kişiye aktarılamıyor",
-    "User %(userId)s is already invited to the room": "Kullanıcı %(userId)s zaten odaya davet edildi",
+    "User %(userId)s is already invited to the room": "%(userId)s Bu kullanıcı zaten odaya davet edildi",
     "This homeserver has been blocked by its administrator.": "Bu sunucu yöneticisi tarafından bloke edildi.",
     "See when people join, leave, or are invited to this room": "İnsanların bu odaya ne zaman katıldığını, ayrıldığını veya davet edildiğini görün",
     "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s Bu odadan bir mesajın sabitlemesini kaldırdı. Bütün sabitlenmiş mesajları görün.",
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s bu odaya bir mesaj sabitledi, Bütün sabitlenmiş mesajları görün.",
-    "Failed to transfer call": "Arama aktarılırken hata oluştu"
+    "Failed to transfer call": "Arama aktarılırken hata oluştu",
+    "Plain Text": "Düz Metin"
 }
