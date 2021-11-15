@@ -3336,5 +3336,15 @@
     "Spaces are ways to group rooms and people.": "Hapësirat janë mënyra për të grupuar dhoma dhe persona.",
     "Sidebar": "Anështyllë",
     "Other rooms": "Dhoma të tjera",
-    "Meta Spaces": "Hapësira Meta"
+    "Meta Spaces": "Hapësira Meta",
+    "Threads help you keep conversations on-topic and easily track them over time. Create the first one by using the \"Reply in thread\" button on a message.": "Rrjedhat ju ndihmojnë të mbani bisedat brenda teme dhe t’i ndiqni kollaj përgjatë kohe. Krijoni të parën tuaj, duke përdorur butonin “Përgjigjuni në rrjedhë” te një mesazh.",
+    "Copy link": "Kopjoji vendndodhjen",
+    "Mentions only": "Vetëm përmendje",
+    "Forget": "Harroje",
+    "Files": "Kartela",
+    "You won't get any notifications": "S’do të merrni ndonjë njoftim",
+    "Get notified only with mentions and keywords as set up in your <a>settings</a>": "Merrni njoftime vetëm për përmendje dhe fjalëkyçe që keni ujdisur te <a>rregullimet</a> tuaja",
+    "@mentions & keywords": "@përmendje & fjalëkyçe",
+    "Get notified for every message": "Merrni njoftim për çdo mesazh",
+    "Get notifications as set up in your <a>settings</a>": "Merrni njoftime siç i keni ujdisur te <a>rregullimet</a> tuaj"
 }
