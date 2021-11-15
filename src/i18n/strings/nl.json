@@ -3272,5 +3272,19 @@
     "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Bevestig uw identiteit met eenmalig inloggen om deze apparaten uit te loggen.",
     "Unable to load device list": "Kan apparatenlijst niet laden",
     "Your homeserver does not support device management.": "Uw server ondersteunt geen apparaatbeheer.",
-    "Use a more compact 'Modern' layout": "Compacte 'Moderne'-indeling gebruiken"
+    "Use a more compact 'Modern' layout": "Compacte 'Moderne'-indeling gebruiken",
+    "Maximised widgets": "Widgets maximaliseren",
+    "Sign Out": "Uitloggen",
+    "Last seen %(date)s at %(ip)s": "Laatst gezien %(date)s via %(ip)s",
+    "This device": "Dit apparaat",
+    "You aren't signed into any other devices.": "U bent niet ingelogd op andere apparaten.",
+    "Sign out %(count)s selected devices|one": "%(count)s geselecteerd apparaat uitloggen",
+    "Sign out %(count)s selected devices|other": "%(count)s geselecteerde apparaten uitloggen",
+    "Devices without encryption support": "Apparaten zonder versleuteling ondersteuning",
+    "Unverified devices": "Ongeverifieerde apparaten",
+    "Verified devices": "Geverifieerde apparaten",
+    "Other rooms": "Andere kamers",
+    "Automatically send debug logs on any error": "Automatisch foutenlogboek versturen bij een fout",
+    "Meta Spaces": "Meta Ruimtes",
+    "Rename": "Hernoemen"
 }
