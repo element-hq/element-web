@@ -48,7 +48,7 @@ if (ls) {
         }
     });
     // This file is a crude attempt at fixing global localstorage errors all over the app.
-    const { setItem, getItem, removeItem, clear } = ls;
+    const { setItem, getItem, removeItem } = ls;
     ls.setItem = (key: string, item: string) => {
         try {
             return setItem.call(ls, key, item);
@@ -82,8 +82,5 @@ if (ls) {
             }
             throw e;
         }
-    };
-    ls.clear = () => {
-        return clear.call(ls);
     };
 }
