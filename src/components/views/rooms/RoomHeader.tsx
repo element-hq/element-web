@@ -36,6 +36,9 @@ import { MatrixEvent, Room, RoomState } from 'matrix-js-sdk/src';
 import { E2EStatus } from '../../../utils/ShieldUtils';
 import { IOOBData } from '../../../stores/ThreepidInviteStore';
 import { SearchScope } from './SearchBar';
+import { ContextMenuTooltipButton } from '../../structures/ContextMenu';
+import RoomContextMenu from "../context_menus/RoomContextMenu";
+import { contextMenuBelow } from './RoomTile';
 
 export interface ISearchInfo {
     searchTerm: string;
@@ -47,7 +50,6 @@ interface IProps {
     room: Room;
     oobData?: IOOBData;
     inRoom: boolean;
-    onSettingsClick: () => void;
     onSearchClick: () => void;
     onForgetClick: () => void;
     onCallPlaced: (type: PlaceCallType) => void;
@@ -57,12 +59,22 @@ interface IProps {
     searchInfo: ISearchInfo;
 }
 
+interface IState {
+    contextMenuPosition?: DOMRect;
+}
+
 @replaceableComponent("views.rooms.RoomHeader")
-export default class RoomHeader extends React.Component<IProps> {
+export default class RoomHeader extends React.Component<IProps, IState> {
     static defaultProps = {
         editing: false,
         inRoom: false,
     };
+
+    constructor(props, context) {
+        super(props, context);
+
+        this.state = {};
+    }
 
     public componentDidMount() {
         const cli = MatrixClientPeg.get();
@@ -97,6 +109,17 @@ export default class RoomHeader extends React.Component<IProps> {
         });
     }
 
+    private onContextMenuOpenClick = (ev: React.MouseEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const target = ev.target as HTMLButtonElement;
+        this.setState({ contextMenuPosition: target.getBoundingClientRect() });
+    };
+
+    private onContextMenuCloseClick = () => {
+        this.setState({ contextMenuPosition: null });
+    };
+
     public render() {
         let searchStatus = null;
 
@@ -127,17 +150,35 @@ export default class RoomHeader extends React.Component<IProps> {
             oobName = this.props.oobData.name;
         }
 
+        let contextMenu: JSX.Element;
+        if (this.state.contextMenuPosition && this.props.room) {
+            contextMenu = (
+                <RoomContextMenu
+                    {...contextMenuBelow(this.state.contextMenuPosition)}
+                    room={this.props.room}
+                    onFinished={this.onContextMenuCloseClick}
+                />
+            );
+        }
+
         const textClasses = classNames('mx_RoomHeader_nametext', { mx_RoomHeader_settingsHint: settingsHint });
-        const name =
-            <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
+        const name = (
+            <ContextMenuTooltipButton
+                className="mx_RoomHeader_name"
+                onClick={this.onContextMenuOpenClick}
+                isExpanded={!!this.state.contextMenuPosition}
+                title={_t("Room options")}
+            >
                 <RoomName room={this.props.room}>
                     { (name) => {
                         const roomName = name || oobName;
                         return <div dir="auto" className={textClasses} title={roomName}>{ roomName }</div>;
                     } }
                 </RoomName>
-                { searchStatus }
-            </div>;
+                { this.props.room && <div className="mx_RoomHeader_chevron" /> }
+                { contextMenu }
+            </ContextMenuTooltipButton>
+        );
 
         const topicElement = <RoomTopic room={this.props.room}>
             { (topic, ref) => <div className="mx_RoomHeader_topic" ref={ref} title={topic} dir="auto">
@@ -149,7 +190,7 @@ export default class RoomHeader extends React.Component<IProps> {
         if (this.props.room) {
             roomAvatar = <DecoratedRoomAvatar
                 room={this.props.room}
-                avatarSize={32}
+                avatarSize={24}
                 oobData={this.props.oobData}
                 viewAvatarOnClick={true}
             />;
@@ -219,6 +260,7 @@ export default class RoomHeader extends React.Component<IProps> {
                     <div className="mx_RoomHeader_avatar">{ roomAvatar }</div>
                     <div className="mx_RoomHeader_e2eIcon">{ e2eIcon }</div>
                     { name }
+                    { searchStatus }
                     { topicElement }
                     { rightRow }
                     <RoomHeaderButtons room={this.props.room} />

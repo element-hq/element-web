@@ -159,7 +159,6 @@ function render(room: Room): HTMLDivElement {
             <RoomHeader
                 room={room}
                 inRoom={true}
-                onSettingsClick={() => {}}
                 onSearchClick={() => {}}
                 onForgetClick={() => {}}
                 onCallPlaced={(_type: PlaceCallType) => {}}

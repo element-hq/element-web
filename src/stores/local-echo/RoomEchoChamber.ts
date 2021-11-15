@@ -19,6 +19,7 @@ import { getRoomNotifsState, RoomNotifState, setRoomNotifsState } from "../../Ro
 import { RoomEchoContext } from "./RoomEchoContext";
 import { _t } from "../../languageHandler";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 export enum CachedRoomKey {
     NotificationVolume,
@@ -46,7 +47,7 @@ export class RoomEchoChamber extends GenericEchoChamber<RoomEchoContext, CachedR
     }
 
     private onAccountData = (event: MatrixEvent) => {
-        if (event.getType() === "m.push_rules") {
+        if (event.getType() === EventType.PushRules) {
             const currentVolume = this.properties.get(CachedRoomKey.NotificationVolume) as RoomNotifState;
             const newVolume = getRoomNotifsState(this.context.room.roomId) as RoomNotifState;
             if (currentVolume !== newVolume) {
