@@ -2274,5 +2274,7 @@
     "Kick, ban, or invite people to this room, and make you leave": "İnsanları bu odadan atın,yasaklayın ya da bu odaya davet edin ve ayrılmanızı sağlayın",
     "Light high contrast": "Yüksek ışık kontrastı",
     "Transfer Failed": "Aktarma Başarısız",
-    "Unable to transfer call": "Arama Karşıdaki kişiye aktarılamıyor"
+    "Unable to transfer call": "Arama Karşıdaki kişiye aktarılamıyor",
+    "User %(userId)s is already invited to the room": "Kullanıcı %(userId)s zaten odaya davet edildi",
+    "This homeserver has been blocked by its administrator.": "Bu sunucu yöneticisi tarafından bloke edildi."
 }
