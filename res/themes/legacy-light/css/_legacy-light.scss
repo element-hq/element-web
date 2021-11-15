@@ -176,6 +176,13 @@ $space-nav: rgba($tertiary-content, 0.15);
 
 $voipcall-plinth-color: $system;
 
+$call-view-button-on-foreground: $secondary-content;
+$call-view-button-on-background: $background;
+$call-view-button-off-foreground: $background;
+$call-view-button-off-background: $secondary-content;
+
+$video-feed-secondary-background: #394049; // XXX: Color from dark theme
+
 $username-variant1-color: #368bd6;
 $username-variant2-color: #ac3ba8;
 $username-variant3-color: #03b381;

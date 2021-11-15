@@ -179,6 +179,16 @@ $eventbubble-bg-hover: #1C2026;
 $eventbubble-reply-color: #C1C6CD;
 // ********************
 
+// VoIP
+// ********************
+$call-view-button-on-foreground: $primary-content;
+$call-view-button-on-background: $system;
+$call-view-button-off-foreground: $system;
+$call-view-button-off-background: $primary-content;
+
+$video-feed-secondary-background: $system;
+// ********************
+
 // One-off colors
 // ********************
 $kbd-border-color: #000000;

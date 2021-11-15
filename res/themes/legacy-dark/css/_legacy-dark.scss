@@ -117,7 +117,12 @@ $space-nav: rgba($panel-base, 0.1);
 
 // ********************
 
-$theme-button-bg-color: #e3e8f0;
+$call-view-button-on-foreground: $primary-content;
+$call-view-button-on-background: $system;
+$call-view-button-off-foreground: $system;
+$call-view-button-off-background: $primary-content;
+
+$video-feed-secondary-background: $system;
 
 $roomlist-button-bg-color: #1A1D23; // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-filter-active-bg-color: $roomlist-button-bg-color;

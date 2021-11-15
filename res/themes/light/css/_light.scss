@@ -259,7 +259,13 @@ $lightbox-background-bg-opacity: 0.95;
 // VoIP
 // ********************
 $voipcall-plinth-color: $system;
-// more colors to come
+
+$call-view-button-on-foreground: $secondary-content;
+$call-view-button-on-background: $background;
+$call-view-button-off-foreground: $background;
+$call-view-button-off-background: $secondary-content;
+
+$video-feed-secondary-background: #394049; // XXX: Color from dark theme
 // ********************
 
 // One-off colors

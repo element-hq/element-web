@@ -39,6 +39,31 @@ const TOOLTIP_Y_OFFSET = -24;
 
 const CONTROLS_HIDE_DELAY = 2000;
 
+interface IButtonProps {
+    state: boolean;
+    className: string;
+    onLabel: string;
+    offLabel: string;
+    onClick: () => void;
+}
+
+const CallViewToggleButton: React.FC<IButtonProps> = ({ state: isOn, className, onLabel, offLabel, onClick }) => {
+    const classes = classNames("mx_CallViewButtons_button", className, {
+        mx_CallViewButtons_button_on: isOn,
+        mx_CallViewButtons_button_off: !isOn,
+    });
+
+    return (
+        <AccessibleTooltipButton
+            className={classes}
+            onClick={onClick}
+            title={isOn ? onLabel : offLabel}
+            alignment={Alignment.Top}
+            yOffset={TOOLTIP_Y_OFFSET}
+        />
+    );
+};
+
 interface IProps {
     call: MatrixCall;
     pipMode: boolean;
@@ -142,112 +167,9 @@ export default class CallViewButtons extends React.Component<IProps, IState> {
     };
 
     public render(): JSX.Element {
-        const micClasses = classNames("mx_CallViewButtons_button", {
-            mx_CallViewButtons_button_micOn: !this.props.buttonsState.micMuted,
-            mx_CallViewButtons_button_micOff: this.props.buttonsState.micMuted,
-        });
-
-        const vidClasses = classNames("mx_CallViewButtons_button", {
-            mx_CallViewButtons_button_vidOn: !this.props.buttonsState.vidMuted,
-            mx_CallViewButtons_button_vidOff: this.props.buttonsState.vidMuted,
-        });
-
-        const screensharingClasses = classNames("mx_CallViewButtons_button", {
-            mx_CallViewButtons_button_screensharingOn: this.props.buttonsState.screensharing,
-            mx_CallViewButtons_button_screensharingOff: !this.props.buttonsState.screensharing,
-        });
-
-        const sidebarButtonClasses = classNames("mx_CallViewButtons_button", {
-            mx_CallViewButtons_button_sidebarOn: this.props.buttonsState.sidebarShown,
-            mx_CallViewButtons_button_sidebarOff: !this.props.buttonsState.sidebarShown,
-        });
-
-        // Put the other states of the mic/video icons in the document to make sure they're cached
-        // (otherwise the icon disappears briefly when toggled)
-        const micCacheClasses = classNames("mx_CallViewButtons_button", "mx_CallViewButtons_button_invisible", {
-            mx_CallViewButtons_button_micOn: this.props.buttonsState.micMuted,
-            mx_CallViewButtons_button_micOff: !this.props.buttonsState.micMuted,
-        });
-
-        const vidCacheClasses = classNames("mx_CallViewButtons_button", "mx_CallViewButtons_button_invisible", {
-            mx_CallViewButtons_button_vidOn: this.props.buttonsState.micMuted,
-            mx_CallViewButtons_button_vidOff: !this.props.buttonsState.micMuted,
-        });
-
         const callControlsClasses = classNames("mx_CallViewButtons", {
             mx_CallViewButtons_hidden: !this.state.visible,
         });
-
-        let vidMuteButton;
-        if (this.props.buttonsVisibility.vidMute) {
-            vidMuteButton = (
-                <AccessibleTooltipButton
-                    className={vidClasses}
-                    onClick={this.props.handlers.onVidMuteClick}
-                    title={this.props.buttonsState.vidMuted ? _t("Start the camera") : _t("Stop the camera")}
-                    alignment={Alignment.Top}
-                    yOffset={TOOLTIP_Y_OFFSET}
-                />
-            );
-        }
-
-        let screensharingButton;
-        if (this.props.buttonsVisibility.screensharing) {
-            screensharingButton = (
-                <AccessibleTooltipButton
-                    className={screensharingClasses}
-                    onClick={this.props.handlers.onScreenshareClick}
-                    title={this.props.buttonsState.screensharing
-                        ? _t("Stop sharing your screen")
-                        : _t("Start sharing your screen")
-                    }
-                    alignment={Alignment.Top}
-                    yOffset={TOOLTIP_Y_OFFSET}
-                />
-            );
-        }
-
-        let sidebarButton;
-        if (this.props.buttonsVisibility.sidebar) {
-            sidebarButton = (
-                <AccessibleTooltipButton
-                    className={sidebarButtonClasses}
-                    onClick={this.props.handlers.onToggleSidebarClick}
-                    title={this.props.buttonsState.sidebarShown ? _t("Hide sidebar") : _t("Show sidebar")}
-                    alignment={Alignment.Top}
-                    yOffset={TOOLTIP_Y_OFFSET}
-                />
-            );
-        }
-
-        let contextMenuButton;
-        if (this.props.buttonsVisibility.contextMenu) {
-            contextMenuButton = (
-                <ContextMenuTooltipButton
-                    className="mx_CallViewButtons_button mx_CallViewButtons_button_more"
-                    onClick={this.onMoreClick}
-                    inputRef={this.contextMenuButton}
-                    isExpanded={this.state.showMoreMenu}
-                    title={_t("More")}
-                    alignment={Alignment.Top}
-                    yOffset={TOOLTIP_Y_OFFSET}
-                />
-            );
-        }
-        let dialpadButton;
-        if (this.props.buttonsVisibility.dialpad) {
-            dialpadButton = (
-                <ContextMenuTooltipButton
-                    className="mx_CallViewButtons_button mx_CallViewButtons_dialpad"
-                    inputRef={this.dialpadButton}
-                    onClick={this.onDialpadClick}
-                    isExpanded={this.state.showDialpad}
-                    title={_t("Dialpad")}
-                    alignment={Alignment.Top}
-                    yOffset={TOOLTIP_Y_OFFSET}
-                />
-            );
-        }
 
         let dialPad;
         if (this.state.showDialpad) {
@@ -289,20 +211,53 @@ export default class CallViewButtons extends React.Component<IProps, IState> {
             >
                 { dialPad }
                 { contextMenu }
-                { dialpadButton }
-                <AccessibleTooltipButton
-                    className={micClasses}
-                    onClick={this.props.handlers.onMicMuteClick}
-                    title={this.props.buttonsState.micMuted ? _t("Unmute the microphone") : _t("Mute the microphone")}
+
+                { this.props.buttonsVisibility.dialpad && <ContextMenuTooltipButton
+                    className="mx_CallViewButtons_button mx_CallViewButtons_dialpad"
+                    inputRef={this.dialpadButton}
+                    onClick={this.onDialpadClick}
+                    isExpanded={this.state.showDialpad}
+                    title={_t("Dialpad")}
                     alignment={Alignment.Top}
                     yOffset={TOOLTIP_Y_OFFSET}
+                /> }
+                <CallViewToggleButton
+                    state={!this.props.buttonsState.micMuted}
+                    className="mx_CallViewButtons_button_mic"
+                    onLabel={_t("Mute the microphone")}
+                    offLabel={_t("Unmute the microphone")}
+                    onClick={this.props.handlers.onMicMuteClick}
                 />
-                { vidMuteButton }
-                <div className={micCacheClasses} />
-                <div className={vidCacheClasses} />
-                { screensharingButton }
-                { sidebarButton }
-                { contextMenuButton }
+                { this.props.buttonsVisibility.vidMute && <CallViewToggleButton
+                    state={!this.props.buttonsState.vidMuted}
+                    className="mx_CallViewButtons_button_vid"
+                    onLabel={_t("Stop the camera")}
+                    offLabel={_t("Start the camera")}
+                    onClick={this.props.handlers.onVidMuteClick}
+                /> }
+                { this.props.buttonsVisibility.screensharing && <CallViewToggleButton
+                    state={this.props.buttonsState.screensharing}
+                    className="mx_CallViewButtons_button_screensharing"
+                    onLabel={_t("Stop sharing your screen")}
+                    offLabel={_t("Start sharing your screen")}
+                    onClick={this.props.handlers.onScreenshareClick}
+                /> }
+                { this.props.buttonsVisibility.sidebar && <CallViewToggleButton
+                    state={this.props.buttonsState.sidebarShown}
+                    className="mx_CallViewButtons_button_sidebar"
+                    onLabel={_t("Hide sidebar")}
+                    offLabel={_t("Show sidebar")}
+                    onClick={this.props.handlers.onToggleSidebarClick}
+                /> }
+                { this.props.buttonsVisibility.contextMenu && <ContextMenuTooltipButton
+                    className="mx_CallViewButtons_button mx_CallViewButtons_button_more"
+                    onClick={this.onMoreClick}
+                    inputRef={this.contextMenuButton}
+                    isExpanded={this.state.showMoreMenu}
+                    title={_t("More")}
+                    alignment={Alignment.Top}
+                    yOffset={TOOLTIP_Y_OFFSET}
+                /> }
                 <AccessibleTooltipButton
                     className="mx_CallViewButtons_button mx_CallViewButtons_button_hangup"
                     onClick={this.props.handlers.onHangupClick}
