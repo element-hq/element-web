@@ -74,7 +74,7 @@
     "Invites": "Invitaciones",
     "Invites user with given id to current room": "Invita al usuario con la ID dada a la sala actual",
     "Sign in with": "Iniciar sesión con",
-    "Join Room": "Unirme a la Sala",
+    "Join Room": "Unirme a la sala",
     "Kick": "Echar",
     "Kicks user with given id": "Echa al usuario con la ID dada",
     "Labs": "Experimentos",
@@ -3328,5 +3328,11 @@
     "Manage rooms in this space": "Gestionar las salas del espacio",
     "Rooms outside of a space": "Salas fuera de un espacio",
     "Sidebar": "Barra lateral",
-    "Other rooms": "Otras salas"
+    "Other rooms": "Otras salas",
+    "Copy link": "Copiar enlace",
+    "Mentions only": "Solo menciones",
+    "You won't get any notifications": "No recibirás ninguna notificación",
+    "@mentions & keywords": "@menciones y palabras clave",
+    "Get notified for every message": "Recibe notificaciones para todos los mensajes",
+    "Get notifications as set up in your <a>settings</a>": "Recibe notificaciones según tus <a>ajustes</a>"
 }
