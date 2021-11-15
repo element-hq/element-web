@@ -583,15 +583,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         // Check if user has previously chosen to hide the app drawer for this
         // room. If so, do not show apps
-        const hideWidgetDrawer = localStorage.getItem(
-            room.roomId + "_hide_widget_drawer");
+        const hideWidgetKey = room.roomId + "_hide_widget_drawer";
+        const hideWidgetDrawer = localStorage.getItem(hideWidgetKey);
 
-        // This is confusing, but it means to say that we default to the tray being
-        // hidden unless the user clicked to open it.
-        const isManuallyShown = hideWidgetDrawer === "false";
+        // If unset show the Tray
+        // Otherwise (in case the user set hideWidgetDrawer by clicking the button) follow the parameter.
+        const isManuallyShown = hideWidgetDrawer ? hideWidgetDrawer === "false": true;
 
         const widgets = WidgetLayoutStore.instance.getContainerWidgets(room, Container.Top);
-        return widgets.length > 0 || isManuallyShown;
+        return isManuallyShown && widgets.length > 0;
     }
 
     componentDidMount() {
