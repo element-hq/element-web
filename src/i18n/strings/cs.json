@@ -1569,7 +1569,7 @@
     "Ask %(displayName)s to scan your code:": "Požádejte uživatele %(displayName)s o naskenování tohoto kódu pro vaše ověření:",
     "If you can't scan the code above, verify by comparing unique emoji.": "Pokud vám skenování kódů nefunguje, ověřte se porovnáním emoji.",
     "You've successfully verified %(displayName)s!": "Úspěšně jste ověřili uživatele %(displayName)s!",
-    "Got it": "Dobře",
+    "Got it": "Rozumím",
     "Encryption enabled": "Šifrování je zapnuté",
     "Encryption not enabled": "Šifrování je vypnuté",
     "The encryption used by this room isn't supported.": "Šifrování používané v této místnosti není podporované.",
