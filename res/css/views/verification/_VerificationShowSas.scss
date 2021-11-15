@@ -67,8 +67,5 @@ limitations under the License.
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-
-    .mx_AccessibleButton {
-        margin-inline: 9px;
-    }
+    gap: 9px;
 }
