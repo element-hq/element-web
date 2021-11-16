@@ -443,7 +443,7 @@ $left-gutter: 64px;
 .mx_EventTile_e2eIcon_normal {
     &::after {
         mask-image: url('$(res)/img/e2e/normal.svg');
-        background-color: $composer-e2e-icon-color;
+        background-color: $header-panel-text-primary-color;
     }
     opacity: 1;
 }

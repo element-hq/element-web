@@ -48,11 +48,6 @@ $h3-color: $primary-content;
 $focus-bg-color: $room-highlight-color;
 $roomtopic-color: $text-secondary-color;
 $light-fg-color: $header-panel-text-secondary-color;
-$composer-e2e-icon-color: $header-panel-text-primary-color;
-$header-divider-color: $header-panel-text-primary-color;
-$groupFilterPanel-button-color: $header-panel-text-primary-color;
-$groupheader-button-color: $header-panel-text-primary-color;
-$rightpanel-button-color: $header-panel-text-primary-color;
 $muted-fg-color: $header-panel-text-primary-color;
 $info-plinth-bg-color: $header-panel-bg-color;
 $dark-panel-bg-color: $header-panel-bg-color;
@@ -79,7 +74,6 @@ $input-border-color: rgba(231, 231, 231, 0.2);
 $input-darker-bg-color: #181b21;
 $input-darker-fg-color: #61708b;
 $input-lighter-bg-color: #f2f5f8;
-$input-focused-border-color: #238cf5;
 // ********************
 
 // Menu
@@ -122,7 +116,6 @@ $widget-body-bg-color: rgba(141, 151, 165, 0.2);
 // ********************
 $tab-label-fg-color: $primary-content;
 $tab-label-active-fg-color: $primary-content;
-$tab-label-active-icon-bg-color: $primary-content;
 // ********************
 
 // Buttons

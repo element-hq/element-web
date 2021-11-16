@@ -53,6 +53,7 @@ $icon-button-color: $quaternary-content;
 
 // Colors that aren't in Figma - we need to get rid of these
 // ********************
+$header-panel-text-primary-color: #91A1C0;
 $muted-fg-color: #61708b;
 $light-fg-color: #747474;
 $focus-bg-color: #dddddd;
@@ -72,12 +73,7 @@ $strong-input-border-color: #c7c7c7;
 $neutral-badge-color: #dbdbdb;
 $preview-widget-bar-color: #ddd;
 $topleftmenu-color: #212121;
-$groupFilterPanel-button-color: #91A1C0;
-$groupheader-button-color: #91A1C0;
-$rightpanel-button-color: #91A1C0;
 $roomtopic-color: #9e9e9e;
-$composer-e2e-icon-color: #91A1C0;
-$header-divider-color: #91A1C0;
 $groupFilterPanel-bg-color: rgba(232, 232, 232, 0.77);
 $progressbar-bg-color: rgba(141, 151, 165, 0.2);
 $panel-gradient: rgba(242, 245, 248, 0), rgba(242, 245, 248, 1);
@@ -91,7 +87,6 @@ $memberstatus-placeholder-color: $muted-fg-color;
 // Blockquote
 // ********************
 $blockquote-bar-color: #ddd;
-$blockquote-fg-color: #777;
 // ********************
 
 // Tooltip
@@ -103,13 +98,13 @@ $tooltip-timeline-fg-color: $background;
 // Widget
 // ********************
 $widget-menu-bar-bg-color: $secondary-accent-color;
-$widget-body-bg-color: #FFF;
+$widget-body-bg-color: $background;
 // ********************
 
 // Menu
 // ********************
 $menu-border-color: #e7e7e7;
-$menu-bg-color: #fff;
+$menu-bg-color: $system;
 $menu-box-shadow-color: rgba(118, 131, 156, 0.6);
 $menu-selected-color: #f5f8fa;
 // ********************
@@ -119,7 +114,7 @@ $menu-selected-color: #f5f8fa;
 $settings-grey-fg-color: #a2a2a2;
 $settings-profile-overlay-placeholder-fg-color: #2e2f32;
 $settings-profile-button-bg-color: #e7e7e7;
-$settings-subsection-fg-color: #61708b;
+$settings-subsection-fg-color: $muted-fg-color;
 // ********************
 
 // RoomHeader
@@ -150,7 +145,7 @@ $input-border-color: #e7e7e7;
 $input-darker-bg-color: $quinary-content;
 $input-darker-fg-color: #9fa9ba;
 $input-lighter-bg-color: #f2f5f8;
-$input-focused-border-color: #238cf5;
+$input-focused-border-color: $accent-alt;
 // ********************
 
 // Dialog
@@ -173,7 +168,7 @@ $imagebody-giflabel-color: rgba(255, 255, 255, 1);
 $roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-bg-color: rgba(245, 245, 245, 0.90);
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%);
-$roomtile-default-badge-bg-color: #61708b;
+$roomtile-default-badge-bg-color: $muted-fg-color;
 // ********************
 
 // e2e
@@ -188,12 +183,11 @@ $e2e-warning-color: #ba6363;
 // ********************
 $tab-label-fg-color: #45474a;
 $tab-label-active-fg-color: $background;
-$tab-label-active-icon-bg-color: $tab-label-active-fg-color;
 // ********************
 
 // Buttons
 // ********************
-$button-primary-fg-color: #ffffff;
+$button-primary-fg-color: $background;
 $button-secondary-bg-color: $accent-fg-color;
 $button-danger-fg-color: $background;
 $button-danger-disabled-fg-color: $background;
@@ -203,7 +197,7 @@ $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
 // Toggle switch
 // ********************
 $togglesw-off-color: #c1c9d6;
-$togglesw-ball-color: #fff;
+$togglesw-ball-color: $background;
 // ********************
 
 // Authpage
@@ -213,7 +207,7 @@ $authpage-modal-bg-color: rgba(245, 245, 245, 0.90);
 $authpage-focus-bg-color: #dddddd;
 $authpage-lang-color: #4e5054;
 $authpage-primary-color: #232f32;
-$authpage-secondary-color: #61708b;
+$authpage-secondary-color: $muted-fg-color;
 // ********************
 
 // Message action bar
@@ -251,7 +245,7 @@ $eventbubble-reply-color: $quaternary-content;
 
 // Lightbox
 // ********************
-$lightbox-fg-color: #ffffff;
+$lightbox-fg-color: $background;
 $lightbox-background-bg-color: #000;
 $lightbox-background-bg-opacity: 0.95;
 // ********************

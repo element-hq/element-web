@@ -112,7 +112,6 @@ $neutral-badge-color: #dbdbdb;
 $preview-widget-bar-color: #ddd;
 
 $blockquote-bar-color: #ddd;
-$blockquote-fg-color: #777;
 
 $settings-grey-fg-color: #a2a2a2;
 $settings-profile-overlay-placeholder-fg-color: #2e2f32;
@@ -124,18 +123,14 @@ $rte-code-bg-color: rgba(0, 0, 0, 0.04);
 $rte-room-pill-color: #aaa;
 $rte-group-pill-color: #aaa;
 
+$header-panel-text-primary-color: #91a1c0;
+
 $topleftmenu-color: #212121;
 $roomheader-bg-color: $primary-bg-color;
 $roomheader-addroom-bg-color: #91a1c0;
 $roomheader-addroom-fg-color: $accent-fg-color;
-$groupFilterPanel-button-color: #91a1c0;
-$groupheader-button-color: #91a1c0;
-$rightpanel-button-color: #91a1c0;
 $icon-button-color: #91a1c0;
 $roomtopic-color: #9e9e9e;
-
-$composer-e2e-icon-color: #91a1c0;
-$header-divider-color: #91a1c0;
 
 // ********************
 
@@ -230,7 +225,6 @@ $lightbox-border-color: #ffffff;
 // Tabbed views
 $tab-label-fg-color: #45474a;
 $tab-label-active-fg-color: #ffffff;
-$tab-label-active-icon-bg-color: $tab-label-active-fg-color;
 
 // Buttons
 $button-primary-fg-color: #ffffff;

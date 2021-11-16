@@ -49,7 +49,7 @@ limitations under the License.
     }
 
     .mx_TabbedView_tabLabel_active .mx_TabbedView_maskedIcon::before {
-        background-color: $tab-label-active-icon-bg-color;
+        background-color: $tab-label-active-fg-color;
     }
 
     .mx_TabbedView_maskedIcon {

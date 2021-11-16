@@ -137,13 +137,6 @@ limitations under the License.
     animation: 0.2s visualbell;
 }
 
-.mx_MessageComposer_input blockquote {
-    color: $blockquote-fg-color;
-    margin: 0 0 16px;
-    padding: 0 15px;
-    border-left: 4px solid $blockquote-bar-color;
-}
-
 .mx_MessageComposer_input pre {
     background-color: $rte-code-bg-color;
     border-radius: 3px;
