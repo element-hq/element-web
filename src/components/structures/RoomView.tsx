@@ -332,15 +332,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private checkWidgets = (room) => {
         this.setState({
-            hasPinnedWidgets: WidgetLayoutStore.instance.hasPinnedWidgets(this.state.room),
-            mainSplitContentType: this.getMainSplitContentType(),
-            showApps: this.shouldShowApps(this.state.room),
+            hasPinnedWidgets: WidgetLayoutStore.instance.hasPinnedWidgets(room),
+            mainSplitContentType: this.getMainSplitContentType(room),
+            showApps: this.shouldShowApps(room),
         });
     };
 
-    private getMainSplitContentType = () => {
+    private getMainSplitContentType = (room) => {
         // TODO-video check if video should be displayed in main panel
-        return (WidgetLayoutStore.instance.hasMaximisedWidget(this.state.room))
+        return (WidgetLayoutStore.instance.hasMaximisedWidget(room))
             ? MainSplitContentType.MaximisedWidget
             : MainSplitContentType.Timeline;
     };
