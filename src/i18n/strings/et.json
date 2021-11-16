@@ -3349,5 +3349,10 @@
     "Get notified only with mentions and keywords as set up in your <a>settings</a>": "Soovin teavitusi sellisena mainimiste ja võtmesõnade puhul, nagu ma neid olen <a>seadistanud</a>",
     "@mentions & keywords": "@mainimiste ja võtmesõnade puhul",
     "Get notified for every message": "Soovin teavitusi iga sõnumi puhul",
-    "Get notifications as set up in your <a>settings</a>": "Soovin teavitusi sellisena, nagu ma neid olen <a>seadistanud</a>"
+    "Get notifications as set up in your <a>settings</a>": "Soovin teavitusi sellisena, nagu ma neid olen <a>seadistanud</a>",
+    "Close this widget to view it in this panel": "Sellel paneelil kuvamiseks sulge see vidin",
+    "Unpin this widget to view it in this panel": "Sellel paneelil kuvamiseks eemalda vidin lemmikutest",
+    "Maximise widget": "Suurenda vidinat",
+    "sends rainfall": "saadab vihmasaju",
+    "Sends the given message with rainfall": "Lisab sellele sõnumile vihmasaju"
 }

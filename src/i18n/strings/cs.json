@@ -3353,5 +3353,7 @@
     "Get notified only with mentions and keywords as set up in your <a>settings</a>": "Dostávat oznámení pouze o zmínkách a klíčových slovech podle <a>nastavení</a>",
     "@mentions & keywords": "@zmínky a klíčová slova",
     "Get notified for every message": "Dostávat oznámení o každé zprávě",
-    "Get notifications as set up in your <a>settings</a>": "Dostávat oznámení podle <a>nastavení</a>"
+    "Get notifications as set up in your <a>settings</a>": "Dostávat oznámení podle <a>nastavení</a>",
+    "sends rainfall": "pošle dešťové srážky",
+    "Sends the given message with rainfall": "Pošle zprávu s dešťovými srážkami"
 }
