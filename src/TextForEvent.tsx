@@ -623,7 +623,7 @@ function textForWidgetEvent(event: MatrixEvent): () => string | null {
 
 function textForWidgetLayoutEvent(event: MatrixEvent): () => string | null {
     const senderName = event.sender?.name || event.getSender();
-    return () => _t("%(senderName)s has updated the widget layout", { senderName });
+    return () => _t("%(senderName)s has updated the room layout", { senderName });
 }
 
 function textForMjolnirEvent(event: MatrixEvent): () => string | null {
