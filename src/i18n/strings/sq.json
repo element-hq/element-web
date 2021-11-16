@@ -3352,5 +3352,7 @@
     "Reset event store?": "Të rikthehet te parazgjedhjet arkivi i akteve?",
     "Flair won't be available in Spaces for the foreseeable future.": "Flair s’do të jetë e përdorshme te Hapësirat për të ardhmen e parashikueshme.",
     "Favourited": "U bë e parapëlqyer",
-    "Dialpad": "Butona numrash"
+    "Dialpad": "Butona numrash",
+    "sends rainfall": "dërgon shi",
+    "Sends the given message with rainfall": "Dërgoje mesazhin e dhënë me shi"
 }
