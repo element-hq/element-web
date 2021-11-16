@@ -43,7 +43,7 @@ import Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import Spinner from "../../../../components/views/elements/Spinner";
 import { TrustInfo } from "matrix-js-sdk/src/crypto/backup";
-import { CrossSigningKeys } from "matrix-js-sdk";
+import { CrossSigningKeys } from "matrix-js-sdk/src";
 import InteractiveAuthDialog from "../../../../components/views/dialogs/InteractiveAuthDialog";
 import { IRecoveryKey } from "matrix-js-sdk/src/crypto/api";
 import { IValidationResult } from "../../../../components/views/elements/Validation";
