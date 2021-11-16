@@ -3343,5 +3343,14 @@
     "Show all threads": "Mostra tutte le conversazioni",
     "Threads help you keep conversations on-topic and easily track them over time. Create the first one by using the \"Reply in thread\" button on a message.": "Le conversazioni ti aiutano a tenere le discussioni in tema e a rintracciarle facilmente nel tempo. Crea la prima usando il pulsante \"Rispondi nella conversazione\" su un messaggio.",
     "Keep discussions organised with threads": "Tieni le discussioni organizzate in conversazioni",
-    "Manage rooms in this space": "Gestisci le stanze in questo spazio"
+    "Manage rooms in this space": "Gestisci le stanze in questo spazio",
+    "Copy link": "Copia collegamento",
+    "Mentions only": "Solo le menzioni",
+    "Forget": "Dimentica",
+    "Files": "File",
+    "You won't get any notifications": "Non riceverai alcuna notifica",
+    "Get notified only with mentions and keywords as set up in your <a>settings</a>": "Ricevi notifiche solo per menzioni e parole chiave come configurato nelle tue <a>impostazioni</a>",
+    "@mentions & keywords": "@menzioni e parole chiave",
+    "Get notified for every message": "Ricevi notifiche per ogni messaggio",
+    "Get notifications as set up in your <a>settings</a>": "Ricevi notifiche come configurato nelle tue <a>impostazioni</a>"
 }
