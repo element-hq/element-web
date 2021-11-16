@@ -138,14 +138,28 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
         mx_RoomSummaryCard_Button_pinned: isPinned,
     });
 
+    const isMaximised = WidgetLayoutStore.instance.isInContainer(room, app, Container.Center);
+    const toggleMaximised = isMaximised
+        ? () => { WidgetLayoutStore.instance.moveToContainer(room, app, Container.Right); }
+        : () => { WidgetLayoutStore.instance.moveToContainer(room, app, Container.Center); };
+
+    const maximiseTitle = isMaximised ? _t("Close") : _t("Maximise widget");
+
+    let openTitle = "";
+    if (isPinned) {
+        openTitle = _t("Unpin this widget to view it in this panel");
+    } else if (isMaximised) {
+        openTitle =_t("Close this widget to view it in this panel");
+    }
+
     return <div className={classes} ref={handle}>
         <AccessibleTooltipButton
             className="mx_RoomSummaryCard_icon_app"
             onClick={onOpenWidgetClick}
             // only show a tooltip if the widget is pinned
-            title={isPinned ? _t("Unpin a widget to view it in this panel") : ""}
-            forceHide={!isPinned}
-            disabled={isPinned}
+            title={openTitle}
+            forceHide={!(isPinned || isMaximised)}
+            disabled={isPinned || isMaximised}
             yOffset={-48}
         >
             <WidgetAvatar app={app} />
@@ -154,7 +168,10 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
         </AccessibleTooltipButton>
 
         <ContextMenuTooltipButton
-            className="mx_RoomSummaryCard_app_options"
+            className={classNames({
+                "mx_RoomSummaryCard_app_options": true,
+                "mx_RoomSummaryCard_maximised_widget": SettingsStore.getValue("feature_maximised_widgets"),
+            })}
             isExpanded={menuDisplayed}
             onClick={openMenu}
             title={_t("Options")}
@@ -168,6 +185,13 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
             disabled={cannotPin}
             yOffset={-24}
         />
+        { SettingsStore.getValue("feature_maximised_widgets") &&
+        <AccessibleTooltipButton
+            className={isMaximised ? "mx_RoomSummaryCard_app_minimise" : "mx_RoomSummaryCard_app_maximise"}
+            onClick={toggleMaximised}
+            title={maximiseTitle}
+            yOffset={-24}
+        /> }
 
         { contextMenu }
     </div>;

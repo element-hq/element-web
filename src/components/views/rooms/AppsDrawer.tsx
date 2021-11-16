@@ -47,7 +47,8 @@ interface IProps {
 }
 
 interface IState {
-    apps: IApp[];
+    // @ts-ignore - TS wants a string key, but we know better
+    apps: {[id: Container]: IApp[]};
     resizingVertical: boolean; // true when changing the height of the apps drawer
     resizingHorizontal: boolean; // true when chagning the distribution of the width between widgets
     resizing: boolean;
@@ -118,7 +119,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
                 this.resizeContainer.classList.remove("mx_AppsDrawer_resizing");
                 WidgetLayoutStore.instance.setResizerDistributions(
                     this.props.room, Container.Top,
-                    this.state.apps.slice(1).map((_, i) => this.resizer.forHandleAt(i).size),
+                    this.topApps().slice(1).map((_, i) => this.resizer.forHandleAt(i).size),
                 );
                 this.setState({ resizingHorizontal: false });
             },
@@ -148,7 +149,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         if (prevProps.userId !== this.props.userId || prevProps.room !== this.props.room) {
             // Room has changed, update apps
             this.updateApps();
-        } else if (this.getAppsHash(this.state.apps) !== this.getAppsHash(prevState.apps)) {
+        } else if (this.getAppsHash(this.topApps()) !== this.getAppsHash(prevState.apps[Container.Top])) {
             this.loadResizerPreferences();
         }
     }
@@ -163,7 +164,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
 
     private loadResizerPreferences = (): void => {
         const distributions = WidgetLayoutStore.instance.getResizerDistributions(this.props.room, Container.Top);
-        if (this.state.apps && (this.state.apps.length - 1) === distributions.length) {
+        if (this.state.apps && (this.topApps().length - 1) === distributions.length) {
             distributions.forEach((size, i) => {
                 const distributor = this.resizer.forHandleAt(i);
                 if (distributor) {
@@ -200,8 +201,16 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
                 break;
         }
     };
-
-    private getApps = (): IApp[] => WidgetLayoutStore.instance.getContainerWidgets(this.props.room, Container.Top);
+    // @ts-ignore - TS wants a string key, but we know better
+    private getApps = (): { [id: Container]: IApp[] } => {
+        // @ts-ignore
+        const appsDict: { [id: Container]: IApp[] } = {};
+        appsDict[Container.Top] = WidgetLayoutStore.instance.getContainerWidgets(this.props.room, Container.Top);
+        appsDict[Container.Center] = WidgetLayoutStore.instance.getContainerWidgets(this.props.room, Container.Center);
+        return appsDict;
+    };
+    private topApps = (): IApp[] => this.state.apps[Container.Top];
+    private centerApps = (): IApp[] => this.state.apps[Container.Center];
 
     private updateApps = (): void => {
         this.setState({
@@ -211,8 +220,9 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
 
     public render(): JSX.Element {
         if (!this.props.showApps) return <div />;
-
-        const apps = this.state.apps.map((app, index, arr) => {
+        const widgetIsMaxmised: boolean = this.centerApps().length > 0;
+        const appsToDisplay = widgetIsMaxmised ? this.centerApps() : this.topApps();
+        const apps = appsToDisplay.map((app, index, arr) => {
             return (<AppTile
                 key={app.id}
                 app={app}
@@ -242,33 +252,42 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
 
         const classes = classNames({
             mx_AppsDrawer: true,
+            mx_AppsDrawer_maximise: widgetIsMaxmised,
             mx_AppsDrawer_fullWidth: apps.length < 2,
             mx_AppsDrawer_resizing: this.state.resizing,
             mx_AppsDrawer_2apps: apps.length === 2,
             mx_AppsDrawer_3apps: apps.length === 3,
         });
+        const appConatiners =
+            <div className="mx_AppsContainer" ref={this.collectResizer}>
+                { apps.map((app, i) => {
+                    if (i < 1) return app;
+                    return <React.Fragment key={app.key}>
+                        <ResizeHandle reverse={i > apps.length / 2} />
+                        { app }
+                    </React.Fragment>;
+                }) }
+            </div>;
+
+        let drawer;
+        if (widgetIsMaxmised) {
+            drawer = appConatiners;
+        } else {
+            drawer = <PersistentVResizer
+                room={this.props.room}
+                minHeight={100}
+                maxHeight={(this.props.maxHeight || !widgetIsMaxmised) ? this.props.maxHeight - 50 : undefined}
+                handleClass="mx_AppsContainer_resizerHandle"
+                handleWrapperClass="mx_AppsContainer_resizerHandleContainer"
+                className="mx_AppsContainer_resizer"
+                resizeNotifier={this.props.resizeNotifier}>
+                { appConatiners }
+            </PersistentVResizer>;
+        }
 
         return (
             <div className={classes}>
-                <PersistentVResizer
-                    room={this.props.room}
-                    minHeight={100}
-                    maxHeight={this.props.maxHeight ? this.props.maxHeight - 50 : undefined}
-                    handleClass="mx_AppsContainer_resizerHandle"
-                    handleWrapperClass="mx_AppsContainer_resizerHandleContainer"
-                    className="mx_AppsContainer_resizer"
-                    resizeNotifier={this.props.resizeNotifier}
-                >
-                    <div className="mx_AppsContainer" ref={this.collectResizer}>
-                        { apps.map((app, i) => {
-                            if (i < 1) return app;
-                            return <React.Fragment key={app.key}>
-                                <ResizeHandle reverse={i > apps.length / 2} />
-                                { app }
-                            </React.Fragment>;
-                        }) }
-                    </div>
-                </PersistentVResizer>
+                { drawer }
                 { spinner }
             </div>
         );

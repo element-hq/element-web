@@ -78,7 +78,7 @@ limitations under the License.
 }
 
 .mx_HostSignup_maximize_button {
-    mask: url('$(res)/img/feather-customised/maximise.svg');
+    mask: url("$(res)/img/element-icons/maximise-expand.svg");
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: cover;
@@ -92,7 +92,7 @@ limitations under the License.
 }
 
 .mx_HostSignup_minimize_button {
-    mask: url('$(res)/img/feather-customised/minimise.svg');
+    mask: url("$(res)/img/element-icons/minimise-collapse.svg");
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: cover;

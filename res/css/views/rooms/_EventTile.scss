@@ -546,13 +546,13 @@ $left-gutter: 64px;
     mask-size: 75%;
     mask-position: center;
     mask-repeat: no-repeat;
-    mask-image: url($collapse-button-url);
+    mask-image: url("$(res)/img/element-icons/minimise-collapse.svg");
 }
 .mx_EventTile_expandButton {
     mask-size: 75%;
     mask-position: center;
     mask-repeat: no-repeat;
-    mask-image: url($expand-button-url);
+    mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
 }
 
 .mx_EventTile_body .mx_EventTile_pre_container:focus-within .mx_EventTile_copyButton,
