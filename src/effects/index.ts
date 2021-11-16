@@ -18,6 +18,7 @@ import { _t, _td } from "../languageHandler";
 import { ConfettiOptions } from "./confetti";
 import { Effect } from "./effect";
 import { FireworksOptions } from "./fireworks";
+import { RainfallOptions } from "./rainfall";
 import { SnowfallOptions } from "./snowfall";
 import { SpaceInvadersOptions } from "./spaceinvaders";
 
@@ -50,6 +51,17 @@ export const CHAT_EFFECTS: Array<Effect<{ [key: string]: any }>> = [
             gravity: 0.05,
         },
     } as Effect<FireworksOptions>,
+    {
+        emojis: ['🌧️', '⛈️', '🌦️'],
+        msgType: 'io.element.effect.rainfall',
+        command: 'rainfall',
+        description: () => _td("Sends the given message with rainfall"),
+        fallbackMessage: () => _t("sends rainfall") + " 🌧️",
+        options: {
+            maxCount: 600,
+            speed: 10,
+        },
+    } as Effect<RainfallOptions>,
     {
         emojis: ['❄', '🌨'],
         msgType: 'io.element.effect.snowfall',
