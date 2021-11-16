@@ -2234,7 +2234,7 @@
     "Create a space": "创建空间",
     "Fill Screen": "填充屏幕",
     "sends snowfall": "发送雪球",
-    "Sends the given message with snowfall": "附加雪球发送",
+    "Sends the given message with snowfall": "附加雪球发送给定信息",
     "sends confetti": "发送五彩纸屑",
     "Sends the given message with confetti": "附加五彩纸屑发送",
     "Sends the given message with fireworks": "附加烟火发送",
@@ -3351,5 +3351,7 @@
     "Get notified only with mentions and keywords as set up in your <a>settings</a>": "如 <a>设置</a>中设定的那样仅通知提及和关键词",
     "@mentions & keywords": "@提及 & 关键词",
     "Get notified for every message": "获得每条消息的通知",
-    "Get notifications as set up in your <a>settings</a>": "如 <a>设置</a>中设定的那样获取通知"
+    "Get notifications as set up in your <a>settings</a>": "如 <a>设置</a>中设定的那样获取通知",
+    "sends rainfall": "发送降雨",
+    "Sends the given message with rainfall": "附加降雨发送给定的消息"
 }
