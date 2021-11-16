@@ -3324,5 +3324,12 @@
     "Based on %(total)s votes": "%(total)s szavazatot alapul véve",
     "%(number)s votes": "%(number)s szavazat",
     "Show tray icon and minimise window to it on close": "Tálcaikon mutatása és az ablak összecsukása bezáráskor",
-    "Reply in thread": "Válasz az üzenetszálban"
+    "Reply in thread": "Válasz az üzenetszálban",
+    "Automatically group all your favourite rooms and people together in one place.": "Kedvenc személyek és szobák automatikus csoportosítása egy helyre.",
+    "Spaces to show": "Megjelenítendő terek",
+    "Spaces are ways to group rooms and people.": "Terek használatával lehet csoportosítani szobákat és embereket.",
+    "Sidebar": "Oldalsáv",
+    "Other rooms": "További szobák",
+    "sends rainfall": "esőt küld",
+    "Sends the given message with rainfall": "Az üzenet elküldése esővel"
 }
