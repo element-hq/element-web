@@ -3344,5 +3344,14 @@
     "Sidebar": "側邊欄",
     "Other rooms": "其他聊天室",
     "Meta Spaces": "架空空間",
-    "Threads help you keep conversations on-topic and easily track them over time. Create the first one by using the \"Reply in thread\" button on a message.": "討論串可協助您讓討論切合主題，並隨著時間推移輕鬆地追蹤它們。使用訊息上的「在討論串中回覆」按鈕建立第一個。"
+    "Threads help you keep conversations on-topic and easily track them over time. Create the first one by using the \"Reply in thread\" button on a message.": "討論串可協助您讓討論切合主題，並隨著時間推移輕鬆地追蹤它們。使用訊息上的「在討論串中回覆」按鈕建立第一個。",
+    "Copy link": "複製連結",
+    "Mentions only": "僅提及",
+    "Forget": "忘記",
+    "Files": "檔案",
+    "You won't get any notifications": "您不會收到任何通知",
+    "Get notified only with mentions and keywords as set up in your <a>settings</a>": "僅在您的<a>設定</a>中設定提及與關鍵字時收到通知",
+    "@mentions & keywords": "@提及與關鍵字",
+    "Get notified for every message": "收到所有訊息的通知",
+    "Get notifications as set up in your <a>settings</a>": "取得您在<a>設定</a>中設定好的通知"
 }
