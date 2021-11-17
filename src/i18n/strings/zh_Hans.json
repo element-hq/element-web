@@ -3353,5 +3353,8 @@
     "Get notified for every message": "获得每条消息的通知",
     "Get notifications as set up in your <a>settings</a>": "如 <a>设置</a>中设定的那样获取通知",
     "sends rainfall": "发送降雨",
-    "Sends the given message with rainfall": "附加降雨发送给定的消息"
+    "Sends the given message with rainfall": "附加降雨发送给定的消息",
+    "Close this widget to view it in this panel": "关闭此小部件在此面板中查看",
+    "Unpin this widget to view it in this panel": "取消固定此小部件在此面板中查看它",
+    "Maximise widget": "最大化小部件"
 }
