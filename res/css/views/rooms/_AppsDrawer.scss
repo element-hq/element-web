@@ -228,15 +228,12 @@ $MinWidth: 240px;
     margin: 0 5px;
 
     &.mx_AppTileMenuBar_iconButton_minWidget {
-        width: 10px;
-        height: 12px;
         mask-size: auto 10px;
         mask-image: url("$(res)/img/element-icons/minimise-collapse.svg");
     }
 
     &.mx_AppTileMenuBar_iconButton_maxWidget {
-        width: 11px;
-        height: 11px;
+        mask-size: auto 10px;
         mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
     }
 
