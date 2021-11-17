@@ -324,7 +324,9 @@ export async function getStoredSessionVars(): Promise<IStoredSession> {
     let accessToken;
     try {
         accessToken = await StorageManager.idbLoad("account", "mx_access_token");
-    } catch (e) {}
+    } catch (e) {
+        logger.error("StorageManager.idbLoad failed for account:mx_access_token", e);
+    }
     if (!accessToken) {
         accessToken = localStorage.getItem("mx_access_token");
         if (accessToken) {
@@ -332,7 +334,9 @@ export async function getStoredSessionVars(): Promise<IStoredSession> {
                 // try to migrate access token to IndexedDB if we can
                 await StorageManager.idbSave("account", "mx_access_token", accessToken);
                 localStorage.removeItem("mx_access_token");
-            } catch (e) {}
+            } catch (e) {
+                logger.error("migration of access token to IndexedDB failed", e);
+            }
         }
     }
     // if we pre-date storing "mx_has_access_token", but we retrieved an access
@@ -858,7 +862,9 @@ async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void
 
         try {
             await StorageManager.idbDelete("account", "mx_access_token");
-        } catch (e) {}
+        } catch (e) {
+            logger.error("idbDelete failed for account:mx_access_token", e);
+        }
 
         // now restore those invites
         if (!opts?.deleteEverything) {
