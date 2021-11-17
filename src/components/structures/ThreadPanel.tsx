@@ -27,7 +27,7 @@ import { ContextMenuButton } from '../../accessibility/context_menu/ContextMenuB
 import ContextMenu, { ChevronFace, useContextMenu } from './ContextMenu';
 import RoomContext, { TimelineRenderingType } from '../../contexts/RoomContext';
 import TimelinePanel from './TimelinePanel';
-import { Layout } from '../../settings/Layout';
+import { Layout } from '../../settings/enums/Layout';
 import { useEventEmitter } from '../../hooks/useEventEmitter';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import { TileShape } from '../views/rooms/EventTile';

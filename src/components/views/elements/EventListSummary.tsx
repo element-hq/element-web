@@ -22,7 +22,7 @@ import MemberAvatar from '../avatars/MemberAvatar';
 import { _t } from '../../../languageHandler';
 import { useStateToggle } from "../../../hooks/useStateToggle";
 import AccessibleButton from "./AccessibleButton";
-import { Layout } from '../../../settings/Layout';
+import { Layout } from '../../../settings/enums/Layout';
 
 interface IProps {
     // An array of member events to summarise

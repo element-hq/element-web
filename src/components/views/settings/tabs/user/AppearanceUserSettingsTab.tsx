@@ -25,12 +25,13 @@ import SettingsFlag from '../../../elements/SettingsFlag';
 import Field from '../../../elements/Field';
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { UIFeature } from "../../../../../settings/UIFeature";
-import { Layout } from "../../../../../settings/Layout";
+import { Layout } from "../../../../../settings/enums/Layout";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import LayoutSwitcher from "../../LayoutSwitcher";
 
 import FontScalingPanel from '../../FontScalingPanel';
 import ThemeChoicePanel from '../../ThemeChoicePanel';
+import ImageSizePanel from "../../ImageSizePanel";
 
 interface IProps {
 }
@@ -188,6 +189,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 { layoutSection }
                 <FontScalingPanel />
                 { this.renderAdvancedSection() }
+                <ImageSizePanel />
             </div>
         );
     }

@@ -22,7 +22,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import Slider from "../elements/Slider";
 import { FontWatcher } from "../../../settings/watchers/FontWatcher";
 import { IValidationResult, IFieldState } from '../elements/Validation';
-import { Layout } from "../../../settings/Layout";
+import { Layout } from "../../../settings/enums/Layout";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { _t } from "../../../languageHandler";

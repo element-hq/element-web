@@ -25,7 +25,7 @@ import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { useSettingValue, useFeatureEnabled } from "../../../hooks/useSettings";
 import { UIFeature } from "../../../settings/UIFeature";
-import { Layout } from "../../../settings/Layout";
+import { Layout } from "../../../settings/enums/Layout";
 import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
 import { avatarUrlForUser } from "../../../Avatar";

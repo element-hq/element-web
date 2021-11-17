@@ -14,7 +14,7 @@ limitations under the License.
 import SettingController from "./SettingController";
 import { SettingLevel } from "../SettingLevel";
 import SettingsStore from "../SettingsStore";
-import { Layout } from "../Layout";
+import { Layout } from "../enums/Layout";
 
 export default class NewLayoutSwitcherController extends SettingController {
     public onChange(level: SettingLevel, roomId: string, newValue: any) {

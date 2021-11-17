@@ -1182,6 +1182,8 @@
     "Size must be a number": "Size must be a number",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Custom font size can only be between %(min)s pt and %(max)s pt",
     "Use between %(min)s pt and %(max)s pt": "Use between %(min)s pt and %(max)s pt",
+    "Image size in the timeline": "Image size in the timeline",
+    "Large": "Large",
     "Connecting to integration manager...": "Connecting to integration manager...",
     "Cannot connect to integration manager": "Cannot connect to integration manager",
     "The integration manager is offline or it cannot reach your homeserver.": "The integration manager is offline or it cannot reach your homeserver.",

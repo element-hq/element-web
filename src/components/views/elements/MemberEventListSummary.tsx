@@ -31,7 +31,7 @@ import { Action } from '../../../dispatcher/actions';
 import { SetRightPanelPhasePayload } from '../../../dispatcher/payloads/SetRightPanelPhasePayload';
 import { jsxJoin } from '../../../utils/ReactUtils';
 import { EventType } from 'matrix-js-sdk/src/@types/event';
-import { Layout } from '../../../settings/Layout';
+import { Layout } from '../../../settings/enums/Layout';
 
 const onPinnedMessagesClick = (): void => {
     defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
