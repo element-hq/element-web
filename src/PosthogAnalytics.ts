@@ -160,6 +160,7 @@ export class PosthogAnalytics {
                 capture_pageview: false,
                 sanitize_properties: this.sanitizeProperties,
                 respect_dnt: true,
+                advanced_disable_decide: true,
             });
             this.enabled = true;
         } else {
