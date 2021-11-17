@@ -3353,5 +3353,10 @@
     "Get notified only with mentions and keywords as set up in your <a>settings</a>": "僅在您的<a>設定</a>中設定提及與關鍵字時收到通知",
     "@mentions & keywords": "@提及與關鍵字",
     "Get notified for every message": "收到所有訊息的通知",
-    "Get notifications as set up in your <a>settings</a>": "取得您在<a>設定</a>中設定好的通知"
+    "Get notifications as set up in your <a>settings</a>": "取得您在<a>設定</a>中設定好的通知",
+    "Close this widget to view it in this panel": "關閉此小工具以在此面板中檢視",
+    "Unpin this widget to view it in this panel": "取消釘選這個小工具以在此面板中檢視",
+    "Maximise widget": "最大化小工具",
+    "sends rainfall": "傳送降雨",
+    "Sends the given message with rainfall": "與降雨一同傳送指定的訊息"
 }
