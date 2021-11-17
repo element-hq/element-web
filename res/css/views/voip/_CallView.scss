@@ -128,6 +128,8 @@ limitations under the License.
     padding-top: 20px;
     padding-bottom: 15px;
     color: $accent-fg-color;
+    user-select: none;
+
     .mx_AccessibleButton_hasKind {
         padding: 0px;
         font-weight: bold;

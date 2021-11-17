@@ -42,6 +42,7 @@ interface IProps {
     className?: string;
     children: ({ onStartMoving, onResize }: IChildrenOptions) => React.ReactNode;
     draggable: boolean;
+    onDoubleClick?: () => void;
 }
 
 interface IState {
@@ -216,6 +217,7 @@ export default class PictureInPictureDragger extends React.Component<IProps, ISt
                 className={this.props.className}
                 style={this.props.draggable ? style : undefined}
                 ref={this.callViewWrapper}
+                onDoubleClick={this.props.onDoubleClick}
             >
                 <>
                     { this.props.children({

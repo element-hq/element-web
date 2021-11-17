@@ -178,6 +178,13 @@ export default class CallPreview extends React.Component<IProps, IState> {
         });
     };
 
+    private onDoubleClick = (): void => {
+        dis.dispatch({
+            action: "view_room",
+            room_id: this.state.primaryCall.roomId,
+        });
+    };
+
     public render() {
         const pipMode = true;
         if (this.state.primaryCall) {
@@ -185,6 +192,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
                 <PictureInPictureDragger
                     className="mx_CallPreview"
                     draggable={pipMode}
+                    onDoubleClick={this.onDoubleClick}
                 >
                     { ({ onStartMoving, onResize }) => <CallView
                         onMouseDownOnHeader={onStartMoving}
