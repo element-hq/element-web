@@ -1826,5 +1826,6 @@
     "Your password was successfully changed. You will not receive push notifications on other sessions until you log back in to them": "Kata sandi Anda berhasil diubah. Anda tidak akan menerima notifikasi di sesi yang lain sampai Anda masuk",
     "Automatically group all your rooms that aren't part of a space in one place.": "Kelompokkan semua ruangan yang tidak berada di sebuah space di satu tempat secara otomatis.",
     "Rooms outside of a space": "Ruangan yang tidak berada di sebuah space",
-    "Automatically group all your people together in one place.": "Kelompokkan semua orang Anda bersama di satu tempat secara otomatis."
+    "Automatically group all your people together in one place.": "Kelompokkan semua orang Anda bersama di satu tempat secara otomatis.",
+    "Missing media permissions, click the button below to request.": "Membutuhkan izin media, klik tombol di bawah untuk meminta izin."
 }
