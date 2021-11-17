@@ -424,8 +424,6 @@ $left-gutter: 64px;
     }
 
     &::before {
-        background-color: #ffffff;
-        mask-image: url('$(res)/img/e2e/normal.svg');
         mask-repeat: no-repeat;
         mask-position: center;
         mask-size: 80%;
