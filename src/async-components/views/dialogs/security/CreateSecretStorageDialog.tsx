@@ -714,12 +714,13 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 <InlineSpinner />
             </div>;
         }
+
         return <div>
             <p>{ _t(
                 "Store your Security Key somewhere safe, like a password manager or a safe, " +
                 "as it's used to safeguard your encrypted data.",
             ) }</p>
-            <div className="mx_CreateSecretStorageDialog_primaryContainer">
+            <div className="mx_CreateSecretStorageDialog_primaryContainer mx_CreateSecretStorageDialog_recoveryKeyPrimarycontainer">
                 <div className="mx_CreateSecretStorageDialog_recoveryKeyContainer">
                     <div className="mx_CreateSecretStorageDialog_recoveryKey">
                         <code ref={this.recoveryKeyNode}>{ this.recoveryKey.encodedPrivateKey }</code>
@@ -739,7 +740,20 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                             onClick={this.onCopyClick}
                             disabled={this.state.phase === Phase.Storing}
                         >
-                            { this.state.copied ? _t("Copied!") : _t("Copy") }
+                            <span
+                                className="mx_CreateSecretStorageDialog_recoveryKeyCopyButtonText"
+                                style={{ height: this.state.copied ? '0' : 'auto' }}
+                                aria-hidden={this.state.copied}
+                            >
+                                { _t("Copy") }
+                            </span>
+                            <span
+                                className="mx_CreateSecretStorageDialog_recoveryKeyCopyButtonText"
+                                style={{ height: this.state.copied ? 'auto' : '0' }}
+                                aria-hidden={!this.state.copied}
+                            >
+                                { _t("Copied!") }
+                            </span>
                         </AccessibleButton>
                     </div>
                 </div>
