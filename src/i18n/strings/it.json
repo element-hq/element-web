@@ -3352,5 +3352,10 @@
     "Get notified only with mentions and keywords as set up in your <a>settings</a>": "Ricevi notifiche solo per menzioni e parole chiave come configurato nelle tue <a>impostazioni</a>",
     "@mentions & keywords": "@menzioni e parole chiave",
     "Get notified for every message": "Ricevi notifiche per ogni messaggio",
-    "Get notifications as set up in your <a>settings</a>": "Ricevi notifiche come configurato nelle tue <a>impostazioni</a>"
+    "Get notifications as set up in your <a>settings</a>": "Ricevi notifiche come configurato nelle tue <a>impostazioni</a>",
+    "Close this widget to view it in this panel": "Chiudi questo widget per vederlo in questo pannello",
+    "Unpin this widget to view it in this panel": "Sblocca questo widget per vederlo in questo pannello",
+    "Maximise widget": "Espandi widget",
+    "sends rainfall": "invia pioggia",
+    "Sends the given message with rainfall": "Invia il messaggio in questione con pioggia"
 }
