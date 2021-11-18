@@ -3358,5 +3358,8 @@
     "Sends the given message with rainfall": "Pošle zprávu s dešťovými srážkami",
     "Close this widget to view it in this panel": "Zavřít tento widget a zobrazit ho na tomto panelu",
     "Unpin this widget to view it in this panel": "Odepnout tento widget a zobrazit ho na tomto panelu",
-    "Maximise widget": "Maximalizovat widget"
+    "Maximise widget": "Maximalizovat widget",
+    "Large": "Velký",
+    "Image size in the timeline": "Velikost obrázku na časové ose",
+    "%(senderName)s has updated the room layout": "%(senderName)s aktualizoval rozvržení místnosti"
 }
