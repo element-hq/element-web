@@ -17,6 +17,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import { TimelineRenderingType } from '../contexts/RoomContext';
 import type { ICompletion, ISelectionRange } from './Autocompleter';
 
 export interface ICommand {
@@ -27,11 +28,19 @@ export interface ICommand {
     };
 }
 
+export interface IAutocompleteOptions {
+    commandRegex?: RegExp;
+    forcedCommandRegex?: RegExp;
+    renderingType?: TimelineRenderingType;
+}
+
 export default abstract class AutocompleteProvider {
     commandRegex: RegExp;
     forcedCommandRegex: RegExp;
 
-    protected constructor(commandRegex?: RegExp, forcedCommandRegex?: RegExp) {
+    protected renderingType: TimelineRenderingType = TimelineRenderingType.Room;
+
+    protected constructor({ commandRegex, forcedCommandRegex, renderingType }: IAutocompleteOptions) {
         if (commandRegex) {
             if (!commandRegex.global) {
                 throw new Error('commandRegex must have global flag set');
@@ -43,6 +52,9 @@ export default abstract class AutocompleteProvider {
                 throw new Error('forcedCommandRegex must have global flag set');
             }
             this.forcedCommandRegex = forcedCommandRegex;
+        }
+        if (renderingType) {
+            this.renderingType = renderingType;
         }
     }
 

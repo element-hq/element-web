@@ -14,11 +14,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
+
+import { IContent } from "matrix-js-sdk/src/models/event";
+
 /**
  * Checks a message if it contains one of the provided emojis
  * @param  {Object} content The message
  * @param  {Array<string>} emojis The list of emojis to check for
  */
-export const containsEmoji = (content: { msgtype: string, body: string }, emojis: Array<string>): boolean => {
+export const containsEmoji = (content: IContent, emojis: Array<string>): boolean => {
     return emojis.some((emoji) => content.body && content.body.includes(emoji));
 };

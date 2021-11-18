@@ -18,6 +18,7 @@ limitations under the License.
 
 import { at, uniq } from 'lodash';
 import { removeHiddenChars } from "matrix-js-sdk/src/utils";
+import { TimelineRenderingType } from '../contexts/RoomContext';
 
 interface IOptions<T extends {}> {
     keys: Array<string | keyof T>;
@@ -25,6 +26,7 @@ interface IOptions<T extends {}> {
     shouldMatchWordsOnly?: boolean;
     // whether to apply unhomoglyph and strip diacritics to fuzz up the search. Defaults to true
     fuzzy?: boolean;
+    context?: TimelineRenderingType;
 }
 
 /**

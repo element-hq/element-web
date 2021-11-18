@@ -28,6 +28,8 @@ import SettingsStore from "../settings/SettingsStore";
 import { EMOJI, IEmoji } from '../emoji';
 
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { TimelineRenderingType } from '../contexts/RoomContext';
 
 const LIMIT = 20;
 
@@ -64,8 +66,8 @@ export default class EmojiProvider extends AutocompleteProvider {
     matcher: QueryMatcher<ISortedEmoji>;
     nameMatcher: QueryMatcher<ISortedEmoji>;
 
-    constructor() {
-        super(EMOJI_REGEX);
+    constructor(room: Room, renderingType?: TimelineRenderingType) {
+        super({ commandRegex: EMOJI_REGEX, renderingType });
         this.matcher = new QueryMatcher<ISortedEmoji>(SORTED_EMOJI, {
             keys: [],
             funcs: [o => o.emoji.shortcodes.map(s => `:${s}:`)],

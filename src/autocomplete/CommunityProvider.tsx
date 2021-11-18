@@ -28,6 +28,8 @@ import { ICompletion, ISelectionRange } from "./Autocompleter";
 import FlairStore from "../stores/FlairStore";
 import { mediaFromMxc } from "../customisations/Media";
 import BaseAvatar from '../components/views/avatars/BaseAvatar';
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { TimelineRenderingType } from '../contexts/RoomContext';
 
 const COMMUNITY_REGEX = /\B\+\S*/g;
 
@@ -43,8 +45,8 @@ function score(query, space) {
 export default class CommunityProvider extends AutocompleteProvider {
     matcher: QueryMatcher<Group>;
 
-    constructor() {
-        super(COMMUNITY_REGEX);
+    constructor(room: Room, renderingType?: TimelineRenderingType) {
+        super({ commandRegex: COMMUNITY_REGEX, renderingType });
         this.matcher = new QueryMatcher([], {
             keys: ['groupId', 'name', 'shortDescription'],
         });

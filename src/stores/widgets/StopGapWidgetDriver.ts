@@ -38,15 +38,16 @@ import WidgetCapabilitiesPromptDialog from "../../components/views/dialogs/Widge
 import { WidgetPermissionCustomisations } from "../../customisations/WidgetPermissions";
 import { OIDCState, WidgetPermissionStore } from "./WidgetPermissionStore";
 import { WidgetType } from "../../widgets/WidgetType";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { CHAT_EFFECTS } from "../../effects";
 import { containsEmoji } from "../../effects/utils";
 import dis from "../../dispatcher/dispatcher";
 import { tryTransformPermalinkToLocalHref } from "../../utils/permalinks/Permalinks";
-import { IEvent, MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IContent, IEvent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import SettingsStore from "../../settings/SettingsStore";
 
 // TODO: Purge this from the universe
 
@@ -141,7 +142,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
     public async sendEvent(
         eventType: string,
-        content: any,
+        content: IContent,
         stateKey: string = null,
         targetRoomId: string = null,
     ): Promise<ISendEventDetails> {
@@ -164,7 +165,12 @@ export class StopGapWidgetDriver extends WidgetDriver {
             if (eventType === EventType.RoomMessage) {
                 CHAT_EFFECTS.forEach((effect) => {
                     if (containsEmoji(content, effect.emojis)) {
-                        dis.dispatch({ action: `effects.${effect.command}` });
+                        // For initial threads launch, chat effects are disabled
+                        // see #19731
+                        const isNotThread = content["m.relates_to"].rel_type !== RelationType.Thread;
+                        if (!SettingsStore.getValue("feature_thread") || !isNotThread) {
+                            dis.dispatch({ action: `effects.${effect.command}` });
+                        }
                     }
                 });
             }

@@ -492,7 +492,12 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             dis.dispatch({ action: "message_sent" });
             CHAT_EFFECTS.forEach((effect) => {
                 if (containsEmoji(content, effect.emojis)) {
-                    dis.dispatch({ action: `effects.${effect.command}` });
+                    // For initial threads launch, chat effects are disabled
+                    // see #19731
+                    const isNotThread = this.props.relation?.rel_type !== RelationType.Thread;
+                    if (!SettingsStore.getValue("feature_thread") || !isNotThread) {
+                        dis.dispatch({ action: `effects.${effect.command}` });
+                    }
                 }
             });
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {

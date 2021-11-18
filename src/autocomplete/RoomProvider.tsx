@@ -29,6 +29,7 @@ import { makeRoomPermalink } from "../utils/permalinks/Permalinks";
 import { ICompletion, ISelectionRange } from "./Autocompleter";
 import RoomAvatar from '../components/views/avatars/RoomAvatar';
 import SpaceStore from "../stores/spaces/SpaceStore";
+import { TimelineRenderingType } from "../contexts/RoomContext";
 
 const ROOM_REGEX = /\B#\S*/g;
 
@@ -48,8 +49,8 @@ function matcherObject(room: Room, displayedAlias: string, matchName = "") {
 export default class RoomProvider extends AutocompleteProvider {
     protected matcher: QueryMatcher<Room>;
 
-    constructor() {
-        super(ROOM_REGEX);
+    constructor(room: Room, renderingType?: TimelineRenderingType) {
+        super({ commandRegex: ROOM_REGEX, renderingType });
         this.matcher = new QueryMatcher([], {
             keys: ['displayedAlias', 'matchName'],
         });
