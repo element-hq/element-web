@@ -3356,5 +3356,8 @@
     "Sends the given message with rainfall": "附加降雨发送给定的消息",
     "Close this widget to view it in this panel": "关闭此小部件在此面板中查看",
     "Unpin this widget to view it in this panel": "取消固定此小部件在此面板中查看它",
-    "Maximise widget": "最大化小部件"
+    "Maximise widget": "最大化小部件",
+    "Large": "大",
+    "Image size in the timeline": "时间轴中的图像大小",
+    "%(senderName)s has updated the room layout": "%(senderName)s 更新了聊天室布局"
 }
