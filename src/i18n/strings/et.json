@@ -3354,5 +3354,8 @@
     "Unpin this widget to view it in this panel": "Sellel paneelil kuvamiseks eemalda vidin lemmikutest",
     "Maximise widget": "Suurenda vidinat",
     "sends rainfall": "saadab vihmasaju",
-    "Sends the given message with rainfall": "Lisab sellele sõnumile vihmasaju"
+    "Sends the given message with rainfall": "Lisab sellele sõnumile vihmasaju",
+    "Large": "Suur",
+    "Image size in the timeline": "Ajajoone piltide suurus",
+    "%(senderName)s has updated the room layout": "%(senderName)s on uuendanud jututoa välimust"
 }
