@@ -3357,5 +3357,8 @@
     "Unpin this widget to view it in this panel": "Sblocca questo widget per vederlo in questo pannello",
     "Maximise widget": "Espandi widget",
     "sends rainfall": "invia pioggia",
-    "Sends the given message with rainfall": "Invia il messaggio in questione con pioggia"
+    "Sends the given message with rainfall": "Invia il messaggio in questione con pioggia",
+    "Large": "Grande",
+    "Image size in the timeline": "Dimensione immagine nella linea temporale",
+    "%(senderName)s has updated the room layout": "%(senderName)s ha aggiornato la disposizione della stanza"
 }
