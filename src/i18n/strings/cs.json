@@ -1992,7 +1992,7 @@
     "Community settings": "Nastavení skupiny",
     "Use a different passphrase?": "Použít jinou přístupovou frázi?",
     "%(ssoButtons)s Or %(usernamePassword)s": "%(ssoButtons)s nebo %(usernamePassword)s",
-    "If you've joined lots of rooms, this might take a while": "Pokud jste se připojili ke spoustě místností, může to chvíli trvat",
+    "If you've joined lots of rooms, this might take a while": "Pokud jste se připojili k mnoha místnostem, může to chvíli trvat",
     "There was a problem communicating with the homeserver, please try again later.": "Při komunikaci s domovským serverem došlo k potížím, zkuste to prosím později.",
     "Continue with %(ssoButtons)s": "Pokračovat s %(ssoButtons)s",
     "Already have an account? <a>Sign in here</a>": "Máte již účet? <a>Přihlašte se zde</a>",
