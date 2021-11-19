@@ -35,6 +35,7 @@ import classNames from 'classnames';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { TileShape } from '../rooms/EventTile';
 import { ImageSize, suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
 
 interface IState {
@@ -517,8 +518,14 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     // Overidden by MStickerBody
     protected getFileBody(): string | JSX.Element {
         if (this.props.forExport) return null;
-        // We only ever need the download bar if we're appearing outside of the timeline
-        if (this.props.tileShape) {
+        /*
+         * In the room timeline or the thread context we don't need the download
+         * link as the message action bar will fullfil that
+         */
+        const hasMessageActionBar = !this.props.tileShape
+            || this.props.tileShape === TileShape.Thread
+            || this.props.tileShape === TileShape.ThreadPanel;
+        if (!hasMessageActionBar) {
             return <MFileBody {...this.props} showGenericPlaceholder={false} />;
         }
     }
