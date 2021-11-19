@@ -414,9 +414,9 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         }
 
         const eventPowerSelectors = Object.keys(eventsLevels).map((eventType, i) => {
-            if (isSpaceRoom && plEventsToShow[eventType].hideForSpace) {
+            if (isSpaceRoom && plEventsToShow[eventType]?.hideForSpace) {
                 return null;
-            } else if (!isSpaceRoom && plEventsToShow[eventType].hideForRoom) {
+            } else if (!isSpaceRoom && plEventsToShow[eventType]?.hideForRoom) {
                 return null;
             }
 
