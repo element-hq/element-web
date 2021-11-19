@@ -37,6 +37,8 @@ interface IState extends IScrollableBaseState {
 const MIN_OPTIONS = 2;
 const MAX_OPTIONS = 20;
 const DEFAULT_NUM_OPTIONS = 2;
+const MAX_QUESTION_LENGTH = 340;
+const MAX_OPTION_LENGTH = 340;
 
 export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState> {
     private addOptionRef = createRef<HTMLDivElement>();
@@ -111,6 +113,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
             <h2>{ _t("What is your poll question or topic?") }</h2>
             <Field
                 value={this.state.question}
+                maxLength={MAX_QUESTION_LENGTH}
                 label={_t("Question or topic")}
                 placeholder={_t("Write something...")}
                 onChange={this.onQuestionChange}
@@ -121,6 +124,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
                 this.state.options.map((op, i) => <div key={`option_${i}`} className="mx_PollCreateDialog_option">
                     <Field
                         value={op}
+                        maxLength={MAX_OPTION_LENGTH}
                         label={_t("Option %(number)s", { number: i + 1 })}
                         placeholder={_t("Write an option")}
                         onChange={e => this.onOptionChange(i, e)}
