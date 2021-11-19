@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as React from 'react';
+import React, { ClipboardEvent } from 'react';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 
@@ -415,9 +415,9 @@ class LoggedInView extends React.Component<IProps, IState> {
         });
     };
 
-    private onPaste = (ev) => {
+    private onPaste = (ev: ClipboardEvent) => {
         let canReceiveInput = false;
-        let element = ev.target;
+        let element = ev.currentTarget;
         // test for all parents because the target can be a child of a contenteditable element
         while (!canReceiveInput && element) {
             canReceiveInput = canElementReceiveInput(element);

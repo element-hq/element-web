@@ -94,7 +94,7 @@ class ReactionPicker extends React.Component<IProps, IState> {
                 this.props.mxEvent.getRoomId(),
                 myReactions[reaction],
             );
-            dis.dispatch({ action: Action.FocusAComposer });
+            dis.fire(Action.FocusAComposer);
             // Tell the emoji picker not to bump this in the more frequently used list.
             return false;
         } else {
@@ -106,7 +106,7 @@ class ReactionPicker extends React.Component<IProps, IState> {
                 },
             });
             dis.dispatch({ action: "message_sent" });
-            dis.dispatch({ action: Action.FocusAComposer });
+            dis.fire(Action.FocusAComposer);
             return true;
         }
     };

@@ -56,12 +56,12 @@ export enum Action {
     CheckUpdates = "check_updates",
 
     /**
-     * Focuses the user's cursor to the send message composer. No additional payload information required.
+     * Focuses the user's cursor to the send message composer. Should be used with a FocusComposerPayload.
      */
     FocusSendMessageComposer = "focus_send_message_composer",
 
     /**
-     * Focuses the user's cursor to the edit message composer. No additional payload information required.
+     * Focuses the user's cursor to the edit message composer. Should be used with a FocusComposerPayload.
      */
     FocusEditMessageComposer = "focus_edit_message_composer",
 
