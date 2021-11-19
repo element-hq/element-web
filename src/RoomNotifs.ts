@@ -18,7 +18,7 @@ limitations under the License.
 import { MatrixClientPeg } from './MatrixClientPeg';
 import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
 import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
-import { IAnnotatedPushRule, PushRuleKind } from "matrix-js-sdk/src/@types/PushRules";
+import { ConditionKind, IPushRule, PushRuleActionName, PushRuleKind } from "matrix-js-sdk/src/@types/PushRules";
 
 export enum RoomNotifState {
     AllMessagesLoud = 'all_messages_loud',
@@ -205,14 +205,12 @@ function setRoomNotifsStateUnmuted(roomId: string, newState: RoomNotifState): Pr
     return Promise.all(promises);
 }
 
-function findOverrideMuteRule(roomId: string): IAnnotatedPushRule {
+function findOverrideMuteRule(roomId: string): IPushRule {
     const cli = MatrixClientPeg.get();
-    if (!cli.pushRules ||
-        !cli.pushRules['global'] ||
-        !cli.pushRules['global'].override) {
+    if (!cli?.pushRules?.global?.override) {
         return null;
     }
-    for (const rule of cli.pushRules['global'].override) {
+    for (const rule of cli.pushRules.global.override) {
         if (isRuleForRoom(roomId, rule)) {
             if (isMuteRule(rule) && rule.enabled) {
                 return rule;
@@ -222,14 +220,14 @@ function findOverrideMuteRule(roomId: string): IAnnotatedPushRule {
     return null;
 }
 
-function isRuleForRoom(roomId: string, rule: IAnnotatedPushRule): boolean {
+function isRuleForRoom(roomId: string, rule: IPushRule): boolean {
     if (rule.conditions.length !== 1) {
         return false;
     }
     const cond = rule.conditions[0];
-    return (cond.kind === 'event_match' && cond.key === 'room_id' && cond.pattern === roomId);
+    return (cond.kind === ConditionKind.EventMatch && cond.key === 'room_id' && cond.pattern === roomId);
 }
 
-function isMuteRule(rule: IAnnotatedPushRule): boolean {
-    return (rule.actions.length === 1 && rule.actions[0] === 'dont_notify');
+function isMuteRule(rule: IPushRule): boolean {
+    return (rule.actions.length === 1 && rule.actions[0] === PushRuleActionName.DontNotify);
 }
