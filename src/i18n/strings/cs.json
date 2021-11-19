@@ -1476,8 +1476,8 @@
     "Enable message search in encrypted rooms": "Povolit vyhledávání v šifrovaných místnostech",
     "How fast should messages be downloaded.": "Jak rychle se mají zprávy stahovat.",
     "Waiting for %(displayName)s to verify…": "Čekám až nás %(displayName)s ověří…",
-    "They match": "Odpovídají",
-    "They don't match": "Neodpovídají",
+    "They match": "Shodují se",
+    "They don't match": "Neshodují se",
     "To be secure, do this in person or use a trusted way to communicate.": "Aby bylo ověření bezpečné, proveďte ho osobně nebo použijte důvěryhodný komunikační prostředek.",
     "Lock": "Zámek",
     "Other users may not trust it": "Ostatní uživatelé této relaci nemusí věřit",
@@ -3353,5 +3353,13 @@
     "Get notified only with mentions and keywords as set up in your <a>settings</a>": "Dostávat oznámení pouze o zmínkách a klíčových slovech podle <a>nastavení</a>",
     "@mentions & keywords": "@zmínky a klíčová slova",
     "Get notified for every message": "Dostávat oznámení o každé zprávě",
-    "Get notifications as set up in your <a>settings</a>": "Dostávat oznámení podle <a>nastavení</a>"
+    "Get notifications as set up in your <a>settings</a>": "Dostávat oznámení podle <a>nastavení</a>",
+    "sends rainfall": "pošle dešťové srážky",
+    "Sends the given message with rainfall": "Pošle zprávu s dešťovými srážkami",
+    "Close this widget to view it in this panel": "Zavřít tento widget a zobrazit ho na tomto panelu",
+    "Unpin this widget to view it in this panel": "Odepnout tento widget a zobrazit ho na tomto panelu",
+    "Maximise widget": "Maximalizovat widget",
+    "Large": "Velký",
+    "Image size in the timeline": "Velikost obrázku na časové ose",
+    "%(senderName)s has updated the room layout": "%(senderName)s aktualizoval rozvržení místnosti"
 }
