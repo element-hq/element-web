@@ -67,4 +67,8 @@ limitations under the License.
         padding: 0;
         margin-bottom: 40px; // arbitrary to create scrollable area under the poll
     }
+
+    .mx_AccessibleButton_disabled {
+        opacity: 0.4;
+    }
 }
