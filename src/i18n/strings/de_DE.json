@@ -3321,12 +3321,13 @@
     "Sidebar": "Seitenleiste",
     "Other rooms": "Andere Räume",
     "Meta Spaces": "Meta Spaces",
-    "Spaces are ways to group rooms and people.": "Mit Spaces können Räume und Personen gruppiert werden",
+    "Spaces are ways to group rooms and people.": "Mit Spaces kannst du Räume und Personen gruppieren",
     "Show tray icon and minimise window to it on close": "Fenster beim Schließen in die Taskleiste minimieren",
     "Large": "Groß",
     "Image size in the timeline": "Bildgröße im Chatverlauf",
     "sends rainfall": "sendet mit Regeneffekt",
     "Sends the given message with rainfall": "Nachricht mit Regeneffekt senden",
     "%(senderName)s has updated the room layout": "%(senderName)s hat das Raumlayout geändert",
-    "Show all your rooms in Home, even if they're in a space.": "Alle Räume in Home anzeigen, auch wenn sie in einem Space sind"
+    "Show all your rooms in Home, even if they're in a space.": "Alle Räume in Home anzeigen, auch wenn sie in einem Space sind",
+    "Home is useful for getting an overview of everything.": "Die Startseite gibt die einen Überblick über alles."
 }
