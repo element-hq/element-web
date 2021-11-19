@@ -472,6 +472,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     };
 
     private renderButtons(menuPosition): JSX.Element | JSX.Element[] {
+        let uploadButtonIndex = 0;
         const buttons: JSX.Element[] = [];
         if (!this.state.haveRecording) {
             if (SettingsStore.getValue("feature_polls")) {
@@ -479,6 +480,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                     <PollButton key="polls" room={this.props.room} />,
                 );
             }
+            uploadButtonIndex = buttons.length;
             buttons.push(
                 <UploadButton
                     key="controls_upload"
@@ -528,7 +530,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             });
 
             return <>
-                { buttons[0] }
+                { buttons[uploadButtonIndex] }
                 <AccessibleTooltipButton
                     className={classnames}
                     onClick={this.toggleButtonMenu}
