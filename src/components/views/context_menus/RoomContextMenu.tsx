@@ -28,7 +28,7 @@ import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
-import RoomListStore from "../../../stores/room-list/RoomListStore";
+import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import dis from "../../../dispatcher/dispatcher";
 import RoomListActions from "../../../actions/RoomListActions";
 import { Key } from "../../../Keyboard";
@@ -43,6 +43,7 @@ import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRight
 import { Action } from "../../../dispatcher/actions";
 import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 import { ROOM_NOTIFICATIONS_TAB } from "../dialogs/RoomSettingsDialog";
+import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 
 interface IProps extends IContextMenuProps {
     room: Room;
@@ -50,7 +51,11 @@ interface IProps extends IContextMenuProps {
 
 const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
     const cli = useContext(MatrixClientContext);
-    const roomTags = RoomListStore.instance.getTagsForRoom(room);
+    const roomTags = useEventEmitterState(
+        RoomListStore.instance,
+        LISTS_UPDATE_EVENT,
+        () => RoomListStore.instance.getTagsForRoom(room),
+    );
 
     let leaveOption: JSX.Element;
     if (roomTags.includes(DefaultTagID.Archived)) {
