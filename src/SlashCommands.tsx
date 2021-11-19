@@ -19,6 +19,7 @@ limitations under the License.
 
 import * as React from 'react';
 import { User } from "matrix-js-sdk/src/models/user";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import * as ContentHelpers from 'matrix-js-sdk/src/content-helpers';
 import { MatrixClientPeg } from './MatrixClientPeg';
@@ -58,6 +59,7 @@ import SlashCommandHelpDialog from "./components/views/dialogs/SlashCommandHelpD
 import { logger } from "matrix-js-sdk/src/logger";
 import { shouldShowComponent } from "./customisations/helpers/UIComponents";
 import { TimelineRenderingType } from './contexts/RoomContext';
+import RoomViewStore from "./stores/RoomViewStore";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -748,6 +750,11 @@ export const Commands = [
         command: 'op',
         args: '<user-id> [<power-level>]',
         description: _td('Define the power level of a user'),
+        isEnabled(): boolean {
+            const cli = MatrixClientPeg.get();
+            const room = cli.getRoom(RoomViewStore.getRoomId());
+            return room?.currentState.maySendStateEvent(EventType.RoomPowerLevels, cli.getUserId());
+        },
         runFn: function(roomId, args) {
             if (args) {
                 const matches = args.match(/^(\S+?)( +(-?\d+))?$/);
@@ -779,6 +786,11 @@ export const Commands = [
         command: 'deop',
         args: '<user-id>',
         description: _td('Deops user with given id'),
+        isEnabled(): boolean {
+            const cli = MatrixClientPeg.get();
+            const room = cli.getRoom(RoomViewStore.getRoomId());
+            return room?.currentState.maySendStateEvent(EventType.RoomPowerLevels, cli.getUserId());
+        },
         runFn: function(roomId, args) {
             if (args) {
                 const matches = args.match(/^(\S+)$/);
