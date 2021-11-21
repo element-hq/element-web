@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const SIZE_LARGE = { w: 480, h: 360 };
+const SIZE_LARGE = { w: 800, h: 600 };
 const SIZE_NORMAL = { w: 324, h: 220 };
 
 export enum ImageSize {
