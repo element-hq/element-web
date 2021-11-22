@@ -76,11 +76,8 @@ import LegacyCommunityPreview from "./LegacyCommunityPreview";
 // NB. this is just for server notices rather than pinned messages in general.
 const MAX_PINNED_NOTICES_PER_ROOM = 2;
 
-function canElementReceiveInput(el) {
-    return el.tagName === "INPUT" ||
-        el.tagName === "TEXTAREA" ||
-        el.tagName === "SELECT" ||
-        !!el.getAttribute("contenteditable");
+function getInputableElement(el: HTMLElement): HTMLElement | null {
+    return el.closest("input, textarea, select, [contenteditable=true]");
 }
 
 interface IProps {
@@ -416,14 +413,12 @@ class LoggedInView extends React.Component<IProps, IState> {
     };
 
     private onPaste = (ev: ClipboardEvent) => {
-        let canReceiveInput = false;
-        let element = ev.currentTarget;
-        // test for all parents because the target can be a child of a contenteditable element
-        while (!canReceiveInput && element) {
-            canReceiveInput = canElementReceiveInput(element);
-            element = element.parentElement;
-        }
-        if (!canReceiveInput) {
+        const element = ev.target as HTMLElement;
+        const inputableElement = getInputableElement(element);
+
+        if (inputableElement) {
+            inputableElement.focus();
+        } else {
             // refocusing during a paste event will make the
             // paste end up in the newly focused element,
             // so dispatch synchronously before paste happens
@@ -580,7 +575,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
             // If the user is entering a printable character outside of an input field
             // redirect it to the composer for them.
-            if (!isClickShortcut && isPrintable && !canElementReceiveInput(ev.target)) {
+            if (!isClickShortcut && isPrintable && !getInputableElement(ev.target as HTMLElement)) {
                 // synchronous dispatch so we focus before key generates input
                 dis.fire(Action.FocusSendMessageComposer, true);
                 ev.stopPropagation();

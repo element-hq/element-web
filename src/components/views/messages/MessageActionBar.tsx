@@ -196,6 +196,10 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
 
     private onThreadClick = (): void => {
         dispatchShowThreadEvent(this.props.mxEvent);
+        dis.dispatch({
+            action: Action.FocusSendMessageComposer,
+            context: TimelineRenderingType.Thread,
+        });
     };
 
     private onEditClick = (ev: React.MouseEvent): void => {
