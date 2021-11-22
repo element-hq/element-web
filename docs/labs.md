@@ -154,3 +154,12 @@ entirely incomplete and may not work at all - it is not recommended for general 
 
 Metaspaces are automatically populated spaces you can enable in your Space panel.
 By default, you'll have Home or All rooms, but you can opt in to a People, Favourites, and Other Rooms metaspace too.
+
+## Location sharing (`feature_location_share`) [In Development]
+
+Allows users to send and display location data using [maplibre](https://maplibre.org).
+
+The current implementation is a quick in-progress development spike to
+demonstrate viability and prove [MSC3488](https://github.com/matrix-org/matrix-doc/pull/3488)
+and [MSC3489](https://github.com/matrix-org/matrix-doc/pull/3489) - **the UI has not yet
+been designed, and it will not exit labs until it has**.
