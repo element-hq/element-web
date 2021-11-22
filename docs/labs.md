@@ -163,3 +163,7 @@ The current implementation is a quick in-progress development spike to
 demonstrate viability and prove [MSC3488](https://github.com/matrix-org/matrix-doc/pull/3488)
 and [MSC3489](https://github.com/matrix-org/matrix-doc/pull/3489) - **the UI has not yet
 been designed, and it will not exit labs until it has**.
+
+For this to work, you must specify a valid maptiler.com API key in
+`"map_style_url": "https://api.maptiler.com/maps/basic/style.json?key=YOUR_KEY_GOES_HERE"`
+in your config.json, or find an alternative map tile server.
