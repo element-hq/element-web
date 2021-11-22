@@ -1,3 +1,9 @@
+Changes in [3.35.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.35.1) (2021-11-22)
+=====================================================================================================
+
+ * Fixes the v3.35.0 release which failed to build correctly due to
+   a missing change updating types following a types update in js-sdk.
+
 Changes in [3.35.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.35.0) (2021-11-22)
 =====================================================================================================
 
