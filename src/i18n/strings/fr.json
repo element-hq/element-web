@@ -3359,5 +3359,6 @@
     "Other rooms": "Autres salons",
     "sends rainfall": "envoie de la pluie",
     "Sends the given message with rainfall": "Envoie le message avec de la pluie",
-    "%(senderName)s has updated the room layout": "%(senderName)s a mis à jour la mise en page du salon"
+    "%(senderName)s has updated the room layout": "%(senderName)s a mis à jour la mise en page du salon",
+    "Meta Spaces": "Méta-espaces"
 }
