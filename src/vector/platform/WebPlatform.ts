@@ -33,8 +33,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
 export default class WebPlatform extends VectorBasePlatform {
-    private runningVersion: string = null;
-
     constructor() {
         super();
         // Register service worker if available on this platform
@@ -102,7 +100,7 @@ export default class WebPlatform extends VectorBasePlatform {
         return notification;
     }
 
-    private getVersion(): Promise<string> {
+    private getMostRecentVersion(): Promise<string> {
         // We add a cachebuster to the request to make sure that we know about
         // the most recent version on the origin server. That might not
         // actually be the version we'd get on a reload (particularly in the
@@ -144,12 +142,10 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     pollForUpdate = () => {
-        return this.getVersion().then((ver) => {
-            if (this.runningVersion === null) {
-                this.runningVersion = ver;
-            } else if (this.runningVersion !== ver) {
-                if (this.shouldShowUpdate(ver)) {
-                    showUpdateToast(this.runningVersion, ver);
+        return this.getMostRecentVersion() .then((mostRecentVersion) => {
+            if (process.env.VERSION !== mostRecentVersion) {
+                if (this.shouldShowUpdate(mostRecentVersion)) {
+                    showUpdateToast(process.env.VERSION, mostRecentVersion);
                 }
                 return { status: UpdateCheckStatus.Ready };
             } else {
