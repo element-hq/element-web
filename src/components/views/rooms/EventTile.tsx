@@ -17,7 +17,7 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import classNames from "classnames";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
@@ -130,7 +130,7 @@ export function getHandlerTile(ev) {
     // not even when showing hidden events
     if (type === "m.room.message") {
         const content = ev.getContent();
-        if (content && content.msgtype === "m.key.verification.request") {
+        if (content && content.msgtype === MsgType.KeyVerificationRequest) {
             const client = MatrixClientPeg.get();
             const me = client && client.getUserId();
             if (ev.getSender() !== me && content.to !== me) {

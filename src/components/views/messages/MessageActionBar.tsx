@@ -42,6 +42,7 @@ import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import ReplyChain from '../elements/ReplyChain';
 import { dispatchShowThreadEvent } from '../../../dispatcher/dispatch-actions/threads';
 import ReactionPicker from "../emojipicker/ReactionPicker";
+import { MsgType } from 'matrix-js-sdk/src/@types/event';
 
 interface IOptionsButtonProps {
     mxEvent: MatrixEvent;
@@ -210,6 +211,21 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         });
     };
 
+    private readonly forbiddenThreadHeadMsgType = [
+        MsgType.KeyVerificationRequest,
+    ];
+
+    private get showReplyInThreadAction(): boolean {
+        const isThreadEnabled = SettingsStore.getValue("feature_thread");
+        const inNotThreadTimeline = this.context.timelineRenderingType !== TimelineRenderingType.Thread;
+
+        const isAllowedMessageType = !this.forbiddenThreadHeadMsgType.includes(
+            this.props.mxEvent.getContent().msgtype as MsgType,
+        );
+
+        return isThreadEnabled && inNotThreadTimeline && isAllowedMessageType;
+    }
+
     /**
      * Runs a given fn on the set of possible events to test. The first event
      * that passes the checkFn will have fn executed on it. Both functions take
@@ -294,8 +310,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                             onClick={this.onReplyClick}
                             key="reply"
                         />
-                        { (SettingsStore.getValue("feature_thread")
-                            && this.context.timelineRenderingType !== TimelineRenderingType.Thread) && (
+                        { (this.showReplyInThreadAction) && (
                             <RovingAccessibleTooltipButton
                                 className="mx_MessageActionBar_maskButton mx_MessageActionBar_threadButton"
                                 title={_t("Reply in thread")}
