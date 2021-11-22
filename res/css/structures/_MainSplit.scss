@@ -25,6 +25,7 @@ limitations under the License.
 .mx_MainSplit > .mx_RightPanel_ResizeWrapper {
     // no padding on the left. The spacing is taken care of by the main split content.
     padding: 5px 5px 5px 0px;
+    margin-left: 8px;
     height: calc(100vh - 51px); // height of .mx_RoomHeader.light-panel
 
     &:hover .mx_RightPanel_ResizeHandle {
