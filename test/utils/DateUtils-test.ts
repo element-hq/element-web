@@ -35,7 +35,7 @@ describe("formatRelativeTime", () => {
     beforeAll(() => {
         dateSpy = jest
             .spyOn(global.Date, 'now')
-            // Tuesday, 2 November 2021 11:18:03
+            // Tuesday, 2 November 2021 11:18:03 UTC
             .mockImplementation(() => 1635851883000);
     });
 
@@ -44,12 +44,12 @@ describe("formatRelativeTime", () => {
     });
 
     it("returns hour format for events created less than 24 hours ago", () => {
-        const date = new Date(1635850883000);
+        const date = new Date(2021, 10, 2, 11, 1, 23, 0);
         expect(formatRelativeTime(date)).toBe("11:01");
     });
 
     it("honours the hour format setting", () => {
-        const date = new Date(1635850883000);
+        const date = new Date(2021, 10, 2, 11, 1, 23, 0);
         expect(formatRelativeTime(date)).toBe("11:01");
         expect(formatRelativeTime(date, false)).toBe("11:01");
         expect(formatRelativeTime(date, true)).toBe("11:01AM");
