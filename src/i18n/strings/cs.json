@@ -3361,5 +3361,12 @@
     "Maximise widget": "Maximalizovat widget",
     "Large": "Velký",
     "Image size in the timeline": "Velikost obrázku na časové ose",
-    "%(senderName)s has updated the room layout": "%(senderName)s aktualizoval rozvržení místnosti"
+    "%(senderName)s has updated the room layout": "%(senderName)s aktualizoval rozvržení místnosti",
+    "Based on %(count)s votes|one": "Na základě %(count)s hlasu",
+    "Based on %(count)s votes|other": "Na základě %(count)s hlasů",
+    "%(count)s votes|one": "%(count)s hlas",
+    "%(count)s votes|other": "%(count)s hlasů",
+    "%(spaceName)s and %(count)s others|one": "%(spaceName)s a %(count)s další",
+    "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s and %(count)s dalších"
 }
