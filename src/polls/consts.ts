@@ -18,6 +18,7 @@ import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
 import { IContent } from "matrix-js-sdk/src/models/event";
 
 export const POLL_START_EVENT_TYPE = new UnstableValue("m.poll.start", "org.matrix.msc3381.poll.start");
+export const POLL_RESPONSE_EVENT_TYPE = new UnstableValue("m.poll.response", "org.matrix.msc3381.poll.response");
 export const POLL_KIND_DISCLOSED = new UnstableValue("m.poll.disclosed", "org.matrix.msc3381.poll.disclosed");
 export const POLL_KIND_UNDISCLOSED = new UnstableValue("m.poll.undisclosed", "org.matrix.msc3381.poll.undisclosed");
 
@@ -38,6 +39,12 @@ export interface IPollContent extends IContent {
         answers: IPollAnswer[];
     };
     [TEXT_NODE_TYPE]: string;
+}
+
+export interface IPollResponse extends IContent {
+    [POLL_RESPONSE_EVENT_TYPE.name]: {
+        answers: string[];
+    };
 }
 
 export function makePollContent(question: string, answers: string[], kind: string): IPollContent {

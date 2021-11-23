@@ -86,6 +86,12 @@ limitations under the License.
 
     .mx_MPollBody_option_checked {
         border-color: $accent;
+
+        .mx_MPollBody_popularityBackground {
+            .mx_MPollBody_popularityAmount {
+                background-color: $accent;
+            }
+        }
     }
 
     .mx_StyledRadioButton_checked input[type="radio"] + div {

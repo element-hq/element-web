@@ -990,7 +990,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         return this.props.getRelationsForEvent(eventId, "m.annotation", "m.reaction");
     };
 
-    private onReactionsCreated = (relationType, eventType) => {
+    private onReactionsCreated = (relationType: string, eventType: string) => {
         if (relationType !== "m.annotation" || eventType !== "m.reaction") {
             return;
         }
@@ -1286,6 +1286,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             onHeightChanged={this.props.onHeightChanged}
                             tileShape={this.props.tileShape}
                             editState={this.props.editState}
+                            getRelationsForEvent={this.props.getRelationsForEvent}
                         />
                     </div>,
                 ]);
@@ -1324,6 +1325,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             tileShape={this.props.tileShape}
                             editState={this.props.editState}
                             replacingEventId={this.props.replacingEventId}
+                            getRelationsForEvent={this.props.getRelationsForEvent}
                         />
                         { actionBar }
                         { timestamp }
@@ -1373,6 +1375,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                                 onHeightChanged={this.props.onHeightChanged}
                                 callEventGrouper={this.props.callEventGrouper}
                                 tileShape={this.props.tileShape}
+                                getRelationsForEvent={this.props.getRelationsForEvent}
                             />
                             { keyRequestInfo }
                             { this.renderThreadPanelSummary() }
@@ -1410,6 +1413,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             tileShape={this.props.tileShape}
                             onHeightChanged={this.props.onHeightChanged}
                             editState={this.props.editState}
+                            getRelationsForEvent={this.props.getRelationsForEvent}
                         />
                     </div>,
                     <a
@@ -1463,6 +1467,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                                 permalinkCreator={this.props.permalinkCreator}
                                 onHeightChanged={this.props.onHeightChanged}
                                 callEventGrouper={this.props.callEventGrouper}
+                                getRelationsForEvent={this.props.getRelationsForEvent}
                             />
                             { keyRequestInfo }
                             { actionBar }
