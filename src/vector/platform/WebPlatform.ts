@@ -150,7 +150,7 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     pollForUpdate = () => {
-        return this.getMostRecentVersion() .then((mostRecentVersion) => {
+        return this.getMostRecentVersion().then((mostRecentVersion) => {
             if (process.env.VERSION !== mostRecentVersion) {
                 if (this.shouldShowUpdate(mostRecentVersion)) {
                     showUpdateToast(process.env.VERSION, mostRecentVersion);
