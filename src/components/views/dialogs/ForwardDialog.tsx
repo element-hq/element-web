@@ -44,6 +44,7 @@ import TruncatedList from "../elements/TruncatedList";
 import EntityTile from "../rooms/EntityTile";
 import BaseAvatar from "../avatars/BaseAvatar";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
+import { roomContextDetailsText } from "../../../Rooms";
 
 const AVATAR_SIZE = 30;
 
@@ -121,6 +122,8 @@ const Entry: React.FC<IEntryProps> = ({ room, event, matrixClient: cli, onFinish
         />;
     }
 
+    const detailsText = roomContextDetailsText(room);
+
     return <div className="mx_ForwardList_entry">
         <AccessibleTooltipButton
             className="mx_ForwardList_roomButton"
@@ -131,6 +134,9 @@ const Entry: React.FC<IEntryProps> = ({ room, event, matrixClient: cli, onFinish
         >
             <DecoratedRoomAvatar room={room} avatarSize={32} />
             <span className="mx_ForwardList_entry_name">{ room.name }</span>
+            { detailsText && <span className="mx_ForwardList_entry_detail">
+                { detailsText }
+            </span> }
         </AccessibleTooltipButton>
         <AccessibleTooltipButton
             kind={sendState === SendState.Failed ? "danger_outline" : "primary_outline"}
