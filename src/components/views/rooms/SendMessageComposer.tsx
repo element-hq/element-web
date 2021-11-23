@@ -643,6 +643,9 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     };
 
     render() {
+        const threadId = this.props.relation?.rel_type === RelationType.Thread
+            ? this.props.relation.event_id
+            : null;
         return (
             <div className="mx_SendMessageComposer" onClick={this.focusComposer} onKeyDown={this.onKeyDown}>
                 <BasicMessageComposer
@@ -650,6 +653,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     ref={this.editorRef}
                     model={this.model}
                     room={this.props.room}
+                    threadId={threadId}
                     label={this.props.placeholder}
                     placeholder={this.props.placeholder}
                     onPaste={this.onPaste}

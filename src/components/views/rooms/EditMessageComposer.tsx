@@ -535,6 +535,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                 ref={this.editorRef}
                 model={this.model}
                 room={this.getRoom()}
+                threadId={this.props.editState?.getEvent()?.getThread()?.id}
                 initialCaret={this.props.editState.getCaret()}
                 label={_t("Edit message")}
                 onChange={this.onChange}
