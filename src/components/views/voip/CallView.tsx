@@ -56,6 +56,8 @@ interface IProps {
 
     // Used for dragging the PiP CallView
     onMouseDownOnHeader?: (event: React.MouseEvent<Element, MouseEvent>) => void;
+
+    showApps?: boolean;
 }
 
 interface IState {
@@ -614,9 +616,14 @@ export default class CallView extends React.Component<IProps, IState> {
             );
         }
 
-        const myClassName = this.props.pipMode ? 'mx_CallView_pip' : 'mx_CallView_large';
+        const callViewClasses = classNames({
+            mx_CallView: true,
+            mx_CallView_pip: this.props.pipMode,
+            mx_CallView_large: !this.props.pipMode,
+            mx_CallView_belowWidget: this.props.showApps, // css to correct the margins if the call is below the AppsDrawer.
+        });
 
-        return <div className={"mx_CallView " + myClassName}>
+        return <div className={callViewClasses}>
             <CallViewHeader
                 onPipMouseDown={this.props.onMouseDownOnHeader}
                 pipMode={this.props.pipMode}

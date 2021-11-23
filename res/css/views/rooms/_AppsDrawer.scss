@@ -18,7 +18,9 @@ limitations under the License.
 $MiniAppTileHeight: 200px;
 
 .mx_AppsDrawer {
-    margin: 5px 5px 5px 13px;
+    margin: 5px;
+    margin-bottom: 0; // No bottom margin for the correct gap to the CallView below.
+    margin-left: 13px; // 5+8px to compensate for the scroll bar padding on the right.
     position: relative;
     display: flex;
     flex-direction: column;

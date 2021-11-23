@@ -28,6 +28,8 @@ interface IProps {
     roomId: string;
 
     resizeNotifier: ResizeNotifier;
+
+    showApps?: boolean;
 }
 
 interface IState {
@@ -121,6 +123,7 @@ export default class CallViewForRoom extends React.Component<IProps, IState> {
                     <CallView
                         call={this.state.call}
                         pipMode={false}
+                        showApps={this.props.showApps}
                     />
                 </Resizable>
             </div>

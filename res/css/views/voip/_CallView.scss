@@ -26,13 +26,17 @@ limitations under the License.
 
 .mx_CallView_large {
     padding-bottom: 10px;
-    margin: 5px 5px 5px 18px;
+    margin: 5px 5px 5px 13px;
     display: flex;
     flex-direction: column;
     flex: 1;
 
     .mx_CallView_voice {
         flex: 1;
+    }
+
+    &.mx_CallView_belowWidget {
+        margin-top: 0;
     }
 }
 
