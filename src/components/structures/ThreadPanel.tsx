@@ -73,15 +73,13 @@ const useFilteredThreadsTimelinePanel = ({
     const buildThreadList = useCallback(function(timelineSet: EventTimelineSet) {
         timelineSet.resetLiveTimeline("");
         Array.from(threads)
-            .map(([, thread]) => thread)
-            .forEach(thread => {
-                const ownEvent = thread.rootEvent.getSender() === userId;
-                if (filterOption !== ThreadFilterType.My || ownEvent) {
+            .forEach(([, thread]) => {
+                if (filterOption !== ThreadFilterType.My || thread.hasCurrentUserParticipated) {
                     timelineSet.addLiveEvent(thread.rootEvent);
                 }
             });
         updateTimeline();
-    }, [filterOption, threads, updateTimeline, userId]);
+    }, [filterOption, threads, updateTimeline]);
 
     useEffect(() => { buildThreadList(timelineSet); }, [timelineSet, buildThreadList]);
 
