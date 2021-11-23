@@ -23,6 +23,7 @@ import { arrayFastClone, arraySeed } from "../../../utils/arrays";
 import Field from "./Field";
 import AccessibleButton from "./AccessibleButton";
 import { makePollContent, POLL_KIND_DISCLOSED, POLL_START_EVENT_TYPE } from "../../../polls/consts";
+import Spinner from "./Spinner";
 
 interface IProps extends IDialogProps {
     room: Room;
@@ -118,6 +119,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
                 placeholder={_t("Write something...")}
                 onChange={this.onQuestionChange}
                 usePlaceholderAsHint={true}
+                disabled={this.state.busy}
             />
             <h2>{ _t("Create options") }</h2>
             {
@@ -129,20 +131,26 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
                         placeholder={_t("Write an option")}
                         onChange={e => this.onOptionChange(i, e)}
                         usePlaceholderAsHint={true}
+                        disabled={this.state.busy}
                     />
                     <AccessibleButton
                         onClick={() => this.onOptionRemove(i)}
                         className="mx_PollCreateDialog_removeOption"
+                        disabled={this.state.busy}
                     />
                 </div>)
             }
             <AccessibleButton
                 onClick={this.onOptionAdd}
-                disabled={this.state.options.length >= MAX_OPTIONS}
+                disabled={this.state.busy || this.state.options.length >= MAX_OPTIONS}
                 kind="secondary"
                 className="mx_PollCreateDialog_addOption"
                 inputRef={this.addOptionRef}
             >{ _t("Add option") }</AccessibleButton>
+            {
+                this.state.busy &&
+                    <div className="mx_PollCreateDialog_busy"><Spinner /></div>
+            }
         </div>;
     }
 }
