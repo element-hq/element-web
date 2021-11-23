@@ -3357,5 +3357,8 @@
     "Sends the given message with rainfall": "Lisab sellele sõnumile vihmasaju",
     "Large": "Suur",
     "Image size in the timeline": "Ajajoone piltide suurus",
-    "%(senderName)s has updated the room layout": "%(senderName)s on uuendanud jututoa välimust"
+    "%(senderName)s has updated the room layout": "%(senderName)s on uuendanud jututoa välimust",
+    "%(spaceName)s and %(count)s others|one": "%(spaceName)s ja veel %(count)s kogukond",
+    "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s ja muud %(count)s kogukonda"
 }
