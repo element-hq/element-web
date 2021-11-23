@@ -3340,5 +3340,9 @@
     "Image size in the timeline": "Tamaño de las imágenes en la línea de tiempo",
     "%(senderName)s has updated the room layout": "%(senderName)s actualizó la disposición de la sala",
     "Sends the given message with rainfall": "Envía el mensaje junto a un efecto de lluvia",
-    "sends rainfall": "envía un efecto de lluvia"
+    "sends rainfall": "envía un efecto de lluvia",
+    "%(count)s votes|one": "%(count)s voto",
+    "%(count)s votes|other": "%(count)s votos",
+    "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s y %(count)s más"
 }
