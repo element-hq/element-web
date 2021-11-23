@@ -3360,5 +3360,9 @@
     "%(senderName)s has updated the room layout": "%(senderName)s on uuendanud jututoa välimust",
     "%(spaceName)s and %(count)s others|one": "%(spaceName)s ja veel %(count)s kogukond",
     "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s ja muud %(count)s kogukonda"
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s ja muud %(count)s kogukonda",
+    "Based on %(count)s votes|one": "Aluseks on %(count)s hääl",
+    "Based on %(count)s votes|other": "Aluseks on %(count)s häält",
+    "%(count)s votes|one": "%(count)s hääl",
+    "%(count)s votes|other": "%(count)s häält"
 }
