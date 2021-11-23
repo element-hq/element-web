@@ -139,9 +139,17 @@ export class Command {
         return this.getCommand() + " " + this.args;
     }
 
-    run(roomId: string, args: string) {
+    run(roomId: string, threadId: string, args: string) {
         // if it has no runFn then its an ignored/nop command (autocomplete only) e.g `/me`
         if (!this.runFn) return reject(_t("Command error"));
+
+        const renderingType = threadId
+            ? TimelineRenderingType.Thread
+            : TimelineRenderingType.Room;
+        if (this.renderingTypes && !this.renderingTypes?.includes(renderingType)) {
+            return reject(_t("Command error"));
+        }
+
         return this.runFn.bind(this)(roomId, args);
     }
 
