@@ -3357,5 +3357,12 @@
     "Automatically group all your people together in one place.": "Személyek automatikus csoportosítása egy helyre.",
     "%(senderName)s has updated the room layout": "%(senderName)s frissítette a szoba kinézetét",
     "Large": "Nagy",
-    "Image size in the timeline": "Képméret az idővonalon"
+    "Image size in the timeline": "Képméret az idővonalon",
+    "Based on %(count)s votes|one": "%(count)s szavazatot alapul véve",
+    "Based on %(count)s votes|other": "%(count)s szavazatot alapul véve",
+    "%(count)s votes|one": "%(count)s szavazat",
+    "%(count)s votes|other": "%(count)s szavazat",
+    "%(spaceName)s and %(count)s others|one": "%(spaceName)s és még %(count)s másik",
+    "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s és még %(count)s másik"
 }
