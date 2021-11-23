@@ -3362,5 +3362,9 @@
     "%(senderName)s has updated the room layout": "%(senderName)s 更新了聊天室布局",
     "%(spaceName)s and %(count)s others|one": "%(spaceName)s 和其他 %(count)s 个空间",
     "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s 和其他 %(count)s 个空间"
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s 和其他 %(count)s 个空间",
+    "Based on %(count)s votes|one": "基于 %(count)s 票",
+    "Based on %(count)s votes|other": "基于 %(count)s 票",
+    "%(count)s votes|one": "%(count)s 票",
+    "%(count)s votes|other": "%(count)s 票"
 }
