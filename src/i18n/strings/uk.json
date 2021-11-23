@@ -2348,5 +2348,18 @@
     "Popout widget": "Спливне розширення",
     "This widget may use cookies.": "Це розширення може використовувати куки.",
     "Error loading Widget": "Помилка завантаження розширення",
-    "This version of %(brand)s does not support searching encrypted messages": "Ця версія %(brand)s не підтримує пошук зашифрованих повідомлень"
+    "This version of %(brand)s does not support searching encrypted messages": "Ця версія %(brand)s не підтримує пошук зашифрованих повідомлень",
+    "Keys restored": "Ключ відновлено",
+    "Successfully restored %(sessionCount)s keys": "Успішно відновлено %(sessionCount)s ключів",
+    "Failed to decrypt %(failedCount)s sessions!": "Не вдалося розшифрувати %(failedCount)s сеансів!",
+    "Enter Security Key": "Введіть ключ безпеки",
+    "This looks like a valid Security Key!": "Це схоже на дійсний ключ безпеки!",
+    "Not a valid Security Key": "Хибний ключ безпеки",
+    "No backup found!": "Резервних копій не знайдено!",
+    "Copy link": "Копіювати посилання",
+    "Mentions only": "Лише згадки",
+    "Forget": "Забути",
+    "Modal Widget": "Модальне розширення",
+    "Message edits": "Редагування повідомлення",
+    "%(senderName)s has updated the room layout": "%(senderName)s оновлює макет кімнати"
 }
