@@ -197,11 +197,13 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                                 checked={this.state.selected === answer.id}
                                 onChange={this.onOptionSelected}
                             >
-                                <div className="mx_MPollBody_optionVoteCount">
-                                    { _t("%(count)s votes", { count: answerVotes }) }
-                                </div>
-                                <div className="mx_MPollBody_optionText">
-                                    { answer[TEXT_NODE_TYPE] }
+                                <div className="mx_MPollBody_optionDescription">
+                                    <div className="mx_MPollBody_optionText">
+                                        { answer[TEXT_NODE_TYPE] }
+                                    </div>
+                                    <div className="mx_MPollBody_optionVoteCount">
+                                        { _t("%(count)s votes", { count: answerVotes }) }
+                                    </div>
                                 </div>
                             </StyledRadioButton>
                             <div className="mx_MPollBody_popularityBackground">

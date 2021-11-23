@@ -57,15 +57,23 @@ limitations under the License.
             padding-top: 2px;
         }
 
-        .mx_MPollBody_optionVoteCount {
-            position: absolute;
-            color: $secondary-content;
-            right: 4px;
-            font-size: $font-12px;
+        .mx_StyledRadioButton_spacer {
+            display: none;
+        }
+
+        .mx_MPollBody_optionDescription {
+            display: flex;
+            justify-content: space-between;
+
+            .mx_MPollBody_optionVoteCount {
+                color: $secondary-content;
+                font-size: $font-12px;
+                white-space: nowrap;
+            }
         }
 
         .mx_MPollBody_popularityBackground {
-            width: calc(100% - 4px);
+            width: calc(100% - 6px);
             height: 8px;
             margin-right: 12px;
             border-radius: 8px;
