@@ -3359,5 +3359,8 @@
     "Maximise widget": "最大化小部件",
     "Large": "大",
     "Image size in the timeline": "时间轴中的图像大小",
-    "%(senderName)s has updated the room layout": "%(senderName)s 更新了聊天室布局"
+    "%(senderName)s has updated the room layout": "%(senderName)s 更新了聊天室布局",
+    "%(spaceName)s and %(count)s others|one": "%(spaceName)s 和其他 %(count)s 个空间",
+    "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s 和其他 %(count)s 个空间"
 }
