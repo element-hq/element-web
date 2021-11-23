@@ -3360,5 +3360,12 @@
     "Sends the given message with rainfall": "Invia il messaggio in questione con pioggia",
     "Large": "Grande",
     "Image size in the timeline": "Dimensione immagine nella linea temporale",
-    "%(senderName)s has updated the room layout": "%(senderName)s ha aggiornato la disposizione della stanza"
+    "%(senderName)s has updated the room layout": "%(senderName)s ha aggiornato la disposizione della stanza",
+    "Based on %(count)s votes|one": "Basato su %(count)s voto",
+    "Based on %(count)s votes|other": "Basato su %(count)s voti",
+    "%(count)s votes|one": "%(count)s voto",
+    "%(count)s votes|other": "%(count)s voti",
+    "%(spaceName)s and %(count)s others|one": "%(spaceName)s e altri %(count)s",
+    "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s e altri %(count)s"
 }
