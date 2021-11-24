@@ -37,29 +37,6 @@ afterAll(() => {
 });
 
 describe("PollCreateDialog", () => {
-    it("doesn't allow submitting until there are options", () => {
-        const dialog = mount(
-            <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />,
-        );
-        expect(submitIsDisabled(dialog)).toBe(true);
-    });
-
-    it("does allow submitting when there are options and a question", () => {
-        // Given a dialog with no info in (which I am unable to submit)
-        const dialog = mount(
-            <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />,
-        );
-        expect(submitIsDisabled(dialog)).toBe(true);
-
-        // When I set some values in the boxes
-        changeValue(dialog, "Question or topic", "Q");
-        changeValue(dialog, "Option 1", "A1");
-        changeValue(dialog, "Option 2", "A2");
-
-        // Then I am able to submit
-        expect(submitIsDisabled(dialog)).toBe(false);
-    });
-
     it("renders a blank poll", () => {
         const dialog = mount(
             <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />,
@@ -84,6 +61,45 @@ describe("PollCreateDialog", () => {
         dialog.find("div.mx_PollCreateDialog_addOption").simulate("click");
         changeValue(dialog, "Option 3", "Mu");
         expect(dialog).toMatchSnapshot();
+    });
+
+    it("doesn't allow submitting until there are options", () => {
+        const dialog = mount(
+            <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />,
+        );
+        expect(submitIsDisabled(dialog)).toBe(true);
+    });
+
+    it("does allow submitting when there are options and a question", () => {
+        // Given a dialog with no info in (which I am unable to submit)
+        const dialog = mount(
+            <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />,
+        );
+        expect(submitIsDisabled(dialog)).toBe(true);
+
+        // When I set some values in the boxes
+        changeValue(dialog, "Question or topic", "Q");
+        changeValue(dialog, "Option 1", "A1");
+        changeValue(dialog, "Option 2", "A2");
+
+        // Then I am able to submit
+        expect(submitIsDisabled(dialog)).toBe(false);
+    });
+
+    it("displays a spinner after submitting", () => {
+        TestUtils.stubClient();
+        MatrixClientPeg.get().sendEvent = jest.fn(() => Promise.resolve());
+
+        const dialog = mount(
+            <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />,
+        );
+        changeValue(dialog, "Question or topic", "Q");
+        changeValue(dialog, "Option 1", "A1");
+        changeValue(dialog, "Option 2", "A2");
+        expect(dialog.find("Spinner").length).toBe(0);
+
+        dialog.find("button").simulate("click");
+        expect(dialog.find("Spinner").length).toBe(1);
     });
 });
 

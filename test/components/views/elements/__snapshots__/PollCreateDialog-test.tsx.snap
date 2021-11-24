@@ -542,7 +542,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                       class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
                     >
                       <input
-                        id="mx_Field_7"
+                        id="mx_Field_1"
                         label="Question or topic"
                         maxlength="340"
                         placeholder="Write something..."
@@ -550,7 +550,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                         value=""
                       />
                       <label
-                        for="mx_Field_7"
+                        for="mx_Field_1"
                       >
                         Question or topic
                       </label>
@@ -565,7 +565,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                         class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
                       >
                         <input
-                          id="mx_Field_8"
+                          id="mx_Field_2"
                           label="Option 1"
                           maxlength="340"
                           placeholder="Write an option"
@@ -573,7 +573,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                           value=""
                         />
                         <label
-                          for="mx_Field_8"
+                          for="mx_Field_2"
                         >
                           Option 1
                         </label>
@@ -591,7 +591,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                         class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
                       >
                         <input
-                          id="mx_Field_9"
+                          id="mx_Field_3"
                           label="Option 2"
                           maxlength="340"
                           placeholder="Write an option"
@@ -599,7 +599,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                           value=""
                         />
                         <label
-                          for="mx_Field_9"
+                          for="mx_Field_3"
                         >
                           Option 2
                         </label>
@@ -700,7 +700,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                         class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
                       >
                         <input
-                          id="mx_Field_7"
+                          id="mx_Field_1"
                           label="Question or topic"
                           maxlength="340"
                           placeholder="Write something..."
@@ -708,7 +708,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                           value=""
                         />
                         <label
-                          for="mx_Field_7"
+                          for="mx_Field_1"
                         >
                           Question or topic
                         </label>
@@ -723,7 +723,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                           class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
                         >
                           <input
-                            id="mx_Field_8"
+                            id="mx_Field_2"
                             label="Option 1"
                             maxlength="340"
                             placeholder="Write an option"
@@ -731,7 +731,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                             value=""
                           />
                           <label
-                            for="mx_Field_8"
+                            for="mx_Field_2"
                           >
                             Option 1
                           </label>
@@ -749,7 +749,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                           class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
                         >
                           <input
-                            id="mx_Field_9"
+                            id="mx_Field_3"
                             label="Option 2"
                             maxlength="340"
                             placeholder="Write an option"
@@ -757,7 +757,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                             value=""
                           />
                           <label
-                            for="mx_Field_9"
+                            for="mx_Field_3"
                           >
                             Option 2
                           </label>
@@ -885,7 +885,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                   >
                     <input
                       disabled={false}
-                      id="mx_Field_7"
+                      id="mx_Field_1"
                       label="Question or topic"
                       maxLength={340}
                       onBlur={[Function]}
@@ -896,7 +896,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                       value=""
                     />
                     <label
-                      htmlFor="mx_Field_7"
+                      htmlFor="mx_Field_1"
                     >
                       Question or topic
                     </label>
@@ -928,7 +928,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                     >
                       <input
                         disabled={false}
-                        id="mx_Field_8"
+                        id="mx_Field_2"
                         label="Option 1"
                         maxLength={340}
                         onBlur={[Function]}
@@ -939,7 +939,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                         value=""
                       />
                       <label
-                        htmlFor="mx_Field_8"
+                        htmlFor="mx_Field_2"
                       >
                         Option 1
                       </label>
@@ -986,7 +986,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                     >
                       <input
                         disabled={false}
-                        id="mx_Field_9"
+                        id="mx_Field_3"
                         label="Option 2"
                         maxLength={340}
                         onBlur={[Function]}
@@ -997,7 +997,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
                         value=""
                       />
                       <label
-                        htmlFor="mx_Field_9"
+                        htmlFor="mx_Field_3"
                       >
                         Option 2
                       </label>
@@ -1661,7 +1661,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                       class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
                     >
                       <input
-                        id="mx_Field_10"
+                        id="mx_Field_4"
                         label="Question or topic"
                         maxlength="340"
                         placeholder="Write something..."
@@ -1669,7 +1669,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                         value="How many turnips is the optimal number?"
                       />
                       <label
-                        for="mx_Field_10"
+                        for="mx_Field_4"
                       >
                         Question or topic
                       </label>
@@ -1684,7 +1684,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                         class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
                       >
                         <input
-                          id="mx_Field_11"
+                          id="mx_Field_5"
                           label="Option 1"
                           maxlength="340"
                           placeholder="Write an option"
@@ -1692,7 +1692,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                           value="As many as my neighbour"
                         />
                         <label
-                          for="mx_Field_11"
+                          for="mx_Field_5"
                         >
                           Option 1
                         </label>
@@ -1710,7 +1710,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                         class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
                       >
                         <input
-                          id="mx_Field_12"
+                          id="mx_Field_6"
                           label="Option 2"
                           maxlength="340"
                           placeholder="Write an option"
@@ -1718,7 +1718,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                           value="The question is meaningless"
                         />
                         <label
-                          for="mx_Field_12"
+                          for="mx_Field_6"
                         >
                           Option 2
                         </label>
@@ -1736,7 +1736,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                         class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
                       >
                         <input
-                          id="mx_Field_13"
+                          id="mx_Field_7"
                           label="Option 3"
                           maxlength="340"
                           placeholder="Write an option"
@@ -1744,7 +1744,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                           value="Mu"
                         />
                         <label
-                          for="mx_Field_13"
+                          for="mx_Field_7"
                         >
                           Option 3
                         </label>
@@ -1844,7 +1844,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                         class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
                       >
                         <input
-                          id="mx_Field_10"
+                          id="mx_Field_4"
                           label="Question or topic"
                           maxlength="340"
                           placeholder="Write something..."
@@ -1852,7 +1852,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                           value="How many turnips is the optimal number?"
                         />
                         <label
-                          for="mx_Field_10"
+                          for="mx_Field_4"
                         >
                           Question or topic
                         </label>
@@ -1867,7 +1867,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                           class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
                         >
                           <input
-                            id="mx_Field_11"
+                            id="mx_Field_5"
                             label="Option 1"
                             maxlength="340"
                             placeholder="Write an option"
@@ -1875,7 +1875,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                             value="As many as my neighbour"
                           />
                           <label
-                            for="mx_Field_11"
+                            for="mx_Field_5"
                           >
                             Option 1
                           </label>
@@ -1893,7 +1893,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                           class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
                         >
                           <input
-                            id="mx_Field_12"
+                            id="mx_Field_6"
                             label="Option 2"
                             maxlength="340"
                             placeholder="Write an option"
@@ -1901,7 +1901,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                             value="The question is meaningless"
                           />
                           <label
-                            for="mx_Field_12"
+                            for="mx_Field_6"
                           >
                             Option 2
                           </label>
@@ -1919,7 +1919,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                           class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
                         >
                           <input
-                            id="mx_Field_13"
+                            id="mx_Field_7"
                             label="Option 3"
                             maxlength="340"
                             placeholder="Write an option"
@@ -1927,7 +1927,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                             value="Mu"
                           />
                           <label
-                            for="mx_Field_13"
+                            for="mx_Field_7"
                           >
                             Option 3
                           </label>
@@ -2054,7 +2054,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                   >
                     <input
                       disabled={false}
-                      id="mx_Field_10"
+                      id="mx_Field_4"
                       label="Question or topic"
                       maxLength={340}
                       onBlur={[Function]}
@@ -2065,7 +2065,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                       value="How many turnips is the optimal number?"
                     />
                     <label
-                      htmlFor="mx_Field_10"
+                      htmlFor="mx_Field_4"
                     >
                       Question or topic
                     </label>
@@ -2097,7 +2097,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                     >
                       <input
                         disabled={false}
-                        id="mx_Field_11"
+                        id="mx_Field_5"
                         label="Option 1"
                         maxLength={340}
                         onBlur={[Function]}
@@ -2108,7 +2108,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                         value="As many as my neighbour"
                       />
                       <label
-                        htmlFor="mx_Field_11"
+                        htmlFor="mx_Field_5"
                       >
                         Option 1
                       </label>
@@ -2155,7 +2155,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                     >
                       <input
                         disabled={false}
-                        id="mx_Field_12"
+                        id="mx_Field_6"
                         label="Option 2"
                         maxLength={340}
                         onBlur={[Function]}
@@ -2166,7 +2166,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                         value="The question is meaningless"
                       />
                       <label
-                        htmlFor="mx_Field_12"
+                        htmlFor="mx_Field_6"
                       >
                         Option 2
                       </label>
@@ -2213,7 +2213,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                     >
                       <input
                         disabled={false}
-                        id="mx_Field_13"
+                        id="mx_Field_7"
                         label="Option 3"
                         maxLength={340}
                         onBlur={[Function]}
@@ -2224,7 +2224,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
                         value="Mu"
                       />
                       <label
-                        htmlFor="mx_Field_13"
+                        htmlFor="mx_Field_7"
                       >
                         Option 3
                       </label>
