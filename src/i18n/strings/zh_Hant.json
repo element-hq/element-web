@@ -3361,5 +3361,12 @@
     "Sends the given message with rainfall": "與降雨一同傳送指定的訊息",
     "Large": "大",
     "Image size in the timeline": "時間軸中的圖片大小",
-    "%(senderName)s has updated the room layout": "%(senderName)s 已更新聊天室佈局"
+    "%(senderName)s has updated the room layout": "%(senderName)s 已更新聊天室佈局",
+    "Based on %(count)s votes|one": "以 %(count)s 個投票為基礎",
+    "Based on %(count)s votes|other": "以 %(count)s 個投票為基礎",
+    "%(count)s votes|one": "%(count)s 個投票",
+    "%(count)s votes|other": "%(count)s 個投票",
+    "%(spaceName)s and %(count)s others|one": "%(spaceName)s 與 %(count)s 個其他的",
+    "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s 與 %(count)s 個其他的"
 }
