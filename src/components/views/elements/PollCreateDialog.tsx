@@ -89,7 +89,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
         this.setState({ options: newOptions }, () => {
             // Scroll the button into view after the state update to ensure we don't experience
             // a pop-in effect, and to avoid the button getting cut off due to a mid-scroll render.
-            this.addOptionRef.current?.scrollIntoView();
+            this.addOptionRef.current?.scrollIntoView?.();
         });
     };
 
