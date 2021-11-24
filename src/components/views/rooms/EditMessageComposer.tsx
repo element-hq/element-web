@@ -426,7 +426,11 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             }
             if (shouldSend) {
                 this.cancelPreviousPendingEdit();
-                const prom = this.props.mxClient.sendMessage(roomId, editContent);
+
+                const event = this.props.editState.getEvent();
+                const threadId = event.threadRootId || null;
+
+                const prom = this.props.mxClient.sendMessage(roomId, threadId, editContent);
                 this.clearStoredEditorState();
                 dis.dispatch({ action: "message_sent" });
                 CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, true, false, editContent);

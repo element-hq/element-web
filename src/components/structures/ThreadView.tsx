@@ -81,7 +81,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         this.teardownThread();
         dis.unregister(this.dispatcherRef);
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        room.on(ThreadEvent.New, this.onNewThread);
+        room.removeListener(ThreadEvent.New, this.onNewThread);
     }
 
     public componentDidUpdate(prevProps) {
