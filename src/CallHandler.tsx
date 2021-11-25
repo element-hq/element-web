@@ -380,6 +380,16 @@ export default class CallHandler extends EventEmitter {
         return callsNotInThatRoom;
     }
 
+    public getAllActiveCallsForPip(roomId: string) {
+        const room = MatrixClientPeg.get().getRoom(roomId);
+        if (WidgetLayoutStore.instance.hasMaximisedWidget(room)) {
+            // This checks if there is space for the call view in the aux panel
+            // If there is no space any call should be displayed in PiP
+            return this.getAllActiveCalls();
+        }
+        return this.getAllActiveCallsNotInRoom(roomId);
+    }
+
     getTransfereeForCallId(callId: string): MatrixCall {
         return this.transferees[callId];
     }
