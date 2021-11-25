@@ -420,6 +420,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             } else {
                 newState.initialEventId = initialEventId;
                 newState.isInitialEventHighlighted = RoomViewStore.isInitialEventHighlighted();
+
+                if (thread && initialEvent?.isThreadRoot) {
+                    dispatchShowThreadEvent(
+                        thread.rootEvent,
+                        initialEvent,
+                        RoomViewStore.isInitialEventHighlighted(),
+                    );
+                }
             }
         }
 
