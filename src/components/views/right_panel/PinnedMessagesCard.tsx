@@ -122,24 +122,26 @@ const PinnedMessagesCard = ({ room, onClose }: IProps) => {
     if (!pinnedEvents) {
         content = <Spinner />;
     } else if (pinnedEvents.length > 0) {
-        let onUnpinClicked;
-        if (canUnpin) {
-            onUnpinClicked = async (event: MatrixEvent) => {
-                const pinnedEvents = room.currentState.getStateEvents(EventType.RoomPinnedEvents, "");
-                if (pinnedEvents?.getContent()?.pinned) {
-                    const pinned = pinnedEvents.getContent().pinned;
-                    const index = pinned.indexOf(event.getId());
-                    if (index !== -1) {
-                        pinned.splice(index, 1);
-                        await cli.sendStateEvent(room.roomId, EventType.RoomPinnedEvents, { pinned }, "");
-                    }
+        const onUnpinClicked = async (event: MatrixEvent) => {
+            const pinnedEvents = room.currentState.getStateEvents(EventType.RoomPinnedEvents, "");
+            if (pinnedEvents?.getContent()?.pinned) {
+                const pinned = pinnedEvents.getContent().pinned;
+                const index = pinned.indexOf(event.getId());
+                if (index !== -1) {
+                    pinned.splice(index, 1);
+                    await cli.sendStateEvent(room.roomId, EventType.RoomPinnedEvents, { pinned }, "");
                 }
-            };
-        }
+            }
+        };
 
         // show them in reverse, with latest pinned at the top
         content = pinnedEvents.filter(Boolean).reverse().map(ev => (
-            <PinnedEventTile key={ev.getId()} room={room} event={ev} onUnpinClicked={() => onUnpinClicked(ev)} />
+            <PinnedEventTile
+                key={ev.getId()}
+                room={room}
+                event={ev}
+                onUnpinClicked={canUnpin ? () => onUnpinClicked(ev) : undefined}
+            />
         ));
     } else {
         content = <div className="mx_PinnedMessagesCard_empty">
