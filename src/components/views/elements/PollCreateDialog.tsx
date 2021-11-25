@@ -16,7 +16,9 @@ limitations under the License.
 
 import ScrollableBaseModal, { IScrollableBaseState } from "../dialogs/ScrollableBaseModal";
 import { IDialogProps } from "../dialogs/IDialogProps";
+import QuestionDialog from "../dialogs/QuestionDialog";
 import React, { ChangeEvent, createRef } from "react";
+import Modal from '../../../Modal';
 import { _t } from "../../../languageHandler";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { arrayFastClone, arraySeed } from "../../../utils/arrays";
@@ -98,10 +100,32 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
         this.matrixClient.sendEvent(
             this.props.room.roomId,
             POLL_START_EVENT_TYPE.name,
-            makePollContent(this.state.question, this.state.options, POLL_KIND_DISCLOSED.name),
-        ).then(() => this.props.onFinished(true)).catch(e => {
-            console.error("Failed to submit poll event:", e);
-            this.setState({ busy: false, canSubmit: true });
+            makePollContent(
+                this.state.question, this.state.options, POLL_KIND_DISCLOSED.name,
+            ),
+        ).then(
+            () => this.props.onFinished(true),
+        ).catch(e => {
+            console.error("Failed to post poll:", e);
+            Modal.createTrackedDialog(
+                'Failed to post poll',
+                '',
+                QuestionDialog,
+                {
+                    title: _t("Failed to post poll"),
+                    description: _t(
+                        "Sorry, the poll you tried to create was not posted."),
+                    button: _t('Try again'),
+                    cancelButton: _t('Cancel'),
+                    onFinished: (tryAgain: boolean) => {
+                        if (!tryAgain) {
+                            this.cancel();
+                        } else {
+                            this.setState({ busy: false, canSubmit: true });
+                        }
+                    },
+                },
+            );
         });
     }
 

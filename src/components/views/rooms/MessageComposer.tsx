@@ -216,9 +216,17 @@ class PollButton extends React.PureComponent<IPollButtonProps> {
                 description: _t("You do not have permission to start polls in this room."),
             });
         } else {
-            Modal.createTrackedDialog('Polls', 'create', PollCreateDialog, {
-                room: this.props.room,
-            }, 'mx_CompoundDialog');
+            Modal.createTrackedDialog(
+                'Polls',
+                'create',
+                PollCreateDialog,
+                {
+                    room: this.props.room,
+                },
+                'mx_CompoundDialog',
+                false, // isPriorityModal
+                true,  // isStaticModal
+            );
         }
     };
 

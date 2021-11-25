@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import Modal from '../../../Modal';
 import { IBodyProps } from "./IBodyProps";
 import {
     IPollAnswer,
@@ -29,6 +30,7 @@ import StyledRadioButton from '../elements/StyledRadioButton';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from 'matrix-js-sdk/src/models/relations';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import ErrorDialog from '../dialogs/ErrorDialog';
 
 // TODO: [andyb] Use extensible events library when ready
 const TEXT_NODE_TYPE = "org.matrix.msc1767.text";
@@ -123,6 +125,17 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
             responseContent,
         ).catch(e => {
             console.error("Failed to submit poll response event:", e);
+
+            Modal.createTrackedDialog(
+                'Vote not registered',
+                '',
+                ErrorDialog,
+                {
+                    title: _t("Vote not registered"),
+                    description: _t(
+                        "Sorry, your vote was not registered. Please try again."),
+                },
+            );
         });
 
         this.setState({ selected: answerId });
