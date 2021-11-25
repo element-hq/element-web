@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import React from 'react';
+import { sortBy } from "lodash";
+
 import { _t } from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
@@ -24,6 +26,8 @@ import SdkConfig from "../../../../../SdkConfig";
 import BetaCard from "../../../beta/BetaCard";
 import SettingsFlag from '../../../elements/SettingsFlag';
 import { MatrixClientPeg } from '../../../../../MatrixClientPeg';
+import { LabGroup, labGroupNames } from "../../../../../settings/Settings";
+import { EnhancedMap } from "../../../../../utils/maps";
 
 interface ILabsSettingToggleProps {
     featureId: string;
@@ -66,7 +70,7 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
         const [labs, betas] = features.reduce((arr, f) => {
             arr[SettingsStore.getBetaInfo(f) ? 1 : 0].push(f);
             return arr;
-        }, [[], []]);
+        }, [[], []] as [string[], string[]]);
 
         let betaSection;
         if (betas.length) {
@@ -77,23 +81,43 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
 
         let labsSection;
         if (SdkConfig.get()['showLabsSettings']) {
-            const flags = labs.map(f => <LabsSettingToggle featureId={f} key={f} />);
+            const groups = new EnhancedMap<LabGroup, JSX.Element[]>();
+            labs.forEach(f => {
+                groups.getOrCreate(SettingsStore.getLabGroup(f), []).push(
+                    <LabsSettingToggle featureId={f} key={f} />,
+                );
+            });
 
-            let hiddenReadReceipts;
+            groups.get(LabGroup.Widgets).push(
+                <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />,
+            );
+
+            groups.get(LabGroup.Experimental).push(
+                <SettingsFlag name="lowBandwidth" level={SettingLevel.DEVICE} />,
+            );
+
+            groups.getOrCreate(LabGroup.Developer, []).push(
+                <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />,
+                <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />,
+            );
+
+            groups.get(LabGroup.Analytics).push(
+                <SettingsFlag name="automaticErrorReporting" level={SettingLevel.DEVICE} />,
+            );
+
             if (this.state.showHiddenReadReceipts) {
-                hiddenReadReceipts = (
-                    <SettingsFlag name="feature_hidden_read_receipts" level={SettingLevel.DEVICE} />
+                groups.get(LabGroup.Messaging).push(
+                    <SettingsFlag name="feature_hidden_read_receipts" level={SettingLevel.DEVICE} />,
                 );
             }
 
             labsSection = <div className="mx_SettingsTab_section">
-                <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />
-                { flags }
-                <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />
-                <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
-                <SettingsFlag name="lowBandwidth" level={SettingLevel.DEVICE} />
-                <SettingsFlag name="automaticErrorReporting" level={SettingLevel.DEVICE} />
-                { hiddenReadReceipts }
+                { sortBy(Array.from(groups.entries()), "0").map(([group, flags]) => (
+                    <div key={group}>
+                        <span className="mx_SettingsTab_subheading">{ _t(labGroupNames[group]) }</span>
+                        { flags }
+                    </div>
+                )) }
             </div>;
         }
 
