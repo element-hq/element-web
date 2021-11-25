@@ -88,6 +88,11 @@ export enum Action {
     UpdateSystemFont = "update_system_font",
 
     /**
+     * Changes room based on payload parameters.
+     */
+    ViewRoom = "view_room",
+
+    /**
      * Changes room based on room list order and payload parameters. Should be used with ViewRoomDeltaPayload.
      */
     ViewRoomDelta = "view_room_delta",

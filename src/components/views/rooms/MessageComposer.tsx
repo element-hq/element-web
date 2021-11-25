@@ -380,7 +380,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
         const viaServers = [this.state.tombstone.getSender().split(':').slice(1).join(':')];
         dis.dispatch({
-            action: 'view_room',
+            action: Action.ViewRoom,
             highlighted: true,
             event_id: createEventId,
             room_id: replacementRoomId,

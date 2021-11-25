@@ -18,6 +18,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import dis from '../../../dispatcher/dispatcher';
+import { Action } from "../../../dispatcher/actions";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../../utils/strings";
 import { ChevronFace, ContextMenuTooltipButton } from "../../structures/ContextMenu";
@@ -48,7 +49,7 @@ const ThreadListContextMenu: React.FC<IProps> = ({ mxEvent, permalinkCreator, on
         evt.preventDefault();
         evt.stopPropagation();
         dis.dispatch({
-            action: 'view_room',
+            action: Action.ViewRoom,
             event_id: mxEvent.getId(),
             highlighted: true,
             room_id: mxEvent.getRoomId(),

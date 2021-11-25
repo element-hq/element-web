@@ -23,6 +23,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import InfoTooltip from "../elements/InfoTooltip";
 import dis from "../../../dispatcher/dispatcher";
+import { Action } from '../../../dispatcher/actions';
 import { showCommunityRoomInviteDialog } from "../../../RoomInvite";
 import GroupStore from "../../../stores/GroupStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -100,7 +101,7 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
                 // Force the group store to update as it might have missed the general chat
                 await GroupStore.refreshGroupRooms(result.group_id);
                 dis.dispatch({
-                    action: 'view_room',
+                    action: Action.ViewRoom,
                     room_id: result.room_id,
                 });
                 showCommunityRoomInviteDialog(result.room_id, this.state.name);

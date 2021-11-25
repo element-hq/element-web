@@ -259,7 +259,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         // entire thing.
         if (opts.andView) {
             dis.dispatch({
-                action: 'view_room',
+                action: Action.ViewRoom,
                 room_id: roomId,
                 should_peek: false,
                 // Creating a room will have joined us to the room,

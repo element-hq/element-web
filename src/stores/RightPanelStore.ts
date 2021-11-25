@@ -148,7 +148,7 @@ export default class RightPanelStore extends Store<ActionPayload> {
 
     __onDispatch(payload: ActionPayload) { // eslint-disable-line @typescript-eslint/naming-convention
         switch (payload.action) {
-            case 'view_room':
+            case Action.ViewRoom:
                 if (payload.room_id === this.lastRoomId) break; // skip this transition, probably a permalink
                 // fallthrough
             case 'view_group':

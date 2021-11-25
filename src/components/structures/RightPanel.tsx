@@ -200,7 +200,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
     };
 
     private onAction = (payload: ActionPayload) => {
-        const isChangingRoom = payload.action === 'view_room' && payload.room_id !== this.props.room.roomId;
+        const isChangingRoom = payload.action === Action.ViewRoom && payload.room_id !== this.props.room.roomId;
         const isViewingThread = this.state.phase === RightPanelPhases.ThreadView;
         if (isChangingRoom && isViewingThread) {
             dispatchShowThreadsPanelEvent();

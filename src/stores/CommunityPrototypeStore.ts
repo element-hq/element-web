@@ -17,6 +17,7 @@ limitations under the License.
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
+import { Action } from "../dispatcher/actions";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EffectiveMembership, getEffectiveMembership } from "../utils/membership";
 import SettingsStore from "../settings/SettingsStore";
@@ -149,7 +150,7 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
             const chat = this.getGeneralChat(payload.tag);
             if (chat) {
                 dis.dispatch({
-                    action: 'view_room',
+                    action: Action.ViewRoom,
                     room_id: chat.roomId,
                 });
             }

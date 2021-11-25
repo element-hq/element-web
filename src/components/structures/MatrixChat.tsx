@@ -676,7 +676,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case 'view_user_info':
                 this.viewUser(payload.userId, payload.subAction);
                 break;
-            case 'view_room': {
+            case Action.ViewRoom: {
                 // Takes either a room ID or room alias: if switching to a room the client is already
                 // known to be in (eg. user clicks on a room in the recents panel), supply the ID
                 // If the user is clicking on a room in the context of the alias being presented
@@ -1124,7 +1124,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         if (dmRooms.length > 0) {
             dis.dispatch({
-                action: 'view_room',
+                action: Action.ViewRoom,
                 room_id: dmRooms[0],
             });
         } else {
@@ -1378,7 +1378,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private viewLastRoom() {
         dis.dispatch({
-            action: 'view_room',
+            action: Action.ViewRoom,
             room_id: localStorage.getItem('mx_last_room_id'),
         });
     }
@@ -1793,7 +1793,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
 
             const payload = {
-                action: 'view_room',
+                action: Action.ViewRoom,
                 event_id: eventId,
                 via_servers: via,
                 // If an event ID is given in the URL hash, notify RoomViewStore to mark
@@ -1849,7 +1849,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     onAliasClick(event: MouseEvent, alias: string) {
         event.preventDefault();
-        dis.dispatch({ action: 'view_room', room_alias: alias });
+        dis.dispatch({ action: Action.ViewRoom, room_alias: alias });
     }
 
     onUserClick(event: MouseEvent, userId: string) {

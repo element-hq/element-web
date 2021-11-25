@@ -94,7 +94,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     };
 
     private onAction = (payload: ActionPayload) => {
-        if (payload.action === 'view_room' && payload.clear_search) {
+        if (payload.action === Action.ViewRoom && payload.clear_search) {
             this.clearInput();
         } else if (payload.action === 'focus_room_filter' && this.inputRef.current) {
             this.inputRef.current.focus();

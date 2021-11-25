@@ -126,7 +126,7 @@ async function openDMForUser(matrixClient: MatrixClient, userId: string) {
 
     if (lastActiveRoom) {
         dis.dispatch({
-            action: 'view_room',
+            action: Action.ViewRoom,
             room_id: lastActiveRoom.roomId,
         });
         return;
@@ -368,7 +368,7 @@ const UserOptionsSection: React.FC<{
             const onReadReceiptButton = function() {
                 const room = cli.getRoom(member.roomId);
                 dis.dispatch({
-                    action: 'view_room',
+                    action: Action.ViewRoom,
                     highlighted: true,
                     event_id: room.getEventReadUpTo(member.userId),
                     room_id: member.roomId,

@@ -925,7 +925,7 @@ export default class CallHandler extends EventEmitter {
                 this.setActiveCallRoomId(payload.room_id);
                 CountlyAnalytics.instance.trackJoinCall(payload.room_id, call.type === CallType.Video, false);
                 dis.dispatch({
-                    action: "view_room",
+                    action: Action.ViewRoom,
                     room_id: payload.room_id,
                 });
                 break;
@@ -974,7 +974,7 @@ export default class CallHandler extends EventEmitter {
         const roomId = await ensureDMExists(MatrixClientPeg.get(), nativeUserId);
 
         dis.dispatch({
-            action: 'view_room',
+            action: Action.ViewRoom,
             room_id: roomId,
         });
 
@@ -1005,7 +1005,7 @@ export default class CallHandler extends EventEmitter {
                 transferee: call,
             });
             dis.dispatch({
-                action: 'view_room',
+                action: Action.ViewRoom,
                 room_id: dmRoomId,
                 should_peek: false,
                 joining: false,

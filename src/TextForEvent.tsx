@@ -495,7 +495,7 @@ function textForPowerEvent(event: MatrixEvent): () => string | null {
 
 const onPinnedOrUnpinnedMessageClick = (messageId: string, roomId: string): void => {
     defaultDispatcher.dispatch({
-        action: 'view_room',
+        action: Action.ViewRoom,
         event_id: messageId,
         highlighted: true,
         room_id: roomId,

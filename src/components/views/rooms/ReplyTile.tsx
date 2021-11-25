@@ -18,6 +18,7 @@ import React, { createRef } from 'react';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
+import { Action } from '../../../dispatcher/actions';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import SenderProfile from "../messages/SenderProfile";
@@ -90,7 +91,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
                 this.props.toggleExpandedQuote();
             } else {
                 dis.dispatch({
-                    action: 'view_room',
+                    action: Action.ViewRoom,
                     event_id: this.props.mxEvent.getId(),
                     highlighted: true,
                     room_id: this.props.mxEvent.getRoomId(),

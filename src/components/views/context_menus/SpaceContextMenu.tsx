@@ -113,7 +113,7 @@ const SpaceContextMenu = ({ space, onFinished, ...props }: IProps) => {
             ev.stopPropagation();
 
             defaultDispatcher.dispatch({
-                action: 'view_room',
+                action: Action.ViewRoom,
                 room_id: space.roomId,
                 forceTimeline: true,
             });

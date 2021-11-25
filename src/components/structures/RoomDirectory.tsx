@@ -49,6 +49,7 @@ import { ActionPayload } from "../../dispatcher/payloads";
 import { getDisplayAliasForAliasSet } from "../../Rooms";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { Action } from "../../dispatcher/actions";
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 800;
@@ -493,7 +494,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
     private showRoom(room: IPublicRoomsChunkRoom, roomAlias?: string, autoJoin = false, shouldPeek = false) {
         this.onFinished();
         const payload: ActionPayload = {
-            action: 'view_room',
+            action: Action.ViewRoom,
             auto_join: autoJoin,
             should_peek: shouldPeek,
             _type: "room_directory", // instrumentation

@@ -528,7 +528,7 @@ export const Commands = [
                     }
 
                     dis.dispatch({
-                        action: 'view_room',
+                        action: Action.ViewRoom,
                         room_alias: roomAlias,
                         auto_join: true,
                         _type: "slash_command", // instrumentation
@@ -538,7 +538,7 @@ export const Commands = [
                     const [roomId, ...viaServers] = params;
 
                     dis.dispatch({
-                        action: 'view_room',
+                        action: Action.ViewRoom,
                         room_id: roomId,
                         opts: {
                             // These are passed down to the js-sdk's /join call
@@ -569,7 +569,7 @@ export const Commands = [
                     const eventId = permalinkParts.eventId;
 
                     const dispatch = {
-                        action: 'view_room',
+                        action: Action.ViewRoom,
                         auto_join: true,
                         _type: "slash_command", // instrumentation
                     };
@@ -1047,7 +1047,7 @@ export const Commands = [
                 const roomId = await ensureDMExists(MatrixClientPeg.get(), userId);
 
                 dis.dispatch({
-                    action: 'view_room',
+                    action: Action.ViewRoom,
                     room_id: roomId,
                 });
             })());
@@ -1069,7 +1069,7 @@ export const Commands = [
                             const cli = MatrixClientPeg.get();
                             const roomId = await ensureDMExists(cli, userId);
                             dis.dispatch({
-                                action: 'view_room',
+                                action: Action.ViewRoom,
                                 room_id: roomId,
                             });
                             if (msg) {

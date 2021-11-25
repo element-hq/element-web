@@ -22,6 +22,7 @@ import { throttle } from 'lodash';
 import AccessibleButton from '../../components/views/elements/AccessibleButton';
 import classNames from 'classnames';
 import { replaceableComponent } from "../../utils/replaceableComponent";
+import { Action } from '../../dispatcher/actions';
 
 interface IProps {
     onSearch?: (query: string) => void;
@@ -77,7 +78,7 @@ export default class SearchBox extends React.Component<IProps, IState> {
         if (!this.props.enableRoomSearchFocus) return;
 
         switch (payload.action) {
-            case 'view_room':
+            case Action.ViewRoom:
                 if (this.search.current && payload.clear_search) {
                     this.clearSearch();
                 }

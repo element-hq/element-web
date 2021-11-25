@@ -20,6 +20,7 @@ import React from 'react';
 import { _t, _td } from '../../../../languageHandler';
 import RoomAvatar from '../../avatars/RoomAvatar';
 import dis from '../../../../dispatcher/dispatcher';
+import { Action } from '../../../../dispatcher/actions';
 import classNames from 'classnames';
 import AccessibleTooltipButton from '../../elements/AccessibleTooltipButton';
 
@@ -44,7 +45,7 @@ const onFullscreenClick = () => {
 
 const onExpandClick = (roomId: string) => {
     dis.dispatch({
-        action: 'view_room',
+        action: Action.ViewRoom,
         room_id: roomId,
     });
 };

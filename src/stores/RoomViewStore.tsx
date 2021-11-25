@@ -107,7 +107,7 @@ class RoomViewStore extends Store<ActionPayload> {
             //      - event_id:     '$213456782:matrix.org'
             //      - event_offset: 100
             //      - highlighted:  true
-            case 'view_room':
+            case Action.ViewRoom:
                 this.viewRoom(payload);
                 break;
             // for these events blank out the roomId as we are no longer in the RoomView
@@ -158,7 +158,7 @@ class RoomViewStore extends Store<ActionPayload> {
                     if (payload.event
                         && payload.event.getRoomId() !== this.state.roomId) {
                         dis.dispatch({
-                            action: 'view_room',
+                            action: Action.ViewRoom,
                             room_id: payload.event.getRoomId(),
                             replyingToEvent: payload.event,
                         });
@@ -251,7 +251,7 @@ class RoomViewStore extends Store<ActionPayload> {
             }
 
             dis.dispatch({
-                action: 'view_room',
+                action: Action.ViewRoom,
                 room_id: roomId,
                 event_id: payload.event_id,
                 highlighted: payload.highlighted,

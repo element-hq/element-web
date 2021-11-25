@@ -175,7 +175,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
     private onScroll = (): void => {
         if (this.props.initialEvent && this.props.initialEventHighlighted) {
             dis.dispatch({
-                action: 'view_room',
+                action: Action.ViewRoom,
                 room_id: this.props.room.roomId,
                 event_id: this.props.initialEvent?.getId(),
                 highlighted: false,

@@ -178,7 +178,7 @@ describe('CallHandler', () => {
             number: '01818118181',
         }, true);
 
-        const viewRoomPayload = await untilDispatch('view_room');
+        const viewRoomPayload = await untilDispatch(Action.ViewRoom);
         expect(viewRoomPayload.room_id).toEqual(MAPPED_ROOM_ID);
 
         // Check that a call was started
