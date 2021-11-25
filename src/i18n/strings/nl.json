@@ -3356,5 +3356,9 @@
     "%(senderName)s has updated the room layout": "%(senderName)s heeft de kamerindeling bijgewerkt",
     "%(spaceName)s and %(count)s others|one": "%(spaceName)s en %(count)s andere",
     "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s en %(count)s andere"
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s en %(count)s andere",
+    "Enter a security phrase only you know, as it's used to safeguard your data. To be secure, you shouldn't re-use your account password.": "Voer een veiligheidswachtwoord in die alleen u kent, deze wordt gebruikt om al uw gegevens te versleutelen. Om echt veilig te zijn, moet u het wachtwoord van uw account niet hergebruiken.",
+    "We'll generate a Security Key for you to store somewhere safe, like a password manager or a safe.": "Wij maken een veiligheidssleutel voor u aan die u ergens veilig kunt opbergen, zoals in een wachtwoordmanager of een kluis.",
+    "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "Ontvang toegang tot uw account en herstel de tijdens deze sessie opgeslagen versleutelingssleutels, zonder deze sleutels zijn sommige van uw versleutelde berichten in uw sessies onleesbaar.",
+    "Without verifying, you won't have access to all your messages and may appear as untrusted to others.": "Zonder verifiëren heeft u geen toegang tot al uw berichten en kan u als onvertrouwd aangemerkt staan bij anderen."
 }
