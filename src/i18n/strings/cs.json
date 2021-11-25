@@ -3368,5 +3368,15 @@
     "%(count)s votes|other": "%(count)s hlasů",
     "%(spaceName)s and %(count)s others|one": "%(spaceName)s a %(count)s další",
     "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s and %(count)s dalších"
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s and %(count)s dalších",
+    "Sorry, the poll you tried to create was not posted.": "Omlouváme se, ale hlasování, které jste se pokusili vytvořit, nebylo zveřejněno.",
+    "Failed to post poll": "Nepodařilo se zveřejnit hlasování",
+    "Sorry, your vote was not registered. Please try again.": "Je nám líto, váš hlas nebyl zaregistrován. Zkuste to prosím znovu.",
+    "Vote not registered": "Hlasování není registrováno",
+    "Developer": "Pro vývojáře",
+    "Experimental": "Experimentální",
+    "Themes": "Motivy vzhledu",
+    "Message Previews": "Náhledy zpráv",
+    "Moderation": "Moderování",
+    "Messaging": "Zprávy"
 }
