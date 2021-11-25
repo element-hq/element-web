@@ -298,10 +298,10 @@
     "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)s saíron %(count)s veces",
     "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s saíron",
     "%(oneUser)sleft %(count)s times|other": "%(oneUser)s saíu %(count)s veces",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)s saio",
+    "%(oneUser)sleft %(count)s times|one": "%(oneUser)s saíu",
     "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)s uníronse e saíron %(count)s veces",
     "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)s uníronse e saíron",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)s uniuse e saio %(count)s veces",
+    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)s uníuse e saíu %(count)s veces",
     "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)s uniuse e saíu",
     "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)s saíron e volveron %(count)s veces",
     "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)s saíron e votaron",
@@ -3357,5 +3357,12 @@
     "Forget": "Esquecer",
     "We call the places where you can host your account 'homeservers'.": "Chamámoslle 'Servidores de Inicio' aos lugares onde podes ter a túa conta.",
     "Matrix.org is the biggest public homeserver in the world, so it's a good place for many.": "Matrix.org é o servidor público máis grande do mundo, podería ser un bo lugar para comezar.",
-    "If you can't see who you're looking for, send them your invite link below.": "Se non atopas a quen buscas, envíalle a túa ligazón de convite."
+    "If you can't see who you're looking for, send them your invite link below.": "Se non atopas a quen buscas, envíalle a túa ligazón de convite.",
+    "Based on %(count)s votes|one": "Baseado en %(count)s voto",
+    "Based on %(count)s votes|other": "Baseado en %(count)s votos",
+    "%(count)s votes|one": "%(count)s voto",
+    "%(count)s votes|other": "%(count)s votos",
+    "%(spaceName)s and %(count)s others|one": "%(spaceName)s e %(count)s outro",
+    "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s e outros %(count)s"
 }
