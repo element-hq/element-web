@@ -3363,5 +3363,19 @@
     "%(senderName)s has updated the room layout": "%(senderName)s ka përditësuar skemën e dhomës",
     "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
     "%(spaceName)s and %(count)s others|one": "%(spaceName)s dhe %(count)s tjetër",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s dhe %(count)s të tjerë"
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s dhe %(count)s të tjerë",
+    "Sorry, the poll you tried to create was not posted.": "Na ndjeni, anketimi që provuat të krijoni s’u postua dot.",
+    "Failed to post poll": "S’u arrit të postohej anketimi",
+    "Based on %(count)s votes|one": "Bazuar në %(count)s votë",
+    "Based on %(count)s votes|other": "Bazua në %(count)s vota",
+    "%(count)s votes|one": "%(count)s votë",
+    "%(count)s votes|other": "%(count)s vota",
+    "Sorry, your vote was not registered. Please try again.": "Na ndjeni, vota juaj s’i regjistruar. Ju lutemi, riprovoni.",
+    "Vote not registered": "Votë e paregjistruar",
+    "Developer": "Zhvillues",
+    "Experimental": "Eksperimentale",
+    "Themes": "Tema",
+    "Message Previews": "Paraparje Mesazhesh",
+    "Moderation": "Moderim",
+    "Messaging": "Shkëmbim mesazhes"
 }
