@@ -3352,5 +3352,16 @@
     "Reset event store?": "Të rikthehet te parazgjedhjet arkivi i akteve?",
     "Flair won't be available in Spaces for the foreseeable future.": "Flair s’do të jetë e përdorshme te Hapësirat për të ardhmen e parashikueshme.",
     "Favourited": "U bë e parapëlqyer",
-    "Dialpad": "Butona numrash"
+    "Dialpad": "Butona numrash",
+    "sends rainfall": "dërgon shi",
+    "Sends the given message with rainfall": "Dërgoje mesazhin e dhënë me shi",
+    "Maximise widget": "Maksimizoje widget-in",
+    "Close this widget to view it in this panel": "Mbylleni këtë widget, që ta shihni te ky panel",
+    "Unpin this widget to view it in this panel": "Hiqjani fiksimin këtij widget-i, që ta shihni te ky panel",
+    "Large": "E madhe",
+    "Image size in the timeline": "Madhësi figure në rrjedhën kohore",
+    "%(senderName)s has updated the room layout": "%(senderName)s ka përditësuar skemën e dhomës",
+    "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
+    "%(spaceName)s and %(count)s others|one": "%(spaceName)s dhe %(count)s tjetër",
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s dhe %(count)s të tjerë"
 }
