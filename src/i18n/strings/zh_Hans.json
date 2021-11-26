@@ -3366,5 +3366,15 @@
     "Based on %(count)s votes|one": "基于 %(count)s 票",
     "Based on %(count)s votes|other": "基于 %(count)s 票",
     "%(count)s votes|one": "%(count)s 票",
-    "%(count)s votes|other": "%(count)s 票"
+    "%(count)s votes|other": "%(count)s 票",
+    "Sorry, the poll you tried to create was not posted.": "抱歉，您尝试创建的投票未被发布。",
+    "Failed to post poll": "发布投票失败",
+    "Sorry, your vote was not registered. Please try again.": "抱歉，您的投票未登记。 请再试一次。",
+    "Vote not registered": "投票未登记",
+    "Developer": "开发者",
+    "Experimental": "实验性",
+    "Themes": "主题",
+    "Message Previews": "消息预览",
+    "Moderation": "缓和",
+    "Messaging": "消息传递"
 }
