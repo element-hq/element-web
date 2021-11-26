@@ -3368,5 +3368,15 @@
     "%(count)s votes|other": "%(count)s 個投票",
     "%(spaceName)s and %(count)s others|one": "%(spaceName)s 與 %(count)s 個其他的",
     "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s 與 %(count)s 個其他的"
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s 與 %(count)s 個其他的",
+    "Sorry, the poll you tried to create was not posted.": "抱歉，您嘗試建立的投票並未發佈。",
+    "Failed to post poll": "張貼投票失敗",
+    "Sorry, your vote was not registered. Please try again.": "抱歉，您的投票未註冊。請再試一次。",
+    "Vote not registered": "投票未註冊",
+    "Developer": "開發者",
+    "Experimental": "實驗性",
+    "Themes": "佈景主題",
+    "Message Previews": "訊息預覽",
+    "Moderation": "審核",
+    "Messaging": "訊息傳遞"
 }
