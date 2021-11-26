@@ -28,26 +28,12 @@ jobs:
               }
             }
           team: ${{ env.TEAM }}
-      - id: write_team_members_to_file
+      - id: any_reviewers_in_the_team
         run: |
-          echo "${{ tojson(fromjson(steps.find_team_members.outputs.data).organization.team.members.nodes[*].login) }}" | \
-            grep -v '\[' | \
-            grep -v '\]' | \
-            sed -n 's/^ *\([^,]*\),*$/\1/p' | \
-            sort > \
-            /tmp/team_members.txt
-      - id: write_reviewers_to_file
-        run: |
-          echo "${{ tojson(github.event.pull_request.requested_reviewers[*].login) }}" | \
-            grep -v '\[' | \
-            grep -v '\]' | \
-            sed -n 's/^ *\([^,]*\),*$/\1/p' | \
-            sort > \
-            /tmp/reviewers.txt
-      - run: cat /tmp/team_members.txt
-      - run: cat /tmp/reviewers.txt
-      - id: intersect_reviewers_and_team_members
-        run: |
+          echo '${{ tojson(fromjson(steps.find_team_members.outputs.data).organization.team.members.nodes[*].login) }}' | tee /tmp/team_members.json
+          echo '${{ tojson(github.event.pull_request.requested_reviewers[*].login) }}' | tee /tmp/reviewers.json
+          jq --raw-output .[] < /tmp/team_members.json | sort | tee /tmp/team_members.txt
+          jq --raw-output .[] < /tmp/reviewers.json | sort | tee /tmp/reviewers.txt
           if [ $(join /tmp/team_members.txt /tmp/reviewers.txt | wc -l) = 0 ]; then
             echo "::set-output name=match::false"
           else
@@ -56,7 +42,7 @@ jobs:
       - uses: octokit/graphql-action@v2.x
         id: add_to_project
         if: >
-          (steps.intersect_reviewers_and_team_members.outputs.match == 'true') ||
+          (steps.any_reviewers_in_the_team.outputs.match == 'true') ||
           (github.event.pull_request.requested_teams.slug == env.TEAM)
         with:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
