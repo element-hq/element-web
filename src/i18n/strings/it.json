@@ -3367,5 +3367,15 @@
     "%(count)s votes|other": "%(count)s voti",
     "%(spaceName)s and %(count)s others|one": "%(spaceName)s e altri %(count)s",
     "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s e altri %(count)s"
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s e altri %(count)s",
+    "Sorry, the poll you tried to create was not posted.": "Spiacenti, il sondaggio che hai provato a creare non è stato inviato.",
+    "Failed to post poll": "Invio del sondaggio fallito",
+    "Sorry, your vote was not registered. Please try again.": "Spiacenti, il tuo voto non è stato registrato. Riprova.",
+    "Vote not registered": "Voto non registrato",
+    "Developer": "Sviluppatore",
+    "Experimental": "Sperimentale",
+    "Messaging": "Messaggi",
+    "Themes": "Temi",
+    "Message Previews": "Anteprime messaggi",
+    "Moderation": "Moderazione"
 }
