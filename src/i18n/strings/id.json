@@ -3290,5 +3290,21 @@
     "Expand room list section": "Buka bagian daftar ruangan",
     "Collapse room list section": "Tutup bagian daftar ruangan",
     "Select room from the room list": "Pilih ruangan dari daftar ruangan",
-    "Navigate up/down in the room list": "Navigasi atas/bawah di daftar ruangan"
+    "Navigate up/down in the room list": "Navigasi atas/bawah di daftar ruangan",
+    "Sorry, the poll you tried to create was not posted.": "Maaf, poll yang Anda buat tidak dapat dikirim.",
+    "Failed to post poll": "Gagal untuk mengirim poll",
+    "Sorry, your vote was not registered. Please try again.": "Maaf, suara Anda tidak didaftarkan. Silakan coba lagi.",
+    "Vote not registered": "Suara tidak didaftarkan",
+    "Developer": "Pengembang",
+    "Experimental": "Eksperimental",
+    "Message Previews": "Tampilan Pesaan",
+    "Themes": "Tema",
+    "Moderation": "Moderasi",
+    "Messaging": "Perpesanan",
+    "Save your Security Key": "Simpan Kunci Keamanan Anda",
+    "Confirm Security Phrase": "Konfirmasi Frasa Keamanan",
+    "Set a Security Phrase": "Atur sebuah Frasa Keamanan",
+    "Upgrade your encryption": "Tingkatkan enkripsi Anda",
+    "You can also set up Secure Backup & manage your keys in Settings.": "Anda juga dapat menyiapkan Cadangan Aman & kelola kunci Anda di Pengaturan.",
+    "If you cancel now, you may lose encrypted messages & data if you lose access to your logins.": "Jika Anda batalkan sekarang, Anda mungkin kehilangan pesan & data terenkripsi jika Anda kehilangan akses ke login Anda."
 }
