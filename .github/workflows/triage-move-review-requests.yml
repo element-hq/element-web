@@ -1,0 +1,58 @@
+name: Move pull requests asking for review to the relevant project
+on:
+  pull_request:
+    types: [review_requested]
+env:
+  PROJECT_ID: "PN_kwDOAM0swc0sUA"   # ID of the project
+  TEAM: "design"                    # The team of reviewers
+  GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+jobs:
+  add_design_pr_to_project:
+    name: Move PRs asking for design review to the design board
+    runs-on: ubuntu-latest
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        id: find_team_members
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            query find_team_members($team: String!) {
+              organization(login: "vector-im") {
+                team(slug: $team) {
+                  members {
+                    nodes {
+                      login
+                    }
+                  }
+                }
+              }
+            }
+          team: ${{ env.TEAM }}
+      - id: any_reviewers_in_the_team
+        run: |
+          echo '${{ tojson(fromjson(steps.find_team_members.outputs.data).organization.team.members.nodes[*].login) }}' | tee /tmp/team_members.json
+          echo '${{ tojson(github.event.pull_request.requested_reviewers[*].login) }}' | tee /tmp/reviewers.json
+          jq --raw-output .[] < /tmp/team_members.json | sort | tee /tmp/team_members.txt
+          jq --raw-output .[] < /tmp/reviewers.json | sort | tee /tmp/reviewers.txt
+          if [ $(join /tmp/team_members.txt /tmp/reviewers.txt | wc -l) = 0 ]; then
+            echo "::set-output name=match::false"
+          else
+            echo "::set-output name=match::true"
+          fi
+      - uses: octokit/graphql-action@v2.x
+        id: add_to_project
+        if: >
+          (steps.any_reviewers_in_the_team.outputs.match == 'true') ||
+          (github.event.pull_request.requested_teams.slug == env.TEAM)
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:String!, $contentid:String!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.pull_request.node_id }}
