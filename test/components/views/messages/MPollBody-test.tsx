@@ -27,6 +27,8 @@ import { IPollAnswer, IPollContent } from "../../../../src/polls/consts";
 import { UserVote, allVotes } from "../../../../src/components/views/messages/MPollBody";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 
+const CHECKED = "mx_MPollBody_option_checked";
+
 const _MPollBody = sdk.getComponent("views.messages.MPollBody");
 const MPollBody = TestUtils.wrapInMatrixClientContext(_MPollBody);
 
@@ -142,6 +144,25 @@ describe("MPollBody", () => {
         expect(votesCount(body, "wings")).toBe("1 vote");
 
         expect(body.find(".mx_MPollBody_totalVotes").text()).toBe("Based on 2 votes");
+
+        // And my vote is highlighted
+        expect(voteButton(body, "wings").hasClass(CHECKED)).toBe(true);
+        expect(voteButton(body, "italian").hasClass(CHECKED)).toBe(false);
+    });
+
+    it("highlights my vote even if I did it on another device", () => {
+        // Given I voted italian
+        const votes = [
+            responseEvent("@me:example.com", "italian"),
+            responseEvent("@nf:example.com", "wings"),
+        ];
+        const body = newMPollBody(votes);
+
+        // But I didn't click anything locally
+
+        // Then my vote is highlighted, and others are not
+        expect(voteButton(body, "italian").hasClass(CHECKED)).toBe(true);
+        expect(voteButton(body, "wings").hasClass(CHECKED)).toBe(false);
     });
 
     it("ignores extra answers", () => {
@@ -378,6 +399,12 @@ function newMPollBody(
 
 function clickRadio(wrapper: ReactWrapper, value: string) {
     wrapper.find(`StyledRadioButton[value="${value}"]`).simulate("click");
+}
+
+function voteButton(wrapper: ReactWrapper, value: string): ReactWrapper {
+    return wrapper.find(
+        `div.mx_MPollBody_option`,
+    ).findWhere(w => w.key() === value);
 }
 
 function votesCount(wrapper: ReactWrapper, value: string): string {

@@ -29,7 +29,7 @@ import {
 import StyledRadioButton from '../elements/StyledRadioButton';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from 'matrix-js-sdk/src/models/relations';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import ErrorDialog from '../dialogs/ErrorDialog';
 
 // TODO: [andyb] Use extensible events library when ready
@@ -42,20 +42,16 @@ interface IState {
 
 @replaceableComponent("views.messages.MPollBody")
 export default class MPollBody extends React.Component<IBodyProps, IState> {
+    static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
+
     constructor(props: IBodyProps) {
         super(props);
 
-        const pollRelations = this.fetchPollRelations();
-        let selected = null;
-
-        const userVotes = collectUserVotes(allVotes(pollRelations), null);
-        const userId = MatrixClientPeg.get().getUserId();
-        const currentVote = userVotes.get(userId);
-        if (currentVote) {
-            selected = currentVote.answers[0];
-        }
-
-        this.state = { selected, pollRelations };
+        this.state = {
+            selected: null,
+            pollRelations: this.fetchPollRelations(),
+        };
 
         this.addListeners(this.state.pollRelations);
         this.props.mxEvent.on("Event.relationsCreated", this.onPollRelationsCreated);
@@ -119,7 +115,8 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                 "rel_type": "m.reference",
             },
         };
-        MatrixClientPeg.get().sendEvent(
+
+        this.context.sendEvent(
             this.props.mxEvent.getRoomId(),
             POLL_RESPONSE_EVENT_TYPE.name,
             responseContent,
@@ -158,12 +155,13 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
     }
 
     /**
-     * @returns answer-id -> number-of-votes
+     * @returns userId -> UserVote
      */
-    private collectVotes(): Map<string, number> {
-        return countVotes(
-            collectUserVotes(allVotes(this.state.pollRelations), this.state.selected),
-            this.props.mxEvent.getContent(),
+    private collectUserVotes(): Map<string, UserVote> {
+        return collectUserVotes(
+            allVotes(this.state.pollRelations),
+            this.context.getUserId(),
+            this.state.selected,
         );
     }
 
@@ -184,15 +182,18 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         }
 
         const pollId = this.props.mxEvent.getId();
-        const votes = this.collectVotes();
+        const userVotes = this.collectUserVotes();
+        const votes = countVotes(userVotes, this.props.mxEvent.getContent());
         const totalVotes = this.totalVotes(votes);
+        const userId = this.context.getUserId();
+        const myVote = userVotes.get(userId)?.answers[0];
 
         return <div className="mx_MPollBody">
             <h2>{ pollInfo.question[TEXT_NODE_TYPE] }</h2>
             <div className="mx_MPollBody_allOptions">
                 {
                     pollInfo.answers.map((answer: IPollAnswer) => {
-                        const checked = this.state.selected === answer.id;
+                        const checked = myVote === answer.id;
                         const classNames = `mx_MPollBody_option${
                             checked ? " mx_MPollBody_option_checked": ""
                         }`;
@@ -207,7 +208,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                             <StyledRadioButton
                                 name={`poll_answer_select-${pollId}`}
                                 value={answer.id}
-                                checked={this.state.selected === answer.id}
+                                checked={checked}
                                 onChange={this.onOptionSelected}
                             >
                                 <div className="mx_MPollBody_optionDescription">
@@ -275,6 +276,7 @@ export function allVotes(pollRelations: Relations): Array<UserVote> {
  */
 function collectUserVotes(
     userResponses: Array<UserVote>,
+    userId: string,
     selected?: string,
 ): Map<string, UserVote> {
     const userVotes: Map<string, UserVote> = new Map();
@@ -287,8 +289,6 @@ function collectUserVotes(
     }
 
     if (selected) {
-        const client = MatrixClientPeg.get();
-        const userId = client.getUserId();
         userVotes.set(userId, new UserVote(0, userId, [selected]));
     }
 
