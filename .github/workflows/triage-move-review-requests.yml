@@ -1,0 +1,72 @@
+name: Move pull requests asking for review to the relevant project
+on:
+  pull_request:
+    types: [review_requested]
+jobs:
+  add_design_pr_to_project:
+    name: Move PRs asking for design review to the design board
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_ID: "PN_kwDOAM0swc0sUA"   # ID of the project
+      TEAM: "design"                    # The team of reviewers
+      GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        id: find_team_members
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            query find_team_members($team: String!) {
+              organization(login: "vector-im") {
+                team(slug: $team) {
+                  members {
+                    nodes {
+                      login
+                    }
+                  }
+                }
+              }
+            }
+          team: ${{ env.TEAM }}
+      - id: write_team_members_to_file
+        run: |
+          echo "${{ tojson(fromjson(steps.find_team_members.outputs.data).organization.team.members.nodes[*].login) }}" | \
+            grep -v '\[' | \
+            grep -v '\]' | \
+            sed -n 's/^ *\([^,]*\),*$/\1/p' | \
+            sort > \
+            /tmp/team_members.txt
+      - id: write_reviewers_to_file
+        run: |
+          echo "${{ tojson(github.event.pull_request.requested_reviewers[*].login) }}" | \
+            grep -v '\[' | \
+            grep -v '\]' | \
+            sed -n 's/^ *\([^,]*\),*$/\1/p' | \
+            sort > \
+            /tmp/reviewers.txt
+      - run: cat /tmp/team_members.txt
+      - run: cat /tmp/reviewers.txt
+      - id: intersect_reviewers_and_team_members
+        run: |
+          if [ $(join /tmp/team_members.txt /tmp/reviewers.txt | wc -l) = 0 ]; then
+            echo "::set-output name=match::false"
+          else
+            echo "::set-output name=match::true"
+          fi
+      - uses: octokit/graphql-action@v2.x
+        id: add_to_project
+        if: >
+          (steps.intersect_reviewers_and_team_members.outputs.match == 'true') ||
+          (github.event.pull_request.requested_teams.slug == env.TEAM)
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:String!, $contentid:String!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.pull_request.node_id }}
