@@ -3364,5 +3364,15 @@
     "%(count)s votes|other": "%(count)s votos",
     "%(spaceName)s and %(count)s others|one": "%(spaceName)s e %(count)s outro",
     "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s e outros %(count)s"
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s e outros %(count)s",
+    "Sorry, the poll you tried to create was not posted.": "A enquisa que ías publicar non se puido publicar.",
+    "Failed to post poll": "Non se puido publicar a enquisa",
+    "Sorry, your vote was not registered. Please try again.": "O teu voto non foi rexistrado, inténtao outra vez.",
+    "Vote not registered": "Voto non rexistrado",
+    "Developer": "Desenvolvemento",
+    "Experimental": "Experimental",
+    "Themes": "Decorados",
+    "Message Previews": "Vista previa das mensaxes",
+    "Moderation": "Moderación",
+    "Messaging": "Conversando"
 }
