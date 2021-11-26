@@ -19,6 +19,7 @@ import { _t } from "./languageHandler";
 
 import SettingsStore from "./settings/SettingsStore";
 import ThemeWatcher from "./settings/watchers/ThemeWatcher";
+import { compare } from "./utils/strings";
 
 export const DEFAULT_THEME = "light";
 const HIGH_CONTRAST_THEMES = {
@@ -84,6 +85,21 @@ export function enumerateThemes(): {[key: string]: string} {
         customThemeNames[`custom-${name}`] = name;
     }
     return Object.assign({}, customThemeNames, BUILTIN_THEMES);
+}
+
+interface ITheme {
+    id: string;
+    name: string;
+}
+
+export function getOrderedThemes(): ITheme[] {
+    const themes = Object.entries(enumerateThemes())
+        .map(p => ({ id: p[0], name: p[1] })) // convert pairs to objects for code readability
+        .filter(p => !isHighContrastTheme(p.id));
+    const builtInThemes = themes.filter(p => !p.id.startsWith("custom-"));
+    const customThemes = themes.filter(p => !builtInThemes.includes(p))
+        .sort((a, b) => compare(a.name, b.name));
+    return [...builtInThemes, ...customThemes];
 }
 
 function clearCustomTheme(): void {
