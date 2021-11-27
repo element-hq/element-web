@@ -3364,5 +3364,17 @@
     "%(count)s votes|other": "%(count)s szavazat",
     "%(spaceName)s and %(count)s others|one": "%(spaceName)s és még %(count)s másik",
     "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s és még %(count)s másik"
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s és még %(count)s másik",
+    "Sorry, the poll you tried to create was not posted.": "Sajnos a szavazás amit készített nem lett elküldve.",
+    "Failed to post poll": "A szavazást nem sikerült beküldeni",
+    "Sorry, your vote was not registered. Please try again.": "Sajnos az Ön szavazata nem lett rögzítve. Kérjük ismételje meg újra.",
+    "Vote not registered": "Nem regisztrált szavazás",
+    "Pin to sidebar": "Rögzítés az oldalsávra",
+    "Quick settings": "Gyors beállítások",
+    "Developer": "Fejlesztői",
+    "Experimental": "Kísérleti",
+    "Themes": "Téma",
+    "Message Previews": "Üzenet előnézet",
+    "Moderation": "Moderálás",
+    "Messaging": "Üzenetküldés"
 }
