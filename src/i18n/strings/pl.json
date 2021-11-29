@@ -33,5 +33,6 @@
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Konfiguracja Elementa zawiera niepoprawny JSON. Popraw konfiguracje i odśwież stronę.",
     "Your Element is misconfigured": "Element jest nieprawidłowo skonfigurowany",
     "Powered by Matrix": "Zasilane przez Matrix",
-    "Use %(brand)s on mobile": "Użyj %(brand)s w telefonie"
+    "Use %(brand)s on mobile": "Użyj %(brand)s w telefonie",
+    "Switch to space by number": "Przełącz na przestrzeń według numeru"
 }
