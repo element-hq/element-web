@@ -230,6 +230,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             } else {
                 defaultDispatcher.dispatch({
                     action: "view_home_page",
+                    context_switch: true,
                 });
             }
         }
@@ -853,6 +854,13 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 window.localStorage.setItem(getSpaceContextKey(this.activeSpace), payload.room_id);
                 break;
             }
+
+            case "view_home_page":
+                if (!payload.context_switch && this.enabledMetaSpaces.includes(MetaSpace.Home)) {
+                    this.setActiveSpace(MetaSpace.Home, false);
+                    window.localStorage.setItem(getSpaceContextKey(this.activeSpace), "");
+                }
+                break;
 
             case "after_leave_room":
                 if (this._activeSpace[0] === "!" && payload.room_id === this._activeSpace) {
