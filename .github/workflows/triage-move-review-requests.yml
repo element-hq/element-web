@@ -2,10 +2,6 @@ name: Move pull requests asking for review to the relevant project
 on:
   pull_request:
     types: [review_requested]
-env:
-  PROJECT_ID: "PN_kwDOAM0swc0sUA"   # ID of the project
-  TEAM: "design"                    # The team of reviewers
-  GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 jobs:
   add_design_pr_to_project:
     name: Move PRs asking for design review to the design board
@@ -28,6 +24,9 @@ jobs:
               }
             }
           team: ${{ env.TEAM }}
+        env:
+          TEAM: "design"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
       - id: any_reviewers_in_the_team
         run: |
           echo '${{ tojson(fromjson(steps.find_team_members.outputs.data).organization.team.members.nodes[*].login) }}' | tee /tmp/team_members.json
@@ -56,3 +55,7 @@ jobs:
             }
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.pull_request.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc0sUA"
+          TEAM: "design"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
