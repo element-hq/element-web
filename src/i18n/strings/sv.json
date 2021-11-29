@@ -3318,5 +3318,9 @@
     "Someone already has that username, please try another.": "Någon annan har redan det användarnamnet, vänligen pröva ett annat.",
     "Someone already has that username. Try another or if it is you, sign in below.": "Någon annan har redan det användarnamnet. Pröva ett annat, eller om det är ditt, logga in nedan.",
     "Maximised widgets": "Maximerade widgets",
-    "Own your conversations.": "Äg dina konversationer."
+    "Own your conversations.": "Äg dina konversationer.",
+    "%(senderName)s has updated the room layout": "%(senderName)s har uppdaterat rummets arrangemang",
+    "%(spaceName)s and %(count)s others|one": "%(spaceName)s och %(count)s till",
+    "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s och %(count)s till"
 }
