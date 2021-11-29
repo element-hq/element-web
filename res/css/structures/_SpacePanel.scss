@@ -41,18 +41,34 @@ $activeBorderColor: $secondary-content;
     }
 
     .mx_SpacePanel_toggleCollapse {
-        flex: 0 0 auto;
-        width: 40px;
-        height: 40px;
-        mask-position: center;
-        mask-size: 32px;
-        mask-repeat: no-repeat;
-        margin-left: $gutterSize;
-        background-color: $tertiary-content;
-        mask-image: url('$(res)/img/element-icons/expand-space-panel.svg');
+        margin: 0 auto;
+        position: relative;
+        min-width: 32px;
+        min-height: 32px;
+        line-height: 32px;
+        color: $secondary-content;
+
+        &::before {
+            content: "";
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            left: 0;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background-color: $secondary-content;
+            mask-image: url('$(res)/img/element-icons/expand-space-panel.svg');
+        }
 
         &.expanded {
-            transform: scaleX(-1);
+            padding-left: 48px;
+            padding-right: 8px;
+            margin-left: $gutterSize;
+
+            &::before {
+                transform: scaleX(-1);
+            }
         }
     }
 

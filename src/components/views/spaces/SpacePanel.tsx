@@ -324,8 +324,11 @@ const SpacePanel = () => {
                             className={classNames("mx_SpacePanel_toggleCollapse", { expanded: !isPanelCollapsed })}
                             onClick={() => setPanelCollapsed(!isPanelCollapsed)}
                             title={isPanelCollapsed ? _t("Expand space panel") : _t("Collapse space panel")}
-                        />
-                        { metaSpacesEnabled && <QuickSettingsButton /> }
+                            forceHide={!isPanelCollapsed}
+                        >
+                            { !isPanelCollapsed ? _t("Collapse") : null }
+                        </AccessibleTooltipButton>
+                        { metaSpacesEnabled && <QuickSettingsButton isPanelCollapsed={isPanelCollapsed} /> }
                     </ul>
                 ) }
             </RovingTabIndexProvider>
