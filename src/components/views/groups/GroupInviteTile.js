@@ -23,7 +23,7 @@ import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import classNames from 'classnames';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { ContextMenu, ContextMenuButton, toRightOf } from "../../structures/ContextMenu";
+import ContextMenu, { ContextMenuButton, toRightOf } from "../../structures/ContextMenu";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import { replaceableComponent } from "../../../utils/replaceableComponent";

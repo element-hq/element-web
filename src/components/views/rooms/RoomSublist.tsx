@@ -26,9 +26,8 @@ import { _t } from "../../../languageHandler";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import RoomTile from "./RoomTile";
 import { ListLayout } from "../../../stores/room-list/ListLayout";
-import {
+import ContextMenu, {
     ChevronFace,
-    ContextMenu,
     ContextMenuTooltipButton,
     StyledMenuItemCheckbox,
     StyledMenuItemRadio,

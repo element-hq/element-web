@@ -23,7 +23,7 @@ import type { Relations } from 'matrix-js-sdk/src/models/relations';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
 import { Action } from '../../../dispatcher/actions';
-import { aboveLeftOf, ContextMenu, ContextMenuTooltipButton, useContextMenu } from '../../structures/ContextMenu';
+import ContextMenu, { aboveLeftOf, ContextMenuTooltipButton, useContextMenu } from '../../structures/ContextMenu';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import Toolbar from "../../../accessibility/Toolbar";

@@ -18,7 +18,7 @@ import React, { useMemo } from "react";
 
 import { _t } from "../../../languageHandler";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import { alwaysAboveRightOf, ChevronFace, ContextMenu, useContextMenu } from "../../structures/ContextMenu";
+import ContextMenu, { alwaysAboveRightOf, ChevronFace, useContextMenu } from "../../structures/ContextMenu";
 import AccessibleButton from "../elements/AccessibleButton";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import { MetaSpace } from "../../../stores/spaces";

@@ -21,7 +21,7 @@ import MemberAvatar from '../avatars/MemberAvatar';
 import classNames from 'classnames';
 import StatusMessageContextMenu from "../context_menus/StatusMessageContextMenu";
 import SettingsStore from "../../../settings/SettingsStore";
-import { ChevronFace, ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
+import ContextMenu, { ChevronFace, ContextMenuButton } from "../../structures/ContextMenu";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { ResizeMethod } from "matrix-js-sdk/src/@types/partials";

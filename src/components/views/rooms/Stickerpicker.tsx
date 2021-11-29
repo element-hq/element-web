@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 import React from 'react';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { _t, _td } from '../../../languageHandler';
@@ -24,7 +25,7 @@ import WidgetUtils, { IWidgetEvent } from '../../../utils/WidgetUtils';
 import PersistedElement from "../elements/PersistedElement";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
-import { ChevronFace, ContextMenu } from "../../structures/ContextMenu";
+import ContextMenu, { ChevronFace } from "../../structures/ContextMenu";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { Action } from "../../../dispatcher/actions";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";

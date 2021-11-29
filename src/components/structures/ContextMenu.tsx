@@ -103,7 +103,7 @@ interface IState {
 // all options inside the menu should be of role=menuitem/menuitemcheckbox/menuitemradiobutton and have tabIndex={-1}
 // this will allow the ContextMenu to manage its own focus using arrow keys as per the ARIA guidelines.
 @replaceableComponent("structures.ContextMenu")
-export class ContextMenu extends React.PureComponent<IProps, IState> {
+export default class ContextMenu extends React.PureComponent<IProps, IState> {
     private readonly initialFocus: HTMLElement;
 
     static defaultProps = {
@@ -411,6 +411,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
                 onClick={this.onClick}
                 onContextMenu={this.onContextMenuPreventBubbling}
             >
+                { background }
                 <div
                     className={menuClasses}
                     style={menuStyle}
@@ -419,7 +420,6 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
                 >
                     { body }
                 </div>
-                { background }
             </div>
         );
     }
@@ -530,30 +530,22 @@ export const useContextMenu = <T extends any = HTMLElement>(): ContextMenuTuple<
     return [isOpen, button, open, close, setIsOpen];
 };
 
-@replaceableComponent("structures.LegacyContextMenu")
-export default class LegacyContextMenu extends ContextMenu {
-    render() {
-        return this.renderMenu(false);
-    }
-}
-
 // XXX: Deprecated, used only for dynamic Tooltips. Avoid using at all costs.
 export function createMenu(ElementClass, props) {
     const onFinished = function(...args) {
         ReactDOM.unmountComponentAtNode(getOrCreateContainer());
-
-        if (props && props.onFinished) {
-            props.onFinished.apply(null, args);
-        }
+        props?.onFinished?.apply(null, args);
     };
 
-    const menu = <LegacyContextMenu
+    const menu = <ContextMenu
         {...props}
+        mountAsChild={true}
+        hasBackground={false}
         onFinished={onFinished} // eslint-disable-line react/jsx-no-bind
         windowResize={onFinished} // eslint-disable-line react/jsx-no-bind
     >
         <ElementClass {...props} onFinished={onFinished} />
-    </LegacyContextMenu>;
+    </ContextMenu>;
 
     ReactDOM.render(menu, getOrCreateContainer());
 

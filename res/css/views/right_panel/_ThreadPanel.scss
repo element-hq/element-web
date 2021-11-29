@@ -120,7 +120,7 @@ limitations under the License.
             &:hover {
                 background-color: $event-selected-color;
             }
-            &[aria-selected="true"] {
+            &[aria-checked="true"] {
                 :first-child {
                     margin-left: -20px;
                 }

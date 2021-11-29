@@ -18,7 +18,7 @@ limitations under the License.
 import TagTile from './TagTile';
 
 import React from 'react';
-import { ContextMenu, toRightOf, useContextMenu } from "../../structures/ContextMenu";
+import ContextMenu, { toRightOf, useContextMenu } from "../../structures/ContextMenu";
 import * as sdk from '../../../index';
 
 export default function DNDTagTile(props) {

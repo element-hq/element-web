@@ -22,7 +22,7 @@ import { HistoryVisibility, Preset } from "matrix-js-sdk/src/@types/partials";
 
 import { _t } from "../../../languageHandler";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import { ChevronFace, ContextMenu } from "../../structures/ContextMenu";
+import ContextMenu, { ChevronFace } from "../../structures/ContextMenu";
 import createRoom, { IOpts as ICreateOpts } from "../../../createRoom";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import SpaceBasicSettings, { SpaceAvatar } from "./SpaceBasicSettings";

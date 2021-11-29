@@ -27,9 +27,8 @@ import { makeRoomPermalink, RoomPermalinkCreator } from '../../../utils/permalin
 import ContentMessages from '../../../ContentMessages';
 import E2EIcon from './E2EIcon';
 import SettingsStore from "../../../settings/SettingsStore";
-import {
+import ContextMenu, {
     aboveLeftOf,
-    ContextMenu,
     useContextMenu,
     MenuItem,
     AboveLeftOf,

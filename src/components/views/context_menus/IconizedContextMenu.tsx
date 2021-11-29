@@ -17,9 +17,8 @@ limitations under the License.
 import React from "react";
 import classNames from "classnames";
 
-import {
+import ContextMenu, {
     ChevronFace,
-    ContextMenu,
     IProps as IContextMenuProps,
     MenuItem,
     MenuItemCheckbox, MenuItemRadio,
