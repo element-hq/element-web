@@ -476,10 +476,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     };
 
     private onMessageListScroll = e => {
-        if (this.props.onScroll) {
-            this.props.onScroll(e);
-        }
-
+        this.props.onScroll?.(e);
         if (this.props.manageReadMarkers) {
             this.doManageReadMarkers();
         }
@@ -594,7 +591,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             this.setState<null>(updatedState, () => {
                 this.messagePanel.current.updateTimelineMinHeight();
                 if (callRMUpdated) {
-                    this.props.onReadMarkerUpdated();
+                    this.props.onReadMarkerUpdated?.();
                 }
             });
         });

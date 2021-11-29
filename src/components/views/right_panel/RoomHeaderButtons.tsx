@@ -67,6 +67,18 @@ const PinnedMessagesHeaderButton = ({ room, isHighlighted, onClick }) => {
     </HeaderButton>;
 };
 
+const TimelineCardHeaderButton = ({ room, isHighlighted, onClick }) => {
+    if (!SettingsStore.getValue("feature_maximised_widgets")) return null;
+
+    return <HeaderButton
+        name="timelineCardButton"
+        title={_t("Chat")}
+        isHighlighted={isHighlighted}
+        onClick={onClick}
+        analytics={["Right Panel", "Timeline Panel Button", "click"]}
+    />;
+};
+
 interface IProps {
     room?: Room;
 }
@@ -122,6 +134,9 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
         // This toggles for us, if needed
         this.setPhase(RightPanelPhases.PinnedMessages);
     };
+    private onTimelineCardClicked = () => {
+        this.setPhase(RightPanelPhases.Timeline);
+    };
 
     private onThreadsPanelClicked = () => {
         if (RoomHeaderButtons.THREAD_PHASES.includes(this.state.phase)) {
@@ -140,6 +155,11 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
                 room={this.props.room}
                 isHighlighted={this.isPhase(RightPanelPhases.PinnedMessages)}
                 onClick={this.onPinnedMessagesClicked}
+            />
+            <TimelineCardHeaderButton
+                room={this.props.room}
+                isHighlighted={this.isPhase(RightPanelPhases.Timeline)}
+                onClick={this.onTimelineCardClicked}
             />
             { SettingsStore.getValue("feature_thread") && <HeaderButton
                 name="threadsButton"

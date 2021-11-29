@@ -96,6 +96,8 @@ import { dispatchShowThreadEvent } from '../../dispatcher/dispatch-actions/threa
 import { fetchInitialEvent } from "../../utils/EventUtils";
 import { ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
 import AppsDrawer from '../views/rooms/AppsDrawer';
+import { SetRightPanelPhasePayload } from '../../dispatcher/payloads/SetRightPanelPhasePayload';
+import { RightPanelPhases } from '../../stores/RightPanelStorePhases';
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -327,7 +329,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private onWidgetLayoutChange = () => {
         if (!this.state.room) return;
+        if (WidgetLayoutStore.instance.hasMaximisedWidget(this.state.room)) {
+            // Show chat in right panel when a widget is maximised
+            dis.dispatch<SetRightPanelPhasePayload>({
+                action: Action.SetRightPanelPhase,
+                phase: RightPanelPhases.Timeline,
+            });
+        }
         this.checkWidgets(this.state.room);
+        this.checkRightPanel(this.state.room);
     };
 
     private checkWidgets = (room) => {
@@ -343,6 +353,22 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         return (WidgetLayoutStore.instance.hasMaximisedWidget(room))
             ? MainSplitContentType.MaximisedWidget
             : MainSplitContentType.Timeline;
+    };
+
+    private checkRightPanel = (room) => {
+        // This is a hack to hide the chat. This should not be necessary once the right panel
+        // phase is stored per room. (need to be done after check widget so that mainSplitContentType is updated)
+        if (
+            RightPanelStore.getSharedInstance().roomPanelPhase === RightPanelPhases.Timeline &&
+            this.state.showRightPanel &&
+            !WidgetLayoutStore.instance.hasMaximisedWidget(this.state.room)
+        ) {
+            // Two timelines are shown prevent this by hiding the right panel
+            dis.dispatch({
+                action: Action.ToggleRightPanel,
+                type: "room",
+            });
+        }
     };
 
     private onReadReceiptsChange = () => {
@@ -1007,6 +1033,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.updateE2EStatus(room);
         this.updatePermissions(room);
         this.checkWidgets(room);
+        this.checkRightPanel(room);
 
         this.setState({
             liveTimeline: room.getLiveTimeline(),
@@ -2102,6 +2129,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         const showRightPanel = this.state.room && this.state.showRightPanel;
+
         const rightPanel = showRightPanel
             ? <RightPanel
                 room={this.state.room}

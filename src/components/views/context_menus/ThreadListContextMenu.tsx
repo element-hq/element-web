@@ -24,6 +24,8 @@ import { copyPlaintext } from "../../../utils/strings";
 import { ChevronFace, ContextMenuTooltipButton } from "../../structures/ContextMenu";
 import { _t } from "../../../languageHandler";
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from "./IconizedContextMenu";
+import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -80,6 +82,9 @@ const ThreadListContextMenu: React.FC<IProps> = ({ mxEvent, permalinkCreator, on
         }
     }, [optionsPosition, onMenuToggle]);
 
+    const isMainSplitTimelineShown = !WidgetLayoutStore.instance.hasMaximisedWidget(
+        MatrixClientPeg.get().getRoom(mxEvent.getRoomId()),
+    );
     return <React.Fragment>
         <ContextMenuTooltipButton
             className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
@@ -95,11 +100,12 @@ const ThreadListContextMenu: React.FC<IProps> = ({ mxEvent, permalinkCreator, on
             {...contextMenuBelow(optionsPosition)}
         >
             <IconizedContextMenuOptionList>
-                <IconizedContextMenuOption
-                    onClick={(e) => viewInRoom(e)}
-                    label={_t("View in room")}
-                    iconClassName="mx_ThreadPanel_viewInRoom"
-                />
+                { isMainSplitTimelineShown &&
+                 <IconizedContextMenuOption
+                     onClick={(e) => viewInRoom(e)}
+                     label={_t("View in room")}
+                     iconClassName="mx_ThreadPanel_viewInRoom"
+                 /> }
                 <IconizedContextMenuOption
                     onClick={(e) => copyLinkToThread(e)}
                     label={_t("Copy link to thread")}

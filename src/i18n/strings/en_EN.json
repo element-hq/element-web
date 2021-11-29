@@ -1886,6 +1886,7 @@
     "Nothing pinned, yet": "Nothing pinned, yet",
     "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.",
     "Pinned messages": "Pinned messages",
+    "Chat": "Chat",
     "Threads": "Threads",
     "Room Info": "Room Info",
     "You can only pin up to %(count)s widgets|other": "You can only pin up to %(count)s widgets",

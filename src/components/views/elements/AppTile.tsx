@@ -402,9 +402,9 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private onMaxMinWidgetClick = (): void => {
         const targetContainer =
-        WidgetLayoutStore.instance.isInContainer(this.props.room, this.props.app, Container.Center)
-            ? Container.Right
-            : Container.Center;
+            WidgetLayoutStore.instance.isInContainer(this.props.room, this.props.app, Container.Center)
+                ? Container.Right
+                : Container.Center;
         WidgetLayoutStore.instance.moveToContainer(this.props.room, this.props.app, targetContainer);
     };
 
