@@ -59,7 +59,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         };
     }
 
-    private get suggestedDimensions(): { w: number, h: number } {
+    private suggestedDimensions(isPortrait): { w: number, h: number } {
         return suggestedVideoSize(SettingsStore.getValue("Images.size") as ImageSize);
     }
 
@@ -69,23 +69,25 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         thumbWidth?: number,
         thumbHeight?: number,
     ): number {
-        if (!thumbWidth || !thumbHeight) {
-            const dims = this.suggestedDimensions;
-            thumbWidth = dims.w;
-            thumbHeight = dims.h;
-        }
-
         if (!fullWidth || !fullHeight) {
             // Cannot calculate thumbnail height for image: missing w/h in metadata. We can't even
             // log this because it's spammy
             return undefined;
         }
+
+        if (!thumbWidth || !thumbHeight) {
+            const dims = this.suggestedDimensions(fullWidth < fullHeight);
+            thumbWidth = dims.w;
+            thumbHeight = dims.h;
+        }
+
         if (fullWidth < thumbWidth && fullHeight < thumbHeight) {
             // no scaling needs to be applied
             return 1;
         }
-        const widthMulti = thumbWidth / fullWidth;
+
         // always scale the videos based on their width.
+        const widthMulti = thumbWidth / fullWidth;
         return widthMulti;
     }
 
@@ -268,7 +270,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
 
         const contentUrl = this.getContentUrl();
         const thumbUrl = this.getThumbUrl();
-        const defaultDims = this.suggestedDimensions;
+        const defaultDims = this.suggestedDimensions(false);
         let height = defaultDims.h;
         let width = defaultDims.w;
         let poster = null;

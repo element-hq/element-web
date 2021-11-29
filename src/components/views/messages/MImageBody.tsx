@@ -378,15 +378,16 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         // The maximum size of the thumbnail as it is rendered as an <img>
         // check for any height constraints
         const imageSize = SettingsStore.getValue("Images.size") as ImageSize;
-        const suggestedAndPossibleWidth = Math.min(suggestedImageSize(imageSize).w, infoWidth);
-        const suggestedAndPossibleHeight = Math.min(suggestedImageSize(imageSize).h, infoHeight);
+        const isPortrait = infoWidth < infoHeight;
+        const suggestedAndPossibleWidth = Math.min(suggestedImageSize(imageSize, isPortrait).w, infoWidth);
+        const suggestedAndPossibleHeight = Math.min(suggestedImageSize(imageSize, isPortrait).h, infoHeight);
         const aspectRatio = infoWidth / infoHeight;
 
         let maxWidth;
         let maxHeight;
         const maxHeightConstraint = forcedHeight || this.props.maxImageHeight || suggestedAndPossibleHeight;
         if (maxHeightConstraint * aspectRatio < suggestedAndPossibleWidth || imageSize === ImageSize.Large) {
-            // width is dictated by the maximum height that was defined by the props or the function param `forcedHeight`
+            // The width is dictated by the maximum height that was defined by the props or the function param `forcedHeight`
             // If the thumbnail size is set to Large, we always let the size be dictated by the height.
             maxWidth = maxHeightConstraint * aspectRatio;
             // there is no need to check for infoHeight here since this is done with `maxHeightConstraint * aspectRatio < suggestedAndPossibleWidth`
