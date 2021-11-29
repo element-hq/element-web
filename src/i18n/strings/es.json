@@ -3344,5 +3344,13 @@
     "%(count)s votes|one": "%(count)s voto",
     "%(count)s votes|other": "%(count)s votos",
     "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s y %(count)s más"
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s y %(count)s más",
+    "Messaging": "Mensajería",
+    "Quick settings": "Ajustes rápidos",
+    "Developer": "Desarrollo",
+    "Experimental": "Experimentos",
+    "Themes": "Temas",
+    "Message Previews": "Previsualización de mensajes",
+    "Moderation": "Moderación",
+    "%(spaceName)s and %(count)s others|one": "%(spaceName)s y %(count)s más"
 }
