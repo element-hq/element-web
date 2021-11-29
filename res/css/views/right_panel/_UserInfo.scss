@@ -116,8 +116,14 @@ limitations under the License.
         transition: font-size 0.5s;
     }
 
-    .mx_UserInfo_avatar .mx_BaseAvatar.mx_BaseAvatar_image {
-        cursor: zoom-in;
+    .mx_UserInfo_avatar .mx_BaseAvatar {
+        .mx_BaseAvatar_initial + .mx_BaseAvatar_image {
+            cursor: default;
+        }
+
+        &.mx_BaseAvatar_image {
+            cursor: zoom-in;
+        }
     }
 
     h3 {
