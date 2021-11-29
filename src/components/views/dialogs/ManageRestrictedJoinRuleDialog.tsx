@@ -66,6 +66,17 @@ const Entry = ({ room, checked, onChange }) => {
     </label>;
 };
 
+const addAllParents = (set: Set<Room>, room: Room): void => {
+    const cli = room.client;
+    const parents = Array.from(SpaceStore.instance.getKnownParents(room.roomId)).map(parentId => cli.getRoom(parentId));
+
+    parents.forEach(parent => {
+        if (set.has(parent)) return;
+        set.add(parent);
+        addAllParents(set, parent);
+    });
+};
+
 const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [], onFinished }) => {
     const cli = room.client;
     const [newSelected, setNewSelected] = useState(new Set<string>(selected));
@@ -73,9 +84,10 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
     const lcQuery = query.toLowerCase().trim();
 
     const [spacesContainingRoom, otherEntries] = useMemo(() => {
-        const spaces = cli.getVisibleRooms().filter(r => r.getMyMembership() === "join" && r.isSpaceRoom());
+        const parents = new Set<Room>();
+        addAllParents(parents, room);
         return [
-            spaces.filter(r => SpaceStore.instance.getSpaceFilteredRoomIds(r.roomId).has(room.roomId)),
+            Array.from(parents),
             selected.map(roomId => {
                 const room = cli.getRoom(roomId);
                 if (!room) {
@@ -86,9 +98,9 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                 }
             }).filter(Boolean),
         ];
-    }, [cli, selected, room.roomId]);
+    }, [cli, selected, room]);
 
-    const [filteredSpacesContainingRooms, filteredOtherEntries] = useMemo(() => [
+    const [filteredSpacesContainingRoom, filteredOtherEntries] = useMemo(() => [
         spacesContainingRoom.filter(r => r.name.toLowerCase().includes(lcQuery)),
         otherEntries.filter(r => r.name.toLowerCase().includes(lcQuery)),
     ], [spacesContainingRoom, otherEntries, lcQuery]);
@@ -129,10 +141,14 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                 autoFocus={true}
             />
             <AutoHideScrollbar className="mx_ManageRestrictedJoinRuleDialog_content">
-                { filteredSpacesContainingRooms.length > 0 ? (
+                { filteredSpacesContainingRoom.length > 0 ? (
                     <div className="mx_ManageRestrictedJoinRuleDialog_section">
-                        <h3>{ _t("Spaces you know that contain this room") }</h3>
-                        { filteredSpacesContainingRooms.map(space => {
+                        <h3>
+                            { room.isSpaceRoom()
+                                ? _t("Spaces you know that contain this space")
+                                : _t("Spaces you know that contain this room") }
+                        </h3>
+                        { filteredSpacesContainingRoom.map(space => {
                             return <Entry
                                 key={space.roomId}
                                 room={space}
@@ -164,7 +180,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                     </div>
                 ) : null }
 
-                { filteredSpacesContainingRooms.length + filteredOtherEntries.length < 1
+                { filteredSpacesContainingRoom.length + filteredOtherEntries.length < 1
                     ? <span className="mx_ManageRestrictedJoinRuleDialog_noResults">
                         { _t("No results") }
                     </span>

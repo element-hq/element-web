@@ -2570,6 +2570,7 @@
     "Select spaces": "Select spaces",
     "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.": "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.",
     "Search spaces": "Search spaces",
+    "Spaces you know that contain this space": "Spaces you know that contain this space",
     "Spaces you know that contain this room": "Spaces you know that contain this room",
     "Other spaces or rooms you might not know": "Other spaces or rooms you might not know",
     "These are likely ones other room admins are a part of.": "These are likely ones other room admins are a part of.",
