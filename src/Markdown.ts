@@ -56,6 +56,12 @@ function isAllowedHtmlTag(node: commonmark.Node): boolean {
 function isMultiLine(node: commonmark.Node): boolean {
     let par = node;
     while (par.parent) {
+        // commonmark Parser separate quotes with blank quoted lines between them with
+        // paragraphs, so we need to consider it when the markdown is only a multiline quote.
+        if (par.type === 'block_quote') {
+            break;
+        }
+
         par = par.parent;
     }
     return par.firstChild != par.lastChild;
