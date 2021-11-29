@@ -55,7 +55,9 @@ export class MessageEventPreview implements IPreview {
         }
 
         if (hasHtml) {
-            body = getHtmlText(body);
+            const sanitised = getHtmlText(body.replace(/<br\/?>/gi, "\n")); // replace line breaks before removing them
+            // run it through DOMParser to fixup encoded html entities
+            body = new DOMParser().parseFromString(sanitised, "text/html").documentElement.textContent;
         }
 
         body = sanitizeForTranslation(body);
