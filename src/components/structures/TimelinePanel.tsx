@@ -134,6 +134,7 @@ interface IProps {
     onPaginationRequest?(timelineWindow: TimelineWindow, direction: string, size: number): Promise<boolean>;
 
     hideThreadedMessages?: boolean;
+    disableGrouping?: boolean;
 }
 
 interface IState {
@@ -223,6 +224,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         className: 'mx_RoomView_messagePanel',
         sendReadReceiptOnLoad: true,
         hideThreadedMessages: true,
+        disableGrouping: false,
     };
 
     private lastRRSentEventId: string = undefined;
@@ -1537,6 +1539,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 layout={this.props.layout}
                 enableFlair={SettingsStore.getValue(UIFeature.Flair)}
                 hideThreadedMessages={this.props.hideThreadedMessages}
+                disableGrouping={this.props.disableGrouping}
             />
         );
     }

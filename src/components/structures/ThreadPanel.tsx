@@ -228,6 +228,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
                     membersLoaded={true}
                     permalinkCreator={permalinkCreator}
                     tileShape={TileShape.ThreadPanel}
+                    disableGrouping={true}
                 />
             </BaseCard>
         </RoomContext.Provider>
