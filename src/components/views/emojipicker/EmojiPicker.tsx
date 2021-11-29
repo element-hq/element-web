@@ -28,8 +28,8 @@ import QuickReactions from "./QuickReactions";
 import Category, { ICategory, CategoryKey } from "./Category";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-export const CATEGORY_HEADER_HEIGHT = 22;
-export const EMOJI_HEIGHT = 37;
+export const CATEGORY_HEADER_HEIGHT = 20;
+export const EMOJI_HEIGHT = 35;
 export const EMOJIS_PER_ROW = 8;
 
 const ZERO_WIDTH_JOINER = "\u200D";
