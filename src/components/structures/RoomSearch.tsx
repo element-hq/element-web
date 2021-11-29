@@ -214,4 +214,16 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
             </div>
         );
     }
+
+    public appendChar(char: string): void {
+        this.setState({
+            query: this.state.query + char,
+        });
+    }
+
+    public backspace(): void {
+        this.setState({
+            query: this.state.query.substring(0, this.state.query.length - 1),
+        });
+    }
 }

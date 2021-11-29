@@ -42,6 +42,7 @@ import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager"
 import UIStore from "../../stores/UIStore";
 import { findSiblingElement, IState as IRovingTabIndexState } from "../../accessibility/RovingTabIndex";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
+import { Key } from "../../Keyboard";
 
 interface IProps {
     isMinimized: boolean;
@@ -304,6 +305,19 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         }
     };
 
+    private onRoomListKeydown = (ev: React.KeyboardEvent) => {
+        // we cannot handle Space as that is an activation key for all focusable elements in this widget
+        if (ev.key.length === 1) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            this.roomSearchRef.current?.appendChar(ev.key);
+        } else if (ev.key === Key.BACKSPACE) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            this.roomSearchRef.current?.backspace();
+        }
+    };
+
     private selectRoom = () => {
         const firstRoom = this.listContainerRef.current.querySelector<HTMLDivElement>(".mx_RoomTile");
         if (firstRoom) {
@@ -411,6 +425,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             // Firefox sometimes makes this element focusable due to
                             // overflow:scroll;, so force it out of tab order.
                             tabIndex={-1}
+                            onKeyDown={this.onRoomListKeydown}
                         >
                             { roomList }
                         </div>

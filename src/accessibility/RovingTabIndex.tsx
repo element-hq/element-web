@@ -123,9 +123,14 @@ export const reducer = (state: IState, action: IAction) => {
 
             if (state.refs.splice(oldIndex, 1)[0] === state.activeRef) {
                 // we just removed the active ref, need to replace it
-                // pick the ref which is now in the index the old ref was in
-                const len = state.refs.length;
-                state.activeRef = oldIndex >= len ? state.refs[len - 1] : state.refs[oldIndex];
+                // pick the ref closest to the index the old ref was in
+                if (oldIndex >= state.refs.length) {
+                    state.activeRef = findSiblingElement(state.refs, state.refs.length - 1, true);
+                } else {
+                    state.activeRef = findSiblingElement(state.refs, oldIndex)
+                        || findSiblingElement(state.refs, oldIndex, true);
+                }
+                state.activeRef?.current?.focus();
             }
 
             // update the refs list
