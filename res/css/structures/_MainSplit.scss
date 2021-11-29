@@ -28,15 +28,16 @@ limitations under the License.
     margin-left: 8px;
     height: calc(100vh - 51px); // height of .mx_RoomHeader.light-panel
 
-    &:hover .mx_RightPanel_ResizeHandle {
-        // Need to use important to override element style attributes
-        // set by re-resizable
-        top: 50% !important;
+    &:hover .mx_ResizeHandle_horizontal::before {
+        position: absolute;
+        top: 50%;
         transform: translate(0, -50%);
 
-        height: 64px !important; // to match width of the ones on roomlist
-        width: 4px !important;
-        border-radius: 4px !important;
+        height: 64px; // to match width of the ones on roomlist
+        width: 4px;
+        border-radius: 4px;
+
+        content: '';
 
         background-color: $primary-content;
         opacity: 0.8;

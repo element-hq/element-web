@@ -83,7 +83,7 @@ export default class MainSplit extends React.Component<IProps> {
                 onResize={this.onResize}
                 onResizeStop={this.onResizeStop}
                 className="mx_RightPanel_ResizeWrapper"
-                handleClasses={{ left: "mx_RightPanel_ResizeHandle" }}
+                handleClasses={{ left: "mx_ResizeHandle_horizontal" }}
             >
                 { panelView }
             </Resizable>;
