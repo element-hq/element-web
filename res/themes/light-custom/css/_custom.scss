@@ -57,7 +57,6 @@ $panel-actions: var(--roomlist-highlights-color);
 $groupFilterPanel-bg-color: var(--sidebar-color);
 $tooltip-timeline-bg-color: var(--sidebar-color);
 $dialog-backdrop-color: var(--sidebar-color-50pct);
-$roomlist-button-bg-color: var(--sidebar-color-15pct);
 //
 // --roomlist-background-color
 $header-panel-bg-color: var(--roomlist-background-color);
@@ -95,19 +94,16 @@ $primary-hairline-color: var(--roomlist-separator-color);// originally #e5e5e5, 
 //
 // --timeline-text-secondary-color
 $authpage-secondary-color: var(--timeline-text-secondary-color);
-$memberstatus-placeholder-color: var(--timeline-text-secondary-color);
 $pinned-color: var(--timeline-text-secondary-color);
 $settings-subsection-fg-color: var(--timeline-text-secondary-color);
 $roomheader-addroom-bg-color: var(--timeline-text-secondary-color);
 // was #747474
 $light-fg-color: var(--timeline-text-secondary-color);
 // was #888888
-$greyed-fg-color: var(--timeline-text-secondary-color);
 $info-plinth-fg-color: var(--timeline-text-secondary-color);
 //
 // --primary-color
 $accent-alt: var(--primary-color);
-$input-focused-border-color: var(--primary-color);
 //
 // --warning-color
 $button-danger-disabled-bg-color: var(--warning-color-50pct); // still needs alpha at 0.5

@@ -248,10 +248,6 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     color: $secondary-accent-color;
 }
 
-#mx_theme_tertiaryAccentColor {
-    color: $tertiary-accent-color;
-}
-
 /* Expected z-indexes for dialogs:
     4000 - Default wrapper index
     4009 - Static dialog background

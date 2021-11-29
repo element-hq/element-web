@@ -28,13 +28,10 @@ $focus-bg-color: $room-highlight-color;
 
 $other-user-pill-bg-color: $room-highlight-color;
 $rte-room-pill-color: $room-highlight-color;
-$rte-group-pill-color: $room-highlight-color;
 
 // informational plinth
 $info-plinth-bg-color: $header-panel-bg-color;
 $info-plinth-fg-color: #888;
-
-$preview-bar-bg-color: $header-panel-bg-color;
 
 $groupFilterPanel-bg-color: $base-color;
 $inverted-bg-color: $groupFilterPanel-bg-color;
@@ -53,7 +50,6 @@ $input-border-color: #e7e7e7;
 $input-darker-bg-color: #181b21;
 $input-darker-fg-color: #61708b;
 $input-lighter-bg-color: #f2f5f8;
-$input-focused-border-color: #238cf5;
 
 $resend-button-divider-color: $muted-fg-color;
 
@@ -118,8 +114,7 @@ $call-view-button-off-background: $primary-content;
 
 $video-feed-secondary-background: $system;
 
-$roomlist-button-bg-color: #1A1D23; // Buttons include the filter box, explore button, and sublist buttons
-$roomlist-filter-active-bg-color: $roomlist-button-bg-color;
+$roomlist-filter-active-bg-color: $panel-actions;
 $roomlist-bg-color: $header-panel-bg-color;
 
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #3e444c 0%, #3e444c00 100%);

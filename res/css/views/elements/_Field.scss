@@ -73,7 +73,7 @@ limitations under the License.
 }
 
 .mx_Field:focus-within {
-    border-color: $input-focused-border-color;
+    border-color: $accent-alt;
 }
 
 .mx_Field input:focus,
@@ -92,7 +92,7 @@ limitations under the License.
 .mx_Field textarea:placeholder-shown:focus::placeholder,
 .mx_Field.mx_Field_placeholderIsHint input::placeholder {
     transition: color 0.25s ease-in 0.1s;
-    color: $greyed-fg-color;
+    color: $info-plinth-fg-color;
 }
 
 .mx_Field label {
@@ -136,7 +136,7 @@ limitations under the License.
 .mx_Field input:focus + label,
 .mx_Field select:focus + label,
 .mx_Field textarea:focus + label {
-    color: $input-focused-border-color;
+    color: $accent-alt;
 }
 
 .mx_Field select:disabled,
@@ -146,7 +146,7 @@ limitations under the License.
 .mx_Field textarea:disabled,
 .mx_Field textarea:disabled + label {
     background-color: $background;
-    color: $greyed-fg-color;
+    color: $info-plinth-fg-color;
 }
 
 .mx_Field_valid {

@@ -7,7 +7,6 @@ $secondary-content: #5E6266;
 $tertiary-content: $secondary-content;
 $quaternary-content: $secondary-content;
 $quinary-content: $secondary-content;
-$roomlist-button-bg-color: rgba(141, 151, 165, 0.2);
 
 $username-variant1-color: #0A6ECA;
 $username-variant2-color: #AC3BA8;
@@ -22,7 +21,6 @@ $accent-alt: $links;
 $input-border-color: $secondary-content;
 $input-darker-bg-color: $quinary-content;
 $input-darker-fg-color: $secondary-content;
-$input-focused-border-color: $accent;
 $resend-button-divider-color: $input-darker-bg-color;
 $icon-button-color: $quaternary-content;
 $theme-button-bg-color: $quinary-content;
@@ -93,11 +91,11 @@ $roomtopic-color: $secondary-content;
 }
 
 .mx_UserMenu_contextMenu .mx_UserMenu_contextMenu_header .mx_UserMenu_contextMenu_themeButton {
-    background-color: $roomlist-button-bg-color !important;
+    background-color: $panel-actions !important;
 }
 
 .mx_FontScalingPanel_fontSlider {
-    background-color: $roomlist-button-bg-color !important;
+    background-color: $panel-actions !important;
 }
 
 .mx_ThemeChoicePanel > .mx_ThemeSelectors > .mx_StyledRadioButton input[type="radio"]:disabled + div {

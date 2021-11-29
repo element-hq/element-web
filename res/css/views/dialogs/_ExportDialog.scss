@@ -35,7 +35,7 @@ limitations under the License.
         }
 
         .mx_StyledRadioButton input[type="radio"]:checked + div > div {
-            background: $greyed-fg-color;
+            background: $info-plinth-fg-color;
         }
 
         .mx_StyledRadioButton input[type=radio]:checked + div {
@@ -52,8 +52,8 @@ limitations under the License.
         }
 
         .mx_Checkbox input[type="checkbox"]:checked + label > .mx_Checkbox_background {
-            background: $greyed-fg-color;
-            border-color: $greyed-fg-color;
+            background: $info-plinth-fg-color;
+            border-color: $info-plinth-fg-color;
         }
     }
 

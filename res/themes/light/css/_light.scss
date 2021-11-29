@@ -59,34 +59,29 @@ $light-fg-color: #747474;
 $focus-bg-color: #dddddd;
 $info-plinth-bg-color: #f7f7f7;
 $info-plinth-fg-color: #888;
-$preview-bar-bg-color: #f7f7f7;
 $secondary-accent-color: #f2f5f8;
-$tertiary-accent-color: #d3efe1;
 $event-selected-color: #f6f7f8;
-$button-fg-color: white;
+$button-fg-color: $background;
 $h3-color: #3d3b39;
 $yellow-background: #fff8e3;
-$greyed-fg-color: #888;
-$event-notsent-color: #f44;
 $accent-alt: #238CF5;
 $strong-input-border-color: #c7c7c7;
 $neutral-badge-color: #dbdbdb;
-$preview-widget-bar-color: #ddd;
+$preview-widget-bar-color: $focus-bg-color;
 $topleftmenu-color: #212121;
 $roomtopic-color: #9e9e9e;
 $groupFilterPanel-bg-color: rgba(232, 232, 232, 0.77);
-$progressbar-bg-color: rgba(141, 151, 165, 0.2);
+$progressbar-bg-color: $panel-actions;
 $panel-gradient: rgba(242, 245, 248, 0), rgba(242, 245, 248, 1);
 $accent-fg-color: $background;
 $selection-fg-color: $background;
 $dark-panel-bg-color: $secondary-accent-color;
 $event-highlight-bg-color: $yellow-background;
-$memberstatus-placeholder-color: $muted-fg-color;
 // ********************
 
 // Blockquote
 // ********************
-$blockquote-bar-color: #ddd;
+$blockquote-bar-color: $focus-bg-color;
 // ********************
 
 // Tooltip
@@ -113,7 +108,7 @@ $menu-selected-color: #f5f8fa;
 // ********************
 $settings-grey-fg-color: #a2a2a2;
 $settings-profile-overlay-placeholder-fg-color: #2e2f32;
-$settings-profile-button-bg-color: #e7e7e7;
+$settings-profile-button-bg-color: $menu-border-color;
 $settings-subsection-fg-color: $muted-fg-color;
 // ********************
 
@@ -128,7 +123,6 @@ $roomheader-addroom-fg-color: #5c6470;
 $rte-bg-color: #e9e9e9;
 $rte-code-bg-color: rgba(0, 0, 0, 0.04);
 $rte-room-pill-color: #aaa;
-$rte-group-pill-color: #aaa;
 // ********************
 
 // Presence
@@ -141,11 +135,10 @@ $presence-offline: $quinary-content;
 // ********************
 $input-underline-color: rgba(151, 151, 151, 0.5);
 $input-fg-color: rgba(74, 74, 74, 0.9);
-$input-border-color: #e7e7e7;
+$input-border-color: $menu-border-color;
 $input-darker-bg-color: $quinary-content;
 $input-darker-fg-color: #9fa9ba;
-$input-lighter-bg-color: #f2f5f8;
-$input-focused-border-color: $accent-alt;
+$input-lighter-bg-color: $secondary-accent-color;
 // ********************
 
 // Dialog
@@ -160,14 +153,13 @@ $dialog-close-fg-color: #c1c1c1;
 // ********************
 $imagebody-giflabel: rgba(0, 0, 0, 0.7);
 $imagebody-giflabel-border: rgba(0, 0, 0, 0.2);
-$imagebody-giflabel-color: rgba(255, 255, 255, 1);
+$imagebody-giflabel-color: $background;
 // ********************
 
 // RoomList
 // ********************
-$roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-bg-color: rgba(245, 245, 245, 0.90);
-$roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%);
+$roomsublist-skeleton-ui-bg: linear-gradient(180deg, $background 0%, #ffffff00 100%);
 $roomtile-default-badge-bg-color: $muted-fg-color;
 // ********************
 
@@ -181,7 +173,7 @@ $e2e-warning-color: #ba6363;
 
 // Tabbed views
 // ********************
-$tab-label-fg-color: #45474a;
+$tab-label-fg-color: $dialog-title-fg-color;
 $tab-label-active-fg-color: $background;
 // ********************
 
@@ -203,8 +195,8 @@ $togglesw-ball-color: $background;
 // Authpage
 // ********************
 $authpage-bg-color: #2e3649;
-$authpage-modal-bg-color: rgba(245, 245, 245, 0.90);
-$authpage-focus-bg-color: #dddddd;
+$authpage-modal-bg-color: $roomlist-bg-color;
+$authpage-focus-bg-color: $focus-bg-color;
 $authpage-lang-color: #4e5054;
 $authpage-primary-color: #232f32;
 $authpage-secondary-color: $muted-fg-color;
@@ -220,7 +212,7 @@ $message-action-bar-hover-border-color: $focus-bg-color;
 
 // Reaction row
 // ********************
-$reaction-row-button-border-color: #e9edf1;
+$reaction-row-button-border-color: $message-action-bar-border-color;
 $reaction-row-button-hover-border-color: $focus-bg-color;
 $reaction-row-button-selected-bg-color: #e9fff9;
 // ********************
@@ -266,7 +258,7 @@ $video-feed-secondary-background: #394049; // XXX: Color from dark theme
 // ********************
 $visual-bell-bg-color: #faa;
 $event-timestamp-color: #acacac;
-$slider-background-color: #c1c9d6;
+$slider-background-color: $togglesw-off-color;
 $breadcrumb-placeholder-bg-color: #e8eef5;
 $primary-hairline-color: transparent;
 $composer-shadow-color: rgba(0, 0, 0, 0.04);

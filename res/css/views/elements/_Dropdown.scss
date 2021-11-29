@@ -38,7 +38,7 @@ limitations under the License.
 }
 
 .mx_Dropdown_input:focus {
-    border-color: $input-focused-border-color;
+    border-color: $accent-alt;
 }
 
 /* Disable dropdown highlight on focus */
@@ -110,7 +110,7 @@ input.mx_Dropdown_option:focus {
     margin: 0;
     padding: 0px;
     border-radius: 4px;
-    border: 1px solid $input-focused-border-color;
+    border: 1px solid $accent-alt;
     background-color: $background;
     max-height: 200px;
     overflow-y: auto;

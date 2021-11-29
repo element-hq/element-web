@@ -16,7 +16,7 @@ limitations under the License.
 
 .mx_RoomUpgradeWarningBar {
     max-height: 235px;
-    background-color: $preview-bar-bg-color;
+    background-color: $info-plinth-bg-color;
     padding-left: 20px;
     padding-right: 20px;
     overflow: scroll;
@@ -48,6 +48,6 @@ limitations under the License.
 }
 
 .mx_RoomUpgradeWarningBar_small {
-    color: $greyed-fg-color;
+    color: $info-plinth-fg-color;
     font-size: 70%;
 }
