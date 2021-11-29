@@ -39,6 +39,7 @@ import { SearchScope } from './SearchBar';
 import { ContextMenuTooltipButton } from '../../structures/ContextMenu';
 import RoomContextMenu from "../context_menus/RoomContextMenu";
 import { contextMenuBelow } from './RoomTile';
+import { RightPanelPhases } from '../../../stores/RightPanelStorePhases';
 
 export interface ISearchInfo {
     searchTerm: string;
@@ -57,6 +58,7 @@ interface IProps {
     e2eStatus: E2EStatus;
     appsShown: boolean;
     searchInfo: ISearchInfo;
+    excludedRightPanelPhaseButtons?: Array<RightPanelPhases>;
 }
 
 interface IState {
@@ -68,6 +70,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
     static defaultProps = {
         editing: false,
         inRoom: false,
+        excludedRightPanelPhaseButtons: [],
     };
 
     constructor(props, context) {
@@ -263,7 +266,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                     { searchStatus }
                     { topicElement }
                     { rightRow }
-                    <RoomHeaderButtons room={this.props.room} />
+                    <RoomHeaderButtons room={this.props.room} excludedRightPanelPhaseButtons={this.props.excludedRightPanelPhaseButtons} />
                 </div>
             </div>
         );

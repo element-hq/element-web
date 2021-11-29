@@ -81,6 +81,7 @@ const TimelineCardHeaderButton = ({ room, isHighlighted, onClick }) => {
 
 interface IProps {
     room?: Room;
+    excludedRightPanelPhaseButtons?: Array<RightPanelPhases>;
 }
 
 @replaceableComponent("views.right_panel.RoomHeaderButtons")
@@ -150,38 +151,54 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
     };
 
     public renderButtons() {
-        return <>
+        const rightPanelPhaseButtons: Map<RightPanelPhases, any> = new Map();
+
+        rightPanelPhaseButtons.set(RightPanelPhases.PinnedMessages,
             <PinnedMessagesHeaderButton
                 room={this.props.room}
                 isHighlighted={this.isPhase(RightPanelPhases.PinnedMessages)}
-                onClick={this.onPinnedMessagesClicked}
-            />
+                onClick={this.onPinnedMessagesClicked} />,
+        );
+        rightPanelPhaseButtons.set(RightPanelPhases.Timeline,
             <TimelineCardHeaderButton
                 room={this.props.room}
                 isHighlighted={this.isPhase(RightPanelPhases.Timeline)}
-                onClick={this.onTimelineCardClicked}
-            />
-            { SettingsStore.getValue("feature_thread") && <HeaderButton
-                name="threadsButton"
-                title={_t("Threads")}
-                onClick={this.onThreadsPanelClicked}
-                isHighlighted={this.isPhase(RoomHeaderButtons.THREAD_PHASES)}
-                analytics={['Right Panel', 'Threads List Button', 'click']}
-            /> }
+                onClick={this.onTimelineCardClicked} />,
+        );
+        rightPanelPhaseButtons.set(RightPanelPhases.ThreadPanel,
+            SettingsStore.getValue("feature_thread")
+                ? <HeaderButton
+                    name="threadsButton"
+                    title={_t("Threads")}
+                    onClick={this.onThreadsPanelClicked}
+                    isHighlighted={this.isPhase(RoomHeaderButtons.THREAD_PHASES)}
+                    analytics={['Right Panel', 'Threads List Button', 'click']} />
+                : null,
+        );
+        rightPanelPhaseButtons.set(RightPanelPhases.NotificationPanel,
             <HeaderButton
                 name="notifsButton"
                 title={_t('Notifications')}
                 isHighlighted={this.isPhase(RightPanelPhases.NotificationPanel)}
                 onClick={this.onNotificationsClicked}
-                analytics={['Right Panel', 'Notification List Button', 'click']}
-            />
+                analytics={['Right Panel', 'Notification List Button', 'click']} />,
+        );
+        rightPanelPhaseButtons.set(RightPanelPhases.RoomSummary,
             <HeaderButton
                 name="roomSummaryButton"
                 title={_t('Room Info')}
                 isHighlighted={this.isPhase(ROOM_INFO_PHASES)}
                 onClick={this.onRoomSummaryClicked}
-                analytics={['Right Panel', 'Room Summary Button', 'click']}
-            />
+                analytics={['Right Panel', 'Room Summary Button', 'click']} />,
+        );
+
+        return <>
+            {
+                Array.from(rightPanelPhaseButtons.keys()).map((phase) =>
+                    ( this.props.excludedRightPanelPhaseButtons.includes(phase)
+                        ? null
+                        : rightPanelPhaseButtons.get(phase)))
+            }
         </>;
     }
 }
