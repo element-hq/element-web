@@ -6,7 +6,7 @@ on:
     
 jobs:
   move_needs_info_issues:
-    name: Move X-Needs-Info issues to Need info on triage board
+    name: X-Needs-Info issues to Need info column on triage board
     runs-on: ubuntu-latest
     steps:
       - uses: konradpabjan/move-labeled-or-milestoned-issue@219d384e03fa4b6460cd24f9f37d19eb033a4338
@@ -17,17 +17,17 @@ jobs:
           label-name: "X-Needs-Info"
 
   add_priority_design_issues_to_project:
-    name: Move priority X-Needs-Design issues to Design project board
+    name: P1 X-Needs-Design to Design project board
     runs-on: ubuntu-latest
     if: >
         contains(github.event.issue.labels.*.name, 'X-Needs-Design') &&
-        contains(github.event.issue.labels.*.name, 'S-Critical') &&
-        (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
-         contains(github.event.issue.labels.*.name, 'O-Occasional')) ||
-        contains(github.event.issue.labels.*.name, 'S-Major') &&
-        contains(github.event.issue.labels.*.name, 'O-Frequent') ||
-        contains(github.event.issue.labels.*.name, 'A11y') &&
-        contains(github.event.issue.labels.*.name, 'O-Frequent')
+        (contains(github.event.issue.labels.*.name, 'S-Critical') &&
+         (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
+          contains(github.event.issue.labels.*.name, 'O-Occasional')) ||
+         contains(github.event.issue.labels.*.name, 'S-Major') &&
+         contains(github.event.issue.labels.*.name, 'O-Frequent') ||
+         contains(github.event.issue.labels.*.name, 'A11y') &&
+         contains(github.event.issue.labels.*.name, 'O-Frequent'))
     steps:
       - uses: octokit/graphql-action@v2.x
         id: add_to_project
@@ -47,8 +47,8 @@ jobs:
           PROJECT_ID: "PN_kwDOAM0swc0sUA"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
-  move_spaces_issues:
-    name: Move Spaces issues to Delight project board
+  spaces_issues_to_old_board:
+    name: Spaces issues to old Delight project board
     runs-on: ubuntu-latest
     if: >
         contains(github.event.issue.labels.*.name, 'A-Spaces') ||
@@ -61,8 +61,16 @@ jobs:
           project-url: "https://github.com/orgs/vector-im/projects/6"
           column-name: "📥 Inbox"
           label-name: "A-Spaces"
+
+  spaces_issues_to_new_board:
+    name: Spaces issues to new Delight project board
+    runs-on: ubuntu-latest
+    if: >
+        contains(github.event.issue.labels.*.name, 'A-Spaces') ||
+        contains(github.event.issue.labels.*.name, 'A-Space-Settings') ||
+        contains(github.event.issue.labels.*.name, 'A-Subspaces')
+    steps:
       - uses: octokit/graphql-action@v2.x
-        id: add_to_delight2
         with:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
@@ -80,19 +88,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   move_voice-message_issues:
-    name: Move A-Voice Messages to Voice message board
+    name: A-Voice Messages to voice message board
     runs-on: ubuntu-latest
     if: >
         contains(github.event.issue.labels.*.name, 'A-Voice Messages')
     steps:
-      - uses: konradpabjan/move-labeled-or-milestoned-issue@219d384e03fa4b6460cd24f9f37d19eb033a4338
-        with:
-          action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
-          project-url: "https://github.com/vector-im/element-web/projects/28"
-          column-name: "📥 Inbox"
-          label-name: "A-Voice Messages"
       - uses: octokit/graphql-action@v2.x
-        id: add_to_voice
         with:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
@@ -110,7 +111,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   move_threads_issues:
-    name: Move A-Threads to Thread board
+    name: A-Threads to Thread board
     runs-on: ubuntu-latest
     if: >
         contains(github.event.issue.labels.*.name, 'A-Threads')
