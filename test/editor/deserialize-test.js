@@ -197,7 +197,6 @@ describe('editor/deserialize', function() {
         it('code block with no trailing text', function() {
             const html = "<pre><code>0xDEADBEEF\n</code></pre>\n";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
-            console.log(parts);
             expect(parts.length).toBe(5);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "```" });
             expect(parts[1]).toStrictEqual({ type: "newline", text: "\n" });
