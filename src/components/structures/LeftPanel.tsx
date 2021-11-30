@@ -24,7 +24,6 @@ import RoomList from "../views/rooms/RoomList";
 import CallHandler from "../../CallHandler";
 import { HEADER_HEIGHT } from "../views/rooms/RoomSublist";
 import { Action } from "../../dispatcher/actions";
-import UserMenu from "./UserMenu";
 import RoomSearch from "./RoomSearch";
 import RoomBreadcrumbs from "../views/rooms/RoomBreadcrumbs";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
@@ -33,15 +32,14 @@ import ResizeNotifier from "../../utils/ResizeNotifier";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore";
 import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
-import RoomListNumResults from "../views/rooms/RoomListNumResults";
 import LeftPanelWidget from "./LeftPanelWidget";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import SpaceStore from "../../stores/spaces/SpaceStore";
-import { SpaceKey, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
+import { MetaSpace, SpaceKey, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
 import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager";
 import UIStore from "../../stores/UIStore";
 import { findSiblingElement, IState as IRovingTabIndexState } from "../../accessibility/RovingTabIndex";
-import MatrixClientContext from "../../contexts/MatrixClientContext";
+import RoomListHeader from "../views/rooms/RoomListHeader";
 import { Key } from "../../Keyboard";
 
 interface IProps {
@@ -62,9 +60,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     private roomListRef = createRef<RoomList>();
     private focusedElement = null;
     private isDoingStickyHeaders = false;
-
-    static contextType = MatrixClientContext;
-    public context!: React.ContextType<typeof MatrixClientContext>;
 
     constructor(props: IProps) {
         super(props);
@@ -327,14 +322,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         }
     };
 
-    private renderHeader(): React.ReactNode {
-        return (
-            <div className="mx_LeftPanel_userHeader">
-                <UserMenu isMinimized={this.props.isMinimized} />
-            </div>
-        );
-    }
-
     private renderBreadcrumbs(): React.ReactNode {
         if (this.state.showBreadcrumbs && !this.props.isMinimized) {
             return (
@@ -362,7 +349,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 />;
         }
 
-        const space = this.state.activeSpace[0] === "!" ? this.context.getRoom(this.state.activeSpace) : null;
         return (
             <div
                 className="mx_LeftPanel_filterContainer"
@@ -378,13 +364,11 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
                 { dialPadButton }
 
-                <AccessibleTooltipButton
-                    className={classNames("mx_LeftPanel_exploreButton", {
-                        mx_LeftPanel_exploreButton_space: !!this.state.activeSpace,
-                    })}
+                { this.state.activeSpace === MetaSpace.Home && <AccessibleTooltipButton
+                    className="mx_LeftPanel_exploreButton"
                     onClick={this.onExplore}
-                    title={space ? _t("Explore %(spaceName)s", { spaceName: space.name }) : _t("Explore rooms")}
-                />
+                    title={_t("Explore rooms")}
+                /> }
             </div>
         );
     }
@@ -415,10 +399,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         return (
             <div className={containerClasses} ref={this.ref}>
                 <aside className="mx_LeftPanel_roomListContainer">
-                    { this.renderHeader() }
                     { this.renderSearchDialExplore() }
                     { this.renderBreadcrumbs() }
-                    <RoomListNumResults onVisibilityChange={this.refreshStickyHeaders} />
+                    { !this.props.isMinimized && <RoomListHeader onVisibilityChange={this.refreshStickyHeaders} /> }
                     <div className="mx_LeftPanel_roomListWrapper">
                         <div
                             className={roomListClasses}

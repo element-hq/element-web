@@ -288,7 +288,7 @@ export async function submitFeedback(
     body.append("user_id", MatrixClientPeg.get()?.getUserId());
 
     for (const k in extraData) {
-        body.append(k, extraData[k]);
+        body.append(k, JSON.stringify(extraData[k]));
     }
 
     await submitReport(SdkConfig.get().bug_report_endpoint_url, body, () => {});

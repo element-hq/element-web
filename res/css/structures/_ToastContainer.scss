@@ -85,6 +85,11 @@ limitations under the License.
                 background-color: $primary-content;
             }
 
+            &.mx_Toast_icon_labs::after {
+                mask-image: url('$(res)/img/element-icons/flask.svg');
+                background-color: $secondary-content;
+            }
+
             .mx_Toast_title, .mx_Toast_body {
                 grid-column: 2;
             }

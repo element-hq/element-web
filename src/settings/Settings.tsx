@@ -319,6 +319,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "doNotDisturb": {
         supportedLevels: [SettingLevel.DEVICE],
         default: false,
+        controller: new IncompatibleController("feature_dnd", false, false),
     },
     "mjolnirRooms": {
         supportedLevels: [SettingLevel.ACCOUNT],

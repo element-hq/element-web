@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { createRef, ReactComponentElement } from "react";
+import { ComponentType, createRef, ReactComponentElement } from "react";
 import { normalize } from "matrix-js-sdk/src/utils";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from 'classnames';
@@ -52,11 +52,9 @@ import { arrayFastClone, arrayHasOrderChange } from "../../../utils/arrays";
 import { objectExcluding, objectHasDiff } from "../../../utils/objects";
 import ExtraTile from "./ExtraTile";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
-import IconizedContextMenu from "../context_menus/IconizedContextMenu";
 import { getKeyBindingsManager, RoomListAction } from "../../../KeyBindingsManager";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
-import { UIComponent } from "../../../settings/UIFeature";
+import { Dispatcher } from "flux";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
@@ -67,13 +65,16 @@ const MAX_PADDING_HEIGHT = SHOW_N_BUTTON_HEIGHT + RESIZE_HANDLE_HEIGHT;
 // HACK: We really shouldn't have to do this.
 polyfillTouchEvent();
 
+export interface IAuxButtonProps {
+    tabIndex: number;
+    dispatcher?: Dispatcher<ActionPayload>;
+}
+
 interface IProps {
     forRooms: boolean;
     startAsHidden: boolean;
     label: string;
-    onAddRoom?: () => void;
-    addRoomContextMenu?: (onFinished: () => void) => React.ReactNode;
-    addRoomLabel: string;
+    AuxButtonComponent?: ComponentType<IAuxButtonProps>;
     isMinimized: boolean;
     tagId: TagID;
     showSkeleton?: boolean;
@@ -81,8 +82,6 @@ interface IProps {
     resizeNotifier: ResizeNotifier;
     extraTiles?: ReactComponentElement<typeof ExtraTile>[];
     onListCollapse?: (isExpanded: boolean) => void;
-
-    // TODO: Account for https://github.com/vector-im/element-web/issues/14179
 }
 
 // TODO: Use re-resizer's NumberSize when it is exposed as the type
@@ -95,7 +94,6 @@ type PartialDOMRect = Pick<DOMRect, "left" | "top" | "height">;
 
 interface IState {
     contextMenuPosition: PartialDOMRect;
-    addRoomContextMenuPosition: PartialDOMRect;
     isResizing: boolean;
     isExpanded: boolean; // used for the for expand of the sublist when the room list is being filtered
     height: number;
@@ -123,7 +121,6 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         this.notificationState = RoomNotificationStateStore.instance.getListState(this.props.tagId);
         this.state = {
             contextMenuPosition: null,
-            addRoomContextMenuPosition: null,
             isResizing: false,
             isExpanded: this.isBeingFiltered ? this.isBeingFiltered : !this.layout.isCollapsed,
             height: 0, // to be fixed in a moment, we need `rooms` to calculate this.
@@ -313,11 +310,6 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         }
     };
 
-    private onAddRoom = (e) => {
-        e.stopPropagation();
-        if (this.props.onAddRoom) this.props.onAddRoom();
-    };
-
     private applyHeightChange(newHeight: number) {
         const heightInTiles = Math.ceil(this.layout.pixelsToTiles(newHeight - this.padding));
         this.layout.visibleTiles = Math.min(this.numTiles, heightInTiles);
@@ -395,19 +387,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         });
     };
 
-    private onAddRoomContextMenu = (ev: React.MouseEvent) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        const target = ev.target as HTMLButtonElement;
-        this.setState({ addRoomContextMenuPosition: target.getBoundingClientRect() });
-    };
-
     private onCloseMenu = () => {
         this.setState({ contextMenuPosition: null });
-    };
-
-    private onCloseAddRoomMenu = () => {
-        this.setState({ addRoomContextMenuPosition: null });
     };
 
     private onUnreadFirstChanged = () => {
@@ -627,18 +608,6 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                     </div>
                 </ContextMenu>
             );
-        } else if (this.state.addRoomContextMenuPosition) {
-            contextMenu = (
-                <IconizedContextMenu
-                    chevronFace={ChevronFace.None}
-                    left={this.state.addRoomContextMenuPosition.left - 7} // center align with the handle
-                    top={this.state.addRoomContextMenuPosition.top + this.state.addRoomContextMenuPosition.height}
-                    onFinished={this.onCloseAddRoomMenu}
-                    compact
-                >
-                    { this.props.addRoomContextMenu(this.onCloseAddRoomMenu) }
-                </IconizedContextMenu>
-            );
         }
 
         return (
@@ -677,30 +646,9 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                     );
 
                     let addRoomButton = null;
-                    if (!!this.props.onAddRoom && shouldShowComponent(UIComponent.CreateRooms)) {
-                        addRoomButton = (
-                            <AccessibleTooltipButton
-                                tabIndex={tabIndex}
-                                onClick={this.onAddRoom}
-                                className="mx_RoomSublist_auxButton"
-                                tooltipClassName="mx_RoomSublist_addRoomTooltip"
-                                aria-label={this.props.addRoomLabel || _t("Add room")}
-                                title={this.props.addRoomLabel}
-                            />
-                        );
-                    } else if (this.props.addRoomContextMenu) {
-                        // We assume that shouldShowComponent() is checked by the context menu itself.
-                        addRoomButton = (
-                            <ContextMenuTooltipButton
-                                tabIndex={tabIndex}
-                                onClick={this.onAddRoomContextMenu}
-                                className="mx_RoomSublist_auxButton"
-                                tooltipClassName="mx_RoomSublist_addRoomTooltip"
-                                aria-label={this.props.addRoomLabel || _t("Add room")}
-                                title={this.props.addRoomLabel}
-                                isExpanded={!!this.state.addRoomContextMenuPosition}
-                            />
-                        );
+                    if (this.props.AuxButtonComponent) {
+                        const AuxButtonComponent = this.props.AuxButtonComponent;
+                        addRoomButton = <AuxButtonComponent tabIndex={tabIndex} />;
                     }
 
                     const collapseClasses = classNames({

@@ -101,8 +101,9 @@ $roomListCollapsedWidth: 68px;
         }
 
         .mx_LeftPanel_filterContainer {
-            margin-left: 12px;
-            margin-right: 12px;
+            margin: 0 12px;
+            padding: 12px 0 8px;
+            border-bottom: 1px solid $quinary-content;
 
             flex-shrink: 0; // to convince safari's layout engine the flexbox is fine
 
@@ -110,7 +111,28 @@ $roomListCollapsedWidth: 68px;
             display: flex;
             align-items: center;
 
+            & + .mx_RoomListHeader {
+                margin-top: 12px;
+            }
+
+            .mx_RoomSearch_shortcutPrompt {
+                border-radius: 6px;
+                background-color: $panel-actions;
+                padding: 2px 4px;
+                user-select: none;
+                pointer-events: none;
+                font-size: $font-12px;
+                line-height: $font-15px;
+                font-weight: $font-semi-bold;
+                color: $light-fg-color;
+                margin-right: 6px;
+            }
+
             .mx_RoomSearch_focused, .mx_RoomSearch_hasQuery {
+                .mx_RoomSearch_shortcutPrompt {
+                    display: none;
+                }
+
                 & + .mx_LeftPanel_exploreButton {
                     // Cheaty way to return the occupied space to the filter input
                     flex-basis: 0;
@@ -170,8 +192,12 @@ $roomListCollapsedWidth: 68px;
                     background: $secondary-content;
                 }
 
-                &.mx_LeftPanel_exploreButton_space::before {
-                    mask-image: url('$(res)/img/element-icons/roomlist/browse.svg');
+                &:hover {
+                    background-color: $tertiary-content;
+
+                    &::before {
+                        background-color: $background;
+                    }
                 }
             }
         }
@@ -234,7 +260,6 @@ $roomListCollapsedWidth: 68px;
                 .mx_LeftPanel_exploreButton {
                     margin-left: 0;
                     margin-top: 8px;
-                    background-color: transparent;
                 }
             }
         }

@@ -59,6 +59,11 @@ limitations under the License.
             border-radius: 0 0 8px 8px; // radius matches .mx_ContextualMenu
         }
 
+        // round all corners of the only button for the hover effect to be bounded
+        &:first-child:last-child .mx_AccessibleButton:first-child:last-child {
+            border-radius: 8px; // radius matches .mx_ContextualMenu
+        }
+
         .mx_AccessibleButton {
             // pad the inside of the button so that the hover background is padded too
             padding-top: 12px;

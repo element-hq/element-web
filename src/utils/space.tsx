@@ -18,6 +18,7 @@ import React from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 import { calculateRoomVia } from "./permalinks/Permalinks";
 import Modal from "../Modal";
@@ -100,6 +101,10 @@ export const showCreateNewRoom = async (space: Room): Promise<boolean> => {
     }
     return shouldCreate;
 };
+
+export const shouldShowSpaceInvite = (space: Room) =>
+    (space?.getMyMembership() === "join" && space.canInvite(space.client.getUserId())) ||
+    space.getJoinRule() === JoinRule.Public;
 
 export const showSpaceInvite = (space: Room, initialText = ""): void => {
     if (space.getJoinRule() === "public") {

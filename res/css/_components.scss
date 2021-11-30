@@ -60,13 +60,11 @@
 @import "./views/auth/_Welcome.scss";
 @import "./views/avatars/_BaseAvatar.scss";
 @import "./views/avatars/_DecoratedRoomAvatar.scss";
-@import "./views/avatars/_MemberStatusMessageAvatar.scss";
 @import "./views/avatars/_WidgetAvatar.scss";
 @import "./views/beta/_BetaCard.scss";
 @import "./views/context_menus/_CallContextMenu.scss";
 @import "./views/context_menus/_IconizedContextMenu.scss";
 @import "./views/context_menus/_MessageContextMenu.scss";
-@import "./views/context_menus/_StatusMessageContextMenu.scss";
 @import "./views/context_menus/_TagTileContextMenu.scss";
 @import "./views/dialogs/_AddExistingToSpaceDialog.scss";
 @import "./views/dialogs/_AddressPickerDialog.scss";
@@ -237,6 +235,7 @@
 @import "./views/rooms/_RoomBreadcrumbs.scss";
 @import "./views/rooms/_RoomHeader.scss";
 @import "./views/rooms/_RoomList.scss";
+@import "./views/rooms/_RoomListHeader.scss";
 @import "./views/rooms/_RoomPreviewBar.scss";
 @import "./views/rooms/_RoomSublist.scss";
 @import "./views/rooms/_RoomTile.scss";
