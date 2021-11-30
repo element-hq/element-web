@@ -43,7 +43,7 @@ export class VisibilityProvider {
         }
 
         if (
-            CallHandler.sharedInstance().getSupportsVirtualRooms() &&
+            CallHandler.instance.getSupportsVirtualRooms() &&
             VoipUserMapper.sharedInstance().isVirtualRoom(room)
         ) {
             return false;

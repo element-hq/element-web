@@ -27,7 +27,6 @@ import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import RoomTopic from "../elements/RoomTopic";
 import RoomName from "../elements/RoomName";
-import { PlaceCallType } from "../../../CallHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Modal from '../../../Modal';
 import InfoDialog from "../dialogs/InfoDialog";
@@ -36,6 +35,7 @@ import { MatrixEvent, Room, RoomState } from 'matrix-js-sdk/src';
 import { E2EStatus } from '../../../utils/ShieldUtils';
 import { IOOBData } from '../../../stores/ThreepidInviteStore';
 import { SearchScope } from './SearchBar';
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { ContextMenuTooltipButton } from '../../structures/ContextMenu';
 import RoomContextMenu from "../context_menus/RoomContextMenu";
 import { contextMenuBelow } from './RoomTile';
@@ -55,7 +55,7 @@ interface IProps {
     inRoom: boolean;
     onSearchClick: () => void;
     onForgetClick: () => void;
-    onCallPlaced: (type: PlaceCallType) => void;
+    onCallPlaced: (type: CallType) => void;
     onAppsClick: () => void;
     e2eStatus: E2EStatus;
     appsShown: boolean;
@@ -213,14 +213,14 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         if (this.props.inRoom && SettingsStore.getValue("showCallButtonsInComposer")) {
             const voiceCallButton = <AccessibleTooltipButton
                 className="mx_RoomHeader_button mx_RoomHeader_voiceCallButton"
-                onClick={() => this.props.onCallPlaced(PlaceCallType.Voice)}
+                onClick={() => this.props.onCallPlaced(CallType.Voice)}
                 title={_t("Voice call")}
                 key="voice"
             />;
             const videoCallButton = <AccessibleTooltipButton
                 className="mx_RoomHeader_button mx_RoomHeader_videoCallButton"
                 onClick={(ev: React.MouseEvent<Element>) => ev.shiftKey ?
-                    this.displayInfoDialogAboutScreensharing() : this.props.onCallPlaced(PlaceCallType.Video)}
+                    this.displayInfoDialogAboutScreensharing() : this.props.onCallPlaced(CallType.Voice)}
                 title={_t("Video call")}
                 key="video"
             />;

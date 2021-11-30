@@ -34,7 +34,7 @@ import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
 import ResizeNotifier from '../../utils/ResizeNotifier';
 import ContentMessages from '../../ContentMessages';
 import Modal from '../../Modal';
-import CallHandler, { PlaceCallType } from '../../CallHandler';
+import CallHandler, { CallHandlerEvent } from '../../CallHandler';
 import dis from '../../dispatcher/dispatcher';
 import * as Rooms from '../../Rooms';
 import eventSearch, { searchPagination } from '../../Searching';
@@ -66,7 +66,7 @@ import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import EffectsOverlay from "../views/elements/EffectsOverlay";
 import { containsEmoji } from '../../effects/utils';
 import { CHAT_EFFECTS } from '../../effects';
-import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import WidgetStore from "../../stores/WidgetStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import Notifier from "../../Notifier";
@@ -669,6 +669,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     }
 
     componentDidUpdate() {
+        CallHandler.instance.addListener(CallHandlerEvent.CallState, this.onCallState);
         if (this.roomView.current) {
             const roomView = this.roomView.current;
             if (!roomView.ondrop) {
@@ -698,6 +699,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         //
         // (We could use isMounted, but facebook have deprecated that.)
         this.unmounted = true;
+
+        CallHandler.instance.removeListener(CallHandlerEvent.CallState, this.onCallState);
 
         // update the scroll map before we get unmounted
         if (this.state.roomId) {
@@ -822,6 +825,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
     };
 
+    private onCallState = (roomId: string): void => {
+        // don't filter out payloads for room IDs other than props.room because
+        // we may be interested in the conf 1:1 room
+
+        if (!roomId) return;
+        const call = this.getCallForRoom();
+        this.setState({ callState: call ? call.state : null });
+    };
+
     private onAction = payload => {
         switch (payload.action) {
             case 'message_sent':
@@ -843,21 +855,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case Action.UploadCanceled:
                 this.forceUpdate();
                 break;
-            case 'call_state': {
-                // don't filter out payloads for room IDs other than props.room because
-                // we may be interested in the conf 1:1 room
-
-                if (!payload.room_id) {
-                    return;
-                }
-
-                const call = this.getCallForRoom();
-
-                this.setState({
-                    callState: call ? call.state : null,
-                });
-                break;
-            }
             case 'appsDrawer':
                 this.setState({
                     showApps: payload.show,
@@ -1531,12 +1528,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         return ret;
     }
 
-    private onCallPlaced = (type: PlaceCallType) => {
-        dis.dispatch({
-            action: 'place_call',
-            type: type,
-            room_id: this.state.room.roomId,
-        });
+    private onCallPlaced = (type: CallType): void => {
+        CallHandler.instance.placeCall(this.state.room?.roomId, type);
     };
 
     private onAppsClick = () => {
@@ -1748,7 +1741,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (!this.state.room) {
             return null;
         }
-        return CallHandler.sharedInstance().getCallForRoom(this.state.room.roomId);
+        return CallHandler.instance.getCallForRoom(this.state.room.roomId);
     }
 
     // this has to be a proper method rather than an unnamed function,

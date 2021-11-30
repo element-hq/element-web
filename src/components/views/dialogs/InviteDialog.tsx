@@ -63,7 +63,6 @@ import { copyPlaintext, selectText } from "../../../utils/strings";
 import * as ContextMenu from "../../structures/ContextMenu";
 import { toRightOf } from "../../structures/ContextMenu";
 import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
-import { TransferCallPayload } from '../../../dispatcher/payloads/TransferCallPayload';
 import Field from '../elements/Field';
 import TabbedView, { Tab, TabLocation } from '../../structures/TabbedView';
 import Dialpad from '../voip/DialPad';
@@ -72,6 +71,7 @@ import Spinner from "../elements/Spinner";
 import BaseDialog from "./BaseDialog";
 import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
+import CallHandler from "../../../CallHandler";
 
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -806,19 +806,17 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 return;
             }
 
-            dis.dispatch({
-                action: Action.TransferCallToMatrixID,
-                call: this.props.call,
-                destination: targetIds[0],
-                consultFirst: this.state.consultFirst,
-            } as TransferCallPayload);
+            CallHandler.instance.startTransferToMatrixID(
+                this.props.call,
+                targetIds[0],
+                this.state.consultFirst,
+            );
         } else {
-            dis.dispatch({
-                action: Action.TransferCallToPhoneNumber,
-                call: this.props.call,
-                destination: this.state.dialPadValue,
-                consultFirst: this.state.consultFirst,
-            } as TransferCallPayload);
+            CallHandler.instance.startTransferToPhoneNumber(
+                this.props.call,
+                this.state.dialPadValue,
+                this.state.consultFirst,
+            );
         }
         this.props.onFinished();
     };

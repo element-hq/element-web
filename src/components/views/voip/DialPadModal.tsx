@@ -19,11 +19,9 @@ import { createRef } from "react";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 import DialPad from './DialPad';
-import dis from '../../../dispatcher/dispatcher';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { DialNumberPayload } from "../../../dispatcher/payloads/DialNumberPayload";
-import { Action } from "../../../dispatcher/actions";
 import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
+import CallHandler from "../../../CallHandler";
 
 interface IProps {
     onFinished: (boolean) => void;
@@ -81,12 +79,7 @@ export default class DialpadModal extends React.PureComponent<IProps, IState> {
     };
 
     onDialPress = async () => {
-        const payload: DialNumberPayload = {
-            action: Action.DialNumber,
-            number: this.state.value,
-        };
-        dis.dispatch(payload);
-
+        CallHandler.instance.dialNumber(this.state.value);
         this.props.onFinished(true);
     };
 

@@ -20,7 +20,6 @@ import { CallEvent, CallState, CallType, MatrixCall } from "matrix-js-sdk/src/we
 import CallHandler, { CallHandlerEvent } from '../../CallHandler';
 import { EventEmitter } from 'events';
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import defaultDispatcher from "../../dispatcher/dispatcher";
 
 export enum CallEventGrouperEvent {
     StateChanged = "state_changed",
@@ -52,8 +51,8 @@ export default class CallEventGrouper extends EventEmitter {
     constructor() {
         super();
 
-        CallHandler.sharedInstance().addListener(CallHandlerEvent.CallsChanged, this.setCall);
-        CallHandler.sharedInstance().addListener(CallHandlerEvent.SilencedCallsChanged, this.onSilencedCallsChanged);
+        CallHandler.instance.addListener(CallHandlerEvent.CallsChanged, this.setCall);
+        CallHandler.instance.addListener(CallHandlerEvent.SilencedCallsChanged, this.onSilencedCallsChanged);
     }
 
     private get invite(): MatrixEvent {
@@ -114,7 +113,7 @@ export default class CallEventGrouper extends EventEmitter {
     }
 
     private onSilencedCallsChanged = () => {
-        const newState = CallHandler.sharedInstance().isCallSilenced(this.callId);
+        const newState = CallHandler.instance.isCallSilenced(this.callId);
         this.emit(CallEventGrouperEvent.SilencedChanged, newState);
     };
 
@@ -122,33 +121,23 @@ export default class CallEventGrouper extends EventEmitter {
         this.emit(CallEventGrouperEvent.LengthChanged, length);
     };
 
-    public answerCall = () => {
-        defaultDispatcher.dispatch({
-            action: 'answer',
-            room_id: this.roomId,
-        });
+    public answerCall = (): void => {
+        CallHandler.instance.answerCall(this.roomId);
     };
 
-    public rejectCall = () => {
-        defaultDispatcher.dispatch({
-            action: 'reject',
-            room_id: this.roomId,
-        });
+    public rejectCall = (): void => {
+        CallHandler.instance.hangupOrReject(this.roomId, true);
     };
 
-    public callBack = () => {
-        defaultDispatcher.dispatch({
-            action: 'place_call',
-            type: this.isVoice ? CallType.Voice : CallType.Video,
-            room_id: this.roomId,
-        });
+    public callBack = (): void => {
+        CallHandler.instance.placeCall(this.roomId, this.isVoice ? CallType.Voice : CallType.Video);
     };
 
     public toggleSilenced = () => {
-        const silenced = CallHandler.sharedInstance().isCallSilenced(this.callId);
+        const silenced = CallHandler.instance.isCallSilenced(this.callId);
         silenced ?
-            CallHandler.sharedInstance().unSilenceCall(this.callId) :
-            CallHandler.sharedInstance().silenceCall(this.callId);
+            CallHandler.instance.unSilenceCall(this.callId) :
+            CallHandler.instance.silenceCall(this.callId);
     };
 
     private setCallListeners() {
@@ -174,7 +163,7 @@ export default class CallEventGrouper extends EventEmitter {
     private setCall = () => {
         if (this.call) return;
 
-        this.call = CallHandler.sharedInstance().getCallById(this.callId);
+        this.call = CallHandler.instance.getCallById(this.callId);
         this.setCallListeners();
         this.setState();
     };

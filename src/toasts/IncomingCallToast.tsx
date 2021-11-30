@@ -22,7 +22,6 @@ import { CallType, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import classNames from 'classnames';
 import { replaceableComponent } from '../utils/replaceableComponent';
 import CallHandler, { CallHandlerEvent } from '../CallHandler';
-import dis from '../dispatcher/dispatcher';
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import { _t } from '../languageHandler';
 import RoomAvatar from '../components/views/avatars/RoomAvatar';
@@ -45,49 +44,43 @@ export default class IncomingCallToast extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            silenced: CallHandler.sharedInstance().isCallSilenced(this.props.call.callId),
+            silenced: CallHandler.instance.isCallSilenced(this.props.call.callId),
         };
     }
 
     public componentDidMount = (): void => {
-        CallHandler.sharedInstance().addListener(CallHandlerEvent.SilencedCallsChanged, this.onSilencedCallsChanged);
+        CallHandler.instance.addListener(CallHandlerEvent.SilencedCallsChanged, this.onSilencedCallsChanged);
     };
 
     public componentWillUnmount(): void {
-        CallHandler.sharedInstance().removeListener(CallHandlerEvent.SilencedCallsChanged, this.onSilencedCallsChanged);
+        CallHandler.instance.removeListener(CallHandlerEvent.SilencedCallsChanged, this.onSilencedCallsChanged);
     }
 
     private onSilencedCallsChanged = (): void => {
-        this.setState({ silenced: CallHandler.sharedInstance().isCallSilenced(this.props.call.callId) });
+        this.setState({ silenced: CallHandler.instance.isCallSilenced(this.props.call.callId) });
     };
 
     private onAnswerClick = (e: React.MouseEvent): void => {
         e.stopPropagation();
-        dis.dispatch({
-            action: 'answer',
-            room_id: CallHandler.sharedInstance().roomIdForCall(this.props.call),
-        });
+        CallHandler.instance.answerCall(CallHandler.instance.roomIdForCall(this.props.call));
     };
 
     private onRejectClick= (e: React.MouseEvent): void => {
         e.stopPropagation();
-        dis.dispatch({
-            action: 'reject',
-            room_id: CallHandler.sharedInstance().roomIdForCall(this.props.call),
-        });
+        CallHandler.instance.hangupOrReject(CallHandler.instance.roomIdForCall(this.props.call), true);
     };
 
     private onSilenceClick = (e: React.MouseEvent): void => {
         e.stopPropagation();
         const callId = this.props.call.callId;
         this.state.silenced ?
-            CallHandler.sharedInstance().unSilenceCall(callId) :
-            CallHandler.sharedInstance().silenceCall(callId);
+            CallHandler.instance.unSilenceCall(callId) :
+            CallHandler.instance.silenceCall(callId);
     };
 
     public render() {
         const call = this.props.call;
-        const room = MatrixClientPeg.get().getRoom(CallHandler.sharedInstance().roomIdForCall(call));
+        const room = MatrixClientPeg.get().getRoom(CallHandler.instance.roomIdForCall(call));
         const isVoice = call.type === CallType.Voice;
 
         const contentClass = classNames("mx_IncomingCallToast_content", {

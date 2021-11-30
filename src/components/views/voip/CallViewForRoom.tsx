@@ -18,7 +18,6 @@ import { CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import React from 'react';
 import CallHandler, { CallHandlerEvent } from '../../../CallHandler';
 import CallView from './CallView';
-import dis from '../../../dispatcher/dispatcher';
 import { Resizable } from "re-resizable";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -52,23 +51,14 @@ export default class CallViewForRoom extends React.Component<IProps, IState> {
     }
 
     public componentDidMount() {
-        this.dispatcherRef = dis.register(this.onAction);
-        CallHandler.sharedInstance().addListener(CallHandlerEvent.CallChangeRoom, this.updateCall);
+        CallHandler.instance.addListener(CallHandlerEvent.CallState, this.updateCall);
+        CallHandler.instance.addListener(CallHandlerEvent.CallChangeRoom, this.updateCall);
     }
 
     public componentWillUnmount() {
-        dis.unregister(this.dispatcherRef);
-        CallHandler.sharedInstance().removeListener(CallHandlerEvent.CallChangeRoom, this.updateCall);
+        CallHandler.instance.removeListener(CallHandlerEvent.CallState, this.updateCall);
+        CallHandler.instance.removeListener(CallHandlerEvent.CallChangeRoom, this.updateCall);
     }
-
-    private onAction = (payload) => {
-        switch (payload.action) {
-            case 'call_state': {
-                this.updateCall();
-                break;
-            }
-        }
-    };
 
     private updateCall = () => {
         const newCall = this.getCall();
@@ -78,7 +68,7 @@ export default class CallViewForRoom extends React.Component<IProps, IState> {
     };
 
     private getCall(): MatrixCall {
-        const call = CallHandler.sharedInstance().getCallForRoom(this.props.roomId);
+        const call = CallHandler.instance.getCallForRoom(this.props.roomId);
 
         if (call && [CallState.Ended, CallState.Ringing].includes(call.state)) return null;
         return call;

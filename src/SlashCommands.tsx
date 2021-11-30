@@ -1037,7 +1037,7 @@ export const Commands = [
 
             return success((async () => {
                 if (isPhoneNumber) {
-                    const results = await CallHandler.sharedInstance().pstnLookup(this.state.value);
+                    const results = await CallHandler.instance.pstnLookup(this.state.value);
                     if (!results || results.length === 0 || !results[0].userid) {
                         throw new Error("Unable to find Matrix ID for phone number");
                     }
@@ -1089,7 +1089,7 @@ export const Commands = [
         description: _td("Places the call in the current room on hold"),
         category: CommandCategories.other,
         runFn: function(roomId, args) {
-            const call = CallHandler.sharedInstance().getCallForRoom(roomId);
+            const call = CallHandler.instance.getCallForRoom(roomId);
             if (!call) {
                 return reject("No active call in this room");
             }
@@ -1103,7 +1103,7 @@ export const Commands = [
         description: _td("Takes the call in the current room off hold"),
         category: CommandCategories.other,
         runFn: function(roomId, args) {
-            const call = CallHandler.sharedInstance().getCallForRoom(roomId);
+            const call = CallHandler.instance.getCallForRoom(roomId);
             if (!call) {
                 return reject("No active call in this room");
             }

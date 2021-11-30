@@ -45,7 +45,7 @@ export default class CallContextMenu extends React.Component<IProps> {
     };
 
     onUnholdClick = () => {
-        CallHandler.sharedInstance().setActiveCallRoomId(this.props.call.roomId);
+        CallHandler.instance.setActiveCallRoomId(this.props.call.roomId);
 
         this.props.onFinished();
     };

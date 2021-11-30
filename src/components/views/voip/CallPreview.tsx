@@ -20,8 +20,6 @@ import React from 'react';
 import CallView from "./CallView";
 import RoomViewStore from '../../../stores/RoomViewStore';
 import CallHandler, { CallHandlerEvent } from '../../../CallHandler';
-import dis from '../../../dispatcher/dispatcher';
-import { ActionPayload } from '../../../dispatcher/payloads';
 import PersistentApp from "../elements/PersistentApp";
 import SettingsStore from "../../../settings/SettingsStore";
 import { CallEvent, CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
@@ -29,6 +27,8 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { EventSubscription } from 'fbemitter';
 import PictureInPictureDragger from './PictureInPictureDragger';
+import dis from '../../../dispatcher/dispatcher';
+import { Action } from "../../../dispatcher/actions";
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { WidgetLayoutStore } from '../../../stores/widgets/WidgetLayoutStore';
@@ -61,7 +61,7 @@ interface IState {
 // The primary will be the one not on hold, or an arbitrary one
 // if they're all on hold)
 function getPrimarySecondaryCallsForPip(roomId: string): [MatrixCall, MatrixCall[]] {
-    const calls = CallHandler.sharedInstance().getAllActiveCallsForPip(roomId);
+    const calls = CallHandler.instance.getAllActiveCallsForPip(roomId);
 
     let primary: MatrixCall = null;
     let secondaries: MatrixCall[] = [];
@@ -114,9 +114,9 @@ export default class CallPreview extends React.Component<IProps, IState> {
     }
 
     public componentDidMount() {
-        CallHandler.sharedInstance().addListener(CallHandlerEvent.CallChangeRoom, this.updateCalls);
+        CallHandler.instance.addListener(CallHandlerEvent.CallChangeRoom, this.updateCalls);
+        CallHandler.instance.addListener(CallHandlerEvent.CallState, this.updateCalls);
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
-        this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
         const room = MatrixClientPeg.get()?.getRoom(this.state.roomId);
         if (room) {
@@ -125,12 +125,12 @@ export default class CallPreview extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount() {
-        CallHandler.sharedInstance().removeListener(CallHandlerEvent.CallChangeRoom, this.updateCalls);
+        CallHandler.instance.removeListener(CallHandlerEvent.CallChangeRoom, this.updateCalls);
+        CallHandler.instance.removeListener(CallHandlerEvent.CallState, this.updateCalls);
         MatrixClientPeg.get().removeListener(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
         if (this.roomStoreToken) {
             this.roomStoreToken.remove();
         }
-        dis.unregister(this.dispatcherRef);
         SettingsStore.unwatchSetting(this.settingsWatcherRef);
         const room = MatrixClientPeg.get().getRoom(this.state.roomId);
         WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(room), this.updateCalls);
@@ -160,19 +160,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
         });
     };
 
-    private onAction = (payload: ActionPayload) => {
-        switch (payload.action) {
-            case 'call_state': {
-                // listen for call state changes to prod the render method, which
-                // may hide the global CallView if the call it is tracking is dead
-
-                this.updateCalls();
-                break;
-            }
-        }
-    };
-
-    private updateCalls = () => {
+    private updateCalls = (): void => {
         if (!this.state.roomId) return;
         const [primaryCall, secondaryCalls] = getPrimarySecondaryCallsForPip(this.state.roomId);
 
@@ -194,7 +182,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
 
     private onDoubleClick = (): void => {
         dis.dispatch({
-            action: "view_room",
+            action: Action.ViewRoom,
             room_id: this.state.primaryCall.roomId,
         });
     };
