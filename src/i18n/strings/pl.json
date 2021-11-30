@@ -2088,5 +2088,10 @@
     "Your homeserver rejected your log in attempt. This could be due to things just taking too long. Please try again. If this continues, please contact your homeserver administrator.": "Twój serwer domowy odrzucił twoją próbę zalogowania się. Może być to spowodowane zbyt długim czasem oczekiwania. Prosimy spróbować ponownie. Jeśli problem się powtórzy, prosimy o kontakt z administratorem twojego serwera domowego.",
     "Failed to transfer call": "Nie udało się przekazać połączenia",
     "Transfer Failed": "Transfer nie powiódł się",
-    "Unable to transfer call": "Nie udało się przekazać połączenia"
+    "Unable to transfer call": "Nie udało się przekazać połączenia",
+    "Some invites couldn't be sent": "Niektóre zaproszenia nie mogły zostać wysłane",
+    "There was an error looking up the phone number": "Podczas wyszukiwania numeru telefonu wystąpił błąd",
+    "Unable to look up phone number": "Nie można wyszukać numeru telefonu",
+    "We sent the others, but the below people couldn't be invited to <RoomName/>": "Wysłaliśmy pozostałym, ale osoby poniżej nie mogły zostać zaproszone do <RoomName/>",
+    "%(date)s at %(time)s": "%(date)s o %(time)s"
 }
