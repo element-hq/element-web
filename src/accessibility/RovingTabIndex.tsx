@@ -165,13 +165,13 @@ export const findSiblingElement = (
 ): RefObject<HTMLElement> => {
     if (backwards) {
         for (let i = startIndex; i < refs.length && i >= 0; i--) {
-            if (refs[i].current.offsetParent !== null) {
+            if (refs[i].current?.offsetParent !== null) {
                 return refs[i];
             }
         }
     } else {
         for (let i = startIndex; i < refs.length && i >= 0; i++) {
-            if (refs[i].current.offsetParent !== null) {
+            if (refs[i].current?.offsetParent !== null) {
                 return refs[i];
             }
         }
